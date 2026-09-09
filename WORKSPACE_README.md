@@ -1,9 +1,10 @@
-# Trading research workspace
+# Start here
 
-[**Start here**](/workspace/planning/trading-research/START_HERE.md) — complete plan, current state, pending work and continuation instructions.
+Raw evidence: sources/documents/
+Live Phase 1 work: planning/phase-1-from-scratch/
+Archive: archive/2026-09-pre-reset/
 
-- [Planning](/workspace/planning/trading-research): one canonical planning bundle, including historical references.
-- [Implementation](/workspace/trading-research): current code, tests and research evidence.
-- [Cursor coordination](/workspace/coordination/trading-research-cursor/HANDOFF.md): bounded implementation workflow.
-
-`data/`, `sources/` and `quantpad-data-pull/` retain the data and acquisition resources. `archive/` is excluded. Older root links exist only to preserve recorded references.
+The archive is not active and is not the project plan.
+Open it only if a wiki page is missing a citation.
+Raw sources stay in sources/documents/.
+Use planning/phase-1-from-scratch/ for live work.
