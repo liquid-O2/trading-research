@@ -1,0 +1,26 @@
+# Session-fail boxes (sweep + fail-back labeler)
+
+## Definition
+A session-fail event: price trades beyond a named box edge (sweep), then fails back inside under a named confirmation. It is the Green Bird primary play — failed breakout → short, failed breakdown → long `[GB L86–88, L109–117]` — and it is the same shape as Jumbo's Judas sweep at a range edge `[TBR p.8]`. Phase 1 uses it as a **labeler** placed beside Judas / single-break labels, on a fixed list of boxes, with the shared confirmation grid. Boxes are rails, not reversal zones `[BRIEF]`.
+
+## Citations
+- GB objects (HIS WORDS / HIS CHART / INFERRED kept): NYAM 09:00–10:00, outcomes only after 10:00 `[GB L28–30, L178]`; previous completed hour `[GB L32–33]`; Asia ≈ 20:00–00:00 `[GB L35–38, L46]`; London ≈ 02:00–05:00, his levels, ICT clock `[GB L48, L53–54]`; TDO = first print at 00:00 ET, 5-minute close back through it as confirmation `[GB L24–26]`; NWOG = Friday close vs Sunday 18:00 open, destination / magnet not entry `[GB L59–60, L68–69]`; 9:30 cash-open manipulation, reclaim, longs `[GB L56–57, L90]`; golden pocket 50–61.8% of the completed impulse, location only `[GB L73–76]`; A+ = a sweep happened `[GB L93]`; sweep alone is not a signal `[GB L85]`; PDH / PDL confluence `[GB L64]`.
+- Not added: fleet / copy ops, 25-point partials `[GB L95]`, DLL psychology, SMT as a GB edge, ICT 7:30 true open `[GB L50]`, "above TDO = short" `[GB L51]`, wickless bottom as a model `[GB L158]`, CPI boxes as a family `[GB L177]` `[BRIEF]`.
+- Jumbo labels this shape as Judas / false breakout into projections with reversal 09:40–09:50 `[TBR p.6 L88, p.8 L124–142]`; "9:40 judas into the exhaustion range level" `[XF p.48 L648]`; "textbook longs after 9:40 to London/Asia highs" `[XF p.30 L395]`; leftover Asia / London highs as targets `[FIND p.5 L99–101]`.
+- Pine tier-2 sweep tables to recompute: hourly sweep of prior-hour H/L by NY hour, conditioned on open vs prior open (e.g. hour 9, open above: high sweep 81.9%, low sweep 56.8%, both 41.2%, n=1552; retrace-to-swept-level ≈ 90–95%) `[PINE NQ Hourly Retracements 12y Stats with Levels.txt:185–313]`; magic-hour break → mid target win rates `[PINE magic_hours:55–103]`; raids ≥ 5 pts with 120-min close-back `[PINE Session Raid Stats.txt]`; London 25%-body level wick-and-close-back counters `[PINE Session Range Candles + 25% Level.txt:930–953]`; HTF candle sweep + close-back definitions `[PINE HTF Sweep Model with CISD Table.txt:136–142; Sweep, CISD, MTF FVG & Key Levels.txt:1106,1148]`.
+
+## Faithful object
+Box list (all NQ, ET): `box.6-9` (Jumbo), `box.gb.nyam` (09:00–10:00, outcomes from 10:00), `box.gb.10-11`, `box.gb.hour` (last completed hour), `box.gb.asia` (20:00–00:00), `box.gb.london` (02:00–05:00), `box.jumbo.london` (00:00–03:00, separate row), `box.prior-rth` (PDH / PDL), `lvl.tdo` (00:00 print), `lvl.nwog` (Friday 17:00 settle vs Sunday 18:00 open; two lines), `lvl.0930open`.
+Event `fail.<box>.<grid>`: `b.wick` beyond an edge, then fail-back inside under `grid.gb.c5` (faithful GB) or `b.c1` (comparison), within `k=30`. `lvl.tdo` uses the GB 5-minute close-back only. Golden pocket `loc.gp` = the 50–61.8% band of the last completed impulse (swing from last fail event extreme to the subsequent extreme); emitted as a location flag on events, never as an event. `label.aplus` = event with sweep depth ≥ `d`.
+
+## Upgrades
+- Sweep depth `d` (2 ticks / 5 pts / 0.1·R); confirmation `b.c1` vs `b.c5` vs 15-minute hold inside; time cap `k`.
+- Box source from the clock grid; trade-level vs 1-second bars.
+
+## Outcomes
+- Event counts per box per session; agreement matrix vs Jumbo labels (Judas / single-extended / single-purged / neither) = the "fail-back vs Jumbo labels" table; faithful disagreements = sessions where `fail.6-9.gb.c5` and `judas.depth.any` disagree.
+- Post-event: reject / hold / break of the swept edge (grid); reach of the opposite edge; reach of magnets `lvl.tdo`, `lvl.nwog`, PDH / PDL; time-to-target; whether the event extreme sits inside `loc.gp`.
+- NWOG: fill rate by 12:00 and by 16:00 on Mondays; TDO: touch rate in 09:30–12:00 (tier-2 comparison: midnight-open hit 73.75% overall `[PINE nq_stats_mapper:311–313]`).
+
+## Links
+[touch-reject-hold-break-grid](touch-reject-hold-break-grid.md) · [range-path-class](range-path-class.md) · [clock-grid-and-bars](clock-grid-and-bars.md) · [tbr-6-9-range](tbr-6-9-range.md)
