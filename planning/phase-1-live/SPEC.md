@@ -12,7 +12,7 @@
 
 ## 3. Object schema (one JSON document per variant)
 ```
-{ "family": "range|path|open|env|flow|value|fail|vol|gap|block|tpo",
+{ "family": "range|path|open|env|flow|value|fail|vol|gap|block|tpo|options",
   "variant": "range.6-9.published",
   "faithful_of": "range.6-9.published" | null,
   "params": { ...named constants only... },
@@ -37,12 +37,13 @@ Every constant is a named parameter. No hidden thresholds.
 | open | `open.switch.published` (27 cells) | VP source and VA % variants, `open.oneway.A.0930-1000`, `open.oneway.OR.5m`, `open.oneway.OR.15m`, `open.dbx.*` | open-location-switch |
 | env | `env.ev.mean60`; `env.ss.avgHL60`; `env.ext.133.from-edge`, `env.ext.166.from-edge`; `pz.approx.A` | `env.ev.{median60,p75,p90,rv20,gk20,yz20,har,iv,vix16}` × `ref.{0930open,0900open,eq69,0900close,tdo}`; `env.ss.{medHL60,minavg60}`; `env.ext.{100,050,133.from-eq,133.from-origin}` and London box; `pz.approx.B` plus history-60, vol-scaled, volume-filter, VP-node-snap; VWAP band row `env.vwap.rth.sd2` | ev-range-expected-move, sessionstat-9-12-envelope, extensions-1-33-1-66, p-zones-benchmark, value-and-profiles |
 | flow | `flow.cvd.trade`; `flow.smt.ohlc.4`; `flow.smt.pine.3-3`; `flow.absorption.A`; `flow.bigtrade.100ny` / `75ldn` | `flow.cvd.{ohlc,part.trade,part.ohlc,gamma}`; `flow.smt.trade.nq`; `flow.absorption.B`; `flow.footprint.diag.4x`; `flow.refill.ontouch`; `flow.ofm.sequence` | cvd-variants, smt-divergence, absorption-and-big-trades |
-| value | `value.vp.rth.trade`; `value.delta.rth.trade`; `value.kz`; `value.node.oi.{ndx,ndxp,spx,spxw}.top3` | `value.vp.rth.ohlc1m`, VA 68 / 40, bins, scope; `value.node.gamma.<product>.top3`; QQQ, SPY, NQ.OPT variants; each node row carries native, mapped_nq, map_known_at, OI_vintage | value-and-profiles, options-nodes |
+| value | `value.vp.rth.trade`; `value.delta.rth.trade`; `value.kz`; `env.vwap.rth.sd2` | `value.vp.rth.ohlc1m`, VA 68 / 40, bins, scope | value-and-profiles |
 | fail | `fail.<box>.gb.c5` for every box; `lvl.tdo`, `lvl.nwog`, `lvl.0930open`; `loc.gp`; `label.aplus` (sweep observed) | `b.c1`, depth `d` (not the A+ definition), cap `k` | session-fail-boxes |
 | vol | `vol.rv20`, `vol.gk20`, `vol.yz20`, `vol.har`, `vol.iv.atm`, `vol.skew25`, `vol.vx.slope` | windows 10 / 60; overnight RV | vol-estimators |
 | gap | `gap.fvg.first.clock` | `gap.body.adjacent`, HTF, trade-empty comparison | fvg-body-gaps |
 | block | `block.sweep.tbr.3m`; `cisd.fractal.literal` | timeframe, wick/body/close, envelope, invalidation | sweep-cisd-blocks |
 | tpo | `value.tpo.rth.30m`; `label.amt.open.30m`; `label.amt.day` | 15/60m periods, trade vs OHLC rows, 80% claims as separate denominators | tpo-ib-auction |
+| options | `value.node.oi.{ndx,ndxp,spx,spxw}.top3` | `value.node.gamma.<product>.top3`; QQQ, SPY, NQ.OPT variants; each node row carries product, native, mapped_nq, map_known_at, OI_vintage; missing quotes = coverage hole, not drop the product | options-nodes |
 
 Not-measurable rows (always printed): `flow.refill.offtouch`, `value.dealer.inventory`, `value.hidden.book`, `value.skylit.*`, `flow.smt.trade.es` (in F).
 

@@ -50,7 +50,7 @@ Ambiguous rule → named variants, never a guess presented as the rule.
 - [cvd-variants](cvd-variants.md) — five CVD constructions.
 - [smt-divergence](smt-divergence.md) — trade-level on NQ, OHLC-level across NQ/ES/YM/RTY; Pine matcher as a named row. Not a GB edge.
 - [vol-estimators](vol-estimators.md) — GK, YZ, RV/HAR, IV/skew/VX as features.
-- [options-nodes](options-nodes.md) — native nodes for **NDX, NDXP, SPX, SPXW**; QQQ, SPY, NQ.OPT as named variants.
+- [options-nodes](options-nodes.md) — native nodes for **NDX, NDXP, SPX, SPXW**; QQQ, SPY, NQ.OPT as named variants. Ticket 09, not 06.
 
 **Discretionary families kept thin (sourced, not inside GB pages)**
 - [fvg-body-gaps](fvg-body-gaps.md) — wick gaps, body gaps, first-presented FVG.

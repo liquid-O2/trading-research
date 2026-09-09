@@ -31,11 +31,12 @@ Execute NQ, ES is information. No overnight hold across the day boundary (nothin
 4. **Day class and open location.** Each F session carries `path_class`, `break_order`, `day_type`, `open_cell` (27 cells), `balance`, `edge_clean`. XF p.11 rows recomputed. In-value vs in-range vs outside-both double-break printed. 76% claim printed on **two** denominators (A-period 09:30–10:00, and frozen OR-edge return). (ticket 03)
 5. **AM envelope grid.** Every EV, SessionStat, extension and P-zone row prints reach, overshoot, reject, time-to-touch, in/out-of-value, calibration with Wilson 95%. P-zone `pz.approx.A` uses the 500-session disclosed bands. (ticket 04)
 6. **CVD and SMT.** Five CVD variants and SMT (OHLC-4, trade NQ, Pine 3/3 matcher) print event counts and pairwise agreement. (ticket 05)
-7. **Value, absorption, nodes.** VP, delta, key zones, absorption A/B, BigTrades 100/75, footprint diagonal, VWAP row, and OI/gamma nodes for **NDX, NDXP, SPX, SPXW** print grid outcomes. QQQ, SPY, NQ.OPT are named variants. Each node row has native, mapped_nq, map_known_at, OI_vintage. Hidden book, dealer inventory, Skylit print `not-measurable`. (ticket 06)
+7. **Value, absorption, flow prints.** VP, delta, key zones, absorption A/B, BigTrades 100/75, footprint diagonal, on-touch refill, VWAP ±2SD print grid outcomes. No options ids. (ticket 06)
 8. **Session-fail boxes.** Every box in `wiki/session-fail-boxes.md` prints fail-back counts and an agreement matrix against Jumbo labels; GB-NYAM outcomes start at 10:00; A+ is sweep-only. (ticket 07)
 9. **FVG / CISD / TPO.** First-presented FVG, TBR/Pine CISD-blocks, and TPO/AMT labels print on F. Not attached to GB pages. IB remains the ticket-02 comparison row. (ticket 08)
-10. **One command, whole phase.** `PHASE.md` pass command with no family argument prints every family's lines and exits 0 only when every family has at least one `measured` row and no row lacks a report path.
-11. **Provenance.** Every printed variant id is defined on exactly one wiki page; every quoted number carries a citation.
+10. **Options nodes.** Ticket 09 is options-only: native nodes on NDX, NDXP, SPX, SPXW; QQQ, SPY, NQ.OPT as named variants; each row has product, native, mapped_nq, map_known_at, OI_vintage; missing quotes are a coverage hole, not a dropped product. (ticket 09)
+11. **One command, whole phase.** `PHASE.md` pass command with no family argument prints every family's lines and exits 0 only when every family has at least one `measured` row and no row lacks a report path.
+12. **Provenance.** Every printed variant id is defined on exactly one wiki page; every quoted number carries a citation.
 
 ## Acceptance for Phase 1 as a whole
 All stories pass on F. Reports live under `trading-research/reports/phase1-live/` as canonical JSON plus a Markdown twin. No file under the must-not-change list has a changed hash.

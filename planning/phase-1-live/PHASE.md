@@ -7,7 +7,7 @@ Every object family in `wiki/index.md` is measured on frozen slice F (NY trade d
 ```
 /tmp/trading-research-venv/bin/python trading-research/tools/run_phase1_objects.py report
 ```
-Prints, one row per family × variant, in this order of families (range, path, open, env, vol, flow, value, fail, gap, block, tpo):
+Prints, one row per family × variant, in this order of families (range, path, open, env, vol, flow, value, fail, gap, block, tpo, options):
 
 ```
 family | variant | n | faithful disagreements | experiment status | report path
@@ -22,9 +22,10 @@ Exit code 0 only when every family has at least one `measured` row and no row la
 3. `tickets/03-day-class-and-open-switch.md` — Judas / extended / purged + 27-cell open switch + in-value vs in-range + split 76% claim.
 4. `tickets/04-ev-extensions-p-zone.md` — EV estimator grid, SessionStat 9–12, 1.33/1.66 both coordinates, P-zone 500-session disclosed approx, vol features.
 5. `tickets/05-cvd-and-smt.md` — five CVD constructions + SMT (trade NQ, OHLC 3–4, Pine matcher).
-6. `tickets/06-value-absorption-options.md` — VP / delta / key zones / absorption / BigTrades / footprint / VWAP / options nodes for NDX, NDXP, SPX, SPXW.
+6. `tickets/06-value-absorption-options.md` — VP / delta / key zones / absorption / BigTrades / footprint / on-touch refill / VWAP ±2SD.
 7. `tickets/07-session-fail-boxes.md` — GB fail-boxes vs Jumbo labels; A+ = sweep happened.
 8. `tickets/08-fvg-cisd-tpo.md` — FVG/body gaps, CISD/rejection blocks, TPO + AMT labels (not inside 07).
+9. `tickets/09-options-nodes.md` — options-only: native nodes on NDX, NDXP, SPX, SPXW.
 
 ## Must not change
 `sources/`, raw data under `/workspace/data`, `archive/`, `planning/phase-1-from-scratch/`, `planning/phase-1-fable/`. This tree writes only under `planning/phase-1-live/` (planning) and `trading-research/reports/phase1-live/` plus the retained artifact store (runs).
