@@ -1,0 +1,190 @@
+{
+  "candidate_execution": {
+    "cli_invocations": 0,
+    "compilations": 0,
+    "fits": 0,
+    "imports": 0,
+    "replays": 0,
+    "tests": 0
+  },
+  "completion_limit": "Three assigned defects have static implementations; the distinct-baseline recipe remains explicitly blocked. No passing execution or complete task claim is made.",
+  "dispositions": {
+    "ELRB-02": {
+      "implementation": "e0_stages now requires exact America/New_York calendar date agreement with date_group, in addition to target and historical-year checks. Seconds use exact integer division before timezone conversion. INT09-F01 changes one literal sample date within the same year and asserts rejection. All five existing literal positive sample dates were checked by standard-library static data inspection and agree.",
+      "status": "implemented_static_pending_registered_validation"
+    },
+    "ELRB-03": {
+      "implementation": [
+        "Strict final CPU <180, wall <360, integer RSS <4GiB, finite positive measurements with booleans/unknown/zero rejected for success. Kernel limits remain 180/190 CPU, 4GiB AS, 360 alarm.",
+        "Success requires actual wait4 exit status and observed usage, complete matching supervisor/worker PID-start-boot acknowledgments, exact retained OS-limit contract and actual inner matrix artifact/trial/configuration linkage.",
+        "Inner CPU/wall/RSS must fit both its strict bounds and the outer physical observations; reports separate matrix_resources from physical_resources and never relabel an unsupervised inner interval as whole-worker telemetry.",
+        "e0-report reads bounded canonical actual matrix bytes, verifies hash, fixed dimensions, exact branch/policy/scenario result identities, manifest/source/fold/code commitments and registered logical trial inventory."
+      ],
+      "status": "implemented_static_pending_registered_validation",
+      "tests": "check_e0_supervision reuses the one existing actual matrix, exercises e0-report, checks pure strict boundary/join inputs and rejects nonfinite resource finalization. No actual worker or matrix is started."
+    },
+    "ELRB-04": {
+      "action_taken": "No invented baseline implementation, no name-only placeholder rows and no weakened golden assertion were added. Actual always_flat and combined time/range rule remain tested in the real INT10 matrix. INT09-F03 extension for distinct simple_time/simple_range remains blocked pending exact source disposition.",
+      "needed_clarification": "Identify the already frozen independent algorithms/mapping for simple_time and simple_range, or explicitly resolve the source/golden mismatch without claiming those unnamed recipes were executed.",
+      "reason": "Frozen INT09-F03 expected.baseline_rows names always_flat, simple_time and simple_range, but no separate simple_time or simple_range algorithm is defined by the original E0-MODELS passages or their retained source. The original implementation plan/backlog specifies a singular simple time/range strategy, and E0_REFERENCE_EXPERIMENT supplies the combined sampled first-inward-contact fade rule already used by the runner. Splitting this into two additional strategies would invent unregistered action/model recipes.",
+      "source_evidence": [
+        {
+          "finding": "Defines full features, fixed frequency bins, empty-cell backoff, L2 grid and 2023/2024 selection/calibration, not two separately named time/range recipes.",
+          "lines": "17-19",
+          "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md"
+        },
+        {
+          "finding": "Defines one sampled first-inward-contact fade strategy plus separately fixed 1x/2x bracket policies.",
+          "lines": "23-25",
+          "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md"
+        },
+        {
+          "finding": "Uses singular a simple time/range strategy.",
+          "lines": "88",
+          "path": "/workspace/planning/trading-model/IMPLEMENTATION_PLAN.md"
+        },
+        {
+          "finding": "Uses singular simple time/range competitor.",
+          "lines": "58",
+          "path": "/workspace/planning/trading-model/IMPLEMENTATION_BACKLOG.md"
+        },
+        {
+          "clause": "E0-MODELS",
+          "finding": "Exact retained passage matches E0_REFERENCE_EXPERIMENT lines 17-19.",
+          "path": "reports/e0-integration-source-preparation.json"
+        }
+      ],
+      "status": "blocked_exact_source_definition"
+    },
+    "ELRB-06": {
+      "implementation": [
+        "e0-recover --output-root finalizes the same stopped lifecycle without launching or signaling a process.",
+        "A supervisor lock prevents competing finalizers. A separate dispatch/acknowledgment lock closes the parent-death/Popen/PID-publication window: recovery either sees the active worker acknowledgment or publishes terminal evidence before worker loading is permitted.",
+        "Linux PID plus start ticks and boot identity rejects active worker recovery without confusing PID reuse. Worker acknowledgment binds exact enforced limits.",
+        "Unknown wait4 usage is explicitly unknown and conservatively charges the 180-second reservation. Terminal evidence is published before pending inner-attempt cleanup; repeated recovery completes cleanup idempotently without new attempts."
+      ],
+      "status": "implemented_static_pending_registered_validation",
+      "tests": "Existing F03 helper uses an explicit no-worker metadata abandonment control, one current-PID active-worker rejection, changed OS contract rejection and repeated recovery/CLI recovery identity checks. It asserts one attempt, interrupted status, 180 charged CPU, no artifacts and no worker acknowledgment for the abandoned control."
+    }
+  },
+  "helper_apis": {
+    "bundle_fixture": "check_e0_bundle(test, root, manifest, days, router, input_artifacts) remains unchanged",
+    "owned_finalizer": "_finalize_e0_supervision(root, *, exit_code, cpu_seconds, wall_seconds, peak_rss_bytes, reason, observed) -> retained_receipt",
+    "pure_join": "_join_e0_supervision(receipt, matrix_summary) -> joined_summary_or_IntegrityError",
+    "recovery": "_recover_e0(output_root) -> retained_report; no new worker, signal or replay",
+    "registered_fixture": "check_e0_supervision(test, root, *, matrix_root); root must wire exactly once inside existing INT10-F03 using the existing actual matrix directory",
+    "retained_matrix": "_matrix_summary(root: Path) -> actual_artifact_and_inner_interval_summary",
+    "strict_terminal": "_e0_resource_error(cpu_seconds, wall_seconds, peak_rss_bytes) -> reason_or_None"
+  },
+  "modified_file_count": 4,
+  "modified_files": [
+    {
+      "line_count": 350,
+      "path": "src/trading_research/experiments/e0/learning.py",
+      "reviewed_before_sha256": "3280aa0e3dac963ef7d615bb6fbda52db3993d75b29d489100f44759293d6e24",
+      "sha256": "c4ba27494c7102d8892cc8ff58f2c3d7f3d96760651fd23ce229d2a4065a0cef",
+      "size_bytes": 19008
+    },
+    {
+      "line_count": 452,
+      "path": "src/trading_research/__main__.py",
+      "reviewed_before_sha256": "f3f04e24d14fbcc594d46f7c2dd3705257325a2eb6c4ed590a117e3e1d5ce0ef",
+      "sha256": "71132c4765c24a1df440dc7457cadf15159b69688b360a04e3b1edab73b2a0ad",
+      "size_bytes": 25862
+    },
+    {
+      "line_count": 189,
+      "path": "tests/test_e0_learning_integration.py",
+      "reviewed_before_sha256": "1d0fcac4a6b3711793cc79eabea1d77a313c821a0577a180e8a32ae1e407faa3",
+      "sha256": "b95227bdd90b1aec3a5c2afa537cc2634a426ccd9cdb51ed9404c20bab27e53c",
+      "size_bytes": 13397
+    },
+    {
+      "line_count": 173,
+      "path": "tests/e0_bundle_fixtures.py",
+      "reviewed_before_sha256": "14c5e723e65aec8804d2656173b975f8919faaf1842cc88147369ea7cb65cb2c",
+      "sha256": "cb6e680f193bb3b9eb2f334c16f32b0828c74bb7b7774aa076684b93b28d49eb",
+      "size_bytes": 9621
+    }
+  ],
+  "modified_source_bytes": 67888,
+  "new_public_test_method_count": 0,
+  "ownership_unchanged": [
+    "runner.py",
+    "bundle.py",
+    "learning_store.py",
+    "operations/artifact_graph.py",
+    "frozen registrations",
+    "frozen golden vectors"
+  ],
+  "public_test_methods": {
+    "tests/e0_bundle_fixtures.py": [],
+    "tests/test_e0_learning_integration.py": [
+      "test_int09_f01_chronological_roles_and_interval_exclusions",
+      "test_int09_f02_future_insample_and_wrong_target_artifacts",
+      "test_int09_f03_typed_learning_selection_calibration_and_retained_serving"
+    ]
+  },
+  "read_source_bindings": [
+    {
+      "line_count": 35,
+      "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md",
+      "sha256": "ee96fb31a84ba96a1bcf887e154bf2a12fbd04b688359c9264d18cbab6e941c9",
+      "size_bytes": 9099
+    },
+    {
+      "line_count": 104,
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_PLAN.md",
+      "sha256": "53bbea7075011245f892bfdf876f84c4df5878cfd33c88365886473dc8574efe",
+      "size_bytes": 17372
+    },
+    {
+      "line_count": 188,
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_BACKLOG.md",
+      "sha256": "72e894dc687a67fe46055f4a65e8b9b693640230512efbef62955212b5f01ea3",
+      "size_bytes": 27363
+    },
+    {
+      "line_count": 109,
+      "path": "/workspace/planning/trading-model/components/COMMON_CONTRACTS.md",
+      "sha256": "838a3a4459b5028350cb5f398ac314f379bb3bc610e32a390e205c8823614031",
+      "size_bytes": 24568
+    },
+    {
+      "line_count": 2076,
+      "path": "reports/e0-integration-source-preparation.json",
+      "sha256": "9ccb617a72c89adb5ac3ab668587cbba2dbf6156a57b77bf7f192d6e95d8e617",
+      "size_bytes": 401096
+    },
+    {
+      "line_count": 7,
+      "path": "validation/E0_PERIOD_ORCHESTRATION_V1.md",
+      "sha256": "74423065be709cbcdf1c5af510dd007ec8540201c58946538fcc27381bb3f4d5",
+      "size_bytes": 2026
+    },
+    {
+      "line_count": 10870,
+      "path": "tests/golden/e0_integration_v1.json",
+      "sha256": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43",
+      "size_bytes": 352801
+    }
+  ],
+  "retained_store_read_reduction_plan": {
+    "bounded_operation_design": "One exact-commit operation scope performs configuration/accounting, file hashes and immutable closure verification once, then shares that already verified closure across restoration, metadata checks, actual row reads, OOF checks and serving for that one head query. Bind store object identity, root/namespace/limits, CommitRef and immutable payload bytes. Reject another store/commit; seal read manifests normally; discard the scope on return or exception.",
+    "first_safe_local_reduction": "Remove the duplicate E0ModelBinding.__call__ reopen by doing supplied-model equality against the single reopened model inside the same prediction operation. Keep source values, target, sample, fold, actual ReadSession and OOF verification unchanged.",
+    "forbidden_shortcuts": [
+      "No persistent cross-call or cross-query mutable cache.",
+      "No reuse based solely on model ID, path, mtime or caller-declared digest.",
+      "No skipped actual source bytes, declared routes, calibration base, fitted metadata or target checks.",
+      "No graph, fold or source-field edits were made in this tranche."
+    ],
+    "status": "static_proposal_only_graph_source_unchanged",
+    "validation_needed": "Use the existing registered F11 tamper/stale/OOF suite plus in-operation same-result/same-read evidence and next-operation mutation rejection. Measure whole-worker effect only in an authorized complete attempt."
+  },
+  "review_source": {
+    "path": "/tmp/e0-final-learning-runner-bundle-review.json",
+    "sha256": "3576e66d8e1329b3657f78af0f0182b5ebb5d4e67420420b1c63733b15469113",
+    "size_bytes": 20924
+  },
+  "schema": "E0LearningCliConsolidatedStaticRepairV1"
+}

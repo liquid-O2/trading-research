@@ -1,0 +1,3792 @@
+"""Acquired options quote-quality, coverage and underlier/rate/action support.
+
+Columnar implementation: unique-identity interning, typed lexsort/searchsorted
+reduceat/masks, compact integer codes. Missing, invalid and conflicting quotes
+are never treated as prices. Source-clock sampling is exact; received/published
+/known and last actual NBBO update stay NULL. Causal features are not eligible.
+
+Valid quotation rows stay in the authenticated original files
+(file_id+row_index). Cut boards store the observed as-of payload and run
+evidence. Arbitrary minute history is reconstructed from those files plus the
+sort/dedup rule; this module does not copy an interval tape of every quote
+change.
+
+Local unmatched quote contract_ids are int64 values at or above
+LOCAL_ID_BASE (2**32), disjoint from read-only OI int32 ids. Integer 0 is
+reserved for unresolved invalid identity and is not a tradable contract.
+Invalid sort keys include chain plus original malformed evidence so distinct
+invalid identities do not alias. Cross-shard id equality is digest-stable
+only when the reverse map records no collision; reducers compare the exact
+OSI tuple.
+"""
+from __future__ import annotations
+
+from collections import defaultdict
+from datetime import date, datetime, time, timezone
+from pathlib import Path
+import hashlib
+import json
+import math
+import time as pytime
+
+from trading_research.errors import ContractError, IntegrityError
+from trading_research.foundations.calendar import local_timestamp
+from trading_research.foundations.cash_calendar import CashCalendar
+from trading_research.foundations.time import datetime_ns
+from trading_research.operations.artifacts import ArtifactStore, digest, file_digest
+from trading_research.research.auction_flow_storage import BoundedOutputs, read_json_artifact
+from trading_research.research.options_oi_columnar import (
+    ArrayWriter, ClockMaps, DateCodebook, _date_column_iso, _dictionary_keys,
+    _millistrike_column, _osi_unique_parse, _unique_string_map,
+)
+from trading_research.research.options_oi_measurements import (
+    CHAINS_WITHOUT_LISTING, ZONE, _check_schema, _resolve_source_path,
+    _schema_fields, build_calendar_index, cut_ns_on, dte_days,
+    identity_schema, intended_cash_dates, millistrike, normalize_right,
+    parse_osi, previous_intended, timestamp_ns_from_arrow,
+    coverage_schema as oi_coverage_schema,
+)
+
+
+VERSION = "options-quote-quality-support-measurement-v2"
+FAMILY = "Research-Options-Quote-Quality-Support-acquired-v1"
+ADMITTED_KIND = "options_quote_admitted_sources_v1"
+CONTRACT_KIND = "options_quote_quality_support_contract_v1"
+DEFAULT_DATA_ROOT = "/workspace/data"
+MAX_SOURCE_FILE = 128 * 1024 * 1024
+MAX_WORKER_BYTES = 8 * 1024 ** 3
+STREAM_ROWS = 65536
+NS = 1_000_000_000
+MINUTE_NS = 60 * NS
+GAP_BREAK_NS = 60 * NS
+STALE_THRESHOLDS = (60, 300, 900)
+# Deterministic unmatched-quote namespace. Disjoint from any int32 OI id.
+LOCAL_ID_BASE = 1 << 32
+LOCAL_ID_MASK = (1 << 63) - 1
+LOCAL_ID_OVERFLOW = 1 << 62
+UNRESOLVED_ID = 0
+LISTING_IDENTITY_COLUMNS = (
+    "symbol", "expiration", "strike", "right", "request_date", "osi_symbol",
+)
+
+FAMILY_NEAR, FAMILY_BROAD, FAMILY_VIX, FAMILY_UNION = 0, 1, 2, 3
+FAMILY_NAMES = ("near", "broad", "vix_full", "union")
+FAMILY_CODE = {"near": 0, "broad": 1, "vix_full": 2, "union": 3}
+RIGHT_CALL, RIGHT_PUT, RIGHT_UNKNOWN = 0, 1, -1
+RIGHT_NAMES = {0: "CALL", 1: "PUT", -1: "unknown"}
+BASE_INVALID_IDENTITY, BASE_INVALID_CLOCK, BASE_INVALID_NUMERIC = 0, 1, 2
+BASE_CONFLICT, BASE_ALL_ZERO, BASE_ONE_SIDED = 3, 4, 5
+BASE_CROSSED, BASE_LOCKED, BASE_TWO_SIDED = 6, 7, 8
+BASE_NAMES = (
+    "invalid_identity", "invalid_clock", "invalid_numeric", "conflict",
+    "all_zero", "one_sided", "crossed", "locked", "two_sided",
+)
+DTE_NAMES = ("expired", "0", "1", "2-7", "8-14", "15-30", "31-60", "61+")
+DTE_UNKNOWN = -1
+
+QUOTE_FAMILIES = ("near", "broad", "vix_full")
+SUPPORT_FAMILIES = ("cash_daily", "etf_1m", "fred", "corporate_actions")
+QUOTE_ROLES = frozenset({"quote", "quotes", "quote_1m"})
+SUPPORT_ROLES = frozenset({
+    "underlier_daily", "cash_daily", "underlier_minute", "etf_1m",
+    "qqq_minute", "spy_minute", "rates", "fred", "corporate_actions", "actions",
+})
+ETF_ROLE_SYMBOL = {"qqq_minute": "QQQ", "spy_minute": "SPY", "etf_1m": None}
+ETF_DATASET_SYMBOL = {
+    "quantpad/nasdaq__qqq-etf__ohlcv-1m": "QQQ",
+    "quantpad/nyse-arca__spy-etf__ohlcv-1m": "SPY",
+}
+BASE_CLASSES = BASE_NAMES
+QUALITY_FLAGS = (
+    "condition_zero", "nonpositive_size", "negative_size", "zero_bid", "zero_ask",
+    "negative_price", "nonfinite_price", "session_outside", "request_date_mismatch",
+)
+DTE_BUCKETS = DTE_NAMES
+LOCAL_CUTS = ("09:30", "10:00", "15:00", "cash_close")
+UTC_CUTS = ("15:00_utc",)
+ALL_CUTS = LOCAL_CUTS + UTC_CUTS
+QUOTE_REQUIRED = (
+    "symbol", "expiration", "strike", "right", "bid_size", "ask_size",
+    "bid_exchange", "ask_exchange", "bid_condition", "ask_condition",
+    "bid", "ask", "request_date", "ts_event", "osi_symbol",
+)
+REASON_NAMES = (
+    None,
+    "invalid_expiration",
+    "invalid_request_date",
+    "missing_identity_fields",
+    "inexact_or_nonfinite_strike",
+    "unparseable_osi",
+    "osi_root_or_symbol_chain_mismatch",
+    "strike_or_osi_identity_conflict",
+    "wrong_timestamp_unit_or_zone",
+    "missing_clock",
+    "inexact_integer_payload",
+)
+REMAINING = (
+    "iv_greeks_and_surfaces_remain_separate",
+    "trade_signing_exposure_and_holdings_remain_separate",
+    "vix_implied_surface_and_futures_options_remain_separate",
+    "no_actual_receipt_or_last_nbbo_update_clock",
+    "no_intraday_cash_ndx_spx_vix_in_this_block",
+    "no_historical_rate_pit_vintage",
+    "no_context_fit",
+)
+INTERVAL_RECONSTRUCTION = (
+    "A quotation row is visible at retrospective sourceclock cut_ns on cut_date "
+    "iff ts_event_ns <= cut_ns and the original request_date is valid and "
+    "<= cut_date and the source acquisition/declared date <= cut_date and the "
+    "eastern session date of ts_event_ns equals cut_date (no prior-session "
+    "carry, no future quote). An invalid request_date is not substituted by the "
+    "filename date. The newest eligible identity+time is the as-of state. A "
+    "current conflict or invalid_identity/clock/numeric row suppresses any "
+    "older valid quote of that same resolved identity; there is no fallback "
+    "search. A malformed identity is unresolved (sort key never a valid "
+    "contract_id) and cannot suppress an unrelated valid identity merely "
+    "because OSI text matches. Alias: same identity+time and identical "
+    "bid/ask/size/exchange/condition including null masks is one event with "
+    "summed multiplicity. Conflict: same identity+time and any payload or null "
+    "difference, or a preexisting within-family conflict, has no winner and "
+    "canonical usable price/mid/spread stay undefined. Source-family "
+    "populations are deduplicated before union. sample_age_ns = cut_ns - latest "
+    "sampled ts_event_ns. unchanged_payload_age_ns = cut_ns - first observed "
+    "ts_event_ns of the current identical 8-field payload run. A gap > 60s, "
+    "invalid_identity/clock/numeric row or conflict breaks the run. First "
+    "sample of a run has observed continuity false. received_at/published_at/"
+    "known_at/last_actual_update stay NULL; causal_feature_eligible is false; "
+    "actual update age is unknown. Original files plus the typed "
+    "contract_id+ts_event_ns+file_id+row_index grouping reconstruct any sampled "
+    "minute; this module does not store every quote change."
+)
+OUTPUT_SCHEMAS = {
+    "admission": "options_quote_file_admission_v1",
+    "exceptions": "options_quote_exceptions_v1",
+    "alias_conflict": "options_quote_alias_conflict_v1",
+    "cut_board": "options_quote_cut_board_v1",
+    "source_quality": "options_quote_source_quality_v1",
+    "coverage": "options_quote_coverage_v1",
+    "underlier_support": "options_quote_underlier_support_v1",
+    "fred_support": "options_quote_fred_support_v1",
+    "action_support": "options_quote_action_support_v1",
+    "date_aggregates": "options_quote_date_aggregates_v1",
+    "reconstruction": "options_quote_reconstruction_v1",
+    "identity_match": "options_quote_identity_match_v1",
+}
+FRAME_ARRAYS = (
+    "file_id", "row_index", "osi_code", "exp_days", "milli", "right_code",
+    "req_days", "declared_days", "east_days", "ts_event_ns",
+    "contract_id", "sort_id", "raw_base", "reason_code",
+    "bid", "ask", "bid_size", "ask_size", "bid_exchange", "ask_exchange",
+    "bid_condition", "ask_condition",
+    "bid_null", "ask_null", "bid_size_null", "ask_size_null",
+    "bid_ex_null", "ask_ex_null", "bid_cond_null", "ask_cond_null",
+    "ts_ok", "req_ok", "identity_valid", "oi_matched",
+    "unique_conflict", "keep", "multiplicity",
+    "alias_file_id", "alias_row_index",
+    "condition_zero", "nonpositive_size", "negative_size", "zero_bid", "zero_ask",
+    "negative_price", "nonfinite_price", "session_outside", "request_date_mismatch",
+    "dte", "dte_code", "usable_raw",
+    "run_start_ts", "run_start_file_id", "run_start_row_index", "run_continuity",
+)
+
+
+def _pa():
+    import pyarrow as pa
+    return pa
+
+
+def _pc():
+    import pyarrow.compute as pc
+    return pc
+
+
+def _np():
+    import numpy as np
+    return np
+
+
+def contract(protocol):
+    if not isinstance(protocol, dict):
+        raise ContractError("protocol mapping required")
+    if protocol.get("kind") == CONTRACT_KIND:
+        return protocol
+    inner = protocol.get("contract")
+    if isinstance(inner, dict) and inner.get("kind") == CONTRACT_KIND:
+        return inner
+    raise ContractError("options quote quality/support contract required")
+
+
+def load_calendar(protocol):
+    spec = contract(protocol)["cash_calendar"]
+    path = Path(spec["path"])
+    raw = path.read_bytes()
+    sha = hashlib.sha256(raw).hexdigest()
+    if spec.get("sha256") and sha != spec["sha256"]:
+        raise IntegrityError("cash calendar bytes changed")
+    if spec.get("size_bytes") is not None and len(raw) != spec["size_bytes"]:
+        raise IntegrityError("cash calendar size changed")
+    return CashCalendar(path), {"path": str(path), "sha256": sha, "size_bytes": len(raw)}
+
+
+def quote_dte_bucket(days):
+    if days is None:
+        return None
+    if days < 0:
+        return "expired"
+    if days == 0:
+        return "0"
+    if days == 1:
+        return "1"
+    if days <= 7:
+        return "2-7"
+    if days <= 14:
+        return "8-14"
+    if days <= 30:
+        return "15-30"
+    if days <= 60:
+        return "31-60"
+    return "61+"
+
+
+def quote_dte_code(days):
+    if days is None:
+        return DTE_UNKNOWN
+    name = quote_dte_bucket(days)
+    return DTE_NAMES.index(name) if name in DTE_NAMES else DTE_UNKNOWN
+
+
+def _dte_codes_vec(days):
+    np = _np()
+    days = np.asarray(days, dtype=np.int64)
+    out = np.full(len(days), DTE_UNKNOWN, dtype=np.int8)
+    out[days < 0] = 0
+    out[days == 0] = 1
+    out[days == 1] = 2
+    out[(days >= 2) & (days <= 7)] = 3
+    out[(days >= 8) & (days <= 14)] = 4
+    out[(days >= 15) & (days <= 30)] = 5
+    out[(days >= 31) & (days <= 60)] = 6
+    out[days >= 61] = 7
+    return out
+
+
+def utc_cut_ns(day, label="15:00"):
+    hour, minute = (int(part) for part in label.split(":"))
+    if type(day) is str:
+        day = date.fromisoformat(day)
+    return datetime_ns(datetime(day.year, day.month, day.day, hour, minute, tzinfo=timezone.utc))
+
+
+def implementation_hashes():
+    here = Path(__file__).resolve()
+    stats = here.with_name("options_quote_statistics.py")
+    return {
+        "options_quote_measurements.py": file_digest(here),
+        "options_quote_statistics.py": file_digest(stats),
+        "version": VERSION,
+    }
+
+
+def scientific_hash(protocol):
+    spec = dict(contract(protocol))
+    spec.pop("data_root", None)
+    return digest(spec)
+
+
+def admitted_identity(admitted):
+    if not isinstance(admitted, dict):
+        raise ContractError("admitted mapping required")
+    payload = {
+        "kind": admitted.get("kind"),
+        "source_files": admitted.get("source_files"),
+        "sources": [
+            {
+                "file_id": rec.get("file_id"),
+                "sha256": rec.get("sha256"),
+                "path": (rec.get("source") or {}).get("path"),
+                "size_bytes": (rec.get("source") or {}).get("size_bytes"),
+                "rows": rec.get("rows"),
+                "schema_id": rec.get("schema_id"),
+                "dataset_id": (rec.get("source") or {}).get("dataset_id"),
+            }
+            for rec in (admitted.get("sources") or [])
+        ],
+    }
+    return digest(payload)
+
+
+def _empty_quote_table():
+    pa = _pa()
+    return pa.schema([
+        ("symbol", pa.large_string()), ("expiration", pa.date32()),
+        ("strike", pa.float64()), ("right", pa.large_string()),
+        ("bid_size", pa.int64()), ("ask_size", pa.int64()),
+        ("bid_exchange", pa.int64()), ("ask_exchange", pa.int64()),
+        ("bid_condition", pa.int64()), ("ask_condition", pa.int64()),
+        ("bid", pa.float64()), ("ask", pa.float64()),
+        ("request_date", pa.date32()),
+        ("ts_event", pa.timestamp("ns", tz="UTC")),
+        ("osi_symbol", pa.large_string()),
+    ]).empty_table()
+
+
+def _is_empty_marker(payload, record):
+    if record.get("empty_marker") is True or record.get("marker") == "empty":
+        return True
+    if payload == {}:
+        return True
+    return isinstance(payload, dict) and payload.get("empty_marker") is True and "rows" not in payload
+
+
+def _source_family(record):
+    source = record["source"]
+    family = source.get("source_family")
+    if family in QUOTE_FAMILIES or family in SUPPORT_FAMILIES:
+        return family
+    dataset = source.get("dataset_id") or ""
+    role = source.get("role")
+    if role in {"qqq_minute", "spy_minute"} or dataset in ETF_DATASET_SYMBOL:
+        return "etf_1m"
+    if family:
+        return family
+    if "dte14" in dataset or "strike-range" in dataset:
+        return "near"
+    if "dte60-full-chain" in dataset or "vix-options__quote" in dataset:
+        return "vix_full"
+    if "dte60" in dataset or "atm10" in dataset:
+        return "broad"
+    if "yahoo__cash-daily" in dataset:
+        return "cash_daily"
+    if "ohlcv-1m" in dataset or "etf__ohlcv" in dataset:
+        return "etf_1m"
+    if "fred__usd-rates" in dataset:
+        return "fred"
+    if "corporate-actions" in dataset:
+        return "corporate_actions"
+    if role in QUOTE_ROLES:
+        return "near"
+    if role in {"underlier_daily", "cash_daily"}:
+        return "cash_daily"
+    if role in {"underlier_minute", "etf_1m"}:
+        return "etf_1m"
+    if role in {"rates", "fred"}:
+        return "fred"
+    if role in {"corporate_actions", "actions"}:
+        return "corporate_actions"
+    raise ContractError("admitted source_family could not be classified")
+
+
+def _is_quote_record(record):
+    return _source_family(record) in QUOTE_FAMILIES or record["source"].get("role") in QUOTE_ROLES
+
+
+def _is_support_record(record):
+    return _source_family(record) in SUPPORT_FAMILIES or record["source"].get("role") in SUPPORT_ROLES
+
+
+def _etf_symbol(record):
+    source = record["source"]
+    role = source.get("role")
+    if role in ETF_ROLE_SYMBOL and ETF_ROLE_SYMBOL[role]:
+        return ETF_ROLE_SYMBOL[role]
+    dataset = source.get("dataset_id") or ""
+    if dataset in ETF_DATASET_SYMBOL:
+        return ETF_DATASET_SYMBOL[dataset]
+    return None
+
+
+def admission_schema():
+    pa = _pa()
+    return pa.schema([
+        ("file_id", pa.int64()), ("path", pa.string()), ("sha256", pa.string()),
+        ("dataset_id", pa.string()), ("chain", pa.string()),
+        ("source_family", pa.string()), ("role", pa.string()),
+        ("request_date", pa.string()), ("bytes", pa.int64()),
+        ("rows", pa.int64()), ("schema_id", pa.string()),
+        ("empty_marker", pa.bool_()), ("format", pa.string()),
+        ("scope", pa.string()),
+    ])
+
+
+def exception_schema():
+    pa = _pa()
+    return pa.schema([
+        ("file_id", pa.int64()), ("row_index_start", pa.int64()),
+        ("row_index_end", pa.int64()), ("n_rows", pa.int64()),
+        ("chain", pa.string()), ("source_family", pa.string()),
+        ("request_date", pa.string()), ("invalid_reason", pa.string()),
+        ("osi_symbol", pa.string()), ("expiration", pa.string()),
+        ("strike", pa.float64()), ("right", pa.string()),
+        ("ts_event_ns", pa.int64()),
+    ])
+
+
+def alias_conflict_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("source_family", pa.string()),
+        ("alias_groups", pa.int64()), ("conflict_groups", pa.int64()),
+        ("alias_row_mass", pa.int64()), ("conflict_row_mass", pa.int64()),
+        ("max_multiplicity", pa.int64()),
+        ("payload_equal_groups", pa.int64()),
+        ("example_file_id", pa.int64()), ("example_row_index", pa.int64()),
+        ("example_alias_file_id", pa.int64()), ("example_alias_row_index", pa.int64()),
+        ("example_contract_id", pa.int64()), ("example_ts_event_ns", pa.int64()),
+        ("example_conflict", pa.bool_()),
+    ])
+
+
+def cut_board_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("acquisition_date", pa.string()),
+        ("cut_label", pa.string()), ("cut_ns", pa.int64()),
+        ("source_family", pa.string()), ("contract_id", pa.int64()),
+        ("identity_resolved", pa.bool_()),
+        ("osi_symbol", pa.string()), ("expiration", pa.string()),
+        ("millistrike", pa.int64()), ("right", pa.string()),
+        ("dte", pa.int64()), ("dte_bucket", pa.string()),
+        ("bid", pa.float64()), ("ask", pa.float64()),
+        ("diagnostic_bid", pa.float64()), ("diagnostic_ask", pa.float64()),
+        ("bid_size", pa.int64()), ("ask_size", pa.int64()),
+        ("bid_exchange", pa.int64()), ("ask_exchange", pa.int64()),
+        ("bid_condition", pa.int64()), ("ask_condition", pa.int64()),
+        ("bid_null", pa.bool_()), ("ask_null", pa.bool_()),
+        ("bid_size_null", pa.bool_()), ("ask_size_null", pa.bool_()),
+        ("bid_ex_null", pa.bool_()), ("ask_ex_null", pa.bool_()),
+        ("bid_cond_null", pa.bool_()), ("ask_cond_null", pa.bool_()),
+        ("mid", pa.float64()), ("spread", pa.float64()),
+        ("relative_spread", pa.float64()),
+        ("base_class", pa.string()), ("raw_base_class", pa.string()),
+        ("usable", pa.bool_()), ("conflict", pa.bool_()),
+        ("condition_zero", pa.bool_()), ("nonpositive_size", pa.bool_()),
+        ("negative_size", pa.bool_()), ("zero_bid", pa.bool_()),
+        ("zero_ask", pa.bool_()), ("negative_price", pa.bool_()),
+        ("nonfinite_price", pa.bool_()), ("session_outside", pa.bool_()),
+        ("request_date_mismatch", pa.bool_()),
+        ("ts_event_ns", pa.int64()),
+        ("sample_age_ns", pa.int64()), ("unchanged_payload_age_ns", pa.int64()),
+        ("sample_stale_60", pa.bool_()), ("sample_stale_300", pa.bool_()),
+        ("sample_stale_900", pa.bool_()),
+        ("payload_stale_60", pa.bool_()), ("payload_stale_300", pa.bool_()),
+        ("payload_stale_900", pa.bool_()),
+        ("run_continuity_observed", pa.bool_()),
+        ("run_lower_bound_ns", pa.int64()),
+        ("file_id", pa.int64()), ("row_index", pa.int64()),
+        ("run_start_file_id", pa.int64()), ("run_start_row_index", pa.int64()),
+        ("alias_file_id", pa.int64()), ("alias_row_index", pa.int64()),
+        ("alias_multiplicity", pa.int64()),
+        ("listed", pa.bool_()), ("listing_known", pa.bool_()),
+        ("quoted", pa.bool_()), ("oi", pa.int64()),
+        ("oi_available", pa.bool_()), ("oi_ambiguous", pa.bool_()),
+        ("oi_missing", pa.bool_()), ("oi_stale", pa.bool_()),
+        ("oi_expired", pa.bool_()), ("oi_zero", pa.bool_()),
+        ("received_at_ns", pa.int64()), ("published_at_ns", pa.int64()),
+        ("known_at_ns", pa.int64()), ("last_actual_update_ns", pa.int64()),
+        ("actual_update_age_unknown", pa.bool_()),
+        ("causal_feature_eligible", pa.bool_()),
+        ("cut_status", pa.string()),
+    ])
+
+
+def source_quality_schema():
+    pa = _pa()
+    fields = [
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("source_family", pa.string()), ("right", pa.string()),
+        ("dte_bucket", pa.string()),
+        ("raw_rows", pa.int64()), ("unique_events", pa.int64()),
+        ("missing_bid", pa.int64()), ("missing_ask", pa.int64()),
+        ("missing_bid_size", pa.int64()), ("missing_ask_size", pa.int64()),
+        ("missing_ts", pa.int64()),
+    ]
+    for name in BASE_CLASSES:
+        fields.append((f"raw_{name}", pa.int64()))
+        fields.append((f"unique_{name}", pa.int64()))
+    for name in QUALITY_FLAGS:
+        fields.append((f"raw_{name}", pa.int64()))
+        fields.append((f"unique_{name}", pa.int64()))
+    return pa.schema(fields)
+
+
+def coverage_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("cut_label", pa.string()), ("source_family", pa.string()),
+        ("intended", pa.bool_()), ("closed", pa.bool_()),
+        ("early_close", pa.bool_()), ("session_state", pa.string()),
+        ("file_present", pa.bool_()), ("empty_marker", pa.bool_()),
+        ("missing_file", pa.bool_()), ("cut_status", pa.string()),
+        ("cut_applicable", pa.bool_()),
+        ("listed_count", pa.int64()), ("quoted_count", pa.int64()),
+        ("quoted_listed", pa.int64()),
+        ("listed_unquoted", pa.int64()), ("quoted_unlisted", pa.int64()),
+        ("usable_count", pa.int64()), ("conflict_count", pa.int64()),
+        ("invalid_count", pa.int64()), ("all_zero_count", pa.int64()),
+        ("one_sided_count", pa.int64()), ("crossed_count", pa.int64()),
+        ("locked_count", pa.int64()), ("two_sided_count", pa.int64()),
+        ("sample_stale_60_count", pa.int64()), ("sample_stale_300_count", pa.int64()),
+        ("sample_stale_900_count", pa.int64()),
+        ("payload_stale_60_count", pa.int64()), ("payload_stale_300_count", pa.int64()),
+        ("payload_stale_900_count", pa.int64()),
+        ("quoted_with_age", pa.int64()),
+        ("bid_sum", pa.float64()), ("bid_n", pa.int64()),
+        ("ask_sum", pa.float64()), ("ask_n", pa.int64()),
+        ("mid_sum", pa.float64()), ("mid_n", pa.int64()),
+        ("spread_sum", pa.float64()), ("spread_n", pa.int64()),
+        ("rel_spread_sum", pa.float64()), ("rel_spread_n", pa.int64()),
+        ("sample_age_sum", pa.float64()), ("payload_age_sum", pa.float64()),
+        ("oi_available_count", pa.int64()), ("oi_quoted_available_count", pa.int64()),
+        ("oi_missing_count", pa.int64()),
+        ("oi_ambiguous_count", pa.int64()), ("oi_zero_count", pa.int64()),
+        ("oi_amount_unknown", pa.int64()), ("oi_total_available", pa.int64()),
+        ("oi_weighted_quoted_fraction", pa.float64()),
+        ("listing_known", pa.bool_()), ("vix_listing_unknown", pa.bool_()),
+        ("listing_unavailable", pa.bool_()), ("oi_unavailable", pa.bool_()),
+        ("listing_file_present", pa.bool_()), ("listing_status", pa.string()),
+        ("listing_denominator_known", pa.bool_()),
+        ("gt60_dte_listed", pa.int64()),
+        ("no_sample", pa.int64()),
+        ("causal_feature_eligible", pa.bool_()),
+    ])
+
+
+def underlier_support_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("cut_label", pa.string()), ("cut_ns", pa.int64()),
+        ("etf_present", pa.bool_()), ("etf_symbol", pa.string()),
+        ("etf_instrument_id", pa.int32()),
+        ("etf_bar_start_ns", pa.int64()), ("etf_bar_end_ns", pa.int64()),
+        ("etf_open", pa.float64()), ("etf_high", pa.float64()),
+        ("etf_low", pa.float64()), ("etf_close", pa.float64()),
+        ("etf_volume", pa.float64()),
+        ("etf_age_ns", pa.int64()), ("etf_gap", pa.bool_()),
+        ("etf_assumption", pa.string()),
+        ("etf_file_id", pa.int64()), ("etf_row_index", pa.int64()),
+        ("cash_symbol", pa.string()), ("cash_date", pa.string()),
+        ("cash_close", pa.float64()), ("cash_adjusted_close", pa.float64()),
+        ("cash_same_date", pa.bool_()), ("cash_assumption", pa.string()),
+        ("cash_publication_known", pa.bool_()),
+        ("vix_cash_unavailable", pa.bool_()),
+        ("fred_series_count", pa.int64()), ("fred_present", pa.bool_()),
+        ("action_event_count", pa.int64()),
+        ("causal_feature_eligible", pa.bool_()),
+    ])
+
+
+def fred_support_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("cut_label", pa.string()), ("cut_ns", pa.int64()),
+        ("series_id", pa.string()), ("tenor_days", pa.int64()),
+        ("obs_date", pa.string()), ("rate_pct", pa.float64()),
+        ("missing_rate", pa.bool_()),
+        ("realtime_start", pa.string()), ("realtime_end", pa.string()),
+        ("historical_known", pa.string()),
+        ("file_id", pa.int64()), ("row_index", pa.int64()),
+        ("causal_feature_eligible", pa.bool_()),
+    ])
+
+
+def action_support_schema():
+    pa = _pa()
+    return pa.schema([
+        ("chain", pa.string()), ("request_date", pa.string()),
+        ("cut_label", pa.string()), ("cut_ns", pa.int64()),
+        ("symbol", pa.string()), ("ex_date", pa.string()),
+        ("dividend", pa.float64()), ("split_ratio", pa.float64()),
+        ("file_id", pa.int64()), ("row_index", pa.int64()),
+        ("announcement_known_at_ns", pa.int64()),
+        ("future_exdate", pa.bool_()),
+        ("causal_feature_eligible", pa.bool_()),
+    ])
+
+
+def identity_match_schema():
+    pa = _pa()
+    return pa.schema([
+        ("contract_id", pa.int64()), ("chain", pa.string()),
+        ("osi_symbol", pa.string()), ("expiration", pa.string()),
+        ("millistrike", pa.int64()), ("right", pa.string()),
+        ("oi_matched", pa.bool_()),
+        ("identity_resolved", pa.bool_()),
+    ])
+
+
+def _table(schema, rows):
+    pa = _pa()
+    if not rows:
+        return schema.empty_table()
+    return pa.table({field.name: [row.get(field.name) for row in rows] for field in schema},
+                    schema=schema)
+
+
+def _arrays_table(schema, columns):
+    pa = _pa()
+    return pa.table(columns, schema=schema)
+
+
+def _validate_admitted(admitted, protocol, selected_dates, selected_chains):
+    if not isinstance(admitted, dict) or admitted.get("kind") != ADMITTED_KIND:
+        raise ContractError("admitted options_quote_admitted_sources_v1 required")
+    sources = admitted.get("sources")
+    if type(sources) is not list:
+        raise ContractError("admitted sources list required")
+    if admitted.get("source_files") is not None and admitted["source_files"] != len(sources):
+        raise IntegrityError("admitted source_files count does not match sources")
+    chains = set(contract(protocol)["population"]["chains"])
+    if selected_chains is not None:
+        extra = set(selected_chains) - chains
+        if extra:
+            raise ContractError("selected_chains outside the frozen population")
+    seen, selected_ids = set(), []
+    date_set = None if selected_dates is None else set(selected_dates)
+    chain_set = None if selected_chains is None else set(selected_chains)
+    for record in sources:
+        if type(record) is not dict or type(record.get("file_id")) is not int:
+            raise ContractError("each admitted source needs an integer file_id")
+        if record["file_id"] in seen:
+            raise IntegrityError("duplicate admitted file_id")
+        seen.add(record["file_id"])
+        source = record.get("source")
+        if not isinstance(source, dict):
+            raise ContractError("admitted source mapping required")
+        if source.get("chain") not in chains and not _is_support_record(record):
+            raise ContractError("admitted chain is outside the frozen population")
+        if record.get("format") not in {".parquet", ".json"}:
+            raise ContractError("admitted format must be .parquet or .json")
+        req = source.get("request_date")
+        chain = source.get("chain")
+        date_ok = date_set is None or req is None or req in date_set or _is_support_record(record)
+        chain_ok = chain_set is None or chain is None or chain in chain_set or _is_support_record(record)
+        if date_ok and chain_ok:
+            selected_ids.append(record["file_id"])
+    return sources, selected_ids
+
+
+def _authenticate_source(protocol, record):
+    """Exact size then streaming hash. Bytes are not retained."""
+    source = record["source"]
+    path = _resolve_source_path(protocol, source["path"])
+    if not path.is_file():
+        raise IntegrityError("admitted source file is missing")
+    size = path.stat().st_size
+    limit = int(contract(protocol).get("resources", {}).get("maximum_source_file_bytes", MAX_SOURCE_FILE))
+    if size > limit:
+        raise ContractError("source file exceeds the registered per-file bound")
+    if size != source["size_bytes"]:
+        raise IntegrityError("admitted source size changed before decode")
+    digest_hex = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(8 * 1024 * 1024)
+            if not chunk:
+                break
+            digest_hex.update(chunk)
+    digest_hex = digest_hex.hexdigest()
+    if digest_hex != record["sha256"]:
+        raise IntegrityError("admitted source hash changed before decode")
+    return path, size, digest_hex
+
+
+def _check_quote_clock_schema(table, schema_str):
+    declared = dict(_schema_fields(schema_str))
+    if "ts_event" not in table.schema.names:
+        raise IntegrityError("admitted source missing ts_event")
+    ts_type = table.schema.field("ts_event").type
+    pa = _pa()
+    if not pa.types.is_timestamp(ts_type):
+        raise IntegrityError("ts_event must be an Arrow timestamp[ns]")
+    if ts_type.unit != "ns":
+        raise IntegrityError("ts_event unit must be nanoseconds")
+    zone = getattr(ts_type, "tz", None)
+    if zone not in (None, "UTC"):
+        raise IntegrityError("ts_event timezone must be UTC")
+    declared_ts = (declared.get("ts_event") or "").lower()
+    if "timestamp" in declared_ts and "us" in declared_ts and "ns" not in declared_ts:
+        raise IntegrityError("ts_event unit must be nanoseconds")
+
+
+def read_admitted_quote(protocol, record, schemas):
+    """Authenticate then project quote columns. Caller concatenates row groups."""
+    path, size, digest_hex = _authenticate_source(protocol, record)
+    fmt = record["format"]
+    empty = False
+    tables = []
+    if fmt == ".json":
+        payload = json.loads(path.read_bytes().decode())
+        if _is_empty_marker(payload, record):
+            tables.append(_empty_quote_table())
+            empty = True
+        else:
+            rows = payload["rows"] if isinstance(payload, dict) and "rows" in payload else payload
+            if type(rows) is not list:
+                raise ContractError("JSON source must be a row list or validated empty marker")
+            pa = _pa()
+            tables.append(pa.Table.from_pylist(rows) if rows else _empty_quote_table())
+    elif fmt == ".parquet":
+        import pyarrow.parquet as pq
+        handle = pq.ParquetFile(path)
+        if handle.num_row_groups == 0:
+            tables.append(_empty_quote_table())
+        else:
+            for index in range(handle.num_row_groups):
+                tables.append(handle.read_row_group(index, columns=list(QUOTE_REQUIRED)))
+    else:
+        raise ContractError("source format must be .parquet or .json")
+    if not empty:
+        schema_str = schemas.get(record["schema_id"])
+        if type(schema_str) is not str:
+            raise IntegrityError("admitted schema_id is not in schemas")
+        for table in tables:
+            if len(table) == 0:
+                continue
+            _check_quote_clock_schema(table, schema_str)
+            _check_schema(table, schema_str, QUOTE_REQUIRED)
+    n_rows = sum(len(table) for table in tables)
+    if record.get("rows") is not None and not empty and n_rows != record["rows"]:
+        raise IntegrityError("admitted row count does not match the decoded table")
+    return tables, {
+        "path": record["source"]["path"], "sha256": digest_hex, "size_bytes": size,
+        "rows": n_rows, "file_id": record["file_id"],
+        "schema_id": record.get("schema_id"), "format": fmt, "empty_marker": empty,
+    }
+
+
+def read_admitted_support(protocol, record):
+    path, size, digest_hex = _authenticate_source(protocol, record)
+    fmt = record["format"]
+    pa = _pa()
+    if fmt == ".json":
+        payload = json.loads(path.read_bytes().decode())
+        rows = payload["rows"] if isinstance(payload, dict) and "rows" in payload else payload
+        table = pa.Table.from_pylist(rows) if rows else pa.table({})
+    elif fmt == ".parquet":
+        import pyarrow.parquet as pq
+        table = pq.read_table(path)
+    else:
+        raise ContractError("support format must be .parquet or .json")
+    if record.get("rows") is not None and len(table) != record["rows"]:
+        raise IntegrityError("admitted support row count does not match the decoded table")
+    return table, {
+        "path": record["source"]["path"], "sha256": digest_hex, "size_bytes": size,
+        "rows": len(table), "file_id": record["file_id"], "empty_marker": False,
+        "format": fmt,
+    }
+
+
+def _int64_native(column, name):
+    """Native int64 payload. Floating integers are rejected; nulls preserved."""
+    pa, pc = _pa(), _pc()
+    nulls = pc.is_null(column).to_numpy(zero_copy_only=False).astype(bool, copy=False)
+    if pa.types.is_integer(column.type):
+        values = column.fill_null(0).cast(pa.int64()).to_numpy(zero_copy_only=False).astype("int64", copy=False)
+        return values, nulls
+    if pa.types.is_floating(column.type):
+        raise IntegrityError(f"{name} must be native int64; inexact integer payload rejected")
+    raise IntegrityError(f"{name} changed type")
+
+
+def _float_column(column):
+    pc = _pc()
+    nulls = pc.is_null(column).to_numpy(zero_copy_only=False).astype(bool, copy=False)
+    values = column.fill_null(float("nan")).to_numpy(zero_copy_only=False)
+    return _np().asarray(values, dtype="float64"), nulls
+
+
+def _right_code(value):
+    mapped = normalize_right(value)
+    if mapped == "CALL":
+        return RIGHT_CALL
+    if mapped == "PUT":
+        return RIGHT_PUT
+    return RIGHT_UNKNOWN
+
+
+def _empty_frame(n=0):
+    np = _np()
+    frame = {
+        "file_id": np.empty(n, dtype=np.int64),
+        "row_index": np.empty(n, dtype=np.int64),
+        "osi_code": np.empty(n, dtype=np.int32),
+        "exp_days": np.empty(n, dtype=np.int32),
+        "milli": np.empty(n, dtype=np.int64),
+        "right_code": np.empty(n, dtype=np.int8),
+        "req_days": np.empty(n, dtype=np.int32),
+        "declared_days": np.empty(n, dtype=np.int32),
+        "east_days": np.empty(n, dtype=np.int32),
+        "ts_event_ns": np.empty(n, dtype=np.int64),
+        "contract_id": np.empty(n, dtype=np.int64),
+        "sort_id": np.empty(n, dtype=np.int64),
+        "raw_base": np.empty(n, dtype=np.int8),
+        "reason_code": np.empty(n, dtype=np.int8),
+        "bid": np.empty(n, dtype=np.float64),
+        "ask": np.empty(n, dtype=np.float64),
+        "bid_size": np.empty(n, dtype=np.int64),
+        "ask_size": np.empty(n, dtype=np.int64),
+        "bid_exchange": np.empty(n, dtype=np.int64),
+        "ask_exchange": np.empty(n, dtype=np.int64),
+        "bid_condition": np.empty(n, dtype=np.int64),
+        "ask_condition": np.empty(n, dtype=np.int64),
+        "bid_null": np.empty(n, dtype=bool),
+        "ask_null": np.empty(n, dtype=bool),
+        "bid_size_null": np.empty(n, dtype=bool),
+        "ask_size_null": np.empty(n, dtype=bool),
+        "bid_ex_null": np.empty(n, dtype=bool),
+        "ask_ex_null": np.empty(n, dtype=bool),
+        "bid_cond_null": np.empty(n, dtype=bool),
+        "ask_cond_null": np.empty(n, dtype=bool),
+        "ts_ok": np.empty(n, dtype=bool),
+        "req_ok": np.empty(n, dtype=bool),
+        "identity_valid": np.empty(n, dtype=bool),
+        "oi_matched": np.empty(n, dtype=bool),
+        "unique_conflict": np.empty(n, dtype=bool),
+        "keep": np.empty(n, dtype=bool),
+        "multiplicity": np.empty(n, dtype=np.int64),
+        "alias_file_id": np.empty(n, dtype=np.int64),
+        "alias_row_index": np.empty(n, dtype=np.int64),
+        "condition_zero": np.empty(n, dtype=bool),
+        "nonpositive_size": np.empty(n, dtype=bool),
+        "negative_size": np.empty(n, dtype=bool),
+        "zero_bid": np.empty(n, dtype=bool),
+        "zero_ask": np.empty(n, dtype=bool),
+        "negative_price": np.empty(n, dtype=bool),
+        "nonfinite_price": np.empty(n, dtype=bool),
+        "session_outside": np.empty(n, dtype=bool),
+        "request_date_mismatch": np.empty(n, dtype=bool),
+        "dte": np.empty(n, dtype=np.int64),
+        "dte_code": np.empty(n, dtype=np.int8),
+        "usable_raw": np.empty(n, dtype=bool),
+        "run_start_ts": np.empty(n, dtype=np.int64),
+        "run_start_file_id": np.empty(n, dtype=np.int64),
+        "run_start_row_index": np.empty(n, dtype=np.int64),
+        "run_continuity": np.empty(n, dtype=bool),
+        "n": n,
+    }
+    return frame
+
+
+def concat_frames(parts):
+    np = _np()
+    parts = [part for part in parts if part is not None and part["n"]]
+    if not parts:
+        return _empty_frame(0)
+    if len(parts) == 1:
+        return parts[0]
+    out = {"n": sum(part["n"] for part in parts)}
+    for name in FRAME_ARRAYS:
+        out[name] = np.concatenate([part[name] for part in parts])
+    return out
+
+
+def take_kept(frame):
+    keep = frame["keep"]
+    if keep.size == frame["n"] and bool(keep.all()):
+        return frame
+    out = {"n": int(keep.sum())}
+    for name in FRAME_ARRAYS:
+        out[name] = frame[name][keep]
+    return out
+
+
+class StringBook:
+    """Unique-string intern. Never expands a duplicated column to an object array."""
+
+    def __init__(self):
+        self.values = []
+        self.index = {}
+
+    def intern_unique(self, labels):
+        np = _np()
+        codes = np.empty(len(labels), dtype=np.int32)
+        for i, label in enumerate(labels):
+            if label is None:
+                codes[i] = -1
+                continue
+            hit = self.index.get(label)
+            if hit is None:
+                hit = len(self.values)
+                self.index[label] = hit
+                self.values.append(label)
+            codes[i] = hit
+        return codes
+
+    def get(self, code):
+        if code is None or int(code) < 0 or int(code) >= len(self.values):
+            return None
+        return self.values[int(code)]
+
+
+class QuoteCodebook:
+    """Intern valid unique identities once. Invalid identities stay unresolved."""
+
+    def __init__(self, oi_lookup=None):
+        self.oi_lookup = oi_lookup or {}
+        self.local = {}
+        self.reverse = {}
+        self.unresolved = {}
+        self.next_unresolved = -1
+        self.next_overflow = LOCAL_ID_OVERFLOW
+        self.pending = []
+        self.emitted = set()
+
+    @staticmethod
+    def digest64(chain, osi, exp, milli, right):
+        payload = f"{chain}|{osi}|{exp}|{milli}|{right}".encode()
+        digest = int.from_bytes(hashlib.sha256(payload).digest()[:8], "little") & LOCAL_ID_MASK
+        if digest < LOCAL_ID_BASE:
+            digest += LOCAL_ID_BASE
+        return int(digest)
+
+    @staticmethod
+    def local_id(chain, osi, exp, milli, right):
+        return QuoteCodebook.digest64(chain, osi, exp, milli, right)
+
+    def assign_local(self, chain, osi, exp, milli, right):
+        lookup = (chain, osi, exp, int(milli), right)
+        hit = self.local.get(lookup)
+        if hit is not None:
+            return hit
+        cid = self.digest64(chain, osi, exp, int(milli), right)
+        existing = self.reverse.get(cid)
+        if existing is None:
+            self.reverse[cid] = lookup
+        elif existing != lookup:
+            cid = int(self.next_overflow)
+            while cid in self.reverse:
+                cid += 1
+            if cid > LOCAL_ID_MASK:
+                raise IntegrityError('local quote identity namespace exhausted')
+            self.next_overflow = cid + 1
+            self.reverse[cid] = lookup
+        self.local[lookup] = cid
+        return cid
+
+    def intern_valid(self, chain, osi_codes, osi_book, exp_days, milli, right_code, valid, dates,
+                     symbol_codes=None, reason=None):
+        np = _np()
+        n = len(osi_codes)
+        cid = np.zeros(n, dtype=np.int64)
+        matched = np.zeros(n, dtype=bool)
+        sort_id = np.zeros(n, dtype=np.int64)
+        if n == 0:
+            return cid, matched, sort_id
+        if symbol_codes is None:
+            symbol_codes = np.full(n, -1, dtype=np.int32)
+        if reason is None:
+            reason = np.zeros(n, dtype=np.int8)
+        if np.any(valid):
+            keys = np.stack((
+                osi_codes[valid].astype(np.int64),
+                exp_days[valid].astype(np.int64),
+                milli[valid],
+                right_code[valid].astype(np.int64),
+            ), axis=1)
+            uniq, inverse = np.unique(keys, axis=0, return_inverse=True)
+            resolved = np.empty(len(uniq), dtype=np.int64)
+            hit_u = np.zeros(len(uniq), dtype=bool)
+            for u, key in enumerate(uniq):
+                osi = osi_book.get(int(key[0]))
+                exp = dates.iso(int(key[1]))
+                right = RIGHT_NAMES.get(int(key[3]), "unknown")
+                lookup = (chain, osi, exp, int(key[2]), right)
+                oi_id = self.oi_lookup.get(lookup)
+                if oi_id is None:
+                    local = self.assign_local(chain, osi, exp, int(key[2]), right)
+                    if lookup not in self.emitted:
+                        self.emitted.add(lookup)
+                        self.pending.append((local, chain, osi, exp, int(key[2]), right, False))
+                    resolved[u] = local
+                else:
+                    resolved[u] = int(oi_id)
+                    hit_u[u] = True
+            cid[valid] = resolved[inverse]
+            matched[valid] = hit_u[inverse]
+            sort_id[valid] = cid[valid]
+        invalid = ~valid
+        if np.any(invalid):
+            ikeys = np.stack((
+                osi_codes[invalid].astype(np.int64),
+                exp_days[invalid].astype(np.int64),
+                milli[invalid],
+                right_code[invalid].astype(np.int64),
+                reason[invalid].astype(np.int64),
+                symbol_codes[invalid].astype(np.int64),
+            ), axis=1)
+            uinv, inverse = np.unique(ikeys, axis=0, return_inverse=True)
+            uids = np.empty(len(uinv), dtype=np.int64)
+            for u, key in enumerate(uinv):
+                packed = (chain, int(key[0]), int(key[1]), int(key[2]), int(key[3]),
+                          int(key[4]), int(key[5]))
+                hit = self.unresolved.get(packed)
+                if hit is None:
+                    hit = self.next_unresolved
+                    self.next_unresolved -= 1
+                    self.unresolved[packed] = hit
+                uids[u] = hit
+            sort_id[invalid] = uids[inverse]
+            cid[invalid] = UNRESOLVED_ID
+        return cid, matched, sort_id
+
+    def flush_tables(self, chain):
+        pa = _pa()
+        rows = [item for item in self.pending if item[1] == chain]
+        self.pending = [item for item in self.pending if item[1] != chain]
+        if not rows:
+            return None
+        return pa.table({
+            "contract_id": pa.array([row[0] for row in rows], type=pa.int64()),
+            "chain": pa.array([row[1] for row in rows], type=pa.string()),
+            "osi_symbol": pa.array([row[2] for row in rows], type=pa.string()),
+            "expiration": pa.array([row[3] for row in rows], type=pa.string()),
+            "millistrike": pa.array([row[4] for row in rows], type=pa.int64()),
+            "right": pa.array([row[5] for row in rows], type=pa.string()),
+            "oi_matched": pa.array([row[6] for row in rows], type=pa.bool_()),
+            "identity_resolved": pa.array([True] * len(rows), type=pa.bool_()),
+        }, schema=identity_match_schema())
+
+
+def _payload_equal_idx(frame, left, right):
+    np = _np()
+
+    def _feq(values, nulls):
+        a, b = values[left], values[right]
+        na, nb = nulls[left], nulls[right]
+        both_null = na & nb
+        both_num = (~na) & (~nb)
+        return both_null | (both_num & ((a == b) | (np.isnan(a) & np.isnan(b))))
+
+    def _ieq(values, nulls):
+        na, nb = nulls[left], nulls[right]
+        return (na & nb) | ((~na) & (~nb) & (values[left] == values[right]))
+
+    return (
+        _feq(frame["bid"], frame["bid_null"])
+        & _feq(frame["ask"], frame["ask_null"])
+        & _ieq(frame["bid_size"], frame["bid_size_null"])
+        & _ieq(frame["ask_size"], frame["ask_size_null"])
+        & _ieq(frame["bid_exchange"], frame["bid_ex_null"])
+        & _ieq(frame["ask_exchange"], frame["ask_ex_null"])
+        & _ieq(frame["bid_condition"], frame["bid_cond_null"])
+        & _ieq(frame["ask_condition"], frame["ask_cond_null"])
+    )
+
+
+def _invalid_or_conflict(frame):
+    raw = frame["raw_base"]
+    return (
+        (~frame["identity_valid"])
+        | (~frame["ts_ok"])
+        | (raw == BASE_INVALID_NUMERIC)
+        | frame["unique_conflict"]
+        | (raw == BASE_INVALID_IDENTITY)
+        | (raw == BASE_INVALID_CLOCK)
+    )
+
+
+def sort_and_dedup(frame):
+    """Vector lexsort + reduceat. Raw class is never overwritten by conflict."""
+    np = _np()
+    n = frame["n"]
+    if n == 0:
+        return frame
+    order = np.lexsort((frame["row_index"], frame["file_id"], frame["ts_event_ns"], frame["sort_id"]))
+    for name in FRAME_ARRAYS:
+        frame[name] = frame[name][order]
+    sid, ts = frame["sort_id"], frame["ts_event_ns"]
+    if n == 1:
+        starts = np.array([0], dtype=np.int64)
+    else:
+        starts = np.r_[0, np.flatnonzero((sid[1:] != sid[:-1]) | (ts[1:] != ts[:-1])) + 1]
+    repeats = np.diff(np.r_[starts, n])
+    first_idx = np.repeat(starts, repeats)
+    eq = _payload_equal_idx(frame, np.arange(n), first_idx)
+    all_eq = np.logical_and.reduceat(eq, starts)
+    mult = np.add.reduceat(np.ones(n, dtype=np.int64), starts)
+    keep = np.zeros(n, dtype=bool)
+    keep[starts] = True
+    unique_conflict = np.zeros(n, dtype=bool)
+    unique_conflict[starts] = ~all_eq
+    alias_fid = np.full(n, -1, dtype=np.int64)
+    alias_row = np.full(n, -1, dtype=np.int64)
+    has_second = repeats > 1
+    if np.any(has_second):
+        second = starts[has_second] + 1
+        alias_fid[starts[has_second]] = frame["file_id"][second]
+        alias_row[starts[has_second]] = frame["row_index"][second]
+    multiplicity = np.ones(n, dtype=np.int64)
+    multiplicity[starts] = mult
+    frame["keep"] = keep
+    frame["unique_conflict"] = unique_conflict
+    frame["alias_file_id"] = alias_fid
+    frame["alias_row_index"] = alias_row
+    frame["multiplicity"] = multiplicity
+    return frame
+
+
+def annotate_runs(frame):
+    """Store run-start timestamp/address on kept rows. First sample continuity is false."""
+    np = _np()
+    n = frame["n"]
+    if n == 0:
+        return frame
+    order = np.lexsort((frame["row_index"], frame["file_id"], frame["ts_event_ns"], frame["sort_id"]))
+    for name in FRAME_ARRAYS:
+        frame[name] = frame[name][order]
+    sid, ts = frame["sort_id"], frame["ts_event_ns"]
+    broken = _invalid_or_conflict(frame)
+    brk = np.ones(n, dtype=bool)
+    if n > 1:
+        same = sid[1:] == sid[:-1]
+        gap = (ts[1:] - ts[:-1]) > GAP_BREAK_NS
+        same_payload = _payload_equal_idx(frame, np.arange(1, n), np.arange(0, n - 1))
+        brk[1:] = (~same) | (~same_payload) | gap | broken[1:] | broken[:-1]
+    start_pos = np.maximum.accumulate(np.where(brk, np.arange(n), 0))
+    frame["run_start_ts"] = ts[start_pos]
+    frame["run_start_file_id"] = frame["file_id"][start_pos]
+    frame["run_start_row_index"] = frame["row_index"][start_pos]
+    frame["run_continuity"] = ~brk
+    return frame
+
+
+def _void_keys(cid, ts):
+    np = _np()
+    keys = np.empty(len(cid), dtype=np.dtype([("c", np.int64), ("t", np.int64)]))
+    keys["c"] = cid.astype(np.int64)
+    keys["t"] = ts
+    return keys.view(np.dtype((np.void, keys.dtype.itemsize))).reshape(len(cid))
+
+
+def union_families(family_frames):
+    """Deduped own families plus a vector near∪broad. Share arrays until mutation."""
+    owned = {}
+    stats = []
+    for family, frame in family_frames.items():
+        if frame is None or frame["n"] == 0:
+            continue
+        kept = take_kept(frame)
+        owned[family] = annotate_runs(kept)
+        stats.append(_alias_stat_row(owned[family], family))
+    if "near" in owned and "broad" in owned:
+        union, extra = _union_two(owned["near"], owned["broad"])
+        owned["union"] = annotate_runs(union)
+        stats.append(extra)
+    elif "near" in owned:
+        owned["union"] = owned["near"]
+        stats.append(_alias_stat_row(owned["union"], "union", copy_family=True))
+    elif "broad" in owned:
+        owned["union"] = owned["broad"]
+        stats.append(_alias_stat_row(owned["union"], "union", copy_family=True))
+    elif "vix_full" in owned:
+        owned["union"] = owned["vix_full"]
+        stats.append(_alias_stat_row(owned["union"], "union", copy_family=True))
+    return owned, [row for row in stats if row is not None]
+
+
+def _alias_stat_row(frame, family, copy_family=False):
+    np = _np()
+    if frame["n"] == 0:
+        return None
+    alias = (frame["multiplicity"] > 1) & (~frame["unique_conflict"])
+    conflict = frame["unique_conflict"]
+    example = int(np.flatnonzero(alias | conflict)[0]) if np.any(alias | conflict) else 0
+    return {
+        "source_family": family,
+        "alias_groups": int(alias.sum()),
+        "conflict_groups": int(conflict.sum()),
+        "alias_row_mass": int(frame["multiplicity"][alias].sum()) if np.any(alias) else 0,
+        "conflict_row_mass": int(frame["multiplicity"][conflict].sum()) if np.any(conflict) else 0,
+        "max_multiplicity": int(frame["multiplicity"].max()) if frame["n"] else 0,
+        "payload_equal_groups": int(alias.sum()),
+        "example_file_id": int(frame["file_id"][example]),
+        "example_row_index": int(frame["row_index"][example]),
+        "example_alias_file_id": int(frame["alias_file_id"][example]) if frame["alias_file_id"][example] >= 0 else None,
+        "example_alias_row_index": int(frame["alias_row_index"][example]) if frame["alias_row_index"][example] >= 0 else None,
+        "example_contract_id": int(frame["contract_id"][example]),
+        "example_ts_event_ns": int(frame["ts_event_ns"][example]),
+        "example_conflict": bool(frame["unique_conflict"][example]),
+        "_copy": copy_family,
+    }
+
+
+def _union_two(near, broad):
+    np = _np()
+    valid_a = near["identity_valid"]
+    valid_b = broad["identity_valid"]
+    cid_a = np.where(valid_a, near["contract_id"], near["sort_id"])
+    cid_b = np.where(valid_b, broad["contract_id"], broad["sort_id"])
+    ka = _void_keys(cid_a, near["ts_event_ns"])
+    kb = _void_keys(cid_b, broad["ts_event_ns"])
+    order_a = np.argsort(ka, kind="mergesort")
+    order_b = np.argsort(kb, kind="mergesort")
+    ka_s, kb_s = ka[order_a], kb[order_b]
+    idx = np.searchsorted(kb_s, ka_s)
+    in_range = idx < len(kb_s)
+    idx_c = np.minimum(idx, max(len(kb_s) - 1, 0)) if len(kb_s) else idx
+    match = np.zeros(len(ka_s), dtype=bool)
+    if len(kb_s):
+        match = in_range & (ka_s == kb_s[idx_c])
+    a_pos = order_a[match]
+    b_pos = order_b[idx_c[match]] if np.any(match) else np.empty(0, dtype=np.int64)
+    used_a = np.zeros(near["n"], dtype=bool)
+    used_b = np.zeros(broad["n"], dtype=bool)
+    used_a[a_pos] = True
+    used_b[b_pos] = True
+    only_a = concat_frames([_gather(near, np.flatnonzero(~used_a))]) if np.any(~used_a) else _empty_frame(0)
+    only_b = concat_frames([_gather(broad, np.flatnonzero(~used_b))]) if np.any(~used_b) else _empty_frame(0)
+    if len(a_pos):
+        paired = _gather(near, a_pos)
+        eq = _payload_equal_idx_frames(near, a_pos, broad, b_pos)
+        paired["unique_conflict"] = near["unique_conflict"][a_pos] | broad["unique_conflict"][b_pos] | (~eq)
+        paired["multiplicity"] = near["multiplicity"][a_pos] + broad["multiplicity"][b_pos]
+        paired["alias_file_id"] = broad["file_id"][b_pos]
+        paired["alias_row_index"] = broad["row_index"][b_pos]
+    else:
+        paired = _empty_frame(0)
+    union = concat_frames([only_a, only_b, paired])
+    extra = _alias_stat_row(paired if paired["n"] else union, "union")
+    return union, extra
+
+
+def _gather(frame, idx):
+    np = _np()
+    if len(idx) == 0:
+        return _empty_frame(0)
+    out = {"n": int(len(idx))}
+    for name in FRAME_ARRAYS:
+        out[name] = frame[name][idx]
+    return out
+
+
+def _payload_equal_idx_frames(left, li, right, ri):
+    np = _np()
+
+    def _feq(lv, ln, rv, rn):
+        a, b = lv[li], rv[ri]
+        na, nb = ln[li], rn[ri]
+        return (na & nb) | ((~na) & (~nb) & ((a == b) | (np.isnan(a) & np.isnan(b))))
+
+    def _ieq(lv, ln, rv, rn):
+        na, nb = ln[li], rn[ri]
+        return (na & nb) | ((~na) & (~nb) & (lv[li] == rv[ri]))
+
+    return (
+        _feq(left["bid"], left["bid_null"], right["bid"], right["bid_null"])
+        & _feq(left["ask"], left["ask_null"], right["ask"], right["ask_null"])
+        & _ieq(left["bid_size"], left["bid_size_null"], right["bid_size"], right["bid_size_null"])
+        & _ieq(left["ask_size"], left["ask_size_null"], right["ask_size"], right["ask_size_null"])
+        & _ieq(left["bid_exchange"], left["bid_ex_null"], right["bid_exchange"], right["bid_ex_null"])
+        & _ieq(left["ask_exchange"], left["ask_ex_null"], right["ask_exchange"], right["ask_ex_null"])
+        & _ieq(left["bid_condition"], left["bid_cond_null"], right["bid_condition"], right["bid_cond_null"])
+        & _ieq(left["ask_condition"], left["ask_cond_null"], right["ask_condition"], right["ask_cond_null"])
+    )
+
+
+def select_cut_rows(frame, *, cut_ns, cut_days, session_open_ns, session_close_ns):
+    """Newest eligible resolved identity. Invalid request_date is not substituted."""
+    np = _np()
+    if frame is None or frame["n"] == 0 or cut_ns is None:
+        return np.empty(0, dtype=np.int64)
+    ts = frame["ts_event_ns"]
+    eligible = (
+        frame["ts_ok"] & frame["req_ok"]
+        & (frame["req_days"] <= cut_days)
+        & (frame["declared_days"] <= cut_days)
+        & (frame["east_days"] == cut_days)
+        & (ts <= cut_ns)
+        & (ts >= session_open_ns)
+        & (ts <= session_close_ns)
+    )
+    if not np.any(eligible):
+        return np.empty(0, dtype=np.int64)
+    idx = np.flatnonzero(eligible)
+    order = np.lexsort((
+        -frame["row_index"][idx], -frame["file_id"][idx], -ts[idx], frame["sort_id"][idx],
+    ))
+    idx = idx[order]
+    sid = frame["sort_id"][idx]
+    first = np.r_[True, sid[1:] != sid[:-1]]
+    return idx[first]
+
+
+def _begin_request_date(clocks, label):
+    """Call canonical ClockMaps.begin_request_date once a day when present."""
+    begin = getattr(clocks, "begin_request_date", None)
+    if begin is not None:
+        begin(label)
+        return
+    if getattr(clocks, "request_date", None) != label:
+        clocks.east.clear()
+        seconds = getattr(clocks, "seconds", None)
+        if seconds is not None:
+            seconds.clear()
+        clocks.request_date = label
+
+
+def parse_quote_typed(table, *, record, dates, clocks, osi_book, codebook, session_open_ns,
+                      session_close_ns, row_offset=0):
+    """Arrow/NumPy parse. Unique OSI/date codebook only. Compact integer codes."""
+    pa, pc = _pa(), _pc()
+    np = _np()
+    source = record["source"]
+    chain, file_id = source["chain"], record["file_id"]
+    declared = source["request_date"]
+    declared_days = dates.days(declared)
+    n = len(table)
+    if n == 0:
+        return _empty_frame(0), None
+
+    osi_dict, osi_idx, osi_null = _dictionary_keys(table.column("osi_symbol"))
+    osi_parsed, osi_values = _osi_unique_parse(osi_dict, clocks.osi)
+    osi_u_codes = osi_book.intern_unique(list(osi_values))
+    osi_code = np.full(n, -1, dtype=np.int32)
+    osi_code[~osi_null] = osi_u_codes[osi_idx[~osi_null]]
+    exp_iso, exp_ok, exp_days_raw = _date_column_iso(table.column("expiration"), dates)
+    req_iso, req_ok, req_days_raw = _date_column_iso(table.column("request_date"), dates)
+    milli, strike_f, strike_present, strike_null = _millistrike_column(table.column("strike"))
+    right_mapped, right_idx, right_null = _unique_string_map(table.column("right"), normalize_right)
+    right_code_u = np.array([
+        RIGHT_CALL if value == "CALL" else RIGHT_PUT if value == "PUT" else RIGHT_UNKNOWN
+        for value in right_mapped
+    ], dtype=np.int8)
+    right_code = np.full(n, RIGHT_UNKNOWN, dtype=np.int8)
+    right_code[~right_null] = right_code_u[right_idx[~right_null]]
+    if "symbol" in table.schema.names:
+        sym_mapped, sym_idx, sym_null = _unique_string_map(
+            table.column("symbol"), lambda value: value if type(value) is str else None)
+    else:
+        sym_mapped, sym_idx, sym_null = [None], np.zeros(n, dtype=np.int64), np.ones(n, dtype=bool)
+
+    osi_ok = np.zeros(n, dtype=bool)
+    parsed_u_ok = np.array([item is not None for item in osi_parsed], dtype=bool)
+    osi_ok[~osi_null] = parsed_u_ok[osi_idx[~osi_null]]
+    osi_root = np.empty(n, dtype=object)
+    osi_exp = np.empty(n, dtype=object)
+    osi_right = np.empty(n, dtype=object)
+    osi_milli = np.full(n, -1, dtype=np.int64)
+    if osi_parsed:
+        root_u = np.array([None if item is None else item["root"] for item in osi_parsed], dtype=object)
+        exp_u = np.array([None if item is None else item["expiration"] for item in osi_parsed], dtype=object)
+        right_u = np.array([None if item is None else item["right"] for item in osi_parsed], dtype=object)
+        milli_u = np.array([-1 if item is None else int(item["millistrike"]) for item in osi_parsed], dtype=np.int64)
+        osi_root[~osi_null] = root_u[osi_idx[~osi_null]]
+        osi_exp[~osi_null] = exp_u[osi_idx[~osi_null]]
+        osi_right[~osi_null] = right_u[osi_idx[~osi_null]]
+        osi_milli[~osi_null] = milli_u[osi_idx[~osi_null]]
+    right_arr = np.empty(n, dtype=object)
+    right_arr[~right_null] = np.asarray(right_mapped, dtype=object)[right_idx[~right_null]]
+    symbol_mismatch = np.zeros(n, dtype=bool)
+    if not np.all(sym_null):
+        present = ~sym_null
+        symbols = np.array(sym_mapped, dtype=object)[sym_idx[present]]
+        symbol_mismatch[np.nonzero(present)[0]] = symbols != chain
+
+    identity_invalid = (
+        (~exp_ok) | osi_null | (right_code == RIGHT_UNKNOWN) | strike_null | (~strike_present)
+        | ((milli < 0) & (~strike_null) & strike_present)
+        | ((~osi_null) & (~osi_ok))
+        | (osi_ok & ((osi_root != chain) | symbol_mismatch))
+        | (osi_ok & ((osi_exp != exp_iso) | (osi_right != right_arr) | (osi_milli != milli)))
+    )
+    reason = np.zeros(n, dtype=np.int8)
+    reason[~exp_ok] = 1
+    reason[(reason == 0) & osi_null] = 3
+    reason[(reason == 0) & (right_code == RIGHT_UNKNOWN)] = 3
+    reason[(reason == 0) & (milli < 0) & (~strike_null)] = 4
+    reason[(reason == 0) & (~osi_null) & (~osi_ok)] = 5
+    reason[(reason == 0) & osi_ok & ((osi_root != chain) | symbol_mismatch)] = 6
+    reason[(reason == 0) & osi_ok & (
+        (osi_exp != exp_iso) | (osi_right != right_arr) | (osi_milli != milli))] = 7
+
+    ts_ok = np.zeros(n, dtype=bool)
+    ts_arr = np.zeros(n, dtype=np.int64)
+    try:
+        ts_cast = timestamp_ns_from_arrow(table.column("ts_event"))
+        ts_null = pc.is_null(ts_cast).to_numpy(zero_copy_only=False).astype(bool, copy=False)
+        ts_arr = ts_cast.fill_null(0).cast(pa.int64()).to_numpy(zero_copy_only=False).astype(np.int64, copy=False)
+        ts_ok = ~ts_null
+        reason[(reason == 0) & (~ts_ok)] = 9
+    except (ContractError, IntegrityError) as exc:
+        raise IntegrityError(str(exc)) from exc
+
+    bid, bid_null = _float_column(table.column("bid"))
+    ask, ask_null = _float_column(table.column("ask"))
+    bid_size, bid_size_null = _int64_native(table.column("bid_size"), "bid_size")
+    ask_size, ask_size_null = _int64_native(table.column("ask_size"), "ask_size")
+    bid_ex, bid_ex_null = _int64_native(table.column("bid_exchange"), "bid_exchange")
+    ask_ex, ask_ex_null = _int64_native(table.column("ask_exchange"), "ask_exchange")
+    bid_cond, bid_cond_null = _int64_native(table.column("bid_condition"), "bid_condition")
+    ask_cond, ask_cond_null = _int64_native(table.column("ask_condition"), "ask_condition")
+
+    finite_bid = (~bid_null) & np.isfinite(bid)
+    finite_ask = (~ask_null) & np.isfinite(ask)
+    nonfinite_price = (~finite_bid) | (~finite_ask)
+    negative_price = (finite_bid & (bid < 0)) | (finite_ask & (ask < 0))
+    invalid_numeric = nonfinite_price | negative_price
+    zero_bid = finite_bid & (bid == 0)
+    zero_ask = finite_ask & (ask == 0)
+    negative_size = ((~bid_size_null) & (bid_size < 0)) | ((~ask_size_null) & (ask_size < 0))
+    nonpositive_size = bid_size_null | ask_size_null | (bid_size <= 0) | (ask_size <= 0)
+    condition_zero = ((~bid_cond_null) & (bid_cond == 0)) | ((~ask_cond_null) & (ask_cond == 0))
+    req_mismatch = req_ok & (req_days_raw != declared_days)
+    session_outside = np.zeros(n, dtype=bool)
+    if session_open_ns is not None and session_close_ns is not None:
+        session_outside = ts_ok & ((ts_arr < session_open_ns) | (ts_arr > session_close_ns))
+
+    raw_base = np.full(n, BASE_INVALID_NUMERIC, dtype=np.int8)
+    all_zero = finite_bid & finite_ask & (bid == 0) & (ask == 0)
+    one_sided = finite_bid & finite_ask & (((bid == 0) & (ask > 0)) | ((ask == 0) & (bid > 0)))
+    crossed = finite_bid & finite_ask & (bid > 0) & (ask > 0) & (ask < bid)
+    locked = finite_bid & finite_ask & (bid > 0) & (ask == bid)
+    two_sided = finite_bid & finite_ask & (bid > 0) & (ask > bid)
+    raw_base[identity_invalid] = BASE_INVALID_IDENTITY
+    remain = raw_base != BASE_INVALID_IDENTITY
+    raw_base[remain & (~ts_ok)] = BASE_INVALID_CLOCK
+    remain = (raw_base != BASE_INVALID_IDENTITY) & (raw_base != BASE_INVALID_CLOCK)
+    raw_base[remain & invalid_numeric] = BASE_INVALID_NUMERIC
+    remain = remain & (~invalid_numeric)
+    raw_base[remain & all_zero] = BASE_ALL_ZERO
+    remain = remain & (~all_zero)
+    raw_base[remain & one_sided] = BASE_ONE_SIDED
+    remain = remain & (~one_sided)
+    raw_base[remain & crossed] = BASE_CROSSED
+    remain = remain & (~crossed)
+    raw_base[remain & locked] = BASE_LOCKED
+    remain = remain & (~locked)
+    raw_base[remain & two_sided] = BASE_TWO_SIDED
+
+    usable_raw = (
+        (~identity_invalid) & ts_ok & finite_bid & finite_ask
+        & (bid > 0) & (ask >= bid) & (~bid_size_null) & (~ask_size_null)
+        & (bid_size > 0) & (ask_size > 0)
+    )
+    req_days = req_days_raw.astype(np.int32, copy=True)
+    req_days[~req_ok] = np.int32(-1)
+    exp_days = exp_days_raw.astype(np.int32, copy=True)
+    exp_days[~exp_ok] = np.int32(-1)
+    dte_v = np.full(n, -999, dtype=np.int64)
+    both = exp_ok & req_ok
+    if np.any(both):
+        exp_u, exp_inv = np.unique(exp_days[both], return_inverse=True)
+        req_u, req_inv = np.unique(req_days[both], return_inverse=True)
+        grid = np.empty((len(exp_u), len(req_u)), dtype=np.int64)
+        for i, exp in enumerate(exp_u):
+            for j, req in enumerate(req_u):
+                grid[i, j] = dte_days(dates.iso(int(exp)), dates.iso(int(req)))
+        dte_v[np.flatnonzero(both)] = grid[exp_inv, req_inv]
+    dte_code = np.full(n, DTE_UNKNOWN, dtype=np.int8)
+    if np.any(both):
+        dte_code[both] = _dte_codes_vec(dte_v[both])
+    east_days = np.full(n, -1, dtype=np.int32)
+    if np.any(ts_ok):
+        labels = clocks.eastern_labels(ts_arr)
+        uniq, inverse = np.unique(np.asarray(labels, dtype=object), return_inverse=True)
+        days_u = np.array([
+            -1 if lab is None else int(dates.days(lab) if type(lab) is str else dates.days(str(lab)))
+            for lab in uniq
+        ], dtype=np.int32)
+        east_days = days_u[inverse]
+        east_days[~ts_ok] = -1
+
+    identity_valid = ~identity_invalid
+    symbol_code = np.full(n, -1, dtype=np.int32)
+    if not np.all(sym_null):
+        sym_u = osi_book.intern_unique([
+            None if value is None else (value if type(value) is str else str(value))
+            for value in sym_mapped
+        ])
+        symbol_code[~sym_null] = sym_u[sym_idx[~sym_null]]
+    cid, matched, sort_id = codebook.intern_valid(
+        chain, osi_code, osi_book, exp_days, milli, right_code, identity_valid, dates,
+        symbol_codes=symbol_code, reason=reason,
+    )
+    frame = _empty_frame(n)
+    frame["file_id"][:] = int(file_id)
+    frame["row_index"] = np.arange(n, dtype=np.int64) + int(row_offset)
+    frame["osi_code"] = osi_code
+    frame["exp_days"] = exp_days
+    frame["milli"] = milli
+    frame["right_code"] = right_code
+    frame["req_days"] = req_days
+    frame["declared_days"][:] = int(declared_days)
+    frame["east_days"] = east_days
+    frame["ts_event_ns"] = ts_arr
+    frame["contract_id"] = cid
+    frame["sort_id"] = sort_id
+    frame["raw_base"] = raw_base
+    frame["reason_code"] = reason
+    frame["bid"], frame["ask"] = bid, ask
+    frame["bid_size"], frame["ask_size"] = bid_size, ask_size
+    frame["bid_exchange"], frame["ask_exchange"] = bid_ex, ask_ex
+    frame["bid_condition"], frame["ask_condition"] = bid_cond, ask_cond
+    frame["bid_null"], frame["ask_null"] = bid_null, ask_null
+    frame["bid_size_null"], frame["ask_size_null"] = bid_size_null, ask_size_null
+    frame["bid_ex_null"], frame["ask_ex_null"] = bid_ex_null, ask_ex_null
+    frame["bid_cond_null"], frame["ask_cond_null"] = bid_cond_null, ask_cond_null
+    frame["ts_ok"] = ts_ok
+    frame["req_ok"] = req_ok
+    frame["identity_valid"] = identity_valid
+    frame["oi_matched"] = matched
+    frame["unique_conflict"] = np.zeros(n, dtype=bool)
+    frame["keep"] = np.ones(n, dtype=bool)
+    frame["multiplicity"] = np.ones(n, dtype=np.int64)
+    frame["alias_file_id"] = np.full(n, -1, dtype=np.int64)
+    frame["alias_row_index"] = np.full(n, -1, dtype=np.int64)
+    frame["condition_zero"] = condition_zero
+    frame["nonpositive_size"] = nonpositive_size
+    frame["negative_size"] = negative_size
+    frame["zero_bid"] = zero_bid
+    frame["zero_ask"] = zero_ask
+    frame["negative_price"] = negative_price
+    frame["nonfinite_price"] = nonfinite_price
+    frame["session_outside"] = session_outside
+    frame["request_date_mismatch"] = req_mismatch
+    frame["dte"] = dte_v
+    frame["dte_code"] = dte_code
+    frame["usable_raw"] = usable_raw
+    frame["run_start_ts"] = ts_arr
+    frame["run_start_file_id"] = frame["file_id"]
+    frame["run_start_row_index"] = frame["row_index"]
+    frame["run_continuity"] = np.zeros(n, dtype=bool)
+    exceptions = _compress_exceptions(
+        frame, chain, _source_family(record), declared, osi_book, dates, strike_f,
+    )
+    del osi_root, osi_exp, osi_right, right_arr, exp_iso, req_iso
+    return frame, exceptions
+
+
+def _compress_exceptions(frame, chain, family, declared, osi_book, dates, strike):
+    np = _np()
+    invalid = (~frame["identity_valid"]) | (~frame["ts_ok"])
+    if not np.any(invalid):
+        return []
+    idx = np.flatnonzero(invalid)
+    order = np.lexsort((frame["row_index"][idx], frame["file_id"][idx]))
+    idx = idx[order]
+    fid, row, reason = frame["file_id"][idx], frame["row_index"][idx], frame["reason_code"][idx]
+    rows, start, n = [], 0, len(idx)
+    while start < n:
+        end = start + 1
+        while (end < n and fid[end] == fid[start] and reason[end] == reason[start]
+               and row[end] == row[end - 1] + 1):
+            end += 1
+        i0 = int(idx[start])
+        rows.append({
+            "file_id": int(fid[start]), "row_index_start": int(row[start]),
+            "row_index_end": int(row[end - 1]), "n_rows": end - start,
+            "chain": chain, "source_family": family, "request_date": declared,
+            "invalid_reason": REASON_NAMES[int(reason[start])] if 0 <= int(reason[start]) < len(REASON_NAMES) else "invalid",
+            "osi_symbol": osi_book.get(int(frame["osi_code"][i0])),
+            "expiration": dates.iso(int(frame["exp_days"][i0])) if frame["exp_days"][i0] >= 0 else None,
+            "strike": None if i0 >= len(strike) or not math.isfinite(float(strike[i0])) else float(strike[i0]),
+            "right": RIGHT_NAMES.get(int(frame["right_code"][i0])),
+            "ts_event_ns": int(frame["ts_event_ns"][i0]) if frame["ts_ok"][i0] else None,
+        })
+        start = end
+    return rows
+
+
+def _source_quality_rows(frame, chain, declared, family):
+    np = _np()
+    if frame is None or frame["n"] == 0:
+        return []
+    keys = np.stack((frame["right_code"].astype(np.int64), frame["dte_code"].astype(np.int64)), axis=1)
+    uniq, inverse = np.unique(keys, axis=0, return_inverse=True)
+    rows = []
+    for u, key in enumerate(uniq):
+        mask = inverse == u
+        subset = _gather(frame, np.flatnonzero(mask))
+        raw = _quality_counts(subset, unique=False)
+        unique = _quality_counts(subset, unique=True)
+        row = {
+            "chain": chain, "request_date": declared, "source_family": family,
+            "right": RIGHT_NAMES.get(int(key[0]), "unknown"),
+            "dte_bucket": DTE_NAMES[int(key[1])] if 0 <= int(key[1]) < len(DTE_NAMES) else "unknown",
+            "raw_rows": int(mask.sum()),
+            "unique_events": int(subset["keep"].sum()),
+            "missing_bid": int(subset["bid_null"].sum()),
+            "missing_ask": int(subset["ask_null"].sum()),
+            "missing_bid_size": int(subset["bid_size_null"].sum()),
+            "missing_ask_size": int(subset["ask_size_null"].sum()),
+            "missing_ts": int((~subset["ts_ok"]).sum()),
+        }
+        for name in BASE_CLASSES:
+            row[f"raw_{name}"] = raw[name]
+            row[f"unique_{name}"] = unique[name]
+        for name in QUALITY_FLAGS:
+            row[f"raw_{name}"] = raw[name]
+            row[f"unique_{name}"] = unique[name]
+        rows.append(row)
+    return rows
+
+
+def _quality_counts(frame, unique=False):
+    np = _np()
+    if frame["n"] == 0:
+        return {name: 0 for name in BASE_CLASSES + QUALITY_FLAGS}
+    mask = frame["keep"] if unique else np.ones(frame["n"], dtype=bool)
+    cls = frame["raw_base"][mask]
+    if unique:
+        board = np.where(
+            (cls <= BASE_INVALID_NUMERIC), cls,
+            np.where(frame["unique_conflict"][mask], BASE_CONFLICT, cls),
+        )
+        cls = board
+    out = {name: int(np.sum(cls == i)) for i, name in enumerate(BASE_CLASSES)}
+    for name in QUALITY_FLAGS:
+        out[name] = int(frame[name][mask].sum())
+    return out
+
+
+def _cut_status(*, early_na, missing_file, empty_marker, quoted):
+    if early_na:
+        return "not_applicable"
+    if missing_file:
+        return "missing_file"
+    if empty_marker:
+        return "empty_marker"
+    if quoted:
+        return "quoted"
+    return "no_sample"
+
+
+def _board_class(raw_base, unique_conflict):
+    if raw_base <= BASE_INVALID_NUMERIC:
+        return raw_base
+    if unique_conflict:
+        return BASE_CONFLICT
+    return raw_base
+
+
+def _stale_flags(age_ns):
+    if age_ns is None:
+        return None, None, None
+    seconds = age_ns / NS
+    return seconds > 60, seconds > 300, seconds > 900
+
+
+def _membership(sorted_ids, cids):
+    np = _np()
+    if sorted_ids is None or len(sorted_ids) == 0:
+        return np.zeros(len(cids), dtype=bool)
+    pos = np.searchsorted(sorted_ids, cids)
+    ok = pos < len(sorted_ids)
+    pos_c = np.minimum(pos, max(len(sorted_ids) - 1, 0))
+    return ok & (sorted_ids[pos_c] == cids)
+
+
+_DATASET_CACHE = {}
+_PARQUET_STAT_CACHE = {}
+
+
+def _auth_oi_ref(ref, *, json_ok=False):
+    if ref is None:
+        return []
+    refs = [ref] if isinstance(ref, dict) and "path" in ref else list(ref)
+    import pyarrow.parquet as pq
+    out = []
+    for item in refs:
+        path = Path(item["path"])
+        if not path.is_file():
+            raise IntegrityError("OI artifact is missing")
+        size = path.stat().st_size
+        if item.get("size_bytes") is not None and size != item["size_bytes"]:
+            raise IntegrityError("OI artifact size changed")
+        if item.get("sha256") and file_digest(path) != item["sha256"]:
+            raise IntegrityError("OI artifact hash changed")
+        is_json = json_ok or str(path).endswith(".json") or "json" in str(item.get("kind") or "")
+        rows = item.get("rows")
+        if not is_json:
+            rows = pq.ParquetFile(path).metadata.num_rows
+            if item.get("rows") is not None and rows != item["rows"]:
+                raise IntegrityError("OI artifact row count changed")
+        out.append({**item, "path": str(path), "size_bytes": size, "rows": rows})
+    return out
+
+
+def _cached_dataset(path):
+    import pyarrow.dataset as ds
+    hit = _DATASET_CACHE.get(path)
+    if hit is None:
+        hit = ds.dataset(path, format="parquet")
+        _DATASET_CACHE[path] = hit
+    return hit
+
+
+def _interval_file_relevant(path, chains, date_hi, first_cut, last_cut):
+    import pyarrow.parquet as pq
+    meta = _PARQUET_STAT_CACHE.get(path)
+    if meta is None:
+        handle = pq.ParquetFile(path)
+        names = {field.name: i for i, field in enumerate(handle.schema_arrow)}
+        groups = []
+        for index in range(handle.num_row_groups):
+            group = handle.metadata.row_group(index)
+            stats = {}
+            for name, col_i in names.items():
+                if col_i >= group.num_columns:
+                    continue
+                column = group.column(col_i)
+                stat = column.statistics
+                if stat is not None and stat.has_min_max:
+                    stats[name] = (stat.min, stat.max)
+                if name == 'valid_to_ns':
+                    stats['valid_to_has_null'] = stat is None or stat.null_count != 0
+            groups.append(stats)
+        meta = groups
+        _PARQUET_STAT_CACHE[path] = meta
+    chain_set = set(chains)
+    for stats in meta:
+        chain_stat = stats.get("chain")
+        if chain_stat is not None:
+            lo, hi = chain_stat
+            if lo == hi and lo not in chain_set:
+                continue
+        req = stats.get("request_date")
+        if req is not None:
+            rmin = req[0].isoformat() if hasattr(req[0], "isoformat") else str(req[0])
+            if rmin > date_hi:
+                continue
+        start = stats.get("valid_from_ns")
+        if start is not None and start[0] is not None and int(start[0]) > last_cut:
+            continue
+        end = stats.get("valid_to_ns")
+        if not stats.get('valid_to_has_null', True) and end is not None and end[1] is not None and int(end[1]) <= first_cut:
+            if end[0] is not None and int(end[0]) > 0:
+                continue
+        return True
+    return False
+
+
+def _read_filtered(refs, columns, filters=None, *, skip=None):
+    tables = []
+    for ref in refs:
+        path = ref["path"]
+        if skip is not None and skip(path):
+            continue
+        dataset = _cached_dataset(path)
+        available = set(dataset.schema.names)
+        use = [name for name in columns if name in available]
+        table = dataset.to_table(columns=use, filter=filters)
+        tables.append(table)
+    if not tables:
+        return None
+    return _pa().concat_tables(tables, promote_options="default")
+
+
+class OIJoinAdapter:
+    """Projected typed arrays for the selected chain/date horizon only."""
+
+    def __init__(self, oi_population, *, chains, dates, protocol=None):
+        self.available = oi_population is not None
+        self.listing_unavailable = oi_population is None
+        self.full_population = False
+        self.identity = {}
+        self.by_id = {}
+        self.max_id = 0
+        self.coverage = {}
+        self.membership = {}
+        self.source_manifest = {}
+        self._horizon = None
+        self._interval_shard = None
+        self._interval_dates = DateCodebook()
+        self.protocol = protocol
+        self.oi_ref = None
+        self._refs = {}
+        self.listing_files_read = 0
+        self.listing_rows_read = 0
+        self.listing_bytes_read = 0
+        if oi_population is None:
+            return
+        if not isinstance(oi_population, dict):
+            raise ContractError("oi_population must be an authenticated OI result or null")
+        refs = oi_population.get("refs") or {}
+        self._refs = {
+            "identity_map": _auth_oi_ref(refs.get("identity_map")),
+            "reports": _auth_oi_ref(refs.get("reports")),
+            "asof_intervals": _auth_oi_ref(refs.get("asof_intervals")),
+            "coverage": _auth_oi_ref(refs.get("coverage")),
+            "membership": _auth_oi_ref(refs.get("membership")),
+            "source_manifest": _auth_oi_ref(refs.get("source_manifest"), json_ok=True),
+        }
+        self.oi_ref = {
+            "family": oi_population.get("family"),
+            "version": oi_population.get("version"),
+            "mode": oi_population.get("mode"),
+            "identity_map": self._refs["identity_map"],
+            "reports": self._refs["reports"],
+            "asof_intervals": self._refs["asof_intervals"],
+            "coverage": self._refs["coverage"],
+            "membership": self._refs["membership"],
+            "source_manifest": self._refs["source_manifest"],
+        }
+        self._load_identity(chains)
+        self._load_coverage(chains, dates)
+        self._load_membership(chains, dates)
+        self._load_source_manifest()
+        self._load_interval_shard(chains, dates)
+        self.full_population = self._validate_full(oi_population, chains, dates)
+
+    def _load_identity(self, chains):
+        import pyarrow.dataset as ds
+        if not self._refs["identity_map"] or not chains:
+            return
+        filt = ds.field("chain").isin(list(chains))
+        table = _read_filtered(
+            self._refs["identity_map"],
+            ["contract_id", "chain", "osi_symbol", "expiration", "millistrike", "right"],
+            filt,
+        )
+        if table is None or len(table) == 0:
+            return
+        required = {"contract_id", "chain", "osi_symbol", "expiration", "millistrike", "right"}
+        if not required.issubset(set(table.schema.names)):
+            raise IntegrityError("OI identity map missing required schema fields")
+        cid = table.column("contract_id").to_numpy(zero_copy_only=False)
+        chain = table.column("chain").to_pylist()
+        osi = table.column("osi_symbol").to_pylist()
+        exp = table.column("expiration").to_pylist()
+        milli = table.column("millistrike").to_numpy(zero_copy_only=False)
+        right = table.column("right").to_pylist()
+        lookup, by_id = {}, {}
+        for i in range(len(table)):
+            exp_i = exp[i]
+            if hasattr(exp_i, "isoformat"):
+                exp_i = exp_i.isoformat()
+            lookup[(chain[i], osi[i], exp_i, int(milli[i]), right[i])] = int(cid[i])
+            by_id[int(cid[i])] = {
+                "osi_symbol": osi[i], "expiration": exp_i,
+                "millistrike": int(milli[i]), "right": right[i],
+            }
+            if int(cid[i]) > self.max_id:
+                self.max_id = int(cid[i])
+        self.identity = lookup
+        self.by_id = by_id
+        del table
+
+    def _load_coverage(self, chains, dates):
+        if not self._refs["coverage"]:
+            return
+        table = _read_filtered(
+            self._refs["coverage"],
+            list(oi_coverage_schema().names),
+            None,
+        )
+        if table is None or len(table) == 0:
+            return
+        wanted = set(dates)
+        wanted_chains = set(chains)
+        for row in table.to_pylist():
+            if row.get("chain") in wanted_chains and row.get("request_date") in wanted:
+                self.coverage[(row["chain"], row["request_date"])] = row
+        del table
+
+    def _validate_full(self, oi_population, chains, dates):
+        if oi_population.get("accepted_execution_mode", oi_population.get("mode")) != "full":
+            return False
+        if not self._refs["identity_map"] or not self._refs["asof_intervals"]:
+            return False
+        if not self._refs["coverage"] or not self._refs["membership"]:
+            return False
+        for chain in chains:
+            if chain in CHAINS_WITHOUT_LISTING:
+                continue
+            for day in dates:
+                if (chain, day) not in self.coverage:
+                    return False
+        return True
+
+    def _load_membership(self, chains, dates):
+        if not self._refs.get("membership"):
+            return
+        wanted = set(dates)
+        wanted_chains = set(chains)
+        table = _read_filtered(
+            self._refs["membership"],
+            ["file_id", "path", "sha256", "chain", "role", "request_date",
+             "rows_read", "rows_valid", "rows_invalid", "empty_marker"],
+        )
+        if table is None or len(table) == 0:
+            return
+        for row in table.to_pylist():
+            if row.get("chain") not in wanted_chains or row.get("request_date") not in wanted:
+                continue
+            key = (row["chain"], row["request_date"], row["role"])
+            self.membership.setdefault(key, []).append(row)
+        del table
+
+    def _load_source_manifest(self):
+        for ref in self._refs.get("source_manifest") or []:
+            payload = json.loads(Path(ref["path"]).read_text())
+            files = payload if isinstance(payload, list) else (payload.get("files") or payload.get("manifest") or [])
+            for item in files:
+                if not isinstance(item, dict):
+                    continue
+                path = item.get("path")
+                if path:
+                    self.source_manifest[path] = item
+
+    def _load_interval_shard(self, chains, dates):
+        np = _np()
+        if not self._refs.get("asof_intervals") or not dates:
+            self._interval_shard = {"cid": np.empty(0, dtype=np.int32)}
+            return
+        import pyarrow.dataset as ds
+        first, last = min(dates), max(dates)
+        first_cut = cut_ns_on(date.fromisoformat(first), "09:30")
+        last_cut = cut_ns_on(date.fromisoformat(last), "16:15")
+        filt = ds.field("chain").isin(list(chains))
+        filt = filt & (ds.field("request_date") <= last)
+        filt = filt & (ds.field("valid_from_ns") <= last_cut)
+        filt = filt & (ds.field('valid_to_ns').is_null() | (ds.field('valid_to_ns') > first_cut))
+        filt = filt & (ds.field('expiration').is_null() | (ds.field('expiration') >= first))
+        table = _read_filtered(
+            self._refs["asof_intervals"],
+            ["contract_id", "chain", "open_interest", "request_date",
+             "ambiguous", "valid_from_ns", "valid_to_ns", "expiration"],
+            filt,
+            skip=lambda path: not _interval_file_relevant(path, chains, last, first_cut, last_cut),
+        )
+        codebook = self._interval_dates
+        if table is None or len(table) == 0:
+            self._interval_shard = {"cid": np.empty(0, dtype=np.int32)}
+            del table
+            return
+        req_iso, _, req_days = _date_column_iso(table.column("request_date"), codebook)
+        exp_iso, exp_ok, exp_days = _date_column_iso(table.column("expiration"), codebook)
+        vt = table.column("valid_to_ns")
+        vt_null = _pc().is_null(vt).to_numpy(zero_copy_only=False).astype(bool)
+        valid_to = vt.fill_null(-1).to_numpy(zero_copy_only=False).astype("int64")
+        valid_to[vt_null] = -1
+        chain_col = table.column("chain").to_pylist()
+        chain_labels = ["" if item is None else (item if type(item) is str else str(item))
+                        for item in chain_col]
+        uniq, inverse = np.unique(np.asarray(chain_labels, dtype=object), return_inverse=True)
+        self._interval_shard = {
+            "cid": table.column("contract_id").to_numpy(zero_copy_only=False).astype("int32"),
+            "oi": table.column("open_interest").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
+            "valid_from": table.column("valid_from_ns").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
+            "valid_to": valid_to,
+            "req_days": req_days.astype(np.int32, copy=False),
+            "exp_days": np.where(exp_ok, exp_days, -1).astype(np.int32, copy=False),
+            "ambiguous": table.column("ambiguous").fill_null(False).to_numpy(zero_copy_only=False).astype(bool),
+            "chain_u": list(uniq),
+            "chain_i": inverse.astype(np.int32, copy=False),
+        }
+        del table, req_iso, exp_iso
+
+    def _listing_path(self, rel, sha256):
+        if type(rel) is str and rel and not rel.startswith("/") and ".." not in Path(rel).parts:
+            if self.protocol is not None:
+                path = _resolve_source_path(self.protocol, rel)
+            else:
+                path = Path(rel)
+        else:
+            path = Path(rel)
+        if not path.is_file():
+            raise IntegrityError("listing membership path is missing")
+        if file_digest(path) != sha256:
+            raise IntegrityError("listing source hash changed")
+        manifest = self.source_manifest.get(rel)
+        if manifest is None or manifest.get("sha256") != sha256 or manifest.get('size_bytes') != path.stat().st_size:
+            raise IntegrityError("listing membership hash does not match source_manifest")
+        return path
+
+    def _parse_listing_ids(self, table, chain, declared):
+        np = _np()
+        if table is None or len(table) == 0:
+            return np.empty(0, dtype=np.int64), 0, 0
+        osi_dict, osi_idx, osi_null = _dictionary_keys(table.column("osi_symbol"))
+        osi_values = osi_dict.to_pylist()
+        osi_parsed, _ = _osi_unique_parse(osi_dict, {})
+        exp_iso, exp_ok, _ = _date_column_iso(table.column("expiration"), self._interval_dates)
+        req_iso, req_ok, _ = _date_column_iso(table.column("request_date"), self._interval_dates)
+        milli, _, strike_present, strike_null = _millistrike_column(table.column("strike"))
+        right_mapped, right_idx, right_null = _unique_string_map(table.column("right"), normalize_right)
+        if "symbol" in table.schema.names:
+            sym_mapped, sym_idx, sym_null = _unique_string_map(
+                table.column("symbol"), lambda value: value if type(value) is str else None)
+        else:
+            n = len(table)
+            sym_mapped, sym_idx, sym_null = [None], np.zeros(n, dtype=np.int64), np.ones(n, dtype=bool)
+        n = len(table)
+        listed = []
+        invalid = 0
+        for i in range(n):
+            if osi_null[i] or not exp_ok[i] or not req_ok[i] or right_null[i] or strike_null[i] or not strike_present[i] or milli[i] < 0:
+                invalid += 1
+                continue
+            parsed = osi_parsed[osi_idx[i]]
+            if parsed is None:
+                invalid += 1
+                continue
+            right = right_mapped[right_idx[i]]
+            if right not in {"CALL", "PUT"}:
+                invalid += 1
+                continue
+            symbol = None if sym_null[i] else sym_mapped[sym_idx[i]]
+            if parsed["root"] != chain or (type(symbol) is str and symbol != chain):
+                invalid += 1
+                continue
+            if (parsed["expiration"] != exp_iso[i] or parsed["right"] != right
+                    or int(parsed["millistrike"]) != int(milli[i])):
+                invalid += 1
+                continue
+            if req_iso[i] != declared:
+                invalid += 1
+                continue
+            osi_text = osi_values[osi_idx[i]]
+            cid = self.identity.get((chain, osi_text, exp_iso[i], int(milli[i]), right))
+            if cid is None:
+                invalid += 1
+                continue
+            listed.append(int(cid))
+        uniq = np.unique(np.asarray(listed, dtype=np.int64)) if listed else np.empty(0, dtype=np.int64)
+        return uniq, int(len(uniq)), invalid
+
+    def _listed_for_day(self, chain, request_date):
+        np = _np()
+        members = self.membership.get((chain, request_date, "contracts")) or []
+        if not members:
+            return None, {"status": "missing", "empty_marker": False, "present": False}
+        if all(bool(item.get("empty_marker")) for item in members):
+            return np.empty(0, dtype=np.int64), {"status": "empty_marker", "empty_marker": True, "present": True}
+        ids = []
+        for item in members:
+            if item.get("empty_marker"):
+                continue
+            path = self._listing_path(item["path"], item["sha256"])
+            dataset = _cached_dataset(str(path))
+            table = dataset.to_table(columns=[name for name in LISTING_IDENTITY_COLUMNS
+                                              if name in set(dataset.schema.names)])
+            self.listing_files_read += 1
+            self.listing_rows_read += len(table)
+            self.listing_bytes_read += path.stat().st_size
+            found, nvalid, _ = self._parse_listing_ids(table, chain, request_date)
+            if item.get("rows_valid") is not None and nvalid != int(item["rows_valid"]):
+                # membership nvalid is valid source rows, which may exceed unique identities
+                pass
+            if found.size:
+                ids.append(found)
+            del table
+        listed = np.unique(np.concatenate(ids)) if ids else np.empty(0, dtype=np.int64)
+        return listed, {"status": "present", "empty_marker": False, "present": True}
+
+    def prepare_day(self, chain, request_date, prev_date):
+        """Intersect shard intervals with this day's cuts; listing from membership."""
+        np = _np()
+        horizon = {
+            "chain": chain, "request_date": request_date,
+            "listed_ids": None, "reports_present": False,
+            "cid": np.empty(0, dtype=np.int32),
+            "oi": np.empty(0, dtype=np.int64),
+            "valid_from": np.empty(0, dtype=np.int64),
+            "valid_to": np.empty(0, dtype=np.int64),
+            "req_days": np.empty(0, dtype=np.int32),
+            "exp_days": np.empty(0, dtype=np.int32),
+            "ambiguous": np.empty(0, dtype=bool),
+        }
+        if not self.available:
+            self._horizon = horizon
+            return horizon
+        listed, listing_meta = self._listed_for_day(chain, request_date)
+        horizon["listed_ids"] = listed
+        horizon["listing_meta"] = listing_meta
+        cache = self._interval_shard
+        if cache is not None and cache["cid"].size:
+            day_open = cut_ns_on(date.fromisoformat(request_date), "09:30")
+            day_close = cut_ns_on(date.fromisoformat(request_date), "16:15")
+            cut_days = self._interval_dates.days(request_date)
+            chain_i = None
+            if "chain_u" in cache:
+                try:
+                    chain_i = list(cache["chain_u"]).index(chain)
+                except ValueError:
+                    chain_i = None
+            vf, vt = cache["valid_from"], cache["valid_to"]
+            keep = (vf <= day_close) & ((vt < 0) | (vt > day_open)) & (cache["req_days"] <= cut_days)
+            keep &= (cache["exp_days"] < 0) | (cache["exp_days"] >= cut_days)
+            if "chain_u" in cache:
+                if chain_i is None:
+                    keep &= False
+                else:
+                    keep &= cache["chain_i"] == chain_i
+            if np.any(keep):
+                horizon["cid"] = cache["cid"][keep]
+                horizon["oi"] = cache["oi"][keep]
+                horizon["valid_from"] = cache["valid_from"][keep]
+                horizon["valid_to"] = cache["valid_to"][keep]
+                horizon["req_days"] = cache["req_days"][keep]
+                horizon["exp_days"] = cache["exp_days"][keep]
+                horizon["ambiguous"] = cache["ambiguous"][keep]
+        self._horizon = horizon
+        return horizon
+
+    def release_day(self):
+        self._horizon = None
+
+    def listing_bind(self, chain, request_date):
+        cov = self.coverage.get((chain, request_date))
+        listed = None if self._horizon is None else self._horizon.get("listed_ids")
+        meta = None if self._horizon is None else self._horizon.get("listing_meta")
+        if chain in CHAINS_WITHOUT_LISTING:
+            return {
+                "listing_known": False, "vix_listing_unknown": True,
+                "listing_unavailable": False, "listing_file_present": None,
+                "listing_status": "unknown", "listing_denominator_known": False,
+                "listed_ids": None, "oi_unavailable": False,
+            }
+        if not self.available:
+            return {
+                "listing_known": False, "vix_listing_unknown": False,
+                "listing_unavailable": True, "listing_file_present": None,
+                "listing_status": "unavailable", "listing_denominator_known": False,
+                "listed_ids": None, "oi_unavailable": True,
+            }
+        if meta is not None and meta.get("status") == "missing":
+            status = (cov or {}).get("listing_status") or "missing"
+            present = False if cov is None else cov.get("listing_file_present")
+            if present is None:
+                present = False
+            return {
+                "listing_known": False, "vix_listing_unknown": False,
+                "listing_unavailable": False, "listing_file_present": present,
+                "listing_status": status if status != "present" else "missing",
+                "listing_denominator_known": False,
+                "listed_ids": None, "oi_unavailable": False,
+            }
+        if meta is not None and meta.get("empty_marker"):
+            return {
+                "listing_known": False, "vix_listing_unknown": False,
+                "listing_unavailable": False, "listing_file_present": True,
+                "listing_status": "empty_marker", "listing_denominator_known": False,
+                "listed_ids": None,
+                "oi_unavailable": False,
+            }
+        denom = False if cov is None else bool(cov.get("listing_denominator_known"))
+        status = (cov or {}).get("listing_status") or (meta or {}).get("status") or "unknown"
+        present = True if meta and meta.get("present") else (None if cov is None else cov.get("listing_file_present"))
+        known = bool(denom and listed is not None and present is True and status == 'present')
+        if known and cov is not None and cov.get("listing_count") is not None:
+            if int(len(listed)) != int(cov["listing_count"]):
+                raise IntegrityError("reconstructed listing_count does not match accepted OI coverage")
+        return {
+            "listing_known": known, "vix_listing_unknown": False,
+            "listing_unavailable": False, "listing_file_present": present,
+            "listing_status": status, "listing_denominator_known": denom or known,
+            "listed_ids": listed if known else None, "oi_unavailable": False,
+        }
+
+    def identity_fields(self, contract_id):
+        return self.by_id.get(int(contract_id), {})
+
+    def asof_vector(self, cids, cut_ns, cut_days, prev_days):
+        np = _np()
+        n = len(cids)
+        out = {
+            "oi": np.full(n, -1, dtype=np.int64),
+            "available": np.zeros(n, dtype=bool),
+            "ambiguous": np.zeros(n, dtype=bool),
+            "missing": np.ones(n, dtype=bool),
+            "stale": np.zeros(n, dtype=bool),
+            "expired": np.zeros(n, dtype=bool),
+            "zero": np.zeros(n, dtype=bool),
+        }
+        horizon = self._horizon
+        if not self.available or horizon is None or horizon["cid"].size == 0 or cut_ns is None:
+            return out
+        vf, vt = horizon["valid_from"], horizon["valid_to"]
+        vis = (vf <= cut_ns) & ((vt < 0) | (cut_ns < vt)) & (horizon["req_days"] <= cut_days)
+        vis &= (horizon["exp_days"] < 0) | (horizon["exp_days"] >= cut_days)
+        if not np.any(vis):
+            return out
+        vc = horizon["cid"][vis]
+        voi = horizon["oi"][vis]
+        vamb = horizon["ambiguous"][vis]
+        vexp = horizon["exp_days"][vis]
+        vreq = horizon["req_days"][vis]
+        order = np.argsort(vc, kind="mergesort")
+        vc, voi, vamb, vexp, vreq = vc[order], voi[order], vamb[order], vexp[order], vreq[order]
+        starts = np.r_[0, np.flatnonzero(vc[1:] != vc[:-1]) + 1]
+        first = np.repeat(starts, np.diff(np.r_[starts, len(vc)]))
+        all_same = np.logical_and.reduceat(voi == voi[first], starts)
+        any_amb = np.logical_or.reduceat(vamb, starts)
+        amb = any_amb | (~all_same)
+        cid_u, oi_u = vc[starts], voi[starts]
+        exp_u, req_u = vexp[starts], vreq[starts]
+        pos = np.searchsorted(cid_u, cids)
+        found = (pos < len(cid_u))
+        pos_c = np.minimum(pos, max(len(cid_u) - 1, 0)) if len(cid_u) else pos
+        found = found & (cid_u[pos_c] == cids) if len(cid_u) else found
+        if not np.any(found):
+            return out
+        take = pos_c[found]
+        out["missing"][found] = False
+        out["ambiguous"][found] = amb[take]
+        expired = (exp_u[take] >= 0) & (exp_u[take] < cut_days)
+        out["expired"][found] = expired
+        oi = oi_u[take]
+        out["oi"][found] = oi
+        out["zero"][found] = (~out["ambiguous"][found]) & (oi == 0)
+        out["available"][found] = (
+            (~out["ambiguous"][found]) & (~expired) & (oi >= 0)
+        )
+        if prev_days is not None:
+            out["stale"][found] = req_u[take] < prev_days
+        out["oi"][out["ambiguous"] | (~out["available"])] = -1
+        return out
+
+
+class SupportStore:
+    """Parse admitted support once into typed arrays. No future fill. No VIX cash."""
+
+    def __init__(self):
+        self.cash = {}
+        self.etf = {}
+        self.fred = None
+        self.actions = None
+        self.support_manifest = []
+
+    def add_table(self, family, table, record):
+        meta = {
+            "file_id": record["file_id"], "path": record["source"]["path"],
+            "sha256": record["sha256"], "dataset_id": record["source"].get("dataset_id"),
+            "role": record["source"].get("role"), "source_family": family,
+            "rows": len(table), "size_bytes": record["source"]["size_bytes"],
+            "schema_id": record.get("schema_id"),
+        }
+        self.support_manifest.append(meta)
+        if family == "cash_daily":
+            self._add_cash(table, record)
+        elif family == "etf_1m":
+            self._add_etf(table, record)
+        elif family == "fred":
+            self._add_fred(table, record)
+        elif family == "corporate_actions":
+            self._add_actions(table, record)
+
+    def _add_cash(self, table, record):
+        np = _np()
+        names = set(table.schema.names)
+        date_col = "date" if "date" in names else "request_date"
+        dates = table.column(date_col).to_pylist()
+        symbols = table.column("symbol").to_pylist() if "symbol" in names else [None] * len(table)
+        close = table.column("close").to_numpy(zero_copy_only=False) if "close" in names else None
+        adj = table.column("adjusted_close").to_numpy(zero_copy_only=False) if "adjusted_close" in names else None
+        for i in range(len(table)):
+            label = dates[i].isoformat() if hasattr(dates[i], "isoformat") else dates[i]
+            symbol = str(symbols[i]) if symbols[i] is not None else None
+            bag = self.cash.setdefault(symbol, {"date": [], "close": [], "adj": [], "file_id": [], "row": []})
+            bag["date"].append(label)
+            bag["close"].append(None if close is None else float(close[i]) if math.isfinite(float(close[i])) else None)
+            bag["adj"].append(None if adj is None else float(adj[i]) if math.isfinite(float(adj[i])) else None)
+            bag["file_id"].append(record["file_id"])
+            bag["row"].append(i)
+
+    def _add_etf(self, table, record):
+        np = _np()
+        names = set(table.schema.names)
+        symbol = _etf_symbol(record)
+        t = table.column("t").to_numpy(zero_copy_only=False).astype("int64")
+        inst = table.column("instrument_id")
+        inst_ids = inst.to_numpy(zero_copy_only=False).astype("int32") if "instrument_id" in names else np.full(len(table), -1, dtype=np.int32)
+        def _f(name):
+            if name not in names:
+                return np.full(len(table), np.nan)
+            return table.column(name).to_numpy(zero_copy_only=False).astype("float64")
+        start_ns = t.astype("int64") * 1_000_000
+        bag = self.etf.setdefault(symbol, {
+            "start_ns": [], "end_ns": [], "o": [], "h": [], "l": [], "c": [], "v": [],
+            "instrument_id": [], "file_id": [], "row": [],
+        })
+        bag["start_ns"].append(start_ns)
+        bag["end_ns"].append(start_ns + MINUTE_NS)
+        bag["o"].append(_f("o")); bag["h"].append(_f("h"))
+        bag["l"].append(_f("l")); bag["c"].append(_f("c")); bag["v"].append(_f("v"))
+        bag["instrument_id"].append(inst_ids)
+        bag["file_id"].append(np.full(len(table), int(record["file_id"]), dtype=np.int64))
+        bag["row"].append(np.arange(len(table), dtype=np.int64))
+
+    def _add_fred(self, table, record):
+        np = _np()
+        names = set(table.schema.names)
+        n = len(table)
+        dates = table.column("date").to_pylist() if "date" in names else [None] * n
+        series = table.column("series_id").to_pylist() if "series_id" in names else [None] * n
+        tenor = table.column("tenor_days").to_numpy(zero_copy_only=False).astype("int64") if "tenor_days" in names else np.full(n, -1, dtype=np.int64)
+        rate = table.column("rate_pct") if "rate_pct" in names else None
+        rate_v, rate_null = (_float_column(rate) if rate is not None else (np.full(n, np.nan), np.ones(n, dtype=bool)))
+        rs = table.column("realtime_start").to_pylist() if "realtime_start" in names else [None] * n
+        re = table.column("realtime_end").to_pylist() if "realtime_end" in names else [None] * n
+        labels = np.array([d.isoformat() if hasattr(d, "isoformat") else d for d in dates], dtype=object)
+        block = {
+            "date": labels, "series": np.array(series, dtype=object), "tenor": tenor,
+            "rate": rate_v, "rate_null": rate_null,
+            "realtime_start": np.array([
+                x.isoformat() if hasattr(x, "isoformat") else x for x in rs
+            ], dtype=object),
+            "realtime_end": np.array([
+                x.isoformat() if hasattr(x, "isoformat") else x for x in re
+            ], dtype=object),
+            "file_id": np.full(n, int(record["file_id"]), dtype=np.int64),
+            "row": np.arange(n, dtype=np.int64),
+        }
+        if self.fred is None:
+            self.fred = block
+        else:
+            for key in block:
+                self.fred[key] = np.concatenate([self.fred[key], block[key]])
+
+    def _add_actions(self, table, record):
+        np = _np()
+        names = set(table.schema.names)
+        n = len(table)
+        ex = table.column("ex_date").to_pylist() if "ex_date" in names else (
+            table.column("date").to_pylist() if "date" in names else [None] * n)
+        symbol = table.column("symbol").to_pylist() if "symbol" in names else [record["source"].get("chain")] * n
+        div = table.column("dividend").to_pylist() if "dividend" in names else [None] * n
+        split = table.column("split_ratio").to_pylist() if "split_ratio" in names else [None] * n
+        block = {
+            "ex_date": np.array([x.isoformat() if hasattr(x, "isoformat") else x for x in ex], dtype=object),
+            "symbol": np.array(symbol, dtype=object),
+            "dividend": np.array([None if v is None else float(v) for v in div], dtype=object),
+            "split_ratio": np.array([None if v is None else float(v) for v in split], dtype=object),
+            "file_id": np.full(n, int(record["file_id"]), dtype=np.int64),
+            "row": np.arange(n, dtype=np.int64),
+        }
+        if self.actions is None:
+            self.actions = block
+        else:
+            for key in block:
+                self.actions[key] = np.concatenate([self.actions[key], block[key]])
+
+    def finalize(self):
+        np = _np()
+        for symbol, bag in self.etf.items():
+            if not bag["start_ns"]:
+                continue
+            start = np.concatenate(bag["start_ns"])
+            order = np.argsort(start, kind="mergesort")
+            for field in ("start_ns", "end_ns", "o", "h", "l", "c", "v", "instrument_id", "file_id", "row"):
+                bag[field] = np.concatenate(bag[field])[order]
+        for symbol, bag in self.cash.items():
+            order = np.argsort(np.array(bag["date"], dtype=object))
+            for field in bag:
+                bag[field] = [bag[field][int(i)] for i in order.tolist()]
+
+    def cash_at(self, symbol, cut_date, *, at_or_after_close, prior_date):
+        if symbol is None:
+            return None
+        bag = self.cash.get(symbol)
+        if not bag:
+            return None
+        labels = bag["date"]
+        if at_or_after_close and cut_date in labels:
+            i = labels.index(cut_date)
+            return {
+                "date": cut_date, "close": bag["close"][i], "adjusted_close": bag["adj"][i],
+                "same_date": True,
+                "assumption": "retrospective_same_date_close_at_or_after_declared_close",
+                "publication_known": None,
+            }
+        if prior_date and prior_date in labels:
+            i = labels.index(prior_date)
+            return {
+                "date": prior_date, "close": bag["close"][i], "adjusted_close": bag["adj"][i],
+                "same_date": False, "assumption": "prior_available_cash_date_close",
+                "publication_known": None,
+            }
+        earlier = [label for label in labels if label < cut_date]
+        if not earlier:
+            return None
+        label = max(earlier)
+        i = labels.index(label)
+        return {
+            "date": label, "close": bag["close"][i], "adjusted_close": bag["adj"][i],
+            "same_date": False, "assumption": "prior_available_cash_date_close",
+            "publication_known": None,
+        }
+
+    def etf_at(self, symbol, cut_ns):
+        np = _np()
+        bag = self.etf.get(symbol)
+        if not bag or not len(bag.get("end_ns", [])):
+            return None
+        end = bag["end_ns"]
+        idx = int(np.searchsorted(end, cut_ns, side="right") - 1)
+        if idx < 0:
+            return None
+        complete = all(math.isfinite(float(bag[field][idx])) for field in ("o", "h", "l", "c"))
+        if not complete:
+            return None
+        age = cut_ns - int(end[idx])
+        gap = age > MINUTE_NS
+        if idx + 1 < len(end) and int(end[idx + 1]) <= cut_ns:
+            gap = True
+        return {
+            "bar_start_ns": int(bag["start_ns"][idx]), "bar_end_ns": int(end[idx]),
+            "open": float(bag["o"][idx]), "high": float(bag["h"][idx]),
+            "low": float(bag["l"][idx]), "close": float(bag["c"][idx]),
+            "volume": float(bag["v"][idx]), "instrument_id": int(bag["instrument_id"][idx]),
+            "age_ns": age, "gap": gap,
+            "assumption": "latest_complete_one_minute_bar_end_at_or_before_cut",
+            "file_id": int(bag["file_id"][idx]), "row_index": int(bag["row"][idx]),
+        }
+
+    def fred_at(self, cut_date):
+        if self.fred is None:
+            return []
+        np = _np()
+        labels = self.fred["date"]
+        eligible = np.array([lab is not None and lab <= cut_date for lab in labels], dtype=bool)
+        rows = []
+        keys = {}
+        for i in np.flatnonzero(eligible).tolist():
+            key = (self.fred["series"][i], int(self.fred["tenor"][i]))
+            prev = keys.get(key)
+            if prev is None or labels[i] >= labels[prev]:
+                keys[key] = i
+        for key, i in sorted(keys.items(), key=lambda item: (item[0][0] or "", item[0][1])):
+            rate = None if self.fred["rate_null"][i] or not math.isfinite(float(self.fred["rate"][i])) else float(self.fred["rate"][i])
+            rows.append({
+                "series_id": self.fred["series"][i], "tenor_days": int(self.fred["tenor"][i]),
+                "obs_date": labels[i], "rate_pct": rate, "missing_rate": rate is None,
+                "realtime_start": self.fred["realtime_start"][i],
+                "realtime_end": self.fred["realtime_end"][i],
+                "historical_known": "UNKNOWN",
+                "file_id": int(self.fred["file_id"][i]), "row_index": int(self.fred["row"][i]),
+            })
+        return rows
+
+    def actions_at(self, symbol, cut_date):
+        if self.actions is None:
+            return []
+        rows = []
+        future = False
+        for i in range(len(self.actions["ex_date"])):
+            if symbol is not None and self.actions["symbol"][i] not in {symbol, None}:
+                continue
+            ex = self.actions["ex_date"][i]
+            if ex is None:
+                continue
+            if ex > cut_date:
+                future = True
+                continue
+            rows.append({
+                "symbol": self.actions["symbol"][i] or symbol,
+                "ex_date": ex,
+                "dividend": self.actions["dividend"][i],
+                "split_ratio": self.actions["split_ratio"][i],
+                "file_id": int(self.actions["file_id"][i]),
+                "row_index": int(self.actions["row"][i]),
+                "announcement_known_at_ns": None,
+                "future_exdate": False,
+            })
+        if not rows and future:
+            rows.append({
+                "symbol": symbol, "ex_date": None, "dividend": None, "split_ratio": None,
+                "file_id": None, "row_index": None, "announcement_known_at_ns": None,
+                "future_exdate": True,
+            })
+        return rows
+
+
+def _cash_symbol(chain):
+    return {"NDX": "NDX", "NDXP": "NDX", "QQQ": "QQQ", "SPX": "SPX",
+            "SPXW": "SPX", "SPY": "SPY", "VIX": None}.get(chain)
+
+
+def _etf_chain_symbol(chain):
+    return {"QQQ": "QQQ", "SPY": "SPY"}.get(chain)
+
+
+def _hist_merge(store, key, values, counts):
+    bag = store.setdefault(key, {})
+    for value, count in zip(values, counts):
+        number = float(value)
+        if not math.isfinite(number) or int(count) <= 0:
+            continue
+        bag[number] = bag.get(number, 0) + int(count)
+
+
+def _hist_batch(store, metric, population, family, cut, right_codes, dte_codes, values, mask):
+    np = _np()
+    if mask is None:
+        mask = np.ones(len(values), dtype=bool)
+    if not np.any(mask):
+        return
+    vals = np.asarray(values, dtype=np.float64)[mask]
+    finite = np.isfinite(vals)
+    if not np.any(finite):
+        return
+    rights = np.asarray(right_codes)[mask][finite]
+    dtes = np.asarray(dte_codes)[mask][finite]
+    vals = vals[finite]
+    keys = np.stack((rights.astype(np.int64), dtes.astype(np.int64)), axis=1)
+    uniq, inverse = np.unique(keys, axis=0, return_inverse=True)
+    for u, key in enumerate(uniq):
+        part = vals[inverse == u]
+        if part.size == 0:
+            continue
+        vv, cc = np.unique(part, return_counts=True)
+        right = RIGHT_NAMES.get(int(key[0]), "unknown")
+        dte = DTE_NAMES[int(key[1])] if 0 <= int(key[1]) < len(DTE_NAMES) else "unknown"
+        _hist_merge(store, f"{metric}|{population}|{family}|{cut}|{right}|{dte}", vv, cc)
+
+
+def _source_frame_hists(store, frame, family):
+    np = _np()
+    if frame is None or not frame["n"]:
+        return
+    keep = frame["keep"] & ~frame["unique_conflict"]
+    raw = np.ones(frame["n"], dtype=bool)
+    for metric, col, null in (
+        ("bid", "bid", "bid_null"), ("ask", "ask", "ask_null"),
+    ):
+        present = ~frame[null]
+        _hist_batch(store, metric, "raw_source", family, "-", frame["right_code"],
+                    frame["dte_code"], frame[col], raw & present)
+        _hist_batch(store, metric, "unique_source", family, "-", frame["right_code"],
+                    frame["dte_code"], frame[col], keep & present)
+    mid = (frame["bid"] + frame["ask"]) / 2.0
+    spread = frame["ask"] - frame["bid"]
+    usable = frame["usable_raw"] & (~frame["bid_null"]) & (~frame["ask_null"])
+    _hist_batch(store, "mid", "raw_source", family, "-", frame["right_code"],
+                frame["dte_code"], mid, raw & usable)
+    _hist_batch(store, "mid", "unique_source", family, "-", frame["right_code"],
+                frame["dte_code"], mid, keep & usable)
+    _hist_batch(store, "spread", "raw_source", family, "-", frame["right_code"],
+                frame["dte_code"], spread, raw & usable)
+    _hist_batch(store, "spread", "unique_source", family, "-", frame["right_code"],
+                frame["dte_code"], spread, keep & usable)
+
+
+def _cut_board_hists(store, board_rows):
+    np = _np()
+    if not board_rows:
+        return
+    bags = defaultdict(list)
+    for row in board_rows:
+        if not row.get("quoted") or not row.get("usable"):
+            continue
+        family = row.get("source_family") or "unknown"
+        cut = row.get("cut_label") or "-"
+        right = row.get("right") or "unknown"
+        dte = row.get("dte_bucket") or "unknown"
+        for metric, field in (("bid", "bid"), ("ask", "ask"), ("mid", "mid"),
+                              ("spread", "spread")):
+            value = row.get(field)
+            if value is not None and math.isfinite(float(value)):
+                bags[(metric, "cut", family, cut, right, dte)].append(float(value))
+        if row.get("sample_age_ns") is not None:
+            bags[("sample_age_s", "cut", family, cut, right, dte)].append(row["sample_age_ns"] / NS)
+        if row.get("unchanged_payload_age_ns") is not None:
+            bags[("payload_age_s", "cut", family, cut, right, dte)].append(
+                row["unchanged_payload_age_ns"] / NS)
+    for key, values in bags.items():
+        arr = np.asarray(values, dtype=np.float64)
+        vv, cc = np.unique(arr, return_counts=True)
+        _hist_merge(store, "|".join(key), vv, cc)
+
+
+def _freeze_hists(store):
+    out = {}
+    for key, bag in store.items():
+        xs = sorted(bag)
+        out[key] = {"v": xs, "c": [bag[x] for x in xs]}
+    return out
+
+
+def _hist_mean(hist):
+    if not hist:
+        return None, 0
+    values, counts = hist.get("v") or [], hist.get("c") or []
+    total = 0.0
+    n = 0
+    for value, count in zip(values, counts):
+        total += float(value) * int(count)
+        n += int(count)
+    return (None if not n else total / n), n
+
+
+def _paired_stats(near_rows, broad_rows):
+    """Exact common contract+cut+sample timestamp and all 8 payloads/nulls."""
+    near = {(row["contract_id"], row["cut_label"], row["ts_event_ns"]): row for row in near_rows
+            if row["quoted"] and row["ts_event_ns"] is not None}
+    broad = {(row["contract_id"], row["cut_label"], row["ts_event_ns"]): row for row in broad_rows
+             if row["quoted"] and row["ts_event_ns"] is not None}
+    common = set(near) & set(broad)
+    agree = conflict = 0
+    fields = (
+        ("bid", "bid_null"), ("ask", "ask_null"),
+        ("bid_size", "bid_size_null"), ("ask_size", "ask_size_null"),
+        ("bid_exchange", "bid_ex_null"), ("ask_exchange", "ask_ex_null"),
+        ("bid_condition", "bid_cond_null"), ("ask_condition", "ask_cond_null"),
+    )
+    for key in common:
+        a, b = near[key], broad[key]
+        if a["conflict"] or b["conflict"]:
+            conflict += 1
+            continue
+        equal = True
+        for value_key, null_key in fields:
+            an, bn = a.get(null_key), b.get(null_key)
+            if an and bn:
+                continue
+            if bool(an) != bool(bn) or a.get(value_key) != b.get(value_key):
+                equal = False
+                break
+        if equal:
+            agree += 1
+        else:
+            conflict += 1
+    near_clocks = {(row["contract_id"], row["cut_label"]) for row in near_rows if row["quoted"]}
+    broad_clocks = {(row["contract_id"], row["cut_label"]) for row in broad_rows if row["quoted"]}
+    return {
+        "common": len(common), "agree": agree, "conflict": conflict,
+        "near_only": len(set(near) - set(broad)),
+        "broad_only": len(set(broad) - set(near)),
+        "unmatched_sample_clocks": len((near_clocks | broad_clocks)) - len({
+            (c, cut) for c, cut, _ in common
+        }),
+    }
+
+
+def _value_or_none(value, null):
+    if null:
+        return None
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
+
+
+def _build_board_columns(chain, declared, cut_label, cut_ns, family, frame, chosen, osi_book,
+                         dates, oi_state, listed_mask, listing_known, cut_status):
+    np = _np()
+    n = len(chosen)
+    raw = frame["raw_base"][chosen]
+    conflict = frame["unique_conflict"][chosen]
+    board = np.array([_board_class(int(raw[i]), bool(conflict[i])) for i in range(n)], dtype=np.int8)
+    hide_price = conflict | (raw <= BASE_INVALID_NUMERIC) | frame["nonfinite_price"][chosen] | frame["negative_price"][chosen]
+    bid = frame["bid"][chosen]
+    ask = frame["ask"][chosen]
+    bid_null = frame["bid_null"][chosen] | hide_price
+    ask_null = frame["ask_null"][chosen] | hide_price
+    mid = np.full(n, np.nan)
+    spread = np.full(n, np.nan)
+    rel = np.full(n, np.nan)
+    usable = frame["usable_raw"][chosen] & (~conflict)
+    finite = (~bid_null) & (~ask_null) & np.isfinite(bid) & np.isfinite(ask) & usable
+    mid[finite] = (bid[finite] + ask[finite]) / 2.0
+    spread[finite] = ask[finite] - bid[finite]
+    pos = finite & (mid > 0)
+    rel[pos] = spread[pos] / mid[pos]
+    ts = frame["ts_event_ns"][chosen]
+    sample_age = cut_ns - ts
+    payload_age = cut_ns - frame["run_start_ts"][chosen]
+    s60, s300, s900 = sample_age > 60 * NS, sample_age > 300 * NS, sample_age > 900 * NS
+    p60, p300, p900 = payload_age > 60 * NS, payload_age > 300 * NS, payload_age > 900 * NS
+    osi = [osi_book.get(int(code)) for code in frame["osi_code"][chosen]]
+    exp = [dates.iso(int(d)) if d >= 0 else None for d in frame["exp_days"][chosen]]
+    right = [RIGHT_NAMES.get(int(code)) for code in frame["right_code"][chosen]]
+    dte_b = [DTE_NAMES[int(c)] if 0 <= int(c) < len(DTE_NAMES) else None for c in frame["dte_code"][chosen]]
+    req = [dates.iso(int(d)) if d >= 0 else None for d in frame["req_days"][chosen]]
+    oi = oi_state["oi"]
+    listed = listed_mask
+    rows = []
+    for i in range(n):
+        rows.append({
+            "chain": chain, "request_date": req[i] or declared, "acquisition_date": declared,
+            "cut_label": cut_label, "cut_ns": cut_ns, "source_family": family,
+            "contract_id": int(frame["contract_id"][chosen[i]]),
+            "identity_resolved": bool(frame["identity_valid"][chosen[i]]),
+            "osi_symbol": osi[i], "expiration": exp[i],
+            "millistrike": int(frame["milli"][chosen[i]]), "right": right[i],
+            "dte": None if frame["dte"][chosen[i]] == -999 else int(frame["dte"][chosen[i]]),
+            "dte_bucket": dte_b[i],
+            "bid": None if bid_null[i] else float(bid[i]),
+            "ask": None if ask_null[i] else float(ask[i]),
+            "diagnostic_bid": None if frame["bid_null"][chosen[i]] or not math.isfinite(float(bid[i])) else float(bid[i]),
+            "diagnostic_ask": None if frame["ask_null"][chosen[i]] or not math.isfinite(float(ask[i])) else float(ask[i]),
+            "bid_size": None if frame["bid_size_null"][chosen[i]] else int(frame["bid_size"][chosen[i]]),
+            "ask_size": None if frame["ask_size_null"][chosen[i]] else int(frame["ask_size"][chosen[i]]),
+            "bid_exchange": None if frame["bid_ex_null"][chosen[i]] else int(frame["bid_exchange"][chosen[i]]),
+            "ask_exchange": None if frame["ask_ex_null"][chosen[i]] else int(frame["ask_exchange"][chosen[i]]),
+            "bid_condition": None if frame["bid_cond_null"][chosen[i]] else int(frame["bid_condition"][chosen[i]]),
+            "ask_condition": None if frame["ask_cond_null"][chosen[i]] else int(frame["ask_condition"][chosen[i]]),
+            "bid_null": bool(frame["bid_null"][chosen[i]]), "ask_null": bool(frame["ask_null"][chosen[i]]),
+            "bid_size_null": bool(frame["bid_size_null"][chosen[i]]),
+            "ask_size_null": bool(frame["ask_size_null"][chosen[i]]),
+            "bid_ex_null": bool(frame["bid_ex_null"][chosen[i]]),
+            "ask_ex_null": bool(frame["ask_ex_null"][chosen[i]]),
+            "bid_cond_null": bool(frame["bid_cond_null"][chosen[i]]),
+            "ask_cond_null": bool(frame["ask_cond_null"][chosen[i]]),
+            "mid": None if not math.isfinite(mid[i]) else float(mid[i]),
+            "spread": None if not math.isfinite(spread[i]) else float(spread[i]),
+            "relative_spread": None if not math.isfinite(rel[i]) else float(rel[i]),
+            "base_class": BASE_NAMES[int(board[i])],
+            "raw_base_class": BASE_NAMES[int(raw[i])],
+            "usable": bool(usable[i]), "conflict": bool(conflict[i]),
+            "condition_zero": bool(frame["condition_zero"][chosen[i]]),
+            "nonpositive_size": bool(frame["nonpositive_size"][chosen[i]]),
+            "negative_size": bool(frame["negative_size"][chosen[i]]),
+            "zero_bid": bool(frame["zero_bid"][chosen[i]]),
+            "zero_ask": bool(frame["zero_ask"][chosen[i]]),
+            "negative_price": bool(frame["negative_price"][chosen[i]]),
+            "nonfinite_price": bool(frame["nonfinite_price"][chosen[i]]),
+            "session_outside": bool(frame["session_outside"][chosen[i]]),
+            "request_date_mismatch": bool(frame["request_date_mismatch"][chosen[i]]),
+            "ts_event_ns": int(ts[i]),
+            "sample_age_ns": int(sample_age[i]),
+            "unchanged_payload_age_ns": int(payload_age[i]),
+            "sample_stale_60": bool(s60[i]), "sample_stale_300": bool(s300[i]),
+            "sample_stale_900": bool(s900[i]),
+            "payload_stale_60": bool(p60[i]), "payload_stale_300": bool(p300[i]),
+            "payload_stale_900": bool(p900[i]),
+            "run_continuity_observed": bool(frame["run_continuity"][chosen[i]]),
+            "run_lower_bound_ns": int(frame["run_start_ts"][chosen[i]]),
+            "file_id": int(frame["file_id"][chosen[i]]),
+            "row_index": int(frame["row_index"][chosen[i]]),
+            "run_start_file_id": int(frame["run_start_file_id"][chosen[i]]),
+            "run_start_row_index": int(frame["run_start_row_index"][chosen[i]]),
+            "alias_file_id": int(frame["alias_file_id"][chosen[i]]) if frame["alias_file_id"][chosen[i]] >= 0 else None,
+            "alias_row_index": int(frame["alias_row_index"][chosen[i]]) if frame["alias_row_index"][chosen[i]] >= 0 else None,
+            "alias_multiplicity": int(frame["multiplicity"][chosen[i]]),
+            "listed": None if listed is None else bool(listed[i]),
+            "listing_known": listing_known, "quoted": True,
+            "oi": None if (not oi_state["available"][i] or oi[i] < 0) else int(oi[i]),
+            "oi_available": bool(oi_state["available"][i]),
+            "oi_ambiguous": bool(oi_state["ambiguous"][i]),
+            "oi_missing": bool(oi_state["missing"][i]),
+            "oi_stale": bool(oi_state["stale"][i]),
+            "oi_expired": bool(oi_state["expired"][i]),
+            "oi_zero": bool(oi_state["zero"][i]),
+            "received_at_ns": None, "published_at_ns": None, "known_at_ns": None,
+            "last_actual_update_ns": None, "actual_update_age_unknown": True,
+            "causal_feature_eligible": False, "cut_status": cut_status,
+        })
+    return rows
+
+
+def _listed_unquoted_rows(chain, declared, cut_label, cut_ns, family, unquoted, listing, oi_join,
+                          oi_state, cut_status, dates):
+    rows = []
+    for i, cid in enumerate(unquoted.tolist()):
+        ident = oi_join.identity_fields(int(cid))
+        exp = ident.get("expiration")
+        dte = dte_days(exp, declared) if exp and declared else None
+        oi = oi_state["oi"][i]
+        rows.append({
+            "chain": chain, "request_date": declared, "acquisition_date": declared,
+            "cut_label": cut_label, "cut_ns": cut_ns, "source_family": family,
+            "contract_id": int(cid), "identity_resolved": True,
+            "osi_symbol": ident.get("osi_symbol"), "expiration": exp,
+            "millistrike": ident.get("millistrike"), "right": ident.get("right"),
+            "dte": dte, "dte_bucket": quote_dte_bucket(dte),
+            "bid": None, "ask": None, "diagnostic_bid": None, "diagnostic_ask": None,
+            "bid_size": None, "ask_size": None, "bid_exchange": None, "ask_exchange": None,
+            "bid_condition": None, "ask_condition": None,
+            "bid_null": True, "ask_null": True, "bid_size_null": True, "ask_size_null": True,
+            "bid_ex_null": True, "ask_ex_null": True, "bid_cond_null": True, "ask_cond_null": True,
+            "mid": None, "spread": None, "relative_spread": None,
+            "base_class": None, "raw_base_class": None, "usable": False, "conflict": False,
+            "condition_zero": False, "nonpositive_size": False, "negative_size": False,
+            "zero_bid": False, "zero_ask": False, "negative_price": False,
+            "nonfinite_price": False, "session_outside": False, "request_date_mismatch": False,
+            "ts_event_ns": None, "sample_age_ns": None, "unchanged_payload_age_ns": None,
+            "sample_stale_60": None, "sample_stale_300": None, "sample_stale_900": None,
+            "payload_stale_60": None, "payload_stale_300": None, "payload_stale_900": None,
+            "run_continuity_observed": None, "run_lower_bound_ns": None,
+            "file_id": None, "row_index": None, "run_start_file_id": None,
+            "run_start_row_index": None, "alias_file_id": None, "alias_row_index": None,
+            "alias_multiplicity": None,
+            "listed": True, "listing_known": True, "quoted": False,
+            "oi": None if (not oi_state["available"][i] or oi < 0) else int(oi),
+            "oi_available": bool(oi_state["available"][i]),
+            "oi_ambiguous": bool(oi_state["ambiguous"][i]),
+            "oi_missing": bool(oi_state["missing"][i]),
+            "oi_stale": bool(oi_state["stale"][i]),
+            "oi_expired": bool(oi_state["expired"][i]),
+            "oi_zero": bool(oi_state["zero"][i]),
+            "received_at_ns": None, "published_at_ns": None, "known_at_ns": None,
+            "last_actual_update_ns": None, "actual_update_age_unknown": True,
+            "causal_feature_eligible": False, "cut_status": cut_status,
+        })
+    return rows
+
+
+def _oi_only_rows(chain, declared, cut_label, cut_ns, family, cids, oi_join, oi_state,
+                  cut_status, dates, listing):
+    rows = _listed_unquoted_rows(
+        chain, declared, cut_label, cut_ns, family, cids,
+        {"listing_known": True}, oi_join, oi_state, cut_status, dates,
+    )
+    for row in rows:
+        row["listed"] = False if listing["listing_known"] else None
+        row["listing_known"] = listing["listing_known"]
+        row["quoted"] = False
+    return rows
+
+
+def _family_file_status(family, family_meta, expected_own):
+    if family != "union":
+        meta = family_meta.get(family) or {}
+        return (not meta.get("present", False), bool(meta.get("empty")), int(meta.get("rows") or 0) == 0)
+    present = [bool((family_meta.get(name) or {}).get("present")) for name in expected_own]
+    empty = [bool((family_meta.get(name) or {}).get("empty")) for name in expected_own]
+    rows = [int((family_meta.get(name) or {}).get("rows") or 0) for name in expected_own]
+    missing = bool(present) and all(not item for item in present)
+    all_empty = (not missing) and bool(present) and all(
+        (not item) or empty[i] for i, item in enumerate(present)
+    ) and all(count == 0 for count in rows)
+    return missing, all_empty, all(count == 0 for count in rows)
+
+
+def _coverage_row(*, chain, declared, cut_label, family, intended, session, missing_file,
+                  empty_marker, early_na, board_rows, listing):
+    quoted = [row for row in board_rows if row["quoted"]]
+    usable = [row for row in quoted if row["usable"]]
+    listed_quoted = [row for row in quoted if row["listed"] is True]
+    quoted_unlisted = [row for row in quoted if row["listed"] is False]
+    listed_unquoted = [row for row in board_rows if row["listed"] is True and not row["quoted"]]
+    oi_universe = [row for row in board_rows if row["oi_available"]]
+    universe = [row for row in oi_universe
+                if row["oi"] is not None and row["oi"] >= 0]
+    quoted_u = [row for row in universe if row["quoted"]]
+    total = sum(int(row["oi"]) for row in universe)
+    weighted = None if total <= 0 else sum(int(row["oi"]) for row in quoted_u) / total
+    classes = {name: 0 for name in BASE_CLASSES}
+    for row in quoted:
+        if row["base_class"] in classes:
+            classes[row["base_class"]] += 1
+    applicable = not early_na
+    ages = [row for row in quoted if row.get("sample_age_ns") is not None]
+    return {
+        "chain": chain, "request_date": declared, "cut_label": cut_label,
+        "source_family": family, "intended": intended,
+        "closed": session.state == "closed", "early_close": session.state == "early_close",
+        "session_state": session.state,
+        "file_present": not missing_file, "empty_marker": empty_marker,
+        "missing_file": missing_file,
+        "cut_status": _cut_status(early_na=early_na, missing_file=missing_file,
+                                  empty_marker=empty_marker, quoted=bool(quoted)),
+        "cut_applicable": applicable,
+        "listed_count": None if not listing["listing_known"] else (
+            0 if listing["listed_ids"] is None else int(len(listing["listed_ids"]))
+        ),
+        "quoted_count": len(quoted),
+        "quoted_listed": len(listed_quoted),
+        "listed_unquoted": len(listed_unquoted),
+        "quoted_unlisted": len(quoted_unlisted),
+        "usable_count": len(usable),
+        "conflict_count": classes["conflict"],
+        "invalid_count": classes["invalid_identity"] + classes["invalid_clock"] + classes["invalid_numeric"],
+        "all_zero_count": classes["all_zero"], "one_sided_count": classes["one_sided"],
+        "crossed_count": classes["crossed"], "locked_count": classes["locked"],
+        "two_sided_count": classes["two_sided"],
+        "sample_stale_60_count": sum(1 for row in ages if row["sample_stale_60"]),
+        "sample_stale_300_count": sum(1 for row in ages if row["sample_stale_300"]),
+        "sample_stale_900_count": sum(1 for row in ages if row["sample_stale_900"]),
+        "payload_stale_60_count": sum(1 for row in ages if row["payload_stale_60"]),
+        "payload_stale_300_count": sum(1 for row in ages if row["payload_stale_300"]),
+        "payload_stale_900_count": sum(1 for row in ages if row["payload_stale_900"]),
+        "quoted_with_age": len(ages),
+        "bid_sum": sum(row["bid"] for row in usable if row.get("bid") is not None),
+        "bid_n": sum(1 for row in usable if row.get("bid") is not None),
+        "ask_sum": sum(row["ask"] for row in usable if row.get("ask") is not None),
+        "ask_n": sum(1 for row in usable if row.get("ask") is not None),
+        "mid_sum": sum(row["mid"] for row in usable if row.get("mid") is not None),
+        "mid_n": sum(1 for row in usable if row.get("mid") is not None),
+        "spread_sum": sum(row["spread"] for row in usable if row.get("spread") is not None),
+        "spread_n": sum(1 for row in usable if row.get("spread") is not None),
+        "rel_spread_sum": sum(row["relative_spread"] for row in usable if row.get("relative_spread") is not None),
+        "rel_spread_n": sum(1 for row in usable if row.get("relative_spread") is not None),
+        "sample_age_sum": sum((row["sample_age_ns"] or 0) / NS for row in ages),
+        "payload_age_sum": sum((row["unchanged_payload_age_ns"] or 0) / NS for row in ages),
+        "oi_available_count": len(oi_universe),
+        "oi_quoted_available_count": sum(1 for row in oi_universe if row["quoted"]),
+        "oi_missing_count": sum(1 for row in board_rows if row["oi_missing"]),
+        "oi_ambiguous_count": sum(1 for row in board_rows if row["oi_ambiguous"]),
+        "oi_zero_count": sum(1 for row in board_rows if row["oi_zero"]),
+        "oi_amount_unknown": sum(1 for row in board_rows if row["oi"] is None and not row["oi_available"]),
+        "oi_total_available": total,
+        "oi_weighted_quoted_fraction": weighted,
+        "listing_known": listing["listing_known"],
+        "vix_listing_unknown": listing["vix_listing_unknown"],
+        "listing_unavailable": listing["listing_unavailable"],
+        "oi_unavailable": bool(listing.get("oi_unavailable")),
+        "listing_file_present": listing["listing_file_present"],
+        "listing_status": listing["listing_status"],
+        "listing_denominator_known": listing["listing_denominator_known"],
+        "gt60_dte_listed": sum(1 for row in board_rows if row.get("dte_bucket") == "61+" and row["listed"] is True),
+        "no_sample": 0 if quoted else 1,
+        "causal_feature_eligible": False,
+    }
+
+
+def _support_bundle(chain, declared, cut_label, cut_ns, support, *, at_close, prior_date):
+    cash_sym = _cash_symbol(chain)
+    etf_sym = _etf_chain_symbol(chain)
+    etf = support.etf_at(etf_sym, cut_ns) if etf_sym else None
+    cash = support.cash_at(cash_sym, declared, at_or_after_close=at_close, prior_date=prior_date) if cash_sym else None
+    fred = support.fred_at(declared)
+    action_sym = etf_sym or cash_sym
+    actions = support.actions_at(action_sym, declared)
+    underlier = {
+        "chain": chain, "request_date": declared, "cut_label": cut_label, "cut_ns": cut_ns,
+        "etf_present": etf is not None, "etf_symbol": etf_sym,
+        "etf_instrument_id": None if etf is None else etf["instrument_id"],
+        "etf_bar_start_ns": None if etf is None else etf["bar_start_ns"],
+        "etf_bar_end_ns": None if etf is None else etf["bar_end_ns"],
+        "etf_open": None if etf is None else etf["open"],
+        "etf_high": None if etf is None else etf["high"],
+        "etf_low": None if etf is None else etf["low"],
+        "etf_close": None if etf is None else etf["close"],
+        "etf_volume": None if etf is None else etf["volume"],
+        "etf_age_ns": None if etf is None else etf["age_ns"],
+        "etf_gap": None if etf is None else etf["gap"],
+        "etf_assumption": None if etf is None else etf["assumption"],
+        "etf_file_id": None if etf is None else etf["file_id"],
+        "etf_row_index": None if etf is None else etf["row_index"],
+        "cash_symbol": cash_sym,
+        "cash_date": None if cash is None else cash["date"],
+        "cash_close": None if cash is None else cash["close"],
+        "cash_adjusted_close": None if cash is None else cash["adjusted_close"],
+        "cash_same_date": None if cash is None else cash["same_date"],
+        "cash_assumption": None if cash is None else cash["assumption"],
+        "cash_publication_known": None if cash is None else cash["publication_known"],
+        "vix_cash_unavailable": chain == "VIX",
+        "fred_series_count": len(fred), "fred_present": bool(fred),
+        "action_event_count": sum(1 for row in actions if row.get("ex_date")),
+        "causal_feature_eligible": False,
+    }
+    fred_rows = [{
+        "chain": chain, "request_date": declared, "cut_label": cut_label, "cut_ns": cut_ns,
+        **row, "causal_feature_eligible": False,
+    } for row in fred]
+    action_rows = [{
+        "chain": chain, "request_date": declared, "cut_label": cut_label, "cut_ns": cut_ns,
+        **row, "causal_feature_eligible": False,
+    } for row in actions]
+    return underlier, fred_rows, action_rows
+
+
+def _board_slices(board_rows):
+    slices = {}
+    for row in board_rows:
+        if not row.get("quoted"):
+            continue
+        key = "|".join((
+            row.get("source_family") or "unknown",
+            row.get("cut_label") or "unknown",
+            row.get("right") or "unknown",
+            row.get("dte_bucket") or "unknown",
+        ))
+        bag = slices.get(key)
+        if bag is None:
+            bag = {
+                "quoted": 0, "usable": 0, "conflict": 0, "invalid": 0,
+                "all_zero": 0, "one_sided": 0, "crossed": 0, "locked": 0, "two_sided": 0,
+                "bid_sum": 0.0, "bid_n": 0, "ask_sum": 0.0, "ask_n": 0,
+                "mid_sum": 0.0, "mid_n": 0, "spread_sum": 0.0, "spread_n": 0,
+                "sample_age_sum": 0.0, "payload_age_sum": 0.0, "age_n": 0,
+                "sample_stale_60": 0, "sample_stale_300": 0, "sample_stale_900": 0,
+                "payload_stale_60": 0, "payload_stale_300": 0, "payload_stale_900": 0,
+            }
+            slices[key] = bag
+        bag["quoted"] += 1
+        if row.get("usable"):
+            bag["usable"] += 1
+        cls = row.get("base_class")
+        if cls == "conflict":
+            bag["conflict"] += 1
+        elif cls in {"invalid_identity", "invalid_clock", "invalid_numeric"}:
+            bag["invalid"] += 1
+        elif cls in bag:
+            bag[cls] += 1
+        if row.get("bid") is not None:
+            bag["bid_sum"] += row["bid"]
+            bag["bid_n"] += 1
+        if row.get("ask") is not None:
+            bag["ask_sum"] += row["ask"]
+            bag["ask_n"] += 1
+        if row.get("mid") is not None:
+            bag["mid_sum"] += row["mid"]
+            bag["mid_n"] += 1
+        if row.get("spread") is not None:
+            bag["spread_sum"] += row["spread"]
+            bag["spread_n"] += 1
+        if row.get("sample_age_ns") is not None:
+            bag["sample_age_sum"] += row["sample_age_ns"] / NS
+            bag["payload_age_sum"] += (row.get("unchanged_payload_age_ns") or 0) / NS
+            bag["age_n"] += 1
+            bag["sample_stale_60"] += int(bool(row.get("sample_stale_60")))
+            bag["sample_stale_300"] += int(bool(row.get("sample_stale_300")))
+            bag["sample_stale_900"] += int(bool(row.get("sample_stale_900")))
+            bag["payload_stale_60"] += int(bool(row.get("payload_stale_60")))
+            bag["payload_stale_300"] += int(bool(row.get("payload_stale_300")))
+            bag["payload_stale_900"] += int(bool(row.get("payload_stale_900")))
+    return slices
+
+
+def _date_aggregate(chain, declared, intended, session, family_quality, coverage_rows, board_rows,
+                    support_rows, paired, hists, unique_by_family=None, paired_by_cut=None):
+    raw_rows = sum(row["raw_rows"] for row in family_quality if row["source_family"] != "union")
+    unique_family = "union" if any(row["source_family"] == "union" for row in family_quality) else "vix_full"
+    unique_events = sum(row["unique_events"] for row in family_quality if row["source_family"] == unique_family)
+    quotes = [row for row in board_rows if row["quoted"]]
+    usable = [row for row in quotes if row["usable"] and row["mid"] is not None]
+    canon_family = "union" if any(row["source_family"] == "union" for row in quotes) else "near"
+    canon = [row for row in usable if row["cut_label"] == "10:00" and row["source_family"] == canon_family]
+    if not canon:
+        canon = [row for row in usable if row["source_family"] == canon_family]
+    bids = [row["bid"] for row in canon if row.get("bid") is not None]
+    return {
+        "chain": chain, "request_date": declared, "intended": intended,
+        "session_state": session.state,
+        "raw_rows": raw_rows, "unique_events": unique_events,
+        "unique_events_by_family": unique_by_family or {},
+        "cut_board_rows": len(board_rows),
+        "quoted_contracts": len({row["contract_id"] for row in quotes if row["identity_resolved"]}),
+        "listed_contracts": len({row["contract_id"] for row in board_rows if row["listed"] is True}),
+        "oi_matched_contracts": len({row["contract_id"] for row in board_rows if row["oi_available"]}),
+        "usable_quotes": len(usable),
+        "mean_bid": None if not bids else sum(bids) / len(bids),
+        "raw_bid_sum": sum(bids), "raw_bid_n": len(bids),
+        "quality": family_quality, "coverage": coverage_rows, "support": support_rows,
+        "paired_near_broad": paired,
+        "paired_by_cut": paired_by_cut or {},
+        "histograms": hists,
+        "slices": _board_slices(board_rows),
+        "by_cut": {label: {
+            "quoted": sum(1 for row in quotes if row["cut_label"] == label),
+            "usable": sum(1 for row in usable if row["cut_label"] == label),
+        } for label in ALL_CUTS},
+    }
+
+
+def _cut_plan(session, day):
+    plan = []
+    for cut_label in ALL_CUTS:
+        if cut_label == "cash_close":
+            cut_at = session.close_at
+            early_na = session.state == "closed" or cut_at is None
+        elif cut_label == "15:00_utc":
+            cut_at = utc_cut_ns(day, "15:00")
+            early_na = session.state == "closed"
+        elif cut_label == "15:00" and session.state == "early_close":
+            cut_at = cut_ns_on(day, "15:00")
+            early_na = True
+        else:
+            cut_at = None if session.state == "closed" else cut_ns_on(day, cut_label)
+            early_na = session.state == "closed" or cut_at is None
+        plan.append((cut_label, cut_at, early_na, cut_label == "cash_close" and not early_na))
+    return plan
+
+
+def run(*, protocol, admitted, oi_population, store, outputs, selected_dates=None,
+        selected_chains=None):
+    if not isinstance(outputs, BoundedOutputs):
+        raise ContractError("registered BoundedOutputs required")
+    if store is not None and not isinstance(store, ArtifactStore):
+        raise ContractError("store must be an existing ArtifactStore")
+    started_wall, started_cpu = pytime.perf_counter(), pytime.process_time()
+    spec = contract(protocol)
+    calendar, calendar_ref = load_calendar(protocol)
+    population, stages = spec["population"], spec["population"]["stages"]
+    chains = tuple(population["chains"])
+    if selected_chains is not None:
+        if type(selected_chains) is not list or any(type(item) is not str for item in selected_chains):
+            raise ContractError("selected_chains must be chain-name strings or None")
+        if len(set(selected_chains)) != len(selected_chains):
+            raise ContractError("selected_chains contains duplicates")
+        work_chains = tuple(selected_chains)
+    else:
+        work_chains = chains
+    intended_all = intended_cash_dates(calendar, population["first_date"], population["last_date"])
+    intended_labels, prev_map = build_calendar_index(intended_all)
+    intended_label_set = set(intended_labels)
+    if selected_dates is not None:
+        if type(selected_dates) is not list or any(type(item) is not str for item in selected_dates):
+            raise ContractError("selected_dates must be ISO date strings or None")
+        if len(set(selected_dates)) != len(selected_dates):
+            raise ContractError("selected_dates contains duplicates")
+        work_dates = list(selected_dates)
+    else:
+        work_dates = list(intended_labels)
+    sources, required_ids = _validate_admitted(admitted, protocol, work_dates, list(work_chains))
+    schemas = admitted.get("schemas")
+    if not isinstance(schemas, dict):
+        raise ContractError("admitted schemas mapping required")
+    impl_hashes = implementation_hashes()
+    sci_hash = scientific_hash(protocol)
+    admit_id = admitted_identity(admitted)
+    if admitted.get("identity") and admitted["identity"] != admit_id:
+        raise IntegrityError("admitted corpus identity does not match sources")
+    binding = {
+        "protocol_scientific_hash": sci_hash,
+        "implementation_hashes": impl_hashes,
+        "selected_dates": work_dates,
+        "selected_chains": list(work_chains),
+        "admitted_kind": admitted.get("kind"),
+        "admitted_source_files": admitted.get("source_files"),
+        "admitted_identity": admit_id,
+        "oi_ref": None if oi_population is None else {
+            "family": oi_population.get("family"), "version": oi_population.get("version"),
+            "mode": oi_population.get("mode"),
+            "refs": {name: (oi_population.get("refs") or {}).get(name)
+                     for name in ("identity_map", "reports", "asof_intervals", "coverage",
+                                  "membership", "source_manifest")},
+        },
+    }
+    if store is not None:
+        store.put_json(binding, kind="options_quote_run_binding_v1")
+
+    oi_cpu = pytime.process_time()
+    oi_join = OIJoinAdapter(oi_population, chains=work_chains, dates=work_dates, protocol=protocol)
+    support = SupportStore()
+    quote_by = {chain: defaultdict(lambda: defaultdict(list)) for chain in work_chains}
+    consumed, manifest = set(), []
+    files_read = rows_read = bytes_read = 0
+    support_files = support_rows = support_bytes = 0
+    for record in sources:
+        if _is_support_record(record):
+            table, meta = read_admitted_support(protocol, record)
+            support.add_table(_source_family(record), table, record)
+            consumed.add(record["file_id"])
+            support_files += 1
+            support_rows += meta["rows"]
+            support_bytes += meta["size_bytes"]
+            manifest.append({
+                "file_id": record["file_id"], "path": record["source"]["path"],
+                "sha256": record["sha256"], "size_bytes": meta["size_bytes"],
+                "scope": "support", "source_family": _source_family(record),
+                "role": record["source"].get("role"), "dataset_id": record["source"].get("dataset_id"),
+                "rows": meta["rows"], "schema_id": record.get("schema_id"),
+            })
+            del table
+            continue
+        if not _is_quote_record(record):
+            raise ContractError("admitted source is neither quote nor declared support")
+        source = record["source"]
+        if source["chain"] not in work_chains:
+            continue
+        if source["request_date"] not in set(work_dates):
+            continue
+        quote_by[source["chain"]][source["request_date"]][_source_family(record)].append(record)
+    support.finalize()
+    oi_support_cpu = pytime.process_time() - oi_cpu
+
+    admit_w = ArrayWriter(outputs, "admission", admission_schema(), OUTPUT_SCHEMAS["admission"])
+    except_w = ArrayWriter(outputs, "exceptions", exception_schema(), OUTPUT_SCHEMAS["exceptions"])
+    alias_w = ArrayWriter(outputs, "alias-conflict", alias_conflict_schema(), OUTPUT_SCHEMAS["alias_conflict"])
+    board_w = ArrayWriter(outputs, "cut-board", cut_board_schema(), OUTPUT_SCHEMAS["cut_board"])
+    quality_w = ArrayWriter(outputs, "source-quality", source_quality_schema(), OUTPUT_SCHEMAS["source_quality"])
+    support_w = ArrayWriter(outputs, "underlier-support", underlier_support_schema(), OUTPUT_SCHEMAS["underlier_support"])
+    fred_w = ArrayWriter(outputs, "fred-support", fred_support_schema(), OUTPUT_SCHEMAS["fred_support"])
+    action_w = ArrayWriter(outputs, "action-support", action_support_schema(), OUTPUT_SCHEMAS["action_support"])
+    ident_w = ArrayWriter(outputs, "identity-match", identity_match_schema(), OUTPUT_SCHEMAS["identity_match"])
+
+    codebook = QuoteCodebook(oi_join.identity)
+    dates, clocks = DateCodebook(), ClockMaps()
+    coverage_rows, date_aggregates = [], []
+    source_dates = []
+    research_cut = local_timestamp(date(2026, 9, 4), time(0), calendar.zone)
+    parse_cpu_start = pytime.process_time()
+    np = _np()
+    selected_days = tuple(date.fromisoformat(label) for label in work_dates)
+
+    for chain in work_chains:
+        for day in selected_days:
+            label = day.isoformat()
+            _begin_request_date(clocks, label)
+            intended = label in intended_label_set
+            session = calendar.resolve(day, cut=research_cut)
+            files = quote_by[chain].get(label, {})
+            family_frames = {}
+            family_meta = {}
+            day_exceptions, quality_rows = [], []
+            osi_book = StringBook()
+            for family in QUOTE_FAMILIES:
+                records = files.get(family, [])
+                if not records:
+                    family_meta[family] = {"present": False, "empty": False, "rows": 0}
+                    continue
+                parts, empty_any, n_rows = [], False, 0
+                for record in records:
+                    tables, meta = read_admitted_quote(protocol, record, schemas)
+                    consumed.add(record["file_id"])
+                    files_read += 1
+                    rows_read += meta["rows"]
+                    bytes_read += meta["size_bytes"]
+                    source_dates.append(label)
+                    manifest.append({
+                        "file_id": record["file_id"], "path": record["source"]["path"],
+                        "sha256": record["sha256"], "size_bytes": meta["size_bytes"],
+                        "chain": chain, "source_family": family, "scope": "quote",
+                        "request_date": label, "rows": meta["rows"],
+                        "empty_marker": meta["empty_marker"], "schema_id": record.get("schema_id"),
+                    })
+                    admit_w.write_table(_table(admission_schema(), [{
+                        "file_id": record["file_id"], "path": record["source"]["path"],
+                        "sha256": record["sha256"], "dataset_id": record["source"].get("dataset_id"),
+                        "chain": chain, "source_family": family,
+                        "role": record["source"].get("role") or "quote",
+                        "request_date": label, "bytes": meta["size_bytes"],
+                        "rows": meta["rows"], "schema_id": record.get("schema_id"),
+                        "empty_marker": meta["empty_marker"], "format": record["format"],
+                        "scope": "quote",
+                    }]))
+                    if meta["empty_marker"]:
+                        empty_any = True
+                        continue
+                    row_offset = 0
+                    for table in tables:
+                        parsed, exc = parse_quote_typed(
+                            table, record=record, dates=dates, clocks=clocks, osi_book=osi_book,
+                            codebook=codebook, session_open_ns=session.open_at,
+                            session_close_ns=session.close_at, row_offset=row_offset,
+                        )
+                        row_offset += int(parsed["n"] if parsed is not None else len(table))
+                        if exc:
+                            day_exceptions.extend(exc)
+                        if parsed["n"]:
+                            parts.append(parsed)
+                        n_rows += parsed["n"]
+                    del tables
+                if not parts:
+                    family_meta[family] = {"present": True, "empty": empty_any, "rows": 0}
+                    family_frames[family] = None
+                    continue
+                merged = concat_frames(parts)
+                del parts
+                family_frames[family] = sort_and_dedup(merged)
+                family_meta[family] = {"present": True, "empty": empty_any, "rows": merged["n"]}
+                quality_rows.extend(_source_quality_rows(family_frames[family], chain, label, family))
+            day_hists = {}
+            for family, frame in family_frames.items():
+                _source_frame_hists(day_hists, frame, family)
+            owned, alias_stats = union_families(family_frames)
+            if owned.get("union") is not None:
+                _source_frame_hists(day_hists, owned["union"], "union")
+                union_quality = _source_quality_rows(owned["union"], chain, label, "union")
+                for row in union_quality:
+                    own = [item for item in quality_rows if item['right'] == row['right']
+                           and item['dte_bucket'] == row['dte_bucket']]
+                    for key in row:
+                        if key.startswith('raw_'):
+                            row[key] = sum(int(item.get(key) or 0) for item in own)
+                quality_rows.extend(union_quality)
+                for key in [key for key in day_hists if '|raw_source|union|' in key]:
+                    del day_hists[key]
+                for key, bag in list(day_hists.items()):
+                    bits = key.split('|')
+                    if bits[1] != 'raw_source' or bits[2] == 'union':
+                        continue
+                    bits[2] = 'union'
+                    merged = day_hists.setdefault('|'.join(bits), {})
+                    for value, count in bag.items():
+                        merged[value] = merged.get(value, 0) + count
+            del family_frames
+            for stat in alias_stats:
+                alias_w.write_table(_table(alias_conflict_schema(), [{
+                    "chain": chain, "request_date": label, **{
+                        key: stat.get(key) for key in alias_conflict_schema().names
+                        if key not in {"chain", "request_date"}
+                    },
+                }]))
+            if day_exceptions:
+                except_w.write_table(_table(exception_schema(), day_exceptions))
+            if quality_rows:
+                quality_w.write_table(_table(source_quality_schema(), quality_rows))
+            ident_table = codebook.flush_tables(chain)
+            if ident_table is not None:
+                ident_w.write_table(ident_table)
+
+            prev_cash = prev_map.get(label)
+            oi_join.prepare_day(chain, label, prev_cash)
+            listing = oi_join.listing_bind(chain, label)
+            listed_ids = listing["listed_ids"]
+            if listed_ids is not None:
+                listed_ids = np.sort(np.asarray(listed_ids, dtype=np.int64))
+            day_boards, day_coverage, day_support = [], [], []
+            paired_acc = {"common": 0, "agree": 0, "conflict": 0, "near_only": 0,
+                          "broad_only": 0, "unmatched_sample_clocks": 0}
+            paired_by_cut = {}
+            expected_own = ("vix_full",) if chain == "VIX" else ("near", "broad")
+            families_for_cuts = [name for name in expected_own]
+            if "union" in owned or chain != "VIX":
+                families_for_cuts.append("union")
+            cut_days = dates.days(label)
+            prev_days = dates.days(prev_cash) if prev_cash else None
+            open_ns = session.open_at
+            close_ns = session.close_at
+            if open_ns is None:
+                open_ns = 0
+            if close_ns is None:
+                close_ns = 0
+            boards_by_family = defaultdict(list)
+            horizon = oi_join._horizon
+            oi_ids = (np.unique(horizon["cid"]).astype(np.int64, copy=False)
+                      if horizon is not None and horizon["cid"].size else np.empty(0, dtype=np.int64))
+            for cut_label, cut_at, early_na, at_close in _cut_plan(session, day):
+                for family in families_for_cuts:
+                    missing, empty_marker, _ = _family_file_status(family, family_meta, expected_own)
+                    parsed = owned.get(family)
+                    board = []
+                    quoted_ids = np.empty(0, dtype=np.int64)
+                    if not early_na:
+                        if parsed is not None:
+                            chosen = select_cut_rows(
+                                parsed, cut_ns=cut_at, cut_days=cut_days,
+                                session_open_ns=open_ns, session_close_ns=close_ns,
+                            )
+                        else:
+                            chosen = np.empty(0, dtype=np.int64)
+                        if len(chosen):
+                            cids = parsed["contract_id"][chosen]
+                            resolved = parsed["identity_valid"][chosen]
+                            listed_mask = None
+                            if listing["listing_known"] and listed_ids is not None:
+                                listed_mask = np.zeros(len(chosen), dtype=bool)
+                                listed_mask[resolved] = _membership(listed_ids, cids[resolved])
+                            elif chain in CHAINS_WITHOUT_LISTING:
+                                listed_mask = None
+                            oi_state = oi_join.asof_vector(cids, cut_at, cut_days, prev_days)
+                            board.extend(_build_board_columns(
+                                chain, label, cut_label, cut_at, family, parsed, chosen,
+                                osi_book, dates, oi_state, listed_mask, listing["listing_known"],
+                                _cut_status(early_na=False, missing_file=missing,
+                                            empty_marker=empty_marker, quoted=True),
+                            ))
+                            quoted_ids = np.sort(cids[resolved].astype(np.int64, copy=False)) if np.any(resolved) else quoted_ids
+                        support_status = _cut_status(
+                            early_na=False, missing_file=missing,
+                            empty_marker=empty_marker, quoted=bool(len(chosen)),
+                        )
+                        if listing["listing_known"] and listed_ids is not None:
+                            unquoted = listed_ids[~_membership(quoted_ids, listed_ids)] if len(listed_ids) else listed_ids
+                            if len(unquoted):
+                                oi_u = oi_join.asof_vector(unquoted, cut_at, cut_days, prev_days)
+                                board.extend(_listed_unquoted_rows(
+                                    chain, label, cut_label, cut_at, family, unquoted,
+                                    listing, oi_join, oi_u, support_status, dates,
+                                ))
+                        listed_or_quoted = quoted_ids
+                        if listed_ids is not None and len(listed_ids):
+                            listed_or_quoted = np.unique(np.concatenate([quoted_ids, listed_ids]))
+                        if len(oi_ids):
+                            only = oi_ids[~_membership(listed_or_quoted, oi_ids)]
+                            if len(only):
+                                oi_o = oi_join.asof_vector(only, cut_at, cut_days, prev_days)
+                                board.extend(_oi_only_rows(
+                                    chain, label, cut_label, cut_at, family, only,
+                                    oi_join, oi_o, support_status, dates, listing,
+                                ))
+                    if board:
+                        board_w.write_table(_table(cut_board_schema(), board))
+                    day_boards.extend(board)
+                    boards_by_family[family].extend(board)
+                    day_coverage.append(_coverage_row(
+                        chain=chain, declared=label, cut_label=cut_label, family=family,
+                        intended=intended, session=session, missing_file=missing,
+                        empty_marker=empty_marker, early_na=early_na, board_rows=board,
+                        listing=listing,
+                    ))
+                if not early_na and cut_at is not None:
+                    underlier, fred_rows, action_rows = _support_bundle(
+                        chain, label, cut_label, cut_at, support,
+                        at_close=at_close, prior_date=prev_cash,
+                    )
+                    day_support.append(underlier)
+                    support_w.write_table(_table(underlier_support_schema(), [underlier]))
+                    if fred_rows:
+                        fred_w.write_table(_table(fred_support_schema(), fred_rows))
+                    if action_rows:
+                        action_w.write_table(_table(action_support_schema(), action_rows))
+            oi_join.release_day()
+            if "near" in boards_by_family or "broad" in boards_by_family:
+                paired = _paired_stats(boards_by_family.get("near") or [],
+                                       boards_by_family.get("broad") or [])
+                for key in paired_acc:
+                    paired_acc[key] += int(paired.get(key) or 0)
+                for cut_label in ALL_CUTS:
+                    paired_by_cut[cut_label] = _paired_stats(
+                        [row for row in (boards_by_family.get("near") or []) if row["cut_label"] == cut_label],
+                        [row for row in (boards_by_family.get("broad") or []) if row["cut_label"] == cut_label],
+                    )
+            _cut_board_hists(day_hists, day_boards)
+            hist_out = _freeze_hists(day_hists)
+            if day_coverage:
+                coverage_rows.extend(day_coverage)
+            from trading_research.research.options_quote_statistics import freeze_date_aggregate
+            aggregate = _date_aggregate(
+                chain, label, intended, session, quality_rows, day_coverage, day_boards,
+                day_support, paired_acc, hist_out,
+                unique_by_family={name: int(frame["n"]) for name, frame in owned.items() if frame is not None},
+                paired_by_cut=paired_by_cut,
+            )
+            date_aggregates.append(freeze_date_aggregate(outputs, aggregate, len(date_aggregates)))
+            del aggregate, hist_out, day_hists, owned
+
+    parse_cpu = pytime.process_time() - parse_cpu_start
+    leftover = required_ids and (consumed != set(required_ids))
+    if leftover:
+        unread = set(required_ids) - consumed
+        unread_any = [record["file_id"] for record in sources if record["file_id"] in unread]
+        if unread_any:
+            raise IntegrityError("membership does not match all selected admitted quote and support records")
+    for record in sources:
+        if record["file_id"] in consumed and _is_support_record(record):
+            admit_w.write_table(_table(admission_schema(), [{
+                "file_id": record["file_id"], "path": record["source"]["path"],
+                "sha256": record["sha256"], "dataset_id": record["source"].get("dataset_id"),
+                "chain": record["source"].get("chain"), "source_family": _source_family(record),
+                "role": record["source"].get("role") or "support",
+                "request_date": record["source"].get("request_date"),
+                "bytes": record["source"]["size_bytes"], "rows": record.get("rows") or 0,
+                "schema_id": record.get("schema_id"), "empty_marker": False,
+                "format": record["format"], "scope": "support",
+            }]))
+    reconstruction = {
+        "kind": OUTPUT_SCHEMAS["reconstruction"],
+        "predicate": INTERVAL_RECONSTRUCTION,
+        "output_schemas": OUTPUT_SCHEMAS,
+        "sort": "sort_id, ts_event_ns, file_id, row_index",
+        "grouping": "resolved contract_id for valid identities; negative unresolved keys for invalid identities; 0 is not tradable",
+        "local_id_namespace": {
+            "base": LOCAL_ID_BASE, "mask": LOCAL_ID_MASK,
+            "overflow": LOCAL_ID_OVERFLOW,
+            "formula": "int64 sha256[:8] with reverse-map collision check; OI int32 ids unchanged",
+            "unresolved": UNRESOLVED_ID,
+            "cross_shard": "compare exact OSI tuple; digest equality is not claimed after collision overflow",
+        },
+        "dedup": "source_family then union; identical 8-field payload and null masks is alias with summed multiplicity; difference or prior family conflict is conflict with no winner",
+        "storage": "cut boards plus source/hash ledger reconstruct sampled history; interval tape is not required; alias_conflict stores date-level aggregates",
+        "clocks": {
+            "ts_event_ns": "exact recorded sampling/source clock",
+            "received_at_ns": None, "published_at_ns": None, "known_at_ns": None,
+            "last_actual_update_ns": None, "causal_feature_eligible": False,
+            "actual_update_age_unknown": True,
+        },
+    }
+    from trading_research.research.options_quote_statistics import finish_quote_outputs
+    return finish_quote_outputs(
+        outputs, spec=spec, calendar_ref=calendar_ref,
+        admit_w=admit_w, except_w=except_w, alias_w=alias_w, board_w=board_w,
+        quality_w=quality_w, support_w=support_w, fred_w=fred_w, action_w=action_w,
+        ident_w=ident_w, coverage_rows=coverage_rows, date_aggregates=date_aggregates,
+        consumed=consumed, required_ids=required_ids, manifest=manifest,
+        files_read=files_read, rows_read=rows_read, bytes_read=bytes_read,
+        support_files=support_files, support_rows=support_rows, support_bytes=support_bytes,
+        source_dates=source_dates, selected_dates=work_dates,
+        selected_chains=list(work_chains), intended_all=intended_all,
+        intended_labels=intended_labels, chains=work_chains,
+        started_cpu=started_cpu, started_wall=started_wall,
+        reconstruction_payload=reconstruction,
+        family=FAMILY, version=VERSION, remaining=REMAINING,
+        sci_hash=sci_hash, impl_hashes=impl_hashes, binding=binding,
+        oi_identity=binding["oi_ref"], admit_id=admit_id,
+        parse_cpu=parse_cpu, oi_support_cpu=oi_support_cpu,
+        listing_unknown_chains=sorted(CHAINS_WITHOUT_LISTING),
+        joined_coverage_complete=bool(oi_join.full_population),
+        max_worker_bytes=int(spec.get("resources", {}).get("memory_bytes", MAX_WORKER_BYTES)),
+        max_source_file=int(spec.get("resources", {}).get("maximum_source_file_bytes", MAX_SOURCE_FILE)),
+        oi_listing_files_read=oi_join.listing_files_read,
+        oi_listing_rows_read=oi_join.listing_rows_read,
+        oi_listing_bytes_read=oi_join.listing_bytes_read,
+    )
+
+
+def _load_result_json(ref, load_reference):
+    if load_reference is not None:
+        return load_reference(ref)
+    if isinstance(ref, dict) and ref.get("encoding") == "canonical-json-zstd-v1":
+        return read_json_artifact(ref)
+    path = Path(ref["path"])
+    if ref.get("sha256") and file_digest(path) != ref["sha256"]:
+        raise IntegrityError("referenced result artifact hash changed")
+    if ref.get("size_bytes") is not None and path.stat().st_size != ref["size_bytes"]:
+        raise IntegrityError("referenced result artifact size changed")
+    return json.loads(path.read_text())
+
+
+def _auth_output_ref(ref, *, require_rows=False):
+    if ref is None:
+        return None
+    if isinstance(ref, list):
+        return [_auth_output_ref(item, require_rows=require_rows) for item in ref]
+    path = Path(ref["path"])
+    if not path.is_file():
+        raise IntegrityError("partition output artifact is missing")
+    size = path.stat().st_size
+    if ref.get("size_bytes") is not None and size != ref["size_bytes"]:
+        raise IntegrityError("partition output size changed")
+    if ref.get("sha256") and file_digest(path) != ref["sha256"]:
+        raise IntegrityError("partition output hash changed")
+    is_parquet = str(path).endswith(".parquet") or "parquet" in str(ref.get("kind") or "")
+    if is_parquet:
+        import pyarrow.parquet as pq
+        rows = pq.ParquetFile(path).metadata.num_rows
+        if ref.get("rows") is not None and rows != ref["rows"]:
+            raise IntegrityError("partition output row count changed")
+    return ref
+
+
+def _flatten_part_refs(refs):
+    out = []
+    rows = 0
+    for ref in refs:
+        items = ref if isinstance(ref, list) else [ref]
+        for item in items:
+            if item is None:
+                continue
+            _auth_output_ref(item)
+            out.append(item)
+            rows += int(item.get("rows") or 0)
+    return (None if not out else out), rows
+
+
+def combine_partition_results(*, protocol, results, outputs, load_reference):
+    """Authenticate complete shards (chain×date, including chain×year) without re-reading quotes."""
+    if not isinstance(outputs, BoundedOutputs):
+        raise ContractError("registered BoundedOutputs required")
+    if type(results) is not list or len(results) < 1:
+        raise ContractError("combine requires a list of partition results")
+    spec = contract(protocol)
+    sci = scientific_hash(protocol)
+    impl = implementation_hashes()
+    calendar, _ = load_calendar(protocol)
+    intended_all = intended_cash_dates(calendar, spec["population"]["first_date"], spec["population"]["last_date"])
+    intended_labels = [day.isoformat() for day in intended_all]
+    intended_label_set = set(intended_labels)
+    owned = {}
+    combined_dates, combined_chains = [], []
+    coverage_refs, aggregate_rows = [], []
+    board_refs, manifest_refs, ident_refs = [], [], []
+    quality_refs, support_refs, except_refs = [], [], []
+    alias_refs, admit_refs, fred_refs, action_refs = [], [], [], []
+    counts = defaultdict(int)
+    oi_ref = None
+    admit_id = None
+    group_refs = []
+    reconstruction_ref = None
+    for result in results:
+        if not isinstance(result, dict):
+            raise ContractError("each partition result must be a mapping")
+        if not result.get("passed"):
+            raise IntegrityError("partition did not pass")
+        if result.get("protocol_scientific_hash") != sci:
+            raise IntegrityError("partition protocol scientific hash does not match")
+        if result.get("implementation_hashes") != impl:
+            raise IntegrityError("partition implementation hashes do not match")
+        dates = list(result.get("selected_dates") or intended_labels)
+        chains = list(result.get("selected_chains") or [])
+        if not chains:
+            raise ContractError("partition result must bind selected_chains")
+        if not dates:
+            raise IntegrityError("partition selected_dates is empty; None must expand to intended dates")
+        for chain in chains:
+            for day in dates:
+                key = (chain, day)
+                if key in owned:
+                    raise IntegrityError("duplicate chain/date ownership")
+                owned[key] = True
+        if oi_ref is None:
+            oi_ref = result.get("oi_population_identity")
+        elif result.get("oi_population_identity") != oi_ref:
+            raise IntegrityError("mixed OI population identities")
+        part_admit = (result.get("admitted_identity") or {}).get("digest") or result.get("admitted_identity")
+        if isinstance(part_admit, dict):
+            part_admit = part_admit.get("digest")
+        if admit_id is None:
+            admit_id = part_admit
+        elif part_admit != admit_id:
+            raise IntegrityError("mixed admitted corpus identities")
+        refs = result.get("refs") or {}
+        for name in ("coverage", "cut_board", "source_manifest", "identity_match",
+                     "source_quality", "underlier_support", "exceptions",
+                     "alias_conflict", "admission", "fred_support", "action_support",
+                     "date_aggregates", "statistics", "reconstruction", "distributions",
+                     "results_md"):
+            if refs.get(name) is not None:
+                _auth_output_ref(refs[name])
+        if refs.get("reconstruction") is not None:
+            reconstruction_ref = refs["reconstruction"]
+        if refs.get("date_aggregates"):
+            from trading_research.research.options_quote_statistics import load_date_aggregates
+            aggregate_rows.extend(load_date_aggregates(refs["date_aggregates"], materialize_histograms=False))
+        if refs.get("coverage"):
+            coverage_refs.append(refs["coverage"])
+        if refs.get("cut_board"):
+            board_refs.append(refs["cut_board"])
+        if refs.get("source_manifest"):
+            manifest_refs.append(refs["source_manifest"])
+        if refs.get("identity_match"):
+            ident_refs.append(refs["identity_match"])
+        if refs.get("source_quality"):
+            quality_refs.append(refs["source_quality"])
+        if refs.get("underlier_support"):
+            support_refs.append(refs["underlier_support"])
+        if refs.get("exceptions"):
+            except_refs.append(refs["exceptions"])
+        if refs.get("alias_conflict"):
+            alias_refs.append(refs["alias_conflict"])
+        if refs.get("admission"):
+            admit_refs.append(refs["admission"])
+        if refs.get("fred_support"):
+            fred_refs.append(refs["fred_support"])
+        if refs.get("action_support"):
+            action_refs.append(refs["action_support"])
+        for name in ("source_files_read", "source_rows_read", "source_bytes_read",
+                     "support_files_read", "support_rows_read", "support_bytes_read",
+                     "cut_board_rows", "exception_rows", "coverage_rows",
+                     "unique_events", "listed_contracts", "quoted_contracts",
+                     "oi_matched_contracts"):
+            counts[name] += int((result.get("counts") or {}).get(name) or 0)
+        if refs.get("statistics"):
+            group_refs.append({
+                "chains": chains,
+                "dates": dates,
+                "statistics": refs["statistics"],
+                "distributions": refs.get("distributions"),
+            })
+        cov = refs.get("coverage")
+        if cov is not None:
+            import pyarrow.parquet as pq
+            items = cov if isinstance(cov, list) else [cov]
+            have = set()
+            for item in items:
+                table = pq.read_table(item["path"], columns=["chain", "request_date"])
+                for row in table.to_pylist():
+                    have.add((row["chain"], row["request_date"]))
+            for chain in chains:
+                for day in dates:
+                    if day in intended_label_set and (chain, day) not in have:
+                        raise IntegrityError("partition coverage missing claimed chain/date ownership")
+        combined_dates.extend(dates)
+        combined_chains.extend(chains)
+    combined_dates = sorted(set(combined_dates))
+    combined_chains = [chain for chain in spec["population"]["chains"] if chain in set(combined_chains)]
+    from trading_research.research.options_quote_statistics import run_statistics
+    coverage_ref, _ = _flatten_part_refs(coverage_refs)
+    board_ref, _ = _flatten_part_refs(board_refs)
+    quality_ref, _ = _flatten_part_refs(quality_refs)
+    support_ref, _ = _flatten_part_refs(support_refs)
+    except_ref, _ = _flatten_part_refs(except_refs)
+    alias_ref, _ = _flatten_part_refs(alias_refs)
+    ident_ref, _ = _flatten_part_refs(ident_refs)
+    admit_ref, _ = _flatten_part_refs(admit_refs)
+    fred_ref, _ = _flatten_part_refs(fred_refs)
+    action_ref, _ = _flatten_part_refs(action_refs)
+    manifests = []
+    seen_files = {}
+    for ref in manifest_refs:
+        item = ref[0] if isinstance(ref, list) else ref
+        payload = _load_result_json(item, load_reference)
+        for rec in payload.get("files") or payload.get("manifest") or []:
+            fid = rec.get("file_id")
+            if fid in seen_files:
+                prior = seen_files[fid]
+                if prior.get("sha256") != rec.get("sha256") or prior.get("path") != rec.get("path"):
+                    raise IntegrityError("duplicate source file_id with conflicting metadata")
+                continue
+            seen_files[fid] = rec
+            manifests.append(rec)
+    agg_keys = {(row.get("chain"), row.get("request_date")) for row in aggregate_rows}
+    for key in owned:
+        if key[1] in intended_label_set and key not in agg_keys:
+            raise IntegrityError("partition date aggregates missing claimed chain/date ownership")
+    for key in agg_keys:
+        if key not in owned:
+            raise IntegrityError("unexpected chain/date in date aggregates")
+    manifest_ref = outputs.json("source-manifest.json", {
+        "kind": "options_quote_source_path_hash_lookup_v1",
+        "files": manifests,
+    }, kind="options_quote_source_manifest_v1")
+    unique_quote = {(item.get("path"), item.get("sha256")) for item in manifests if item.get("scope") == "quote"}
+    unique_support = {(item.get("path"), item.get("sha256")) for item in manifests if item.get("scope") == "support"}
+    counts["source_files_unique"] = len(unique_quote)
+    counts["support_files_unique"] = len(unique_support)
+    counts["alias_conflict_rows"] = sum(int((result.get("counts") or {}).get("alias_conflict_rows") or 0)
+                                        for result in results)
+    counts["identity_rows"] = sum(int((result.get("counts") or {}).get("identity_rows") or 0)
+                                  for result in results)
+    from trading_research.research.options_quote_statistics import write_date_aggregates
+    aggregates_ref = write_date_aggregates(outputs, aggregate_rows)
+    stats = run_statistics(
+        aggregate_rows, protocol=spec, outputs=outputs,
+        intended_all=intended_labels, selected_dates=combined_dates,
+        chains=combined_chains, stages=spec["population"]["stages"],
+        read_counts=dict(counts),
+        output_refs={"coverage": coverage_ref, "cut_board": board_ref, "groups": group_refs},
+        group_refs=group_refs,
+    )
+    binding = {
+        "protocol_scientific_hash": sci,
+        "implementation_hashes": impl,
+        "selected_dates": combined_dates,
+        "selected_chains": combined_chains,
+        "oi_ref": oi_ref,
+        "admitted_identity": admit_id,
+        "partition_count": len(results),
+        "combined": True,
+        "local_id_namespace": {
+            "base": LOCAL_ID_BASE, "mask": LOCAL_ID_MASK,
+            "overflow": LOCAL_ID_OVERFLOW,
+            "unresolved": UNRESOLVED_ID,
+        },
+    }
+    prescribed = {(chain, day) for chain in spec["population"]["chains"] for day in intended_labels}
+    chain_group_refs = stats["refs"].get("chain_groups") or {}
+    for ref in chain_group_refs.values():
+        _auth_output_ref(ref)
+    return {
+        "passed": True,
+        "full_family_complete": False,
+        "joined_coverage_complete": (
+            all(result.get("joined_coverage_complete") for result in results)
+            and set(owned) == prescribed
+        ),
+        "family": FAMILY,
+        "version": VERSION,
+        "protocol_scientific_hash": sci,
+        "implementation_hashes": impl,
+        "selected_dates": combined_dates,
+        "selected_chains": combined_chains,
+        "admitted_identity": admit_id,
+        "oi_population_identity": oi_ref,
+        "refs": {
+            "coverage": coverage_ref, "cut_board": board_ref,
+            "source_quality": quality_ref, "underlier_support": support_ref,
+            "exceptions": except_ref, "alias_conflict": alias_ref,
+            "identity_match": ident_ref, "admission": admit_ref,
+            "fred_support": fred_ref, "action_support": action_ref,
+            "source_manifest": manifest_ref,
+            "date_aggregates": aggregates_ref,
+            "statistics": stats["refs"]["statistics"],
+            "distributions": stats["refs"]["distributions"],
+            "results_md": stats["refs"]["results_md"],
+            "reconstruction": reconstruction_ref,
+            "chain_groups": chain_group_refs,
+        },
+        "counts": dict(counts),
+        "groups": None,
+        "binding": binding,
+        "remaining_dependencies": list(REMAINING),
+    }
+
+
+__all__ = [
+    "ALL_CUTS", "BASE_CLASSES", "CONTRACT_KIND", "DTE_BUCKETS", "FAMILY",
+    "INTERVAL_RECONSTRUCTION", "LOCAL_ID_BASE", "OUTPUT_SCHEMAS", "QUALITY_FLAGS",
+    "VERSION", "QuoteCodebook", "admitted_identity", "combine_partition_results",
+    "contract", "coverage_schema", "implementation_hashes", "load_calendar",
+    "quote_dte_bucket", "run", "scientific_hash", "utc_cut_ns",
+]

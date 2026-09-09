@@ -1,0 +1,13 @@
+{
+  "failed_execution": "reports/jumbo-runs/ca0ca10eefc6a6a0cbd8150319daa829e67c743e7cafa7dcdee4db3089a7058d/execution.json",
+  "original_exception": "AssertionError test_jumbo_timing_statistics.py396 expectedearlycount>=1 got0",
+  "diagnosis": "Fixture JTR known_at940 is later than earlierturn930 but exactlyequal sourcewindow940; equality is causally available under frozen<= cut rule. The end-to-end assertion selected the wrong turn window. Reviewed all remaining fixture assertions and dates before this correction.",
+  "fix": "Assert early exclusion for actual earlierturn930; preserve source940boundary asvalid and add explicit equalitycheck. Numericalsourceunchanged.",
+  "resource": {
+    "cpu_seconds": 3.514633,
+    "peak_rss_bytes": 135274496
+  },
+  "file": "/workspace/trading-research/tests/test_jumbo_timing_statistics.py",
+  "before": "b82bb768627fb308b69523a16eeda46635fdbbf571d09f3e4f7dffcd8564b7f8",
+  "after": "e37886006d8639d49e0fc8ce60eae9873eac246e387e0870e781366aa66c5937"
+}

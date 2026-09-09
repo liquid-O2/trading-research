@@ -1,0 +1,200 @@
+{
+  "schema": "jumbo-cash-calendar-extension-evidence-v1",
+  "recorded_on": "2026-09-07",
+  "scope": {
+    "study": "Jumbo first actual-data range/path/timing study",
+    "calendar_scope": "NYSE cash equities core RTH context",
+    "timezone": "America/New_York",
+    "requested_years": ["2020", "2021", "2026"],
+    "regular_session_convention": {
+      "open": "09:30:00",
+      "close": "16:00:00",
+      "basis": "Current official NYSE page states the core trading session is 9:30 a.m. to 4:00 p.m. ET. The research convention uses that interval for cash RTH context; this evidence does not independently certify every historical venue or data-vendor status."
+    }
+  },
+  "local_reference": {
+    "path": "/workspace/trading-research/configs/cash-rth-calendar.json",
+    "schema": "published-cash-rth-calendar-v1",
+    "sha256": "75a036304953c4a4809fb267684d48b94ac31f4af89fc0bab8e04ea24dc964c5",
+    "size_bytes": 2858,
+    "verification_date": "2026-09-06",
+    "current_year_tables": ["2022", "2023", "2024", "2025"],
+    "current_overrides": ["2025-01-09"],
+    "raw_official_page_bytes_retained": false,
+    "local_reference_note": "The local config is the admitted reference byte set. Official page URLs and publication dates are retained below; no claim is made that an official HTML/PDF byte capture is immutable in this evidence file."
+  },
+  "known_at_policy": {
+    "method": "Conservative end of the official publication date in New York, represented as the following civil day at 00:00:00 America/New_York.",
+    "implementation_equivalent": "CashCalendar._available(published_date)",
+    "publication_time": "Not supplied by the official release pages; intraday availability is therefore not claimed.",
+    "cut_comparison": "A release is usable only when its derived known_at is at or before the observation cut. CashCalendar.resolve selects the newest eligible release for the requested year."
+  },
+  "official_sources": [
+    {
+      "id": "ice-2018-12-04",
+      "title": "NYSE Group Announces 2019, 2020 and 2021 Holiday and Early Closings Calendar",
+      "published_date": "2018-12-04",
+      "source_url": "https://ir.theice.com/press/news-details/2018/NYSE-Group-Announces-2019-2020-and-2021-Holiday-and-Early-Closings-Calendar/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE Group official press release",
+      "coverage": ["2020", "2021"],
+      "page_evidence": "The official table lists the 2020 and 2021 closed dates; its footnotes specify 13:00 ET early close on the day after Thanksgiving for both years and 13:00 ET on 2020-12-24.",
+      "derived_known_at_local": "2018-12-05T00:00:00-05:00",
+      "derived_known_at_utc": "2018-12-05T05:00:00Z",
+      "selection_role": "Earliest retained official reference for both requested years; use when a historical cut precedes the 2019 release."
+    },
+    {
+      "id": "ice-2019-12-09",
+      "title": "NYSE Group Announces 2020, 2021 and 2022 Holiday and Early Closings Calendar",
+      "published_date": "2019-12-09",
+      "source_url": "https://ir.theice.com/press/news-details/2019/NYSE-Group-Announces-2020-2021-and-2022-Holiday-and-Early-Closings-Calendar/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE Group official press release",
+      "coverage": ["2020", "2021"],
+      "page_evidence": "The official table republishes the 2020 and 2021 closures; the footnotes specify 13:00 ET on 2020-11-27 and 2021-11-26, and 13:00 ET on 2020-12-24.",
+      "derived_known_at_local": "2019-12-10T00:00:00-05:00",
+      "derived_known_at_utc": "2019-12-10T05:00:00Z",
+      "selection_role": "Preferred latest official release for 2020/2021 observations whose cut is on or after this known-at boundary."
+    },
+    {
+      "id": "ice-2021-12-27",
+      "title": "NYSE Group Announces 2022, 2023 and 2024 Holiday and Early Closings Calendar",
+      "published_date": "2021-12-27",
+      "source_url": "https://ir.theice.com/press/news-details/2021/NYSE-Group-Announces-2022-2023-and-2024-Holiday-and-Early-Closings-Calendar/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE Group official press release",
+      "coverage": ["2022", "2023", "2024"],
+      "derived_known_at_local": "2021-12-28T00:00:00-05:00",
+      "derived_known_at_utc": "2021-12-28T05:00:00Z",
+      "selection_role": "Already represented in the local config; reverified as the official source lineage for the existing 2022-2024 tables."
+    },
+    {
+      "id": "ice-2022-12-21",
+      "title": "NYSE Group Announces 2023, 2024 and 2025 Holiday and Early Closings Calendar",
+      "published_date": "2022-12-21",
+      "source_url": "https://ir.theice.com/press/news-details/2022/NYSE-Group-Announces-2023-2024-and-2025-Holiday-and-Early-Closings-Calendar/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE Group official press release",
+      "coverage": ["2023", "2024", "2025"],
+      "derived_known_at_local": "2022-12-22T00:00:00-05:00",
+      "derived_known_at_utc": "2022-12-22T05:00:00Z",
+      "selection_role": "Already represented in the local config; reverified as the official source lineage for the existing 2023-2025 tables."
+    },
+    {
+      "id": "ice-2025-12-23",
+      "title": "NYSE Group Announces 2026, 2027 and 2028 Holiday and Early Closings Calendar",
+      "published_date": "2025-12-23",
+      "source_url": "https://ir.theice.com/press/news-details/2025/NYSE-Group-Announces-2026-2027-and-2028-Holiday-and-Early-Closings-Calendar/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE Group official press release",
+      "coverage": ["2026"],
+      "page_evidence": "The official 2026 table lists the ten closed dates; its footnotes specify 13:00 ET on 2026-11-27 and 2026-12-24.",
+      "derived_known_at_local": "2025-12-24T00:00:00-05:00",
+      "derived_known_at_utc": "2025-12-24T05:00:00Z",
+      "selection_role": "Preferred official release for 2026; it was known before the 2026 observation year."
+    },
+    {
+      "id": "ice-2024-12-30-carter",
+      "title": "The New York Stock Exchange Will Close Markets on January 9 to Honor the Passing of Former President Jimmy Carter on National Day of Mourning",
+      "published_date": "2024-12-30",
+      "date": "2025-01-09",
+      "state": "closed",
+      "source_url": "https://ir.theice.com/press/news-details/2024/The-New-York-Stock-Exchange-Will-Close-Markets-on-January-9-to-Honor-the-Passing-of-Former-President-Jimmy-Carter-on-National-Day-of-Mourning/default.aspx",
+      "authority": "Intercontinental Exchange / NYSE official special closure notice",
+      "derived_known_at_local": "2024-12-31T00:00:00-05:00",
+      "derived_known_at_utc": "2024-12-31T05:00:00Z",
+      "selection_role": "Already represented by the local override and retained as a required exception."
+    },
+    {
+      "id": "nyse-current-hours",
+      "title": "Holidays & Trading Hours",
+      "source_url": "https://www.nyse.com/trade/hours-calendars",
+      "authority": "Official NYSE trading-hours page",
+      "page_evidence": "The page states the 2026-2028 holiday table and the NYSE Tape A core session of 9:30 a.m. to 4:00 p.m. ET."
+    },
+    {
+      "id": "nyse-2026-yearly-calendar",
+      "title": "2026 Trading Calendar",
+      "source_url": "https://www.nyse.com/publicdocs/nyse/ICE_NYSE_2026_Yearly_Trading_Calendar.pdf",
+      "authority": "Official NYSE yearly calendar PDF",
+      "page_evidence": "The PDF legend identifies exchange holidays as market closed and early market closes at 1 p.m. Eastern; its date note says the calendar was correct as of 2025-12-10 and subject to change."
+    }
+  ],
+  "calendar_extension": {
+    "date_encoding": "MM-DD suffixes under the named year; all early closes are local New York wall time.",
+    "early_close_convention": "13:00:00 America/New_York for NYSE cash equities; the releases mention 13:15 ET for eligible options, which is outside this cash-equity scope.",
+    "years": {
+      "2020": {
+        "closed": ["01-01", "01-20", "02-17", "04-10", "05-25", "07-03", "09-07", "11-26", "12-25"],
+        "early": {"11-27": "13:00:00", "12-24": "13:00:00"},
+        "preferred_release": "ice-2019-12-09",
+        "fallback_release": "ice-2018-12-04",
+        "notes": ["July 3 is the observed Independence Day closure because July 4, 2020 was Saturday.", "No Juneteenth closure appears in the official 2020/2021 NYSE tables; do not add one retroactively from later calendars."]
+      },
+      "2021": {
+        "closed": ["01-01", "01-18", "02-15", "04-02", "05-31", "07-05", "09-06", "11-25", "12-24"],
+        "early": {"11-26": "13:00:00"},
+        "preferred_release": "ice-2019-12-09",
+        "fallback_release": "ice-2018-12-04",
+        "notes": ["July 5 is the observed Independence Day closure because July 4, 2021 was Sunday.", "December 24 is the observed Christmas closure; it is not an early-close date.", "No Juneteenth closure appears in the official 2020/2021 NYSE tables; do not add one retroactively from later calendars."]
+      },
+      "2026": {
+        "closed": ["01-01", "01-19", "02-16", "04-03", "05-25", "06-19", "07-03", "09-07", "11-26", "12-25"],
+        "early": {"11-27": "13:00:00", "12-24": "13:00:00"},
+        "preferred_release": "ice-2025-12-23",
+        "notes": ["July 3 is the observed Independence Day closure because July 4, 2026 is Saturday.", "Juneteenth is a full closure on June 19, 2026.", "The current 2026-09-07 date is Labor Day; dates after the latest acquired observation must remain future schedule facts until actual data receipt is established."]
+      }
+    }
+  },
+  "release_selection_by_year": {
+    "2020": {"cut_before_2019-12-10T05:00:00Z": "ice-2018-12-04", "cut_on_or_after_2019-12-10T05:00:00Z": "ice-2019-12-09"},
+    "2021": {"cut_before_2019-12-10T05:00:00Z": "ice-2018-12-04", "cut_on_or_after_2019-12-10T05:00:00Z": "ice-2019-12-09"},
+    "2026": {"cut_on_or_after_2025-12-24T05:00:00Z": "ice-2025-12-23"}
+  },
+  "errors_or_gaps_in_current_calendar": [
+    {
+      "id": "CASH-CALENDAR-001",
+      "severity": "blocking_for_2020_study",
+      "finding": "The admitted config has no 2020 year table. CashCalendar.resolve cannot produce a 2020 CashDay at a 2020 or later cut because no eligible release contains that year.",
+      "repair_needed": "Add the 2018-12-04 and 2019-12-09 official release lineage, with the latest eligible release selected by cut."
+    },
+    {
+      "id": "CASH-CALENDAR-002",
+      "severity": "blocking_for_2021_study",
+      "finding": "The admitted config has no 2021 year table. CashCalendar.resolve cannot produce a 2021 CashDay at a 2021 or later cut because no eligible release contains that year.",
+      "repair_needed": "Add the 2018-12-04 and 2019-12-09 official release lineage, with the latest eligible release selected by cut."
+    },
+    {
+      "id": "CASH-CALENDAR-003",
+      "severity": "blocking_for_2026_study",
+      "finding": "The admitted config has no 2026 year table even though the official 2026 schedule was published on 2025-12-23.",
+      "repair_needed": "Add the 2025-12-23 official 2026 release; keep post-observation dates separate from dates actually covered by acquired data."
+    },
+    {
+      "id": "CASH-CALENDAR-004",
+      "severity": "audit_gap",
+      "finding": "The current config explicitly claims transcribed official facts but retains no raw official HTML/PDF bytes or hashes.",
+      "repair_needed": "For a stronger admitted reference, retain immutable official page/PDF bytes or a separately governed capture; until then, URLs and publication dates are the primary citations and the byte-level source claim remains open."
+    },
+    {
+      "id": "CASH-CALENDAR-005",
+      "severity": "scope_uncertainty",
+      "finding": "The cash calendar does not certify CME Globex, futures venue boundaries, broker cutoffs, or vendor receipt/completeness. It also does not establish the latest acquired 2026 observation date.",
+      "repair_needed": "Use this extension only as a cash RTH context gate and resolve futures, source-coverage, and actual-data-cut evidence separately before admitting a Jumbo cohort."
+    }
+  ],
+  "current_config_assessment": {
+    "2022_2025_tables_match_official_release_lineage": true,
+    "2025_01_09_override_match_official_notice": true,
+    "regular_hours_url_is_current_official_redirect_target": true,
+    "missing_requested_years": ["2020", "2021", "2026"],
+    "latest_acquired_2026_observation_date": null,
+    "reason_latest_date_unknown": "This read-only evidence task did not scan market data or infer data coverage from filenames."
+  },
+  "execution_status": {
+    "candidate_imports": false,
+    "candidate_compilation": false,
+    "tests_run": false,
+    "cli_run": false,
+    "market_data_scan": false,
+    "model_fits": false,
+    "economic_runs": false,
+    "repository_or_config_edits": false,
+    "official_source_type": "Web citations only; no raw-page byte capture claimed."
+  }
+}

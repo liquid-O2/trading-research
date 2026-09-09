@@ -1,0 +1,14 @@
+{
+  "schema": "f02-independent-payoff-expectations-v1",
+  "recorded_before_implementation": true,
+  "cases": {
+    "nq_tick": {"price_change": "0.25", "multiplier": "20", "cash": "5"},
+    "es_tick": {"price_change": "0.25", "multiplier": "50", "cash": "12.50"},
+    "ndxp_call": {"fixing": "8487.71", "strike": "8250", "multiplier": "100", "cash": "23771"},
+    "ndxp_put": {"fixing": "8487.71", "strike": "8500", "multiplier": "100", "cash": "1229"},
+    "adjusted_call": {"shares": "138", "deliverable_cash": "10.94", "synthetic_share_price": "8", "synthetic_exercise_cash": "1000", "intrinsic": "114.94", "exercise_cash_transfer": "-989.06"},
+    "nq_future_delivery_call": {"fixing": "12250.01", "strike": "12250", "multiplier": "20", "intrinsic": "0.20", "cash_transfer": "0", "future_contracts": "1"},
+    "ndxp_tick_boundary": {"threshold": "3.00", "below_tick": "0.05", "from_threshold_tick": "0.10", "input": "3.05", "floor": "3.00", "ceil": "3.10"}
+  },
+  "limitations": "Hand-fixed equation and synthetic identity/time cases only; not a historical market or contract-cohort certification."
+}

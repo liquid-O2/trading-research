@@ -1,0 +1,2315 @@
+{
+  "kind": "m12_remaining_measurements_independent_gold_v1",
+  "status": "prepared_before_own_candidate_implementation",
+  "scope_ids": [
+    "M12",
+    "M12.REFERENCE_TYPES"
+  ],
+  "cases": [
+    {
+      "id": "MR01",
+      "title": "Certified open before session completion",
+      "inputs": {
+        "window": [
+          0,
+          100
+        ],
+        "cut": 11,
+        "published_at": 12,
+        "coverage": [
+          [
+            0,
+            11
+          ]
+        ],
+        "coverage_known_at": 11,
+        "trades": [
+          [
+            10,
+            10,
+            100,
+            5,
+            1,
+            0
+          ]
+        ],
+        "history_complete": true
+      },
+      "expected": {
+        "open_ticks": [
+          100,
+          1
+        ],
+        "first_observed_ticks": [
+          100,
+          1
+        ],
+        "open_event_at": 10,
+        "open_known_at": 12,
+        "incomplete_open": false,
+        "enclosing_session_complete": false
+      },
+      "requirements": [
+        "early-open",
+        "SR-M12",
+        "M12-P0"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR02",
+      "title": "Missing early support preserves only first observed print",
+      "inputs": {
+        "window": [
+          0,
+          100
+        ],
+        "cut": 40,
+        "published_at": 41,
+        "coverage": [
+          [
+            20,
+            40
+          ]
+        ],
+        "coverage_known_at": 40,
+        "trades": [
+          [
+            30,
+            30,
+            103,
+            5,
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "open_ticks": null,
+        "first_observed_ticks": [
+          103,
+          1
+        ],
+        "incomplete_open": true
+      },
+      "requirements": [
+        "incomplete-open",
+        "SR-M12"
+      ],
+      "variants": [
+        {
+          "changes": {
+            "coverage": [
+              [
+                0,
+                40
+              ]
+            ]
+          },
+          "expected_open_ticks": [
+            103,
+            1
+          ],
+          "reason": "A healthy quiet prefix before a late first print is complete opening support."
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR03",
+      "title": "Equal daily opens and missing current anchor retain date identity",
+      "inputs": {
+        "dates": [
+          "2026-01-05",
+          "2026-01-06",
+          "2026-01-07"
+        ],
+        "observed_opens": [
+          [
+            100,
+            1
+          ],
+          [
+            100,
+            1
+          ],
+          null
+        ]
+      },
+      "expected": {
+        "first_two_values_equal": true,
+        "first_two_versions_equal": false,
+        "third_open": null,
+        "third_reuses_old_value": false
+      },
+      "requirements": [
+        "PIN015-02",
+        "PIN047-03",
+        "PIN064-01",
+        "PIN066-03"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR04",
+      "title": "Missing calendar date blocks prior-period traversal",
+      "inputs": {
+        "period": "iso_week",
+        "current_date": "2026-01-07",
+        "calendar": [
+          [
+            "2026-01-05",
+            "missing"
+          ],
+          [
+            "2026-01-06",
+            "eligible"
+          ],
+          [
+            "2026-01-07",
+            "eligible"
+          ]
+        ],
+        "observed_opens": [
+          [
+            "2026-01-06",
+            101
+          ]
+        ]
+      },
+      "expected": {
+        "status": "calendar_unavailable",
+        "selected_date": null,
+        "producer_reads_after_missing_calendar": 0
+      },
+      "requirements": [
+        "period-prefix-calendar",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR05",
+      "title": "Weekly open follows explicit Monday holiday",
+      "inputs": {
+        "period": "iso_week",
+        "current_date": "2026-01-07",
+        "calendar": [
+          [
+            "2026-01-05",
+            "closed"
+          ],
+          [
+            "2026-01-06",
+            "eligible"
+          ],
+          [
+            "2026-01-07",
+            "eligible"
+          ]
+        ],
+        "observed_opens": [
+          [
+            "2026-01-06",
+            101
+          ],
+          [
+            "2026-01-07",
+            105
+          ]
+        ]
+      },
+      "expected": {
+        "period_key": "2026-W02",
+        "selected_date": "2026-01-06",
+        "open_ticks": [
+          101,
+          1
+        ],
+        "traversed_dates": [
+          "2026-01-05",
+          "2026-01-06"
+        ]
+      },
+      "requirements": [
+        "weekly-open",
+        "PIN064-02"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR06",
+      "title": "Monthly/quarter/year opens keep actual first eligible date",
+      "inputs": {
+        "current_date": "2026-01-02",
+        "calendar": [
+          [
+            "2026-01-01",
+            "closed"
+          ],
+          [
+            "2026-01-02",
+            "eligible"
+          ]
+        ],
+        "observed_opens": [
+          [
+            "2026-01-02",
+            102
+          ]
+        ]
+      },
+      "expected": {
+        "month_key": "2026-01",
+        "quarter_key": "2026-Q1",
+        "year_key": "2026",
+        "selected_date": "2026-01-02",
+        "open_ticks": [
+          102,
+          1
+        ]
+      },
+      "requirements": [
+        "monthly-open",
+        "quarter-open",
+        "year-open",
+        "PIN023-02",
+        "PIN077-02"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR07",
+      "title": "ISO week-year differs from calendar-year open",
+      "inputs": {
+        "period": "iso_week",
+        "current_date": "2026-01-02",
+        "calendar": [
+          [
+            "2025-12-29",
+            "eligible"
+          ]
+        ],
+        "observed_opens": [
+          [
+            "2025-12-29",
+            99
+          ]
+        ]
+      },
+      "expected": {
+        "period_key": "2026-W01",
+        "selected_date": "2025-12-29",
+        "open_ticks": [
+          99,
+          1
+        ],
+        "civil_month_key": "2026-01"
+      },
+      "requirements": [
+        "week-year-boundary",
+        "PIN077-02"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR08",
+      "title": "Future prefix and future calendar revision cannot change current open",
+      "inputs": {
+        "window": [
+          0,
+          100
+        ],
+        "cut": 10,
+        "published_at": 11,
+        "coverage": [
+          [
+            0,
+            10
+          ]
+        ],
+        "trades": [
+          [
+            20,
+            20,
+            101,
+            1,
+            1,
+            0
+          ]
+        ],
+        "later_calendar_revision_known_at": 20
+      },
+      "expected": {
+        "open_ticks": null,
+        "future_suffix_deletion_preserves_result": true,
+        "later_calendar_revision_ignored": true
+      },
+      "requirements": [
+        "suffix-deletion",
+        "future-calendar",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR09",
+      "title": "Quiet earlier session differs from missing earlier session",
+      "inputs": {
+        "period": "iso_week",
+        "dates": [
+          "2026-01-05",
+          "2026-01-06"
+        ],
+        "first_session_no_prints": true,
+        "second_session_open": 101
+      },
+      "expected": {
+        "complete_quiet_first_session_open": [
+          101,
+          1
+        ],
+        "complete_quiet_selected_date": "2026-01-06",
+        "missing_first_session_open": null,
+        "missing_first_session_first_observed": [
+          101,
+          1
+        ],
+        "missing_first_session_incomplete_open": true
+      },
+      "requirements": [
+        "quiet-vs-outage",
+        "period-open-completeness"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR10",
+      "title": "Raw gap survives unavailable normalization",
+      "inputs": {
+        "current": [
+          110,
+          1
+        ],
+        "prior": [
+          100,
+          1
+        ],
+        "scale_ticks": [
+          5,
+          1
+        ]
+      },
+      "expected": {
+        "gap_ticks": [
+          10,
+          1
+        ],
+        "direction": 1,
+        "normalized_gap": [
+          2,
+          1
+        ]
+      },
+      "requirements": [
+        "prior-volatility-normalization",
+        "M12-P0"
+      ],
+      "variants": [
+        {
+          "scale_ticks": [
+            0,
+            1
+          ],
+          "normalized_gap": null,
+          "gap_ticks": [
+            10,
+            1
+          ]
+        },
+        {
+          "current": [
+            -10,
+            1
+          ],
+          "prior": [
+            -20,
+            1
+          ],
+          "scale_ticks": [
+            5,
+            1
+          ],
+          "normalized_gap": [
+            2,
+            1
+          ],
+          "gap_ticks": [
+            10,
+            1
+          ]
+        },
+        {
+          "current": [
+            100,
+            1
+          ],
+          "prior": [
+            100,
+            1
+          ],
+          "direction": 0,
+          "normalized_gap": [
+            0,
+            1
+          ]
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR11",
+      "title": "Prior scale needs correct time and raw instrument",
+      "inputs": {
+        "opening_observed_at": 10,
+        "cut": 12,
+        "scale_formation_end": 9,
+        "scale_published_at": 11
+      },
+      "expected": {
+        "valid_scale_admitted": true
+      },
+      "requirements": [
+        "normalizer-causality",
+        "unit-binding"
+      ],
+      "variants": [
+        {
+          "scale_formation_end": 11,
+          "reject": "scale includes post-open observations"
+        },
+        {
+          "scale_published_at": 13,
+          "reject": "future scale publication"
+        },
+        {
+          "scale_ticks": [
+            -1,
+            1
+          ],
+          "reject": "negative scale"
+        },
+        {
+          "different_raw_instrument": true,
+          "reject": "wrong raw coordinate"
+        },
+        {
+          "scale_ticks": true,
+          "reject": "nonrational exact scalar"
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR12",
+      "title": "Official settlement and last trade remain distinct gaps",
+      "inputs": {
+        "current_open": [
+          110,
+          1
+        ],
+        "prior_close": [
+          100,
+          1
+        ],
+        "official_settlement": [
+          102,
+          1
+        ]
+      },
+      "expected": {
+        "open_minus_close": [
+          10,
+          1
+        ],
+        "open_minus_settlement": [
+          8,
+          1
+        ],
+        "reference_types_distinct": true,
+        "missing_official_has_no_close_fallback": true
+      },
+      "requirements": [
+        "typed-reference-gap",
+        "MAV-10",
+        "INV-statistics"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR13",
+      "title": "Consensus preserves same-kind members and separates unlike types",
+      "inputs": {
+        "same_kind_same_observation_values": [
+          [
+            100,
+            1
+          ],
+          [
+            102,
+            1
+          ],
+          [
+            104,
+            1
+          ]
+        ],
+        "weights": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "unlike_values": [
+          [
+            "bar_open",
+            [
+              100,
+              1
+            ]
+          ],
+          [
+            "official_settlement",
+            [
+              102,
+              1
+            ]
+          ]
+        ]
+      },
+      "expected": {
+        "same_kind_mean": [
+          102,
+          1
+        ],
+        "same_kind_spread": [
+          4,
+          1
+        ],
+        "same_kind_member_count": 3,
+        "unlike_common_mean": null,
+        "unlike_difference": [
+          2,
+          1
+        ],
+        "unlike_member_count": 2
+      },
+      "requirements": [
+        "UP-M12-reference-graph",
+        "same-numeric-different-provenance"
+      ],
+      "variants": [
+        {
+          "weights": [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "mean": [
+            102,
+            1
+          ]
+        },
+        {
+          "weights": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "reject": "zero total consensus weight"
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR14",
+      "title": "Reference graph differences satisfy exact triangle identity",
+      "inputs": {
+        "vertices": [
+          [
+            "a",
+            [
+              100,
+              1
+            ]
+          ],
+          [
+            "b",
+            [
+              110,
+              1
+            ]
+          ],
+          [
+            "c",
+            [
+              115,
+              1
+            ]
+          ]
+        ],
+        "requested_edges": [
+          [
+            "b",
+            "a"
+          ],
+          [
+            "c",
+            "b"
+          ],
+          [
+            "c",
+            "a"
+          ]
+        ]
+      },
+      "expected": {
+        "differences": [
+          [
+            10,
+            1
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            15,
+            1
+          ]
+        ],
+        "triangle_residual": [
+          0,
+          1
+        ]
+      },
+      "requirements": [
+        "typed-reference-graph",
+        "UP-M12-price-reconciliation"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR15",
+      "title": "Reference publication age differs from economic age",
+      "inputs": {
+        "observed_at": 2,
+        "reference_known_at": 20,
+        "cut": 22,
+        "graph_published_at": 23
+      },
+      "expected": {
+        "observation_age": 20,
+        "publication_age": 2,
+        "graph_known_at": 23,
+        "graph_unavailable_at": 22
+      },
+      "requirements": [
+        "publication-age",
+        "delayed-settlement",
+        "SR-M12"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR16",
+      "title": "Stale reference and exact expiry are explicit",
+      "inputs": {
+        "reference_known_at": 10,
+        "horizon_end": 20,
+        "maximum_age_ns": 5
+      },
+      "expected": {
+        "cut15": "observed",
+        "cut16": "stale",
+        "cut20": "expired"
+      },
+      "requirements": [
+        "stale-reference",
+        "UP-M12"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR17",
+      "title": "Reference graph limits admit exact capacity and reject one over",
+      "inputs": {
+        "max_references": 3,
+        "max_edges": 3,
+        "references": 3,
+        "edges": 3
+      },
+      "expected": {
+        "exact_capacity": "admitted",
+        "four_references": "reject_before_materialization",
+        "four_edges": "reject_before_materialization"
+      },
+      "requirements": [
+        "finite-reference-state"
+      ],
+      "variants": [
+        {
+          "limit": true,
+          "reject": "exact positive integer required"
+        },
+        {
+          "limit": 0,
+          "reject": "exact positive integer required"
+        },
+        {
+          "duplicate_same_identity": "idempotent",
+          "conflicting_same_identity": "reject"
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR18",
+      "title": "Roll bridge decomposes raw move in actual F04 coordinates",
+      "inputs": {
+        "source_prior_points": [
+          99,
+          1
+        ],
+        "destination_current_points": [
+          113,
+          1
+        ],
+        "bridge_old_points": [
+          100,
+          1
+        ],
+        "bridge_new_points": [
+          110,
+          1
+        ],
+        "destination_tick_size_points": [
+          1,
+          4
+        ],
+        "uncertainty_points": [
+          1,
+          4
+        ]
+      },
+      "expected": {
+        "raw_gap_points": [
+          14,
+          1
+        ],
+        "bridge_spread_points": [
+          10,
+          1
+        ],
+        "mapped_gap_points": [
+          4,
+          1
+        ],
+        "mapped_gap_destination_ticks": [
+          16,
+          1
+        ],
+        "uncertainty_destination_ticks": [
+          1,
+          1
+        ],
+        "reconciliation_error": [
+          0,
+          1
+        ]
+      },
+      "requirements": [
+        "UP-M12-roll-decomposition",
+        "actual-F04-bridge"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR19",
+      "title": "Bridge lifecycle, unit and namespace faults reject",
+      "inputs": {
+        "valid_bridge_from_case": "MR18",
+        "cut": 20,
+        "published_at": 21
+      },
+      "expected": {
+        "valid_bridge": "admitted"
+      },
+      "requirements": [
+        "bridge-causality",
+        "raw-lifetime-binding"
+      ],
+      "variants": [
+        {
+          "wrong_provider": true,
+          "reject": true
+        },
+        {
+          "wrong_lifetime": true,
+          "reject": true
+        },
+        {
+          "wrong_tick_size": true,
+          "reject": true
+        },
+        {
+          "different_currency": true,
+          "reject": true
+        },
+        {
+          "bridge_known_at": 22,
+          "reject": true
+        },
+        {
+          "bridge_expiry": 21,
+          "reject": true
+        },
+        {
+          "stale_at_publication": true,
+          "reject": true
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR20",
+      "title": "Adjusted display prices do not become raw reference measurements",
+      "inputs": {
+        "kind": "causally_adjusted_display",
+        "numeric_price": [
+          99,
+          1
+        ],
+        "otherwise_valid_bridge_from": "MR18"
+      },
+      "expected": {
+        "bind_as_raw_reference": "reject",
+        "synthetic_settlement_created": false
+      },
+      "requirements": [
+        "adjusted-roll-series",
+        "INV-07"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR21",
+      "title": "Open-to-open interpolation has frozen origin and fraction",
+      "inputs": {
+        "forecast_open": [
+          110,
+          1
+        ],
+        "reference_open": [
+          100,
+          1
+        ],
+        "fraction": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "target_ticks": [
+          105,
+          1
+        ],
+        "formation_displacement_ticks": [
+          10,
+          1
+        ],
+        "direction_from_forecast": -1,
+        "direction_from_reference": 1
+      },
+      "requirements": [
+        "PIN074-01",
+        "PIN076-01"
+      ],
+      "variants": [
+        {
+          "fraction": [
+            0,
+            1
+          ],
+          "target_ticks": [
+            110,
+            1
+          ]
+        },
+        {
+          "fraction": [
+            1,
+            1
+          ],
+          "target_ticks": [
+            100,
+            1
+          ]
+        },
+        {
+          "forecast_open": [
+            100,
+            1
+          ],
+          "reference_open": [
+            100,
+            1
+          ],
+          "target_ticks": [
+            100,
+            1
+          ],
+          "direction_from_forecast": 0,
+          "direction_from_reference": 0
+        },
+        {
+          "fraction": [
+            -1,
+            2
+          ],
+          "ordinary_retracement": "reject",
+          "named_extrapolation_target": [
+            115,
+            1
+          ]
+        },
+        {
+          "fraction": [
+            3,
+            2
+          ],
+          "ordinary_retracement": "reject",
+          "named_extrapolation_target": [
+            95,
+            1
+          ]
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR22",
+      "title": "Complete source floor-pivot family",
+      "inputs": {
+        "high": [
+          120,
+          1
+        ],
+        "low": [
+          90,
+          1
+        ],
+        "close": [
+          105,
+          1
+        ],
+        "same_completed_period": true
+      },
+      "expected": {
+        "P": [
+          105,
+          1
+        ],
+        "R1": [
+          120,
+          1
+        ],
+        "S1": [
+          90,
+          1
+        ],
+        "R2": [
+          135,
+          1
+        ],
+        "S2": [
+          75,
+          1
+        ],
+        "R3": [
+          150,
+          1
+        ],
+        "S3": [
+          60,
+          1
+        ],
+        "R4": [
+          180,
+          1
+        ],
+        "S4": [
+          30,
+          1
+        ],
+        "R5": [
+          210,
+          1
+        ],
+        "S5": [
+          0,
+          1
+        ]
+      },
+      "requirements": [
+        "PIN013-01"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR23",
+      "title": "Golden zones preserve reflected interval orientation",
+      "inputs": {
+        "high": [
+          120,
+          1
+        ],
+        "low": [
+          90,
+          1
+        ],
+        "pivot": [
+          105,
+          1
+        ],
+        "R1": [
+          120,
+          1
+        ],
+        "S1": [
+          90,
+          1
+        ],
+        "fractions": [
+          [
+            1,
+            2
+          ],
+          [
+            309,
+            500
+          ]
+        ]
+      },
+      "expected": {
+        "daily_from_low": [
+          [
+            105,
+            1
+          ],
+          [
+            5427,
+            50
+          ]
+        ],
+        "daily_from_high_sorted": [
+          [
+            5073,
+            50
+          ],
+          [
+            105,
+            1
+          ]
+        ],
+        "P_to_R1_sorted": [
+          [
+            225,
+            2
+          ],
+          [
+            11427,
+            100
+          ]
+        ],
+        "P_to_S1_sorted": [
+          [
+            9573,
+            100
+          ],
+          [
+            195,
+            2
+          ]
+        ],
+        "all_adjacent_pivot_intervals_count": 10
+      },
+      "requirements": [
+        "PIN013-02",
+        "reflection-invariance",
+        "source-fractions"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR24",
+      "title": "Reference formulas reject mixed period and unsupported dependencies",
+      "inputs": {
+        "valid_floor_inputs_from": "MR22"
+      },
+      "expected": {
+        "valid": "admitted"
+      },
+      "requirements": [
+        "formula-field-provenance"
+      ],
+      "variants": [
+        {
+          "close_from_other_period": true,
+          "reject": true
+        },
+        {
+          "high_support": "partial",
+          "reject": true
+        },
+        {
+          "high": [
+            89,
+            1
+          ],
+          "low": [
+            90,
+            1
+          ],
+          "reject": true
+        },
+        {
+          "high": [
+            100,
+            1
+          ],
+          "low": [
+            100,
+            1
+          ],
+          "close": [
+            100,
+            1
+          ],
+          "result": "explicit_degenerate",
+          "pivot": [
+            100,
+            1
+          ]
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR25",
+      "title": "Scheduled source clocks retain every disclosed variant",
+      "inputs": {
+        "PIN012_opens": [
+          "00:00",
+          "09:53",
+          "10:34",
+          "11:10",
+          "11:21",
+          "12:35",
+          "13:30",
+          "12:02",
+          "18:07",
+          "19:37",
+          "21:44",
+          "00:08",
+          "03:12",
+          "04:10",
+          "05:29",
+          "06:58"
+        ],
+        "PIN025_pairs": [
+          "00:00",
+          "02:00",
+          "04:00",
+          "04:30",
+          "07:00",
+          "08:00",
+          "09:00",
+          "09:30",
+          "10:00",
+          "14:00",
+          "16:00"
+        ],
+        "PIN074_opens": [
+          "00:00",
+          "01:00",
+          "03:00",
+          "04:00",
+          "07:00"
+        ],
+        "PIN074_fifth_original": [
+          "07:00",
+          "next_day_05:01"
+        ],
+        "PIN074_fifth_corrected": [
+          "07:00",
+          "07:01"
+        ]
+      },
+      "expected": {
+        "PIN012_count": 16,
+        "PIN025_open_count": 11,
+        "PIN025_close_count": 11,
+        "PIN074_count": 5,
+        "fifth_original_duration_minutes": 1321,
+        "fifth_corrected_duration_minutes": 1,
+        "original_corrected_versions_equal": false,
+        "all_readiness_independent_of_display": true
+      },
+      "requirements": [
+        "scheduled-open-source-variants",
+        "PIN012-02",
+        "PIN025-01",
+        "PIN074-01"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR26",
+      "title": "Close of first fifteen minutes differs from close of bar starting then",
+      "inputs": {
+        "interval_start": 0,
+        "first_interval_end": 15,
+        "following_bar": [
+          15,
+          16
+        ],
+        "first_completed_close": 102,
+        "following_completed_close": 99,
+        "first_published_at": 16,
+        "following_published_at": 17
+      },
+      "expected": {
+        "first_fifteen_close": [
+          102,
+          1
+        ],
+        "bar_starting_at_fifteen_close": [
+          99,
+          1
+        ],
+        "first_close_at_cut15": null,
+        "first_close_at_cut16": [
+          102,
+          1
+        ],
+        "different_reference_versions": true
+      },
+      "requirements": [
+        "PIN019-02",
+        "opening-candle-close-availability"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR27",
+      "title": "Traded gap fill is first passage to frozen reference",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            5,
+            0,
+            [
+              100,
+              1
+            ],
+            5
+          ],
+          [
+            8,
+            0,
+            [
+              99,
+              1
+            ],
+            8
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "status": "observed",
+        "contact_at": 5,
+        "touched": true,
+        "closed_through": true,
+        "held_after_contact": true,
+        "gap_crossings": [],
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "ordered-gap-fill",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR28",
+      "title": "Gap across without a traded touch is separate from closing through",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            5,
+            0,
+            [
+              90,
+              1
+            ],
+            5
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "status": "observed",
+        "contact_at": null,
+        "touched": false,
+        "closed_through": true,
+        "held_after_contact": null,
+        "gap_crossings": [
+          5
+        ],
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "gap-past-target-without-trade",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR29",
+      "title": "Touch, close through and hold are distinct outcomes",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            5,
+            0,
+            [
+              100,
+              1
+            ],
+            5
+          ],
+          [
+            8,
+            0,
+            [
+              105,
+              1
+            ],
+            8
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "status": "observed",
+        "contact_at": 5,
+        "touched": true,
+        "closed_through": false,
+        "held_after_contact": false,
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "touch-closed-through-held"
+      ],
+      "variants": [
+        {
+          "mirror_about": [
+            100,
+            1
+          ],
+          "initial": [
+            90,
+            1
+          ],
+          "points": [
+            [
+              5,
+              0,
+              [
+                100,
+                1
+              ],
+              5
+            ],
+            [
+              8,
+              0,
+              [
+                95,
+                1
+              ],
+              8
+            ]
+          ],
+          "touched": true,
+          "closed_through": false,
+          "held_after_contact": false
+        },
+        {
+          "initial": [
+            100,
+            1
+          ],
+          "contact_mode": "contact_at_cut",
+          "points": [],
+          "contact_at": 0,
+          "touched": true,
+          "closed_through": null,
+          "held_after_contact": null
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR30",
+      "title": "Covered quiet no-fill includes its denominator",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "status": "observed",
+        "touched": false,
+        "contact_at": null,
+        "terminal_ticks": [
+          110,
+          1
+        ],
+        "closed_through": false,
+        "held_after_contact": null,
+        "observed_count": 0,
+        "full_outcome_count": 1,
+        "gap_held": true,
+        "gap_traversed": false
+      },
+      "requirements": [
+        "no-fill-denominator",
+        "quiet-not-missing"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR31",
+      "title": "Later outage censors the full target while retaining a partial contact fact",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            4,
+            0,
+            [
+              100,
+              1
+            ],
+            4
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [
+            [
+              5,
+              7
+            ]
+          ],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "status": "censored",
+        "touched": null,
+        "contact_at": null,
+        "closed_through": null,
+        "held_after_contact": null,
+        "partial_contact_at": 4,
+        "full_outcome_count": 0,
+        "unresolved_count": 1,
+        "gap_held": null,
+        "gap_traversed": null
+      },
+      "requirements": [
+        "censored-gap-outcome",
+        "V01-partial-fact"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR32",
+      "title": "No eventual gap outcome is available at the open",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "query_at": 0,
+        "observed_end": 0,
+        "points": []
+      },
+      "expected": {
+        "status": "pending",
+        "touched": null,
+        "terminal_ticks": null,
+        "closed_through": null,
+        "held_after_contact": null,
+        "outcome_is_open_feature": false,
+        "gap_held": null,
+        "gap_traversed": null
+      },
+      "requirements": [
+        "no-label-at-open",
+        "SR-M12"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR33",
+      "title": "Unknown order retains compatible outcome support",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            5,
+            0,
+            [
+              100,
+              1
+            ],
+            5
+          ],
+          [
+            5,
+            1,
+            [
+              90,
+              1
+            ],
+            5
+          ],
+          [
+            5,
+            2,
+            [
+              110,
+              1
+            ],
+            5
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": false
+        }
+      },
+      "expected": {
+        "status": "ambiguous",
+        "contact_at": 5,
+        "touched": true,
+        "closed_through": null,
+        "held_after_contact": null,
+        "compatible_terminal_ticks": [
+          [
+            90,
+            1
+          ],
+          [
+            100,
+            1
+          ],
+          [
+            110,
+            1
+          ]
+        ],
+        "compatible_closed_through": [
+          false,
+          true
+        ],
+        "compatible_held_after_contact": [
+          false,
+          true
+        ],
+        "permutations": 6,
+        "transition_work": 18,
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "unknown-order-gap-path",
+        "bounded-ambiguity"
+      ],
+      "variants": [
+        {
+          "maximum_transition_work": 18,
+          "admit": true
+        },
+        {
+          "maximum_transition_work": 17,
+          "reject_before_enumeration": true
+        },
+        {
+          "maximum_batch": true,
+          "reject": true
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR34",
+      "title": "Fixed-end gap outcome includes exact endpoint and excludes later points",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            10,
+            0,
+            [
+              100,
+              1
+            ],
+            10
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "contact_at": 10,
+        "touched": true,
+        "closed_through": false,
+        "held_after_contact": true,
+        "point_at11_rejected_if_submitted_as_target_evidence": true,
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "fixed-end-boundary",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR35",
+      "title": "Late receipt delays label maturity and cannot move its frozen origin",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "end": 10,
+        "points": [
+          [
+            5,
+            0,
+            [
+              100,
+              1
+            ],
+            12
+          ]
+        ],
+        "coverage": {
+          "end": 10,
+          "certified_at": 10,
+          "gaps": [],
+          "source_order_known": true
+        }
+      },
+      "expected": {
+        "maturity_at": 12,
+        "available_at11": false,
+        "available_at12": true,
+        "contact_at": 5,
+        "fixed_end": 10,
+        "origin": 0,
+        "gap_held": false,
+        "gap_traversed": true
+      },
+      "requirements": [
+        "late-receipt",
+        "actual-label-maturity"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR36",
+      "title": "Correction and restore retain frozen targets and current reference versions",
+      "inputs": {
+        "initial_reference_version": "settlement-v1",
+        "revised_reference_version": "settlement-v2",
+        "initial_reference": [
+          100,
+          1
+        ],
+        "revised_reference": [
+          101,
+          1
+        ],
+        "revision_known_at": 20,
+        "initial_gap_cut": 10
+      },
+      "expected": {
+        "old_gap_target_reference": [
+          100,
+          1
+        ],
+        "old_target_unchanged_at20": true,
+        "new_gap_target_reference": [
+          101,
+          1
+        ],
+        "old_new_target_versions_differ": true,
+        "restored_old_target_equal": true,
+        "restored_new_target_equal": true,
+        "changed_retained_evidence_rejected": true
+      },
+      "requirements": [
+        "revision-prefix-parity",
+        "fresh-restore",
+        "M12-P1"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR37",
+      "title": "Actual F10 early-open object, expiry and frozen target",
+      "inputs": {
+        "open_case": "MR01",
+        "anchor_start": 10,
+        "anchor_end": 10,
+        "anchor_confirmed_at": 10,
+        "open_published_at": 12,
+        "ttl_ns": 20,
+        "correction_published_at": 15
+      },
+      "expected": {
+        "anchor_has_no_future_end": true,
+        "initial_object_born_at": 12,
+        "effective_horizon_end": 32,
+        "correction_keeps_born_at": 12,
+        "active_at31": true,
+        "active_at32": false,
+        "target_uses_exact_published_geometry": true,
+        "fresh_restore_matches": true
+      },
+      "requirements": [
+        "actual-F10-publication",
+        "birth-ttl",
+        "consumer-binding"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR38",
+      "title": "Malformed or detached measurement evidence cannot publish a reference",
+      "inputs": {
+        "valid_capture_from": "MR01"
+      },
+      "expected": {
+        "valid_actual_capture": "admitted"
+      },
+      "requirements": [
+        "actual-source-admission",
+        "evidence-forgery"
+      ],
+      "variants": [
+        {
+          "changed_trade_price_same_id": true,
+          "reject": true
+        },
+        {
+          "changed_coverage_same_version": true,
+          "reject": true
+        },
+        {
+          "changed_clock_selection": true,
+          "reject": true
+        },
+        {
+          "changed_reference_result_same_receipt": true,
+          "reject": true
+        },
+        {
+          "captured_trade_in_unobserved_span": true,
+          "reject": true
+        },
+        {
+          "wrong_raw_instrument": true,
+          "reject": true
+        },
+        {
+          "aggregation_unit_mismatch": true,
+          "reject": true
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR39",
+      "title": "Opening tie support is distinct from interior order",
+      "inputs": {
+        "window": [
+          0,
+          100
+        ],
+        "coverage": [
+          [
+            0,
+            20
+          ]
+        ],
+        "cut": 20,
+        "published_at": 21,
+        "trades": [
+          [
+            10,
+            10,
+            100,
+            1,
+            1,
+            null
+          ],
+          [
+            10,
+            10,
+            101,
+            1,
+            -1,
+            null
+          ]
+        ]
+      },
+      "expected": {
+        "open_ticks": null,
+        "status": "ambiguous",
+        "possible_first_prices": [
+          [
+            100,
+            1
+          ],
+          [
+            101,
+            1
+          ]
+        ]
+      },
+      "requirements": [
+        "opening-order-ambiguity"
+      ],
+      "variants": [
+        {
+          "first_prices": [
+            100,
+            100
+          ],
+          "open_ticks": [
+            100,
+            1
+          ]
+        },
+        {
+          "unique_shared_domain_order": [
+            0,
+            1
+          ],
+          "open_ticks": [
+            100,
+            1
+          ]
+        },
+        {
+          "first_price": 100,
+          "later_interior_ambiguous": true,
+          "open_ticks": [
+            100,
+            1
+          ]
+        }
+      ],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR40",
+      "title": "Complete measurement request retention has finite exact limits",
+      "inputs": {
+        "max_period_days": 2,
+        "retained_period_days": 2,
+        "max_points": 2,
+        "points": 2,
+        "max_source_id_bytes": 3,
+        "source_id": "abc"
+      },
+      "expected": {
+        "exact_capacity": "admitted",
+        "period_days3": "reject",
+        "points3": "reject",
+        "source_id_abcd": "reject",
+        "exact_checkpoint_bytes": "admitted",
+        "one_byte_below_checkpoint_bytes": "reject",
+        "checkpoint_changed_configuration": "reject",
+        "unsized_input": "reject_before_consumption"
+      },
+      "requirements": [
+        "bounded-state",
+        "checkpoint-integrity"
+      ],
+      "variants": [],
+      "independent_basis": "Hand arithmetic, explicit calendar/date membership or primitive finite event relation; no candidate execution."
+    },
+    {
+      "id": "MR41",
+      "title": "Every child gap horizon uses separately frozen hold/fill/traverse targets",
+      "inputs": {
+        "initial": [
+          110,
+          1
+        ],
+        "reference": [
+          100,
+          1
+        ],
+        "cut": 0,
+        "unit": "nanoseconds",
+        "minute_ns": 60000000000,
+        "session_end": 7200000000000,
+        "horizons_minutes": [
+          5,
+          15,
+          60
+        ],
+        "include_session_remainder": true,
+        "points_minutes": [
+          [
+            3,
+            108
+          ],
+          [
+            7,
+            100
+          ],
+          [
+            12,
+            98
+          ],
+          [
+            45,
+            90
+          ],
+          [
+            70,
+            105
+          ]
+        ],
+        "coverage": "complete separately through each frozen end; actual certification/publication at that end",
+        "contact_mode": "future_contact"
+      },
+      "expected": {
+        "fixed_ends": [
+          300000000000,
+          900000000000,
+          3600000000000,
+          7200000000000
+        ],
+        "gap_held": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "touched": [
+          false,
+          true,
+          true,
+          true
+        ],
+        "gap_traversed": [
+          false,
+          true,
+          true,
+          true
+        ],
+        "closed_through": [
+          false,
+          true,
+          true,
+          false
+        ],
+        "held_after_contact": [
+          null,
+          true,
+          true,
+          false
+        ],
+        "terminal_ticks": [
+          [
+            108,
+            1
+          ],
+          [
+            98,
+            1
+          ],
+          [
+            90,
+            1
+          ],
+          [
+            105,
+            1
+          ]
+        ],
+        "first_contact_at": [
+          null,
+          420000000000,
+          420000000000,
+          420000000000
+        ],
+        "distinct_target_versions": 4,
+        "origin_features_contain_no_future_outcomes": true
+      },
+      "requirements": [
+        "M12.REFERENCE_TYPES-P0-all-horizons",
+        "gap-hold-fill-traverse",
+        "fixed-horizon-no-future-selection"
+      ],
+      "variants": [
+        {
+          "gap_direction": 0,
+          "gap_held": null,
+          "gap_traversed": null
+        },
+        {
+          "jump_across_without_trade": "MR28",
+          "touched": false,
+          "gap_traversed": true
+        }
+      ],
+      "independent_basis": "At minute3 price108 remains strictly above100. The first exact trade at100 is minute7; minute12/45 marks finish below100 and minute70 returns above. Each target filters only its fixed future interval and matures at its own certified end."
+    }
+  ],
+  "defaults": {
+    "integer_times": "Synthetic ns unless a case uses ISO civil dates; calendar fixtures compile explicit fixed-UTC session 09:30\u201316:00, definition known before the period. No synthetic date is silently claimed to be an exchange calendar.",
+    "trade_tuple": [
+      "event_at",
+      "known_at",
+      "price_ticks",
+      "whole_contracts",
+      "reported_side",
+      "source_order"
+    ],
+    "point_tuple": [
+      "event_at",
+      "source_sequence",
+      "fractional_ticks",
+      "known_at"
+    ],
+    "rational_encoding": "[exact numerator, positive denominator] in lowest terms",
+    "reference_expiry": 1000,
+    "reference_kind": "session_first_eligible_trade",
+    "price_process": "last_observed_native_trade",
+    "source_aggregation": "provider-reported-trade-record",
+    "source_history_complete": true,
+    "direction": "sign(initial-reference)",
+    "identity": "Each row has a unique nonempty source/content ID; different primitive histories keep different hashes even when arithmetic is equal.",
+    "unknown_order": "Sequence labels establish uniqueness only unless actual source domain/order evidence permits ordering."
+  },
+  "absolute_engineering_limits": {
+    "max_references": 256,
+    "max_edges": 4096,
+    "max_period_days": 366,
+    "max_inputs": 4096,
+    "max_source_ids": 4096,
+    "max_points": 4096,
+    "max_order_batch": 8,
+    "max_outcomes": 4096,
+    "max_transition_work": 65536,
+    "max_id_bytes": 256,
+    "max_retained_bytes": 8388608
+  },
+  "execution": {
+    "candidate_imports": 0,
+    "candidate_compiles": 0,
+    "tests": 0,
+    "market_tape_reads": 0,
+    "model_fits": 0
+  },
+  "remaining": [
+    "Native archive quality and supported eligible dates.",
+    "Chronological empirical gap/logistic/survival and source conditional models.",
+    "Matched C/L/G/R downstream information and capacity comparisons.",
+    "E0\u2013E5 complete policy economics and prospective parity."
+  ],
+  "family": "M12-complete-reference-measurement-engineering-v1"
+}

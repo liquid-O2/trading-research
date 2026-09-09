@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,datetime
+root=Path('/workspace/trading-research');coord=Path('/workspace/coordination/trading-research-cursor');now=datetime.datetime.now(datetime.timezone.utc).isoformat();p=Path('/workspace/planning/trading-research/state/CURRENT.json');d=json.loads(p.read_text());families={};attempts={}
+for f in sorted((root/'evidence/trials/events').glob('*.json')):
+ e=json.loads(f.read_text());v=e['payload']
+ if e['kind']=='family':families[v['id']]=dict(v)
+ elif e['kind']=='budget_amended':families[v['family']].update(v['authorized_limits'])
+ elif e['kind']=='started':attempts[v['id']]={**v,'status':'running'}
+ elif e['kind']=='finished':attempts[v['id']].update(v)
+for key,item in d.items():
+ if not key.endswith('_budget') or not isinstance(item,dict) or item.get('family') not in families:continue
+ family=item['family'];f=families[family];aa=[a for a in attempts.values() if a['family']==family];item.update(maximum_attempts=f['max_attempts'],attempts_used=len(aa),attempts_remaining=f['max_attempts']-len(aa),cpu_total_limit_seconds=f['cpu_budget_seconds'],cpu_used_seconds=sum(a.get('cpu_seconds') or 0 for a in aa if a['status']!='running'),cpu_reserved_running_seconds=sum(a['cpu_reservation_seconds'] for a in aa if a['status']=='running'),running_attempts=[a['id'] for a in aa if a['status']=='running'])
+active=[{'id':a['id'],'family':a['family']} for a in attempts.values() if a['status']=='running'];c=d['current_deliverable']
+for name in ['options-oi6-diagnosis.json','options-oi7-diagnosis.json']:
+ rec=json.loads((coord/name).read_text());c['verification_failures'].append({'branch':'options_oi','diagnosis':str(coord/name),'execution':rec['execution']['attempt_id'],'cpu_seconds':rec['execution']['cpu_seconds'],'scope':'full6 memory failure; pilot7 root test output-directory setup failure before actual source scan'})
+c['accepted_evidence']['options_oi_pilot8']={'execution':str(root/'reports/options-oi-runs/14d06cc09a2cc6b6f24191201b74d8a3c908c79990617f3140583c0d0f24fa02/execution.json'),'scope':'44fixtures including small-table buffer bound; eight complete logical tables, date aggregates/distributions/statistics identical to acceptedpilot2','full_population_complete':False,'cpu_seconds':25.350661,'source_production_cpu_seconds':11.806854792,'statistical_cpu_seconds':1.725961518,'fix':'writer flushes at256Arrow tables as well as65536rows; no science or cap change'}
+c['active_work']={'codex':'Review/integrate completed correctedprofile and quotequality drafts; verifycross performance exactscalar parity and measured2020pilot; reviewOI full9 aftercompletion.','cursor':[],'registered':active}
+c['progress_reviews'].append({'at':now,'acceptance_advanced':'OI8 passes44checks and exactlogical table/statistical parity after directly diagnosed unboundedtinyArrowtable retention; full9running underunchanged4GiB cap. Full6failed beforecompletion androotfixturefailure7retained. Crossvector draftrootcorrectedstaleNULLreferences/labelIDs/preflusharraymutation, full8table scalarparityfixtureadded; pilot6running. Profile andquotequality corrections returned, scientificreview pending. Quote17.067browadmission remainsaccepted. FullD1 incomplete.'})
+d.update(updated_at=now,active_cursor_workers=[],active_research_processes=active,research_execution='FullOI9 andcrossmarketpilot6 registered; profile/quotequality drafts returned forrootreview.',resume_only_when_requested=False);p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+p=coord/'state.json';s=json.loads(p.read_text());s.update(updated_at=now,current_deliverable=c,active_cursor_workers=[],active_research_processes=active)
+for k,v in d.items():
+ if k.endswith('_budget'):s[k]=v
+p.write_text(json.dumps(s,indent=2,sort_keys=True)+'\n')
+p=Path('/workspace/planning/trading-research/STATUS.md');s=p.read_text();s=s[s.index('## Completed evidence and pending work'):];p.write_text('## Current Deliverable 1 progress — '+now+'\n\nFull open-interest run6 stopped at the4GiB address-space bound after1653.51CPU seconds. The writer retained thousands of one-row Arrow tables under a65536-row threshold. A256-table bound now passes44fixtures and exactlogical parity across all8pilot tables and date/statistical results; full9 is running with the same scientific scope and4GiB cap. Root fixture setup failure7 is also retained.\n\nCross-market performance repair is under registered2020 verification, including all8logical tables and date sums/counts against the retained scalar calculation. Correctedprofile and newquote-quality drafts are awaiting complete rootreview. Quote-source admission accepted17,067,661,037rows across20,029files/86.536GB. Accepted causal-window statistics49 covers13partitions/3589source windows/4,092,200features/12,276,600labels.\n\nDeliverable1 remains incomplete; Context has not started. Exact evidence, failures, scope and consumed budgets are in [CURRENT.json](state/CURRENT.json). Historical figures below do not override current state.\n\n'+s)
+print(json.dumps({'at':now,'active':active,'OIbudget':d['options_oi_budget']}))

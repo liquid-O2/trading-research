@@ -1,0 +1,65 @@
+def verify_pilot2_logical(actual, store, protocol, outputs):
+    import math
+    import pyarrow as pa
+    import pyarrow.compute as pc
+    import pyarrow.parquet as pq
+    from trading_research.operations.artifacts import artifact_ref
+    baseline_path=RUNS/'7afd70dbe582775095dc3367834abdd4ba4a71ff2263dff0948587ba3d7b0816/execution.json'
+    baseline_raw=checked(baseline_path)
+    _,expected=predecessor_actual({'path':str(baseline_path),'sha256':hashlib.sha256(baseline_raw).hexdigest()},store,protocol,'pilot')
+    def table(refs):
+        refs=[refs] if isinstance(refs,dict) else refs
+        return pa.concat_tables([pq.read_table(pa.BufferReader(checked(r['path'],r['sha256'],maximum=128*1024**2))) for r in refs])
+    def jsonref(ref):return json.loads(checked(ref['path'],ref['sha256'],maximum=128*1024**2))
+    def rec(a,b,path='value'):
+        if type(a) is dict:
+            if type(b) is not dict or a.keys()!=b.keys():raise ValueError('logical keys mismatch: '+path)
+            for k in a:rec(a[k],b[k],path+'.'+str(k))
+        elif type(a) is list:
+            if type(b) is not list or len(a)!=len(b):raise ValueError('logical list mismatch: '+path)
+            for i,(x,y) in enumerate(zip(a,b)):rec(x,y,path+'['+str(i)+']')
+        elif type(a) is float and type(b) in (float,int):
+            if not math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-12):raise ValueError('logical number mismatch: '+path+' '+repr((a,b)))
+        elif a!=b:raise ValueError('logical value mismatch: '+path+' '+repr((a,b)))
+    rec(expected['counts'],actual['counts'],'counts')
+    report=table(actual['refs']['reports'])
+    for suffix in ['oi','ts_event_ns','file_id','row_index']:
+        name='last_'+suffix
+        report=report.set_column(report.schema.get_field_index(name),name,pc.if_else(report['last_eq_first'],report['first_'+suffix],report[name]))
+    reports_by_id=report.sort_by([('report_id','ascending')])
+    checks={}
+    order_keys={
+      'reports':['contract_id','request_date'], 'lifecycle':['contract_id','prior_date','next_date'],
+      'asof_intervals':['contract_id','valid_from_ns','ts_event_ns','valid_to_ns'],
+      'identity_map':['contract_id'], 'exceptions':['file_id','row_index'], 'membership':['file_id'],
+      'coverage':['chain','request_date'],'asof_aggregates':['chain','cut_date','cut_label'],
+    }
+    for key,keys in order_keys.items():
+        left=table(expected['refs'][key])
+        right=report if key=='reports' else table(actual['refs'][key])
+        if key=='lifecycle':
+            for name in left.column_names:
+                if name in right.column_names:continue
+                parts=name.split('_')
+                if len(parts)>=3 and parts[0] in ('first','last') and parts[1] in ('prior','next'):
+                    field=parts[0]+'_'+'_'.join(parts[2:])
+                    ids=right[parts[1]+'_report_id']
+                    values=pc.take(reports_by_id[field],ids)
+                    right=right.append_column(name,values)
+                else:raise ValueError('unreconstructable lifecycle field: '+name)
+        right=right.select(left.column_names).cast(left.schema.remove_metadata())
+        left=left.replace_schema_metadata(None)
+        if left.num_rows!=right.num_rows:raise ValueError('logical row count mismatch: '+key)
+        left=left.sort_by([(k,'ascending') for k in keys]);right=right.sort_by([(k,'ascending') for k in keys])
+        if not left.equals(right,check_metadata=False):
+            bad=[name for name in left.column_names if not left[name].equals(right[name])]
+            raise ValueError('logical table mismatch: '+key+' fields='+repr(bad))
+        checks[key]={'rows':left.num_rows,'columns':len(left.column_names),'equal':True}
+        del left,right
+    for key in ['date_aggregates','distributions']:
+        rec(jsonref(expected['refs'][key]),jsonref(actual['refs'][key]),key)
+        checks[key]={'equal':True,'float_tolerance':1e-12}
+    rec(jsonref(expected['refs']['statistics'])['groups'],jsonref(actual['refs']['statistics'])['groups'],'statistics.groups')
+    checks['statistics.groups']={'equal':True,'float_tolerance':1e-12}
+    return outputs.json('pilot2-logical-parity.json',{'passed':True,'baseline_execution':str(baseline_path),'checks':checks},kind='options_oi_complete_pilot_logical_parity_v1')
+

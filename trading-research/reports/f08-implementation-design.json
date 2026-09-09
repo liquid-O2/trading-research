@@ -1,0 +1,351 @@
+{
+  "recorded_at": "2026-09-06T20:26:38.560026+00:00",
+  "kind": "proposed F08 implementation design; awaiting root registration",
+  "status": "ready_for_registration_not_implemented",
+  "source_preparation": {
+    "path": "/workspace/trading-research/reports/f08-source-preparation.json",
+    "sha256": "963350d29d5a2b633a46bca58cf56e48c3d42d3578b84687232f8520ef8e3eef"
+  },
+  "protocol": {
+    "path": "/tmp/f08-batch-planning/F08_TRANSITION_PROTOCOL.md",
+    "sha256": "7ff31e291b158a7eca8bdb354cd309407ae2385537d7193cb96798f13cee514d"
+  },
+  "golden": {
+    "path": "/tmp/f08-batch-planning/f08-transitions-golden.json",
+    "sha256": "4737fb51627667e6f728fb0d64e1e0ca53084c9affda84a562183cc15722e5db",
+    "origin": "Hand-specified literal integer/rational expected results; no implementation execution"
+  },
+  "owned_file_proposal": [
+    {
+      "path": "src/trading_research/foundations/rolls.py",
+      "proposed_work": [
+        "Strict immutable scalar helper contracts, including identity/clock/completeness/Fraction guards.",
+        "Versioned RollPolicy and immutable selection evidence vector; predecessor-session identity/interval and instrument lifetime checks.",
+        "Separately named known-time fixed/provider-map records alongside prior-volume comparator.",
+        "Explicit paired quote/bridge policy with age/skew/eligibility, exact point/tick coordinates and uncertainty.",
+        "One-time reset/translation records for price levels, bands and bounded profile nodes; declared state-invariant dispatch.",
+        "Separate point-in-time split and cash-dividend actions/coordinates, with no automatic F02 deliverable inference.",
+        "Small bounded RollLedger using existing Journal append/restore semantics for F08 records; reject conflicting IDs, configuration changes and capacity overflow."
+      ],
+      "constraints": [
+        "Retain existing same-cut arithmetic expectations and prior-volume tie behavior.",
+        "Do not edit data/definitions.py or instrument/payoff registry except a separately reviewed minimum integration need.",
+        "Legacy bridge helper lacking an explicit age policy cannot authorize indefinite later-cut reuse.",
+        "Any real parent-completeness certificate remains external evidence, never inferred by a synthetic flag."
+      ]
+    },
+    {
+      "path": "references/rolls_literal.py",
+      "proposed_work": [
+        "Independent finite primitive-record selector and point-coordinate arithmetic.",
+        "Independent profile mass/level transition and split/dividend cash examples.",
+        "Independent direct raw-contract fill/cost arithmetic; no implementation selector/translation method used as oracle."
+      ],
+      "constraints": [
+        "No source archive, market tape or dynamic expected-value derivation from the implementation.",
+        "Reference is bounded finite engineering algebra, not a market replay or model."
+      ]
+    },
+    {
+      "path": "tests/test_roll_transitions.py",
+      "proposed_work": [
+        "New discriminating regression and contract cases mapped to all 26 preparation cases with explicit remaining evidence.",
+        "Golden literal comparisons, prefix/suffix/revision/restart/hash/config/boundary faults.",
+        "Finite profile, option-coordinate gate and raw-fill consumer integration; measured toy operations/resources only where useful."
+      ],
+      "constraints": [
+        "No changes until root registration; this is an ownership proposal.",
+        "Existing test_rolls_definitions.py expectations remain intact; extend coverage without weakening them.",
+        "Do not create market economic cohorts or call data audit routines."
+      ]
+    }
+  ],
+  "data_contracts": [
+    {
+      "name": "RollPolicy",
+      "contract": "Frozen policy identity/name, predecessor-session and tie rules, optional fixed/provider mapping identity; no fit or realized-return selection."
+    },
+    {
+      "name": "SelectionEvidence",
+      "contract": "Decision cut, input_known_at and actual_completion_at/output_known_at kept separate; universe scope/full version, every considered definition/volume/exclusion evidence with namespace/lifetime, typed calendar predecessor evidence, selected identity and policy version. Same-valued new lineage changes version. Scalar reference remains unpublished."
+    },
+    {
+      "name": "RawCoordinate / PriceObservation",
+      "contract": "Exact provider/venue/lifetime/raw-contract and point/tick domain; price Fraction, Clocks, quote eligibility, version and observation time. No bare root coordinate substitution."
+    },
+    {
+      "name": "BridgePolicy / RollBridge",
+      "contract": "Frozen maximum skew/age, paired observation span and versions, exact additive point spread and uncertainty; cut-aware availability. No hidden widening of source uncertainty or backdating."
+    },
+    {
+      "name": "CoordinateState / TransitionRecord",
+      "contract": "Source state ID/version/coordinate, parent lineage, explicit reset/translate/carry mode, target coordinate, bridge/action/policy version, destination version, original clocks, error and exposure/cost lineage. Bounded profile nodes."
+    },
+    {
+      "name": "SplitAction / DividendAction",
+      "contract": "Action kind, asset lifetime, effect and known times, exact ratio or per-share cash/currency, original evidence and supersedes identity; split and dividend are separate domains."
+    },
+    {
+      "name": "RollLedger",
+      "contract": "Journal-backed append-only F08 evidence namespace with immutable registration/configuration identity and explicit retained record/byte/profile/chain bounds; restored state validates every envelope and preserves source clocks."
+    }
+  ],
+  "consumer_proposal": [
+    {
+      "name": "selection parity gate",
+      "input": "Declared book/trade/bar raw coordinate plus versioned selection",
+      "expected": "Same outright rule/coordinate accepted; mismatch blocks dependent comparison. No actual dataset read.",
+      "scope": "Finite F08 consumer adapter, not whole F05/F06 admission."
+    },
+    {
+      "name": "price band/profile consumer",
+      "input": "Bounded source nodes and source object version plus bridge/reset choice",
+      "expected": "Exact transformed coordinates, conserved contracts, one transition only, retained source/destination lineage and off-grid status.",
+      "scope": "Finite state consumer; no claim all F10 lifecycle generators are integrated."
+    },
+    {
+      "name": "point-scale/price-anchor consumer",
+      "input": "Explicit invariant declaration and typed source state",
+      "expected": "Additive shift preserves point-scale, shifts price anchor, unknown invariant resets/rejects.",
+      "scope": "Two demonstrable algebraic invariants, not an arbitrary indicator state transplant."
+    },
+    {
+      "name": "raw option coordinate gate",
+      "input": "Typed raw or adjusted/display/total-return underlying coordinate",
+      "expected": "Only compatible raw option coordinate admitted; unknown adjusted deliverable remains F02-unavailable.",
+      "scope": "Coordinate guard, not an options pricing model or native contract adapter."
+    },
+    {
+      "name": "raw fill/accounting fixture",
+      "input": "Two exact raw-contract legs, one contract, multiplier and explicit side fees",
+      "expected": "20+40=60 gross,8 fees,52 net; chart adjustment has no cash effect.",
+      "scope": "Synthetic exact accounting integration, not observed performance or execution simulation."
+    },
+    {
+      "name": "E0 completeness consumer",
+      "input": "Existing cohort required checks and retained dependency metadata",
+      "expected": "Missing complete-parent/prior-session evidence keeps exact E0 non-runnable; acquired diagnostic scope cannot satisfy exact scope.",
+      "scope": "Preserve existing gate and dependency; no market cohort construction."
+    }
+  ],
+  "case_coverage_plan": [
+    {
+      "case": "F08-01",
+      "name": "COMPLETE-PARENT",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-02",
+      "name": "PRIOR-VOLUME-CUT",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-03",
+      "name": "SESSION-ADJACENCY",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-04",
+      "name": "IDENTITY-LIFETIME",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-05",
+      "name": "IMMUTABLE-LINEAGE",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-06",
+      "name": "BOOK-TRADE-BAR-PARITY",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-07",
+      "name": "QUARTERLY-LAST-DAY",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-08",
+      "name": "THREE-ROLL-RULES",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-09",
+      "name": "SIMULTANEOUS-BRIDGE",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-10",
+      "name": "STALE-BRIDGE",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-11",
+      "name": "GENUINE-GAP",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-12",
+      "name": "BRIDGE-REVISION",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-13",
+      "name": "OBJECT-RESET",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-14",
+      "name": "OBJECT-TRANSLATION",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-15",
+      "name": "DOUBLE-TRANSLATION",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-16",
+      "name": "MIXED-PROFILE",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-17",
+      "name": "TICK-UNITS",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-18",
+      "name": "NEGATIVE-ZERO-PRICE",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-19",
+      "name": "SPLIT-PUBLICATION",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-20",
+      "name": "DIVIDEND-COORDINATE",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-21",
+      "name": "RAW-OPTION-COORDINATE",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-22",
+      "name": "STATE-INVARIANTS",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-23",
+      "name": "ACTUAL-FILL-PNL",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-24",
+      "name": "RESTART-SUFFIX-DELAY",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-25",
+      "name": "UNCERTAINTY-WARMUP",
+      "planned_evidence": "finite engineering assertion with actual-data extent explicitly retained",
+      "whole_case_or_phase_closure": false
+    },
+    {
+      "case": "F08-26",
+      "name": "P2-P7-CONSUMERS",
+      "planned_evidence": "finite contract/arithmetic assertion plus unresolved dated/source/production comparison",
+      "whole_case_or_phase_closure": false
+    }
+  ],
+  "comparison_stages": [
+    "Source-faithful documented provider/calendar/raw-coordinate comparator, including explicit unavailable cases.",
+    "Corrected prior-completed-session selection and causal reset/translation reference.",
+    "Versioned bridge/action/state-transfer kernel versus independent literal reference on exactly the same finite inputs."
+  ],
+  "registration_sequence": [
+    "Root freezes protocol/golden and registers F08 family; root owns ports.py/verify.py. F08 may have its own registered family while sharing one combined measured F05-F08 suite.",
+    "Root authorizes bounded source/tests implementation in owned files.",
+    "One complete static review of all new code and affected callers; collect the full batch.",
+    "One consolidated repair, then root performs the registered combined supervised full-suite verification.",
+    "Preserve failed attempts and snapshot/report/resource evidence; no separate unaccounted F08 run."
+  ],
+  "suggested_engineering_bounds": {
+    "transition_records": 4096,
+    "retained_envelope_bytes": 8388608,
+    "profile_nodes": 1024,
+    "bridge_or_action_chain": 32,
+    "on_overflow": "explicit backpressure/reject without partial mutation",
+    "combined_verification": "Root final combined family governs; draft proposes at most3 attempts/600CPU seconds total with180soft190hardCPU/4GiB/240wall seconds per attempt."
+  },
+  "e0_dependency": {
+    "catalog": {
+      "kind": "supplied_dataset_catalog",
+      "sha256": "fae56a271437f4e0db4179c82c8e975d7e452ecbdb062b0949c180be2271564e",
+      "size_bytes": 261584
+    },
+    "definition_audit": {
+      "kind": "raw_definition_audit",
+      "sha256": "797745fb42186fb0b1c9d0c6b7b2a6a4559d73a5e65c6781946ef2974864f1e0",
+      "size_bytes": 1396557
+    },
+    "does_not_block": "Independent reference implementation, native/Arrow semantic admission, deterministic measurement and later branches with their own eligible inputs.",
+    "id": "E0-COMPLETE-PARENT-OUTRIGHTS",
+    "next_action": "Locate or obtain independently authorized parent coverage/equivalent causal proof. Continue opening engineering and separately registered acquired-contract diagnostics within their own gates.",
+    "observed": "The scoped catalog supplies NQ.c.0 for outright data and NQ.OPT for options; it supplies no NQ.FUT acquisition. Calendar-expiry rank does not establish prior-volume selection.",
+    "required": "Historically known complete NQ parent outright definitions/listings and compatible completed preceding-session volumes; selected-contract MBP for the required windows.",
+    "scope": "exact E0 market cohort and dependent comparisons",
+    "state": "missing_required_evidence"
+  },
+  "exclusions": [
+    "No market data reads, source archive mutation, paid acquisition, model fitting, prediction trial or economic cohort execution.",
+    "No invented complete parent universe, simultaneous quote evidence, authoritative corporate-action notice or native provider parity.",
+    "No silent all-indicator state transfer; no adjustment of actual fill prices or option deliverables without their own contract.",
+    "No whole F08/F08.ROLL_PARITY/P0-P7 closure from this finite batch."
+  ],
+  "preregistration_or_ledger_mutations": false,
+  "src_tests_configs_references_mutated_this_preparation": false,
+  "tests_run": 0,
+  "market_tape_reads": 0,
+  "derived_availability_contract": {
+    "rule": "max(required input availability, confirmation/effect, actual completion)",
+    "completion_must_be_at_or_after_original_decision_cut": true,
+    "actual_and_modeled_compute_charge_mutually_exclusive": true,
+    "original_horizon_does_not_restart": true,
+    "applies_to": [
+      "contract selection",
+      "bridge publication",
+      "state/object transition",
+      "corporate-action derived view"
+    ],
+    "fixture": "source160; decision200; actual completion202 => publication202, never160"
+  }
+}

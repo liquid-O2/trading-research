@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 477.8235462042503,
+  "finished_at": "2026-09-08T11:07:40.624192+00:00",
+  "session_id": "b9bb6495-dde8-49b0-bd9c-425cbc192dd9",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 473174,
+    "duration_api_ms": 473174,
+    "is_error": false,
+    "result": "I\u2019ll repair only the two allowed files: fix the two-swing fixture, bind definition IDs to the full frozen science, and enforce the emit cap during the single source pass.I\u2019ll apply the fixture, identity, emit-cap, and validation repairs together so the kernel and tests stay consistent.The kernel is complete. Next I\u2019ll update the tests: two-swing fixture, independent definition IDs, early emit-cap stop, and the extra negative-domain cases.Updating remaining tests: two-swing fixture, independent IDs, emit-cap early stop, and stronger domain cases.The isolated repair is written. Scope stayed on the two assigned files. No candidate execution, imports, or registered check was run.\n\n**`src/trading_research/research/auction_flow_structure.py`**\n- Definition IDs are content digests of the full frozen rule (normalized int/`Fraction` ticks, lengths, ties, `frozen_at`, human version). The human version stays separate. Pivot `reference_definition_id` / `reference_swing()` still use the original `final_bar_pivot` digest.\n- Distinct-definition checks reject duplicate content IDs and conflicting reuse of the same human version.\n- Emit cap is enforced on the first prospective extra swing, before constructing it. Earlier-call immutable results stay; attempt counters live in `work()` and remain readable after poison; `record` / `snapshot` / `add_prepared` still reject failed scientific state.\n- Bounded-slice validation is vectorized once (including `flags` in `[0, 255]`, `side` in `{-1,0,1}`, owned `_source_key` membership). The recurrence then walks primitive values once with one live `SourcePoint` per row. No per-row dicts or per-row key copies. `int()` keeps uint64 addresses.\n\n**`tests/test_auction_flow_structure.py`**\n- Objects-reference path now expects both original swings: low 100 at event 1 confirmed at event 2+delay, then high 110 at event 3 confirmed at event 5+delay. The initial low is not dropped.\n- IDs are checked against independently computed digests, plus parameter/`frozen_at` identity cases.\n- Long oscillating batches with a tiny cap and multiple scales assert processing stops at the bound; earlier emits stay byte-equal.\n- Negative-domain coverage includes `raw_flags=-256`, forged side/price, duplicate/backward row/order, and future/early time/delay. Reference comparisons include original clock/address fields; origin fields stay on independent literal checks.\n\nController should review, integrate, and run the registered full-source check. These edits are unexecuted here.",
+    "session_id": "b9bb6495-dde8-49b0-bd9c-425cbc192dd9",
+    "request_id": "355cff6e-8212-49e1-90ba-1edfc9aa99c8",
+    "usage": {
+      "inputTokens": 161443,
+      "outputTokens": 56825,
+      "cacheReadTokens": 2509376,
+      "cacheWriteTokens": 0
+    }
+  }
+}

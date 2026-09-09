@@ -1,0 +1,56 @@
+{
+  "blockers": [],
+  "cleared_findings": [
+    {
+      "evidence": "Known-time DefinitionBlock removes all records known at/before latest block; a later valid known record is needed to resume. Missing/nonquarter tick records remain explicit ineligible records, never filtered out to resurrect older tick terms.",
+      "finding": "Deleted or malformed same-ID rows no longer disappear and leave old eligible records active.",
+      "id": "JA01"
+    },
+    {
+      "evidence": "Parser requires type(instrument_id) is int and positive before coercion and permits onlyA/M; D/unsupported actions enter known-time blocks. Unidentifiable raw ID rejects the source domain rather than guessing which existing ID it modifies.",
+      "finding": "Unsupported action or malformed raw ID cannot become an eligible coerced record.",
+      "id": "JA02"
+    },
+    {
+      "evidence": "Exact positive ID with unplaceable update enters unknown_instrument_ids quarantine; resolve returnsNone at every cut and is_blocked identifies quarantine. Known-time block uses max(event,provider)+250ms.",
+      "finding": "Unknown event/provider clocks remain explicit, without invented availability.",
+      "id": "JA03"
+    },
+    {
+      "evidence": "resolve selects newest known record before active-lifetime filtering; if newest is inactive at cut it returnsNone. Distinct active overlapping lifetime IDs remain ambiguous and simultaneous latest corrections raise IntegrityError.",
+      "finding": "A newer known inactive interval cannot fall back to an older active interval.",
+      "id": "JA04"
+    },
+    {
+      "evidence": "Both covers and tick checks are nested under definition is not None; ambiguous_definition reason survives with missing associated contract key/version.",
+      "finding": "Ambiguous resolution retains an invalid output row without None dereference.",
+      "id": "JA05"
+    },
+    {
+      "evidence": "Blocked fixture timestamp120000ms is whole-minute and before new known120.35s. Added tests cover unsupported action block then later update; newer shortened expiry cannot restore older lifetime; fractional raw-ID schema rejection; unknown-clock exact-ID quarantine. Existing overlap and bar-end lifetime tests retained.",
+      "finding": "Independent source-written regression inputs target the claimed causal failures.",
+      "id": "JA06"
+    }
+  ],
+  "files": [
+    {
+      "path": "src/trading_research/data/ohlc.py",
+      "sha256": "6745c0e5531ffe248d9bce956b179d3eddc5f677a916574fc195c7549924d7ca",
+      "size_bytes": 38338
+    },
+    {
+      "path": "tests/test_ohlc_admission.py",
+      "sha256": "148e5a7899bd12c18665641d47f264c4287d8ffc9576fca22bbfabcef046d38f",
+      "size_bytes": 17682
+    }
+  ],
+  "limits": [
+    "Static clearance is not passing test evidence; next action is the registered bounded check.",
+    "No source/test file was edited by this reviewer during this final review.",
+    "Unknown-clock quarantine is intentionally conservative across the exact ID; no fake timestamp or raw-ID remap is supplied."
+  ],
+  "method": "Source text inspection and file hashes only; no candidate imports, compilation, fixture execution, tests, CLI study invocation or market data reads.",
+  "schema": "jumbo-final-admission-static-review-v1",
+  "scope": "Narrow final definition as-of admission repair and related source-written causal fault examples only. No opinion on unreviewed final worker changes.",
+  "status": "statically_cleared_for_registered_check"
+}

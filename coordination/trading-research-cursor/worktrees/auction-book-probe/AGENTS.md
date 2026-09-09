@@ -1,0 +1,29 @@
+# Current user-authorized research direction
+
+## Phase order clarified on 2026-09-08
+
+The user's latest instruction is: "yea complete it phase by phase. first validation, then context then location". Complete validation across all intended families and discretionary frameworks first, including actual definitions/calculations, eligible real-data descriptive statistics, timing and source-variant comparisons, and exact evidence-backed unsupported dispositions. Then complete the Context phase; then complete the Location phase. This supersedes the earlier permission to advance one family into Context or Locations while other families remain in validation. Keep previously prepared Context/Location code and approvals checkpointed for their later phase. Do not launch full Context fitting/confirmation or Location-quality studies during the current validation phase. Maintain this order across tool calls, worker assignments and resumptions; all scientific depth remains required.
+
+The user revised the active scope on 2026-09-07. Read `/workspace/planning/trading-research/PLAN.md` and the applicable family sections of `/workspace/planning/trading-research/RESEARCH_SPEC.md` when continuing this implementation. `/workspace/planning/trading-research/IMPLEMENTATION_INSTRUCTIONS.md` contains the handoff and evidence-preserving transition. Later explicit user instructions take precedence.
+
+Deliver validated statistics/timings across all intended families, independently tested Context specialists, and the full evaluated Location catalogue. Keep full quality, rigor, actual algorithms/interfaces and necessary implementation details. A weak proxy, synthetic fixture, representative child or small pilot does not substitute for the required mechanism or real-data evidence. Preserve meaningful source variants and justified improvement comparisons.
+
+The previous B00–B10 trading-system work order is archived. E0, full trading-policy/account/broker/Response/live systems are not prerequisites for the current research outcomes. Observable order-flow and discretionary-pattern statistics remain current. Keep causal/data/label requirements strict and local; advance genuinely eligible independent studies when another branch lacks data.
+
+Reuse this package and existing evidence. Checkpoint current work, repair shared correctness defects that affect the next study, and prioritize a complete actual-data Jumbo range/path/timing report followed by the equally detailed family studies. Reuse admitted data, features, labels and one evaluation path; add abstractions or optimizations only for a current need or measured bottleneck.
+
+The frozen readable plan at `/workspace/planning/trading-model` and existing implementation ledger retain their historical hashes and statuses. Do not overwrite them or mark old phases passed to fit the revised scope. Use `/workspace/planning/trading-research/scope_map.json` as a reference mapping and `/workspace/planning/trading-research/STATUS.md` for the active family-level delivery view. Historical full-policy promotion checks remain valid for their later purpose; add a separate research-completion view only where needed.
+
+Preserve prior failures, consumed budgets and explicit user-directed review/test rules for existing runs. No budget reset, paid expansion or external trading action is authorized here. Primary research is 2020 onward, with older Jumbo/OHLC studies separately scoped. Preserve original source/data bytes and the exclusion of `/workspace/archive`.
+
+## Implementation workflow selected on 2026-09-08
+
+The user selected **Cursor Grok 4.6 Extra High Fast** (`cursor-grok-4.6-xhigh-fast`) for bounded implementation, with Codex retaining scientific definitions, architecture, performance diagnosis, independent review, acceptance and integration. Read [the current handoff](/workspace/coordination/trading-research-cursor/HANDOFF.md) and `/workspace/coordination/trading-research-cursor/state.json` when continuing this work. The previous implementation task was stopped by the user before this handoff.
+
+Use the recorded CLI launcher and isolated checkout described there. Give the worker a coherent change with exact interfaces and acceptance criteria; review the complete diff and consolidate defects into one repair pass. The supervisor may make a small direct correction when that avoids another handoff loop. Execute applicable research checks through their existing registered runner and preserve the live consumed budgets. A worker completion message is not verification evidence.
+
+## Persistence and tool use clarified on 2026-09-08
+
+Use as many tool calls as needed in every turn to complete the authorized work. Minimize unnecessary turns and handoffs to the user; do not end merely because a patch, worker assignment, check or intermediate report is complete. Continue through the remaining implementation, verification, actual studies and research deliverables while authorized progress is possible. Give concise progress updates during sustained work. Ask only when genuinely required information or authorization is missing, and continue independent eligible work while awaiting it. Tool-call volume is not a reason to omit necessary work or stop early.
+
+Use the user's supplied hardware specification: 21 vCPUs, 83 GB RAM and an RTX A4000 with 16 GB VRAM, with the stricter effective pod limits governing execution. The recorded and current cgroup limits are 17.85 CPU cores of quota and 82,999,996,416 bytes of RAM. Host-reported 128 CPUs or roughly 500 GB RAM are not this allocation. The exact supplied hardware text is retained at `/workspace/trading-research/validation/HARDWARE_USER_SPEC_V1.md`; current Jumbo scheduling and memory settings are recorded separately in `validation/JUMBO_HARDWARE_EXECUTION_V1.json`. Preserve the approved cumulative compute/output budgets and prior consumption.

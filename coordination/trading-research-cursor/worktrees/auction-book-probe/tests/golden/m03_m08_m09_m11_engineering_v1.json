@@ -1,0 +1,2574 @@
+{
+  "family": "M03-M08-M09-M11-structure-pressure-memory-engineering-v1",
+  "units": [
+    "M03",
+    "M03.COHORT_SMT",
+    "M03.PRICE_CVD",
+    "M08",
+    "M08.MULTISCALE",
+    "M09",
+    "M09.RECOVERY",
+    "M11",
+    "M11.MEMORY_DECAY"
+  ],
+  "numeric_policy": {
+    "rational": "exact Fraction string or integer",
+    "exponential_abs_tolerance": 1e-12,
+    "times": "integer nanoseconds unless a vector explicitly labels seconds; synthetic dates/materialization in protocol"
+  },
+  "materialization": "Use actual common TradeLedger/TransactionTapeView capture, certified F09 engine publication, original normalize_mbp recipes and BookReducer, and actual F10 registry. Hand endpoint numbers never bypass producer authentication. Vectors describe intended semantic data, not accepted detached production objects.",
+  "cases": [
+    {
+      "id": "MD01",
+      "units": [
+        "M03",
+        "M03.PRICE_CVD"
+      ],
+      "name": "four ordinary/hidden cases",
+      "input_vector": {
+        "a": {
+          "price": 100,
+          "flow": 20,
+          "event": 1,
+          "known": 1
+        },
+        "b_variants": [
+          [
+            104,
+            10,
+            "high"
+          ],
+          [
+            96,
+            30,
+            "high"
+          ],
+          [
+            96,
+            30,
+            "low"
+          ],
+          [
+            104,
+            10,
+            "low"
+          ]
+        ],
+        "price_scale": 2,
+        "flow_scale": 5,
+        "b_event": 3,
+        "b_known": 4,
+        "cut": 4
+      },
+      "expected_literal": {
+        "changes": [
+          [
+            2,
+            -2
+          ],
+          [
+            -2,
+            2
+          ],
+          [
+            -2,
+            2
+          ],
+          [
+            2,
+            -2
+          ]
+        ],
+        "regular": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "hidden": [
+          false,
+          true,
+          false,
+          true
+        ],
+        "confirmation_delay": 1
+      },
+      "source_ids": [
+        "FP9-04",
+        "PIN072-02"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD02",
+      "units": [
+        "M03",
+        "M03.PRICE_CVD"
+      ],
+      "name": "tick tolerance versus mismatch magnitude",
+      "input_vector": {
+        "a": [
+          100,
+          20
+        ],
+        "b_variants": [
+          [
+            101,
+            19
+          ],
+          [
+            110,
+            10
+          ]
+        ],
+        "price_scale": 2,
+        "flow_scale": 5,
+        "tolerance_ticks": 1
+      },
+      "expected_literal": {
+        "tie": [
+          true,
+          false
+        ],
+        "normalized_changes": [
+          [
+            "1/2",
+            "-1/5"
+          ],
+          [
+            5,
+            -2
+          ]
+        ],
+        "discrepancy": [
+          "7/10",
+          7
+        ]
+      },
+      "source_ids": [
+        "YMA-02"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD03",
+      "units": [
+        "M03"
+      ],
+      "name": "equal price or equal flow no strict divergence",
+      "input_vector": {
+        "a": [
+          100,
+          20
+        ],
+        "b": [
+          [
+            100,
+            10
+          ],
+          [
+            104,
+            20
+          ]
+        ]
+      },
+      "expected_literal": {
+        "tie": [
+          true,
+          true
+        ],
+        "regular": [
+          false,
+          false
+        ],
+        "hidden": [
+          false,
+          false
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD04",
+      "units": [
+        "M03"
+      ],
+      "name": "delayed source observation",
+      "input_vector": {
+        "receiver_breach_event": 3,
+        "receiver_known": 3,
+        "source_breach_event": 2,
+        "source_known": 5,
+        "cuts": [
+          3,
+          5
+        ]
+      },
+      "expected_literal": {
+        "usable": [
+          false,
+          true
+        ],
+        "event_lag": -1,
+        "knowledge_lag": 2,
+        "first_known_at": 5
+      },
+      "source_ids": [
+        "CD1-04",
+        "CEX-07"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD05",
+      "units": [
+        "M03"
+      ],
+      "name": "same endpoints reversed crossing order",
+      "input_vector": {
+        "reference": 100,
+        "receiver_paths": [
+          [
+            99,
+            101,
+            102
+          ],
+          [
+            99,
+            99,
+            102
+          ]
+        ],
+        "source_paths": [
+          [
+            99,
+            99,
+            102
+          ],
+          [
+            99,
+            101,
+            102
+          ]
+        ],
+        "times": [
+          0,
+          1,
+          2
+        ]
+      },
+      "expected_literal": {
+        "endpoint_changes_identical": true,
+        "source_minus_receiver_breach_lag": [
+          1,
+          -1
+        ]
+      },
+      "source_ids": [
+        "CD1-04"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD06",
+      "units": [
+        "M03"
+      ],
+      "name": "closed or missing source cannot assert nonbreach",
+      "input_vector": {
+        "receiver_path": [
+          99,
+          101
+        ],
+        "source_path": [],
+        "opportunity": [
+          0,
+          2
+        ],
+        "source_states": [
+          "closed",
+          "missing",
+          "stale"
+        ]
+      },
+      "expected_literal": {
+        "source_nonbreach": [
+          null,
+          null,
+          null
+        ],
+        "smt_available": [
+          false,
+          false,
+          false
+        ]
+      },
+      "source_ids": [
+        "JTR-07"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD07",
+      "units": [
+        "M03"
+      ],
+      "name": "complete observed source nonbreach",
+      "input_vector": {
+        "receiver_path": [
+          99,
+          101
+        ],
+        "source_path": [
+          99,
+          100
+        ],
+        "strict_reference": 100,
+        "coverage": [
+          0,
+          2
+        ]
+      },
+      "expected_literal": {
+        "receiver_breach": true,
+        "source_breach": false,
+        "source_nonbreach": true,
+        "source_breach_time": null
+      },
+      "source_ids": [
+        "CD1-04"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD08",
+      "units": [
+        "M03"
+      ],
+      "name": "incompatible anchor/reset/date/cohort",
+      "input_vector": {
+        "base": {
+          "raw": "NQH7",
+          "date": "2027-01-04",
+          "reset": "R1",
+          "aggregation": "whole_print",
+          "cohort": "C1"
+        },
+        "mutations": {
+          "raw": "NQM7",
+          "date": "2027-01-05",
+          "reset": "R2",
+          "aggregation": "minute_net",
+          "cohort": "C2"
+        }
+      },
+      "expected_literal": {
+        "each_mutation": "ContractError",
+        "emitted": 0
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD09",
+      "units": [
+        "M03",
+        "M03.COHORT_SMT"
+      ],
+      "name": "aggregate unchanged while large cohort diverges",
+      "input_vector": {
+        "opening": 0,
+        "first_window": {
+          "large_buy": 20,
+          "large_sell": 0,
+          "small_buy": 0,
+          "small_sell": 10
+        },
+        "second_window": {
+          "large_buy": 0,
+          "large_sell": 10,
+          "small_buy": 10,
+          "small_sell": 0
+        },
+        "price_endpoints": [
+          100,
+          104
+        ]
+      },
+      "expected_literal": {
+        "aggregate_endpoint_cvd": [
+          10,
+          10
+        ],
+        "large_endpoint_cvd": [
+          20,
+          10
+        ],
+        "aggregate_regular": false,
+        "large_regular": true
+      },
+      "source_ids": [
+        "K18-07"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD10",
+      "units": [
+        "M03.COHORT_SMT"
+      ],
+      "name": "one soft print belongs fractionally to two channels",
+      "input_vector": {
+        "size": 15,
+        "side": 1,
+        "knots": [
+          10,
+          20
+        ]
+      },
+      "expected_literal": {
+        "weights": [
+          "1/2",
+          "1/2"
+        ],
+        "weighted_flow": [
+          "15/2",
+          "15/2"
+        ],
+        "sum": 15,
+        "independent_print_count": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD11",
+      "units": [
+        "M03.COHORT_SMT"
+      ],
+      "name": "empty cohort observed versus missing",
+      "input_vector": {
+        "trades": [
+          [
+            5,
+            1
+          ]
+        ],
+        "threshold": 10,
+        "coverage_variants": [
+          "complete",
+          "missing"
+        ]
+      },
+      "expected_literal": {
+        "observed_cohort_count": [
+          0,
+          0
+        ],
+        "true_flow": [
+          0,
+          null
+        ],
+        "standardized_discrepancy": [
+          null,
+          null
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD12",
+      "units": [
+        "M03.COHORT_SMT"
+      ],
+      "name": "same close different CVD extrema",
+      "input_vector": {
+        "opening": 0,
+        "paths": [
+          [
+            10,
+            -8,
+            3
+          ],
+          [
+            -8,
+            10,
+            3
+          ]
+        ]
+      },
+      "expected_literal": {
+        "close": [
+          5,
+          5
+        ],
+        "high": [
+          10,
+          5
+        ],
+        "low": [
+          0,
+          -8
+        ],
+        "first_high_index": [
+          0,
+          2
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD13",
+      "units": [
+        "M03.PRICE_CVD"
+      ],
+      "name": "running divergence disappears before confirmation",
+      "input_vector": {
+        "price_highs": [
+          100,
+          104,
+          103
+        ],
+        "flow_at_high_prefix": [
+          20,
+          10
+        ],
+        "flow_by_confirmation": 30,
+        "prefix_cut": 2,
+        "confirmation_cut": 3
+      },
+      "expected_literal": {
+        "running_regular_at_2": true,
+        "confirmed_regular_at_3": false,
+        "earlier_prefix_immutable": true
+      },
+      "source_ids": [
+        "FP9-02"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD14",
+      "units": [
+        "M03"
+      ],
+      "name": "train-frozen ridge residual literal",
+      "input_vector": {
+        "training_x": [
+          -1,
+          1
+        ],
+        "training_y": [
+          -2,
+          2
+        ],
+        "intercept": false,
+        "ridge": 2,
+        "train_end": 3,
+        "available_at": 4,
+        "inference_start": 5,
+        "query_x": 2,
+        "query_y": 3
+      },
+      "expected_literal": {
+        "beta": 1,
+        "expected": 2,
+        "residual": 1,
+        "fit_rows": 2
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD15",
+      "units": [
+        "M03"
+      ],
+      "name": "cross-lag interaction basis",
+      "input_vector": {
+        "x": [
+          2,
+          3
+        ],
+        "lag": -1,
+        "basis": [
+          "intercept",
+          "x0",
+          "x1",
+          "lag",
+          "x0*lag",
+          "x1*lag"
+        ],
+        "coefficients": [
+          1,
+          2,
+          0,
+          1,
+          1,
+          0
+        ],
+        "observed": 8
+      },
+      "expected_literal": {
+        "basis_vector": [
+          1,
+          2,
+          3,
+          -1,
+          -2,
+          -3
+        ],
+        "expected": 2,
+        "residual": 6
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MD16",
+      "units": [
+        "M03"
+      ],
+      "name": "fit availability/scale support",
+      "input_vector": {
+        "train_end": 4,
+        "available_at": 5,
+        "query_window_start": 4,
+        "scale": 0
+      },
+      "expected_literal": {
+        "early_transform": "DependencyUnavailable",
+        "zero_scale_standardization": null,
+        "raw_preserved": true
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS01",
+      "units": [
+        "M08"
+      ],
+      "name": "right bar pivot waits for publication",
+      "input_vector": {
+        "bars": [
+          [
+            0,
+            1,
+            100,
+            90,
+            1
+          ],
+          [
+            1,
+            2,
+            110,
+            95,
+            2
+          ],
+          [
+            2,
+            3,
+            105,
+            92,
+            4
+          ]
+        ],
+        "left": 1,
+        "right": 1,
+        "cuts": [
+          3,
+          4
+        ]
+      },
+      "expected_literal": {
+        "high_pivots": [
+          [],
+          [
+            {
+              "price": 110,
+              "extreme_start": 1,
+              "confirmed_at": 4
+            }
+          ]
+        ],
+        "backplot_eligible_at_1": false
+      },
+      "source_ids": [
+        "PIN038-01"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS02",
+      "units": [
+        "M08"
+      ],
+      "name": "all registered equal-extreme rules",
+      "input_vector": {
+        "highs": [
+          100,
+          110,
+          110,
+          105
+        ],
+        "lows": [
+          90,
+          95,
+          96,
+          92
+        ],
+        "left": 1,
+        "right": 1,
+        "published_at": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected_literal": {
+        "strict": [],
+        "earliest": [
+          1
+        ],
+        "latest": [
+          2
+        ],
+        "ambiguous": [
+          1,
+          2
+        ],
+        "ambiguous_status": "ambiguous_equal_extremum"
+      },
+      "source_ids": [
+        "OSF-01"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS03",
+      "units": [
+        "M08"
+      ],
+      "name": "partial/gap bars cannot confirm",
+      "input_vector": {
+        "bars": [
+          [
+            0,
+            1,
+            100,
+            90
+          ],
+          [
+            1,
+            2,
+            110,
+            95
+          ],
+          [
+            3,
+            4,
+            105,
+            92
+          ]
+        ],
+        "middle_coverage": "partial"
+      },
+      "expected_literal": {
+        "confirmed_pivots": []
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS04",
+      "units": [
+        "M08"
+      ],
+      "name": "directional changes and provisional extension",
+      "input_vector": {
+        "times": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "prices": [
+          100,
+          106,
+          103,
+          100
+        ],
+        "threshold": 2
+      },
+      "expected_literal": {
+        "confirmations": [
+          {
+            "side": "low",
+            "price": 100,
+            "extreme": 0,
+            "known": 1
+          },
+          {
+            "side": "high",
+            "price": 106,
+            "extreme": 1,
+            "known": 2
+          }
+        ],
+        "provisional_low": 100,
+        "confirmed_high_unchanged": 106
+      },
+      "source_ids": [
+        "OSF-02"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS05",
+      "units": [
+        "M08",
+        "M08.MULTISCALE"
+      ],
+      "name": "nested scales and delayed common extreme",
+      "input_vector": {
+        "times": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "prices": [
+          100,
+          106,
+          103,
+          100
+        ],
+        "thresholds": [
+          2,
+          4
+        ]
+      },
+      "expected_literal": {
+        "high_confirmations": [
+          {
+            "threshold": 2,
+            "price": 106,
+            "extreme": 1,
+            "known": 2,
+            "delay": 1
+          },
+          {
+            "threshold": 4,
+            "price": 106,
+            "extreme": 1,
+            "known": 3,
+            "delay": 2
+          }
+        ],
+        "high_persistence_by_cut": [
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "normalized_prominence": [
+          3,
+          "3/2"
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS06",
+      "units": [
+        "M08",
+        "M08.MULTISCALE"
+      ],
+      "name": "threshold frozen at leg birth",
+      "input_vector": {
+        "prices": [
+          100,
+          106,
+          103
+        ],
+        "times": [
+          0,
+          1,
+          2
+        ],
+        "birth_threshold": 2,
+        "new_scale_threshold": 10,
+        "new_scale_known": 1
+      },
+      "expected_literal": {
+        "existing_leg_threshold": 2,
+        "high_confirmed_at": 2,
+        "next_leg_threshold": 10,
+        "scale_change_alone_confirms": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS07",
+      "units": [
+        "M08.MULTISCALE"
+      ],
+      "name": "simultaneous confirmation retains distinct definitions",
+      "input_vector": {
+        "prices": [
+          100,
+          106,
+          100
+        ],
+        "thresholds": [
+          2,
+          4
+        ],
+        "times": [
+          0,
+          1,
+          2
+        ]
+      },
+      "expected_literal": {
+        "high_confirmations_at_2": 2,
+        "distinct_scale_ids": 2,
+        "shared_extreme_source_count": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS08",
+      "units": [
+        "M08"
+      ],
+      "name": "incomplete trade path resets swing state",
+      "input_vector": {
+        "prices": [
+          100,
+          106,
+          103
+        ],
+        "times": [
+          0,
+          1,
+          2
+        ],
+        "complete": [
+          true,
+          false,
+          true
+        ],
+        "threshold": 2
+      },
+      "expected_literal": {
+        "confirmed": [],
+        "cross_gap_leg": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS09",
+      "units": [
+        "M08"
+      ],
+      "name": "unknown same-time order cannot invent reversals",
+      "input_vector": {
+        "prices": [
+          100,
+          106,
+          100
+        ],
+        "times": [
+          0,
+          1,
+          1
+        ],
+        "orders": [
+          0,
+          null,
+          null
+        ],
+        "threshold": 2
+      },
+      "expected_literal": {
+        "order_status": "ambiguous",
+        "high_confirmation": null
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS10",
+      "units": [
+        "M08"
+      ],
+      "name": "exact retracement source variants",
+      "input_vector": {
+        "low": 100,
+        "high": 120,
+        "fractions": [
+          "0",
+          "1/4",
+          "1/2",
+          "3/4",
+          "1",
+          "133/100",
+          "-1/2"
+        ]
+      },
+      "expected_literal": {
+        "levels": [
+          100,
+          105,
+          110,
+          115,
+          120,
+          "633/5",
+          90
+        ]
+      },
+      "source_ids": [
+        "JXA-20",
+        "OSF-03"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS11",
+      "units": [
+        "M08"
+      ],
+      "name": "F09 correction immutable prior pivot",
+      "input_vector": {
+        "original_highs": [
+          100,
+          110,
+          105
+        ],
+        "corrected_middle_high": 102,
+        "original_publication": 4,
+        "correction_publication": 6,
+        "cuts": [
+          4,
+          6
+        ]
+      },
+      "expected_literal": {
+        "high_pivot_prices": [
+          110,
+          null
+        ],
+        "prior_snapshot_high": 110,
+        "source_revision_changes": true
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MS12",
+      "units": [
+        "M08"
+      ],
+      "name": "actual certified bars required",
+      "input_vector": {
+        "mutations": [
+          "detached_CausalBar",
+          "activity_bar",
+          "forged_receipt",
+          "future_publication",
+          "raw_roll",
+          "changed_reset"
+        ]
+      },
+      "expected_literal": {
+        "each_mutation": "reject",
+        "admitted": 0
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ01",
+      "units": [
+        "M09"
+      ],
+      "name": "exact top quote arithmetic",
+      "input_vector": {
+        "previous": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "current": [
+          100,
+          102,
+          12,
+          17
+        ]
+      },
+      "expected_literal": {
+        "ofi": 5,
+        "same_price_size_ofi": 5,
+        "price_change_ofi": 0,
+        "queue_imbalance": "-5/29",
+        "microprice_points": "2924/29",
+        "spread": 2
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ02",
+      "units": [
+        "M09"
+      ],
+      "name": "price changes and sizes remain distinct",
+      "input_vector": {
+        "previous": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "current": [
+          101,
+          103,
+          12,
+          17
+        ]
+      },
+      "expected_literal": {
+        "ofi": 32,
+        "same_price_size_ofi": 0,
+        "price_change_ofi": 32
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ03",
+      "units": [
+        "M09"
+      ],
+      "name": "crossed empty and zero-depth masks",
+      "input_vector": {
+        "quotes": [
+          [
+            103,
+            102,
+            10,
+            20
+          ],
+          [
+            100,
+            102,
+            0,
+            20
+          ],
+          [
+            100,
+            102,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected_literal": {
+        "valid": [
+          false,
+          false,
+          false
+        ],
+        "microprice": [
+          null,
+          null,
+          null
+        ],
+        "normalized_pressure": [
+          null,
+          null,
+          null
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ04",
+      "units": [
+        "M09"
+      ],
+      "name": "healthy unchanged observation and copied snapshot",
+      "input_vector": {
+        "initial": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "updates": [
+          {
+            "time": 1,
+            "action": "M",
+            "snapshot": false,
+            "quote": [
+              100,
+              102,
+              10,
+              20
+            ]
+          },
+          {
+            "time": 2,
+            "action": "A",
+            "snapshot": true,
+            "quote": [
+              100,
+              102,
+              10,
+              20
+            ]
+          }
+        ]
+      },
+      "expected_literal": {
+        "ofi": [
+          0,
+          null
+        ],
+        "fresh_pressure_update_count": 1,
+        "copied_fresh_count": 0,
+        "economic_quote_at": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ05",
+      "units": [
+        "M09"
+      ],
+      "name": "initialization is not pressure",
+      "input_vector": {
+        "initial_action": "A",
+        "snapshot": true,
+        "quote": [
+          100,
+          102,
+          10,
+          20
+        ]
+      },
+      "expected_literal": {
+        "ofi": null,
+        "fresh_quote_events": 0,
+        "economic_quote_at": null
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ06",
+      "units": [
+        "M09",
+        "M09.RECOVERY"
+      ],
+      "name": "trade carries pretrade quote without automatic decrement",
+      "input_vector": {
+        "before": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "trade": {
+          "price": 102,
+          "size": 5,
+          "side": "B",
+          "pretrade_quote": [
+            100,
+            102,
+            10,
+            20
+          ]
+        },
+        "following_quote": [
+          100,
+          102,
+          10,
+          17
+        ]
+      },
+      "expected_literal": {
+        "after_trade_ask_depth": 20,
+        "after_quote_ask_depth": 17,
+        "ask_net_recovery": 2,
+        "trade_count": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ07",
+      "units": [
+        "M09.RECOVERY"
+      ],
+      "name": "execution-adjusted net change not gross refill",
+      "input_vector": {
+        "start_bid_depth": 10,
+        "end_bid_depth": 8,
+        "executed_at_bid": 5,
+        "gross_alternatives": [
+          [
+            3,
+            0
+          ],
+          [
+            8,
+            5
+          ]
+        ]
+      },
+      "expected_literal": {
+        "bid_net": 3,
+        "both_gross_alternatives_fit": true,
+        "gross_additions_identified": false,
+        "gross_cancels_identified": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ08",
+      "units": [
+        "M09.RECOVERY"
+      ],
+      "name": "price leaves and returns",
+      "input_vector": {
+        "bid_prices": [
+          100,
+          99,
+          100
+        ],
+        "bid_sizes": [
+          10,
+          8,
+          10
+        ],
+        "executed_at_bid": 5
+      },
+      "expected_literal": {
+        "whole_interval_exact_recovery": null,
+        "constant_price_episodes": 3
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ09",
+      "units": [
+        "M09.RECOVERY"
+      ],
+      "name": "duplicate execution and unknown side",
+      "input_vector": {
+        "trade_ids": [
+          "a",
+          "a",
+          "b"
+        ],
+        "sizes": [
+          5,
+          5,
+          3
+        ],
+        "sides": [
+          "B",
+          "B",
+          "N"
+        ],
+        "ask_start": 20,
+        "ask_end": 17
+      },
+      "expected_literal": {
+        "unique_trade_volume": 8,
+        "known_ask_execution": 5,
+        "unknown_execution": 3,
+        "exact_ask_recovery": null,
+        "observed_known_execution_net": 2
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ10",
+      "units": [
+        "M09"
+      ],
+      "name": "normalized pressure denominators",
+      "input_vector": {
+        "ofi_updates": [
+          5,
+          -1
+        ],
+        "preceding_total_depth": [
+          20,
+          10
+        ],
+        "covered_ns": 2000000000
+      },
+      "expected_literal": {
+        "raw_ofi": 4,
+        "per_update": 2,
+        "per_second": 2,
+        "sum_depth_normalized": "3/20"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ11",
+      "units": [
+        "M09"
+      ],
+      "name": "duration-weighted imbalance persistence",
+      "input_vector": {
+        "intervals": [
+          [
+            0,
+            2,
+            "1/2"
+          ],
+          [
+            2,
+            3,
+            "-1/2"
+          ]
+        ],
+        "cut": 3
+      },
+      "expected_literal": {
+        "mean_imbalance": "1/6",
+        "positive_duration_fraction": "2/3",
+        "update_positive_fraction": "1/2"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ12",
+      "units": [
+        "M09",
+        "M09.RECOVERY"
+      ],
+      "name": "causal depletion and recovery timing",
+      "input_vector": {
+        "times": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "depths": [
+          10,
+          4,
+          7,
+          10
+        ],
+        "recovery_fraction": "1/2"
+      },
+      "expected_literal": {
+        "minimum_depth": 4,
+        "initial_depletion": 6,
+        "half_recovery_at": 2,
+        "full_recovery_at": 3,
+        "half_recovery_delay": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ13",
+      "units": [
+        "M09"
+      ],
+      "name": "simple lag weights and trade interaction",
+      "input_vector": {
+        "ages": [
+          0,
+          1,
+          2
+        ],
+        "ofi": [
+          4,
+          2,
+          -2
+        ],
+        "signed_trade": [
+          3,
+          -1,
+          0
+        ],
+        "half_life": 1
+      },
+      "expected_literal": {
+        "weights": [
+          1,
+          "1/2",
+          "1/4"
+        ],
+        "weighted_ofi": "9/2",
+        "weighted_trade": "5/2",
+        "product": "45/4"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ14",
+      "units": [
+        "M09"
+      ],
+      "name": "unknown batching preserves raw endpoint but masks path",
+      "input_vector": {
+        "initial_quote": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "batch_quotes": [
+          [
+            100,
+            102,
+            5,
+            20
+          ],
+          [
+            100,
+            102,
+            10,
+            20
+          ]
+        ],
+        "same_event_time": 1,
+        "order": null
+      },
+      "expected_literal": {
+        "endpoint_depth_change": 0,
+        "depletion_order": null,
+        "recovery_timing": null,
+        "lag_interaction": null
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ15",
+      "units": [
+        "M09"
+      ],
+      "name": "M10 quote summary exact ticks and prewindow origin",
+      "input_vector": {
+        "tick_size": "1/4",
+        "initial_quote": [
+          100,
+          102,
+          10,
+          20
+        ],
+        "initial_at": 0,
+        "window": [
+          1,
+          3
+        ],
+        "terminal_quote": [
+          101,
+          103,
+          12,
+          17
+        ],
+        "terminal_at": 2
+      },
+      "expected_literal": {
+        "initial_midpoint_ticks": 404,
+        "terminal_midpoint_ticks": 408,
+        "progress_ticks": 4,
+        "strictly_prewindow": true,
+        "spread_change_ticks": 0,
+        "total_depth_change": -1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ16",
+      "units": [
+        "M09"
+      ],
+      "name": "first in-window quote cannot be prewindow conditioning",
+      "input_vector": {
+        "window": [
+          1,
+          3
+        ],
+        "first_quote_at": 2,
+        "first_quote": [
+          100,
+          102,
+          10,
+          20
+        ]
+      },
+      "expected_literal": {
+        "strictly_prewindow": false,
+        "prewindow_midpoint": null,
+        "conditional_intensity_context": "unavailable"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MQ17",
+      "units": [
+        "M09"
+      ],
+      "name": "raw normalization mismatch fails authentication",
+      "input_vector": {
+        "base_trade_size": 5,
+        "mutated_normalized_size": 50,
+        "raw_fields_unchanged": true
+      },
+      "expected_literal": {
+        "event_id_can_remain_equal": true,
+        "recipe_redecode_validation": "IntegrityError"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM01",
+      "units": [
+        "M11"
+      ],
+      "name": "whole-print size and opposing memories",
+      "input_vector": {
+        "trades": [
+          [
+            "a",
+            0,
+            100,
+            10,
+            1
+          ],
+          [
+            "b",
+            1,
+            100,
+            8,
+            -1
+          ],
+          [
+            "c",
+            2,
+            100,
+            2,
+            null
+          ]
+        ],
+        "minimum_size": 1,
+        "price_radius": 0,
+        "time_radius": 10
+      },
+      "expected_literal": {
+        "clusters": 3,
+        "buy": 10,
+        "sell": 8,
+        "unknown": 2,
+        "signed": 2,
+        "inventory_identity": null
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM02",
+      "units": [
+        "M11"
+      ],
+      "name": "overlapping windows deduplicate actual trade identity",
+      "input_vector": {
+        "windows": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ]
+        ],
+        "trades": {
+          "a": [
+            100,
+            10,
+            1
+          ],
+          "b": [
+            101,
+            20,
+            1
+          ],
+          "c": [
+            102,
+            30,
+            1
+          ]
+        }
+      },
+      "expected_literal": {
+        "unique_members": [
+          "a",
+          "b",
+          "c"
+        ],
+        "gross": 60,
+        "weighted_center": "304/3",
+        "raw_count": 3
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM03",
+      "units": [
+        "M11"
+      ],
+      "name": "bridge creates forward merge without historical rewrite",
+      "input_vector": {
+        "at_cut_1": [
+          [
+            "a",
+            0,
+            100,
+            10,
+            1
+          ],
+          [
+            "b",
+            0,
+            104,
+            10,
+            1
+          ]
+        ],
+        "at_cut_2_add": [
+          "c",
+          1,
+          102,
+          10,
+          1
+        ],
+        "price_radius": 2,
+        "time_radius": 2
+      },
+      "expected_literal": {
+        "cluster_counts": [
+          2,
+          1
+        ],
+        "merged_members": [
+          "a",
+          "b",
+          "c"
+        ],
+        "merged_center": 102,
+        "previous_members_unchanged": true
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM04",
+      "units": [
+        "M11"
+      ],
+      "name": "correction splits later version",
+      "input_vector": {
+        "members": [
+          [
+            "a",
+            0,
+            100,
+            10,
+            1
+          ],
+          [
+            "b",
+            0,
+            104,
+            10,
+            1
+          ],
+          [
+            "c",
+            1,
+            102,
+            10,
+            1
+          ]
+        ],
+        "remove_c_known": 3,
+        "price_radius": 2
+      },
+      "expected_literal": {
+        "before_clusters": 1,
+        "after_clusters": 2,
+        "old_version_member_count": 3
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM05",
+      "units": [
+        "M11",
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "normalized triangular spatial field",
+      "input_vector": {
+        "price": 100,
+        "size": 10,
+        "side": 1,
+        "grid": [
+          99,
+          100,
+          101
+        ],
+        "triangular_weights": [
+          1,
+          2,
+          1
+        ]
+      },
+      "expected_literal": {
+        "normalized_weights": [
+          "1/4",
+          "1/2",
+          "1/4"
+        ],
+        "buy_cells": [
+          "5/2",
+          5,
+          "5/2"
+        ],
+        "mass": 10,
+        "sell_mass": 0
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM06",
+      "units": [
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "separate time and activity clocks",
+      "input_vector": {
+        "source_size": 16,
+        "source_time": 0,
+        "cut": 2,
+        "time_half_life": 2,
+        "subsequent_contracts": 8,
+        "volume_half_life": 4
+      },
+      "expected_literal": {
+        "time_decayed_mass": 8,
+        "volume_decayed_mass": 4,
+        "raw_mass": 16
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM07",
+      "units": [
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "visit hysteresis and new flow",
+      "input_vector": {
+        "band": [
+          99,
+          101
+        ],
+        "prices": [
+          100,
+          101,
+          100,
+          103,
+          100,
+          100
+        ],
+        "times": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "new_trade_at_4": [
+          "b",
+          3,
+          1
+        ],
+        "original_trade": [
+          "a",
+          10,
+          1
+        ]
+      },
+      "expected_literal": {
+        "visits": 2,
+        "retests": 1,
+        "new_flow": 3,
+        "unique_total_flow": 13,
+        "flicker_inside_new_visit": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM08",
+      "units": [
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "visit half-life distinct from raw mass",
+      "input_vector": {
+        "original_mass": 16,
+        "completed_retests": 2,
+        "visit_half_life": 1
+      },
+      "expected_literal": {
+        "decayed_mass": 4,
+        "raw_mass": 16
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM09",
+      "units": [
+        "M11"
+      ],
+      "name": "markout pending until fixed deadline and publication",
+      "input_vector": {
+        "origin": 100,
+        "side": 1,
+        "born": 1,
+        "horizon_end": 4,
+        "future_prices": [
+          [
+            2,
+            103
+          ],
+          [
+            3,
+            98
+          ],
+          [
+            4,
+            101
+          ]
+        ],
+        "future_publication": 5,
+        "cuts": [
+          3,
+          4,
+          5
+        ]
+      },
+      "expected_literal": {
+        "statuses": [
+          "pending",
+          "pending",
+          "mature"
+        ],
+        "terminal_markout": 1,
+        "mfe": 3,
+        "mae": -2,
+        "earliest_known_at": 5
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM10",
+      "units": [
+        "M11",
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "largest aggressive print loses",
+      "input_vector": {
+        "origin": 100,
+        "side": 1,
+        "size": 100,
+        "future_prices": [
+          99,
+          98,
+          97
+        ],
+        "horizon_complete": true
+      },
+      "expected_literal": {
+        "terminal_markout": -3,
+        "mfe": 0,
+        "mae": -3,
+        "inferred_remaining_inventory": null
+      },
+      "source_ids": [
+        "RDL-04"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM11",
+      "units": [
+        "M11"
+      ],
+      "name": "opposite-side markouts at same origin",
+      "input_vector": {
+        "origin": 100,
+        "sides": [
+          1,
+          -1
+        ],
+        "future_prices": [
+          103,
+          98,
+          101
+        ]
+      },
+      "expected_literal": {
+        "terminal_markout": [
+          1,
+          -1
+        ],
+        "mfe": [
+          3,
+          2
+        ],
+        "mae": [
+          -2,
+          -3
+        ]
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM12",
+      "units": [
+        "M11"
+      ],
+      "name": "gap and unpriced future cannot become zero reward",
+      "input_vector": {
+        "origin": 100,
+        "horizon": [
+          1,
+          4
+        ],
+        "observed_prices": [
+          [
+            2,
+            101
+          ]
+        ],
+        "coverage": [
+          [
+            1,
+            2
+          ]
+        ],
+        "unpriced_trade_at": 3
+      },
+      "expected_literal": {
+        "label_status": "unavailable",
+        "terminal_markout": null,
+        "true_mfe": null,
+        "observed_mfe": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM13",
+      "units": [
+        "M11",
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "protection available after missed opportunity",
+      "input_vector": {
+        "birth": 1,
+        "opportunity": 3,
+        "swing_extreme": 2,
+        "swing_confirmed": 5,
+        "protection_published": 6
+      },
+      "expected_literal": {
+        "protected_at_3": false,
+        "protected_at_6": true,
+        "birth_unchanged": 1,
+        "markout_maturity_depends_on_protection": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM14",
+      "units": [
+        "M11.MEMORY_DECAY"
+      ],
+      "name": "repeated failure stays separate attempts same episode",
+      "input_vector": {
+        "episode": "E1",
+        "attempts": [
+          "A1",
+          "A2"
+        ],
+        "markouts": [
+          -2,
+          -3
+        ],
+        "new_flow_before_second": 0
+      },
+      "expected_literal": {
+        "attempt_count": 2,
+        "independent_episode_count": 1,
+        "fresh_effort_for_second": false,
+        "sum_attempt_markouts": -5
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM15",
+      "units": [
+        "M11"
+      ],
+      "name": "matured nearest retrieval excludes future and own episode",
+      "input_vector": {
+        "query": {
+          "x": 2,
+          "start": 10,
+          "episode": "Q"
+        },
+        "episodes": [
+          {
+            "id": "a",
+            "x": 1,
+            "matured": 8,
+            "y": 3,
+            "episode": "A"
+          },
+          {
+            "id": "b",
+            "x": 3,
+            "matured": 9,
+            "y": -1,
+            "episode": "B"
+          },
+          {
+            "id": "c",
+            "x": 2,
+            "matured": 11,
+            "y": 100,
+            "episode": "C"
+          },
+          {
+            "id": "q",
+            "x": 2,
+            "matured": 8,
+            "y": 100,
+            "episode": "Q"
+          }
+        ],
+        "k": 2
+      },
+      "expected_literal": {
+        "selected": [
+          "a",
+          "b"
+        ],
+        "distances": [
+          1,
+          1
+        ],
+        "support": 2,
+        "mean_markout": 1
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM16",
+      "units": [
+        "M11"
+      ],
+      "name": "no supported matured comparables",
+      "input_vector": {
+        "query_start": 3,
+        "episode_matured_at": [
+          4,
+          5
+        ],
+        "k": 2
+      },
+      "expected_literal": {
+        "selected": [],
+        "support": 0,
+        "mean_markout": null
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MM17",
+      "units": [
+        "M11"
+      ],
+      "name": "registered hard threshold strictness and proxy separation",
+      "input_vector": {
+        "sizes": [
+          59,
+          60,
+          61
+        ],
+        "threshold": 60,
+        "comparators": [
+          "at_least",
+          "strict_greater"
+        ],
+        "input_kinds": [
+          "reported_aggressor",
+          "ohlc_signed_proxy"
+        ]
+      },
+      "expected_literal": {
+        "members": [
+          [
+            60,
+            61
+          ],
+          [
+            61
+          ]
+        ],
+        "interchangeable_input_definitions": false
+      },
+      "source_ids": [
+        "RFE-01",
+        "MVF-02"
+      ],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX01",
+      "units": [
+        "M03"
+      ],
+      "name": "capacity exact and one-over atomicity",
+      "input_vector": {
+        "resource": "fit_rows",
+        "limit": 1024,
+        "sizes": [
+          1024,
+          1025
+        ]
+      },
+      "expected_literal": {
+        "accepted": [
+          true,
+          false
+        ],
+        "overflow_error": "ContractError",
+        "overflow_state_changed": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX02",
+      "units": [
+        "M08"
+      ],
+      "name": "capacity exact and one-over atomicity",
+      "input_vector": {
+        "resource": "scales",
+        "limit": 32,
+        "sizes": [
+          32,
+          33
+        ]
+      },
+      "expected_literal": {
+        "accepted": [
+          true,
+          false
+        ],
+        "overflow_error": "ContractError",
+        "overflow_state_changed": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX03",
+      "units": [
+        "M09"
+      ],
+      "name": "capacity exact and one-over atomicity",
+      "input_vector": {
+        "resource": "events",
+        "limit": 4096,
+        "sizes": [
+          4096,
+          4097
+        ]
+      },
+      "expected_literal": {
+        "accepted": [
+          true,
+          false
+        ],
+        "overflow_error": "ContractError",
+        "overflow_state_changed": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX04",
+      "units": [
+        "M11"
+      ],
+      "name": "capacity exact and one-over atomicity",
+      "input_vector": {
+        "resource": "sparse_cells",
+        "limit": 4096,
+        "sizes": [
+          4096,
+          4097
+        ]
+      },
+      "expected_literal": {
+        "accepted": [
+          true,
+          false
+        ],
+        "overflow_error": "ContractError",
+        "overflow_state_changed": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX05",
+      "units": [
+        "M03",
+        "M08",
+        "M09",
+        "M11"
+      ],
+      "name": "suffix-delay-correction-restart through actual consumers",
+      "input_vector": {
+        "base_cases": [
+          "MD09",
+          "MS05",
+          "MQ06",
+          "MM03"
+        ],
+        "operations": [
+          "remove_future_suffix",
+          "append_future_known",
+          "delay_last_source",
+          "correct_latest",
+          "checkpoint_restore"
+        ]
+      },
+      "expected_literal": {
+        "past_outputs_immutable": true,
+        "new_versions_use_new_sources": true,
+        "restored_equals_full_replay": true,
+        "future_inputs_used_at_earlier_cut": false
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX06",
+      "units": [
+        "M03",
+        "M08",
+        "M09",
+        "M11"
+      ],
+      "name": "forged receipt and malformed bounded restoration",
+      "input_vector": {
+        "mutations": [
+          "replace_numeric_result",
+          "copy_token_to_changed_recipe",
+          "remove_predecessor",
+          "wrong_instrument",
+          "wrong_definition",
+          "over_limit_payload"
+        ]
+      },
+      "expected_literal": {
+        "each_mutation": "reject",
+        "partial_publication_count": 0
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX07",
+      "units": [
+        "M03",
+        "M08",
+        "M09",
+        "M11"
+      ],
+      "name": "real F10 and scheduler consumer causal publication",
+      "input_vector": {
+        "source_cut": 10,
+        "completion": 12,
+        "consumer_cuts": [
+          10,
+          12
+        ],
+        "double_latency_charge": 2
+      },
+      "expected_literal": {
+        "usable": [
+          false,
+          true
+        ],
+        "known_at": 12,
+        "known_at_is_not": 14,
+        "same_batch_cycle": "reject"
+      },
+      "source_ids": [],
+      "status": "preregistered hand-derived expectation; unexecuted"
+    },
+    {
+      "id": "MX08",
+      "units": [
+        "M03",
+        "M09",
+        "M11"
+      ],
+      "name": "actual retained temporal fit through all learned measurement consumers",
+      "input_vector": {
+        "base_case": "M-F11-FIT-001",
+        "actual_training_rows": [
+          "train1",
+          "train2"
+        ],
+        "heldout": "heldout",
+        "fit_cut": 30,
+        "fit_completion": 31,
+        "query_start": 39,
+        "query_cut": 40,
+        "publication": 41,
+        "ridge_training": {
+          "x": [
+            -1,
+            1
+          ],
+          "y": [
+            -2,
+            2
+          ],
+          "ridge": 2,
+          "intercept": false
+        },
+        "divergence_query": {
+          "x": 2,
+          "observed": 3
+        },
+        "quote_lag_query": {
+          "x": 2,
+          "observed": 3
+        },
+        "memory_distance_training": [
+          1,
+          3
+        ],
+        "memory_query": 2,
+        "memory_candidates": [
+          [
+            "a",
+            1,
+            3
+          ],
+          [
+            "b",
+            3,
+            -1
+          ]
+        ],
+        "operations": [
+          "commit actual temporal fold, sources, matured labels and actual ReadSession manifests",
+          "retain exact family recipe and independently computed state",
+          "reconstruct each family from actual retained training reads before inference",
+          "reopen store and repeat heldout serving"
+        ],
+        "negative_variants": [
+          "heldout fit_feature read",
+          "fit completion 41 after query start39",
+          "state copied to changed recipe",
+          "train membership includes heldout"
+        ]
+      },
+      "expected_literal": {
+        "ridge_coefficient": 1,
+        "divergence_expected": 2,
+        "divergence_residual": 1,
+        "quote_lag_expected": 2,
+        "quote_lag_residual": 1,
+        "memory_training_mean": 2,
+        "memory_training_scale": 1,
+        "memory_selected": [
+          "a",
+          "b"
+        ],
+        "memory_distances": [
+          1,
+          1
+        ],
+        "memory_mean_markout": 1,
+        "all_negative_variants": "reject before fitted inference",
+        "restored_result": "exact_equal"
+      },
+      "source_ids": [],
+      "status": "root-added preimplementation engineering integration requirement; unexecuted",
+      "derivation": "Ridge beta=(-1*-2+1*2)/(1+1+2)=1. Population mean(1+3)/2=2, scale1. Equal distance1 neighbors have mean(3-1)/2=1. Actual F11 temporal routes certify eligibility independently of these arithmetic literals."
+    }
+  ],
+  "execution": "No candidate/reference/test imported or executed; independent expected literals written before implementation."
+}

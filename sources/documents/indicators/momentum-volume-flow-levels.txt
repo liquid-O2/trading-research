@@ -1,0 +1,488 @@
+//@version=6
+indicator("Bias 7: SMA200 + Delta + SQA vs SMA50 + Delta Lines + MTF + SMA5 + Vol Anomaly (Hysteresis)", shorttitle="Bias 7 Hysteresis", overlay=true, max_lines_count=500, max_labels_count=500, max_boxes_count=500)
+
+// ─── Inputs ────────────────────────────────────────────────────────────────
+htf         = input.timeframe("5", "Calculation timeframe (HTF Variables)", group="General")
+mtf_conf    = input.timeframe("5", "MTF Confirmation Timeframe", group="General")
+
+// Sistema de Histéresis para evitar el efecto sierra
+minVotesBull = input.int(4, "Votes needed to flip BULLISH (Strength)", minval=1, maxval=7, group="General", tooltip="Se necesita un golpe de fuerza (ej. 4 de 7 votos) para activar compras.")
+minVotesBear = input.int(4, "Votes needed to flip BEARISH (Strength)", minval=1, maxval=7, group="General", tooltip="Se necesita un golpe de fuerza (ej. 4 de 7 votos) para activar ventas.")
+
+mode24h     = input.bool(false, "24h mode (ignore session filter)", group="General")
+
+len200      = input.int(200, "SMA 200 Base", minval=1, group="Trend & Structure")
+len50       = input.int(50, "SMA 50 Filter", minval=1, group="Trend & Structure")
+len5        = input.int(5, "SMA 5 Cross", minval=1, group="Trend & Structure")
+showSma     = input.bool(false, "Show HTF Moving Averages (200 & 50)", group="Trend & Structure")
+
+ltf         = input.timeframe("1", "Delta granularity (sub-bars)", group="Condition 2 · Volume Delta")
+thrMode     = input.string("Dynamic", "Threshold mode", options=["Dynamic", "Fixed"], group="Condition 2 · Volume Delta")
+vdMult      = input.float(6.0, "Dynamic: times the average delta", minval=0.1, step=0.1, group="Condition 2 · Volume Delta")
+vdAvgLen    = input.int(50, "Dynamic: average length (bars)", minval=1, group="Condition 2 · Volume Delta")
+vdFixed     = input.float(3000, "Absolute threshold (fixed · and floor of dynamic)", minval=0, group="Condition 2 · Volume Delta")
+
+sqaLen2     = input.int(27,  "SQA long (for SMA50 cross)", minval=1, group="Condition 3 · SQA vs SMA50")
+sqaSmooth   = input.int(3,   "SQA SMA smoothing", minval=1, group="Condition 3 · SQA vs SMA50")
+
+gDA            = "Condition 4 · Delta zones (flow edges)"
+showDeltaAreas = input.bool(true, "Draw delta zone edges", group=gDA)
+kClusters      = input.int(4,  "Zones per side (k-means k)", minval=2, maxval=12, group=gDA)
+minZonePct     = input.int(45, "Hide zones weaker than (% of strongest)", minval=0, maxval=95, group=gDA)
+kmIter         = input.int(12, "K-means iterations", minval=2, maxval=25, group=gDA)
+heatHotTransp  = input.int(25, "Opacity — strongest edge (0 = solid)", minval=0, maxval=95, group=gDA)
+heatColdTransp = input.int(75, "Opacity — weakest edge", minval=10, maxval=99, group=gDA)
+zonePadAtr     = input.float(0.4, "Min zone thickness (× ATR-14)", minval=0.0, step=0.1, group=gDA)
+showZoneLabels = input.bool(true, "Show zone flow labels", group=gDA)
+maxDet         = input.int(3000, "Max detections kept per side (perf guard)", minval=200, maxval=8000, group=gDA)
+
+gVA            = "Condition 7 · Volume Anomaly (directional · break/reject on zones)"
+vaLength       = input.int(20, "Average volume period", minval=1, group=gVA)
+vaFactor       = input.float(2.5, "Anomaly factor (× average volume)", minval=0.1, step=0.1, group=gVA)
+vaShowZones    = input.bool(true, "Draw anomaly zones (boxes)", group=gVA)
+vaZonaColor    = input.color(color.new(color.yellow, 30), "Zone color", group=gVA)
+vaGrosorPorc   = input.float(0.2, "Zone thickness (% of price)", minval=0.01, step=0.05, group=gVA)
+vaZonaUmbral   = input.float(0.5, "Proximity merge threshold (%)", minval=0.0, step=0.05, group=gVA, tooltip="Si una zona nueva está a menos de este % de otra existente, se conserva solo la de mayor volumen.")
+vaMaxZonas     = input.int(50, "Max active zones (perf guard)", minval=5, maxval=300, group=gVA)
+
+showBubbles = input.bool(true, "Show delta bubbles", group="Visual")
+showBg      = input.bool(true, "Color background by bias", group="Visual")
+
+// ─── Session window (Eastern Time) ─────────────────────────────────────────
+nqTz       = "America/New_York"
+nqTod      = hour(time, nqTz) * 60 + minute(time, nqTz)
+nqInLondon = nqTod >= 120 and nqTod < 480
+nqInNY     = nqTod >= 480 and nqTod < 960
+inSession  = mode24h or nqInLondon or nqInNY
+
+// ─── HTF Multi-Condition Calculations ───────────────────────────────────────
+f_htf_calculations(int l5, int l50, int l200, int sLen2, int sSmooth) =>
+    sqa27_raw = ta.percentile_linear_interpolation(close, sLen2, 50.0)
+    sqa27_smoothed = ta.sma(sqa27_raw, sSmooth)
+    s5   = ta.sma(close, l5)
+    s50  = ta.sma(close, l50)
+    s200 = ta.sma(close, l200)
+    c1 = close > s200 ? 1 : close < s200 ? -1 : 0
+    c3 = sqa27_smoothed > s50 ? 1 : sqa27_smoothed < s50 ? -1 : 0
+    c6 = s5 > s200 ? 1 : s5 < s200 ? -1 : 0
+    [s200, s50, sqa27_smoothed, c1, c3, c6]
+
+[sma200htf, sma50htf, sqa27htf, c1dir, c3dir, c6dir] = request.security(syminfo.tickerid, htf, f_htf_calculations(len5, len50, len200, sqaLen2, sqaSmooth))
+
+c1Bull = c1dir > 0
+c1Bear = c1dir < 0
+c3Bull = c3dir > 0
+c3Bear = c3dir < 0
+c6Bull = c6dir > 0
+c6Bear = c6dir < 0
+
+// ─── Condition 2: Volume Delta — signal detection ──────────────────────────
+ltfArr   = request.security_lower_tf(syminfo.tickerid, ltf, close > open ? volume : close < open ? -volume : 0.0)
+barDelta = array.size(ltfArr) > 0 ? nz(array.sum(ltfArr)) : (close > open ? volume : close < open ? -volume : 0.0)
+
+avgAbsDelta = ta.sma(math.abs(barDelta), vdAvgLen)
+effThresh   = thrMode == "Fixed" ? vdFixed : math.max(avgAbsDelta * vdMult, vdFixed)
+
+sigEvent = math.abs(barDelta) > effThresh
+
+deltaBull = sigEvent and barDelta > 0
+deltaBear = sigEvent and barDelta < 0
+
+// ─── Delta direction (Condition 2) ─────────────────────────────────────────
+var int lastDeltaDir = 0
+if sigEvent
+    lastDeltaDir := barDelta > 0 ? 1 : barDelta < 0 ? -1 : lastDeltaDir
+c2Bull = lastDeltaDir ==  1
+c2Bear = lastDeltaDir == -1
+
+// ─── Condition 7: Volume Anomaly (AHORA DIRECCIONAL, igual que C4) ──────────
+// Un pico de volumen crea una zona. C7 vota por breakout/rejection del precio
+// sobre esas zonas de anomalía, exactamente igual que C4 lo hace con las suyas.
+volAnomAvg      = ta.sma(volume, vaLength)
+isVolumeAnomaly = volume > (volAnomAvg * vaFactor)
+var int c7dir = 0
+
+// ─── Condition 7 · LÓGICA: centros de zona (SOLO floats — alimenta la dirección) ─
+// Sin funciones de box aquí: este array llega hasta C5/security, y Pine prohíbe
+// cualquier box.* en esa cadena. El dibujo de cajas va en un bloque aparte.
+var array<float> vaVolumenesZonas = array.new<float>()
+var array<float> vaCentrosZonas   = array.new<float>()
+var array<int>   vaTimesZonas     = array.new<int>()
+
+if isVolumeAnomaly
+    zonaNuevaOk  = true
+    precioActual = close
+    margen       = precioActual * (vaZonaUmbral / 100.0)
+
+    if array.size(vaCentrosZonas) > 0
+        for i = array.size(vaCentrosZonas) - 1 to 0
+            precioViejo  = array.get(vaCentrosZonas, i)
+            volumenViejo = array.get(vaVolumenesZonas, i)
+            if math.abs(precioActual - precioViejo) <= margen
+                if volume > volumenViejo
+                    array.remove(vaVolumenesZonas, i)
+                    array.remove(vaCentrosZonas, i)
+                    array.remove(vaTimesZonas, i)
+                else
+                    zonaNuevaOk := false
+                    break
+
+    if zonaNuevaOk
+        if array.size(vaCentrosZonas) >= vaMaxZonas
+            array.remove(vaVolumenesZonas, 0)
+            array.remove(vaCentrosZonas, 0)
+            array.remove(vaTimesZonas, 0)
+        array.push(vaVolumenesZonas, volume)
+        array.push(vaCentrosZonas, precioActual)
+        array.push(vaTimesZonas, time)
+
+// ─── Condition 7 · DIRECCIÓN: breakout / rejection sobre zonas de anomalía (igual que C4) ─
+if array.size(vaCentrosZonas) > 0
+    for i = 0 to array.size(vaCentrosZonas) - 1
+        L = array.get(vaCentrosZonas, i)
+        // BREAKOUT al alza o REJECTION al alza → alcista
+        if (close > L and close[1] <= L) or (close > L and low <= L and low[1] > L)
+            c7dir := 1
+        // BREAKOUT a la baja o REJECTION a la baja → bajista
+        if (close < L and close[1] >= L) or (close < L and high >= L and high[1] < L)
+            c7dir := -1
+c7Bull = c7dir == 1
+c7Bear = c7dir == -1
+
+// ─── Condition 7 · DIBUJO: refleja EXACTAMENTE las zonas ya fusionadas ──────
+// Lee los arrays de la lógica (solo números) y escribe únicamente en las cajas
+// del pool, así no hay box.* alimentando security. Usa xloc.bar_time para no
+// chocar con el límite de bar_index en históricos largos.
+var array<box> vaPool = array.new<box>()
+if barstate.isfirst
+    for i = 0 to vaMaxZonas - 1
+        array.push(vaPool, box.new(time, close, time, close, xloc=xloc.bar_time, border_color=color.new(color.gray, 100), bgcolor=color.new(color.gray, 100)))
+if vaShowZones
+    // ocultar todo el pool
+    for i = 0 to array.size(vaPool) - 1
+        box.set_bgcolor(array.get(vaPool, i), color.new(color.gray, 100))
+        box.set_border_color(array.get(vaPool, i), color.new(color.gray, 100))
+    // dibujar solo las zonas activas (ya fusionadas, máx vaMaxZonas)
+    nZonas = math.min(array.size(vaCentrosZonas), array.size(vaPool))
+    if nZonas > 0
+        for i = 0 to nZonas - 1
+            c     = array.get(vaCentrosZonas, i)
+            xt    = array.get(vaTimesZonas, i)
+            mitad = (c * (vaGrosorPorc / 100.0)) / 2
+            b     = array.get(vaPool, i)
+            box.set_lefttop(b, xt, c + mitad)
+            box.set_rightbottom(b, time, c - mitad)
+            box.set_bgcolor(b, vaZonaColor)
+            box.set_border_color(b, color.new(vaZonaColor, 100))
+
+// ─── Condition 4: Delta-line break / rejection ─────────────────────────────
+var int c4dir = 0
+
+// ─── Delta zones — k-means clustering, drawn as zone EDGES ──────────────────
+f_fmt(float v) =>
+    a = math.abs(v)
+    a >= 1e9 ? str.tostring(v/1e9, "#.#")+"B" : a >= 1e6 ? str.tostring(v/1e6, "#.#")+"M" : a >= 1e3 ? str.tostring(v/1e3, "#.#")+"K" : str.tostring(v, "#")
+
+atr14    = ta.atr(14)
+minZoneH = nz(atr14) * zonePadAtr
+
+// Weighted 1-D k-means
+f_kmeans(array<float> pxArr, array<float> wArr, array<int> tArr, int k, int iters) =>
+    n     = array.size(pxArr)
+    cCtr  = array.new<float>(k, na)
+    cMin  = array.new<float>(k, na)
+    cMax  = array.new<float>(k, na)
+    cWsum = array.new<float>(k, 0.0)
+    cCnt  = array.new<int>(k, 0)
+    cT    = array.new<int>(k, na)
+    if n > 0
+        keff = math.min(k, n)
+        srt  = array.copy(pxArr)
+        array.sort(srt, order.ascending)
+        for j = 0 to keff - 1
+            idx = math.min(int((j + 0.5) / keff * n), n - 1)
+            array.set(cCtr, j, array.get(srt, idx))
+        sumW  = array.new<float>(keff, 0.0)
+        sumWX = array.new<float>(keff, 0.0)
+        for it = 1 to iters
+            array.fill(sumW, 0.0)
+            array.fill(sumWX, 0.0)
+            for p = 0 to n - 1
+                px    = array.get(pxArr, p)
+                best  = 0
+                bestD = math.abs(px - array.get(cCtr, 0))
+                for c = 1 to keff - 1
+                    d = math.abs(px - array.get(cCtr, c))
+                    if d < bestD
+                        bestD := d
+                        best  := c
+                w = array.get(wArr, p)
+                array.set(sumW,  best, array.get(sumW,  best) + w)
+                array.set(sumWX, best, array.get(sumWX, best) + w * px)
+            for c = 0 to keff - 1
+                sw = array.get(sumW, c)
+                if sw > 0
+                    array.set(cCtr, c, array.get(sumWX, c) / sw)
+        for p = 0 to n - 1
+            px    = array.get(pxArr, p)
+            best  = 0
+            bestD = math.abs(px - array.get(cCtr, 0))
+            for c = 1 to keff - 1
+                d = math.abs(px - array.get(cCtr, c))
+                if d < bestD
+                    bestD := d
+                    best  := c
+            w  = array.get(wArr, p)
+            ti = array.get(tArr, p)
+            array.set(cWsum, best, array.get(cWsum, best) + w)
+            array.set(cCnt,  best, array.get(cCnt,  best) + 1)
+            pmn = array.get(cMin, best)
+            pmx = array.get(cMax, best)
+            array.set(cMin, best, na(pmn) ? px : math.min(pmn, px))
+            array.set(cMax, best, na(pmx) ? px : math.max(pmx, px))
+            pct = array.get(cT, best)
+            array.set(cT, best, na(pct) ? ti : math.min(pct, ti))
+    [cMin, cMax, cWsum, cCnt, cT]
+
+f_renderEdges(array<line> lines, array<label> labs, array<float> bMin, array<float> bMax, array<float> bW, array<int> bCnt, array<int> bT, array<float> rMin, array<float> rMax, array<float> rW, array<int> rCnt, array<int> rT) =>
+    nLine = array.size(lines)
+    nLab  = array.size(labs)
+    for i = 0 to nLine - 1
+        line.set_color(array.get(lines, i), color.new(color.gray, 100))
+    for i = 0 to nLab - 1
+        label.set_color(array.get(labs, i), color.new(color.gray, 100))
+        label.set_textcolor(array.get(labs, i), color.new(color.gray, 100))
+        label.set_text(array.get(labs, i), "")
+    if showDeltaAreas
+        k = array.size(bMin)
+        maxW = 0.0
+        for c = 0 to k - 1
+            if array.get(bCnt, c) > 0
+                maxW := math.max(maxW, array.get(bW, c))
+            if array.get(rCnt, c) > 0
+                maxW := math.max(maxW, array.get(rW, c))
+        li  = 0
+        lbi = 0
+        for c = 0 to k - 1
+            if array.get(bCnt, c) > 0 and li <= nLine - 2 and (maxW > 0 ? array.get(bW, c) / maxW : 1.0) * 100 >= minZonePct
+                lo = array.get(bMin, c)
+                hi = array.get(bMax, c)
+                md = (lo + hi) / 2.0
+                hf = math.max((hi - lo) / 2.0, minZoneH / 2.0)
+                w  = array.get(bW, c)
+                ratio  = maxW > 0 ? w / maxW : 1.0
+                transp = math.min(math.max(int(heatColdTransp - (heatColdTransp - heatHotTransp) * ratio), 0), 100)
+                wd  = ratio >= 0.66 ? 3 : ratio >= 0.33 ? 2 : 1
+                x1  = array.get(bT, c)
+                col = color.new(color.lime, transp)
+                lnT = array.get(lines, li)
+                lnB = array.get(lines, li + 1)
+                line.set_xy1(lnT, x1, md + hf)
+                line.set_xy2(lnT, time, md + hf)
+                line.set_color(lnT, col)
+                line.set_width(lnT, wd)
+                line.set_xy1(lnB, x1, md - hf)
+                line.set_xy2(lnB, time, md - hf)
+                line.set_color(lnB, col)
+                line.set_width(lnB, wd)
+                li += 2
+                if showZoneLabels and lbi <= nLab - 1
+                    lb = array.get(labs, lbi)
+                    label.set_xy(lb, time, md + hf)
+                    label.set_text(lb, f_fmt(w))
+                    label.set_color(lb, color.new(color.black, 100))
+                    label.set_textcolor(lb, color.new(color.lime, math.max(transp - 25, 0)))
+                    lbi += 1
+            if array.get(rCnt, c) > 0 and li <= nLine - 2 and (maxW > 0 ? array.get(rW, c) / maxW : 1.0) * 100 >= minZonePct
+                lo = array.get(rMin, c)
+                hi = array.get(rMax, c)
+                md = (lo + hi) / 2.0
+                hf = math.max((hi - lo) / 2.0, minZoneH / 2.0)
+                w  = array.get(rW, c)
+                ratio  = maxW > 0 ? w / maxW : 1.0
+                transp = math.min(math.max(int(heatColdTransp - (heatColdTransp - heatHotTransp) * ratio), 0), 100)
+                wd  = ratio >= 0.66 ? 3 : ratio >= 0.33 ? 2 : 1
+                x1  = array.get(rT, c)
+                col = color.new(color.red, transp)
+                lnT = array.get(lines, li)
+                lnB = array.get(lines, li + 1)
+                line.set_xy1(lnT, x1, md + hf)
+                line.set_xy2(lnT, time, md + hf)
+                line.set_color(lnT, col)
+                line.set_width(lnT, wd)
+                line.set_xy1(lnB, x1, md - hf)
+                line.set_xy2(lnB, time, md - hf)
+                line.set_color(lnB, col)
+                line.set_width(lnB, wd)
+                li += 2
+                if showZoneLabels and lbi <= nLab - 1
+                    lb = array.get(labs, lbi)
+                    label.set_xy(lb, time, md - hf)
+                    label.set_text(lb, f_fmt(w))
+                    label.set_color(lb, color.new(color.black, 100))
+                    label.set_textcolor(lb, color.new(color.red, math.max(transp - 25, 0)))
+                    lbi += 1
+
+f_collectLevels(array<float> bMin, array<float> bMax, array<float> bW, array<int> bCnt, array<float> rMin, array<float> rMax, array<float> rW, array<int> rCnt, float minH) =>
+    lv = array.new<float>()
+    k  = array.size(bMin)
+    maxW = 0.0
+    for c = 0 to k - 1
+        if array.get(bCnt, c) > 0
+            maxW := math.max(maxW, array.get(bW, c))
+        if array.get(rCnt, c) > 0
+            maxW := math.max(maxW, array.get(rW, c))
+    for c = 0 to k - 1
+        if array.get(bCnt, c) > 0 and (maxW > 0 ? array.get(bW, c) / maxW : 1.0) * 100 >= minZonePct
+            md = (array.get(bMin, c) + array.get(bMax, c)) / 2.0
+            hf = math.max((array.get(bMax, c) - array.get(bMin, c)) / 2.0, minH / 2.0)
+            array.push(lv, md + hf)
+            array.push(lv, md - hf)
+        if array.get(rCnt, c) > 0 and (maxW > 0 ? array.get(rW, c) / maxW : 1.0) * 100 >= minZonePct
+            md = (array.get(rMin, c) + array.get(rMax, c)) / 2.0
+            hf = math.max((array.get(rMax, c) - array.get(rMin, c)) / 2.0, minH / 2.0)
+            array.push(lv, md + hf)
+            array.push(lv, md - hf)
+    lv
+
+// Stores
+var array<float> bullPx   = array.new<float>()
+var array<float> bullW    = array.new<float>()
+var array<int>   bullTime = array.new<int>()
+var array<float> bearPx   = array.new<float>()
+var array<float> bearW    = array.new<float>()
+var array<int>   bearTime = array.new<int>()
+
+// Line/label pool
+var array<line>   heatLines  = array.new<line>()
+var array<label> heatLabels = array.new<label>()
+if barstate.isfirst
+    for i = 0 to 4 * kClusters - 1
+        array.push(heatLines, line.new(time, close, time, close, xloc=xloc.bar_time, color=color.new(color.gray, 100), width=1))
+    for i = 0 to 2 * kClusters - 1
+        array.push(heatLabels, label.new(time, close, "", xloc=xloc.bar_time, style=label.style_label_left, color=color.new(color.gray, 100), textcolor=color.new(color.gray, 100), size=size.small))
+
+// Cache resultados
+var array<float> bullCMin = array.new<float>(kClusters, na)
+var array<float> bullCMax = array.new<float>(kClusters, na)
+var array<float> bullCW   = array.new<float>(kClusters, 0.0)
+var array<int>   bullCCnt = array.new<int>(kClusters, 0)
+var array<int>   bullCT   = array.new<int>(kClusters, na)
+var array<float> bearCMin = array.new<float>(kClusters, na)
+var array<float> bearCMax = array.new<float>(kClusters, na)
+var array<float> bearCW   = array.new<float>(kClusters, 0.0)
+var array<int>   bearCCnt = array.new<int>(kClusters, 0)
+var array<int>   bearCT   = array.new<int>(kClusters, na)
+
+detBullEvt = inSession and deltaBull
+detBearEvt = inSession and deltaBear
+
+if detBullEvt
+    array.push(bullPx,   math.min(open, close))
+    array.push(bullW,    math.abs(barDelta))
+    array.push(bullTime, time)
+    if array.size(bullPx) > maxDet
+        array.shift(bullPx)
+        array.shift(bullW)
+        array.shift(bullTime)
+    if showDeltaAreas
+        [cmn, cmx, cw, ccnt, ct] = f_kmeans(bullPx, bullW, bullTime, kClusters, kmIter)
+        bullCMin := cmn
+        bullCMax := cmx
+        bullCW   := cw
+        bullCCnt := ccnt
+        bullCT   := ct
+
+if detBearEvt
+    array.push(bearPx,   math.max(open, close))
+    array.push(bearW,    math.abs(barDelta))
+    array.push(bearTime, time)
+    if array.size(bearPx) > maxDet
+        array.shift(bearPx)
+        array.shift(bearW)
+        array.shift(bearTime)
+    if showDeltaAreas
+        [cmn, cmx, cw, ccnt, ct] = f_kmeans(bearPx, bearW, bearTime, kClusters, kmIter)
+        bearCMin := cmn
+        bearCMax := cmx
+        bearCW   := cw
+        bearCCnt := ccnt
+        bearCT   := ct
+
+f_renderEdges(heatLines, heatLabels, bullCMin, bullCMax, bullCW, bullCCnt, bullCT, bearCMin, bearCMax, bearCW, bearCCnt, bearCT)
+
+// ─── Condition 4: Delta-line break / rejection (CORREGIDO) ──────────────────
+// ARREGLO 1: Antes, si en la misma vela había rotura alcista Y rechazo bajista
+//   a la vez, c4dir se quedaba CONGELADO. Ahora lo último que pasa manda.
+// ARREGLO 2: Antes el breakout comparaba close[2] contra un nivel que se
+//   recalcula. Ahora el cruce usa solo 1 vela de referencia (close[1]).
+// ARREGLO 3: Antes el rebote se disparaba en CADA vela. Ahora exige que la
+//   mecha entre al nivel SOLO en esta vela.
+c4Levels = f_collectLevels(bullCMin, bullCMax, bullCW, bullCCnt, bearCMin, bearCMax, bearCW, bearCCnt, minZoneH)
+if array.size(c4Levels) > 0
+    for i = 0 to array.size(c4Levels) - 1
+        L = array.get(c4Levels, i)
+        // BREAKOUT al alza  o  REJECTION/rebote al alza  →  alcista
+        if (close > L and close[1] <= L) or (close > L and low <= L and low[1] > L)
+            c4dir := 1
+        // BREAKOUT a la baja  o  REJECTION al alza  →  bajista
+        if (close < L and close[1] >= L) or (close < L and high >= L and high[1] < L)
+            c4dir := -1
+
+// ─── Condition 5: Multi-Timeframe Confirmation (MTF) ────────────────────────
+// C7 ahora es direccional (igual que C4) y SÍ participa en el régimen local.
+currentLocalBull = (c1Bull ? 1 : 0) + (c2Bull ? 1 : 0) + (c3Bull ? 1 : 0) + (c4dir == 1 ? 1 : 0) + (c6Bull ? 1 : 0) + (c7Bull ? 1 : 0)
+currentLocalBear = (c1Bear ? 1 : 0) + (c2Bear ? 1 : 0) + (c3Bear ? 1 : 0) + (c4dir == -1 ? 1 : 0) + (c6Bear ? 1 : 0) + (c7Bear ? 1 : 0)
+estLocalRegime   = currentLocalBull >= currentLocalBear ? 1 : -1
+
+mtfRegime = request.security(syminfo.tickerid, mtf_conf, estLocalRegime[1], barmerge.gaps_off, barmerge.lookahead_off)
+
+c5Bull = mtfRegime == 1
+c5Bear = mtfRegime == -1
+
+// ─── Conteo de Votos Totales (Máximo 7) ──────────────────────────────────────
+countBull = (c1Bull ? 1 : 0) + (c2Bull ? 1 : 0) + (c3Bull ? 1 : 0) + (c4dir == 1 ? 1 : 0) + (c5Bull ? 1 : 0) + (c6Bull ? 1 : 0) + (c7Bull ? 1 : 0)
+countBear = (c1Bear ? 1 : 0) + (c2Bear ? 1 : 0) + (c3Bear ? 1 : 0) + (c4dir == -1 ? 1 : 0) + (c5Bear ? 1 : 0) + (c6Bear ? 1 : 0) + (c7Bear ? 1 : 0)
+
+// ─── Algoritmo de Histéresis (Filtro Anti-Efecto Sierra) ─────────────────────
+var int regime = -1 // Inicialización por defecto en Bearish
+
+if regime == -1 and countBull >= minVotesBull
+    regime := 1  // Solo pasa a Bullish si supera el umbral exigente de compras
+else if regime == 1 and countBear >= minVotesBear
+    regime := -1 // Solo pasa a Bearish si los bajistas recuperan con fuerza el umbral exigente
+
+// Asignación limpia de colores según el sesgo directo amortiguado
+color biasColor = regime == 1 ? color.new(color.lime, 90) : color.new(color.red, 90)
+
+// ─── Plots (visible during London+NY session, or 24h with mode24h) ─────────
+plot(showSma and inSession ? sma200htf : na, "SMA 200 HTF", color=c1Bull ? color.lime : c1Bear ? color.red : color.gray, linewidth=2)
+plot(showSma and inSession ? sma50htf : na, "SMA 50 HTF", color=color.orange, linewidth=1)
+plot(showSma and inSession ? sqa27htf : na, "SQA 27 HTF", color=color.white, linewidth=2)
+bgcolor(showBg and inSession ? biasColor : na)
+
+// Votos expuestos en la Data Window
+plot(countBull, "Total BULL VOTE Count", color=color.green, display=display.data_window)
+plot(countBear, "Total BEAR VOTE Count", color=color.red, display=display.data_window)
+plot(c1dir, "C1 · Close vs SMA200", color=color.green, display=display.data_window)
+plot(c2Bull ? 1 : c2Bear ? -1 : 0, "C2 · Delta Flow Vol", color=color.aqua, display=display.data_window)
+plot(c3dir, "C3 · SQA27 vs SMA50 vote", color=color.purple, display=display.data_window)
+plot(c4dir, "C4 · delta-line vote", color=color.gray, display=display.data_window)
+plot(c5Bull ? 1 : c5Bear ? -1 : 0, "C5 · MTF confirmation vote", color=color.orange, display=display.data_window)
+plot(c6dir, "C6 · SMA5 vs SMA200 vote", color=color.blue, display=display.data_window)
+plot(c7Bull ? 1 : c7Bear ? -1 : 0, "C7 · Volume Anomaly break/reject", color=color.yellow, display=display.data_window)
+
+// ─── Delta bubbles ─────────────────────────────────────────────────────────
+f_size(float v) =>
+    r = effThresh > 0 ? math.abs(v) / effThresh : 1.0
+    r >= 3 ? size.large : r >= 1.8 ? size.normal : size.small
+
+if showBubbles and deltaBull and inSession
+    label.new(bar_index, low,  f_fmt(barDelta), yloc=yloc.belowbar, style=label.style_circle, color=color.new(color.lime,15), textcolor=color.black, size=f_size(barDelta))
+if showBubbles and deltaBear and inSession
+    label.new(bar_index, high, f_fmt(barDelta), yloc=yloc.abovebar, style=label.style_circle, color=color.new(color.red,15), textcolor=color.white, size=f_size(barDelta))
+
+// ─── Alerts ────────────────────────────────────────────────────────────────
+alertcondition(regime == 1 and regime[1] != 1, "Switch to BULLISH", "Bias: Hysteresis BULLISH regime")
+alertcondition(regime == -1 and regime[1] != -1, "Switch to BEARISH", "Bias: Hysteresis BEARISH regime")
+alertcondition(isVolumeAnomaly, "Volume Anomaly (C7)", "Bias: Volume anomaly detected — C7 zone created")

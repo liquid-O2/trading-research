@@ -1,0 +1,74 @@
+{
+  "annual_cpu_total_seconds": 51.375205854,
+  "completed_annual_stage": {
+    "annual_output_bytes": 20759757,
+    "annual_preflight": "all_tables_and_statistics_match",
+    "comparisons": {
+      "exact_values": 13351620,
+      "floating_values": 110377,
+      "maximum_absolute_float_error": 0.0
+    },
+    "extraction_cpu_seconds": 29.541714432,
+    "serialization_cpu_seconds": 6.047789704000003,
+    "statistics_cpu_seconds": 15.785701717999999
+  },
+  "completed_source_audit": {
+    "kind": "jumbo_actual_definition_supersession_report_v1",
+    "sha256": "52ab5cf8044a01533084394035c84c1e8face2c525a8fa5735cc68390b2da642",
+    "size_bytes": 124232
+  },
+  "cpu_seconds": 81.368804,
+  "current_correction_status": "Unexecuted source edits normalize absent compact metadata to null, preserve NaN feature masks, keep missing width distinct from zero width, and bind feature availability to origin/anchor publication rather than future label maturity.",
+  "definition_documentation": "https://databento.com/docs/schemas-and-data-formats/instrument-definitions",
+  "execution": {
+    "path": "reports/jumbo-runs/b77a4794cb12595d3c428e7c176d630452431fb2c64ea8418a830fcd0f37fdb6/execution.json",
+    "sha256": "61ddf5b04aab7ce77f0800f3ff5feb3a952b417b2d9a08af8d995791ecb48ce2",
+    "size_bytes": 29867
+  },
+  "failure": "SpecialTargetInputError: unavailable formation width/fraction were NaN in compact JSON metadata; failure arose in actual source-special model preparation, before actual optimizers.",
+  "family_attempts_consumed": 9,
+  "family_cpu_seconds_consumed": 565.945249,
+  "kind": "jumbo_consolidated_check9_failure_review_v1",
+  "original_cpu_budget_seconds": 2400,
+  "original_maximum_attempts": 10,
+  "overall_attempt_status": "failed",
+  "packet": {
+    "path": "reports/jumbo-runs/b77a4794cb12595d3c428e7c176d630452431fb2c64ea8418a830fcd0f37fdb6/packet.json",
+    "sha256": "346f714ec6b290768d5d1f53c7d97c4a19956603982add38a805f5be2cbabd16",
+    "size_bytes": 64000
+  },
+  "partial_evidence_rule": "The overall failure remains failed. Full annual equality/timing is retained as scoped completed evidence; any future reuse requires exact original data, algorithms, serialization code, runtime providers and recorded log hashes. This review does not itself authorize a new extraction or model execution.",
+  "peak_rss_bytes": 1607720960,
+  "remaining_attempts": 1,
+  "remaining_cpu_seconds": 1834.054751,
+  "source_interpretation_limit": "The executed M-only supplement preserved exclusions. Later official source review establishes that definition snapshots are emitted at UTC midnight on weekdays; A-only records require snapshot interpretation and source-binding verification, not automatic permanent rejection. No snapshot correction has been admitted.",
+  "source_summary": {
+    "actual_accepted": false,
+    "cpu_seconds_internal": 0.6021878420000064,
+    "raw_definition_audit_attempts": [
+      "quantpad/cme__nq-continuous-futures__definition/2019.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2022.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2023.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2025.parquet",
+      "quantpad/cme__nq-continuous-futures__definition/2026.parquet"
+    ],
+    "raw_definition_index_read_files": [],
+    "raw_ohlc_read_attempts": [],
+    "reason_codes": [
+      "a_only_no_authoritative_modification"
+    ],
+    "status": "unresolved",
+    "target_action_counts": {
+      "A": 65
+    }
+  },
+  "tests_passed": 399,
+  "worker_log": {
+    "path": "reports/jumbo-runs/b77a4794cb12595d3c428e7c176d630452431fb2c64ea8418a830fcd0f37fdb6/worker.log",
+    "sha256": "c1518ee50d91577836d0be93c5897056029e3bbc4e1831cbcff02d27ce5d727c",
+    "size_bytes": 65723
+  }
+}

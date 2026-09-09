@@ -1,0 +1,45 @@
+{
+  "schema": "primary-period-admission-design-v1",
+  "proposal": {
+    "path": "/tmp/primary-period-source-binding-proposal.json",
+    "sha256": "9b752def195004dc13c50edde583a16b215d8ede9a327bc3e0d57fc59cb49c46",
+    "size_bytes": 20686
+  },
+  "root_pre_freeze_dispositions": [
+    {
+      "id": "PERIOD-PRE-01",
+      "reason": "Both original/corrected PERIOD05 future protocols must register strictly before the first evaluation observation. B-1 replaces B only for registered_at so the period fixture reaches the intended independent boundary. No implementation was executed."
+    },
+    {
+      "id": "PERIOD-PRE-02",
+      "reason": "Primary sample/observation boundary does not globally reject older static definitions/calendar publication metadata. Optional older Jumbo/OHLC context or comparisons retain separate purpose/cohort provenance; arbitrary preperiod raw_past remains ineligible for primary use."
+    },
+    {
+      "id": "PERIOD-PRE-03",
+      "reason": "Future confirmation protocols may declare future endpoints before observations exist. Actual source availability is checked at data admission/model reads/result completion; a planned future endpoint is not a completed eligible observation."
+    }
+  ],
+  "scope": "An immutable typed policy/purpose/population admission envelope preserves existing legacy diagnostic wire schemas. The new primary path must bind complete population hashes and actual-cut scope through cohorts, both folds, models, calibration, measurement-fit admission and protocol evaluation; omitted scope cannot confer primary eligibility. No raw source/partition clipping or old-evidence rewrite.",
+  "implementation_ownership": [
+    "src/trading_research/research/period.py",
+    "src/trading_research/data/cohorts.py",
+    "src/trading_research/research/folds.py",
+    "src/trading_research/research/temporal_folds.py",
+    "src/trading_research/research/models.py",
+    "src/trading_research/research/calibration.py",
+    "src/trading_research/measurements/measurement_fits.py",
+    "src/trading_research/research/protocols.py",
+    "tests/test_primary_period.py"
+  ],
+  "cross_consumer_contract": "Publish a small explicit typed research scope and primary admission surface usable by E0 integration. Model/fold wrappers bind exact policy hash and population; default diagnostic remains visible and cannot be presented as primary. Existing F11 retained bytes/semantic gates remain unchanged.",
+  "resource_limits": {
+    "maximum_cpu_per_attempt": 180,
+    "hard_cpu_seconds": 190,
+    "address_space_bytes": 4294967296,
+    "wall_seconds": 360,
+    "maximum_attempts": 3,
+    "cpu_budget_seconds": 600
+  },
+  "verification": "Seven fixed literal case groups plus complete earlier851-assertion baseline, one combined reviewed supervised E0/period batch. Candidate imports/compilation/private tests prohibited before that run. No real model/data evaluation.",
+  "whole_definition_or_phase_closure": false
+}

@@ -1,0 +1,7 @@
+{
+  "execution": "/workspace/trading-research/reports/auction-flow-runs/923e84fe30e27aa2be4edf97c770dee851ed5e2ae113e1090ddd78432eed16f8/execution.json",
+  "traceback": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3065, in worker\n    authenticated = authenticate_registered_packet(packet_path)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 390, in authenticate_registered_packet\n    checked(ROOT / name, sha)\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 70, in checked\n    raise ValueError(f'frozen input changed: {path}')\nValueError: frozen input changed: /workspace/trading-research/src/trading_research/research/options_quote_measurements.py\n",
+  "candidate_executed": false,
+  "cpu_seconds": 1.17504,
+  "decision": "Finish quote edits, then wait through complete parent+worker authentication before further source edits. Same unchanged profile diagnostic, no consumer correction."
+}

@@ -1,0 +1,111 @@
+{
+  "status": "complete_static_review_findings_collected_no_repairs_no_execution",
+  "reviewer": "/root/f04_batch_review",
+  "scope": "F09-F12 shared supervisor, coverage normalizer, evidence recorder and direct verification/ledger/trial interfaces",
+  "recorded_at": "2026-09-06T22:43:49.664203+00:00",
+  "reviewed_identities": [
+    {
+      "path": "tools/verify_f09_f12.py",
+      "sha256": "c95dd824ff5a97ac0a3343643378464326673b3445e960ab5437f79f1cba7fbb",
+      "bytes": 23959
+    },
+    {
+      "path": "tools/record_f09_f12.py",
+      "sha256": "5a961ab8de140267a8a6b355603f41508cb0cfcad09064aa2ce74581723b062e",
+      "bytes": 12931
+    },
+    {
+      "path": "tools/map_f09_f12.py",
+      "sha256": "7835c23af1e19184fb372fc2a9680c2cf58b343dfa48b05a4ad7d2833a69169d",
+      "bytes": 5959
+    },
+    {
+      "path": "src/trading_research/verify.py",
+      "sha256": "636fc207d84c20c64cd55cdefaff0cdc3738c22367c989afa7ef7ecd610f20b3",
+      "bytes": 8865
+    },
+    {
+      "path": "src/trading_research/operations/trials.py",
+      "sha256": "7c5b0a21e979af10abd31fee143a03fb102eab5b36a54683056d9eac3f78ba4f",
+      "bytes": 8390
+    },
+    {
+      "path": "src/trading_research/operations/artifacts.py",
+      "sha256": "4b13058530d7a5ee95a2e39ebeea6d14c0f2930626330df1ed22c52b083e7c33",
+      "bytes": 6038
+    },
+    {
+      "path": "src/trading_research/operations/ledger.py",
+      "sha256": "dc0b5b1189b4f9bfde7f483f0f1103d927eda69ea6caf9f261b10a9bb2bc064b",
+      "bytes": 15670
+    }
+  ],
+  "findings": [
+    {
+      "id": "ORCH-R01",
+      "severity": "high",
+      "location": "tools/verify_f09_f12.py:377",
+      "finding": "Aggregate attempt CPU is not enforced",
+      "detail": "The worker uses per-process RLIMIT_CPU and process.wait(timeout=240), while F11/F12 fork real child workers. Multiple processes can exceed the shared 180-second physical-attempt reservation without any individual process exceeding its CPU limit.",
+      "repair": "Poll aggregate live group CPU plus reaped child CPU, avoiding double counting, and terminate at the frozen aggregate soft limit; preserve the hard per-process and wall limits and retain observed resource charges."
+    },
+    {
+      "id": "ORCH-R02",
+      "severity": "high",
+      "location": "tools/verify_f09_f12.py:206-219,383",
+      "finding": "Malformed result can permanently strand reserved attempts",
+      "detail": "A parsed result can be non-None but omit artifact/code_snapshot or reference missing/corrupt bytes. Exception handling preserves that result in durable interrupted completion. finalize indexes and copies those fields before finishing any family, and recovery repeats the same failing operation.",
+      "repair": "Validate result schema and referenced artifacts before accepting it as a verification result; preserve malformed raw output separately, then terminalize interrupted members with available evidence and correct charges. Artifact-copy failure must remain explicitly recoverable without a worker rerun."
+    },
+    {
+      "id": "ORCH-R03",
+      "severity": "high",
+      "location": "tools/verify_f09_f12.py:283-317",
+      "finding": "Leader death leaves live fork descendants unrecoverable",
+      "detail": "Recovery identifies inherited worker argv in fork descendants but calls killpg(child PID), although descendants remain in the original leader process group. After leader death this misses the executable group and live_groups retains the gate indefinitely.",
+      "repair": "Resolve and validate actual process-group identity from surviving exact-command descendants and retained launch identity before group termination. Retain process start identity so PID reuse cannot be confused with the original worker."
+    },
+    {
+      "id": "ORCH-R04",
+      "severity": "medium",
+      "location": "tools/verify_f09_f12.py:283-325",
+      "finding": "Shared lifecycle directory has incompatible recovery routing",
+      "detail": "The new supervisor gates on unresolved lifecycle files also used by the older F05-F08 supervisor, but --recover requires acknowledgement worker_source to equal the new script. An older unresolved run therefore receives a recovery instruction the new command cannot fulfill.",
+      "repair": "Record and validate supervisor identity per lifecycle and dispatch or print the exact owning recovery command for foreign runs. Never launch another worker to recover."
+    },
+    {
+      "id": "ORCH-R05",
+      "severity": "high",
+      "location": "src/trading_research/verify.py:104-125; tools/record_f09_f12.py",
+      "finding": "Metrics presence is weaker than frozen performance evidence requirements",
+      "detail": "Metrics collection accepts any dictionary including empty, validates JSON finiteness only, and is triggered by any passed test in a module. Recorder relays these values without checking mandatory fields or that the performance/parity assertion ran successfully.",
+      "repair": "Specify a finite schema for each family, bind it to the exact successful performance assertion identity, and validate required timing/memory/counter/parity fields and bounds before marking success or attaching evidence."
+    },
+    {
+      "id": "ORCH-R06",
+      "severity": "medium",
+      "location": "tools/verify_f09_f12.py:148-177",
+      "finding": "Preflight does not prove all collected findings received a disposition",
+      "detail": "Review preflight checks existing disposition values and supplied identity lists; empty dispositions or omitted reviewer reports pass those conditions. It does not compare disposition keys with the union of required collected finding IDs.",
+      "repair": "Require the batch review to enumerate the intended implementation and orchestration reviews, resolve every finding ID exactly once, reject omitted/extra dispositions, and retain those exact reviewed sources and repair reports."
+    },
+    {
+      "id": "ORCH-R07",
+      "severity": "medium",
+      "location": "tools/map_f09_f12.py; tools/verify_f09_f12.py:148-177",
+      "finding": "Mapping script provenance is not retained with execution",
+      "detail": "Mapping metadata hashes the normalizer but the code snapshot excludes tools and preflight retains supervisor and recorder only. A later mapping cannot be reproduced from retained script bytes unless separately added to the review input list.",
+      "repair": "Retain the normalizer bytes and its exact source inputs in preflight and bind mapping input hashes to those artifacts and frozen registration source bytes."
+    }
+  ],
+  "confirmed": [
+    "Registration protocol/golden pins and exact finite literal/source binding sets are checked before reservation.",
+    "One worker services four distinct family attempts and all successful assertion IDs are retained.",
+    "Recorder checks current code snapshot, immutable result membership and observed resource charges; ledger attachment uses idempotent keys and explicit partial engineering state.",
+    "No market data read, candidate execution, test run, compilation, repair or evidence attachment performed during this review."
+  ],
+  "remaining": [
+    "Apply one consolidated repair after all implementation reviews are collected, statically verify dispositions, then run the authorized shared full suite.",
+    "Scope remains partial engineering; real parent-outright gate and broader market validation remain open."
+  ]
+}

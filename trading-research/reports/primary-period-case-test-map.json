@@ -1,0 +1,176 @@
+{
+  "test_modules": [
+    "tests.test_primary_period"
+  ],
+  "cases": [
+    {
+      "case_id": "PERIOD-01-before-boundary",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-02-exact-boundary",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-03-prefix-no-range",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_03_prefix_without_range_stays_observed_only"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-04-fold-boundary-and-lookback",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-05-evaluation-registration",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-06-period-pass-source-fail",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_06_inrange_missing_source_remains_source_failure"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    },
+    {
+      "case_id": "PERIOD-07-terms-and-calendar-block",
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks"
+      ],
+      "remaining": [
+        "Static case mapping only; registered candidate execution and complete source/phase closure remain pending."
+      ]
+    }
+  ],
+  "source_dispositions": [
+    {
+      "source_id": "PERIOD-SRC-POLICY",
+      "case_ids": [
+        "PERIOD-01-before-boundary",
+        "PERIOD-02-exact-boundary",
+        "PERIOD-03-prefix-no-range",
+        "PERIOD-04-fold-boundary-and-lookback",
+        "PERIOD-05-evaluation-registration",
+        "PERIOD-06-period-pass-source-fail",
+        "PERIOD-07-terms-and-calendar-block"
+      ],
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_03_prefix_without_range_stays_observed_only",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_06_inrange_missing_source_remains_source_failure",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks"
+      ],
+      "covered_mechanism": "Primary training/calibration/evaluation population starts at 2020-01-01 inclusive; only Jumbo/OHLC older optional uses are allowed under declared separate purposes.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The cited policy mechanism is statically mapped only; complete original-source, parent/phase, and execution closure remains open."
+      ]
+    },
+    {
+      "source_id": "PERIOD-SRC-CONFIG",
+      "case_ids": [
+        "PERIOD-01-before-boundary",
+        "PERIOD-02-exact-boundary",
+        "PERIOD-05-evaluation-registration"
+      ],
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path"
+      ],
+      "covered_mechanism": "Machine-readable lower boundary and actual-availability end; prior raw/source/evidence remains immutable.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The cited configuration mechanism is statically mapped only; complete source and registered execution closure remains open."
+      ]
+    },
+    {
+      "source_id": "PERIOD-SRC-V02",
+      "case_ids": [
+        "PERIOD-04-fold-boundary-and-lookback",
+        "PERIOD-05-evaluation-registration"
+      ],
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path"
+      ],
+      "covered_mechanism": "V02 full retained populations, maturity/embargo, fitted/calibration closure and V03 immutable cohort/evaluation scope remain independent gates.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The cited V02/V03 mechanism is statically mapped only; complete original-source and phase closure remains open."
+      ]
+    },
+    {
+      "source_id": "PERIOD-SRC-SOURCE",
+      "case_ids": [
+        "PERIOD-01-before-boundary",
+        "PERIOD-02-exact-boundary",
+        "PERIOD-03-prefix-no-range",
+        "PERIOD-04-fold-boundary-and-lookback",
+        "PERIOD-05-evaluation-registration",
+        "PERIOD-06-period-pass-source-fail",
+        "PERIOD-07-terms-and-calendar-block"
+      ],
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_03_prefix_without_range_stays_observed_only",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_06_inrange_missing_source_remains_source_failure",
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks"
+      ],
+      "covered_mechanism": "Exact source/cohort/operation validity, timestamps and contract/venue eligibility cannot be inferred from period membership.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The cited source mechanism is statically mapped only; complete data, venue, parent-universe and execution closure remains open."
+      ]
+    },
+    {
+      "source_id": "PERIOD-SRC-E0",
+      "case_ids": [
+        "PERIOD-07-terms-and-calendar-block"
+      ],
+      "assertion_ids": [
+        "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks"
+      ],
+      "covered_mechanism": "Historical 2022-25 E0 harness is retained separately from primary 2020-onward scope; exact definition/calendar/parent-volume completeness still applies.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The historical E0 mechanism is statically mapped only; complete market-data and economic closure remains open."
+      ]
+    }
+  ],
+  "remaining": [
+    "Actual registered candidate execution is pending; this map does not claim imports, compilation, tests, CLI use, market-tape reads, model fits, economic runs, or whole-source/phase closure."
+  ],
+  "candidate_imports_or_executions": false
+}

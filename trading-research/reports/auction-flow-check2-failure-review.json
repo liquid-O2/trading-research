@@ -1,0 +1,32 @@
+{
+  "attempt_output_bytes": 211887,
+  "cause": "The original raw and excluded projections were RecordBatch objects; the complete-source concatenation/retention boundary requires Arrow Tables. The one remaining error surfaced that shared interface mismatch.",
+  "cpu_seconds": 38.651528,
+  "cumulative_cpu_seconds": 76.141537,
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/383c81a1dac20c8ae11e7601f27be8295b82ce64f2a23fabbc20d8ceaa0086ab/execution.json",
+    "sha256": "510b252914499741991609e5833409cd5a53b5821cbbe83d900453e50caa9e97",
+    "size_bytes": 19461
+  },
+  "family": "Research-Auction-Flow-acquired-MBP-v1",
+  "kind": "auction_flow_second_check_failure_review_v1",
+  "market_preflight_executed": false,
+  "new_data_or_models": false,
+  "passed_support": "Boolean conversion and full value-based Parquet comparison checks passed, including exact large clocks, nullable/sliced values, signed zero and NaN payload bits. Native/time-at-price arithmetic cases passed.",
+  "peak_rss_bytes": 194514944,
+  "prepared_repair": "Normalize raw/excluded projections to Arrow Tables inside the source producer after retaining the unchanged original all-field fingerprint. Quotes/trades were already Tables. Explicit source-interface check added; original values, physical row addresses and source order unchanged.",
+  "preserve_failed_status": true,
+  "registered_attempts_consumed": 2,
+  "tests": {
+    "cpu_seconds": 35.792288201,
+    "errors": 1,
+    "failures": 0,
+    "success": false,
+    "tests": 234
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/383c81a1dac20c8ae11e7601f27be8295b82ce64f2a23fabbc20d8ceaa0086ab/worker.log",
+    "sha256": "2c47a3889b5f62d5768f8ca67240278acd2d4464dbf1c167ed9fd800b8fef461",
+    "size_bytes": 39831
+  }
+}

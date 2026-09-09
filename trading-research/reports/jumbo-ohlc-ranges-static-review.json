@@ -1,0 +1,90 @@
+{
+  "schema": "JumboOHLCRangesStaticReviewV1",
+  "scope": "Exact new module source read against independent17literal cases. No candidate imports/compile/tests/CLI/data execution. Tests source is being authored separately.",
+  "source": {
+    "path": "/workspace/trading-research/src/trading_research/research/ohlc_ranges.py",
+    "sha256": "0638996a4685ae31bce074e7ce6010282627df8ca285d8ca39ef236a1c961a25",
+    "size_bytes": 15689
+  },
+  "findings": [
+    {
+      "id": "JOR01",
+      "severity": "medium",
+      "location": "MinuteBars.__init__ numeric/source validation",
+      "issue": "array(q,...) silently converts bool numeric prices/volume to0/1; truthy non-string source_version accepted. This violates exact integer identity/domain and can mark malformed input valid.",
+      "example": "OHLC=[True,2,0,1],volume=True,valid=True passes geometry/positivevolume checks; source_version={\"mutable\":\"claim\"} also passes.",
+      "recommendation": "Validate exact int/allowed admitted integer scalar domain excludingbool before array conversion and require bounded nonempty str source_version; validate available_at exact nonnegative int when supplied.",
+      "final_disposition": "repaired_statically_pending_shared_verification"
+    },
+    {
+      "id": "JOR02",
+      "severity": "medium",
+      "location": "level_outcome contact/definite calculation",
+      "issue": "The first compatible straddle solely determines definite status. A later observed O/H/L/C exactly equal tolevel can prove contact but output remains compatible_straddle_only and conditional_on_contact=True.",
+      "example": "level100:bar0 O98H102L97C101 straddles without equality;bar1 O100H104L99C103 proves laterprint100; currentoutput ignores that proof.",
+      "recommendation": "Retain earliest compatible A and first definite D; status definite if D exists. Guaranteed post-contact lower bounds begin at D close/later bars; if no D, use latest compatible bar for conditional lower bound. Upper bounds may use A onward. Tests include earlier110peak before any definite100 print and no-definite multiple-straddle case.",
+      "final_disposition": "repaired_statically_pending_shared_verification"
+    },
+    {
+      "id": "JOR03",
+      "severity": "medium",
+      "location": "MinuteBars public mutable arrays + OhlcWindow.version",
+      "issue": "Arrays and source_version are public mutable; existing window stores only initial reasons/indexes. Mutation after window admission can change geometry/path while version and complete state stay unchanged, including known_at changes bypassing availability.",
+      "recommendation": "Expose immutable/read-only storage or validate identity/content before use. If deliberately trusting internal ownership, constrain API and provenance claim explicitly; no stale admitted window should survive source mutation.",
+      "final_disposition": "repaired_statically_pending_shared_verification"
+    }
+  ],
+  "nonblocking_limits": [
+    "summary and level_outcome report floats for fractional geometry/bounds; preserve exact core Fraction and numerator/denominator sourcelevel, label reporting precision explicitly or add exact pairs for nonbinary fractions.",
+    "range_path close-confirmed reclaim is an end-of-bar observed-prefix fact, not exact intraminute reclaim timestamp.",
+    "wall_interval rejects repeated DSTtime without fold support; appropriate for rejection fixtures but no fold-resolved variant is available in this API."
+  ],
+  "case_assessment": "JO01-JO17 core numerical/window/path behaviors appear compatible by reading; JO15 uses separate actual LabelLedger regression. Additional literal negative cases will expose JOR01/02/03 where stable public API permits.",
+  "test_source": {
+    "path": "/workspace/trading-research/tests/test_ohlc_ranges.py",
+    "sha256": "89e2a44f29d89395e558127d04293adc153ac310dcadc6e77b17d2d5ac852c4a",
+    "size_bytes": 21379,
+    "methods": [
+      "test_jo01_half_open_and_delayed_final_publication",
+      "test_jo02_jo17_units_and_partial_bar_rejection",
+      "test_jo03_missing_first_middle_last_and_invalid_minutes",
+      "test_jo04_jo05_duplicate_and_cross_raw_contract_rejection",
+      "test_jo06_jo07_zero_width_and_distinct_exact_geometry",
+      "test_jo08_strict_break_and_inclusive_reach_are_different",
+      "test_jo09_jo10_dual_hit_order_and_open_evidence",
+      "test_jo11_later_second_hit_retains_distinct_intervals",
+      "test_jo12_close_confirmed_reclaim_uses_delayed_publication",
+      "test_jo13_contact_bar_excursions_are_bounds_with_side_mirror",
+      "test_jo14_gap_through_is_not_an_observed_level_print",
+      "test_jo15_actual_label_ledger_distinguishes_empty_flat_and_carry",
+      "test_jo16_dst_short_cash_day_and_overnight_offsets",
+      "test_exact_numerical_identity_rejects_bool_and_mutable_source_claims",
+      "test_later_definite_print_does_not_disappear_after_earlier_straddle",
+      "test_admitted_window_cannot_change_under_the_same_identity"
+    ],
+    "method_count": 16,
+    "coverage": "All17independent literals grouped in13methods, plus3domain/contact-lineage methods. Actual LabelLedger append_price_outcome+restore validates censored/observed-flat/explicitcarry/gap and process mismatch.",
+    "execution": "AST structural read only; no candidate imports, compile, tests or CLI."
+  },
+  "root_repair_status": "JOR01\u201303 repaired and independently reread statically; all17literal mechanisms and3additional finding cases represented in16 test methods. No execution.",
+  "final_reviewed_files": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/ohlc_ranges.py",
+      "sha256": "ce114903ffce1033ac8543fb0a2a086a6fecb5e2b70e1dc36f1d46434ba7144b",
+      "size_bytes": 17459,
+      "AST": "readable"
+    },
+    {
+      "path": "/workspace/trading-research/tests/test_ohlc_ranges.py",
+      "sha256": "89e2a44f29d89395e558127d04293adc153ac310dcadc6e77b17d2d5ac852c4a",
+      "size_bytes": 21379,
+      "AST": "readable"
+    }
+  ],
+  "final_assessment": [
+    "Frozen slotted MinuteBars copies exact int columns into immutable bytes-backed read-only views; source identity and optional availability strictly typed.",
+    "Level outcome separately records earliest compatible and first definite print; first actual contact is bounded between A.start and latest.end. Conservative lower excursions use latest possible contact, upper excursions use earliest compatible interval onward.",
+    "Actual LabelLedger append/restore test verifies low-level censored status propagation and explicit process match; no fake flat points for empty actual observations.",
+    "No additional blocking finding in this bounded module review. Reporting floats are explicit nonblocking precision limitation; exact core geometry remains Fraction."
+  ]
+}

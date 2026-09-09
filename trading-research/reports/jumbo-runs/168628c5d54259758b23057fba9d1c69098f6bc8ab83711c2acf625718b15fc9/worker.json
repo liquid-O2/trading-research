@@ -1,0 +1,2247 @@
+{
+  "attempt_id": "168628c5d54259758b23057fba9d1c69098f6bc8ab83711c2acf625718b15fc9",
+  "code_snapshot": {
+    "kind": "code_snapshot",
+    "sha256": "a88d1edace03df482d50aefbd5a7c5639183ac2cd8237f52475b97b5e270f50d",
+    "size_bytes": 10685290
+  },
+  "coverage_limit": "Rows and partitions are admitted here. Complete formation/future windows, roll exclusions, statistics and predictive evidence are separate outputs.",
+  "cpu_seconds_internal": 115.99347794,
+  "definitions": {
+    "ES": {
+      "artifact": {
+        "kind": "jumbo_complete_definition_admission",
+        "sha256": "501f6c8ffef42c5e24f2e0cdb7e65d1cb48e8a9fe77e1693508d79bf37b157dd",
+        "size_bytes": 1425441
+      },
+      "cpu_seconds": 1.2165641599999972,
+      "indexed_records": 1980,
+      "source_files": [
+        "quantpad/cme__es-continuous-futures__definition/2019.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2020.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2021.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2022.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2023.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2025.parquet",
+        "quantpad/cme__es-continuous-futures__definition/2026.parquet"
+      ],
+      "source_rows": 1980,
+      "unresolved_rows": 0
+    },
+    "NQ": {
+      "artifact": {
+        "kind": "jumbo_complete_definition_admission",
+        "sha256": "636cca6b3252b651f1a3491ffecfcef7b27cece4db6bb5be37159c043fbaead6",
+        "size_bytes": 1427198
+      },
+      "cpu_seconds": 1.0895701309999999,
+      "indexed_records": 1981,
+      "source_files": [
+        "quantpad/cme__nq-continuous-futures__definition/2019.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2022.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2023.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2025.parquet",
+        "quantpad/cme__nq-continuous-futures__definition/2026.parquet"
+      ],
+      "source_rows": 1981,
+      "unresolved_rows": 0
+    }
+  },
+  "derived_output_bytes": 172435349,
+  "economic_or_live_runs": 0,
+  "expansion_estimate": {
+    "basis": "actual full-partition pilot; remaining source-byte ratio x2 plus15CPU seconds; output x1.25",
+    "memory_basis": "same sequential per-file admission, at most declared600000rows; root-level research indexing measured later",
+    "remaining_cpu_seconds_conservative": 15.0,
+    "total_derived_bytes_conservative": 215544186.25,
+    "within_declared_allowance": true
+  },
+  "family_statistics_complete": false,
+  "mode": "admit",
+  "model_fits": 0,
+  "partitions": [
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "d68bc488a32ea36d22a0fba2fc459a058c0ddefdde571e8fbac3baadce8f8917",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 346579,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "2fa2edae74cadf9f01e312a30e74024dd56021b32e9d06bb3a99743b40c07e87",
+        "size_bytes": 12772512
+      },
+      "cpu_seconds": 1.4403783640000003,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1577919600000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 373,
+        "last_end_ns": 1609452000000000000,
+        "last_known_at_ns": 1609452060000000000,
+        "positive_interval_gap_count": 1646,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+          "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+          "NQ:NQM0:16908:1552685400000000000:1592573400000000000",
+          "NQ:NQU0:14028:1561123800000000000:1600435800000000000",
+          "NQ:NQZ0:16337:1568986200000000000:1608301800000000000"
+        ],
+        "rows": 346579,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10737660000000000,
+        "valid_rows": 346206
+      },
+      "primary_coverage": {
+        "first_start_ns": 1577919600000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 373,
+        "last_end_ns": 1609452000000000000,
+        "last_known_at_ns": 1609452060000000000,
+        "positive_interval_gap_count": 1646,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+          "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+          "NQ:NQM0:16908:1552685400000000000:1592573400000000000",
+          "NQ:NQU0:14028:1561123800000000000:1600435800000000000",
+          "NQ:NQZ0:16337:1568986200000000000:1608301800000000000"
+        ],
+        "rows": 346579,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10737660000000000,
+        "valid_rows": 346206
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 373
+      },
+      "reused_pilot_admission": true,
+      "root": "NQ",
+      "source_bytes": 5233037,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2020.parquet",
+      "source_sha256": "9aefce4864bf0b799d6e1ea8ba60646226a5561d63fda0ba9b84f3c73e2e3714"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "5d15458170502e0ac3ca6b1995cf5f8feaa79bed75e3585c93d6a5582b59b5b9",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 349504,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "d45292b3fde4e139dccc6ae0f564fd6ebea89c7cf43c0c0f4175e2688cb5d5d0",
+        "size_bytes": 12835333
+      },
+      "cpu_seconds": 10.510920531,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1609714800000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1640988000000000000,
+        "last_known_at_ns": 1640988060000000000,
+        "positive_interval_gap_count": 1168,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+          "NQ:NQH2:3541:1608301800000000000:1647610200000000000",
+          "NQ:NQM1:2786:1584711000000000000:1624023000000000000",
+          "NQ:NQU1:828:1592573400000000000:1631885400000000000",
+          "NQ:NQZ1:2770:1600435800000000000:1639751400000000000"
+        ],
+        "rows": 349504,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10302960000000000,
+        "valid_rows": 349080
+      },
+      "primary_coverage": {
+        "first_start_ns": 1609714800000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1640988000000000000,
+        "last_known_at_ns": 1640988060000000000,
+        "positive_interval_gap_count": 1168,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+          "NQ:NQH2:3541:1608301800000000000:1647610200000000000",
+          "NQ:NQM1:2786:1584711000000000000:1624023000000000000",
+          "NQ:NQU1:828:1592573400000000000:1631885400000000000",
+          "NQ:NQZ1:2770:1600435800000000000:1639751400000000000"
+        ],
+        "rows": 349504,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10302960000000000,
+        "valid_rows": 349080
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "NQ",
+      "source_bytes": 5193369,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2021.parquet",
+      "source_sha256": "bd307da1752b5090947c5d49b7337b6d2d077f9a362e34a89a6824940513a315"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "816dfad016b463e0e328cbc3ca0af0b5c460d337fbff43b4d0d93c5ff27684a5",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 351611,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "6bc23b13085d7ea6cd61da7a7336d070aa7f6814a8df49f67c43256a60b1f6b3",
+        "size_bytes": 13128188
+      },
+      "cpu_seconds": 10.540876407999999,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1641164400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1672437600000000000,
+        "last_known_at_ns": 1672437660000000000,
+        "positive_interval_gap_count": 733,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH2:3541:1608301800000000000:1647610200000000000",
+          "NQ:NQH3:20631:1639751400000000000:1679059800000000000",
+          "NQ:NQM2:2895:1616160600000000000:1655472600000000000",
+          "NQ:NQU2:10391:1624023000000000000:1663335000000000000",
+          "NQ:NQZ2:13613:1631885400000000000:1671201000000000000"
+        ],
+        "rows": 351611,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10176540000000000,
+        "valid_rows": 351187
+      },
+      "primary_coverage": {
+        "first_start_ns": 1641164400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1672437600000000000,
+        "last_known_at_ns": 1672437660000000000,
+        "positive_interval_gap_count": 733,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH2:3541:1608301800000000000:1647610200000000000",
+          "NQ:NQH3:20631:1639751400000000000:1679059800000000000",
+          "NQ:NQM2:2895:1616160600000000000:1655472600000000000",
+          "NQ:NQU2:10391:1624023000000000000:1663335000000000000",
+          "NQ:NQZ2:13613:1631885400000000000:1671201000000000000"
+        ],
+        "rows": 351611,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10176540000000000,
+        "valid_rows": 351187
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "NQ",
+      "source_bytes": 5476794,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2022.parquet",
+      "source_sha256": "2e4c9b17de30c9bf3ada30110e33ed2bf3fb740cf1834b6eb6accc471b74f89a"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "ac6aff3831d239c9654b53eb240acf18037ed600fa29dd5580b8a054ddd562c3",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 349499,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "c7f4eae09219df922fd24569369ed82f1f495fac6a3ee7fc3085612dc2c7f3b7",
+        "size_bytes": 12887217
+      },
+      "cpu_seconds": 10.534067689,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1672700400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1703887200000000000,
+        "last_known_at_ns": 1703887260000000000,
+        "positive_interval_gap_count": 1087,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH3:20631:1639751400000000000:1679059800000000000",
+          "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+          "NQ:NQM3:3522:1647610200000000000:1686922200000000000",
+          "NQ:NQU3:2130:1655472600000000000:1694784600000000000",
+          "NQ:NQZ3:260937:1653082200000000000:1702650600000000000"
+        ],
+        "rows": 349499,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10216860000000000,
+        "valid_rows": 349075
+      },
+      "primary_coverage": {
+        "first_start_ns": 1672700400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1703887200000000000,
+        "last_known_at_ns": 1703887260000000000,
+        "positive_interval_gap_count": 1087,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH3:20631:1639751400000000000:1679059800000000000",
+          "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+          "NQ:NQM3:3522:1647610200000000000:1686922200000000000",
+          "NQ:NQU3:2130:1655472600000000000:1694784600000000000",
+          "NQ:NQZ3:260937:1653082200000000000:1702650600000000000"
+        ],
+        "rows": 349499,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10216860000000000,
+        "valid_rows": 349075
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "NQ",
+      "source_bytes": 5383455,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2023.parquet",
+      "source_sha256": "28a6ca45f105c85441489f7141867f2a2c05bbb9528a82145dc91d9edff0d552"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "c068a57347973be7c8e32bc0d3464a11ae9f89aa7cd39f8fcaac172f054ef9a2",
+        "size_bytes": 1558
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 351696,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "5ce545e87e88341ccb11cca170af8197a9cb8ab80ccc8c42d0b47e2ec1abb65f",
+        "size_bytes": 13006012
+      },
+      "cpu_seconds": 1.3889869770000018,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1704150000000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 33665,
+        "last_end_ns": 1735682400000000000,
+        "last_known_at_ns": 1735682460000000000,
+        "positive_interval_gap_count": 1172,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+          "NQ:NQH5:42288528:1700260200000000000:1742563800000000000",
+          "NQ:NQM4:13743:1679059800000000000:1718976600000000000",
+          "NQ:NQU4:4358:1686922200000000000:1726839000000000000",
+          "NQ:NQZ4:106364:1653082200000000000:1734705000000000000"
+        ],
+        "rows": 351696,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10430640000000000,
+        "valid_rows": 318031
+      },
+      "primary_coverage": {
+        "first_start_ns": 1704150000000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 33665,
+        "last_end_ns": 1735682400000000000,
+        "last_known_at_ns": 1735682460000000000,
+        "positive_interval_gap_count": 1172,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+          "NQ:NQH5:42288528:1700260200000000000:1742563800000000000",
+          "NQ:NQM4:13743:1679059800000000000:1718976600000000000",
+          "NQ:NQU4:4358:1686922200000000000:1726839000000000000",
+          "NQ:NQZ4:106364:1653082200000000000:1734705000000000000"
+        ],
+        "rows": 351696,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10430640000000000,
+        "valid_rows": 318031
+      },
+      "quality_counts": {
+        "IntegrityError": 33241,
+        "ambiguous_definition": 33241,
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": true,
+      "root": "NQ",
+      "source_bytes": 5317527,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+      "source_sha256": "8bd0d4a923f05bd3c94c189f582f7f0ef316e33da697d5a69f66e907ddf24ce2"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "e22506902fd84f6a0e17d1abbf9c37ca4d56461cd0cf386f4fd254cbdf106ee8",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 346578,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "e15a0dba8ffb069dde0a49c79851381423c1b8a0d66b37ca2d1874517ea2809e",
+        "size_bytes": 12931654
+      },
+      "cpu_seconds": 10.382059650999999,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1735772400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1767218400000000000,
+        "last_known_at_ns": 1767218460000000000,
+        "positive_interval_gap_count": 1302,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH5:42288528:1700260200000000000:1742563800000000000",
+          "NQ:NQH6:42002475:1726839000000000000:1774013400000000000",
+          "NQ:NQM5:42005804:1702650600000000000:1750426200000000000",
+          "NQ:NQU5:42008487:1710509400000000000:1758288600000000000",
+          "NQ:NQZ5:158704:1653226200000000000:1766154600000000000"
+        ],
+        "rows": 346578,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10651320000000000,
+        "valid_rows": 346154
+      },
+      "primary_coverage": {
+        "first_start_ns": 1735772400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1767218400000000000,
+        "last_known_at_ns": 1767218460000000000,
+        "positive_interval_gap_count": 1302,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH5:42288528:1700260200000000000:1742563800000000000",
+          "NQ:NQH6:42002475:1726839000000000000:1774013400000000000",
+          "NQ:NQM5:42005804:1702650600000000000:1750426200000000000",
+          "NQ:NQU5:42008487:1710509400000000000:1758288600000000000",
+          "NQ:NQZ5:158704:1653226200000000000:1766154600000000000"
+        ],
+        "rows": 346578,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10651320000000000,
+        "valid_rows": 346154
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "NQ",
+      "source_bytes": 5450142,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+      "source_sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "33b28d86cf658d89f8e951bd2f511e40cb27c908edca0b51d731937aaef8dfa0",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 224364,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "1cbdc489127cabf568c4d587e0e6c409a0866b68ae348e143849a244c3b0e7fb",
+        "size_bytes": 8465344
+      },
+      "cpu_seconds": 6.6870682219999935,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1767308400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 122,
+        "last_end_ns": 1788362400000000000,
+        "last_known_at_ns": 1788362460000000000,
+        "positive_interval_gap_count": 670,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH6:42002475:1726839000000000000:1774013400000000000",
+          "NQ:NQM6:42004058:1734705000000000000:1781789400000000000",
+          "NQ:NQU6:42004177:1742563800000000000:1789738200000000000"
+        ],
+        "rows": 224364,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 7592160000000000,
+        "valid_rows": 224242
+      },
+      "primary_coverage": {
+        "first_start_ns": 1767308400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 122,
+        "last_end_ns": 1788362400000000000,
+        "last_known_at_ns": 1788362460000000000,
+        "positive_interval_gap_count": 670,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "NQ:NQH6:42002475:1726839000000000000:1774013400000000000",
+          "NQ:NQM6:42004058:1734705000000000000:1781789400000000000",
+          "NQ:NQU6:42004177:1742563800000000000:1789738200000000000"
+        ],
+        "rows": 224364,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 7592160000000000,
+        "valid_rows": 224242
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 122
+      },
+      "reused_pilot_admission": false,
+      "root": "NQ",
+      "source_bytes": 3584842,
+      "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+      "source_sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "c097d97270d9ef66d66efd8040f4223b9e7afeb69839d9cf5e775bc251d558e2",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 348139,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "9f80cf610c4c9ef0a984e15f2b6f4a9f40252a806f277ae01c028e62e7f274a3",
+        "size_bytes": 12466683
+      },
+      "cpu_seconds": 1.4446699539999983,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1577919600000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 404,
+        "last_end_ns": 1609452000000000000,
+        "last_known_at_ns": 1609452060000000000,
+        "positive_interval_gap_count": 1285,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH0:10571:1545402600000000000:1584711000000000000",
+          "ES:ESH1:5482:1576852200000000000:1616160600000000000",
+          "ES:ESM0:21336:1552685400000000000:1592573400000000000",
+          "ES:ESU0:12181:1561123800000000000:1600435800000000000",
+          "ES:ESZ0:19100:1568986200000000000:1608301800000000000"
+        ],
+        "rows": 348139,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10644060000000000,
+        "valid_rows": 347735
+      },
+      "primary_coverage": {
+        "first_start_ns": 1577919600000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 404,
+        "last_end_ns": 1609452000000000000,
+        "last_known_at_ns": 1609452060000000000,
+        "positive_interval_gap_count": 1285,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH0:10571:1545402600000000000:1584711000000000000",
+          "ES:ESH1:5482:1576852200000000000:1616160600000000000",
+          "ES:ESM0:21336:1552685400000000000:1592573400000000000",
+          "ES:ESU0:12181:1561123800000000000:1600435800000000000",
+          "ES:ESZ0:19100:1568986200000000000:1608301800000000000"
+        ],
+        "rows": 348139,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10644060000000000,
+        "valid_rows": 347735
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 404
+      },
+      "reused_pilot_admission": true,
+      "root": "ES",
+      "source_bytes": 4780492,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2020.parquet",
+      "source_sha256": "0ee22dd1a9a89f4a2f896c3bab19428f318991e713b3c9907878d8a189a82aa7"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "21a9d19997f7ef9b1dcc1a5dbca87b30310f7233909ab3658818156b3ca4e0d7",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 350146,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "6fdfa5652484bbde97e82ce5cca94741b580f01f7524cb27b09e91411dd7ed3a",
+        "size_bytes": 12477458
+      },
+      "cpu_seconds": 10.646553931,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1609714800000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1640988000000000000,
+        "last_known_at_ns": 1640988060000000000,
+        "positive_interval_gap_count": 896,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH1:5482:1576852200000000000:1616160600000000000",
+          "ES:ESH2:5782:1608301800000000000:1647610200000000000",
+          "ES:ESM1:3853:1584711000000000000:1624023000000000000",
+          "ES:ESU1:1030:1592573400000000000:1631885400000000000",
+          "ES:ESZ1:8858:1600435800000000000:1639751400000000000"
+        ],
+        "rows": 350146,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10264440000000000,
+        "valid_rows": 349722
+      },
+      "primary_coverage": {
+        "first_start_ns": 1609714800000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1640988000000000000,
+        "last_known_at_ns": 1640988060000000000,
+        "positive_interval_gap_count": 896,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH1:5482:1576852200000000000:1616160600000000000",
+          "ES:ESH2:5782:1608301800000000000:1647610200000000000",
+          "ES:ESM1:3853:1584711000000000000:1624023000000000000",
+          "ES:ESU1:1030:1592573400000000000:1631885400000000000",
+          "ES:ESZ1:8858:1600435800000000000:1639751400000000000"
+        ],
+        "rows": 350146,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10264440000000000,
+        "valid_rows": 349722
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 4726739,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2021.parquet",
+      "source_sha256": "5ce5b554710ebf48948286f559d1f8a49a5c343448b54e6b650087385a292907"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "e86d03b2203282f8973f7e1394abc5ac652b353d2451775b66658fa550830b4d",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 352022,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "28d0d109a8235f0cc75f9c4053bec88edbfdf4c4275d22caf898ec4f166fdd2a",
+        "size_bytes": 12687077
+      },
+      "cpu_seconds": 10.721886189000003,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1641164400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1672437600000000000,
+        "last_known_at_ns": 1672437660000000000,
+        "positive_interval_gap_count": 510,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH2:5782:1608301800000000000:1647610200000000000",
+          "ES:ESH3:206299:1622842200000000000:1679059800000000000",
+          "ES:ESM2:3403:1616160600000000000:1655472600000000000",
+          "ES:ESU2:97042:1622842200000000000:1663335000000000000",
+          "ES:ESZ2:206323:1622842200000000000:1671201000000000000"
+        ],
+        "rows": 352022,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10151880000000000,
+        "valid_rows": 351598
+      },
+      "primary_coverage": {
+        "first_start_ns": 1641164400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1672437600000000000,
+        "last_known_at_ns": 1672437660000000000,
+        "positive_interval_gap_count": 510,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH2:5782:1608301800000000000:1647610200000000000",
+          "ES:ESH3:206299:1622842200000000000:1679059800000000000",
+          "ES:ESM2:3403:1616160600000000000:1655472600000000000",
+          "ES:ESU2:97042:1622842200000000000:1663335000000000000",
+          "ES:ESZ2:206323:1622842200000000000:1671201000000000000"
+        ],
+        "rows": 352022,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10151880000000000,
+        "valid_rows": 351598
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 4951451,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2022.parquet",
+      "source_sha256": "1fc757b72343852ed8b07dafffa91c53ab3b2753b28dccff0b3bc619b4eed2ad"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "d24ac39ddbbdc84f11d190ae24c2e1b6bfc3685d1ea76a3645ad7c5c276d6553",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 349907,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "883ccebcf5e274472bb42d7ebc5d28eb72a2ed0676c16914edb72d1bad1c45f2",
+        "size_bytes": 12519130
+      },
+      "cpu_seconds": 10.701259824000005,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1672700400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 421,
+        "last_end_ns": 1703887200000000000,
+        "last_known_at_ns": 1703887260000000000,
+        "positive_interval_gap_count": 915,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH3:206299:1622842200000000000:1679059800000000000",
+          "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+          "ES:ESM3:95414:1622842200000000000:1686922200000000000",
+          "ES:ESU3:3445:1623936600000000000:1694784600000000000",
+          "ES:ESZ3:314863:1622842200000000000:1702650600000000000"
+        ],
+        "rows": 349907,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10192380000000000,
+        "valid_rows": 349486
+      },
+      "primary_coverage": {
+        "first_start_ns": 1672700400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 421,
+        "last_end_ns": 1703887200000000000,
+        "last_known_at_ns": 1703887260000000000,
+        "positive_interval_gap_count": 915,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH3:206299:1622842200000000000:1679059800000000000",
+          "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+          "ES:ESM3:95414:1622842200000000000:1686922200000000000",
+          "ES:ESU3:3445:1623936600000000000:1694784600000000000",
+          "ES:ESZ3:314863:1622842200000000000:1702650600000000000"
+        ],
+        "rows": 349907,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10192380000000000,
+        "valid_rows": 349486
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 421
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 4804524,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2023.parquet",
+      "source_sha256": "c513fd158ef4a9c9b967c9e18cbd41525937fe9acf36402b67ceea7192994361"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "c10a8072cf98404be4848e1eb6516283d2aa5a7ebb7095d9867fbd514ea65335",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 352093,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "285bf9b544088434aa3786cee3d01d849767146dfaddade0716cdb589ae277fb",
+        "size_bytes": 12582155
+      },
+      "cpu_seconds": 10.743909607999996,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1704150000000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1735682400000000000,
+        "last_known_at_ns": 1735682460000000000,
+        "positive_interval_gap_count": 1126,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+          "ES:ESH5:5002:1671201000000000000:1742563800000000000",
+          "ES:ESM4:5602:1647610200000000000:1718976600000000000",
+          "ES:ESU4:118:1655472600000000000:1726839000000000000",
+          "ES:ESZ4:183748:1622842200000000000:1734705000000000000"
+        ],
+        "rows": 352093,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10406820000000000,
+        "valid_rows": 351669
+      },
+      "primary_coverage": {
+        "first_start_ns": 1704150000000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 424,
+        "last_end_ns": 1735682400000000000,
+        "last_known_at_ns": 1735682460000000000,
+        "positive_interval_gap_count": 1126,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+          "ES:ESH5:5002:1671201000000000000:1742563800000000000",
+          "ES:ESM4:5602:1647610200000000000:1718976600000000000",
+          "ES:ESU4:118:1655472600000000000:1726839000000000000",
+          "ES:ESZ4:183748:1622842200000000000:1734705000000000000"
+        ],
+        "rows": 352093,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10406820000000000,
+        "valid_rows": 351669
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 424
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 4891632,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2024.parquet",
+      "source_sha256": "3c3a8dae9a82d2b2881312d29794da299a1790e10ac119d4b901036a160aae0d"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "f13287f199d0aeaa5f8efc995de92e46d469f95ebef0c6bc2a240daabc619f2c",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 347670,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "4237eb63930ae78a0d15818d0fe4a04d93aed073bbaf9a8d5547a7fa12cbd4cb",
+        "size_bytes": 12472375
+      },
+      "cpu_seconds": 10.534905367999997,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1735772400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 423,
+        "last_end_ns": 1767218400000000000,
+        "last_known_at_ns": 1767218460000000000,
+        "positive_interval_gap_count": 830,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH5:5002:1671201000000000000:1742563800000000000",
+          "ES:ESH6:42140878:1692394200000000000:1774013400000000000",
+          "ES:ESM5:4916:1679059800000000000:1750426200000000000",
+          "ES:ESU5:14160:1686922200000000000:1758288600000000000",
+          "ES:ESZ5:294973:1622842200000000000:1766154600000000000"
+        ],
+        "rows": 347670,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10585800000000000,
+        "valid_rows": 347247
+      },
+      "primary_coverage": {
+        "first_start_ns": 1735772400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 423,
+        "last_end_ns": 1767218400000000000,
+        "last_known_at_ns": 1767218460000000000,
+        "positive_interval_gap_count": 830,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH5:5002:1671201000000000000:1742563800000000000",
+          "ES:ESH6:42140878:1692394200000000000:1774013400000000000",
+          "ES:ESM5:4916:1679059800000000000:1750426200000000000",
+          "ES:ESU5:14160:1686922200000000000:1758288600000000000",
+          "ES:ESZ5:294973:1622842200000000000:1766154600000000000"
+        ],
+        "rows": 347670,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 10585800000000000,
+        "valid_rows": 347247
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 423
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 4892595,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2025.parquet",
+      "source_sha256": "d7b620a2d41300dadeb9c2b98c51b3c7232fa873c5985f3247fe267e192345aa"
+    },
+    {
+      "admission_manifest": {
+        "kind": "jumbo_complete_ohlc_admission",
+        "sha256": "a02460ca1014daa32f1e901f9feb778bf1f3cedf785456fe44efc42bf9af502a",
+        "size_bytes": 1504
+      },
+      "canonical_table": {
+        "kind": "jumbo_canonical_ohlc_parquet",
+        "rows": 231922,
+        "schema_sha256": "da0eeab2ca0f5dd4a8690b03e00d382e003072b71f06c08474b60c37ef289f45",
+        "sha256": "54624eb671effc2726b698cc3569143fcd16443b9e879c6751dbff16fff17780",
+        "size_bytes": 8330462
+      },
+      "cpu_seconds": 7.0447183410000065,
+      "excluded_by_period_or_available_cut": 0,
+      "full_coverage": {
+        "first_start_ns": 1767308400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 122,
+        "last_end_ns": 1788362400000000000,
+        "last_known_at_ns": 1788362460000000000,
+        "positive_interval_gap_count": 268,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH6:42140878:1692394200000000000:1774013400000000000",
+          "ES:ESM6:42140864:1692394200000000000:1781789400000000000",
+          "ES:ESU6:42140870:1692394200000000000:1789738200000000000"
+        ],
+        "rows": 231922,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 7138680000000000,
+        "valid_rows": 231800
+      },
+      "primary_coverage": {
+        "first_start_ns": 1767308400000000000,
+        "gap_scope": "Unobserved between-row intervals include scheduled closures; no inference of zero activity or venue status.",
+        "invalid_rows": 122,
+        "last_end_ns": 1788362400000000000,
+        "last_known_at_ns": 1788362460000000000,
+        "positive_interval_gap_count": 268,
+        "raw_contract_change_count": 0,
+        "raw_contracts": [
+          "ES:ESH6:42140878:1692394200000000000:1774013400000000000",
+          "ES:ESM6:42140864:1692394200000000000:1781789400000000000",
+          "ES:ESU6:42140870:1692394200000000000:1789738200000000000"
+        ],
+        "rows": 231922,
+        "strictly_time_ordered": true,
+        "total_between_row_gap_ns": 7138680000000000,
+        "valid_rows": 231800
+      },
+      "quality_counts": {
+        "definition_not_available_at_bar_start": 122
+      },
+      "reused_pilot_admission": false,
+      "root": "ES",
+      "source_bytes": 3196345,
+      "source_path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2026.parquet",
+      "source_sha256": "09d0855e502adf952b5f876a26237c8f2e7e5b56f14e9a1763f0795632f550e6"
+    }
+  ],
+  "primary_rows": 4651730,
+  "protocol_sha256": "44917720ecd064431b83fcb489819989f6a4aceb270e962f1a472fb895b37562",
+  "reconciliation": {
+    "actual_trade_count": 56077,
+    "actual_trade_source": {
+      "kind": "arrow_compact_trades",
+      "sha256": "4d281c613bf084a8106b7f009a7528e121b1fc8fd1cd620a2777ac9aed7a3e3f",
+      "size_bytes": 2524376
+    },
+    "all_compared_minutes": [
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71905,
+          71958,
+          71825,
+          71937,
+          2232
+        ],
+        "source_row": 68060,
+        "source_valid": true,
+        "start_ns": 1710163800000000000,
+        "trade_ohlcv": [
+          71905,
+          71958,
+          71825,
+          71937,
+          2232
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71935,
+          71935,
+          71739,
+          71749,
+          2108
+        ],
+        "source_row": 68061,
+        "source_valid": true,
+        "start_ns": 1710163860000000000,
+        "trade_ohlcv": [
+          71935,
+          71935,
+          71739,
+          71749,
+          2108
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71755,
+          71775,
+          71652,
+          71741,
+          2944
+        ],
+        "source_row": 68062,
+        "source_valid": true,
+        "start_ns": 1710163920000000000,
+        "trade_ohlcv": [
+          71755,
+          71775,
+          71652,
+          71741,
+          2944
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71740,
+          71758,
+          71628,
+          71643,
+          2262
+        ],
+        "source_row": 68063,
+        "source_valid": true,
+        "start_ns": 1710163980000000000,
+        "trade_ohlcv": [
+          71740,
+          71758,
+          71628,
+          71643,
+          2262
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71644,
+          71741,
+          71641,
+          71655,
+          1871
+        ],
+        "source_row": 68064,
+        "source_valid": true,
+        "start_ns": 1710164040000000000,
+        "trade_ohlcv": [
+          71644,
+          71741,
+          71641,
+          71655,
+          1871
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71654,
+          71771,
+          71633,
+          71730,
+          1845
+        ],
+        "source_row": 68065,
+        "source_valid": true,
+        "start_ns": 1710164100000000000,
+        "trade_ohlcv": [
+          71654,
+          71771,
+          71633,
+          71730,
+          1845
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71733,
+          71856,
+          71733,
+          71838,
+          2173
+        ],
+        "source_row": 68066,
+        "source_valid": true,
+        "start_ns": 1710164160000000000,
+        "trade_ohlcv": [
+          71733,
+          71856,
+          71733,
+          71838,
+          2173
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71840,
+          71933,
+          71809,
+          71914,
+          2115
+        ],
+        "source_row": 68067,
+        "source_valid": true,
+        "start_ns": 1710164220000000000,
+        "trade_ohlcv": [
+          71840,
+          71933,
+          71809,
+          71914,
+          2115
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71908,
+          71945,
+          71877,
+          71905,
+          1583
+        ],
+        "source_row": 68068,
+        "source_valid": true,
+        "start_ns": 1710164280000000000,
+        "trade_ohlcv": [
+          71908,
+          71945,
+          71877,
+          71905,
+          1583
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71908,
+          71932,
+          71871,
+          71931,
+          1336
+        ],
+        "source_row": 68069,
+        "source_valid": true,
+        "start_ns": 1710164340000000000,
+        "trade_ohlcv": [
+          71908,
+          71932,
+          71871,
+          71931,
+          1336
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71934,
+          71990,
+          71905,
+          71922,
+          1853
+        ],
+        "source_row": 68070,
+        "source_valid": true,
+        "start_ns": 1710164400000000000,
+        "trade_ohlcv": [
+          71934,
+          71990,
+          71905,
+          71922,
+          1853
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71921,
+          72000,
+          71915,
+          71944,
+          1389
+        ],
+        "source_row": 68071,
+        "source_valid": true,
+        "start_ns": 1710164460000000000,
+        "trade_ohlcv": [
+          71921,
+          72000,
+          71915,
+          71944,
+          1389
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71945,
+          71968,
+          71892,
+          71944,
+          1396
+        ],
+        "source_row": 68072,
+        "source_valid": true,
+        "start_ns": 1710164520000000000,
+        "trade_ohlcv": [
+          71945,
+          71968,
+          71892,
+          71944,
+          1396
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71947,
+          71957,
+          71885,
+          71920,
+          1417
+        ],
+        "source_row": 68073,
+        "source_valid": true,
+        "start_ns": 1710164580000000000,
+        "trade_ohlcv": [
+          71947,
+          71957,
+          71885,
+          71920,
+          1417
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71921,
+          71957,
+          71878,
+          71914,
+          909
+        ],
+        "source_row": 68074,
+        "source_valid": true,
+        "start_ns": 1710164640000000000,
+        "trade_ohlcv": [
+          71921,
+          71957,
+          71878,
+          71914,
+          909
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71920,
+          71995,
+          71896,
+          71963,
+          1018
+        ],
+        "source_row": 68075,
+        "source_valid": true,
+        "start_ns": 1710164700000000000,
+        "trade_ohlcv": [
+          71920,
+          71995,
+          71896,
+          71963,
+          1018
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71968,
+          72005,
+          71932,
+          71948,
+          1181
+        ],
+        "source_row": 68076,
+        "source_valid": true,
+        "start_ns": 1710164760000000000,
+        "trade_ohlcv": [
+          71968,
+          72005,
+          71932,
+          71948,
+          1181
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71945,
+          71957,
+          71875,
+          71885,
+          1277
+        ],
+        "source_row": 68077,
+        "source_valid": true,
+        "start_ns": 1710164820000000000,
+        "trade_ohlcv": [
+          71945,
+          71957,
+          71875,
+          71885,
+          1277
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71886,
+          71903,
+          71831,
+          71840,
+          1376
+        ],
+        "source_row": 68078,
+        "source_valid": true,
+        "start_ns": 1710164880000000000,
+        "trade_ohlcv": [
+          71886,
+          71903,
+          71831,
+          71840,
+          1376
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71835,
+          71869,
+          71808,
+          71859,
+          1105
+        ],
+        "source_row": 68079,
+        "source_valid": true,
+        "start_ns": 1710164940000000000,
+        "trade_ohlcv": [
+          71835,
+          71869,
+          71808,
+          71859,
+          1105
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71863,
+          71947,
+          71851,
+          71914,
+          1298
+        ],
+        "source_row": 68080,
+        "source_valid": true,
+        "start_ns": 1710165000000000000,
+        "trade_ohlcv": [
+          71863,
+          71947,
+          71851,
+          71914,
+          1298
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71914,
+          71932,
+          71833,
+          71839,
+          882
+        ],
+        "source_row": 68081,
+        "source_valid": true,
+        "start_ns": 1710165060000000000,
+        "trade_ohlcv": [
+          71914,
+          71932,
+          71833,
+          71839,
+          882
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71843,
+          71852,
+          71744,
+          71821,
+          2003
+        ],
+        "source_row": 68082,
+        "source_valid": true,
+        "start_ns": 1710165120000000000,
+        "trade_ohlcv": [
+          71843,
+          71852,
+          71744,
+          71821,
+          2003
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71825,
+          71850,
+          71757,
+          71779,
+          1066
+        ],
+        "source_row": 68083,
+        "source_valid": true,
+        "start_ns": 1710165180000000000,
+        "trade_ohlcv": [
+          71825,
+          71850,
+          71757,
+          71779,
+          1066
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71781,
+          71797,
+          71709,
+          71715,
+          1463
+        ],
+        "source_row": 68084,
+        "source_valid": true,
+        "start_ns": 1710165240000000000,
+        "trade_ohlcv": [
+          71781,
+          71797,
+          71709,
+          71715,
+          1463
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71716,
+          71730,
+          71657,
+          71679,
+          2146
+        ],
+        "source_row": 68085,
+        "source_valid": true,
+        "start_ns": 1710165300000000000,
+        "trade_ohlcv": [
+          71716,
+          71730,
+          71657,
+          71679,
+          2146
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71679,
+          71801,
+          71676,
+          71785,
+          1933
+        ],
+        "source_row": 68086,
+        "source_valid": true,
+        "start_ns": 1710165360000000000,
+        "trade_ohlcv": [
+          71679,
+          71801,
+          71676,
+          71785,
+          1933
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71787,
+          71802,
+          71757,
+          71782,
+          929
+        ],
+        "source_row": 68087,
+        "source_valid": true,
+        "start_ns": 1710165420000000000,
+        "trade_ohlcv": [
+          71787,
+          71802,
+          71757,
+          71782,
+          929
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71783,
+          71784,
+          71651,
+          71663,
+          1589
+        ],
+        "source_row": 68088,
+        "source_valid": true,
+        "start_ns": 1710165480000000000,
+        "trade_ohlcv": [
+          71783,
+          71784,
+          71651,
+          71663,
+          1589
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71663,
+          71665,
+          71593,
+          71598,
+          2053
+        ],
+        "source_row": 68089,
+        "source_valid": true,
+        "start_ns": 1710165540000000000,
+        "trade_ohlcv": [
+          71663,
+          71665,
+          71593,
+          71598,
+          2053
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71599,
+          71676,
+          71588,
+          71644,
+          1579
+        ],
+        "source_row": 68090,
+        "source_valid": true,
+        "start_ns": 1710165600000000000,
+        "trade_ohlcv": [
+          71599,
+          71676,
+          71588,
+          71644,
+          1579
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71643,
+          71679,
+          71606,
+          71662,
+          1467
+        ],
+        "source_row": 68091,
+        "source_valid": true,
+        "start_ns": 1710165660000000000,
+        "trade_ohlcv": [
+          71643,
+          71679,
+          71606,
+          71662,
+          1467
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71661,
+          71674,
+          71562,
+          71577,
+          1708
+        ],
+        "source_row": 68092,
+        "source_valid": true,
+        "start_ns": 1710165720000000000,
+        "trade_ohlcv": [
+          71661,
+          71674,
+          71562,
+          71577,
+          1708
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71580,
+          71688,
+          71577,
+          71649,
+          1492
+        ],
+        "source_row": 68093,
+        "source_valid": true,
+        "start_ns": 1710165780000000000,
+        "trade_ohlcv": [
+          71580,
+          71688,
+          71577,
+          71649,
+          1492
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71653,
+          71670,
+          71603,
+          71633,
+          828
+        ],
+        "source_row": 68094,
+        "source_valid": true,
+        "start_ns": 1710165840000000000,
+        "trade_ohlcv": [
+          71653,
+          71670,
+          71603,
+          71633,
+          828
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71637,
+          71677,
+          71630,
+          71659,
+          940
+        ],
+        "source_row": 68095,
+        "source_valid": true,
+        "start_ns": 1710165900000000000,
+        "trade_ohlcv": [
+          71637,
+          71677,
+          71630,
+          71659,
+          940
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71655,
+          71679,
+          71634,
+          71652,
+          721
+        ],
+        "source_row": 68096,
+        "source_valid": true,
+        "start_ns": 1710165960000000000,
+        "trade_ohlcv": [
+          71655,
+          71679,
+          71634,
+          71652,
+          721
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71655,
+          71655,
+          71584,
+          71598,
+          1070
+        ],
+        "source_row": 68097,
+        "source_valid": true,
+        "start_ns": 1710166020000000000,
+        "trade_ohlcv": [
+          71655,
+          71655,
+          71584,
+          71598,
+          1070
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71597,
+          71687,
+          71596,
+          71681,
+          990
+        ],
+        "source_row": 68098,
+        "source_valid": true,
+        "start_ns": 1710166080000000000,
+        "trade_ohlcv": [
+          71597,
+          71687,
+          71596,
+          71681,
+          990
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71682,
+          71725,
+          71662,
+          71677,
+          826
+        ],
+        "source_row": 68099,
+        "source_valid": true,
+        "start_ns": 1710166140000000000,
+        "trade_ohlcv": [
+          71682,
+          71725,
+          71662,
+          71677,
+          826
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71679,
+          71708,
+          71653,
+          71670,
+          641
+        ],
+        "source_row": 68100,
+        "source_valid": true,
+        "start_ns": 1710166200000000000,
+        "trade_ohlcv": [
+          71679,
+          71708,
+          71653,
+          71670,
+          641
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71667,
+          71677,
+          71601,
+          71607,
+          836
+        ],
+        "source_row": 68101,
+        "source_valid": true,
+        "start_ns": 1710166260000000000,
+        "trade_ohlcv": [
+          71667,
+          71677,
+          71601,
+          71607,
+          836
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71605,
+          71643,
+          71587,
+          71605,
+          902
+        ],
+        "source_row": 68102,
+        "source_valid": true,
+        "start_ns": 1710166320000000000,
+        "trade_ohlcv": [
+          71605,
+          71643,
+          71587,
+          71605,
+          902
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71606,
+          71629,
+          71575,
+          71603,
+          848
+        ],
+        "source_row": 68103,
+        "source_valid": true,
+        "start_ns": 1710166380000000000,
+        "trade_ohlcv": [
+          71606,
+          71629,
+          71575,
+          71603,
+          848
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71603,
+          71644,
+          71603,
+          71609,
+          724
+        ],
+        "source_row": 68104,
+        "source_valid": true,
+        "start_ns": 1710166440000000000,
+        "trade_ohlcv": [
+          71603,
+          71644,
+          71603,
+          71609,
+          724
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71609,
+          71676,
+          71600,
+          71675,
+          744
+        ],
+        "source_row": 68105,
+        "source_valid": true,
+        "start_ns": 1710166500000000000,
+        "trade_ohlcv": [
+          71609,
+          71676,
+          71600,
+          71675,
+          744
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71673,
+          71674,
+          71621,
+          71640,
+          623
+        ],
+        "source_row": 68106,
+        "source_valid": true,
+        "start_ns": 1710166560000000000,
+        "trade_ohlcv": [
+          71673,
+          71674,
+          71621,
+          71640,
+          623
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71638,
+          71717,
+          71638,
+          71705,
+          802
+        ],
+        "source_row": 68107,
+        "source_valid": true,
+        "start_ns": 1710166620000000000,
+        "trade_ohlcv": [
+          71638,
+          71717,
+          71638,
+          71705,
+          802
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71705,
+          71756,
+          71688,
+          71733,
+          1051
+        ],
+        "source_row": 68108,
+        "source_valid": true,
+        "start_ns": 1710166680000000000,
+        "trade_ohlcv": [
+          71705,
+          71756,
+          71688,
+          71733,
+          1051
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71731,
+          71756,
+          71717,
+          71746,
+          812
+        ],
+        "source_row": 68109,
+        "source_valid": true,
+        "start_ns": 1710166740000000000,
+        "trade_ohlcv": [
+          71731,
+          71756,
+          71717,
+          71746,
+          812
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71750,
+          71775,
+          71688,
+          71692,
+          1054
+        ],
+        "source_row": 68110,
+        "source_valid": true,
+        "start_ns": 1710166800000000000,
+        "trade_ohlcv": [
+          71750,
+          71775,
+          71688,
+          71692,
+          1054
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71691,
+          71695,
+          71650,
+          71661,
+          651
+        ],
+        "source_row": 68111,
+        "source_valid": true,
+        "start_ns": 1710166860000000000,
+        "trade_ohlcv": [
+          71691,
+          71695,
+          71650,
+          71661,
+          651
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71658,
+          71668,
+          71629,
+          71631,
+          652
+        ],
+        "source_row": 68112,
+        "source_valid": true,
+        "start_ns": 1710166920000000000,
+        "trade_ohlcv": [
+          71658,
+          71668,
+          71629,
+          71631,
+          652
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71630,
+          71666,
+          71590,
+          71599,
+          739
+        ],
+        "source_row": 68113,
+        "source_valid": true,
+        "start_ns": 1710166980000000000,
+        "trade_ohlcv": [
+          71630,
+          71666,
+          71590,
+          71599,
+          739
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71599,
+          71651,
+          71594,
+          71619,
+          1062
+        ],
+        "source_row": 68114,
+        "source_valid": true,
+        "start_ns": 1710167040000000000,
+        "trade_ohlcv": [
+          71599,
+          71651,
+          71594,
+          71619,
+          1062
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71620,
+          71683,
+          71620,
+          71670,
+          695
+        ],
+        "source_row": 68115,
+        "source_valid": true,
+        "start_ns": 1710167100000000000,
+        "trade_ohlcv": [
+          71620,
+          71683,
+          71620,
+          71670,
+          695
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71671,
+          71693,
+          71616,
+          71675,
+          771
+        ],
+        "source_row": 68116,
+        "source_valid": true,
+        "start_ns": 1710167160000000000,
+        "trade_ohlcv": [
+          71671,
+          71693,
+          71616,
+          71675,
+          771
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71673,
+          71723,
+          71669,
+          71673,
+          670
+        ],
+        "source_row": 68117,
+        "source_valid": true,
+        "start_ns": 1710167220000000000,
+        "trade_ohlcv": [
+          71673,
+          71723,
+          71669,
+          71673,
+          670
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71679,
+          71698,
+          71651,
+          71676,
+          500
+        ],
+        "source_row": 68118,
+        "source_valid": true,
+        "start_ns": 1710167280000000000,
+        "trade_ohlcv": [
+          71679,
+          71698,
+          71651,
+          71676,
+          500
+        ]
+      },
+      {
+        "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+        "instrument_id": 750,
+        "source_ohlcv": [
+          71674,
+          71730,
+          71672,
+          71716,
+          610
+        ],
+        "source_row": 68119,
+        "source_valid": true,
+        "start_ns": 1710167340000000000,
+        "trade_ohlcv": [
+          71674,
+          71730,
+          71672,
+          71716,
+          610
+        ]
+      }
+    ],
+    "end_ns": 1710167400000000000,
+    "matched_minutes": 60,
+    "mismatched_minutes": [],
+    "scope": "OHLCV parity for this actual hour only; not a price-path ordering certificate or whole-history trade reconciliation",
+    "start_ns": 1710163800000000000,
+    "success": true,
+    "unmatched_trade_groups": []
+  },
+  "scope": "full declared acquired-contract OHLC cohort admission",
+  "study_id": "jumbo-acquired-contract-ohlc-v1",
+  "success": true,
+  "tools_snapshot": {
+    "kind": "research_study_tools_snapshot",
+    "sha256": "6bfeec69d82604bf4ef8aa44a4a860175c955c57e91f3f2f22d09baf0c037fd5",
+    "size_bytes": 35337
+  },
+  "trial_id": "81495be63d63ec2c9865125024ffc4ea7166df80c2ac7ad2897099d134b9e911",
+  "valid_primary_rows": 4613232
+}

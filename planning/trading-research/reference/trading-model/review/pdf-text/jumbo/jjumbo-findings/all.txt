@@ -1,0 +1,573 @@
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 1/14 =====
+ RECONSTRUCTION · PUBLIC RECORD ONLY
+JJumboFX Time-Based Ranges
+ Findings, upgrades, and operating rules distilled from @JJumboFX posts, replies, chart screenshots,
+ and public TradingView pages.
+
+
+ This document does not reproduce the two manuals you already have. Those stay separate. What follows is everything that
+  lives in the public stream — including the things he draws and never names — plus a tighter version of the same machine.
+
+ Not financial advice. Stats below are his published numbers unless marked as an inference from a screenshot. P-zone internals and some
+  lookbacks remain unpublished.
+
+ Compiled 2 September 2026 · Account @JJumboFX · NQ-first, portable to ES / YM / RTY / GC / CL / SI
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  1
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 2/14 =====
+ Contents
+ 1. What the public record actually says
+ 2. The portable machine (not just 6–9)
+ 3. Core sequence — the only diagram that matters
+ 4. Range catalog from posts and charts
+ 5. Classification layer (the 2026 edge)
+ 6. Levels he actually trades
+ 7. P-zones, rebuilt without the black box
+ 8. Profiles: VP, delta profile, range profile, footprint
+ 9. Prints, absorption, and what the bubbles are
+ 10. Session rotation and unfinished business
+ 11. Instruments and open times
+ 12. Time windows and the 9:40 cluster
+ 13. Entries, flips, and management leaks
+ 14. What to discard (old / weak / cargo-cult)
+ 15. Upgraded daily brief and checklist
+ 16. Replication spec (no paid script required)
+ 17. Source map — which posts built which rule
+ 18. Still unpublished / do not invent
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  2
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 3/14 =====
+ 1. What the public record actually says
+ JJumbo presents as an NQ futures day trader who productized a time-based range. The bio is the thesis: “Time-Based Ranges
+   | 6-9 range ideator.” The 6–9 box is the SKU. The operating system underneath is larger.
+ Three sentences from him do more work than most threads:
+
+     “Context — location — confirmation.” (28 Aug 2026 recap)
+
+    “Same principles, same logic, different times of action.” (13 Oct 2025, London range week)
+
+     “Almost any time window between 5am and 9am will behave similarly, that’s not a wheel rediscovery.” (27 Aug
+     2026)
+
+ He is a reversal trader first. Continuation is allowed only after the overnight (or the prior session) has already done the
+ stop-hunt work. He ends most A+ NY days in the first 20 minutes. He posts both +140 and −60 sessions. Management, not
+  level selection, is the leak he names on losing days (“diabolical BEs”).
+ Public tools named on X / TradingView: SDRange+ (later SDRange+²), SessionStat+, Absorption Zone+, PD RTH Range+,
+ P-zones, 3-day liquidity map. Execution screenshots in 2026 are mostly NinjaTrader: RTH-scoped volume profile, delta
+  profile, footprint, BigTrades bubbles.
+
+ 2. The portable machine (not just 6–9)
+ Treat every session as the same four-step loop.
+     1. Build. A clock window prints a high, low, open, mid, 25/75.
+     2. Classify. Size, balance vs imbalance, which edge is still clean, where the next session opens versus prior-day value,
+    whether sister indices already hunted the same side.
+     3. Trade the next clock. Either fade a sweep (Judas / double) or participate in a single break from mid / open / quadrant.
+    The “open analog” is 09:30 for NY, ~03:00 for London, 08:20 for gold, 09:00 for crude.
+     4. Confirm at location. Wick / 3-candle reclaim, absorption or delta taper, VP shelf, P-zone, leftover session high/low,
+     SessionStat envelope. One of these alone is not a trade.
+  If you only run 06:00–09:00 into 09:30 NY, you are running one costume. Weeks exist where he says London is the cleaner
+ move and NY AM is leftover draw. Weeks exist where he is in gold on Sunday using RTH range + 18:00 P-zones. The
+ machine does not change.
+
+ 3. Core sequence — the only diagram that matters
+ 3 Oct 2025 post: “easiest sequence to spot when trading ranges” / follow-up “look it up on your chart — #NQ #ES #YM.”
+ The cartoon is the model. It is index-agnostic.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  3
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 4/14 =====
+       Figure. Core sequences — single break (left) vs sweep-then-reverse (right). Red = untouched edge. Blue = swept edge. Green OP = range open.
+
+ Left — single break. One edge taken, opposite edge still red/clean. Price breaks, returns to range open (OP), continues in
+ the break direction. Open is an entry magnet, not a fade. Mid of the range is the other common entry (27 Jul 2026: “single
+ break behaviour through A period, range mid provided the entry area”).
+ Right — Judas / double. One edge swept (blue), opposite edge still clean (red) = the draw. Sweep extends to exhaustion
+ (−0.5 / mean-reversal / P-zone), then reverses through mid toward the untouched edge.
+
+ Upgrade: decide which cartoon you are in before 09:30 (or 03:00), from overnight size + balance + whether Asia/London edges still
+  exist. Do not decide from the first 3-minute candle.
+
+ 4. Range catalog from posts and charts
+
+ 4.1 NY 06:00–09:00 into cash open
+ The productized box. Build 06:00–09:00 ET. Trade 09:30 with a statistical cluster at 09:40–09:50. He flattens A+ days by
+ ~10:00 unless the day is expansive. 30 Jan 2025 stats post coordinates “based on the 06:00–09:00 range and its levels.”
+
+ 4.2 London TBR into 03:00
+ 13 Oct 2025: “past couple of weeks London range… cycle where London gives cleaner moves in relation to NY AM.”
+ Charts mark a full high/low/EQ/25/75 box finishing into 03:00, a dashed line at 03:00 (London open analog), and a second
+ dashed line at 06:00 (handoff to the 6–9 build). 5 Jun 2026: “London range exhaustion (1.33–1.66) longs.” 23 May 2025:
+ “London H4 stats + absorption zone at the reversal.” Someone asked if he uses time models or the stat session for London —
+ he uses both the London TBR and a 4-hour / London SessionStat overlay.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  4
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 5/14 =====
+                                     Figure. London TBR with 03:00 and 06:00 dashed lines — same internals as 6–9.
+
+ Exact London build start is never pinned the way 6–9 is. Charts are consistent with a box that ends at 03:00, not with only a 03:00–03:30
+ micro opening range.
+
+ 4.3 Asia / midnight as live liquidity, then as the NY draw
+ SDRange “does Asia, London, New York, plus any custom time” (4 Nov 2025 reply). NY recaps treat leftover Asia/London
+ highs and lows as the target after a 09:40 reverse: “textbook longs after 9:40 to London/Asia highs” (30 Dec 2025);
+ “unfinished business at London highs” (18 Nov 2025); “10 am p-zone > london low” (2 Jan 2026). Lines stay until purged,
+ then they are done.
+
+ 4.4 09:00–12:00 statistical envelope (SessionStat)
+ Not a trade clock. A target map. 6 Jul 2026: “range exhaustion levels and 9–12 statistical session boundaries both meeting up
+  nicely.” A+ when today’s −0.5 / 1.33 sits on the 9–12 average/median extreme. SessionStat public page: custom sessions (up
+  to four), or fixed 15m / 1H / 4H / Daily / Weekly; lookback configurable; simple or weighted average; expected high/low
+ plus expansion. “London H4 stats” is this overlay on a 4-hour / London window.
+
+ 4.5 15-minute (sometimes 5-minute) opening range — mid only
+ He said he does not really use classic ORs. 16 Jul 2026: “two retracement-to-mid stats at play from the lows, 6–9 range and
+ 15m OR” — and he still went one-and-done without taking the mid long. 19 May 2026: “don’t really use ORs that much, i
+ sometime use the 5m OR for reference or the 15m… in that chart is a time based range.”
+
+ 4.6 Prior-day RTH and “in value / in range”
+ 28 Jul 2026 reply: “RTH open location in relation to previous day value/range and the current day 6–9.” 10 Jul 2026:
+ “expected mean reversion day… RTH open inside previous day value/range, scalping territory, continuation trades got rekt.”
+ 28 Aug 2026 A+  list: “range double break expectancy (in value/in range).” This is Dalton-style location, not a holy
+ premium/discount box. The PD RTH product later grew a premium/discount feature; treat that as optional paint, not the
+ edge. Location vs prior-day value is the part that keeps showing up in recaps.
+
+ 4.7 Lunch / PM / MOC
+ Lunch is a documented leak. 12 Jun 2026: caught the morning shorts range-high to range-low, “gave it all back during lunch
+  trying to reach a daily target,” then next London session 3/3 for 354. AM expansion days often become PM consolidation.
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  5
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 6/14 =====
+ Compressed AM can become PM expansion. 1.33–1.66 of the morning range is the fork he watches for that decision. He
+ does not treat lunch as an A+ clock.
+
+ 4.8 Metals / energy clocks
+ 26 Aug 2026 reply: “GC open: 8:20am / CL open: 9:00am.” 16 Nov 2025: “Gold on Sunday open — RTH range and 6pm
+ P-zones +23.” Do not clone 09:30 onto gold.
+
+
+
+
+
+          Figure. Gold Sunday — grey P-zone boxes at distance bands, EQ, RTH range. This is what a P-zone looks like when he does not name it.
+
+ 5. Classification layer (the 2026 edge)
+ The naive read of early 2025 posts is “always fade 6–9 at 09:40.” Later posts are a filter on that idea.
+
+ 5.1 Range size
+ 8 Jun 2026, with VP + footprint attached: at ~1.2% range size, very low chance of double break; combined single-break
+ (only high or only low) > 74% across his sample; retrace to midpoint still ~60.4%. 27 Aug 2026: small ranges that print a
+ high double-break percentage are usually skewed samples — “most of it isn’t applicable as edge.” Base rate he published:
+ “~45% of pre market ranges do in fact single break during AM. Don’t be surprised if your breakout isn’t failing.”
+
+ 5.2 Balance vs imbalance
+ 27 Aug 2026: “Balanced — imbalanced overnight matters.” 7 Jul 2026: “simple notion taken from Dalton’s book on market
+ profiling… identifying range break behaviour (single/double) with a pretty good probabilistic %.” Balanced overnight +
+ open inside prior-day value → mean-reversion / failed-break bias. Imbalanced / already-purged overnight + open outside
+ value → discard mean reversion. 28 Jul 2026: “discard mean reversion and range double breaks when these things align.
+ +138.”
+
+ 5.3 IB-stat cargo cult
+ 26 Aug 2026: “IB stats have been performing poorly recently. There was never sustainable edge… curve fit or not enough
+ data sample. Don’t be fooled by it.” Use this day’s 6–9 size + balance + prior-day location, not a generic “IB always fades.”
+
+ Upgrade: a one-line classifier before the open.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  6
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 7/14 =====
+       Input               Toward Judas / fade                       Toward single break / trend
+
+      Range size               Mid-sized, not tiny, not already extended          ~1.2%+ of price or already stretched overnight
+
+       Overnight shape          Balanced, both edges still meaningful               Already hunted / single-print / RS divergence done
+
+     RTH open vs PD value    Inside prior-day value/range                        Outside value, accepting
+
+        Sister indices          Same side still live on ES/YM                  One index already purged, others lag
+
+       Double-break             In-value + in-range print supports fade              Table says single-break dominates
+       expectancy
+
+       9:40–9:50 job            Reversal window                                   Continuation / add, not a fade
+
+ 6. Levels he actually trades
+ From charts and captions, not from a settings dump.
+
+       Level                   Job on a fade day                           Job on a single-break day
+
+     TBR high / low           Sweep magnet, then invalidation                       First target; often enough
+
+      Range open (OP)           Reclaim after sweep = confirmation                Pullback entry after the break
+
+     EQ / mid                    Pass-through toward clean edge                   Primary entry (absorption often sits here)
+
+      25 / 75                       Inner structure                                  Expansion entries after overnight already purged
+
+       −0.5 / mean-reversal      A+ fade location (86.46% of his 9–12 reversals      Usually off the table
+                                   tagged here)
+
+        1.0 projection               Extension if fade becomes trend the other way        First stretch target
+
+       1.33–1.66 band         AM/PM fork: continue AM or reverse the whole    PT / flatten area (“just math”)
+                                morning
+
+       SessionStat 9–12 H/L        Confluence if it sits on −0.5 / P-zone               Expected AM vol cap
+
+       Asia / London H/L        Draw after NY fade                              Already gone if overnight purged
+
+       P-zone                     Location filter on the above                        Location filter on the above
+
+     15m OR mid                Optional second mid-retrace stat                    Optional add
+
+       Daily high/low              Cycle-2 target after 10:00 continuation               Stretch target on trend days
+
+     VP LVN / HVN shelf       Unspoken box — level must sit on one             Absorption at mid HVN, taper at extreme
+
+ On 1.33–1.66 he is blunt (25 Nov 2025): “some will look to the left across all time-frames trying to justify why… it’s not
+ random, just math.” A later reply called someone else’s running fibs “another form of fibs but dynamic tho not projected
+ from a static time based range — good confluence.” Static TBR projections stay primary.
+
+  Public TradingView note on SDRange: 1.33–1.66 comes from a “rule of thirds” idea about fund flatten zones. Retrace to range open after a sweep
+  is described there as a high-hit-percentage event. That is a vendor page claim, not a table he posted.
+
+ 7. P-zones, rebuilt without the black box
+ 28 Dec 2025, answering “what are P-zones?”:
+
+    “P-Zone is just the name i gave it. It’s a number of things that define areas of support/resistance based on distances
+      that are filtered by volume and volatility. Each ticker has its own zone.”
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  7
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 8/14 =====
+ TradingView changelog (public): fixed distance; volatility and volume filtered; multi-ticker; auto-learning lookback on
+ previous N sessions; custom session times; used as exhaustion and as S/R for reversals.
+ How he points at them on X, never lectured: “9:30 pzone,” “10am pzone,” “10 am p-zone > london low,” “9am p-zones,”
+ gold “6pm P-zones,” “one and done on the early fade… P-zone + low > range open. Full reversal during 9:40–9:50.”
+
+ Upgrade — approximate engine you can actually run:
+ Anchor a session (6–9, London into 03:00, RTH, 18:00). Measure distance bands from open and from mid that kept reacting
+ over the last N similar-vol sessions. Keep a band only if realized range and session volume of those lookback days sit near
+ today (drop the band on a holiday tape). Overlay session VP: keep the band if it sits on an HVN or on the shelf next to an
+ LVN. That stack — distance + vol regime + volume node — is the public definition. The unpublished part is only the exact
+ auto-learn weights.
+
+ A lone P-zone in air, with no TBR level and no node, is not his trade. On 2 Jan 2026 the fade was P-zone and 6–9 low above range open.
+
+ 8. Profiles: VP, delta profile, range profile, footprint
+ 16 Jul 2026, asked what the right-side profile is:
+
+     “Just RTH session VP and delta profile.”
+
+ He scopes profiles to the session under study. For NY execution that is RTH, not a full ETH composite. A separate reply
+ corrected “volume profile” to “range profile*” — profile of the range, not a generic day blob.
+ Screenshot grammar:
+     Right-side histogram = session VP. Fat node = HVN / balance. Thin slot = LVN. He draws a rectangle on the thin slot or
+    on the shelf beside the fat node and parks a TBR level there. He almost never types “LVN.”
+     Delta profile = aggressive buy vs sell leftover at that price. Midpoint absorption = two-sided delta, price not leaving.
+    Taper at the low = selling dries up into the TBR low / −0.5.
+     Footprint: “only highlighting top 35% of transactions.” Yellow boxes on stacked prints at a level = the OF confirmation.
+   POC migrates by timeframe. 26 Mar 2026: “surely cause of time frames, on M2 the poc is on the upper side. trading view
+   OF tools are dog water.” Use a real OF platform if you are going to lean on POC.
+
+
+
+
+
+          Figure. 8 Jun 2026 — boxed node / absorption at range mid, VP on the right. Caption talked about 1.2% range size and 74% single-break.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  8
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 9/14 =====
+                                     Figure. Same day footprint — stacked prints boxed at the level, top-print filter on.
+
+ 9. Prints, absorption, and what the bubbles are
+ 19 May 2026, two replies:
+
+    “Those are not absorption bubbles. It’s bigtrades indicator, it highlights large executed trades bid/ask.”
+
+     “I use a 100 threshold on NQ during NY and 75 during London. Anything below 100 during NY is noise to me. Some
+     people uses lower thresholds.” He also said that is “participants intentions.”
+
+ Absorption Zone+ is a different tool. Public update 27 Jun 2025: bull/bear color on absorption candles; isolation; absorption
+ imbalances; custom multi-timeframe imbalance selection. 23 May 2025: “Used the imbalance in the absorption candle.” So
+ confirmation can be the imbalance inside the absorption bar, not just “high volume doji.”
+ 9 Jan 2026 recap: “note the absorption happening at the key levels of the 6–9.” That is the intended stack: TBR level +
+  absorption/delta, not absorption in the middle of nowhere.
+
+ 10. Session rotation and unfinished business
+ Ranges talk to each other. That is how NY stops looking random.
+    Fade 6–9 at −0.5 toward leftover Asia/London high or low.
+      If London already purged both sides, NY often will not Judas. That is the “discard mean reversion” alignment.
+     Relative strength overnight between NQ and ES (and YM) is a model selector. He rarely writes SMT; the charts and the
+    6–9 single-break scenario describe the same thing.
+    Which session is clean this week is a real input. London-clean weeks: trade 03:00–06:00 as A+, use NY as management
+     or as the draw. NY-clean weeks: ignore the urge to invent a London home run after 09:30.
+
+  Unfinished business is a target, not an entry by itself.
+
+ 11. Instruments and open times
+ Tags he uses when showing the same geometry: NQ, ES, YM, RTY, GC, CL, SI. 3 Oct 2025 cartoon is explicitly
+ multi-index. What changes is the clock and the zone, not the cartoon.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                  9
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 10/14 =====
+      Product              Open analog he has named                 Notes from posts
+
+    NQ / ES / YM / RTY       09:30 ET cash                   NQ is the home chart; 80–120 pt A+ talk is NQ
+
+     GC                       08:20 ET; also Sunday open            RTH range + 18:00 P-zones on Sunday example
+
+     CL                       09:00 ET                          Do not use 09:30
+
+       SI                         tagged on SDRange+² update               same paint, unpublished threshold
+
+  P-zones and BigTrades thresholds are per ticker. Only NQ NY=100 / London=75 is public.
+
+ 12. Time windows and the 9:40 cluster
+ 30 Jan 2025 (the 108k-view post), 15 years NQ, 4,537 days in the later writeup of the same study:
+     Highest reversal-time count inside the 09:00–12:00 window sits between 09:40 and 09:50.
+    Average reversal time printed on the chart ~09:47.
+    86.46% of those reversals occur off the −0.5 / extended-range exhaustion of 06:00–09:00.
+    “Does this mean i have a 100% win rate? no.”
+
+
+
+
+
+                        Figure. The 15-year histogram post — 09:40 cluster and 86.46% at −0.5. This is a location stat, not P(win).
+
+ Upgrade: treat 09:40–09:50 as the default NY Cycle-2 window. 10:00 news delays Cycle 2 — he has live days where the
+  “real” reverse is after the release. London’s analog cluster is not published as a histogram; he still trades London off 03:00
+  structure rather than waiting for 09:40.
+ A-period (09:30–10:00) can finish the whole day on a single-break morning (27 Jul 2026 +124, done at the open). That is a
+  feature, not a missed second trade.
+
+ 13. Entries, flips, and management leaks
+ He does not preach one candle pattern on X the way a course would. What shows up:
+    Reclaim after a sweep at −0.5 / P-zone / overnight high-low, often 2–5 minute structure.
+     Pullback to range mid or range open on single-break days.
+    Absorption / imbalance candle on the level (May 2025).
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                 10
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 11/14 =====
+     Flip when the first idea dies. 1 Sep 2026: morning went −60 with “diabolical BEs,” then “too good to pass / flipped long
+      at that spot / simple pullback long.”
+    One-and-done is the preferred outcome. Adding the OR-mid long is optional and often skipped.
+     Front-running a target: 9 Jan 2026 video caption — “Front runned my target killed the position manually at clear
+     rejection at the midpoint of the range.” Mid rejection can be an exit even if the fib is further.
+    Greed at lunch is the named leak. Hitting BE because the clock hit 09:50 while location is still valid is the other named
+     leak.
+   He runs prop accounts (Topstep mentioned) and will take a clean 50–70 point series on mean-reversion days rather than
+    hunt a home run (“not chasing home runs or continuations,” 21 Jul 2026, from the road).
+  Language: “walking the dog” appears as a reply — manipulation of the box, then the real move. Same as Judas then reverse.
+
+ 14. What to discard (old / weak / cargo-cult)
+ You flagged premium/discount and similar as possibly stale. Agreed, with a split:
+    Keep: prior-day RTH high/low as location. “Open inside yesterday’s value/range” keeps printing as a mean-reversion
+       tell. That is Dalton location, still live in 2026 recaps.
+    Downgrade: a painted premium/discount box as a standalone signal. It was added to PD RTH Range+ in a 2025 update.
+    2026 recaps do not talk about “I shorted because we were in premium.” They talk about in-value / in-range, range size,
+    and leftover session highs.
+    Discard: generic IB fade stats as an edge. He said so.
+    Discard: “always fade 6–9.” He spent 2026 posting the 45% single-break base rate so people would stop doing that.
+    Discard: ETH stop-runs as NY signals when you are using an RTH-only frame. He greys premarket and colors cash for a
+     reason.
+    Discard: TradingView order-flow POC as confirmation.
+    Discard: BigTrades bubbles below his threshold, and bubbles-as-absorption.
+    Discard: treating 86.46% as a win rate.
+    Be careful with: lunch OR, MOC, and “daily target” grind. Documented as how a green morning dies.
+
+ 15. Upgraded daily brief and checklist
+
+ Before the open analog (03:00 London / 08:20 GC / 09:30 NY)
+    Which session is the clean one this week? Build that TBR, not every TBR.
+    Write range size in points and in percent. Mark 1.2% as a single-break warning.
+    Balanced or already hunted? Which Asia/London/midnight edges still exist?
+     Sister indices: same hunt or divergence?
+    Where will the open analog print versus prior-day RTH value/range?
+     SessionStat envelope for the upcoming window (9–12 for NY, H4 for London).
+    P-zone / VP node overlap with −0.5, open, mid, leftover session extreme.
+    News: does Cycle-2 get delayed? If yes, do not force 09:40.
+    Write Model A (fade) or Model B (single break) in one line. Stop.
+
+ During the window
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                 11
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 12/14 =====
+     Location first. If price is not at the pre-written level, there is no trade.
+     Confirmation: reclaim, absorption/imbalance, delta taper, large prints ≥ threshold.
+    Fade days: flatten the Judas rider before the reversal window; take the reverse at −0.5 / P-zone toward the clean edge or
+     leftover London/Asia.
+     Single-break days: enter mid / open / quadrant. 09:40 is an add, not a fade.
+    One-and-done is allowed to win the day.
+
+ After
+ Default flat after the A+ window. Lunch is not a second A+. 1.33–1.66 decides whether PM is continuation or a full AM
+  reverse. If the first idea dies at the level, flipping is in-model; grinding a daily target is not.
+
+ 16. Replication spec (no paid script required)
+
+      His paint                      Rebuild
+
+     TBR box                         Session rectangle + fib 0 / 0.25 / 0.5 / 0.75 / 1, then 1.5 and 1.33 / 1.66
+
+       −0.5                            Half the range projected beyond the broken side
+
+      Range open                          First print of the build window
+
+       Asia / London H/L                Separate boxes; delete when swept
+
+       SessionStat envelope              Last 60 (or your N) sessions of that clock: mean and median of high, low, range
+
+       P-zones                          Distance bands from open/mid kept only on similar-vol days, snapped to VP nodes
+
+     RTH VP + delta                Scope the profile to RTH (or to the traded session), not ETH
+
+        Footprint filter                Top ~35% of transactions
+
+       BigTrades              NQ NY ≥100, London ≥75; ignore the rest
+
+       Absorption                     Small body + volume spike at a mapped level; optional imbalance inside the bar
+
+      RTH-only candles               Color from the open analog; grey the build
+
+ The script is convenience. The classifier plus the cartoon plus session-scoped profiles is the thing.
+
+ 17. Source map — which posts built which rule
+
+  Included so you can audit me. IDs are the public post IDs.
+
+      Rule                                                 Primary public source
+
+      86.46% at −0.5; 09:40–09:50 cluster                         1884942410901319800 (30 Jan 2025) + chart GiinQYMX
+
+       Context / location / confirmation stack                       2093335135789719861 (28 Aug 2026)
+
+        In-value double-break + overnight H/L + AM vol              same recap
+
+     ~45% single-break; size; balance; 5–9 interchangeability         2093020177696755878 (27 Aug 2026)
+
+      IB stats have no edge                                     2092662643232268473 (26 Aug 2026)
+
+      1.2% size → 74% single-break; mid 60.4%; VP + OF           2064008375751311653 (8 Jun 2026)
+
+       Dalton single/double classification                          2074569053239226627 (7 Jul 2026)
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                 12
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 13/14 =====
+      Rule                                                 Primary public source
+
+       Discard MR when alignment prints                          2082104746077245851 (28 Jul 2026)
+
+       Single-break + mid entry, done at open                       2081737561265893419 (27 Jul 2026)
+
+      6–9 + 15m OR mid stats; one-and-done                       2077772706544496943 (16 Jul 2026)
+
+      RTH-only VP + delta profile                                      reply 2077828415923581206
+
+       BigTrades 100 NY / 75 London; not absorption                2056792694878314750 / 2056794762049421618
+
+       P-zone definition                                        2005418003593363762 (28 Dec 2025)
+
+       P-zone + low > open, 09:40 reverse                          2007108825904460106 (2 Jan 2026)
+
+       London/Asia as NY draw                                  2006019084345819535 / 1990858695702442275
+
+      London TBR week; same logic other clock                    1977848592091033789 (13 Oct 2025)
+
+      Core sequence cartoon NQ/ES/YM                          1974149966609400120 / 1974141763389419915
+
+     GC 08:20 / CL 09:00                                     2092661939507802258
+
+      Gold Sunday + 18:00 P-zones                              1990196152936096162
+
+       1.33–1.66 “just math”                                     1993371273934606757
+
+      Open vs prior-day value                                   2082205480877781167 / 2075602926215561312
+
+        Flip after bad BE morning                                 2094812641197777367
+
+      Lunch gave the morning back                              2065371458461725165
+
+     OR mid is reference only                                  2056797248604815569
+
+      Asia/London/NY + custom times in the tool                   1985728485621457223
+
+      9–12 stat boundaries + exhaustion                           2074192880776647082
+
+       Front-run exit at range mid                                 2009669116102426817
+
+       Absorption at 6–9 levels                                   2009649655953383553
+
+      London 1.33–1.66 longs                                   2062826544381215027
+
+      London H4 stats + absorption                              1925814512130691494
+
+ 18. Still unpublished / do not invent
+    Exact P-zone auto-learn weights and distance function.
+    Exact London build-window start time.
+     Delta-profile row size / tick vs volume settings.
+    BigTrades thresholds for ES, YM, GC, CL.
+   Why SessionStat default lookback is 60.
+   A clean published histogram for London’s reversal clock analogous to 09:40.
+   Win rate or expectancy table. He has point examples, not a ledger.
+
+
+  If a rule cannot be pointed at a post, a reply, a public vendor paragraph, or a specific screenshot, it does not belong in this
+  file. That is the contract for this PDF.
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                 13
+
+===== /workspace/sources/documents/jumbo/jjumbo-findings.pdf PAGE 14/14 =====
+ Companion file: JJumboFX_Raw_X_Archive.pdf — the posts, replies, and images this reconstruction was built from.
+
+
+
+
+
+JJumboFX findings  · sourced from public X / charts / TradingView  · not the attached manuals                                                 14

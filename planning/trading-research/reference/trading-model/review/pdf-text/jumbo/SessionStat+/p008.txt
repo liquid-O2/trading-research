@@ -1,0 +1,38 @@
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 8/12 =====
+Custom Sessions time
+limitations
+
+The Custom sessions feature are designed to work in current day
+time stamps only (Midnight to Midnight), when selecting cross-day
+times (e.g. 11pm - 5am) the indicator will automatically stop
+plotting.
+
+Single-Day Timestamp Logic:
+   The indicator sets session start and end times using the current
+    day's date. For example, when you define a session like 9:00
+   AM–12:00 PM, it assumes both times are within the same day
+     (e.g., today). If you try to set a session that crosses midnight
+     (e.g., 11:00 PM yesterday to 2:00 AM today), the indicator
+    doesn't account for the day change because it uses the current
+    day's date for all timestamps.
+
+
+If you want to set a custom session starting at 6:00 PM and
+ending at or near midnight (e.g., for the Asia session such as
+8:00 PM to 11:59 PM), there are specific settings you need to use
+due to how the indicator handles session timing and resets.
+
+
+
+
+
+Daily Reset at Midnight (00:00):
+   The indicator ties session timestamps to the current day’s date.
+    At midnight (00:00 in the specified timezone, default
+    America/New_York), the date changes, and the indicator treats
+    this as a new day, resetting session data. If a session’s end time
+     is set to 00:00 or beyond, it may be interpreted as the next day,
+    causing the session to fail or not plot correctly.
+   To avoid this, you should set the session end time to 11:59 PM
+    (23:59), the last minute of the current day and set “Extension
+   Type” to “Extend Until Session End”

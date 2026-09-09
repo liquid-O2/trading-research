@@ -1,0 +1,290 @@
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 1/8 =====
+   ETHER  F R E E R E S O U R C E S
+
+
+
+
+
+T H E S E C O N D C O D E
+EXPOSURE
+AND
+RISK
+
+MFE and MAE for engineered stops, break even and trailing
+mechanics, partials, and the maths that keeps accounts alive:
+Monte Carlo and Kelly.
+
+
+
+
+
+By Sires
+Ether, the free side of Ethos
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 2/8 =====
+Contents
+
+
+Exposure, the number that matters                                                FRAMEWORK     03  ›
+
+MFE and MAE                                                                  FRAMEWORK     04  ›
+
+The three exposure plays                                                                 EXECUTION     05  ›
+
+The maths and the tool                                                                ADVANCED     06  ›
+
+Expectancy, the only number                                                     FRAMEWORK     07  ›
+
+
+This guide pairs with the video. Watch it for the live walkthrough, keep this next to the charts.
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  02
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 3/8 =====
+Exposure, the number that matters
+
+
+
+
+
+Exposure is the amount of capital that could be lost if a trade goes against you. The higher the exposure, the higher
+the potential loss. Limiting it is about controlling how much any single trade can take from you, and protecting profits
+at logical places while the trade develops.
+
+
+
+
+
+You cannot control the market. You can always control the
+exposure.
+
+
+
+
+
+   THE MINDSET
+
+   Every technique in this code does one of two things: it removes risk from a live trade, or it converts open profit
+    into locked profit. Nothing here predicts anything.
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  03
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 4/8 =====
+MFE and MAE
+
+
+
+
+
+Before you can place stops and targets optimally, you need to know what your trades actually do. Two
+measurements answer it.
+
+
+
+
+
+   MFE, MAXIMUM FAVOURABLE EXCURSION
+
+   The highest profit a trade reaches from entry before it reverses. How much the trade COULD have made at its peak, even
+      if it eventually went against you.
+
+
+
+
+
+   MAE, MAXIMUM ADVERSE EXCURSION
+
+   The worst loss the trade reaches from entry before turning. How much heat it took at its lowest point, even if it later
+   moved your way.
+
+
+
+
+
+   THE SAMPLE RULE
+
+    Collect 40 to 80 trades, then read the MFE and MAE distributions. Your optimal stop sits beyond where winners
+    typically get their heat, your target sits where winners typically peak. Placement becomes engineering, not
+    vibes.
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  04
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 5/8 =====
+The three exposure plays
+
+
+
+
+
+Three plays to cut exposure on a live trade, each with the exact mechanics.
+
+
+
+
+
+      Break even, then move in profit
+         Enter with a 100 stop and 200 target. Once the trade moves 100 in your favour, stop to entry, risk is now
+          zero. As it keeps going, trail the stop into profit, at plus 100 you can lock plus 50. Only move it where the
+        market could logically return to, identify those spots and step the stop behind them.
+
+
+
+
+
+      The trailing stop
+      A stop that follows price automatically. If price runs 6 to 10 points your way, trail roughly 3 points behind
+         to protect part of the move while giving the trade room to grow. Protection without strangling it.
+
+
+
+
+
+        Partial exits
+        Close a portion at planned levels: 50% off at 1 to 1, stop to break even on the rest. Half the profit is
+        banked, the remaining half is a free trade. This is the play that makes runners psychologically possible.
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  05
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 6/8 =====
+The maths and the tool
+
+
+
+
+
+Two pieces of maths every serious risk model leans on, and the tool that automates them.
+
+
+
+
+
+   MONTE CARLO SIMULATION
+
+    Simulates thousands of possible outcome sequences for your strategy, showing the drawdown and return distribution
+   under randomness. It tells you how bad the bad runs can get, what your strategy survives, and where the risk settings
+   need work.
+
+
+
+
+
+   THE KELLY CRITERION
+
+   The formula for the optimal fraction of the account to risk per trade to maximise long term growth while minimising the
+    risk of ruin. Full Kelly is aggressive, fractional Kelly is the practical version.
+
+
+
+
+
+   THE SHORTCUT
+
+   The pro version of Sera runs this for you: it tells you how much to risk so you do not hit your drawdown, and
+   keeps that probability very small. serawave.com
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  06
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 7/8 =====
+Expectancy, the only number
+
+
+
+
+
+None of the mechanics matter if the underlying edge is negative. The one number that decides whether you make
+money over a sample is expectancy.
+
+
+
+Expectancy = (win% x avg win) minus (loss% x avg loss), measured in
+R.
+
+
+
+
+
+   THINK IN R, NOT DOLLARS  One R is the amount you risked on the trade. A win of plus 2R and a loss of minus
+                         1R are comparable across any account size, and R is the only honest way to grade
+                             a system.
+
+
+
+
+
+   POSITIVE EXPECTANCY        If the formula is above zero, the edge makes money over enough trades even with
+                             a sub-50% win rate. A 40% win rate at 1 to 3 is a monster.
+
+
+
+
+
+   THE SAMPLE RULES ALL    Expectancy only means something over 100+ trades. Any smaller and you are
+                                reading variance, not edge. This is why the codex and the data collection exist.
+
+
+
+
+
+  WHY THIS TIES IT TOGETHER
+
+   MFE and MAE set the stop and target, exposure plays protect the open trade, and expectancy tells you whether
+   the whole thing is worth running. Know your expectancy or you are gambling with good manners.
+
+
+
+
+
+E T H E R ,  T H E  F R E E  S I D E  O F  E T H O S  07
+
+===== /workspace/sources/documents/discretionary/code-2-risk.pdf PAGE 8/8 =====
+Now cap the downside.
+
+   You now have the full exposure toolkit. Inside Ethos, the mentorship,
+    risk is managed exactly like this on every live trade, three sessions a
+                             week.
+
+
+      Stops from data, not fear
+      40 to 80 trades of MFE and MAE, then engineer the placement.
+
+      Convert open profit to locked profit
+       Break even, trail, partial. In that order, at logical spots.
+
+     Know your worst run before it happens
+      Monte Carlo the strategy, size with Kelly in mind.
+
+
+
+
+             START THE FREE 7 DAY TRIAL
+
+
+
+       WATCH THE SECOND CODE ›   JOIN ETHER ON DISCORD ›
+
+
+
+
+
+Education only. Kanji and Ethos do not sell signals and do not promise profit.
+     Trading futures and options carries substantial risk. © Ether / Ethos

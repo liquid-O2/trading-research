@@ -1,0 +1,488 @@
+--- tests/test_options_quote_measurements.py
++++ tests/test_options_quote_measurements.py
+@@ -16,15 +16,15 @@
+ from trading_research.research.auction_flow_storage import BoundedOutputs
+ from trading_research.research.options_oi_measurements import (
+     coverage_schema as oi_coverage_schema, cut_ns_on, identity_schema,
+-    interval_schema, report_schema,
++    interval_schema, membership_schema, report_schema,
+ )
+ from trading_research.research.options_quote_measurements import (
+     ALL_CUTS, BASE_CLASSES, FAMILY, INTERVAL_RECONSTRUCTION, LOCAL_ID_BASE, VERSION,
+-    combine_partition_results, implementation_hashes, quote_dte_bucket, run,
++    QuoteCodebook, combine_partition_results, implementation_hashes, quote_dte_bucket, run,
+     scientific_hash, utc_cut_ns,
+ )
+ from trading_research.research.options_quote_statistics import (
+-    PRESPECIFIED, date_balanced_point, raw_mean,
++    PRESPECIFIED, date_balanced_point, load_group_statistics, raw_mean,
+ )
+ 
+ 
+@@ -181,79 +181,171 @@
+             rows.append(row)
+         return pa.table({name: [row[name] for row in rows] for name in schema.names}, schema=schema)
+ 
++    def _listing_table(self, rows):
++        import pyarrow as pa
++        return pa.table({
++            "symbol": pa.array([row[0] for row in rows], type=pa.large_string()),
++            "expiration": pa.array([row[1] for row in rows], type=pa.date32()),
++            "strike": pa.array([row[2] for row in rows], type=pa.float64()),
++            "right": pa.array([row[3] for row in rows], type=pa.large_string()),
++            "request_date": pa.array([row[4] for row in rows], type=pa.date32()),
++            "osi_symbol": pa.array([row[5] for row in rows], type=pa.large_string()),
++        })
++
+     def _oi_population(self, folder, *, chain="NDX", osi=NDX_OSI, exp="2020-01-17",
+                        milli=3400000, right="CALL", cid=1, dates=None, listed=True,
+                        intervals=None, first_oi=10, last_oi=None,
+                        listing_file_present=True, listing_status="present",
+-                       listing_denominator_known=True):
++                       listing_denominator_known=True, extra_listed=None, extra_oi=None,
++                       omit_listing=False, empty_listing=False, mode=None, listing_count=None):
+         import pyarrow as pa
+         import pyarrow.parquet as pq
+         dates = dates or ["2020-01-02"]
++        identities = [(cid, chain, osi, exp, milli, right)]
++        for item in extra_listed or []:
++            identities.append(item)
++        for item in extra_oi or []:
++            identities.append(item[:6])
+         ident = pa.table({
+-            "contract_id": pa.array([cid], type=pa.int32()),
+-            "chain": pa.array([chain]), "osi_symbol": pa.array([osi]),
+-            "expiration": pa.array([exp]), "millistrike": pa.array([milli], type=pa.int64()),
+-            "right": pa.array([right]),
++            "contract_id": pa.array([row[0] for row in identities], type=pa.int32()),
++            "chain": pa.array([row[1] for row in identities]),
++            "osi_symbol": pa.array([row[2] for row in identities]),
++            "expiration": pa.array([row[3] for row in identities]),
++            "millistrike": pa.array([row[4] for row in identities], type=pa.int64()),
++            "right": pa.array([row[5] for row in identities]),
+         }, schema=identity_schema())
+         ident_path = Path(folder) / "oi-identity.parquet"
+         pq.write_table(ident, ident_path)
++        report_cids = [cid] + [item[0] for item in (extra_oi or [])]
+         reports = []
+         for day in dates:
+-            reports.append({
+-                "contract_id": cid, "chain": chain, "request_date": day, "listed": listed,
+-                "first_oi": first_oi, "first_ts_event_ns": 1, "first_file_id": 1,
+-                "first_row_index": 0, "last_oi": last_oi, "last_ts_event_ns": None,
+-                "last_file_id": None, "last_row_index": None, "alias_multiplicity": 1,
+-                "same_time_conflict": False, "conflict_disposition": "none",
+-                "update_candidate": False, "observed_update_difference": None,
+-                "certified_revision": False, "usable_for_statistics": True,
+-                "n_source_rows": 1, "n_distinct_times": 1, "support_observations": 1,
+-                "dte": 15, "dte_bucket": "15-30", "right": right,
+-                "causal_feature_eligible": False,
+-            })
++            for report_cid in report_cids:
++                ident_row = next(row for row in identities if row[0] == report_cid)
++                reports.append({
++                    "contract_id": report_cid, "chain": chain, "request_date": day,
++                    "listed": listed and report_cid == cid,
++                    "first_oi": first_oi, "first_ts_event_ns": 1, "first_file_id": 1,
++                    "first_row_index": 0, "last_oi": last_oi, "last_ts_event_ns": None,
++                    "last_file_id": None, "last_row_index": None, "alias_multiplicity": 1,
++                    "same_time_conflict": False, "conflict_disposition": "none",
++                    "update_candidate": False, "observed_update_difference": None,
++                    "certified_revision": False, "usable_for_statistics": True,
++                    "n_source_rows": 1, "n_distinct_times": 1, "support_observations": 1,
++                    "dte": 15, "dte_bucket": "15-30", "right": ident_row[5],
++                    "causal_feature_eligible": False,
++                })
+         report_table = pa.table({name: [row[name] for row in reports] for name in report_schema().names},
+                                 schema=report_schema())
+         report_path = Path(folder) / "oi-reports.parquet"
+         pq.write_table(report_table, report_path)
+         if intervals is None:
+-            intervals = [{
+-                "contract_id": cid, "chain": chain, "open_interest": first_oi,
+-                "ts_event_ns": cut_ns_on(date.fromisoformat(dates[0]), "06:30"),
+-                "request_date": dates[0], "file_id": 1, "row_index": 0,
+-                "ambiguous": False,
+-                "valid_from_ns": cut_ns_on(date.fromisoformat(dates[0]), "06:30"),
+-                "valid_to_ns": None, "expiration": exp, "causal_feature_eligible": False,
+-            }]
++            intervals = []
++            for report_cid in report_cids:
++                ident_row = next(row for row in identities if row[0] == report_cid)
++                intervals.append({
++                    "contract_id": report_cid, "chain": chain, "open_interest": first_oi,
++                    "ts_event_ns": cut_ns_on(date.fromisoformat(dates[0]), "06:30"),
++                    "request_date": dates[0], "file_id": 1, "row_index": 0,
++                    "ambiguous": False,
++                    "valid_from_ns": cut_ns_on(date.fromisoformat(dates[0]), "06:30"),
++                    "valid_to_ns": None, "expiration": ident_row[3],
++                    "causal_feature_eligible": False,
++                })
+         interval_table = pa.table(
+             {name: [row.get(name) for row in intervals] for name in interval_schema().names},
+             schema=interval_schema(),
+         )
+         interval_path = Path(folder) / "oi-intervals.parquet"
+         pq.write_table(interval_table, interval_path)
++        listed_n = 0
++        if listed:
++            listed_n += 1
++        listed_n += len(extra_listed or [])
++        if listing_count is None:
++            listing_count = listed_n if listing_file_present and not omit_listing and not empty_listing else (
++                0 if empty_listing else None)
+         cov_table = self._oi_coverage_table(
+-            dates, chain, listing_file_present=listing_file_present,
+-            listing_status=listing_status, listing_denominator_known=listing_denominator_known,
+-            listing_count=1 if listed else 0,
++            dates, chain, listing_file_present=listing_file_present and not omit_listing,
++            listing_status=("empty_marker" if empty_listing else listing_status),
++            listing_denominator_known=listing_denominator_known and not omit_listing,
++            listing_count=listing_count,
+         )
+         cov_path = Path(folder) / "oi-coverage.parquet"
+         pq.write_table(cov_table, cov_path)
++        member_rows = []
++        manifest_files = []
++        if not omit_listing:
++            for day in dates:
++                list_path = Path(folder) / f"oi-listing-{chain}-{day}.parquet"
++                if empty_listing:
++                    pq.write_table(self._listing_table([]), list_path)
++                    raw = list_path.read_bytes()
++                    digest = hashlib.sha256(raw).hexdigest()
++                    member_rows.append({
++                        "file_id": 9000 + len(member_rows), "path": str(list_path),
++                        "sha256": digest, "chain": chain, "role": "contracts",
++                        "request_date": day, "rows_read": 0, "rows_valid": 0,
++                        "rows_invalid": 0, "empty_marker": True,
++                    })
++                    manifest_files.append({
++                        "file_id": member_rows[-1]["file_id"], "path": str(list_path),
++                        "sha256": digest, "size_bytes": len(raw),
++                    })
++                    continue
++                list_rows = []
++                if listed:
++                    list_rows.append((chain, date.fromisoformat(exp), milli / 1000.0, right,
++                                      date.fromisoformat(day), osi))
++                for item in extra_listed or []:
++                    list_rows.append((item[1], date.fromisoformat(item[3]), item[4] / 1000.0,
++                                      item[5], date.fromisoformat(day), item[2]))
++                table = self._listing_table(list_rows)
++                pq.write_table(table, list_path)
++                raw = list_path.read_bytes()
++                digest = hashlib.sha256(raw).hexdigest()
++                member_rows.append({
++                    "file_id": 9000 + len(member_rows), "path": str(list_path),
++                    "sha256": digest, "chain": chain, "role": "contracts",
++                    "request_date": day, "rows_read": len(list_rows),
++                    "rows_valid": len(list_rows), "rows_invalid": 0, "empty_marker": False,
++                })
++                manifest_files.append({
++                    "file_id": member_rows[-1]["file_id"], "path": str(list_path),
++                    "sha256": digest, "size_bytes": len(raw),
++                })
++        member_path = Path(folder) / "oi-membership.parquet"
++        if member_rows:
++            member_table = pa.table(
++                {name: [row[name] for row in member_rows] for name in membership_schema().names},
++                schema=membership_schema(),
++            )
++        else:
++            member_table = membership_schema().empty_table()
++        pq.write_table(member_table, member_path)
++        man_path = Path(folder) / "oi-source-manifest.json"
++        man_path.write_text(json.dumps({"kind": "options_oi_source_manifest_v1", "files": manifest_files}))
+ 
+         def _ref(path, kind, rows):
+             raw = path.read_bytes()
+             return {"path": str(path), "sha256": hashlib.sha256(raw).hexdigest(),
+                     "size_bytes": len(raw), "kind": kind, "rows": rows}
+ 
+-        return {
++        payload = {
+             "passed": True,
+             "family": "Research-Options-OI-report-lifecycle-v1",
+             "version": "options-oi-report-lifecycle-measurement-v2",
+             "refs": {
+-                "identity_map": [_ref(ident_path, "options_oi_identity_map_v2", 1)],
++                "identity_map": [_ref(ident_path, "options_oi_identity_map_v2", len(identities))],
+                 "reports": [_ref(report_path, "options_oi_resolved_reports_v2", len(reports))],
+                 "asof_intervals": [_ref(interval_path, "options_oi_asof_intervals_v2", len(intervals))],
+                 "coverage": [_ref(cov_path, "options_oi_coverage_v2", len(dates))],
++                "membership": [_ref(member_path, "options_oi_membership_v2", len(member_rows))],
++                "source_manifest": [_ref(man_path, "options_oi_source_manifest_v1", len(manifest_files))],
+             },
+         }
++        if mode is not None:
++            payload["mode"] = mode
++        return payload
+ 
+     def _run(self, folder, root, sources, dates, chains, oi=None, schemas=None):
+         return run(
+@@ -761,7 +853,7 @@
+         with tempfile.TemporaryDirectory() as folder:
+             root = Path(folder) / "data"
+             rel = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
+-            oi = self._oi_population(folder, listed=True, first_oi=0)
++            oi = self._oi_population(folder, listed=True, first_oi=0, mode="full")
+             sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
+                               "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
+                               "quote_1m", _write_parquet(root / rel, _quotes([
+@@ -871,17 +963,14 @@
+                 (by_day["2020-01-02"]["raw_bid_n"] or 0) + (by_day["2020-01-03"]["raw_bid_n"] or 0),
+             )
+             self.assertNotEqual(date_mean, event_mean)
+-            groups = result["groups"]
++            groups = load_group_statistics(result)
+             ndx = groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["mean_bid"]
+-            self.assertEqual(ndx.get("raw_mean"), event_mean)
+             self.assertAlmostEqual(ndx.get("estimate"), date_mean)
+             self.assertIn("raw_quantiles", ndx)
+             self.assertIn("date_quantiles", ndx)
+             self.assertNotEqual(ndx["raw_quantiles"].get("0.5"), ndx["date_quantiles"].get("0.5"))
+-            half = groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["known_half_fraction"]
+-            unit = groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["known_unit_fraction"]
+-            self.assertEqual(half.get("estimate"), 0.5)
+-            self.assertEqual(unit.get("estimate"), 1.0)
++            self.assertNotIn("known_half_fraction", PRESPECIFIED)
++            self.assertNotIn("known_unit_fraction", PRESPECIFIED)
+ 
+     def test_mutated_source_hash_fails_before_decode(self):
+         day = date(2020, 1, 2)
+@@ -938,11 +1027,13 @@
+             self.assertEqual(set(combined["selected_chains"]), {"NDX", "QQQ"})
+             self.assertEqual(combined["counts"]["source_rows_read"], fresh["counts"]["source_rows_read"])
+             self.assertEqual(combined["counts"]["source_files_read"], fresh["counts"]["source_files_read"])
+-            self.assertIn("NDX|all_period|all|all|all|all", combined["groups"])
+-            self.assertIn("QQQ|all_period|all|all|all|all", combined["groups"])
++            combined_groups = load_group_statistics(combined)
++            fresh_groups = load_group_statistics(fresh)
++            self.assertIn("NDX|all_period|all|all|all|all", combined_groups)
++            self.assertIn("QQQ|all_period|all|all|all|all", combined_groups)
+             self.assertEqual(
+-                combined["groups"]["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
+-                fresh["groups"]["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
++                combined_groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
++                fresh_groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
+             )
+             self.assertIsNotNone(combined["refs"].get("cut_board"))
+             self.assertIsNotNone(combined["refs"].get("source_manifest"))
+@@ -1097,7 +1188,7 @@
+             oi = self._oi_population(
+                 folder, listed=True, first_oi=0,
+                 listing_file_present=False, listing_status="missing",
+-                listing_denominator_known=False,
++                listing_denominator_known=False, omit_listing=True,
+             )
+             sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
+                               "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
+@@ -1323,7 +1414,7 @@
+                               "quote_1m", _write_parquet(root / rel, _quotes([
+                                   _q("NDX", exp, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 1.0, 1.2, day, ts, NDX_OSI)])))]
+             result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"])
+-            for name, block in result["groups"].items():
++            for name, block in load_group_statistics(result).items():
+                 metrics = block["statistics"]["metrics"]
+                 for metric, payload in metrics.items():
+                     if not metric.endswith("_fraction"):
+@@ -1404,13 +1495,18 @@
+                 outputs=self._outputs(folder, "out-year"), load_reference=None,
+             )
+             self.assertEqual(combined["counts"]["source_rows_read"], fresh["counts"]["source_rows_read"])
++            combined_groups = load_group_statistics(combined)
++            fresh_groups = load_group_statistics(fresh)
+             self.assertEqual(
+-                combined["groups"]["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
+-                fresh["groups"]["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
++                combined_groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
++                fresh_groups["NDX|all_period|all|all|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
+             )
++            ident_a = {(row["osi_symbol"], row["expiration"], row["millistrike"], row["right"])
++                       for row in _near_quoted(_read_parts(r_a["refs"]["cut_board"]))}
++            ident_b = {(row["osi_symbol"], row["expiration"], row["millistrike"], row["right"])
++                       for row in _near_quoted(_read_parts(r_b["refs"]["cut_board"]))}
++            self.assertEqual(ident_a, ident_b)
+             ids_a = {row["contract_id"] for row in _near_quoted(_read_parts(r_a["refs"]["cut_board"]))}
+-            ids_b = {row["contract_id"] for row in _near_quoted(_read_parts(r_b["refs"]["cut_board"]))}
+-            self.assertEqual(ids_a, ids_b)
+             self.assertTrue(all(cid >= LOCAL_ID_BASE for cid in ids_a))
+             corrupt = dict(r_b)
+             cov = dict(r_b["refs"]["coverage"])
+@@ -1451,6 +1547,175 @@
+                     outputs=self._outputs(folder, "out-missing-date"), load_reference=None,
+                 )
+ 
++    def test_local_id_digest_collision_is_disambiguated(self):
++        book = QuoteCodebook()
++        first = book.assign_local("NDX", "OSI-A", "2020-01-17", 1, "CALL")
++        digest_b = book.digest64("NDX", "OSI-B", "2020-01-17", 2, "CALL")
++        book.reverse[digest_b] = ("NDX", "POISON", "2020-01-17", 0, "PUT")
++        second = book.assign_local("NDX", "OSI-B", "2020-01-17", 2, "CALL")
++        self.assertNotEqual(first, second)
++        self.assertNotEqual(second, digest_b)
++        self.assertEqual(book.reverse[second], ("NDX", "OSI-B", "2020-01-17", 2, "CALL"))
++        self.assertGreaterEqual(first, LOCAL_ID_BASE)
++        self.assertGreaterEqual(second, LOCAL_ID_BASE)
++
++    def test_listing_only_oi_only_and_empty_listing(self):
++        day = date(2020, 1, 2)
++        exp = date(2020, 1, 17)
++        ts = local_timestamp(day, time(10, 0), ZONE)
++        extra_listed = [(2, "NDX", "NDX   200117C03500000", "2020-01-17", 3500000, "CALL")]
++        extra_oi = [(3, "NDX", "NDX   200117P03400000", "2020-01-17", 3400000, "PUT")]
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            rel = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
++            oi = self._oi_population(
++                folder, extra_listed=extra_listed, extra_oi=extra_oi, first_oi=4,
++            )
++            sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
++                              "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
++                              "quote_1m", _write_parquet(root / rel, _quotes([
++                                  _q("NDX", exp, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 1.0, 1.2, day, ts, NDX_OSI)])))]
++            result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"], oi=oi)
++            board = [row for row in _read_parts(result["refs"]["cut_board"])
++                     if row["cut_label"] == "10:00" and row["source_family"] == "near"]
++            listed_only = [row for row in board if row["contract_id"] == 2]
++            oi_only = [row for row in board if row["contract_id"] == 3]
++            quoted = [row for row in board if row["quoted"]]
++            self.assertTrue(listed_only)
++            self.assertTrue(listed_only[0]["listed"])
++            self.assertFalse(listed_only[0]["quoted"])
++            self.assertTrue(oi_only)
++            self.assertFalse(oi_only[0]["listed"])
++            self.assertFalse(oi_only[0]["quoted"])
++            self.assertEqual(len(quoted), 1)
++            self.assertEqual(result["counts"]["oi_listing_files_read"], 1)
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            rel = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
++            oi = self._oi_population(folder, empty_listing=True, listing_status="empty_marker")
++            sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
++                              "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
++                              "quote_1m", _write_parquet(root / rel, _quotes([
++                                  _q("NDX", exp, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 1.0, 1.2, day, ts, NDX_OSI)])))]
++            result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"], oi=oi)
++            coverage = [row for row in _read_parts(result["refs"]["coverage"])
++                        if row["cut_label"] == "10:00" and row["source_family"] == "near"]
++            self.assertTrue(coverage)
++            self.assertEqual(coverage[0]["listing_status"], "empty_marker")
++            self.assertEqual(coverage[0]["listed_count"], 0)
++
++    def test_two_listed_one_usable_is_half_and_full_quoted_coverage(self):
++        day = date(2020, 1, 2)
++        exp = date(2020, 1, 17)
++        ts = local_timestamp(day, time(10, 0), ZONE)
++        extra_listed = [(2, "NDX", "NDX   200117C03500000", "2020-01-17", 3500000, "CALL")]
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            rel = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
++            oi = self._oi_population(folder, extra_listed=extra_listed)
++            sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
++                              "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
++                              "quote_1m", _write_parquet(root / rel, _quotes([
++                                  _q("NDX", exp, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 1.0, 1.2, day, ts, NDX_OSI),
++                                  _q("NDX", exp, 3500.0, "CALL", 10, 10, 1, 1, 50, 50, 0.0, 0.0, day, ts,
++                                     "NDX   200117C03500000"),
++                              ])))]
++            result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"], oi=oi)
++            groups = load_group_statistics(result)
++            metrics = groups["NDX|all_period|all|near|all|all"]["statistics"]["metrics"]
++            self.assertAlmostEqual(metrics["usable_fraction"]["estimate"], 0.5)
++            self.assertAlmostEqual(metrics["quoted_fraction"]["estimate"], 1.0)
++            self.assertNotIn("known_half_fraction", metrics)
++            self.assertNotIn("known_unit_fraction", metrics)
++
++    def test_cuts_rights_dtes_families_and_raw_unique_differ(self):
++        day = date(2020, 1, 2)
++        exp_near = date(2020, 1, 17)
++        exp_far = date(2020, 3, 20)
++        ts_10 = local_timestamp(day, time(10, 0), ZONE)
++        ts_15 = local_timestamp(day, time(14, 30), ZONE)
++        osi_put = NDX_PUT
++        osi_far = "NDX   200320C03400000"
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            near = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
++            broad = "databento-opra/opra__ndx-options__cmbp-1__dte365/2020-01-02.parquet"
++            sources = [
++                _admit(1, near, "NDX", "near", "2020-01-02",
++                       "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
++                       "quote_1m", _write_parquet(root / near, _quotes([
++                           _q("NDX", exp_near, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 2.0, 2.2, day, ts_10, NDX_OSI),
++                           _q("NDX", exp_near, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 8.0, 8.2, day, ts_15, NDX_OSI),
++                           _q("NDX", exp_near, 3400.0, "PUT", 10, 10, 1, 1, 50, 50, 3.0, 3.2, day, ts_10, osi_put),
++                           _q("NDX", exp_far, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 4.0, 4.2, day, ts_10, osi_far),
++                       ]))),
++                _admit(2, broad, "NDX", "broad", "2020-01-02",
++                       "databento-opra/opra__ndx-options__cmbp-1__dte365",
++                       "quote_1m", _write_parquet(root / broad, _quotes([
++                           _q("NDX", exp_near, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 6.0, 6.2, day, ts_10, NDX_OSI),
++                           _q("NDX", exp_near, 3400.0, "CALL", 10, 10, 1, 1, 50, 50, 6.0, 6.2, day, ts_10, NDX_OSI),
++                       ]))),
++            ]
++            result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"])
++            groups = load_group_statistics(result)
++            ten = groups["NDX|all_period|10:00|near|all|all"]["statistics"]["metrics"]["mean_bid"]["estimate"]
++            fifteen = groups["NDX|all_period|15:00|near|all|all"]["statistics"]["metrics"]["mean_bid"]["estimate"]
++            self.assertNotEqual(ten, fifteen)
++            call = groups["NDX|all_period|all|near|CALL|all"]["statistics"]["metrics"]["unique_event_count"]["estimate"]
++            put = groups["NDX|all_period|all|near|PUT|all"]["statistics"]["metrics"]["unique_event_count"]["estimate"]
++            self.assertNotEqual(call, put)
++            near_dte = groups["NDX|all_period|all|near|all|15-30"]["statistics"]["metrics"]["unique_event_count"]["estimate"]
++            far_dte = groups["NDX|all_period|all|near|all|61+"]["statistics"]["metrics"]["unique_event_count"]["estimate"]
++            self.assertNotEqual(near_dte, far_dte)
++            near_m = groups["NDX|all_period|10:00|near|all|all"]["statistics"]["metrics"]["mean_bid"]["estimate"]
++            broad_m = groups["NDX|all_period|10:00|broad|all|all"]["statistics"]["metrics"]["mean_bid"]["estimate"]
++            self.assertNotEqual(near_m, broad_m)
++            raw = groups["NDX|all_period|all|broad|all|all"]["statistics"]["metrics"]["mean_bid_raw"]["raw_mean"]
++            uniq = groups["NDX|all_period|all|broad|all|all"]["statistics"]["metrics"]["mean_bid_unique"]["raw_mean"]
++            self.assertEqual(raw, uniq)
++            self.assertGreater(
++                groups["NDX|all_period|all|broad|all|all"]["statistics"]["metrics"]["raw_row_count"]["estimate"],
++                groups["NDX|all_period|all|broad|all|all"]["statistics"]["metrics"]["unique_event_count"]["estimate"],
++            )
++
++    def test_missing_quote_file_still_emits_listed_universe(self):
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            oi = self._oi_population(folder, listed=True, first_oi=7)
++            result = self._run(folder, root, [], ["2020-01-02"], ["NDX"], oi=oi)
++            board = [row for row in _read_parts(result["refs"]["cut_board"])
++                     if row["cut_label"] == "10:00" and row["source_family"] == "near"]
++            self.assertTrue(board)
++            self.assertTrue(all(not row["quoted"] for row in board))
++            self.assertTrue(any(row["listed"] for row in board))
++            coverage = [row for row in _read_parts(result["refs"]["coverage"])
++                        if row["cut_label"] == "10:00" and row["source_family"] == "near"]
++            self.assertTrue(coverage[0]["missing_file"])
++            union = [row for row in _read_parts(result["refs"]["coverage"])
++                     if row["cut_label"] == "10:00" and row["source_family"] == "union"]
++            self.assertTrue(union)
++            self.assertTrue(union[0]["missing_file"])
++
++    def test_invalid_numeric_hides_canonical_price(self):
++        day = date(2020, 1, 2)
++        exp = date(2020, 1, 17)
++        ts = local_timestamp(day, time(10, 0), ZONE)
++        with tempfile.TemporaryDirectory() as folder:
++            root = Path(folder) / "data"
++            rel = "thetadata-opra/opra__ndx-options__quote-1m__dte14/2020-01-02.parquet"
++            sources = [_admit(1, rel, "NDX", "near", "2020-01-02",
++                              "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
++                              "quote_1m", _write_parquet(root / rel, _quotes([
++                                  _q("NDX", exp, 3400.0, "CALL", 10, 10, 1, 1, 50, 50,
++                                     float("nan"), 1.2, day, ts, NDX_OSI)])))]
++            result = self._run(folder, root, sources, ["2020-01-02"], ["NDX"])
++            board = _near_quoted(_read_parts(result["refs"]["cut_board"]))
++            self.assertTrue(board)
++            self.assertIsNone(board[0]["bid"])
++            self.assertIsNone(board[0]["ask"])
++            self.assertIsNone(board[0]["mid"])
++            self.assertTrue(board[0]["nonfinite_price"])
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

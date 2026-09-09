@@ -1,0 +1,1197 @@
+{
+  "kind": "b00-6-decision-source-preparation",
+  "status": "DRAFT_SOURCE_AND_HAND_CASES_ONLY",
+  "reader": "/root",
+  "scope": [
+    "B00.6"
+  ],
+  "engineering_only": true,
+  "planning_records": [
+    {
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_HANDOFF.md",
+      "sha256": "3f5603dbb77d411a30f18f0a89dda845d098b34883304a72fb97ee78f67e914d",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          1,
+          69
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1,
+          "end": 69,
+          "text": "# Complete implementation handoff\n\nPrepared 2026-09-06. **Implementation has not started. This handoff covers one continuing implementation workflow for the entire B00–B10 program.** There is no requirement to create a thread per phase, feature family or asset. A single new implementation thread in the same project/workspace is recommended to separate the build outcome from this planning discussion; continuing here is also possible. The receiving thread must verify access to and read the durable files. Separate project chats have their own transcripts, while project files carry durable guidance. [Projects and chats](https://learn.chatgpt.com/docs/projects).\n\n## Complete scope and governing constraints\n\nBuild and evaluate the full Context → Location → Response research system, including foundations, measurements, options, cross-market information, opportunity generation, mixtures/calibration/selection, policy, execution, independent risk, account cash, validation and operations. **Context and Location may originate entries.** Build their foundations and the neutral execution/risk harness first; detailed Response and management experiments follow in this same program. “Later” specifies sequence and dependencies, not another handoff or an omitted requirement.\n\nThe primary experiment is one account, flat or one outright NQ/ES mini, preferably NQ; a $2,000 mean daily net objective across all eligible days including zero-trade days; a $1,000 daily loss objective; and flat at the required boundary. No account copying, additional units, partial exits or micro substitution. Feasibility is unknown. Report trading net and business cash separately until their target accounting basis is resolved. Preserve the user's actual constraints over historical assistant proposals.\n\nUse all supported information. NQ/ES are execution choices, not a limit on inputs. IV/VIX, Gamma, volume profiles and CVD are examples of the depth required across every component. Retain all clocks, range/path variants, auction states, volatility features/forecasts, options/OI/Greek/flow/node mechanisms, cross-market relationships and location/response branches. Preserve each upgrade path from the original crude idea, through the prior conversation's proposed improvement, to the refined measurement/representation/model and its comparisons. Complexity is justified by evidence; a learned model is optional. MBP-1 is the primary available futures event source; “BBO” means its validated best-quote state unless a sampled-schema comparison is explicitly identified. Preserve raw action, side, flags, source order, timing and uncertainty under the [source contract](MARKET_DATA_SOURCE_CONTRACT.md).\n\nThe [full scope index](IMPLEMENTATION_SCOPE.md) and [machine-readable scope](review/implementation_scope.json) enumerate every required parent, refinement, P0–P7 phase, source finding, requirement, dataset and backlog task. They include the binding [153 definition refinements](SYSTEM_REFINEMENT.md), [153 substantive upgrade paths and 191 specific child instructions](UPGRADE_PATHS.md), and [implementation constructions](UPGRADE_CONSTRUCTIONS.md). They are coverage obligations, not proof that every hypothesized model should be deployed. Implement and evaluate eligible comparisons under registered budgets; retain negative and inconclusive results. Unavailable observations or unpublished formulas receive exact dependency/disposition records. A placeholder, a test with only a component name, or an unevaluated stub does not satisfy a mechanism.\n\nThe previous failed workspace archive under `/workspace/archive/` remains excluded from inspection/adoption. Supplied source conversations remain in scope, including prior assistant proposals as hypotheses. Preserve original source/data bytes.\n\n## Reading and conflict resolution\n\n1. Read [README](README.md), this handoff, [full scope](IMPLEMENTATION_SCOPE.md), [master plan](IMPLEMENTATION_PLAN.md), [requirements](REQUIREMENTS_TRACEABILITY.md), and [source contract](MARKET_DATA_SOURCE_CONTRACT.md).\n2. Read [common contracts](components/COMMON_CONTRACTS.md), [computation schedule](components/COMPUTATION_SCHEDULE.md), [runtime scheduler](components/RUNTIME_SCHEDULER.md), [data capabilities](DATA_CAPABILITY_AUDIT.md), [quality criteria](MODEL_QUALITY_AND_STOPPING_RULES.md), [validation](VALIDATION_PLAN.md), and the complete [B00–B10 backlog](IMPLEMENTATION_BACKLOG.md).\n3. Read [specialist experiment rules](SPECIALIST_EXPERIMENT_PROGRAM.md), [all-family experiment index](experiments/README.md), [upgrade paths](UPGRADE_PATHS.md), [construction contracts](UPGRADE_CONSTRUCTIONS.md) and [E0 reference](E0_REFERENCE_EXPERIMENT.md). Before implementing each unit, read its entire ten-part parent card, its specific child definition/upgrade/local phases, applicable shared constructions and upstream contracts. Register every source alternative and upgrade stage with an actual comparison or dependency; an index or representative child alone is insufficient.\n4. Follow every implemented mechanism back through [source routes](traceability/SOURCE_TO_DESIGN.md), [source findings](SOURCE_FINDINGS_AND_CONFLICTS.md), [conversation recheck](CONVERSATION_RECHECK.md), [external routes](traceability/EXTERNAL_TO_DESIGN.md) and [source ledger](SOURCE_REVIEW_LEDGER.md) to the original referenced passage. Expand its exceptions and corrections into named expected assertions.\n\nThe latest explicit corrections refine the earlier baseline; they do not silently delete unrelated mechanisms. Record semantic conflicts and resolve them before dependent code is built. Preserve faithful causal source comparators and separately named corrected/improved variants. An impossible, unobservable or leaky original needs an explicit reason and a valid comparison, not invented data or a claimed reproduction.\n\n## Continue through all milestones\n\n| Milestone | Required progression in this same workflow |\n|---|---|\n| B00 | Typed units/time/identity/ports, label/fold/reference fixtures, complete scope registry, provenance, trial ledger and resumable evidence records |\n| B01 | Certify source/version/field/cohort semantics across all 111 catalog datasets; MBP event decoding, trade/quote reconciliation, calendar/roll, as-of availability, options/chain/OI coverage and other family-specific dependencies |\n| B02 | Deterministic ordinary/cohort CVD with true OHLC; volume/delta/TPO/footprint/VWAP; swings/SMT/effort/flow/memory; exact source ranges, anchors, structures and causal object revisions |\n| B03 | Implement and evaluate E0 as the first complete one-mini economic baseline, including simple complete competitors, orders/fills/costs, rejected candidates, eligible days and account paths. **E0 is an early checkpoint, not program completion.** |\n| B04 | Every Context range/path, open/auction/value/participation/session/regime/origination specialist and the full physical/implied/event/remaining-horizon volatility program; independent quality, mixtures and decision effects |\n| B05 | Options universe/quotes/signs/surfaces/Greeks/OI; next-report OI and uncertain intraday holdings; all flow channels; exposure attribution; node topology, identity, movement, action roles and futures-options branches |\n| B06 | Related-market coordinate mapping, NDX/NDXP/QQQ and S&P comparisons, source-only transmission without receiver touch, joint strike/expiry/chain/asset/time models, cross-flow SMT and supported broader source families |\n| B07 | All 19 Location parent families and children, width/identity/lifecycle/refinement/confluence/candidate competition; compatible mixtures, calibration, reach/path/value, act/wait/confirm/abstain and controlled adaptation; integrated E1–E4 comparisons |\n| B08 | Full-position exits/trails/targets, cumulative re-entry lineage, execution/cost/fill uncertainty, independent risk/scheduling, order/broker-state fault simulation, product-specific rules, boundaries and trading/business cash |\n| B09 | All 22 Response parents and children, observable prefixes and source variants, failed/no-retest/quiet-failure branches, annotations and E5 incremental entry/exit value on frozen initial C/L opportunities |\n| B10 | Freeze the selected complete policy and future endpoint/inference protocol; collect permitted prospective evidence as time elapses, verify parity/operations, evaluate matured outcomes and reconcile complete scope before the later deployment decision |\n\nThe backlog defines exact tasks, prerequisites and resource envelopes; this table explains continuity. Dependencies may allow independent branches to overlap. A blocked optional feed/expert disables its consumers only. Continue other eligible work and keep the blocked branch visible with its exact missing observation, access, resource or elapsed-time requirement. Do not automatically ask whether to continue at each milestone or asset boundary within the authorized implementation scope.\n\n## Evidence ledger and completion rules\n\nAt B00 create a durable implementation ledger outside the generated planning manifests. Import every scope ID and record independently: definition reviewed, code/reference artifact, semantic/causal verification, data/cohort eligibility, each applicable experiment phase, evidence locations and disposition. Keep an append-only history; checkpoint current work, exact versions, commands/results, blockers and next eligible steps for resumption. Scope regeneration never overwrites actual status.\n\nUse separate engineering states (`unstarted`, `in_progress`, `implemented`, `verified`), evaluation states (`unrun`, `running`, `evaluated`) and dispositions (`undecided`, `selected`, `rejected`, `inconclusive`, `dependency_blocked`, `not_applicable`) with explicit evidence and applicability. A rejected model may be fully implemented and tested; an operational invariant is accepted on fidelity rather than alpha. `not_applicable` requires a contract-based reason; it cannot replace an unwanted comparison. Every deliberate scope change carries its prior requirement, reason and dependency consequences.\n\nBefore any completion claim, compare exact scope IDs and required phases against the ledger, reconcile source-clause assertions and datasets' field/cohort eligibility, and inspect missing/blocked/inconclusive records. Report separately:\n\n- **Engineering completion:** requested eligible modules, reference fixtures, orchestration, reports and reproducible bounded research runs are implemented and verified.\n- **Research disposition:** every eligible hypothesis/comparison has required evidence supporting selected/rejected/inconclusive status; unsupported ones retain specific dependency records.\n- **Economic evidence:** the complete policy's measured results and uncertainty, including all eligible days and constraints. Coding completion does not establish the $2,000 objective.\n- **Outstanding future work:** prospective time, live receipt data or other unresolved dependencies, without relabeling them completed. Future observation cannot be produced in one sitting by faster compute.\n\nAll phases remain planned at this handoff. No model is selected simply because its name appears in the plan, and no family disappears because E0 or a neighboring specialist performed poorly. Use registered useful-effect, power and resource rules to limit inconclusive research; record closure and next evidence explicitly.\n\n## Existing evidence and starting work\n\nThe package records review of 39 PDFs/580 pages, five conversations, 83 ZIP text/source members and 712 source findings. Its 153 parent contracts and 191 named refinements have eight proposed phases each: 344 units and 2,752 phase records. The 111-dataset/80,198-file inventory is reconciled; bounded schema/timing/coverage audits include representative Parquet checks, native options records, selected full trade reconciliations and a later MBP field/flag audit. The [data audit](DATA_CAPABILITY_AUDIT.md) records their exact unequal depths and remaining family-by-family work. The VIX audit is one bounded feasibility example within this broader program.\n\nThese facts certify neither every data row nor a working trading model. Existing `review/` scripts are planning/audit utilities. The backlog's proposed `python -m trading_research ...` interfaces do not yet exist. No model fitting, strategy backtest, prospective trial or profitability evaluation has been performed.\n\nOnce implementation is requested, inspect applicable repository instructions and existing files, create an isolated research package, import the full scope, and begin B00/B01 with literal reference readers and tiny deterministic replay fixtures. Preserve a reference implementation when optimizing measured hot paths. Measure bounded-partition throughput before wider jobs. The plan does not itself authorize purchases, materially costly expansion, external orders or messages to others; preserve any later explicit authorization without requesting it repeatedly.\n\n## Message to start the single implementation thread\n\n> Implement the complete trading research system in this workspace. Start by reading `/workspace/planning/trading-model/IMPLEMENTATION_HANDOFF.md`, its full scope manifest and required documents. Carry the entire B00–B10 program in this one continuing thread: all F/M/C/O/X/L/G/P/R/V parents, refinements, local phases, source clauses, datasets and binding upgrades. Begin with B00/B01, build deterministic measurements and E0, then continue through all eligible Context, options, cross-asset, Location, selection, policy/risk, later Response and validation work. E0 and individual milestones are checkpoints, not stopping boundaries. Preserve all user constraints and the excluded-archive boundary. Maintain a durable implementation/evidence ledger with exact scope coverage and resume from it. If a branch requires unavailable data, future elapsed time or separate authorization, record the precise dependency and continue independent work. Use bounded measured runs; do not claim proposed tests passed or profitability before evidence. Report engineering completion, research dispositions, economic evidence and outstanding future dependencies separately."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_BACKLOG.md",
+      "sha256": "72e894dc687a67fe46055f4a65e8b9b693640230512efbef62955212b5f01ea3",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          158,
+          177
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 158,
+          "end": 177,
+          "text": "Before B01 feature/forecast integration, add the port registry and `T-DAG` compiler/OOF negative fixtures specified in [COMPUTATION_SCHEDULE.md](components/COMPUTATION_SCHEDULE.md). This is a B00/B01 prerequisite, not a later cleanup task. Build X02 raw-parity bootstrap before O02 IV; keep O03 sign usable independently of IV. B04 volatility comparisons include C23 Parkinson and C24 ARCH/GARCH. Options and M09 implementation must include the second-review sign, timing and net-recovery fixtures in VALIDATION_PLAN.md. No command for these future modules has been run during planning.\n\nThe final source-clause audit adds O23’s per-expiry settlement-payoff benchmark to B05/B07, C04.OPEN_TYPE prefix/label fixtures to B04, and R11.FA_POC/FA_VALUE distinct prior-balance sequences to deferred B09. They inherit the same evidence gates; source naming does not imply profitable behavior.\n\n## Third-review additions within the existing milestones\n\nThese are binding elaborations of B00–B10, not a second implementation track. All commands and trading tests remain future work.\n\n| Task | Concrete deliverable and prerequisite | Required evidence |\n|---|---|---|\n| B00.5 | Import all 153 parent and 191 named refinement contracts with their eight phase records; expand each listed local case into named expected assertions | Registry/source/target coverage; explicit applicable/inapplicable fields; no empty name-only tests |\n| B00.6 | Implement capability, fixed-end horizon, incremental/macroaction reward, standing-quote, geometry and duplicate-assimilation reference fixtures | T-CAPABILITY/T-HORIZON/T-REWARD/T-STANDING-QUOTE/T-GEOMETRY/T-OI-ASSIMILATION |\n| B01.7 | Certify VIX/VIXW product/venue/condition/clock/rate rules and broaden the bounded VIX quote/OI audit; distinguish UX data dependency | Quote/OI expiry support, parity inconsistency, IV intervals and historical source rules |\n| B01.8 | Dataset/field/cohort readiness ledger covering all 111 catalog datasets; preserve completed audit depth, unresolved semantics and each dependent expert | F01/F05/F06/F07; apply MARKET_DATA_SOURCE_CONTRACT and the family readiness matrix; no family becomes certified from inventory alone |\n| B03.5 | Implement the exact E0_REFERENCE_EXPERIMENT, including minute decision/contact semantics, full-unit brackets and frozen cost/feed/order-delay scenarios | Complete causal label/order/day/account reference and always-flat/simple/model comparisons |\n| B04.5 | Run individual range, auction, physical-volatility, IV/skew/term/event/VIX and remainder experiments, then prespecified mixtures/interactions | Per-unit P0–P6 artifacts and matched information/model capacity; no variance-to-path shortcut |\n| B05.6 | Restore all Greek-flow channels including vega; fit primitive joint surface scenarios before dependent node dynamics; test uncertainty and one-time evidence assimilation | Per-channel units/OOF/ablation; acyclic C15.SCENARIO port; node/runner increment |\n| B06.6 | Test broad source families, price/cohort-flow SMT and source-only transmission with actual per-source cadence | Same-date/common/full cohorts, lag/placebo and native-unit checks; missing-data gates |\n| B07.6 | Compare every Location generator/refinement and target-matched selector; separate candidate/scorer tests, model sharing and exact in-set diagnostics | Density/width/age controls, input lineage, reward/occupancy parity and whole-policy ablation |\n| B08.5 | Implement independent scheduler/atomic risk reservations and boundary-truncated late-session plans | Overload/timeout/duplicate-intent/restart/late-forecast fixtures and measured latency |"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/VALIDATION_PLAN.md",
+      "sha256": "ba2d556b1bdd329c2296f1d8dd5a82a0ea7114777da45b20f3e2d513d50bdb6c",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          152,
+          167
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 152,
+          "end": 167,
+          "text": "`T-SRC-MAV-05/T-SRC-ALM-03` distinguish established balance A, prior balance B, the specific B-POC versus broader value reference, rejection/acceptance, re-entry and unfinished far-edge traversal. `T-SRC-AM1-08` tests causal opening-type attributes versus their matured labels. `T-O23` verifies exact max-pain payoff/minimizer sets, mixed-settlement/coverage failures and incremental value versus full-node/round-strike controls; it never validates pinning by construction.\n\n## Third-review contracts to test explicitly\n\n| Case | Required invariant and outcome | Owners |\n|---|---|---|\n| T-CAPABILITY / T-ORDER | Same terminal return and excursions can have opposite barrier order; reject a variance/excursion-only forecast at a trajectory-required port | CC-03/04, C06.JOINT, G04.ORDER |\n| T-HORIZON | Pre-contact prediction ends at t+h; a later contact prediction ending at contact+h is a different target; no-contact with full observation differs from censoring | V01, G04/05 |\n| T-REWARD | Incremental net rewards telescope; macroaction continuation starts at its actual terminal time/state; fees and complete-trade P&L are charged once | G06/07, P01/11 |\n| T-STANDING-QUOTE | Marketable fills use valid standing venue BBO at arrival, including unseen-yet venue updates only in outcome replay; no mandatory wait for a new quote update | P05.CLOCKS, F04 |\n| T-OI-ASSIMILATION | O07's flow-conditioned forecast and the same flow are not independent repeated observations; duplicate-evidence input cannot create spurious certainty | O07/08/21 |\n| T-GEOMETRY | Physical band, estimation/mapping uncertainty and entry tolerance remain distinct; changing the labeled region creates a new target | O11, L04/13/16, F10 |\n| T-VEGA-FLOW | Distinct vega-weighted CVD, USD/unit-IV versus USD/vol-point conversion, event-frozen eligibility, true OHLC and sold-trade sign | O05/16 |\n| T-SCHEDULER | Slow optional work cannot block independent risk/boundary handling; expired forecasts retain their original horizon; pre-dispatch state/risk reservation is atomic | F04/11/12, P07/08/10 |\n| T-QUALITY | Controlled planted signal recovered; future-only field rejected; information/model/generator/scorer tests separated; approximate oracle never called a proven bound | V02/03/04/07 |\n| T-FUTURE-END | Fixed endpoint baseline; any sequential extension requires a valid declared inference method; risk halt retains the full record | V03/04/05 |"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/THIRD_DESIGN_REVIEW.md",
+      "sha256": "8ea7f312305064da17735a4ee671050de165bf7ccf3c78a6ba874403339b8d4d",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          1,
+          64
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1,
+          "end": 64,
+          "text": "# Third design review: substantive expansion and remaining evidence\n\nThe previous plan preserved the broad source families, but it still left too much inside broad component names and shared test language. This review adds a more concrete improvement and testing program across **every layer**, including subjects not repeated in the latest messages. It also fixes several mathematical, timing and inference ambiguities. This is an improved research specification; no production trading system or empirically validated edge is claimed.\n\nThe 153 parent contracts remain the architecture. They now have eight explicit experiment phases, alongside 191 named refinements: **344 experiment units and 2,752 phase records**. These numbers count proposed experiments and phase specifications, not independent models, successful tests or required deployed components. Independent specialist heads, shared representations and simple joint competitors must be compared fairly.\n\n## Read the important additions\n\n| Document | What it makes concrete |\n|---|---|\n| [Quality and stopping rules](MODEL_QUALITY_AND_STOPPING_RULES.md) | How to judge correctness, predictive strength, calibration, incremental information, decision value and best-supported alternatives; learning curves, uncertainty and inconclusive results |\n| [Specialist program](SPECIALIST_EXPERIMENT_PROGRAM.md) and [family index](experiments/README.md) | Local targets, input/definition choices, challenger models, fixtures, ablations and P0–P7 phases for every parent/refinement |\n| [Volatility/IV/skew/VIX research](VOLATILITY_RESEARCH_SPEC.md) | Physical estimators, full supported smiles, skew/curvature, total/forward/event variance, intraday surface changes, joint shocks, 0DTE remainder and VIX-option specialists |\n| [E0 reference](E0_REFERENCE_EXPERIMENT.md) | Initial date cohort, minute contact/decision semantics, features, model comparisons, bracket choices, latency/cost assumptions and accounting |\n| [Runtime scheduler](components/RUNTIME_SCHEDULER.md) | Different update clocks, completed-version publication, deadlines, stale state, backpressure, independent risk and atomic dispatch |\n| [Conversation recheck](CONVERSATION_RECHECK.md) | Explicit routes from all 122 conversation findings to concrete experiment units, while retaining the full original source clauses |\n\n## Material findings and changes\n\n| Finding | Previous limitation | Correction and verification route |\n|---|---|---|\n| TR-01 Individual testing was too implicit | Ten-part parent cards and generic test families did not expose each small hypothesis's sequence of evidence | Every parent/refinement now has P0–P7 with local cases, targets, challengers, metrics and decision consequences. A named test alone does not satisfy a source case. |\n| TR-02 “Best” had insufficient operational meaning | A more complex model or a higher local score could appear to justify improvement without identifying the bottleneck | Separate data/definition/information/model/policy comparisons; actual-input lineage; learning curves; planted/null controls; useful-effect thresholds; scoped oracle diagnostics; fixed confirmatory rules. |\n| TR-03 Vega flow was omitted | O16 listed delta/gamma/vanna/charm but not the vega flow explicitly present in the DTM conversation | Added a separate vega CVD/OHLC experiment, correct USD/unit-IV versus USD/vol-point units and independent future-surface/receiver tests. |\n| TR-04 IV/skew/VX coverage was too broad | One C15 card and a generic C16 description obscured substantially different mechanisms and data needs | Explicit ATM, smile, delta-skew, curvature, tenor, event, variance-gap, strip, intraday-change, leverage, 0DTE and cross-IV heads; separate VIX forward/surface/VVIX, daily VX and distinct VX-option dependency. |\n| TR-05 VIX feasibility was underused | The existing audit established files, but did not show whether actual intraday call/put sets supported a calculation | Read three quote days, compute illustrative parity/IV at nine cuts, preserve quote/rate/clock limitations and pair inconsistencies. OI expiries exceed the request-folder label; quote/OI coverage must be separate. |\n| TR-06 Variance/excursions could be treated as paths | Calibrated excursion summaries alone do not determine barrier order | Typed forecast capability masks and explicit dynamics/survival requirements; same-excursions/opposite-order fixtures. |\n| TR-07 Contact-horizon labels were ambiguous | Pre-contact reach by t+h could be multiplied with post-contact outcomes extending to contact+h | Fixed common end for pre-contact targets; separately identified contact-origin targets; no-contact versus censor distinction. |\n| TR-08 Waiting-value rewards could double count | A full-trade value could be mistaken for one-step reward plus overlapping continuation | Incremental marked-net or semi-Markov macroaction contracts; fees once; continuation at actual terminal state/time; same account boundary and occupied-time comparison. |\n| TR-09 OI evidence could be assimilated twice | O07 already uses some flow subsequently passed into O08 | One coherent conditional assimilation path; duplicate-evidence certainty fixture; endpoint calibration remains separate from unidentifiable intraday holdings truth. |\n| TR-10 Marketable-fill wording used the next quote | Waiting for a new post-arrival quote can change execution time and price | Use standing venue BBO at actual simulated arrival; separate strategy-information and venue-outcome clocks, feed lag and outbound lag. |\n| TR-11 Geometry and uncertainty could be conflated | Strike-cluster spread, mapping/model uncertainty and contact tolerance were described as one width | Separate fields and explicitly defined scenario regions; freeze the actual event band and compare matched width/count/distance. |\n| TR-12 A DAG could still imply all work on every tick | Logical dependency ordering did not specify multi-rate execution, expiry or overload behavior | Independent risk/order lane; cached completed versions; bounded optional work; explicit cadence/TTL trials; atomic pre-dispatch reservation. |\n| TR-13 Primitive surface scenarios needed their own port | Joint-shock improvements could otherwise create a new C15↔O10/O12 cycle | Restricted C15.SCENARIO after the raw surface, before node decomposition; no current downstream/final forecasts as inputs; explicit negative cycle fixtures. |\n| TR-14 Frozen versus adaptive evaluation conflicted | F12 forbade all telemetry-driven fitting while G10 allowed a preregistered adaptive policy | Baseline freezes parameters; an adaptive challenger freezes its update rule and evaluates the complete causal trajectory. |\n| TR-15 Future-test extension was statistically incomplete | Extending until an ordinary confidence interval reaches desired precision/target can invalidate the intended coverage | Fixed endpoint as initial protocol; justified group-sequential/time-uniform alternatives require explicit assumptions and estimand. Risk halts retain the whole record. |\n| TR-16 Standalone gain could become an excessive gate | An exact service or interaction-only input need not be profitable/predictively superior alone | Mandatory semantic/causal integrity, but allow preregistered neither/A/B/A+B comparisons and explicit invariant/risk roles; require integrated evidence before promotion. |\n| TR-17 The early baseline left too many choices open | E0 was an experiment outline rather than a reproducible reference | Exact initial sampling, inputs, models, observations, entry/bracket/time exits, timing stress and required fee/account manifest. It is an engineering benchmark, not an adopted strategy. |\n\n## Improvements beyond volatility\n\nThe [measurement experiments](experiments/M.md) separate source size cohorts from adaptive/continuous size marks, true CVD OHLC from closing totals, and exact trade profiles from bar allocation. They test causal profile anchors, multimodal shelves/valleys, buy/sell/delta channels, TPO versus dwell, robust VWAP bands, swing confirmation, BBO net recovery, intensity, effort efficiency and aggression-memory decay.\n\nThe [Context experiments](experiments/C.md) preserve different Jumbo path branches and opening types while comparing learned clock, activity and auction/change-point ranges. Conditional/analog and joint excursion models update remaining movement from the observed prefix. Auction acceptance, value migration, event responses, realized reversion/expansion and session transitions receive separate tests. An eventual day label or gamma sign cannot replace those observables.\n\nThe [Location experiments](experiments/L.md) compare every source family and its improvements at matched geometry and candidate density, then distinguish a better generator from a better scorer. Internal EQ continuation, small options nodes, in-between learned proposals, actual profile anchors, dynamic versus frozen targets, retest lifetimes and source-only receiver entries remain independently eligible hypotheses.\n\nThe [options](experiments/O.md) and [cross-market](experiments/X.md) experiments separate raw information, surface/Greek accuracy, holdings scenarios, mechanical changes, node dynamics, topology, chain identity and joint representations. They include explicit NDX/NDXP/QQQ and SPX/SPXW/SPY comparisons, price versus cohort-flow SMT, directed source-only transmission, and each supported global/slow-context family with publication gates. Acquired daily gold/dollar context is now explicitly routed without assuming intraday GLD/OG data.\n\nThe [selection](experiments/G.md), [policy/risk](experiments/P.md) and [research](experiments/V.md) experiments compare model diversity, calibration/support, reach/runner duration, cost-dependent value, occupancy-aware waiting, actual action selection, fills/shortfall, full-position exits, re-entry and account/cash consequences. Detailed [Response](experiments/R.md) remains later, but its source variants and prefix/entry/exit tests are explicit now, including the distinct failed-auction and resqueeze branches.\n\n## What was actually checked in this review\n\nAll ten component-family documents, common contracts, dependency schedule, implementation/validation/backlog and governing requirements were reviewed for the expanded design; affected evidence, data and risk documents were reconciled. All five original conversations had already been read fully in the source review; this pass rechecked their 122 finding rows and explicitly assigned experiment routes. The original 712-source and 114-external matrices were retained and regenerated for the changed document locations. The [five new primary checks](THIRD_REVIEW_RESEARCH.md) bring external finding records across the two research documents to 119. This is not a fresh claim of rerendering all 580 source PDF pages during this pass.\n\nThe completed [VIX audit](review/third-review/VIX_FEASIBILITY.md) read **261,970 quote rows**, three accompanying OI files, nine decision cuts and 18 expiry/cut combinations. Illustrative IV inversion was possible in all 18 under stated assumptions; several whole-pair parity sets were inconsistent, and uncertainty remains explicit. The [27 finite worked-example assertions](review/third-review/DESIGN_EXAMPLES.md) checked reward arithmetic, path order, target clocks, standing quotes, duplicate evidence, geometry, Greek units and the review-only IV solver. Neither activity is a fitted strategy test or proof of signal quality.\n\nThe reproducible [planning audit](review/document_qa.json) checks required documents, parent fields, exact source/requirement routes, local links and preserved source hashes. The [third-review audit](review/third-review/review_qa.json) checks all 344 units/2,752 phase records, local definitions, 122 explicit conversation routes, five research entries and bounded-example/data evidence. Structural checks do not prove semantic completeness or empirical success. The pre-review authored package and manifest are preserved in `review/third-review/planning-baseline.zip` and `baseline-manifest.json`.\n\n## What remains unknown\n\nThe strongest future signal, best supported model, achievable daily net and required data scale remain empirical questions. Useful-effect thresholds, numerical runtime budgets and exact account fees/permissions are set or certified before their dependent implementation experiments; they are not inferred from a plan. Missing quote conditions/receipts, incomplete wings, uncertain publication vintages, unacquired constituent/TRF/depth/VX-option streams and undisclosed source formulas retain their explicit gates. The excluded old workspace archive remains excluded.\n\nThe requested outcome of this review is a much more concrete, broadly improved and falsifiable plan. Execution of the proposed trading-model program is separate work. “Best supported under tested conditions” is the acceptance standard; the quality framework prevents an impressive specification, large model count or reputation claim from being mistaken for evidence."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/review/third-review/DESIGN_EXAMPLES.md",
+      "sha256": "e9fbf43a14dc044fed5869662e27c032f5dcb67ea00dd5883edcb7d9d0e762ad",
+      "role": "original_finite_mathematical_example",
+      "read_ranges": [
+        [
+          1,
+          37
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1,
+          "end": 37,
+          "text": "# Verified finite design examples\n\nFinite arithmetic, ordering and clock examples only. This does not test an implemented trading system, data feed, forecast model, policy or profit.\n\n**27 explicit assertions passed.** These examples check the internal logic of the corrected specification and the small review-only IV inversion routine. They are not the thousands of proposed trading-system phase checks.\n\n| Example | Actual | Expected | Meaning |\n|---|---|---|---|\n| EXAMPLE-REWARD-01 | 95 | 95 | Incremental marked-net reward telescopes to terminal net. |\n| EXAMPLE-REWARD-02 | True | True | A shorter trade can leave valuable occupied-time capacity; all alternatives use the same boundary. |\n| EXAMPLE-REWARD-03 | False | False | Adding complete-trade reward and overlapping continuation double counts value. |\n| EXAMPLE-ORDER-01 | (2, 1, 1) | (2, 1, 1) | Identical excursions and endpoint do not identify order. |\n| EXAMPLE-ORDER-02 | ('upper', 'lower') | ('upper', 'lower') | The ordered labels must differ despite matching excursion summaries. |\n| EXAMPLE-HORIZON-01 | False | False | Contact at minute nine and favorable passage at eleven is unresolved at the original minute-ten end. |\n| EXAMPLE-HORIZON-02 | True | True | A new ten-minute contact-origin forecast has a different end and label. |\n| EXAMPLE-QUOTE-01 | 100 | 100 | The strategy cannot use the later venue quote before receipt. |\n| EXAMPLE-QUOTE-02 | 102 | 102 | At arrival the venue can have a changed standing quote not yet received locally. |\n| EXAMPLE-QUOTE-03 | False | False | A marketable fill is not delayed to the next quote update. |\n| EXAMPLE-ASSIMILATION-01 | 0.5 | 0.5 | Identical evidence ID is assimilated once in this illustrative Gaussian model. |\n| EXAMPLE-ASSIMILATION-02 | 0.5 | 0.5 | Duplicate input must not create a second independent observation. |\n| EXAMPLE-GEOMETRY-01 | False | False | The original physical band does not include a point admitted only by a wider uncertainty region. |\n| EXAMPLE-GEOMETRY-02 | True | True | A declared scenario region is a distinct event definition, not a retroactive physical touch. |\n| EXAMPLE-VEGA-01 | 1000 | 1000 | USD per unit annualized IV fraction. |\n| EXAMPLE-VEGA-02 | 10.00 | 10 | USD per one volatility percentage point. |\n| EXAMPLE-VEGA-03 | -10.00 | -10 | A sold trade reverses the signed vega-flow contribution. |\n| EXAMPLE-SKEW-01 | 0.06 | 0.06 | Put-minus-call skew uses a declared positive downside-richness convention. |\n| EXAMPLE-SKEW-02 | 0.02 | 0.02 | Butterfly curvature is distinct from the skew slope. |\n| EXAMPLE-TERM-01 | 0.14 | 0.14 | Interval total-variance difference is a variance proxy, not a difference of volatilities. |\n| EXAMPLE-RISK-01 | 430 | 430 | Headroom subtracts current net loss and incremental stop/cost exposure once. |\n| EXAMPLE-OI-01 | (80, 120) | (80, 120) | Synthetic no-exercise OI bounds do not identify a path or trade-level opening status. |\n| EXAMPLE-NONFILL-01 | 0 | 0 | No fill creates zero trade P&L absent an explicit order cost; a missed winner is an alternative-policy diagnostic. |\n| EXAMPLE-IV-01 | 0.40000000000000047 | 0.4 | Bisection inversion agrees with an independent ATM closed-form identity. |\n| EXAMPLE-IV-02 | 0.40000000000000047 | 0.4 | ATM put/call symmetry under the same forward convention. |\n| EXAMPLE-IV-03 | None | None | Below-bound quotes have no admissible IV. |\n| EXAMPLE-IV-04 | None | None | A price at the strict upper bound has no finite IV in this convention. |\n\n[Machine-readable results](design_examples.json). [Reproduction script](verify_design_examples.py)."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/review/third-review/verify_design_examples.py",
+      "sha256": "1e554d90dff4dc00033c9c7cbdcf616b4b5cf9673f95e05b016b93999109956a",
+      "role": "read_only_original_example_not_executed",
+      "read_ranges": [
+        [
+          1,
+          84
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1,
+          "end": 84,
+          "text": "\"\"\"Finite independent worked examples for design corrections; no strategy tests.\"\"\"\nfrom pathlib import Path\nfrom datetime import datetime, timezone\nfrom decimal import Decimal as D\nimport ast\nimport json\nimport math\n\nOUT=Path(__file__).resolve().parent\nresults=[]\ndef check(id,actual,expected,meaning,tol=None):\n    ok=abs(float(actual)-float(expected))<=tol if tol is not None else actual==expected\n    results.append({'id':id,'passed':bool(ok),'actual':str(actual),'expected':str(expected),'meaning':meaning})\n    assert ok,(id,actual,expected)\n\n# Literal account marks already include each charged fee exactly once.\nnet_marks=[D('0'),D('-5'),D('20'),D('100'),D('95')]\nincrements=[b-a for a,b in zip(net_marks,net_marks[1:])]\ncheck('EXAMPLE-REWARD-01',sum(increments),D('95'),'Incremental marked-net reward telescopes to terminal net.')\ncheck('EXAMPLE-REWARD-02',D('30')+D('80')>D('100'),True,'A shorter trade can leave valuable occupied-time capacity; all alternatives use the same boundary.')\ncheck('EXAMPLE-REWARD-03',D('95')+D('75')==D('95'),False,'Adding complete-trade reward and overlapping continuation double counts value.')\n\ndef excursions(path):return max(path)-path[0],path[0]-min(path),path[-1]-path[0]\ndef first(path,up=2,down=-1):\n    for x in path[1:]:\n        if x>=up:return 'upper'\n        if x<=down:return 'lower'\n    return 'none'\na=[0,2,-1,1];b=[0,-1,2,1]\ncheck('EXAMPLE-ORDER-01',excursions(a),excursions(b),'Identical excursions and endpoint do not identify order.')\ncheck('EXAMPLE-ORDER-02',(first(a),first(b)),('upper','lower'),'The ordered labels must differ despite matching excursion summaries.')\ncheck('EXAMPLE-HORIZON-01',11<=0+10,False,'Contact at minute nine and favorable passage at eleven is unresolved at the original minute-ten end.')\ncheck('EXAMPLE-HORIZON-02',11<=9+10,True,'A new ten-minute contact-origin forecast has a different end and label.')\n\nquotes=[{'event':0,'receipt':0,'ask':100},{'event':4,'receipt':6,'ask':102},{'event':10,'receipt':10,'ask':103}]\ndecision_time=3;arrival=5\ndecision_ask=max((q for q in quotes if q['receipt']<=decision_time),key=lambda q:q['event'])['ask']\nvenue_ask=max((q for q in quotes if q['event']<=arrival),key=lambda q:q['event'])['ask']\ncheck('EXAMPLE-QUOTE-01',decision_ask,100,'The strategy cannot use the later venue quote before receipt.')\ncheck('EXAMPLE-QUOTE-02',venue_ask,102,'At arrival the venue can have a changed standing quote not yet received locally.')\ncheck('EXAMPLE-QUOTE-03',venue_ask==103,False,'A marketable fill is not delayed to the next quote update.')\n\n# One N(0,1) prior and one unit-noise observation y=1: mean .5, variance .5.\nobservations=[('flow1',D('1')),('flow1',D('1'))]\nunique=dict(observations);precision=D('1')+len(unique)\ncheck('EXAMPLE-ASSIMILATION-01',sum(unique.values())/precision,D('.5'),'Identical evidence ID is assimilated once in this illustrative Gaussian model.')\ncheck('EXAMPLE-ASSIMILATION-02',D('1')/precision,D('.5'),'Duplicate input must not create a second independent observation.')\ncheck('EXAMPLE-GEOMETRY-01',D('99')<=D('103')<=D('101'),False,'The original physical band does not include a point admitted only by a wider uncertainty region.')\ncheck('EXAMPLE-GEOMETRY-02',D('97')<=D('103')<=D('103'),True,'A declared scenario region is a distinct event definition, not a retroactive physical touch.')\n\nvega=D('2')*D('100')*D('5')\ncheck('EXAMPLE-VEGA-01',vega,D('1000'),'USD per unit annualized IV fraction.')\ncheck('EXAMPLE-VEGA-02',vega*D('.01'),D('10'),'USD per one volatility percentage point.')\ncheck('EXAMPLE-VEGA-03',-vega*D('.01'),D('-10'),'A sold trade reverses the signed vega-flow contribution.')\ncheck('EXAMPLE-SKEW-01',D('.30')-D('.24'),D('.06'),'Put-minus-call skew uses a declared positive downside-richness convention.')\ncheck('EXAMPLE-SKEW-02',(D('.30')+D('.24'))/2-D('.25'),D('.02'),'Butterfly curvature is distinct from the skew slope.')\nw1=D('.2')**2*D('.1');w2=D('.3')**2*D('.2')\ncheck('EXAMPLE-TERM-01',(w2-w1)/(D('.2')-D('.1')),D('.14'),'Interval total-variance difference is a variance proxy, not a difference of volatilities.')\ncheck('EXAMPLE-RISK-01',D('1000')-D('300')-D('250')-D('20'),D('430'),'Headroom subtracts current net loss and incremental stop/cost exposure once.')\ncheck('EXAMPLE-OI-01',(max(0,100-20),100+20),(80,120),'Synthetic no-exercise OI bounds do not identify a path or trade-level opening status.')\ncheck('EXAMPLE-NONFILL-01',D('0'),D('0'),'No fill creates zero trade P&L absent an explicit order cost; a missed winner is an alternative-policy diagnostic.')\n\n# Reuse only the isolated review pricing functions, without rerunning data reads.\nmodule=ast.parse((OUT/'audit_vix_surface_feasibility.py').read_text())\nselected=ast.Module(body=[n for n in module.body if isinstance(n,ast.FunctionDef) and n.name in {'normal_cdf','black','iv'}],type_ignores=[])\nns={'math':math};exec(compile(selected,'<review-pricing-functions>','exec'),ns)\n# Independent ATM identity C=F*(2*Phi(sigma*sqrt(T)/2)-1), D=1.\nprice=20*math.erf(.1/math.sqrt(2))\ncheck('EXAMPLE-IV-01',ns['iv'](price,20,20,.25,1,'CALL'),.4,'Bisection inversion agrees with an independent ATM closed-form identity.',1e-10)\ncheck('EXAMPLE-IV-02',ns['iv'](price,20,20,.25,1,'PUT'),.4,'ATM put/call symmetry under the same forward convention.',1e-10)\ncheck('EXAMPLE-IV-03',ns['iv'](-.1,20,20,.25,1,'CALL'),None,'Below-bound quotes have no admissible IV.')\ncheck('EXAMPLE-IV-04',ns['iv'](20,20,20,.25,1,'CALL'),None,'A price at the strict upper bound has no finite IV in this convention.')\n\nreport={'status':'PASS','created_at':datetime.now(timezone.utc).isoformat(),'count':len(results),\n        'scope':'Finite arithmetic, ordering and clock examples only. This does not test an implemented trading system, data feed, forecast model, policy or profit.',\n        'results':results}\n(OUT/'design_examples.json').write_text(json.dumps(report,indent=2)+'\\n')\nlines=['# Verified finite design examples','',report['scope'],'',\n       f\"**{len(results)} explicit assertions passed.** These examples check the internal logic of the corrected specification and the small review-only IV inversion routine. They are not the thousands of proposed trading-system phase checks.\",'',\n       '| Example | Actual | Expected | Meaning |','|---|---|---|---|']\nfor r in results:lines.append(f\"| {r['id']} | {r['actual']} | {r['expected']} | {r['meaning']} |\")\nlines += ['', '[Machine-readable results](design_examples.json). [Reproduction script](verify_design_examples.py).']\n(OUT/'DESIGN_EXAMPLES.md').write_text('\\n'.join(lines)+'\\n')\nprint(f'PASS: {len(results)} finite design-example assertions; no strategy tests.')"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/COMMON_CONTRACTS.md",
+      "sha256": "838a3a4459b5028350cb5f398ac314f379bb3bc610e32a390e205c8823614031",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          1,
+          109
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1,
+          "end": 109,
+          "text": "# Binding contracts for every component\n\nThese clauses are incorporated into every ten-part component specification. A card supplies its local definitions and deviations; it cannot silently waive causality, units, quality, label or risk contracts. IDs designate independently testable services/experts, not necessarily separate operating-system processes. Parameterized asset/horizon variants receive child IDs in the model registry and their own metrics. All thresholds below described as initial grids or engineering budgets are **proposed starting choices**, not empirical findings.\n\nThe [system refinements](../SYSTEM_REFINEMENT.md), [complete upgrade paths](../UPGRADE_PATHS.md) and [implementation constructions](../UPGRADE_CONSTRUCTIONS.md) bind every applicable parent/child. Retain raw reference measurements, original source alternatives and prior upgrade stages. Register additional target schemas, uncertainty meanings, fitted transforms and ports explicitly; count/width/delay or information/capacity changes cannot be hidden inside a claimed like-for-like improvement.\n\n## CC-01 — Time, replay and availability\n\nStore `event_at`, `received_at`, `published_at`, `known_at`, `computed_at`, `valid_from`, `valid_until`, `source_version` and `clock_uncertainty_ns` as distinct fields when applicable. Missing receipt time stays missing. `known_at` is the earliest defensible availability to the actual strategy: receipt/publication plus processing when observed, otherwise an explicitly tagged latency assumption. A bar's open timestamp does not make its final high/low/close known at the open. A same-time batch is processed in a stable source order only where that order is supported; otherwise declare tie/interval uncertainty and stress admissible orderings.\n\nFor an observed completed computation, derived `known_at = max(max(required_input_known_at), actual_completion_at, required_confirmation_known_at)`. Do not add the already observed compute duration again. When completion is unobserved, simulate start/queue/duration explicitly once and tag the resulting availability as assumed. Publication may refer to an older position/observation date. Revisions create new immutable versions: they do not rewrite the historic decision view. Historical arrival profiles and research replay assumptions are separate; no `max(event,receipt)` shortcut substitutes for resolving clock domains. Time-to-live is a property of the consuming decision horizon and source; age and coverage travel with values even when still permitted.\n\nTrack last source event/quote observation, last actual value change, last receipt, validated standing state, source liveness and expected publication separately. A healthy unchanged quote is not stale merely because its price did not change. Repeated copied snapshots do not prove the underlying feed remained observed. An infrequent published report retains its own validity/age rule rather than an executable-quote TTL.\n\n**Invariant:** remove every observation/version available only after decision time `t`, replay the prefix, and require identical feature/object/forecast/action hashes at `t` (or numerically bounded deterministic tolerance declared before the test). This applies to profiles, confirmed swings, OI reports, macro revisions, adaptive windows, cross-asset mappings, scalers, model weights and universe construction. Restart from a checkpoint plus the same suffix must match uninterrupted replay. Future invalidation must not erase a prior candidate or its rejected decision record.\n\n## CC-02 — Units, keys and universes\n\nUse integer price ticks for outright trade/order prices; retain exact source price scaling and decimal strike/cash prices. Never round a cross-asset mapped location without retaining pre-rounded center/width and mapping error. Contracts, shares, USD premium, futures USD P&L, log return, variance, volatility, delta-equivalent shares/contracts and gamma contribution to option delta-equivalent-dollar change per 1% Greek-coordinate move (with opposite hypothetical offsetting-hedge sign) are different units. Per-option Greek units and contract multiplier are mandatory. IV is stored as an annualized fraction; display percentages never enter arithmetic without conversion. Expiry is a timestamp/calendar convention, not just a date.\n\nKeys include provider/venue, instrument ID, raw symbol, canonical underlying, contract/expiry/right/strike/exercise/settlement, definition validity and corporate-action version. Outright options and spreads are different instruments. For equities, preserve raw and adjustment factors known as of each time; never use today's adjusted historical absolute price for an old option strike join. Futures signals can use a documented continuous-return series; fills and absolute locations use the actual contract, with roll/reset/translation rules recorded.\n\nUse a predeclared `CoverageMask(asset,chain,expiry,moneyness,field,time)` with observed, stale, missing, ineligible, estimated and invalid states. Absence is not zero. Training and reporting stratify by coverage cohort. Learned imputation is fitted only on training data and includes mask/age features; no imputation is permitted for critical executable BBO, position or risk state. Asset membership must be known at the historical time; today's surviving constituent list is not a historical universe.\n\n## CC-03 — Common messages\n\n| Schema | Required payload beyond CC-01/02 |\n|---|---|\n| `CanonicalEvent` | immutable event ID, instrument key, raw and normalized type/action/side, reported aggressor versus resting side, complete source payload, raw flag bitset and decoded quality/message flags, normalized units, quote-state association, correction linkage, source file/row or live sequence provenance; apply the [market-data source contract](../MARKET_DATA_SOURCE_CONTRACT.md) |\n| `Measurement` | component/definition/version, asset/anchor/window, value or vector, units, sample count/covered duration, age, quality/missingness, reset reason; no learned confidence attached to exact arithmetic |\n| `MarketObject` | object ID, parent IDs, generator/parameter version, source and execution coordinate, center/lower/upper, physical support, optional predictive contact region with definition ID, estimation uncertainty, mapping uncertainty, entry tolerance, anchor start/end/confirmation, formation price state, side-neutral geometry, role candidates, creation/revision/expiry/invalidation events, age, touches, map uncertainty, source provenance |\n| `Forecast` | target ID, asset/object/action scope, decision timestamp, horizon end, observation process, conditioning population, capability mask (variance / terminal return / excursions / ordered first passage / coherent trajectory), calibrated distribution/quantiles/probabilities, uncertainty type, model/fold/calibrator version, expert availability, applicability mask, reason for abstention, upstream prediction IDs |\n| `Opportunity` | decision-set ID, object/version and source-event IDs, candidate side, feasible entry/stop/target plans, reach/path/fill/payoff estimates, estimated all-in costs, risk consumption, alternative wait actions, coverage and uncertainty |\n| `Decision` | complete candidate IDs and scores, selected action and rejected reasons, pre-action position/account state, parameter/model hashes, order intent/expiry, risk approval/veto, local processing/dispatch timestamps |\n| `OrderEvent` | client/broker IDs, request/ack/cancel/fill/reject/reconcile type, quantity, side, price, fees, venue timestamps, receipt, previous state, idempotency key |\n| `Outcome` | forecast/opportunity/decision reference, label definition/version, maturity time, censor/ambiguous-tie flags, predicted/observed target, simulated/actual fill status, costs, horizon and sequential-account linkage |\n\nAn object can be both a possible reversal and continuation reference. Its geometry does not encode a guaranteed direction. A source event can produce a receiver opportunity without a mapped receiver-level touch. Different generators can retain distinct identities at the same price, linked by a correlated-evidence group; merging cannot manufacture independent votes.\n\n## CC-04 — Label dictionary\n\nEvery label starts **after the decision's information cut**. Price-event labels use a declared observation process (trade, midpoint or executable bid/ask). Economic labels use actual contract prices and a declared fill/latency model. Do not mix them in one accuracy number.\n\n- `PATH(h)` records signed return, upper/lower excursions, first passage times to frozen barriers, barrier order, time spent/volume inside regions, horizon-end location and no-event/censor status. Initial research horizons: 5, 15, 30, 60 minutes, named session remainder and required-day remainder. These are separate registered targets, not pooled observations. Very short flow experiments additionally use 1, 5, 15, 30 seconds only in data cohorts whose timing supports them.\n- `REACH(object,h)` is first entry of the observation process into the object's **decision-time frozen band** by horizon. Crossing a gap past it is not an executable touch. Store gap-cross as a separate event. Revising the band creates a new forecast target; old labels remain tied to old versions.\n- `DEPART(object,side,h,a,b)` fixes the end at `H=t+h` for a pre-contact prediction made at t; after contact at τ, the remaining observation window is `H−τ`. A new prediction at contact may instead end at `τ+h`, with a distinct target ID. Never combine reach-by-`t+h` with departure-through-`τ+h` while labeling both as one h-horizon. The ordered outcome after first observable contact is: favorable barrier `a` versus adverse barrier `b`, unresolved, gap/ordering ambiguous, and excursions at maturity. Barriers use frozen tick/volatility-scaled choices determined at the prediction time. This forecasts future price behavior, not the optional Response module's pattern class.\n- `TRAVERSE` records entering/exiting a value area or range, first opposing-edge passage and competing failure/reclaim, never eventual-day hindsight. Unordered both-edges-touched is a different target from lower-then-upper.\n- `VALUE(action,h)` is full-position net P&L/utility after the candidate action, including fill or non-fill and explicit subsequent policy, conditional on the observable decision state. A candidate's counterfactual value in replay is a **simulation label**, not a measured causal effect of our order.\n- `OI_NEXT(contract,position_date)` becomes observable only on the next legitimate report/revision. Store the exact horizon/report version. Separate continuing contracts from expiries, exercised/adjusted contracts and missing publications; do not label every disappeared 0DTE contract as an accurately predicted intraday liquidation.\n\nA fully observed horizon with no contact is an observed no-contact outcome; censoring means observation ends before the prescribed horizon. A variance, terminal-return distribution or pair of upper/lower excursion marginals does not identify first-passage order or a trajectory. Consumers must declare required forecast capabilities and reject incompatible ports. Path simulation requires a separately specified and validated joint dynamics model. For joint labels, estimate the joint distribution or conditional factorization consistently. Multiplying an unconditional reach probability by a response probability trained on a different selected sample is forbidden. If both barriers occur inside one coarse bar and order is unknown, label ambiguous or evaluate pessimistic/optimistic bounds; never pick the favorable order.\n\nTarget IDs also distinguish integrated/realized variation from variance of the terminal return, squared ticks from squared log returns, and a forecast mean from a quantile. Realized variation over disjoint intervals is additive by its measurement definition; terminal-return variance also contains covariance between interval returns unless the declared model justifies its absence. A stale forecast retains its fixed end; a new remainder distribution must condition on the observed prefix, not restart the original horizon or subtract past range from predicted total range.\n\nRegister coherence groups for related forecast heads. For the same cut, frozen object, observation process and nested horizon ends, a first-entry cumulative incidence is nondecreasing in time; quantiles are noncrossing; an explicitly exclusive/exhaustive outcome partition sums to one; joint path samples respect their extrema and terminal-price support. Overlapping roles, correlated experts, or coincident candidate bands are not an exclusive partition. Do not force all candidate reach probabilities to sum to one or impose deep-band reach ≤ near-band reach when a discrete price observation can gap over the near band. Define co-contact sets, disjoint destination regions and tie/interval cases explicitly. Projection/reconciliation changes the forecast and may disturb calibration: fit and evaluate the complete ordered coherence/calibration/selection chain, with any post-calibration projection checked again. `T-COHERENCE` exercises these positive and negative cases.\n\n## CC-05 — Sampling, normalization and learning\n\nFit on chronological training data. Group correlated assets/options/contracts and all overlapping candidates from the same trading date in the same partition. Purge training examples when their future outcome/label span or fitted-state dependencies transfer held-out information into fitting. Shared raw observations in a legitimate past lookback do not by themselves require purging. Embargo is derived from label maturity, repeated object episodes and state carryover; V02 records the exact prohibited overlap. Training-history features may look backward across a boundary; future labels, fitted scalers and evaluation-derived model state may not. Long OI/swing/profile lifetimes are tracked by explicit interval intersections.\n\nKeep a uniform clock-time/background sample plus all registered candidate/source events; weights recover the intended decision population. Do not train only on taken trades or successful touches. Store negative/no-touch/censored outcomes. Control repeated retests through object/date grouping and sample weights. Class imbalance: compare natural-prior likelihood training with training-only weights/downsampling; if reweighted, recalibrate to deployment prevalence on untouched calibration data. Missingness is an input and an analysis cohort, not a reason to invent data.\n\nNormalize return/flow/range features by preceding asset/session scale, robust training-fold statistics or causal expanding estimates, with a declared zero-scale fallback. Never use full-day volume/range to normalize an earlier decision. Learned upstream forecasts consumed by another learned component must be **out of fold and time honest**. Construct inner chronological predictions, fit downstream only on those predictions, and regenerate them for each outer fold. Final fitted upstream models may serve the outer test but may not retroactively replace their in-sample training outputs in the downstream training set.\n\nEach learned family compares (a) an interpretable rule/constant or seasonal-frequency baseline, (b) a simple statistical model matched to the target, and (c) justified nonlinear/sequence/set candidates. Compare common information and compute/search budgets; separate an information improvement from a model-class improvement. Deterministic components have no learned arithmetic replacement requirement: their statistical/learned comparisons concern forecasting or anomaly detection downstream, and are explicitly marked not applicable where they would change semantics.\n\n## CC-06 — Mixtures and disagreement\n\nFor a target `Y_h`, eligible experts produce distributions `p_e(Y_h|I_t)`. A convex mixture is `p(Y_h|I_t)=sum_e w_e(t)p_e`, `w_e>=0`, `sum_e w_e=1` over available experts. Compare uniform, fixed validation-weighted, regularized logistic/softmax gating and a shallow nonlinear gate. Gates receive as-of context, coverage, expert age and out-of-fold predictions; never realized future errors. A measurement vector, GEX dollar level and return forecast are not averaged as if they share units.\n\nCalibrate expert distributions and the combined distribution on separate chronological calibration predictions. For binary outcomes compare logistic and isotonic calibrators; for multiclass compare temperature/vector calibration with sample-complexity control; for quantiles use held-out coverage correction. Record conditional calibration and dependence violations; distribution shift voids automatic coverage guarantees. Common-target disagreement is mixture spread plus between-expert dispersion; interpret it as diagnostic uncertainty, not automatic alpha.\n\nMissing expert weights are masked and renormalized only if this missingness pattern was validated; otherwise use the designated simple available-data model or abstain. If every expert is missing, return no forecast. Gate collapse is diagnosed through occupancy, effective expert count, correlated residuals and ablations; equal utilization is not forced when evidence favors one expert. Diverse feature sets/horizons/structural assumptions are designed explicitly, and experts remain independently scored. Gating cannot override independent risk.\n\n## CC-07 — Common verification matrix\n\nEach component owns `T-<ID>-UNIT`, `-PROP`, `-SYN`, `-INT`, and, when learned/actionable, `-PRED`, `-ECON`, `-ABL`. The [specialist program](../SPECIALIST_EXPERIMENT_PROGRAM.md) adds eight explicit phase records for every parent and named refinement; the [quality framework](../MODEL_QUALITY_AND_STOPPING_RULES.md) defines best-supported-version selection, learning curves, interactions and stopping. Cards name local fixtures and metrics. The validation plan supplies cross-cutting tests `T-TIME`, `T-CAUSAL`, `T-DATA`, `T-UNIVERSE`, `T-FILL`, `T-ACCOUNT`, `T-OOF`, `T-PLACEBO`, `T-SEARCH`, `T-SHADOW` and `T-RESTART`. Deterministic algebra/semantic invariants have zero unexplained failures; numeric tolerances come from units/solver accuracy, not a tolerance chosen to make a failed test pass.\n\nPrediction metrics: proper log/Brier score for categorical events; pinball/CRPS and interval coverage for distributions; QLIKE plus robust error for variance; MAE/Poisson or negative-binomial deviance for counts; concordance/calibrated cumulative incidence for time-to-event; conditional residual diagnostics for every family. An improvement is judged on paired same-date predictions with dependence-aware intervals, not independent touch t-tests. Sample sufficiency comes from learning curves, effective date/block counts, interval width and a predeclared economically relevant effect. Rare cohorts are pooled/shrunk or marked unsupported, not awarded arbitrary confidence at `n=30`.\n\nAn exact service need not produce alpha. An information-only or interaction contributor may pass a prespecified, held-out joint comparison even if standalone predictive lift is weak; include neither/A/B/A+B with matched search/capacity and valid OOF. Economic acceptance requires the complete sequential one-mini replay, cost stress and risk constraints; a local score alone is insufficient. Material gain thresholds and non-inferiority margins are selected in development from economic requirements/measurement error and frozen before outer/future evaluation. No component gets an invented proven hit-rate threshold. Hard position, account and integrity constraints remain in every eligible policy comparison; a relaxed diagnostic is separately labeled and cannot be promoted as an eligible policy. A risk/quality service may be retained for an invariant or measured risk reduction even if it lowers mean P&L; the tradeoff must be explicit.\n\n## CC-08 — Ablation, monitoring and fallback\n\nEvery component has a no-component or simpler-component challenger, a source/input-family ablation, a definition/parameter sensitivity and relevant time/order/coverage placebo. Monitor schema/units, missingness, feature/target distributions, calibration, applicability, latency, stale outputs, prediction drift and downstream value attribution. Drift tests alert; they do not authorize autonomous model replacement. Predeclared calibration/refit/rollback policies are evaluated prequentially on all matured eligible labels, including no-trade days. Immediate online state updates are distinct from retraining model parameters.\n\nFallback preserves semantics: a stale quote is unavailable, a missing OI estimate is uncertain, an absent profile is not a zero-volume shelf, an uncertain gate yields the validated simple model or abstention. A critical order/position mismatch triggers reconciliation and independent risk action. No fallback increases position size, widens a stop to recover losses or fabricates hidden liquidity.\n\n## CC-09 — Resource/latency classes\n\nThese are planning budgets to measure on the inspected ~17.85 CPU/~77.3 GiB/A4000-16 GiB pod, not observed benchmarks. Cards declare a class and a scaling driver; stage one profiles actual throughput before any large run.\n\n| Class | Expected work | Initial budget and scaling |\n|---|---|---|\n| A | Deterministic streaming state | O(1) per event or O(log active objects); bounded RAM per instrument/anchor; aim microseconds–submillisecond/event in compiled hot path; aggregate publication 100 ms–1 min according to target |\n| B | Tabular/statistical specialist | CPU training minutes–hours on event/decision tables; 1–8 GiB typical trial; batch inference target <10 ms per decision for the combined tabular stack; exact budget profiled |\n| C | Surface/set/graph specialist | CPU surface solves or small GPU models; seconds–hours calibration/training to start, 4–14 GiB GPU budget; initial boards at 1 min cadence, target <1 s end-to-end; record actual completion delay |\n| D | Raw replay/validation | I/O dominated; stream one instrument/day with RAM cap 48 GiB and bounded sorted spill; storage grows with retained events and trials; never multiply 37B rows by every feature configuration in memory |\n| E | Deferred detailed Response sequence | Candidate-centered event buffers and compact statistical/sequence learners; actual latency budget determined by measured post-confirmation opportunity; no low-latency profitability assumption |\n\nFor storage estimation use measured `rows/day × retained bytes/row × days × versions` plus checkpoints and model artifacts, report compressed and uncompressed. For a larger machine, report required CPU/GPU hours and a quoted hourly rate when procurement is considered; this plan does not invent current cloud prices or approve paid work. Train-free deterministic outputs and shared causal features are cached by hash to prevent duplicate work across experts.\n\nThe [computation schedule](COMPUTATION_SCHEDULE.md) is a binding elaboration of these contracts: component cards list both upstream services and downstream consumers for readability, while the schedule specifies directional runtime ports. A model registry must compile those ports to an acyclic graph before fitting or replay.\n\n## CC-10 — Meaning of completion and deferral\n\nA specification card is complete when its inputs/outputs/algorithm/alternatives/test/decision contract is implementable; its empirical parameter choice may remain a registered experiment. A component is implemented only after code and applicable tests exist. A component is validated only after the prescribed held-out evidence exists. These three statuses are different. The [full implementation scope](../IMPLEMENTATION_SCOPE.md) binds all B00–B10 milestones in one continuing workflow and specifies separate engineering, evaluation and disposition records. Exact unit/phase/source-clause/dataset/task coverage is required before completion claims; unavailable data, future elapsed time and inconclusive findings remain explicit.\n\nDetailed Response development is deferred by the user's current sequencing preference. The R-series cards preserve each mechanism and specify the measurable sequence, prerequisites, competing models and later tests. No source mechanism is silently dropped; no promise is made that all require production deployment. Fine response-trigger annotation and model tuning follow Context/Location baseline validation. Requirements depending on unavailable hidden depth/participant identity remain unidentifiable unless new data actually supply the missing observation."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/UPGRADE_CONSTRUCTIONS.md",
+      "sha256": "5c0635aacfe94fe04b82d066a5f5fd9dd9727cdbe5dfce812743b9c5c54ced83",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          85,
+          109
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 85,
+          "end": 109,
+          "text": "\nLatent intraday holdings/package/queue quantities retain separate observational, parameter and structural-model uncertainty. Endpoint OI cannot identify a unique path; unlabelled package heuristics cannot identify an order owner. Use evidence-compatible model families and direct observable predictive challengers. A finite scenario range is conditional on the registered scenario set, not a universal statistical bound or calibrated probability interval unless that additional claim is supported.\n\nMeasure both forecast dispersion and action disagreement. Report which uncertainty changes the selected action and the potential value of improved data/computation. Early quality masks depend on input validity; late action-sensitivity diagnostics depend on completed downstream forecasts/value. The latter cannot feed the current upstream scenario/mixture through an unregistered cycle.\n\n<a id=\"upk-08\"></a>\n## UPK-08 — Spatial proposals and controlled geometry\n\nFor every L family and C05/C22/O11 originator, a candidate has explicit parent identity, geometry, side/role, birth/revision time, trigger/entry alternatives, expiry and source support. Exact source geometry remains a comparator. A learned field on a fixed relative-price grid separates contact probability, conditional outcome/role and executable utility. Utility is not normalized as if it were a probability density. No-reach/unresolved/no-action states remain in the target population.\n\nCompare generation with a frozen scorer, scoring with a frozen candidate set, and finally the refitted complete policy. Match or stratify candidate count, width, distance, age, support and information/confirmation delay. Include compatible ordinary-price/grid/placebo candidates. A wider band or more proposals can increase contact rate without improving placement, and a moving/snap-to-best region cannot rewrite its earlier label.\n\nA limited offset stays within its registered parent geometry/uncertainty neighborhood; otherwise issue a distinct generator object. Keep actual geometry, measurement/mapping uncertainty and execution tolerance separately typed. Object lifecycle state is a fact; useful lifetime/retention is a forecast/policy. Source narrative labels never create hidden liquidity, identity or mandatory exclusion rules.\n\n<a id=\"upk-09\"></a>\n## UPK-09 — Paired full-policy value and bounded waiting\n\nFor G06–G08/P/R19, evaluate feasible complete actions on common admissible path/fill/cost scenarios. For two complete policies with the same initial state, the paired quantity is `Delta V = E[R_A−R_B]`, with common model error retained. Common random numbers can reduce simulation noise in differences; they do not remove simulator bias, unsupported action outcomes or market uncertainty. Direct value models and paired residual-value models use chronological training and supported target definitions.\n\nUse either incremental liquidation-equity reward or total-return semi-Markov macroactions. For the latter, `Q(s,a)=E[R_a + V(s_terminal,t_terminal)]`; continuation begins after the complete macroaction, not on its next tick with the same trade payoff counted again. All alternatives share the actual terminal account boundary and include pending orders, one-mini occupancy, fees and cumulative idea/day/firm constraints.\n\nCompare myopic action, source fixed wait/confirmation rules, one-step and bounded two-decision lookahead before deeper planning. Waiting consumes time and can cause nonarrival, invalidation, price deterioration or a missed later opportunity. The value of observing another stage is conditional on its transition law, not guaranteed by a stronger-looking pattern.\n\nJoint stop/target/expiry/route search uses a registered bounded grid. Dominance pruning is allowed only under the stated common outcome and continuation contract; keep complete enumeration as the reference. Optional management uses paired incremental hold/exit/amend value with replacement delay/race costs and tested shrinkage/hysteresis. Mandatory independent risk actions do not wait for a discretionary value threshold. Re-entry requires measured fresh evidence and the same cumulative budgets; no unit escalation or profit-recovery target is added.\n"
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/GATES_AND_SELECTION.md",
+      "sha256": "9f552073ce9c147b03397fc0016c6d0e35607dd1d4d3c58c843f52c73533cde2",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          71,
+          95
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 71,
+          "end": 95,
+          "text": "## G06 — Executable action-value and cost model\n\n1. **Purpose/sources.** Convert predictions into one-mini economic choices; user objective, source execution/confirmation weaknesses, TECH-11 counterfactual limits.\n2. **Inputs.** Candidate side/entry/stop/target/horizon, G04/05 path, P05/06 fill/adverse-selection model, fees/latency, current account/position and boundary. Each feasible action at decision time.\n3. **Definition.** Estimate net-value distribution for the complete specified action+subsequent exit policy: sum over fill/non-fill and path scenarios of actual-contract gross P&L minus all costs. Non-fill has zero trade P&L plus any explicit order cost; its missed opportunity is compared through G07, not counted twice as a fictitious cash loss. Fill probability and adverse markout are conditioned jointly where dependent. Compare expected net, lower confidence/scenario bound and tail-risk constrained value; quantities are only0/±1. Publish the joint distribution of net increment, occupied duration, and terminal account/position state for each complete action policy. G07 may use this as a macroaction ending at that terminal state, never as an immediate next-tick reward plus continuation covering the same trade. Binding local refinement: [SR-G06](../SYSTEM_REFINEMENT.md#sr-g06).\n4. **Output.** `VALUE` distribution, expected net, lower/scenario bound, loss/tail probability, cost decomposition, fill uncertainty and infeasible reason. Replay label is simulated value, not observed causal counterfactual.\n5. **Dependencies.** G04/05, enumerated P02 entry/exit plans, frozen P05/06 fill/cost predictors, C19/F11, and pre-decision P01/07/08/09 position/account state. It does not consume the action it is about to select. G07/08 consume values; P risk independently rechecks/reserves after selection.\n6. **Comparisons.** Fixed source RR/expected-value rule; empirical outcome/cost table and linear/GAM value; distributional boosted model or calibrated scenario aggregation. A1:1 RR can be positive/negative depending probabilities/costs. Binding further upgrade and child comparisons: [UP-G06](../UPGRADE_PATHS.md#up-g06).\n7. **Training.** Common action grid and OOF upstreams, natural candidate population, all fees/non-fills; no profit-only labels. Residual cost calibration comes from held-out telemetry when available; uncertainty otherwise stressed.\n8. **Tests.** Good hit rate/negative net, passive no-fill, stop gap, spread1 versus several ticks, confirmation delay, one-mini forbidden partial exit and correlated fill/adverse selection.\n9. **Acceptance.** Value calibration and complete sequential net/day/account survival under conservative scenarios; reject apparent edge dependent on optimistic fill or unobserved queue priority.\n10. **Ablation/fallback/resources.** Each cost/fill/path model, expected versus conservative value, price-only baseline. Unbounded critical cost/position uncertainty blocks action. Class B/D scenario replay, vectorized few feasible plans per object.\n\n## G07 — Value of waiting, deeper levels and additional information\n\n1. **Purpose/sources.** Solve nearer-now versus deeper-later/confirmation/abstention; explicit user selection requirement, SKY gatekeeper/decoy, CRL dense-level failures.\n2. **Inputs.** Complete decision set and G06 action values, G04 arrival/path dependencies, current position/risk/time, possible future observation events and boundary. Every decision cut.\n3. **Algorithm.** Baseline compare immediate net value to zero/nearest-next rule. Challenger finite-horizon event decision tree or fitted value iteration `Q(s,a)=E[r+V(s')]` for actions enter-now, place passive, wait-for-deeper, wait-for-simple/Response evidence, cancel and remain flat. Intraday undiscounted reward with time/boundary constraints; no future oracle candidate selection. Waiting branches may see no touch, invalidation, changed context or worsened price; model their transitions and consumed time/risk. Sequential replay re-computes choices from each actual prefix. Use one of two explicit reward contracts: (A) incremental net liquidation-equity changes between decision events, with fees charged exactly once; or (B) semi-Markov macroactions with G06 total net increment and terminal time/state, then continuation beginning only at that terminal time. Do not add a full-trade return to next-tick continuation. All alternatives end at the same account boundary and include opportunity occupancy, remaining budget, pending orders and forced close. USD/minute alone is not the objective. Include a toy case where a shorter $30 trade leaves time for $80 while a $100 trade occupies that entire interval. Binding local refinement: [SR-G07](../SYSTEM_REFINEMENT.md#sr-g07).\n4. **Output.** Comparable Q/value distributions, chosen wait trigger/deadline/cancel conditions, opportunity-cost diagnostics and uncertainty. Counterfactual alternatives remain model-based where fills/market impact unobserved.\n5. **Dependencies.** G04–06/P state/C19/L17/18; G08 final selector and P01 state machine.\n6. **Comparisons.** Act if positive conservative value, fixed nearest/deeper/confirmation rules, finite event tree, regularized fitted Q or model-based planning. Offline RL is not assumed superior; doubly robust evaluation unavailable without defensible action support/logs. Binding further upgrade and child comparisons: [UP-G07](../UPGRADE_PATHS.md#up-g07).\n7. **Training.** Sequential same-date trajectories and OOF forecasts, bounded action/state set, inner-fold planning depth/penalties. Full-day perfect foresight is an unattainable diagnostic upper bound only.\n8. **Tests.** Deeper never reached, nearer trade blocks later winner, waiting reveals failure, source event expires, passive order pending at boundary, same-time competing levels and loss-budget state changes. Reward telescoping, fees-once, common terminal time, macroaction/event-step agreement, and full-trade-return double-count rejection are explicit fixtures in the review arithmetic examples.\n9. **Acceptance.** Paired sequential net/risk improvement over simple act-now and wait rules; policy support/model-error stress; no-go if value depends on impossible future observation or oracle fill.\n10. **Ablation/fallback/resources.** No waiting value, no deeper option, no information update, planning horizon and transition model. Fall back predeclared simple conservative policy. Class B/D small event/action tree first, larger planning only after evidence."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/POLICY_EXECUTION_RISK.md",
+      "sha256": "0bbf2dc9403be7cefe5da35ee827528abfea920a886c52339e4c14d5b6b97a57",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          6,
+          17
+        ],
+        [
+          58,
+          69
+        ],
+        [
+          136,
+          147
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 6,
+          "end": 17,
+          "text": "## P01 — Action state and complete sequential policy\n\n1. **Purpose/sources.** Translate G08 opportunity choice into lawful state transitions; user one-mini scope, JTR-15, AUT-10, CD3-01/02.\n2. **Inputs.** Timestamped candidate set, calibrated action values, F02/03 instrument/calendar, current position, pending orders, executable BBO and P08/09 headroom. Evaluate on candidate changes, fills and risk events; receipt age is mandatory.\n3. **Definition.** In flat state choose wait, abstain, marketable entry, limit entry or stop/stop-limit intent with explicit expiry. While held choose hold, full exit, cancel/replace protective orders, or update a permitted trail. Permit at most one active entry intention plus its contingent protection; atomic risk reservation prevents two simultaneous candidates entering. Binding local refinement: [SR-P01](../SYSTEM_REFINEMENT.md#sr-p01).\n4. **Outputs/labels.** `Decision` and `OrderIntent` with preconditions, state/version, expiry and full future management-policy ID. Target `VALUE(action,h)` includes non-fill and the subsequent policy; abstain has zero trading P&L but logged foregone opportunities.\n5. **Dependencies.** G06–09 propose; P08/09 veto; P07 executes. P01 cannot directly mutate broker position or override vetoes.\n6. **Comparators.** Rule-based highest positive conservative value; regularized contextual utility/ranker; later constrained finite-horizon dynamic programming. Offline RL is optional only after simulator/support audit, not the baseline. Binding further upgrade and child comparisons: [UP-P01](../UPGRADE_PATHS.md#up-p01).\n7. **Learning.** Fit on OOF action forecasts and simulated complete paths, retaining all rejected candidates. No fabricated observed counterfactuals; split dates and policy tuning chronologically.\n8. **Tests.** T-P01: simultaneous long/short signals, fill during cancellation, reversal, stale account version, boundary near entry, all forecasts missing. Assert position/order reservations never authorize more than one unit.\n9. **Acceptance.** Zero unexplained state violations; evaluate daily net, risk overshoot, regret bounds under simulator variants and stability. Predictive score alone cannot promote policy.\n10. **Ablation/fallback/resources.** Remove wait model, gate or target adaptation separately. On unavailable market state no new entry; manage existing exposure through independent risk. Class A/B; bound active intents and log every transition."
+        },
+        {
+          "start": 58,
+          "end": 69,
+          "text": "## P05 — Event replay and passive-fill uncertainty\n\n1. **Purpose/sources.** Prevent touch-fill optimism in RFE-05–10 and Pine bar backtests; respect DA02/04 and MBP-1 limits.\n2. **Inputs.** Eligible MBP-1 trades and validated derived BBO changes, action/side/flag provenance, source ordering/receipt assumptions, submitted order price/size, latency, contract and session. Preserve native intervening events even when candidate scoring is slower. Native option data does not provide futures execution BBO by substitution.\n3. **Definition.** Maintain separate strategy-information and venue-outcome clocks. A marketable order uses the valid standing venue ask/bid at simulated order arrival, including a quote last updated before arrival, plus modeled impact; it does not wait for a new quote update. Outcome replay may observe venue events not yet received by the strategy, but they cannot enter the decision inputs. Missing/reordered snapshots or insufficient displayed size yield explicit price/fill uncertainty. Feed latency and outbound order latency are separate assumptions. Passive one-unit fills require post-arrival executions at eligible prices under declared priority assumptions. Maintain optimistic touch bound, trade-through/conservative bound and calibrated probabilistic queue scenario; none is asserted exact with MBP-1. Exclude crossed auctions from continuous-book rules. Stop triggers and stop-limit fills are separate events. Binding local refinement: [SR-P05](../SYSTEM_REFINEMENT.md#sr-p05).\n4. **Outputs/labels.** `SimulatedOrderEvent` with scenario, possible/confirmed-under-assumption fill, price/time/cost and ambiguity cause. Queue position is latent, not ground truth. Labels include non-fill and adverse markouts.\n5. **Dependencies.** F01–09 ordered replay, P01 intents, P07 state machine; G06 uses validated uncertainty bounds rather than a favorable fill label.\n6. **Comparators.** Conservative marketable baseline; passive bounds; survival fill model calibrated later from authorized paper/order telemetry. Full-depth/MBO is a separately justified dependency, not invented now. Binding further upgrade and child comparisons: [UP-P05](../UPGRADE_PATHS.md#up-p05).\n7. **Learning.** Fit latency/fill distributions only on past telemetry or explicitly simulated scenarios; historical hypothetical order fills do not identify actual queue rank. Report cohort by timing quality.\n8. **Tests.** T-P05: touched with no prints, trade-through gap, cancellation/fill race, same-time ambiguous order, stale quote, price improvement, stop-trigger-no-fill and duplicate execution. Standing unchanged BBO at arrival, an intervening venue quote not yet received locally, missing depth for a sweep, and zero-size best quotes must be tested separately.\n9. **Acceptance.** Accounting/state invariants exact; economic advantage must survive conservative plausible fill/cost scenarios or remain unresolved. Shadow quote replay alone cannot validate passive queue fills.\n10. **Ablation/fallback/resources.** Compare identical ex-ante candidates across policies including non-fills; fallback marketable benchmark or abstention. Class D/A, streaming event buffers; no full-book queue claim."
+        },
+        {
+          "start": 136,
+          "end": 147,
+          "text": "## P11 — Trading net, business cash and objective accounting\n\n1. **Purpose/sources.** Prevent copied-account or payout screenshots from substituting for user objective; DTM-U05, AUT-01/05, K10/K18/NYA/F23.\n2. **Inputs.** Every eligible day, one-mini fills/fees, forced exits, account fees/data/platform costs, rule-version payout split/buffer, requested/approved/received cash, refunds and taxes only if explicitly modeled. Cash dates and P&L dates remain distinct.\n3. **Definition.** Primary proposed metric `sum(day_net)/count(eligible_days)` includes zero-trade days. Trading net includes execution costs; second ledger reports business net cash after all paid costs and actually received payouts, plus accrued eligible/unpaid amounts separately. Account acquisition/reset expenses include failed attempts; no multi-account scale-up. Report both accounting interpretations while user choice remains open. Binding local refinement: [SR-P11](../SYSTEM_REFINEMENT.md#sr-p11).\n4. **Outputs/labels.** Daily/monthly trading and cash ledgers, gross-to-net reconciliation, target gap, risk distribution, equity/floor paths and payout eligibility. One NQ $2,000 equals 100 net points; ES equals 40.\n5. **Dependencies.** P07/P09 and predeclared F03 eligibility calendar; V04 evaluates feasibility with dependence-aware uncertainty.\n6. **Comparators.** Deterministic double-entry/reconciliation checks; business scenario analysis, no learned accounting. Predictive cashflow model optional only after actual product assumptions fixed. Binding further upgrade and child comparisons: [UP-P11](../UPGRADE_PATHS.md#up-p11).\n7. **Learning.** N/A to arithmetic. Missing historical data exclusions must be fixed before outcomes; future outages remain in operational denominator.\n8. **Tests.** T-P11: flat day, losing evaluation plus reset, payout pending versus paid, withdrawal not trading loss, fee date, overnight session trading-date attribution and gross/net spread double charge.\n9. **Acceptance.** Exact ledger equality and transparent denominator. Economic aspiration passes only under V04 evidence; reported favorable point estimate does not prove sustainable $2,000/day.\n10. **Ablation/fallback/resources.** Report costs and payout scenarios separately; unknown fees remain explicit ranges, not zero. Class A/D, tiny ledger relative to event data; no tax/legal advice implied."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/OPTIONS.md",
+      "sha256": "7e5c8f0413e2bbc4ee45f11b11e8b6b45033175ce5d446edaa3467fbdd5603b4",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          84,
+          108
+        ],
+        [
+          266,
+          277
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 84,
+          "end": 108,
+          "text": "## O07 — Aggregate next-reported-OI forecast experts\n\n1. **Purpose/sources.** Develop the user's OI calibration ambition beyond a volume proxy; DRF-U01/02/06, IMG dynamic dots, CEX options ideas.\n2. **Inputs.** O06 prior OI/history, cumulative and recent observed volume, O03 sign uncertainty, O15/16 flow, price/IV/skew changes, expiry/time/moneyness, venue/condition and coverage. Predict at predeclared intraday cuts and material flow events, contract and strike/expiry aggregate scopes separately.\n3. **Definition.** Target next comparable reported OI or ΔOI. Compare persistence; constrained linear/count models; zero-inflated/negative-binomial or distributional boosting; hierarchical contract→strike→expiry model; compact sequence/set model. Include total volume separately from signed volume. Enforce nonnegative predicted OI, but do not enforce a trade-only ΔOI bound when exercise/adjustment/report corrections can violate it. Produce coherent aggregates by summing posterior samples or reconciled hierarchical distributions. Binding local refinement: [SR-O07](../SYSTEM_REFINEMENT.md#sr-o07).\n4. **Output.** Next-report OI predictive distribution, quantiles/probability of material net increase/decrease, maturity/censor flags and coverage. It predicts a future aggregate report, **not actual OI at the current intraday instant**.\n5. **Dependencies.** O01/03/06/15/16/F11; O08 uncertain state scenarios and O09 boards. Downstream uses OOF forecasts; next-day true OI only evaluates them.\n6. **Baselines/candidates.** Persistence, prior OI plus fixed fraction of volume, linear/hierarchical count model, boosted/sequence candidates. Separate overall OI accuracy from the error on small/new/0DTE contracts and large nodes. Binding further upgrade and child comparisons: [UP-O07](../UPGRADE_PATHS.md#up-o07).\n7. **Training.** Same-date/expiry-family grouping, publication-aware purging, prefix samples weighted by day/contract; retain unknown signs/coverage. Non-expiring, newly listed, adjusted and expiry contracts have separate heads/cohorts. Avoid treating every minute prefix as an independent endpoint label.\n8. **Tests.** Equal signed flow/different gross volume, closing versus opening ambiguity, no trade/change in reported OI, missing report, large new contract, early prefix versus full-day leakage and coherent aggregate uncertainty.\n9. **Acceptance.** MAE/deviance/CRPS/interval coverage and improvement over persistence on held-out dates; additionally improve node/reaction and economic tests versus static/volume boards. Better endpoint prediction alone is insufficient.\n10. **Ablation/fallback/resources.** Remove signs, IV, history, hierarchy, late flow, estimated wings; sensitivity to report revisions. Fall back to persistence+wide interval. Class B/C contract snapshots; sample cuts control repeated-label volume.\n\n## O08 — Intraday aggregate-holdings scenario updater\n\n1. **Purpose/sources.** Separate a useful uncertain intraday exposure estimate from unidentifiable true holdings; user dynamic gamma ambition, DRF-U06, SKY flow/OI cautions.\n2. **Inputs.** Prior reported OI O06, observed cumulative volume/flow and O07 next-report forecasts, contract exercise/expiry/adjustment state and coverage. Intraday event/minute updates.\n3. **Algorithm.** Baseline freeze holdings. Challenger scenarios allocate observed trades to opening/closing/unchanged net stock with latent fractions and uncertainty; in a no-exercise/no-adjustment synthetic setting, aggregate OI lies within `max(0,OIprev−volume)` and `OIprev+volume`. Actual scenarios add exercise/adjustment/report uncertainty. State-space/particle filtering can be trained against later endpoint reports, but many paths yield the same endpoint: retain a posterior family, no asserted true path. Filtering uses prefix only; smoothing is research label analysis, never live input. O07 already conditions on some of the same flow. Treat that forecast as a conditional proposal/prior within one coherent model, or condition directly on the underlying flow, rather than multiplying O07 and that flow as independent observations. Register which observations were assimilated once. Duplicate-evidence input must not spuriously shrink the posterior. Binding local refinement: [SR-O08](../SYSTEM_REFINEMENT.md#sr-o08).\n4. **Output.** Current aggregate-OI **scenario distribution/identification interval**, method assumptions and next-report consistency diagnostics. Dealer sign/ownership remains separately unknown.\n5. **Dependencies.** O06/07/15/16; O09 scenario exposures and O21 confidence. O07 terminal forecast is not renamed current OI without this explicit model.\n6. **Comparisons.** Frozen OI, proportional volume heuristic, constrained latent update/filter, learned conditional opening-fraction model only with uncertainty. Direct price/flow-to-reaction models bypass latent holdings as an important challenger. Binding further upgrade and child comparisons: [UP-O08](../UPGRADE_PATHS.md#up-o08).\n7. **Training.** Endpoint supervision alone cannot validate intraday truth; report identifiability and sensitivity to priors. Tune on inner dates, evaluate terminal and downstream predictions separately; 0DTE has explicit expiry model or abstention.\n8. **Tests.** Identical endpoint/different intraday paths, all opening/all closing/no-change flow, exercise without trade, contract expiry, future report accidentally entering filter and nonnegative stock.\n9. **Acceptance.** Scenario consistency/calibration where observable; downstream improvement robust across plausible latent assumptions. Reject any claim of precise dealer/current inventory or gains dependent on one unverifiable allocation.\n10. **Ablation/fallback/resources.** Latent updater off, prior strength, endpoint forecast, flow fractions and 0DTE removal. Fall back frozen OI with uncertainty. Class B/C small particle/scenario sets per active contract/aggregate, minute cadence."
+        },
+        {
+          "start": 266,
+          "end": 277,
+          "text": "## O21 — Options uncertainty and applicability propagation\n\n1. **Purpose/sources.** Make uncertainty actionable rather than a generic warning; DRF-U08, all options data findings, SKY display/proprietary limitations.\n2. **Inputs.** Quote/underlying age, coverage, IV/surface residuals, OI forecast/scenario spread, sign ambiguity, mapping error and node instability. Every options forecast/object update.\n3. **Algorithm.** Propagate a finite joint scenario ensemble through Greeks→exposure→nodes→path forecasts; preserve dependence (same S/IV/holdings scenario across contracts) instead of independent error bars. Compare empirical residual calibration and conservative bounds for unidentifiable inputs. Applicability classifier estimates when a forecast beats its simple baseline on OOF data; it does not learn from same-sample realized P&L at inference. Binding local refinement: [SR-O21](../SYSTEM_REFINEMENT.md#sr-o21).\n4. **Output.** Forecast intervals, scenario dispersion, field-specific quality reasons, calibrated reliability and available/limited/unavailable status. A confidence score cannot create missing data.\n5. **Dependencies.** O21.quality uses O01–20 measurement/scenario ports and X02.bootstrap, without C19-dependent pattern forecasts or X03–06. O21.forecast_reliability may evaluate completed downstream predictions later, under F11/OOF, and feeds only later G09.SELECT. No downstream reliability output feeds the current upstream forecast it evaluates. L width/P risk can use the appropriate available port.\n6. **Comparisons.** Hard validity+age rules, stratified reliability/shrinkage, regularized meta-model; scenario propagation versus single-point estimate. Complexity only if it improves calibration/decision quality. Binding further upgrade and child comparisons: [UP-O21](../UPGRADE_PATHS.md#up-o21).\n7. **Training.** OOF errors and held-out chronological calibration; coverage regimes separated from market regimes. Extreme sparse states return wide uncertainty/abstention rather than unsupported extrapolation.\n8. **Tests.** Common underlying shock across whole chain, correlated wing errors, missing expiry, stale quote, perfect-looking smooth surface with low coverage and unsupported missing-expert pattern.\n9. **Acceptance.** Conditional coverage/reliability and better risk-adjusted selection under realistic perturbations; report unsupported identification rather than claiming statistical calibration solves it.\n10. **Ablation/fallback/resources.** Point versus scenario, each uncertainty source, coverage-aware versus blind model. Fall back validated static/observed-only board or no options forecast. Class B/C bounded scenarios, latency profiled with whole board."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/SYSTEM_REFINEMENT.md",
+      "sha256": "e1a07b23c36587dd6ed0f6b2735d35ae136df4697f2fe12937ac12cd9825cfd6",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          1207,
+          1227
+        ],
+        [
+          1374,
+          1383
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 1207,
+          "end": 1227,
+          "text": "<a id=\"sr-g06\"></a>\n#### SR-G06 — Value uncertainty after action search\n\nParent: [G06 — Executable action-value and cost model](components/GATES_AND_SELECTION.md); [individual phases](experiments/G.md#g06).\n\n**Definition and interaction.** Separate future payoff dispersion, parameter uncertainty and scenario uncertainty in the value output. The chosen maximum across many actions needs selection-aware evaluation; a per-action lower bound is not automatically a simultaneous guarantee.\n\n**Comparison.** Compare expected-value and prespecified conservative policies on the same complete action grid with jointly paired uncertainty and calibrated net outcomes.\n\n**Local cases to implement.** Adding many noisy action variants creates a false winner; identical gross P&L with different costs; duplicated plans; uncertainty collapses when adverse fill/markout dependence is ignored.\n\n<a id=\"sr-g07\"></a>\n#### SR-G07 — Planner support and transition error\n\nParent: [G07 — Value of waiting, deeper levels and additional information](components/GATES_AND_SELECTION.md); [individual phases](experiments/G.md#g07).\n\n**Definition and interaction.** Declare finite planning states, event/time resolution and the prospective object-arrival model. Continuation can depend on future observations only through a trained transition distribution; it cannot query the replay's actual future candidate set. Carry planning uncertainty and occupancy.\n\n**Comparison.** Compare shallow reference trees, act/wait rules and fitted continuation at matched actions; increase depth only if transition-error stress and complete-policy evidence improve.\n\n**Local cases to implement.** A future object known only from the completed replay; deeper planning amplifies small optimistic bias; pending cancellation occupies the action state; no valid continuation model."
+        },
+        {
+          "start": 1374,
+          "end": 1383,
+          "text": "<a id=\"sr-p11\"></a>\n#### SR-P11 — Eligible-day and cash conservation\n\nParent: [P11 — Trading net, business cash and objective accounting](components/POLICY_EXECUTION_RISK.md); [individual phases](experiments/P.md#p11).\n\n**Definition and interaction.** Freeze eligible-day membership before results and keep future outages/flat days in the operational denominator. Separate trading P&L, deposits/withdrawals, received cash, pending entitlements and all paid business costs. Every ledger entry has one ownership/date rule.\n\n**Comparison.** Compare independent cash/position/fee reconstructions and accounting scenarios; no learned substitute for arithmetic.\n\n**Local cases to implement.** Withdrawal double-counted as loss; pending payout counted received; failed evaluation fees omitted; reset across midnight; fee charged twice; missing market day removed after loss."
+        }
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/UPGRADE_PATHS.md",
+      "sha256": "3b9607108ffd8d5b9777772f8728483c5c35f46180d2237263893359451343c8",
+      "role": "governing_contract",
+      "read_ranges": [
+        [
+          4304,
+          4374
+        ],
+        [
+          2354,
+          2377
+        ]
+      ],
+      "reviewed_text": [
+        {
+          "start": 4304,
+          "end": 4374,
+          "text": "<a id=\"up-g06\"></a>\n### UP-G06 — Executable action-value and cost model\n\nParent: [G06](components/GATES_AND_SELECTION.md); [local phases](experiments/G.md#g06); [definition refinement](SYSTEM_REFINEMENT.md#sr-g06). Upgrade role: `decision`.\n\n**Starting idea.** Multiply win probability by reward and subtract loss/cost.\n\n**Existing improvement path.** Joint fill, path, cost, occupied duration and terminal-state action value.\n\n**Remaining weakness.** Independent action estimates waste shared information and can exaggerate uncertainty in one difference while understating common model error.\n\n**Further upgrade.** Evaluate all feasible complete policies on coupled, admissible outcome scenarios and common random numbers. Compare direct action-value fits with a regularized model of paired value differences relative to a simple policy; propagate common fill/price/latency errors jointly and preserve the cash reward contract.\n\n**Fair comparison.** Empirical outcome table, existing distributional value, coupled scenario evaluation and paired residual-value model.\n\n**Evidence.** Paired value error, policy regret on supported simulation assumptions, net/tail calibration, ranking stability and compute.\n\n**Additional local cases to implement.** Two actions share every outcome until one stop event; incompatible fill scenarios; double-counted continuation; profitable but long occupancy.\n\n**Decision or system use.** Improve enter/route/exit comparisons while making common uncertainty and simulator dependence explicit.\n\n**Exact reviewed source clauses.** [DTM-A15](SOURCE_FINDINGS_AND_CONFLICTS.md:73), [DRF-U01](SOURCE_FINDINGS_AND_CONFLICTS.md:425), [DRF-A10](SOURCE_FINDINGS_AND_CONFLICTS.md:451), [TBR-05](SOURCE_FINDINGS_AND_CONFLICTS.md:740).\n\n**Conversation upgrade lineage.** [DRF-A05](SOURCE_FINDINGS_AND_CONFLICTS.md:446), [DRF-A10](SOURCE_FINDINGS_AND_CONFLICTS.md:451), [DRF-A21](SOURCE_FINDINGS_AND_CONFLICTS.md:462). Read the full rows and their original conversation references; [the recheck](CONVERSATION_RECHECK.md) preserves the exact unit/exception routes.\n\n<a id=\"up-g06-cost_dependence\"></a>\n#### G06.COST_DEPENDENCE — Joint fill and action-value uncertainty\n\n[Existing definition, target and P0–P7](experiments/G.md#g06-cost_dependence) remain binding.\n\n**Specific upgrade scope.** Couple price, fill, delay, cost and occupied-duration scenarios across complete competing actions.\n\n**Local comparison.** Compare direct values with paired residual differences and common random numbers, retaining shared model error.\n\n**Additional cases.** Actions identical until one barrier; inconsistent fills; nonfill opportunity counted twice; continuation overlap.\n\n<a id=\"up-g07\"></a>\n### UP-G07 — Value of waiting, deeper levels and additional information\n\nParent: [G07](components/GATES_AND_SELECTION.md); [local phases](experiments/G.md#g07); [definition refinement](SYSTEM_REFINEMENT.md#sr-g07). Upgrade role: `decision`.\n\n**Starting idea.** Take the nearest good level or wait for confirmation.\n\n**Existing improvement path.** Common-boundary finite-horizon policies with occupancy and information transitions.\n\n**Remaining weakness.** Waiting rules rarely separate the information gained from the price, time and opportunity lost while obtaining it.\n\n**Further upgrade.** Add bounded two-decision lookahead with explicit observation-event transitions. Estimate the incremental value of the next observable stage versus price deterioration, nonarrival and opportunity consumption; compare to a myopic policy and fixed waits before expanding depth. Include a finite-horizon value-of-information decomposition as a diagnostic.\n\n**Fair comparison.** Positive-value now, fixed deeper/confirmation wait, one-step and bounded two-step policies with identical candidate availability and reward accounting.\n\n**Evidence.** Full-day constrained net, waiting regret, missed/expired opportunities, occupancy, transition calibration and planning cost.\n\n**Additional local cases to implement.** No confirmation arrives; better level invalidates; new opportunity appears while occupied; additional signal changes nothing; boundary intervenes.\n\n**Decision or system use.** Choose when waiting improves the complete day policy instead of treating stronger confirmation as automatically beneficial.\n\n**Exact reviewed source clauses.** [DTM-A04](SOURCE_FINDINGS_AND_CONFLICTS.md:62), [JXA-09](SOURCE_FINDINGS_AND_CONFLICTS.md:108), [DRF-A10](SOURCE_FINDINGS_AND_CONFLICTS.md:451), [AUT-04](SOURCE_FINDINGS_AND_CONFLICTS.md:770), [AUT-06](SOURCE_FINDINGS_AND_CONFLICTS.md:772).\n\n**Conversation upgrade lineage.** [DTM-A04](SOURCE_FINDINGS_AND_CONFLICTS.md:62), [DTM-A11](SOURCE_FINDINGS_AND_CONFLICTS.md:69), [DTM-A14](SOURCE_FINDINGS_AND_CONFLICTS.md:72), [CRL-16](SOURCE_FINDINGS_AND_CONFLICTS.md:232), [DRF-A24](SOURCE_FINDINGS_AND_CONFLICTS.md:465), [DRF-A27](SOURCE_FINDINGS_AND_CONFLICTS.md:468). Read the full rows and their original conversation references; [the recheck](CONVERSATION_RECHECK.md) preserves the exact unit/exception routes.\n\n<a id=\"up-g07-duration\"></a>\n#### G07.DURATION — Common-boundary waiting and occupancy\n\n[Existing definition, target and P0–P7](experiments/G.md#g07-duration) remain binding.\n\n**Specific upgrade scope.** Compare bounded lookahead with myopic policies using the same terminal boundary and correctly timed continuation.\n\n**Local comparison.** Evaluate total day net/occupancy rather than independent USD-per-minute scores; common scenarios support paired differences.\n\n**Additional cases.** Short trade leaves later opportunity; long trade blocks it; boundary truncation; pending order consumes capacity."
+        },
+        {
+          "start": 2354,
+          "end": 2377,
+          "text": "<a id=\"up-o08\"></a>\n### UP-O08 — Intraday aggregate-holdings scenario updater\n\nParent: [O08](components/OPTIONS.md); [local phases](experiments/O.md#o08); [definition refinement](SYSTEM_REFINEMENT.md#sr-o08). Upgrade role: `forecast`.\n\n**Starting idea.** Update inferred holdings deterministically from signed flow.\n\n**Existing improvement path.** Frozen holdings, latent opening/closing scenarios, coherent filtering and endpoint nonidentification.\n\n**Remaining weakness.** A single chosen filter can appear precise despite many compatible intraday paths, and downstream usefulness may not require identifying one path.\n\n**Further upgrade.** Compare a family of identified-compatible latent transition models with shared one-time evidence assimilation and endpoint likelihoods. Propagate model/parameter/path uncertainty separately; test decision sensitivity across plausible filters against direct observable flow-to-path challengers. Do not score an unavailable intraday truth as if observed.\n\n**Fair comparison.** Frozen/proportional scenarios, one state-space filter, uncertainty-preserving model family and direct predictive bypass.\n\n**Evidence.** Endpoint forecast loss, synthetic path recovery where truth is known, uncertainty sensitivity, downstream net and compute.\n\n**Additional local cases to implement.** Different paths share endpoint; flow reused through O07; exercise shock; filter collapses after duplicate evidence; direct model works without holdings.\n\n**Decision or system use.** Use latent holdings only to the extent supported by observations and added decision value, preserving uncertainty that endpoints cannot resolve.\n\n**Exact reviewed source clauses.** [DTM-A05](SOURCE_FINDINGS_AND_CONFLICTS.md:63), [CEX-17](SOURCE_FINDINGS_AND_CONFLICTS.md:199), [IMG-01](SOURCE_FINDINGS_AND_CONFLICTS.md:248), [IMG-02](SOURCE_FINDINGS_AND_CONFLICTS.md:249), [IMG-03](SOURCE_FINDINGS_AND_CONFLICTS.md:250), [IMG-04](SOURCE_FINDINGS_AND_CONFLICTS.md:251), [IMG-05](SOURCE_FINDINGS_AND_CONFLICTS.md:252), [IMG-06](SOURCE_FINDINGS_AND_CONFLICTS.md:253), [IMG-07](SOURCE_FINDINGS_AND_CONFLICTS.md:254), [DRF-U06](SOURCE_FINDINGS_AND_CONFLICTS.md:430), [DRF-A01](SOURCE_FINDINGS_AND_CONFLICTS.md:442), [DRF-A04](SOURCE_FINDINGS_AND_CONFLICTS.md:445), [DRF-A18](SOURCE_FINDINGS_AND_CONFLICTS.md:459).\n\n**Conversation upgrade lineage.** [DTM-A05](SOURCE_FINDINGS_AND_CONFLICTS.md:63), [CEX-17](SOURCE_FINDINGS_AND_CONFLICTS.md:199), [DRF-U01](SOURCE_FINDINGS_AND_CONFLICTS.md:425), [DRF-U06](SOURCE_FINDINGS_AND_CONFLICTS.md:430), [DRF-A02](SOURCE_FINDINGS_AND_CONFLICTS.md:443), [DRF-A04](SOURCE_FINDINGS_AND_CONFLICTS.md:445), [DRF-A18](SOURCE_FINDINGS_AND_CONFLICTS.md:459). Read the full rows and their original conversation references; [the recheck](CONVERSATION_RECHECK.md) preserves the exact unit/exception routes."
+        }
+      ]
+    }
+  ],
+  "original_provenance": "The finite original mathematical examples and the corrected contracts are the direct source of this unit. Original trading/Pine/OOF source-mechanism implementations remain with their independently prepared unit owners; these fixtures are not complete G06/G07/O08/P05/P11 implementations.",
+  "hand_derived_cases": [
+    {
+      "case_id": "BC01",
+      "family": "T-CAPABILITY",
+      "source_bindings": [
+        "TR-06",
+        "EXAMPLE-ORDER-01",
+        "EXAMPLE-ORDER-02"
+      ],
+      "inputs": {
+        "paths": [
+          [
+            0,
+            2,
+            -1,
+            1
+          ],
+          [
+            0,
+            -1,
+            2,
+            1
+          ]
+        ],
+        "up": 2,
+        "down": 1
+      },
+      "expected": {
+        "terminal": [
+          1,
+          1
+        ],
+        "maximum_up": [
+          2,
+          2
+        ],
+        "maximum_down": [
+          1,
+          1
+        ],
+        "first_barrier": [
+          "upper",
+          "lower"
+        ]
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC02",
+      "family": "T-CAPABILITY",
+      "source_bindings": [
+        "CC-03",
+        "CC-04",
+        "T-CAPABILITY"
+      ],
+      "inputs": {
+        "offered": [
+          "terminal_return_variance",
+          "terminal_return",
+          "excursions",
+          "realized_variation"
+        ],
+        "required": "coherent_trajectory",
+        "cut": 0,
+        "end": 10
+      },
+      "expected": {
+        "each_single_capability_result": "DependencyUnavailable",
+        "combined_excursions_terminal_result": "DependencyUnavailable"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC03",
+      "family": "T-CAPABILITY",
+      "source_bindings": [
+        "CC-04"
+      ],
+      "inputs": {
+        "offered": [
+          "ordered_first_passage"
+        ],
+        "required": "ordered_first_passage",
+        "target_end": 10,
+        "cut": 0
+      },
+      "expected": {
+        "before_expiry": "accepted",
+        "at_end": "DependencyUnavailable",
+        "changed_observation_process": "ContractError",
+        "changed_population": "ContractError"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC04",
+      "family": "T-HORIZON",
+      "source_bindings": [
+        "TR-07",
+        "EXAMPLE-HORIZON-01",
+        "EXAMPLE-HORIZON-02"
+      ],
+      "inputs": {
+        "clock_unit": "minute",
+        "origin": 0,
+        "fixed_end": 10,
+        "contact": 9,
+        "favorable_event": 11,
+        "new_contact_end": 19,
+        "band": [
+          99,
+          101
+        ],
+        "prices": [
+          [
+            1,
+            98
+          ],
+          [
+            9,
+            100
+          ],
+          [
+            10,
+            101
+          ],
+          [
+            11,
+            103
+          ],
+          [
+            19,
+            103
+          ]
+        ],
+        "favorable_distance": 3,
+        "adverse_distance": 3
+      },
+      "expected": {
+        "original_end": 10,
+        "original_after_contact": "unresolved",
+        "new_end": 19,
+        "new_after_contact": "favorable_first",
+        "target_identity_changes": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC05",
+      "family": "T-HORIZON",
+      "source_bindings": [
+        "CC-04",
+        "T-HORIZON"
+      ],
+      "inputs": {
+        "origin": 0,
+        "end": 10,
+        "band": [
+          99,
+          101
+        ],
+        "prices": [
+          [
+            1,
+            90
+          ],
+          [
+            9,
+            95
+          ]
+        ],
+        "full_observation_end": 10,
+        "partial_observation_end": 9
+      },
+      "expected": {
+        "full_status": "observed_no_contact",
+        "partial_status": "censored",
+        "terminal_prolonged_to_contact_plus_h": false
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC06",
+      "family": "T-HORIZON",
+      "source_bindings": [
+        "CC-04"
+      ],
+      "inputs": {
+        "origin": 0,
+        "end": 10,
+        "band": [
+          99,
+          101
+        ],
+        "prices": [
+          [
+            1,
+            98
+          ],
+          [
+            2,
+            102
+          ],
+          [
+            10,
+            104
+          ]
+        ]
+      },
+      "expected": {
+        "gap_cross": true,
+        "traded_contact": false
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC07",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "TR-08",
+        "EXAMPLE-REWARD-01"
+      ],
+      "inputs": {
+        "times": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "gross_marks": [
+          "0",
+          "0",
+          "25",
+          "105",
+          "105"
+        ],
+        "cumulative_fee_ids": [
+          [],
+          [
+            "entry"
+          ],
+          [
+            "entry"
+          ],
+          [
+            "entry"
+          ],
+          [
+            "entry",
+            "exit"
+          ]
+        ],
+        "fees": {
+          "entry": "5",
+          "exit": "5"
+        }
+      },
+      "expected": {
+        "net_marks": [
+          "0",
+          "-5",
+          "20",
+          "100",
+          "95"
+        ],
+        "increments": [
+          "-5",
+          "25",
+          "80",
+          "-5"
+        ],
+        "net_change": "95",
+        "total_charged_fees": "10"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC08",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "G07.3",
+        "EXAMPLE-REWARD-02",
+        "UPK-09"
+      ],
+      "inputs": {
+        "common_boundary": 20,
+        "short": {
+          "start": 0,
+          "terminal": 10,
+          "net": "30",
+          "terminal_state": "flat10"
+        },
+        "continuation": {
+          "start": 10,
+          "terminal": 20,
+          "net": "80",
+          "initial_state": "flat10"
+        },
+        "long": {
+          "start": 0,
+          "terminal": 20,
+          "net": "100"
+        }
+      },
+      "expected": {
+        "short_plus_continuation": "110",
+        "long": "100",
+        "paired_difference": "10"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC09",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "EXAMPLE-REWARD-03",
+        "UPK-09"
+      ],
+      "inputs": {
+        "macro_terminal": 10,
+        "continuation_starts": [
+          1,
+          9,
+          11
+        ],
+        "complete_trade_net": "95",
+        "overlap_value": "75"
+      },
+      "expected": {
+        "each_result": "ContractError",
+        "invalid_sum": "170",
+        "eligible_complete_value": "95"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC10",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "G07.DURATION",
+        "P01.8"
+      ],
+      "inputs": {
+        "macro_terminal_state": {
+          "at": 10,
+          "state_version": "pending-cancel",
+          "position": 0,
+          "pending_order": true
+        },
+        "continuation_start_state": {
+          "at": 10,
+          "state_version": "flat",
+          "position": 0,
+          "pending_order": false
+        }
+      },
+      "expected": {
+        "result": "ContractError",
+        "reason": "exact terminal state differs; pending order consumes capacity"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC11",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "T-REWARD",
+        "P11.8"
+      ],
+      "inputs": {
+        "charges": [
+          {
+            "id": "f1",
+            "amount": "5"
+          },
+          {
+            "id": "f1",
+            "amount": "5"
+          }
+        ],
+        "conflicting_retry": {
+          "id": "f1",
+          "amount": "6"
+        }
+      },
+      "expected": {
+        "exact_duplicate_cash_charge_count": 1,
+        "conflicting_retry": "ContractError",
+        "missing_previously_charged_fee": "ContractError",
+        "same_fee_in_macro_and_continuation": "ContractError"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC12",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "UPK-09",
+        "G07.DURATION"
+      ],
+      "inputs": {
+        "boundary": 20,
+        "invalid_macro_ends": [
+          21
+        ],
+        "different_boundaries": [
+          20,
+          21
+        ],
+        "different_accounts": [
+          "A",
+          "B"
+        ],
+        "different_scenarios": [
+          "base",
+          "adverse"
+        ]
+      },
+      "expected": {
+        "beyond_boundary": "ContractError",
+        "different_common_boundary": "ContractError",
+        "cross_account": "ContractError",
+        "mixed_scenario": "ContractError"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC13",
+      "family": "T-REWARD",
+      "source_bindings": [
+        "EXAMPLE-NONFILL-01",
+        "P01.4"
+      ],
+      "inputs": {
+        "flat_no_fill_gross": [
+          "0",
+          "0"
+        ],
+        "fees": []
+      },
+      "expected": {
+        "trade_reward": "0",
+        "foregone_winner_not_cash_charge": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC14",
+      "family": "T-STANDING-QUOTE",
+      "source_bindings": [
+        "TR-10",
+        "EXAMPLE-QUOTE-01",
+        "EXAMPLE-QUOTE-02",
+        "EXAMPLE-QUOTE-03"
+      ],
+      "inputs": {
+        "quotes": [
+          {
+            "id": "q0",
+            "event": 0,
+            "receipt": 0,
+            "bid": 99,
+            "ask": 100
+          },
+          {
+            "id": "q4",
+            "event": 4,
+            "receipt": 6,
+            "bid": 101,
+            "ask": 102
+          },
+          {
+            "id": "q10",
+            "event": 10,
+            "receipt": 10,
+            "bid": 102,
+            "ask": 103
+          }
+        ],
+        "decision": 3,
+        "arrival": 5,
+        "coverage": [
+          0,
+          20
+        ],
+        "impact": 0
+      },
+      "expected": {
+        "decision_ask": 100,
+        "arrival_ask": 102,
+        "filled_at": 5,
+        "filled_price": 102,
+        "source_quote": "q4",
+        "not_next_update_price": 103
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC15",
+      "family": "T-STANDING-QUOTE",
+      "source_bindings": [
+        "T-STANDING-QUOTE"
+      ],
+      "inputs": {
+        "same_quotes_as": "BC14",
+        "arrival": 4,
+        "same_time_scenarios": [
+          "order_first",
+          "venue_first",
+          "ambiguous"
+        ]
+      },
+      "expected": {
+        "prices": [
+          100,
+          102,
+          null
+        ],
+        "statuses": [
+          "filled_under_scenario",
+          "filled_under_scenario",
+          "uncertain"
+        ]
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC16",
+      "family": "T-STANDING-QUOTE",
+      "source_bindings": [
+        "T-STANDING-QUOTE",
+        "MARKET_DATA_SOURCE_CONTRACT"
+      ],
+      "inputs": {
+        "same_quotes_as": "BC14",
+        "arrival": 5,
+        "coverage": [
+          [
+            0,
+            3
+          ],
+          [
+            5,
+            20
+          ]
+        ]
+      },
+      "expected": {
+        "result": "uncertain",
+        "price": null,
+        "reason": "standing quote predates unobserved gap; no recovery evidence"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC17",
+      "family": "T-GEOMETRY",
+      "source_bindings": [
+        "TR-11",
+        "EXAMPLE-GEOMETRY-01",
+        "EXAMPLE-GEOMETRY-02"
+      ],
+      "inputs": {
+        "physical_band": [
+          99,
+          101
+        ],
+        "contact_band": [
+          99,
+          101
+        ],
+        "estimation_uncertainty": 2,
+        "mapping_uncertainty": 3,
+        "entry_tolerance": 1,
+        "price": 103,
+        "scenario_contact_band": [
+          97,
+          103
+        ]
+      },
+      "expected": {
+        "original_physical_touch": false,
+        "original_contact": false,
+        "scenario_contact": true,
+        "scenario_target_identity_changes": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC18",
+      "family": "T-GEOMETRY",
+      "source_bindings": [
+        "CC-04",
+        "F10"
+      ],
+      "inputs": {
+        "physical_band": [
+          99,
+          101
+        ],
+        "contact_band": [
+          99,
+          101
+        ],
+        "metadata_changes": {
+          "estimation_uncertainty": 4,
+          "mapping_uncertainty": 5,
+          "entry_tolerance": 2
+        }
+      },
+      "expected": {
+        "fixed_contact_geometry_identity_unchanged": true,
+        "earlier_label_band_unchanged": true,
+        "different_execution_coordinate_new_identity": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC19",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "TR-09",
+        "EXAMPLE-ASSIMILATION-01",
+        "EXAMPLE-ASSIMILATION-02"
+      ],
+      "inputs": {
+        "model": "synthetic independent unit-normal likelihood",
+        "prior_mean": "0",
+        "prior_variance": "1",
+        "observations": [
+          {
+            "factor_id": "flow1",
+            "atoms": [
+              "flow1"
+            ],
+            "value": "1",
+            "noise_variance": "1"
+          },
+          {
+            "factor_id": "flow1",
+            "atoms": [
+              "flow1"
+            ],
+            "value": "1",
+            "noise_variance": "1"
+          }
+        ]
+      },
+      "expected": {
+        "mean": "1/2",
+        "variance": "1/2",
+        "accepted_factors": 1,
+        "repeated_factor": "duplicate",
+        "invalid_independent_twice_variance": "1/3"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC20",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "O08.3",
+        "T-OI-ASSIMILATION"
+      ],
+      "inputs": {
+        "conditional_proposal_mean": "1/2",
+        "conditional_proposal_variance": "1/2",
+        "already_assimilated_atoms": [
+          "flow1"
+        ],
+        "incoming_factor_id": "same-flow-new-wrapper",
+        "incoming_atoms": [
+          "flow1"
+        ],
+        "incoming_value": "1",
+        "noise_variance": "1"
+      },
+      "expected": {
+        "admission": "redundant_evidence",
+        "mean": "1/2",
+        "variance": "1/2",
+        "not_independent_after_renaming": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC21",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "UP-O08",
+        "CC-05"
+      ],
+      "inputs": {
+        "already_assimilated_atoms": [
+          "flow1"
+        ],
+        "incoming_factor_id": "flow-conditioned-forecast",
+        "incoming_atoms": [
+          "flow1",
+          "flow2"
+        ]
+      },
+      "expected": {
+        "admission": "DependencyUnavailable",
+        "reason": "partial overlap requires coherent conditional likelihood; never silently remove duplicated atoms from joint factor"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC22",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "T-OI-ASSIMILATION",
+        "F11"
+      ],
+      "inputs": {
+        "factor_id": "flow1",
+        "old_payload": "y=1",
+        "new_payload": "y=2",
+        "atom": "flow1"
+      },
+      "expected": {
+        "result": "ContractError",
+        "unchanged_previous_state": true,
+        "correction_requires_new_coherent_model_state": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC23",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "CC-01",
+        "O08.7"
+      ],
+      "inputs": {
+        "prior_atoms": [],
+        "incoming_atoms": [
+          "flow2"
+        ],
+        "known_at": 6,
+        "decision_cut": 5
+      },
+      "expected": {
+        "admission": "DependencyUnavailable",
+        "unchanged_previous_state": true
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC24",
+      "family": "T-OI-ASSIMILATION",
+      "source_bindings": [
+        "UP-O08"
+      ],
+      "inputs": {
+        "prior_atoms": [
+          "flow1"
+        ],
+        "incoming_atoms": [
+          "flow2"
+        ],
+        "independence_contract": null
+      },
+      "expected": {
+        "admission": "DependencyUnavailable",
+        "reason": "different IDs alone do not establish independence"
+      },
+      "status": "hand_derived_not_executed"
+    },
+    {
+      "case_id": "BC25",
+      "family": "T-RESTART-BOUNDS",
+      "source_bindings": [
+        "CC-07",
+        "B00.6"
+      ],
+      "inputs": {
+        "max_marks": 64,
+        "too_many_marks": 65,
+        "max_factors": 64,
+        "too_many_factors": 65,
+        "max_atoms": 256,
+        "too_many_atoms": 257
+      },
+      "expected": {
+        "each_overbound": "ContractError before mutation",
+        "exact_restore": "same semantic version and duplicate admission",
+        "future_suffix": "earlier finite outputs unchanged"
+      },
+      "status": "hand_derived_not_executed"
+    }
+  ],
+  "source_obligations": [
+    {
+      "source_id": "T-CAPABILITY",
+      "case_ids": [
+        "BC01",
+        "BC02",
+        "BC03"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-GEOMETRY",
+      "case_ids": [
+        "BC17",
+        "BC18"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-HORIZON",
+      "case_ids": [
+        "BC04",
+        "BC05",
+        "BC06"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-OI-ASSIMILATION",
+      "case_ids": [
+        "BC19",
+        "BC20",
+        "BC21",
+        "BC22",
+        "BC23",
+        "BC24"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-RESTART-BOUNDS",
+      "case_ids": [
+        "BC25"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-REWARD",
+      "case_ids": [
+        "BC07",
+        "BC08",
+        "BC09",
+        "BC10",
+        "BC11",
+        "BC12",
+        "BC13"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    },
+    {
+      "source_id": "T-STANDING-QUOTE",
+      "case_ids": [
+        "BC14",
+        "BC15",
+        "BC16"
+      ],
+      "disposition": "finite engineering reference and direct production-port contract assertions; no alpha claim"
+    }
+  ],
+  "existing_code_read": [
+    {
+      "path": "src/trading_research/foundations/contracts.py",
+      "sha256": "1d90517a39a2c2ad31dbaac59bc90bad08b084c56a02313b74bbdb046d13b9a0",
+      "read": "complete current public module"
+    },
+    {
+      "path": "src/trading_research/research/labels.py",
+      "sha256": "f28fb00f9cf11e0509a0dfb97cc25cdccb6bef4bb5ed6502d244b70649793b5f",
+      "read": "complete current public module"
+    },
+    {
+      "path": "src/trading_research/execution/venue.py",
+      "sha256": "b61b1f96a0a49b9ab259eae30e3249ecad4838298f845dbdecb1249b4042e3c2",
+      "read": "complete current public module"
+    },
+    {
+      "path": "src/trading_research/execution/accounting.py",
+      "sha256": "91426f5e1b22cee3149c101eca00c4a1c1ae34e1ae9b9cf55153a8bd7a87b401",
+      "read": "complete current public module"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "V01_V02_API",
+      "detail": "Feynman contact-label adapter final names must be frozen before registration."
+    },
+    {
+      "id": "G06_G07_P01_P11",
+      "detail": "Finite exact composition kernel only; actual learned action/transition model, full account mark integration, policy, support and economics remain unrun."
+    },
+    {
+      "id": "O07_O08_O21",
+      "detail": "Evidence admission protects one-time lineage under explicit likelihood assumptions; it does not identify true intraday holdings or implement/calibrate an OI model."
+    }
+  ],
+  "activity": {
+    "application_imported": false,
+    "compiled": false,
+    "candidate_reference_tests_written": false,
+    "market_data_read": false,
+    "tests_run": false
+  }
+}

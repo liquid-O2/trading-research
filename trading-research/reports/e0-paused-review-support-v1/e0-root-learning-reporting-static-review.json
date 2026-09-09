@@ -1,0 +1,150 @@
+{
+  "schema": "E0RootLearningReportingStaticReviewV1",
+  "scope": "Static independent source review of root learning/reporting and helper integration against frozen INT09/INT11 and cited original E0 source. No candidate imports, compilation, tests, CLI, market/raw reads or frozen edits.",
+  "input_identities": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/experiments/e0/learning.py",
+      "sha256": "c7f86b64af669e6107a171a9955823d4cc2b7c7f41a59e554cefa8246b8742d4"
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/experiments/e0/reporting.py",
+      "sha256": "1e7ae0c1270528ed93ace8d0729c4c3a4e8d1484ba0001a95898dfa4df74c037"
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/experiments/e0/learning_store.py",
+      "sha256": "dc0bfd37e5b3a0c1b8fa6aa63cdf55711c245ea8c7aac9114372ae1ebb2077c3"
+    },
+    {
+      "path": "/workspace/trading-research/tests/golden/e0_integration_v1.json",
+      "sha256": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43"
+    },
+    {
+      "path": "/workspace/trading-research/reports/e0-integration-registration.json",
+      "sha256": "e663d6d0d593eb29081175fa02895d3d21bb026c6d7ba3096a23bc0c6b017d84"
+    },
+    {
+      "path": "/tmp/e0-integration-source-bindings-frozen.json",
+      "sha256": "2963e257b96907390abc24ec4b15ed06e9512f6bc1d37fadaf2c130f2f4792d1"
+    },
+    {
+      "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md",
+      "sha256": "ee96fb31a84ba96a1bcf887e154bf2a12fbd04b688359c9264d18cbab6e941c9"
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/COMMON_CONTRACTS.md",
+      "sha256": "838a3a4459b5028350cb5f398ac314f379bb3bc610e32a390e205c8823614031"
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/FOUNDATIONS.md",
+      "sha256": "8874367de2db551b6f6104643abc05fb1f5f7716a3a01ca842b5553270d57b5b"
+    },
+    {
+      "path": "/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md",
+      "sha256": "d3db19c782494861301daf3ff8413a74a5f1baed219cea2b261d8bc61a227d78"
+    }
+  ],
+  "finding_count": 8,
+  "findings": [
+    {
+      "id": "E0-LR-01",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-09-F01",
+        "E0-INT-09-F03"
+      ],
+      "location": "learning.py:183-186",
+      "finding": "2023 proper-score selection consumes outcomes without checking their actual label maturity by the end of the declared 2023 selection stage. e0_stages only bounds decision_at to its date year; the base evaluation fold spans through 2026.",
+      "concrete_trigger": "Take a valid 2023 selection Sample and move label_known_at to a 2025 timestamp while leaving decision_at and dependency_end in 2023. Sample and the 2022 fit fold remain valid; the selection loop reads the outcome and may choose lambda before that label was available.",
+      "required_change": "Require every scored selection label/target dependency to be mature at the immutable selection cutoff (start of 2024), preserve excluded-row reasons rather than use later outcomes, and do not reassign calibration/evaluation rows into selection."
+    },
+    {
+      "id": "E0-LR-02",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-09-F02",
+        "E0-INT-09-F03"
+      ],
+      "location": "learning.py:241-251; learning_store.py:163-170,424-441",
+      "finding": "Policy/head labels are checked only against freely replaceable E0LearningConfig fields, not the retained target payload identified by target_ref.sha256. Whole-fit commit does not reconcile config with stages or target bytes.",
+      "concrete_trigger": "Clone one valid fitted head three times with dataclasses.replace(config, policy_version=another_policy, head=name), keeping identical target_version, model, examples and stages. A real callback serving the unchanged stored model succeeds for all three. predict_complete_bracket then presents one binary target as three complete bracket outcomes (typically 1/3 each).",
+      "required_change": "Bind an exact canonical target descriptor (policy version, head, horizon/endpoint rule) to target_ref bytes and verify it against config/stages at commit and complete-bracket admission. Require distinct compatible target heads and matching original horizon/policy; never change only a config label."
+    },
+    {
+      "id": "E0-LR-03",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-09-F03"
+      ],
+      "location": "learning.py:227,247-249",
+      "finding": "The complete-bracket admission boundary accepts any callable and any truthy read object as actual committed evidence. It never resolves the returned commit or validates that the prediction was served through F11.",
+      "concrete_trigger": "With otherwise valid fits/examples, committed_predict=lambda model,example:(0.5,{\"claimed\":True}) is accepted and emits a complete E0BracketPrediction with no store, source, target or OOF reads.",
+      "required_change": "Use a typed actual-store binding/accessor collection or validate a typed returned evidence envelope by reopening its exact store/commit/model/read manifest. Keep support for multiple head stores without permitting unverified callback declarations."
+    },
+    {
+      "id": "E0-LR-04",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-09-F02",
+        "E0-INT-09-F03"
+      ],
+      "location": "learning_store.py:323-339",
+      "finding": "Only the local learner/root FittedArtifact is checked against the supplied fold. Other supplied fitted artifacts are then represented by newly constructed semantic fit evidence, which can mask a future/in-sample/stale scaler declaration.",
+      "concrete_trigger": "Replace only a BinaryModel scaler artifact fitted_at with a post-query timestamp, leaving the learner artifact and numeric means/scales intact. _validate_model_fold sees only fit_artifacts[-1]; F11 semantic nodes get fold.fit_at for both fits, while _attest_components verifies numeric state but not supplied FittedArtifact metadata. Legacy model.predict would reject the future scaler but committed serving can accept it.",
+      "required_change": "Validate every local scaler/learner/calibration FittedArtifact membership, fold, fitted clock, label maturity and exact upstream IDs before constructing semantic nodes. Validate nested calibration components and bind the root ID. Owned helper repair authorized after findings delivery.",
+      "owner": "e0_contract_check"
+    },
+    {
+      "id": "E0-LR-05",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-11-F03"
+      ],
+      "location": "reporting.py:112-147",
+      "finding": "Economic completeness does not join accounting fills, order execution IDs, bracket outcomes, paths or the asserted population. all(outcomes) passes an empty tuple, paths only need any nonempty coverage interval, and interval.population_hash is compared only to a caller string.",
+      "concrete_trigger": "Use a complete profitable AccountingLedger with real fills, an unrelated reconciled-flat empty OrderLedger sharing account_id, paths=(any typed covered path,), outcomes=(), and an above-target interval. The current complete predicate can be True and return supported_at_declared_uncertainty despite no order/source/outcome reconciliation for those fills.",
+      "required_change": "Join the retained accounting contract/date population to the run population and reconcile exact execution IDs, quantities, prices, fees and totals against actual orders/outcomes and their source paths. Empty outcomes are valid only for a verified zero-fill account; bind risk/boundary evidence to the same executions and days."
+    },
+    {
+      "id": "E0-LR-06",
+      "severity": "high",
+      "case_ids": [
+        "E0-INT-11-F01",
+        "E0-INT-11-F03"
+      ],
+      "location": "reporting.py:16-27,112-132",
+      "finding": "E0Parity is accepted as integrity evidence without validating its six component records or their relation to whole-prefix hashes. Equality of three arbitrary strings is sufficient for passed=True.",
+      "concrete_trigger": "E0Parity(\"x\",\"x\",\"x\",None,()) passes the integrity gate and yields supported semantic/causal quality tracks; the report never requires outputs of compare_e0_prefixes or actual retained states.",
+      "required_change": "Require complete immutable six-component evidence, validate the first divergent component and matching digest identities, and bind the comparison to actual retained run/prefix/restart states. A manually constructed empty/sentinel parity declaration must not authorize economics."
+    },
+    {
+      "id": "E0-LR-07",
+      "severity": "medium",
+      "case_ids": [
+        "E0-INT-11-F03"
+      ],
+      "location": "reporting.py:133-136,175-176",
+      "finding": "The missing-fee branch clears top-level mean/net/gap, but the nested scorecard still receives the original accounting mean from the local variable.",
+      "concrete_trigger": "Pass fees=None with a complete account whose mean is 2300. Top-level objective_gap_usd_per_day becomes None, while quality_tracks.objective_mean_per_day remains 2300 and quality_tracks.objective_gap remains -300.",
+      "required_change": "Pass the final admitted result mean into scorecard so missing economic inputs leave every published economic objective field unavailable."
+    },
+    {
+      "id": "E0-LR-08",
+      "severity": "medium",
+      "case_ids": [
+        "E0-INT-11-F02"
+      ],
+      "location": "reporting.py:60-81",
+      "finding": "Fault attribution can report a newly caused defect when the baseline already has the same ambiguous source ordering; fee attribution checks only changed net rather than isolating a cost-only replay.",
+      "concrete_trigger": "Pass the identical same-time-ambiguous VenuePath as baseline_path and changed_path, identical fees and population. The unchanged path still triggers venue_path.same_time_order instead of refusing an intervention with no change. Separately, changed fees plus unrelated complete outcomes with different fill/gross prices is classified as a cost-only effect.",
+      "required_change": "Compare baseline and changed defect status at the first event, reject identical no-op interventions, and require fee-only comparisons to retain source path, matched fills/gross economics and candidate population while verifying the expected itemized fee delta."
+    }
+  ],
+  "checked_without_additional_findings": [
+    "All four nonempty date roles remain 2022 fit, 2023 selection, 2024 calibration and 2025 retrospective evaluation. Base evaluation fold correctly reaches 2026 so calibration/query rows have explicit F11 OOF routes.",
+    "Only 2022 fold.training_ids fit frequency/logistic/scaling; calibration fitting inherits 2024-only training_start and actual preflight maturity. 2025 outcomes are not directly read in the selection loop.",
+    "Empty/purged fit membership fails model preflight; a single-class 2022 head takes the registered conditional-frequency fallback. Single-class calibration/solver failure propagates as failure rather than inventing a fit.",
+    "The F11 helper uses actual ReadSession reads and sealed manifests, actual retained source/value snapshots and labels, fitted scaler ancestors and exact cell/moment attestation. Calibration raw_logit nodes are actual OOF predictions computed from serve_bound_model outputs with explicit base routes; no model fitting or test-fixture imports occur in the helper.",
+    "Source/target mismatches and malformed supplied model target versions fail at actual F11 boundaries. Report program_complete remains False and richer information quality remains inconclusive."
+  ],
+  "next_action": "Root owns learning.py/reporting.py repairs and runner/test integration. Agent will repair only learning_store.py local artifact checks after sending this review."
+}

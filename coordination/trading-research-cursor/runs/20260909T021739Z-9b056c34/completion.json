@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 721.3962475219741,
+  "finished_at": "2026-09-09T02:29:40.817692+00:00",
+  "session_id": "832b6c04-0198-4fbb-9e98-6cfdc71ad6f5",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 716944,
+    "duration_api_ms": 716944,
+    "is_error": false,
+    "result": "I'll read the three owned files and apply only the remaining defects, without repeating already-corrected work.I have the remaining defects located. Next I\u2019ll apply the six concrete fixes in the three owned files only.The six remaining defects are now in the three owned files. Root still has to run registered verification.\n\n**1. Window helper and join clocks**  \n`_window_rows` now writes **12 features** (4 formations \u00d7 3 latencies) with non-NULL `latency_ns`, `complete`, `chronological_eligible`, `data_complete`, and `contract_stable`. Those columns are persisted on the feature table. `_feature_for_arm` requires an exact non-NULL latency. `_scenario_publication` shifts only source-latency clocks (`published` and `input_known`); selection stays fixed. The join fixture checks 12/12 rows, all 48 pairs, literal actual `cut+250ms` vs scenario `0` / `250ms` / `1000ms`, and at least one eligible zero-latency arm.\n\n**2. Statistics pairing and release**  \n`_release_geometry_group` pairs **once** after all 14 variants and 6 proxies have been emitted (complete or not). Developing/rolling rows are not indexed. `write_partition_groups` only pairs leftover unmatched anchors. The fixture checks one observation per contrast per completed anchor and empty indexes after 240 developing/rolling cuts plus three completed anchors.\n\n**3. Integer exactness**  \n`normalize_exact_integers` encodes every declared exact integer field (num, den, and accumulated moments). Statistics decode `*_text` before ratios. The Parquet fixture uses masses `2**32` and `2**32+1` at 100000 and 100002 and checks concentration num **and** den above int64, preserved variance and `sum_p2q`, finite statistics, and side Wasserstein **exactly 2 ticks** for 100-buy / 102-sell.\n\n**4. Fresh/reuse reducer**  \n`refs['groups']` is now `auction_flow_profile_group_manifest_v1` (per-partition refs only). Reconstruct with `iter_authenticated_profile_groups` / `reconstruct_profile_groups`. The report streams readable metric rows (unit, means, support, undefined) partition by partition. Reuse authenticates one partition payload and discards it. Semantic counts are unchanged. Per-partition group JSON stays the current kind.\n\n**5. Civil output identity and warm history**  \nCivil `economic_date` / stage come from `anchor.end_ns - 1`. Baseline `completed_id` is computed once before the variant loop. Crossed weeks/months/quarters/years are owned by that end date (no 2020 emit of a week that ends in 2021). Warm days compute compact prior cash/futures completed geometry without emitting out-of-cohort rows. Fixtures: Dec 31 cash \u2192 Jan 4 prior close `111` and non-NULL `completed_geometry_id`; Dec 28 + Jan 2 week mass `50` dated `2021-01-03`, absent from the 2020 partition.\n\n**6. Partial groups, unpriced overflow, transport**  \nPartial geometry values go into the `observed_partial` distribution, not the eligible-complete estimates. Partial future joins are retained under `future_observed_partial`. `future_low/high_overflow_unpriced` stay NULL with `unpriced_side_of_grid_unidentified`; priced side overflow stays numeric. `future_val` / `future_vah` units are `quarter_point_ticks`. `side_wasserstein` remains buy/sell distance. `future_transport` is current-vs-future 1-Wasserstein on the frozen grid, with overflow unidentified as its own flag.\n\n**Public API change:** `refs['groups']` / `refs['paired']` are compact manifests. Use the exported iterator/reconstructor. Per-partition group JSON kind is unchanged.\n\n**Not claimed:** this pass was not imported or executed here.",
+    "session_id": "832b6c04-0198-4fbb-9e98-6cfdc71ad6f5",
+    "request_id": "6de2394d-4597-4cce-a437-8855133a2a30",
+    "usage": {
+      "inputTokens": 215775,
+      "outputTokens": 73239,
+      "cacheReadTokens": 8404992,
+      "cacheWriteTokens": 0
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "actual_cpu_seconds_consumed": 420.642858,
+  "all_attempts_consumed": 5,
+  "attempt": {
+    "cpu_reservation_seconds": 490,
+    "cpu_seconds": 264.25735199999997,
+    "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+    "id": "f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847",
+    "peak_rss_bytes": 2062733312,
+    "reason": "supervisor exception: KeyboardInterrupt; prior reservation retained if usage unknown",
+    "resource_basis": "observed",
+    "result_artifacts": [],
+    "status": "interrupted",
+    "trial_id": "d1537b6d88a557a7aae0f9da776ea9b974e74876c2e212aa486d34939a724cdb",
+    "wall_seconds": 268.70880373893306
+  },
+  "checkpoint_reuse_requirement": "New registered attempt must join original packet/trial/family/analysis/source hashes, verify each complete shard/artifact, and pass reference-versus-optimized parity on admitted real observations.",
+  "completed_shards": [
+    {
+      "kind": "jumbo_completed_year_checkpoint_v1",
+      "path": "reports/jumbo-runs/f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847/NQ-2020-shard.json",
+      "sha256": "b3eece3fcc81a8773ed31a0f55c0b42ad974561f722b30abb98b999effabab11",
+      "size_bytes": 2763
+    },
+    {
+      "kind": "jumbo_completed_year_checkpoint_v1",
+      "path": "reports/jumbo-runs/f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847/NQ-2021-shard.json",
+      "sha256": "cd94f328117dd37b6b25b2f791a9dbda6dee446bfe211dd6cfd222a1d678c50e",
+      "size_bytes": 2768
+    },
+    {
+      "kind": "jumbo_completed_year_checkpoint_v1",
+      "path": "reports/jumbo-runs/f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847/NQ-2022-shard.json",
+      "sha256": "91134a24e11d3abbf718c933caa8e83377f030340e5d403f85ef9a152b964c6a",
+      "size_bytes": 2768
+    }
+  ],
+  "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+  "kind": "partial_evidence_review_after_registered_interruption",
+  "packet": {
+    "kind": "jumbo_attempt_packet",
+    "path": "reports/jumbo-runs/f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847/packet.json",
+    "sha256": "6b43e5ed818a918cbdaa16c601c81a1688f2f2e587a968e53fbab569d5ef3d98",
+    "size_bytes": 30724
+  },
+  "reason": "Stopped after measured first-year cost projected all10 root-years above original480CPU-second develop cap. Three whole NQyears were committed before interruption. This review preserves partial evidence; it does not change interrupted registry status or retroactively accept the whole attempt.",
+  "remaining_attempts": 5,
+  "remaining_cpu_seconds": 1979.357142,
+  "scope": "NQ2020\u20132022 development observations only; no heldout target assessment or market model fits.",
+  "trial": {
+    "code_hash": "9bbe7a385bb49e8185fc61a0fccd02c1d3783b601e4e95ed8804aea8540093c2",
+    "configuration": {
+      "analysis_plan": {
+        "kind": "jumbo_analysis_plan_v1",
+        "sha256": "d5f541ca6db5b0a50138f11e97b9e3b1380fb5a66a67890093c86d8a1407aac3",
+        "size_bytes": 8712
+      },
+      "executable": "/tmp/trading-research-venv/bin/python",
+      "mode": "develop",
+      "phase": "extract",
+      "predecessor": {
+        "path": "reports/jumbo-runs/168628c5d54259758b23057fba9d1c69098f6bc8ab83711c2acf625718b15fc9/execution.json",
+        "sha256": "4c39d917d38152b1f34d48b0b801876387b4ca8c28911ca486b639e91d123d42"
+      },
+      "protocol_sha256": "44917720ecd064431b83fcb489819989f6a4aceb270e962f1a472fb895b37562",
+      "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+      "thread_limits": {
+        "ARROW_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "tools_snapshot": {
+        "kind": "research_study_tools_snapshot",
+        "sha256": "d14efd29ab2f0b09012dc6eae484d8e9e869bd6adac5c1b2434f57546fbaded4",
+        "size_bytes": 40921
+      }
+    },
+    "data_hashes": {
+      "protocol": "44917720ecd064431b83fcb489819989f6a4aceb270e962f1a472fb895b37562"
+    },
+    "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+    "fold_version": "2020-2022_train_2023-2024_development_2025plus_heldout-v1",
+    "id": "d1537b6d88a557a7aae0f9da776ea9b974e74876c2e212aa486d34939a724cdb",
+    "name": "jumbo-acquired-contract-ohlc-v1:develop:extract",
+    "parent_trial": "81495be63d63ec2c9865125024ffc4ea7166df80c2ac7ad2897099d134b9e911",
+    "stage": "model",
+    "target_version": "observed-minute-ohlc-ranges-paths-v1"
+  },
+  "worker_log": {
+    "kind": "jumbo_worker_log",
+    "path": "reports/jumbo-runs/f716b22e901d4f6cc9e21a21e1ab1a9493bab62deb73b66f5b1c97721bdbf847/worker.log",
+    "sha256": "9ddfc858ae72b9de7119cc574d45b051ace1374ab83a4ade144527d5aabe6c66",
+    "size_bytes": 1786
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "coordinator_reserve_bytes": 33554432,
+  "files": [
+    {
+      "maximum_output_bytes": 330494207,
+      "root": "NQ",
+      "source_metadata_sha256": "da83fed86e5b966215795fef131f90478095500689921c7026e7c120bb246de2",
+      "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2019-12-30.parquet",
+      "window_count": 5
+    },
+    {
+      "maximum_output_bytes": 188648414,
+      "root": "NQ",
+      "source_metadata_sha256": "a999a0c8e86ea4176fb6e3dc0d4e03566285654a02404935d92480676abf1876",
+      "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2026-09.parquet",
+      "window_count": 3
+    }
+  ],
+  "kind": "auction_flow_production_plan_v1",
+  "latency_ns": 250000000,
+  "mode": "extract-check",
+  "required_file_count": 2,
+  "required_window_count": 8,
+  "reservation_basis": {
+    "bytes_per_trade": 8.708820882088208,
+    "calibration_worker": {
+      "kind": "auction_flow_worker_report",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/541e27aac8fd7ce9a91be85d5c53a3654e7583559caed957fd0ff5ab337500e8/worker.json",
+      "sha256": "b9eef220a7e12061985def5e952f2e7cdc5baeaebd1e89a47221b91d69313869",
+      "size_bytes": 81527
+    },
+    "compressed_measurement_bytes_per_atomic_cell": 5221.358974358975,
+    "empirical_margin": 1.5,
+    "failure_bytes_per_source_year": 536870912,
+    "failure_reserve_distribution": "by number of full scheduled windows within each root/year; no reserve removed",
+    "metadata_bytes_per_reader_batch": 2048,
+    "metadata_bytes_per_window": 262144,
+    "native_bytes_per_cell": 39.6380811965812,
+    "scope": "Empirical output allowance, not theoretical bound; includes source windows and exact source carry/receipts/quote metadata; later family statistics remain separate and charged.",
+    "trade_density": 0.13366217516843118
+  },
+  "schedule": {
+    "kind": "auction_flow_production_check_schedule",
+    "path": "/workspace/trading-research/validation/AUCTION_FLOW_PRODUCTION_CHECK_SCHEDULE_V1.json",
+    "sha256": "b108fcd02ae1702959ae625d8e95f699676f415c07fbb07a95fc3812498e794e",
+    "size_bytes": 13779
+  },
+  "source_clock_policy": "redundant_backward_snapshot_v1"
+}

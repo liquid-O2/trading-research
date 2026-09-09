@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 900.4036504710093,
+  "finished_at": "2026-09-08T17:16:14.796894+00:00",
+  "session_id": "c330ef1b-0507-4198-959d-013dc3ad09d4",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 889155,
+    "duration_api_ms": 889155,
+    "is_error": false,
+    "result": "I'll start by reading the required project docs and the scientific/source files this consumer must reuse, then implement only the owned files.Next I\u2019ll read RESEARCH_SPEC section 2, the V19 extension, and the auction-flow modules this consumer must reuse.I\u2019ll read the existing anchor/production modules and tests to match their interfaces rather than wrapping the probe.I\u2019ll inspect existing tests, the production receipt, and any prior drafts so the new consumer matches current contracts.I have the contracts and APIs. Next I\u2019ll add the optional source-order domain to `AnchorTrades`, then implement the production consumer and focused tests.I\u2019ll write the production consumer next: schedule expansion, exact-cut reconstruction, and artifact/statistic output.Next I\u2019ll add focused tests with independent expected values for the cuts, domain map, and coverage cases.The named-formation consumer is in place. It enumerates scientific clocks and measures them from retained atoms plus exact cache reconstruction; it is not a wrapper around `check_anchor_unit`.\n\n## Interface\n\n`consume_anchor_schedule(schedule, *, catalog, calendar, outputs, registered_attempt=None)` is the controller.\n\nThe schedule (`auction_flow_anchor_production_request_v1`) is a frozen membership of:\n\n- civil `decision_cuts` \u00d7 supported raw contracts\n- all applicable `named_clock_anchors` (cash RTH/prior RTH, observed futures 18\u201317, overnight, NY 06\u201309, fixed UTC-4 06\u201309, Monday/Tuesday 22\u201321 UTC, NY week/month/quarter/year)\n- rolling 5/15/60/240 with explicit event ends\n- caller event/swing/Jumbo/composite records\n- closed vs `developing_prefix` as distinct requests\n\nEvery scheduled item gets a result or an exact disposition (`unavailable`, `not_applicable`, `pending_selection_producer`, `missing_coverage`, `partial`, `no_volume`, `source_utc_day_is_not_a_scientific_formation`, `rejected`). There is no top-N or downsampling.\n\n`catalog` is admitted measurements and/or exact trade caches (in-memory tables or verified Parquet). Mid-minute event, TPO, rolling, and prefix cuts that fall inside a source atom are rebuilt with `TapeWindow` + `PreparedTradeBatch` (65,536-row batches, one decode per window). A whole minute is never taken across a scientific cut. Equal-time prints stay distinct; unpriced/unknown mass and original addresses are kept.\n\n`admit_source_order_domain(...)` is the optional multi-file map on `AnchorTrades` / `RollingAnchorTrades`. Default single-source order checks are unchanged. The map is retained on output so local `source_order` extrema stay physically resolvable. Original orders are not renumbered. Quote/book carry is not composed.\n\nArtifacts: per-request compressed results, compact statistic rows (identity, cuts, support/coverage, range, side/delta, POC/VA/nodes/shape, VWAP/dispersion, TPO), plus a receipt with refs, counts, CPU, and output bytes.\n\n## Limitations\n\n- Swing/event/composite **selection producers stay pending** unless the caller supplies the actual selection record. No hindsight pivots.\n- Cross-file composition is **trade-profile membership only**. Monthly `YYYY-MM` and date-named `YYYY-MM-DD` files are distinct collections. Overlaps reject unless an explicit disjoint selection is supplied. Filename match is not coverage.\n- Missing intervals stay missing; they do not become quiet/complete.\n- PIN069 runs only on `source_06_09_fixed_utc_minus4`. Bar proxies use completed bars, not mid-minute event fragments.\n- No new subprocess framework, Context fitting, Location evaluation, or family-completion claim. Codex still owns registered execution and acceptance. Tests were written, not executed.",
+    "session_id": "c330ef1b-0507-4198-959d-013dc3ad09d4",
+    "request_id": "1105cfeb-6bba-4319-b42f-020aa9248e88",
+    "usage": {
+      "inputTokens": 211155,
+      "outputTokens": 83789,
+      "cacheReadTokens": 4471104,
+      "cacheWriteTokens": 0
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 717.7197982850485,
+  "finished_at": "2026-09-08T23:58:24.407733+00:00",
+  "session_id": "2020d389-960e-48bd-a98b-110a74e2e522",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 713499,
+    "duration_api_ms": 713499,
+    "is_error": false,
+    "result": "I'll apply one correction pass on the two owned files: read the current consumer and tests, then fix the ten review defects without expanding scope.I have the ten defects and the contracts they break. Next I\u2019ll replace the consumer and tests in one pass: per-unit event linking, typed group metadata, cut-clock classification, and the new fixture.Writing the corrected consumer first, then the fixture tests that lock the review failures.The first write stopped mid-function. I\u2019ll append the rest of the consumer from that point.Fixing the double extract, join-key collisions, and passing NumPy through unit processing.Updating the tests: keep the 19 pure checks, fix the timestamp fixture, and add the integrated run.Corrected only the two owned files. Tests were not run.\n\n**Owned files**\n- `src/trading_research/research/auction_flow_window_statistics.py`\n- `tests/test_auction_flow_window_statistics.py`\n\n**API (unchanged)**  \n`run_window_statistics(*, population, contract, outputs, load_reference, selected_partition_keys=None)`\n\n**What the ten review failures are now doing**\n1. Events are linked **per unit** from a pre-indexed 925-event time/date index. Receivers resolve by full source identity + instrument + contract + cut + formation + horizon + latency. Every eligible horizon/latency is emitted; there is no first-match break. Links flush in bounded Parquet batches; unit joins are discarded.\n2. Group metadata is typed (`event_type` / `time_precision` / `status` / `relative_bucket` stay off the formation/latency slots). `provenance_json` is `json.dumps`. Event latency pairs keep terminal / up / down / no-new-trade. Date-only stays out of timed buckets.\n3. Economic date/year/session come from the **cut** clock, cached by `(cut, root)`. Year-boundary units are counted once globally. Empty intended universes are not backfilled from observed dates.\n4. Admitted features require stored `known_at = cut + 250ms`. Join still uses scenario `cut + label.latency`, plus `label_start = cut + latency`, matured `known >= end`, the same quality/censor/stage rules, and reference-inside-formation for priced displacements. Missing prices stay missing.\n5. Own latency/formation supports are recorded before the intersection. Formation pairs compare declared **feature** metrics on the common cut/reference; zero future-target difference is kept as a control.\n6. Units: ticks / ticks\u00b2 / contracts / contracts/sec / dimensionless / count. `zero_past_sign` uses the past sign even when the future price is missing.\n7. Date-mean CIs stay one weight per date. Raw cut/contract `events` are merged back onto support. Quantiles are labeled as the date-mean distribution.\n8. Each partition only expects its year/calendar events. Global no-receiver is a semantic-id set, not a sum. All 925 events stay in an independent global denominator table. Inconsistent timestamp/date clocks are ineligible for timed proximity but the original row is retained.\n9. Reuse goes through `load_reference` plus `read_series_tables`. Tampered accepted Parquet/JSON cannot pass. The test loader authenticates refs under its temp output root and rejects external paths.\n10. `results.md` has representative feature / delay / formation / event numbers (mean, support, CI), coverage, all refs, escaped `|`, and explicit undefined. No winner selection.\n\n**Fixture**  \nThe original 19 checks remain. A new integrated run covers two sources, two instruments, two horizons, 0/250ms/1s, 5/15 formations, one ineligible arm, a nearby event, year-boundary uniqueness, nano timestamps `> 2**53`, and rejected tampered reuse.\n\n**Root still owns**  \nRegistration, the registered test run, pilot then full45, and the resource gate. This message is not acceptance.",
+    "session_id": "2020d389-960e-48bd-a98b-110a74e2e522",
+    "request_id": "31ffe88f-a159-4bfb-98ec-c0754d4ddcff",
+    "usage": {
+      "inputTokens": 178964,
+      "outputTokens": 86869,
+      "cacheReadTokens": 2763328,
+      "cacheWriteTokens": 0
+    }
+  }
+}

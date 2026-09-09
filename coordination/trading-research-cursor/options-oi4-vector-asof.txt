@@ -1,0 +1,104 @@
+class TypedAsof:
+    """Sorted column state; process each contract's successive reports in vector waves."""
+    _types = {'cid': 'int32', 'ts': 'int64', 'oi': 'int64', 'req': object,
+              'fid': 'int64', 'row': 'int64', 'exp': object, 'start': 'int64', 'amb': bool}
+
+    def __init__(self, chain, dates, midnight_cache):
+        self.chain, self.dates, self.midnight_cache = chain, dates, midnight_cache
+        self.pending = {k: _np().empty(0, dtype=v) for k,v in self._types.items() if k not in ('start','amb')}
+        self.live = {k: _np().empty(0, dtype=v) for k,v in self._types.items()}
+
+    def add(self, cids, ts, oi, request_dates, file_id, row_index, expirations):
+        np = _np()
+        values = dict(cid=cids, ts=ts, oi=oi, req=request_dates, fid=file_id, row=row_index, exp=expirations)
+        for key, value in values.items():
+            self.pending[key] = np.concatenate((self.pending[key], np.asarray(value, dtype=self._types[key])))
+        for label in np.unique(self.pending['req']):
+            if label not in self.midnight_cache:
+                self.midnight_cache[label] = cut_ns_on(label, '00:00')
+
+    def _intervals(self, idx, valid_to=None):
+        pa, np = _pa(), _np()
+        n = len(idx)
+        if not n:return None
+        d={k:v[idx] for k,v in self.live.items()}
+        end = pa.nulls(n, type=pa.int64()) if valid_to is None else pa.array(np.broadcast_to(valid_to, (n,)), type=pa.int64())
+        return pa.table({
+            'contract_id':pa.array(d['cid'], type=pa.int32()), 'chain':pa.array([self.chain]*n),
+            'open_interest':pa.array(d['oi'],mask=d['amb'], type=pa.int64()),
+            'ts_event_ns':pa.array(d['ts'], type=pa.int64()), 'request_date':pa.array(d['req']),
+            'file_id':pa.array(d['fid'], type=pa.int64()), 'row_index':pa.array(d['row'], type=pa.int64()),
+            'ambiguous':pa.array(d['amb']), 'valid_from_ns':pa.array(d['start'], type=pa.int64()),
+            'valid_to_ns':end,'expiration':pa.array(d['exp']),
+            'causal_feature_eligible':pa.array(np.zeros(n,dtype=bool)),
+        },schema=interval_schema())
+
+    def apply_through(self, cut_ns, cut_date):
+        np, pa = _np(), _pa()
+        p=self.pending
+        eligible=(p['ts']<=cut_ns)&(p['req']<=cut_date)
+        if not np.any(eligible):return None
+        d={k:v[eligible] for k,v in p.items()}
+        self.pending={k:v[~eligible] for k,v in p.items()}
+        labels,inverse=np.unique(d['req'],return_inverse=True)
+        mids=np.array([self.midnight_cache[x] for x in labels],dtype=np.int64)
+        d['start']=np.maximum(d['ts'],mids[inverse])
+        order=np.lexsort((d['row'],d['fid'],d['req'],d['ts'],d['start'],d['cid']))
+        d={k:v[order] for k,v in d.items()}
+        change=np.ones(len(order),dtype=bool)
+        change[1:]=(d['cid'][1:]!=d['cid'][:-1])|(d['ts'][1:]!=d['ts'][:-1])|(d['start'][1:]!=d['start'][:-1])
+        starts=np.flatnonzero(change)
+        low=np.minimum.reduceat(d['oi'],starts);high=np.maximum.reduceat(d['oi'],starts)
+        g={k:v[starts] for k,v in d.items()};g['amb']=low!=high
+        # One report per cid in each wave permits independent vector updates.
+        first=np.r_[True,g['cid'][1:]!=g['cid'][:-1]]
+        ptr=np.flatnonzero(first);ends=np.r_[ptr[1:],len(first)]
+        closed=[]
+        while len(ptr):
+            wave={k:v[ptr] for k,v in g.items()}
+            idx,has=_lookup_sorted(self.live['cid'],wave['cid'])
+            prev_ts=np.zeros(len(ptr),dtype=np.int64)
+            prev_oi=np.zeros(len(ptr),dtype=np.int64)
+            prev_amb=np.zeros(len(ptr),dtype=bool)
+            prev_from=np.zeros(len(ptr),dtype=np.int64)
+            if np.any(has):
+                at=idx[has]
+                prev_ts[has]=self.live['ts'][at];prev_oi[has]=self.live['oi'][at]
+                prev_amb[has]=self.live['amb'][at];prev_from[has]=self.live['start'][at]
+            same=has&(wave['ts']==prev_ts)
+            wave['amb'] |= same & (prev_amb | (wave['oi'] != prev_oi))
+            update=(~has)|(wave['ts']>prev_ts)|(same&wave['amb'])
+            wave['start']=np.maximum(wave['start'],prev_from)
+            close=update&has
+            if np.any(close):closed.append(self._intervals(idx[close],wave['start'][close]))
+            live_keep=np.ones(len(self.live['cid']),dtype=bool);live_keep[idx[close]]=False
+            next_live={k:np.concatenate((v[live_keep],wave[k][update])) for k,v in self.live.items()}
+            order=np.argsort(next_live['cid'],kind='stable')
+            self.live={k:v[order] for k,v in next_live.items()}
+            ptr=ptr+1;more=ptr<ends;ptr=ptr[more];ends=ends[more]
+        return pa.concat_tables(closed) if closed else None
+
+    def purge_expired(self, cut_date, cut_midnight_ns):
+        np=_np();expired=(self.live['exp']!=None)&(self.live['exp']<cut_date)
+        out=self._intervals(np.flatnonzero(expired),cut_midnight_ns)
+        if np.any(expired):self.live={k:v[~expired] for k,v in self.live.items()}
+        return out
+
+    def open_table(self):
+        return self._intervals(_np().arange(len(self.live['cid'])))
+
+    def snapshot_counts(self, cut_ns, cut_date, listing_ids, prev_cash):
+        np=_np();d=self.live
+        expired=(d['exp']!=None)&(d['exp']<cut_date)
+        live=d['cid'][~expired];available_mask=(~expired)&(~d['amb'])
+        available=int(available_mask.sum());ambiguous=int(((~expired)&d['amb']).sum())
+        prior_held=int((available_mask&(d['req']<cut_date)).sum())
+        stale=int((available_mask&(d['req']<prev_cash)).sum()) if prev_cash else 0
+        listing=np.unique(np.asarray(listing_ids,dtype=np.int32))
+        p=self.pending;future=np.unique(p['cid'][(p['req']==cut_date)&(p['ts']>cut_ns)])
+        universe=np.union1d(np.union1d(live,listing),future);n=len(universe)
+        return {'universe':n,'available':available,'ambiguous':ambiguous,'stale':stale,
+                'prior_held':prior_held,'future_today':len(future),'not_available':n-available,
+                'expired':int(expired.sum()),'listing_only':len(np.setdiff1d(listing,live,assume_unique=True)),
+                'available_fraction':available/n if n else None}
+

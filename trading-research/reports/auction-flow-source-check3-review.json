@@ -1,0 +1,1120 @@
+{
+  "actual_source_variants": 9,
+  "attempt_id": "18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c",
+  "attempts_preserved": [
+    {
+      "attempt_id": "18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c",
+      "cpu_seconds": 267.630915,
+      "execution": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/execution.json",
+      "output_bytes": 448041535,
+      "success": true
+    },
+    {
+      "attempt_id": "383c81a1dac20c8ae11e7601f27be8295b82ce64f2a23fabbc20d8ceaa0086ab",
+      "cpu_seconds": 38.651528,
+      "execution": "/workspace/trading-research/reports/auction-flow-runs/383c81a1dac20c8ae11e7601f27be8295b82ce64f2a23fabbc20d8ceaa0086ab/execution.json",
+      "output_bytes": 211887,
+      "success": false
+    },
+    {
+      "attempt_id": "67c89e640a7ca799cd5fd1302e712959a07c365d7f07a48a280c96075ca36dba",
+      "cpu_seconds": 37.490009,
+      "execution": "/workspace/trading-research/reports/auction-flow-runs/67c89e640a7ca799cd5fd1302e712959a07c365d7f07a48a280c96075ca36dba/execution.json",
+      "output_bytes": 257418,
+      "success": false
+    }
+  ],
+  "complete_family_statistics": false,
+  "complete_location_evaluations": 0,
+  "cumulative_cpu_seconds": 343.77245200000004,
+  "cumulative_output_bytes": 448510840,
+  "execution": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/execution.json",
+  "independent_context_evaluations": 0,
+  "kind": "auction_flow_source_check3_review_v1",
+  "next_requirements": [
+    "Carry actual invalidation, prior standing age and source order across extraction partitions; do not let a date or file cut infer recovery.",
+    "Build the full source-variant/date schedule and preserve source-address aliases only where ordered all-field equality is proved for the exact population.",
+    "Measure lossless storage choices using retained events; preserve all original files and prior failed artifacts.",
+    "Complete supported anchors, family statistics, individual Context targets and controlled Location populations."
+  ],
+  "projection_disposition": {
+    "next": "Use mutually exclusive row-dependent, window/cell-dependent and fixed-report costs, retaining all sparse/flagged units. Measure complete extraction partition/carry, anchor/statistics/model and storage workloads before full scaling.",
+    "original_retained_unchanged": true,
+    "reason": "The v1 projection assigns whole-window pipeline and measurement/native output to every raw row, then separately adds window/native-cell overhead. A 16,624-row flagged window drives the maximum rate. The measured component timings remain valid; the 1,287,491 CPU-second / 2,301,632,853,875-byte extrapolation is not an identified workload estimate and must not drive optimization or resource expansion.",
+    "usable_for_full_extraction_authorization": false
+  },
+  "quote_quality_scope": "Full-window observed-prefix initialization; no supported post-gap book recovery. Separately initialized cash-window quote eligibility does not establish a continuously valid full-session or full-cohort book.",
+  "registered_cohorts": 7,
+  "resource_units": [
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 13484,
+        "end_ns": 1584366748400000000,
+        "exact_field_comparisons": 889944,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 26968,
+        "maximum_float_absolute_error": 1.4901161193847656e-08,
+        "passed": true,
+        "raw_events": 32764,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 97993,
+        "gap_rows": 0,
+        "quote_rows": 1329276,
+        "raw_rows": 1484342,
+        "sell_volume": 102402,
+        "snapshot_trade_rows": 0,
+        "trades": 155066,
+        "unknown_volume": 287,
+        "unpriced_volume": 0,
+        "volume": 200682
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 1.4667864620000017,
+        "initialization": 0.0008043779999979961,
+        "instrument_allocation": 0.034998278999999854,
+        "scan_and_consumers": 8.687882594000001
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+                "definition_version": "8d588de12485c8d0ca9462bc937c80251fe7d8291dcd6ca1b1d22f1c4fe12ef5",
+                "from_ns": 1584365400000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+                "source_row": 52,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 10204,
+          "native_quality": {
+            "coordinate_eligible": 234000,
+            "price_history_complete": 234000,
+            "quote_pressure_complete": 225428,
+            "quote_standing_complete": 225430,
+            "source_eligible": 234000
+          },
+          "whole_flow_complete": true,
+          "whole_price_complete": true
+        }
+      ],
+      "json_cpu_seconds": 1.7068530929999994,
+      "measurement_and_cache_bytes": 40926325,
+      "native_array_bytes": 140634000,
+      "native_cells": 234000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 1569851,
+      "pipeline_cpu_seconds": 10.284880813000001,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1584365400000000000-f085aa10ebaf-resource-unit.json",
+        "sha256": "d2469d9d443ed15e0a1ef7f679c396a60a4b43d0f4ae5f18c374b5deb010826a",
+        "size_bytes": 26886
+      },
+      "reference_cpu_seconds": 12.138268854000003,
+      "unit": {
+        "calendar_version": "c5963af7f3484ef9d48b1e6408bb136fc7eaab27f24fbe23bc7028ced1432fbd",
+        "cash_date": "2020-03-16",
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1584388800000000000,
+        "event_start_ns": 1584365400000000000,
+        "role": "stressed_pipeline_cost",
+        "root": "NQ",
+        "source_groups": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "source_metadata_version": "8c694595d4673eb8959f02faa10a3f9ba82cd4463cea0d727b646cd244f2d029",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2020-03-16.parquet",
+        "source_variant": "f085aa10ebaf"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 13484,
+        "end_ns": 1584366748400000000,
+        "exact_field_comparisons": 889944,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 26968,
+        "maximum_float_absolute_error": 1.4901161193847656e-08,
+        "passed": true,
+        "raw_events": 32764,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 97993,
+        "gap_rows": 0,
+        "quote_rows": 1329276,
+        "raw_rows": 1484342,
+        "sell_volume": 102402,
+        "snapshot_trade_rows": 0,
+        "trades": 155066,
+        "unknown_volume": 287,
+        "unpriced_volume": 0,
+        "volume": 200682
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 1.4098276960000078,
+        "initialization": 0.0015713360000049192,
+        "instrument_allocation": 0.03294035999999778,
+        "scan_and_consumers": 8.843346485999994
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH0:10204:1545402600000000000:1584711000000000000",
+                "definition_version": "8d588de12485c8d0ca9462bc937c80251fe7d8291dcd6ca1b1d22f1c4fe12ef5",
+                "from_ns": 1584365400000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+                "source_row": 52,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 10204,
+          "native_quality": {
+            "coordinate_eligible": 234000,
+            "price_history_complete": 234000,
+            "quote_pressure_complete": 225428,
+            "quote_standing_complete": 225430,
+            "source_eligible": 234000
+          },
+          "whole_flow_complete": true,
+          "whole_price_complete": true
+        }
+      ],
+      "json_cpu_seconds": 1.7635600830000016,
+      "measurement_and_cache_bytes": 41011214,
+      "native_array_bytes": 140634000,
+      "native_cells": 234000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 1590313,
+      "pipeline_cpu_seconds": 10.374280298000002,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1584365400000000000-49292438ea3b-resource-unit.json",
+        "sha256": "04498f1a9f0c96bcd1459395ba3c77e569acbf0c1eed5809e7d1e5b053c837ed",
+        "size_bytes": 27299
+      },
+      "reference_cpu_seconds": 12.079437417999998,
+      "unit": {
+        "calendar_version": "c5963af7f3484ef9d48b1e6408bb136fc7eaab27f24fbe23bc7028ced1432fbd",
+        "cash_date": "2020-03-16",
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1584388800000000000,
+        "event_start_ns": 1584365400000000000,
+        "role": "stressed_pipeline_cost",
+        "root": "NQ",
+        "source_groups": [
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208
+        ],
+        "source_metadata_version": "d97cbdc1ffd4bcc498ec6ab6261f109474aa5e286f65aadcf4a6b93cabe3d0ff",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2020-03.parquet",
+        "source_variant": "49292438ea3b"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 639,
+        "end_ns": 1710163863900000000,
+        "exact_field_comparisons": 42174,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 1278,
+        "maximum_float_absolute_error": 7.450580596923828e-09,
+        "passed": true,
+        "raw_events": 32736,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 109297,
+        "gap_rows": 0,
+        "quote_rows": 3511118,
+        "raw_rows": 3667827,
+        "sell_volume": 108063,
+        "snapshot_trade_rows": 0,
+        "trades": 156709,
+        "unknown_volume": 0,
+        "unpriced_volume": 0,
+        "volume": 217360
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 1.1108912960000055,
+        "initialization": 0.002049503999998592,
+        "instrument_allocation": 0.013001123999998754,
+        "scan_and_consumers": 15.402555394000004
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+                "definition_version": "79d6e3a317937efb2c86805ea85202dc78979557f5d8320ebd3f2f70f4860fe7",
+                "from_ns": 1710163800000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+                "source_row": 49,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 750,
+          "native_quality": {
+            "coordinate_eligible": 234000,
+            "price_history_complete": 234000,
+            "quote_pressure_complete": 233999,
+            "quote_standing_complete": 233999,
+            "source_eligible": 234000
+          },
+          "whole_flow_complete": true,
+          "whole_price_complete": true
+        }
+      ],
+      "json_cpu_seconds": 1.0700160669999974,
+      "measurement_and_cache_bytes": 60142834,
+      "native_array_bytes": 140634000,
+      "native_cells": 234000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 3750000,
+      "pipeline_cpu_seconds": 16.67264850400001,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1710163800000000000-555d99e2180b-resource-unit.json",
+        "sha256": "c82cf7962501203ba5df1256b73ffc70a79b2cca2111f48e893a81e9463967a8",
+        "size_bytes": 47612
+      },
+      "reference_cpu_seconds": 12.130261606000005,
+      "unit": {
+        "calendar_version": "7a9a48690399034a9a9a82418e7cebedad91a24712741c8f8ba75b0ae6c3a1a7",
+        "cash_date": "2024-03-11",
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1710187200000000000,
+        "event_start_ns": 1710163800000000000,
+        "role": "ordinary_pipeline_cost",
+        "root": "NQ",
+        "source_groups": [
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182
+        ],
+        "source_metadata_version": "4ab0118f3cbe2b85f557e4816297cf79501b0f21e30e0f4548a914b352db0744",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2024-03.parquet",
+        "source_variant": "555d99e2180b"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 10898,
+        "end_ns": 1584366489800000000,
+        "exact_field_comparisons": 719268,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 21796,
+        "maximum_float_absolute_error": 1.4901161193847656e-08,
+        "passed": true,
+        "raw_events": 32759,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 489308,
+        "gap_rows": 0,
+        "quote_rows": 3039099,
+        "raw_rows": 3450647,
+        "sell_volume": 493244,
+        "snapshot_trade_rows": 0,
+        "trades": 411548,
+        "unknown_volume": 4696,
+        "unpriced_volume": 0,
+        "volume": 987248
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 1.2392090589999896,
+        "initialization": 0.0018418040000085512,
+        "instrument_allocation": 0.01294044000000838,
+        "scan_and_consumers": 14.601500605999988
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "ES:ESH0:10571:1545402600000000000:1584711000000000000",
+            "source_versions": [
+              {
+                "contract_key": "ES:ESH0:10571:1545402600000000000:1584711000000000000",
+                "definition_version": "251c3ec31ed6ea694e1f0c9b694b196472549f01f378613fc7126b65ac7d5df9",
+                "from_ns": 1584365400000000000,
+                "source_path": "quantpad/cme__es-continuous-futures__definition/2020.parquet",
+                "source_row": 52,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 10571,
+          "native_quality": {
+            "coordinate_eligible": 234000,
+            "price_history_complete": 234000,
+            "quote_pressure_complete": 225255,
+            "quote_standing_complete": 225256,
+            "source_eligible": 234000
+          },
+          "whole_flow_complete": true,
+          "whole_price_complete": true
+        }
+      ],
+      "json_cpu_seconds": 0.8533515819999877,
+      "measurement_and_cache_bytes": 59983330,
+      "native_array_bytes": 140634000,
+      "native_cells": 234000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 3750000,
+      "pipeline_cpu_seconds": 16.03559273100001,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/ES-1584365400000000000-344c67d7af74-resource-unit.json",
+        "sha256": "6bdb3149bda468093096e424981e28504c041198627c1ff5bd797bde04607ef1",
+        "size_bytes": 45982
+      },
+      "reference_cpu_seconds": 11.454336232999992,
+      "unit": {
+        "calendar_version": "c5963af7f3484ef9d48b1e6408bb136fc7eaab27f24fbe23bc7028ced1432fbd",
+        "cash_date": "2020-03-16",
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1584388800000000000,
+        "event_start_ns": 1584365400000000000,
+        "role": "stressed_pipeline_cost",
+        "root": "ES",
+        "source_groups": [
+          262,
+          263,
+          264,
+          265,
+          266,
+          267,
+          268,
+          269,
+          270,
+          271,
+          272,
+          273,
+          274,
+          275,
+          276
+        ],
+        "source_metadata_version": "a642413a0998f7afb0ad5676c18e3d4081d5a13e7f79efabb6901ff1ae38c145",
+        "source_path": "quantpad/cme__es-continuous-futures__mbp-1/2020-03.parquet",
+        "source_variant": "344c67d7af74"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 272,
+        "end_ns": 1710163827200000000,
+        "exact_field_comparisons": 17952,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 544,
+        "maximum_float_absolute_error": 7.450580596923828e-09,
+        "passed": true,
+        "raw_events": 32708,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 254859,
+        "gap_rows": 0,
+        "quote_rows": 4119906,
+        "raw_rows": 4271130,
+        "sell_volume": 254170,
+        "snapshot_trade_rows": 0,
+        "trades": 151224,
+        "unknown_volume": 0,
+        "unpriced_volume": 0,
+        "volume": 509029
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 0.9209810970000092,
+        "initialization": 0.0010416740000209757,
+        "instrument_allocation": 0.013998002999983328,
+        "scan_and_consumers": 17.059415809
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+            "source_versions": [
+              {
+                "contract_key": "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+                "definition_version": "9b0fbb0ba602d919280e8d9f5dfcee0abed1517c623b2e49b300fed28b1baae0",
+                "from_ns": 1710163800000000000,
+                "source_path": "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+                "source_row": 49,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 17077,
+          "native_quality": {
+            "coordinate_eligible": 234000,
+            "price_history_complete": 234000,
+            "quote_pressure_complete": 233999,
+            "quote_standing_complete": 233999,
+            "source_eligible": 234000
+          },
+          "whole_flow_complete": true,
+          "whole_price_complete": true
+        }
+      ],
+      "json_cpu_seconds": 0.4476708279999855,
+      "measurement_and_cache_bytes": 62374277,
+      "native_array_bytes": 140634000,
+      "native_cells": 234000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 4574899,
+      "pipeline_cpu_seconds": 18.172411616000005,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/ES-1710163800000000000-c5a8c714a41c-resource-unit.json",
+        "sha256": "58c99be98764467cbf45a56d67dbdd527e784c1c07cf552358ed69588f58d092",
+        "size_bytes": 53798
+      },
+      "reference_cpu_seconds": 12.225426396000017,
+      "unit": {
+        "calendar_version": "7a9a48690399034a9a9a82418e7cebedad91a24712741c8f8ba75b0ae6c3a1a7",
+        "cash_date": "2024-03-11",
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1710187200000000000,
+        "event_start_ns": 1710163800000000000,
+        "role": "ordinary_pipeline_cost",
+        "root": "ES",
+        "source_groups": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173
+        ],
+        "source_metadata_version": "05ff12a3641391ed36b7db52c60433a1a1e8d1e54dc32f90646d0c20cd5f637d",
+        "source_path": "quantpad/cme__es-continuous-futures__mbp-1/2024-03.parquet",
+        "source_variant": "c5a8c714a41c"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 36000,
+        "end_ns": 1613347200000000000,
+        "exact_field_comparisons": 2376000,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 72000,
+        "maximum_float_absolute_error": 0.0,
+        "passed": true,
+        "raw_events": 16624,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 1752,
+        "gap_rows": 16623,
+        "quote_rows": 16624,
+        "raw_rows": 16624,
+        "sell_volume": 1659,
+        "snapshot_trade_rows": 0,
+        "trades": 2222,
+        "unknown_volume": 116,
+        "unpriced_volume": 0,
+        "volume": 3527
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 0.3491493509999941,
+        "initialization": 0.0014027999999939311,
+        "instrument_allocation": 0.003002411000011307,
+        "scan_and_consumers": 0.5784103889999983
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+                "definition_version": "309aeb8a4caa542e29cd85d9361894f59270760d37b5ad461bd4dbb1070fdd15",
+                "from_ns": 1613343600000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+                "source_row": 29,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 4378,
+          "native_quality": {
+            "coordinate_eligible": 36000,
+            "price_history_complete": 31843,
+            "quote_pressure_complete": 0,
+            "quote_standing_complete": 0,
+            "source_eligible": 31843
+          },
+          "whole_flow_complete": false,
+          "whole_price_complete": false
+        }
+      ],
+      "json_cpu_seconds": 0.05534915399999818,
+      "measurement_and_cache_bytes": 1455016,
+      "native_array_bytes": 21636000,
+      "native_cells": 36000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 16624,
+      "pipeline_cpu_seconds": 0.9429433219999908,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1613343600000000000-d552aa3fb49e-resource-unit.json",
+        "sha256": "16484d2c7d2422be7e855a6924075bb0dad6d6161f1b22eec0d59ec5ca6389da",
+        "size_bytes": 12833
+      },
+      "reference_cpu_seconds": 5.115674669999976,
+      "unit": {
+        "calendar_version": null,
+        "cash_date": null,
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1613347200000000000,
+        "event_start_ns": 1613343600000000000,
+        "role": "previously_observed_gap_flag_case",
+        "root": "NQ",
+        "source_groups": [
+          88
+        ],
+        "source_metadata_version": "485458400970f83ac2cc2cf91da16da86fdab0a984995a3f1f50e12d7e7b5213",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2021-02-08.parquet",
+        "source_variant": "d552aa3fb49e"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 36000,
+        "end_ns": 1613347200000000000,
+        "exact_field_comparisons": 2376000,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 72000,
+        "maximum_float_absolute_error": 0.0,
+        "passed": true,
+        "raw_events": 16624,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 1752,
+        "gap_rows": 16623,
+        "quote_rows": 16624,
+        "raw_rows": 16624,
+        "sell_volume": 1659,
+        "snapshot_trade_rows": 0,
+        "trades": 2222,
+        "unknown_volume": 116,
+        "unpriced_volume": 0,
+        "volume": 3527
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 0.3454146729999934,
+        "initialization": 0.0010165369999981522,
+        "instrument_allocation": 0.0020004719999917597,
+        "scan_and_consumers": 0.8166017380000028
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH1:4378:1576852200000000000:1616160600000000000",
+                "definition_version": "309aeb8a4caa542e29cd85d9361894f59270760d37b5ad461bd4dbb1070fdd15",
+                "from_ns": 1613343600000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+                "source_row": 29,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 4378,
+          "native_quality": {
+            "coordinate_eligible": 36000,
+            "price_history_complete": 31843,
+            "quote_pressure_complete": 0,
+            "quote_standing_complete": 0,
+            "source_eligible": 31843
+          },
+          "whole_flow_complete": false,
+          "whole_price_complete": false
+        }
+      ],
+      "json_cpu_seconds": 0.05700898699998902,
+      "measurement_and_cache_bytes": 1455017,
+      "native_array_bytes": 21636000,
+      "native_cells": 36000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 250000,
+      "pipeline_cpu_seconds": 1.1833688819999963,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1613343600000000000-def4a5d11100-resource-unit.json",
+        "sha256": "a5e5db126cbcd4e60c571ead3d2c4ffeb60cbf1cdb511cc73b503ac6a4369689",
+        "size_bytes": 12828
+      },
+      "reference_cpu_seconds": 5.153671464000013,
+      "unit": {
+        "calendar_version": null,
+        "cash_date": null,
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1613347200000000000,
+        "event_start_ns": 1613343600000000000,
+        "role": "previously_observed_gap_flag_case",
+        "root": "NQ",
+        "source_groups": [
+          179
+        ],
+        "source_metadata_version": "e623caf6414737f2835c45f63c269339f91f098aa176ab7564f6ad20d1f810dd",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2021-02.parquet",
+        "source_variant": "def4a5d11100"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 26611,
+        "end_ns": 1710110661100000000,
+        "exact_field_comparisons": 1756326,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 53222,
+        "maximum_float_absolute_error": 0.0,
+        "passed": true,
+        "raw_events": 32738,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 157479,
+        "gap_rows": 74341,
+        "quote_rows": 4317678,
+        "raw_rows": 4534492,
+        "sell_volume": 156683,
+        "snapshot_trade_rows": 0,
+        "trades": 224387,
+        "unknown_volume": 83,
+        "unpriced_volume": 0,
+        "volume": 314245
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 3.2310684349999974,
+        "initialization": 0.003768507999978965,
+        "instrument_allocation": 0.05095451500000081,
+        "scan_and_consumers": 23.866896578000024
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+            "source_versions": [
+              {
+                "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+                "definition_version": "fb2cbb8c972a58617e841acf86c659315378d604fda75d087479f2beb65ba876",
+                "from_ns": 1710108000000000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+                "source_row": 48,
+                "status": "accepted_original_definition"
+              },
+              {
+                "contract_key": "NQ:NQH4:750:1671201000000000000:1710509400000000000",
+                "definition_version": "79d6e3a317937efb2c86805ea85202dc78979557f5d8320ebd3f2f70f4860fe7",
+                "from_ns": 1710115200250000000,
+                "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+                "source_row": 49,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 750,
+          "native_quality": {
+            "coordinate_eligible": 828000,
+            "price_history_complete": 815988,
+            "quote_pressure_complete": 0,
+            "quote_standing_complete": 0,
+            "source_eligible": 815988
+          },
+          "whole_flow_complete": false,
+          "whole_price_complete": false
+        }
+      ],
+      "json_cpu_seconds": 2.355591331999989,
+      "measurement_and_cache_bytes": 87277908,
+      "native_array_bytes": 497628000,
+      "native_cells": 828000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 4534501,
+      "pipeline_cpu_seconds": 27.36545051599998,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1710108000000000000-555d99e2180b-resource-unit.json",
+        "sha256": "e80e08d900d8891bcd015c6ddcb93b83d4de4c0ce93d1332963ea57335d69360",
+        "size_bytes": 58344
+      },
+      "reference_cpu_seconds": 9.200818925000021,
+      "unit": {
+        "calendar_version": null,
+        "cash_date": null,
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1710190800000000000,
+        "event_start_ns": 1710108000000000000,
+        "role": "full_observed_futures_clock_cost",
+        "root": "NQ",
+        "source_groups": [
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183
+        ],
+        "source_metadata_version": "4ab0118f3cbe2b85f557e4816297cf79501b0f21e30e0f4548a914b352db0744",
+        "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2024-03.parquet",
+        "source_variant": "555d99e2180b"
+      }
+    },
+    {
+      "actual_reference": {
+        "complete_cells_per_instrument": 30430,
+        "end_ns": 1710111043000000000,
+        "exact_field_comparisons": 2008380,
+        "exchange_order_or_receipt_certified": false,
+        "float_absolute_tolerance": 1e-06,
+        "float_relative_tolerance": 1e-12,
+        "floating_field_comparisons": 60860,
+        "maximum_float_absolute_error": 0.0,
+        "passed": true,
+        "raw_events": 32757,
+        "source_order_scenario": true
+      },
+      "counts": {
+        "buy_volume": 357043,
+        "gap_rows": 91327,
+        "quote_rows": 5357185,
+        "raw_rows": 5574880,
+        "sell_volume": 358431,
+        "snapshot_trade_rows": 0,
+        "trades": 224556,
+        "unknown_volume": 76,
+        "unpriced_volume": 0,
+        "volume": 715550
+      },
+      "cpu_components": {
+        "finalization_and_native_storage": 2.711892127000027,
+        "initialization": 0.002777820000005704,
+        "instrument_allocation": 0.12799603700000262,
+        "scan_and_consumers": 25.50759135199999
+      },
+      "instrument_quality": [
+        {
+          "coordinate": {
+            "availability_rule": "retained conservative definition known-at <= event time; physical lifetime checked separately",
+            "complete": true,
+            "contract_key": "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+            "source_versions": [
+              {
+                "contract_key": "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+                "definition_version": "a76e89efe334c798d578cfb02973dc34e76b9bb6d3e84037f70ad66f5deb1831",
+                "from_ns": 1710108000000000000,
+                "source_path": "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+                "source_row": 48,
+                "status": "accepted_original_definition"
+              },
+              {
+                "contract_key": "ES:ESH4:17077:1639751400000000000:1710509400000000000",
+                "definition_version": "9b0fbb0ba602d919280e8d9f5dfcee0abed1517c623b2e49b300fed28b1baae0",
+                "from_ns": 1710115200250000000,
+                "source_path": "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+                "source_row": 49,
+                "status": "accepted_original_definition"
+              }
+            ]
+          },
+          "instrument_id": 17077,
+          "native_quality": {
+            "coordinate_eligible": 828000,
+            "price_history_complete": 817241,
+            "quote_pressure_complete": 0,
+            "quote_standing_complete": 0,
+            "source_eligible": 817241
+          },
+          "whole_flow_complete": false,
+          "whole_price_complete": false
+        }
+      ],
+      "json_cpu_seconds": 1.2768793780000465,
+      "measurement_and_cache_bytes": 90506719,
+      "native_array_bytes": 497628000,
+      "native_cells": 828000,
+      "parquet_roundtrip_all_fields": true,
+      "physical_rows": 5574899,
+      "pipeline_cpu_seconds": 28.604303969,
+      "reference": {
+        "kind": "auction_flow_source_resource_unit",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/ES-1710108000000000000-c5a8c714a41c-resource-unit.json",
+        "sha256": "a88d540aea0814177f2f3e4fbca594a988531b38b45f643f214c01c83c61ab99",
+        "size_bytes": 68339
+      },
+      "reference_cpu_seconds": 9.26611188999999,
+      "unit": {
+        "calendar_version": null,
+        "cash_date": null,
+        "coverage_basis": "separately observed acquired source; overlapping acquisitions are not concatenated",
+        "event_end_ns": 1710190800000000000,
+        "event_start_ns": 1710108000000000000,
+        "role": "full_observed_futures_clock_cost",
+        "root": "ES",
+        "source_groups": [
+          151,
+          152,
+          153,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173
+        ],
+        "source_metadata_version": "05ff12a3641391ed36b7db52c60433a1a1e8d1e54dc32f90646d0c20cd5f637d",
+        "source_path": "quantpad/cme__es-continuous-futures__mbp-1/2024-03.parquet",
+        "source_variant": "c5a8c714a41c"
+      }
+    }
+  ],
+  "source_check_passed": true,
+  "source_overlaps": [
+    {
+      "deduplication_or_source_supersession_claim": false,
+      "end_ns": 1584388800000000000,
+      "ordered_all_eleven_fields_equal": true,
+      "root": "NQ",
+      "start_ns": 1584365400000000000,
+      "variants": [
+        {
+          "counts": {
+            "buy_volume": 97993,
+            "gap_rows": 0,
+            "quote_rows": 1329276,
+            "raw_rows": 1484342,
+            "sell_volume": 102402,
+            "snapshot_trade_rows": 0,
+            "trades": 155066,
+            "unknown_volume": 287,
+            "unpriced_volume": 0,
+            "volume": 200682
+          },
+          "measurement": {
+            "kind": "auction_flow_full_window_measurements",
+            "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1584365400000000000-f085aa10ebaf-measurements.json",
+            "sha256": "a2ea78355212a4bfdad78df66c3acd680d1052954091b2669073ee9a09d5a96f",
+            "size_bytes": 12121294
+          },
+          "raw_stream": {
+            "comparison_scope": "actual ordered selected values and multiplicity",
+            "rows": 1484342,
+            "sha256": "f48e3f04278b0206498357a2c1bb28d61f527c179558404b23fed547fa9734b5",
+            "version": "all-eleven-fields-fixed-65536-row-values-v2"
+          },
+          "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2020-03-16.parquet"
+        },
+        {
+          "counts": {
+            "buy_volume": 97993,
+            "gap_rows": 0,
+            "quote_rows": 1329276,
+            "raw_rows": 1484342,
+            "sell_volume": 102402,
+            "snapshot_trade_rows": 0,
+            "trades": 155066,
+            "unknown_volume": 287,
+            "unpriced_volume": 0,
+            "volume": 200682
+          },
+          "measurement": {
+            "kind": "auction_flow_full_window_measurements",
+            "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1584365400000000000-49292438ea3b-measurements.json",
+            "sha256": "1451201005da470ed951b12e6939494bb648495ceb3cf44f28b0876291309d97",
+            "size_bytes": 12201752
+          },
+          "raw_stream": {
+            "comparison_scope": "actual ordered selected values and multiplicity",
+            "rows": 1484342,
+            "sha256": "f48e3f04278b0206498357a2c1bb28d61f527c179558404b23fed547fa9734b5",
+            "version": "all-eleven-fields-fixed-65536-row-values-v2"
+          },
+          "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2020-03.parquet"
+        }
+      ]
+    },
+    {
+      "deduplication_or_source_supersession_claim": false,
+      "end_ns": 1613347200000000000,
+      "ordered_all_eleven_fields_equal": true,
+      "root": "NQ",
+      "start_ns": 1613343600000000000,
+      "variants": [
+        {
+          "counts": {
+            "buy_volume": 1752,
+            "gap_rows": 16623,
+            "quote_rows": 16624,
+            "raw_rows": 16624,
+            "sell_volume": 1659,
+            "snapshot_trade_rows": 0,
+            "trades": 2222,
+            "unknown_volume": 116,
+            "unpriced_volume": 0,
+            "volume": 3527
+          },
+          "measurement": {
+            "kind": "auction_flow_full_window_measurements",
+            "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1613343600000000000-d552aa3fb49e-measurements.json",
+            "sha256": "79fb2ad9a8bbdb3e257b306562cb2689f020b981662b3b87589138c17e91909c",
+            "size_bytes": 718258
+          },
+          "raw_stream": {
+            "comparison_scope": "actual ordered selected values and multiplicity",
+            "rows": 16624,
+            "sha256": "6d8884c77ad153a665de0854945c05f80557e3d750777b17cdfa2ccade53920a",
+            "version": "all-eleven-fields-fixed-65536-row-values-v2"
+          },
+          "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2021-02-08.parquet"
+        },
+        {
+          "counts": {
+            "buy_volume": 1752,
+            "gap_rows": 16623,
+            "quote_rows": 16624,
+            "raw_rows": 16624,
+            "sell_volume": 1659,
+            "snapshot_trade_rows": 0,
+            "trades": 2222,
+            "unknown_volume": 116,
+            "unpriced_volume": 0,
+            "volume": 3527
+          },
+          "measurement": {
+            "kind": "auction_flow_full_window_measurements",
+            "path": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/outputs/NQ-1613343600000000000-def4a5d11100-measurements.json",
+            "sha256": "7e6ddae3aa935bf8838bf4e4a54f8d61a25fde71547fbaadb7caccdcaea3c7f8",
+            "size_bytes": 718257
+          },
+          "raw_stream": {
+            "comparison_scope": "actual ordered selected values and multiplicity",
+            "rows": 16624,
+            "sha256": "6d8884c77ad153a665de0854945c05f80557e3d750777b17cdfa2ccade53920a",
+            "version": "all-eleven-fields-fixed-65536-row-values-v2"
+          },
+          "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2021-02.parquet"
+        }
+      ]
+    }
+  ],
+  "tests": {
+    "cpu_seconds": 35.25033754,
+    "errors": 0,
+    "failures": 0,
+    "success": true,
+    "tests": 235
+  },
+  "worker_report": "/workspace/trading-research/reports/auction-flow-runs/18938c03cf632e3be4d56221f1c2c25b9ce33185efe922aac334feccc585856c/worker.json"
+}

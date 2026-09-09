@@ -1,0 +1,28 @@
+{
+  "kind": "options_quote_statistics_cpu_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/options-quote-runs/da3974dac71e790afc001abfdb09b2149e581a9c2990a1d68ecfe2f2dc2beba3/execution.json",
+    "sha256": "28cb044bec77313fdfe014b0b8d4d98467a42cdc022b7f86aec9193fa959e1ce",
+    "size_bytes": 2657
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/options-quote-runs/da3974dac71e790afc001abfdb09b2149e581a9c2990a1d68ecfe2f2dc2beba3/worker.log",
+    "sha256": "2e82f4e0325921241dc1a76882fec200b0621a62d8a52a237755161772f94cc6",
+    "size_bytes": 2243
+  },
+  "exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 468, in <module>\n    if len(sys.argv)==3 and sys.argv[1]=='--worker':raise SystemExit(worker(sys.argv[2]))\n                                                                     ^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 360, in worker\n    actual=run_measurement(packet,protocol,store,outputs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 140, in run_measurement\n    actual=run(protocol=protocol,admitted=admitted,oi_population=oi_population,store=store,outputs=outputs,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_measurements.py\", line 3478, in run\n    return finish_quote_outputs(\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_statistics.py\", line 1168, in finish_quote_outputs\n    stats = run_statistics(\n            ^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_statistics.py\", line 1035, in run_statistics\n    groups, cfg = build_group_statistics(\n                  ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_statistics.py\", line 853, in build_group_statistics\n    metrics, events, raw_means, raw_q = _bundle_for(\n                                        ^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_statistics.py\", line 784, in _bundle_for\n    values, counts = _histograms_for(\n                     ^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_statistics.py\", line 715, in _histograms_for\n    values.extend(hist.get(\"v\") or [])\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 335, in interrupted\n    raise RuntimeError('registered quote coordinator interrupted: '+str(signum))\nRuntimeError: registered quote coordinator interrupted: 24\n",
+  "resources": {
+    "cpu_seconds": 1201.103878,
+    "wall_seconds": 1213.561771193985,
+    "peak_rss_bytes": 4002377728,
+    "output_bytes": 483800004
+  },
+  "tests": 40,
+  "retained_date_aggregates": {
+    "path": "/workspace/trading-research/reports/options-quote-runs/da3974dac71e790afc001abfdb09b2149e581a9c2990a1d68ecfe2f2dc2beba3/outputs/date-aggregates.json",
+    "sha256": "c7f68906d3b4acae0b3b84c622014d89f576f5fce2c1a604e47e0bbfea4910fc",
+    "size_bytes": 441907878
+  },
+  "finding": "All40checks passed. Actualpilot allsource measurement reachesfinish_quote_outputs andwritesdateaggregates441907878bytes/reconstruction/source-manifest/allParquet beforestats. SIGXCPU1200 in _bundle_for->_histograms_for values.extend; completepilotnotaccepted. Dateaggfile canserveunchangedstatistics-only registereddiagnostic, avoidrawreread. Histogramrepeatedlyparseseverykey andextendsPythonlists for everymetric/group/wholeuniverse/day. RawJSONhistduplication alone projects>16GiBfulloutput; needcompaction/groupreuse aftermeasuringunchangedCPU. SourcephaseCPU counters notpersistedbeforestats, cannotclaimthroughput yet.",
+  "decision": "Preservefailedtablesandhashbounddateagg; reassessstatistics-only diagnostic/compact histbeforeanyfurtherrepair. No fullquote launch."
+}

@@ -1,0 +1,70 @@
+{
+  "kind": "options_oi_full6_memory_diagnosis_v1",
+  "at": "2026-09-09T01:42:43.624435+00:00",
+  "execution": {
+    "attempt_id": "ed8fc072fb4a7e9a40d0a23274c570e98accbe0c74fa00d0066508904c9c9ff3",
+    "configuration_implementation_paths": [
+      "src/trading_research/data/clock_uncertainty.py",
+      "src/trading_research/data/compact.py",
+      "src/trading_research/data/compact_native.py",
+      "src/trading_research/data/events.py",
+      "src/trading_research/data/reconcile.py",
+      "src/trading_research/errors.py",
+      "src/trading_research/foundations/calendar.py",
+      "src/trading_research/foundations/cash_calendar.py",
+      "src/trading_research/foundations/time.py",
+      "src/trading_research/foundations/units.py",
+      "src/trading_research/measurements/tape.py",
+      "src/trading_research/operations/artifacts.py",
+      "src/trading_research/operations/trials.py",
+      "src/trading_research/research/auction_flow_arrow.py",
+      "src/trading_research/research/auction_flow_data.py",
+      "src/trading_research/research/auction_flow_quote_replay.py",
+      "src/trading_research/research/auction_flow_storage.py",
+      "src/trading_research/research/auction_flow_structural_encoding.py",
+      "src/trading_research/research/date_statistics.py",
+      "src/trading_research/research/options_oi_columnar.py",
+      "src/trading_research/research/options_oi_measurements.py",
+      "src/trading_research/research/options_oi_statistics.py",
+      "src/trading_research/research/scoring.py",
+      "tests/test_options_oi_measurements.py"
+    ],
+    "cpu_seconds": 1653.512817,
+    "exit_code": 1,
+    "family": "Research-Options-OI-report-lifecycle-v1",
+    "finished_at": "2026-09-09T01:35:16.852677+00:00",
+    "kind": "options_oi_execution_v1",
+    "mode": "full",
+    "output_bytes": 1848964609,
+    "peak_rss_bytes": 2934476800,
+    "protocol": {
+      "kind": "options_oi_report_lifecycle_contract_v1",
+      "sha256": "2aef4b8129cc060f88b8b09e50b95d597206c8e90d09ad02d7f10b22ff26e6c8",
+      "size_bytes": 9347
+    },
+    "runner_sha256": "abc988b10dcbb86492e5bbea3ef1f0c646ddba8166c0d288a00b3269a88fdc7c",
+    "snapshot": {
+      "kind": "code_snapshot",
+      "sha256": "04c64b428191a6beee1126cbda04d94392dcefa8a8b3949a79f56c080c08f63f",
+      "size_bytes": 19349490
+    },
+    "success": false,
+    "trial_id": "5ddb3b5df76ac3dd0cc99df1055e6cea7b08422e56c81fa7d4371572081ea435",
+    "wall_seconds": 1909.1291829161346,
+    "worker": null
+  },
+  "exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_options_oi_study.py\", line 334, in <module>\n    if len(sys.argv)==3 and sys.argv[1]=='--worker':raise SystemExit(worker(sys.argv[2]))\n                                                                     ^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_oi_study.py\", line 246, in worker\n    actual=run_measurement(packet,protocol,store,outputs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_oi_study.py\", line 210, in run_measurement\n    actual=run(protocol=protocol,admitted=admitted,outputs=outputs,selected_dates=selected)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_oi_measurements.py\", line 1291, in run\n    return run_columnar(protocol=protocol, admitted=admitted, outputs=outputs, selected_dates=selected_dates)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_oi_columnar.py\", line 1756, in run_columnar\n    life = join_lifecycle_typed(\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_oi_columnar.py\", line 1048, in join_lifecycle_typed\n    exp_days = identities.expiration_days_array(all_cids, dates)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_oi_columnar.py\", line 451, in expiration_days_array\n    table = np.asarray(self.exp_days, dtype=np.int32)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nnumpy._core._exceptions._ArrayMemoryError: Unable to allocate 7.40 MiB for an array with shape (1941013,) and data type int32\n",
+  "last_flushed_reports": {
+    "part": 908,
+    "chain": "SPXW",
+    "last_date": "2023-10-23"
+  },
+  "last_allocated_global_contract_count": 1941013,
+  "failed_allocation_bytes": 7764052,
+  "observations": {
+    "membership_parquet_parts": 0,
+    "asof_aggregate_parquet_parts": 0,
+    "ArrayWriter_flush_policy": "only chunk_rows >=65536; membership and cut aggregates append one Arrow table per source/cut"
+  },
+  "decision": "Bound retained Arrow table/chunk count at256 as well as65536rows. No science, IDs, clocks or resource cap change. Exact eight-table and statistical pilot parity then complete full required. Cache/identity rewrites deferred because writer retention is directly observed."
+}

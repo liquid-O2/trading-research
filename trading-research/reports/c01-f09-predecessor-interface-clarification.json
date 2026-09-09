@@ -1,0 +1,19 @@
+{
+  "kind": "registered_implementation_interface_clarification",
+  "family": "C01-L01-range-location-engineering-v1",
+  "registered_protocol_sha256": "6e4d6b838bd11ca1176bdaf4ffac61f2e6a4482ccbd9446488538e8b6e40d335",
+  "reason": "RangePrimitive.supersedes requires an exact retained source predecessor; a digest of stream identity and ordinal alone is not a predecessor content identity. SharedBar has a revision ordinal but no serialized predecessor field.",
+  "decision": "Within the registered narrow F09 retained-publication lookup extension, also expose window_publication_predecessor(publication_version_id: str) -> str | None. Keep window_publication return (SharedBar, WindowRequest) and all existing serialized records unchanged.",
+  "contract": [
+    "Return the exact retained immediately preceding time-window publication version_id in the same source stream, or None for the first publication.",
+    "Maintain the predecessor reference alongside the bounded O(1) window-publication index at successful publish; restore reconstructs both through existing checked replay.",
+    "Malformed ID raises ContractError; unknown or activity-result ID raises DependencyUnavailable.",
+    "RangePrimitive.supersedes binds this exact predecessor publication ID and documents that namespace separately from RangePrimitive.version_id.",
+    "Existing registered correction/restart/forgery cases must assert this exact binding; no synthetic predecessor digest or per-call full-history scan."
+  ],
+  "scope_change": false,
+  "golden_expected_values_change": false,
+  "protocol_or_checkpoint_schema_changed": false,
+  "candidate_execution": false,
+  "initial_static_review_and_shared_run_still_required": true
+}

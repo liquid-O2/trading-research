@@ -1,0 +1,120 @@
+{
+  "status": "complete_static_repair_confirmation_residual_findings_collected",
+  "reviewer": "/root/f04_merge_tests",
+  "recorded_at": "2026-09-06T21:19:28.404311+00:00",
+  "reviewed_identities": [
+    {
+      "path": "tools/verify_foundation_extensions.py",
+      "sha256": "35c9218b48bc42569a983a8b5cbb0834b25fe8f534fc421a8b43bd41ca78940b",
+      "bytes": 19303
+    },
+    {
+      "path": "tools/record_foundation_extensions.py",
+      "sha256": "7febd3cc85bf10a3c8910de8f726f6105bdb17cc24e20216991d673723bb2c33",
+      "bytes": 12955
+    },
+    {
+      "path": "src/trading_research/verify.py",
+      "sha256": "df1336ec1379fe65502b8c7d8d4dc4325a40c81630372f2d2913a4a9cfcd0fa1",
+      "bytes": 7520
+    },
+    {
+      "path": "src/trading_research/operations/ledger.py",
+      "sha256": "dc0b5b1189b4f9bfde7f483f0f1103d927eda69ea6caf9f261b10a9bb2bc064b",
+      "bytes": 15670
+    },
+    {
+      "path": "tests/test_evidence.py",
+      "sha256": "48fe21bdedce4ef874b3633d1c22334ad32dc6b8ff5d42ce092c437e84555c77",
+      "bytes": 11359
+    },
+    {
+      "path": "src/trading_research/operations/trials.py",
+      "sha256": "7c5b0a21e979af10abd31fee143a03fb102eab5b36a54683056d9eac3f78ba4f",
+      "bytes": 8390
+    },
+    {
+      "path": "src/trading_research/operations/artifacts.py",
+      "sha256": "4b13058530d7a5ee95a2e39ebeea6d14c0f2930626330df1ed22c52b083e7c33",
+      "bytes": 6038
+    },
+    {
+      "path": "reports/f05-f08-orchestration-repair-dispositions.json",
+      "sha256": "46f03a7310f85426ead9118c4de10a0368f9442e40c502a8d0bd552c8e569ce4",
+      "bytes": 4404
+    }
+  ],
+  "original_finding_dispositions": {
+    "ORCH-01": "Durable completion precedes immutable publication/finalization; errors leave an explicit recovery gate, each member is handled independently, existing finishes are matched. Static confirmation satisfactory.",
+    "ORCH-02": "Group lock, unresolved family/lifecycle gates, known-time command recovery and reservation-based unknown charges improve the path; residual launch-gap and late-signal consistency findings are listed.",
+    "ORCH-03": "Immutable summary/resource/result equality, exact members, registry succeeded links/config/snapshot/golden/resources/artifact membership checked. Static confirmation satisfactory.",
+    "ORCH-04": "Exact three frozen families plus max_attempts=3, budget600, reservation180/hard190,4GiB,wall240 checked before reservations. Static confirmation satisfactory.",
+    "ORCH-05": "Complete review/repair flag, reviewed-code digest, frozen supporting file identities, approved modules and exact source-case/static-method mappings retained before reservations; recorder uses immutable retained mappings. Static confirmation satisfactory.",
+    "ORCH-06": "Optional verify.run tee streams unittest verbosity2 progress with flush; supervisor logs and completed/partial result bytes survive exceptions/recovery. Existing nonstreaming API defaults remain intact. Static confirmation satisfactory.",
+    "ORCH-07": "Explicit evidence fields are unioned against current state under the ledger lock, with new deterministic interleaving fixture covering another writer plus identical/conflicting retries. Static confirmation satisfactory.",
+    "ORCH-08": "Scope audit and parse precede attachment; deterministic report bytes and attachment digest give a durable idempotent receipt; postcommit presentation errors explicit and recoverable. Residual presentation shape preflight issue listed."
+  },
+  "findings": [
+    {
+      "id": "ORCH-REPAIR-01",
+      "original_finding": "ORCH-02",
+      "severity": "high",
+      "path": "tools/verify_foundation_extensions.py",
+      "lines": [
+        222,
+        228,
+        231,
+        240,
+        297,
+        300
+      ],
+      "trigger": "Supervisor dies after Popen starts a worker but before the running PID lifecycle write. Lifecycle remains launch_pending with no pid. Recovery finds the worker by command and sends SIGKILL, but the only group-absence check is guarded by lifecycle.get(pid), not the discovered PID.",
+      "consequence": "Recovery may finalize the group and remove the new-run gate while the discovered worker/group still exists, especially with unreaped or blocked descendants. It also cannot identify a surviving descendant if the unrecorded leader has already disappeared. This is precisely the launch-record gap the new comment says is covered.",
+      "suggested_correction": "Retain and check all discovered worker process groups before finalization; add a durable worker startup PID/group handshake before any suite work so a leader disappearing during the parent launch gap cannot erase group identity. Do not finalize a launch_pending lifecycle until absence of every launched group is established."
+    },
+    {
+      "id": "ORCH-REPAIR-02",
+      "original_finding": "ORCH-02",
+      "severity": "medium",
+      "path": "tools/verify_foundation_extensions.py",
+      "lines": [
+        308,
+        314,
+        316,
+        324,
+        165
+      ],
+      "trigger": "SIGTERM/SIGINT arrives after success has become True in the completed-result branch but before the try block finishes. The BaseException handler sets status=interrupted without resetting success.",
+      "consequence": "Durable completion can contain success=True and status=interrupted. finalize selects succeeded from success, marks all member attempts succeeded, and returns zero; recorder rejects the same immutable report because its status is interrupted. Recovery only repeats the inconsistent completion.",
+      "suggested_correction": "Keep success/status as one consistent outcome. Clear success in the interruption handler, or deliberately preserve a completed succeeded outcome with a separately recorded late signal; make finalization reject inconsistent success/status combinations."
+    },
+    {
+      "id": "ORCH-REPAIR-03",
+      "original_finding": "ORCH-08",
+      "severity": "low",
+      "path": "tools/record_foundation_extensions.py",
+      "lines": [
+        112,
+        175,
+        182,
+        185
+      ],
+      "trigger": "A presentation input is valid JSON but not an object, for example [] or null. Preflight only json.loads it, then ledger.update commits before checkpoint.update/conformance.update raises.",
+      "consequence": "A predictable invalid input still causes postcommit presentation failure even though the repair explicitly intends validation before commit. The new attachment key correctly prevents duplicate ledger transactions on retries, so this is a remaining preflight defect rather than lost evidence.",
+      "suggested_correction": "Require both loaded presentation inputs to be dictionaries (and any fields relied on later to have expected shape) before ledger.update."
+    }
+  ],
+  "reviewed_extent": [
+    "Full new supervisor and recorder, verify.run/RecordedResult/CLI caller path, Ledger history/current/_append/update/audit/validation and new test_evidence method, complete TrialRegistry and ArtifactStore dependencies.",
+    "Static search confirms actual suite includes subprocess/multiprocessing paths, so launched process-group identity matters beyond a single process.",
+    "No source edits, orchestration invocations, tests, code imports, compilation or market data reads."
+  ],
+  "execution": {
+    "tests": 0,
+    "new_supervisor_runs": 0,
+    "new_recorder_runs": 0,
+    "source_compilation": 0,
+    "production_imports": 0,
+    "source_edits": 0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 419.30718267010525,
+  "finished_at": "2026-09-08T23:07:01.952549+00:00",
+  "session_id": "7fd0ec72-f2ac-4093-87f6-a88ddfd52270",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 415110,
+    "duration_api_ms": 415110,
+    "is_error": false,
+    "result": "I'll start from the project entry docs and the exact daily-volatility contract so the two owned files stay inside Deliverable 1 scope.Next I\u2019ll pull the admission-read pattern, date-statistics API, and C16 notes so the measurement code matches the frozen contract.The `run()` API should execute its own unit tests first, then measure admitted CAS bytes. I\u2019ll read the admission pattern and a comparable family next.I have the admission samples (`M`/`W` duration labels) and the `run()` contract. Next I\u2019ll add the two owned files: compact measurement helpers plus independent fixture tests.The report writer was cut off. I\u2019ll finish that function and add the `run()` entry point.Independent fixture tests are next; I\u2019ll run only those, not the registered data worker.The two owned files are in place for the acquired daily VX/VIX branch. `run()` will execute the fixture suite first, then measure admitted CAS bytes only.\n\n**Owned files**\n- `/workspace/coordination/trading-research-cursor/worktrees/daily-volatility1/src/trading_research/research/daily_volatility_complex.py`\n- `/workspace/coordination/trading-research-cursor/worktrees/daily-volatility1/tests/test_daily_volatility_complex.py`\n\n**`run(*, packet, protocol, root, store)`**\n- Runs the owned unittest module first and keeps the full trace if it fails.\n- Resolves `packet.configuration.predecessor` by file hash \u2192 execution `worker` CAS \u2192 `worker.actual` CAS, then checks success, attempt id, actual fields, and frozen protocol sha.\n- Reads each of the 6 sources once with `store.read(artifact_ref(raw))` and `pq.read_table(BufferReader(...))`.\n- Writes under `reports/daily-volatility-runs/<attempt_id>/outputs` with a 128\u202fMiB\u221216\u202fMiB bound.\n- Returns `output_bytes`, `refs`, `counts`, `tests`, `resources`, and `family_complete: False`.\n\n**Measurement (contract only)**\n- Monthly (`M`) / weekly (`W`) stay separate; unexpected duration labels are kept, not folded into monthly.\n- Curves rank distinct positive DTE; equal aliases are deduped with a count; identity/maturity conflicts are excluded and flagged; DTE 0 is retained but left off the positive-time curve.\n- 30/60/90 are linear **price** interpolation inside one duration (exact tenor used directly; no extrapolation). Explicit VX futures price proxy.\n- Changes use the previous intended cash date only; missing dates stay gaps. Front rank-1 is split into `same_contract_change` vs `rank_roll_gap`.\n- Every row is date-only: `known_at_ns` null, `causal_feature_eligible` false. FRED realtime dates are vintage only.\n- Index pairs are by same family/source/date; FRED is a separate comparison. Aliases do not add dates. No NQ/ES join, no official VIX/VVIX replication.\n- Date-weighted means and 5-date-block 95% intervals go through `observed_date_statistics` (seed `20260908`, 1000 reps, min 100 dates) on the full intended cash universe through 2026-09-03.\n\n**Independent fixtures** cover the required arithmetic: upward/flat/downward curves, F30=20 at DTE 20/40 with weights 0.5, exact tenor, outside-bracket null, unequal tenors, weekly/monthly isolation, alias vs conflict, DTE 0, nonfinite/nonpositive, missing front, missing previous intended date, rank-roll split, VIX3M/VIX `20/10-1=1`, date-only publication not usable, alias dates not doubled, nullable int64 timestamps.\n\nThis worktree denies Shell, so fixtures were not executed here. Root should integrate these two files and run the registered measure worker; that path runs the suite before any admitted data. `family_complete` stays false until that actual run is accepted. This does not complete the full C16 parent.",
+    "session_id": "7fd0ec72-f2ac-4093-87f6-a88ddfd52270",
+    "request_id": "76b80def-37b5-4682-808e-7c919fbf7335",
+    "usage": {
+      "inputTokens": 136722,
+      "outputTokens": 65492,
+      "cacheReadTokens": 1906880,
+      "cacheWriteTokens": 0
+    }
+  }
+}

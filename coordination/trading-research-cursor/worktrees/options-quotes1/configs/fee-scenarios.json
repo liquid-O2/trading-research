@@ -1,0 +1,95 @@
+{
+  "verification": {
+    "verified_at": "2026-09-06T11:56:19.213716+00:00",
+    "method": "Read the official published web tables; verify the currently linked Tradovate PDF URL and NQ/ES rows; retain factual extraction rather than claim unavailable original PDF bytes.",
+    "raw_download_status": "Direct Python HTTP download returned 403; no original-file hash is asserted. Official sources were readable through the web reader.",
+    "observations": [
+      {
+        "url": "https://www.tradovate.com/pricing/",
+        "fact": "Free standard commission is 1.29 USD per side; pricing page links the PDF below; exchange, clearing and NFA charges apply."
+      },
+      {
+        "url": "https://www.tradovate.com/TradovateAllInRates120625.pdf",
+        "table": "Indices, CME NQ and ES",
+        "exchange_and_NFA_usd": "1.40",
+        "routing_usd": "0.00",
+        "clearing_usd": "0.19",
+        "free_commission_usd": "1.29",
+        "free_all_in_per_side_usd": "2.88",
+        "document_last_update_printed": "12/5/25"
+      },
+      {
+        "url": "https://help.tradeify.co/en/articles/10468315-trading-commission-fees",
+        "article_date": "2026-04-28",
+        "fact": "NQ and ES total round-trip cost is 5.76 USD per contract under free membership; total includes exchange, NFA, clearing and commissions."
+      },
+      {
+        "url": "https://help.tradeify.co/en/articles/10468221-supported-platforms",
+        "article_date": "2026-08-05",
+        "fact": "Rithmic and Tradovate are available broker connections at the same price, with no platform surcharge."
+      }
+    ],
+    "application": "Synthetic research-account transaction-cost scenarios. No historical account-cost certification, real account selection, business-cash estimate, fill quality or platform latency difference is inferred."
+  },
+  "verification_hash": "c2818f0337c8717793ed63a5a2cba5a21b3e8192742f6d0864ac19e2e80c7ba7",
+  "schedules": [
+    {
+      "currency": "USD",
+      "per_side": [
+        [
+          "NQ",
+          "2.88"
+        ],
+        [
+          "ES",
+          "2.88"
+        ]
+      ],
+      "verified_at": "2026-09-06T11:56:19.213716+00:00",
+      "historical_basis": "published_benchmark_not_historical_account_cost",
+      "included": [
+        "exchange",
+        "regulatory",
+        "clearing",
+        "commission",
+        "routing"
+      ],
+      "id": "tradovate-free-published-2026-09-06",
+      "connection": "Tradovate",
+      "account_product": "Tradovate Free published transaction-fee benchmark; synthetic research account",
+      "source_urls": [
+        "https://www.tradovate.com/pricing/",
+        "https://www.tradovate.com/TradovateAllInRates120625.pdf"
+      ]
+    },
+    {
+      "currency": "USD",
+      "per_side": [
+        [
+          "NQ",
+          "2.88"
+        ],
+        [
+          "ES",
+          "2.88"
+        ]
+      ],
+      "verified_at": "2026-09-06T11:56:19.213716+00:00",
+      "historical_basis": "published_benchmark_not_historical_account_cost",
+      "included": [
+        "exchange",
+        "regulatory",
+        "clearing",
+        "commission",
+        "routing"
+      ],
+      "id": "rithmic-tradeify-published-2026-09-06",
+      "connection": "Rithmic",
+      "account_product": "Tradeify free-membership transaction-fee benchmark through Rithmic; synthetic research account",
+      "source_urls": [
+        "https://help.tradeify.co/en/articles/10468315-trading-commission-fees",
+        "https://help.tradeify.co/en/articles/10468221-supported-platforms"
+      ]
+    }
+  ]
+}

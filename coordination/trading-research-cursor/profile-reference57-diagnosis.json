@@ -1,0 +1,32 @@
+{
+  "kind": "profile_budget_binding_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/6b3945ad1488ae590c25edbdffb9b24d7a9d2f14dd3cf6b1ee020d2f462e68d5/execution.json",
+    "sha256": "ba39c35dd101a66e18ea9d76cae986d3d238ff886d500e16afdb876081abfa74",
+    "size_bytes": 51318,
+    "kind": "execution"
+  },
+  "packet": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/6b3945ad1488ae590c25edbdffb9b24d7a9d2f14dd3cf6b1ee020d2f462e68d5/packet.json",
+    "sha256": "100b92faa5753c727f681ce59a16a0af93ce93614aa1722e9408668db2508d14",
+    "size_bytes": 95367,
+    "kind": "packet"
+  },
+  "original_exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3060, in worker\n    authenticated = authenticate_registered_packet(packet_path)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 381, in authenticate_registered_packet\n    raise ValueError('worker lacks its actual running same-family attempt, snapshot, limits and supervisor')\nValueError: worker lacks its actual running same-family attempt, snapshot, limits and supervisor\n",
+  "resources": {
+    "cpu_seconds": 0.903523,
+    "wall_seconds": 2.845485355705023,
+    "peak_rss_bytes": 123539456,
+    "attempt_output_bytes": 199150
+  },
+  "extension_budget": {
+    "cpu_budget_seconds": 192000,
+    "max_attempts": 57
+  },
+  "registry_budget": {
+    "cpu_budget_seconds": 192000,
+    "max_attempts": 58
+  },
+  "cause": "V48 retained top-level V4 max57 budget reference while registry already bound V5 max58. Strict worker join rejected before candidate import or fixtures.",
+  "repair": "Publish successor extension binding current successor budget directly. Preserve all attempts and CPU; do not weaken authentication or change profile science."
+}

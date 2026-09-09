@@ -1,0 +1,1019 @@
+{
+  "definition": "F12.ARRIVAL_TRACE.v1",
+  "status": "preregistered_hand_reasoned_unexecuted",
+  "clock_unit": "integer_nanoseconds_unless_named_logical_ordinal",
+  "scope": "finite offline synthetic boundary fixtures",
+  "actual_live_evidence": false,
+  "simulated_boundary": true,
+  "source_preparation_sha256": "7f13bcd389cc455339eb7fd722aa7482c1f65455a8c4f2ef04cb6b0796193b99",
+  "cases": [
+    {
+      "case_id": "F12-T01",
+      "source_case": "F12-T01",
+      "name": "identical-bytes",
+      "input": {
+        "records": [
+          {
+            "ordinal": 0,
+            "value": 100,
+            "receipt": 10
+          },
+          {
+            "ordinal": 1,
+            "value": 101,
+            "receipt": 20
+          }
+        ],
+        "cuts": [
+          15,
+          20
+        ]
+      },
+      "expected": {
+        "historical": [
+          100,
+          101
+        ],
+        "captured": [
+          100,
+          101
+        ],
+        "semantic_parity": true
+      },
+      "source_literal_expectation": "At cut15 both serve100; cut20 both serve101, with equal semantic versions and separately retained receipt provenance.",
+      "assertions": [
+        "test_identical_bytes"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T02",
+      "source_case": "F12-T02",
+      "name": "actual-receipt",
+      "input": {
+        "event": 1,
+        "provider": 2,
+        "receipt": 7,
+        "finish": 11,
+        "extra_modeled_delay": 3
+      },
+      "expected": {
+        "first_known": 7,
+        "published": 11,
+        "published_14": false
+      },
+      "source_literal_expectation": "Unknown before7; publication11, never14. Actual finish already includes elapsed latency.",
+      "assertions": [
+        "test_actual_receipt"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T03",
+      "source_case": "F12-T03",
+      "name": "missing-receipt",
+      "input": {
+        "historical_event": 1,
+        "provider": 2,
+        "scenario_receipt": 5,
+        "actual_receipt": null
+      },
+      "expected": {
+        "actual_receipt": null,
+        "modeled_receipt": 5,
+        "actual_lag_samples": []
+      },
+      "source_literal_expectation": "Modeled receipt5 is labeled scenario; actual receipt remains absent and no actual-latency percentile is emitted.",
+      "assertions": [
+        "test_missing_receipt"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T04",
+      "source_case": "F12-T04",
+      "name": "clock-adjust",
+      "input": {
+        "boot": [
+          "A",
+          "A"
+        ],
+        "monotonic": [
+          100,
+          110
+        ],
+        "utc": [
+          1000,
+          900
+        ]
+      },
+      "expected": {
+        "elapsed": 10,
+        "utc_step": -100,
+        "clock_adjust": true,
+        "rewritten_utc": false
+      },
+      "source_literal_expectation": "Elapsed10 remains valid; preserve UTC step-100 and a clock-adjust record; no negative elapsed or fabricated UTC1001.",
+      "assertions": [
+        "test_clock_adjust"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T05",
+      "source_case": "F12-T05",
+      "name": "boot-epoch",
+      "input": {
+        "start": [
+          "A",
+          100
+        ],
+        "end": [
+          "B",
+          5
+        ]
+      },
+      "expected": {
+        "elapsed": null,
+        "reason": "cross_boot"
+      },
+      "source_literal_expectation": "No -95 elapsed across boots; uncertainty/epoch boundary explicit.",
+      "assertions": [
+        "test_boot_epoch"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T06",
+      "source_case": "F12-T06",
+      "name": "reconnect-reset",
+      "input": {
+        "deliveries": [
+          [
+            "A",
+            9
+          ],
+          [
+            "B",
+            1
+          ]
+        ],
+        "reconnect_before": "B"
+      },
+      "expected": {
+        "retained": 2,
+        "generations": [
+          "A",
+          "B"
+        ],
+        "sequence_reset": true
+      },
+      "source_literal_expectation": "Both deliveries retained; reset is explicit; second is not dropped as an old sequence.",
+      "assertions": [
+        "test_reconnect_reset"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T07",
+      "source_case": "F12-T07",
+      "name": "reconnect-duplicate",
+      "input": {
+        "deliveries": [
+          [
+            "d1",
+            "x",
+            2,
+            10
+          ],
+          [
+            "d2",
+            "x",
+            2,
+            15
+          ]
+        ]
+      },
+      "expected": {
+        "raw_deliveries": 2,
+        "economic_applications": 1,
+        "quantity": 2
+      },
+      "source_literal_expectation": "Two delivery records, one economic +2; cumulative quantity2, not4.",
+      "assertions": [
+        "test_reconnect_duplicate"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T08",
+      "source_case": "F12-T08",
+      "name": "snapshot-trades",
+      "input": {
+        "deliveries": [
+          [
+            "snapshot",
+            "s1",
+            5
+          ],
+          [
+            "snapshot",
+            "s1",
+            5
+          ],
+          [
+            "trade",
+            "t1",
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "quantity": 7,
+        "economic_trade_quantity": 2,
+        "raw_deliveries": 3
+      },
+      "source_literal_expectation": "State7; snapshot replay does not become another trade5.",
+      "assertions": [
+        "test_snapshot_trades"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T09",
+      "source_case": "F12-T09",
+      "name": "sequence-tie",
+      "input": {
+        "deliveries": [
+          [
+            "A",
+            1,
+            4
+          ],
+          [
+            "B",
+            1,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "order": [
+          4,
+          5
+        ],
+        "retained": 2
+      },
+      "source_literal_expectation": "Stable trace ordering4 then5; neither is lost by a global sequence uniqueness check.",
+      "assertions": [
+        "test_sequence_tie"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T10",
+      "source_case": "F12-T10",
+      "name": "batch-boundary",
+      "input": {
+        "values": [
+          1,
+          2,
+          3
+        ],
+        "batches_a": [
+          [
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "batches_b": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "expected": {
+        "prefix_sums": [
+          1,
+          3,
+          6
+        ],
+        "final": 6,
+        "parity": true
+      },
+      "source_literal_expectation": "At each delivery cut equal prefix state, final sum6, equal served decisions.",
+      "assertions": [
+        "test_batch_boundary"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T11",
+      "source_case": "F12-T11",
+      "name": "quiet-gap",
+      "input": {
+        "last_trade": 10,
+        "keepalive": 15,
+        "disconnect": 16,
+        "end": 20
+      },
+      "expected": {
+        "gap_start": 16,
+        "keepalive_trade_count": 0,
+        "quiet_until": 16
+      },
+      "source_literal_expectation": "Keepalive is transport liveness only, market quiet before16; gap starts16 and is not backfilled with zero trades.",
+      "assertions": [
+        "test_quiet_gap"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T12",
+      "source_case": "F12-T12",
+      "name": "subscription",
+      "input": {
+        "subscription_events": [
+          [
+            "subscribe",
+            "A",
+            10
+          ],
+          [
+            "denied",
+            "B",
+            15
+          ],
+          [
+            "unsubscribe",
+            "A",
+            20
+          ]
+        ]
+      },
+      "expected": {
+        "B_eligible": false,
+        "A_generation_ends": 20,
+        "denial_retained": true
+      },
+      "source_literal_expectation": "B never eligible; A subscription generation ends20; preserve denial and changes, no inferred observations.",
+      "assertions": [
+        "test_subscription"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T13",
+      "source_case": "F12-T13",
+      "name": "delayed-bbo",
+      "input": {
+        "trade_event": 5,
+        "trade_receipt": 6,
+        "bbo_event": 4,
+        "bbo_receipt": 9,
+        "cuts": [
+          7,
+          9
+        ]
+      },
+      "expected": {
+        "bbo_eligible": [
+          false,
+          true
+        ],
+        "decision7_rewritten": false
+      },
+      "source_literal_expectation": "At decision7 BBO absent; at9 only future decisions may use it, no retroactive decision7 repair.",
+      "assertions": [
+        "test_delayed_bbo"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T14",
+      "source_case": "F12-T14",
+      "name": "dropped-chain",
+      "input": {
+        "required_chain_receipt": 10,
+        "critical_feed_loss": 12,
+        "independent_protection_inputs_valid": true
+      },
+      "expected": {
+        "entry_eligible_at12": false,
+        "independent_protection_eligible_at12": true
+      },
+      "source_literal_expectation": "Dependent entry lane invalid at12; independent existing-position protection remains eligible if its own inputs are valid.",
+      "assertions": [
+        "test_dropped_chain"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T15",
+      "source_case": "F12-T15",
+      "name": "timer-alone",
+      "input": {
+        "last_trade": 10,
+        "timer_due": 15,
+        "next_trade": 20
+      },
+      "expected": {
+        "timer_fired": 15,
+        "synthetic_trades": 0
+      },
+      "source_literal_expectation": "Timer executes at15 in both adapters; no synthetic trade required.",
+      "assertions": [
+        "test_timer_alone"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T16",
+      "source_case": "F12-T16",
+      "name": "interrupted-compute",
+      "input": {
+        "input_version": "v1",
+        "input_receipt": 10,
+        "restart": 15,
+        "captured_completion": 20
+      },
+      "expected": {
+        "publications": [
+          [
+            "v1",
+            20
+          ]
+        ],
+        "publication_count": 1,
+        "used_live_wall_clock": false
+      },
+      "source_literal_expectation": "Trace completion20 publishes exactly one v1 result; replay cannot substitute current live wall time.",
+      "assertions": [
+        "test_interrupted_compute"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T17",
+      "source_case": "F12-T17",
+      "name": "served-version",
+      "input": {
+        "versions": [
+          [
+            "v1",
+            10,
+            20
+          ],
+          [
+            "v2",
+            15,
+            25
+          ]
+        ],
+        "cuts": [
+          22,
+          25
+        ]
+      },
+      "expected": {
+        "served": [
+          "v1",
+          "v2"
+        ]
+      },
+      "source_literal_expectation": "At22 serve v1; at25 serve v2; receipt15 does not publish v2 early.",
+      "assertions": [
+        "test_served_version"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T18",
+      "source_case": "F12-T18",
+      "name": "order-restart",
+      "input": {
+        "order": "O",
+        "pending": 10,
+        "restart": 12,
+        "ack": 14,
+        "duplicate_ack": 15
+      },
+      "expected": {
+        "order_count": 1,
+        "state": "acknowledged",
+        "ack_known_at13": false,
+        "submissions": 0
+      },
+      "source_literal_expectation": "One acknowledged order, same ID; no duplicate order submission, acknowledgement unavailable at13.",
+      "assertions": [
+        "test_order_restart"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T19",
+      "source_case": "F12-T19",
+      "name": "stale-order",
+      "input": {
+        "acks": [
+          [
+            "acknowledged",
+            20,
+            20
+          ],
+          [
+            "pending",
+            15,
+            25
+          ]
+        ]
+      },
+      "expected": {
+        "state": "acknowledged",
+        "raw_acks": 2,
+        "stale_rejections": 1
+      },
+      "source_literal_expectation": "Retain late receipt diagnostic; do not regress acknowledged state or erase actual position.",
+      "assertions": [
+        "test_stale_order"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T20",
+      "source_case": "F12-T20",
+      "name": "suffix",
+      "input": {
+        "prefix_end": 20,
+        "appended_correction": 30,
+        "appended_extreme": 40
+      },
+      "expected": {
+        "outputs_through20_changed": false
+      },
+      "source_literal_expectation": "Every output at cuts<=20 unchanged; correction may affect only later eligible state.",
+      "assertions": [
+        "test_suffix"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T21",
+      "source_case": "F12-T21",
+      "name": "poll-stream",
+      "input": {
+        "stream": [
+          [
+            10,
+            100
+          ],
+          [
+            15,
+            110
+          ],
+          [
+            20,
+            100
+          ]
+        ],
+        "poll": [
+          [
+            10,
+            100
+          ],
+          [
+            20,
+            100
+          ]
+        ],
+        "common_cut": 20
+      },
+      "expected": {
+        "endpoint_values": [
+          100,
+          100
+        ],
+        "endpoint_parity": true,
+        "poll_peak110_certified": false,
+        "cut15_parity": "unsupported"
+      },
+      "source_literal_expectation": "At common cut20 endpoint100 agrees; poll has no certified intrainterval110 path, and no synthetic parity at15.",
+      "assertions": [
+        "test_poll_stream"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T22",
+      "source_case": "F12-T22",
+      "name": "fault-diagnosis",
+      "input": {
+        "seed": 7,
+        "eligible_ordinals": [
+          1,
+          2,
+          3
+        ],
+        "fault": "delay_one",
+        "event2_original_receipt": 20,
+        "event2_target_receipt": 30,
+        "decision_cut": 25,
+        "target_slot": "after all original records at logical time30; stable original ordinal"
+      },
+      "expected": {
+        "selected_index": 1,
+        "selected_original_ordinal": 2,
+        "first_divergence_cut": 25,
+        "minimal_prefix_ends_at": "decision25",
+        "repeat_seed_same_schedule": true,
+        "derived_trace_has_origin_mapping": true
+      },
+      "source_literal_expectation": "Repeat seed yields identical schedule; report first divergence at relevant cut25 and smallest failing prefix containing event2/timer25.",
+      "assertions": [
+        "test_fault_diagnosis"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T23",
+      "source_case": "F12-T23",
+      "name": "latency-denominator",
+      "input": {
+        "synthetic_lags": [
+          1,
+          2,
+          9
+        ],
+        "expected_count": 4,
+        "expected_evidence": "fixture-count",
+        "unique_received": 3
+      },
+      "expected": {
+        "p50": 2,
+        "p95": 9,
+        "p99": 9,
+        "n": 3,
+        "missing": 1,
+        "drop_rate": [
+          1,
+          4
+        ],
+        "actual_live_evidence": false
+      },
+      "source_literal_expectation": "p50=2,p95=9,p99=9; drop rate1/4 only with expected-count evidence, otherwise unknown; n=3 explicit.",
+      "assertions": [
+        "test_latency_denominator"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T24",
+      "source_case": "F12-T24",
+      "name": "bar-open",
+      "input": {
+        "bar_open": 0,
+        "bar_end": 60,
+        "bar_receipt": 65,
+        "high": 110,
+        "cuts": [
+          30,
+          60,
+          65
+        ]
+      },
+      "expected": {
+        "high_eligible": [
+          false,
+          false,
+          true
+        ],
+        "no_data_implies_zero": false
+      },
+      "source_literal_expectation": "High110 unavailable at30 or60, eligible only>=65 subject to finalization; no_data never produces synthetic zero bar.",
+      "assertions": [
+        "test_bar_open"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T25",
+      "source_case": null,
+      "name": "raw-before-decode",
+      "input": {
+        "raw_hex": "ff00",
+        "decoder_result": "invalid_utf8",
+        "second_writer_attempt": true
+      },
+      "expected": {
+        "operation_order": [
+          "write_all",
+          "flush",
+          "fsync",
+          "decode"
+        ],
+        "raw_retained_hex": "ff00",
+        "decode_failed": true,
+        "committed_raw_records": 1,
+        "second_writer": "rejected_before_write"
+      },
+      "assertions": [
+        "test_raw_before_decode"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T26",
+      "source_case": null,
+      "name": "append-fsync-failure",
+      "input": {
+        "delivery": "d1",
+        "fault": "fsync_error",
+        "complete_frame_on_reopen": true
+      },
+      "expected": {
+        "initial_dispatch_count": 0,
+        "initial_result": "uncertain_commit",
+        "recovered_records": 1,
+        "exact_retry_new_records": 0,
+        "final_dispatch_count": 1
+      },
+      "assertions": [
+        "test_append_fsync_failure"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T27",
+      "source_case": null,
+      "name": "torn-tail",
+      "input": {
+        "frames": [
+          "valid1",
+          "partial2"
+        ]
+      },
+      "expected": {
+        "verified_prefix_records": 1,
+        "tail_classification": "torn_final_frame",
+        "tail_quarantined": true,
+        "original_mutated": false,
+        "silent_truncation": false
+      },
+      "assertions": [
+        "test_torn_tail"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T28",
+      "source_case": null,
+      "name": "interior-corruption",
+      "input": {
+        "frames": [
+          "valid1",
+          "bad_checksum2",
+          "valid3"
+        ]
+      },
+      "expected": {
+        "recovery": "rejected",
+        "first_bad_frame": 2,
+        "frame3_dispatched": false
+      },
+      "assertions": [
+        "test_interior_corruption"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T29",
+      "source_case": null,
+      "name": "delivery-id-conflict",
+      "input": {
+        "records": [
+          [
+            "d1",
+            "aa"
+          ],
+          [
+            "d1",
+            "aa"
+          ],
+          [
+            "d1",
+            "bb"
+          ]
+        ]
+      },
+      "expected": {
+        "committed_unique_deliveries": 1,
+        "exact_retry": "idempotent",
+        "changed_retry": "conflict"
+      },
+      "assertions": [
+        "test_delivery_id_conflict"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T30",
+      "source_case": null,
+      "name": "economic-id-conflict",
+      "input": {
+        "records": [
+          [
+            "d1",
+            "econ1",
+            2
+          ],
+          [
+            "d2",
+            "econ1",
+            3
+          ]
+        ]
+      },
+      "expected": {
+        "raw_deliveries": 2,
+        "economic_applications": 1,
+        "quantity": 2,
+        "integrity_incident": true
+      },
+      "assertions": [
+        "test_economic_id_conflict"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T31",
+      "source_case": null,
+      "name": "callback-atomicity",
+      "input": {
+        "callbacks": [
+          "increment",
+          "raise"
+        ],
+        "initial_state": 0,
+        "record_ordinal": 0,
+        "first_callback_mutates_its_passed_state": true
+      },
+      "expected": {
+        "published_state": 0,
+        "next_ordinal": 0,
+        "outputs": [],
+        "external_effects_permitted": false,
+        "committed_state_mutated": false
+      },
+      "assertions": [
+        "test_callback_atomicity"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T32",
+      "source_case": null,
+      "name": "checkpoint-restore",
+      "input": {
+        "trace_values": [
+          1,
+          2,
+          3
+        ],
+        "checkpoint_after_ordinal": 1,
+        "suffix_values": [
+          3
+        ],
+        "checkpoint_write_fault": "before atomic replace"
+      },
+      "expected": {
+        "checkpoint_state": 3,
+        "restored_final": 6,
+        "uninterrupted_final": 6,
+        "checkpoint_bytes_same_state_equal": true,
+        "prior_checkpoint_survives": true
+      },
+      "assertions": [
+        "test_checkpoint_restore"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T33",
+      "source_case": null,
+      "name": "checkpoint-mismatch",
+      "input": {
+        "checkpoint_callback_version": "v1",
+        "restore_callback_version": "v2",
+        "other_input": "unchanged",
+        "additional_rejection_scenarios": [
+          "changed consumed-prefix digest",
+          "corrupt checkpoint bytes",
+          "missing retained required prefix"
+        ]
+      },
+      "expected": {
+        "restore": "rejected",
+        "state_exposed": false,
+        "all_additional_scenarios": "rejected_before_state_exposure"
+      },
+      "assertions": [
+        "test_checkpoint_mismatch"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T34",
+      "source_case": null,
+      "name": "registry-and-bounds",
+      "input": {
+        "registered_callbacks": [
+          "safe"
+        ],
+        "requested_callback": "missing",
+        "record_bound": 4096,
+        "proposed_record_count": 4097,
+        "additional_invalid_records": [
+          "boolean clock",
+          "same boot monotonic100 then99",
+          "negative monotonic clock",
+          "raw SHA mismatch",
+          "unknown schema"
+        ]
+      },
+      "expected": {
+        "unknown_callback": "rejected_before_advance",
+        "overflow": "explicit_saturation",
+        "silent_evictions": 0,
+        "all_additional_invalid_records": "rejected_before_dispatch"
+      },
+      "assertions": [
+        "test_registry_and_bounds"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T35",
+      "source_case": null,
+      "name": "unknown-drop-denominator",
+      "input": {
+        "received": 3,
+        "expected": null,
+        "duplicate_receipts": 2,
+        "lag_samples": [],
+        "utc_negative_lag_example": {
+          "source_utc": 10,
+          "receipt_utc": 8
+        }
+      },
+      "expected": {
+        "drop_rate": null,
+        "reason": "missing_expected_population",
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "unique_received": 3,
+        "duplicate_receipts": 2,
+        "utc_lag_signed_diagnostic": -2,
+        "clamped_to_zero": false,
+        "actual_qualified_samples_without_sync_evidence": 0
+      },
+      "assertions": [
+        "test_unknown_drop_denominator"
+      ],
+      "status": "preregistered_literal_not_executed"
+    },
+    {
+      "case_id": "F12-T36",
+      "source_case": null,
+      "name": "semantic-versus-transport",
+      "input": {
+        "a": {
+          "semantic_value": 5,
+          "receipt": 10
+        },
+        "b": {
+          "semantic_value": 5,
+          "receipt": 12
+        }
+      },
+      "expected": {
+        "semantic_equal": true,
+        "timing_equal": false,
+        "unconditional_parity": false,
+        "difference_kind": "timing_mismatch"
+      },
+      "assertions": [
+        "test_semantic_versus_transport"
+      ],
+      "status": "preregistered_literal_not_executed"
+    }
+  ],
+  "family": "F12-arrival-trace-engineering-v1"
+}

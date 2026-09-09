@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 934.9947427343577,
+  "finished_at": "2026-09-08T11:18:00.886505+00:00",
+  "session_id": "b3eac72f-4b10-4624-baa6-f7fafb449e1e",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 930385,
+    "duration_api_ms": 930385,
+    "is_error": false,
+    "result": "I'll read the current kernel and the quote test builders, then fix the six issues and write the independent tests.I have the kernel. Next I\u2019ll fix sparse projection, carry/history/schema validation, then write the independent tests.The kernel write was cut off at `_restore`. I\u2019ll write the complete file next.The projection and carry fixes are in. Next I\u2019ll write the independent test file covering the required sequences and checks.The two assigned files are in place. Tests are written and were not executed.\n\n`auction_flow_book_recovery.py` now:\n- Loops only over blocked-state opens/closes; repeated flags use vectorized sums (`episode_transition_visits` is the work-count fixture)\n- Treats history as permanently incomplete from cumulative `provider_flagged_records` / `unknown_action_rows`, and ANDs coverage across adjacent intervals\n- Bounds carry shape/size before digest, then checks key, invalidation/recovery, order, overlap, and count invariants, including previous interval start/end and prefix start\n- Rejects trusted original rows outside the update domain and non-categorical action/side/key columns\n- Returns a new table with the original schema; only `book_valid` values change\n\n`tests/test_auction_flow_book_recovery.py` covers the required sequences, the independent scalar loop, one-pass/chunk/cut equality, coverage carry, poison/limits, schema isolation, and QuoteWindow OFI/exposure. QuoteWindow\u2019s `book_recovery` string is left unchanged.\n\nRemaining: this is still an unpublished candidate, not a venue or exchange-order certificate, and not a replacement for strict invalidation. Cross-file `source_key` joins stay unsupported. The controller still needs to review the diff and run the registered actual-source check.",
+    "session_id": "b3eac72f-4b10-4624-baa6-f7fafb449e1e",
+    "request_id": "b5d254d4-67e9-4d1e-8c70-8369e4f8564b",
+    "usage": {
+      "inputTokens": 67057,
+      "outputTokens": 53248,
+      "cacheReadTokens": 1604544,
+      "cacheWriteTokens": 0
+    }
+  }
+}

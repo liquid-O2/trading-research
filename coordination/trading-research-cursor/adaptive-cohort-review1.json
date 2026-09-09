@@ -1,0 +1,35 @@
+{
+  "kind": "adaptive_cohort_preintegration_review_v1",
+  "worker_run": "/workspace/coordination/trading-research-cursor/runs/20260909T062643Z-36b1f6e8",
+  "reviewed_at": "2026-09-09T06:45:20.332535+00:00",
+  "source_files": [
+    {
+      "path": "/workspace/coordination/trading-research-cursor/worktrees/auction-cohorts/src/trading_research/research/auction_flow_adaptive_cohort_measurements.py",
+      "sha256": "61f2e41e8a73cb57cf9f7b06d0c077c4f7859cd60d2c58baf90ac0ba86b7f195",
+      "size_bytes": 57695
+    },
+    {
+      "path": "/workspace/coordination/trading-research-cursor/worktrees/auction-cohorts/tests/test_auction_flow_adaptive_cohort_measurements.py",
+      "sha256": "0489a528d4ccacde592214cb4fbcbbfd64be3874b0932c7e2990d51db1329eba",
+      "size_bytes": 26423
+    }
+  ],
+  "not_integrated": true,
+  "not_executed": true,
+  "critical_findings": [
+    "compose_cohort_records sums left/right volume (cohortweighted mass), notwindow_volume(allflow), corrupting nonall occupancy andnextcomposition denominators; returnedwindowvolume becomesFraction then_emit_row nullsvolume.",
+    "Missing-window composition returnsleftdata withoutupdatingend/nullingcounts/path; _compose_span incompleteprefixcopiesvalidatom metrics ratherthanfullymissinginterval.",
+    "Trainingwindow checks onlydeclaredend/published; noactualtrade timestampsagainstmemberwindow/train_end, noobservationtilingproof. complete_pairs can manufacturehistogramagainstemptytrades withoutsourcebinding. Extra_reports dontcarrymatchingmemberwindowregistry.",
+    "fit_definitions catchesallContractError as unavailable, hidinginvalidfuture/duplicate/tamperedinput; root/source_collection notboundtohistmanifest orcheckedonconsumer fitreuse.",
+    "PreparedCursor searchsorted requiresglobalperinstrumenttimestamp/sourceorder validation missingfrom_validate_trades; extra traded instruments absentobs silentlyignored; noinputtradeconservation proof.",
+    "Rawcontract boundary withinoneinstrument cancomposenumericalpaths withcontractNone whilecoordinate_complete staysTrue. Identity/definition compatibility notcheckedbeyondchannelID incompose.",
+    "source/flow coverage andactualobservationknownat are notallpropagated; internaltruebounds/historyuse sourcecoverage only.",
+    "scientific_join_eligibility barealias ignorescohortunavailable/incomplete anddefinitionavailability; distinguishexplicit0/250/1000ms latencycounterfactual fromactualdependencyknownat without modifyingacceptedwindowkernel."
+  ],
+  "additional_review": [
+    "Needfinalschemaexactnum/denint64 bound analysis; current_fraction_pair rejectslargeexactvalues evenkernelsupportsPython fallback; use appropriateexactrepresentation ifactualboundrequires.",
+    "Trainingobservationsmayincludeinactive rawinstruments; do notmistakeknownzero presence for missingeligibletrainingevidence. Decideeligiblecomplete unit/instrument members usingacceptedsource/observation contracts, notallpresence conjunction.",
+    "Fullsource rowcollectoroneunit max~60k-100koutputdicts mayfit process butmeasure; fixture records() scansallArrowcellsineachlookupslow, replacewithtypedfilter/to_pylist ifnecessary.",
+    "Workeronly19testsandnorealexecution. Requiredfailingregressionfirst ifpracticalthroughnewregisteredcohortfamily wrapper, thenoneconsolidatedrootcorrection+decisivefulltest/actualpilot. Existingauctionprofilemainandquoteclosureactive cannotedit."
+  ]
+}

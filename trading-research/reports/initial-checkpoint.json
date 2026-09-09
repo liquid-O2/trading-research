@@ -1,0 +1,87 @@
+{
+  "recorded_at": "2026-09-06T11:24:07.065081+00:00",
+  "scope_version": "0d7fff8cba9a2201a30ea140cfa7f012556405c8c8a7416ef2802c109c6d7a95",
+  "ledger_event_hash": "d7265dab2f57f308ff73ae68aa00f9b0826fe1c34aaab45dbc5cbaa245dc6a7a",
+  "verification": {
+    "sha256": "1d4c1e3efb4ca00acc3c7d835bd41b373265dd857032eebaca1e31b564869975",
+    "size_bytes": 14759,
+    "kind": "verification"
+  },
+  "code_snapshot": {
+    "sha256": "621c26380a250e3057298e6c3b2e712990c9daab5160b647664eeecba75754c9",
+    "size_bytes": 386516,
+    "kind": "code_snapshot"
+  },
+  "pilot": {
+    "sha256": "b1107ce9ce27fd278d6da458758159a1dbc49e0a21f1ee9932bb5fb09f805bb5",
+    "size_bytes": 13397,
+    "kind": "bounded_data_pilot"
+  },
+  "pilot_trial_root": "evidence/trials",
+  "audit": {
+    "scope_version": "0d7fff8cba9a2201a30ea140cfa7f012556405c8c8a7416ef2802c109c6d7a95",
+    "records": 4173,
+    "kinds": {
+      "unit": 344,
+      "phase": 2752,
+      "source": 712,
+      "external": 119,
+      "requirement": 68,
+      "dataset": 111,
+      "task": 64,
+      "method": 3
+    },
+    "engineering": {
+      "unstarted": 4128,
+      "in_progress": 44,
+      "verified": 1
+    },
+    "evaluation": {
+      "unrun": 4173
+    },
+    "dispositions": {
+      "undecided": 4172,
+      "selected": 1
+    },
+    "definition_reviewed": 1,
+    "unresolved_records": 4172,
+    "coverage_valid": true,
+    "engineering_complete": false,
+    "engineering_pending": 4172,
+    "research_disposition_complete": false,
+    "research_pending": 4172,
+    "economic_evidence": "No economic conclusion is inferred from coverage or engineering status."
+  },
+  "completed_commands": [
+    {
+      "command": "python -m trading_research.verify all --require-traceability",
+      "result": "49 passed; zero failures/errors/skips; code unchanged during run"
+    },
+    {
+      "command": "python -m trading_research.data.audit mbp-pilot --max-rows 4096",
+      "result": "16,384 rows across four prefixes; raw roundtrip/volume assertions passed"
+    },
+    {
+      "command": "uv build --out-dir /tmp/trading-research-build",
+      "result": "source distribution and wheel built"
+    },
+    {
+      "command": "AST parse src/tests",
+      "result": "32 Python files parsed"
+    }
+  ],
+  "economic_runs": 0,
+  "model_fits": 0,
+  "future_evidence_days": 0,
+  "next_work": [
+    "Complete remaining B00 local/source assertion inventory and runtime graph/reference fixtures.",
+    "B01 matched-hour trade reconciliation, explicit calendar/roll/instrument and field/cohort certification.",
+    "B02 deterministic CVD/profile/object references, then the E0 execution/account harness.",
+    "Continue eligible B04-B09 specialists and B10 future protocol; all exact records remain in the ledger."
+  ],
+  "external_or_elapsed_dependencies": [
+    "Verified numeric all-in E0 fee input and its source are not configured.",
+    "Historical actual strategy receipt clocks are absent from these archives; prospective receipt capture is distinct.",
+    "B10 future eligible days require a frozen protocol and elapsed future time."
+  ]
+}

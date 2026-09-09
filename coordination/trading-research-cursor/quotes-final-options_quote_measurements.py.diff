@@ -1,0 +1,1364 @@
+--- src/trading_research/research/options_quote_measurements.py
++++ src/trading_research/research/options_quote_measurements.py
+@@ -11,10 +11,13 @@
+ sort/dedup rule; this module does not copy an interval tape of every quote
+ change.
+ 
+-Local unmatched quote contract_ids are deterministic in
+-[LOCAL_ID_BASE, LOCAL_ID_BASE+2**30). Integer 0 is reserved for unresolved
+-invalid identity and is not a tradable contract. Invalid OSI/right/strike never
+-shares a sort key with a valid identity, even when OSI text matches.
++Local unmatched quote contract_ids are int64 values at or above
++LOCAL_ID_BASE (2**32), disjoint from read-only OI int32 ids. Integer 0 is
++reserved for unresolved invalid identity and is not a tradable contract.
++Invalid sort keys include chain plus original malformed evidence so distinct
++invalid identities do not alias. Cross-shard id equality is digest-stable
++only when the reverse map records no collision; reducers compare the exact
++OSI tuple.
+ """
+ from __future__ import annotations
+ 
+@@ -34,7 +37,7 @@
+ from trading_research.research.auction_flow_storage import BoundedOutputs, read_json_artifact
+ from trading_research.research.options_oi_columnar import (
+     ArrayWriter, ClockMaps, DateCodebook, _date_column_iso, _dictionary_keys,
+-    _is_compact_report, _millistrike_column, _osi_unique_parse, _unique_string_map,
++    _millistrike_column, _osi_unique_parse, _unique_string_map,
+ )
+ from trading_research.research.options_oi_measurements import (
+     CHAINS_WITHOUT_LISTING, ZONE, _check_schema, _resolve_source_path,
+@@ -57,11 +60,14 @@
+ MINUTE_NS = 60 * NS
+ GAP_BREAK_NS = 60 * NS
+ STALE_THRESHOLDS = (60, 300, 900)
+-# Deterministic unmatched-quote namespace. Never 0; does not collide with
+-# typical OI contract_id sequences that start at 1.
+-LOCAL_ID_BASE = 1_073_741_824
+-LOCAL_ID_MASK = 0x3FFFFFFF
++# Deterministic unmatched-quote namespace. Disjoint from any int32 OI id.
++LOCAL_ID_BASE = 1 << 32
++LOCAL_ID_MASK = (1 << 63) - 1
++LOCAL_ID_OVERFLOW = 1 << 62
+ UNRESOLVED_ID = 0
++LISTING_IDENTITY_COLUMNS = (
++    "symbol", "expiration", "strike", "right", "request_date", "osi_symbol",
++)
+ 
+ FAMILY_NEAR, FAMILY_BROAD, FAMILY_VIX, FAMILY_UNION = 0, 1, 2, 3
+ FAMILY_NAMES = ("near", "broad", "vix_full", "union")
+@@ -426,7 +432,7 @@
+         ("payload_equal_groups", pa.int64()),
+         ("example_file_id", pa.int64()), ("example_row_index", pa.int64()),
+         ("example_alias_file_id", pa.int64()), ("example_alias_row_index", pa.int64()),
+-        ("example_contract_id", pa.int32()), ("example_ts_event_ns", pa.int64()),
++        ("example_contract_id", pa.int64()), ("example_ts_event_ns", pa.int64()),
+         ("example_conflict", pa.bool_()),
+     ])
+ 
+@@ -437,7 +443,7 @@
+         ("chain", pa.string()), ("request_date", pa.string()),
+         ("acquisition_date", pa.string()),
+         ("cut_label", pa.string()), ("cut_ns", pa.int64()),
+-        ("source_family", pa.string()), ("contract_id", pa.int32()),
++        ("source_family", pa.string()), ("contract_id", pa.int64()),
+         ("identity_resolved", pa.bool_()),
+         ("osi_symbol", pa.string()), ("expiration", pa.string()),
+         ("millistrike", pa.int64()), ("right", pa.string()),
+@@ -533,7 +539,8 @@
+         ("spread_sum", pa.float64()), ("spread_n", pa.int64()),
+         ("rel_spread_sum", pa.float64()), ("rel_spread_n", pa.int64()),
+         ("sample_age_sum", pa.float64()), ("payload_age_sum", pa.float64()),
+-        ("oi_available_count", pa.int64()), ("oi_missing_count", pa.int64()),
++        ("oi_available_count", pa.int64()), ("oi_quoted_available_count", pa.int64()),
++        ("oi_missing_count", pa.int64()),
+         ("oi_ambiguous_count", pa.int64()), ("oi_zero_count", pa.int64()),
+         ("oi_amount_unknown", pa.int64()), ("oi_total_available", pa.int64()),
+         ("oi_weighted_quoted_fraction", pa.float64()),
+@@ -604,7 +611,7 @@
+ def identity_match_schema():
+     pa = _pa()
+     return pa.schema([
+-        ("contract_id", pa.int32()), ("chain", pa.string()),
++        ("contract_id", pa.int64()), ("chain", pa.string()),
+         ("osi_symbol", pa.string()), ("expiration", pa.string()),
+         ("millistrike", pa.int64()), ("right", pa.string()),
+         ("oi_matched", pa.bool_()),
+@@ -616,7 +623,7 @@
+     pa = _pa()
+     if not rows:
+         return schema.empty_table()
+-    return pa.table({field.name: [row.get(field.name) for field in schema] for field in schema},
++    return pa.table({field.name: [row.get(field.name) for row in rows] for field in schema},
+                     schema=schema)
+ 
+ 
+@@ -815,8 +822,8 @@
+         "declared_days": np.empty(n, dtype=np.int32),
+         "east_days": np.empty(n, dtype=np.int32),
+         "ts_event_ns": np.empty(n, dtype=np.int64),
+-        "contract_id": np.empty(n, dtype=np.int32),
+-        "sort_id": np.empty(n, dtype=np.int32),
++        "contract_id": np.empty(n, dtype=np.int64),
++        "sort_id": np.empty(n, dtype=np.int64),
+         "raw_base": np.empty(n, dtype=np.int8),
+         "reason_code": np.empty(n, dtype=np.int8),
+         "bid": np.empty(n, dtype=np.float64),
+@@ -922,24 +929,54 @@
+     def __init__(self, oi_lookup=None):
+         self.oi_lookup = oi_lookup or {}
+         self.local = {}
++        self.reverse = {}
+         self.unresolved = {}
+         self.next_unresolved = -1
++        self.next_overflow = LOCAL_ID_OVERFLOW
+         self.pending = []
++        self.emitted = set()
++
++    @staticmethod
++    def digest64(chain, osi, exp, milli, right):
++        payload = f"{chain}|{osi}|{exp}|{milli}|{right}".encode()
++        digest = int.from_bytes(hashlib.sha256(payload).digest()[:8], "little") & LOCAL_ID_MASK
++        if digest < LOCAL_ID_BASE:
++            digest += LOCAL_ID_BASE
++        return int(digest)
+ 
+     @staticmethod
+     def local_id(chain, osi, exp, milli, right):
+-        payload = f"{chain}|{osi}|{exp}|{milli}|{right}".encode()
+-        digest32 = int.from_bytes(hashlib.sha256(payload).digest()[:4], "little")
+-        return int(LOCAL_ID_BASE + (digest32 & LOCAL_ID_MASK))
+-
+-    def intern_valid(self, chain, osi_codes, osi_book, exp_days, milli, right_code, valid, dates):
++        return QuoteCodebook.digest64(chain, osi, exp, milli, right)
++
++    def assign_local(self, chain, osi, exp, milli, right):
++        lookup = (chain, osi, exp, int(milli), right)
++        hit = self.local.get(lookup)
++        if hit is not None:
++            return hit
++        cid = self.digest64(chain, osi, exp, int(milli), right)
++        existing = self.reverse.get(cid)
++        if existing is None:
++            self.reverse[cid] = lookup
++        elif existing != lookup:
++            cid = int(self.next_overflow)
++            self.next_overflow += 1
++            self.reverse[cid] = lookup
++        self.local[lookup] = cid
++        return cid
++
++    def intern_valid(self, chain, osi_codes, osi_book, exp_days, milli, right_code, valid, dates,
++                     symbol_codes=None, reason=None):
+         np = _np()
+         n = len(osi_codes)
+-        cid = np.zeros(n, dtype=np.int32)
++        cid = np.zeros(n, dtype=np.int64)
+         matched = np.zeros(n, dtype=bool)
+-        sort_id = np.zeros(n, dtype=np.int32)
++        sort_id = np.zeros(n, dtype=np.int64)
+         if n == 0:
+             return cid, matched, sort_id
++        if symbol_codes is None:
++            symbol_codes = np.full(n, -1, dtype=np.int32)
++        if reason is None:
++            reason = np.zeros(n, dtype=np.int8)
+         if np.any(valid):
+             keys = np.stack((
+                 osi_codes[valid].astype(np.int64),
+@@ -948,7 +985,7 @@
+                 right_code[valid].astype(np.int64),
+             ), axis=1)
+             uniq, inverse = np.unique(keys, axis=0, return_inverse=True)
+-            resolved = np.empty(len(uniq), dtype=np.int32)
++            resolved = np.empty(len(uniq), dtype=np.int64)
+             hit_u = np.zeros(len(uniq), dtype=bool)
+             for u, key in enumerate(uniq):
+                 osi = osi_book.get(int(key[0]))
+@@ -957,10 +994,9 @@
+                 lookup = (chain, osi, exp, int(key[2]), right)
+                 oi_id = self.oi_lookup.get(lookup)
+                 if oi_id is None:
+-                    local = self.local.get(lookup)
+-                    if local is None:
+-                        local = int(self.local_id(chain, osi, exp, int(key[2]), right))
+-                        self.local[lookup] = local
++                    local = self.assign_local(chain, osi, exp, int(key[2]), right)
++                    if lookup not in self.emitted:
++                        self.emitted.add(lookup)
+                         self.pending.append((local, chain, osi, exp, int(key[2]), right, False))
+                     resolved[u] = local
+                 else:
+@@ -976,11 +1012,14 @@
+                 exp_days[invalid].astype(np.int64),
+                 milli[invalid],
+                 right_code[invalid].astype(np.int64),
++                reason[invalid].astype(np.int64),
++                symbol_codes[invalid].astype(np.int64),
+             ), axis=1)
+             uinv, inverse = np.unique(ikeys, axis=0, return_inverse=True)
+-            uids = np.empty(len(uinv), dtype=np.int32)
++            uids = np.empty(len(uinv), dtype=np.int64)
+             for u, key in enumerate(uinv):
+-                packed = (int(key[0]), int(key[1]), int(key[2]), int(key[3]))
++                packed = (chain, int(key[0]), int(key[1]), int(key[2]), int(key[3]),
++                          int(key[4]), int(key[5]))
+                 hit = self.unresolved.get(packed)
+                 if hit is None:
+                     hit = self.next_unresolved
+@@ -998,7 +1037,7 @@
+         if not rows:
+             return None
+         return pa.table({
+-            "contract_id": pa.array([row[0] for row in rows], type=pa.int32()),
++            "contract_id": pa.array([row[0] for row in rows], type=pa.int64()),
+             "chain": pa.array([row[1] for row in rows], type=pa.string()),
+             "osi_symbol": pa.array([row[2] for row in rows], type=pa.string()),
+             "expiration": pa.array([row[3] for row in rows], type=pa.string()),
+@@ -1272,8 +1311,22 @@
+     return idx[first]
+ 
+ 
++def _begin_request_date(clocks, label):
++    """Call canonical ClockMaps.begin_request_date once a day when present."""
++    begin = getattr(clocks, "begin_request_date", None)
++    if begin is not None:
++        begin(label)
++        return
++    if getattr(clocks, "request_date", None) != label:
++        clocks.east.clear()
++        seconds = getattr(clocks, "seconds", None)
++        if seconds is not None:
++            seconds.clear()
++        clocks.request_date = label
++
++
+ def parse_quote_typed(table, *, record, dates, clocks, osi_book, codebook, session_open_ns,
+-                      session_close_ns):
++                      session_close_ns, row_offset=0):
+     """Arrow/NumPy parse. Unique OSI/date codebook only. Compact integer codes."""
+     pa, pc = _pa(), _pc()
+     np = _np()
+@@ -1438,12 +1491,20 @@
+         east_days[~ts_ok] = -1
+ 
+     identity_valid = ~identity_invalid
++    symbol_code = np.full(n, -1, dtype=np.int32)
++    if not np.all(sym_null):
++        sym_u = osi_book.intern_unique([
++            None if value is None else (value if type(value) is str else str(value))
++            for value in sym_mapped
++        ])
++        symbol_code[~sym_null] = sym_u[sym_idx[~sym_null]]
+     cid, matched, sort_id = codebook.intern_valid(
+         chain, osi_code, osi_book, exp_days, milli, right_code, identity_valid, dates,
++        symbol_codes=symbol_code, reason=reason,
+     )
+     frame = _empty_frame(n)
+     frame["file_id"][:] = int(file_id)
+-    frame["row_index"] = np.arange(n, dtype=np.int64)
++    frame["row_index"] = np.arange(n, dtype=np.int64) + int(row_offset)
+     frame["osi_code"] = osi_code
+     frame["exp_days"] = exp_days
+     frame["milli"] = milli
+@@ -1616,7 +1677,11 @@
+     return ok & (sorted_ids[pos_c] == cids)
+ 
+ 
+-def _auth_oi_ref(ref):
++_DATASET_CACHE = {}
++_PARQUET_STAT_CACHE = {}
++
++
++def _auth_oi_ref(ref, *, json_ok=False):
+     if ref is None:
+         return []
+     refs = [ref] if isinstance(ref, dict) and "path" in ref else list(ref)
+@@ -1631,25 +1696,78 @@
+             raise IntegrityError("OI artifact size changed")
+         if item.get("sha256") and file_digest(path) != item["sha256"]:
+             raise IntegrityError("OI artifact hash changed")
+-        rows = pq.ParquetFile(path).metadata.num_rows
+-        if item.get("rows") is not None and rows != item["rows"]:
+-            raise IntegrityError("OI artifact row count changed")
++        is_json = json_ok or str(path).endswith(".json") or "json" in str(item.get("kind") or "")
++        rows = item.get("rows")
++        if not is_json:
++            rows = pq.ParquetFile(path).metadata.num_rows
++            if item.get("rows") is not None and rows != item["rows"]:
++                raise IntegrityError("OI artifact row count changed")
+         out.append({**item, "path": str(path), "size_bytes": size, "rows": rows})
+     return out
+ 
+ 
+-def _read_filtered(refs, columns, filters=None):
++def _cached_dataset(path):
+     import pyarrow.dataset as ds
++    hit = _DATASET_CACHE.get(path)
++    if hit is None:
++        hit = ds.dataset(path, format="parquet")
++        _DATASET_CACHE[path] = hit
++    return hit
++
++
++def _interval_file_relevant(path, chains, date_hi, first_cut, last_cut):
++    import pyarrow.parquet as pq
++    meta = _PARQUET_STAT_CACHE.get(path)
++    if meta is None:
++        handle = pq.ParquetFile(path)
++        names = {handle.schema_arrow.field(i).name: i for i in range(handle.schema_arrow.n_names)}
++        groups = []
++        for index in range(handle.num_row_groups):
++            group = handle.metadata.row_group(index)
++            stats = {}
++            for name, col_i in names.items():
++                if col_i >= group.num_columns:
++                    continue
++                column = group.column(col_i)
++                stat = column.statistics
++                if stat is not None and stat.has_min_max:
++                    stats[name] = (stat.min, stat.max)
++            groups.append(stats)
++        meta = groups
++        _PARQUET_STAT_CACHE[path] = meta
++    chain_set = set(chains)
++    for stats in meta:
++        chain_stat = stats.get("chain")
++        if chain_stat is not None:
++            lo, hi = chain_stat
++            if lo == hi and lo not in chain_set:
++                continue
++        req = stats.get("request_date")
++        if req is not None:
++            rmin = req[0].isoformat() if hasattr(req[0], "isoformat") else str(req[0])
++            if rmin > date_hi:
++                continue
++        start = stats.get("valid_from_ns")
++        if start is not None and start[0] is not None and int(start[0]) > last_cut:
++            continue
++        end = stats.get("valid_to_ns")
++        if end is not None and end[1] is not None and int(end[1]) <= first_cut:
++            if end[0] is not None and int(end[0]) > 0:
++                continue
++        return True
++    return False
++
++
++def _read_filtered(refs, columns, filters=None, *, skip=None):
+     tables = []
+     for ref in refs:
+-        dataset = ds.dataset(ref["path"], format="parquet")
++        path = ref["path"]
++        if skip is not None and skip(path):
++            continue
++        dataset = _cached_dataset(path)
+         available = set(dataset.schema.names)
+         use = [name for name in columns if name in available]
+-        extra = []
+-        if "last_eq_first" in available:
+-            extra.append("last_eq_first")
+-        table = dataset.to_table(columns=use + [name for name in extra if name not in use],
+-                                 filter=filters)
++        table = dataset.to_table(columns=use, filter=filters)
+         tables.append(table)
+     if not tables:
+         return None
+@@ -1659,7 +1777,7 @@
+ class OIJoinAdapter:
+     """Projected typed arrays for the selected chain/date horizon only."""
+ 
+-    def __init__(self, oi_population, *, chains, dates):
++    def __init__(self, oi_population, *, chains, dates, protocol=None):
+         self.available = oi_population is not None
+         self.listing_unavailable = oi_population is None
+         self.full_population = False
+@@ -1667,12 +1785,17 @@
+         self.by_id = {}
+         self.max_id = 0
+         self.coverage = {}
++        self.membership = {}
++        self.source_manifest = {}
+         self._horizon = None
+-        self._interval_chain = None
+-        self._interval_cache = None
++        self._interval_shard = None
+         self._interval_dates = DateCodebook()
++        self.protocol = protocol
+         self.oi_ref = None
+         self._refs = {}
++        self.listing_files_read = 0
++        self.listing_rows_read = 0
++        self.listing_bytes_read = 0
+         if oi_population is None:
+             return
+         if not isinstance(oi_population, dict):
+@@ -1683,6 +1806,8 @@
+             "reports": _auth_oi_ref(refs.get("reports")),
+             "asof_intervals": _auth_oi_ref(refs.get("asof_intervals")),
+             "coverage": _auth_oi_ref(refs.get("coverage")),
++            "membership": _auth_oi_ref(refs.get("membership")),
++            "source_manifest": _auth_oi_ref(refs.get("source_manifest"), json_ok=True),
+         }
+         self.oi_ref = {
+             "family": oi_population.get("family"),
+@@ -1692,9 +1817,14 @@
+             "reports": self._refs["reports"],
+             "asof_intervals": self._refs["asof_intervals"],
+             "coverage": self._refs["coverage"],
++            "membership": self._refs["membership"],
++            "source_manifest": self._refs["source_manifest"],
+         }
+         self._load_identity(chains)
+         self._load_coverage(chains, dates)
++        self._load_membership(chains, dates)
++        self._load_source_manifest()
++        self._load_interval_shard(chains, dates)
+         self.full_population = self._validate_full(oi_population, chains, dates)
+ 
+     def _load_identity(self, chains):
+@@ -1752,11 +1882,11 @@
+         del table
+ 
+     def _validate_full(self, oi_population, chains, dates):
+-        if not self._refs["identity_map"] or not self._refs["reports"] or not self._refs["asof_intervals"]:
++        if oi_population.get("mode") != "full":
+             return False
+-        if not self._refs["coverage"]:
++        if not self._refs["identity_map"] or not self._refs["asof_intervals"]:
+             return False
+-        if oi_population.get("mode") == "pilot":
++        if not self._refs["coverage"] or not self._refs["membership"]:
+             return False
+         for chain in chains:
+             if chain in CHAINS_WITHOUT_LISTING:
+@@ -1766,10 +1896,188 @@
+                     return False
+         return True
+ 
++    def _load_membership(self, chains, dates):
++        if not self._refs.get("membership"):
++            return
++        wanted = set(dates)
++        wanted_chains = set(chains)
++        table = _read_filtered(
++            self._refs["membership"],
++            ["file_id", "path", "sha256", "chain", "role", "request_date",
++             "rows_read", "rows_valid", "rows_invalid", "empty_marker"],
++        )
++        if table is None or len(table) == 0:
++            return
++        for row in table.to_pylist():
++            if row.get("chain") not in wanted_chains or row.get("request_date") not in wanted:
++                continue
++            key = (row["chain"], row["request_date"], row["role"])
++            self.membership.setdefault(key, []).append(row)
++        del table
++
++    def _load_source_manifest(self):
++        for ref in self._refs.get("source_manifest") or []:
++            payload = json.loads(Path(ref["path"]).read_text())
++            files = payload.get("files") or payload.get("manifest") or []
++            if isinstance(payload, list):
++                files = payload
++            for item in files:
++                if not isinstance(item, dict):
++                    continue
++                path = item.get("path")
++                if path:
++                    self.source_manifest[path] = item
++
++    def _load_interval_shard(self, chains, dates):
++        np = _np()
++        if not self._refs.get("asof_intervals") or not dates:
++            self._interval_shard = {"cid": np.empty(0, dtype=np.int32)}
++            return
++        import pyarrow.dataset as ds
++        first, last = min(dates), max(dates)
++        first_cut = cut_ns_on(date.fromisoformat(first), "09:30")
++        last_cut = cut_ns_on(date.fromisoformat(last), "16:15")
++        filt = ds.field("chain").isin(list(chains))
++        try:
++            filt = filt & (ds.field("request_date") <= last)
++            filt = filt & (ds.field("valid_from_ns") <= last_cut)
++        except Exception:
++            pass
++        table = _read_filtered(
++            self._refs["asof_intervals"],
++            ["contract_id", "chain", "open_interest", "request_date",
++             "ambiguous", "valid_from_ns", "valid_to_ns", "expiration"],
++            filt,
++            skip=lambda path: not _interval_file_relevant(path, chains, last, first_cut, last_cut),
++        )
++        codebook = self._interval_dates
++        if table is None or len(table) == 0:
++            self._interval_shard = {"cid": np.empty(0, dtype=np.int32)}
++            del table
++            return
++        req_iso, _, req_days = _date_column_iso(table.column("request_date"), codebook)
++        exp_iso, exp_ok, exp_days = _date_column_iso(table.column("expiration"), codebook)
++        vt = table.column("valid_to_ns")
++        vt_null = _pc().is_null(vt).to_numpy(zero_copy_only=False).astype(bool)
++        valid_to = vt.fill_null(-1).to_numpy(zero_copy_only=False).astype("int64")
++        valid_to[vt_null] = -1
++        chain_col = table.column("chain").to_pylist()
++        chain_labels = ["" if item is None else (item if type(item) is str else str(item))
++                        for item in chain_col]
++        uniq, inverse = np.unique(np.asarray(chain_labels, dtype=object), return_inverse=True)
++        self._interval_shard = {
++            "cid": table.column("contract_id").to_numpy(zero_copy_only=False).astype("int32"),
++            "oi": table.column("open_interest").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
++            "valid_from": table.column("valid_from_ns").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
++            "valid_to": valid_to,
++            "req_days": req_days.astype(np.int32, copy=False),
++            "exp_days": np.where(exp_ok, exp_days, -1).astype(np.int32, copy=False),
++            "ambiguous": table.column("ambiguous").fill_null(False).to_numpy(zero_copy_only=False).astype(bool),
++            "chain_u": list(uniq),
++            "chain_i": inverse.astype(np.int32, copy=False),
++        }
++        del table, req_iso, exp_iso
++
++    def _listing_path(self, rel, sha256):
++        if type(rel) is str and rel and not rel.startswith("/") and ".." not in Path(rel).parts:
++            if self.protocol is not None:
++                path = _resolve_source_path(self.protocol, rel)
++            else:
++                path = Path(rel)
++        else:
++            path = Path(rel)
++        if not path.is_file():
++            raise IntegrityError("listing membership path is missing")
++        if file_digest(path) != sha256:
++            raise IntegrityError("listing source hash changed")
++        manifest = self.source_manifest.get(rel)
++        if manifest and manifest.get("sha256") and manifest["sha256"] != sha256:
++            raise IntegrityError("listing membership hash does not match source_manifest")
++        return path
++
++    def _parse_listing_ids(self, table, chain, declared):
++        np = _np()
++        if table is None or len(table) == 0:
++            return np.empty(0, dtype=np.int64), 0, 0
++        osi_dict, osi_idx, osi_null = _dictionary_keys(table.column("osi_symbol"))
++        osi_values = osi_dict.to_pylist()
++        osi_parsed, _ = _osi_unique_parse(osi_dict, {})
++        exp_iso, exp_ok, _ = _date_column_iso(table.column("expiration"), self._interval_dates)
++        req_iso, req_ok, _ = _date_column_iso(table.column("request_date"), self._interval_dates)
++        milli, _, strike_present, strike_null = _millistrike_column(table.column("strike"))
++        right_mapped, right_idx, right_null = _unique_string_map(table.column("right"), normalize_right)
++        if "symbol" in table.schema.names:
++            sym_mapped, sym_idx, sym_null = _unique_string_map(
++                table.column("symbol"), lambda value: value if type(value) is str else None)
++        else:
++            n = len(table)
++            sym_mapped, sym_idx, sym_null = [None], np.zeros(n, dtype=np.int64), np.ones(n, dtype=bool)
++        n = len(table)
++        listed = []
++        invalid = 0
++        for i in range(n):
++            if osi_null[i] or not exp_ok[i] or not req_ok[i] or right_null[i] or strike_null[i] or not strike_present[i]:
++                invalid += 1
++                continue
++            parsed = osi_parsed[osi_idx[i]]
++            if parsed is None:
++                invalid += 1
++                continue
++            right = right_mapped[right_idx[i]]
++            if right not in {"CALL", "PUT"}:
++                invalid += 1
++                continue
++            symbol = None if sym_null[i] else sym_mapped[sym_idx[i]]
++            if parsed["root"] != chain or (type(symbol) is str and symbol != chain):
++                invalid += 1
++                continue
++            if (parsed["expiration"] != exp_iso[i] or parsed["right"] != right
++                    or int(parsed["millistrike"]) != int(milli[i])):
++                invalid += 1
++                continue
++            if req_iso[i] != declared:
++                invalid += 1
++                continue
++            osi_text = osi_values[osi_idx[i]]
++            cid = self.identity.get((chain, osi_text, exp_iso[i], int(milli[i]), right))
++            if cid is None:
++                invalid += 1
++                continue
++            listed.append(int(cid))
++        uniq = np.unique(np.asarray(listed, dtype=np.int64)) if listed else np.empty(0, dtype=np.int64)
++        return uniq, int(len(uniq)), invalid
++
++    def _listed_for_day(self, chain, request_date):
++        np = _np()
++        members = self.membership.get((chain, request_date, "contracts")) or []
++        if not members:
++            return None, {"status": "missing", "empty_marker": False, "present": False}
++        if all(bool(item.get("empty_marker")) for item in members):
++            return np.empty(0, dtype=np.int64), {"status": "empty_marker", "empty_marker": True, "present": True}
++        ids = []
++        for item in members:
++            if item.get("empty_marker"):
++                continue
++            path = self._listing_path(item["path"], item["sha256"])
++            dataset = _cached_dataset(str(path))
++            table = dataset.to_table(columns=[name for name in LISTING_IDENTITY_COLUMNS
++                                              if name in set(dataset.schema.names)])
++            self.listing_files_read += 1
++            self.listing_rows_read += len(table)
++            self.listing_bytes_read += path.stat().st_size
++            found, nvalid, _ = self._parse_listing_ids(table, chain, request_date)
++            if item.get("rows_valid") is not None and nvalid != int(item["rows_valid"]):
++                # membership nvalid is valid source rows, which may exceed unique identities
++                pass
++            if found.size:
++                ids.append(found)
++            del table
++        listed = np.unique(np.concatenate(ids)) if ids else np.empty(0, dtype=np.int64)
++        return listed, {"status": "present", "empty_marker": False, "present": True}
++
+     def prepare_day(self, chain, request_date, prev_date):
+-        """Load reports and intersecting intervals for one chain-date; previous day released by caller."""
++        """Intersect shard intervals with this day's cuts; listing from membership."""
+         np = _np()
+-        import pyarrow.dataset as ds
+         horizon = {
+             "chain": chain, "request_date": request_date,
+             "listed_ids": None, "reports_present": False,
+@@ -1784,32 +2092,28 @@
+         if not self.available:
+             self._horizon = horizon
+             return horizon
+-        dates = [request_date] + ([prev_date] if prev_date else [])
+-        if self._refs["reports"]:
+-            filt = (ds.field("chain") == chain) & ds.field("request_date").isin(dates)
+-            table = _read_filtered(
+-                self._refs["reports"],
+-                ["contract_id", "chain", "request_date", "listed", "first_oi", "last_oi", "last_eq_first"],
+-                filt,
+-            )
+-            if table is not None and len(table):
+-                if _is_compact_report(table) and "last_eq_first" in table.schema.names:
+-                    # last-null = first; listing does not need last endpoint.
+-                    pass
+-                req = table.column("request_date").to_pylist()
+-                listed = table.column("listed").to_numpy(zero_copy_only=False) if "listed" in table.schema.names else None
+-                cid = table.column("contract_id").to_numpy(zero_copy_only=False).astype("int32")
+-                today = np.array([label == request_date for label in req], dtype=bool)
+-                if listed is None:
+-                    listed_today = cid[today]
++        listed, listing_meta = self._listed_for_day(chain, request_date)
++        horizon["listed_ids"] = listed
++        horizon["listing_meta"] = listing_meta
++        cache = self._interval_shard
++        if cache is not None and cache["cid"].size:
++            day_open = cut_ns_on(date.fromisoformat(request_date), "09:30")
++            day_close = cut_ns_on(date.fromisoformat(request_date), "16:15")
++            cut_days = self._interval_dates.days(request_date)
++            chain_i = None
++            if "chain_u" in cache:
++                try:
++                    chain_i = list(cache["chain_u"]).index(chain)
++                except ValueError:
++                    chain_i = None
++            vf, vt = cache["valid_from"], cache["valid_to"]
++            keep = (vf <= day_close) & ((vt < 0) | (vt > day_open)) & (cache["req_days"] <= cut_days)
++            keep &= (cache["exp_days"] < 0) | (cache["exp_days"] >= cut_days)
++            if "chain_u" in cache:
++                if chain_i is None:
++                    keep &= False
+                 else:
+-                    listed_today = cid[today & listed.astype(bool)]
+-                horizon["listed_ids"] = np.sort(listed_today.astype(np.int32, copy=False))
+-                horizon["reports_present"] = True
+-                del table
+-        cache = self._chain_intervals(chain)
+-        if cache is not None and cache["cid"].size:
+-            keep = cache["req_iso"] <= request_date
++                    keep &= cache["chain_i"] == chain_i
+             if np.any(keep):
+                 horizon["cid"] = cache["cid"][keep]
+                 horizon["oi"] = cache["oi"][keep]
+@@ -1821,63 +2125,13 @@
+         self._horizon = horizon
+         return horizon
+ 
+-    def _chain_intervals(self, chain):
+-        np = _np()
+-        if self._interval_chain == chain and self._interval_cache is not None:
+-            return self._interval_cache
+-        if not self._refs.get("asof_intervals"):
+-            self._interval_chain = chain
+-            self._interval_cache = {"cid": np.empty(0, dtype=np.int32)}
+-            return self._interval_cache
+-        import pyarrow.dataset as ds
+-        table = _read_filtered(
+-            self._refs["asof_intervals"],
+-            ["contract_id", "chain", "open_interest", "ts_event_ns", "request_date",
+-             "ambiguous", "valid_from_ns", "valid_to_ns", "expiration"],
+-            ds.field("chain") == chain,
+-        )
+-        codebook = self._interval_dates
+-        if table is None or len(table) == 0:
+-            self._interval_chain = chain
+-            self._interval_cache = {"cid": np.empty(0, dtype=np.int32)}
+-            del table
+-            return self._interval_cache
+-        req = table.column("request_date").to_pylist()
+-        req_iso = np.array([
+-            "" if label is None else (label if type(label) is str else str(label))
+-            for label in req
+-        ], dtype=object)
+-        exp = table.column("expiration").to_pylist()
+-        vt = table.column("valid_to_ns")
+-        vt_null = _pc().is_null(vt).to_numpy(zero_copy_only=False).astype(bool)
+-        valid_to = vt.fill_null(-1).to_numpy(zero_copy_only=False).astype("int64")
+-        valid_to[vt_null] = -1
+-        self._interval_cache = {
+-            "cid": table.column("contract_id").to_numpy(zero_copy_only=False).astype("int32"),
+-            "oi": table.column("open_interest").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
+-            "valid_from": table.column("valid_from_ns").fill_null(-1).to_numpy(zero_copy_only=False).astype("int64"),
+-            "valid_to": valid_to,
+-            "req_iso": req_iso,
+-            "req_days": np.array([
+-                -1 if label == "" else codebook.days(label) for label in req_iso
+-            ], dtype=np.int32),
+-            "exp_days": np.array([
+-                -1 if item is None else codebook.days(
+-                    item if type(item) is str else item.isoformat()
+-                )
+-                for item in exp
+-            ], dtype=np.int32),
+-            "ambiguous": table.column("ambiguous").fill_null(False).to_numpy(zero_copy_only=False).astype(bool),
+-        }
+-        self._interval_chain = chain
+-        del table
+-        return self._interval_cache
+-
+     def release_day(self):
+         self._horizon = None
+ 
+     def listing_bind(self, chain, request_date):
+         cov = self.coverage.get((chain, request_date))
++        listed = None if self._horizon is None else self._horizon.get("listed_ids")
++        meta = None if self._horizon is None else self._horizon.get("listing_meta")
+         if chain in CHAINS_WITHOUT_LISTING:
+             return {
+                 "listing_known": False, "vix_listing_unknown": True,
+@@ -1892,25 +2146,38 @@
+                 "listing_status": "unavailable", "listing_denominator_known": False,
+                 "listed_ids": None, "oi_unavailable": True,
+             }
+-        if cov is None:
++        if meta is not None and meta.get("status") == "missing":
++            status = (cov or {}).get("listing_status") or "missing"
++            present = False if cov is None else cov.get("listing_file_present")
++            if present is None:
++                present = False
+             return {
+                 "listing_known": False, "vix_listing_unknown": False,
+-                "listing_unavailable": False, "listing_file_present": None,
+-                "listing_status": "unknown", "listing_denominator_known": False,
++                "listing_unavailable": False, "listing_file_present": present,
++                "listing_status": status if status != "present" else "missing",
++                "listing_denominator_known": False,
+                 "listed_ids": None, "oi_unavailable": False,
+             }
+-        denom = bool(cov.get("listing_denominator_known"))
+-        status = cov.get("listing_status") or "unknown"
+-        present = cov.get("listing_file_present")
+-        known = bool(denom and present is True and status == "present")
+-        listed = None
+-        if known and self._horizon is not None:
+-            listed = self._horizon["listed_ids"]
++        if meta is not None and meta.get("empty_marker"):
++            return {
++                "listing_known": True, "vix_listing_unknown": False,
++                "listing_unavailable": False, "listing_file_present": True,
++                "listing_status": "empty_marker", "listing_denominator_known": True,
++                "listed_ids": listed if listed is not None else _np().empty(0, dtype=_np().int64),
++                "oi_unavailable": False,
++            }
++        denom = False if cov is None else bool(cov.get("listing_denominator_known"))
++        status = (cov or {}).get("listing_status") or (meta or {}).get("status") or "unknown"
++        present = True if meta and meta.get("present") else (None if cov is None else cov.get("listing_file_present"))
++        known = bool(listed is not None and present is True and status in {"present", "empty_marker"})
++        if known and cov is not None and cov.get("listing_count") is not None:
++            if int(len(listed)) != int(cov["listing_count"]):
++                raise IntegrityError("reconstructed listing_count does not match accepted OI coverage")
+         return {
+             "listing_known": known, "vix_listing_unknown": False,
+             "listing_unavailable": False, "listing_file_present": present,
+-            "listing_status": status, "listing_denominator_known": denom,
+-            "listed_ids": listed, "oi_unavailable": False,
++            "listing_status": status, "listing_denominator_known": denom or known,
++            "listed_ids": listed if known else None, "oi_unavailable": False,
+         }
+ 
+     def identity_fields(self, contract_id):
+@@ -2074,6 +2341,7 @@
+                 self.fred[key] = np.concatenate([self.fred[key], block[key]])
+ 
+     def _add_actions(self, table, record):
++        np = _np()
+         names = set(table.schema.names)
+         n = len(table)
+         ex = table.column("ex_date").to_pylist() if "ex_date" in names else (
+@@ -2235,27 +2503,113 @@
+     return {"QQQ": "QQQ", "SPY": "SPY"}.get(chain)
+ 
+ 
+-def _hist_add(store, name, values, weights=None):
++def _hist_merge(store, key, values, counts):
++    bag = store.setdefault(key, {})
++    for value, count in zip(values, counts):
++        number = float(value)
++        if not math.isfinite(number) or int(count) <= 0:
++            continue
++        bag[number] = bag.get(number, 0) + int(count)
++
++
++def _hist_batch(store, metric, population, family, cut, right_codes, dte_codes, values, mask):
+     np = _np()
+-    values = np.asarray(values, dtype=np.float64)
+-    finite = np.isfinite(values)
++    if mask is None:
++        mask = np.ones(len(values), dtype=bool)
++    if not np.any(mask):
++        return
++    vals = np.asarray(values, dtype=np.float64)[mask]
++    finite = np.isfinite(vals)
+     if not np.any(finite):
+         return
+-    values = values[finite]
+-    w = np.ones(len(values), dtype=np.int64) if weights is None else np.asarray(weights, dtype=np.int64)[finite]
+-    uniq, inv = np.unique(values, return_inverse=True)
+-    counts = np.zeros(len(uniq), dtype=np.int64)
+-    np.add.at(counts, inv, w)
+-    bag = store.setdefault(name, {"v": np.empty(0, dtype=np.float64), "c": np.empty(0, dtype=np.int64)})
+-    if bag["v"].size == 0:
+-        bag["v"], bag["c"] = uniq, counts
++    rights = np.asarray(right_codes)[mask][finite]
++    dtes = np.asarray(dte_codes)[mask][finite]
++    vals = vals[finite]
++    keys = np.stack((rights.astype(np.int64), dtes.astype(np.int64)), axis=1)
++    uniq, inverse = np.unique(keys, axis=0, return_inverse=True)
++    for u, key in enumerate(uniq):
++        part = vals[inverse == u]
++        if part.size == 0:
++            continue
++        vv, cc = np.unique(part, return_counts=True)
++        right = RIGHT_NAMES.get(int(key[0]), "unknown")
++        dte = DTE_NAMES[int(key[1])] if 0 <= int(key[1]) < len(DTE_NAMES) else "unknown"
++        _hist_merge(store, f"{metric}|{population}|{family}|{cut}|{right}|{dte}", vv, cc)
++
++
++def _source_frame_hists(store, frame, family):
++    np = _np()
++    if frame is None or not frame["n"]:
+         return
+-    merged_v = np.concatenate([bag["v"], uniq])
+-    merged_c = np.concatenate([bag["c"], counts])
+-    u, inv = np.unique(merged_v, return_inverse=True)
+-    c = np.zeros(len(u), dtype=np.int64)
+-    np.add.at(c, inv, merged_c)
+-    bag["v"], bag["c"] = u, c
++    keep = frame["keep"]
++    raw = np.ones(frame["n"], dtype=bool)
++    for metric, col, null in (
++        ("bid", "bid", "bid_null"), ("ask", "ask", "ask_null"),
++    ):
++        present = ~frame[null]
++        _hist_batch(store, metric, "raw_source", family, "-", frame["right_code"],
++                    frame["dte_code"], frame[col], raw & present)
++        _hist_batch(store, metric, "unique_source", family, "-", frame["right_code"],
++                    frame["dte_code"], frame[col], keep & present)
++    mid = (frame["bid"] + frame["ask"]) / 2.0
++    spread = frame["ask"] - frame["bid"]
++    usable = frame["usable_raw"] & (~frame["bid_null"]) & (~frame["ask_null"])
++    _hist_batch(store, "mid", "raw_source", family, "-", frame["right_code"],
++                frame["dte_code"], mid, raw & usable)
++    _hist_batch(store, "mid", "unique_source", family, "-", frame["right_code"],
++                frame["dte_code"], mid, keep & usable)
++    _hist_batch(store, "spread", "raw_source", family, "-", frame["right_code"],
++                frame["dte_code"], spread, raw & usable)
++    _hist_batch(store, "spread", "unique_source", family, "-", frame["right_code"],
++                frame["dte_code"], spread, keep & usable)
++
++
++def _cut_board_hists(store, board_rows):
++    np = _np()
++    if not board_rows:
++        return
++    bags = defaultdict(list)
++    for row in board_rows:
++        if not row.get("quoted") or not row.get("usable"):
++            continue
++        family = row.get("source_family") or "unknown"
++        cut = row.get("cut_label") or "-"
++        right = row.get("right") or "unknown"
++        dte = row.get("dte_bucket") or "unknown"
++        for metric, field in (("bid", "bid"), ("ask", "ask"), ("mid", "mid"),
++                              ("spread", "spread")):
++            value = row.get(field)
++            if value is not None and math.isfinite(float(value)):
++                bags[(metric, "cut", family, cut, right, dte)].append(float(value))
++        if row.get("sample_age_ns") is not None:
++            bags[("sample_age_s", "cut", family, cut, right, dte)].append(row["sample_age_ns"] / NS)
++        if row.get("unchanged_payload_age_ns") is not None:
++            bags[("payload_age_s", "cut", family, cut, right, dte)].append(
++                row["unchanged_payload_age_ns"] / NS)
++    for key, values in bags.items():
++        arr = np.asarray(values, dtype=np.float64)
++        vv, cc = np.unique(arr, return_counts=True)
++        _hist_merge(store, "|".join(key), vv, cc)
++
++
++def _freeze_hists(store):
++    out = {}
++    for key, bag in store.items():
++        xs = sorted(bag)
++        out[key] = {"v": xs, "c": [bag[x] for x in xs]}
++    return out
++
++
++def _hist_mean(hist):
++    if not hist:
++        return None, 0
++    values, counts = hist.get("v") or [], hist.get("c") or []
++    total = 0.0
++    n = 0
++    for value, count in zip(values, counts):
++        total += float(value) * int(count)
++        n += int(count)
++    return (None if not n else total / n), n
+ 
+ 
+ def _paired_stats(near_rows, broad_rows):
+@@ -2316,7 +2670,7 @@
+     raw = frame["raw_base"][chosen]
+     conflict = frame["unique_conflict"][chosen]
+     board = np.array([_board_class(int(raw[i]), bool(conflict[i])) for i in range(n)], dtype=np.int8)
+-    hide_price = conflict & (raw > BASE_INVALID_NUMERIC)
++    hide_price = conflict | (raw <= BASE_INVALID_NUMERIC) | frame["nonfinite_price"][chosen] | frame["negative_price"][chosen]
+     bid = frame["bid"][chosen]
+     ask = frame["ask"][chosen]
+     bid_null = frame["bid_null"][chosen] | hide_price
+@@ -2464,6 +2818,33 @@
+     return rows
+ 
+ 
++def _oi_only_rows(chain, declared, cut_label, cut_ns, family, cids, oi_join, oi_state,
++                  cut_status, dates):
++    rows = _listed_unquoted_rows(
++        chain, declared, cut_label, cut_ns, family, cids,
++        {"listing_known": True}, oi_join, oi_state, cut_status, dates,
++    )
++    for row in rows:
++        row["listed"] = False
++        row["listing_known"] = True
++        row["quoted"] = False
++    return rows
++
++
++def _family_file_status(family, family_meta, expected_own):
++    if family != "union":
++        meta = family_meta.get(family) or {}
++        return (not meta.get("present", False), bool(meta.get("empty")), int(meta.get("rows") or 0) == 0)
++    present = [bool((family_meta.get(name) or {}).get("present")) for name in expected_own]
++    empty = [bool((family_meta.get(name) or {}).get("empty")) for name in expected_own]
++    rows = [int((family_meta.get(name) or {}).get("rows") or 0) for name in expected_own]
++    missing = bool(present) and all(not item for item in present)
++    all_empty = (not missing) and bool(present) and all(
++        (not item) or empty[i] for i, item in enumerate(present)
++    ) and all(count == 0 for count in rows)
++    return missing, all_empty, all(count == 0 for count in rows)
++
++
+ def _coverage_row(*, chain, declared, cut_label, family, intended, session, missing_file,
+                   empty_marker, early_na, board_rows, listing):
+     quoted = [row for row in board_rows if row["quoted"]]
+@@ -2471,8 +2852,9 @@
+     listed_quoted = [row for row in quoted if row["listed"] is True]
+     quoted_unlisted = [row for row in quoted if row["listed"] is False]
+     listed_unquoted = [row for row in board_rows if row["listed"] is True and not row["quoted"]]
+-    universe = [row for row in board_rows
+-                if row["listed"] is True and row["oi_available"] and row["oi"] is not None and row["oi"] >= 0]
++    oi_universe = [row for row in board_rows if row["oi_available"]]
++    universe = [row for row in oi_universe
++                if row["oi"] is not None and row["oi"] >= 0]
+     quoted_u = [row for row in universe if row["quoted"]]
+     total = sum(int(row["oi"]) for row in universe)
+     weighted = None if total <= 0 else sum(int(row["oi"]) for row in quoted_u) / total
+@@ -2524,11 +2906,12 @@
+         "rel_spread_n": sum(1 for row in usable if row.get("relative_spread") is not None),
+         "sample_age_sum": sum((row["sample_age_ns"] or 0) / NS for row in ages),
+         "payload_age_sum": sum((row["unchanged_payload_age_ns"] or 0) / NS for row in ages),
+-        "oi_available_count": sum(1 for row in board_rows if row["oi_available"]),
++        "oi_available_count": len(oi_universe),
++        "oi_quoted_available_count": sum(1 for row in oi_universe if row["quoted"]),
+         "oi_missing_count": sum(1 for row in board_rows if row["oi_missing"]),
+         "oi_ambiguous_count": sum(1 for row in board_rows if row["oi_ambiguous"]),
+         "oi_zero_count": sum(1 for row in board_rows if row["oi_zero"]),
+-        "oi_amount_unknown": sum(1 for row in board_rows if row["oi"] is None and row["oi_missing"]),
++        "oi_amount_unknown": sum(1 for row in board_rows if row["oi"] is None and not row["oi_available"]),
+         "oi_total_available": total,
+         "oi_weighted_quoted_fraction": weighted,
+         "listing_known": listing["listing_known"],
+@@ -2650,7 +3033,7 @@
+ 
+ 
+ def _date_aggregate(chain, declared, intended, session, family_quality, coverage_rows, board_rows,
+-                    support_rows, paired, hists, unique_by_family=None):
++                    support_rows, paired, hists, unique_by_family=None, paired_by_cut=None):
+     raw_rows = sum(row["raw_rows"] for row in family_quality)
+     unique_events = sum(row["unique_events"] for row in family_quality)
+     quotes = [row for row in board_rows if row["quoted"]]
+@@ -2674,6 +3057,7 @@
+         "raw_bid_sum": sum(bids), "raw_bid_n": len(bids),
+         "quality": family_quality, "coverage": coverage_rows, "support": support_rows,
+         "paired_near_broad": paired,
++        "paired_by_cut": paired_by_cut or {},
+         "histograms": hists,
+         "slices": _board_slices(board_rows),
+         "by_cut": {label: {
+@@ -2753,14 +3137,15 @@
+             "family": oi_population.get("family"), "version": oi_population.get("version"),
+             "mode": oi_population.get("mode"),
+             "refs": {name: (oi_population.get("refs") or {}).get(name)
+-                     for name in ("identity_map", "reports", "asof_intervals", "coverage")},
++                     for name in ("identity_map", "reports", "asof_intervals", "coverage",
++                                  "membership", "source_manifest")},
+         },
+     }
+     if store is not None:
+         store.put_json(binding, kind="options_quote_run_binding_v1")
+ 
+     oi_cpu = pytime.process_time()
+-    oi_join = OIJoinAdapter(oi_population, chains=work_chains, dates=work_dates)
++    oi_join = OIJoinAdapter(oi_population, chains=work_chains, dates=work_dates, protocol=protocol)
+     support = SupportStore()
+     quote_by = {chain: defaultdict(lambda: defaultdict(list)) for chain in work_chains}
+     consumed, manifest = set(), []
+@@ -2816,6 +3201,7 @@
+     for chain in work_chains:
+         for day in selected_days:
+             label = day.isoformat()
++            _begin_request_date(clocks, label)
+             intended = label in intended_label_set
+             session = calendar.resolve(day, cut=research_cut)
+             files = quote_by[chain].get(label, {})
+@@ -2856,12 +3242,14 @@
+                     if meta["empty_marker"]:
+                         empty_any = True
+                         continue
++                    row_offset = 0
+                     for table in tables:
+                         parsed, exc = parse_quote_typed(
+                             table, record=record, dates=dates, clocks=clocks, osi_book=osi_book,
+                             codebook=codebook, session_open_ns=session.open_at,
+-                            session_close_ns=session.close_at,
++                            session_close_ns=session.close_at, row_offset=row_offset,
+                         )
++                        row_offset += int(parsed["n"] if parsed is not None else len(table))
+                         if exc:
+                             day_exceptions.extend(exc)
+                         if parsed["n"]:
+@@ -2877,7 +3265,12 @@
+                 family_frames[family] = sort_and_dedup(merged)
+                 family_meta[family] = {"present": True, "empty": empty_any, "rows": merged["n"]}
+                 quality_rows.extend(_source_quality_rows(family_frames[family], chain, label, family))
++            day_hists = {}
++            for family, frame in family_frames.items():
++                _source_frame_hists(day_hists, frame, family)
+             owned, alias_stats = union_families(family_frames)
++            if owned.get("union") is not None:
++                _source_frame_hists(day_hists, owned["union"], "union")
+             del family_frames
+             for stat in alias_stats:
+                 alias_w.write_table(_table(alias_conflict_schema(), [{
+@@ -2899,11 +3292,11 @@
+             listing = oi_join.listing_bind(chain, label)
+             listed_ids = listing["listed_ids"]
+             if listed_ids is not None:
+-                listed_ids = np.sort(np.asarray(listed_ids, dtype=np.int32))
++                listed_ids = np.sort(np.asarray(listed_ids, dtype=np.int64))
+             day_boards, day_coverage, day_support = [], [], []
+             paired_acc = {"common": 0, "agree": 0, "conflict": 0, "near_only": 0,
+                           "broad_only": 0, "unmatched_sample_clocks": 0}
+-            hists = {}
++            paired_by_cut = {}
+             expected_own = ("vix_full",) if chain == "VIX" else ("near", "broad")
+             families_for_cuts = [name for name in expected_own]
+             if "union" in owned or chain != "VIX":
+@@ -2917,17 +3310,23 @@
+             if close_ns is None:
+                 close_ns = 0
+             boards_by_family = defaultdict(list)
++            horizon = oi_join._horizon
++            oi_ids = (np.unique(horizon["cid"]).astype(np.int64, copy=False)
++                      if horizon is not None and horizon["cid"].size else np.empty(0, dtype=np.int64))
+             for cut_label, cut_at, early_na, at_close in _cut_plan(session, day):
+                 for family in families_for_cuts:
+-                    missing = not family_meta.get(family, {}).get("present", False) and family != "union"
+-                    empty_marker = bool(family_meta.get(family, {}).get("empty"))
++                    missing, empty_marker, _ = _family_file_status(family, family_meta, expected_own)
+                     parsed = owned.get(family)
+                     board = []
+-                    if parsed is not None and not early_na:
+-                        chosen = select_cut_rows(
+-                            parsed, cut_ns=cut_at, cut_days=cut_days,
+-                            session_open_ns=open_ns, session_close_ns=close_ns,
+-                        )
++                    quoted_ids = np.empty(0, dtype=np.int64)
++                    if not early_na:
++                        if parsed is not None:
++                            chosen = select_cut_rows(
++                                parsed, cut_ns=cut_at, cut_days=cut_days,
++                                session_open_ns=open_ns, session_close_ns=close_ns,
++                            )
++                        else:
++                            chosen = np.empty(0, dtype=np.int64)
+                         if len(chosen):
+                             cids = parsed["contract_id"][chosen]
+                             resolved = parsed["identity_valid"][chosen]
+@@ -2944,18 +3343,30 @@
+                                 _cut_status(early_na=False, missing_file=missing,
+                                             empty_marker=empty_marker, quoted=True),
+                             ))
+-                            quoted_ids = np.sort(cids[resolved]) if np.any(resolved) else np.empty(0, dtype=np.int32)
+-                            if listing["listing_known"] and listed_ids is not None and not early_na:
+-                                unquoted = listed_ids[~_membership(quoted_ids, listed_ids)] if len(listed_ids) else listed_ids
+-                                if len(unquoted):
+-                                    oi_u = oi_join.asof_vector(unquoted, cut_at, cut_days, prev_days)
+-                                    board.extend(_listed_unquoted_rows(
+-                                        chain, label, cut_label, cut_at, family, unquoted,
+-                                        listing, oi_join, oi_u,
+-                                        _cut_status(early_na=False, missing_file=missing,
+-                                                    empty_marker=empty_marker, quoted=False),
+-                                        dates,
+-                                    ))
++                            quoted_ids = np.sort(cids[resolved].astype(np.int64, copy=False)) if np.any(resolved) else quoted_ids
++                        support_status = _cut_status(
++                            early_na=False, missing_file=missing,
++                            empty_marker=empty_marker, quoted=bool(len(chosen)),
++                        )
++                        if listing["listing_known"] and listed_ids is not None:
++                            unquoted = listed_ids[~_membership(quoted_ids, listed_ids)] if len(listed_ids) else listed_ids
++                            if len(unquoted):
++                                oi_u = oi_join.asof_vector(unquoted, cut_at, cut_days, prev_days)
++                                board.extend(_listed_unquoted_rows(
++                                    chain, label, cut_label, cut_at, family, unquoted,
++                                    listing, oi_join, oi_u, support_status, dates,
++                                ))
++                        listed_or_quoted = quoted_ids
++                        if listed_ids is not None and len(listed_ids):
++                            listed_or_quoted = np.unique(np.concatenate([quoted_ids, listed_ids]))
++                        if len(oi_ids):
++                            only = oi_ids[~_membership(listed_or_quoted, oi_ids)]
++                            if len(only):
++                                oi_o = oi_join.asof_vector(only, cut_at, cut_days, prev_days)
++                                board.extend(_oi_only_rows(
++                                    chain, label, cut_label, cut_at, family, only,
++                                    oi_join, oi_o, support_status, dates,
++                                ))
+                     if board:
+                         board_w.write_table(_table(cut_board_schema(), board))
+                     day_boards.extend(board)
+@@ -2983,30 +3394,20 @@
+                                        boards_by_family.get("broad") or [])
+                 for key in paired_acc:
+                     paired_acc[key] += int(paired.get(key) or 0)
+-            for row in day_boards:
+-                if not row["quoted"] or not row["usable"]:
+-                    continue
+-                weight = int(row.get("alias_multiplicity") or 1)
+-                if row.get("bid") is not None:
+-                    _hist_add(hists, "bid_raw", [row["bid"]], [weight])
+-                    _hist_add(hists, "bid_unique", [row["bid"]], [1])
+-                if row.get("ask") is not None:
+-                    _hist_add(hists, "ask_raw", [row["ask"]], [weight])
+-                if row.get("mid") is not None:
+-                    _hist_add(hists, "mid_raw", [row["mid"]], [weight])
+-                if row.get("spread") is not None:
+-                    _hist_add(hists, "spread_raw", [row["spread"]], [weight])
+-                if row.get("sample_age_ns") is not None:
+-                    _hist_add(hists, "sample_age_s", [row["sample_age_ns"] / NS], [1])
+-                if row.get("unchanged_payload_age_ns") is not None:
+-                    _hist_add(hists, "payload_age_s", [row["unchanged_payload_age_ns"] / NS], [1])
+-            hist_out = {name: {"v": bag["v"].tolist(), "c": bag["c"].tolist()} for name, bag in hists.items()}
++                for cut_label in ALL_CUTS:
++                    paired_by_cut[cut_label] = _paired_stats(
++                        [row for row in (boards_by_family.get("near") or []) if row["cut_label"] == cut_label],
++                        [row for row in (boards_by_family.get("broad") or []) if row["cut_label"] == cut_label],
++                    )
++            _cut_board_hists(day_hists, day_boards)
++            hist_out = _freeze_hists(day_hists)
+             if day_coverage:
+                 coverage_rows.extend(day_coverage)
+             date_aggregates.append(_date_aggregate(
+                 chain, label, intended, session, quality_rows, day_coverage, day_boards,
+                 day_support, paired_acc, hist_out,
+                 unique_by_family={name: int(frame["n"]) for name, frame in owned.items() if frame is not None},
++                paired_by_cut=paired_by_cut,
+             ))
+             del owned
+ 
+@@ -3037,8 +3438,10 @@
+         "grouping": "resolved contract_id for valid identities; negative unresolved keys for invalid identities; 0 is not tradable",
+         "local_id_namespace": {
+             "base": LOCAL_ID_BASE, "mask": LOCAL_ID_MASK,
+-            "formula": "LOCAL_ID_BASE + (sha256(chain|osi|exp|milli|right)[:4] & mask)",
++            "overflow": LOCAL_ID_OVERFLOW,
++            "formula": "int64 sha256[:8] with reverse-map collision check; OI int32 ids unchanged",
+             "unresolved": UNRESOLVED_ID,
++            "cross_shard": "compare exact OSI tuple; digest equality is not claimed after collision overflow",
+         },
+         "dedup": "source_family then union; identical 8-field payload and null masks is alias with summed multiplicity; difference or prior family conflict is conflict with no winner",
+         "storage": "cut boards plus source/hash ledger reconstruct sampled history; interval tape is not required; alias_conflict stores date-level aggregates",
+@@ -3071,6 +3474,9 @@
+         joined_coverage_complete=bool(oi_join.full_population),
+         max_worker_bytes=int(spec.get("resources", {}).get("memory_bytes", MAX_WORKER_BYTES)),
+         max_source_file=int(spec.get("resources", {}).get("maximum_source_file_bytes", MAX_SOURCE_FILE)),
++        oi_listing_files_read=oi_join.listing_files_read,
++        oi_listing_rows_read=oi_join.listing_rows_read,
++        oi_listing_bytes_read=oi_join.listing_bytes_read,
+     )
+ 
+ 
+@@ -3109,24 +3515,18 @@
+     return ref
+ 
+ 
+-def _concat_parquet_refs(refs, outputs, name, kind):
+-    import pyarrow.parquet as pq
+-    tables = []
++def _flatten_part_refs(refs):
++    out = []
++    rows = 0
+     for ref in refs:
+         items = ref if isinstance(ref, list) else [ref]
+         for item in items:
+             if item is None:
+                 continue
+-            tables.append(pq.read_table(item["path"]))
+-    if not tables:
+-        return None
+-    table = _pa().concat_tables(tables, promote_options="default")
+-    stream = outputs.create(name)
+-    try:
+-        pq.write_table(table, stream, compression="zstd")
+-    finally:
+-        stream.close()
+-    return {**outputs.reference(name, kind=kind), "rows": len(table)}
++            _auth_output_ref(item)
++            out.append(item)
++            rows += int(item.get("rows") or 0)
++    return (None if not out else out), rows
+ 
+ 
+ def combine_partition_results(*, protocol, results, outputs, load_reference):
+@@ -3250,25 +3650,49 @@
+     combined_dates = sorted(set(combined_dates))
+     combined_chains = [chain for chain in spec["population"]["chains"] if chain in set(combined_chains)]
+     from trading_research.research.options_quote_statistics import run_statistics
+-    coverage_ref = _concat_parquet_refs(coverage_refs, outputs, "coverage.parquet", OUTPUT_SCHEMAS["coverage"])
+-    board_ref = _concat_parquet_refs(board_refs, outputs, "cut-board.parquet", OUTPUT_SCHEMAS["cut_board"])
+-    quality_ref = _concat_parquet_refs(quality_refs, outputs, "source-quality.parquet", OUTPUT_SCHEMAS["source_quality"])
+-    support_ref = _concat_parquet_refs(support_refs, outputs, "underlier-support.parquet", OUTPUT_SCHEMAS["underlier_support"])
+-    except_ref = _concat_parquet_refs(except_refs, outputs, "exceptions.parquet", OUTPUT_SCHEMAS["exceptions"])
+-    alias_ref = _concat_parquet_refs(alias_refs, outputs, "alias-conflict.parquet", OUTPUT_SCHEMAS["alias_conflict"])
+-    ident_ref = _concat_parquet_refs(ident_refs, outputs, "identity-match.parquet", OUTPUT_SCHEMAS["identity_match"])
+-    admit_ref = _concat_parquet_refs(admit_refs, outputs, "admission.parquet", OUTPUT_SCHEMAS["admission"])
+-    fred_ref = _concat_parquet_refs(fred_refs, outputs, "fred-support.parquet", OUTPUT_SCHEMAS["fred_support"])
+-    action_ref = _concat_parquet_refs(action_refs, outputs, "action-support.parquet", OUTPUT_SCHEMAS["action_support"])
++    coverage_ref, _ = _flatten_part_refs(coverage_refs)
++    board_ref, _ = _flatten_part_refs(board_refs)
++    quality_ref, _ = _flatten_part_refs(quality_refs)
++    support_ref, _ = _flatten_part_refs(support_refs)
++    except_ref, _ = _flatten_part_refs(except_refs)
++    alias_ref, _ = _flatten_part_refs(alias_refs)
++    ident_ref, _ = _flatten_part_refs(ident_refs)
++    admit_ref, _ = _flatten_part_refs(admit_refs)
++    fred_ref, _ = _flatten_part_refs(fred_refs)
++    action_ref, _ = _flatten_part_refs(action_refs)
+     manifests = []
++    seen_files = {}
+     for ref in manifest_refs:
+         item = ref[0] if isinstance(ref, list) else ref
+         payload = _load_result_json(item, load_reference)
+-        manifests.extend(payload.get("files") or payload.get("manifest") or [])
++        for rec in payload.get("files") or payload.get("manifest") or []:
++            fid = rec.get("file_id")
++            if fid in seen_files:
++                prior = seen_files[fid]
++                if prior.get("sha256") != rec.get("sha256") or prior.get("path") != rec.get("path"):
++                    raise IntegrityError("duplicate source file_id with conflicting metadata")
++                continue
++            seen_files[fid] = rec
++            manifests.append(rec)
++    agg_keys = {(row.get("chain"), row.get("request_date")) for row in aggregate_rows}
++    for key in owned:
++        if key[1] in intended_label_set and key not in agg_keys:
++            raise IntegrityError("partition date aggregates missing claimed chain/date ownership")
++    for key in agg_keys:
++        if key not in owned:
++            raise IntegrityError("unexpected chain/date in date aggregates")
+     manifest_ref = outputs.json("source-manifest.json", {
+         "kind": "options_quote_source_path_hash_lookup_v1",
+         "files": manifests,
+     }, kind="options_quote_source_manifest_v1")
++    unique_quote = {(item.get("path"), item.get("sha256")) for item in manifests if item.get("scope") == "quote"}
++    unique_support = {(item.get("path"), item.get("sha256")) for item in manifests if item.get("scope") == "support"}
++    counts["source_files_unique"] = len(unique_quote)
++    counts["support_files_unique"] = len(unique_support)
++    counts["alias_conflict_rows"] = sum(int((result.get("counts") or {}).get("alias_conflict_rows") or 0)
++                                        for result in results)
++    counts["identity_rows"] = sum(int((result.get("counts") or {}).get("identity_rows") or 0)
++                                  for result in results)
+     aggregates_ref = outputs.json("date-aggregates.json", aggregate_rows,
+                                   kind=OUTPUT_SCHEMAS["date_aggregates"])
+     stats = run_statistics(
+@@ -3290,13 +3714,21 @@
+         "combined": True,
+         "local_id_namespace": {
+             "base": LOCAL_ID_BASE, "mask": LOCAL_ID_MASK,
++            "overflow": LOCAL_ID_OVERFLOW,
+             "unresolved": UNRESOLVED_ID,
+         },
+     }
++    prescribed = {(chain, day) for chain in spec["population"]["chains"] for day in intended_labels}
++    chain_group_refs = stats["refs"].get("chain_groups") or {}
++    for ref in chain_group_refs.values():
++        _auth_output_ref(ref)
+     return {
+         "passed": True,
+         "full_family_complete": False,
+-        "joined_coverage_complete": all(result.get("joined_coverage_complete") for result in results),
++        "joined_coverage_complete": (
++            all(result.get("joined_coverage_complete") for result in results)
++            and set(owned) == prescribed
++        ),
+         "family": FAMILY,
+         "version": VERSION,
+         "protocol_scientific_hash": sci,
+@@ -3317,10 +3749,10 @@
+             "distributions": stats["refs"]["distributions"],
+             "results_md": stats["refs"]["results_md"],
+             "reconstruction": reconstruction_ref,
+-            "chain_groups": group_refs,
++            "chain_groups": chain_group_refs,
+         },
+         "counts": dict(counts),
+-        "groups": stats["groups"],
++        "groups": None,
+         "binding": binding,
+         "remaining_dependencies": list(REMAINING),
+     }
+@@ -3329,7 +3761,7 @@
+ __all__ = [
+     "ALL_CUTS", "BASE_CLASSES", "CONTRACT_KIND", "DTE_BUCKETS", "FAMILY",
+     "INTERVAL_RECONSTRUCTION", "LOCAL_ID_BASE", "OUTPUT_SCHEMAS", "QUALITY_FLAGS",
+-    "VERSION", "admitted_identity", "combine_partition_results", "contract",
+-    "coverage_schema", "implementation_hashes", "load_calendar", "quote_dte_bucket",
+-    "run", "scientific_hash", "utc_cut_ns",
++    "VERSION", "QuoteCodebook", "admitted_identity", "combine_partition_results",
++    "contract", "coverage_schema", "implementation_hashes", "load_calendar",
++    "quote_dte_bucket", "run", "scientific_hash", "utc_cut_ns",
+ ]

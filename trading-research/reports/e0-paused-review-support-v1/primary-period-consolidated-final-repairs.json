@@ -1,0 +1,68 @@
+{
+  "schema": "PrimaryPeriodConsolidatedFinalRepairsV1",
+  "input_review": "/tmp/primary-period-static-review.json",
+  "changed_files": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/period.py",
+      "sha256": "52f8c9d294a2474b48917e2bb76e268a383495eb0c50cd56a14e324d2724b64c"
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/protocols.py",
+      "sha256": "7c825ff216afe9c8789c109aa2acb85fc76e820b42d841419521cc08c2d32297"
+    },
+    {
+      "path": "/workspace/trading-research/tests/test_primary_period.py",
+      "sha256": "526822394ed47d327ab5830f47caddfa659bc95371397f12af59a416f3d2c3b8"
+    }
+  ],
+  "public_api": "All signatures unchanged: scope=ResearchScopeV1, policy=ResearchPeriodPolicyV1, admission=PrimaryAdmissionV1.from_population(..., actual_cut_at=...). Typed Sample/TemporalSampleV1 admission populations now use existing compiler (decision_at,id) order and reject duplicates/mixed schemas; non-sample wire order unchanged.",
+  "repairs": [
+    {
+      "finding": "PERIOD-STATIC-01",
+      "change": "Separate later calibration rows/groups/fold/admission and heldout prediction; actual transitive base/calibration OOF closure asserted."
+    },
+    {
+      "finding": "PERIOD-STATIC-02",
+      "change": "Canonical typed constructor and validation matches fold/compiler/preflight hashing, with no deduplication or changed-hash rebinding."
+    },
+    {
+      "finding": "PERIOD-STATIC-03",
+      "change": "Immutable observation cut must reach endpoint and not exceed finished_at before journal append. Planned future endpoint can register but early-cut fixture cannot finish. Positive completion explicitly retrospective with validated observed population and post-cut register/start."
+    },
+    {
+      "finding": "PERIOD-STATIC-04",
+      "change": "All seven frozen groups loaded, exact cohort/sample/dependency/protocol/universe literals used; complete period messages, source-independent public refusals, and parent-universe blockers. See fixture limitations."
+    },
+    {
+      "finding": "PERIOD-STATIC-05",
+      "change": "Existing authentic fitted_sources builder at in-period clock_offset commits real temporal rows/mature labels/training reads. Primary admission, payload reopen, real query read and sealed replay positive; omitted/changed population and too-early cut negatives. No mocks/fake receipts."
+    }
+  ],
+  "fixture_limitations": [
+    "PERIOD05 symbolic non-SHA sample_manifest_hash literals cannot equal a valid PrimaryAdmissionV1 digest. Exact original/corrected literals exercise period checks; separate registration control uses actual retained population digest. Golden unchanged.",
+    "PERIOD06 actual generic F11 refusal uses DependencyUnavailable(required committed bytes absent), not the golden narrative ES-specific required_message. No hardcoded ES message added to generic store. Exact missing cohort and next_action plus source failure disposition retained.",
+    "F11 controls use actual content-addressed target identity from existing committed fixture builder. Frozen symbolic target-v1 vectors remain exact period controls rather than forged F11 target references."
+  ],
+  "frozen_file_sha256": {
+    "tests/golden/primary_period_admission_v1.json": "c2e3d1c1c20d7b746f1cbd0bc9cba12421ba80536e765ace891d9c5b2d7b2cfd",
+    "validation/PRIMARY_PERIOD_ADMISSION_V1.md": "f406e0017ea55a7b3a0182cb9603e827f85680ea9d358c9077fa74c2ec48a6b7",
+    "reports/primary-period-registration.json": "38664b919cb6206a21d3b0c251f3fb411cde300edef4260dbfb8ad07057fd060",
+    "reports/primary-period-source-preparation.json": "85de7473cb9c2f555a8c61f8db69904dfcdb506db5843db429fce9c2dea384d3",
+    "reports/primary-period-design.json": "6310b499e53c9ffba847cfa8002ed5a3cd74824d73730210eb9de5d0043303b6",
+    "configs/research-period.json": "92640d2d2c77fe3ef7baa3c6f29ce78327b17432cf7210c7002c39e2b964ec07"
+  },
+  "golden_protocol_registration_hashes_match": true,
+  "source_identity_note": "reports/primary-period-source-preparation.json is retained unchanged by this pass; its current hash is not the original source_cases artifact hash in registration. This report does not conflate those artifacts.",
+  "preservation": "Only three named files edited in this pass. No golden/source/protocol/config/design/registration artifacts or old test files edited. Existing omitted-scope wire branches unchanged.",
+  "validation": {
+    "static_json_hash_checks": true,
+    "python_lexical_tokenization": true,
+    "registered_group_methods": 7,
+    "candidate_imports": false,
+    "candidate_compilation": false,
+    "tests_run": false,
+    "private_runs": false,
+    "market_tape_reads": false
+  },
+  "case_map": "/tmp/primary-period-consolidated-final-case-map.json"
+}

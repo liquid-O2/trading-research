@@ -1,0 +1,23 @@
+{
+  "observed_failure_ids": [
+    "MW06_MW09_cross_anchor_contributions",
+    "MW10_MA04_actual_source_high_reanchors_and_ema",
+    "f05_ineligible_mass_and_unresolved_condition",
+    "MM17_MX05_MX06_memory_restore",
+    "MQ15_MQ16_MQ17_MX03_MX06",
+    "MS11_MX05_MX06_swing_restart"
+  ],
+  "cause": {
+    "auction_sources": "Independent actual profiles reused generated transaction ID 0 with changed retained bytes; source VWAP/composite validation correctly treated this as a correction/conflicting revision.",
+    "f05": "The unresolved fixture set both volume_eligibility and directional_eligibility to None, so the explicit boolean contract rejected it before the dependency gate.",
+    "receipt_forgery": "dataclasses.replace on frozen result wrappers drops private init=False authenticity state, so validators correctly raised ContractError before inspecting tampered retained fields."
+  },
+  "repairs": [
+    "Added opt-in source_identity namespacing to Sources.profile and used distinct IDs for independent MW06/MW09 and MW10 actual sources; event times and frozen values are unchanged.",
+    "Set the F05 unresolved fixture to volume_eligibility=None and directional_eligibility=False.",
+    "Updated MM17, MQ15/MQ16/MQ17/MX03/MX06, and MS11/MX05/MX06 to assert detached-wrapper ContractError separately, then retain the actual private receipt/mapping on a copied tampered wrapper and assert IntegrityError."
+  ],
+  "static_only": true,
+  "tests_run": false,
+  "imports_or_candidate_execution": false
+}

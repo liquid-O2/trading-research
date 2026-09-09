@@ -1,0 +1,56 @@
+# Bounded implementation: exact full-source historical aggression memory
+
+Use the selected Cursor Grok 4.6 Extra High Fast model in this isolated checkout. Read AGENTS.md. The controller owns scientific scope, eligibility, independent review, integration and all execution. Current phase is validation across all families; no Context or Location-quality study is authorized in this assignment.
+
+Allowed writes ONLY two new files:
+- src/trading_research/research/auction_flow_memory.py
+- tests/test_auction_flow_memory.py
+
+Do not modify existing kernels, helpers, fixtures, references, configs, validation, tools, budgets or permissions. No shell, imports/tests/compile, numerical execution, benchmarks, raw scans, network, dependencies, worker spawning or empirical claims. Write the tests but do not execute them. Return only a concise changed-file summary and concrete unresolved issues.
+
+## Actual need and retained science
+
+Implement a bounded unpublished arithmetic path for the exact historical-effort connected clusters and raw/decayed spatial fields already defined by measurements/memory.py::build_memory. The scalar reference retains small captured populations and performs all-pairs comparisons; the full-source study needs the same actual mathematics on the retained whole-print projection. This is not an invented trader/inventory proxy or a complete memory family. Birth/visits/protection/matured labels and fitted retrieval remain separate existing mechanisms for later adapter work.
+
+Read original measurements/memory.py, references/structure_pressure_memory_literal.py, and relevant tests/test_structure_pressure_memory.py (especially the actual path/memory builders and MM01–MM08). Read auction_flow_windows.py::PreparedTradeBatch. Tests must preserve the originals as independent comparators. Never weaken source authentication or replace existing production APIs. Your result must explicitly be unpublished resource/calculation output and must not claim F05/F10/F11 admission.
+
+## Interface and input domain
+
+Provide a typed frozen definition for source minimum_size/strict_size, exact nonnegative price_radius_ticks/time_radius_ns, max_age_ns, contiguous immutable spatial_grid, spatial_kernel point/triangular, spatial_radius_ticks, decay_clock time/volume, decay_scale positive int/Fraction, decay_kernel half_life/box, version and frozen_at. Keep precise original semantics. No visit-decay numeric stand-in: raise an explicit unsupported error for that clock in this kernel, since the actual visit producer is a separate mechanism. Retain original constants/cutoff comparators as configurable definitions; do not choose a winning threshold or infer participant identity.
+
+A one-window accumulator binds instrument_id, ONE original source_key, half-open [start_ns,end_ns), latency_ns and finite capacities. add_prepared(prepared,left=0,right=None,*,history_complete=True) accepts only an actual unreleased PreparedTradeBatch and proper bounded slices (max65,536 rows), validates exact instrument/source/window, known_at_ns=t+delay, nondecreasing t, strictly increasing source_order and physical source_row across and inside calls. Source_row can be uint64 above 2**63; never narrow it. Preserve original flags/action/side and immutable source addresses in retained membership. No economic dedupe and no source merging. The complete event cache remains the raw source; membership references its physical rows.
+
+Input counters include every eligible trade, unknown-side and unpriced mass, records older than max_age or below the source filter, and flags. Do not discard known observed aggression merely because history is incomplete. An explicit false history segment or bit4 makes the cumulative history flag false; raw observed cluster/field mass remains calculable. Missing history masks activity-volume decay as in the original, not raw mass. Raw sides -1/0/+1 retain separate sell/unknown/buy channels, unknown matching original None semantics. All true arithmetic inputs remain exact integers or Fractions; no float coercion of coordinates, quantities, addresses or raw mass.
+
+finish() operates at the declared end and publication end+delay, returns a copied immutable or safely serializable report with source/definition/window lineage, clusters, raw field mass, decayed field mass, separate overflow, input/selected/excluded counts, history/order status and actual work counters. It seals the accumulator; publication or use after a failed mutation must be rejected. Use finite configurable capacities <=50m input rows, <=2m retained selected prints, <=1m clusters, <=65,536 grid cells, <=64 tick neighbor/spatial radius and <=512MiB retained result bytes; sensible defaults 50m/500k/100k/65,536 and 64MiB result. Exact cap succeeds, one over fails with charged counts and no silent truncation. Validate lengths before copying and resource domain before allocating.
+
+This is a closed fixed-window calculation, not mutable online revisions. It may stage selected primitive columns until finalization, bounded by the explicit selected limit. Re-running a later/corrected window creates a distinct result; do not add a generic checkpoint/registry or replay authority framework.
+
+## Connected-component calculation, exactly the existing graph
+
+Selection is priced trades satisfying the minimum/strict size rule and end_ns - event_at <= max_age_ns, matching the original inclusive age boundary. Two selected prints share an undirected edge iff same reported side, |price_a-price_b|<=price_radius and |t_a-t_b|<=time_radius. Clusters are transitive connected components; not greedy centroid assignment, consecutive-run grouping, DBSCAN with a made-up min_samples, or only largest examples.
+
+Implement exact connectivity with a chronological union-find plus a bounded integer-price/time lookup. For each arriving selected print at time t and price p, a latest retained representative at each same-side integer price in [p-radius,p+radius] is enough when its time is >=t-time_radius: earlier active prints at that price are mutually connected to the latest one, so connecting the representative preserves ALL edges' connected components. Expired representatives cannot create new edges; historical selected membership remains in union-find so a long transitive component is retained. No quadratic all-pairs scan in the candidate. Count actual price lookups, unions and visited selected prints. The scalar all-pairs original and literal reference remain independent expected implementations on bounded test inputs.
+
+Every cluster retains ALL physical member addresses (with source version/key), side, exact total quantity/raw_count, min/max price, first/last event time and exact volume-weighted center Fraction(sum(q*p),sum(q)). The cluster identity derives from the frozen definition and exact member/source content, independent of reader chunking; do not hash every source row repeatedly per definition. Deterministic cluster order and address order are mandatory. Do not merge opposite or unknown-side components, even at the same price. A bridging later print must connect previous subcomponents within the same final window; different snapshots/expiry can split them, but this kernel makes no predecessor/lineage claim it has not calculated.
+
+## Raw spatial fields and the two real decay clocks
+
+Preserve the original formula and overflow. For point kernel use radius0. For triangular radius r, weights are (r+1-|p-trade_price|)/(r+1)^2 on every integer support tick and zero elsewhere; include every part outside the declared grid in overflow. Sum raw buy/sell/unknown field mass plus overflow exactly to corresponding selected totals. No grid clipping or renormalizing away overflow. Zero/empty grid is explicit (all support goes to overflow), not a hidden inferred grid.
+
+Time age=end_ns-event_at. Volume age is sum of the size of EVERY later eligible trade whose event_at is STRICTLY GREATER than the selected trade's event_at, including later unpriced and below-filter trades. Same-time ties do not contribute to each other's age under the retained original definition. A reverse grouped-time cumulative sum supplies exact ages in one pass; do not accidentally change to physical-order age or selected-only volume. If history/order support is unavailable, decayed activity-volume values become unavailable while raw fields stay present. Record the exact clock convention.
+
+Box weight is int(age<=decay_scale); keep exact raw and box-decayed Fractions. Half-life weight is 2**(-float(Fraction(age,decay_scale))), following the original computation. Maintain deterministic original source-order accumulation and original spatial arithmetic for numerical parity; do not introduce approximation/table quantization, truncation, or an unproved reduced precision. Tests compare half-life results to the original with the existing 1e-12 absolute tolerance on declared cases. Exact arrays/products need explicit overflow bounds or Python integer fallback. Do not assume int64 is safe because prices and sizes separately fit.
+
+Return raw selected mass and decayed mass separately from field cells, as in build_memory. Never infer held positions, protection, trapped traders, recovered historical trades or a future markout from these fields.
+
+## Required tests (write, do not run)
+
+- Literal connected chain where endpoints are outside the radius yet a middle print bridges them; separated time/price neighbors; equality at time/price/age/size boundary; opposite and unknown signs at one price; repeated equal-economic prints at different physical rows; expiry selecting a subset that splits a prior component in a separately formed result.
+- Full cluster membership/side/center/bounds/times/count/gross compare to BOTH original build_memory on actual small captures and independent literal all-pairs clustering. Canonicalize only identity representation where source adapters differ; do not omit quantitative fields or drop members to make comparison pass.
+- Exact point/triangular raw/box fields and low/high out-of-grid overflow; mass conservation, empty grid, unpriced/below-filter exclusions and large exact integer/Fraction products.
+- Time and volume half-life against original; same-timestamp groups including a group spanning reader chunks; later small/unpriced trades contribute to volume age; gap history masks volume decay only; time/raw remain observable. Different cut/scale/source definitions keep distinct identities.
+- Batch/slice equality and full first-to-last source lineage; mutable Arrow source buffer independence; uint64 addresses above2**63; empty window; strict bounds/released/forged/mixed/future/delay/order rejection; poison and exact/one-over limits; caller mutation of returned reports cannot alter retained state.
+- Count actual algorithm operations in a long repeated-price chain to demonstrate that neighbor lookups scale with selected count and frozen price radius, not all pairs. This is a fixture work-count assertion, not a timing or real-data speed claim.
+
+The controller will review the entire diff and wire a later registered full-source probe with independent bounded scalar checks and actual complete resource measurements. Preserve all original references and budgets.

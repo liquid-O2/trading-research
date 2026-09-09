@@ -1,0 +1,356 @@
+{
+  "attempt_id": "b0b71983862de2ebe6190ea2d07774d4f861cac64a71a7f15743d4281546a623",
+  "completed_expanded_resource_units": {
+    "continuous_units": [
+      {
+        "classes": 0,
+        "compressed_output_bytes": 137918,
+        "cpu_seconds": 0.5419681609999998,
+        "dates": 20,
+        "grouped_artifact": {
+          "kind": "jumbo_resource_continuous_grouped_gzip_v1",
+          "sha256": "89e863d12b3ca8e8eed1b9ed6518baef91c09e00459afca250fcd1a64a4621b1",
+          "size_bytes": 136902
+        },
+        "grouped_compressed_output_bytes": 136902,
+        "grouped_cpu_seconds": 0.5339684879999993,
+        "grouped_serialization_cpu_seconds": 0.414402281000001,
+        "groups": 433,
+        "kind": "continuous",
+        "metrics": 18,
+        "overall_artifact": {
+          "kind": "jumbo_resource_continuous_overall_gzip_v1",
+          "sha256": "3127573f88b789c5f8ea5a779587bffc3e0ed59c52cb694bc5fae2a21ab83a72",
+          "size_bytes": 1016
+        },
+        "overall_compressed_output_bytes": 1016,
+        "overall_cpu_seconds": 0.007999673000000485,
+        "overall_serialization_cpu_seconds": 0.0005102980000017965,
+        "prediction_scope": "Artificial varying monotone quantiles on actual admitted labels; resource evidence only.",
+        "rows": 6896,
+        "serialization_cpu_seconds": 0.4149125790000028,
+        "uncompressed_output_bytes": 1384841
+      },
+      {
+        "classes": 0,
+        "compressed_output_bytes": 194615,
+        "cpu_seconds": 3.1986908140000025,
+        "dates": 253,
+        "grouped_artifact": {
+          "kind": "jumbo_resource_continuous_grouped_gzip_v1",
+          "sha256": "f5a38cae3a46cca36c8ca4e59d53c69f1c5a9d8c85543e18b676e6512ccf3443",
+          "size_bytes": 193606
+        },
+        "grouped_compressed_output_bytes": 193606,
+        "grouped_cpu_seconds": 3.134690261000003,
+        "grouped_serialization_cpu_seconds": 0.4170085410000013,
+        "groups": 433,
+        "kind": "continuous",
+        "metrics": 18,
+        "overall_artifact": {
+          "kind": "jumbo_resource_continuous_overall_gzip_v1",
+          "sha256": "3689f54378bf7de7b5997820795fe9cf6dc32a7d63ae93a3317ec0102add93ac",
+          "size_bytes": 1009
+        },
+        "overall_compressed_output_bytes": 1009,
+        "overall_cpu_seconds": 0.06400055299999963,
+        "overall_serialization_cpu_seconds": 0.000495262000001162,
+        "prediction_scope": "Artificial varying monotone quantiles on actual admitted labels; resource evidence only.",
+        "rows": 90808,
+        "serialization_cpu_seconds": 0.41750380300000245,
+        "uncompressed_output_bytes": 1424490
+      }
+    ],
+    "larger_trees": [
+      {
+        "actual_dates": 99,
+        "actual_rows": 36217,
+        "cpu_seconds": 1.8639036309999995,
+        "failure": null,
+        "features": 116,
+        "heads_or_classes": 6,
+        "iteration_cap": 10,
+        "iterations": 10,
+        "kind": "hgb_classification",
+        "maximum_observed_tree_nodes": 29,
+        "parameter_bytes": 172038,
+        "purpose": "registered resource preflight only",
+        "status": "completed_fixed_iter",
+        "target": "path"
+      },
+      {
+        "actual_dates": 99,
+        "actual_rows": 36217,
+        "cpu_seconds": 3.475900422999999,
+        "failure": null,
+        "features": 116,
+        "heads_or_classes": 6,
+        "iteration_cap": 20,
+        "iterations": 20,
+        "kind": "hgb_classification",
+        "maximum_observed_tree_nodes": 29,
+        "parameter_bytes": 307102,
+        "purpose": "registered resource preflight only",
+        "status": "completed_fixed_iter",
+        "target": "path"
+      },
+      {
+        "actual_dates": 99,
+        "actual_rows": 36217,
+        "cpu_seconds": 0.5159765540000052,
+        "failure": null,
+        "features": 115,
+        "heads_or_classes": 1,
+        "iteration_cap": 10,
+        "iterations": 10,
+        "kind": "hgb_quantile",
+        "maximum_observed_tree_nodes": 29,
+        "parameter_bytes": 59475,
+        "purpose": "registered resource preflight only",
+        "status": "completed_fixed_iter",
+        "target": "future_high_from_known_W"
+      },
+      {
+        "actual_dates": 99,
+        "actual_rows": 36217,
+        "cpu_seconds": 0.8596345939999992,
+        "failure": null,
+        "features": 115,
+        "heads_or_classes": 1,
+        "iteration_cap": 20,
+        "iterations": 20,
+        "kind": "hgb_quantile",
+        "maximum_observed_tree_nodes": 29,
+        "parameter_bytes": 82635,
+        "purpose": "registered resource preflight only",
+        "status": "completed_fixed_iter",
+        "target": "future_high_from_known_W"
+      }
+    ],
+    "storage_units": {
+      "categorical": {
+        "actual_dates": 19,
+        "actual_empirical_distribution_calls": 1,
+        "actual_optimizer_calls": 5,
+        "actual_rows": 6896,
+        "all_models_all_targets_prediction_and_score_cpu_seconds": 0.1769966669999974,
+        "categorical_group_slots": 1458,
+        "classes": 6,
+        "complete_frozen_family_roundtrip": true,
+        "derived_output_bytes": 130937,
+        "empirical_evidence": [],
+        "empirical_evidence_compressed_bytes": 0,
+        "empirical_evidence_uncompressed_bytes": 0,
+        "exact_prior_serving_scalar_comparisons": 0,
+        "family_cpu_seconds": 0.8909667679999984,
+        "frozen_family": {
+          "encoding": "gzip-json",
+          "kind": "jumbo_resource_complete_frozen_family_gzip_v1",
+          "sha256": "1a79cacb821435b70d0813a4e93f2b93893749f656277458dba9b64039affa05",
+          "size_bytes": 130937,
+          "uncompressed_sha256": "8bb1e4c5d0090689386b3aff93380f916387c3966481993300e25c781d2d793b",
+          "uncompressed_size_bytes": 1281881
+        },
+        "full_prior_validation": null,
+        "groups": 433,
+        "kind": "categorical",
+        "linear_backend_full_length_coefficients_bytes_upper": 62928,
+        "metadata_bytes": 32689,
+        "model_identity_and_container_cpu_seconds": 0.15299445100000497,
+        "model_statuses": {
+          "controls_linear": "failed_empirical_fallback",
+          "empirical": "fitted",
+          "full_linear": "failed_empirical_fallback",
+          "full_nonlinear": "failed_empirical_fallback",
+          "hgb_full": "fitted",
+          "own_linear": "failed_empirical_fallback"
+        },
+        "models": 6,
+        "prediction_by_model_cpu_seconds": {
+          "controls_linear": 0.0229982330000027,
+          "empirical": 0.021000816999993788,
+          "full_linear": 0.02500100000000316,
+          "full_nonlinear": 0.026997203000000525,
+          "hgb_full": 0.05699951199999731,
+          "own_linear": 0.023999901999999906
+        },
+        "prior_serialization_cpu_seconds": 0.0,
+        "publication_and_restore_cpu_seconds": 0.13022596900000138,
+        "quantiles": 0,
+        "scope": "Production storage/prediction consumers on actual 20-date resource cohort; no tuning, selection or quality claim.",
+        "serving_prior_bytes": 180318,
+        "target_count": 1,
+        "targets": [
+          "path"
+        ],
+        "tree_iteration_cap": 10,
+        "tree_records": 1,
+        "tree_wire_bytes": 154197
+      },
+      "continuous": {
+        "actual_dates": 19,
+        "actual_empirical_distribution_calls": 6,
+        "actual_optimizer_calls": 34,
+        "actual_rows": 6896,
+        "all_models_all_targets_prediction_and_score_cpu_seconds": 3.481853507000004,
+        "categorical_group_slots": 1458,
+        "classes": 0,
+        "complete_frozen_family_roundtrip": true,
+        "derived_output_bytes": 1771855,
+        "empirical_evidence": [
+          {
+            "encoding": "gzip-json",
+            "kind": "jumbo_resource_complete_empirical_distributions_gzip_v1",
+            "sha256": "bcaeae6d3554f5dcb8bc5ac2d6bd4ba9f62ead8240b9f56360abba5b9875bbe9",
+            "size_bytes": 457777,
+            "uncompressed_sha256": "3e684d04e2ae358c47cb8cef72edd4a3d5ad430918c2f4b858f79f47cdcfab53",
+            "uncompressed_size_bytes": 2720841
+          }
+        ],
+        "empirical_evidence_compressed_bytes": 457777,
+        "empirical_evidence_uncompressed_bytes": 2720841,
+        "exact_prior_serving_scalar_comparisons": 258030,
+        "family_cpu_seconds": 6.934970169000003,
+        "frozen_family": {
+          "encoding": "gzip-json",
+          "kind": "jumbo_resource_complete_frozen_family_gzip_v1",
+          "sha256": "6e2dfbad3aacb0b1114a4075419c0fce168227057536d24cfda6da17f911e728",
+          "size_bytes": 1314078,
+          "uncompressed_sha256": "ff131d678111c3ec63e0b463c004826a388a55dc89cfc7a1843ae0db6e7c359a",
+          "uncompressed_size_bytes": 3651760
+        },
+        "full_prior_validation": {
+          "baseline_id": "3e684d04e2ae358c47cb8cef72edd4a3d5ad430918c2f4b858f79f47cdcfab53",
+          "full_atom_and_mass_evidence_retained": true,
+          "full_distribution_count": 6
+        },
+        "groups": 433,
+        "kind": "continuous",
+        "linear_backend_full_length_coefficients_bytes_upper": 468470,
+        "metadata_bytes": 59584,
+        "model_identity_and_container_cpu_seconds": 0.2729238699999996,
+        "model_statuses": {
+          "controls_linear": "failed_empirical_fallback",
+          "empirical": "fitted",
+          "full_linear": "failed_empirical_fallback",
+          "full_nonlinear": "failed_empirical_fallback",
+          "hgb_full": "fitted",
+          "own_linear": "failed_empirical_fallback"
+        },
+        "models": 6,
+        "prediction_by_model_cpu_seconds": {
+          "controls_linear": 0.3189924710000014,
+          "empirical": 0.3509902509999989,
+          "full_linear": 0.3569880519999984,
+          "full_nonlinear": 0.3809782249999998,
+          "hgb_full": 1.7459101550000042,
+          "own_linear": 0.3279943530000011
+        },
+        "prior_serialization_cpu_seconds": 0.09950234700000493,
+        "publication_and_restore_cpu_seconds": 1.4375551540000018,
+        "quantiles": 5,
+        "scope": "Production storage/prediction consumers on actual 20-date resource cohort; no tuning, selection or quality claim.",
+        "serving_prior_bytes": 217098,
+        "target_count": 6,
+        "targets": [
+          "future_high_from_known_W",
+          "future_low_from_known_W",
+          "terminal_from_known_W",
+          "quadratic_variation_W2",
+          "positive_high_excursion_from_known_W",
+          "positive_low_excursion_from_known_W"
+        ],
+        "tree_iteration_cap": 10,
+        "tree_records": 30,
+        "tree_wire_bytes": 2171512
+      },
+      "interval_categorical": {
+        "actual_dates": 20,
+        "actual_empirical_distribution_calls": 1,
+        "actual_optimizer_calls": 4,
+        "actual_rows": 7459,
+        "all_models_all_targets_prediction_and_score_cpu_seconds": 0.13699756900000182,
+        "categorical_group_slots": 1458,
+        "classes": 7,
+        "complete_frozen_family_roundtrip": true,
+        "derived_output_bytes": 104598,
+        "empirical_evidence": [],
+        "empirical_evidence_compressed_bytes": 0,
+        "empirical_evidence_uncompressed_bytes": 0,
+        "exact_prior_serving_scalar_comparisons": 0,
+        "family_cpu_seconds": 0.5689628599999992,
+        "frozen_family": {
+          "encoding": "gzip-json",
+          "kind": "jumbo_resource_complete_frozen_family_gzip_v1",
+          "sha256": "464c2e246530436e4b82509edaee8f2a58ef995ceff6ff65fa334f0944d19aa2",
+          "size_bytes": 104598,
+          "uncompressed_sha256": "c0089918abc2a3e6fd7270530b467dd2b2d6fa6d33034c9da6e9aa361a8225ff",
+          "uncompressed_size_bytes": 1108980
+        },
+        "full_prior_validation": null,
+        "groups": 433,
+        "kind": "interval_categorical",
+        "linear_backend_full_length_coefficients_bytes_upper": 72772,
+        "metadata_bytes": 27712,
+        "model_identity_and_container_cpu_seconds": 0.14499361500000418,
+        "model_statuses": {
+          "controls_linear": "failed_empirical_fallback",
+          "empirical": "fitted",
+          "full_linear": "failed_empirical_fallback",
+          "full_nonlinear": "failed_empirical_fallback",
+          "own_linear": "failed_empirical_fallback"
+        },
+        "models": 5,
+        "prediction_by_model_cpu_seconds": {
+          "controls_linear": 0.024999305999998,
+          "empirical": 0.024999587000003487,
+          "full_linear": 0.029000029999998844,
+          "full_nonlinear": 0.03199934399999904,
+          "own_linear": 0.025999302000002444
+        },
+        "prior_serialization_cpu_seconds": 0.0,
+        "publication_and_restore_cpu_seconds": 0.12129974599999827,
+        "quantiles": 0,
+        "scope": "Production storage/prediction consumers on actual 20-date resource cohort; no tuning, selection or quality claim.",
+        "serving_prior_bytes": 213358,
+        "target_count": 1,
+        "targets": [
+          "first_duration"
+        ],
+        "tree_iteration_cap": 10,
+        "tree_records": 0,
+        "tree_wire_bytes": 0
+      }
+    }
+  },
+  "cpu_seconds": 64.925158,
+  "cumulative_attempts_completed": 15,
+  "cumulative_cpu_seconds": 1431.394988,
+  "execution": {
+    "kind": "research_study_execution",
+    "path": "reports/jumbo-runs/b0b71983862de2ebe6190ea2d07774d4f861cac64a71a7f15743d4281546a623/execution.json",
+    "sha256": "e8a6a20f315205756b82d5416262b0cfa6bad93a190d41ab22976af4cbc56012",
+    "size_bytes": 31604
+  },
+  "failure": "Completed extraction identity compared an extended authorization-test file as an extraction dependency; all extraction source files and prior numerical cases were unchanged.",
+  "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+  "heldout_target_rows_inspected": 0,
+  "kind": "jumbo_completed_resource15_extraction_reuse_failure_review_v1",
+  "packet": {
+    "path": "reports/jumbo-runs/b0b71983862de2ebe6190ea2d07774d4f861cac64a71a7f15743d4281546a623/packet.json",
+    "sha256": "faf48a952f387c5fa867cd51f19c0d5ec1cf58e8a59b5b7ffc3ec6fe7df64dba",
+    "size_bytes": 68500
+  },
+  "peak_rss_bytes": 1522077696,
+  "predictive_quality_claim": false,
+  "repair": "Keep original extraction test file byte-identical to successful extraction13. The added second-authorization test is preserved in test_jumbo_verification.py and rerun. Validate reuse before resource work.",
+  "reuse_scope": "Completed original numerical units only, bound to the failed registered receipt/log, exact measurement functions/dependencies, admitted input identities, runtime and scientific plans. Current projection and orchestration are verified afresh. No failed attempt is promoted.",
+  "status": "failed",
+  "tests_passed": 440,
+  "worker_log": {
+    "kind": "research_study_worker_log",
+    "path": "reports/jumbo-runs/b0b71983862de2ebe6190ea2d07774d4f861cac64a71a7f15743d4281546a623/worker.log",
+    "sha256": "2d38860db67b9e265a8429a7f85a7f1cee5be99eace36fee669de3fd7ca458b5",
+    "size_bytes": 100281
+  }
+}

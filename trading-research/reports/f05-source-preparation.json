@@ -1,0 +1,1523 @@
+{
+  "kind": "f05_original_source_preparation",
+  "recorded_at": "2026-09-06T20:10:47.334697+00:00",
+  "scope": [
+    "F05",
+    "F05.CROSS_VENDOR"
+  ],
+  "status": "source preparation and draft assertions only; no preregistration or phase closure",
+  "source_ids": [
+    "DTM-A07",
+    "JCV-A03",
+    "CEX-24",
+    "INV-01",
+    "INV-02",
+    "INV-03",
+    "INV-04",
+    "INV-05",
+    "INV-06",
+    "INV-07",
+    "INV-08",
+    "INV-09",
+    "INV-10",
+    "INV-11",
+    "INV-12",
+    "DEN-01",
+    "DEN-02",
+    "DEN-03",
+    "DEN-04",
+    "DEN-05",
+    "DRF-A02",
+    "DRF-A03"
+  ],
+  "source_count": 22,
+  "source_inventory": {
+    "path": "/workspace/planning/trading-model/review/source_inventory.json",
+    "sha256": "d959bf8d3619b0b895cae070a516b4fc05eac4424a478eef3adb1d54feb01eec",
+    "size_bytes": 36026
+  },
+  "prior_review_report": {
+    "path": "/workspace/trading-research/reports/f04-source-cases.json",
+    "sha256": "01101522c7d7875b50dff6b6c5ed4531251e85bc8a2f3299a400102fa8d52817",
+    "size_bytes": 217691
+  },
+  "prior_review_artifact": {
+    "sha256": "dfa02324c3355ffe296597db199e8c5fea7fd2911927c64480c4ed7a2c810486",
+    "size_bytes": 126616,
+    "kind": "original_source_case_review"
+  },
+  "governing_reads": [
+    {
+      "path": "/workspace/planning/trading-model/components/FOUNDATIONS.md",
+      "sha256": "8874367de2db551b6f6104643abc05fb1f5f7716a3a01ca842b5553270d57b5b",
+      "ranges": [
+        [
+          58,
+          69
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-parent-excerpt.txt",
+      "excerpt_sha256": "1bd53533832d70cc7ba35e817efe383aede386cfd51ad042edef65860bf1e8f2",
+      "label": "parent",
+      "text_read": true
+    },
+    {
+      "path": "/workspace/planning/trading-model/SYSTEM_REFINEMENT.md",
+      "sha256": "e1a07b23c36587dd6ed0f6b2735d35ae136df4697f2fe12937ac12cd9825cfd6",
+      "ranges": [
+        [
+          74,
+          82
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-sr-excerpt.txt",
+      "excerpt_sha256": "d56c6eb5541592a9fe27e7112eeec9287611914c7976bc66d9bdbe7230a44bd8",
+      "label": "sr",
+      "text_read": true
+    },
+    {
+      "path": "/workspace/planning/trading-model/UPGRADE_PATHS.md",
+      "sha256": "3b9607108ffd8d5b9777772f8728483c5c35f46180d2237263893359451343c8",
+      "ranges": [
+        [
+          184,
+          217
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-up-excerpt.txt",
+      "excerpt_sha256": "7b4a962af792617153410bed281f3458117283c6075f86ce63cc2d1634527b41",
+      "label": "up",
+      "text_read": true
+    },
+    {
+      "path": "/workspace/planning/trading-model/experiments/F.md",
+      "sha256": "a010fe1d7fcfa3cb4a45a288be9772fcede0290c0130082074d3e455d2b66bc2",
+      "ranges": [
+        [
+          163,
+          192
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-experiments-excerpt.txt",
+      "excerpt_sha256": "0f2b54f2397afe9f37b96b5ac2b77c77a415a8d8614fea407a76997966408c25",
+      "label": "experiments",
+      "text_read": true
+    }
+  ],
+  "new_original_conversation_reads": [
+    {
+      "path": "/workspace/sources/documents/conversations/Develop Trading Model.md",
+      "sha256": "00d8fe8bad5ab7f5f1095f013523e71550b0381f57feeb34e7ebe4789f58631b",
+      "ranges": [
+        [
+          211,
+          229
+        ],
+        [
+          385,
+          426
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-DTM-excerpt.txt",
+      "excerpt_sha256": "c5d2b1582a608d5f8a2ea7b2b5350f1bc2c1fcb0df1610c32f98bf6b962af08d",
+      "label": "DTM",
+      "text_read": true,
+      "inventory_sha256": "00d8fe8bad5ab7f5f1095f013523e71550b0381f57feeb34e7ebe4789f58631b",
+      "current_hash_matches_inventory": true
+    },
+    {
+      "path": "/workspace/sources/documents/jumbo/JJumbo_Conversation_Export.md",
+      "sha256": "6e8ee55e2934d7db1bd09105fe94e5f41e77441df88b8fa4c6f158f67ef47c8a",
+      "ranges": [
+        [
+          157,
+          173
+        ],
+        [
+          242,
+          279
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-JCV-excerpt.txt",
+      "excerpt_sha256": "5dff52af7e59182ca7ed874f79edf01326d345c15c63f901fee8efcbbcd6600a",
+      "label": "JCV",
+      "text_read": true,
+      "inventory_sha256": "6e8ee55e2934d7db1bd09105fe94e5f41e77441df88b8fa4c6f158f67ef47c8a",
+      "current_hash_matches_inventory": true
+    },
+    {
+      "path": "/workspace/sources/documents/conversations/Design robust feature levels.md",
+      "sha256": "4762c47e5a547d59cc9fa8662a38ecc3c1f1b038d33e45bc44eedc93253a3d4f",
+      "ranges": [
+        [
+          88,
+          96
+        ],
+        [
+          195,
+          236
+        ],
+        [
+          240,
+          274
+        ]
+      ],
+      "excerpt_path": "/tmp/f05-DRF-excerpt.txt",
+      "excerpt_sha256": "c992f2331b06f07e8664599114d0c2aaaaae59ef3d3161225b5eec5d0df25818",
+      "label": "DRF",
+      "text_read": true,
+      "inventory_sha256": "4762c47e5a547d59cc9fa8662a38ecc3c1f1b038d33e45bc44eedc93253a3d4f",
+      "current_hash_matches_inventory": true
+    }
+  ],
+  "reused_original_sources": [
+    {
+      "source_ids": [
+        "CEX-24"
+      ],
+      "exact_f04_record": {
+        "path": "/workspace/sources/documents/conversations/conversation_export (1).md",
+        "sha256": "ef688ea3ffe59481dccf05362d28c49a85965de6ac528f6534c2992dab857082",
+        "ranges": [
+          [
+            66,
+            110
+          ],
+          [
+            1023,
+            1087
+          ],
+          [
+            1201,
+            1245
+          ],
+          [
+            1281,
+            1296
+          ]
+        ],
+        "excerpt": {
+          "sha256": "6fcc99b186545067b30ab6cbf1b004569238029f2971cde6670a6bcdadaae910",
+          "size_bytes": 19865,
+          "kind": "original_conversation_excerpt"
+        },
+        "read": true
+      },
+      "current_original": {
+        "path": "/workspace/sources/documents/conversations/conversation_export (1).md",
+        "sha256": "ef688ea3ffe59481dccf05362d28c49a85965de6ac528f6534c2992dab857082",
+        "size_bytes": 110823
+      },
+      "current_hash_matches_f04": true,
+      "original_read_reused": true,
+      "new_full_original_read_claimed": false,
+      "retained_evidence": {
+        "path": "/workspace/trading-research/evidence/trials/artifacts/6f/6fcc99b186545067b30ab6cbf1b004569238029f2971cde6670a6bcdadaae910",
+        "sha256": "6fcc99b186545067b30ab6cbf1b004569238029f2971cde6670a6bcdadaae910",
+        "size_bytes": 19865
+      },
+      "evidence_hash_matches_f04": true
+    },
+    {
+      "source_ids": [
+        "INV-01",
+        "INV-02",
+        "INV-03",
+        "INV-04",
+        "INV-05",
+        "INV-06",
+        "INV-07",
+        "INV-08",
+        "INV-09",
+        "INV-10",
+        "INV-11",
+        "INV-12"
+      ],
+      "exact_f04_record": {
+        "path": "/workspace/sources/documents/inventory/DATA_INVENTORY.md",
+        "sha256": "41d6d749a2adbf0748c87473ccf7796a9c82e3a2e12eef7e9f44ba9784aaa99e",
+        "prior_review": {
+          "sha256": "491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+          "size_bytes": 16756,
+          "kind": "implementation_source_case_review"
+        },
+        "read_extent": "Exact original passages and full files stated in the review, not all contents of every hashed conversation.",
+        "admission": "inventory metadata only; unequal field/cohort evidence; missing hardware transcript unresolved"
+      },
+      "current_original": {
+        "path": "/workspace/sources/documents/inventory/DATA_INVENTORY.md",
+        "sha256": "41d6d749a2adbf0748c87473ccf7796a9c82e3a2e12eef7e9f44ba9784aaa99e",
+        "size_bytes": 60378
+      },
+      "current_hash_matches_f04": true,
+      "original_read_reused": true,
+      "new_full_original_read_claimed": false,
+      "retained_evidence": {
+        "path": "/workspace/trading-research/evidence/artifacts/49/491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+        "sha256": "491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+        "size_bytes": 16756
+      },
+      "evidence_hash_matches_f04": true
+    },
+    {
+      "source_ids": [
+        "INV-01",
+        "INV-02",
+        "INV-03",
+        "INV-04",
+        "INV-05",
+        "INV-06",
+        "INV-07",
+        "INV-08",
+        "INV-09",
+        "INV-10",
+        "INV-11",
+        "INV-12"
+      ],
+      "exact_f04_record": {
+        "path": "/workspace/sources/documents/inventory/databento_pull_list.md",
+        "sha256": "2137679d5e65cebb0ba4625ed6ecbc2ed7b69f78998abe27771e73124efc2ff1",
+        "prior_review": {
+          "sha256": "491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+          "size_bytes": 16756,
+          "kind": "implementation_source_case_review"
+        },
+        "read_extent": "Exact original passages and full files stated in the review, not all contents of every hashed conversation.",
+        "admission": "inventory metadata only; unequal field/cohort evidence; missing hardware transcript unresolved"
+      },
+      "current_original": {
+        "path": "/workspace/sources/documents/inventory/databento_pull_list.md",
+        "sha256": "2137679d5e65cebb0ba4625ed6ecbc2ed7b69f78998abe27771e73124efc2ff1",
+        "size_bytes": 4712
+      },
+      "current_hash_matches_f04": true,
+      "original_read_reused": true,
+      "new_full_original_read_claimed": false,
+      "retained_evidence": {
+        "path": "/workspace/trading-research/evidence/artifacts/49/491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+        "sha256": "491d148c9d5d70ed95fe605bdf7192a83528d57b79ee43d29552033e804894b7",
+        "size_bytes": 16756
+      },
+      "evidence_hash_matches_f04": true
+    }
+  ],
+  "pdf_pages": [
+    {
+      "page": 3,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "text": {
+        "path": "/tmp/f05-den-p3.txt",
+        "sha256": "ed1f42c1cb443fefed8663cbfe848f3c359e34eb57909b1014798ac79c92e74d",
+        "size_bytes": 1053
+      },
+      "render": {
+        "path": "/tmp/f05-den-p3.png",
+        "sha256": "4363e793d9d9e445d2c676d687a21f2870201db962b662cc204abd1589e4f6fa",
+        "size_bytes": 148191
+      },
+      "text_read": true,
+      "visually_inspected": true,
+      "visual_notes": "Four checked process steps and separate journaling callout are legible. No trade dataset, empirical results or sample count supplied.",
+      "renderer": "PyMuPDF 1.28.2, scale 1.4, read/render only"
+    },
+    {
+      "page": 4,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "text": {
+        "path": "/tmp/f05-den-p4.txt",
+        "sha256": "56a80573c3b32d56471577bd41bd29a5f07cb3b20b712076b1d89854a46de30a",
+        "size_bytes": 591
+      },
+      "render": {
+        "path": "/tmp/f05-den-p4.png",
+        "sha256": "0fe925bd8a8e43f359b6a0729182f39f2dc94b642dba342cf644ac73223d3cfa",
+        "size_bytes": 144828
+      },
+      "text_read": true,
+      "visually_inspected": true,
+      "visual_notes": "Two opposing forecast boxes plus Stoic analogy. Extracted text ordering differs from visual order; all content read. No quantitative forecast evidence.",
+      "renderer": "PyMuPDF 1.28.2, scale 1.4, read/render only"
+    },
+    {
+      "page": 5,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "text": {
+        "path": "/tmp/f05-den-p5.txt",
+        "sha256": "6f4c60cf906a92e4de994fb1a66c0a5e8565df2589bf2f7cfba9816cbcf40402",
+        "size_bytes": 742
+      },
+      "render": {
+        "path": "/tmp/f05-den-p5.png",
+        "sha256": "bd2eaf0a71e971244d9414e28795e2338e3c1cc83198db53f54bce311c937b03",
+        "size_bytes": 144882
+      },
+      "text_read": true,
+      "visually_inspected": true,
+      "visual_notes": "Five named input families and objectivity callout. C-score formula and data vintage are not disclosed.",
+      "renderer": "PyMuPDF 1.28.2, scale 1.4, read/render only"
+    },
+    {
+      "page": 6,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "exact_f04_record": {
+        "prefix": "DEN",
+        "original_path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "original_sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "page": 6,
+        "text": {
+          "sha256": "eb26f3e6a46aeaca26c7b24fb5357e9c0813873536085390331950d924ec2b35",
+          "size_bytes": 998,
+          "kind": "original_pdf_page_text"
+        },
+        "render": {
+          "sha256": "4bdf6701e9614d52f36a1c679551fddef021069f45cd11fa704b157ecf33b824",
+          "size_bytes": 242088,
+          "kind": "inspected_original_pdf_page"
+        },
+        "text_read": true,
+        "visually_inspected": true
+      },
+      "current_hash_matches_f04": true,
+      "text": {
+        "path": "/tmp/f05-den-p6.txt",
+        "sha256": "eb26f3e6a46aeaca26c7b24fb5357e9c0813873536085390331950d924ec2b35",
+        "size_bytes": 998
+      },
+      "render": {
+        "path": "/tmp/f05-den-p6.png",
+        "sha256": "4bdf6701e9614d52f36a1c679551fddef021069f45cd11fa704b157ecf33b824",
+        "size_bytes": 242088
+      },
+      "text_and_visual_review_reused": true,
+      "new_visual_review_claimed": false,
+      "visual_notes": "Retain F04 original-page inspection and rejected undated bubble verdict; no supporting dataset/calculation supplied."
+    },
+    {
+      "page": 7,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "text": {
+        "path": "/tmp/f05-den-p7.txt",
+        "sha256": "c72c4f4436b26b828304cd7ba9234207c02e92d706853cea73985cac0c3633bd",
+        "size_bytes": 821
+      },
+      "render": {
+        "path": "/tmp/f05-den-p7.png",
+        "sha256": "6f3fab29b3e89f41ccf55f76afc716679db7bbb06b1df3c33714084553178201",
+        "size_bytes": 153321
+      },
+      "text_read": true,
+      "visually_inspected": true,
+      "visual_notes": "Intro says two-trade winning streak; TRADE TWO explicitly raises risk after first win. Four mechanics boxes plus WHY IT WORKS. No supporting streak data or fee/account calculation.",
+      "renderer": "PyMuPDF 1.28.2, scale 1.4, read/render only"
+    },
+    {
+      "page": 8,
+      "original": {
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+        "size_bytes": 1867876
+      },
+      "text": {
+        "path": "/tmp/f05-den-p8.txt",
+        "sha256": "e092d2da27583091db27893c734527805bbea990d4357db4818d85c410d91d5c",
+        "size_bytes": 610
+      },
+      "render": {
+        "path": "/tmp/f05-den-p8.png",
+        "sha256": "f7543b4f1a6d870e4c27aef0105c4d50e379eac89237b3531c07ad91684a7453",
+        "size_bytes": 113590
+      },
+      "text_read": true,
+      "visually_inspected": true,
+      "visual_notes": "Four checked guardrails include 1% base, volatile equity, 100-plus trades and Monte Carlo maximum losses. These are assertions, not validated safety evidence.",
+      "renderer": "PyMuPDF 1.28.2, scale 1.4, read/render only"
+    }
+  ],
+  "source_findings": [
+    {
+      "id": "DTM-A07",
+      "exact_finding_row": "65: | DTM-A07 |211-229,385-426 | Ordered response variants; MBP1 boundary; unequal coverage; derive early trades from MBP1 and reconcile duplicates; prefix replay invariant | Verify actual archive, not inventory assumptions | Retain scope-aware interfaces; no invented depth/inventory; sampling audit and deterministic fixtures |",
+      "exact_traceability_row": "48: | [DTM-A07](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:65) — 211-229,385-426 | Ordered response variants; MBP1 boundary; unequal coverage; derive early trades from MBP1 and reconcile duplicates; prefix replay invariant | Retain scope-aware interfaces; no invented depth/inventory; sampling audit and deterministic fixtures | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [R11](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:140), [R12](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:153), [R14](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:179), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71) | `T-SRC-DTM-A07`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-01",
+        "F05-DRAFT-02",
+        "F05-DRAFT-03",
+        "F05-DRAFT-05",
+        "F05-DRAFT-06",
+        "F05-DRAFT-09",
+        "F05-DRAFT-10",
+        "F05-DRAFT-15"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "JCV-A03",
+      "exact_finding_row": "162: | JCV-A03 | 157–173,242–279 | MBP-1 BBO/trade events and counts, TBBO, off-touch limitation; discarding MBO/MBP-10 and declaring three years adequate | Retain the observation boundary. Reject `side=N` or non-dropping size as an iceberg label: classification and feed aggregation can explain it. MBP-10 is ten price levels, not necessarily ten ticks. Holding horizon does not remove execution costs; 750 sessions prove neither adequacy nor transformer memorization. Use official schemas, samples and learning curves. |",
+      "exact_traceability_row": "106: | [JCV-A03](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:162) — 157–173,242–279 | MBP-1 BBO/trade events and counts, TBBO, off-touch limitation; discarding MBO/MBP-10 and declaring three years adequate | Retain the observation boundary. Reject `side=N` or non-dropping size as an iceberg label: classification and feed aggregation can explain it. MBP-10 is ten price levels, not necessarily ten ticks. Holding horizon does not remove execution costs; 750 sessions prove neither adequacy nor transformer memorization. Use official schemas, samples and learning curves. | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [P05](/workspace/planning/trading-model/components/POLICY_EXECUTION_RISK.md:58), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V02](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:19) | `T-SRC-JCV-A03`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-01",
+        "F05-DRAFT-02",
+        "F05-DRAFT-09",
+        "F05-DRAFT-20"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "CEX-24",
+      "exact_finding_row": "206: | CEX-24 | T28–29/T34/T37, ll1023–1087,1201–1245,1281–1296: Theta quote/trade_quote/OI/contract-list equivalence to Databento; ET milliseconds; overlap tests | Versions/rates/coverage unverified in transcript; OI is not all statistics and contract list not full definition; mismatch not necessarily user error | Vendor normalization and reconciliation | Preserve clock/condition/age/correction semantics and raw schema versions; actual-file audit now supplies evidence | Retain validation idea; reject one-for-one completeness and blind condition removal | Vendor adapters; time; options data | Same contract/day, NBBO event timing, trade counts/conditions, OI dates and roots/expiry sets |",
+      "exact_traceability_row": "137: | [CEX-24](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:206) — T28–29/T34/T37, ll1023–1087,1201–1245,1281–1296: Theta quote/trade_quote/OI/contract-list equivalence to Databento; ET milliseconds; overlap tests | Vendor normalization and reconciliation | Retain validation idea; reject one-for-one completeness and blind condition removal; Preserve clock/condition/age/correction semantics and raw schema versions; actual-file audit now supplies evidence; validation: Same contract/day, NBBO event timing, trade counts/conditions, OI dates and roots/expiry sets | [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [O03](/workspace/planning/trading-model/components/OPTIONS.md:32), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71) | `T-SRC-CEX-24`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-01",
+        "F05-DRAFT-02",
+        "F05-DRAFT-03",
+        "F05-DRAFT-04",
+        "F05-DRAFT-05",
+        "F05-DRAFT-06",
+        "F05-DRAFT-08",
+        "F05-DRAFT-09",
+        "F05-DRAFT-10",
+        "F05-DRAFT-12"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "CEX-24",
+        "source_line": 206,
+        "provenance": "T28–29/T34/T37, ll1023–1087,1201–1245,1281–1296: Theta quote/trade_quote/OI/contract-list equivalence to Databento; ET milliseconds; overlap tests",
+        "idea": "Vendor normalization and reconciliation",
+        "rationale": "Retain validation idea; reject one-for-one completeness and blind condition removal; Preserve clock/condition/age/correction semantics and raw schema versions; actual-file audit now supplies evidence; validation: Same contract/day, NBBO event timing, trade counts/conditions, OI dates and roots/expiry sets",
+        "components": [
+          "F04",
+          "F05",
+          "F07",
+          "O03",
+          "V06"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference",
+          "Modified/merged",
+          "Rejected clause/exclusion"
+        ],
+        "fixture": "T-SRC-CEX-24",
+        "cases": [
+          "F04-01",
+          "F04-04",
+          "F04-06",
+          "F04-09",
+          "F04-11",
+          "F04-19",
+          "F04-21",
+          "F04-23"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-01",
+      "exact_finding_row": "262: | INV-01 | Inventoryll1–34:111datasets,80,198files,322,136,177,617bytes;37,031,891,942knownParquetrows. Currentpath `/workspace/data`, olderpaths historical; partitions notrecordgranularity. | Verified all80,198 dataset-file paths and sizes againstfiles.parquet, noextra/missing/size mismatch; metadata-only reconciliation does not prove recordquality or gap-free coverage. Preserve originals and provenance. |",
+      "exact_traceability_row": "168: | [INV-01](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:262) — Exact pages/lines in linked finding | Inventoryll1–34:111datasets,80,198files,322,136,177,617bytes;37,031,891,942knownParquetrows. Currentpath `/workspace/data`, olderpaths historical; partitions notrecordgranularity. | Verified all80,198 dataset-file paths and sizes againstfiles.parquet, noextra/missing/size mismatch; metadata-only reconciliation does not prove recordquality or gap-free coverage. Preserve originals and provenance. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-01`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-13"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-01",
+        "source_line": 262,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "Inventoryll1–34:111datasets,80,198files,322,136,177,617bytes;37,031,891,942knownParquetrows. Currentpath `/workspace/data`, olderpaths historical; partitions notrecordgranularity.",
+        "rationale": "Verified all80,198 dataset-file paths and sizes againstfiles.parquet, noextra/missing/size mismatch; metadata-only reconciliation does not prove recordquality or gap-free coverage. Preserve originals and provenance.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference",
+          "Dependency/unresolved"
+        ],
+        "fixture": "T-SRC-INV-01",
+        "cases": [
+          "F04-04",
+          "F04-06",
+          "F04-07",
+          "F04-11"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-02",
+      "exact_finding_row": "263: | INV-02 | ll36–141: ES/NQ futures options fullparent definitions,statistics,trades,1mbars from2020; HG/NKD/SI MBP1 context archives. | Retain futures-option experts and broader supportedcontext. Missing optionquotes/MBP1 in listedarchive matters: trades/bars are not a synchronized quote surface. Audit DBN before exactcoverage claim. |",
+      "exact_traceability_row": "169: | [INV-02](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:263) — Exact pages/lines in linked finding | ll36–141: ES/NQ futures options fullparent definitions,statistics,trades,1mbars from2020; HG/NKD/SI MBP1 context archives. | Retain futures-option experts and broader supportedcontext. Missing optionquotes/MBP1 in listedarchive matters: trades/bars are not a synchronized quote surface. Audit DBN before exactcoverage claim. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-02`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-07",
+        "F05-DRAFT-14"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-02",
+        "source_line": 263,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll36–141: ES/NQ futures options fullparent definitions,statistics,trades,1mbars from2020; HG/NKD/SI MBP1 context archives.",
+        "rationale": "Retain futures-option experts and broader supportedcontext. Missing optionquotes/MBP1 in listedarchive matters: trades/bars are not a synchronized quote surface. Audit DBN before exactcoverage claim.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference",
+          "Dependency/unresolved",
+          "Unvalidated claim"
+        ],
+        "fixture": "T-SRC-INV-02",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-03",
+      "exact_finding_row": "264: | INV-03 | ll145–249: NQMBP1reported2020–Sep2026; standaloneNQtrades actuallySep2021–Sep2026 despite scopewording2020; ES/YM/RTYtrades2020+; ESbookpartial25months;RTY definitions2019+. | Retain richerNQbook cohort and trade-derivedCVD opportunities; reconstructeligibleNQtradesfromMBP1only after actualaction/flag reconciliation. Equal-information/dateNQvsEStests; nofakecompleteESbook orRTYpre2017history. |",
+      "exact_traceability_row": "170: | [INV-03](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:264) — Exact pages/lines in linked finding | ll145–249: NQMBP1reported2020–Sep2026; standaloneNQtrades actuallySep2021–Sep2026 despite scopewording2020; ES/YM/RTYtrades2020+; ESbookpartial25months;RTY definitions2019+. | Retain richerNQbook cohort and trade-derivedCVD opportunities; reconstructeligibleNQtradesfromMBP1only after actualaction/flag reconciliation. Equal-information/dateNQvsEStests; nofakecompleteESbook orRTYpre2017history. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-03`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-03",
+        "F05-DRAFT-04",
+        "F05-DRAFT-15"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-03",
+        "source_line": 264,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll145–249: NQMBP1reported2020–Sep2026; standaloneNQtrades actuallySep2021–Sep2026 despite scopewording2020; ES/YM/RTYtrades2020+; ESbookpartial25months;RTY definitions2019+.",
+        "rationale": "Retain richerNQbook cohort and trade-derivedCVD opportunities; reconstructeligibleNQtradesfromMBP1only after actualaction/flag reconciliation. Equal-information/dateNQvsEStests; nofakecompleteESbook orRTYpre2017history.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference"
+        ],
+        "fixture": "T-SRC-INV-03",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-04",
+      "exact_finding_row": "265: | INV-04 | ll251–298: QQQ/SPY1mbarsfromSep2018; limited QuantPad OPRA reference data; NDXOIreferenceabsent. | ETF bars fromsinglevenuefeeds require explicitcoverage semantics; referencepulls arecrosschecks,notadditiveflow. IntradayNDX/SPXcash notlisted; options-derivedforwards and basis challengers mustcarryuncertainty. |",
+      "exact_traceability_row": "171: | [INV-04](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:265) — Exact pages/lines in linked finding | ll251–298: QQQ/SPY1mbarsfromSep2018; limited QuantPad OPRA reference data; NDXOIreferenceabsent. | ETF bars fromsinglevenuefeeds require explicitcoverage semantics; referencepulls arecrosschecks,notadditiveflow. IntradayNDX/SPXcash notlisted; options-derivedforwards and basis challengers mustcarryuncertainty. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-04`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-04",
+        "F05-DRAFT-16"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-04",
+        "source_line": 265,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll251–298: QQQ/SPY1mbarsfromSep2018; limited QuantPad OPRA reference data; NDXOIreferenceabsent.",
+        "rationale": "ETF bars fromsinglevenuefeeds require explicitcoverage semantics; referencepulls arecrosschecks,notadditiveflow. IntradayNDX/SPXcash notlisted; options-derivedforwards and basis challengers mustcarryuncertainty.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Source-specific disposition in rationale"
+        ],
+        "fixture": "T-SRC-INV-04",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-05",
+      "exact_finding_row": "266: | INV-05 | ll300–563: Six primaryrootsNDX/NDXP/QQQ/SPX/SPXW/SPY dailycontracts/EOD/OIfullchains; intradayquotesDTE≤14/strikeranges, surfaceDTE≤60ATM±10,tradequoteDTE≤7;VIXOI/quotesDTE≤60fullchain;legacyATM±3 overlaps. | Preserve allsevenrootresearch scope and distinguish coveragebyfield/expiry/time. Representative actualrecords verified for all Theta Parquet datasets. Deduplicate overlap; full daily chains do not mean fullintradaychains. NDXPdailyhistorybegins2018;differentmonthly/weekly listing calendars explain some sparsefiles and mustbeverified. |",
+      "exact_traceability_row": "172: | [INV-05](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:266) — Exact pages/lines in linked finding | ll300–563: Six primaryrootsNDX/NDXP/QQQ/SPX/SPXW/SPY dailycontracts/EOD/OIfullchains; intradayquotesDTE≤14/strikeranges, surfaceDTE≤60ATM±10,tradequoteDTE≤7;VIXOI/quotesDTE≤60fullchain;legacyATM±3 overlaps. | Preserve allsevenrootresearch scope and distinguish coveragebyfield/expiry/time. Representative actualrecords verified for all Theta Parquet datasets. Deduplicate overlap; full daily chains do not mean fullintradaychains. NDXPdailyhistorybegins2018;differentmonthly/weekly listing calendars explain some sparsefiles and mustbeverified. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-05`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-04",
+        "F05-DRAFT-17"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-05",
+        "source_line": 266,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll300–563: Six primaryrootsNDX/NDXP/QQQ/SPX/SPXW/SPY dailycontracts/EOD/OIfullchains; intradayquotesDTE≤14/strikeranges, surfaceDTE≤60ATM±10,tradequoteDTE≤7;VIXOI/quotesDTE≤60fullchain;legacyATM±3 overlaps.",
+        "rationale": "Preserve allsevenrootresearch scope and distinguish coveragebyfield/expiry/time. Representative actualrecords verified for all Theta Parquet datasets. Deduplicate overlap; full daily chains do not mean fullintradaychains. NDXPdailyhistorybegins2018;differentmonthly/weekly listing calendars explain some sparsefiles and mustbeverified.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference"
+        ],
+        "fixture": "T-SRC-INV-05",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-06",
+      "exact_finding_row": "267: | INV-06 | ll565–734: VVIX,VIX/VXN/VIX3M,VXcurve,rates,events/earnings,CFTC,FX/metal/Nikkei context,corporateactions,cashdailyseries. | Retain supportedcalendar/volatility/rates/crossmarket experts, each with publication and revision eligibility. Cashdaily andVXdaily cannot supply contemporaneous intraday observations. Do not narrow all context to four index futures. |",
+      "exact_traceability_row": "173: | [INV-06](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:267) — Exact pages/lines in linked finding | ll565–734: VVIX,VIX/VXN/VIX3M,VXcurve,rates,events/earnings,CFTC,FX/metal/Nikkei context,corporateactions,cashdailyseries. | Retain supportedcalendar/volatility/rates/crossmarket experts, each with publication and revision eligibility. Cashdaily andVXdaily cannot supply contemporaneous intraday observations. Do not narrow all context to four index futures. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-06`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-18"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-06",
+        "source_line": 267,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll565–734: VVIX,VIX/VXN/VIX3M,VXcurve,rates,events/earnings,CFTC,FX/metal/Nikkei context,corporateactions,cashdailyseries.",
+        "rationale": "Retain supportedcalendar/volatility/rates/crossmarket experts, each with publication and revision eligibility. Cashdaily andVXdaily cannot supply contemporaneous intraday observations. Do not narrow all context to four index futures.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V06",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference"
+        ],
+        "fixture": "T-SRC-INV-06",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-07",
+      "exact_finding_row": "268: | INV-07 | ll736–746: derivedrollmaps NQ/ES/YM,65instruments/segments each; RTY omitted | Usefulmapping baseline, not proofas-ofrollchoice orbar/tickparity. Stored instrument identity andrawcontract joins must bechecked aroundrolls; backadjusted history not tradable prices. |",
+      "exact_traceability_row": "174: | [INV-07](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:268) — Exact pages/lines in linked finding | ll736–746: derivedrollmaps NQ/ES/YM,65instruments/segments each; RTY omitted | Usefulmapping baseline, not proofas-ofrollchoice orbar/tickparity. Stored instrument identity andrawcontract joins must bechecked aroundrolls; backadjusted history not tradable prices. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-07`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-07",
+        "F05-DRAFT-19"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-07",
+        "source_line": 268,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll736–746: derivedrollmaps NQ/ES/YM,65instruments/segments each; RTY omitted",
+        "rationale": "Usefulmapping baseline, not proofas-ofrollchoice orbar/tickparity. Stored instrument identity andrawcontract joins must bechecked aroundrolls; backadjusted history not tradable prices.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Source-specific disposition in rationale"
+        ],
+        "fixture": "T-SRC-INV-07",
+        "cases": [
+          "F04-04",
+          "F04-06",
+          "F04-07",
+          "F04-11"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-08",
+      "exact_finding_row": "269: | INV-08 | ll748–765: NQMBP10 intentionallyexcluded,five incomplete parts removed,empty datasetsomitted | Current available capability isMBP1, not historical planned depth. No queueidentity/offtouchdepthlabels; optionaldepthupgrade needs separate evidence and authorization. |",
+      "exact_traceability_row": "175: | [INV-08](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:269) — Exact pages/lines in linked finding | ll748–765: NQMBP10 intentionallyexcluded,five incomplete parts removed,empty datasetsomitted | Current available capability isMBP1, not historical planned depth. No queueidentity/offtouchdepthlabels; optionaldepthupgrade needs separate evidence and authorization. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-08`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-20"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-08",
+        "source_line": 269,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "ll748–765: NQMBP10 intentionallyexcluded,five incomplete parts removed,empty datasetsomitted",
+        "rationale": "Current available capability isMBP1, not historical planned depth. No queueidentity/offtouchdepthlabels; optionaldepthupgrade needs separate evidence and authorization.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Rejected clause/exclusion",
+          "Unvalidated claim"
+        ],
+        "fixture": "T-SRC-INV-08",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-09",
+      "exact_finding_row": "270: | INV-09 | Timestampprofilesll20–34 andtimestamp-conventions.json | Actualsamples confirmQuantPadbarsint64ms,ticksint64ns;NQtick sampleslackts_recv/sequence. Theta UTC ns storage contains ms precision andseparatets_quote/trade ts_event;OI timestampsvarybydate/root. Preserveevent/source-record/receipt/publication distinctions; don'trelocalizeUTC. |",
+      "exact_traceability_row": "176: | [INV-09](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:270) — Exact pages/lines in linked finding | Timestampprofilesll20–34 andtimestamp-conventions.json | Actualsamples confirmQuantPadbarsint64ms,ticksint64ns;NQtick sampleslackts_recv/sequence. Theta UTC ns storage contains ms precision andseparatets_quote/trade ts_event;OI timestampsvarybydate/root. Preserveevent/source-record/receipt/publication distinctions; don'trelocalizeUTC. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-09`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-07",
+        "F05-DRAFT-10",
+        "F05-DRAFT-21"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-09",
+        "source_line": 270,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "Timestampprofilesll20–34 andtimestamp-conventions.json",
+        "rationale": "Actualsamples confirmQuantPadbarsint64ms,ticksint64ns;NQtick sampleslackts_recv/sequence. Theta UTC ns storage contains ms precision andseparatets_quote/trade ts_event;OI timestampsvarybydate/root. Preserveevent/source-record/receipt/publication distinctions; don'trelocalizeUTC.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V06",
+          "V08"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference"
+        ],
+        "fixture": "T-SRC-INV-09",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-10",
+      "exact_finding_row": "271: | INV-10 | Oldpull-listll1–91 mirrorsCEXT8: planownership,CBBO2013,costestimates,NQ3yrheld,C.0meaning,greeksfromOHLC,paidvendorpriorities | Treat as acquisition request-history/benchmark,not authoritative availability. Current inventory and actual samples overrule. Verify continuous symbology and vendor semantics usingprimarydocs; no purchase or new pull authorized. |",
+      "exact_traceability_row": "177: | [INV-10](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:271) — Exact pages/lines in linked finding | Oldpull-listll1–91 mirrorsCEXT8: planownership,CBBO2013,costestimates,NQ3yrheld,C.0meaning,greeksfromOHLC,paidvendorpriorities | Treat as acquisition request-history/benchmark,not authoritative availability. Current inventory and actual samples overrule. Verify continuous symbology and vendor semantics usingprimarydocs; no purchase or new pull authorized. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-10`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-22"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-10",
+        "source_line": 271,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "Oldpull-listll1–91 mirrorsCEXT8: planownership,CBBO2013,costestimates,NQ3yrheld,C.0meaning,greeksfromOHLC,paidvendorpriorities",
+        "rationale": "Treat as acquisition request-history/benchmark,not authoritative availability. Current inventory and actual samples overrule. Verify continuous symbology and vendor semantics usingprimarydocs; no purchase or new pull authorized.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Benchmark comparison",
+          "Rejected clause/exclusion"
+        ],
+        "fixture": "T-SRC-INV-10",
+        "cases": [
+          "F04-04",
+          "F04-07"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-11",
+      "exact_finding_row": "272: | INV-11 | Focusedauditreview/data-audit:216Parquetfilesacrossall75Parquetdatasets,first/middle/latest file when possible | Allopened;footerrowcounts matchedmanifest;no readerrors. Samplesarefirst128recordsatmostperfile, notrandomfull-filequalityaudit. Zerooptionquotes,variable OI publication times andunsorted-across-contract rowsobserved; need full qualityscan inimplementationgate. |",
+      "exact_traceability_row": "178: | [INV-11](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:272) — Exact pages/lines in linked finding | Focusedauditreview/data-audit:216Parquetfilesacrossall75Parquetdatasets,first/middle/latest file when possible | Allopened;footerrowcounts matchedmanifest;no readerrors. Samplesarefirst128recordsatmostperfile, notrandomfull-filequalityaudit. Zerooptionquotes,variable OI publication times andunsorted-across-contract rowsobserved; need full qualityscan inimplementationgate. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-11`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-13"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-11",
+        "source_line": 272,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "Focusedauditreview/data-audit:216Parquetfilesacrossall75Parquetdatasets,first/middle/latest file when possible",
+        "rationale": "Allopened;footerrowcounts matchedmanifest;no readerrors. Samplesarefirst128recordsatmostperfile, notrandomfull-filequalityaudit. Zerooptionquotes,variable OI publication times andunsorted-across-contract rowsobserved; need full qualityscan inimplementationgate.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V06",
+          "V08"
+        ],
+        "statuses": [
+          "Source-specific disposition in rationale"
+        ],
+        "fixture": "T-SRC-INV-11",
+        "cases": [
+          "F04-21"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "INV-12",
+      "exact_finding_row": "273: | INV-12 | Hardwareinspection2026-09-05 | HostEPYC7702/128logicalCPUs/503GiB visible, butcgroupv1CPUquota17.85cores andmemorylimit82,999,996,416bytes(~77.3GiB). OneRTXA4000~16GiBVRAM. Workspace633Tfree is shared filesystem report, notpodquota; overlay~24GiBfree. Use bounded partition streaming andmeasuredbenchmarks; don'testimateas128dedicatedcores/503GiB. |",
+      "exact_traceability_row": "179: | [INV-12](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:273) — Exact pages/lines in linked finding | Hardwareinspection2026-09-05 | HostEPYC7702/128logicalCPUs/503GiB visible, butcgroupv1CPUquota17.85cores andmemorylimit82,999,996,416bytes(~77.3GiB). OneRTXA4000~16GiBVRAM. Workspace633Tfree is shared filesystem report, notpodquota; overlay~24GiBfree. Use bounded partition streaming andmeasuredbenchmarks; don'testimateas128dedicatedcores/503GiB. | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F02](/workspace/planning/trading-model/components/FOUNDATIONS.md:19), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [F06](/workspace/planning/trading-model/components/FOUNDATIONS.md:71), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-INV-12`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-23"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "INV-12",
+        "source_line": 273,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "Hardwareinspection2026-09-05",
+        "rationale": "HostEPYC7702/128logicalCPUs/503GiB visible, butcgroupv1CPUquota17.85cores andmemorylimit82,999,996,416bytes(~77.3GiB). OneRTXA4000~16GiBVRAM. Workspace633Tfree is shared filesystem report, notpodquota; overlay~24GiBfree. Use bounded partition streaming andmeasuredbenchmarks; don'testimateas128dedicatedcores/503GiB.",
+        "components": [
+          "F01",
+          "F02",
+          "F04",
+          "F05",
+          "F06",
+          "F07",
+          "V08"
+        ],
+        "statuses": [
+          "Benchmark comparison"
+        ],
+        "fixture": "T-SRC-INV-12",
+        "cases": [
+          "F04-08",
+          "F04-13",
+          "F04-21"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DEN-01",
+      "exact_finding_row": "409: | DEN-01 | p3: concepts→mechanical process→data→winner/loser comparison→refine | Retain reproducibility and full candidate logging, improve with frozen hypothesis registry, nested out-of-sample tuning and ablations. Repeatedly refining on same outcomes risks overfit. Journaling and systematic data can overlap; numerical inputs alone do not establish edge. |",
+      "exact_traceability_row": "258: | [DEN-01](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:409) — Exact pages/lines in linked finding | p3: concepts→mechanical process→data→winner/loser comparison→refine | Retain reproducibility and full candidate logging, improve with frozen hypothesis registry, nested out-of-sample tuning and ablations. Repeatedly refining on same outcomes risks overfit. Journaling and systematic data can overlap; numerical inputs alone do not establish edge. | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M01](/workspace/planning/trading-model/components/MEASUREMENTS.md:6), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [M13](/workspace/planning/trading-model/components/MEASUREMENTS.md:162), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V01](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:6), [V03](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:32), [V07](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:84) | `T-SRC-DEN-01`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-24"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DEN-02",
+      "exact_finding_row": "410: | DEN-02 | p4: probabilistic aggregate rather than next-candle certainty | Retain probabilistic forecasts and distributional evaluation; rejecting certainty does not mean individual-event probabilistic prediction is impossible. Evaluate conditional next-event and horizon distributions, not deterministic promises. |",
+      "exact_traceability_row": "259: | [DEN-02](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:410) — Exact pages/lines in linked finding | p4: probabilistic aggregate rather than next-candle certainty | Retain probabilistic forecasts and distributional evaluation; rejecting certainty does not mean individual-event probabilistic prediction is impossible. Evaluate conditional next-event and horizon distributions, not deterministic promises. | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M01](/workspace/planning/trading-model/components/MEASUREMENTS.md:6), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [M13](/workspace/planning/trading-model/components/MEASUREMENTS.md:162), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V01](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:6), [V03](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:32), [V07](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:84) | `T-SRC-DEN-02`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-25"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DEN-03",
+      "exact_finding_row": "411: | DEN-03 | p5: trend score, history-relative values, C-scores, standard deviations, macro cycles | Retain measurable trend and point-in-time macro context where audited data supports it. C-score formula undisclosed; don't invent a reconstruction. Benchmark rolling z/quantiles, surprise/dispersion and revision-aware slow state; quantify incremental value at intraday horizon. |",
+      "exact_traceability_row": "260: | [DEN-03](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:411) — Exact pages/lines in linked finding | p5: trend score, history-relative values, C-scores, standard deviations, macro cycles | Retain measurable trend and point-in-time macro context where audited data supports it. C-score formula undisclosed; don't invent a reconstruction. Benchmark rolling z/quantiles, surprise/dispersion and revision-aware slow state; quantify incremental value at intraday horizon. | [C09](/workspace/planning/trading-model/components/CONTEXT.md:110), [C20](/workspace/planning/trading-model/components/CONTEXT.md:253), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M01](/workspace/planning/trading-model/components/MEASUREMENTS.md:6), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [M13](/workspace/planning/trading-model/components/MEASUREMENTS.md:162), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V01](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:6), [V03](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:32), [V07](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:84), [X10](/workspace/planning/trading-model/components/CROSS_ASSET.md:133) | `T-SRC-DEN-03`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-26"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DEN-04",
+      "exact_finding_row": "412: | DEN-04 | p6: tech-bubble case using cycle, leverage, corporate borrowing, housing, valuations/P-E, capex, rates | Preserve proposed feature families and historical comparison method; reject undated verdict and claim every bubble needs all named conditions. No supporting dataset or calculation supplied. Defer unavailable macro series behind vintage/publication audit; avoid current-market diagnosis in planning task. |",
+      "exact_traceability_row": "261: | [DEN-04](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:412) — Exact pages/lines in linked finding | p6: tech-bubble case using cycle, leverage, corporate borrowing, housing, valuations/P-E, capex, rates | Preserve proposed feature families and historical comparison method; reject undated verdict and claim every bubble needs all named conditions. No supporting dataset or calculation supplied. Defer unavailable macro series behind vintage/publication audit; avoid current-market diagnosis in planning task. | [C17](/workspace/planning/trading-model/components/CONTEXT.md:214), [F04](/workspace/planning/trading-model/components/FOUNDATIONS.md:45), [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M01](/workspace/planning/trading-model/components/MEASUREMENTS.md:6), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [M13](/workspace/planning/trading-model/components/MEASUREMENTS.md:162), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V01](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:6), [V03](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:32), [V06](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:71), [V07](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:84), [X08](/workspace/planning/trading-model/components/CROSS_ASSET.md:97), [X10](/workspace/planning/trading-model/components/CROSS_ASSET.md:133) | `T-SRC-DEN-04`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-27"
+      ],
+      "original_read_mode": "reused F04 records with current hashes",
+      "exact_f04_finding_record": {
+        "id": "DEN-04",
+        "source_line": 412,
+        "provenance": "Exact pages/lines in linked finding",
+        "idea": "p6: tech-bubble case using cycle, leverage, corporate borrowing, housing, valuations/P-E, capex, rates",
+        "rationale": "Preserve proposed feature families and historical comparison method; reject undated verdict and claim every bubble needs all named conditions. No supporting dataset or calculation supplied. Defer unavailable macro series behind vintage/publication audit; avoid current-market diagnosis in planning task.",
+        "components": [
+          "C17",
+          "F04",
+          "F05",
+          "M01",
+          "M09",
+          "M13",
+          "R06",
+          "V01",
+          "V03",
+          "V06",
+          "V07",
+          "X08",
+          "X10"
+        ],
+        "statuses": [
+          "Retained hypothesis/reference",
+          "Rejected clause/exclusion",
+          "Dependency/unresolved",
+          "Unvalidated claim",
+          "Detailed Response later"
+        ],
+        "fixture": "T-SRC-DEN-04",
+        "cases": [
+          "F04-18",
+          "F04-21"
+        ],
+        "assigned_original_passages_reviewed": true,
+        "full_indicator_implementation_claimed": false
+      },
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DEN-05",
+      "exact_finding_row": "413: | DEN-05 | pp7–8: asymmetric compounding1%→4% after3R win; reset after second win;100+ trades/MC | Heading says activates on two-win streak but mechanics increases risk after first. Arithmetic+3→+15 or−1 uses original capital, ignoring costs; current-capital percentages differ. Increased exposure is not created edge, and one-mini constraint excludes contract escalation. Preserve only benchmark/concept disposition, not primary sizing. Robust risk tests retain dependency, daily objectives and account rules; neither100 trades nor simulated maximum losses guarantees safety. |",
+      "exact_traceability_row": "262: | [DEN-05](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:413) — Exact pages/lines in linked finding | pp7–8: asymmetric compounding1%→4% after3R win; reset after second win;100+ trades/MC | Heading says activates on two-win streak but mechanics increases risk after first. Arithmetic+3→+15 or−1 uses original capital, ignoring costs; current-capital percentages differ. Increased exposure is not created edge, and one-mini constraint excludes contract escalation. Preserve only benchmark/concept disposition, not primary sizing. Robust risk tests retain dependency, daily objectives and account rules; neither100 trades nor simulated maximum losses guarantees safety. | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M01](/workspace/planning/trading-model/components/MEASUREMENTS.md:6), [M09](/workspace/planning/trading-model/components/MEASUREMENTS.md:110), [M13](/workspace/planning/trading-model/components/MEASUREMENTS.md:162), [P08](/workspace/planning/trading-model/components/POLICY_EXECUTION_RISK.md:97), [R06](/workspace/planning/trading-model/components/RESPONSE_DEFERRED.md:75), [V01](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:6), [V03](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:32), [V04](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:45), [V07](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:84) | `T-SRC-DEN-05`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-28"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DRF-A02",
+      "exact_finding_row": "443: | DRF-A02 |88–96,195–236: participant-field interpretation, Nasdaq Trade Outline products | Venue/contract/side fields not identities; aggregated origin/open-close data proposed | Verify official product coverage/cost/latency and present acquired schema; no purchase dependency | Retained distinction; external-product factuals pending verification | Data audit/options observability | Field semantics, venue representativeness, availability and incremental-value case |",
+      "exact_traceability_row": "276: | [DRF-A02](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:443) — 88–96,195–236: participant-field interpretation, Nasdaq Trade Outline products | Venue/contract/side fields not identities; aggregated origin/open-close data proposed | Verify official product coverage/cost/latency and present acquired schema; no purchase dependency; Retained distinction; external-product factuals pending verification; Data audit/options observability; Field semantics, venue representativeness, availability and incremental-value case | [F05](/workspace/planning/trading-model/components/FOUNDATIONS.md:58), [M02](/workspace/planning/trading-model/components/MEASUREMENTS.md:19), [O03](/workspace/planning/trading-model/components/OPTIONS.md:32), [O20](/workspace/planning/trading-model/components/OPTIONS.md:253) | `T-SRC-DRF-A02`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-11",
+        "F05-DRAFT-12"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    },
+    {
+      "id": "DRF-A03",
+      "exact_finding_row": "444: | DRF-A03 |197–205,240–274: data queue/coverage, probabilistic trade signing, multi-leg groups | Useful planned pipeline; historical queued status not current acquisition truth | Actual archive reconciliation supersedes queue; sign model includes inside-spread uncertainty, stale/crossed NBBO, conditions and sign-sensitivity bounds | Modified | Trade/quote adapter, options flow | CME sign convention, OPRA quote alignment, condition coverage and robustness |",
+      "exact_traceability_row": "277: | [DRF-A03](/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md:444) — 197–205,240–274: data queue/coverage, probabilistic trade signing, multi-leg groups | Useful planned pipeline; historical queued status not current acquisition truth | Actual archive reconciliation supersedes queue; sign model includes inside-spread uncertainty, stale/crossed NBBO, conditions and sign-sensitivity bounds; Modified; Trade/quote adapter, options flow; CME sign convention, OPRA quote alignment, condition coverage and robustness | [F01](/workspace/planning/trading-model/components/FOUNDATIONS.md:6), [F07](/workspace/planning/trading-model/components/FOUNDATIONS.md:84), [V08](/workspace/planning/trading-model/components/RESEARCH_AND_OPERATIONS.md:97) | `T-SRC-DRF-A03`; component tests |",
+      "draft_case_ids": [
+        "F05-DRAFT-08",
+        "F05-DRAFT-11",
+        "F05-DRAFT-12",
+        "F05-DRAFT-22"
+      ],
+      "original_read_mode": "new exact passage/page inspection",
+      "exact_f04_finding_record": null,
+      "whole_source_consumer_closure": false
+    }
+  ],
+  "draft_assertions": [
+    {
+      "id": "F05-DRAFT-01",
+      "slug": "action-side",
+      "source_ids": [
+        "DTM-A07",
+        "JCV-A03",
+        "CEX-24"
+      ],
+      "expected": "Under declared Databento trade semantics, T/B size 3 contributes buy=3, T/A size 2 sell=2, T/N size 4 unknown=4; total=9, signed=1. A/B book-side meanings remain separate. N is not an iceberg label.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-02",
+      "slug": "flag-contract",
+      "source_ids": [
+        "DTM-A07",
+        "JCV-A03",
+        "CEX-24"
+      ],
+      "expected": "A valid T without F_LAST remains eligible. Decode combined flags 132 and 168 bitwise using the exact provider/schema/version; unresolved publisher-specific bits retain raw evidence and explicit uncertainty. Do not impose MBO-only F_LAST buffering on normalized MBP-1.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-03",
+      "slug": "duplicate-multiplicity",
+      "source_ids": [
+        "DTM-A07",
+        "CEX-24",
+        "INV-03"
+      ],
+      "expected": "Two distinct legitimate transactions sharing timestamp, price and size remain two; a repeated acquisition of one original is idempotent. Timestamp-price dedup is rejected; source ownership and multiplicity determine evidence.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-04",
+      "slug": "cross-vendor-partial",
+      "source_ids": [
+        "CEX-24",
+        "INV-03",
+        "INV-05",
+        "INV-04"
+      ],
+      "expected": "Two standalone and one potentially embedded matching print retain an uncertain match set; do not concatenate into three confirmed executions or force one-to-one identity. Report matched/unmatched counts and volumes by condition and comparable cohort.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-05",
+      "slug": "correction-algebra",
+      "source_ids": [
+        "DTM-A07",
+        "CEX-24"
+      ],
+      "expected": "Insert buy size 3 at price 100: total=3, signed=3, notional=300. A later known revision to sell size 2 at price 101 changes state to total=2, signed=-2, notional=202; deltas -1,-5,-98. Duplicate revision changes nothing. Cancel removes remaining mass once. Earlier decision views stay unchanged.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-06",
+      "slug": "correction-before-original",
+      "source_ids": [
+        "CEX-24",
+        "DTM-A07"
+      ],
+      "expected": "Correction received before its referenced original is explicitly unresolved/pending, never an invented fresh trade; resolve once when ownership is available under a declared causal policy. Orphan and conflicting lineage remain visible.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-07",
+      "slug": "identity-scope",
+      "source_ids": [
+        "INV-02",
+        "INV-07",
+        "INV-09"
+      ],
+      "expected": "Same sequence across different instruments/channels/publishers or session resets is not globally unique. Original transaction, receipt revision and correction IDs remain separate; raw contract identity survives continuous-symbol mappings.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-08",
+      "slug": "conditions-size-spread",
+      "source_ids": [
+        "CEX-24",
+        "DRF-A03"
+      ],
+      "expected": "Versioned provider/date condition rules label auction, cancel/correct and spread transactions. Unknown conditions quarantine directional use and retain provenance. Invalid zero/negative outright sizes are rejected; spread units cannot silently become outright quantity. No blind condition removal.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-09",
+      "slug": "snapshot-book",
+      "source_ids": [
+        "DTM-A07",
+        "JCV-A03",
+        "CEX-24"
+      ],
+      "expected": "Repeated BBO snapshot is state evidence, not fresh trade flow. Trade plus later book update cannot subtract the trade twice; MBP-1 does not expose off-touch depth, participant identity, or queue ownership.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-10",
+      "slug": "prefix-restart",
+      "source_ids": [
+        "DTM-A07",
+        "CEX-24",
+        "INV-09"
+      ],
+      "expected": "Deleting every future suffix, delaying corrections, and reopening before/after consumer commit preserves earlier event-derived views and exactly-once reducer effects under declared acknowledgement semantics. Actual availability, not origin time, releases revisions.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-11",
+      "slug": "participant-fields",
+      "source_ids": [
+        "DRF-A02",
+        "DRF-A03"
+      ],
+      "expected": "Theta exchange/bid_exchange/ask_exchange, sequence, Databento publisher_id/instrument_id/side must not populate customer/dealer identity. Trade Outline proposal is aggregate origin/open-close by venue, not individual-firm identity and not an acquired feed.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-12",
+      "slug": "sign-inference",
+      "source_ids": [
+        "DRF-A03",
+        "DRF-A02",
+        "CEX-24"
+      ],
+      "expected": "Vendor-reported sign remains the baseline; OPRA at-quote/inside-spread inference is separately tagged O03 output. Stale/crossed/locked quotes, bundles, multi-leg uncertainty and invalid conditions remain explicit. Next-day OI cannot retrospectively be an intraday opening/closing observation.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-13",
+      "slug": "inventory-only",
+      "source_ids": [
+        "INV-01",
+        "INV-11"
+      ],
+      "expected": "Manifest/file counts and small first-record audit samples do not prove complete record quality, no gaps, source equality or receipt latency; record exact admitted cohort and unresolved scope.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-14",
+      "slug": "futures-option-coverage",
+      "source_ids": [
+        "INV-02"
+      ],
+      "expected": "Futures-option definitions/statistics/trades/bars do not establish an observed synchronized quote surface or universal aggressor availability; unsupported fields remain absent.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-15",
+      "slug": "unequal-history",
+      "source_ids": [
+        "INV-03",
+        "DTM-A07"
+      ],
+      "expected": "Earlier NQ trades may be derived only from eligible MBP-1 actions with overlap reconciliation. Do not invent complete ES book, pre-2017 RTY history, or standalone NQ trades back to 2020.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-16",
+      "slug": "cash-reference",
+      "source_ids": [
+        "INV-04"
+      ],
+      "expected": "Single-venue ETF bars and limited reference pulls retain coverage and are not additive flow; absent intraday cash spot cannot be replaced by an unlabeled observed spot series.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-17",
+      "slug": "options-universe",
+      "source_ids": [
+        "INV-05"
+      ],
+      "expected": "Keep seven roots and field/expiry/strike/time coverage distinct; full daily chains do not imply full intraday chains. Overlapping legacy/surface selections are reconciled, not blindly added.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-18",
+      "slug": "slow-context",
+      "source_ids": [
+        "INV-06"
+      ],
+      "expected": "Daily cash/VX and publication/revision-dependent context do not become contemporaneous intraday observations. Scenario repricing does not count as new options flow.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-19",
+      "slug": "roll-identity",
+      "source_ids": [
+        "INV-07"
+      ],
+      "expected": "Roll map/continuous symbol is not proof of as-of roll choice or native event identity; raw contract joins remain auditable and backadjusted values are not executable prices.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-20",
+      "slug": "absent-depth",
+      "source_ids": [
+        "INV-08",
+        "JCV-A03"
+      ],
+      "expected": "MBP-10 and MBO unavailable capabilities stay disabled. MBP-10 means ten price levels, not necessarily ten ticks; N or unchanged displayed size does not establish hidden size.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-21",
+      "slug": "clock-units",
+      "source_ids": [
+        "INV-09"
+      ],
+      "expected": "Preserve event, source-record, provider receipt, strategy receipt and publication clocks. QuantPad ms/ns and Theta stored UTC-ns with ms precision are explicit; do not relocalize UTC or invent missing sequence/receipt columns.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-22",
+      "slug": "historical-acquisition",
+      "source_ids": [
+        "INV-10",
+        "DRF-A03"
+      ],
+      "expected": "Old pull-list/queued status is history, not current availability or authorization. Reuse existing audited evidence and do not label already acquired trade_quote as absent solely from old prose.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-23",
+      "slug": "resource-evidence",
+      "source_ids": [
+        "INV-12"
+      ],
+      "expected": "Bounded partition processing measures actual resource use. Historical host CPU/RAM and shared filesystem capacity are not dedicated cgroup capacity; missing historical hardware transcript remains missing.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-24",
+      "slug": "candidate-logging",
+      "source_ids": [
+        "DEN-01"
+      ],
+      "expected": "Retain all eligible/rejected/untraded candidate observations and freeze hypotheses before outcomes; winner/loser comparisons and repeated same-sample refinement cannot certify edge. Numerical data and journaling alone are insufficient.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-25",
+      "slug": "probabilistic-claim",
+      "source_ids": [
+        "DEN-02"
+      ],
+      "expected": "Reject deterministic next-candle certainty without rejecting conditional single-event probability models; evaluate distributions on chronology and supported cohorts. No predictive run is authorized here.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-26",
+      "slug": "undisclosed-score",
+      "source_ids": [
+        "DEN-03"
+      ],
+      "expected": "Trend/history-relative/macro feature families are retained as candidates; C-score formula is unavailable and must not be invented. Numeric inputs do not by themselves establish objectivity, comparability or edge.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-27",
+      "slug": "bubble-claim",
+      "source_ids": [
+        "DEN-04"
+      ],
+      "expected": "Retain cycle/leverage/borrowing/housing/valuation/capex/rate families for vintage-audited research; reject undated no-bubble verdict and universal all-conditions necessity. No current-market diagnosis or empirical bubble result is supplied.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    },
+    {
+      "id": "F05-DRAFT-28",
+      "slug": "sizing-claim",
+      "source_ids": [
+        "DEN-05"
+      ],
+      "expected": "Source heading says two wins but mechanics escalates after first win. Original-capital arithmetic +3 then +12 gives +15, or +3 minus4 gives -1, before fees; current-capital percentages differ. Exposure escalation creates no edge; retain benchmark only, no one-mini escalation. 100 trades and simulated max loss do not guarantee safety.",
+      "status": "draft_not_preregistered",
+      "executed": false,
+      "whole_case_verified": false
+    }
+  ],
+  "routing_evidence": [
+    {
+      "original": {
+        "path": "/workspace/planning/trading-model/SOURCE_FINDINGS_AND_CONFLICTS.md",
+        "sha256": "f81552fe75b46d05544cbaf2c6e7b451b3e2bb734a4abade85ef6ddeed92ea6c",
+        "size_bytes": 467814
+      },
+      "excerpt": {
+        "path": "/tmp/f05-routing-rows.txt",
+        "sha256": "03d1f3533f2ef62945e4ff9abdd9bfc37f20ea73ca34e0e4213893a41465b242",
+        "size_bytes": 9139
+      },
+      "all_22_rows_read": true
+    },
+    {
+      "original": {
+        "path": "/workspace/planning/trading-model/traceability/SOURCE_TO_DESIGN.md",
+        "sha256": "262bf34c6c0e097fc4047c6c6494eddbf3a508dd9b2b6d2dfb3e3456a5d527e2",
+        "size_bytes": 992695
+      },
+      "excerpt": {
+        "path": "/tmp/f05-traceability-rows.txt",
+        "sha256": "41679f5c97bc5e1afde9785af5c0736c1f35693a5f8296c55b6e9ee8796d04d6",
+        "size_bytes": 23852
+      },
+      "all_22_rows_read": true
+    }
+  ],
+  "missing_dependencies": [
+    {
+      "dependency": "Original DEN C-score formula and empirical calculations/datasets for bubble and streak claims",
+      "effect": "Cannot reproduce undocumented scores or certify those claims; not required to implement event identity."
+    },
+    {
+      "dependency": "Historical INV-12 hardware command/output transcript",
+      "effect": "Cannot revalidate historical resource measurements; current actual bounded telemetry must be distinct."
+    },
+    {
+      "dependency": "Complete native cohort-specific provider/schema/date condition and flag certification plus raw/corrected overlap reconciliation",
+      "effect": "Required before claiming broad native event eligibility or vendor equality; this preparation reads no market records."
+    },
+    {
+      "dependency": "Actual strategy receipt streams and full downstream consumer parity/integration/economic evidence",
+      "effect": "Required for live latency and complete phase claims; not supplied by inventory metadata or synthetic engineering."
+    },
+    {
+      "dependency": "Participant/dealer identity and acquired Trade Outline origin/open-close data",
+      "effect": "Not present in cited current schemas. No purchase or new feed dependency is imposed on baseline F05; optional product coverage/cost/latency facts remain unverified here."
+    },
+    {
+      "dependency": "Off-touch depth/MBO order identity and unsupported contemporaneous intraday cash/option-quote fields",
+      "effect": "Those capabilities stay unavailable where inventory does not support them; MBP-1 proxies cannot substitute silently."
+    }
+  ],
+  "preserved_rejected_clauses": [
+    "Timestamp-price-only deduplication; one-to-one matching without multiplicity/lineage evidence.",
+    "Unknown side N or unchanged BBO size as iceberg/participant identity evidence.",
+    "MBO-only event buffering and mandatory F_LAST applied to MBP-1 trade inclusion.",
+    "One-for-one Theta/Databento completeness, blind trade-condition removal, and future OI as contemporaneous opening/closing truth.",
+    "Ten levels equated to ten ticks; universal depth irrelevance or negligible execution cost based solely on hold horizon; 750 sessions proving model adequacy/memorization.",
+    "Venue/contract/sequence/aggressor fields interpreted as dealer/customer identity.",
+    "Numerical inputs establish edge/objectivity; repeated same-outcome refinement proves improvement; certainty rejection excludes conditional probabilities.",
+    "Undated bubble verdict and universal all-bubble-conditions claim.",
+    "Asymmetric risk escalation creates edge; inconsistent two-win activation; fee-free original-capital arithmetic treated as current-capital truth; 100-trade/Monte-Carlo guarantee and contract escalation."
+  ],
+  "boundary": {
+    "tests_run": 0,
+    "implementation_changed": false,
+    "preregistration_changed": false,
+    "ledger_changed": false,
+    "source_code_executed": false,
+    "originals_changed": false,
+    "market_tape_reads": 0,
+    "external_calls_or_orders": 0,
+    "economic_runs": 0,
+    "archive_content_reads": 0,
+    "preparation_does_not_close_P0_P7": true
+  },
+  "route_note": "DRF-A03 is included through the explicit UP-F05 conversation-upgrade lineage although its SOURCE_TO_DESIGN row routes directly to F01/F07/V08."
+}

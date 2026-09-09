@@ -1,0 +1,89 @@
+{
+  "adaptive_definitions": [
+    {
+      "name": "count_quartiles",
+      "probabilities": [
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "weighting": "count"
+    },
+    {
+      "name": "volume_quartiles",
+      "probabilities": [
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "weighting": "volume"
+    },
+    {
+      "name": "source_top35_count_quantile",
+      "probabilities": [
+        [
+          13,
+          20
+        ]
+      ],
+      "weighting": "count"
+    }
+  ],
+  "aggregation_unit": "provider-reported-trade-record",
+  "all_original_source_checks_retained": true,
+  "atomic_width_ns": 60000000000,
+  "context_or_location_evaluation": false,
+  "f11_serving_admitted": false,
+  "family_statistics_complete": false,
+  "fixed_filters": [
+    "all",
+    "ny_ge100",
+    "london_ge75",
+    "inclusive30_through60"
+  ],
+  "fixed_soft_knots": [
+    1,
+    30,
+    61,
+    75,
+    100
+  ],
+  "full_window_and_all_one_minute_bars": true,
+  "kind": "auction_flow_actual_cohort_validation_contract_v1",
+  "maximum_literal_reference_prints_per_definition_instrument": 4096,
+  "maximum_training_prefix_prints": 4096,
+  "source_variants": "Current units retain separate original acquired streams; selecting one complete retained 2020 training reference for this cost probe does not merge or discard source variants.",
+  "training_resource_units": {
+    "ES": {
+      "kind": "auction_flow_source_resource_unit",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/ddf0d2c136a6cd4048045f53448fd96fff40f4d67096e221f0a3de1d13367455/outputs/ES-1584365400000000000-344c67d7af74-resource-unit.json",
+      "sha256": "8d1d8a7cc02c5a2762437f4ee4a17d02098c0b1e55dab7447b2c1b8654eb5618",
+      "size_bytes": 107015
+    },
+    "NQ": {
+      "kind": "auction_flow_source_resource_unit",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/ddf0d2c136a6cd4048045f53448fd96fff40f4d67096e221f0a3de1d13367455/outputs/NQ-1584365400000000000-f085aa10ebaf-resource-unit.json",
+      "sha256": "0c7babdff2bd97b1dd1554ae9cbae9c26429a74953e94c03f039691f07b1caa1",
+      "size_bytes": 63044
+    }
+  },
+  "training_scope": "Bounded complete timestamp groups in the first up-to-4096 eligible prints from the retained complete 2020-03-16 resource unit, separately per root. This validates exact unpublished arithmetic and resource cost; it is not the complete 2020-2022 training cohort or an admitted F11 fit."
+}

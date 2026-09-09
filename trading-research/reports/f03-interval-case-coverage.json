@@ -1,0 +1,549 @@
+{
+  "artifact": {
+    "kind": "implementation_review",
+    "sha256": "bb4f65df8d123fea479f4c6d68dbeb99a7680f93d231b0d43841ecd33c0bd130",
+    "size_bytes": 20150
+  },
+  "artifacts": {
+    "golden": {
+      "kind": "independent_golden_reference",
+      "sha256": "1dcdae9f0feb880b0aa1d3c69b8888264ca3cc3dc40c4dbed35b174cc83412c6",
+      "size_bytes": 709
+    },
+    "protocol": {
+      "kind": "engineering_protocol",
+      "sha256": "267dec5f5d229370f28f794779a92c80ac0d019e3ae790fad7eacded5b94a1e1",
+      "size_bytes": 4974
+    },
+    "review": {
+      "kind": "implementation_review",
+      "sha256": "165d2c66671d5774732319907d7246fd7e2b1de026e263bff00bf2a0be97ecf6",
+      "size_bytes": 4445
+    },
+    "source_cases": {
+      "kind": "original_source_case_review",
+      "sha256": "25a4d4d9d4fcdcbb5e73c1be4a694b5b90a4614f5e10b3ebb353ababd7907f05",
+      "size_bytes": 176123
+    },
+    "supervised": {
+      "kind": "supervised_engineering_verification",
+      "sha256": "435ce9de7e7990d3f9f5cd6182b45bad6e77551d69602b11924ce167cb42279d",
+      "size_bytes": 2169
+    },
+    "supervisor": {
+      "kind": "verification_supervisor_source",
+      "sha256": "aba801cd6263bb04bbcfb69c862dd95dea2eb94e04b66775e34effc4e529bd66",
+      "size_bytes": 7224
+    }
+  },
+  "cases": [
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Immutable typed calendar facts and known-time revisions",
+      "id": "F03-01",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_calendar_rows_have_stable_identity_and_frozen_known_time_queries",
+        "tests.test_interval_graph.CashCalendarContractTests.test_public_cash_source_views_cannot_mutate_frozen_versions",
+        "tests.test_interval_graph.CashCalendarContractTests.test_malformed_published_cash_rows_fail_at_ingestion"
+      ],
+      "source_ids": [
+        "CEX-26"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "NY wall versus fixed offsets and explicit DST folds",
+      "id": "F03-02",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_summer_ny_fixed_est_and_nine_vs_nine_thirty_match_frozen_utc",
+        "tests.test_interval_graph.IntervalGraphTests.test_dst_gap_fold_and_non_24_hour_calendar_days"
+      ],
+      "source_ids": [
+        "JSS-04",
+        "JTR-03",
+        "MAV-11",
+        "PIN018-02",
+        "PIN021-02",
+        "PIN025-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Declared Sunday/overnight trading date; complete midnight interval",
+      "id": "F03-03",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_sunday_midnight_interval_keeps_declared_trading_date_and_last_nanosecond"
+      ],
+      "source_ids": [
+        "JSS-04",
+        "OSF-01",
+        "PIN001-01",
+        "PIN032-02",
+        "PIN066-03",
+        "PIN078-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Named half-open intersections retain overlap and inactive gaps",
+      "id": "F03-04",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_compiled_intersections_match_literal_and_preserve_inactive_gaps",
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries"
+      ],
+      "source_ids": [
+        "PIN075-01",
+        "PIN057-01",
+        "PIN083-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Weekly/monthly actual date union retains holidays and half-days",
+      "id": "F03-05",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_weekly_dated_union_keeps_a_holiday_and_short_session",
+        "tests.test_interval_graph.IntervalGraphTests.test_dst_gap_fold_and_non_24_hour_calendar_days"
+      ],
+      "source_ids": [
+        "CEX-26",
+        "VW10-05",
+        "PIN045-05",
+        "PIN066-03",
+        "PIN077-02",
+        "PIN078-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Earliest venue/firm/platform boundary minus explicit margin",
+      "id": "F03-06",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_session_cutoff_and_eligibility_do_not_depend_on_opening_prints",
+        "tests.test_interval_graph.CashCalendarContractTests.test_cash_and_venue_clocks_reject_invalid_types_and_margins"
+      ],
+      "source_ids": [
+        "CEX-26",
+        "JXA-21"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Independent timer, no market tick, stable reset owner",
+      "id": "F03-07",
+      "new_partial_assertion_ids": [
+        "tests.test_timer_journal.TimerJournalTests.test_no_market_tick_is_needed_and_boundary_order_is_deterministic",
+        "tests.test_interval_graph.IntervalGraphTests.test_boundary_order_empty_intersections_and_duplicate_reset_owners",
+        "tests.test_timer_journal.TimerJournalTests.test_separate_owners_share_clock_but_not_state_or_logical_identity"
+      ],
+      "source_ids": [
+        "JSS-04",
+        "PIN007-05",
+        "PIN012-04",
+        "PIN013-03",
+        "PIN024-02",
+        "PIN040-02",
+        "PIN068-03",
+        "PIN081-04"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Restart before and after atomic internal state commit",
+      "id": "F03-08",
+      "new_partial_assertion_ids": [
+        "tests.test_timer_journal.TimerJournalTests.test_abrupt_process_exit_before_and_after_commit_is_restart_safe",
+        "tests.test_timer_journal.TimerJournalTests.test_reducer_failure_rolls_back_state_application_and_clock_together",
+        "tests.test_timer_journal.TimerJournalTests.test_initial_late_install_catches_up_at_available_cut_and_duplicate_is_inert"
+      ],
+      "source_ids": [
+        "PIN061-01",
+        "PIN066-03",
+        "PIN068-03",
+        "PIN070-01",
+        "PIN077-02"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Future boundary revision supersedes unfired timer",
+      "id": "F03-09",
+      "new_partial_assertion_ids": [
+        "tests.test_timer_journal.TimerJournalTests.test_future_calendar_change_replaces_pending_timer_and_keeps_old_history",
+        "tests.test_timer_journal.TimerJournalTests.test_removed_unapplied_action_can_be_explicitly_reintroduced"
+      ],
+      "source_ids": [
+        "CEX-26"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Past revision reconciles at known cut; never repeats a committed reset",
+      "id": "F03-10",
+      "new_partial_assertion_ids": [
+        "tests.test_timer_journal.TimerJournalTests.test_past_revision_reconciles_at_installation_without_retroactive_reset",
+        "tests.test_timer_journal.TimerJournalTests.test_calendar_revision_never_repeats_an_already_committed_logical_reset"
+      ],
+      "source_ids": [
+        "CEX-26",
+        "PIN068-03"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Missing opening/closing print does not move a clock or supply a price",
+      "id": "F03-11",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_session_cutoff_and_eligibility_do_not_depend_on_opening_prints",
+        "tests.test_timer_journal.TimerJournalTests.test_no_market_tick_is_needed_and_boundary_order_is_deterministic"
+      ],
+      "source_ids": [
+        "PIN012-02",
+        "PIN025-01",
+        "PIN040-02",
+        "PIN074-02",
+        "PIN076-02",
+        "PIN081-04"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "09:00 versus 09:30 and completed 5-minute opening range",
+      "id": "F03-12",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_summer_ny_fixed_est_and_nine_vs_nine_thirty_match_frozen_utc",
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries"
+      ],
+      "source_ids": [
+        "JTR-03",
+        "JXA-05",
+        "TP3-01",
+        "PIN003-01",
+        "PIN057-01",
+        "PIN059-01",
+        "PIN083-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Literal exchange clocks remain separate from NY-labelled clocks",
+      "id": "F03-13",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_summer_ny_fixed_est_and_nine_vs_nine_thirty_match_frozen_utc",
+        "tests.test_interval_graph.IntervalGraphTests.test_invalid_public_clock_types_and_unknown_timezone_bytes_fail"
+      ],
+      "source_ids": [
+        "PIN006-01",
+        "PIN013-03",
+        "PIN015-01",
+        "PIN015-02",
+        "PIN016-04",
+        "PIN024-02",
+        "PIN028-01",
+        "PIN043-01",
+        "PIN046-01",
+        "PIN047-01",
+        "PIN064-01",
+        "PIN071-05"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Distinct Asia 18/19/20 starts, London and NY formations",
+      "id": "F03-14",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries"
+      ],
+      "source_ids": [
+        "PIN039-01",
+        "PIN041-01",
+        "PIN041-02",
+        "PIN049-01",
+        "PIN061-01",
+        "PIN064-01",
+        "PIN080-01",
+        "PIN082-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Three-hour 14\u201317 block and actual elapsed time, not bar counts",
+      "id": "F03-15",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries",
+        "tests.test_interval_graph.IntervalGraphTests.test_dst_gap_fold_and_non_24_hour_calendar_days"
+      ],
+      "source_ids": [
+        "PIN001-01",
+        "PIN002-02",
+        "PIN032-02",
+        "PIN040-02",
+        "PIN054-01",
+        "PIN055-02",
+        "PIN081-04"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Separate formation, confirmation, publication and reset",
+      "id": "F03-16",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_boundary_order_empty_intersections_and_duplicate_reset_owners",
+        "tests.test_timer_journal.TimerJournalTests.test_no_market_tick_is_needed_and_boundary_order_is_deterministic"
+      ],
+      "source_ids": [
+        "AM1-04",
+        "MAT-07",
+        "PIN003-01",
+        "PIN014-02",
+        "PIN041-03",
+        "PIN047-02",
+        "PIN059-01",
+        "PIN065-01",
+        "PIN068-01",
+        "PIN068-02",
+        "PIN070-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Irregular DTT windows and inner minute markers; missing import stays open",
+      "id": "F03-17",
+      "new_partial_assertion_ids": [],
+      "source_ids": [
+        "PIN012-02",
+        "PIN012-03",
+        "PIN012-04"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Seven magic-hour one-hour formations with three-hour analysis",
+      "id": "F03-18",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries"
+      ],
+      "source_ids": [
+        "PIN081-01",
+        "PIN081-04"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Price-triggered anchor and bar-index expiry need price/bar dependencies",
+      "id": "F03-19",
+      "new_partial_assertion_ids": [],
+      "source_ids": [
+        "VW10-05",
+        "PIN051-02",
+        "PIN069-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Display clocks and filenames are not historical availability",
+      "id": "F03-20",
+      "new_partial_assertion_ids": [],
+      "source_ids": [
+        "IMG-01",
+        "TBR-07",
+        "OBT-03",
+        "OSF-01",
+        "PIN007-05",
+        "PIN021-02",
+        "PIN076-02"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "No direction, global session ban or private formula inferred from narrative",
+      "id": "F03-21",
+      "new_partial_assertion_ids": [],
+      "source_ids": [
+        "JTR-09",
+        "JXA-05",
+        "JXA-21",
+        "JFN-04",
+        "JFN-10",
+        "AM1-04",
+        "MAT-07",
+        "TBR-07",
+        "OBT-03"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Source UI examples and alternative clock choices remain explicit",
+      "id": "F03-22",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_summer_ny_fixed_est_and_nine_vs_nine_thirty_match_frozen_utc"
+      ],
+      "source_ids": [
+        "JSS-02",
+        "JSS-04",
+        "MAV-11",
+        "PIN055-02",
+        "PIN057-01",
+        "PIN065-01",
+        "PIN069-01",
+        "PIN074-02",
+        "PIN076-02",
+        "PIN083-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "Literal versus compiled queries on frozen clocks and endpoints",
+      "id": "F03-23",
+      "new_partial_assertion_ids": [
+        "tests.test_interval_graph.IntervalGraphTests.test_compiled_intersections_match_literal_and_preserve_inactive_gaps",
+        "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries",
+        "tests.test_interval_graph.IntervalGraphTests.test_graph_intervals_and_source_dependencies_are_immutable"
+      ],
+      "source_ids": [
+        "JTR-03",
+        "TP3-01",
+        "PIN001-01",
+        "PIN054-01",
+        "PIN075-01",
+        "PIN081-01"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Fixed calendar/reference state cases only; indicator, dated-data and all-consumer closure remains separate.",
+      "batch_scope": "reference infrastructure only; source-specific indicator replay remains separate",
+      "expected": "No empirical statistics or all-consumer admission from synthetic clock parity",
+      "id": "F03-24",
+      "new_partial_assertion_ids": [],
+      "source_ids": [
+        "PIN039-01",
+        "PIN041-01",
+        "PIN041-02",
+        "PIN043-01",
+        "PIN046-01",
+        "PIN047-02",
+        "PIN054-01",
+        "PIN080-01",
+        "PIN082-01",
+        "PIN082-03"
+      ],
+      "whole_case_verified": false
+    }
+  ],
+  "code_snapshot": {
+    "kind": "code_snapshot",
+    "sha256": "7e11c065ac72b8a9eef7eaf2c35c1df334bab89b712db0c3e1d733315a4a72d6",
+    "size_bytes": 1999634
+  },
+  "combined_tests_passed": 288,
+  "consolidated_repair_passes": 1,
+  "economic_runs": 0,
+  "historical_venue_cohort_admitted": false,
+  "kind": "f03_partial_interval_timer_evidence",
+  "market_tape_reads": 0,
+  "new_assertion_ids": [
+    "tests.test_interval_graph.CashCalendarContractTests.test_cash_and_venue_clocks_reject_invalid_types_and_margins",
+    "tests.test_interval_graph.CashCalendarContractTests.test_malformed_published_cash_rows_fail_at_ingestion",
+    "tests.test_interval_graph.CashCalendarContractTests.test_public_cash_source_views_cannot_mutate_frozen_versions",
+    "tests.test_interval_graph.IntervalGraphTests.test_boundary_order_empty_intersections_and_duplicate_reset_owners",
+    "tests.test_interval_graph.IntervalGraphTests.test_calendar_rows_have_stable_identity_and_frozen_known_time_queries",
+    "tests.test_interval_graph.IntervalGraphTests.test_compiled_intersections_match_literal_and_preserve_inactive_gaps",
+    "tests.test_interval_graph.IntervalGraphTests.test_dst_gap_fold_and_non_24_hour_calendar_days",
+    "tests.test_interval_graph.IntervalGraphTests.test_graph_intervals_and_source_dependencies_are_immutable",
+    "tests.test_interval_graph.IntervalGraphTests.test_invalid_public_clock_types_and_unknown_timezone_bytes_fail",
+    "tests.test_interval_graph.IntervalGraphTests.test_literal_source_clock_variants_and_all_endpoint_queries",
+    "tests.test_interval_graph.IntervalGraphTests.test_session_cutoff_and_eligibility_do_not_depend_on_opening_prints",
+    "tests.test_interval_graph.IntervalGraphTests.test_summer_ny_fixed_est_and_nine_vs_nine_thirty_match_frozen_utc",
+    "tests.test_interval_graph.IntervalGraphTests.test_sunday_midnight_interval_keeps_declared_trading_date_and_last_nanosecond",
+    "tests.test_interval_graph.IntervalGraphTests.test_weekly_dated_union_keeps_a_holiday_and_short_session",
+    "tests.test_timer_journal.TimerJournalTests.test_abrupt_process_exit_before_and_after_commit_is_restart_safe",
+    "tests.test_timer_journal.TimerJournalTests.test_calendar_revision_never_repeats_an_already_committed_logical_reset",
+    "tests.test_timer_journal.TimerJournalTests.test_conflicting_versions_clock_rewind_and_invalid_state_fail_atomically",
+    "tests.test_timer_journal.TimerJournalTests.test_future_calendar_change_replaces_pending_timer_and_keeps_old_history",
+    "tests.test_timer_journal.TimerJournalTests.test_initial_late_install_catches_up_at_available_cut_and_duplicate_is_inert",
+    "tests.test_timer_journal.TimerJournalTests.test_no_market_tick_is_needed_and_boundary_order_is_deterministic",
+    "tests.test_timer_journal.TimerJournalTests.test_past_revision_reconciles_at_installation_without_retroactive_reset",
+    "tests.test_timer_journal.TimerJournalTests.test_reducer_failure_rolls_back_state_application_and_clock_together",
+    "tests.test_timer_journal.TimerJournalTests.test_removed_unapplied_action_can_be_explicitly_reintroduced",
+    "tests.test_timer_journal.TimerJournalTests.test_separate_owners_share_clock_but_not_state_or_logical_identity"
+  ],
+  "new_tests_passed": 24,
+  "phase_p5_consumer_integration_complete": false,
+  "recorded_at": "2026-09-06T19:42:57.353886+00:00",
+  "remaining": [
+    "Every source-specific indicator variant and unresolved imported/private source definition.",
+    "Dated futures venue, firm and platform boundaries and eligibility joins.",
+    "Actual print coverage, formation data and prior-session/weekly/monthly reconciliation.",
+    "Measured original/provider/compiled cost comparisons on equivalent eligible inputs.",
+    "Complete runtime and C/L/R/P consumer integration; external action delivery remains its own contract.",
+    "Eligible economic comparisons and prospective phases."
+  ],
+  "resources": {
+    "cpu_seconds": 29.710092999999997,
+    "peak_rss_bytes": 168046592,
+    "wall_seconds": 58.627925015985966
+  },
+  "review_findings_collected": 12,
+  "scope_version": "0d7fff8cba9a2201a30ea140cfa7f012556405c8c8a7416ef2802c109c6d7a95",
+  "script": {
+    "kind": "evidence_assembly_script",
+    "sha256": "9d205bd4629a26c478e76bf5666d6fe6ece4b76fdd3213ce97dca0a5835d1f35",
+    "size_bytes": 10614
+  },
+  "source_findings_reviewed": 74,
+  "static_original_files": 47,
+  "verification": {
+    "kind": "verification",
+    "sha256": "eb677cb594b51c67d71d5a1e54fe41c017336c56f8ea402c46e9c2c25a1dd594",
+    "size_bytes": 87149
+  },
+  "verification_attempts": 1,
+  "visually_inspected_pdf_pages": 41,
+  "whole_unit_definition_closure": false
+}

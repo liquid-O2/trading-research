@@ -1,0 +1,197 @@
+{
+  "status": "PASS",
+  "created_at": "2026-09-06T06:51:11.276178+00:00",
+  "count": 27,
+  "scope": "Finite arithmetic, ordering and clock examples only. This does not test an implemented trading system, data feed, forecast model, policy or profit.",
+  "results": [
+    {
+      "id": "EXAMPLE-REWARD-01",
+      "passed": true,
+      "actual": "95",
+      "expected": "95",
+      "meaning": "Incremental marked-net reward telescopes to terminal net."
+    },
+    {
+      "id": "EXAMPLE-REWARD-02",
+      "passed": true,
+      "actual": "True",
+      "expected": "True",
+      "meaning": "A shorter trade can leave valuable occupied-time capacity; all alternatives use the same boundary."
+    },
+    {
+      "id": "EXAMPLE-REWARD-03",
+      "passed": true,
+      "actual": "False",
+      "expected": "False",
+      "meaning": "Adding complete-trade reward and overlapping continuation double counts value."
+    },
+    {
+      "id": "EXAMPLE-ORDER-01",
+      "passed": true,
+      "actual": "(2, 1, 1)",
+      "expected": "(2, 1, 1)",
+      "meaning": "Identical excursions and endpoint do not identify order."
+    },
+    {
+      "id": "EXAMPLE-ORDER-02",
+      "passed": true,
+      "actual": "('upper', 'lower')",
+      "expected": "('upper', 'lower')",
+      "meaning": "The ordered labels must differ despite matching excursion summaries."
+    },
+    {
+      "id": "EXAMPLE-HORIZON-01",
+      "passed": true,
+      "actual": "False",
+      "expected": "False",
+      "meaning": "Contact at minute nine and favorable passage at eleven is unresolved at the original minute-ten end."
+    },
+    {
+      "id": "EXAMPLE-HORIZON-02",
+      "passed": true,
+      "actual": "True",
+      "expected": "True",
+      "meaning": "A new ten-minute contact-origin forecast has a different end and label."
+    },
+    {
+      "id": "EXAMPLE-QUOTE-01",
+      "passed": true,
+      "actual": "100",
+      "expected": "100",
+      "meaning": "The strategy cannot use the later venue quote before receipt."
+    },
+    {
+      "id": "EXAMPLE-QUOTE-02",
+      "passed": true,
+      "actual": "102",
+      "expected": "102",
+      "meaning": "At arrival the venue can have a changed standing quote not yet received locally."
+    },
+    {
+      "id": "EXAMPLE-QUOTE-03",
+      "passed": true,
+      "actual": "False",
+      "expected": "False",
+      "meaning": "A marketable fill is not delayed to the next quote update."
+    },
+    {
+      "id": "EXAMPLE-ASSIMILATION-01",
+      "passed": true,
+      "actual": "0.5",
+      "expected": "0.5",
+      "meaning": "Identical evidence ID is assimilated once in this illustrative Gaussian model."
+    },
+    {
+      "id": "EXAMPLE-ASSIMILATION-02",
+      "passed": true,
+      "actual": "0.5",
+      "expected": "0.5",
+      "meaning": "Duplicate input must not create a second independent observation."
+    },
+    {
+      "id": "EXAMPLE-GEOMETRY-01",
+      "passed": true,
+      "actual": "False",
+      "expected": "False",
+      "meaning": "The original physical band does not include a point admitted only by a wider uncertainty region."
+    },
+    {
+      "id": "EXAMPLE-GEOMETRY-02",
+      "passed": true,
+      "actual": "True",
+      "expected": "True",
+      "meaning": "A declared scenario region is a distinct event definition, not a retroactive physical touch."
+    },
+    {
+      "id": "EXAMPLE-VEGA-01",
+      "passed": true,
+      "actual": "1000",
+      "expected": "1000",
+      "meaning": "USD per unit annualized IV fraction."
+    },
+    {
+      "id": "EXAMPLE-VEGA-02",
+      "passed": true,
+      "actual": "10.00",
+      "expected": "10",
+      "meaning": "USD per one volatility percentage point."
+    },
+    {
+      "id": "EXAMPLE-VEGA-03",
+      "passed": true,
+      "actual": "-10.00",
+      "expected": "-10",
+      "meaning": "A sold trade reverses the signed vega-flow contribution."
+    },
+    {
+      "id": "EXAMPLE-SKEW-01",
+      "passed": true,
+      "actual": "0.06",
+      "expected": "0.06",
+      "meaning": "Put-minus-call skew uses a declared positive downside-richness convention."
+    },
+    {
+      "id": "EXAMPLE-SKEW-02",
+      "passed": true,
+      "actual": "0.02",
+      "expected": "0.02",
+      "meaning": "Butterfly curvature is distinct from the skew slope."
+    },
+    {
+      "id": "EXAMPLE-TERM-01",
+      "passed": true,
+      "actual": "0.14",
+      "expected": "0.14",
+      "meaning": "Interval total-variance difference is a variance proxy, not a difference of volatilities."
+    },
+    {
+      "id": "EXAMPLE-RISK-01",
+      "passed": true,
+      "actual": "430",
+      "expected": "430",
+      "meaning": "Headroom subtracts current net loss and incremental stop/cost exposure once."
+    },
+    {
+      "id": "EXAMPLE-OI-01",
+      "passed": true,
+      "actual": "(80, 120)",
+      "expected": "(80, 120)",
+      "meaning": "Synthetic no-exercise OI bounds do not identify a path or trade-level opening status."
+    },
+    {
+      "id": "EXAMPLE-NONFILL-01",
+      "passed": true,
+      "actual": "0",
+      "expected": "0",
+      "meaning": "No fill creates zero trade P&L absent an explicit order cost; a missed winner is an alternative-policy diagnostic."
+    },
+    {
+      "id": "EXAMPLE-IV-01",
+      "passed": true,
+      "actual": "0.40000000000000047",
+      "expected": "0.4",
+      "meaning": "Bisection inversion agrees with an independent ATM closed-form identity."
+    },
+    {
+      "id": "EXAMPLE-IV-02",
+      "passed": true,
+      "actual": "0.40000000000000047",
+      "expected": "0.4",
+      "meaning": "ATM put/call symmetry under the same forward convention."
+    },
+    {
+      "id": "EXAMPLE-IV-03",
+      "passed": true,
+      "actual": "None",
+      "expected": "None",
+      "meaning": "Below-bound quotes have no admissible IV."
+    },
+    {
+      "id": "EXAMPLE-IV-04",
+      "passed": true,
+      "actual": "None",
+      "expected": "None",
+      "meaning": "A price at the strict upper bound has no finite IV in this convention."
+    }
+  ]
+}

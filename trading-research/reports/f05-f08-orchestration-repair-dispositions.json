@@ -1,0 +1,96 @@
+{
+  "reviewer": "/root",
+  "recorded_at": "2026-09-06T21:22:29.079840+00:00",
+  "status": "consolidated_repairs_written_static_verification_complete",
+  "dispositions": {
+    "ORCH-01": {
+      "status": "repaired_and_statically_verified",
+      "correction": "A fsynced shared lifecycle retains the completion payload before artifact publication; member finalization is independent, checks existing finalizations, records errors, and supports idempotent --recover without new tests. Reservation gaps are reconciled from trial configuration identity."
+    },
+    "ORCH-02": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Exclusive group lock and durable unresolved-run/family gates precede any UUID/reservation. Launch phase, PID/group and exact worker command are retained; SIGTERM/INT kill and reap the worker. Hard-crash recovery never reruns tests, verifies worker command before killing, waits for group absence, and charges unknown use as reservations."
+    },
+    "ORCH-03": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Recorder requires wrapper equality to immutable members/resources/result, exact family set, actual succeeded trial membership/config/code/golden, observed charges and supervised artifact in each attempt."
+    },
+    "ORCH-04": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Exactly the three frozen families and their full 3-attempt/600-CPU-second budgets and per-run 180/190 CPU,4GiB,240-wall limits are validated before reservations."
+    },
+    "ORCH-05": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Preflight pins complete review/repair JSON, all initial reviews and repair reports, frozen contracts, exact coverage and recorder source. Static AST method IDs, approved modules, source case identity and repaired manifest hash must match before execution; recorder consumes immutable mappings."
+    },
+    "ORCH-06": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Dedicated worker in the retained new supervisor uses optional verify.run progress_stream tee. Test identities/output flush to persistent stdout/stderr files as executed. Completed/partial result bytes and tracebacks are retained on interrupted runs. Prior F04 worker remains byte-identical."
+    },
+    "ORCH-07": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Ledger.update can union only explicitly named evidence lists while holding the ledger lock. Recorder supplies new additions instead of stale snapshots. Added one regression with interleaved prepared writer and other committed writer."
+    },
+    "ORCH-08": {
+      "status": "repaired_and_statically_verified",
+      "correction": "Recorder preflights scope audit and presentation JSON before commit. Ledger atomically binds shared attachment key to exact changes and returns existing event on identical retry, rejects conflicting reuse. Deterministic case reports, atomic dashboards and explicit postcommit presentation failure preserve recoverable attachment identity."
+    }
+  },
+  "repaired_identities": [
+    {
+      "path": "tools/verify_foundation_extensions.py",
+      "sha256": "e7bfc25bd6f64d4a06ada70bc452521e2bd59da346be0658f542cd655fa06053",
+      "bytes": 21501
+    },
+    {
+      "path": "tools/record_foundation_extensions.py",
+      "sha256": "7a62309dd644943def06bbee201622959e508e660ee046732e54350844dfdae8",
+      "bytes": 13121
+    },
+    {
+      "path": "src/trading_research/verify.py",
+      "sha256": "df1336ec1379fe65502b8c7d8d4dc4325a40c81630372f2d2913a4a9cfcd0fa1",
+      "bytes": 7520
+    },
+    {
+      "path": "src/trading_research/operations/ledger.py",
+      "sha256": "dc0b5b1189b4f9bfde7f483f0f1103d927eda69ea6caf9f261b10a9bb2bc064b",
+      "bytes": 15670
+    },
+    {
+      "path": "tests/test_evidence.py",
+      "sha256": "48fe21bdedce4ef874b3633d1c22334ad32dc6b8ff5d42ce092c437e84555c77",
+      "bytes": 11359
+    }
+  ],
+  "execution": {
+    "tests": 0,
+    "compilation": 0,
+    "production_imports": 0,
+    "new_supervisor_runs": 0,
+    "new_recorder_runs": 0
+  },
+  "regression_assertion": "tests.test_evidence.ScopeLedgerTests.test_atomic_evidence_append_and_attachment_retry_preserve_other_writer",
+  "remaining": "Run the one frozen shared suite only after all family repair dispositions and final identity checks are complete.",
+  "repair_verification_report": "reports/f05-f08-orchestration-repair-review.json",
+  "repair_verification_residuals": [
+    {
+      "id": "ORCH-REPAIR-01",
+      "original_finding": "ORCH-02",
+      "status": "repaired_and_statically_verified",
+      "correction": "Worker fsyncs PID/PGID handshake before suite import/discovery. Recovery unions persisted, handshake and command-discovered groups and checks every live member before releasing gate. Normal supervision also detects/kills lingering descendants and retains unresolved lifecycle."
+    },
+    {
+      "id": "ORCH-REPAIR-02",
+      "original_finding": "ORCH-02",
+      "status": "repaired_and_statically_verified",
+      "correction": "Interruption sets success=False with interrupted status. Finalizer rejects inconsistent success/terminal-status pairs."
+    },
+    {
+      "id": "ORCH-REPAIR-03",
+      "original_finding": "ORCH-08",
+      "status": "repaired_and_statically_verified",
+      "correction": "Both dashboard inputs must be JSON objects before any ledger commit."
+    }
+  ]
+}

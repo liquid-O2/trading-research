@@ -1,0 +1,551 @@
+{
+  "schema": "PrimaryPeriodAdmissionGoldenCasesV1",
+  "recorded_on": "2026-09-07",
+  "policy": {
+    "config_path": "configs/research-period.json",
+    "config_kind": "ResearchPeriodPolicyV1",
+    "primary_scope": "primary_model",
+    "primary_start_date_inclusive": "2020-01-01",
+    "primary_start_ns_utc": 1577836800000000000,
+    "primary_end": "latest_eligible_observation_available_at_the_frozen_evaluation_cut",
+    "pre_2020_training_or_evaluation_rows": false,
+    "older_scopes": [
+      "jumbo_optional",
+      "ohlc_optional"
+    ],
+    "legacy_scope": "diagnostic",
+    "older_scope_rule": "Every older use is bound to its own declared purpose and cohort and is excluded from the primary denominator.",
+    "availability_rule": "Future or unavailable rows remain ineligible under the existing typed clocks and source-quality gates."
+  },
+  "conventions": {
+    "time_unit": "UTC nanoseconds as exact int64-compatible integers",
+    "fold_interval": "decision and evaluation intervals are half-open where the current fold APIs specify a range",
+    "period_lower_bound": "inclusive",
+    "primary_row_rule": "Every retained training, calibration, or evaluation Sample/TemporalSampleV1 decision_at must be at or after primary_start_ns_utc.",
+    "primary_clock_rule": "A primary fold must also have fit_at, evaluation_start, and any training_start at or after primary_start_ns_utc; its evaluation_end remains bounded by actual eligibility at the frozen cut rather than a fixed calendar end.",
+    "raw_past_rule": "A pre-period raw_past dependency is not admitted to the primary model. It may be retained only under diagnostic, jumbo_optional, or ohlc_optional purpose with its own denominator and causal disclosure. A primary boundary row with no pre-period dependency may pass the period check, subject to maturity, OOF, embargo, source, and availability gates.",
+    "source_quality_rule": "Passing the period check never upgrades missing, incomplete, unpaired, unavailable, or purpose-ineligible source evidence.",
+    "historical_e0_rule": "The existing E0_exact 2022-2025 completeness harness remains a separate historical harness; it is not the wider primary 2020+ admission policy."
+  },
+  "fixture_artifact_rule": {
+    "cohort_artifact": "Each cohort fixture includes a literal certification payload. A test harness may publish that payload through ArtifactStore.put_json and fill ArtifactRef from the returned immutable reference; the certification payload itself is part of this contract.",
+    "temporal_dependency_artifact": "Temporal dependency fixtures include the literal dependency identity and clocks. The harness must publish the exact TemporalDependencyEvidenceV1 bytes before calling validate_dependency_bytes; the period disposition is independent of that publication step."
+  },
+  "cases": [
+    {
+      "id": "PERIOD-01-before-boundary",
+      "scope": "primary_model",
+      "purpose": "Reject a complete-looking cohort whose first observation is one nanosecond before the inclusive primary boundary.",
+      "interfaces": [
+        "CohortEvidence",
+        "CohortRegistry.append"
+      ],
+      "literal": {
+        "cohort_evidence": {
+          "id": "fixture-period-01",
+          "dataset_id": "fixture/nq/mbp-1",
+          "field": "bid_px",
+          "cohort_id": "NQ:2019-12-31T23:59:59.999999999Z/PT1.000000001S",
+          "operation": "quote_replay",
+          "state": "eligible",
+          "depth": "complete_window",
+          "source_identity": "fixture-source-v1",
+          "definition_version": "fixture-definition-v1",
+          "code_version": "fixture-code-v1",
+          "observation_start": 1577836799999999999,
+          "observation_end": 1577836801000000000,
+          "latency_scenario": "declared_zero_latency",
+          "reason": "literal complete-window fixture",
+          "dependent_units": [
+            "fixture.quote_replay"
+          ],
+          "next_action": null
+        },
+        "artifact_certification": {
+          "success": true,
+          "certification": {
+            "datasets": [
+              "fixture/nq/mbp-1"
+            ],
+            "cohort_id": "NQ:2019-12-31T23:59:59.999999999Z/PT1.000000001S",
+            "operations": [
+              "quote_replay"
+            ],
+            "fields": [
+              "bid_px"
+            ],
+            "depth": "complete_window"
+          }
+        }
+      },
+      "expected": {
+        "period_check": "fail",
+        "error_code": "pre_period_observation",
+        "error_type": "ContractError",
+        "required_message": "primary cohort observation_start is before 2020-01-01T00:00:00Z",
+        "record_disposition": "ineligible",
+        "primary_denominator_effect": "zero",
+        "artifact_scope_effect": "The exact artifact certification must still be checked; it cannot override the period failure.",
+        "permitted_legacy_disposition": "Retain immutable audit evidence under diagnostic or an explicitly declared optional scope with next_action if that scope is ineligible."
+      }
+    },
+    {
+      "id": "PERIOD-02-exact-boundary",
+      "scope": "primary_model",
+      "purpose": "Prove that the inclusive boundary itself passes the period gate without asserting full source eligibility.",
+      "interfaces": [
+        "CohortEvidence",
+        "CohortRegistry.append"
+      ],
+      "literal": {
+        "cohort_evidence": {
+          "id": "fixture-period-02",
+          "dataset_id": "fixture/nq/mbp-1",
+          "field": "ask_px",
+          "cohort_id": "NQ:2020-01-01T00:00:00Z/PT1.000000001S",
+          "operation": "quote_replay",
+          "state": "eligible",
+          "depth": "complete_window",
+          "source_identity": "fixture-source-v1",
+          "definition_version": "fixture-definition-v1",
+          "code_version": "fixture-code-v1",
+          "observation_start": 1577836800000000000,
+          "observation_end": 1577836801000000000,
+          "latency_scenario": "declared_zero_latency",
+          "reason": "literal exact-boundary complete-window fixture",
+          "dependent_units": [
+            "fixture.quote_replay"
+          ],
+          "next_action": null
+        },
+        "artifact_certification": {
+          "success": true,
+          "certification": {
+            "datasets": [
+              "fixture/nq/mbp-1"
+            ],
+            "cohort_id": "NQ:2020-01-01T00:00:00Z/PT1.000000001S",
+            "operations": [
+              "quote_replay"
+            ],
+            "fields": [
+              "ask_px"
+            ],
+            "depth": "complete_window"
+          }
+        }
+      },
+      "expected": {
+        "period_check": "pass",
+        "error_code": null,
+        "required_message": null,
+        "admission_disposition": "period_admissible_only",
+        "primary_denominator_effect": "undetermined_until_other_gates_pass",
+        "remaining_gates": [
+          "exact artifact scope",
+          "typed source clocks",
+          "actual availability at frozen cut",
+          "source quality",
+          "calendar/definition/roll scope where applicable"
+        ],
+        "boundary_assertion": "observation_start equal to primary_start_ns_utc is accepted; a strict greater-than comparison is forbidden."
+      }
+    },
+    {
+      "id": "PERIOD-03-prefix-no-range",
+      "scope": "primary_model",
+      "purpose": "Retain observed field-preservation evidence while preventing a row prefix with no range from certifying a primary cohort.",
+      "interfaces": [
+        "CohortEvidence",
+        "CohortRegistry.append"
+      ],
+      "literal": {
+        "cohort_evidence": {
+          "id": "fixture-period-03",
+          "dataset_id": "fixture/es/ohlcv-1m",
+          "field": "close_px",
+          "cohort_id": "ES:prefix-2020-onward-unknown-range",
+          "operation": "ordinary_ohlc_context",
+          "state": "observed",
+          "depth": "row_prefix",
+          "source_identity": "fixture-source-v1",
+          "definition_version": "fixture-definition-v1",
+          "code_version": "fixture-code-v1",
+          "observation_start": null,
+          "observation_end": null,
+          "latency_scenario": null,
+          "reason": "field and schema preservation observed on a bounded row prefix",
+          "dependent_units": [],
+          "next_action": null
+        },
+        "artifact_certification": {
+          "success": true,
+          "certification": {
+            "datasets": [
+              "fixture/es/ohlcv-1m"
+            ],
+            "cohort_id": "ES:prefix-2020-onward-unknown-range",
+            "operations": [
+              "ordinary_ohlc_context"
+            ],
+            "fields": [
+              "close_px"
+            ],
+            "depth": "row_prefix"
+          }
+        }
+      },
+      "expected": {
+        "period_check": "fail",
+        "error_code": "primary_complete_range_required",
+        "error_type": "ContractError",
+        "required_message": "primary cohort evidence requires concrete observation bounds and a complete operation-specific window",
+        "record_disposition": "retain_observed_field_evidence_as_incomplete_for_primary",
+        "primary_denominator_effect": "zero",
+        "next_action": "capture and certify a complete 2020-onward operation-specific window with actual availability and source identity",
+        "legacy_note": "CohortEvidence.__post_init__ already prevents eligible state for row_prefix; the new primary admission check must also prevent an observed row_prefix from being promoted later."
+      }
+    },
+    {
+      "id": "PERIOD-04-fold-boundary-and-lookback",
+      "scope": "primary_model",
+      "purpose": "Close period bypasses at fold compilation, direct legacy Fold construction, model preflight, calibration, and fitted measurement admission.",
+      "interfaces": [
+        "Sample",
+        "Fold",
+        "chronological_fold",
+        "validate_fold_population",
+        "TemporalSampleV1",
+        "compile_temporal_fold",
+        "validate_temporal_fold_population",
+        "preflight_training",
+        "fit_logistic",
+        "fit_frequency",
+        "fit_sigmoid_calibration",
+        "admit_measurement_fit"
+      ],
+      "literal": {
+        "primary_start_ns_utc": 1577836800000000000,
+        "legacy_samples": [
+          {
+            "id": "legacy-before",
+            "date_group": "2019-12-31",
+            "decision_at": 1577836799999999999,
+            "label_known_at": 1577836800000000000,
+            "dependency_end": 1577836799999999999,
+            "target_version": "target-v1"
+          },
+          {
+            "id": "legacy-boundary",
+            "date_group": "2020-01-01",
+            "decision_at": 1577836800000000000,
+            "label_known_at": 1577836802000000000,
+            "dependency_end": 1577836801000000000,
+            "target_version": "target-v1"
+          }
+        ],
+        "temporal_dependency": {
+          "id": "raw-pre-period-lookback",
+          "kind": "raw_past",
+          "start": 1577836780000000000,
+          "end": 1577836790000000000,
+          "known_at": 1577836790000000000,
+          "evidence_payload_format": "TemporalDependencyEvidenceV1"
+        },
+        "temporal_samples": [
+          {
+            "id": "temporal-before",
+            "date_group": "2019-12-31",
+            "decision_at": 1577836799999999999,
+            "target_end": 1577836800999999999,
+            "label_known_at": 1577836801999999999,
+            "target_version": "target-v1",
+            "phase_role": "train",
+            "endpoint_group": "episode-2019-12-31",
+            "parent_groups": [],
+            "dependencies": []
+          },
+          {
+            "id": "temporal-boundary-with-pre-period-lookback",
+            "date_group": "2020-01-01",
+            "decision_at": 1577836800000000000,
+            "target_end": 1577836801500000000,
+            "label_known_at": 1577836802000000000,
+            "target_version": "target-v1",
+            "phase_role": "train",
+            "endpoint_group": "episode-2020-01-01",
+            "parent_groups": [],
+            "dependencies": [
+              "raw-pre-period-lookback"
+            ]
+          }
+        ],
+        "fold_clocks": {
+          "id": "fold-period-04",
+          "fit_at": 1577836802000000000,
+          "evaluation_start": 1577836803000000000,
+          "evaluation_end": 1577836804000000000,
+          "embargo_ns": 0,
+          "training_start": null
+        },
+        "direct_legacy_fold_declaration": {
+          "id": "fold-period-04-direct",
+          "fit_at": 1577836802000000000,
+          "evaluation_start": 1577836803000000000,
+          "evaluation_end": 1577836804000000000,
+          "embargo_ns": 0,
+          "training_ids": [
+            "legacy-before",
+            "legacy-boundary"
+          ],
+          "evaluation_ids": [],
+          "purged": [],
+          "sample_manifest_hash": "fixture-manifest-hash-period-04",
+          "training_start": null
+        },
+        "diagnostic_variant": {
+          "scope": "diagnostic",
+          "raw_past_rule": "The boundary row may be retained as a causal diagnostic only when raw_past.end and raw_past.known_at are no later than decision_at; it cannot be reused by a primary model fold."
+        }
+      },
+      "expected": {
+        "period_check": "fail_for_primary_population",
+        "error_code": "pre_period_training_or_dependency",
+        "error_type": "ContractError",
+        "required_message": "primary fold population contains a pre-period decision row or a disallowed pre-period raw_past dependency",
+        "compilation": {
+          "chronological_fold": "reject legacy-before when scope=primary_model",
+          "compile_temporal_fold": "reject temporal-before and temporal-boundary-with-pre-period-lookback when scope=primary_model",
+          "validate_fold_population": "recheck the complete retained population and reject even when a caller supplies a manually constructed Fold",
+          "validate_temporal_fold_population": "recheck the complete retained temporal population and reject even when a caller supplies a manually constructed TemporalFoldV1"
+        },
+        "direct_fold_bypass": {
+          "Fold_constructor": "May remain a structural declaration for legacy compatibility, but it is not primary admission evidence.",
+          "preflight_training": "must reject the direct declaration after inspecting every supplied BinaryExample sample under scope=primary_model",
+          "fit_logistic": "must inherit the preflight rejection",
+          "fit_frequency": "must inherit the preflight rejection",
+          "fit_sigmoid_calibration": "must inherit the preflight rejection before reading base predictions",
+          "admit_measurement_fit": "must reject a primary retained temporal population containing either disallowed row"
+        },
+        "exact_boundary_without_lookback": "A 2020-01-01 decision row with no pre-period raw_past dependency may pass the period check; maturity, OOF, embargo, source, and actual availability still apply.",
+        "primary_denominator_effect": "zero_for_this_fixture",
+        "diagnostic_denominator_effect": "retained_only_under_explicit_diagnostic_scope"
+      }
+    },
+    {
+      "id": "PERIOD-05-evaluation-registration",
+      "scope": "primary_model",
+      "purpose": "Reject a protocol that freezes a pre-period evaluation date and admit the corrected boundary-only date list only after all other registration gates.",
+      "interfaces": [
+        "Protocol",
+        "EvaluationRegistry.register",
+        "EvaluationRegistry.begin",
+        "EvaluationRegistry.finish"
+      ],
+      "literal": {
+        "protocol_id": "protocol-period-05",
+        "scope": "primary_model",
+        "ordered_dates": [
+          "2019-12-31",
+          "2020-01-01"
+        ],
+        "evaluation_start_at": 1577836800000000000,
+        "endpoint_at": 1578009600000000000,
+        "registered_at": 1577836799999999999,
+        "sample_manifest_hash": "fixture-primary-manifest-period-05",
+        "role": "future_confirmation",
+        "corrected_variant": {
+          "ordered_dates": [
+            "2020-01-01",
+            "2020-01-02"
+          ],
+          "evaluation_start_at": 1577836800000000000,
+          "endpoint_at": 1578009600000000000,
+          "registered_at": 1577836799999999999,
+          "sample_manifest_hash": "fixture-primary-manifest-period-05-corrected"
+        },
+        "frozen_cut_rule": "The corrected variant has no hard-coded primary end date beyond its registered endpoint; each date must still have actual eligible observations at the frozen cut."
+      },
+      "expected": {
+        "period_check": "fail_for_original",
+        "error_code": "pre_period_evaluation_date",
+        "error_type": "ContractError",
+        "required_message": "primary protocol ordered_dates contains 2019-12-31 before 2020-01-01",
+        "register_disposition": "do_not_register",
+        "begin_disposition": "unreachable_for_original_period_failure",
+        "corrected_variant": {
+          "period_check": "pass",
+          "admission_disposition": "period_admissible_only",
+          "next_gates": [
+            "immutable registered protocol",
+            "frozen model IDs before future confirmation starts",
+            "sample_manifest_hash equality",
+            "actual source/clock availability",
+            "one-use date reservation",
+            "endpoint completion"
+          ]
+        },
+        "primary_denominator_effect": "zero_for_original",
+        "registration_clock_note": "Registration may occur before the first2020 observation; the observed primary population lower bound does not forbid earlier protocol registration."
+      }
+    },
+    {
+      "id": "PERIOD-06-period-pass-source-fail",
+      "scope": "primary_model",
+      "purpose": "Keep a 2022 period pass separate from an ES quote-source failure for a quote-dependent operation.",
+      "interfaces": [
+        "CohortEvidence",
+        "CohortRegistry.append",
+        "admit_measurement_fit",
+        "ValidatedTemporalFoldEvidenceV1"
+      ],
+      "literal": {
+        "decision_at": 1646922600000000000,
+        "trading_date": "2022-03-10",
+        "dataset_id": "quantpad/cme__es-continuous-futures__mbp-1",
+        "field": "bid_px",
+        "cohort_id": "ES:2022-03-10T14:30:00+00:00:PT1H",
+        "operation": "quote_replay",
+        "state": "missing",
+        "depth": "complete_window",
+        "source_identity": "quantpad-cme-es-mbp-v1",
+        "definition_version": "es-definition-v1",
+        "code_version": "current-readiness-code",
+        "observation_start": 1646922600000000000,
+        "observation_end": 1646926200000000000,
+        "latency_scenario": "declared_provider_timestamp",
+        "reason": "no ES MBP rows for the selected hour; standalone ES trades are present but do not certify quote-dependent operations",
+        "dependent_units": [
+          "quote_replay",
+          "event_clock",
+          "economic_reconstruction"
+        ],
+        "next_action": "capture or certify the missing ES MBP partition and actual receipt/clock assumptions",
+        "paired_trade_fact": {
+          "dataset_id": "quantpad/cme__es-continuous-futures__trades",
+          "operation": "standalone_trade_audit",
+          "state": "observed",
+          "row_count": 112476,
+          "quote_substitution": false
+        }
+      },
+      "expected": {
+        "period_check": "pass",
+        "error_code": null,
+        "source_quality_check": "fail_for_quote_dependent_operations",
+        "error_type": "DependencyUnavailable",
+        "required_message": "missing ES MBP partition for the selected quote-dependent cohort",
+        "quote_dependent_disposition": "ineligible",
+        "standalone_trade_disposition": "independently assessed; may not inherit quote eligibility",
+        "period_failure_relabel": "forbidden",
+        "next_action_preservation": "retain the concrete missing-MBP action",
+        "primary_denominator_effect": "zero_for_quote_dependent_units",
+        "measurement_fit_effect": "admit_measurement_fit must reject if the actual retained fold/evidence closure depends on this missing source; it must not report pre_period_observation."
+      }
+    },
+    {
+      "id": "PERIOD-07-terms-and-calendar-block",
+      "scope": "primary_model",
+      "purpose": "Show that a 2020+ date can pass the period gate while execution terms, verified venue boundaries, and complete parent-universe lineage remain blocking dependencies.",
+      "interfaces": [
+        "InstrumentDefinition.eligibility",
+        "InstrumentDefinition.futures_terms",
+        "Calendar.resolve",
+        "e0_window",
+        "ContractUniverse",
+        "SessionSequence",
+        "select_prior_volume",
+        "freeze_cohort",
+        "require_runnable"
+      ],
+      "literal": {
+        "decision_at": 1577975400000000000,
+        "trading_date": "2020-01-02",
+        "instrument_definition": {
+          "underlying": "NQ",
+          "classification": "future",
+          "multiplier": null,
+          "tick_size": "0.25",
+          "definition_version": "nq-definition-missing-multiplier-v1",
+          "purpose": "execution_and_valuation"
+        },
+        "cash_and_venue": {
+          "venue_scope": "synthetic_research_window",
+          "require_verified_venue": true,
+          "cash_context_day": "2020-01-02",
+          "venue_boundary_day": "2020-01-02"
+        },
+        "universe": {
+          "root": "NQ",
+          "coverage_scope": "acquired_outright_cohort",
+          "contract_ids": [
+            "NQ-H20",
+            "NQ-M20"
+          ],
+          "available_definition_ids": [
+            "NQ-H20"
+          ],
+          "missing_definition_ids": [
+            "NQ-M20"
+          ],
+          "previous_session_id": "NQ-session-2020-01-01"
+        },
+        "historical_e0_harness": {
+          "scope": "E0_exact",
+          "default_years": [
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "separate_from_primary_scope": true
+        }
+      },
+      "expected": {
+        "period_check": "pass",
+        "term_check": {
+          "raw_flow": "may pass because raw identity does not require valuation terms",
+          "valuation": "fail",
+          "execution": "fail",
+          "error_code": "required_multiplier_or_tick_terms_missing",
+          "error_type": "DependencyUnavailable"
+        },
+        "venue_check": {
+          "e0_window": "fail when require_verified_venue=true",
+          "error_code": "unverified_venue_boundary",
+          "error_type": "DependencyUnavailable"
+        },
+        "universe_check": {
+          "primary_e0": "fail because acquired_outright_cohort is not a complete parent universe for the exact E0 contract",
+          "low_level_selection": "must fail with missing definition or missing previous-session volume when the declared incomplete fixture is evaluated",
+          "error_type": "DependencyUnavailable"
+        },
+        "primary_disposition": "ineligible_until_terms_calendar_and_parent_universe_lineage_are_certified",
+        "period_failure_relabel": "forbidden",
+        "primary_denominator_effect": "zero"
+      }
+    }
+  ],
+  "cross_case_invariants": [
+    "Only PERIOD-02 and the period sub-check of PERIOD-06 and PERIOD-07 pass the lower-bound test; a period pass never implies source or execution eligibility.",
+    "No case may place a pre-2020 row in a primary training, calibration, or evaluation denominator.",
+    "A manually constructed legacy Fold or Protocol cannot serve as primary evidence without an explicit policy/scope admission check and a retained policy hash.",
+    "Missing ES 2022 MBP remains a source-quality/availability failure and is never renamed as a period failure.",
+    "Pre-2020 storage partitions remain retainable for audit and explicit optional/diagnostic work; the period gate belongs at purpose-specific cohort, fold, model, measurement, and evaluation admission.",
+    "The primary end is resolved from actual eligible observations at the frozen evaluation cut; no fixture may replace it with an arbitrary fixed calendar end."
+  ],
+  "pre_freeze_root_dispositions": [
+    {
+      "id": "PERIOD-PRE-01",
+      "reason": "Both original/corrected PERIOD05 future protocols must register strictly before the first evaluation observation. B-1 replaces B only for registered_at so the period fixture reaches the intended independent boundary. No implementation was executed."
+    },
+    {
+      "id": "PERIOD-PRE-02",
+      "reason": "Primary sample/observation boundary does not globally reject older static definitions/calendar publication metadata. Optional older Jumbo/OHLC context or comparisons retain separate purpose/cohort provenance; arbitrary preperiod raw_past remains ineligible for primary use."
+    },
+    {
+      "id": "PERIOD-PRE-03",
+      "reason": "Future confirmation protocols may declare future endpoints before observations exist. Actual source availability is checked at data admission/model reads/result completion; a planned future endpoint is not a completed eligible observation."
+    }
+  ]
+}

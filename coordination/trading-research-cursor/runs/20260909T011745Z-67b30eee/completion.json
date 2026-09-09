@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 1105.2869926542044,
+  "finished_at": "2026-09-09T01:36:10.466664+00:00",
+  "session_id": "3b0b092d-5fbb-4b26-8bce-18e53ffbe607",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 1101049,
+    "duration_api_ms": 1101049,
+    "is_error": false,
+    "result": "I\u2019ll start from root\u2019s integrate notes, diagnosis, and the refreshed three owned files so the repair targets the measured 2020 costs without changing science.Root already landed the scientific fixes. I\u2019ll read the measured hot paths in the refreshed files and the profile records next.The hot paths are still the per-bar pivot loop, scalar joins, per-row writer, and `_add_cell`. I\u2019ll read emit, grouping, and tests next.I have the five measured paths and the root scientific contracts. Next I\u2019ll vectorize pivots and joins, then add a typed batch writer and day-level group reductions.Pivot confirmation is now shifted-array comparisons plus one linear carry. Next I\u2019ll batch future-window lookups and then rewrite the writer, grouping, and emit paths.Next I\u2019ll add the day-batch cut emitter and replace the per-cut Python loop so writes and grouping stay in the same row order.I\u2019ll swap the leftover per-cut loop for the batch emitter and fix `prior_dates` plus mapping residuals.The leftover cut-loop body is still in the file. I\u2019ll remove it next and wire `prior_dates` through the batch emitter.The cut loop is gone. Next I\u2019ll vectorize source-event joins and replace the per-scalar emit path.Label IDs were assigned lag-first, which would change row identity. I\u2019m switching assignment to event-major, matching the original order.The three owned files are updated. Root still owns registered execution; this assignment did not import or run anything.\n\n**What changed**\n\n1. **`confirmed_pivots`** \u2014 Confirmation is shifted-array / window comparisons (no per-bar `np.all` on 2-wide slices). Validity, run, gap, and contract-reset masks are built once; active level and first breach are a linear carry. Center high/low, right-2 known clocks (`end + 60s` baseline), strict `>` / `<` ties, and reset on gap/invalid/instrument change are unchanged. `confirmed_pivots_reference` is the literal policy loop.\n\n2. **`_emit_source_events`** \u2014 Events are collected in bar/kind order. For each receiver, all event-known / formation-start / formation-end joins run as one `backward_join_indices` per lag. Five horizon windows are `lookup_future_windows` arrays. Reference bar ending at event known remains allowed (`ref_start >= event_known` is still the reject). Past formation/preavailability still require same `run_id` and contract. Labels keep first-seen **event-major, then lag, then horizon** IDs. Links stay the compact 3-table layout; `reconstruct_joint_event_rows` is unchanged.\n\n3. **`_SeriesWriter`** \u2014 Columnar int64/float64/bool buffers with explicit NULL masks. Nanosecond clocks stay int64 (float clocks raise). Scalar `add` remains for fixtures and new labels.\n\n4. **Grouping** \u2014 Day-batch `add_day_values` / `add_day_flags` replace most per-row `_add_cell`. Missing/non-finite values still omit both sum and count; 0/1 flags still count zeros. `summarize_groups` still batches one `observed_date_statistics` per intended-date universe and caches 1000\u00d75 block weights (`_bootstrap_state`). Date-mean CI and restored raw event/date counts are unchanged.\n\n5. **Cut grid** \u2014 One day\u2019s cuts/SMT/lookbacks/mapping are filled in the original cut\u2192pair\u2192lag order and written as typed batches.\n\n**How root should verify**\n\n- Run the previous 37 fixtures plus the four new ones: vector vs literal pivots (gap/roll/tie, every field); typed batch writer (NULL and `> 2**53` ns); vector joins vs scalar `last_available`; grouping sums/counts vs `_add_cell` with two dates and missing values.\n- Run a complete 2020 pilot. Compare fully emitted prefixes to failed run `3224d8b35c2b190d3367073659864677f29ef2ca339e75da8f2c3d71e678fac4` and the old reference formulas.\n- Acceptance is that 2020 pilot CPU, not these fixtures. `full_family_complete` stays false. No follow-on worker.",
+    "session_id": "3b0b092d-5fbb-4b26-8bce-18e53ffbe607",
+    "request_id": "69184d64-bdfa-4a57-85a6-39364dddee2d",
+    "usage": {
+      "inputTokens": 473269,
+      "outputTokens": 110835,
+      "cacheReadTokens": 9576640,
+      "cacheWriteTokens": 0
+    }
+  }
+}

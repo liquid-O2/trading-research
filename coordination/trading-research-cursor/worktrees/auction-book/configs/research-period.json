@@ -1,0 +1,16 @@
+{
+  "kind": "ResearchPeriodPolicyV1",
+  "user_instruction_recorded_on": "2026-09-07",
+  "primary_model": {
+    "start_date_inclusive": "2020-01-01",
+    "end": "latest_eligible_observation_available_at_the_frozen_evaluation_cut",
+    "pre_2020_training_or_evaluation_rows": false
+  },
+  "older_data_optional_uses": [
+    "Jumbo source constructions and comparisons",
+    "ordinary OHLC context and comparisons"
+  ],
+  "older_data_reporting": "Bind each use to its own declared cohort and purpose; keep primary model results on the 2020-onward population.",
+  "future_or_unavailable_observations": "Remain ineligible until actual availability and existing source-quality gates are satisfied.",
+  "prior_evidence": "Historical engineering and data-audit receipts remain immutable; this policy governs subsequent primary model cohorts."
+}

@@ -1,0 +1,315 @@
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 1/12 =====
+Session
+Stat+
+
+
+
+
+
+ Statistical
+approach
+
+ JJumbo
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 2/12 =====
+Table of content
+
+  1.Introduction
+
+  2.Indicator instructions
+
+  3.Functionality
+
+  4.Accuracy & Data Detection
+
+  5.Custom Sessions time limitations
+
+  6.Layouts
+
+  7.Key session times
+
+  8.Levels failure potential
+
+  9.Conclusion
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 3/12 =====
+Introduction
+
+The SessionStat+ indicator is a powerful and versatile tool designed
+to empower traders with precise insights into market price dynamics
+across multiple timeframes and custom sessions. By leveraging
+statistical analysis of historical price movements, SessionStat+
+identifies key price levels, including expected highs, lows, and
+maximium/minimum distributions, enabling traders to anticipate
+market behavior with confidence.
+Whether you're trading on 15-minute, hourly, daily, weekly, or
+custom-defined sessions, SessionStat+ calculates critical metrics
+using both simple and weighted averages, as well as medians.
+These calculations are visualized through intuitive lines, boxes, and
+projections, providing a clear roadmap of support, resistance, and
+breakout zones. With customizable settings for data lookback
+periods, timezones, and visual styles, SessionStat+ adapts to any
+trading strategy, from scalping to swing trading.
+
+Key features include:
+    Multi-Timeframe Analysis: Analyze price levels across standard
+    timeframes or up to four custom sessions.
+     Statistical Projections: Forecast potential price targets with upper and
+    lower expansion zones based on historical data.
+   Minimum Average levels: Detects potential swings areas that fall short
+   from highs and lows.
+    Visual Clarity: Display levels with customizable lines, shaded boxes, and
+    midpoint lines for enhanced chart readability.
+    Flexible Configuration: Tailor session times, averaging methods, and
+    visual preferences to suit your trading style.
+
+Whether you're a day trader, swing trader, or market analyst,
+SessionStat+ equips you with the data-driven edge needed to make
+informed decisions in dynamic markets.
+
+
+
+Thanks.
+JJumbo
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 4/12 =====
+Indicator instructions
+
+
+
+
+
+                                 Period - Custom session settings
+                                   Fixed timeframe selection
+                              Custom Lookback Data
+                              Custom timeframe selection with
+                             up to 4 sessions
+                                2 types of average calculation
+                              Range open and close levels
+                                  Customizable lines, boxes, labels
+                                 Data table displaying average range
+                                     of selected session (Min, Max,
+                                  Expansion)
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 5/12 =====
+Projections settings
+   Projections based on the statistical
+    levels
+   Customisable projections (high -
+   low)
+
+
+
+
+
+Minimum Average levels
+  Minimum Average range display of
+  selected sessions
+  Customizable lines, labels, boxes
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 6/12 =====
+Functionality
+
+
+    Flexible Period Analysis:
+   The indicator allows users to select a time period for analysis: 15-
+    minute, 1-hour, 4-hour, daily, weekly, or custom sessions.
+    For custom sessions, users can define up to four distinct sessions
+    with specific start and end times, each with customizable colors
+    for visualization.
+
+
+
+
+
+    Level Calculations:
+    Average and Median Levels: It calculates the average and median
+    of the Highs and Lows over the lookback period chosen.
+   Minimum average Levels: It computes additional levels based
+   on the minimum average of the session, which reflects price
+   movements of shorter swings.
+    Projections: Optional custom upper and lower projections are
+    calculated by extending the average range (difference between
+   upper and lower levels).
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 7/12 =====
+ Accuracy & Data Detection
+
+
+The levels in the indicator may differ when switching to a timeframe
+below 2 minutes by design, to gather additional accuracy in the
+levels. Consider using the indicator above 2-3 minute time-frame
+(unless using the 1 hour or 15 minute non-custom chosen session)
+
+Bar-Based Calculations and Session Detection:
+   The indicator uses bar_index and time-based conditions to
+    detect the start and end of periods or sessions. On lower
+    timeframes, there are more bars per session, which can lead to
+   more frequent updates or slight variations in how session
+    boundaries are detected due to timestamp granularity.
+    For example, a 1-minute chart has 5 times more bars than a 5-
+   minute chart, so the exact bar where a session starts or ends
+   might differ slightly, affecting when the indicator initializes or
+   updates session data.
+
+
+Practical Implications:
+    Visual Differences: On timeframes below 5 minutes, you might
+    notice levels appearing at slightly different prices or extending to
+    different bars due to the finer granularity of data and potential
+    misalignment in session detection.
+   Performance Considerations: Lower timeframes generate more
+    bars, increasing computational load and potentially causing the
+    indicator to process data differently, especially for custom
+    sessions with frequent updates.
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 8/12 =====
+Custom Sessions time
+limitations
+
+The Custom sessions feature are designed to work in current day
+time stamps only (Midnight to Midnight), when selecting cross-day
+times (e.g. 11pm - 5am) the indicator will automatically stop
+plotting.
+
+Single-Day Timestamp Logic:
+   The indicator sets session start and end times using the current
+    day's date. For example, when you define a session like 9:00
+   AM–12:00 PM, it assumes both times are within the same day
+     (e.g., today). If you try to set a session that crosses midnight
+     (e.g., 11:00 PM yesterday to 2:00 AM today), the indicator
+    doesn't account for the day change because it uses the current
+    day's date for all timestamps.
+
+
+If you want to set a custom session starting at 6:00 PM and
+ending at or near midnight (e.g., for the Asia session such as
+8:00 PM to 11:59 PM), there are specific settings you need to use
+due to how the indicator handles session timing and resets.
+
+
+
+
+
+Daily Reset at Midnight (00:00):
+   The indicator ties session timestamps to the current day’s date.
+    At midnight (00:00 in the specified timezone, default
+    America/New_York), the date changes, and the indicator treats
+    this as a new day, resetting session data. If a session’s end time
+     is set to 00:00 or beyond, it may be interpreted as the next day,
+    causing the session to fail or not plot correctly.
+   To avoid this, you should set the session end time to 11:59 PM
+    (23:59), the last minute of the current day and set “Extension
+   Type” to “Extend Until Session End”
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 9/12 =====
+Layouts
+
+
+ 09:00 - 12:00 Session                09:30 - 16:00 RTH Session
+
+
+
+
+
+ Daily + RTH Session
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 10/12 =====
+Key Session Times
+
+
+
+9:00 AM–12:00 PM: New York AM Session (High and Low)
+
+What It Represents
+
+    Session Time: 9:00 AM to 12:00 PM New York time.
+   Purpose: This session captures the New York AM session, which
+    represents the morning trading activity in the U.S. financial
+    markets, particularly for Index Futures
+   High and Low: The indicator calculates the highest price (high)
+   and lowest price (low) during this 3-hour window (9:00 AM–
+    12:00 PM) on the current day. These levels are significant as
+    they reflect the price range during the initial hours of active
+    trading in New York, often a period of high volatility and
+     liquidity.
+
+
+9:30 AM–4:00 PM: Regular Trading Hours (RTH) Session (High
+and Low of Day)
+
+What It Represents
+
+    Session Time: 9:30 AM to 4:00 PM New York time.
+   Purpose: This session corresponds to the Regular Trading
+   Hours (RTH) for major U.S. stock exchanges, such as the NYSE
+   and NASDAQ, when most trading volume occurs. It captures the
+    high and low of the trading day, representing the full range of
+    price action during official market hours.
+   High and Low: The indicator calculates the highest price (high)
+   and lowest price (low) from 9:30 AM to 4:00 PM, effectively
+    covering the entire day’s primary trading activity. These are
+    considered the daily high and low because RTH encompasses
+    the most significant trading period.
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 11/12 =====
+Levels Failure Potential
+
+
+When and Why Levels Might Fail
+
+Levels generated by the indicator may fail to act as reliable
+support/resistance or be breached unpredictably in the following
+scenarios:
+
+Choppy Market Conditions:
+   Why It Happens:
+        In choppy markets, prices oscillate rapidly within a narrow range,
+        often triggered by lack of directional momentum.
+      The indicator’s levels are based on average historical ranges, which
+       expect a certain degree of directional movement. Choppy
+        conditions produce erratic, non-directional price action, which may
+        misalign with these averages.
+   Impact on Levels:
+       High/Low Levels: The projected high/low may be repeatedly tested
+      and breached in both directions, failing to hold as
+        support/resistance.
+        Projections: Extended projections may be too far from the choppy
+        price action, rendering them irrelevant.
+       Boxes: Boxes between average and median levels may be too wide
+        or narrow, as choppy prices don’t respect historical ranges.
+
+Low Volatility Environments:
+   Why It Happens:
+        In low-volatility periods, price ranges are much smaller than
+         historical averages due to reduced trading activity or market
+         interest. For instance, during a holiday or weekend, trading volume
+      may drop, leading to tight price ranges.
+      The indicator’s levels are based on past sessions with normal
+          volatility, which may overestimate the expected high/low in a low-
+         volatility market.
+   Impact on Levels:
+       High/Low Levels: Projected levels are too far from the actual price
+        action. For example, if the historical average expansion is 10 points,
+       but today’s range is only 2 points, the high level at open + 10 is
+       unreachable.
+        Projections: Projections are even further out, making them
+         irrelevant.
+       Boxes: Boxes may appear overly wide, as the actual price range is
+      much smaller than the historical average range.
+
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 12/12 =====
+JJumbo
+
+Stay tuned for future updates and releases as well video
+presentations and trade breakdowns through my X account or
+Youtube
+
+
+
+
+                              [Link]
+
+
+
+           x.com/JJumboFX

@@ -1,0 +1,35 @@
+{
+  "kind": "cross_market_original2024_memory_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/cross-market-runs/48e766ed9188f3a5cdaf61de27ec8a277f6b58f5e4f3fc3ee8431b8b9bca9aaf/execution.json",
+    "sha256": "54056462cfd13b10a48b5b94c1bfcdc946881fa6e6c9bda9d22c7c66143e25b3",
+    "size_bytes": 2852
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/cross-market-runs/48e766ed9188f3a5cdaf61de27ec8a277f6b58f5e4f3fc3ee8431b8b9bca9aaf/worker.log",
+    "sha256": "80e9dd61e4c7bc2dd53e91cbd22ffad8a929723d1de440463c2c14f959d30daf",
+    "size_bytes": 2717
+  },
+  "exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 276, in <module>\n    if len(sys.argv)==3 and sys.argv[1]=='--worker':raise SystemExit(worker(sys.argv[2]))\n                                                                     ^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 183, in worker\n    actual=run_measurement(packet,protocol,store,outputs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 151, in run_measurement\n    actual=run(protocol=protocol,admitted=admitted,store=store,outputs=outputs,selected_years=selected)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 3235, in run\n    process_year(\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 1743, in process_year\n    _emit_cut_grid(\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 1482, in _emit_cut_grid\n    writers[\"lookbacks\"].add_columns(lb_out, length=n_lb, nulls=lb_nulls)\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 558, in add_columns\n    self.flush()\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 580, in flush\n    self.series.append(pa.Table.from_arrays(arrays, schema=self.schema))\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 289, in append\n    self._finish_file()\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 207, in _finish_file\n    ref = self.outputs.reference(self.current_name, kind='auction_flow_parquet')\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 95, in reference\n    ref = {'path': str(path), 'sha256': file_digest(path), 'size_bytes': path.stat().st_size, 'kind': kind}\n                                        ^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/operations/artifacts.py\", line 71, in file_digest\n    for block in iter(lambda: stream.read(1024 * 1024), b\"\"):\n  File \"/workspace/trading-research/src/trading_research/operations/artifacts.py\", line 71, in <lambda>\n    for block in iter(lambda: stream.read(1024 * 1024), b\"\"):\n                              ^^^^^^^^^^^^^^^^^^^^^^^^\nMemoryError\n",
+  "resources": {
+    "cpu_seconds": 2888.4144730000003,
+    "wall_seconds": 2977.4519308269955,
+    "peak_rss_bytes": 2908164096,
+    "output_bytes": 2351586905
+  },
+  "affected_input": "2024-09-04 lookback append; additional original_nq2024 canonical population alongside primary. Complete2020-2023 statistics text exists; not acceptedpartialrun.",
+  "observation": {
+    "completed_year_headings": [
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "last_aligned_cuts_date": "2024-08-30",
+    "last_lookback_date": "2024-09-04",
+    "statistics_bytes": 183536403,
+    "original_address_space_bytes": 4294967296
+  },
+  "assessment": "run clears groups/year_stats/intended_map/units after eachyear anddaily labelIDcache. Error within2024year date accumulation forlargeroriginal-sourcepairpopulation; full2020pilot cannotcovermax2024cardinality. AS4GiB exhaustedat2.908GBRSS. Increaseboundedallocation8GiB onactual83GBallocation ratherthanchange accepted numerics orremoveoriginalsourcecomparison. RetainfullfailedfilesandallCPU.",
+  "decision": "One full unchangedscience reexecution usingacceptedpilot8 with explicit exactrunnercompatibility for operationalmemory-only amendment. Full9000CPU,total15000CPU,total12GiBphysicaloutput unchanged, no freshpilotneeded. Attemptmax9->10; all9attemptscharged. If verificationfails preserveevidence/reassessbeforefurtheredits."
+}

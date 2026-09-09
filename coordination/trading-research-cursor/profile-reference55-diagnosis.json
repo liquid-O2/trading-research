@@ -1,0 +1,22 @@
+{
+  "kind": "profile_completeness_kind_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/fa72ba5f0359149b95b73507aaccad7ad0b1d3d8de477ae0cb32bae38220f855/execution.json",
+    "sha256": "1d3473c88812870e1954c0023ee386ffee226c492b9e1f6c77c60e633d28b7f5",
+    "size_bytes": 49419
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/fa72ba5f0359149b95b73507aaccad7ad0b1d3d8de477ae0cb32bae38220f855/worker.log",
+    "sha256": "2dbef50b21075185eccd6bb17e68ed86b325ad961150643faea52e807211f288",
+    "size_bytes": 2649
+  },
+  "exception": "test_null_empty_and_large_signed_list_values_roundtrip (tests.test_auction_flow_profile_reference.ProfileListStorageTests.test_null_empty_and_large_signed_list_values_roundtrip) ... ok\ntest_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected) ... ERROR\n\n======================================================================\nERROR: test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tests/test_auction_flow_profile_reference.py\", line 1574, in test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected\n    reused = run_profile_statistics(\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1591, in run_profile_statistics\n    reused_payload = authenticate_reused_partition(part, load_reference)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1276, in authenticate_reused_partition\n    completeness = _authenticate_json_ref(\n                   ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1231, in _authenticate_json_ref\n    raise IntegrityError('accepted JSON reference failed authentication')\ntrading_research.errors.IntegrityError: accepted JSON reference failed authentication\n\n----------------------------------------------------------------------\nRan 2 tests in 56.142s\n\nFAILED (errors=1)\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3066, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 1483, in profile_statistics\n    if not tests['success']:raise ValueError('profile-statistics regression failure; no actual reduction')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: profile-statistics regression failure; no actual reduction\n",
+  "resources": {
+    "cpu_seconds": 63.181774,
+    "wall_seconds": 70.0845264941454,
+    "peak_rss_bytes": 946044928,
+    "attempt_output_bytes": 197600
+  },
+  "finding": "Fresh profile fixture nowfinalizesallstatistics/readablereport. Reuse fails exactpayloadkindcheck: completeness writer supplieskindonlyinexternalref, omissioninJSONpayload.",
+  "decision": "Add declared completenesskind toJSONpayload. Keepreaderstrictandallscientificfieldsunchanged. Reusefixturealreadyindependentlycomparesfresh/reusedallgroupsandcorruptneighbor."
+}

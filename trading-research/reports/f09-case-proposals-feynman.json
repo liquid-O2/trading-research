@@ -1,0 +1,456 @@
+{
+  "scope": "F09 preparation only: distinctive shared-bar-related source case proposals from fully read chunks36\u201349",
+  "created_at": "2026-09-06T21:30:56.531301+00:00",
+  "reader": "/root/f04_merge_tests",
+  "reading_evidence": "reports/f09-source-reading-36-49.json",
+  "reading_evidence_sha256": "c5d380d0500109830cbe734727ad26e88a967d2c879c6da109caef2f687bae1a",
+  "case_count": 12,
+  "limits": [
+    "Hand-reasoned synthetic event sequences; no project imports, production execution, source-code execution, compilation or tests.",
+    "No production/test/golden/registration changes; proposals require owner scope selection before implementation.",
+    "No private formula reconstruction, native market-data equivalence, executable Pine parity or empirical calibration claimed.",
+    "Source discrepancies are distinguished from proposed corrected semantics; downstream estimator details do not automatically become F09 shared-bar scope."
+  ],
+  "cases": [
+    {
+      "proposal_id": "F09-FEYNMAN-01",
+      "name": "Close-return differs from intrabar touch",
+      "source_provenance": [
+        {
+          "source_id": "PIN052-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Pre-market session levels and stats.txt",
+          "original_sha256": "5e23d4026ccf6134d905b018862bfe3bd90cf09d5d065a15bc651188ad536999",
+          "routed_provenance": "L607\u2013641,789\u20131073,1075\u20131254,1280\u20131548",
+          "reviewed_lines": [
+            [
+              607,
+              620
+            ],
+            [
+              870,
+              921
+            ]
+          ]
+        }
+      ],
+      "mechanism": "The return anchor is the earlier formation open and source return requires abs(close-anchor)<0.0001 after a hit flag.",
+      "minimal_event_sequence": [
+        "Completed 06\u201309 formation open=100; 09\u201312 tracking open=102; upper target=105.",
+        "A completed tracking bar O=102 H=106 L=99 C=101 hits target and crosses100.",
+        "Next completed bar O=101 H=102 L=99 C=100."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "First bar: touch/cross of100=true, source close_return=false. Second bar: source close_return=true.",
+        "Use100, not tracking open102, as return anchor. Publish each predicate no earlier than supporting bar availability; neither proves a fill."
+      ],
+      "suggested_scope": "Shared-bar anchors, distinct predicate definitions, close availability; source-specific counters remain downstream.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-02",
+      "name": "Week identity replaces previous-bar weekday reset",
+      "source_provenance": [
+        {
+          "source_id": "PIN052-03",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Pre-market session levels and stats.txt",
+          "original_sha256": "5e23d4026ccf6134d905b018862bfe3bd90cf09d5d065a15bc651188ad536999",
+          "routed_provenance": "L643\u2013786,1075\u20131104,1280\u20131548",
+          "reviewed_lines": [
+            [
+              641,
+              641
+            ],
+            [
+              1075,
+              1104
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Source reset requires Monday stats start and preceding bar not Monday, which fails on a continuous Monday chart.",
+      "minimal_event_sequence": [
+        "Friday leaves completed-session count=3.",
+        "Monday 08:59 bar followed by Monday09:00 statistics-window start."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Source literal condition does not reset because prior bar is Monday.",
+        "A proposed corrected weekly accumulator resets once on new explicit week identity; repeated09:00 delivery does not reset twice. Preserve source discrepancy/version, not silent equivalence."
+      ],
+      "suggested_scope": "Shared calendar/window identity plus downstream correction proposal; no weekly-stat implementation requested here.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-03",
+      "name": "Provisional hit cannot enter completed denominator",
+      "source_provenance": [
+        {
+          "source_id": "PIN052-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Pre-market session levels and stats.txt",
+          "original_sha256": "5e23d4026ccf6134d905b018862bfe3bd90cf09d5d065a15bc651188ad536999",
+          "routed_provenance": "L607\u2013641,789\u20131073,1075\u20131254,1280\u20131548",
+          "reviewed_lines": [
+            [
+              1075,
+              1104
+            ],
+            [
+              1107,
+              1179
+            ],
+            [
+              1182,
+              1233
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Hits update during the active session, denominator at its observed end; medians include successful hits only.",
+      "minimal_event_sequence": [
+        "One completed eligible session: one hit at10minutes.",
+        "Second session reaches target at5minutes but remains open.",
+        "Second session subsequently closes normally; third completes with no hit."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "While second open, completed frequency stays1/1 with separate provisional hit; literal source counter can show2/1=200%.",
+        "After second completion:2/2. After third:2/3; hit-time median over [10,5] is7.5minutes conditional on hit, not over all three.",
+        "No completed eligible observations means unavailable denominator, not an observed0% rate."
+      ],
+      "suggested_scope": "Completion and eligibility metadata feeding downstream estimators.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-04",
+      "name": "Both London edges do not prove sequence",
+      "source_provenance": [
+        {
+          "source_id": "PIN061-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Candles + 25% Level.txt",
+          "original_sha256": "db55db8ff01643ed8ce2d60fac86ffb1af7a5650f1d7f2b1be7b66f750c2434c",
+          "routed_provenance": "L775\u2013796,802\u2013812,871\u2013960,1051\u20131148",
+          "reviewed_lines": [
+            [
+              912,
+              953
+            ],
+            [
+              1075,
+              1078
+            ]
+          ]
+        }
+      ],
+      "mechanism": "The source Sequential H+L quantity is conjunction of high/low coverage without chronology.",
+      "minimal_event_sequence": [
+        "Completed London range L=90 H=110.",
+        "NY provides one completed bar O=100 H=111 L=89 C=101, without finer events."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "High_taken=true and low_taken=true, both_coverage=true. High_first/low_first remains unknown.",
+        "Two possible within-bar paths through111 then89 or89 then111 yield identical OHLC; a requested ordered event must remain unresolved."
+      ],
+      "suggested_scope": "Direct shared-bar OHLC information boundary and downstream both-touch naming.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-05",
+      "name": "Close-reclaim rate retains joint cohort denominator",
+      "source_provenance": [
+        {
+          "source_id": "PIN061-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Candles + 25% Level.txt",
+          "original_sha256": "db55db8ff01643ed8ce2d60fac86ffb1af7a5650f1d7f2b1be7b66f750c2434c",
+          "routed_provenance": "L775\u2013796,802\u2013812,871\u2013960,1051\u20131148",
+          "reviewed_lines": [
+            [
+              930,
+              953
+            ],
+            [
+              1091,
+              1146
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Source wick-and-close outcome divides by all bullish/bearish London sessions in the regime, not just sessions that wick.",
+      "minimal_event_sequence": [
+        "Four completed bullish London sessions in one regime, body25=100 each.",
+        "Only sessions1 and2 have NY low<100; session1 closes101, session2 closes99; sessions3 and4 never wick."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Joint wick-and-reclaim frequency=1/4; conditional reclaim given wick=1/2. Store both names and denominators if both are offered.",
+        "Equality NYlow=100 does not meet strict wick predicate. Retain all cohort records without claiming independent source confirmations."
+      ],
+      "suggested_scope": "Shared-bar strict inequalities and cohort metadata; downstream empirical estimation.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-06",
+      "name": "Eviction uses original admitted contribution",
+      "source_provenance": [
+        {
+          "source_id": "PIN057-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Based Statmap with closing stats.txt",
+          "original_sha256": "b301a10e9e38217190c906ec48bff5f52aacb0df6af9faed7adf4a465206db0b",
+          "routed_provenance": "L19\u201361,250\u2013294,327\u2013330",
+          "reviewed_lines": [
+            [
+              250,
+              294
+            ],
+            [
+              327,
+              330
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Source subtracts evicted close exceedance using a recomputed mean rather than the mean used when admitting it.",
+      "minimal_event_sequence": [
+        "Construct an admitted observation A with close-minus-open=5, assigned threshold4, contribution=true.",
+        "Before eviction, changed retained-window data produce current threshold6.",
+        "Evict A."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Under fixed-at-admission semantics, decrement its saved true contribution exactly once even though5>6 is false.",
+        "Alternatively recompute every retained predicate under one current threshold and label that different estimand. A mix of old admissions/new removals is invalid; clipping cannot repair it."
+      ],
+      "suggested_scope": "Downstream reducer proposal requiring retained threshold/version/contribution, not a claim that shared bars estimate Statmap.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-07",
+      "name": "Raid minimum is not displayed first bucket threshold",
+      "source_provenance": [
+        {
+          "source_id": "PIN060-01",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Raid Stats.txt",
+          "original_sha256": "ac6818a9bb1b044b3710459857f56f7aca9f11e777978ae01fc77f51a522df93",
+          "routed_provenance": "\u2014 Session Raid Stats.txt L14\u201363,115\u2013174,308\u2013406,408\u2013606",
+          "reviewed_lines": [
+            [
+              373,
+              406
+            ]
+          ]
+        },
+        {
+          "source_id": "PIN060-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Raid Stats.txt",
+          "original_sha256": "ac6818a9bb1b044b3710459857f56f7aca9f11e777978ae01fc77f51a522df93",
+          "routed_provenance": "L132\u2013151,378\u2013406,478\u2013506,578\u2013606,638\u2013662",
+          "reviewed_lines": [
+            [
+              137,
+              151
+            ],
+            [
+              638,
+              662
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Strict raid minimum5 and coarse bucket0<30 do not justify a displayed >=20 count.",
+      "minimal_event_sequence": [
+        "Formation H=100; min_raid=5; later completed bar H=106 C=100 confirms overshoot6.",
+        "Separate cases overshoot=5,20,75,80 mature at the configured cutoff."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Overshoot6 qualifies as raid but does not satisfy >=20; exact5 fails strict >5 qualification;20 satisfies >=20.",
+        "Source bucket0 includes6 and20. Numerical overflow starts80, so75 must not be equated with overflow despite >70 display label.",
+        "Retain raw maximum excursion, point units, strictness and numeric boundaries independently of bucket labels."
+      ],
+      "suggested_scope": "Shared-bar excursions/equality and downstream bucket semantics.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-08",
+      "name": "Raid zero cutoff and capped history are explicit policies",
+      "source_provenance": [
+        {
+          "source_id": "PIN060-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Raid Stats.txt",
+          "original_sha256": "ac6818a9bb1b044b3710459857f56f7aca9f11e777978ae01fc77f51a522df93",
+          "routed_provenance": "L132\u2013151,378\u2013406,478\u2013506,578\u2013606,638\u2013662",
+          "reviewed_lines": [
+            [
+              478,
+              606
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Source cutoff0 never expires and max_days accepts first N matured observations rather than a rolling N.",
+      "minimal_event_sequence": [
+        "Set max_days=2 and positive cutoff. Complete three eligible range sessions A,B,C.",
+        "In separate definition set cutoff=0, observe a qualified raid and then next range start."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Literal source population retains A,B; a rolling variant would retain B,C and must carry another definition.",
+        "Under literal zero-cutoff behavior no expiry tally is inferred. A corrected next-window/session-end maturity policy must be explicit before obtaining a completed observation."
+      ],
+      "suggested_scope": "Outcome horizon and retention definition metadata, not native market validation.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-09",
+      "name": "Display visibility cannot change numeric formation",
+      "source_provenance": [
+        {
+          "source_id": "PIN060-03",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Raid Stats.txt",
+          "original_sha256": "ac6818a9bb1b044b3710459857f56f7aca9f11e777978ae01fc77f51a522df93",
+          "routed_provenance": "L309\u2013340,409\u2013440,509\u2013540,683\u2013701",
+          "reviewed_lines": [
+            [
+              309,
+              337
+            ]
+          ]
+        },
+        {
+          "source_id": "PIN062-03",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Projections with stats.txt",
+          "original_sha256": "67f9be82ef6788fc7f5bde4d75710b36a04d900dcea5c5232853a2452a56db8e",
+          "routed_provenance": "L317\u2013356,368\u2013506,961\u20131046",
+          "reviewed_lines": [
+            [
+              317,
+              337
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Both sources couple extrema state to chart boxes although completion reads numeric box values.",
+      "minimal_event_sequence": [
+        "Replay identical completed formation bars with highs[102,105], lows[99,98], opens/closes retained.",
+        "Evaluate definition twice, display_box=true and false, with all numeric settings identical."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "A proposed corrected shared numeric aggregate returns H=105 L=98 range7 in both runs, same lineage and availability.",
+        "Literal source visibility dependency is recorded as discrepancy. Rendering identity may differ; numeric definition must not depend on it."
+      ],
+      "suggested_scope": "Direct shared-bar calculation/render separation; no source Pine execution performed.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-10",
+      "name": "Body envelope is not aggregate candle body",
+      "source_provenance": [
+        {
+          "source_id": "PIN062-01",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Projections with stats.txt",
+          "original_sha256": "67f9be82ef6788fc7f5bde4d75710b36a04d900dcea5c5232853a2452a56db8e",
+          "routed_provenance": "\u2014 Session Range Projections with stats.txt L15\u201346,57\u201387,98\u2013128,167\u2013171,317\u2013365,508\u2013557,699\u2013748",
+          "reviewed_lines": [
+            [
+              167,
+              171
+            ],
+            [
+              317,
+              341
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Body basis uses all constituent open/close endpoints, so OHLC reaggregation loses required body-envelope information.",
+      "minimal_event_sequence": [
+        "Bar1 O=100 H=111 L=99 C=110. Bar2 O=110 H=112 L=99 C=100.",
+        "Aggregate these bars into one session candle O=100 H=112 L=99 C=100."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Constituent body envelope=[100,110], width10; session candle body width0; wick range13.",
+        "An aggregate candle alone does not prove the constituent body envelope. Preserve sufficient body extrema or return unsupported for this derived feature after lossy aggregation."
+      ],
+      "suggested_scope": "Direct shared-bar sufficient statistics and definition-aware aggregation.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-11",
+      "name": "Range SD vintage and Both selection remain explicit",
+      "source_provenance": [
+        {
+          "source_id": "PIN062-01",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Projections with stats.txt",
+          "original_sha256": "67f9be82ef6788fc7f5bde4d75710b36a04d900dcea5c5232853a2452a56db8e",
+          "routed_provenance": "\u2014 Session Range Projections with stats.txt L15\u201346,57\u201387,98\u2013128,167\u2013171,317\u2013365,508\u2013557,699\u2013748",
+          "reviewed_lines": [
+            [
+              344,
+              365
+            ],
+            [
+              446,
+              461
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Source appends completed range before estimating range-magnitude variance; scalar Both branch selects body; <2 samples returns0.",
+      "minimal_event_sequence": [
+        "Before current completion history contains body range2, wick range4.",
+        "Current completion supplies body range6, wick range10; evaluate Body and Both in True SD mode.",
+        "Also inspect a one-sample history."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Body and source scalar Both estimator inputs are[2,6], mean4; they are not wick inputs[4,10] or price returns. Current sample is available only at completion.",
+        "Expose variance normalization as part of definition: population SD=2, sample SD=sqrt(8); do not choose normalization from a label alone.",
+        "Source one-sample literal0 must carry insufficient-support status in a corrected estimator; it is not evidence of zero future dispersion."
+      ],
+      "suggested_scope": "Estimator input lineage/version from shared bars; downstream normalization and warmup policy must be explicit.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    },
+    {
+      "proposal_id": "F09-FEYNMAN-12",
+      "name": "Resolution probability and completion flag cannot certify correctness",
+      "source_provenance": [
+        {
+          "source_id": "PIN054-02",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Range Prob.txt",
+          "original_sha256": "42ea4846b0ff07994337caf34308b5e76fb048ad5e7e00659466ebec7ae7cc8e",
+          "routed_provenance": "L199\u2013208,259\u2013304,329\u2013341,352\u2013402,580\u2013616",
+          "reviewed_lines": [
+            [
+              339,
+              341
+            ],
+            [
+              580,
+              616
+            ]
+          ]
+        },
+        {
+          "source_id": "PIN048-03",
+          "original_path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/NY 5m and & 15m Orb Statistics & LTF Candle structure.txt",
+          "original_sha256": "e9d4cf3d48beb13abc1316110c946729d6c6de04707aa772a84010903add87b5",
+          "routed_provenance": "L923\u2013952,985\u20131012,1099\u20131128,1161\u20131189",
+          "reviewed_lines": [
+            [
+              1008,
+              1010
+            ],
+            [
+              1184,
+              1186
+            ]
+          ]
+        }
+      ],
+      "mechanism": "Range Prob keeps resolved-direction and all-call denominators distinct; ORB marks session close Validated merely when session ends.",
+      "minimal_event_sequence": [
+        "Ten completed calls: four resolve outside prior range, three of those resolve above.",
+        "Separately an ORB forecast says bullish session close; session finishes bearish."
+      ],
+      "hand_reasoned_expected_behavior": [
+        "Observed direction-above conditional on resolution=3/4; resolution rate=4/10; above joint frequency=3/10, below=1/10, inside/unresolved=6/10 under the specified closed-inside definition.",
+        "ORB outcome_mature=true but prediction_correct=false; literal source Validated text is not correctness evidence.",
+        "Neither table constants nor these hand examples establish chronological calibration or trading win rates."
+      ],
+      "suggested_scope": "Shared-bar completed outcomes and downstream estimand/correctness separation.",
+      "status": "preparation_proposal_not_registered_or_executed"
+    }
+  ]
+}

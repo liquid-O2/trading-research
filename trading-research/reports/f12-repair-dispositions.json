@@ -1,0 +1,356 @@
+{
+  "assertion_ids": [
+    "tests.test_arrival.ArrivalTraceTests.test_actual_receipt",
+    "tests.test_arrival.ArrivalTraceTests.test_append_fsync_failure",
+    "tests.test_arrival.ArrivalTraceTests.test_bar_open",
+    "tests.test_arrival.ArrivalTraceTests.test_batch_boundary",
+    "tests.test_arrival.ArrivalTraceTests.test_boot_epoch",
+    "tests.test_arrival.ArrivalTraceTests.test_callback_atomicity",
+    "tests.test_arrival.ArrivalTraceTests.test_checkpoint_mismatch",
+    "tests.test_arrival.ArrivalTraceTests.test_checkpoint_restore",
+    "tests.test_arrival.ArrivalTraceTests.test_clock_adjust",
+    "tests.test_arrival.ArrivalTraceTests.test_delayed_bbo",
+    "tests.test_arrival.ArrivalTraceTests.test_delivery_id_conflict",
+    "tests.test_arrival.ArrivalTraceTests.test_dropped_chain",
+    "tests.test_arrival.ArrivalTraceTests.test_economic_id_conflict",
+    "tests.test_arrival.ArrivalTraceTests.test_fault_diagnosis",
+    "tests.test_arrival.ArrivalTraceTests.test_identical_bytes",
+    "tests.test_arrival.ArrivalTraceTests.test_interior_corruption",
+    "tests.test_arrival.ArrivalTraceTests.test_interrupted_compute",
+    "tests.test_arrival.ArrivalTraceTests.test_latency_denominator",
+    "tests.test_arrival.ArrivalTraceTests.test_local_resource_measurements",
+    "tests.test_arrival.ArrivalTraceTests.test_missing_receipt",
+    "tests.test_arrival.ArrivalTraceTests.test_order_restart",
+    "tests.test_arrival.ArrivalTraceTests.test_poll_stream",
+    "tests.test_arrival.ArrivalTraceTests.test_quiet_gap",
+    "tests.test_arrival.ArrivalTraceTests.test_raw_before_decode",
+    "tests.test_arrival.ArrivalTraceTests.test_reconnect_duplicate",
+    "tests.test_arrival.ArrivalTraceTests.test_reconnect_reset",
+    "tests.test_arrival.ArrivalTraceTests.test_registry_and_bounds",
+    "tests.test_arrival.ArrivalTraceTests.test_repair_boundaries",
+    "tests.test_arrival.ArrivalTraceTests.test_semantic_versus_transport",
+    "tests.test_arrival.ArrivalTraceTests.test_sequence_tie",
+    "tests.test_arrival.ArrivalTraceTests.test_served_version",
+    "tests.test_arrival.ArrivalTraceTests.test_snapshot_trades",
+    "tests.test_arrival.ArrivalTraceTests.test_stale_order",
+    "tests.test_arrival.ArrivalTraceTests.test_subscription",
+    "tests.test_arrival.ArrivalTraceTests.test_suffix",
+    "tests.test_arrival.ArrivalTraceTests.test_timer_alone",
+    "tests.test_arrival.ArrivalTraceTests.test_torn_tail",
+    "tests.test_arrival.ArrivalTraceTests.test_unknown_drop_denominator"
+  ],
+  "candidate_compiled": false,
+  "candidate_executed": false,
+  "candidate_imported": false,
+  "consolidated_repair_passes": 1,
+  "dispositions": [
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "F07 snapshot calls now pass FieldKey/policy.id pairs for entry and protection.",
+      "id": "F12-R01",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Driver and independent fold include source instrument/definition/semantic kind, recorded decision action/vector, and control payloads in semantic core; comparison also reports exact numeric difference paths.",
+      "id": "F12-R02",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "F05, publication, order and toy market wrappers reject actual_capture; F07 retains explicit synthetic nondecreasing UTC gate. Local raw journal still retains actual-labelled bytes without certifying capture.",
+      "id": "F12-R03",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Order boundary seeds last economic clocks from supplied initial events, checks declared initial logical availability, retains stale identities, and rejects conflicting equal state versions.",
+      "id": "F12-R04",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "F05 requires semantic_kind trade before creating transaction receipts; snapshot counterexample asserts no admission.",
+      "id": "F12-R05",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "F05/publication pin source/instrument/definition. Generic toy market pins instrument/definition but allows A/B provider sequence merge required by T09; source identity remains in semantic observation and economic dedup identity.",
+      "id": "F12-R06",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Control reducer tracks used stream/subscription generations, rejects reused boot epochs, preserves first outage start and both opening/closing gap evidence.",
+      "id": "F12-R07",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Journal validates frame/envelope/order/trace and same-boot monotonic structure only; replay performs semantic generation/sequence admission after raw retention.",
+      "id": "F12-R08",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Exclusive new-file creation distinguishes existing empty corruption. Quarantine holds source lock and exclusively creates binary tail, JSON evidence, verified archive; original immutable. Partial recovery remains visible and retry requires fresh destination.",
+      "id": "F12-R09",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Durable commit objects require journal-issued token bound to record hash, prefix and archive. Public caller cannot merely assert durability or replace bound content. Retry validates record, prefix and archive boundary. Trusted Python module boundary, not adversarial sandbox.",
+      "id": "F12-R10",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Replay callback/trace/definition/policy public configuration immutable; journal public path read-only; quality scope tuples required and joint span bound to declaration.",
+      "id": "F12-R11",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Unicode, unhashable enum/list and decoded-container errors normalize to ContractError; declared wrapper schema guards preserve domain errors. Generic caller callback errors remain their original exceptions.",
+      "id": "F12-R12",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Attempted callbacks counted before invocation separately from committed calls; history rows/bytes serialization counts expose bounded quadratic work. Separate harness measures local driver/callback/journal CPU/wall/shared process peak RSS.",
+      "id": "F12-R13",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Fault transform validates original typed identity/order/controls before sorting. T22 assertions explicitly show source global ordinals [1,2,4] with decision occupying3; conceptual three-source index, seed-selected original2 and first decision cut25 unchanged.",
+      "id": "F12-R14",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Latency samples carry retained records, recompute qualification/arithmetic, enforce canonical exact equality, bound sample count/methods, dedup identical identities and reject conflicts; source labels validated. Actual-qualified arithmetic never upgrades actual_live_evidence.",
+      "id": "F12-R15",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Quality facts require explicit available_operations; fixtures supply execution capability. Joint span configurable, integer validated, included in immutable version declaration.",
+      "id": "F12-R16",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Completion start must follow same-boot frozen job submission, immutable completion signature includes all payload. Both timer wrappers retain and verify immutable firing signatures; publication deduplicates timer IDs.",
+      "id": "F12-R17",
+      "status": "repaired_and_statically_verified"
+    },
+    {
+      "assertion_scope": "36 original golden assertions plus test_repair_boundaries and test_local_resource_measurements; successful execution pending root",
+      "disposition": "Added observable repair-boundary assertions and local measurement method; original36 methods untouched in identity, frozen golden and map unchanged. Live clock/thread/socket/order-submit fail guards, full/partial write poisoning, malformed callback rollback, proof, scope, stale/version, action/numeric/capability/control tests added.",
+      "id": "F12-R18",
+      "status": "repaired_and_statically_verified"
+    }
+  ],
+  "engineering_metrics_schema": {
+    "count_scope": "driver counts are restored instance,8 input rows; callback calls16 includes original+restore; journal append/decode counts8; IO header/reopen fsync excluded explicitly; written_bytes counts complete write_all returns, attempted_write_bytes includes failed requests. CPU scopes overlap; RSS shared process high-water mark, not additive per-component allocation.",
+    "metrics": {
+      "batch_boundary_comparison": {
+        "required_fields": {
+          "actual_live_evidence": "exact bool false",
+          "candidate_callback_calls": "exact int >= 0 (bool rejected)",
+          "candidate_records_applied": "exact int >= 0 (bool rejected)",
+          "reference_callback_calls": "exact int >= 0 (bool rejected)",
+          "reference_rows_examined": "exact int >= 0 (bool rejected)"
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_batch_boundary",
+        "type": "object"
+      },
+      "durable_raw_boundary": {
+        "required_fields": {
+          "measured_local_journal_bytes": "exact int >= 0 (bool rejected)",
+          "ordered_operations": "list[str], exactly write_all/flush/fsync/decode",
+          "retained_raw_bytes": "exact int >= 0 (bool rejected)",
+          "scope": "nonempty str"
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_raw_before_decode",
+        "type": "object"
+      },
+      "local_resource_measurements": {
+        "required_fields": {
+          "actual_live_evidence": "exact bool false",
+          "callback": {
+            "required_fields": {
+              "calls": "exact int >= 0 (bool rejected)",
+              "cpu_seconds": "finite float >= 0",
+              "process_peak_rss_bytes": "exact int > 0",
+              "scope": "nonempty str",
+              "wall_seconds": "finite float >= 0"
+            },
+            "type": "object"
+          },
+          "driver": {
+            "required_fields": {
+              "counts": {
+                "required_fields": {
+                  "callback_attempts": "exact int >= 0 (bool rejected)",
+                  "callback_calls": "exact int >= 0 (bool rejected)",
+                  "checkpoint_bytes_serialized": "exact int >= 0 (bool rejected)",
+                  "checkpoint_history_rows_serialized": "exact int >= 0 (bool rejected)",
+                  "duplicate_write_retries": "exact int >= 0 (bool rejected)",
+                  "records_applied": "exact int >= 0 (bool rejected)",
+                  "restore_validation_records": "exact int >= 0 (bool rejected)",
+                  "retained_record_bytes": "exact int >= 0 (bool rejected)"
+                },
+                "type": "object"
+              },
+              "cpu_seconds": "finite float >= 0",
+              "process_peak_rss_bytes": "exact int > 0",
+              "scope": "nonempty str",
+              "wall_seconds": "finite float >= 0"
+            },
+            "type": "object"
+          },
+          "journal": {
+            "required_fields": {
+              "counts": {
+                "required_fields": {
+                  "attempted_write_bytes": "exact int >= 0 (bool rejected)",
+                  "committed_appends": "exact int >= 0 (bool rejected)",
+                  "decode_attempts": "exact int >= 0 (bool rejected)",
+                  "flush_calls": "exact int >= 0 (bool rejected)",
+                  "fsync_calls": "exact int >= 0 (bool rejected)",
+                  "write_attempts": "exact int >= 0 (bool rejected)",
+                  "written_bytes": "exact int >= 0 (bool rejected)"
+                },
+                "type": "object"
+              },
+              "cpu_seconds": "finite float >= 0",
+              "process_peak_rss_bytes": "exact int > 0",
+              "scope": "nonempty str",
+              "wall_seconds": "finite float >= 0"
+            },
+            "type": "object"
+          },
+          "scope": "nonempty str"
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_local_resource_measurements",
+        "type": "object"
+      },
+      "restart_comparison": {
+        "required_fields": {
+          "candidate_callback_calls_including_prefix_verification": "exact int >= 0 (bool rejected)",
+          "measured_checkpoint_bytes": "exact int >= 0 (bool rejected)",
+          "restore_validation_records": "exact int >= 0 (bool rejected)",
+          "scope": "nonempty str"
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_checkpoint_restore",
+        "type": "object"
+      },
+      "same_bytes_comparison": {
+        "required_fields": {
+          "actual_live_evidence": "exact bool false",
+          "candidate_callback_calls": "exact int >= 0 (bool rejected)",
+          "measured_local_journal_bytes": "exact int >= 0 (bool rejected)",
+          "reference_callback_calls": "exact int >= 0 (bool rejected)",
+          "reference_rows_examined": "exact int >= 0 (bool rejected)",
+          "synthetic_records": "exact int >= 0 (bool rejected)"
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_identical_bytes",
+        "type": "object"
+      },
+      "synthetic_latency_arithmetic": {
+        "required_fields": {
+          "drops": {
+            "required_fields": {
+              "actual_live_evidence": "exact bool false",
+              "drop_rate": "[exact nonnegative int, exact positive int] or null",
+              "duplicate_receipts": "exact int >= 0 (bool rejected)",
+              "expected_count": "exact nonnegative int or null",
+              "expected_evidence_id": "str or null",
+              "generation": "nonempty str",
+              "identity_contract": "nonempty str",
+              "missing": "exact nonnegative int or null",
+              "reason": "nonempty str",
+              "simulated_boundary": "exact bool true",
+              "source_id": "nonempty str",
+              "unique_received": "exact int >= 0 (bool rejected)",
+              "window_id": "nonempty str"
+            },
+            "type": "object"
+          },
+          "measurement_scope": "nonempty str",
+          "summary": {
+            "required_fields": {
+              "actual_live_evidence": "exact bool false",
+              "actual_qualified_count": "exact int >= 0 (bool rejected)",
+              "duplicate_samples": "exact int >= 0 (bool rejected)",
+              "excluded": "exact int >= 0 (bool rejected)",
+              "method": "source_to_receipt",
+              "n": "exact int >= 0 (bool rejected)",
+              "p50": "exact int or null",
+              "p95": "exact int or null",
+              "p99": "exact int or null",
+              "provenance": "synthetic_fixture",
+              "reason": "nonempty str",
+              "session_id": "nonempty str",
+              "simulated_boundary": "exact bool true",
+              "source_id": "nonempty str"
+            },
+            "type": "object"
+          }
+        },
+        "required_successful_assertion_id": "tests.test_arrival.ArrivalTraceTests.test_latency_denominator",
+        "type": "object"
+      }
+    },
+    "publication_rule": "Accept a metric only when its exact required_successful_assertion_id appears in successful execution evidence. Never infer a successful binding from import or partial test progress.",
+    "required_metric_keys": [
+      "batch_boundary_comparison",
+      "durable_raw_boundary",
+      "local_resource_measurements",
+      "restart_comparison",
+      "same_bytes_comparison",
+      "synthetic_latency_arithmetic"
+    ],
+    "synthetic_arithmetic_scope": "T23 hand-specified latency quantiles and drop universe remain separate from measured local durations and all actual capture evidence.",
+    "type": "object"
+  },
+  "family": "F12-arrival-trace-engineering-v1",
+  "final_identities": [
+    {
+      "lines": 1656,
+      "path": "src/trading_research/runtime/arrival.py",
+      "sha256": "2d177c8acc7c9bb9e6ba74978e8d61bb8b37f3dbf9e66999ffed047ace6b2a50",
+      "size_bytes": 97558
+    },
+    {
+      "lines": 110,
+      "path": "references/arrival_literal.py",
+      "sha256": "4a2c2b162028720b5518ec0854dfc27599d8278d99862bc0a7bde9eecf3eaec2",
+      "size_bytes": 6630
+    },
+    {
+      "lines": 915,
+      "path": "tests/test_arrival.py",
+      "sha256": "8012f639835c6e0a9a65653f61c58d2c499fe5a4a0f7bcf615e30a0f304cce65",
+      "size_bytes": 60915
+    }
+  ],
+  "frozen_protocol_and_golden_modified": false,
+  "initial_review": {
+    "path": "reports/f12-initial-static-review.json",
+    "sha256": "ee3ecc4e9225ae2a0e8ba1813a0e78faeb9aee0371456a1cc7145798afbc93be"
+  },
+  "kind": "consolidated_repair_dispositions",
+  "original_case_map_unchanged": true,
+  "remaining_gates": [
+    "Root shared supervised suite has not run.",
+    "No native/provider capture certification, external broker effects, economic evaluation or broader source/all-consumer integration closure.",
+    "Durability is local POSIX fsync boundary, not power-loss certification; private token protects ordinary API construction, not malicious in-process Python.",
+    "Pure callback functions are trusted registered code; no sandbox or external exactly-once guarantee."
+  ],
+  "static_validation": "Reviewed initial full text and all repair transformations/call sites; stdlib ast.parse syntax and method identity checks only. No candidate evaluation. Root supervised run still required.",
+  "status": "repaired_and_statically_verified"
+}

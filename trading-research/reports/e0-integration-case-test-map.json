@@ -1,0 +1,2429 @@
+{
+  "schema": "E0IntegrationCompleteCaseMapDraftV1",
+  "family": "B03-E0-full-integration-engineering-v1",
+  "test_modules": [
+    "tests.test_e0_source_integration",
+    "tests.test_e0_learning_integration",
+    "tests.test_e0_policy_account",
+    "tests.test_e0_runner_integration",
+    "tests.test_e0_reporting_integration"
+  ],
+  "reviewed_current_modules": [
+    {
+      "path": "tests/test_e0_source_integration.py",
+      "sha256": "fdf05b672fcdb945fb06c5905f94ea45b7df06ef10424376514087c8ca52bd61",
+      "size_bytes": 14748
+    },
+    {
+      "path": "tests/test_e0_learning_integration.py",
+      "sha256": "b95227bdd90b1aec3a5c2afa537cc2634a426ccd9cdb51ed9404c20bab27e53c",
+      "size_bytes": 13397
+    },
+    {
+      "path": "tests/test_e0_policy_account.py",
+      "sha256": "cff71bf41c5fd5d2bf30c556c4681349f68c3428ebc7257143d195c68daf58e4",
+      "size_bytes": 38346
+    },
+    {
+      "path": "tests/test_e0_runner_integration.py",
+      "sha256": "7f53616c3cece48a4052f718fe3c0ed00adb4cc40d1acb0b09c0aebb560178a0",
+      "size_bytes": 21863
+    },
+    {
+      "path": "tests/test_e0_reporting_integration.py",
+      "sha256": "e1e93d99a86569d8773f9b2d050d70b3bb95f99490b5aa05ced0c539c82ebdb7",
+      "size_bytes": 23213
+    },
+    {
+      "path": "tests/test_e0.py",
+      "sha256": "79a1587634d15482020fcc4f87387bbf525c862c4871f8070a09f56e81034d4d",
+      "size_bytes": 7843
+    },
+    {
+      "path": "tests/e0_source_operational_cases.py",
+      "sha256": "8875d65fcb2a544646e9d10465367c42f232e460ff3134af535155bd6edeba06",
+      "size_bytes": 38089
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "E0-INT-01-F01",
+      "source_case_ids": [
+        "E0-MANIFEST",
+        "F02-ROLLS",
+        "CC-02",
+        "V01-DATES"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f01_complete_parent_volume_selection"
+      ],
+      "remaining": [
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "case_id": "E0-INT-01-F02",
+      "source_case_ids": [
+        "F02-ROLLS",
+        "E0-MANIFEST",
+        "CC-02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f02_ties_and_missing_competitor_matrix"
+      ],
+      "remaining": [
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "case_id": "E0-INT-01-F03",
+      "source_case_ids": [
+        "F02-ROLLS",
+        "MDS-CANONICAL",
+        "CC-02",
+        "F10-OBJECTS"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f03_raw_identity_rejection_matrix"
+      ],
+      "remaining": [
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "case_id": "E0-INT-12-F01",
+      "source_case_ids": [
+        "E0-CALENDAR",
+        "F03-CALENDAR",
+        "P10",
+        "CC-01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f01_calendar_boundary_and_window_matrix"
+      ],
+      "remaining": [
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "case_id": "E0-INT-12-F02",
+      "source_case_ids": [
+        "E0-REPLAY",
+        "P11",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f02_fee_category_matrix"
+      ],
+      "remaining": [
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "case_id": "E0-INT-12-F03",
+      "source_case_ids": [
+        "P11",
+        "V04",
+        "E0-REPORT"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f03_eligible_denominator_retains_flat_outage_halted"
+      ],
+      "remaining": [
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "case_id": "E0-INT-02-F01",
+      "source_case_ids": [
+        "C01-RANGE",
+        "L01",
+        "L02",
+        "L03",
+        "E0-RANGES",
+        "CC-01",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish"
+      ],
+      "remaining": [
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-02-F02",
+      "source_case_ids": [
+        "C01-RANGE",
+        "F09-BARS",
+        "F10-OBJECTS",
+        "CC-01",
+        "E0-RANGES"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions"
+      ],
+      "remaining": [
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-02-F03",
+      "source_case_ids": [
+        "C01-RANGE",
+        "L03",
+        "CC-02",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f03_zero_width_and_prior_binding_matrix"
+      ],
+      "remaining": [
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-04-F01",
+      "source_case_ids": [
+        "MDS-CANONICAL",
+        "MDS-CLOCKS",
+        "F05-NORMALIZE",
+        "F06-QUALITY",
+        "P05",
+        "CC-01",
+        "CC-02",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks"
+      ],
+      "remaining": [
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "case_id": "E0-INT-04-F02",
+      "source_case_ids": [
+        "MDS-FLAGS",
+        "MDS-QUALITY",
+        "F06-GAP-RECOVERY",
+        "F05-NORMALIZE",
+        "CC-01",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix"
+      ],
+      "remaining": [
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "case_id": "E0-INT-04-F03",
+      "source_case_ids": [
+        "MDS-CANONICAL",
+        "MDS-TRADES",
+        "MDS-FLAGS",
+        "F05-NORMALIZE",
+        "CC-01",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix"
+      ],
+      "remaining": [
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "case_id": "E0-INT-03-F01",
+      "source_case_ids": [
+        "E0-CANDIDATES",
+        "V01",
+        "F10-OBJECTS",
+        "CC-02",
+        "CC-03",
+        "CC-05",
+        "G08"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order"
+      ],
+      "remaining": [
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-03-F02",
+      "source_case_ids": [
+        "E0-CANDIDATES",
+        "V01",
+        "CC-01",
+        "CC-03",
+        "CC-04"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows"
+      ],
+      "remaining": [
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-03-F03",
+      "source_case_ids": [
+        "F10-OBJECTS",
+        "V01",
+        "CC-01",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f03_revisions_and_future_births"
+      ],
+      "remaining": [
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F01",
+      "source_case_ids": [
+        "E0-LABELS",
+        "E0-ACTION",
+        "V01",
+        "CC-01",
+        "CC-04",
+        "MDS-CANONICAL"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate"
+      ],
+      "remaining": [
+        "Synthetic contact/label controls do not establish complete native path coverage, historical endpoint evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F02",
+      "source_case_ids": [
+        "E0-LABELS",
+        "V01",
+        "CC-01",
+        "CC-04",
+        "MDS-QUALITY"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix"
+      ],
+      "remaining": [
+        "Synthetic contact/label controls do not establish complete native path coverage, historical endpoint evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F03",
+      "source_case_ids": [
+        "E0-LABELS",
+        "V01",
+        "CC-01",
+        "CC-04"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f03_endpoint_is_inclusive_and_fixed"
+      ],
+      "remaining": [
+        "Synthetic contact/label controls do not establish complete native path coverage, historical endpoint evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-06-F01",
+      "source_case_ids": [
+        "G03",
+        "G06",
+        "G08",
+        "P01",
+        "P02",
+        "E0-ACTION",
+        "CC-03",
+        "CC-04",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision"
+      ],
+      "remaining": [
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-06-F02",
+      "source_case_ids": [
+        "G06",
+        "G08",
+        "P01",
+        "CC-03",
+        "CC-04"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait"
+      ],
+      "remaining": [
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-06-F03",
+      "source_case_ids": [
+        "G03",
+        "G06",
+        "G08",
+        "V02",
+        "F11",
+        "CC-01",
+        "CC-05"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants"
+      ],
+      "remaining": [
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-07-F01",
+      "source_case_ids": [
+        "P02",
+        "P08",
+        "P10",
+        "E0-BRACKET",
+        "E0-RISK",
+        "CC-02",
+        "CC-03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end"
+      ],
+      "remaining": [
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-07-F02",
+      "source_case_ids": [
+        "P02",
+        "P08",
+        "P10",
+        "E0-CALENDAR",
+        "CC-01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants"
+      ],
+      "remaining": [
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-07-F03",
+      "source_case_ids": [
+        "P01",
+        "P08",
+        "P10",
+        "E0-RISK",
+        "CC-03",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants"
+      ],
+      "remaining": [
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "case_id": "E0-INT-08-F01",
+      "source_case_ids": [
+        "P05",
+        "P06",
+        "P11",
+        "E0-REPLAY",
+        "E0-ACCOUNT",
+        "CC-03",
+        "CC-04",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler"
+      ],
+      "remaining": [
+        "Synthetic scheduler/account controls do not establish live order acceptance, historical queue evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-08-F02",
+      "source_case_ids": [
+        "P05",
+        "P06",
+        "V01",
+        "E0-REPLAY",
+        "E0-ACCOUNT",
+        "CC-01",
+        "CC-03",
+        "CC-04"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants"
+      ],
+      "remaining": [
+        "Synthetic scheduler/account controls do not establish live order acceptance, historical queue evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-08-F03",
+      "source_case_ids": [
+        "P11",
+        "E0-ACCOUNT",
+        "V04",
+        "CC-03",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash"
+      ],
+      "remaining": [
+        "Synthetic scheduler/account controls do not establish live order acceptance, historical queue evidence, or economic validity."
+      ]
+    },
+    {
+      "case_id": "E0-INT-09-F01",
+      "source_case_ids": [
+        "E0-FOLDS",
+        "V01",
+        "V02",
+        "F11",
+        "CC-01",
+        "CC-05",
+        "E0-MANIFEST"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions"
+      ],
+      "remaining": [
+        "Synthetic fold/model controls do not close F11 arbitrary-consumer semantics, full source/model definitions, or market validation."
+      ]
+    },
+    {
+      "case_id": "E0-INT-09-F02",
+      "source_case_ids": [
+        "V02",
+        "F11",
+        "E0-FOLDS",
+        "CC-01",
+        "CC-05"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts"
+      ],
+      "remaining": [
+        "Synthetic fold/model controls do not close F11 arbitrary-consumer semantics, full source/model definitions, or market validation."
+      ]
+    },
+    {
+      "case_id": "E0-INT-09-F03",
+      "source_case_ids": [
+        "E0-FOLDS",
+        "E0-MODELS",
+        "G03",
+        "V02",
+        "CC-05",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving"
+      ],
+      "remaining": [
+        "Synthetic fold/model controls do not close F11 arbitrary-consumer semantics, full source/model definitions, or market validation."
+      ]
+    },
+    {
+      "case_id": "E0-INT-10-F01",
+      "source_case_ids": [
+        "E0-MANIFEST",
+        "B03.1",
+        "B03.2",
+        "B03.3",
+        "V03",
+        "V08",
+        "CC-01",
+        "CC-05",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population"
+      ],
+      "remaining": [
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "case_id": "E0-INT-10-F02",
+      "source_case_ids": [
+        "E0-REPLAY",
+        "E0-MANIFEST",
+        "B03.1",
+        "B03.2",
+        "CC-01",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix"
+      ],
+      "remaining": [
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "case_id": "E0-INT-10-F03",
+      "source_case_ids": [
+        "V03",
+        "V06",
+        "V08",
+        "E0-MANIFEST",
+        "CC-01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment"
+      ],
+      "remaining": [
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "case_id": "E0-INT-11-F01",
+      "source_case_ids": [
+        "V06",
+        "F09-BARS",
+        "F10-OBJECTS",
+        "F11",
+        "CC-01",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart"
+      ],
+      "remaining": [
+        "Synthetic replay/report controls do not establish actual historical receipt parity, production fault attribution, or V04 acceptance."
+      ]
+    },
+    {
+      "case_id": "E0-INT-11-F02",
+      "source_case_ids": [
+        "V07",
+        "V06",
+        "MDS-QUALITY",
+        "F06-GAP-RECOVERY",
+        "CC-01",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay"
+      ],
+      "remaining": [
+        "Synthetic replay/report controls do not establish actual historical receipt parity, production fault attribution, or V04 acceptance."
+      ]
+    },
+    {
+      "case_id": "E0-INT-11-F03",
+      "source_case_ids": [
+        "V04",
+        "V06",
+        "V07",
+        "B03.4",
+        "CC-07"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts"
+      ],
+      "remaining": [
+        "Synthetic replay/report controls do not establish actual historical receipt parity, production fault attribution, or V04 acceptance."
+      ]
+    },
+    {
+      "case_id": "E0-SCOPE-F01",
+      "source_case_ids": [
+        "E0-MANIFEST",
+        "STATUS",
+        "RESEARCH_PERIOD",
+        "CC-01",
+        "CC-05"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "remaining": [
+        "Historical/primary separation is a finite scope guardrail; neither cohort nor the wider research period is closed."
+      ]
+    }
+  ],
+  "source_case_mapping": {
+    "E0-MANIFEST": [
+      "E0-INT-01-F01",
+      "E0-INT-01-F02",
+      "E0-INT-09-F01",
+      "E0-INT-10-F01",
+      "E0-INT-10-F02",
+      "E0-INT-10-F03",
+      "E0-SCOPE-F01"
+    ],
+    "E0-FEATURES": [],
+    "E0-ACTION": [
+      "E0-INT-05-F01",
+      "E0-INT-06-F01"
+    ],
+    "E0-RISK": [
+      "E0-INT-07-F01",
+      "E0-INT-07-F03"
+    ],
+    "E0-REPORT": [
+      "E0-INT-12-F03"
+    ],
+    "B03.1": [
+      "E0-INT-10-F01",
+      "E0-INT-10-F02"
+    ],
+    "B03.2": [
+      "E0-INT-10-F01",
+      "E0-INT-10-F02"
+    ],
+    "B03.3": [
+      "E0-INT-10-F01"
+    ],
+    "B03.4": [
+      "E0-INT-11-F03"
+    ],
+    "B03.5": [],
+    "CC-01": [
+      "E0-INT-12-F01",
+      "E0-INT-02-F01",
+      "E0-INT-02-F02",
+      "E0-INT-04-F01",
+      "E0-INT-04-F02",
+      "E0-INT-04-F03",
+      "E0-INT-03-F02",
+      "E0-INT-03-F03",
+      "E0-INT-05-F01",
+      "E0-INT-05-F02",
+      "E0-INT-05-F03",
+      "E0-INT-06-F03",
+      "E0-INT-07-F02",
+      "E0-INT-08-F02",
+      "E0-INT-09-F01",
+      "E0-INT-09-F02",
+      "E0-INT-10-F01",
+      "E0-INT-10-F02",
+      "E0-INT-10-F03",
+      "E0-INT-11-F01",
+      "E0-INT-11-F02",
+      "E0-SCOPE-F01"
+    ],
+    "CC-02": [
+      "E0-INT-01-F01",
+      "E0-INT-01-F02",
+      "E0-INT-01-F03",
+      "E0-INT-02-F03",
+      "E0-INT-04-F01",
+      "E0-INT-03-F01",
+      "E0-INT-07-F01"
+    ],
+    "CC-03": [
+      "E0-INT-02-F01",
+      "E0-INT-02-F03",
+      "E0-INT-04-F01",
+      "E0-INT-04-F02",
+      "E0-INT-04-F03",
+      "E0-INT-03-F01",
+      "E0-INT-03-F02",
+      "E0-INT-03-F03",
+      "E0-INT-06-F01",
+      "E0-INT-06-F02",
+      "E0-INT-07-F01",
+      "E0-INT-07-F03",
+      "E0-INT-08-F01",
+      "E0-INT-08-F02",
+      "E0-INT-08-F03"
+    ],
+    "CC-04": [
+      "E0-INT-03-F02",
+      "E0-INT-05-F01",
+      "E0-INT-05-F02",
+      "E0-INT-05-F03",
+      "E0-INT-06-F01",
+      "E0-INT-06-F02",
+      "E0-INT-08-F01",
+      "E0-INT-08-F02"
+    ],
+    "CC-05": [
+      "E0-INT-03-F01",
+      "E0-INT-06-F03",
+      "E0-INT-09-F01",
+      "E0-INT-09-F02",
+      "E0-INT-09-F03",
+      "E0-INT-10-F01",
+      "E0-SCOPE-F01"
+    ],
+    "CC-07": [
+      "E0-INT-12-F02",
+      "E0-INT-06-F01",
+      "E0-INT-07-F03",
+      "E0-INT-08-F01",
+      "E0-INT-08-F03",
+      "E0-INT-09-F03",
+      "E0-INT-10-F01",
+      "E0-INT-10-F02",
+      "E0-INT-11-F01",
+      "E0-INT-11-F02",
+      "E0-INT-11-F03"
+    ],
+    "MDS-CANONICAL": [
+      "E0-INT-01-F03",
+      "E0-INT-04-F01",
+      "E0-INT-04-F03",
+      "E0-INT-05-F01"
+    ],
+    "MDS-SCHEMA": [],
+    "MDS-FLAGS": [
+      "E0-INT-04-F02",
+      "E0-INT-04-F03"
+    ],
+    "MDS-QUALITY": [
+      "E0-INT-04-F02",
+      "E0-INT-05-F02",
+      "E0-INT-11-F02"
+    ],
+    "C01-RANGE": [
+      "E0-INT-02-F01",
+      "E0-INT-02-F02",
+      "E0-INT-02-F03"
+    ],
+    "L01": [
+      "E0-INT-02-F01"
+    ],
+    "L02": [
+      "E0-INT-02-F01"
+    ],
+    "L03": [
+      "E0-INT-02-F01",
+      "E0-INT-02-F03"
+    ],
+    "F02-ROLLS": [
+      "E0-INT-01-F01",
+      "E0-INT-01-F02",
+      "E0-INT-01-F03"
+    ],
+    "F03-CALENDAR": [
+      "E0-INT-12-F01"
+    ],
+    "F05-NORMALIZE": [
+      "E0-INT-04-F01",
+      "E0-INT-04-F02",
+      "E0-INT-04-F03"
+    ],
+    "F06-QUALITY": [
+      "E0-INT-04-F01"
+    ],
+    "F06-GAP-RECOVERY": [
+      "E0-INT-04-F02",
+      "E0-INT-11-F02"
+    ],
+    "F09-BARS": [
+      "E0-INT-02-F02",
+      "E0-INT-11-F01"
+    ],
+    "F10-OBJECTS": [
+      "E0-INT-01-F03",
+      "E0-INT-02-F02",
+      "E0-INT-03-F01",
+      "E0-INT-03-F03",
+      "E0-INT-11-F01"
+    ],
+    "F11": [
+      "E0-INT-06-F03",
+      "E0-INT-09-F01",
+      "E0-INT-09-F02",
+      "E0-INT-11-F01"
+    ],
+    "P01": [
+      "E0-INT-06-F01",
+      "E0-INT-06-F02",
+      "E0-INT-07-F03"
+    ],
+    "P02": [
+      "E0-INT-06-F01",
+      "E0-INT-07-F01",
+      "E0-INT-07-F02"
+    ],
+    "P05": [
+      "E0-INT-04-F01",
+      "E0-INT-08-F01",
+      "E0-INT-08-F02"
+    ],
+    "P06": [
+      "E0-INT-08-F01",
+      "E0-INT-08-F02"
+    ],
+    "P08": [
+      "E0-INT-07-F01",
+      "E0-INT-07-F02",
+      "E0-INT-07-F03"
+    ],
+    "P10": [
+      "E0-INT-12-F01",
+      "E0-INT-07-F01",
+      "E0-INT-07-F02",
+      "E0-INT-07-F03"
+    ],
+    "P11": [
+      "E0-INT-12-F02",
+      "E0-INT-12-F03",
+      "E0-INT-08-F01",
+      "E0-INT-08-F03"
+    ],
+    "G03": [
+      "E0-INT-06-F01",
+      "E0-INT-06-F03",
+      "E0-INT-09-F03"
+    ],
+    "G06": [
+      "E0-INT-06-F01",
+      "E0-INT-06-F02",
+      "E0-INT-06-F03"
+    ],
+    "G08": [
+      "E0-INT-03-F01",
+      "E0-INT-06-F01",
+      "E0-INT-06-F02",
+      "E0-INT-06-F03"
+    ],
+    "V01": [
+      "E0-INT-03-F01",
+      "E0-INT-03-F02",
+      "E0-INT-03-F03",
+      "E0-INT-05-F01",
+      "E0-INT-05-F02",
+      "E0-INT-05-F03",
+      "E0-INT-08-F02",
+      "E0-INT-09-F01"
+    ],
+    "V02": [
+      "E0-INT-06-F03",
+      "E0-INT-09-F01",
+      "E0-INT-09-F02",
+      "E0-INT-09-F03"
+    ],
+    "V03": [
+      "E0-INT-10-F01",
+      "E0-INT-10-F03"
+    ],
+    "V04": [
+      "E0-INT-12-F03",
+      "E0-INT-08-F03",
+      "E0-INT-11-F03"
+    ],
+    "V06": [
+      "E0-INT-10-F03",
+      "E0-INT-11-F01",
+      "E0-INT-11-F02",
+      "E0-INT-11-F03"
+    ],
+    "V07": [
+      "E0-INT-11-F02",
+      "E0-INT-11-F03"
+    ],
+    "V08": [
+      "E0-INT-10-F01",
+      "E0-INT-10-F03"
+    ],
+    "STATUS": [
+      "E0-SCOPE-F01"
+    ],
+    "RESEARCH_PERIOD": [
+      "E0-SCOPE-F01"
+    ],
+    "repo-e0-cohort": [],
+    "repo-e0-candidates": [],
+    "repo-rolls": [],
+    "repo-ranges": [],
+    "repo-range-adapter": [],
+    "repo-location": [],
+    "repo-book": [],
+    "repo-venue": [],
+    "repo-replay": [],
+    "repo-orders": [],
+    "repo-accounting": [],
+    "repo-labels": [],
+    "repo-learning": [],
+    "repo-risk": [],
+    "V01-DATES": [
+      "E0-INT-01-F01"
+    ],
+    "E0-CALENDAR": [
+      "E0-INT-12-F01",
+      "E0-INT-07-F02"
+    ],
+    "E0-REPLAY": [
+      "E0-INT-12-F02",
+      "E0-INT-08-F01",
+      "E0-INT-08-F02",
+      "E0-INT-10-F02"
+    ],
+    "E0-RANGES": [
+      "E0-INT-02-F01",
+      "E0-INT-02-F02"
+    ],
+    "E0-CANDIDATES": [
+      "E0-INT-03-F01",
+      "E0-INT-03-F02"
+    ],
+    "E0-LABELS": [
+      "E0-INT-05-F01",
+      "E0-INT-05-F02",
+      "E0-INT-05-F03"
+    ],
+    "E0-BRACKET": [
+      "E0-INT-07-F01"
+    ],
+    "E0-ACCOUNT": [
+      "E0-INT-08-F01",
+      "E0-INT-08-F02",
+      "E0-INT-08-F03"
+    ],
+    "E0-FOLDS": [
+      "E0-INT-09-F01",
+      "E0-INT-09-F02",
+      "E0-INT-09-F03"
+    ],
+    "E0-MODELS": [
+      "E0-INT-09-F03"
+    ],
+    "MDS-CLOCKS": [
+      "E0-INT-04-F01"
+    ],
+    "MDS-TRADES": [
+      "E0-INT-04-F03"
+    ]
+  },
+  "source_dispositions": [
+    {
+      "source_id": "E0-MANIFEST",
+      "case_ids": [
+        "E0-INT-01-F01",
+        "E0-INT-01-F02",
+        "E0-INT-09-F01",
+        "E0-INT-10-F01",
+        "E0-INT-10-F02",
+        "E0-INT-10-F03",
+        "E0-SCOPE-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f01_complete_parent_volume_selection",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f02_ties_and_missing_competitor_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-MANIFEST contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "E0-FEATURES",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-FEATURES contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "E0-ACTION",
+      "case_ids": [
+        "E0-INT-05-F01",
+        "E0-INT-06-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-ACTION contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic contact/label controls do not establish complete native path coverage, historical endpoint evidence, or economic validity."
+      ]
+    },
+    {
+      "source_id": "E0-RISK",
+      "case_ids": [
+        "E0-INT-07-F01",
+        "E0-INT-07-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-RISK contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "source_id": "E0-REPORT",
+      "case_ids": [
+        "E0-INT-12-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f03_eligible_denominator_retains_flat_outage_halted"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-REPORT contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "B03.1",
+      "case_ids": [
+        "E0-INT-10-F01",
+        "E0-INT-10-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix"
+      ],
+      "covered_mechanism": "Bound runner/report cases exercise the B03.1 engineering deliverable boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "source_id": "B03.2",
+      "case_ids": [
+        "E0-INT-10-F01",
+        "E0-INT-10-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix"
+      ],
+      "covered_mechanism": "INT09-F03 exercises the declared frequency/logistic/calibration path and retained serving boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The original source defines one combined time/range first-inward fade rule; separate simple_time and simple_range controls are not independently defined and remain open.",
+        "Native admitted source gates, market-model fitting/economic runs, F11 arbitrary-consumer closure, and broader B00-B10 definitions remain open.",
+        "No whole source definition or phase closure is claimed from these 37 finite integration cases."
+      ]
+    },
+    {
+      "source_id": "B03.3",
+      "case_ids": [
+        "E0-INT-10-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population"
+      ],
+      "covered_mechanism": "Bound runner/report cases exercise the B03.3 engineering deliverable boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "source_id": "B03.4",
+      "case_ids": [
+        "E0-INT-11-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts"
+      ],
+      "covered_mechanism": "Bound runner/report cases exercise the B03.4 engineering deliverable boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic replay/report controls do not establish actual historical receipt parity, production fault attribution, or V04 acceptance."
+      ]
+    },
+    {
+      "source_id": "B03.5",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Bound runner/report cases exercise the B03.5 engineering deliverable boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "CC-01",
+      "case_ids": [
+        "E0-INT-12-F01",
+        "E0-INT-02-F01",
+        "E0-INT-02-F02",
+        "E0-INT-04-F01",
+        "E0-INT-04-F02",
+        "E0-INT-04-F03",
+        "E0-INT-03-F02",
+        "E0-INT-03-F03",
+        "E0-INT-05-F01",
+        "E0-INT-05-F02",
+        "E0-INT-05-F03",
+        "E0-INT-06-F03",
+        "E0-INT-07-F02",
+        "E0-INT-08-F02",
+        "E0-INT-09-F01",
+        "E0-INT-09-F02",
+        "E0-INT-10-F01",
+        "E0-INT-10-F02",
+        "E0-INT-10-F03",
+        "E0-INT-11-F01",
+        "E0-INT-11-F02",
+        "E0-SCOPE-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f03_revisions_and_future_births",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f03_endpoint_is_inclusive_and_fixed",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f01_calendar_boundary_and_window_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-01 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "CC-02",
+      "case_ids": [
+        "E0-INT-01-F01",
+        "E0-INT-01-F02",
+        "E0-INT-01-F03",
+        "E0-INT-02-F03",
+        "E0-INT-04-F01",
+        "E0-INT-03-F01",
+        "E0-INT-07-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f01_complete_parent_volume_selection",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f02_ties_and_missing_competitor_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f03_raw_identity_rejection_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f03_zero_width_and_prior_binding_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-02 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "CC-03",
+      "case_ids": [
+        "E0-INT-02-F01",
+        "E0-INT-02-F03",
+        "E0-INT-04-F01",
+        "E0-INT-04-F02",
+        "E0-INT-04-F03",
+        "E0-INT-03-F01",
+        "E0-INT-03-F02",
+        "E0-INT-03-F03",
+        "E0-INT-06-F01",
+        "E0-INT-06-F02",
+        "E0-INT-07-F01",
+        "E0-INT-07-F03",
+        "E0-INT-08-F01",
+        "E0-INT-08-F02",
+        "E0-INT-08-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f03_zero_width_and_prior_binding_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f03_revisions_and_future_births",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-03 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "CC-04",
+      "case_ids": [
+        "E0-INT-03-F02",
+        "E0-INT-05-F01",
+        "E0-INT-05-F02",
+        "E0-INT-05-F03",
+        "E0-INT-06-F01",
+        "E0-INT-06-F02",
+        "E0-INT-08-F01",
+        "E0-INT-08-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f03_endpoint_is_inclusive_and_fixed"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-04 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "source_id": "CC-05",
+      "case_ids": [
+        "E0-INT-03-F01",
+        "E0-INT-06-F03",
+        "E0-INT-09-F01",
+        "E0-INT-09-F02",
+        "E0-INT-09-F03",
+        "E0-INT-10-F01",
+        "E0-SCOPE-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-05 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "source_id": "CC-07",
+      "case_ids": [
+        "E0-INT-12-F02",
+        "E0-INT-06-F01",
+        "E0-INT-07-F03",
+        "E0-INT-08-F01",
+        "E0-INT-08-F03",
+        "E0-INT-09-F03",
+        "E0-INT-10-F01",
+        "E0-INT-10-F02",
+        "E0-INT-11-F01",
+        "E0-INT-11-F02",
+        "E0-INT-11-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f02_fee_category_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the CC-07 common-contract invariant through the public consumer path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "MDS-CANONICAL",
+      "case_ids": [
+        "E0-INT-01-F03",
+        "E0-INT-04-F01",
+        "E0-INT-04-F03",
+        "E0-INT-05-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f03_raw_identity_rejection_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate"
+      ],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-CANONICAL source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "MDS-SCHEMA",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-SCHEMA source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "MDS-FLAGS",
+      "case_ids": [
+        "E0-INT-04-F02",
+        "E0-INT-04-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix"
+      ],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-FLAGS source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "MDS-QUALITY",
+      "case_ids": [
+        "E0-INT-04-F02",
+        "E0-INT-05-F02",
+        "E0-INT-11-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix"
+      ],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-QUALITY source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "C01-RANGE",
+      "case_ids": [
+        "E0-INT-02-F01",
+        "E0-INT-02-F02",
+        "E0-INT-02-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f03_zero_width_and_prior_binding_matrix"
+      ],
+      "covered_mechanism": "Bound range cases exercise the C01-RANGE range/lineage contract through the typed range adapter.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "L01",
+      "case_ids": [
+        "E0-INT-02-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish"
+      ],
+      "covered_mechanism": "Bound range cases exercise the L01 range/lineage contract through the typed range adapter.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "L02",
+      "case_ids": [
+        "E0-INT-02-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish"
+      ],
+      "covered_mechanism": "Bound range cases exercise the L02 range/lineage contract through the typed range adapter.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "L03",
+      "case_ids": [
+        "E0-INT-02-F01",
+        "E0-INT-02-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f03_zero_width_and_prior_binding_matrix"
+      ],
+      "covered_mechanism": "Bound range cases exercise the L03 range/lineage contract through the typed range adapter.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "F02-ROLLS",
+      "case_ids": [
+        "E0-INT-01-F01",
+        "E0-INT-01-F02",
+        "E0-INT-01-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f01_complete_parent_volume_selection",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f02_ties_and_missing_competitor_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f03_raw_identity_rejection_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F02-ROLLS foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "F03-CALENDAR",
+      "case_ids": [
+        "E0-INT-12-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f01_calendar_boundary_and_window_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F03-CALENDAR foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "F05-NORMALIZE",
+      "case_ids": [
+        "E0-INT-04-F01",
+        "E0-INT-04-F02",
+        "E0-INT-04-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F05-NORMALIZE foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "F06-QUALITY",
+      "case_ids": [
+        "E0-INT-04-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F06-QUALITY foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "F06-GAP-RECOVERY",
+      "case_ids": [
+        "E0-INT-04-F02",
+        "E0-INT-11-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f02_book_flags_and_recovery_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F06-GAP-RECOVERY foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "F09-BARS",
+      "case_ids": [
+        "E0-INT-02-F02",
+        "E0-INT-11-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F09-BARS foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "F10-OBJECTS",
+      "case_ids": [
+        "E0-INT-01-F03",
+        "E0-INT-02-F02",
+        "E0-INT-03-F01",
+        "E0-INT-03-F03",
+        "E0-INT-11-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f03_raw_identity_rejection_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f03_revisions_and_future_births"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F10-OBJECTS foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "F11",
+      "case_ids": [
+        "E0-INT-06-F03",
+        "E0-INT-09-F01",
+        "E0-INT-09-F02",
+        "E0-INT-11-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the F11 foundation contract at the named E0 consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "P01",
+      "case_ids": [
+        "E0-INT-06-F01",
+        "E0-INT-06-F02",
+        "E0-INT-07-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P01 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "P02",
+      "case_ids": [
+        "E0-INT-06-F01",
+        "E0-INT-07-F01",
+        "E0-INT-07-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P02 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "P05",
+      "case_ids": [
+        "E0-INT-04-F01",
+        "E0-INT-08-F01",
+        "E0-INT-08-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P05 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "P06",
+      "case_ids": [
+        "E0-INT-08-F01",
+        "E0-INT-08-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P06 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic scheduler/account controls do not establish live order acceptance, historical queue evidence, or economic validity."
+      ]
+    },
+    {
+      "source_id": "P08",
+      "case_ids": [
+        "E0-INT-07-F01",
+        "E0-INT-07-F02",
+        "E0-INT-07-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P08 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "source_id": "P10",
+      "case_ids": [
+        "E0-INT-12-F01",
+        "E0-INT-07-F01",
+        "E0-INT-07-F02",
+        "E0-INT-07-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F03_atomic_risk_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f01_calendar_boundary_and_window_matrix"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P10 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "P11",
+      "case_ids": [
+        "E0-INT-12-F02",
+        "E0-INT-12-F03",
+        "E0-INT-08-F01",
+        "E0-INT-08-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f02_fee_category_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f03_eligible_denominator_retains_flat_outage_halted"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the P11 policy/execution contract through typed public ports.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "G03",
+      "case_ids": [
+        "E0-INT-06-F01",
+        "E0-INT-06-F03",
+        "E0-INT-09-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the G03 model/selection contract through the declared typed path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "G06",
+      "case_ids": [
+        "E0-INT-06-F01",
+        "E0-INT-06-F02",
+        "E0-INT-06-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the G06 model/selection contract through the declared typed path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "G08",
+      "case_ids": [
+        "E0-INT-03-F01",
+        "E0-INT-06-F01",
+        "E0-INT-06-F02",
+        "E0-INT-06-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F01_complete_policy_decision",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F02_all_negative_flat_wait",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the G08 model/selection contract through the declared typed path.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "source_id": "V01",
+      "case_ids": [
+        "E0-INT-03-F01",
+        "E0-INT-03-F02",
+        "E0-INT-03-F03",
+        "E0-INT-05-F01",
+        "E0-INT-05-F02",
+        "E0-INT-05-F03",
+        "E0-INT-08-F02",
+        "E0-INT-09-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f03_revisions_and_future_births",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f03_endpoint_is_inclusive_and_fixed"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V01 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "source_id": "V02",
+      "case_ids": [
+        "E0-INT-06-F03",
+        "E0-INT-09-F01",
+        "E0-INT-09-F02",
+        "E0-INT-09-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT06_F03_artifact_abstention_variants"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V02 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic policy/value assertions do not establish learned performance, market behavior, or broader policy-family closure."
+      ]
+    },
+    {
+      "source_id": "V03",
+      "case_ids": [
+        "E0-INT-10-F01",
+        "E0-INT-10-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V03 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "source_id": "V04",
+      "case_ids": [
+        "E0-INT-12-F03",
+        "E0-INT-08-F03",
+        "E0-INT-11-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f03_eligible_denominator_retains_flat_outage_halted"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V04 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "V06",
+      "case_ids": [
+        "E0-INT-10-F03",
+        "E0-INT-11-F01",
+        "E0-INT-11-F02",
+        "E0-INT-11-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f01_real_source_visit_order_and_account_prefix_restart",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V06 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "source_id": "V07",
+      "case_ids": [
+        "E0-INT-11-F02",
+        "E0-INT-11-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f02_actual_first_source_fault_and_complete_fee_replay",
+        "tests.test_e0_reporting_integration.E0ReportingIntegrationTests.test_e0_int_11_f03_actual_four_day_account_gates_and_all_frozen_verdicts"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V07 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic replay/report controls do not establish actual historical receipt parity, production fault attribution, or V04 acceptance."
+      ]
+    },
+    {
+      "source_id": "V08",
+      "case_ids": [
+        "E0-INT-10-F01",
+        "E0-INT-10-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f01_one_actual_manifest_and_full_comparator_population",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f03_actual_pending_exit_restart_and_retained_abandonment"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V08 validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Finite synthetic runner controls do not establish historical market evidence, resource-frontier closure, or whole B03 phase completion."
+      ]
+    },
+    {
+      "source_id": "STATUS",
+      "case_ids": [
+        "E0-SCOPE-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "covered_mechanism": "The scope case exercises the retained historical/primary population identity and status boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Historical/primary separation is a finite scope guardrail; neither cohort nor the wider research period is closed."
+      ]
+    },
+    {
+      "source_id": "RESEARCH_PERIOD",
+      "case_ids": [
+        "E0-SCOPE-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_scope_f01_historical_and_primary_populations_are_separate"
+      ],
+      "covered_mechanism": "The scope case exercises the retained historical/primary population identity and status boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Historical/primary separation is a finite scope guardrail; neither cohort nor the wider research period is closed."
+      ]
+    },
+    {
+      "source_id": "repo-e0-cohort",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-e0-candidates",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-rolls",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-ranges",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-range-adapter",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-location",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-book",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-venue",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-replay",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-orders",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-accounting",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-labels",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-learning",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "repo-risk",
+      "case_ids": [],
+      "assertion_ids": [],
+      "covered_mechanism": "Uncovered in the 37 frozen assertions; the cataloged repository path remains an implementation locator for later review.",
+      "whole_source_closed": false,
+      "remaining": [
+        "No frozen case assertion is bound to this source clause; its full definition, native evidence, and broader validation remain open."
+      ]
+    },
+    {
+      "source_id": "V01-DATES",
+      "case_ids": [
+        "E0-INT-01-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int01_f01_complete_parent_volume_selection"
+      ],
+      "covered_mechanism": "Bound integration cases exercise the V01-DATES validation/report contract with retained reject evidence.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Native admitted complete parent-universe, point-in-time definition and venue/source evidence remain open; these typed fixtures do not certify a historical market cohort."
+      ]
+    },
+    {
+      "source_id": "E0-CALENDAR",
+      "case_ids": [
+        "E0-INT-12-F01",
+        "E0-INT-07-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F02_shortened_boundary_variants",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f01_calendar_boundary_and_window_matrix"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-CALENDAR contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "E0-REPLAY",
+      "case_ids": [
+        "E0-INT-12-F02",
+        "E0-INT-08-F01",
+        "E0-INT-08-F02",
+        "E0-INT-10-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_runner_integration.E0RunnerIntegrationTests.test_e0_int_10_f02_exact_finite_paired_latency_and_impact_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int12_f02_fee_category_matrix"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-REPLAY contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Typed calendar/fee/denominator controls do not certify real venue boundaries, product schedules, or economic runs."
+      ]
+    },
+    {
+      "source_id": "E0-RANGES",
+      "case_ids": [
+        "E0-INT-02-F01",
+        "E0-INT-02-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f01_only_final_positive_ranges_publish",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int02_f02_range_corrections_are_immutable_versions"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-RANGES contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic C01/L03 range and object controls do not establish complete native bars, full source coverage, or whole range-definition closure."
+      ]
+    },
+    {
+      "source_id": "E0-CANDIDATES",
+      "case_ids": [
+        "E0-INT-03-F01",
+        "E0-INT-03-F02"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f01_complete_population_and_order",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int03_f02_missing_midpoint_and_future_gap_keep_rows"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-CANDIDATES contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic candidate populations do not establish a complete historical candidate universe, native availability, or downstream model/policy closure."
+      ]
+    },
+    {
+      "source_id": "E0-LABELS",
+      "case_ids": [
+        "E0-INT-05-F01",
+        "E0-INT-05-F02",
+        "E0-INT-05-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f01_sampled_contact_and_native_touch_are_separate",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f02_gap_and_unknown_order_matrix",
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int05_f03_endpoint_is_inclusive_and_fixed"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-LABELS contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic contact/label controls do not establish complete native path coverage, historical endpoint evidence, or economic validity."
+      ]
+    },
+    {
+      "source_id": "E0-BRACKET",
+      "case_ids": [
+        "E0-INT-07-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT07_F01_geometry_and_fixed_end"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-BRACKET contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic bracket/risk geometry does not establish account/product approval, realized gap loss bounds, or broader risk-policy closure."
+      ]
+    },
+    {
+      "source_id": "E0-ACCOUNT",
+      "case_ids": [
+        "E0-INT-08-F01",
+        "E0-INT-08-F02",
+        "E0-INT-08-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F01_confirmed_bracket_scheduler",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F02_uncertain_and_gap_variants",
+        "tests.test_e0_policy_account.E0IntegrationFrozenTests.test_INT08_F03_accounting_denominator_and_cash"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-ACCOUNT contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic scheduler/account controls do not establish live order acceptance, historical queue evidence, or economic validity."
+      ]
+    },
+    {
+      "source_id": "E0-FOLDS",
+      "case_ids": [
+        "E0-INT-09-F01",
+        "E0-INT-09-F02",
+        "E0-INT-09-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f01_chronological_roles_and_interval_exclusions",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f02_future_insample_and_wrong_target_artifacts",
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving"
+      ],
+      "covered_mechanism": "Bound E0 integration cases exercise the typed E0-FOLDS contract at its declared consumer boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic fold/model controls do not close F11 arbitrary-consumer semantics, full source/model definitions, or market validation."
+      ]
+    },
+    {
+      "source_id": "E0-MODELS",
+      "case_ids": [
+        "E0-INT-09-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_learning_integration.E0LearningIntegrationTests.test_int09_f03_typed_learning_selection_calibration_and_retained_serving"
+      ],
+      "covered_mechanism": "INT09-F03 exercises the declared frequency/logistic/calibration path and retained serving boundary.",
+      "whole_source_closed": false,
+      "remaining": [
+        "The original source defines one combined time/range first-inward fade rule; separate simple_time and simple_range controls are not independently defined and remain open.",
+        "Native admitted source gates, market-model fitting/economic runs, F11 arbitrary-consumer closure, and broader B00-B10 definitions remain open.",
+        "No whole source definition or phase closure is claimed from these 37 finite integration cases."
+      ]
+    },
+    {
+      "source_id": "MDS-CLOCKS",
+      "case_ids": [
+        "E0-INT-04-F01"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f01_canonical_mbp_path_preserves_two_clocks"
+      ],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-CLOCKS source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    },
+    {
+      "source_id": "MDS-TRADES",
+      "case_ids": [
+        "E0-INT-04-F03"
+      ],
+      "assertion_ids": [
+        "tests.test_e0_source_integration.E0SourceIntegrationTests.test_e0_int04_f03_trade_deduplication_and_same_time_matrix"
+      ],
+      "covered_mechanism": "Bound native-source cases exercise the MDS-TRADES source semantics through canonical admission/path or label controls.",
+      "whole_source_closed": false,
+      "remaining": [
+        "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+        "Synthetic MBP controls do not certify provider coverage, recovery receipts, receive clocks, or executable historical market data."
+      ]
+    }
+  ],
+  "remaining": [
+    "This is a static implementation-to-source map; it records mechanism coverage and does not claim execution or passing verification.",
+    "Native admitted source gates, market-model fitting/economic runs, F11 arbitrary-consumer closure, and broader B00-B10 definitions remain open.",
+    "No whole source definition or phase closure is claimed from these 37 finite integration cases."
+  ],
+  "counts": {
+    "prepared_cases": 37,
+    "mapped_public_methods": 37,
+    "unique_source_clauses": 77,
+    "retained_catalog_entries": 79,
+    "uncovered_source_clauses": 17
+  },
+  "inputs": [
+    {
+      "path": "tools/engineering_batch_contract.py",
+      "sha256": "0ba59abe5ae9c2b50cad9b401e1265cecc516cebd4b914f034a9f06a3a24775f",
+      "size_bytes": 29569
+    },
+    {
+      "path": "reports/e0-integration-source-preparation.json",
+      "sha256": "9ccb617a72c89adb5ac3ab668587cbba2dbf6156a57b77bf7f192d6e95d8e617",
+      "size_bytes": 401096
+    },
+    {
+      "path": "reports/e0-integration-registration.json",
+      "sha256": "e663d6d0d593eb29081175fa02895d3d21bb026c6d7ba3096a23bc0c6b017d84",
+      "size_bytes": 1540
+    },
+    {
+      "path": "tests/golden/e0_integration_v1.json",
+      "sha256": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43",
+      "size_bytes": 352801
+    },
+    {
+      "path": "/tmp/e0-integration-source-binding-proposal.json",
+      "sha256": "bf263d28c9fef6dd3f7288a48ce51ab8f12d8e195ef3a6c8ba64dc4321635cab",
+      "size_bytes": 128838
+    }
+  ],
+  "mapping_evidence": {
+    "source_catalog_hash": "9ccb617a72c89adb5ac3ab668587cbba2dbf6156a57b77bf7f192d6e95d8e617",
+    "corrected_binding_hash": "2963e257b96907390abc24ec4b15ed06e9512f6bc1d37fadaf2c130f2f4792d1",
+    "golden_hash": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43",
+    "candidate_execution": false,
+    "whole_definition_or_phase_closure": false,
+    "special_elrb04_note": "INT09-F03/E0-MODELS/B03.2 retains the single combined time/range first-inward fade rule; separate simple_time and simple_range controls are not claimed."
+  }
+}

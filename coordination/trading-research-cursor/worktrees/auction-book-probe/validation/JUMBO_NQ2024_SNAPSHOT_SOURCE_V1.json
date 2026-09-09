@@ -1,0 +1,46 @@
+{
+  "causal_policy": "Each bar uses the latest already-known active state at max(t,ts_recv)+250ms. The declared delay is a scenario. Retain earliest physical contract key, unchanged raw prices, and all non-conflict exclusions.",
+  "dataset": "GLBX.MDP3",
+  "evidence_review": {
+    "acquisition_manifest_path": "/workspace/quantpad-data-pull/manifests/completed.jsonl",
+    "acquisition_manifest_sha256": "155df5515f0dc3c08a69484189945f42ccfbc145dedafbca7cd82d4dd98335be",
+    "acquisition_record": {
+      "bytes": 677997,
+      "completed_at": "2026-09-04T19:10:01.635085+00:00",
+      "dataset": "GLBX.MDP3",
+      "end": "2025-01-01T00:00:00+00:00",
+      "path": "/workspace/quantpad-data-pull/data/phase-1/glbx-mdp3/nq-c-0/definition/2024.parquet",
+      "rows": 259,
+      "schema": "definition",
+      "spec_id": "04-nq-definition",
+      "start": "2024-01-01T00:00:00+00:00",
+      "status": "downloaded",
+      "symbol": "NQ.c.0"
+    },
+    "actual_prior_audit": {
+      "kind": "jumbo_actual_definition_supersession_report_v1",
+      "sha256": "52ab5cf8044a01533084394035c84c1e8face2c525a8fa5735cc68390b2da642",
+      "size_bytes": 124232
+    },
+    "api_version": "1.0.0",
+    "databento_rule": "The historical definition endpoint supplies active-definition snapshots at UTC midnight on weekdays where publishers do not supply a full daily list. Definitions are point-in-time states.",
+    "date": "2026-09-07",
+    "downloader_path": "/workspace/quantpad-data-pull/pull_quantpad.py",
+    "downloader_sha256": "ee066d157116ab30e35afbe5be47dc5969ced369edf7bd1ed2c187711822577b",
+    "export_operation": "Arrow RecordBatches written directly by ParquetWriter.write_batch; no value, timestamp or action transformation in retained acquisition code",
+    "interpretation": "Snapshot classification is an inference from the provider contract, retained acquisition binding and complete raw target audit; the registered check must verify every target receipt, action and physical field before any recovery.",
+    "kind": "source_semantics_and_acquisition_review_not_a_new_market_run",
+    "numeric_publisher_id": "omitted by this export; remains unknown, bound to QuantPad source namespace and exact source hash instead",
+    "original_failures": "original M-only audit and primary exclusions remain immutable; no price correction executed by this review",
+    "public_openapi_response_sha256": "ebd086f662244b60efbc05e844a890739d47d19da1db6be79b74d1ceb1e92632",
+    "quantpad_rule": "The reference-event endpoint streams canonical Arrow data fetched from Databento or its cache; per-symbol coverage is derived from Databento dataset/schema coverage. Public API describes the same /v1/ticks interface used by the retained downloader."
+  },
+  "export_documentation": "https://api.quantpad.ai/external/openapi.json",
+  "provider_documentation": "https://databento.com/docs/schemas-and-data-formats/instrument-definitions",
+  "publisher": "quantpad",
+  "schema": "definition",
+  "semantics": "databento_active_definition_daily_snapshot_v1",
+  "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+  "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+  "symbol": "NQ.c.0"
+}

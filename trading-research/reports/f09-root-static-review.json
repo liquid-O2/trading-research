@@ -1,0 +1,103 @@
+{
+  "status": "complete_root_initial_static_review_no_repairs_no_execution",
+  "scope": "Full F09 implementation, independent reference and 34 authored tests; full legacy bars and source tape; direct caller passages previously read and checked against this change. New verify/ports integration fully read.",
+  "independent_review": "reports/f09-independent-review.json",
+  "reviewed_files": [
+    {
+      "path": "src/trading_research/foundations/multiresolution.py",
+      "sha256": "ce84e6f745d803e5d212f9c75b4ecd5e4a8fb33247dd0e15fd547d7b511bac71"
+    },
+    {
+      "path": "references/shared_bars_literal.py",
+      "sha256": "7233705d933c7af29eb69b4e1aa0fb8ad8fba8a0c12cfdf6b7435edb6bc9d860"
+    },
+    {
+      "path": "tests/test_shared_bars.py",
+      "sha256": "34925b481209aff8d0f9fe42e38e08219a9a9b24c8c06cf2cef98acdcd7724a1"
+    },
+    {
+      "path": "src/trading_research/foundations/bars.py",
+      "sha256": "f3f08c5a65bc1145bf4ee4df33ea3b4f6f59a232ae9a69c613c8dab6cc36c58a"
+    },
+    {
+      "path": "src/trading_research/measurements/tape.py",
+      "sha256": "2968f4c0db9370f35b77b0455e05cafda73dcd561453c79da821634424ce59a8"
+    },
+    {
+      "path": "src/trading_research/measurements/structure.py",
+      "sha256": "cb32694f479a23e705e93f72e2c8a773bfd5f8b6a0ef488ba2062453ff2baa30"
+    },
+    {
+      "path": "tests/test_measurements.py",
+      "sha256": "d1ace062dbbb4c07ade339f3fac28f9d1f27ab842cd4c642a11cb0259f7f47c0"
+    },
+    {
+      "path": "tests/test_batch_review.py",
+      "sha256": "608751585e163862234cb51cccb605192d53043032f57f141a0627f894b7b50c"
+    },
+    {
+      "path": "src/trading_research/verify.py",
+      "sha256": "636fc207d84c20c64cd55cdefaff0cdc3738c22367c989afa7ef7ecd610f20b3"
+    },
+    {
+      "path": "src/trading_research/runtime/ports.py",
+      "sha256": "bcc51bfb6d1d0833ead7db5478986ad42f0ade6b9ba78a839af99cabf9e848ea"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F09-R01",
+      "severity": "high",
+      "location": "tests/test_shared_bars.py:test_b27_only_mature_complete_opportunities",
+      "finding": "Forming missing and final missing witnesses reuse the same bar/target/end identity with distinct versions. The intentional immutable opportunity conflict gate therefore raises before the intended eligible-count assertion.",
+      "repair": "Use distinct declared target definitions for the two separate denominator exclusion examples, and separately assert version substitution conflict for one opportunity. Keep the fixed expected eligible1/success0."
+    },
+    {
+      "id": "F09-R02",
+      "severity": "high",
+      "location": "multiresolution.py:SharedBar.version_id and prefix reconstruction",
+      "finding": "Even after filtering prefix_id to eligible inputs (I08), semantic version_id includes the admission cursor. An unavailable future admission suffix therefore still changes a reconstructed old-cut semantic version.",
+      "repair": "Retain cursor as audit/replay evidence while computing semantic version from eligible prefix identity and publication semantics. Compare freshly reconstructed identical old cuts with and without future additions and future corrections; retain the distinct same-cut later-admission behavior.",
+      "related": [
+        "F09-I08"
+      ]
+    },
+    {
+      "id": "F09-L01",
+      "severity": "high",
+      "finding": "Legacy BarEngine and ActivityBars configuration and public collections remain assignable/mutable.",
+      "repair": "Freeze configuration and expose immutable views of retained publications/state while preserving BarEngine.ledger.correct access and narrow legacy callers."
+    },
+    {
+      "id": "F09-L02",
+      "severity": "high",
+      "finding": "Legacy BarEngine restore trusts plausible serialized price/volume outputs without publication input/coverage/watermark/prefix reconstruction.",
+      "repair": "Retain each admitted request and its actual ledger prefix, verify it is retained in the final ledger history and reconstruct every publication including prior same-cut cursors; enforce bounded publication retention."
+    },
+    {
+      "id": "F09-L03",
+      "severity": "high",
+      "finding": "Legacy ActivityBars restore does not reconstruct first threshold crossing and interleaved same-known-time resets; output close_reason and threshold flags can be forged.",
+      "repair": "Retain an ordered add/boundary operation journal and replay it; compare every completed/forming/output frontier field and exact canonical representation."
+    },
+    {
+      "id": "F09-L04",
+      "severity": "medium",
+      "finding": "Legacy activity admission repeatedly sums all pending event quantities, creating quadratic work for high thresholds.",
+      "repair": "Use an exact pending-volume counter and reconstruct it through the retained operation journal; retain the old literal path as the bounded baseline, with no unsupported universal speedup claim."
+    }
+  ],
+  "linked_repair_details": {
+    "F09-I01": "Canonical sort imported rows by market key for rows_hash and validate every before/after correction endpoint against the imported domain/interval; bound changes and reject malformed no-publication checkpoints.",
+    "F09-I02/I06/I14": "Store capture event timestamp and block IDs/index once; verify factory ownership/cursor without recursive prefix rehash on each query; retain all construction/hash/lineage copying counters separately; materialize mixed activity definitions under one outer event dispatch and enforce aggregate bounds atomically.",
+    "F09-I03": "Unknown anchored CVD propagates as None after unknown mass until an explicit reset, without making otherwise valid whole-event partitions unavailable.",
+    "F09-I04/I09/I10": "Typed immutable output validation plus factory-certified shared publications prevent dataclass replacement from claiming finality; actual two-right-final fixture needs two distinct compatible ordered final bars.",
+    "F09-I13": "Compare complete forming and completed supported metadata, corrections/reset lineage, bounds, import tamper, activity checkpoint and suffix cases; preserve protocol/golden bytes."
+  },
+  "execution": {
+    "candidate_imports": false,
+    "tests": false,
+    "compile": false,
+    "repairs": false
+  }
+}

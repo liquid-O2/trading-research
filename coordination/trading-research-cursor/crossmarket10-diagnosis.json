@@ -1,0 +1,24 @@
+{
+  "execution": {
+    "path": "/workspace/trading-research/reports/cross-market-runs/6b852ece3fb7a07f1668b3daef6477b54712d6fd60f05e35325d25d1db275a38/execution.json",
+    "sha256": "c851990c825f5469c9a835165c73689f0b03ba3ba1b2722066ca0fab5e2593f8",
+    "size_bytes": 2851
+  },
+  "exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 279, in <module>\n    if len(sys.argv)==3 and sys.argv[1]=='--worker':raise SystemExit(worker(sys.argv[2]))\n                                                                     ^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 186, in worker\n    actual=run_measurement(packet,protocol,store,outputs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_cross_market_study.py\", line 153, in run_measurement\n    actual=run(protocol=protocol,admitted=admitted,store=store,outputs=outputs,selected_years=selected)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_descriptive.py\", line 3223, in run\n    unit = load_raw_unit(item, maximum_bytes=maximum_bytes)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_alignment.py\", line 1523, in load_raw_unit\n    return parse_raw_minute_table(\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_alignment.py\", line 396, in parse_raw_minute_table\n    return parse_raw_minute_arrays(\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/cross_market_alignment.py\", line 363, in parse_raw_minute_arrays\n    raise IntegrityError(\"raw minute timestamps must be strictly increasing\")\ntrading_research.errors.IntegrityError: raw minute timestamps must be strictly increasing\n",
+  "completed_years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "failure_phase": "2026 raw minute loading before any 2026 measurement",
+  "resources": {
+    "cpu_seconds": 3808.7804229999997,
+    "output_bytes": 3198131628,
+    "peak_rss_bytes": 3618361344,
+    "wall_seconds": 3923.659389356617
+  },
+  "decision": "No automatic full rerun. Registered 2026-only raw timestamp diagnostic identifies exact rows and whether unsorted, identical aliases or conflicting same-time observations. Preserve complete 2020-2025 partial outputs, not a successful full run."
+}

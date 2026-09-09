@@ -1,0 +1,21 @@
+{
+  "kind": "profile_output_exhaustion_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/71ad49891285d4734e964887d67757572acacb5a1584bcfdfd90f6dddc474c09/execution.json",
+    "sha256": "5d68b2337160d5fbf5b6141a85fa15b1387072557e40b6bc31d5e018140b01c0",
+    "size_bytes": 48292
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/71ad49891285d4734e964887d67757572acacb5a1584bcfdfd90f6dddc474c09/worker.log",
+    "sha256": "12aa0dd4a620fafc5a0a023782b9bd1b2708b70cfcf9a53992d0a7dce5a88749",
+    "size_bytes": 3012
+  },
+  "exception": "test_null_empty_and_large_signed_list_values_roundtrip (tests.test_auction_flow_profile_reference.ProfileListStorageTests.test_null_empty_and_large_signed_list_values_roundtrip) ... ok\ntest_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected) ... ERROR\n\n======================================================================\nERROR: test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tests/test_auction_flow_profile_reference.py\", line 1567, in test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected\n    first = run_profile_statistics(\n            ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1579, in run_profile_statistics\n    ref, part, measurement = compute_profile_partition(\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_reference.py\", line 4076, in compute_profile_partition\n    groups_ref, paired_ref = write_partition_groups(\n                             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1196, in write_partition_groups\n    groups_ref = outputs.json(prefix + '-groups.json', {\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 102, in json\n    stream.write(payload)\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 46, in write\n    raise ContractError('registered derived-output allowance exhausted before write')\ntrading_research.errors.ContractError: registered derived-output allowance exhausted before write\n\n----------------------------------------------------------------------\nRan 2 tests in 67.604s\n\nFAILED (errors=1)\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3066, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 1483, in profile_statistics\n    if not tests['success']:raise ValueError('profile-statistics regression failure; no actual reduction')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: profile-statistics regression failure; no actual reduction\n",
+  "resources": {
+    "cpu_seconds": 75.025181,
+    "wall_seconds": 82.09787652874365,
+    "peak_rss_bytes": 1800523776,
+    "attempt_output_bytes": 194942
+  },
+  "decision": "First original exception is the16MiB fixture per-file output bound at finalized group JSON, not geometry/list codec. Full finalized and paired lists also retain all groups before writing. Keep prescribed metrics/definitions/checks. Yield finalized groups, write bounded compressed parts through existing exact codec, authenticate streamed parts, and compact readable undefined rows. Fix report missing json import seen on this path before retry."
+}

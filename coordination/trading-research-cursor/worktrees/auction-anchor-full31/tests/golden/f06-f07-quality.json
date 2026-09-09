@@ -1,0 +1,953 @@
+{
+  "definition": "F06/F07 finite synthetic engineering gold v1; frozen before implementation",
+  "clock_unit": "synthetic int64 nanoseconds",
+  "measured_live_latency_claim": false,
+  "cases": [
+    {
+      "id": "QJ-01",
+      "name": "Four independent clocks, equal new observation and copied snapshot",
+      "inputs": {
+        "field": "book.bid",
+        "facts": [
+          {
+            "id": "a",
+            "observed_at": 10,
+            "known_at": 10,
+            "receipt_at": 10,
+            "value": 100
+          },
+          {
+            "id": "b",
+            "observed_at": 20,
+            "known_at": 20,
+            "receipt_at": 20,
+            "value": 100
+          },
+          {
+            "id": "copy",
+            "observed_at": 20,
+            "known_at": 30,
+            "receipt_at": 30,
+            "value": 100,
+            "content_origin_id": "b"
+          }
+        ],
+        "healthy_liveness": {
+          "id": "pulse35",
+          "source_observed_at": 35,
+          "known_at": 35
+        },
+        "dead_liveness": {
+          "id": "pulse20",
+          "source_observed_at": 20,
+          "known_at": 20
+        },
+        "cut": 35,
+        "max_economic_age_ns": 20,
+        "max_source_silence_ns": 5
+      },
+      "expected": {
+        "last_value_change_at": 10,
+        "last_source_observation_at": 20,
+        "last_local_receipt_at": 30,
+        "economic_observed_at": 20,
+        "age_ns": 15,
+        "healthy": {
+          "liveness_at": 35,
+          "liveness_age_ns": 0,
+          "state": "observed"
+        },
+        "dead": {
+          "liveness_at": 20,
+          "liveness_age_ns": 15,
+          "state": "stale",
+          "reason": "source_silent"
+        },
+        "content_origin_id": "b",
+        "new_equal_observation_changes_lineage": true,
+        "snapshot_copy_is_new_flow": false
+      }
+    },
+    {
+      "id": "QJ-02",
+      "name": "Copied content and immutable identity contracts",
+      "inputs": {
+        "valid_origin": {
+          "id": "a",
+          "field": "bid",
+          "observed_at": 10,
+          "value": 100
+        },
+        "invalid_variants": [
+          "unknown origin",
+          "changed value101",
+          "changed fieldask",
+          "changed economic observation20",
+          "future origin known30 at copy receipt20",
+          "duplicate ID with changed content"
+        ]
+      },
+      "expected": {
+        "each_invalid_variant": "ContractError",
+        "admitted_state_unchanged_after_rejection": true
+      }
+    },
+    {
+      "id": "QJ-03",
+      "name": "Separate operation views",
+      "inputs": {
+        "field": "quote",
+        "observed_at": 10,
+        "known_at": 10,
+        "cut": 20,
+        "liveness_at": 20,
+        "operation_max_age_ns": {
+          "valuation": 30,
+          "forecasting": 20,
+          "signing": 5,
+          "execution": 4
+        },
+        "source_available_operations": [
+          "valuation",
+          "forecasting",
+          "signing"
+        ]
+      },
+      "expected": {
+        "valuation": "observed",
+        "forecasting": "observed",
+        "signing": "stale",
+        "execution": "ineligible",
+        "execution_reason": "source_capability_missing",
+        "age_ns": 10
+      }
+    },
+    {
+      "id": "QJ-04",
+      "name": "Field-local quality propagation and optional omission",
+      "inputs": {
+        "graph_edges": [
+          {
+            "input": "trade.buy",
+            "output": "cvd.value",
+            "optional": false
+          },
+          {
+            "input": "trade.sell",
+            "output": "cvd.value",
+            "optional": false
+          },
+          {
+            "input": "oi.contracts",
+            "output": "exposure.value",
+            "optional": false
+          },
+          {
+            "input": "cvd.value",
+            "output": "decision.value",
+            "optional": false
+          },
+          {
+            "input": "exposure.value",
+            "output": "decision.value",
+            "optional": true
+          }
+        ],
+        "incident": {
+          "id": "bad-oi",
+          "stage": "raw",
+          "fields": [
+            "oi.contracts"
+          ],
+          "known_at": 10,
+          "affected_from": 10,
+          "affected_until": 20,
+          "severity": "dependent-feature-block",
+          "operations": [
+            "valuation",
+            "forecasting"
+          ]
+        }
+      },
+      "expected": {
+        "blocked_fields": [
+          "oi.contracts",
+          "exposure.value"
+        ],
+        "dirty_consumers": [
+          "exposure",
+          "decision"
+        ],
+        "usable_independent_fields": [
+          "trade.buy",
+          "trade.sell",
+          "cvd.value"
+        ],
+        "decision_optional_omissions": [
+          "exposure.value"
+        ],
+        "unconditional_lanes": [
+          "market",
+          "account",
+          "timer"
+        ],
+        "blocked_interval": [
+          10,
+          20
+        ]
+      }
+    },
+    {
+      "id": "QJ-05",
+      "name": "Hard semantic integrity outranks statistical advisory",
+      "inputs": {
+        "field": "quote",
+        "cut": 10,
+        "hard_incident": {
+          "stage": "semantic",
+          "kind": "crossed_continuous_quote",
+          "severity": "execution-block"
+        },
+        "advisory": {
+          "kind": "anomaly_score",
+          "value": 0,
+          "severity": "informational"
+        }
+      },
+      "expected": {
+        "execution_state": "invalid",
+        "advisory_can_override": false,
+        "both_evidence_ids_retained": true
+      }
+    },
+    {
+      "id": "QJ-06",
+      "name": "Certified book recovery never repairs flow history",
+      "inputs": {
+        "events": [
+          {
+            "at": 9,
+            "kind": "healthy_book",
+            "economic_observed_at": 9
+          },
+          {
+            "at": 10,
+            "kind": "book_gap_and_flow_gap",
+            "raw_flags": 132
+          },
+          {
+            "at": 11,
+            "kind": "clean_looking_update"
+          },
+          {
+            "at": 12,
+            "kind": "documented_book_snapshot",
+            "raw_flags": 168,
+            "certificate": "book-only",
+            "economic_observed_at": 9
+          }
+        ],
+        "aggregate_window": [
+          8,
+          14
+        ]
+      },
+      "expected": {
+        "at11": {
+          "book_trusted": false,
+          "flow_complete": false
+        },
+        "at12": {
+          "book_trusted": true,
+          "flow_complete": false,
+          "economic_observed_at": 9,
+          "fresh_pressure_from_snapshot": 0
+        },
+        "book_unavailable_intervals": [
+          [
+            10,
+            12
+          ]
+        ],
+        "flow_unavailable_intervals": [
+          [
+            10,
+            null
+          ]
+        ],
+        "aggregate_window_duration_ns": 6,
+        "flow_invalid_duration_ns": 4,
+        "flow_supported_duration_ns": 2,
+        "plausible_update_is_recovery": false
+      }
+    },
+    {
+      "id": "QJ-07",
+      "name": "Affected interval union and partial aggregate support",
+      "inputs": {
+        "window": [
+          8,
+          22
+        ],
+        "incidents": [
+          [
+            10,
+            15
+          ],
+          [
+            13,
+            18
+          ],
+          [
+            18,
+            20
+          ]
+        ],
+        "independent_field": "trade_count"
+      },
+      "expected": {
+        "union": [
+          [
+            10,
+            20
+          ]
+        ],
+        "window_duration_ns": 14,
+        "invalid_duration_ns": 10,
+        "supported_duration_ns": 4,
+        "missing_contribution_upper_bound": null,
+        "independent_field_invalid_duration_ns": 0
+      }
+    },
+    {
+      "id": "QJ-08",
+      "name": "Quiet, expected gap, halt, stale copy and timeout are separate",
+      "inputs": {
+        "states": [
+          "healthy_source_zero_trades",
+          "missing_expected_heartbeat",
+          "documented_halt",
+          "fresh_receipt_of_old_snapshot",
+          "optional_model_timeout"
+        ]
+      },
+      "expected": {
+        "classifications": [
+          "observed_no_event",
+          "source_gap",
+          "halted",
+          "stale_content",
+          "computation_timeout"
+        ],
+        "zero_trades_alone_is_gap": false,
+        "timeout_proves_corrupt_source": false,
+        "account_timer_operable": true
+      }
+    },
+    {
+      "id": "QJ-09",
+      "name": "Revision and late older observation with future suffix",
+      "inputs": {
+        "facts": [
+          {
+            "id": "oi0",
+            "observed_at": 5,
+            "known_at": 10,
+            "revision": 0,
+            "value": 100,
+            "eligible": true
+          },
+          {
+            "id": "oi1",
+            "observed_at": 5,
+            "known_at": 20,
+            "revision": 1,
+            "value": 110,
+            "eligible": true
+          },
+          {
+            "id": "old-late",
+            "observed_at": 4,
+            "known_at": 25,
+            "revision": 2,
+            "value": 90,
+            "eligible": true
+          },
+          {
+            "id": "invalid",
+            "observed_at": 5,
+            "known_at": 35,
+            "revision": 2,
+            "value": 110,
+            "eligible": false
+          },
+          {
+            "id": "future",
+            "observed_at": 40,
+            "known_at": 40,
+            "revision": 0,
+            "value": 999,
+            "eligible": true
+          }
+        ],
+        "cuts": [
+          9,
+          10,
+          15,
+          20,
+          25,
+          35,
+          40
+        ],
+        "max_age_ns": 100
+      },
+      "expected": {
+        "admitted_ids": [
+          null,
+          "oi0",
+          "oi0",
+          "oi1",
+          "oi1",
+          null,
+          "future"
+        ],
+        "candidate_at35": "invalid",
+        "old_value_resurrected_at35": false,
+        "deleting_future_preserves_all_cuts_before40": true
+      }
+    },
+    {
+      "id": "QJ-10",
+      "name": "Availability and inclusive age endpoint",
+      "inputs": {
+        "observed_at": 10,
+        "known_at": 12,
+        "max_age_ns": 5,
+        "cuts": [
+          11,
+          12,
+          15,
+          16
+        ]
+      },
+      "expected": {
+        "states": [
+          "missing",
+          "observed",
+          "observed",
+          "stale"
+        ],
+        "ages_ns": [
+          null,
+          2,
+          5,
+          6
+        ],
+        "eligible_interval_half_open": [
+          12,
+          16
+        ]
+      }
+    },
+    {
+      "id": "QJ-11",
+      "name": "Joint support is stricter than individual TTL",
+      "inputs": {
+        "cut": 20,
+        "fields": [
+          {
+            "id": "call",
+            "observed_at": 10,
+            "known_at": 10
+          },
+          {
+            "id": "put",
+            "observed_at": 18,
+            "known_at": 18
+          }
+        ],
+        "max_field_age_ns": 15,
+        "max_joint_observation_span_ns": 5,
+        "movement_policy_max_ticks": 5,
+        "movement_witnesses": [
+          {
+            "id": "big",
+            "known_at": 20,
+            "from": 10,
+            "until": 20,
+            "complete": true,
+            "min_ticks": 100,
+            "max_ticks": 112
+          },
+          {
+            "id": "small",
+            "known_at": 20,
+            "from": 10,
+            "until": 20,
+            "complete": true,
+            "min_ticks": 100,
+            "max_ticks": 104
+          },
+          {
+            "id": "partial",
+            "known_at": 20,
+            "from": 10,
+            "until": 20,
+            "complete": false,
+            "min_ticks": 100,
+            "max_ticks": 104
+          }
+        ]
+      },
+      "expected": {
+        "individual_ages_ns": [
+          10,
+          2
+        ],
+        "individual_ttl_pass": [
+          true,
+          true
+        ],
+        "observation_span_ns": 8,
+        "joint_span_reason": "asynchronous_support",
+        "with_span_limit10_movement_results": {
+          "big": "movement_limit_exceeded",
+          "small": "supported",
+          "partial": "movement_support_missing"
+        },
+        "missing_witness_if_required": "movement_support_missing"
+      }
+    },
+    {
+      "id": "QJ-12",
+      "name": "One stale field in a new row",
+      "inputs": {
+        "cut": 20,
+        "row_received_at": 20,
+        "fields": {
+          "oi": {
+            "observed_at": 10,
+            "max_age_ns": 5
+          },
+          "quote": {
+            "observed_at": 19,
+            "max_age_ns": 2
+          }
+        }
+      },
+      "expected": {
+        "oi": {
+          "age_ns": 10,
+          "state": "stale"
+        },
+        "quote": {
+          "age_ns": 1,
+          "state": "observed"
+        },
+        "row_receipt_refreshes_all_fields": false,
+        "quote_only_optional_branch_usable": true
+      }
+    },
+    {
+      "id": "QJ-13",
+      "name": "Economic overlap union and conflict",
+      "inputs": {
+        "equivalent_aliases": [
+          {
+            "id": "near",
+            "contract": "c1",
+            "observed_at": 10,
+            "known_at": 10,
+            "value": 100,
+            "definition": "d1"
+          },
+          {
+            "id": "broad",
+            "contract": "c1",
+            "observed_at": 10,
+            "known_at": 10,
+            "value": 100,
+            "definition": "d1"
+          }
+        ],
+        "conflict_changes": {
+          "id": "broad",
+          "value": 101
+        }
+      },
+      "expected": {
+        "union_count": 1,
+        "economic_value": 100,
+        "retained_acquisition_ids": [
+          "broad",
+          "near"
+        ],
+        "conflicting_payload": "ContractError",
+        "conflict_rejection_atomic": true,
+        "insertion_order_changes_value": false
+      }
+    },
+    {
+      "id": "QJ-14",
+      "name": "PIT universe and exact observed-OI support",
+      "inputs": {
+        "cut": 10,
+        "universe": [
+          {
+            "id": "c1",
+            "known_at": 1,
+            "active_from": 1,
+            "dte": 0
+          },
+          {
+            "id": "c2",
+            "known_at": 1,
+            "active_from": 1,
+            "dte": 30
+          },
+          {
+            "id": "c3",
+            "known_at": 1,
+            "active_from": 1,
+            "dte": 61
+          },
+          {
+            "id": "future-listed",
+            "known_at": 12,
+            "active_from": 1,
+            "dte": 0
+          }
+        ],
+        "observed_oi": {
+          "c1": 100,
+          "c2": 300
+        },
+        "valid_quote_contracts": [
+          "c1"
+        ],
+        "quote_aliases": [
+          "near:c1",
+          "broad:c1"
+        ]
+      },
+      "expected": {
+        "eligible_contract_ids": [
+          "c1",
+          "c2",
+          "c3"
+        ],
+        "quoted_contract_count": 1,
+        "universe_count": 3,
+        "known_oi_contract_count": 2,
+        "missing_oi_contract_count": 1,
+        "quoted_known_oi": 100,
+        "total_reported_known_oi": 400,
+        "observed_oi_quote_fraction": {
+          "numerator": 1,
+          "denominator": 4
+        },
+        "missing_quote_ids": [
+          "c2",
+          "c3"
+        ],
+        "true_total_exposure_fraction": null,
+        "missing_oi_is_zero": false
+      }
+    },
+    {
+      "id": "QJ-15",
+      "name": "No eligible monthly expiry is not an acquisition outage",
+      "inputs": {
+        "cut": 10,
+        "known_contract_dtes": [
+          30
+        ],
+        "requested_max_dte": 14,
+        "quotes": []
+      },
+      "expected": {
+        "expected_contract_count": 0,
+        "state": "ineligible",
+        "reason": "no_contract_in_declared_scope",
+        "outage": false
+      }
+    },
+    {
+      "id": "QJ-16",
+      "name": "Identity and measured capability boundaries",
+      "inputs": {
+        "same_strike_date_contracts": [
+          {
+            "id": "NDX-monthly",
+            "definition": "am-cash"
+          },
+          {
+            "id": "NDXP-weekly",
+            "definition": "pm-cash"
+          }
+        ],
+        "unsupported_promotions": [
+          "futures_option_bar_to_BBO",
+          "daily_cash_to_intraday_spot",
+          "daily_VX_to_intraday_curve",
+          "MBP1_to_off_touch_depth",
+          "OSI_to_full_definition",
+          "current_macro_vintage_to_historical_surprise"
+        ]
+      },
+      "expected": {
+        "distinct_contract_count": 2,
+        "every_unsupported_promotion": "ineligible",
+        "parent_universe_inferred_from_observed_fields": false,
+        "estimated_scenario_is_new_observation": false
+      }
+    },
+    {
+      "id": "QJ-17",
+      "name": "Finite full-scan versus materialized interval comparison",
+      "inputs": {
+        "facts": [
+          {
+            "id": "buy10",
+            "field": "buy",
+            "observed_at": 10,
+            "known_at": 10,
+            "value": 9
+          },
+          {
+            "id": "sell10",
+            "field": "sell",
+            "observed_at": 10,
+            "known_at": 10,
+            "value": 4
+          },
+          {
+            "id": "oi10",
+            "field": "oi",
+            "observed_at": 10,
+            "known_at": 10,
+            "value": 3
+          },
+          {
+            "id": "oi20",
+            "field": "oi",
+            "observed_at": 20,
+            "known_at": 20,
+            "value": 5
+          },
+          {
+            "id": "sell30",
+            "field": "sell",
+            "observed_at": 30,
+            "known_at": 30,
+            "value": 6
+          },
+          {
+            "id": "oi40",
+            "field": "oi",
+            "observed_at": 40,
+            "known_at": 40,
+            "value": 5
+          }
+        ],
+        "cuts": [
+          10,
+          20,
+          30,
+          40,
+          50
+        ],
+        "field_order": [
+          "buy",
+          "sell",
+          "oi"
+        ],
+        "max_age_ns": 100,
+        "max_joint_span_ns": 100,
+        "toy_output_expression": "buy - sell + oi",
+        "reference_scan_rule": "Visit each of all6 supplied immutable observations once for each requested field/cut; count every visited candidate including unavailable future rows."
+      },
+      "expected": {
+        "rows": [
+          {
+            "cut": 10,
+            "ids": [
+              "buy10",
+              "sell10",
+              "oi10"
+            ],
+            "values": [
+              9,
+              4,
+              3
+            ],
+            "ages": [
+              0,
+              0,
+              0
+            ],
+            "output": 8
+          },
+          {
+            "cut": 20,
+            "ids": [
+              "buy10",
+              "sell10",
+              "oi20"
+            ],
+            "values": [
+              9,
+              4,
+              5
+            ],
+            "ages": [
+              10,
+              10,
+              0
+            ],
+            "output": 10
+          },
+          {
+            "cut": 30,
+            "ids": [
+              "buy10",
+              "sell30",
+              "oi20"
+            ],
+            "values": [
+              9,
+              6,
+              5
+            ],
+            "ages": [
+              20,
+              0,
+              10
+            ],
+            "output": 8
+          },
+          {
+            "cut": 40,
+            "ids": [
+              "buy10",
+              "sell30",
+              "oi40"
+            ],
+            "values": [
+              9,
+              6,
+              5
+            ],
+            "ages": [
+              30,
+              10,
+              0
+            ],
+            "output": 8
+          },
+          {
+            "cut": 50,
+            "ids": [
+              "buy10",
+              "sell30",
+              "oi40"
+            ],
+            "values": [
+              9,
+              6,
+              5
+            ],
+            "ages": [
+              40,
+              20,
+              10
+            ],
+            "output": 8
+          }
+        ],
+        "reference_candidate_row_checks": 90,
+        "interval_query_lookup_calls": 15,
+        "interval_query_source_candidate_scans": 0,
+        "full_toy_arithmetic_operations": {
+          "subtract": 5,
+          "add": 5
+        },
+        "incremental_toy_arithmetic_operations": {
+          "subtract": 4,
+          "add": 4
+        },
+        "index_build_work": "instrument and retain separately; no fixed speed claim or exclusion from telemetry",
+        "same_value_new_lineage_at40_recomputes_toy_output": true
+      }
+    },
+    {
+      "id": "QJ-18",
+      "name": "Conservative age and timing uncertainty",
+      "inputs": {
+        "observed_at": 10,
+        "known_at": 12,
+        "cut": 20,
+        "uncertainty_ns": 2,
+        "max_age_ns": 10,
+        "max_uncertainty_ns": 2
+      },
+      "expected": {
+        "age_lower_ns": 8,
+        "age_upper_ns": 12,
+        "state": "stale",
+        "reason": "conservative_age_exceeded",
+        "decision_clock_shifted_earlier": false
+      }
+    },
+    {
+      "id": "QJ-19",
+      "name": "Bounded contracts and atomic failures",
+      "inputs": {
+        "invalid_variants": [
+          "mutable field sets",
+          "bool timestamp",
+          "negative age limit",
+          "unknown operation",
+          "reversed affected interval",
+          "missing source/definition identity",
+          "duplicate inconsistent event ID",
+          "recovery targets unrelated gap",
+          "cyclic quality dependencies",
+          "changed policy checkpoint",
+          "event capacity exceeded",
+          "interval capacity exceeded"
+        ]
+      },
+      "expected": {
+        "each_invalid_variant": "ContractError",
+        "partial_state_visible_after_rejection": false,
+        "silent_eviction": false
+      }
+    },
+    {
+      "id": "QJ-20",
+      "name": "Reference repair boundary and restart",
+      "inputs": {
+        "affected_from": 10,
+        "checkpoint_cut": 8,
+        "correction_known_at": 20,
+        "query_cuts": [
+          15,
+          20
+        ],
+        "variants": [
+          "complete retained original suffix",
+          "missing required original segment",
+          "checkpoint after affected state"
+        ]
+      },
+      "expected": {
+        "complete_retained_original_suffix": "reference state equals local repair at20; cut15 unchanged",
+        "missing_required_original_segment": "dependent output unavailable with missing interval",
+        "checkpoint_after_affected_state": "reject as repair anchor or use earlier valid checkpoint",
+        "unaffected_fields_rebuilt": false,
+        "repeat_equal_suffix_counts_once": true
+      }
+    }
+  ]
+}

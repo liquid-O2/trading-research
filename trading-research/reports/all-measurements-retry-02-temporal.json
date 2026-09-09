@@ -1,0 +1,41 @@
+{
+  "failed_receipt": "reports/all-measurements-location-label-decision-v1-verification-68b8120118d4.json",
+  "shared_execution_id": "68b8120118d447aea09c4faec58197f7",
+  "status": "static-only",
+  "failures": [
+    {
+      "identity": "tests.test_measurement_fits.MeasurementFitTests.test_M_F11_FIT_001",
+      "cause": "measurement_fit_fixture constructed a temporal fold node without retained execution/local temporal limits",
+      "repair": "bound the fold node execution configuration to every DEFAULT_LIMITS field under temporal_limits_v1"
+    },
+    {
+      "identity": "tests.test_measurement_fits.MeasurementFitTests.test_M_F11_FIT_001_actual_cohort_conditional_and_surface_queries",
+      "cause": "fitted_sources hit the same missing temporal fold execution binding before downstream F11 admission/query assertions",
+      "repair": "bound fitted_sources fold execution to the exact DEFAULT_LIMITS temporal_limits_v1 configuration"
+    },
+    {
+      "identity": "tests.test_auction_measurements.AuctionMeasurements.test_MP18_MA05_actual_retained_developing_profile_fit",
+      "cause": "shared fitted_sources fixture failed at temporal fold construction",
+      "repair": "same fitted_sources fold execution binding"
+    },
+    {
+      "identity": "tests.test_structure_pressure_memory.StructurePressureMemoryTests.test_MM15_MM16_MX08_real_retained_memory_distance",
+      "cause": "shared fitted_sources fixture failed at temporal fold construction",
+      "repair": "same fitted_sources fold execution binding"
+    },
+    {
+      "identity": "tests.test_structure_pressure_memory.StructurePressureMemoryTests.test_MX08_real_retained_ridge_consumers",
+      "cause": "shared fitted_sources fixture failed at temporal fold construction",
+      "repair": "same fitted_sources fold execution binding"
+    },
+    {
+      "identity": "tests.test_v01_v02.V01V02Tests.test_capacity_variants",
+      "cause": "sample() prefixed the 257-byte identity with E: for endpoint_group, exceeding the expanded 257-byte identity limit",
+      "repair": "retained the x*257 identity and 65 dependencies while replacing endpoint_group with bounded d0"
+    }
+  ],
+  "remaining_concerns": [
+    "No imports, tests, compilation, candidate code, or normalizers were run; shared retry remains the execution authority.",
+    "The receipt also contains unrelated dependency and contract errors outside this bounded repair."
+  ]
+}

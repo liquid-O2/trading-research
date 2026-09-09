@@ -1,0 +1,23 @@
+{
+  "kind": "options_quote_parse_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/options-quote-runs/8b3d7a8add23de4707ae38672fc5f1bc88f9186444bce0e65e08fc7c1f4cfae7/execution.json",
+    "sha256": "672c25622d6913ea79680df76be078d4f696b549da9432d35bdf4f61755ead36",
+    "size_bytes": 2642
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/options-quote-runs/8b3d7a8add23de4707ae38672fc5f1bc88f9186444bce0e65e08fc7c1f4cfae7/worker.log",
+    "sha256": "0305b8cad298bad0a3ce20f037ea38943b6744486e81e8c264c2d414808ef3ef",
+    "size_bytes": 2396
+  },
+  "original_exception": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 468, in <module>\n    if len(sys.argv)==3 and sys.argv[1]=='--worker':raise SystemExit(worker(sys.argv[2]))\n                                                                     ^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 360, in worker\n    actual=run_measurement(packet,protocol,store,outputs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_options_quote_study.py\", line 134, in run_measurement\n    if not tests['passed']:raise ValueError('quote quality regressions failed before actual source execution:\\n'+stream.getvalue())\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: quote quality regressions failed before actual source execution:\ntest_all_fraction_metrics_stay_in_unit_interval (test_options_quote_measurements.QuoteFixtureCase.test_all_fraction_metrics_stay_in_unit_interval) ... ERROR\n\n======================================================================\nERROR: test_all_fraction_metrics_stay_in_unit_interval (test_options_quote_measurements.QuoteFixtureCase.test_all_fraction_metrics_stay_in_unit_interval)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tests/test_options_quote_measurements.py\", line 1416, in test_all_fraction_metrics_stay_in_unit_interval\n    result = self._run(folder, root, sources, [\"2020-01-02\"], [\"NDX\"])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tests/test_options_quote_measurements.py\", line 351, in _run\n    return run(\n           ^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_measurements.py\", line 3251, in run\n    parsed, exc = parse_quote_typed(\n                  ^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/options_quote_measurements.py\", line 1470, in parse_quote_typed\n    req_days[~req_ok] = np.int32(-1)\n    ~~~~~~~~^^^^^^^^^\nValueError: assignment destination is read-only\n\n----------------------------------------------------------------------\nRan 1 test in 0.326s\n\nFAILED (errors=1)\n\n",
+  "resources": {
+    "cpu_seconds": 3.567165,
+    "wall_seconds": 9.03484314493835,
+    "peak_rss_bytes": 154415104,
+    "attempt_output_bytes": null,
+    "output_bytes": 7496
+  },
+  "identity": "test_all_fraction_metrics_stay_in_unit_interval; NDX2020-01-02 source fixture; no acquired source rows decoded",
+  "decision": "Make owned writable int32 request/expiration day arrays before NULL masking; inspect all other inplace Arrow-derived parse arrays. One fix then failfast full regression/pilot."
+}

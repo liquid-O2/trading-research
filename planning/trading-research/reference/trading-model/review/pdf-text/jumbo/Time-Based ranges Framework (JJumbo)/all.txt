@@ -1,0 +1,1086 @@
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 1/38 =====
+Time
+Based
+Models
+
+
+
+
+
+ A Complete
+ Guide for Data-
+ driven approach
+
+ written by JJumbo
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 2/38 =====
+Table of content
+
+
+
+   1. Introduction
+
+   2. Indicator instructions (Dynamic SDRange)
+
+   3. Framework overview
+
+   4. Time-Based ranges
+
+   5. Trading Set Ups
+
+       a. 6-9 Model
+
+       b. Trading session windows
+
+        c. Levels interaction
+
+       d. Market conditions
+
+       e. Expectations
+
+           f. Trading orders presets
+
+       g. Entry models
+
+   6. Statistical approach
+
+   7. Confluences
+
+   8. Sessions correlation
+
+   9. Model and Set up failure
+
+ 10. Conclusion
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 3/38 =====
+Introduction
+
+In this document, i present my frameworks and tools with all my
+models and how i view the financial markets.
+Please bear in mind that this is not financial advice. The information
+here are solely based on my personal experience.
+
+
+These tools and models offer a significant potential and guide lines
+to gauge an edge in the markets; However, the results are guaranteed
+by the success of personal application and requires an understanding
+and effective risk management in place.
+
+I will present the technical aspects of the frameworks and my
+personal approach, but i also will give enough space for the trader to
+apply its own understanding.
+
+
+
+Thanks.
+JJumbo
+
+
+
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 4/38 =====
+Indicator instructions
+
+
+
+                              Range Settings
+                                 Custom range time selection
+                                 Custom quadrant levels 25% 75%
+                                       Equilibrium
+                                  Range open and close levels
+                                 Custom High and Low lines
+                                       Table showing range size in points
+
+
+
+
+
+                                     Visual Settings
+                            RTH Candles activation
+                                        Lines customisable colors
+
+
+
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 5/38 =====
+Projections settings
+   Mean reversal levels toggling
+    projections toggling
+   Area shading of mean reversal
+    Projection direction plotting
+    Projection customisable colors
+    Retracement/reversal levels
+   Mean reversal lines color
+    Retracement/Reversal (R/R)
+    shading area
+    Projection labels sizes
+
+
+
+
+
+Custom overnight sessions highs
+and lows
+   2 custom session selection
+   Custom highs and lows text labels
+    customisable lines width and
+    colors
+
+
+
+
+
+               RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 6/38 =====
+Framework Overview
+
+The framework is based entirely on time-based ranges that appear through
+out the day during electronic trading hours and regular trading hours (all
+times i refer to during the entirety of this document will be in Eastern
+Standard Time, ET).
+
+Markets often exhibit rhythmic behavior tied to sessions, where liquidity and
+volatility spike predictably for order accumulations and breakouts
+
+The idea behind this and how i view ranges is that every range has
+measurable exhaustion points where price absorbes orders accumulated
+during the range window and reverses or breaks after hitting trapped stops
+to then distribute to post-breakouts targets often corresponding to the range
+extensions. It usually happens in the form of “False Breakout” or judas swing
+as ICT describes it (which is one of the models later presented) or just “Range
+breakout”.
+
+Our job is to anticipate these moves in the exhaustion areas and position
+ourselves during specific time windows during the trading session where
+statistically these moves form.
+
+This logic can be applied to multiple ranges present throughout the day
+helping you identify these moves and the signatures in price at said levels.
+This system is fairly simple and a rules-based system focusing on time and
+price signatures can reduce overthinking, making it actionable if backtested
+and followed consistently.
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 7/38 =====
+Time-Based Ranges
+
+In this section i will go through a series of time-based ranges that i personally
+discovered and backtested and consider significant, by no means this what you
+should only trade but feel free to experiment with other times with the help of
+my tool
+
+
+Overnight Session:
+
+   08:00pm - 08:30pm (Asia opening range)
+   00:00am - 00:30am (Midnight opening range)
+   03:00am - 03:30am (London opening range)
+   06:00am - 09:00am (ONS session - main New York model)
+
+RTH Session AM:
+
+   09:30am - 10:00am (Equities opening range)
+   10:00am - 10:30am
+
+
+RTH Session Lunch/PM:
+
+   12:00pm - 12:30pm (Lunch opening range)
+   03:00pm - 03:30pm (MOC macro trading session)
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 8/38 =====
+Trading Set Ups (section a.)
+6-9 Model (main New York AM model)
+
+Time range selection: 6:00am - 9:00am
+
+    Judas Model
+
+
+
+
+ This model is what i define as my A+ bread and butter, always terminating my
+ trading session before 10am. Quick in and out and easy to spot providing on
+ average 80 -120 pts, it usually presents two distinct trade opportunities, the
+ judas trades from 9:30 to the reversal window and the actual reversal trade
+between the 9:40 and 9:50.
+
+   Trade #1
+
+As stated above, this model presents two trades with two levels of difficulty, the
+first trade is where we position ourselves right at the open where we participate
+in the judas move (false breakout) towards the projections of the range where
+the reversal will take place.
+The time window of this trade spans from 9:30 open until the 9:40 -9:50 reversal
+window where the real move will happen. I suggest to have positions closed as
+we reach the reversal window, the yield of this trade outcome will vary
+depending on the size of the 6-9 range (e.g. the distances from open to
+projection levels) application of risk to reward needs to be considered)
+
+   Trade #2
+
+The second trade in this model is easier to trade, filters out the volatility of the
+open and allows you to let price develop before taking place in any position
+avoiding to be knocked out of your trade.
+Here is where we participate in the reversal during the 9:40 - 9:50 window, levels
+of interest will be the mean reversal levels or -0.5 projection.
+By this time we are already in position to ride the actual move after the fake
+breakout, price will move faster and cleaner also allowing you to build a larger
+position towards the higher projections of the range and compound on the
+winners.
+
+Chart Examples
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 9/38 =====
+Trade #1
+
+
+
+
+
+Trade #2
+
+
+
+
+
+                                            RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 10/38 =====
+Trade #1
+
+
+
+
+
+Trade #2
+
+
+
+
+
+                                           RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 11/38 =====
+Additional confluence is given for the reversal trades, the indicator plots the
+highs and lows of a chosen overnight session (time-based liquidity)for probable
+liquidity purge which will then be deleted once purged.
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 12/38 =====
+Time range selection: 6:00am - 9:00am
+
+    Single Breakout Model
+
+
+In this model, taking in consideration the size of the overnight range is really
+important (i will later discuss in the “expectation section”), the size of the ONS
+range will give you a hint whether we will have a false breakout or just a
+breakout distributing from the EQ or quadrants.
+Always take in consideration the table below to know the size of the range
+before market open.
+This is usually a slower trade where i lower my expectation in terms of profit
+taking and extension reaching, you want to be in the trade before 10am an look
+to close position around 9:40-9:50 window.
+
+
+Scenario #1 (Extended overnight range)
+In the case of having an extended overnight range, the EQ or quadrants become
+our levels on interest.
+This is usually where i lower my expectations during AM session, the 6-9 range
+high/low are sufficient as target for the most part, the projections are off the
+table and after 10am all interest in being in a position is not longer present.
+Price tends to consolidate all the way through lunch/PM session
+
+
+Scenario #2 (Stop Hunts - relative strength/weakness between indices
+during overnight)
+When overnight presents stop hunts/ swing failure scenarios and every
+significant overnight liquidity has been purged , During AM session price usually
+don’t present a fake breakout to knock people out of positions, we can
+anticipate price expanding from the inner range levels (EQ, Quadrants).
+In this case scenario my targets expectation increases, we can notice a shrank
+overnight range leading to explosive expansions during the AM session
+discarding the 9:40 9:50 window to be of any interest for reversals but rather
+use it as continuation where i would look to add to my position.
+
+As you can notice, on all set ups i keep “Show RTH candles?” toggled on to only
+highlight candles from 9:30 onwards as i only look to enter positions after open.
+
+
+
+
+
+Chart Examples
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 13/38 =====
+Scenario #1
+
+
+
+
+
+   Range table
+
+
+
+
+  Scenario #2
+
+
+
+
+
+                                            RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 14/38 =====
+RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 15/38 =====
+  Trading session windows
+  (section b.)
+
+                        RTH
+
+Reversal scenario
+
+
+
+
+
+  Single breakout
+     scenario
+
+
+                        RTH                                            RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 16/38 =====
+In the graphs above i’ve highlighted the entire trading day, segmented into key
+time windows, to define the price behavior during each period. This helps me
+manage my positions with clear expectations.
+
+I focus on the 9:00 AM to 12:00 PM window as a whole to frame my setups,
+expecting specific price behavior during this period (which can be interpreted
+as a 3-hour "PO3"). This window captures most of the morning session’s
+volume and significant price movements.
+
+Within the 9:00 AM to 12:00 PM window, I’ve identified two time-defined entry
+and take-profit zones to guide my trades when paired with my framework. In
+both scenarios, trade opportunities arise at the open (9:30 AM) and during the
+9:40 AM to 9:50 AM window, with take-profit points along the way.
+
+For each window, I manage my position by taking profits, adding to my
+position, or closing it entirely. When combined with my framework/indicator,
+this approach provides specific levels to act upon—essentially creating a matrix
+where Time and Price are integrated. This allows me to dissect the trading day
+into distinct cycles, during which price behaves differently.
+
+
+
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 17/38 =====
+Reversal scenario
+
+
+
+
+
+Single breakout
+   scenario
+
+
+
+
+
+                                             RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 18/38 =====
+Delayed cycle 2 move with 10am news examples
+
+
+
+
+
+ On news days with a 10:00 am release, we often observe a delayed cycle 2
+ move. Instead of the expected reversal occurring between 9:40 and 9:50 (where
+ a Judas swing typically happens), the real reversal takes place after the 10:00
+ am news.
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 19/38 =====
+In this depiction, you can notice how i’m dissecting the 3 hour candle (9AM -
+12PM) using the Time and Price matrix to position myself accordingly having
+in mind this interpretation.
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 20/38 =====
+  Levels Interaction (section
+  c.)
+
+     In this section i will talk about all the levels interaction of the framework and
+   how price behaves and presents price signatures to take into account when
+    framing your trades.
+
+
+Reversal scenario
+
+
+
+
+
+In the reversal scenario, when we’re looking for price signatures, all we want to identify is how
+price is behaving at our anticipated levels.
+when we’re expecting a reversal, you can notice how candles form at the levels, constant rejection
+and multiple wicks they are usually a hint of price not willing to expand further but rather about to
+reverse not having enough fuel to continue its direction
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 21/38 =====
+ Single breakout scenario
+
+
+
+
+
+ 1.33 1.66 Retracement/Reversal levels
+
+
+
+
+
+It’s important to note the 1.33 1.66 levels and monitor the interaction at these levels.
+They function as Retracement/Reversal area where price will continue the direction of AM or
+reverse all of the AM session through PM session.
+
+Again this is all tied to time and its pivots are time-sensitive, this will guide you through PM in
+case of taking action after AM
+
+
+
+
+
+                                            RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 22/38 =====
+ Market Conditions
+ (section d.)
+   In this section, I will touch on the importance of market conditions and how
+   they dictate the outcome of the model. Just like any other model, market
+   conditions play a significant role in the trading session due to their somewhat
+   predictable nature. While we cannot fully anticipate market conditions, we can
+   predict their behavior and adjust our expectations and risk management
+   accordingly.
+   Economic Calendar
+   Monitoring the economic calendar is crucial to understand where we are in the week
+   with regard to limiting our participation on range-bound or increase exposure in volatile
+   days. This allows us to adjust our expectations for risk, profit-taking, and overall
+    participation.
+
+
+
+
+
+   The three most important red folder news above, is what i would mainly monitor as
+    well as the days leading up to the news.
+
+    Usually, the way i approach this, i don’t completely cease trading because there will
+   always be set up present within the model, but i lower my expectations and risk and
+    limit damage as much as possible in case of any.
+
+   Below i will present a table with the days of the week, during every specific week where
+   news are present and mark the days with the respective approach to take.
+
+      Low risk/ low expectations
+
+        Moderate risk/Moderate expectations
+
+         risk-on/high expectations
+
+
+
+ News       Monday       Tuesday     Wednesday    Thursday       Friday
+
+ CPI
+
+ NFP
+
+FOMC
+
+                                           RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 23/38 =====
+Examples of unfavourable
+Market conditions
+
+
+
+
+
+As stated above, market conditions will be very important for the outcome of your
+trading session.
+With the economic calendar, we can limit our participation in these market condition
+and prevent any significant damage.
+In these occurrences, AM is completely off-limits, PM will usually have most of the
+moves.
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 24/38 =====
+Expectations (section e.)
+“Refer to (section b. Market Conditions)”
+
+In this section, we will see how to adjust our expectations based on conditions.
+This is also important as it will dictate the outcome of your trades management
+it will be useful to limit unnecessary losses, roundtrip trades, lock-in profits at
+the right time.
+
+Based on what we talked about in the previous section (“market conditions”)
+we will adopt different approaches on the framework.
+
+Extended Overnight Session (6am -9pm) usually present on 8:30 red folder news
+
+    Targets
+Targets in these conditions will be limited to the high and low of the overnight range
+until lunch time.
+Having an extended overnight range, these targets will suffice for the entirety of the AM
+session, price will be slower and harder to engage in the market
+    Risk
+Risk should be considerably moderated, invalidations for you entries will be a lot larger
+than usual depending on your entry model.
+Price actin will be grindy for the most part with deep retracements knocking you out of
+your position.
+
+
+Range-bound price action leading to news days
+  Targets
+Targets in these conditions will be limited to the high and low of the overnight range or
+inner range levels in case of outside of range openings
+A scalping approach should be adopted with in and outs and considerably reduced
+Risk/Reward trades
+  Risk
+Risk should be considerably moderated, invalidations for you entries will be a lot larger
+than usual depending on your entry model.
+Price actin will be grindy for the most part with deep retracements knocking you out of
+your position.
+
+Expansive days - favourable market conditions
+    Targets
+Targets in these conditions should be exponentially higher, higher projections of the
+range will be highly probable allowing you to hold positions for longer, here is where you
+want to compound on your winners and let runners run.
+Risk/Reward increases and price action will be a lot easier to engage.
+    Risk
+Risk can be increased, and multiple entry opportunities will be provided.
+In case of being knocked out of your position, a re - entry is considered to be plausible
+due to fast and one-directional price action.                  RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 25/38 =====
+Trading Orders Presets
+(section d.)
+“Trading view ”
+
+ TRADING VIEW:
+ Adopting the use of presets for your orders, will allow you to be quick on executions
+ during high volatility especially at market open.
+  It will set your target and stop loss instantly without wasting time pulling R/R tools or
+ manually setting stop loss and target.
+ There three different entries: Market Order, Limit Order, Stop Order each of them will be
+ beneficial on different scenarios.
+     Market Order
+ Instant execution at current or best price available (this is what i mostly use during high
+  volatility)
+
+
+
+
+                                      Set your desired Stop Loss and target price
+                                    as well as your desired risk and save preset.
+
+                                Once activated Buy/Sell buttons and instant
+                                      execution at the top-left of your chart, you will
+                                  have instant execution when pressed buy or
+                                                     sell.
+
+
+
+
+     Limit Order
+  Generally i don’t use Limit Orders unless i’m copying multiple accounts on my copier for
+  precise execution avoiding to de-sync my accounts when entering a position and
+  trading low volatility conditions.
+
+                                      Set your desired Stop Loss, target price
+                               and desired risk, i have my “ask/bid” set to 0
+                                            for a more precise execution.
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 26/38 =====
+  Stop Order
+
+I use this preset frequently, especially in volatile price action, and just like the limit order
+i noticed is beneficial when copying multiple accounts avoiding to de-sync your
+accounts when entering.
+
+
+                                      Just like the other presets, set your desired
+                                  Stop Loss, target price
+                              and desired risk, “ask/bid” should also be set to 0
+                                          for a more precise execution.
+
+
+
+
+
+The same can be done with other softwares like NinjaTrdaer or Tadovate in case of
+anyone executing on different softwares other done Trading view.
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 27/38 =====
+ Entry Models (section e.)
+  “Personal favourites not fixed to the model ”
+
+    In this section, I will go through my usual entry models to engage in the market
+    with the model presented.
+   The entry models will be tied to your win rate and management, everyone has a
+     different view on win rate, some prefer a high win rate and low Risk/Reward,
+   some prefer a low win rate and high Risk/Reward.
+    This is entirely up to you, but the way a personally operate, i usually go for high
+    Risk/Reward trades, sacrificing my win rate.
+    As a rule of thumb, win rate doesn’t define your profitability as a trader and it’s
+    very much dependant on the trader’s style.
+
+
+    Orderblocks - Rejection blocks
+    These are my personal favourite functions for my entry models, especially on reversals,
+    they usually provide a good invalidation with tight stop losses allowing me to engage in
+    high Risk/Reward trades.
+    Time frame of execution 2 minutes 3 minutes 5 minutes
+
+
+ 3 candles formation OB entry (Reversal)
+
+                                                            Aggressive Stop Loss at the
+                                                       midpoint of the orderblock
+                                                            providing high Risk/Reward trades
+
+                                                         candle 2 sweeps candle 1
+                                                         candle 3 closes above candle 2
+                                                         candle 3 confirms the set up
+                                                               closing above candle 2
+
+                                                             This entry model is i usually
+                                                           wait for during reversals
+
+
+
+
+
+3 minutes
+Time Frame
+
+
+
+                                           RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 28/38 =====
+                                                            Conservative Stop Loss at the
+                                                    low of the orderblock
+                                                             providing a slightly
+                                                         lower high Risk/Reward trade
+
+                                                         candle 2 sweeps candle 1
+                                                         candle 3 closes above candle 2
+                                                         candle 3 confirms the set up
+                                                               closing above candle 2
+
+                                                             This entry model is also what
+                                                                                                      i usually wait for during
+                                                                 reversals
+
+
+
+
+
+3 minutes
+Time Frame
+
+
+
+
+
+                                                           Aggressive entry at the
+                                                      midpoint of the orderblock
+                                                           providing high Risk/Reward trades
+
+                                                        candle 2 sweeps candle 1
+                                                        candle 3 closes above candle 2
+                                                        candle 3 confirms the set up
+                                                              closing above candle 2
+
+                                           Same view on reversals
+
+
+
+
+
+  3 minutes
+  Time Frame
+
+                                          RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 29/38 =====
+Rejection Blocks ( Reversals - Single Breakout)
+
+                                                            Aggressive Stop Loss at the
+                                                      midpoint of the rejection block
+                                                            providing high Risk/Reward
+                                                                trades.
+
+                                                          Closure of the candle above
+                                                        the sweep candle confirms
+                                                        the rejection block set up
+
+
+
+
+
+                                                          Conservative Stop Loss at the
+                                                      midpoint of the rejection block
+                                                            providing a slightly
+                                                        lower high Risk/Reward trade
+
+                                                          Closure of the candle above
+                                                        the sweep candle confirms
+                                                        the rejection block set up
+
+
+
+
+
+                                          RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 30/38 =====
+Statistical Approach
+
+ The information in this section are based on 20 years E-mini Nasdaq 100
+ demonstrating and compounding the model characteristics over the course of
+ the years.
+
+ It displays the key times of the significant moves and behaviour discussed so
+ far.
+
+ All the data has been provided by “CME Group” which i then used and run
+ through Python to gather statistics based on my model criteria.
+
+
+
+
+
+ The two graphs above are displaying the highest count of reversal happening at a specific time
+ window (left) which is what we discussed so far, the 9:40 9:50 reversal window.
+ And on the right, the overall percentage of reversals happening at the -0.5 projection of the range
+ (86.46%).
+ This analysis was done on 4537 days of data.
+
+
+
+
+
+In this graph instead, we can see how significant are also the “mean reversal levels” projections,
+holding a very high percentage of reversal across all the days analysed.
+
+All data statistics are based on the 9:00am - 12:00pm time window, which is where we frame most
+of our set ups.
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 31/38 =====
+Confluences
+
+Here is where we will make use of the other indicators provided in the collection, to
+reinforce our trade ideas.
+
+The SDRange framework already is a standalone model, but with the use of additional
+confluence we will have more confidence in the trade idea and direction.
+
+Absorption zone+
+The concept behind this indicator is based on "absorption" in trading, which typically
+refers to when large players are absorbing (buying or selling) a significant amount of
+volume without moving the price much. This often happens at key levels (Pairing
+SDRange framework with its key levels) and can signal a potential reversal or
+continuation by highlighting the candles/zone where this takes place.
+
+The small body with high volume suggests that despite significant trading activity,
+prices didn't move much in one direction - possibly indicating that large buyers or
+sellers are "absorbing" the opposing pressure, potentially before a move in their favor.
+
+
+
+
+
+                                         RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 32/38 =====
+PD RTH Range+
+
+The primary purpose of this indicator is to help traders visualize the price range
+established during regular trading hours, which often serves as important Key levels for
+next day’s RTH session tracking and displaying the Previous day’s Regular Trading
+Hours (RTH) range High and Low and just like the SDRange+, it only highlights the RTH
+session when toggled on, helping visualize better the sessions of interest.
+
+Refer to ICT One Set Up for Life for the view on RTH sessions.
+I tweaked this framework to my preferences and added my own view to it as well as creating the indicator for it
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 33/38 =====
+The concept behind the PD RTH Range+ is to only focus on the RTH (Regular Trading
+Hours) price action (9:30 - 16:00) and its key levels to get your overall daily direction for
+the entirety of the trading session.
+You want to use its key levels especially highs and lows as draw on liquidity and
+imbalances (M15 and H1)
+
+
+
+
+
+                                        RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 34/38 =====
+ Here are few examples on how you can use it as confluence wit the SDRange+ indicator
+
+
+
+
+
+You can notice that ETH session is not taken into account at all, our focus is mainly on
+RTH session, whatever ETH did, when using this framework, we completely disregard it.
+If highs get taken during ETH for example, we don’t take it into account, we wait for RTH
+session to start and and trade towards them, essentially we don’t engage before RTH
+open but rather wait and let it tell us the direction once RTH opens.
+
+                                          RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 35/38 =====
+Confluence indicators settings
+(PD RTH Range+ Absoprtion zone+)
+
+
+                                             Fully customisable lines display
+                             RTH candles highlight
+                                                 First presented FVG displaying
+                                           in current Time Frame chosen
+                                   Range projections
+
+
+
+
+
+                                        Suggested settings as per picture
+
+
+
+                                               Candles characteristics threshold identifier
+
+                                             Higher than average volume (defined by the
+                                            "Volume Multiplier" parameter against a 14-
+                                                period volume average)
+
+
+                                           RMC Strategy
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 36/38 =====
+Sessions Correlation
+Understanding the relationships between trading sessions provides valuable context
+for anticipating price behavior throughout the day. The following represent common
+correlations between AM (9:30-12:00), Lunch (12:00-13:00), and PM (13:00-16:00)
+sessions. There are other Profiles throughout the day but this is what we will focus on to
+trade my framework.
+
+                          AM Consolidation → PM Expansion
+
+                                 When the AM session trades in a
+                                        narrow range with low directional
+                                               conviction
+                                       Lunch session often continues the
+                                               consolidation
+                              PM session frequently breaks out of
+                                           the range with stronger directional
+                                momentum
+                                                  Target: Higher projections from the
+                               AM session range
+
+
+
+
+
+                          AM Expansion → PM Consolidation
+
+                                            Strong momentum and range
+                                           expansion during AM session
+                                            Exhaustion of the move leads to
+                                           choppy, range-bound activity in
+                                       Lunch through PM
+                              PM often consolidates between key
+                               AM session levels
+
+
+
+
+
+                                                                                                                Retracement
+
+
+
+
+
+                                                                                               Expansion                                    Reversal
+
+
+
+
+
+                                                                                                                           Consolidation
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 37/38 =====
+Model and Set Ups Failure
+
+Recognizing Failure Signals
+
+Failed 6-9 Model Reversal
+   No Rejection Signature: When price reaches the projection levels during the 9:40-
+    9:50 window but shows no rejection candles or orderblocks
+    Continuous Momentum: Price continues through projection levels with strong
+   momentum and volume, showing no signs of exhaustion
+    Extended Bodies: Instead of wicks at projection levels, candles show extended
+    bodies in the direction of the trend
+     Daily direction mis-interpretation
+
+Time Window Violations
+    Missing the 9:40-9:50 Window: When price reverses significantly before or after our
+     critical time window
+    Extended Moves: Price moves beyond expected extensions without respecting
+    time-based pivots
+    Premature Reversals: Reversal occurs well before or after reaching the expected
+    projection levels (e.g 10am news)
+
+Risk Management During Failures
+
+Early Recognition and Exit
+     3-Strike Rule: If price attempts to reverse 3 times at a level without follow-through,
+    consider the setup failed
+   Volume Divergence: When price reaches critical levels but without corresponding
+    volume signature
+    Tight Initial Stops: Using the aggressive stop placement mentioned in the entry
+    models section to limit damage on failed setups
+Adjusting After Recognition
+     Exit and Observe: Once a setup is confirmed as failed, exit positions and observe for
+    the remainder of the session
+    Switch to Alternative Models: Consider using different setups like the Single
+    Breakout Model or look for opportunities in PM session
+    Reduce Position Size: If continuing to trade after a failed setup, reduce your risk
+     allocation by at least 50%
+
+Key Takeaways
+
+   1. Failing Fast: Recognizing failures quickly preserves capital and mental energy
+   2. Contextual Awareness: Understanding why a setup failed improves future decision-
+    making
+   3. Statistical Mindset: No setup works 100% of the time; respect the statistical nature
+    of market edges
+   4. Risk Management: Having pre-defined failure protocols prevents emotional
+    decision-making
+
+===== /workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf PAGE 38/38 =====
+Conclusion
+
+The time-based trading methodology presented in this document offers a systematic
+approach to identifying high-probability trading opportunities in financial markets. By
+focusing on specific time windows and price behaviors, traders can develop a
+structured framework that reduces subjective decision-making and emotional
+interference.
+Take your time to go through the content and train your eye to see the framework in
+action and get a good grasp of it.
+
+Key principles of this approach include:
+   1. Time-Price Matrix: Understanding the relationship between specific time
+    windows and price behavior creates predictable opportunities in the market.
+   2. Statistical Edge: Historical analysis spanning 20 years of market data validates the
+     significance of key time windows, particularly the 9:40-9:50 reversal window with
+      its 86.46% probability of reversal at projection levels.
+   3. Adaptability: The framework can be adjusted based on market conditions, with
+     clear guidelines for modifying expectations and risk management during different
+     scenarios.
+   4. Risk Management Integration: From precise entry models to failure recognition
+     protocols, risk management is embedded throughout the entire trading process.
+   5. Systematic Execution: Through consistent application of the tools and models
+    presented, traders can develop a repeatable process for engaging with the
+    markets.
+
+Remember that success with this methodology requires:
+    Consistent application of the principles and tools
+    Proper risk management with each trade
+    Recognition of favorable versus unfavorable conditions
+    Regular review and refinement of your approach
+
+No trading method is effective 100% of the time, which is why understanding both the
+ideal setups and potential failures is critical. By respecting the statistical nature of
+market edges and having clear protocols for various scenarios, you can navigate the
+inevitable fluctuations of trading performance.
+I encourage you to first practice this approach in a simulated environment,
+documenting your observations and outcomes before applying it with real capital.
+Success will come not just from understanding the concepts presented, but from your
+personal discipline in applying them consistently over time.
+Trading is both an art and a science - this framework provides the scientific foundation,
+but your experience and judgment will refine it into a personalized approach that works
+for your specific goals and risk tolerance.
+
+Best of success in your trading journey,
+
+JJumbo

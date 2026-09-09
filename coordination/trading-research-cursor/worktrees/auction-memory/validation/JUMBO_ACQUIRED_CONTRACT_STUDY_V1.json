@@ -1,0 +1,4134 @@
+{
+  "active_scope": "2026-09-07-research-v2",
+  "bar_availability_scenario": "bar_end_plus_60s",
+  "bar_duration_ns": 60000000000,
+  "bar_latency_ns": 60000000000,
+  "bar_schema": {
+    "c": "double",
+    "h": "double",
+    "instrument_id": "int32",
+    "l": "double",
+    "o": "double",
+    "t": "int64",
+    "v": "double"
+  },
+  "bar_timestamp": "millisecond UTC interval start; retained unchanged, explicit ns conversion in derived table",
+  "calendar_path": "configs/cash-rth-calendar-research-v1.json",
+  "chronology": {
+    "confirmation_policy": "Select models, scales, clocks and thresholds using training/development only; freeze their exact artifacts before one heldout evaluation. Descriptive heldout findings cannot select a new winner in this registration.",
+    "development": [
+      "2023-01-01",
+      "2024-12-31"
+    ],
+    "earlier_inspection": "Prior bounded field and trade-reconciliation audits sampled dates including2025/2026; no completed Jumbo family model evaluation. Pilot uses training/development years only.",
+    "heldout": [
+      "2025-01-01",
+      "latest_admitted_date"
+    ],
+    "role": "retrospective chronological evaluation; not prospective evidence",
+    "training": [
+      "2020-01-01",
+      "2022-12-31"
+    ]
+  },
+  "clock_recipes": [
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "00:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "01:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "01:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_01",
+      "local": {
+        "end": {
+          "day_offset": -1,
+          "time": "20:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "20:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "01:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "01:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_01",
+      "local": {
+        "end": {
+          "day_offset": -1,
+          "time": "20:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "20:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_02",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_02",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_03",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_03",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "10:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_04",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "06:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_04",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "06:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_05",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_05",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_06",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "10:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_06",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "10:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_07",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "12:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_07",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "12:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "19:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "20:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "15:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "fixed_EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "20:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "JTR_fixed_EST_sensitivity_08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "15:00"
+        }
+      },
+      "local_zone": "Etc/GMT+5",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "JTR-03"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "11:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "ONS03",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "07:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "overnight_pivot_range_v1",
+      "source_ids": [
+        "JTR-02"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "01:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "ONS20",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "20:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "overnight_pivot_range_v1",
+      "source_ids": [
+        "JTR-02"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:35"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:35"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "OR5",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:35"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "C01",
+        "PIN027-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:45"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:45"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "OR15",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:45"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "wick_range_v1",
+      "source_ids": [
+        "C01",
+        "PIN027-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "01:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "Asia20",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "02:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "20:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN082-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "London02",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "08:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN082-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "NY08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "16:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN082-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": -1,
+            "time": "23:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "Asia19",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "02:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "19:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN083-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "22:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "futures08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "17:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN083-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "22:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "day00",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "17:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN083-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "custom09",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN083-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "early_close_policy": "This row is source fixed09:30-16 clock; actual cash-RTH variant substitutes published actual close and has a distinct target/version. Do not silently claim16:00 cash session on early-close dates.",
+      "id": "RTH0930",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "16:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN083-01"
+      ]
+    },
+    {
+      "UTC": {
+        "UTC": {
+          "end": {
+            "day_offset": 0,
+            "time": "22:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN015_NY_UTC",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "22:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "local_zone": "UTC",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN015-01"
+      ]
+    },
+    {
+      "UTC": {
+        "UTC": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:45"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN015_London_UTC",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:45"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "07:00"
+        }
+      },
+      "local_zone": "UTC",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN015-01"
+      ]
+    },
+    {
+      "UTC": {
+        "UTC": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN015_Asia_UTC",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "07:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "UTC",
+      "output_definition": "session_wick_OC_body_v1",
+      "source_ids": [
+        "PIN015-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": -1,
+            "time": "23:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": -1,
+            "time": "22:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "00:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": -1,
+            "time": "23:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_01",
+      "local": {
+        "end": {
+          "day_offset": -1,
+          "time": "19:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "18:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "03:04"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": -1,
+            "time": "23:01"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:04"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "00:01"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_02",
+      "local": {
+        "end": {
+          "day_offset": -1,
+          "time": "23:04"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "19:01"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "03:04"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:04"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_03",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "23:04"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:44"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:44"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_04",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:44"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "09:20"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:44"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "10:20"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:44"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_05",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "05:20"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:44"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "10:39"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "09:20"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "11:39"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "10:20"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_06",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "06:39"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "05:20"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "10:39"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:39"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_07",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "06:39"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:20"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:55"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:20"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:55"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:20"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:55"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:10"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:20"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:10"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:20"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_09",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "11:10"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "10:20"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:49"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:10"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:49"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:10"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_10",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "11:49"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "11:10"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "18:09"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:35"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:09"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:35"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_11",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "14:09"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "12:35"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "18:09"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "19:09"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN075_12",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "16:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "14:09"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "source_window_range_and_open_excursions_v1",
+      "source_ids": [
+        "PIN075-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "09:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "04:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "01:00"
+        }
+      },
+      "id": "magic_00",
+      "invalidation_W": 1,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "01:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "09:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "10:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "05:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:00"
+        }
+      },
+      "id": "magic_01",
+      "invalidation_W": 1,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "02:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "01:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "10:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "11:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "06:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "id": "magic_02",
+      "invalidation_W": 0.75,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "11:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "10:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "07:00"
+        }
+      },
+      "id": "magic_06",
+      "invalidation_W": 1,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "07:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "06:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "11:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "id": "magic_07",
+      "invalidation_W": 1,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "08:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "07:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:00"
+        }
+      },
+      "id": "magic_08",
+      "invalidation_W": 0.75,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "03:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "check_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "check_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "id": "magic_23",
+      "invalidation_W": 0.75,
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "23:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "magic_break_midpoint_competing_extension_v1",
+      "postformation_check_minutes": 180,
+      "source_ids": [
+        "PIN081-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "conditioning_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:30"
+          }
+        }
+      },
+      "conditioning_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "08:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:30"
+        }
+      },
+      "forecast_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "forecast_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "id": "PIN073_1",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "02:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "three_stage_midpoint_return_v1",
+      "source_ids": [
+        "PIN073-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "conditioning_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "18:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "conditioning_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "13:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "forecast_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "18:00"
+          }
+        }
+      },
+      "forecast_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "id": "PIN073_2",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "three_stage_midpoint_return_v1",
+      "source_ids": [
+        "PIN073-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "conditioning_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:30"
+          }
+        }
+      },
+      "conditioning_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "02:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:30"
+        }
+      },
+      "forecast_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        }
+      },
+      "forecast_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "08:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "02:00"
+        }
+      },
+      "id": "PIN073_3",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "three_stage_midpoint_return_v1",
+      "source_ids": [
+        "PIN073-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "conditioning_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "15:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:30"
+          }
+        }
+      },
+      "conditioning_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "11:30"
+        }
+      },
+      "forecast_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        }
+      },
+      "forecast_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "12:00"
+        }
+      },
+      "id": "PIN073_4",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "11:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "11:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "three_stage_midpoint_return_v1",
+      "source_ids": [
+        "PIN073-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "18:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "18:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:30"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "19:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "conditioning_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "19:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "18:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "19:30"
+          }
+        }
+      },
+      "conditioning_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "15:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "14:30"
+        }
+      },
+      "forecast_UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "19:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "20:00"
+          }
+        }
+      },
+      "forecast_local": {
+        "end": {
+          "day_offset": 0,
+          "time": "16:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "15:00"
+        }
+      },
+      "id": "PIN073_5",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "14:30"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "14:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "three_stage_midpoint_return_v1",
+      "source_ids": [
+        "PIN073-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN074_ref_00",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN074-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "06:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "06:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN074_ref_01",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "01:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "01:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN074-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "07:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "07:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN074_ref_03",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "03:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "03:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN074-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "08:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "08:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "09:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "09:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN074_ref_04",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "04:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "04:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN074-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "11:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "11:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN074_ref_07",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "07:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "07:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN074-01"
+      ],
+      "source_status": "Explicit corrected07:00-07:01 variant; source supplied07:00-05:01 remains separate literal code behavior, not assumed intended."
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "04:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "04:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "05:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "05:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "08:00"
+      },
+      "id": "PIN076_00_08",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "00:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "00:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN076-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "12:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "12:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:01"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "forecast_end_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "20:00"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "21:00"
+        }
+      },
+      "forecast_end_local": {
+        "day_offset": 0,
+        "time": "16:00"
+      },
+      "forecast_origin_UTC": {
+        "EDT": {
+          "day_offset": 0,
+          "time": "13:30"
+        },
+        "EST": {
+          "day_offset": 0,
+          "time": "14:30"
+        }
+      },
+      "forecast_origin_local": {
+        "day_offset": 0,
+        "time": "09:30"
+      },
+      "id": "PIN076_08_0930",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "08:01"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "08:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "open_to_open_retracement_v1",
+      "p_exact": [
+        1,
+        2
+      ],
+      "source_ids": [
+        "PIN076-01"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "16:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "AM",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "12:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "17:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "16:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "18:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "lunch",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "13:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "12:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "20:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "17:00"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "18:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PM",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "16:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "13:00"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:50"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:40"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:50"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:40"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "turn_source",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:50"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:40"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "13:40"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:30"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:40"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:30"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "turn_earlier",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "09:40"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:30"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "EDT": {
+          "end": {
+            "day_offset": 0,
+            "time": "14:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "13:50"
+          }
+        },
+        "EST": {
+          "end": {
+            "day_offset": 0,
+            "time": "15:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": 0,
+            "time": "14:50"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "turn_later",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "10:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": 0,
+          "time": "09:50"
+        }
+      },
+      "local_zone": "America/New_York",
+      "output_definition": "session_transition_attribute_v1",
+      "source_ids": [
+        "JTR-08",
+        "JTR-09",
+        "JTR-23"
+      ]
+    },
+    {
+      "UTC": {
+        "UTC": {
+          "end": {
+            "day_offset": 0,
+            "time": "21:00"
+          },
+          "interval": "[start,end)",
+          "start": {
+            "day_offset": -1,
+            "time": "22:00"
+          }
+        }
+      },
+      "calendar_policy": "cash_date_index_v1+actual_OHLC_coverage; no_CME_status_claim",
+      "id": "PIN078_daily_not_combined",
+      "local": {
+        "end": {
+          "day_offset": 0,
+          "time": "21:00"
+        },
+        "interval": "[start,end)",
+        "start": {
+          "day_offset": -1,
+          "time": "22:00"
+        }
+      },
+      "local_zone": "UTC",
+      "output_definition": "source_mon_tue_daily_range_v1",
+      "source_ids": [
+        "PIN078-01"
+      ],
+      "weekday_semantics": "Source Pine daytags23 are preserved; study corrected date-key uses D=UTC close date, Mon/Tue. Exact Pine overnight-daytag equivalence not newly certified; do not label a combined-weekly reproduction."
+    }
+  ],
+  "definition_availability_scenario": "max_event_provider_plus_250ms",
+  "definition_latency_ns": 250000000,
+  "definition_source_paths": [
+    "quantpad/cme__nq-continuous-futures__definition/2019.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2022.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2023.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2025.parquet",
+    "quantpad/cme__nq-continuous-futures__definition/2026.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2019.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2020.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2021.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2022.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2023.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2025.parquet",
+    "quantpad/cme__es-continuous-futures__definition/2026.parquet"
+  ],
+  "economic_or_live_trading": false,
+  "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+  "frozen_available_cut_utc": "2026-09-07T16:00:00Z",
+  "frozen_metadata": [
+    {
+      "path": "configs/cash-rth-calendar-research-v1.json",
+      "sha256": "f069df0ccbb8318f1c675a05d9deed64ad681ebe1e47dd8573a6b18266665818",
+      "size_bytes": 6922
+    },
+    {
+      "path": "configs/research-period.json",
+      "sha256": "92640d2d2c77fe3ef7baa3c6f29ce78327b17432cf7210c7002c39e2b964ec07",
+      "size_bytes": 836
+    },
+    {
+      "path": "reports/jumbo-study-definition-readiness-v1.json",
+      "sha256": "96f618048f4f97811c9c1d3864c5afee6af74d1d362fb7eae40bfe145ba036c7",
+      "size_bytes": 147775
+    },
+    {
+      "path": "reports/jumbo-data-readiness-v1.json",
+      "sha256": "4b16f5d331713a0942a7da8edbf2542aeafd6b09284e44563019a6006bfd5151",
+      "size_bytes": 31937
+    },
+    {
+      "path": "reports/jumbo-cash-calendar-extension-evidence-v1.json",
+      "sha256": "eba46b1a02bfc13c4acc93ff2422d2d7df72dc31361908bf70a7d78d6db6cd1d",
+      "size_bytes": 12954
+    },
+    {
+      "path": "tests/golden/jumbo_ohlc_independent_v1.json",
+      "sha256": "1e1e9d0c02d36682fd3ae8d7e82ca088ff6507d54ea2d3a72f55d2149b85ebb6",
+      "size_bytes": 10486
+    }
+  ],
+  "kind": "jumbo_acquired_contract_study_v1",
+  "model_comparisons": {
+    "calibration": "Separate chronological calibration data; score final emitted probabilities/intervals; report proper scores and coverage individually",
+    "challengers": [
+      "regularized logistic or multinomial for separate identifiable event targets",
+      "discrete-time duration for reach",
+      "regularized quantile/distributional model for excursion targets"
+    ],
+    "incremental_information": "Compare same-target geometry-only baseline to same-capacity prior-range/session/prefix additions on exact shared rows; generator/scorer/Context roles remain separate",
+    "initial_baselines": [
+      "shrunken unconditional/seasonal frequency",
+      "training empirical excursion quantiles"
+    ],
+    "minimum_practical_score_gain": 0.005,
+    "search": "Freeze exact target-specific model matrices after development diagnostics; no heldout-guided retuning, baseline-only result cannot close an untested justified challenger."
+  },
+  "ohlc_source_paths": [
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2020.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2021.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2022.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2023.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+    "quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2020.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2021.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2022.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2023.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2024.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2025.parquet",
+    "quantpad/cme__es-continuous-futures__ohlcv-1m/2026.parquet"
+  ],
+  "old_runs": "No old E0 or measurement trial is rerun/reset by this distinct scientific study; old failures and private-execution deviations remain rejected/retained.",
+  "outcomes": {
+    "common_new_comparison_horizons_minutes": [
+      15,
+      30,
+      60,
+      180
+    ],
+    "contact": "definite observed O/H/L/C level print vs compatible straddle only vs gap-through/no-contact; contact-bar post-contact excursions reported as bounds",
+    "horizon_provenance": "These four postformation durations are separately named research comparisons where a source does not disclose a check horizon. Source-specific staged/magic/open-to-open endpoints remain distinct.",
+    "inclusive_path": "boundary attainments high>=H,low<=L, explicitly distinct from strict breach",
+    "primary_geometry_paths": "All69 disclosed/corrected clock recipes and actual prior RTH; explicitly unresolved formulas retain dependencies, not fabricated values.",
+    "range_geometry": "O/H/L/C/width/volume/open_position, body25/lowerbody25/wick25 kept distinct",
+    "reclaim": "first observed close strictly inside original range after first identified breach; confirmation known at closing bar publication",
+    "remaining_excursions": "Nonnegative extrema from first observed open in the target minute; target origin open is a label, never an input feature assumed available at the cut",
+    "strict_path": "high>H and low<L; first/second breach interval, no_break/high_only/low_only/high_then_low/low_then_high/ambiguous/censored"
+  },
+  "pilot": {
+    "definition_years": {
+      "ES": [
+        2019,
+        2020
+      ],
+      "NQ": [
+        2019,
+        2020,
+        2023,
+        2024
+      ]
+    },
+    "ohlc_paths": [
+      "quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+      "quantpad/cme__nq-continuous-futures__ohlcv-1m/2020.parquet",
+      "quantpad/cme__es-continuous-futures__ohlcv-1m/2020.parquet"
+    ],
+    "purpose": "Measure real full-partition admission cost and compare all60 minute OHLCV values against the retained NQ trade hour; no model selection or final-test outcome inspection.",
+    "reconciliation_end_ns": 1710167400000000000,
+    "reconciliation_report": "reports/compact-one-hour.json",
+    "reconciliation_start_ns": 1710163800000000000
+  },
+  "price_unit": "quarter-point raw-contract ticks; require supplied definition tick=0.25; no dollar valuation",
+  "primary_start_date": "2020-01-01",
+  "prior_rth_recipe": {
+    "UTC_13_close_EDT": "[P13:30,P17:00)",
+    "UTC_13_close_EST": "[P14:30,P18:00)",
+    "UTC_regular_EDT": "[P13:30,P20:00)",
+    "UTC_regular_EST": "[P14:30,P21:00)",
+    "calendar": "same exact CashCalendar payload/known-at release; early-close uses actual published endpoint",
+    "date": "P=max admitted_cash_date strictly before D; NOT D-1 calendar day",
+    "formation_local": "[P09:30, Pactual_cash_close)",
+    "output": "Prior O/H/L/C, wick quarters/edges; actual prior session close reference and current open-minus-prior-close gap. Settlement/value references unavailable without own sources.",
+    "source_ids": [
+      "JTR-21",
+      "JTR-22",
+      "L03",
+      "M12"
+    ]
+  },
+  "prior_year_definition_purpose": "Dated contract-reference facts may precede 2020; no pre2020 price training/evaluation row is admitted.",
+  "question": "How do disclosed and explicitly corrected source ranges, session geometry and clock timing relate to later interval-observed paths, and which available inputs predict those declared outcomes on later dates?",
+  "remaining_specification_dependencies": [
+    "London H4/02:00-end graphic lacks exact start;03:00 alternative is distinct, not a filled-in source recipe.",
+    "Proprietary P-zone anchor/distance/weights/selection/invalidation/calibration, minimum-average and MPOC formulas remain undisclosed; conditional excursion and profile-based alternatives must be labelled new comparators.",
+    "Missing source videos/five JXA pictures and tiny JXA29 digit uncertainty cannot be closed by copied rates. JXA42 OP abbreviation is not proven range-open.",
+    "Hardcoded PIN win/quantile/time tables and reported Jumbo percentages lack compatible dated denominators; preserve as unverified source claims, re-estimate supported mechanisms on actual data.",
+    "PIN081 supplied tail is incomplete; preserve exact reviewed extent and implement stated observable hypothesis independently, not claim runnable whole-source reproduction.",
+    "London H4 start unresolved; fixed02:00-end/03:00-end graphic does not specify formation start.",
+    "PIN0701H/4H/D/W/M source uses chart/exchange aggregation alignment; no supplied OHLC exchange aggregation origin/calendar yet pinned. Keep those endpoints unresolved until dataset clock contract supplies them, rather than silently assuming UTC midnights.",
+    "PIN078 exact code daytag overnight attribution not reinterpreted as certified CME trading-date mapping; corrected UTC close-date recipe is explicit separate study construction.",
+    "Undisclosed vendor adaptive/P-zone window rules and formula anchors cannot receive invented endpoints."
+  ],
+  "resources": {
+    "cpu_budget_seconds": 2400,
+    "expansion_rule": "Full cohort admission follows successful actual pilot and measured cost estimate; no paid expansion or exhausted-family reset.",
+    "hard_cpu_margin_seconds": 10,
+    "maximum_attempts": 10,
+    "maximum_definition_rows_per_root": 12000,
+    "maximum_derived_output_bytes": 536870912,
+    "maximum_file_bytes": 16777216,
+    "maximum_rows_per_ohlc_file": 600000,
+    "memory_bytes": 4294967296,
+    "mode_cpu_seconds": {
+      "admit": 300,
+      "check": 90,
+      "confirm": 480,
+      "develop": 480,
+      "pilot": 120
+    },
+    "wall_seconds": 900
+  },
+  "roots": [
+    "NQ",
+    "ES"
+  ],
+  "same_contract_rule": "One raw root/symbol/lifetime coordinate over every formation and corresponding outcome; no cross-roll level splicing or price adjustment.",
+  "source_end_policy": "latest actual admitted observations at or before the frozen cut; filenames do not create coverage",
+  "source_file_metadata": [
+    {
+      "mtime_ns": 1788363820000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2020.parquet",
+      "size_bytes": 5233037
+    },
+    {
+      "mtime_ns": 1788363841000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2021.parquet",
+      "size_bytes": 5193369
+    },
+    {
+      "mtime_ns": 1788363890000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2022.parquet",
+      "size_bytes": 5476794
+    },
+    {
+      "mtime_ns": 1788363903000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2023.parquet",
+      "size_bytes": 5383455
+    },
+    {
+      "mtime_ns": 1788363924000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+      "size_bytes": 5317527
+    },
+    {
+      "mtime_ns": 1788363940000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+      "size_bytes": 5450142
+    },
+    {
+      "mtime_ns": 1788363964000000000,
+      "path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+      "size_bytes": 3584842
+    },
+    {
+      "mtime_ns": 1788364256000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2020.parquet",
+      "size_bytes": 4780492
+    },
+    {
+      "mtime_ns": 1788365262000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2021.parquet",
+      "size_bytes": 4726739
+    },
+    {
+      "mtime_ns": 1788364325000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2022.parquet",
+      "size_bytes": 4951451
+    },
+    {
+      "mtime_ns": 1788364360000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2023.parquet",
+      "size_bytes": 4804524
+    },
+    {
+      "mtime_ns": 1788365284000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2024.parquet",
+      "size_bytes": 4891632
+    },
+    {
+      "mtime_ns": 1788364419000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2025.parquet",
+      "size_bytes": 4892595
+    },
+    {
+      "mtime_ns": 1788364452000000000,
+      "path": "quantpad/cme__es-continuous-futures__ohlcv-1m/2026.parquet",
+      "size_bytes": 3196345
+    },
+    {
+      "mtime_ns": 1788537713000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2019.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788540516000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+      "size_bytes": 677997
+    },
+    {
+      "mtime_ns": 1788542727000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2021.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788544742000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2022.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788546924000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2023.parquet",
+      "size_bytes": 672773
+    },
+    {
+      "mtime_ns": 1788549001000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+      "size_bytes": 677997
+    },
+    {
+      "mtime_ns": 1788551666000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2025.parquet",
+      "size_bytes": 672789
+    },
+    {
+      "mtime_ns": 1788554540000000000,
+      "path": "quantpad/cme__nq-continuous-futures__definition/2026.parquet",
+      "size_bytes": 455977
+    },
+    {
+      "mtime_ns": 1788558816000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2019.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788562663000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2020.parquet",
+      "size_bytes": 677997
+    },
+    {
+      "mtime_ns": 1788565835000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2021.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788569475000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2022.parquet",
+      "size_bytes": 675385
+    },
+    {
+      "mtime_ns": 1788572372000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2023.parquet",
+      "size_bytes": 672773
+    },
+    {
+      "mtime_ns": 1788574638000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2024.parquet",
+      "size_bytes": 677997
+    },
+    {
+      "mtime_ns": 1788576880000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2025.parquet",
+      "size_bytes": 672773
+    },
+    {
+      "mtime_ns": 1788578489000000000,
+      "path": "quantpad/cme__es-continuous-futures__definition/2026.parquet",
+      "size_bytes": 455977
+    }
+  ],
+  "source_quality": "Require every minute in each declared window to be observed and valid; missing minutes do not imply no-trade; excluded windows and raw-contract transitions stay in denominators.",
+  "statistics": {
+    "grouping": "root,clock,date and distinct source episode; retain year/session/width/roll strata",
+    "mean_quantile_estimands": "Raw absolute historic levels, session-open excursions and current-anchor conditional excursions remain separate; no proprietary P-zone reproduction.",
+    "support": "Report all attempted/admitted/excluded dates, no-event/no-contact and ambiguous/censored outcomes. Fewer than100 independent dates or20 events in a subgroup is sparse support, not selected evidence.",
+    "timing_comparison": "Same-root shared dates and same target/end, with width/prior-volatility/candidate-count controls; longer formation gets later availability and shorter fixed-end horizon.",
+    "uncertainty": "Date-block resampling,5 consecutive observed dates per block,1000 replicates,95 percent interval, deterministic seed20260907"
+  },
+  "study_id": "jumbo-acquired-contract-ohlc-v1"
+}

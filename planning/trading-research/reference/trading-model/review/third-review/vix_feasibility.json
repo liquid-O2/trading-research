@@ -1,0 +1,990 @@
+{
+  "created_at": "2026-09-06T06:07:30.139676+00:00",
+  "scope": "bounded parity/Black-IV algebra and coverage; no model training/trades",
+  "assumptions": "Bounded algebra/coverage audit of three existing VIX quote days; no strategy.\n\nAssumptions deliberately differ from an official VIX/VVIX reconstruction.\nUses arithmetic quote screens, one-minute assumed availability lag, ACT/365,\n09:30 New York settlement, and discount factors 1 and exp(-.05*T).\nNo actual receipt chronology, quote-condition certification, rates curve,\nofficial venue filters, executable arbitrage, or statistical edge is claimed.\n",
+  "quote_rows_read": 261970,
+  "days": 3,
+  "decision_cuts": 9,
+  "expiry_cuts": 18,
+  "cuts_with_iv": 18,
+  "inputs": [
+    {
+      "day": "2020-01-02",
+      "quote_path": "/workspace/data/thetadata-opra/opra__vix-options__quote-1m__dte60-full-chain/2020-01-02.parquet",
+      "quote_sha256": "49dbbf0cbf835f31532b4f027a74b2cd5712dbcce02a8650910dfe13ee415765",
+      "rows": 62560,
+      "oi_rows": 440,
+      "oi_sha256": "ccb4c423a331addaea76b0803b496f0f07de1697e34c205cfc76376b3a242177",
+      "oi_min_dte": 20,
+      "oi_max_dte": 167,
+      "quote_conditions": {
+        "50": 62400,
+        "0": 160
+      }
+    },
+    {
+      "day": "2023-05-02",
+      "quote_path": "/workspace/data/thetadata-opra/opra__vix-options__quote-1m__dte60-full-chain/2023-05-02.parquet",
+      "quote_sha256": "684c58fa0368f11d09d41275db42883b8792188582b15de7234c6e9469c2c659",
+      "rows": 89930,
+      "oi_rows": 954,
+      "oi_sha256": "426a00660c81f03bf6d8dbcece57a5feaf9b50ed6259cbeaf86287bc55091979",
+      "oi_min_dte": 15,
+      "oi_max_dte": 260,
+      "quote_conditions": {
+        "50": 89930
+      }
+    },
+    {
+      "day": "2026-09-03",
+      "quote_path": "/workspace/data/thetadata-opra/opra__vix-options__quote-1m__dte60-full-chain/2026-09-03.parquet",
+      "quote_sha256": "5518f4c9de9af13a5c71e1e3f8d64be30f4648073dd3007e3a55faa56de85c8b",
+      "rows": 109480,
+      "oi_rows": 1120,
+      "oi_sha256": "0481144d7b372d93c5eb814ccdfc2c598e4aa61d4f9ed967ae821b9257d3015d",
+      "oi_min_dte": 13,
+      "oi_max_dte": 257,
+      "quote_conditions": {
+        "50": 109480
+      }
+    }
+  ],
+  "records": [
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 15:00:00+00:00",
+      "expiry": "2020-01-22",
+      "T_years": 0.05473744292237443,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 66,
+      "paired_strikes": 26,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 14.45,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.450000000000001,
+          "all_pair_interval_high": 14.5,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.964143613419002,
+            "log_moneyness": 0.0034542348680876036,
+            "reprice_error": 1.3322676295501878e-15
+          },
+          "max_reprice_error": 1.4432899320127035e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9972668696740472,
+          "forward_mid": 14.44986296896001,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.448492658560125,
+          "all_pair_interval_high": 14.5,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.9668018457197769,
+            "log_moneyness": 0.0034637180300067963,
+            "reprice_error": 8.881784197001252e-16
+          },
+          "max_reprice_error": 1.27675647831893e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 15:00:00+00:00",
+      "expiry": "2020-02-19",
+      "T_years": 0.13144977168949773,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 72,
+      "paired_strikes": 32,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.425,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.449999999999996,
+          "all_pair_interval_high": 16.5,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.7720895321877028,
+            "log_moneyness": -0.026215842130893025,
+            "reprice_error": 1.3322676295501878e-15
+          },
+          "max_reprice_error": 1.7763568394002505e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9934490629769753,
+          "forward_mid": 16.427802507283506,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.429014193052772,
+          "all_pair_interval_high": 16.346785224266725,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.7771474744619673,
+            "log_moneyness": -0.026386452068336393,
+            "reprice_error": 8.881784197001252e-16
+          },
+          "max_reprice_error": 1.609823385706477e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 17:00:00+00:00",
+      "expiry": "2020-01-22",
+      "T_years": 0.054509132420091325,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 66,
+      "paired_strikes": 26,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 14.375,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.350000000000001,
+          "all_pair_interval_high": 14.45,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.9587227519329244,
+            "log_moneyness": 0.008658062743114531,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 1.5543122344752192e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9972782540640227,
+          "forward_mid": 14.374658853243204,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.350955210919029,
+          "all_pair_interval_high": 14.410290517508942,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.9613617091722988,
+            "log_moneyness": 0.008681794973020471,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 8.881784197001252e-16
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 17:00:00+00:00",
+      "expiry": "2020-02-19",
+      "T_years": 0.13122146118721462,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 72,
+      "paired_strikes": 32,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.325,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.349999999999994,
+          "all_pair_interval_high": 16.4,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.76574415169982,
+            "log_moneyness": -0.02010895292271351,
+            "reprice_error": 0.0
+          },
+          "max_reprice_error": 1.7763568394002505e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9934604037844339,
+          "forward_mid": 16.327139359316146,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.268102271136627,
+          "all_pair_interval_high": 16.314313248243813,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.7707665392316143,
+            "log_moneyness": -0.02023999238053673,
+            "reprice_error": 6.661338147750939e-16
+          },
+          "max_reprice_error": 1.7763568394002505e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 19:00:00+00:00",
+      "expiry": "2020-01-22",
+      "T_years": 0.05428082191780822,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 66,
+      "paired_strikes": 26,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 14.325,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.3,
+          "all_pair_interval_high": 14.399999999999999,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.9429123746268877,
+            "log_moneyness": 0.01214238682572556,
+            "reprice_error": 0.0
+          },
+          "max_reprice_error": 1.5543122344752192e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9972896385839578,
+          "forward_mid": 14.324524397698063,
+          "forward_reference_strike": 14.5,
+          "all_pair_interval_low": 14.303533045671525,
+          "all_pair_interval_high": 14.35080913334263,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 26,
+          "put_iv_count": 6,
+          "call_iv_count": 20,
+          "nearest_supported_iv": {
+            "strike": 14.5,
+            "right": "CALL",
+            "iv": 0.9455010541585838,
+            "log_moneyness": 0.012175588235660116,
+            "reprice_error": 1.5543122344752192e-15
+          },
+          "max_reprice_error": 1.5543122344752192e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2020-01-02",
+      "cut": "2020-01-02 19:00:00+00:00",
+      "expiry": "2020-02-19",
+      "T_years": 0.1309931506849315,
+      "total_contracts_at_cut": 80,
+      "screened_contracts": 72,
+      "paired_strikes": 32,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.3,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.3,
+          "all_pair_interval_high": 16.35,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.7510350591315897,
+            "log_moneyness": -0.01857638557293542,
+            "reprice_error": 1.3322676295501878e-15
+          },
+          "max_reprice_error": 1.3322676295501878e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9934717447213545,
+          "forward_mid": 16.301971346033746,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.25821394180727,
+          "all_pair_interval_high": 16.21415482510705,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 32,
+          "put_iv_count": 8,
+          "call_iv_count": 24,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.7559548882737102,
+            "log_moneyness": -0.018697319734567827,
+            "reprice_error": 1.1102230246251565e-15
+          },
+          "max_reprice_error": 1.6375789613221059e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 15:00:00+00:00",
+      "expiry": "2023-05-17",
+      "T_years": 0.040924657534246574,
+      "total_contracts_at_cut": 120,
+      "screened_contracts": 99,
+      "paired_strikes": 39,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 20.415,
+          "forward_reference_strike": 20.0,
+          "all_pair_interval_low": 20.46,
+          "all_pair_interval_high": 20.45,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 39,
+          "put_iv_count": 7,
+          "call_iv_count": 32,
+          "nearest_supported_iv": {
+            "strike": 20.0,
+            "right": "PUT",
+            "iv": 1.0533234861054206,
+            "log_moneyness": -0.020537651217548095,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 1.4432899320127035e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9979558592305577,
+          "forward_mid": 20.415850056053554,
+          "forward_reference_strike": 20.0,
+          "all_pair_interval_low": 20.382826692419048,
+          "all_pair_interval_high": 20.45092174752795,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 39,
+          "put_iv_count": 7,
+          "call_iv_count": 32,
+          "nearest_supported_iv": {
+            "strike": 20.0,
+            "right": "PUT",
+            "iv": 1.0554671122357098,
+            "log_moneyness": -0.020579289148304324,
+            "reprice_error": 1.3322676295501878e-15
+          },
+          "max_reprice_error": 2.4147350785597155e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 15:00:00+00:00",
+      "expiry": "2023-06-21",
+      "T_years": 0.13681506849315067,
+      "total_contracts_at_cut": 110,
+      "screened_contracts": 101,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 22.425,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 23.210000000000008,
+          "all_pair_interval_high": 22.4,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 46,
+          "put_iv_count": 9,
+          "call_iv_count": 37,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "PUT",
+            "iv": 0.8663307134330056,
+            "log_moneyness": -0.019133954586543985,
+            "reprice_error": 8.881784197001252e-16
+          },
+          "max_reprice_error": 2.6645352591003757e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9931825912669596,
+          "forward_mid": 22.427917287049752,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 22.351947141315655,
+          "all_pair_interval_high": 22.437066706043908,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 9,
+          "call_iv_count": 37,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "PUT",
+            "iv": 0.8722716532271713,
+            "log_moneyness": -0.019264036963803657,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 3.552713678800501e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 17:00:00+00:00",
+      "expiry": "2023-05-17",
+      "T_years": 0.04069634703196347,
+      "total_contracts_at_cut": 120,
+      "screened_contracts": 99,
+      "paired_strikes": 39,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 19.895,
+          "forward_reference_strike": 20.0,
+          "all_pair_interval_low": 19.909999999999997,
+          "all_pair_interval_high": 19.94,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 39,
+          "put_iv_count": 7,
+          "call_iv_count": 32,
+          "nearest_supported_iv": {
+            "strike": 20.0,
+            "right": "CALL",
+            "iv": 0.9807744870783204,
+            "log_moneyness": 0.005263829675099004,
+            "reprice_error": 3.1086244689504383e-15
+          },
+          "max_reprice_error": 3.1086244689504383e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9979672514857557,
+          "forward_mid": 19.89478612665528,
+          "forward_reference_strike": 20.0,
+          "all_pair_interval_low": 19.84953039055374,
+          "all_pair_interval_high": 19.937840897662834,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 39,
+          "put_iv_count": 7,
+          "call_iv_count": 32,
+          "nearest_supported_iv": {
+            "strike": 20.0,
+            "right": "CALL",
+            "iv": 0.9827840608994758,
+            "log_moneyness": 0.005274579838170526,
+            "reprice_error": 1.1102230246251565e-15
+          },
+          "max_reprice_error": 1.6653345369377348e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 17:00:00+00:00",
+      "expiry": "2023-06-21",
+      "T_years": 0.13658675799086759,
+      "total_contracts_at_cut": 110,
+      "screened_contracts": 101,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 21.97,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 22.760000000000005,
+          "all_pair_interval_high": 21.990000000000002,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 46,
+          "put_iv_count": 8,
+          "call_iv_count": 38,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "CALL",
+            "iv": 0.8612520082677964,
+            "log_moneyness": 0.0013645669617971738,
+            "reprice_error": 3.1086244689504383e-15
+          },
+          "max_reprice_error": 3.1086244689504383e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9931939290324864,
+          "forward_mid": 21.969794418669853,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 21.92140436284062,
+          "all_pair_interval_high": 22.020137054220097,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 8,
+          "call_iv_count": 38,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "CALL",
+            "iv": 0.8672086150886127,
+            "log_moneyness": 0.0013739243715376321,
+            "reprice_error": 8.881784197001252e-16
+          },
+          "max_reprice_error": 1.9984014443252818e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 19:00:00+00:00",
+      "expiry": "2023-05-17",
+      "T_years": 0.04046803652968037,
+      "total_contracts_at_cut": 120,
+      "screened_contracts": 95,
+      "paired_strikes": 35,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 19.375,
+          "forward_reference_strike": 19.0,
+          "all_pair_interval_low": 19.380000000000003,
+          "all_pair_interval_high": 19.4,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 35,
+          "put_iv_count": 6,
+          "call_iv_count": 29,
+          "nearest_supported_iv": {
+            "strike": 19.0,
+            "right": "PUT",
+            "iv": 0.8806313897867848,
+            "log_moneyness": -0.019544596072970283,
+            "reprice_error": 8.881784197001252e-16
+          },
+          "max_reprice_error": 1.1102230246251565e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9979786438710031,
+          "forward_mid": 19.375759543857004,
+          "forward_reference_strike": 19.0,
+          "all_pair_interval_low": 19.34068865309702,
+          "all_pair_interval_high": 19.402835630399483,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 35,
+          "put_iv_count": 6,
+          "call_iv_count": 29,
+          "nearest_supported_iv": {
+            "strike": 19.0,
+            "right": "PUT",
+            "iv": 0.8824023533129577,
+            "log_moneyness": -0.019583797568168845,
+            "reprice_error": 1.1102230246251565e-15
+          },
+          "max_reprice_error": 1.5543122344752192e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2023-05-02",
+      "cut": "2023-05-02 19:00:00+00:00",
+      "expiry": "2023-06-21",
+      "T_years": 0.13635844748858447,
+      "total_contracts_at_cut": 110,
+      "screened_contracts": 101,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 21.55,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 22.36,
+          "all_pair_interval_high": 21.59,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 46,
+          "put_iv_count": 8,
+          "call_iv_count": 38,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "CALL",
+            "iv": 0.8685627670851406,
+            "log_moneyness": 0.020666636808559128,
+            "reprice_error": 1.7763568394002505e-15
+          },
+          "max_reprice_error": 2.275957200481571e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9932052669274404,
+          "forward_mid": 21.546921452206842,
+          "forward_reference_strike": 22.0,
+          "all_pair_interval_low": 21.523557433005426,
+          "all_pair_interval_high": 21.617400337419113,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 8,
+          "call_iv_count": 38,
+          "nearest_supported_iv": {
+            "strike": 22.0,
+            "right": "CALL",
+            "iv": 0.8746193294674676,
+            "log_moneyness": 0.020809503059542232,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 2.3314683517128287e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 15:00:00+00:00",
+      "expiry": "2026-09-16",
+      "T_years": 0.035445205479452055,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 116,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.48,
+          "forward_reference_strike": 16.5,
+          "all_pair_interval_low": 16.470000000000006,
+          "all_pair_interval_high": 16.509999999999998,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.5,
+            "right": "CALL",
+            "iv": 0.7029240393306857,
+            "log_moneyness": 0.0012128564252092296,
+            "reprice_error": 1.2212453270876722e-15
+          },
+          "max_reprice_error": 1.7763568394002505e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.998229309251927,
+          "forward_mid": 16.479964523366892,
+          "forward_reference_strike": 16.5,
+          "all_pair_interval_low": 16.453720635939977,
+          "all_pair_interval_high": 16.509552227721166,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.5,
+            "right": "CALL",
+            "iv": 0.70417349335328,
+            "log_moneyness": 0.0012150091358460807,
+            "reprice_error": 1.887379141862766e-15
+          },
+          "max_reprice_error": 1.887379141862766e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 15:00:00+00:00",
+      "expiry": "2026-10-21",
+      "T_years": 0.13133561643835617,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 135,
+      "paired_strikes": 65,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 18.27,
+          "forward_reference_strike": 18.5,
+          "all_pair_interval_low": 19.109999999999985,
+          "all_pair_interval_high": 18.29,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 65,
+          "put_iv_count": 12,
+          "call_iv_count": 53,
+          "nearest_supported_iv": {
+            "strike": 18.5,
+            "right": "CALL",
+            "iv": 0.7558852415721695,
+            "log_moneyness": 0.012510361694363736,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 2.0261570199409107e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.993454733364522,
+          "forward_mid": 18.268484670437815,
+          "forward_reference_strike": 18.5,
+          "all_pair_interval_low": 18.244692108363793,
+          "all_pair_interval_high": 18.21378206379063,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 65,
+          "put_iv_count": 12,
+          "call_iv_count": 53,
+          "nearest_supported_iv": {
+            "strike": 18.5,
+            "right": "CALL",
+            "iv": 0.7609285704169448,
+            "log_moneyness": 0.012593305996883334,
+            "reprice_error": 2.220446049250313e-16
+          },
+          "max_reprice_error": 2.1094237467877974e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 17:00:00+00:00",
+      "expiry": "2026-09-16",
+      "T_years": 0.03521689497716895,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 116,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.3,
+          "forward_reference_strike": 16.5,
+          "all_pair_interval_low": 16.32,
+          "all_pair_interval_high": 16.34,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.5,
+            "right": "CALL",
+            "iv": 0.7020174022064118,
+            "log_moneyness": 0.012195273093818206,
+            "reprice_error": 5.551115123125783e-16
+          },
+          "max_reprice_error": 1.5543122344752192e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9982407046287185,
+          "forward_mid": 16.299647520810737,
+          "forward_reference_strike": 16.5,
+          "all_pair_interval_low": 16.285872799494985,
+          "all_pair_interval_high": 16.34236161056806,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.5,
+            "right": "CALL",
+            "iv": 0.7032640300249198,
+            "log_moneyness": 0.012216897817769754,
+            "reprice_error": 4.440892098500626e-16
+          },
+          "max_reprice_error": 1.4988010832439613e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 17:00:00+00:00",
+      "expiry": "2026-10-21",
+      "T_years": 0.13110730593607306,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 131,
+      "paired_strikes": 61,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 18.27,
+          "forward_reference_strike": 18.5,
+          "all_pair_interval_low": 19.109999999999985,
+          "all_pair_interval_high": 18.29,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 61,
+          "put_iv_count": 11,
+          "call_iv_count": 50,
+          "nearest_supported_iv": {
+            "strike": 18.5,
+            "right": "CALL",
+            "iv": 0.754640674532636,
+            "log_moneyness": 0.012510361694363736,
+            "reprice_error": 2.220446049250313e-16
+          },
+          "max_reprice_error": 2.1649348980190553e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9934660742367113,
+          "forward_mid": 18.26848731329179,
+          "forward_reference_strike": 18.5,
+          "all_pair_interval_low": 18.22762297467168,
+          "all_pair_interval_high": 18.23038414266263,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 61,
+          "put_iv_count": 11,
+          "call_iv_count": 50,
+          "nearest_supported_iv": {
+            "strike": 18.5,
+            "right": "CALL",
+            "iv": 0.7596667574685931,
+            "log_moneyness": 0.01259316132950489,
+            "reprice_error": 0.0
+          },
+          "max_reprice_error": 2.4424906541753444e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 19:00:00+00:00",
+      "expiry": "2026-09-16",
+      "T_years": 0.03498858447488584,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 116,
+      "paired_strikes": 46,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 16.235,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.23,
+          "all_pair_interval_high": 16.25,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.6253257015517262,
+            "log_moneyness": -0.01458068331502799,
+            "reprice_error": 3.3306690738754696e-16
+          },
+          "max_reprice_error": 1.3322676295501878e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9982521001355948,
+          "forward_mid": 16.235411475686433,
+          "forward_reference_strike": 16.0,
+          "all_pair_interval_low": 16.20861674130944,
+          "all_pair_interval_high": 16.252188700459744,
+          "all_pair_intersection_nonempty": true,
+          "otm_iv_count": 46,
+          "put_iv_count": 5,
+          "call_iv_count": 41,
+          "nearest_supported_iv": {
+            "strike": 16.0,
+            "right": "PUT",
+            "iv": 0.6264139079809108,
+            "log_moneyness": -0.014606027969915692,
+            "reprice_error": 7.771561172376096e-16
+          },
+          "max_reprice_error": 1.942890293094024e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    },
+    {
+      "day": "2026-09-03",
+      "cut": "2026-09-03 19:00:00+00:00",
+      "expiry": "2026-10-21",
+      "T_years": 0.13087899543378995,
+      "total_contracts_at_cut": 140,
+      "screened_contracts": 131,
+      "paired_strikes": 61,
+      "rate_scenarios": [
+        {
+          "rate_assumption": 0.0,
+          "discount": 1.0,
+          "forward_mid": 18.175,
+          "forward_reference_strike": 18.0,
+          "all_pair_interval_low": 19.00999999999999,
+          "all_pair_interval_high": 18.19,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 61,
+          "put_iv_count": 11,
+          "call_iv_count": 50,
+          "nearest_supported_iv": {
+            "strike": 18.0,
+            "right": "PUT",
+            "iv": 0.7168898727690964,
+            "log_moneyness": -0.009675265523418422,
+            "reprice_error": 2.220446049250313e-16
+          },
+          "max_reprice_error": 2.220446049250313e-15
+        },
+        {
+          "rate_assumption": 0.05,
+          "discount": 0.9934774152383634,
+          "forward_mid": 18.176148946433788,
+          "forward_reference_strike": 18.0,
+          "all_pair_interval_low": 18.164115627615104,
+          "all_pair_interval_high": 18.120709540136517,
+          "all_pair_intersection_nonempty": false,
+          "otm_iv_count": 61,
+          "put_iv_count": 11,
+          "call_iv_count": 50,
+          "nearest_supported_iv": {
+            "strike": 18.0,
+            "right": "PUT",
+            "iv": 0.7216003066735426,
+            "log_moneyness": -0.00973847928515471,
+            "reprice_error": 2.220446049250313e-16
+          },
+          "max_reprice_error": 2.6645352591003757e-15
+        }
+      ],
+      "status": "illustrative_iv_computed"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "base_family_sha256": "b335ee105370f34b5ec381ce1be41aad798ee14e1d7235d983ee833767f43d2c",
+  "deviation_review": {
+    "kind": "jumbo_check_dispatch_deviation_review_v1",
+    "path": "reports/jumbo-check14-dispatch-deviation-review.json",
+    "sha256": "a7d6585540482820c6c14c413f03b7bf4c7a6c04ed901001b668e4a1e4e7695d",
+    "size_bytes": 3299
+  },
+  "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+  "kind": "family_budget_amendment_proposal_v1",
+  "previous_limits": {
+    "cpu_budget_seconds": 12000,
+    "max_attempts": 16
+  },
+  "proposed_limits": {
+    "cpu_budget_seconds": 12000,
+    "max_attempts": 17
+  },
+  "reason": "One extra registered check is needed after the check14 dispatch error. Its435 passing tests and legacy parity remain valid in their actual scope; all fourteen attempts and1366.46983CPU seconds remain counted.",
+  "sequence": [
+    {
+      "attempt": 15,
+      "phase": "consolidated_check"
+    },
+    {
+      "attempt": 16,
+      "phase": "fit"
+    },
+    {
+      "attempt": 17,
+      "phase": "confirmation"
+    }
+  ],
+  "status": "proposed_not_authorized",
+  "unchanged_limits": {
+    "check_cpu_seconds": 90,
+    "confirmation_cpu_seconds": 3600,
+    "extract_cpu_seconds": 900,
+    "fit_cpu_seconds": 6000,
+    "maximum_output_bytes": 536870912,
+    "memory_bytes": 4294967296
+  }
+}

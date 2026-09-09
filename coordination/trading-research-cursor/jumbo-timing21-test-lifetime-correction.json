@@ -1,0 +1,13 @@
+{
+  "failed_execution": "reports/jumbo-runs/212a65fddc6b7b9f122ff666ce5c5dd8c3d6b28a8ceb15dbe54ff337fc68ff39/execution.json",
+  "original_exception": "FileNotFoundError at test_jumbo_timing_statistics.py367: temporary directory deleted before report read",
+  "diagnosis": "Test-owned TemporaryDirectory lifetime, not numerical algorithm or production output failure. 17 other checks passed and fixture production report existed inside context. No actual data scan started.",
+  "resource": {
+    "cpu_seconds": 3.288158,
+    "peak_rss_bytes": 135065600
+  },
+  "fix": "Read fixture outputs before leaving its TemporaryDirectory context; all existing assertions retained, no numerical source change.",
+  "file": "/workspace/trading-research/tests/test_jumbo_timing_statistics.py",
+  "before": "6f47df62f74044563438844028425527b9ec1f805e134f03b98cb72c8b8aa885",
+  "after": "b82bb768627fb308b69523a16eeda46635fdbbf571d09f3e4f7dffcd8564b7f8"
+}

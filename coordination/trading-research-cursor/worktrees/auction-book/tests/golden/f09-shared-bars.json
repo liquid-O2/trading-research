@@ -1,0 +1,835 @@
+{
+  "schema": "F09-shared-bars-golden-v1",
+  "units": {
+    "time": "integer nanoseconds",
+    "price": "integer raw-contract ticks",
+    "size": "integer contracts",
+    "count": "unique original events"
+  },
+  "toy_instrument": "TEST-H26",
+  "toy_measure": "registered-whole-print",
+  "base_tape": [
+    {
+      "id": "a",
+      "event_at": 1,
+      "known_at": 1,
+      "price_ticks": 100,
+      "contracts": 2,
+      "side": 1,
+      "order": 1
+    },
+    {
+      "id": "b",
+      "event_at": 2,
+      "known_at": 2,
+      "price_ticks": 103,
+      "contracts": 1,
+      "side": -1,
+      "order": 1
+    },
+    {
+      "id": "c",
+      "event_at": 3,
+      "known_at": 3,
+      "price_ticks": 101,
+      "contracts": 4,
+      "side": 1,
+      "order": 1
+    },
+    {
+      "id": "d",
+      "event_at": 10,
+      "known_at": 10,
+      "price_ticks": 99,
+      "contracts": 2,
+      "side": -1,
+      "order": 1
+    }
+  ],
+  "cases": [
+    {
+      "id": "F09-B01",
+      "name": "Exact mergeable price-volume and cumulative-flow arithmetic",
+      "input": {
+        "events": [
+          "a",
+          "b",
+          "c"
+        ],
+        "opening_cvd": 0
+      },
+      "expected": {
+        "ohlc_ticks": [
+          100,
+          103,
+          100,
+          101
+        ],
+        "volume": 7,
+        "source_events": 3,
+        "priced_volume": 7,
+        "sum_pv": 707,
+        "sum_p2v": 71413,
+        "cvd_ohlc": [
+          0,
+          5,
+          0,
+          5
+        ]
+      }
+    },
+    {
+      "id": "F09-B02",
+      "name": "Equal net CVD preserves different ordered extrema",
+      "input": {
+        "increment_paths": [
+          [
+            5,
+            -5
+          ],
+          [
+            -5,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "cvd_ohlc": [
+          [
+            0,
+            5,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -5,
+            0
+          ]
+        ],
+        "same_endpoint": true
+      }
+    },
+    {
+      "id": "F09-B03",
+      "name": "Ordered summary composition is associative and not commutative",
+      "input": {
+        "partitions": [
+          [
+            [
+              "a"
+            ],
+            [
+              "b",
+              "c"
+            ]
+          ],
+          [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "c"
+            ]
+          ]
+        ]
+      },
+      "expected": {
+        "same_as": "B01",
+        "reordering_is_not_a_valid_same_tape_comparison": true
+      }
+    },
+    {
+      "id": "F09-B04",
+      "name": "Boundary timestamp ties cannot invent event order",
+      "input": {
+        "tie_events": [
+          {
+            "price": 100,
+            "size": 2,
+            "side": 1,
+            "order": null
+          },
+          {
+            "price": 110,
+            "size": 3,
+            "side": -1,
+            "order": null
+          }
+        ],
+        "time": 5
+      },
+      "expected": {
+        "volume": 5,
+        "high": 110,
+        "low": 100,
+        "open": null,
+        "close": null,
+        "signed_endpoint": -1,
+        "cvd_high": null,
+        "cvd_low": null,
+        "order_exact": false,
+        "ordered_activity_partition": "unavailable"
+      }
+    },
+    {
+      "id": "F09-B05",
+      "name": "Unpriced mass and unknown signs have explicit support",
+      "input": {
+        "events": [
+          {
+            "price": 100,
+            "size": 2,
+            "side": 1
+          },
+          {
+            "price": null,
+            "size": 3,
+            "side": null
+          }
+        ]
+      },
+      "expected": {
+        "volume": 5,
+        "priced_volume": 2,
+        "unpriced_volume": 3,
+        "sum_pv": 200,
+        "sum_p2v": 20000,
+        "known_signed": 2,
+        "unknown_signed_volume": 3,
+        "conditional_endpoint_bounds": [
+          -1,
+          5
+        ],
+        "cvd_extrema": null,
+        "history_gap_missing_contribution_bound": null
+      }
+    },
+    {
+      "id": "F09-B06",
+      "name": "Trade-count bars close on whole source events",
+      "input": {
+        "kind": "events",
+        "threshold": 2,
+        "events": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "expected": {
+        "completed": [
+          {
+            "events": [
+              "a",
+              "b"
+            ],
+            "volume": 3,
+            "reached": true
+          }
+        ],
+        "forming": {
+          "events": [
+            "c"
+          ],
+          "volume": 4
+        }
+      }
+    },
+    {
+      "id": "F09-B07",
+      "name": "Whole-event volume bars preserve oversized-print overshoot",
+      "input": {
+        "kind": "volume",
+        "threshold": 5,
+        "sizes": [
+          12,
+          1
+        ]
+      },
+      "expected": {
+        "completed_volume": [
+          12
+        ],
+        "completed_source_events": [
+          1
+        ],
+        "overshoot": [
+          7
+        ],
+        "forming_volume": 1,
+        "independent_source_events": 2
+      }
+    },
+    {
+      "id": "F09-B08",
+      "name": "Range bars close at first complete event crossing the frozen span",
+      "input": {
+        "kind": "range",
+        "threshold_ticks": 3,
+        "events": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "expected": {
+        "completed_events": [
+          [
+            "a",
+            "b"
+          ]
+        ],
+        "completed_span": [
+          3
+        ],
+        "overshoot_ticks": [
+          0
+        ],
+        "forming_events": [
+          "c",
+          "d"
+        ],
+        "forming_span": 2,
+        "unpriced_or_unordered_threshold_partition": "unavailable"
+      }
+    },
+    {
+      "id": "F09-B09",
+      "name": "A reset inside activity formation does not pool both sides",
+      "input": {
+        "kind": "volume",
+        "threshold": 5,
+        "before_reset_size": 3,
+        "after_reset_size": 2
+      },
+      "expected": {
+        "reset_partial_volume": 3,
+        "reset_partial_threshold_reached": false,
+        "new_forming_volume": 2,
+        "cross_reset_completed_bar": false
+      }
+    },
+    {
+      "id": "F09-B10",
+      "name": "Threshold, units, alignment and storage bounds are immutable definitions",
+      "input": {
+        "initial_threshold": 5,
+        "forming_volume": 2,
+        "proposed_threshold": 3
+      },
+      "expected": {
+        "silent_mutation": "rejected",
+        "new_definition_requires_explicit_reset": true,
+        "different_definition_same_values_same_version": false
+      }
+    },
+    {
+      "id": "F09-B11",
+      "name": "Duplicate, conflicting and over-capacity admissions are atomic",
+      "input": {
+        "repeat": "a",
+        "changed_same_id_size": 9,
+        "bounded_capacity": 2
+      },
+      "expected": {
+        "exact_repeat_added_events": 0,
+        "conflict": "rejected",
+        "capacity": "rejected",
+        "failed_batch_changes_published_or_retained_state": false
+      }
+    },
+    {
+      "id": "F09-B12",
+      "name": "Time windows are half-open and use the first actual print",
+      "input": {
+        "window": [
+          0,
+          10
+        ],
+        "events": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      },
+      "expected": {
+        "events": [
+          "a",
+          "b",
+          "c"
+        ],
+        "first_event_at": 1,
+        "same_as": "B01",
+        "endpoint_event_d_belongs_to_next_window": true
+      }
+    },
+    {
+      "id": "F09-B13",
+      "name": "Final publication requires close, watermark, receipt and actual completion",
+      "input": {
+        "window": [
+          0,
+          10
+        ],
+        "watermark_known_at": 12,
+        "publication_at": 13,
+        "query_cuts": [
+          9,
+          10,
+          12,
+          13
+        ]
+      },
+      "expected": {
+        "final_available": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "forming_is_distinct": true,
+        "backdraw_to_zero_changes_availability": false
+      }
+    },
+    {
+      "id": "F09-B14",
+      "name": "Covered empty, missing and unfinished intervals remain distinct",
+      "input": {
+        "window": [
+          5,
+          10
+        ],
+        "events": [],
+        "complete_coverage": [
+          [
+            5,
+            10
+          ]
+        ],
+        "missing_coverage": [],
+        "cut": 12,
+        "publication_at": 13
+      },
+      "expected": {
+        "covered_empty_volume": 0,
+        "covered_empty_ohlc": [
+          null,
+          null,
+          null,
+          null
+        ],
+        "covered_empty_final": true,
+        "covered_empty_complete": true,
+        "missing_complete": false,
+        "unfinished_is_not_final": true
+      }
+    },
+    {
+      "id": "F09-B15",
+      "name": "Correction creates a new version without changing old decision cuts",
+      "input": {
+        "original_events": [
+          "a",
+          "b",
+          "c"
+        ],
+        "correction_known_at": 20,
+        "replacement_b": {
+          "id": "b2",
+          "event_at": 2,
+          "known_at": 20,
+          "price_ticks": 104,
+          "contracts": 2,
+          "side": -1,
+          "order": 1
+        },
+        "publication_at": 21
+      },
+      "expected": {
+        "old_volume": 7,
+        "new_volume": 8,
+        "old_sum_pv": 707,
+        "new_sum_pv": 812,
+        "new_sum_p2v": 82436,
+        "old_cvd_close": 5,
+        "new_cvd_close": 4,
+        "before_correction_retains_old_version": true,
+        "affected_dependents_change": true,
+        "unaffected_block_identity_retained": true
+      }
+    },
+    {
+      "id": "F09-B16",
+      "name": "Late event and future suffix preserve exact prior prefixes",
+      "input": {
+        "old_cut": 12,
+        "late_event_at": 4,
+        "late_known_at": 30
+      },
+      "expected": {
+        "old_cut_changes": false,
+        "new_available_version_changes": true,
+        "delete_future_suffix_changes_old_cut": false
+      }
+    },
+    {
+      "id": "F09-B17",
+      "name": "Checkpoint restoration verifies retained inputs and published computations",
+      "input": {
+        "restart": "between_complete_and_next_event",
+        "tamper": [
+          "summary",
+          "event_order",
+          "threshold",
+          "publication",
+          "lineage"
+        ]
+      },
+      "expected": {
+        "restored_suffix_equal": true,
+        "all_tampered_outputs_rejected": true,
+        "same_cut_later_admission_does_not_rewrite_saved_input_prefix": true
+      }
+    },
+    {
+      "id": "F09-B18",
+      "name": "Opaque coarse bars cannot be split at a formation end",
+      "input": {
+        "target_window": [
+          0,
+          10
+        ],
+        "opaque_bar": {
+          "window": [
+            8,
+            12
+          ],
+          "ohlc": [
+            100,
+            110,
+            90,
+            105
+          ]
+        }
+      },
+      "expected": {
+        "exact_target_ohlc": "unavailable",
+        "duration_scaled_volume": "rejected",
+        "contained_final_bars_may_compose": true
+      }
+    },
+    {
+      "id": "F09-B19",
+      "name": "Equal-valued consecutive bars retain separate observation identities",
+      "input": {
+        "windows": [
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            10
+          ]
+        ],
+        "both_ohlc": [
+          100,
+          100,
+          100,
+          100
+        ],
+        "volume_each": 1
+      },
+      "expected": {
+        "distinct_bar_ids": true,
+        "unique_completed_observations": 2,
+        "redelivery_of_first_adds_observations": 0
+      }
+    },
+    {
+      "id": "F09-B20",
+      "name": "Quote bars are a separate measurement without traded mass or CVD",
+      "input": {
+        "quote_points": [
+          {
+            "at": 1,
+            "bid": 100,
+            "ask": 102
+          },
+          {
+            "at": 2,
+            "bid": 99,
+            "ask": 101
+          }
+        ]
+      },
+      "expected": {
+        "bid_ohlc": [
+          100,
+          100,
+          99,
+          99
+        ],
+        "ask_ohlc": [
+          102,
+          102,
+          101,
+          101
+        ],
+        "traded_volume": null,
+        "cvd": null,
+        "quote_as_trade_input": "rejected"
+      }
+    },
+    {
+      "id": "F09-B21",
+      "name": "Coarse side totals do not imply ordered CVD extrema",
+      "input": {
+        "coarse_buy_volume": 5,
+        "coarse_sell_volume": 5,
+        "raw_sequence": null
+      },
+      "expected": {
+        "signed_endpoint": 0,
+        "true_cvd_high": null,
+        "true_cvd_low": null
+      }
+    },
+    {
+      "id": "F09-B22",
+      "name": "Daily OI, options activity and cumulative totals are not raw underlying volume",
+      "input": {
+        "daily_oi_delta": 8,
+        "copies": 4,
+        "daily_cumulative_volumes": [
+          3,
+          7
+        ]
+      },
+      "expected": {
+        "independent_oi_observations": 1,
+        "underlying_traded_volume_from_oi": "unavailable",
+        "cumulative_fields_as_disjoint_increments": "rejected",
+        "native_reconciliation_requires_measure_filter_and_instrument_match": true
+      }
+    },
+    {
+      "id": "F09-B23",
+      "name": "Explicit allocations preserve one source event and its original completion",
+      "input": {
+        "source_id": "big",
+        "source_size": 12,
+        "allocation_sizes": [
+          5,
+          5,
+          2
+        ],
+        "known_at": 2
+      },
+      "expected": {
+        "allocated_total": 12,
+        "independent_source_events": 1,
+        "all_allocations_known_at": 2,
+        "allocations_are_ordinary_trades": false,
+        "over_or_under_allocation": "rejected"
+      }
+    },
+    {
+      "id": "F09-B24",
+      "name": "Constituent body envelope is not the body of an aggregate candle",
+      "input": {
+        "bars": [
+          [
+            100,
+            111,
+            99,
+            110
+          ],
+          [
+            110,
+            112,
+            99,
+            100
+          ]
+        ]
+      },
+      "expected": {
+        "aggregate_ohlc": [
+          100,
+          112,
+          99,
+          100
+        ],
+        "aggregate_body_width": 0,
+        "constituent_body_envelope": [
+          100,
+          110
+        ],
+        "constituent_body_width": 10,
+        "opaque_aggregate_without_body_summary": "unavailable"
+      }
+    },
+    {
+      "id": "F09-B25",
+      "name": "Bar lineage does not certify source forecasts or hidden estimators",
+      "input": {
+        "unvalidated_rate": "98%",
+        "backdrawn_anchor": 1,
+        "two_right_bars_final_at": 4
+      },
+      "expected": {
+        "rate_admitted_as_calibration": false,
+        "final_pattern_before_4": false,
+        "quantile_or_changing_anchor_estimator_from_moments_only": "unavailable"
+      }
+    },
+    {
+      "id": "F09-B26",
+      "name": "Shared builders and literal traversal have one matched bounded comparison",
+      "input": {
+        "small_events": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "clock_count": 3,
+        "benchmark_events": 4096,
+        "benchmark_active_clocks": 8,
+        "repetitions": 1
+      },
+      "expected": {
+        "literal_small_event_visits": 12,
+        "shared_small_source_event_visits": 4,
+        "all_output_and_lineage_parity": true,
+        "wall_cpu_rss_recorded": true,
+        "universal_speedup_claim": false
+      }
+    },
+    {
+      "id": "F09-B27",
+      "name": "Only completed eligible opportunities reach a downstream counter",
+      "input": {
+        "opportunities": [
+          "final_complete_no_touch",
+          "forming",
+          "final_missing"
+        ]
+      },
+      "expected": {
+        "eligible_mature_opportunities": 1,
+        "successes": 0,
+        "redelivery_or_restart_adds_same_opportunity": false,
+        "empty_interval_target_eligibility_requires_explicit_observation_process": true
+      }
+    },
+    {
+      "id": "F09-B28",
+      "name": "Session intervals use F03 calendar endpoints across DST",
+      "input": {
+        "new_york_local_days": [
+          "2024-03-10",
+          "2024-11-03"
+        ]
+      },
+      "expected": {
+        "elapsed_ns": [
+          82800000000000,
+          90000000000000
+        ],
+        "fixed_24h_or_chart_count_substitution": "rejected"
+      }
+    },
+    {
+      "id": "F09-B29",
+      "name": "Numerical bar identity excludes viewport and preserves semantic settings",
+      "input": {
+        "display_variants": [
+          "hidden",
+          "shown",
+          "backdrawn"
+        ],
+        "semantic_variants": [
+          "different_source_measure",
+          "different_calendar",
+          "different_reset"
+        ]
+      },
+      "expected": {
+        "display_same_numerical_output": true,
+        "semantic_same_identity": false,
+        "drop_or_deletion_erases_historical_evidence": false
+      }
+    },
+    {
+      "id": "F09-B30",
+      "name": "CVD carry and reset retain named anchors and whole-event history",
+      "input": {
+        "first_block_increments": [
+          5,
+          -2
+        ],
+        "next_block_increments": [
+          2
+        ],
+        "reset_before_next": [
+          false,
+          true
+        ]
+      },
+      "expected": {
+        "no_reset_and_reset_next_open": [
+          3,
+          0
+        ],
+        "no_reset_and_reset_next_close": [
+          5,
+          2
+        ],
+        "distinct_anchor_identity": true,
+        "minute_endpoint_replaces_prior_extrema": false
+      }
+    },
+    {
+      "id": "F09-B31",
+      "name": "Strict breakout, inclusive touch and ordered reversal are separate consumers",
+      "input": {
+        "level": 100,
+        "bars": [
+          [
+            102,
+            106,
+            99,
+            101
+          ],
+          [
+            101,
+            102,
+            99,
+            100
+          ]
+        ],
+        "return_anchor": 100
+      },
+      "expected": {
+        "inclusive_contact": [
+          true,
+          true
+        ],
+        "exact_close_return": [
+          false,
+          true
+        ],
+        "intrabar_first_passage_time_from_ohlc": "unavailable",
+        "both_extremes_proves_high_first": false
+      }
+    }
+  ],
+  "generated_by_candidate": false,
+  "native_market_or_probability_evidence": false
+}

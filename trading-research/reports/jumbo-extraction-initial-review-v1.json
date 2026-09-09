@@ -1,0 +1,102 @@
+{
+  "schema": "JumboExtractionReportStaticReviewV1",
+  "scope": "Static review of the development extraction and date-aware reporting boundary. No imports, compilation, tests, CLI/data-worker execution, source edits, or market-partition reads were performed for this review.",
+  "reviewed_at_utc": "2026-09-07",
+  "inputs": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/jumbo_study.py",
+      "sha256": "0bb2dd07f6bc303065d8b4414af5278b2858e08353aba2a052bbcb1c23b38bb7",
+      "size_bytes": 29941
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/jumbo_report.py",
+      "sha256": "45ea262c7b1284e78ff67006037a82444bce875991fe1f6b02d947293ccc9c07",
+      "size_bytes": 11346
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/jumbo_tables.py",
+      "sha256": "aa9c49c4a749ac4cadd7afa17540cca917c27d7d8d973717ca24505431107eae",
+      "size_bytes": 27579
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/ohlc_ranges.py",
+      "sha256": "9aff2a1cd53fbf3786335c6a3c2f8c69b5101610c7facb45dff9b36f17b985b9",
+      "size_bytes": 18090
+    },
+    {
+      "path": "/workspace/trading-research/validation/JUMBO_ANALYSIS_V1.json",
+      "sha256": "33cd35d0a645d491e9ab71c7c7b2e82bdd5735cfc0f2bb59e794f79bd976d053",
+      "size_bytes": 4951
+    },
+    {
+      "path": "/workspace/trading-research/validation/JUMBO_ACQUIRED_CONTRACT_STUDY_V1.json",
+      "sha256": "44917720ecd064431b83fcb489819989f6a4aceb270e962f1a472fb895b37562",
+      "size_bytes": 103065
+    },
+    {
+      "path": "/workspace/trading-research/tools/run_jumbo_study.py",
+      "sha256": "cfa5f0ba4f71d05feb591d82c746f7d6badba7fc34bf225f0493f3e907115714",
+      "size_bytes": 20399
+    }
+  ],
+  "findings": [
+    {
+      "id": "JEX01",
+      "severity": "high",
+      "location": "src/trading_research/research/jumbo_report.py:124-179",
+      "issue": "Formation and special summaries derive intended_dates from the rows that arrived and never validate the supplied date universe. For a dropped or omitted row, the denominator shrinks silently; special metric intervals also resample tuple(day for day, _ in observations) rather than the declared dates.",
+      "evidence": "formation_statistics sets intended_dates to len(observations); special_statistics does the same and passes observation dates to metric_intervals. The dates argument is otherwise unused in both functions. path_statistics has a length guard, but that guard does not protect formation or special populations.",
+      "impact": "A real missing source date, a mechanism returning no payload, or an extraction defect can be reported as a complete smaller population and its date-block interval can exclude the missing date entirely. This violates the frozen full intended cash-date denominator.",
+      "recommendation": "For each clock compute the expected sequence from dates, with the explicit Monday/Tuesday subset for PIN078_daily_not_combined. Reject duplicate dates and require the observed set to equal that sequence, or materialize an unavailable row. Pass the expected sequence to metric_intervals and retain expected/observed counts separately.",
+      "disposition": "open_static_blocker"
+    },
+    {
+      "id": "JEX02",
+      "severity": "high",
+      "location": "src/trading_research/research/jumbo_study.py:299-305",
+      "issue": "_rows_table relies on pyarrow.Table.from_pylist type inference after unioning keys. A column that is None for every row in one root/year is inferred as Arrow null, while the same field becomes int64, float64, or bool in another shard.",
+      "evidence": "The helper builds rows with row.get(key) and supplies no schema or cast. Many path fields are initialized with dict.fromkeys(PATH_NUMBERS/FLAGS), and feature/formation fields legitimately remain None for censored, unavailable, or zero-width populations.",
+      "impact": "Per-year Parquet schemas are not stable. A later concat or consumer expecting a canonical field type can fail or receive a null-typed field; schema_sha256 then differs for reasons caused by missingness rather than a declared table-version change.",
+      "recommendation": "Declare and cast fixed schemas separately for formations, paths, and specials: int64 for timestamps/counts/ticks, float64 for normalized metrics, bool for flags, string for IDs/statuses, and string for JSON payloads. Include an all-censored/all-null schema fixture before accepting real output.",
+      "disposition": "open_static_blocker"
+    },
+    {
+      "id": "JEX03",
+      "severity": "medium",
+      "location": "src/trading_research/research/jumbo_study.py:346-347, 373-378, 432-447",
+      "issue": "The per-root source_version omits the extraction period end, calendar identity, analysis-plan identity, and clock-recipe identity. Shards also retain only an intended-date count, not the exact date sequence or calendar version.",
+      "evidence": "source_version hashes table_definition, canonical source refs, period_start, and available_cut only. The CashCalendar version is not emitted in rows or shard metadata; the final result links an analysis-plan ref but does not bind it into source_version.",
+      "impact": "Two runs using the same source tables and available cut but a different end date, calendar bytes, or recipe/plan can produce different rows under the same source_version. A standalone shard cannot prove which date universe and calendar facts produced it.",
+      "recommendation": "Hash period_start/period_end, calendar file/version/timezone, exact plan and protocol/recipe digests into source_version; retain the expected date IDs and expected-count rule in each yearly statistics artifact and shard.",
+      "disposition": "open_provenance_gap"
+    },
+    {
+      "id": "JEX04",
+      "severity": "medium",
+      "location": "src/trading_research/research/jumbo_study.py:337-351",
+      "issue": "Extraction materializes every admitted 2020-2024 root table at once, concatenates it, and then converts ten columns to Python lists inside MinuteBars.from_table. The declared admission memory estimate covers sequential per-file admission, not this root-level indexing/extraction peak.",
+      "evidence": "tables contains all selected canonical tables until pa.concat_tables; MinuteBars.from_table calls table[k].to_pylist() for every indexed column before the Arrow table is released. The extraction path has no preflight or measured root-index peak; only the external 4 GiB address-space/CPU/wall limits in tools/run_jumbo_study.py bound failure.",
+      "impact": "A full development run can be killed for memory or CPU after writing partial yearly artifacts, and the current admission estimate cannot certify extraction feasibility. The retained 600000-row per-file cap does not bound the aggregate root table or Python object expansion.",
+      "recommendation": "Add an actual bounded extraction pilot or a root-row/peak-memory estimate, record peak RSS, and either process one year at a time or use a compact typed index with an explicit aggregate row cap. Treat a killed worker and partial shards as failed extraction until a complete resource receipt is joined.",
+      "disposition": "open_resource_certification_gap"
+    },
+    {
+      "id": "JEX05",
+      "severity": "low",
+      "location": "src/trading_research/research/jumbo_study.py:381-385, 432-437",
+      "issue": "derived_output_bytes accounts for content-addressed tables, statistics, and narrative bytes, but not the direct shard checkpoint files or report.md published beside worker.json.",
+      "evidence": "output_bytes is incremented only from _put_table, stats_ref, and narrative_ref; publish_new calls for yearly shards and report.md have no size accounting.",
+      "impact": "The aggregate-output receipt undercounts the complete retained output set. The omitted files are expected to be small, but the declared allowance is not a byte-exact total.",
+      "recommendation": "Either include checkpoint/report byte sizes in the aggregate count or explicitly declare them as supervisor metadata outside the derived-output allowance and record their hashes/sizes in the final receipt.",
+      "disposition": "open_accounting_gap"
+    }
+  ],
+  "resource_contract": {
+    "memory_bytes": 4294967296,
+    "mode_cpu_seconds": {"develop": 480},
+    "wall_seconds": 900,
+    "maximum_derived_output_bytes": 536870912,
+    "static_conclusion": "The extraction output budget is checked for CAS payloads, but aggregate indexing memory and extraction CPU are not preflight-certified by the admission estimate. A bounded worker receipt is required before treating a real development extraction as feasible."
+  },
+  "review_result": "The report/date denominator and typed Arrow schema issues are blockers for a trustworthy real-data report; provenance, resource, and direct-output accounting gaps remain open until repaired or explicitly bounded."
+}

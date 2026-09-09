@@ -1,0 +1,51 @@
+{
+  "kind": "complete_initial_static_review",
+  "reviewer": "f04_batch_review",
+  "scope": "New generic engineering batch orchestration and only the new GROUPS/OWNERS additions in verify.py",
+  "review_complete": true,
+  "candidate_execution": false,
+  "tests_run": false,
+  "repairs_applied": false,
+  "coverage": [
+    {"path":"tools/engineering_batch_contract.py","line_count":364,"read_lines":[1,364],"sha256":"80b84301d11da6ad16f19c9462ca1ba908c32da1407c911c347c6b4e32b8ab06"},
+    {"path":"tools/map_engineering_batch.py","line_count":34,"read_lines":[1,34],"sha256":"d79e191acddf0032ae90737ddf25d625f0d8cac3ec96044ac492e47f44dcfdf8"},
+    {"path":"tools/verify_engineering_batch.py","line_count":611,"read_lines":[1,611],"sha256":"61eae2de0655764077be7aa001905013d2f52c62ae798c752d9e910368ef895a"},
+    {"path":"tools/record_engineering_batch.py","line_count":223,"read_lines":[1,223],"sha256":"aaf3cce39cffa92108d333633933d591fa8f3e7502ec2b474d070309526a65a0"},
+    {"path":"src/trading_research/verify.py","line_count":238,"reviewed_scope":"New range-locations, reference-locations, decision-contracts, label-temporal GROUPS/OWNERS entries within lines 21-80 only; surrounding lines read for context.","sha256":"b937f687894ec709248d648656297f847d24972063f3b3fe43671230bee5c494"}
+  ],
+  "findings": [
+    {
+      "id":"ORCH-NEXT-01",
+      "severity":"high",
+      "status":"unfixed",
+      "paths":["tools/verify_engineering_batch.py:89","tools/verify_engineering_batch.py:503","tools/record_engineering_batch.py:58"],
+      "problem":"The supervisor is retained in preflight with kind engineering_orchestration_source and in configuration with kind verification_supervisor_source. The recorder compares the complete references for equality. Equal SHA and length cannot make these references equal because kind differs, so every otherwise successful execution fails before attachment.",
+      "suggested_repair":"Use a single retained supervisor reference for both fields, with a consistent declared kind. Retain the recorder's full-reference identity check.",
+      "static_evidence":"retain_preflight uses engineering_orchestration_source for every tools role. supervise independently retains __file__ as verification_supervisor_source. main rejects preflight['supervisor'] != configuration['supervisor']."
+    },
+    {
+      "id":"ORCH-NEXT-02",
+      "severity":"medium",
+      "status":"unfixed",
+      "paths":["tools/engineering_batch_contract.py:238","tools/engineering_batch_contract.py:267"],
+      "problem":"Mapping provenance is assembled from separate reads without ensuring the retained bytes match the advertised identity. normalize_coverage parses the raw case map and test methods before subsequently hashing those paths. retain_mapping_inputs computes expected identities, validates them, then rereads each input into the artifact store without comparing the resulting reference SHA and size to its identity. An edit between these reads can pair assertions from one map with the identity or retained bytes of another map.",
+      "suggested_repair":"Read each mapping input once into a bounded retained byte set, derive both normalization and identities from those bytes, and verify each retained artifact SHA and size against the identity. At minimum compare final rereads against the originally validated bytes and fail before reservations if any differ. Apply the same exact-read rule to the batch contract used for configuration.",
+      "static_evidence":"normalize_coverage raw_map and static_methods reads precede result.inputs local_identity reads. retain_mapping_inputs returns identity=item paired with put_bytes(package_path(item['path']).read_bytes()) without an identity comparison. A later recorder comparison detects some changes only after the shared run has already consumed attempts."
+    }
+  ],
+  "reviewed_without_additional_findings": [
+    "Exact literal/prepared case coverage and source-clause disposition accounting, including remaining-work and nonclosure fields.",
+    "Registration equality against retained family state and frozen resource budgets.",
+    "Full prior/new static assertion population matched to the actual successful result.",
+    "Initial review union and repair-report disposition binding.",
+    "Durable reservation, worker acknowledgement, completion, retryable finalization and conservative interrupted-run charging.",
+    "Successful trial membership, artifact retention, idempotent ledger attachment and recoverable presentation writes.",
+    "The new GROUPS/OWNERS entries contain the intended four test modules and their stated scope owners."
+  ],
+  "limitations": [
+    "Static inspection only; no candidate imports, compilation, AST execution, tests or benchmarks were performed.",
+    "The new batch contract JSON did not yet exist for this review; its concrete selectors, bindings and paths must be checked when assembled.",
+    "No historical supervisor implementation was changed or independently re-reviewed. Existing lifecycle behavior was assessed only as present in the new supervisor.",
+    "No source, native-data, consumer-integration or economic closure is claimed."
+  ]
+}

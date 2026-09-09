@@ -1,0 +1,349 @@
+{
+  "artifact": {
+    "kind": "implementation_review",
+    "sha256": "fa3c1b799c45dfcf5717ca1e07e36a12c2682e27259e73b0beb3546c250454f2",
+    "size_bytes": 17581
+  },
+  "artifacts": {
+    "golden": {
+      "kind": "independent_golden_reference",
+      "sha256": "72956df1c9a52e27ddcb560d10b984adc1b64a017cc7b0076be7b65005b90c09",
+      "size_bytes": 1104
+    },
+    "protocol": {
+      "kind": "engineering_protocol",
+      "sha256": "c766e6ae33efe8a0a53fe081565623d12a901babcccd356cb793e2906e9fb264",
+      "size_bytes": 6748
+    },
+    "review": {
+      "kind": "implementation_review",
+      "sha256": "280a34fc68d9805d4dbd2bc0693598b762d39b92ac50ea5b65d7c4ec2ae7335e",
+      "size_bytes": 6190
+    },
+    "supervised": {
+      "kind": "supervised_engineering_verification",
+      "sha256": "fa1bb4469e4072d106d17688d7e8266c8e9cc161c7bf79610b5d8b0caa9d7954",
+      "size_bytes": 2013
+    },
+    "supervisor": {
+      "kind": "verification_supervisor_source",
+      "sha256": "f28fb12f94cdea7ba413c998c3f5b6f6f955b4b7326c9deca799d2392add08e3",
+      "size_bytes": 7141
+    }
+  },
+  "cases": [
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-01",
+      "expected": "A valid NQ outright definition has no multiplier. Preserve identity, raw fields and raw-flow eligibility; block dollar valuation and orders.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_definition_term_conflicts_missing_support_and_public_constructor_fail_closed"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.DefinitionTests.test_missing_multiplier_preserves_raw_flow_but_blocks_execution"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-02",
+      "expected": "A separately dated NQ multiplier becomes known after a decision. The old cut remains blocked; a later join may use it. If raw multiplier is 50 and the NQ evidence says 20, reject the conflict.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_definition_term_conflicts_missing_support_and_public_constructor_fail_closed"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.DefinitionTests.test_external_terms_must_be_available_match_raw_terms_and_preserve_unused_field_identity"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-03",
+      "expected": "A 0.25 point NQ move at 20 USD/point is 5 USD per mini. Long +1 point and short \u22121 point are +20 USD. Off-tick 20000.251 is rejected; Decimal precision must not change the answer.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_nq_es_tick_cash_matches_frozen_golden_and_existing_one_mini_arithmetic"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_foundations.ArithmeticAndClockTests.test_ticks_use_exact_ratio_not_decimal_context_rounding"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-04",
+      "expected": "A dated 0.25 point ES tick at 50 USD/point is 12.50 USD. The full independent ES path must agree through order and account cash.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_nq_es_tick_cash_matches_frozen_golden_and_existing_one_mini_arithmetic"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-05",
+      "expected": "The same provider/venue/numeric ID is assigned to a different contract in a later disjoint interval. Each cut resolves the correct lifetime; equal-looking prices must not join across lifetimes.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_reused_id_retirement_delayed_knowledge_and_json_restart"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-06",
+      "expected": "An unknown definition valid at 15 is corrected at knowledge time 20. A decision at 15 keeps the unknown version; research truth or a later query may see the correction.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_late_correction_cannot_reactivate_and_old_kernel_stays_frozen",
+        "tests.test_payoffs_registry.PayoffTests.test_fixed_grid_literal_compiled_parity_and_late_fixing_revision"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_foundations.GraphAndGeometryTests.test_definition_revision_is_known_time_and_use_specific"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-07",
+      "expected": "Change a supplied but currently unused field without changing numeric terms. The definition version must change; no old cache may claim the new bytes.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_raw_deletion_binds_provider_lifetime_clocks_and_unused_fields"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.DefinitionTests.test_external_terms_must_be_available_match_raw_terms_and_preserve_unused_field_identity"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-08",
+      "expected": "A known security deletion retires the affected valid interval at its availability time and cannot resurrect an older tradeable definition.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_ambiguous_definitions_immutable_versions_and_corrupt_checkpoint_fail",
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_late_correction_cannot_reactivate_and_old_kernel_stays_frozen",
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_raw_deletion_binds_provider_lifetime_clocks_and_unused_fields",
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_reused_id_retirement_delayed_knowledge_and_json_restart"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.DefinitionTests.test_spreads_deletions_sentinels_and_bad_clocks_are_explicitly_unavailable"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-09",
+      "expected": "A UDS or multi-leg instrument, including one missing leg, cannot use the outright payoff. Preserve its raw signed price and identity; dispatch to explicit unsupported valuation until every leg and ratio is known.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.TickAndCoordinateTests.test_immutable_contract_terms_and_explicit_exact_types"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_decoder_faults.NativeSemanticFaultTests.test_negative_spread_price_and_distinct_price_timestamp_sentinels"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-10",
+      "expected": "Two options share root/date/strike/right but settle AM versus PM. They need distinct identities, expiry clocks and settlement inputs; a PM observation cannot settle the AM contract.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_am_pm_fixing_identity_trade_deadline_and_revised_payment_are_distinct"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-11",
+      "expected": "Monthly and weekly symbols that share a calendar date must resolve by explicit series and settlement rules, not a suffix heuristic.",
+      "new_partial_assertion_ids": [],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-12",
+      "expected": "At expiry minus one supported time unit a contract can still be valid; at expiry it cannot open new risk. Holiday revisions apply only after publication.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_am_pm_fixing_identity_trade_deadline_and_revised_payment_are_distinct",
+        "tests.test_payoffs_registry.PayoffTests.test_american_intrinsic_available_but_early_payment_schedule_is_not_invented"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.RollTests.test_expired_outright_is_excluded_without_requiring_nonexistent_later_volume"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-13",
+      "expected": "Values on either side of a source-defined option premium threshold use their own tick grid, including the exact boundary. Off-grid values fail under the correct style.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.TickAndCoordinateTests.test_premium_threshold_and_signed_or_bounded_grids"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-14",
+      "expected": "A valid adjusted option can have a nonstandard multiplier, shares and cash. Known terms select its exact payoff; unresolved terms yield unsupported, not a standard 100-share assumption.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_adjusted_share_cash_basket_and_put_delivery_signs"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-15",
+      "expected": "A multiplier change creates a new version at its own knowledge/effective times. Earlier decisions and closed trades retain their original terms; later risk uses the applicable version.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_late_correction_cannot_reactivate_and_old_kernel_stays_frozen"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-16",
+      "expected": "A published 4:1 split cannot rewrite a pre-effective decision. At the effective cut, 400 maps to 100 in the explicitly adjusted display; option strikes and valuation still use compatible raw coordinates and actual deliverables.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_marks_are_distinct_from_fixings_and_unavailable_inputs_emit_no_result",
+        "tests.test_payoffs_registry.PayoffTests.test_adjusted_share_cash_basket_and_put_delivery_signs"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.RollTests.test_future_split_does_not_rewrite_features_or_option_strike_coordinates"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-17",
+      "expected": "An option references a particular future that differs from a root's currently active future. Use that exact contract and expiry; replacing it with the active root blocks valuation.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.PayoffTests.test_future_delivery_uses_exact_underlier_and_does_not_round_fixing_to_future_tick"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-18",
+      "expected": "A VIX index observation and a dated volatility future remain different instruments and price domains. An option model must use its specified settlement/underlier, not whichever price exists.",
+      "new_partial_assertion_ids": [],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-19",
+      "expected": "For an explicit deterministic coordinate y=2x, valid inverse x=y/2 round-trips. A noisy conditional estimate E[y\\|x] has no automatic reciprocal conditional estimate E[x\\|y].",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.TickAndCoordinateTests.test_exact_inverse_conditional_mean_refusal_and_fixed_expiry_time_sign"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-20",
+      "expected": "With remaining time \u03c4=T\u2212t and fixed T, dV/dt=\u2212dV/d\u03c4. A changed expiry/calendar is a changed contract assumption; it cannot be hidden in the derivative sign.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.TickAndCoordinateTests.test_exact_inverse_conditional_mean_refusal_and_fixed_expiry_time_sign"
+      ],
+      "prior_assertion_ids": [],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-21",
+      "expected": "Missing/undefined expiry or required provider clock, unsupported class or ambiguous symbol cannot silently become a tradeable outright. Preserve the physical fields for diagnosis.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.RegistryLifetimeTests.test_raw_deletion_binds_provider_lifetime_clocks_and_unused_fields",
+        "tests.test_payoffs_registry.PayoffTests.test_definition_term_conflicts_missing_support_and_public_constructor_fail_closed"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_rolls_definitions.DefinitionTests.test_spreads_deletions_sentinels_and_bad_clocks_are_explicitly_unavailable"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-22",
+      "expected": "Hedge sensitivity expressed as mini-equivalent information is not an allowed order quantity. Currency and contract quantities cannot be added.",
+      "new_partial_assertion_ids": [
+        "tests.test_payoffs_registry.TickAndCoordinateTests.test_fx_units_availability_and_informational_mini_conversion"
+      ],
+      "prior_assertion_ids": [
+        "tests.test_batch_review.FoundationReviewTests.test_integral_quantities_are_independent_of_decimal_precision",
+        "tests.test_foundations.ArithmeticAndClockTests.test_information_mini_equivalent_is_not_order_quantity"
+      ],
+      "whole_case_verified": false
+    },
+    {
+      "basis": "Bounded literal/synthetic cases; dated/native/all-consumer closure is separate.",
+      "case": "F02-23",
+      "expected": "Prior-session volume is required for every eligible competitor in the declared universe, at the selection cut. Missing competitor history is not zero; the tape of an acquired calendar-front contract is not a complete parent universe.",
+      "new_partial_assertion_ids": [],
+      "prior_assertion_ids": [
+        "tests.test_e0.CohortTests.test_exact_reference_cannot_adopt_acquired_universe_as_complete_parent",
+        "tests.test_rolls_definitions.RollTests.test_missing_competitor_duplicate_definitions_and_mismatched_sessions_cannot_select",
+        "tests.test_rolls_definitions.RollTests.test_previous_volume_ties_and_universe_scope_are_frozen_at_cut"
+      ],
+      "whole_case_verified": false
+    }
+  ],
+  "code_snapshot": {
+    "kind": "code_snapshot",
+    "sha256": "0257976146814f2794b0b24f74200f9a9e90d57793c97536e3f7c295f140980e",
+    "size_bytes": 1844300
+  },
+  "combined_tests_passed": 264,
+  "economic_runs": 0,
+  "historical_option_cohort_admitted": false,
+  "kind": "f02_partial_kernel_case_evidence",
+  "new_assertion_ids": [
+    "tests.test_payoffs_registry.PayoffTests.test_adjusted_share_cash_basket_and_put_delivery_signs",
+    "tests.test_payoffs_registry.PayoffTests.test_am_pm_fixing_identity_trade_deadline_and_revised_payment_are_distinct",
+    "tests.test_payoffs_registry.PayoffTests.test_american_intrinsic_available_but_early_payment_schedule_is_not_invented",
+    "tests.test_payoffs_registry.PayoffTests.test_definition_term_conflicts_missing_support_and_public_constructor_fail_closed",
+    "tests.test_payoffs_registry.PayoffTests.test_fixed_grid_literal_compiled_parity_and_late_fixing_revision",
+    "tests.test_payoffs_registry.PayoffTests.test_future_delivery_uses_exact_underlier_and_does_not_round_fixing_to_future_tick",
+    "tests.test_payoffs_registry.PayoffTests.test_marks_are_distinct_from_fixings_and_unavailable_inputs_emit_no_result",
+    "tests.test_payoffs_registry.PayoffTests.test_nasdaq_cash_call_put_and_zero_exercise_match_frozen_equations",
+    "tests.test_payoffs_registry.PayoffTests.test_nq_es_tick_cash_matches_frozen_golden_and_existing_one_mini_arithmetic",
+    "tests.test_payoffs_registry.RegistryLifetimeTests.test_ambiguous_definitions_immutable_versions_and_corrupt_checkpoint_fail",
+    "tests.test_payoffs_registry.RegistryLifetimeTests.test_late_correction_cannot_reactivate_and_old_kernel_stays_frozen",
+    "tests.test_payoffs_registry.RegistryLifetimeTests.test_raw_deletion_binds_provider_lifetime_clocks_and_unused_fields",
+    "tests.test_payoffs_registry.RegistryLifetimeTests.test_reused_id_retirement_delayed_knowledge_and_json_restart",
+    "tests.test_payoffs_registry.TickAndCoordinateTests.test_exact_inverse_conditional_mean_refusal_and_fixed_expiry_time_sign",
+    "tests.test_payoffs_registry.TickAndCoordinateTests.test_fx_units_availability_and_informational_mini_conversion",
+    "tests.test_payoffs_registry.TickAndCoordinateTests.test_immutable_contract_terms_and_explicit_exact_types",
+    "tests.test_payoffs_registry.TickAndCoordinateTests.test_premium_threshold_and_signed_or_bounded_grids"
+  ],
+  "phase_p5_consumer_integration_complete": false,
+  "recorded_at": "2026-09-06T18:38:55.739925+00:00",
+  "remaining": [
+    "Dated/native option identities, calendar/style/deliverable joins and unsupported series.",
+    "Explicit reinstatement and overlapping lifetime-boundary correction.",
+    "Early exercise payment schedules, full model fair values and Greeks.",
+    "Original/provider/curated/compiled same-input cost and quality comparisons.",
+    "Affected O/P/X replay, eligible economics and prospective phases."
+  ],
+  "resources": {
+    "cpu_seconds": 27.249021999999997,
+    "peak_rss_bytes": 169160704,
+    "wall_seconds": 54.739255933091044
+  },
+  "scope_version": "0d7fff8cba9a2201a30ea140cfa7f012556405c8c8a7416ef2802c109c6d7a95",
+  "script": {
+    "kind": "evidence_assembly_script",
+    "sha256": "c561cf9bbf3bcad882067458bdf6431876994448378b67a686ad73712ce8c720",
+    "size_bytes": 8614
+  },
+  "verification": {
+    "kind": "verification",
+    "sha256": "d04c1b33f92eb5df00f44d41c4f47dac3aa3f49db4d76a9ccc3eb85a6b51a31c",
+    "size_bytes": 79954
+  },
+  "verification_attempts": 1,
+  "whole_unit_definition_closure": false
+}

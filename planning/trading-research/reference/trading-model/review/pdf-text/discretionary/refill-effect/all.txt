@@ -1,0 +1,875 @@
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 1/24 =====
+                        ETHOS ORDER FLOW / RESEARCH
+
+
+
+
+
+    The Refill Effect
+
+
+        Aggressive orders, level memory, and a tradeable feature set in
+       Nasdaq futures, measured, stress-tested, and published with its
+                                 failures attached.
+
+
+                              SIRES × TEAM VOT
+
+
+
+
+
+NQ / MNQ        CME        199M TICKS         235 SESSIONS          41,152 EVENTS         JULY 2026
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 2/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                     CONTENTS
+
+
+Contents
+
+
+What this paper shows  the three results, in one page                                          03
+
+Introduction  the claim, and why we tested it like academics                                        04
+
+The refill concept   zones, touches, and the one question that matters                                 05
+
+The data and the feature set  199M ticks and the honest baseline                                 08
+
+Selection  how grading the touches flips the sign                                                  09
+
+Where the money lives  the discovery that names the paper                                      10
+
+The out-of-sample record  79 untouched sessions, trade by trade                                 12
+
+An independent engine agrees  the same signals on software we didn't write                        14
+
+Why this is not overfitting  seven attacks on our own result                                     16
+
+Prop-firm economics  pass rates, sizing, and the daily stop                                       19
+
+The stat sheet  every number on one page                                                     23
+
+
+
+READ THIS FIRST
+
+The language, in plain English
+
+Zone: a price area where a burst of large aggressive orders     Touch: price returning to a zone later. Each touch is one
+traded. Someone with size fought there.                      event in this study.
+
+Feature: one measurable fact about a touch, known beforeit   R: result measured in risk units. Risk $80, make $240 → +3R.
+resolves (e.g. "did this zone hold earlier?"). The feature set is   Lose the stop → −1R.
+that checklist.
+
+Expectancy: the average R per trade. Positive means the        Profit factor: gross wins ÷ gross losses. Above 1.0 is
+approach makes money over many trades.                       profitable; 1.8 means $1.80 won per $1 lost.
+
+Out-of-sample: data the model never saw during tuning. The   Placebo test: rerun everything on scrambled labels. If the
+only performance that counts.                               "edge" survives, your machinery is lying to you.
+
+AUC: grading skill from 0.5 (coin flip) to 1.0 (perfect). 0.63 =   Drawdown: the give-back from a running peak. Prop
+a real, modest, usable signal.                                  evaluations fail you on it; we measure it everywhere.
+
+                                                            ETHOS ORDER FLOW RESEARCH 02
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 3/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                      ABSTRACT
+
+
+
+
+IN ONE PAGE
+
+What this paper shows
+
+We measured one idea on 199 million ticks of Nasdaq futures data: price levels built by
+large aggressive orders, and the memory of whether those levels were defended when
+price returned. Three results follow.
+
+
+
+   01 / THE RAW CONCEPT LOSES
+
+   Fading every touch of every level loses −0.285R per trade after costs. Only 42% of touches hold. Anyone
+    selling "just fade the level" is selling this line.
+
+
+
+   02 / SELECTION FLIPS THE SIGN
+
+  A small statistical model reads each touch's context: has this level held before, was it built by real size,
+   where does it sit in the day, and it separates the touches that hold from the ones that break (AUC 0.63
+   against a 0.51 placebo). Taking only the best-graded touches flips expectancy to +0.14R per trade, on
+   data the model never saw.
+
+
+
+   03 / THE EDGE IS THE REFILL
+
+   The profit concentrates almost entirely in one execution style: resting passively inside the level, where
+   the defenders reload. The same signals traded with market orders lose money.
+
+
+
+
+We then attack our own result with placebos, reversed splits,
+rotating folds and a 100-configuration audit, and we publish the
+losing quarter along with the winning ones.
+
+
+
+Companion reading: OriginoftheMove, the education paper for this feature set, free at kanji.org.uk.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 03
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 4/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                  INTRODUCTION
+01Every trader has seen it
+
+  Price falls into a level. Heavy selling hits the bid. Nothing happens. The offers absorb, the
+  level refuses to break, and price leaves. When price comes back to that level later, it
+  holds again.
+
+  Traders call the mechanism a refill: the passive orders defending the level are pulled,
+   filled, and quietly replaced. The level "remembers" who defended it, because those
+  participants are still there.
+
+  The claim is easy to say and easy to sell. It is much harder to prove. Harvey and Liu
+  [2014] showed that most published trading strategies are false discoveries once you
+  account for how many things were tried. That warning applies to us as much as to
+  anyone.
+
+  So this paper does something unusual for a trading education group: it puts the concept
+  through the same machinery an academic would use, and publishes the results either
+  way. We audited every input for hindsight, tested against scrambled-label placebos,
+  reversed the data split, rotated the folds, and re-ran everything on an independent
+  backtest engine we do not control.
+
+
+
+ What we found, in one sentence: the refill concept survives, but
+  not where most people look for it.
+
+
+  The entry signal alone is modest. The selection layer (which levels have memory) and the
+  execution layer (being the refill, rather than chasing it) carry nearly all of the money.
+
+ We also report what did not survive: raw aggression with no context, tight scalp brackets
+  that lived on fill assumptions, and a losing final quarter. All of it is in here, because that is
+  what makes the rest believable.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 04
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 5/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                     THE CONCEPT
+02The refill concept
+
+ When a burst of large aggressive market orders trades at one price area (sixty, eighty, a
+  hundred contracts hitting in seconds) that area stops being a random price. Somebody
+  with size chose to fight there. We call the cluster of prints a zone.
+
+  The next time price returns to the zone, exactly one question matters: are the defenders
+   still there? If they are, the touch is absorbed, the zone refills, and the level holds. If they
+  are gone, the zone is just ink on a chart, and price trades straight through it.
+
+
+ The two outcomes of a touch
+
+
+
+
+
+  A schematic, not a trade example. A zone is built by clustered large aggressive prints (circles, sized by print size). Price
+   leaves, then returns: that is the touch. Everything in this paper exists to answer, beforethetouchresolves, which of these
+  two pictures you are in.
+
+ A textbook example, on the real chart
+
+
+
+
+
+  A real MNQ session in Quant Charts, the platform every statistic here was validated on. Red sell-bubbles hammer a level,
+  green buy-bubbles absorb them, and price turns and trends up. That absorption is the refill.
+
+                                                              ETHOS ORDER FLOW RESEARCH 05
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 6/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                     THE CONCEPT
+
+
+Test it before you trust it
+
+
+
+   IT IS MEASURABLE BEFORE THE FACT                     IT HAS AN ECONOMIC REASON TO EXIST
+
+   Everything that defines the zone (print sizes,         A defended level is not a chart pattern; it is
+   width, location in the session's structure, and            inventory. Participants who accumulated there
+   whether it held an earlier touch) is known             defend the position because letting the market
+   before the next touch happens. Nothing peeks at        prove them wrong is expensive. Edges with a
+   the outcome. That makes it a legitimate              mechanism have a reason to persist. Edges
+   forecasting problem, not a story told in                 without one are usually noise that got lucky.
+   hindsight.
+
+
+Testing it honestly means turning the idea into numbers. Every zone becomes a row of
+data. Every return of price to a zone, every touch, becomes an event with a known
+outcome: the level held, or it broke. And every fact we could have known beforethat
+outcome becomes a feature: a checklist item a trader could read off the chart in real
+time.
+
+That checklist, the feature set, is what this paper is really about. Not an indicator, not a
+magic entry: a set of observable facts about a level that, together, tell you whether the
+defenders are likely still there.
+
+The next sections measure it end to end: the data and the baseline, where the profit
+actually lives, the out-of-sample record, the overfitting battery, and what it means inside
+a funded-account evaluation.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 06
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 7/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                     THE CONCEPT
+
+
+What the aggressive orders look like
+
+Before any modelling, this is the raw material, read live off the DOM the way it actually
+happens. The rectangles below are zones built by clusters of large aggressive orders; the
+circles are individual large prints. The red and green boxes are the read in real time: a
+level gets tested, gives the aggressor no result, and either holds again or finally gives way.
+
+A live read: the level gets tested twice before buyers take it
+
+
+
+
+
+A real NQ session. The level (red) is built early and tested twice, once on the first touch and again on a sharp sell-off back
+into it, and both times the sellers get nothing: price holds, not breaks. Right after the second test, buyers build a small base
+(green) just above the level and take control. That is the read this whole paper tries to quantify: not the entry trigger, but
+whether the defenders are still there when price comes back.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 07
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 8/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                             DATA
+03The data and the feature set
+
+
+  199M         235          41,152       Dec 24–
+
+     TICKS,          AGGRESSOR-        REGULAR SESSIONS         ZONE-TOUCH EVENTS    Nov 25     SIDE
+                                                                        CME NQ / MNQ
+
+
+  Each touch carries roughly twenty pre-touch features, in four families, every one of them
+  a fact a trader could check on the chart before the trade:
+
+
+    FAMILY            THE QUESTION IT ANSWERS       EXAMPLES
+
+                     Has this zone been defended
+    Memory                                              held earlier this session; prior-day defence
+                         before?
+
+    Construction      Was it built by real size?          number & size of aggressive prints; zone width
+
+                                                            value-area edges, session extremes, distance
+    Location              Is it at a real auction edge?
+                                                      from open
+
+                     What is happening as price          delta into the touch, approach speed, balance vs
+    Flow & state
+                            arrives?                         imbalance
+
+  Start with the honest baseline. Only 42% of touches hold. Fading every touch (buying
+  every support touch, selling every resistance touch, no questions asked) loses −0.285R
+  per trade after costs. The raw concept, traded indiscriminately, is a losing strategy. That
+   is the starting point, not the punchline.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 08
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 9/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                        SELECTION
+
+
+Selection is what changes the sign
+
+A deliberately simple statistical model reads the feature checklist for each touch and
+produces one number: how likely is this level to hold? It trains only on the past and
+grades only on the future, never the other way around. Out-of-sample, the touches it
+ranks highest hold 63% of the time; the ones it ranks lowest hold 25%.
+
+Trading everything loses; selecting on memory wins
+
+
+
+
+
+Left: the average result per trade, taking every touch versus only the model-selected touches, both measured after costs.
+Right: the model's grading skill in three separate time-slices it never saw, versus the same machinery trained on scrambled
+labels.
+
+
+
+  ONE FINDING CUTS AGAINST OUR OWN BRANDING
+
+  When we decompose the model, the memory and location families do almost all the work; raw order-flow
+   features alone barely beat a coin flip (AUC 0.54). Aggression buildsthe level, but it is the level's memory
+   that predicts the next touch. We would rather report that than sell a prettier story.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 09
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 10/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                      EXECUTION
+04Where the money actually lives
+
+  This is the section that gives the paper its name. It began as a failure.
+
+  Our first backtests used a tight scalp bracket and looked wonderful. Then we replayed
+  the identical signals against real tick-by-tick data and found the result depended entirely
+  on which side of the bracket was assumed to fill first inside each bar. Optimistic
+  assumption: heavily profitable. Pessimistic: heavily losing. Honest middle: a coin flip. The
+  "edge" was an artifact of fill assumptions, so we threw it away and started over at the tick
+  level.
+
+  The tick data then explained why, and the reason is the refill itself: around a genuine
+  defended level, the median eventual winner first dips 18 ticks past the touch before it
+  works. The defence does not happen at the front edge of the zone. It happens inside it,
+  where the resting orders reload.
+
+ The refill, one layer deeper: what happens in the order book
+
+
+
+
+
+  Each bar is resting buy orders at one price. The wall gets hit, price dips inside the zone, and if the defenders are real, fresh
+  orders replace the filled ones before the sellers can break through. The trade is to be one of those replacing orders.
+
+
+ Same signal. Opposite side of the mechanism.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 10
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 11/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                      EXECUTION
+
+
+Identical signals, opposite outcomes
+
+
+  MARKET ORDER AT THE TOUCH                      RESTING LIMIT INSIDE THE ZONE
+
+   You do what the losing aggressors do: pay the         You are filled by that same flush, at the price
+   spread to push into a wall, enter before the            where the refill is defending, alongside the
+    flush, and eat the full 18-tick dip against a tight          defenders. You are the refill, and you collect the
+   stop. You pay for the defence.                     premium the impatient side pays.
+
+
+The edge is the refill
+
+
+
+
+
+Same selected signals, same quarter (Q1), same independent tick engine. The resting-limit entries fill on 64 trades; the
+market-order entries fill on 312. The limit fills less often precisely because it demands the flush that defines the setup.
+
+Nothing changes between the two columns except the entry order type: not the signals,
+not the period, not the engine, not the costs. Resting inside the zone earns a profit factor
+of 1.80; chasing the touch with market orders earns 0.81 and loses money.
+
+This is also why the effect is hard to data-mine into a lie: it is not a chart pattern, it is a
+mechanism with a fee attached, and the fee changes sign depending on which side of
+the order book you stand on.
+
+
+This execution, resting inside the level rather than chasing it, is what Ethos trades live every session. Seven day free trial:
+whop.com/ethos-orderflow
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 11
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 12/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                   OUT-OF-SAMPLE
+05The out-of-sample record
+
+  The deployed configuration in one sentence: at a model-selected zone, rest a limit order
+  12 ticks inside the level, stop 32 ticks, target 96 ticks, cancel after 30 minutes, one
+  position at a time, with a 1-tick round-trip cost and 1 tick of stop slippage charged.
+
+  All tuning used the first 156 sessions. The final 79 sessions were never touched until the
+  configuration was frozen:
+
+
+  +0.143R      1.19         +78R         ~6.8
+
+    PER TRADE, AFTER          PROFIT FACTOR             CUMULATIVE, 542          TRADES PER DAY
+    COSTS                                           TRADES
+
+
+
+  Out-of-sample equity, tick-resolved, after costs
+
+
+
+
+
+  Every one of the 542 trades across the 79 held-out sessions, in sequence. No parameter was chosen using any of this data.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 12
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 13/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   OUT-OF-SAMPLE
+
+
+The shape of the returns
+
+Averages hide character. The distribution below is what a 30%-win, 3-to-1 strategy
+actually feels like to trade: many small bounded losses, a steady cluster of full winners,
+and nothing worse than the stop.
+
+Every trade outcome, out-of-sample
+
+
+
+
+
+Week-by-week consistency
+
+
+
+
+
+Net R for each block of five held-out sessions.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 13
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 14/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   OUT-OF-SAMPLE
+
+
+An independent engine agrees
+
+Equity curves from your own research code deserve suspicion. So we embedded the
+same signals into a strategy for Quant Charts' tick-level backtester, an engine we did not
+write, with its own fill logic, and ran it over the full year at its default sizing.
+
+
+  PERIOD                   TRADES        WIN RATE           PROFIT FACTOR         NET P&L
+
+  Q1 Dec–Mar                 64           68.8%                     1.80         +$2,112
+
+  Q2 Apr–Jun                 60           55.0%                     1.28         +$928
+
+  Q3 Jul–Sep                 65           55.4%                     1.73         +$1,410
+
+  Q4 Oct–Nov                 34           52.9%                     0.76         −$647
+
+  Year                       223          58.7%                     1.45         +$3,803
+
+
+Per-trade expectancy on this engine ≈ +0.07R, about half the research simulation's +0.14R, because its fills are stricter. We
+quote both rather than the friendlier one.
+
+
+   NOTE THE LOSING QUARTER
+
+   Q4, the most recent slice, lost money at every parameter setting we tried. The edge is regime-dependent:
+   weakest when volatility compressed late in the sample. We flag it and count it in every statistic, because
+   an edge that only appears when losing periods are trimmed away is not an edge.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 14
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 15/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   OUT-OF-SAMPLE
+
+
+Straight from the engine
+
+Nothing below is redrawn or re-styled by us. These are the raw Quant Charts outputs for
+the first quarter, exactly as the software renders them. The equity curve is one contract,
+compounding from a $100,000 base across the 64 trades the engine took.
+
+
+Quant Charts equity curve, Q1, one contract
+
+
+
+
+
+The engine's own performance summary
+
+
+
+
+
+Net +$2,112 across 64 trades, 68.8% win rate, profit factor 1.80, worst drawdown −$1,052. Read straight off the Quant
+Charts results panel, the same figures quoted in the table on the previous page.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 15
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 16/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                   ROBUSTNESS
+06Why this is not overfitting
+
+ A profitable backtest is the cheapest object in finance. Anyone who mines enough
+  combinations finds a curve that goes up. So we attacked our own result seven ways. It
+  survives all seven. This is the strongest claim in the paper.
+
+
+  01   The hindsight audit. Every feature was tested for information leaks. One failed: a stored field that
+         predicted outcomes even at a zone's firsttouch, impossible without contamination. Removed and rebuilt
+          cleanly. The edge stood without it.
+
+  02   The scrambled-label placebo. Retrain the identical pipeline on shuffled labels: grading skill collapses to
+        a coin flip, and only 0.2% of shuffles match the real result. The machinery cannot manufacture an edge
+        from noise.
+
+  03    Strict chronological split. All choices were made on the first half of the data; only the untouched second
+          half is quoted throughout this paper.
+
+  04   The reverse split. Train on the latedata, test on the earlydata. The edge holds, slightly stronger. A one-
+        regime artifact fails exactly this test.
+
+  05    Rotating folds. Three time-slices, each held out in turn: mean R +0.14 to +0.22, win rate 63–67%,
+         grading skill 0.61–0.64 in every slice. No single lucky period carries the result.
+
+  06   The parameter plateau. All 100 exit configurations: performance on the first half of the data predicts
+        the second half with rank correlation 0.92, and the whole neighbourhood of the deployed setting stays
+          positive. The next page shows it.
+
+  07   A mechanism, not a pattern. Overfit patterns do not care how you execute; a real liquidity mechanism
+        does. The profit lives exactly where the mechanism says it must, on the passive side of the level, and
+         dies when you chase.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 16
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 17/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   ROBUSTNESS
+
+
+A plateau, not a spike
+
+One hundred configurations: the first half predicts the second
+
+
+
+
+
+Each circle is one exit configuration (stop × target × entry depth), placed by its average R on the first half of the data (x) and
+the untouched second half (y). Green circles are profitable in both halves. If the result were curve-fit, this cloud would be
+shapeless.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 17
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 18/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   ROBUSTNESS
+
+
+The whole parameter space, two ways
+
+The ridge: expectancy across every stop and target
+
+
+
+
+
+The same space, point by point
+
+
+
+
+
+Both views show all 100 configurations on the untouched half of the data. A curve-fit edge is one bright dot in a sea of
+noise; this is a coherent warm region. The parameters barely matter, the concept does.
+
+                                                            ETHOS ORDER FLOW RESEARCH 18
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 19/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                               PROP ECONOMICS
+07Inside a funded-account evaluation
+
+ A per-trade edge of +0.14R is modest. What makes it valuable is its shape: many small
+  bounded losses, steady drift, and a fat right tail from the 3-to-1 target. That shape is
+  close to ideal for a prop evaluation, which is a race to +$3,000 before a $2,000 trailing
+  drawdown, not a race for maximum profit.
+
+ We replayed the held-out daily results 4,000 times through a Topstep-style 50K
+  evaluation, with the consistency rule enforced and one self-imposed policy: stop trading
+  any day that reaches −4R.
+
+
+ The evaluation as a barrier problem
+
+
+
+
+
+  Read the left panel as a fan of possible futures. Almost every path clears the target; only
+  the unluckiest sequences of losing days brush the fail line. The right panel is the headline:
+  at $80 of risk per R, the strategy clears a Topstep-style evaluation 92% of the time. The
+  rest of this chapter takes that apart: how size trades against speed, why the daily stop
+  matters so much, and what a pass is actually worth.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 19
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 20/24 =====
+ETHOS ORDER FLOW / RESEARCH                                               PROP ECONOMICS
+
+
+Size sets the trade-off between odds and speed
+
+Bet size is the one dial you fully control, and it works in two directions at once. Risk less
+per trade and the trailing drawdown almost never catches you, but it takes many more
+trading days to grind out the $3,000 target. Risk more and you get there faster, at the cost
+of a few percent of pass rate. There is no free lunch, only a curve you get to choose a
+point on.
+
+Pass rate and time-to-pass, by risk size
+
+
+
+
+
+Teal bars: chance of passing (left axis). Amber line: median trading days to reach the target (right axis). At $60 per R you
+pass ~97% of the time but wait ~7 weeks; at $150 you pass in under two weeks, roughly four in five attempts.
+
+
+
+   PATIENT SIZING                                  FASTER SIZING
+
+  $60–80 per R: pass rate in the 90s, but you           $100–150 per R: a pass in 10–20 days, at 80–
+   must be willing to trade for a month or more        86% odds. Right when you have several
+   without forcing the pace.                             attempts queued and want turnover.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 20
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 21/24 =====
+ETHOS ORDER FLOW / RESEARCH                                               PROP ECONOMICS
+
+
+The daily stop, and what a pass is worth
+
+The single most powerful rule we found has nothing to do with the entry: stop trading for
+the day once you are down four risk units. A trailing-drawdown evaluation is
+asymmetric: one runaway losing day ends the account, while no single good day is worth
+the same in reverse. Cutting the tail of bad days off is worth about fourteen points of pass
+rate at every size we tested.
+
+The −4R daily stop, measured
+
+
+
+
+
+Passing is only half the economics. The payout on a funded account is structurally
+capped near $2,000 per cycle by the same trailing drawdown, and no edge, however
+large, lifts that ceiling. The lever for total income is not size, it is count: run several funded
+accounts in parallel and the chance that at least one reaches a payout climbs fast.
+
+Reach a payout: scale by accounts, not by size
+
+
+
+
+
+A single funded account reaches a first payout ~96% of the time at $80 per R; three in parallel make at least one payout a
+near-certainty. Many small, capped, high-probability payouts, not one big score.
+
+The sizing and the daily-stop policy in this chapter are the same rules run inside Ethos. Seven day free trial:
+whop.com/ethos-orderflow
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 22/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                        LIMITATIONS
+08Limitations, stated plainly
+
+  The out-of-sample window is 79 sessions, one regime slice, and the most recent quarter
+  lost money. Limit fills assume a fill when price trades at or through the level; real queues
+  are less kind. Costs are modelled, not lived.
+
+  The per-trade edge is thin enough that discipline, not the signal, decides whether it
+  survives contact with a human. And every number here is historical simulation: it
+  describes what was, not what will be. Nothing in this paper is financial advice, and no
+  result guarantees any future outcome.
+
+
+
+
+  SOURCES
+ References
+
+  Harvey, C. R., and Y. Liu. "Evaluating Trading Strategies." TheJournalofPortfolioManagement, 40th Anniversary Issue
+  (2014), pp. 108–118.
+
+  López de Prado, M. AdvancesinFinancialMachineLearning. Wiley, 2018: meta-labelling; purged walk-forward cross-
+   validation.
+
+  Steidlmayer, J. P., and S. B. Hawkins. SteidlmayeronMarkets:TradingwithMarketProfile. Wiley, 2003: auction framework.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 22
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 23/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   THE STAT SHEET
+
+
+Complete statistics on one page
+
+  STATISTIC                                               VALUE    BASIS
+
+  DATA
+  Instrument / period                            NQ & MNQ, Dec 2024–Nov 2025           CMEtickdata,aggressorside
+   Ticks / sessions / events                                 199M / 235 / 41,152                      alltouches,nodiscretion
+
+  THE RAW CONCEPT
+  Touches that hold                                                      42%                            baserate
+  Fade every touch, mean R                                            −0.285R                     thehonestbaseline
+
+  SELECTION
+   Touch-grading, out-of-sample                                       AUC 0.63                     purgedwalk-forward
+  Scrambled-label placebo                               AUC 0.51, 0.2% match                          placebocontrol
+  Hold rate, worst → best decile                                      25% → 63%                             monotonic
+  Dominant features                                       memory + location                      flowalone:AUC0.54
+
+  EXECUTION / THE REFILL EFFECT
+  Median winner's dip past the touch                                   18 ticks                   whychasingfails
+   Resting limit: win / PF / P&L                           68.8% / 1.80 / +$2,112                    independentengine,Q1
+  Market order: win / PF / P&L                             27.2% / 0.81 / −$405              samesignals,sameengine
+
+  OUT-OF-SAMPLE RECORD / 79 UNTOUCHED SESSIONS
+  Trades / per day                                                542 / ~6.8                limit12tin,32tstop,96ttarget
+  Mean R / PF / win rate                                  +0.143R / 1.19 / 30%                       tick-resolved,aftercosts
+  Cumulative / weekly consistency                   +78R, 11 of 16 weeks green               nosingleweekcarriesit
+  Independent engine, year                           +$3,803, 3 of 4 quarters          ≈+0.07R/trade,stricterfills
+  Worst quarter (most recent)                                   −$647, PF 0.76                          disclosed,included
+
+  OVERFITTING BATTERY
+   Hindsight audit                                    1 leaky feature removed                  edgestandswithoutit
+  Reverse split / rotating folds                           holds, +0.14 to +0.22R                    allpositive,AUC0.61–0.64
+  Parameter grid, train → test                                   rank corr 0.92                  100configs,plateau
+
+  FUNDED-ACCOUNT EVALUATION / 4,000-PATH MONTE CARLO
+  Pass at $60 / $80 / $100 per R                          96.7% / 92.2% / 85.7%                 consistency+−4Rdailystop
+  −4R daily stop                                           +14 pts pass rate                           largestsinglelever
+  Reach first payout ($80/R)                                             95.5%                 payout≈capped$2k/cycle
+  Three staggered accounts                         P(≥1 payout/cycle) ≈ 99.6%                  scalebyaccounts,notsize
+
+All figures are historical simulation after modelled costs. Educational statistics, not a promise of future performance.
+To watch this feature set traded live, the trial is on the last page.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 23
+
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 24/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                              JOIN
+
+
+
+
+
+      The statistics found the levels.
+       Reading them live is the craft.
+
+               Every input in this paper, the zones, the memory grading, the resting
+                 entries, the minus-4R day, is taught and traded live inside Ethos Order
+             Flow. Three live sessions a week on NQ order flow, the full archive, and the
+                  thesis work that supplies direction. The trial runs seven days with
+                                      everything unlocked.
+
+
+
+                 START THE 7 DAY FREE TRIAL
+
+
+                                 whop.com/ethos-orderflow
+
+             Two minutes to start. Cancel from your Whop settings in two clicks if the room is not for you.
+
+
+               Youhavereadthelosingquarter.Resultsinsidearereportedtothesamestandard.
+
+
+
+
+           Ethos Order Flow is an educational community. Nothing in this paper or inside Ethos is financial advice, a solicitation, or a
+           promise of profit. Futures trading carries substantial risk of loss and is not suitable for every person. All statistics herein
+               are historical simulations after modelled costs; past or simulated performance does not guarantee future results.
+
+            Companion reading: OriginoftheMove, the education paper for this feature set, free at kanji.org.uk
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 24

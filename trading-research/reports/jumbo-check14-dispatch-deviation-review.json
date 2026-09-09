@@ -1,0 +1,77 @@
+{
+  "all_prior_attempts_and_costs_retained": true,
+  "attempt_id": "000ddb3a43c1cb8d2320d9dc607583f11694b01e5169d0ada9df1b6987d5ad79",
+  "budget_after_attempt": {
+    "authorized_cpu_seconds": 12000,
+    "authorized_max_attempts": 16,
+    "completed_attempts": 14,
+    "cpu_seconds_consumed": 1366.46983,
+    "remaining_attempts": 2,
+    "remaining_cpu_seconds": 10633.53017
+  },
+  "cause": "The dispatcher recognized annual execution schemas throughv7 only. The newv8 schema fell through to the legacy60-date branch. All435 tests and that legacy parity passed, but no new model resource unit ran.",
+  "cpu_seconds": 55.529881,
+  "execution": {
+    "kind": "research_study_execution",
+    "path": "reports/jumbo-runs/000ddb3a43c1cb8d2320d9dc607583f11694b01e5169d0ada9df1b6987d5ad79/execution.json",
+    "sha256": "52ef971febb45f7e4a56cbf27c6f98fd5e53c683eb711018f9c69fb0923b141a",
+    "size_bytes": 31751
+  },
+  "full_context_quality_complete": false,
+  "peak_rss_bytes": 957325312,
+  "registered_result": "succeeded",
+  "repair": "Explicitly route the stable complete-model-workload-v8 schema to the annual/model path and reject every unrecognized schema. Add positive dispatch and unknown/missing-schema failure fixtures.",
+  "required_remaining_stages": [
+    "corrected consolidated check",
+    "full independent fit",
+    "heldout confirmation"
+  ],
+  "resource_admission_result": "incomplete",
+  "retained_actual_result": {
+    "actual_admitted_tables_read": 4,
+    "comparisons": {
+      "exact_values": 5674466,
+      "floating_values": 2508090,
+      "maximum_absolute_float_error": 0.0
+    },
+    "first_date": "2020-01-02",
+    "intended_cash_dates": 60,
+    "last_date": "2020-03-27",
+    "market_model_fits": 0,
+    "passed": true,
+    "projected_remaining_extraction_cpu_seconds_conservative": 562.0931859999998,
+    "remaining_intended_dates": 1760,
+    "root": "NQ",
+    "row_counts": {
+      "formations": 4822,
+      "paths": 25790,
+      "specials": 1282
+    },
+    "scope": "All fields and statistics from identical60date real cohort; optimized vs preserved reference, saved2020 table rows, and30date resumed continuation. Whole study completion and model quality are not asserted.",
+    "timing": {
+      "optimized_extraction_cpu_seconds": 6.755817385,
+      "optimized_statistics_cpu_seconds": 7.210360414999997,
+      "reference_extraction_cpu_seconds": 9.779439108,
+      "reference_statistics_cpu_seconds": 10.262827240999997,
+      "resumed30dates_cpu_seconds": 4.185274656000001
+    },
+    "total_cpu_seconds_internal": 49.54309569,
+    "within_declared_extract_cap": true,
+    "year": 2020
+  },
+  "source_extraction13_unchanged": true,
+  "tests": 435,
+  "version": "jumbo-check-dispatch-deviation-review-v1",
+  "worker": {
+    "kind": "research_study_worker_report",
+    "path": "reports/jumbo-runs/000ddb3a43c1cb8d2320d9dc607583f11694b01e5169d0ada9df1b6987d5ad79/worker.json",
+    "sha256": "6089e33027d52d485afd517f7e6b4356fe109186f05e96d7bdffab6edf167033",
+    "size_bytes": 33396
+  },
+  "worker_log": {
+    "kind": "research_study_worker_log",
+    "path": "reports/jumbo-runs/000ddb3a43c1cb8d2320d9dc607583f11694b01e5169d0ada9df1b6987d5ad79/worker.log",
+    "sha256": "95c42b93dfdf50a4d3522b86b04a32418cc8742ce337aba9461f0fc2a8436eea",
+    "size_bytes": 71194
+  }
+}

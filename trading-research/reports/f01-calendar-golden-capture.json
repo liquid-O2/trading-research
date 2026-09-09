@@ -1,0 +1,381 @@
+{
+  "artifact": {
+    "kind": "independent_golden_reference",
+    "sha256": "99f309a375c871b161b80dfc340b758593cccbffa6589c798255c74ef06dee4d",
+    "size_bytes": 7623
+  },
+  "attempt_id": "df6797ee6a236d7b3e4745e210833620b067a527150800ac74f1d698b1b119ff",
+  "code_snapshot": {
+    "kind": "code_snapshot",
+    "sha256": "16f1c290d2cfb0f3887649c89e3adf6e9f7f13c968e33e55d2729c649cccfaaf",
+    "size_bytes": 1711635
+  },
+  "cpu_seconds": 0.12088791500000001,
+  "economic_evaluation": false,
+  "kind": "independent_golden_reference",
+  "peak_rss_bytes": 122728448,
+  "product_decoder_invoked": false,
+  "protocol": {
+    "limits": {
+      "address_space_bytes": 2147483648,
+      "cpu_hard_seconds": 35,
+      "cpu_seconds": 30,
+      "wall_seconds": 60
+    },
+    "max_files_examined": 5,
+    "max_rows": 3,
+    "max_source_bytes_per_file": 1048576,
+    "profile_id": "b382eec1322b80c1b624f952c81910ac7cd0b5c87bbea0bfceb739c3ea290590",
+    "provider_reference": "pyarrow 25.0.1 scalar casts to epoch-day/int64 and literal values; product physical-field decoder is not invoked",
+    "purpose": "Independent provider scalar reference for the one missing physical Parquet profile",
+    "scope": "physical field reference, not publication time or historical economic truth",
+    "selection": "Lexicographically first complete file in the normalized event calendar whose field/type/nullability signature matches the fixed catalog profile"
+  },
+  "scanned": [
+    {
+      "fields": [
+        {
+          "name": "event_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "event_time_et",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "status",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "path": "free-sources/context__event-calendar__normalized/combined-event-calendar.parquet",
+      "rows": 2253
+    },
+    {
+      "fields": [
+        {
+          "name": "event_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "event_time_et",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "null"
+        },
+        {
+          "name": "status",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "path": "free-sources/context__event-calendar__normalized/economic-releases.parquet",
+      "rows": 424
+    }
+  ],
+  "schema_catalog_sha256": "36cfa8b245edb30b8c920bf3106de5c1b7338e80cbf471f1c12310e33fd13b0d",
+  "script": {
+    "kind": "audit_reference_script",
+    "sha256": "77a2e297275d1aba3ceba63397d33b52096ba7b1c42c83bafccb59ce50bb304d",
+    "size_bytes": 6920
+  },
+  "selected": {
+    "dataset_id": "free-sources/context__event-calendar__normalized",
+    "golden_rows": [
+      {
+        "details_json": {
+          "type": "large_string",
+          "value": "{\"release_id\": 50, \"release_last_updated\": null}"
+        },
+        "event_date": {
+          "type": "date32[day]",
+          "value": 14617
+        },
+        "event_name": {
+          "type": "large_string",
+          "value": "Employment Situation"
+        },
+        "event_time_et": {
+          "type": "large_string",
+          "value": "08:30:00"
+        },
+        "event_ts_utc": {
+          "type": "timestamp[us, tz=UTC]",
+          "value": 1262957400000000
+        },
+        "event_type": {
+          "type": "large_string",
+          "value": "nfp"
+        },
+        "source": {
+          "type": "large_string",
+          "value": "FRED release calendar"
+        },
+        "source_url": {
+          "type": "large_string",
+          "value": "https://fred.stlouisfed.org/docs/api/fred/release_dates.html"
+        },
+        "status": {
+          "type": "large_string",
+          "value": "scheduled_or_observed"
+        },
+        "symbol": {
+          "type": "null",
+          "value": null
+        },
+        "time_basis": {
+          "type": "large_string",
+          "value": "standard_release_time"
+        }
+      },
+      {
+        "details_json": {
+          "type": "large_string",
+          "value": "{\"release_id\": 10, \"release_last_updated\": null}"
+        },
+        "event_date": {
+          "type": "date32[day]",
+          "value": 14624
+        },
+        "event_name": {
+          "type": "large_string",
+          "value": "Consumer Price Index"
+        },
+        "event_time_et": {
+          "type": "large_string",
+          "value": "08:30:00"
+        },
+        "event_ts_utc": {
+          "type": "timestamp[us, tz=UTC]",
+          "value": 1263562200000000
+        },
+        "event_type": {
+          "type": "large_string",
+          "value": "cpi"
+        },
+        "source": {
+          "type": "large_string",
+          "value": "FRED release calendar"
+        },
+        "source_url": {
+          "type": "large_string",
+          "value": "https://fred.stlouisfed.org/docs/api/fred/release_dates.html"
+        },
+        "status": {
+          "type": "large_string",
+          "value": "scheduled_or_observed"
+        },
+        "symbol": {
+          "type": "null",
+          "value": null
+        },
+        "time_basis": {
+          "type": "large_string",
+          "value": "standard_release_time"
+        }
+      },
+      {
+        "details_json": {
+          "type": "large_string",
+          "value": "{\"release_id\": 50, \"release_last_updated\": null}"
+        },
+        "event_date": {
+          "type": "date32[day]",
+          "value": 14645
+        },
+        "event_name": {
+          "type": "large_string",
+          "value": "Employment Situation"
+        },
+        "event_time_et": {
+          "type": "large_string",
+          "value": "08:30:00"
+        },
+        "event_ts_utc": {
+          "type": "timestamp[us, tz=UTC]",
+          "value": 1265376600000000
+        },
+        "event_type": {
+          "type": "large_string",
+          "value": "nfp"
+        },
+        "source": {
+          "type": "large_string",
+          "value": "FRED release calendar"
+        },
+        "source_url": {
+          "type": "large_string",
+          "value": "https://fred.stlouisfed.org/docs/api/fred/release_dates.html"
+        },
+        "status": {
+          "type": "large_string",
+          "value": "scheduled_or_observed"
+        },
+        "symbol": {
+          "type": "null",
+          "value": null
+        },
+        "time_basis": {
+          "type": "large_string",
+          "value": "standard_release_time"
+        }
+      }
+    ],
+    "relative_path": "free-sources/context__event-calendar__normalized/economic-releases.parquet",
+    "row_group": 0,
+    "row_numbers": [
+      0,
+      1,
+      2
+    ],
+    "schema_arrow": "ffffffff780200001000000000000a000c000600050008000a000000000104000c000000080008000000040008000000040000000b00000010020000b40100007c0100004c0100001c010000f0000000c4000000940000006800000038000000040000002cfeffff00000114100000002000000004000000000000000c00000064657461696c735f6a736f6e00000000a8feffff5cfeffff00000114100000001c00000004000000000000000a000000736f757263655f75726c0000d4feffff88feffff000001141000000018000000040000000000000006000000736f757263650000fcfeffffb0feffff00000114100000001c00000004000000000000000a00000074696d655f6261736973000028ffffffdcfeffff000001141000000018000000040000000000000006000000737461747573000050ffffff04ffffff00000101100000001800000004000000000000000600000073796d626f6c000078ffffff2cffffff00000114100000001c00000004000000000000000a0000006576656e745f6e616d650000a4ffffff58ffffff00000114100000001c00000004000000000000000a0000006576656e745f747970650000d0ffffff84ffffff00000114100000002400000004000000000000000d0000006576656e745f74696d655f65740000000400040004000000b8ffffff0000010a100000002800000004000000000000000c0000006576656e745f74735f7574630000000008000c00060008000800000000000200040000000300000055544300100014000800060007000c00000010001000000000000108100000002400000004000000000000000a0000006576656e745f64617465000000000600080006000600000000000000",
+    "schema_fields": [
+      {
+        "name": "event_date",
+        "nullable": true,
+        "type": "date32[day]"
+      },
+      {
+        "name": "event_ts_utc",
+        "nullable": true,
+        "type": "timestamp[us, tz=UTC]"
+      },
+      {
+        "name": "event_time_et",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "event_type",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "event_name",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "symbol",
+        "nullable": true,
+        "type": "null"
+      },
+      {
+        "name": "status",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "time_basis",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "source",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "source_url",
+        "nullable": true,
+        "type": "large_string"
+      },
+      {
+        "name": "details_json",
+        "nullable": true,
+        "type": "large_string"
+      }
+    ],
+    "source": {
+      "kind": "bounded_golden_source",
+      "sha256": "5950ea351b1118fd3536c711341283f9e068148dd2151c713bcecb1e9d7ddc90",
+      "size_bytes": 9292
+    },
+    "source_rows": 424
+  },
+  "success": true,
+  "trial_id": "20787b7f6f20dc3f0b586561206e3ddeec177ca38de5a4adf779bf5cf9c1a619",
+  "wall_seconds": 0.470244936645031
+}

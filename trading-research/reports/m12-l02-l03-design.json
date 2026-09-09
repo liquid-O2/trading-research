@@ -1,0 +1,169 @@
+{
+  "kind": "consumer_design_proposal",
+  "status": "DRAFT_UNREGISTERED_NO_IMPLEMENTATION",
+  "units": [
+    "M12",
+    "L02",
+    "L03"
+  ],
+  "preparation": {
+    "path": "/workspace/trading-research/reports/m12-l02-l03-source-preparation.json",
+    "sha256": "91aa9f09235ed0f048c3e533d0051932ffd1d6a333fd00f888d0ada628a7ab81"
+  },
+  "protocol_draft": {
+    "path": "/tmp/m12-l02-l03-protocol-draft.md",
+    "sha256": "2f19d0f7606370c2eb09516a402e4388184a49d506c4b07188c9082401a1444c"
+  },
+  "golden_draft": {
+    "path": "/tmp/m12-l02-l03-golden-draft.json",
+    "sha256": "c153bb82121302b94f6ff2be39b806ea202037ff8851e68864f6c395586fb23d",
+    "cases": 32
+  },
+  "proposed_files": {
+    "candidate": [
+      "src/trading_research/measurements/reference_prices.py",
+      "src/trading_research/location/edge_extensions.py",
+      "src/trading_research/location/prior_session.py"
+    ],
+    "reference": "references/reference_locations_literal.py",
+    "tests": "tests/test_reference_locations.py",
+    "neutral_shared_port": "one root-assigned module jointly frozen with C01; do not implement competing definitions",
+    "registry_adapter": "one root-frozen adapter consuming modern F10 ObjectGraph"
+  },
+  "shared_port_proposal": {
+    "status": "root_to_freeze_before_code",
+    "neutral_types": [
+      "ClockSelection",
+      "RangePrimitive"
+    ],
+    "ClockSelection": {
+      "fields": [
+        "raw_instrument_definition_id",
+        "calendar_version",
+        "session_key/trading_date",
+        "source_clock_variant_id",
+        "formation_start_ns",
+        "formation_end_ns",
+        "predecessor_session_key_if_prior",
+        "calendar_known_at_ns"
+      ],
+      "contract": "F03-derived immutable named half-open interval; no custom consumer clock recomputation or assumed prior calendar date. Different NY/fixedEST/partial windows are different variants."
+    },
+    "RangePrimitive": {
+      "fields": [
+        "clock_selection",
+        "source_bar_version_id",
+        "source_evidence_version_ids",
+        "source_anchor_version_ids",
+        "source_definition_id",
+        "reset_epoch",
+        "observation_cut_ns",
+        "published_at_ns",
+        "revision",
+        "supersedes_version_id",
+        "open_ticks",
+        "high_ticks",
+        "low_ticks",
+        "close_ticks",
+        "coverage_complete",
+        "coverage_version",
+        "watermark_version",
+        "per_field_support",
+        "status"
+      ],
+      "contract": "Thin typed projection from certified F09 factory SharedBar, plus original evidence/anchor references; immutable fractions/integers, no hidden fill. Bare user-created primitive cannot assert certification. Adapter validates source factory availability, time-final state, exact interval/raw domain and coverage. Width computed by C01, extension by L02, prior-calendar selection by M12."
+    },
+    "ownership": "Herschel (/root/f04_scheduler_tests) owns the neutral ClockSelection/RangePrimitive module and thin actual F03/F09/F10 adapter per root. M12/L02/L03 consumes only; no overlapping neutral/adapter edits."
+  },
+  "port_clarifications": [
+    "Include exact raw lifetime and original first/last event times directly or by exact retrievable source parent IDs.",
+    "Current 06\u201309 E0 range geometry requires H/L; prior completeE0 reference set requires O/H/L/C. Per-field unsupported output remains explicit; no fabricated open/close or unnecessary high/low erasure.",
+    "Interior order_exact=False does not alone invalidate first/last price if F09 proves their price. Use per-field support rather than blanket order flag.",
+    "Minimal port is sealed time range; early first-print prefix service is not implied by a certified full-session range.",
+    "Result known_at derives from actual completion; declared object horizon/expiry carried by generator/publication envelope and cannot be inferred from line length.",
+    "Per-field coverage: original retained request spans certify prefix O/suffix C independently; H/L full coverage. SharedBar lacks spans, so adapter must authenticate matching original request through retained checkpoint/replay or exact certified subwindow evidence, never arbitrary external coverage. No F09 code edit proposed."
+  ],
+  "scopes": {
+    "minimum_e0": "M12 selects certified calendar predecessor RTH OHLC; L02 generates four exact edge\u00b1.5W/\u00b1W sources; L03 publishes priorOHLC, preserves source-only RTH freshness and full-session diagnostics. E0 union joins C01/L01 five sources for13 identities.",
+    "broader_deterministic": "Official settlement revision interface, body/range fractions, explicit gap conventions,1.33/1.66 regions and rounding collisions are proposed fixture cases requiring root scope decision. No market data adapter invented.",
+    "broader_predictive": "All source-specific probability/quantile/multiscale role/ordered hazard/profile and upgrade comparisons remain open. No hardcoded rate becomes probability.",
+    "data": "E0 complete parent outright universe, verified exact fee/account and native replay prerequisites remain open."
+  },
+  "pipeline": [
+    "Verified F03 ClockSelection selects exact named source formation and previous eligible RTH.",
+    "Certified F09 time-final SharedBar and per-field support project into neutral RangePrimitive.",
+    "M12 typed references preserve actual semantic source and known time; incompatible raw domains require F08 mapping or unavailable.",
+    "L02 exact rational edge formulas; L03 prior reference variants; preserve all source births, overlap and corrections.",
+    "Common F10 adapter atomically records exact evidence,anchor,object revisions and freezes candidate sets.",
+    "External E0 coordinator handles sampled one-minute BBO midpoint contact and native-event future labels/fills; no private execution policy in generators."
+  ],
+  "complexity_and_retention": {
+    "proposal": "Pure finite per-range generation; no separate historical tape scan or competing archive. Default E0 geometry13 sources; configurable maximum256 proposed distinct generated sources per request, with actual F10 batch_max respected via reviewed atomic grouping. Root must freeze exact bounds before code.",
+    "state": "Persist lineage/revisions/candidate cuts in existing bounded F10 hot state plus journal. Reject overbudget before mutation; do not erase failures or silently truncate.",
+    "telemetry": [
+      "source factory publications consumed",
+      "reference fields inspected",
+      "rational operations",
+      "candidates proposed",
+      "batch members written",
+      "graph hot/archive count",
+      "checkpoint bytes",
+      "wall/CPU observed without universal speed assertion"
+    ]
+  },
+  "required_adapter_integration_assertions": [
+    "F03 actual named interval resolves fixture DST/cross-midnight and predecessor selection; same original source event reaches same range via certified F09 publication",
+    "F09 actual certified factory emits forming/final versions with coverage/watermark/publication as-of gating; correction appends new primitive and retains old range",
+    "F10 actual ObjectGraph AtomicBatch commits evidence,anchor,range and location revisions; frozen candidate cuts preserve13source E0 identities and overlap action aliases",
+    "Restore actual F09 retained publication and actual F10 checkpoint on fresh paths, reapply adapter request, compare primitive/active candidates/target birth geometry and correction availability to uninterrupted path",
+    "Reject invented stub bar objects, private-certification bypass and detached manual evidence claims; synthetic raw records still enter real foundation public factories",
+    "Current and prior windows from actual same raw contract/calendar enter certified factory; prior selection skips verified holiday, not missing calendar data.",
+    "Real F10 revisions/asof demonstrate correction after earlier frozen cut and prior target geometry retention.",
+    "Complete empty, missing opening coverage, unresolved first/last price and exact extrema support produce explicit statuses through actual F09 factory.",
+    "RTH-only and ETH-aware observations share exact immutable reference geometry but preserve separate interpretation/event history.",
+    "Thirteen E0 source objects survive price overlap; action aliasing does not erase generator evidence.",
+    "Actual F09 retained incomplete-window publications certify suffixC180 for[300,10800)last10799 and prefixO120 for[0,10740)first0; partial other fields never become exact, and restored request provenance matches source publication."
+  ],
+  "open_design_items_before_registration": [
+    "Herschel finalizes neutral port and common F10 adapter API names; root freezes the resulting contract.",
+    "Root fixes reference horizon/expiry (current entry session/calendar boundary) and invalid-source revision eligibility semantics.",
+    "Root freezes all-or-none complete E0 set reporting alongside per-field diagnostics.",
+    "Root freezes exact storage/batch bounds; all32 deterministic cases already included.",
+    "Root freezes protocol/golden hashes before any source/reference/test edits."
+  ],
+  "activity": {
+    "source_edits": false,
+    "tests_run": false,
+    "compilation": false,
+    "application_imports": false,
+    "market_reads": false,
+    "registered": false
+  },
+  "source_route_dispositions": {
+    "source_report": "/workspace/trading-research/reports/m12-l02-l03-source-preparation.json",
+    "all_routes": 233,
+    "concrete_case_assertion_routes": 41,
+    "other_routes": "exact clause requirement and named missing mechanism/dependency; no whole route closure claimed"
+  },
+  "all_32_cases_included_by_root": true,
+  "shared_ports_agreed": {
+    "owner": "/root/f04_scheduler_tests",
+    "neutral_module": "src/trading_research/foundations/range_primitives.py",
+    "adapter_module": "src/trading_research/context/range_adapter.py",
+    "functions": [
+      "select_clock",
+      "primitive_from_shared_bar",
+      "primitive_registry_links",
+      "publish_range_batch"
+    ],
+    "prior_selection": "M12 chooses exact prior session externally, then consumes exact ClockSelection; no calendar reinterpretation or adapter edits",
+    "select_clock_inputs": "actual available IntervalGraph + interval_name, not detached FormationWindow; graph/node versions retained; Calendar resolution separate from formation membership",
+    "endpoint_evidence": "Herschel owns minimal checked public SharedBarEngine publication-request accessor and common adapter; M12 consumes certified primitive only."
+  },
+  "shared_api_contract": {
+    "path": "/workspace/trading-research/reports/c01-l01-design.json",
+    "sha256": "74d0eef4200c241acfd739f435d6beeb6cc324b807e567723812abd3741b9cb4",
+    "owner": "/root/f04_scheduler_tests",
+    "contract_key": "public_api_contract"
+  }
+}

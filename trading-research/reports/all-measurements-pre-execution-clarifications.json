@@ -1,0 +1,60 @@
+{
+  "amendments": [
+    {
+      "all_other_hand_values_unchanged": true,
+      "case_id": "CL-T03",
+      "contradiction": "Original field_support marks every field partial; the simultaneously frozen M12 suffix-close vector requires certified C180.",
+      "effective_neutral_field_support": {
+        "close": "observed",
+        "high": "partial",
+        "low": "partial",
+        "open": "partial"
+      },
+      "id": "CL-T03-ENDPOINT-CAPABILITY",
+      "original_golden": {
+        "kind": "independent_golden_reference",
+        "sha256": "696b39ea7656c16cea7894f3235d96ba4410fead505781d65feb83b6f04b0a29",
+        "size_bytes": 76331
+      },
+      "resolution": "The all-partial mapping remains the original whole-window fidelity diagnostic. The neutral field capability is independently certified from actual endpoint coverage: open/high/low partial, close observed at180. Full-window high/low geometry and E0 eligibility remain unavailable.",
+      "review_findings": [
+        "CL-IR-004",
+        "M12-IR-001"
+      ]
+    },
+    {
+      "case_id": "BC25",
+      "id": "BC25-FEE-OCCURRENCES",
+      "input_occurrence_limit": 4096,
+      "original_golden": {
+        "kind": "independent_golden_reference",
+        "sha256": "3a8094f24dbe7955f1002a64e52a679ea390f697516452862f0ad8336a6eba40",
+        "size_bytes": 88350
+      },
+      "resolution": "Retain at most256 unique cash fee IDs. Bound input occurrences separately at4096 before deduplication; identical repeated IDs consume input work but no extra retained cash atom. The4097th occurrence rejects before mutation.",
+      "retained_unique_fee_limit": 256,
+      "review_findings": [
+        "B00-IR-005"
+      ]
+    },
+    {
+      "case_id": "MX03",
+      "combined_input_limit": 4096,
+      "id": "MX03-QUOTE-RECIPE-CAPACITY",
+      "initial_recipes_in_exact_case": 1,
+      "original_golden": {
+        "kind": "independent_golden_reference",
+        "sha256": "1edc0c2cee96f771d4236c8f48030e41b73c4861613e9691ea69d1d1ada6471e",
+        "size_bytes": 53500
+      },
+      "resolution": "The4096 event input bound includes initial book recipes and window recipes. Exercise one actual initial snapshot plus4095 window events for exactly4096; one extra window event exceeds the bound. Retained serialized bytes remain separately capped at8388608.",
+      "review_findings": [
+        "M-REVIEW-22"
+      ],
+      "window_recipes_in_exact_case": 4095
+    }
+  ],
+  "candidate_execution_before_clarification": false,
+  "changes_original_golden_bytes": false,
+  "kind": "pre_execution_contract_clarifications_v1"
+}

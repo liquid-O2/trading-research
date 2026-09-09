@@ -1,0 +1,83 @@
+{
+  "active_phase_order": [
+    "validation_across_all_families",
+    "context",
+    "location"
+  ],
+  "approval": {
+    "interpretation": "The user renewed near-full hardware utilization on September8. Admit17single-thread source workers under17.85effective cores. Reserve4GiB each plus4GiB coordinator,72GiB total, below82,999,996,416-byte live limit with5,690,585,088 bytes headroom. No CPU, attempt,output or scientific scope increase.",
+    "messages": [
+      {
+        "at": "2026-09-08T08:18:47.330996Z",
+        "text": "1, but speed it up, it is 100% doable, use numba or vectorised stuff or use another language that is fast, also you arent even using the full hardware."
+      },
+      {
+        "at": "2026-09-08T08:27:26.385943Z",
+        "text": "No, those are like random restrictions. So the actual pods thingy, but we don't have all of that available. I literally told you the exact hardware we have available in hardware.m.d.r. like somewhere else. Follow that."
+      },
+      {
+        "at": "2026-09-08T08:27:26.385943Z",
+        "text": "We don't have 128 CPUs. We don't have 477 GB of RAM."
+      },
+      {
+        "at": "2026-09-08T14:50:04.151466Z",
+        "text": "yea lets get close to perfect utilisation anything above 3 is unacceptable. use numba cython or vectorised stuff to speed things up"
+      }
+    ],
+    "source": "explicit_user_instruction"
+  },
+  "created_at": "2026-09-08T15:02:24.836046+00:00",
+  "declared_hardware": {
+    "gpu": "NVIDIA RTX A4000",
+    "memory_bytes": 83000000000,
+    "vcpus": 21,
+    "vram_bytes": 16000000000
+  },
+  "execution": {
+    "aggregate_memory_bytes": 77309411328,
+    "child_memory_bytes": 4294967296,
+    "coordinator_memory_bytes": 4294967296,
+    "gpu_workers": 0,
+    "maximum_child_output_bytes": 536870912,
+    "maximum_workers": 17,
+    "native_threads_per_worker": 1
+  },
+  "family": "Research-Auction-Flow-acquired-MBP-v1",
+  "full_extraction_or_model_authorized_by_this_hardware_record": false,
+  "hardware_specification": {
+    "kind": "user_supplied_hardware_specification_v1",
+    "path": "/workspace/trading-research/validation/HARDWARE_USER_SPEC_V1.md",
+    "sha256": "f25903dccbd44f285bf875b213bfb2ac52bb39544ffff43aa78030623eaccaae",
+    "size_bytes": 75
+  },
+  "kind": "auction_flow_user_hardware_execution_v2",
+  "live_limits_observed_when_prepared": {
+    "cpu_period_us": 100000,
+    "cpu_quota_us": 1785000,
+    "memory_limit_bytes": 82999996416
+  },
+  "parent_protocol_sha256": "a70b281899acf5417290846d4e94d159b713a453b1f18c0997f07e44acb014b5",
+  "prior_failed_attempts_or_consumption_reset": false,
+  "resource_accounting": "At most min(17,21,floor(livequota),(min(72GiB,declared/live RAM)-4GiB)//4GiB,ready units) children. Current maximum17. Preserve every actual child/coordinator CPU and all partial output in same retained family; no oversubscription or host-wide allocation claims.",
+  "scientific_population_or_definitions_changed": false,
+  "unchanged_scientific_resources": {
+    "cpu_budget_seconds": 192000,
+    "hard_cpu_margin_seconds": 10,
+    "maximum_attempts": 32,
+    "maximum_derived_output_bytes": 17179869184,
+    "maximum_native_array_bytes": 2147483648,
+    "maximum_output_file_bytes": 536870912,
+    "maximum_raw_batch_rows": 65536,
+    "maximum_source_day_scan_rows": 50000000,
+    "maximum_study_output_bytes": 274877906944,
+    "memory_bytes": 4294967296,
+    "per_check_wall_seconds": 3600,
+    "phase_cpu_seconds": {
+      "check": 1200,
+      "confirm": 16000,
+      "extract": 12000,
+      "fit": 16000
+    },
+    "supervisor_output_reserve_bytes": 16777216
+  }
+}

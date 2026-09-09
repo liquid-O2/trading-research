@@ -1,0 +1,76 @@
+{
+  "scope": "Static bounded Journal transaction and OrderLedger incremental-cache review",
+  "files": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/operations/journal.py",
+      "sha256": "5ad5865d942f8e3a5aa5922d8f08b71acbbb6aeca2ae6e27eab2955d5cb6cecc",
+      "size_bytes": 7078
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/operations/artifacts.py",
+      "sha256": "81225bba5c4678a1f30bbfecfa38bd41f24d3fc9fa99e8b6b4822553f183e564",
+      "size_bytes": 6093
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/execution/orders.py",
+      "sha256": "a04706c925ea097485f5747d6970db403e82106cf42dbb161efc7ed2e0792133",
+      "size_bytes": 17059
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/execution/orders_reference.py",
+      "sha256": "3ae98a52cd8473ecd9e381f4f8321d98fde61fdfea33e53118d6b4c5a0a354aa",
+      "size_bytes": 6675
+    },
+    {
+      "path": "/workspace/trading-research/tests/e0_report_fixtures.py",
+      "sha256": "9adecfa81452ed72279e76f663d7a8174c54092bbafc85e80523dd56debe68bb",
+      "size_bytes": 23562
+    }
+  ],
+  "findings": [
+    {
+      "id": "TX-01",
+      "status": "repaired_by_root_and_statically_confirmed",
+      "finding": "Read-only dict/list subclasses were mutable through base-container methods, exposing trusted transaction snapshots",
+      "repair": "Recursive genuine MappingProxyType and tuple, explicit canonical_json support for MappingProxyType"
+    },
+    {
+      "id": "TX-02",
+      "status": "repaired_by_root_and_statically_confirmed",
+      "finding": "Prefix freeze failure after active connection installation could leave dangling transaction flag",
+      "repair": "Freeze prefix and buildkeys inlocals before installing transactional attributes"
+    },
+    {
+      "id": "EXIT-PRICE-01",
+      "status": "repaired_by_root_and_statically_confirmed",
+      "finding": "Local full-exit BrokerEvent constructor omitted exit.price_ticks",
+      "repair": "Root restoredprice and tightened actualcancel/position/exit knownclock ordering"
+    },
+    {
+      "id": "EXIT-DAY-PRIORITY",
+      "status": "sent_to_root",
+      "finding": "Newexit ack/fill/cash/flat priorities60/61/62/70 leave day_status at50; recommend80 toprevent complete-day publication in a partialdurable prefix beforecash/flat"
+    }
+  ],
+  "cache_review": "Same active SQLite connection and exacthashprefix only; speculative unhashedcandidate events neverseedcache; returned orders/executions/position/incidents copied and brokertruth is genuinelyimmutable; active/protection indexes preserve prior publicport semantics, liveorder insertionorder and incidentorder; rollback connectionidentity prevents oldcache reuse. Existing prefix fullyhashverified underBEGINIMMEDIATE. No ordinary read/append verification weakened. Transactions atomic perSQLitejournal, not distributedatomiccommit across two DBs.",
+  "fixture_update": "250realportloop and finalstatuses wrappedwithorders4096/accounting1024 transaction contexts. Approx3254neworderevents and754newaccountevents afternewcancelreconciliation fitlimits. No favorableprices/gates/fees injected.",
+  "helper": "check_history_import(test,root), called byroot existingINT10F03; no newtestmethods",
+  "assertions": [
+    "idempotency withoutbudgetconsumption, divergentkey refusal, stalehead refusal, nestedtransaction refusal, eventlimit",
+    "ordinary and base-container readmutation refusal; oldsnapshot lengthstable afterappend",
+    "uncaughtexception rollback and twoactivejournal rollback",
+    "real OrderLedger publicport history throughentry/protection/cancel/overfill/correctivefill/reconcile",
+    "incrementalstate equals ordinary sequentialstate and preserved independent original reduce_order_history at eachstep",
+    "mutating returned mutable state does notpoisoncache",
+    "failed conflictingexecution candidate leavesjournal/state/cache unchanged",
+    "postcommit/reopen/fullreduce matchestransactionstate and exactjournalhashhistory",
+    "reducedprefix rollback and subsequenttransaction cache independence"
+  ],
+  "execution": {
+    "candidate_imported": false,
+    "candidate_compiled": false,
+    "tests_run": false,
+    "worker_run": false,
+    "raw_archive_accessed": false
+  }
+}

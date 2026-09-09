@@ -1,0 +1,99 @@
+{
+  "scope_ids": [
+    "F09",
+    "F09.ACTIVITY_BARS",
+    "B00.1"
+  ],
+  "new_modules": [
+    "foundations.multiresolution"
+  ],
+  "existing_module_scope": "Keep literal bar and whole-event references. Repair the four collected public configuration/restore/boundedness issues together with the new batch; preserve existing named semantics and callers.",
+  "input": "Immutable eligible Trade/TradeView records from F05, raw instrument and measurement/filter definition, F03 explicit half-open windows/reset identities, F06 positive coverage and watermark evidence; distinct typed quote observations.",
+  "outputs": [
+    "Exact price OHLC, V/count/priced and unpriced V, sum(pV), sum(p²V), signed/unknown mass, order/coverage status, relative CVD increment and extrema with named opening anchor.",
+    "Immutable final/provisional/reset-partial materializations with actual completion, event/interval/definition identity and complete correction dependency lineage.",
+    "Separate typed quote and opaque supplied-bar summaries which cannot invent traded mass or within-bar sequence.",
+    "Explicit allocation records retain one original event and no new independent trade identity."
+  ],
+  "composition": {
+    "price_volume": "V=A.V+B.V; PV=A.PV+B.PV; P2V=A.P2V+B.P2V on equal raw units/measure. Partial priced support is reported separately.",
+    "ordered_cvd": "d=A.d+B.d; high=max(A.high,A.d+B.high); low=min(A.low,A.d+B.low), including initial zero. Exact only with positive history, known signs and proved order, including cross-block timestamp ties.",
+    "ohlc": "Chronologically ordered endpoints and max/min extrema. If edge ties lack order, retain exact common price only when all tied prices agree; otherwise edge unknown. Interior tie ambiguity blocks sequence-dependent consumers.",
+    "nonmergeable": "No generic exact composition for quantiles, rebinned profiles, changing-anchor deviations, conditional probabilities, hidden vendor transforms or constituent body envelope from one opaque aggregate."
+  },
+  "materialization": "One capture/source pass produces shared bounded event blocks/summaries. Independent literal traversal is a separate reference. Time windows may query shared blocks; count/volume/range builders receive one whole-event pass. No branch may derive several independent events from one print.",
+  "activity_rules": {
+    "volume": "first whole event reaches or exceeds frozen contract-volume threshold",
+    "events": "first whole event reaches frozen unique-original-event threshold",
+    "range": "first whole event reaches/exceeds frozen high-minus-low tick threshold",
+    "reset": "close nonempty pending bar as explicit reset-partial, then start new named epoch",
+    "ambiguous_order_or_range_price": "unavailable ordered partition, while independent time/mass summaries keep supported quantities",
+    "allocations": "separate complete exact allocation plan; sum equals original size; original clocks and independent-event cardinality remain unchanged"
+  },
+  "causality_and_restore": "Freeze every captured input prefix and request/evidence version. Publication >= captured cut and all required inputs/close/watermark. Preserve old publications through late correction and same-cut later admission. Checkpoint retains reproducible input history/request/support; rebuild and compare canonical derived content before accepting restoration.",
+  "bounds": {
+    "default_max_events": 4096,
+    "default_max_active_clocks": 32,
+    "default_block_events": 32,
+    "default_max_retained_publications": 4096,
+    "policy": "Exact immutable positive bounds; overflow refuses atomically, no silent eviction or configuration mutation."
+  },
+  "reference": "Independent scalar arithmetic/traversal from original toy records; never calls challenger summary merge, materializer, selection or restore computation. Sharing immutable input/output type contracts is allowed.",
+  "comparison": {
+    "one_timed_workload": {
+      "events": 4096,
+      "clocks": 8,
+      "repetitions": 1
+    },
+    "retain": [
+      "exact outputs and source/correction lineage",
+      "source-row visits and summary compositions",
+      "actual build/query CPU and wall time",
+      "peak process RSS and retained state counts"
+    ],
+    "acceptance": "exact arithmetic/prefix/restart/fault invariants and declared bounded work; no universal runtime speedup required from one toy timing"
+  },
+  "coverage_cases": [
+    "F09-B01",
+    "F09-B02",
+    "F09-B03",
+    "F09-B04",
+    "F09-B05",
+    "F09-B06",
+    "F09-B07",
+    "F09-B08",
+    "F09-B09",
+    "F09-B10",
+    "F09-B11",
+    "F09-B12",
+    "F09-B13",
+    "F09-B14",
+    "F09-B15",
+    "F09-B16",
+    "F09-B17",
+    "F09-B18",
+    "F09-B19",
+    "F09-B20",
+    "F09-B21",
+    "F09-B22",
+    "F09-B23",
+    "F09-B24",
+    "F09-B25",
+    "F09-B26",
+    "F09-B27",
+    "F09-B28",
+    "F09-B29",
+    "F09-B30",
+    "F09-B31"
+  ],
+  "source_preparation": {
+    "path": "/workspace/trading-research/reports/f09-source-preparation.json",
+    "sha256": "3a0e46c4e5cefa7b6c7539a3cfd5ab228aa9541d2607b164e3592896bbf38245",
+    "bytes": 494062
+  },
+  "remaining": [
+    "Native supplied/recomputed matching by actual raw instrument/filter/source semantics; all named source variants remain individually open.",
+    "Threshold learning is C05; all fitted calibrations/OOF/held-out predictive and economic comparisons remain gated.",
+    "Real receipt replay, external projections, all-source consumer integration and future monitoring are not replaced by these deterministic fixtures."
+  ]
+}

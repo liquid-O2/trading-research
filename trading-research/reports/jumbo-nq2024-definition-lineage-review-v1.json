@@ -1,0 +1,300 @@
+{
+  "definition_index_facts": {
+    "blocks": [],
+    "distinct_instrument_ids": 18,
+    "indexed_records": 1033,
+    "latency_ns": 250000000,
+    "latency_scenario": "definition-provider-plus-250ms",
+    "multi_lifetime_instrument_ids": [
+      106364
+    ],
+    "retained_records": 1033,
+    "same_ID_same_known_at_duplicate_group_count": 0,
+    "source_files": [
+      {
+        "all_row_ipc_sha256": "fec4b7228761f39b4b59f8645b229942c96faf05743b177f1942d0887ea16321",
+        "schema": "t: int64\nts_recv: int64\nraw_symbol: string\ninstrument_id: int32\ninstrument_class: dictionary<values=string, indices=int8, ordered=0>\nstrike_price: double\nexpiration: int64\nactivation: int64\nunderlying: string\nmin_price_increment: double\nmin_lot_size: int32\ncontract_multiplier: double\ncurrency: string\nsecurity_update_action: dictionary<values=string, indices=int8, ordered=0>",
+        "schema_sha256": "86086c50f188cbe232bcb6b5851688eb4197f8177321e8fae43193b5a1c52865",
+        "size_bytes": 675385,
+        "source_path": "quantpad/cme__nq-continuous-futures__definition/2019.parquet",
+        "source_rows": 258,
+        "source_sha256": "554c09dbb144dfecc75e64a51218182425ff158ca42d13d434e358310dd7a5c1",
+        "unresolved_rows": []
+      },
+      {
+        "all_row_ipc_sha256": "cf558cf8a99a83d28d5f59fdb065314a581826adc4cae43edfa167d10327b1db",
+        "schema": "t: int64\nts_recv: int64\nraw_symbol: string\ninstrument_id: int32\ninstrument_class: dictionary<values=string, indices=int8, ordered=0>\nstrike_price: double\nexpiration: int64\nactivation: int64\nunderlying: string\nmin_price_increment: double\nmin_lot_size: int32\ncontract_multiplier: double\ncurrency: string\nsecurity_update_action: dictionary<values=string, indices=int8, ordered=0>",
+        "schema_sha256": "86086c50f188cbe232bcb6b5851688eb4197f8177321e8fae43193b5a1c52865",
+        "size_bytes": 677997,
+        "source_path": "quantpad/cme__nq-continuous-futures__definition/2020.parquet",
+        "source_rows": 259,
+        "source_sha256": "49070cea151a01c97de22f3849eaa3c925a1b6d1ba8f15b4f1d9ca74520bf848",
+        "unresolved_rows": []
+      },
+      {
+        "all_row_ipc_sha256": "66899761bfc13a778088dcfdd9aeb84b31bba56ec6ee90df4b15e559cfedd872",
+        "schema": "t: int64\nts_recv: int64\nraw_symbol: string\ninstrument_id: int32\ninstrument_class: dictionary<values=string, indices=int8, ordered=0>\nstrike_price: double\nexpiration: int64\nactivation: int64\nunderlying: string\nmin_price_increment: double\nmin_lot_size: int32\ncontract_multiplier: double\ncurrency: string\nsecurity_update_action: dictionary<values=string, indices=int8, ordered=0>",
+        "schema_sha256": "86086c50f188cbe232bcb6b5851688eb4197f8177321e8fae43193b5a1c52865",
+        "size_bytes": 672773,
+        "source_path": "quantpad/cme__nq-continuous-futures__definition/2023.parquet",
+        "source_rows": 257,
+        "source_sha256": "06e26e8cec6c2bd9d3f072f88c547d48cfc6d9add818555423f7342ca07295b8",
+        "unresolved_rows": []
+      },
+      {
+        "all_row_ipc_sha256": "d1678d28254011044e1f34501938f75cca86bee62c6699fa99568a4f2e80d158",
+        "schema": "t: int64\nts_recv: int64\nraw_symbol: string\ninstrument_id: int32\ninstrument_class: dictionary<values=string, indices=int8, ordered=0>\nstrike_price: double\nexpiration: int64\nactivation: int64\nunderlying: string\nmin_price_increment: double\nmin_lot_size: int32\ncontract_multiplier: double\ncurrency: string\nsecurity_update_action: dictionary<values=string, indices=int8, ordered=0>",
+        "schema_sha256": "86086c50f188cbe232bcb6b5851688eb4197f8177321e8fae43193b5a1c52865",
+        "size_bytes": 677997,
+        "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+        "source_rows": 259,
+        "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+        "unresolved_rows": []
+      }
+    ],
+    "source_rows": 1033,
+    "unknown_instrument_ids": [],
+    "unresolved_rows": 0
+  },
+  "inputs": [
+    {
+      "expected_sha256": "4fdd7318b979c2e673b265c5400a570ce329d47fcc53d84c589a47b7b8c40bfc",
+      "path": "evidence/trials/artifacts/4f/4fdd7318b979c2e673b265c5400a570ce329d47fcc53d84c589a47b7b8c40bfc",
+      "sha256": "4fdd7318b979c2e673b265c5400a570ce329d47fcc53d84c589a47b7b8c40bfc",
+      "size_bytes": 743306
+    },
+    {
+      "path": "reports/jumbo-runs/aca57a5813fb5c66cb9e9a7ce67b1601da8fe4c406c2f495245c2cf9cc50abe4/worker.json",
+      "sha256": "b0e6cd538136c35d3cbc26a09cc355cda15849ee7ffa9ba097c4bb45435e60ca"
+    }
+  ],
+  "interpretation": {
+    "ambiguity_count_relation": "This is the only distinct-lifetime overlap in the1033-record pilot definition index and there are no same-ID/same-known duplicates. It is therefore the identified structural source of the ambiguity path. The33241-minute attribution is the existing pilot report, not newly verified by per-minute joins.",
+    "decision": "Preserve frozen ambiguity and exclusions. Do not relax distinct-lifetime tests, collapse lifetime IDs, assign a roll mapping, or amend running admission outputs from this inference.",
+    "inference": "This pattern is consistent with an activation-date metadata revision of the same NQZ4 contract. It is not evidence of a different price scale; no tick change is present. However, metadata consistency alone is not a sourced correction/supersession contract.",
+    "observed": "One source raw ID/symbol/expiry/tick tuple acquires a different historical activation timestamp in consecutive source-row regimes. All records are individually admitted quarter-tick records; no delete/invalid block separates regimes. Strict identity includes activation, so two active lifetime identities coexist once the newer record is known."
+  },
+  "overlap": {
+    "activation_change_hours": 40,
+    "activation_change_ns": 144000000000000,
+    "both_lifetimes_valid_until_UTC": "2024-12-20T14:30:00.000000000Z",
+    "changed_identity_field": "valid_from_ns/activation",
+    "clock_scope": "This is the possible ambiguity interval for bars bearing this raw ID, not a claim every clock minute is observed or the continuous series still chooses NQZ4 until expiry.",
+    "earliest_new_lifetime_known_at_UTC": "2024-11-18T00:00:00.250000000Z",
+    "earliest_new_lifetime_known_at_ns": 1731888000250000000,
+    "earliest_whole_minute_bar_start_at_or_after_new_known_at_UTC": "2024-11-18T00:01:00.000000000Z",
+    "groups": [
+      {
+        "all_eligible": true,
+        "contract_key": "NQ:NQZ4:106364:1653082200000000000:1734705000000000000",
+        "first_known_at_UTC": "2024-09-23T00:00:00.250000000Z",
+        "first_known_at_ns": 1727049600250000000,
+        "first_record": {
+          "contract_key": "NQ:NQZ4:106364:1653082200000000000:1734705000000000000",
+          "definition_version": "6e498dfcbcc23505dbd6135810f79dabb08ff55575a6c4d9d7eecf1aab7aed47",
+          "eligible": true,
+          "instrument_id": 106364,
+          "known_at_ns": 1727049600250000000,
+          "lifetime_id": "19b767e24f2f9e03ef716441826ac20ba02c7523ed9e49dd86ca342b1a5e4bf2",
+          "raw_fields_sha256": "b838864ea084dfd978df20c6361e712cfbb49460a138fc0bcde87956fc0b23c9",
+          "raw_symbol": "NQZ4",
+          "reason": "known_tick_0.25",
+          "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+          "source_row": 188,
+          "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+          "tick_size": "0.25",
+          "valid_from_ns": 1653082200000000000,
+          "valid_until_ns": 1734705000000000000
+        },
+        "instrument_id": 106364,
+        "last_known_at_UTC": "2024-11-15T00:00:00.250000000Z",
+        "last_known_at_ns": 1731628800250000000,
+        "last_record": {
+          "contract_key": "NQ:NQZ4:106364:1653082200000000000:1734705000000000000",
+          "definition_version": "93c52ba3b68cd6df5b75e12b76f201a7e8d8144d2dae22795a96c3f4d8d3a097",
+          "eligible": true,
+          "instrument_id": 106364,
+          "known_at_ns": 1731628800250000000,
+          "lifetime_id": "19b767e24f2f9e03ef716441826ac20ba02c7523ed9e49dd86ca342b1a5e4bf2",
+          "raw_fields_sha256": "bfd04078d35942707ad127ed565c79cab82698017433d3537d3135dd223433fb",
+          "raw_symbol": "NQZ4",
+          "reason": "known_tick_0.25",
+          "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+          "source_row": 227,
+          "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+          "tick_size": "0.25",
+          "valid_from_ns": 1653082200000000000,
+          "valid_until_ns": 1734705000000000000
+        },
+        "lifetime_id": "19b767e24f2f9e03ef716441826ac20ba02c7523ed9e49dd86ca342b1a5e4bf2",
+        "raw_symbol": "NQZ4",
+        "record_count": 40,
+        "source_rows": [
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194,
+          195,
+          196,
+          197,
+          198,
+          199,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          216,
+          217,
+          218,
+          219,
+          220,
+          221,
+          222,
+          223,
+          224,
+          225,
+          226,
+          227
+        ],
+        "tick_sizes": [
+          "0.25"
+        ],
+        "valid_from_UTC": "2022-05-20T21:30:00.000000000Z",
+        "valid_from_ns": 1653082200000000000,
+        "valid_until_UTC": "2024-12-20T14:30:00.000000000Z",
+        "valid_until_ns": 1734705000000000000
+      },
+      {
+        "all_eligible": true,
+        "contract_key": "NQ:NQZ4:106364:1653226200000000000:1734705000000000000",
+        "first_known_at_UTC": "2024-11-18T00:00:00.250000000Z",
+        "first_known_at_ns": 1731888000250000000,
+        "first_record": {
+          "contract_key": "NQ:NQZ4:106364:1653226200000000000:1734705000000000000",
+          "definition_version": "b28c7e1d8ef7abafda567db65e4d6e7b53052d9ba6fb78dbcce08083bcfc4061",
+          "eligible": true,
+          "instrument_id": 106364,
+          "known_at_ns": 1731888000250000000,
+          "lifetime_id": "97c801c0c9abde26452b24cfaa6209ab588fdc7c7ab5c1b14ad463dac7f591ff",
+          "raw_fields_sha256": "b33a465d00571b1797dbd1795aab2954a4de852e4148ae1f783ff851db806901",
+          "raw_symbol": "NQZ4",
+          "reason": "known_tick_0.25",
+          "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+          "source_row": 228,
+          "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+          "tick_size": "0.25",
+          "valid_from_ns": 1653226200000000000,
+          "valid_until_ns": 1734705000000000000
+        },
+        "instrument_id": 106364,
+        "last_known_at_UTC": "2024-12-20T00:00:00.250000000Z",
+        "last_known_at_ns": 1734652800250000000,
+        "last_record": {
+          "contract_key": "NQ:NQZ4:106364:1653226200000000000:1734705000000000000",
+          "definition_version": "cb96e12a13818c90f533186ba21d7e82548a32f0c5a9f8e953daee8074ef7f1f",
+          "eligible": true,
+          "instrument_id": 106364,
+          "known_at_ns": 1734652800250000000,
+          "lifetime_id": "97c801c0c9abde26452b24cfaa6209ab588fdc7c7ab5c1b14ad463dac7f591ff",
+          "raw_fields_sha256": "fe280f8e4c66c88ff8bee1382c5a4159869d119822566189bb00f3020339d754",
+          "raw_symbol": "NQZ4",
+          "reason": "known_tick_0.25",
+          "source_path": "quantpad/cme__nq-continuous-futures__definition/2024.parquet",
+          "source_row": 252,
+          "source_sha256": "2191a05b4ec619ac90bf9c676ecef0485d00f5dda6aaec437b9d1e31173f9bf7",
+          "tick_size": "0.25",
+          "valid_from_ns": 1653226200000000000,
+          "valid_until_ns": 1734705000000000000
+        },
+        "lifetime_id": "97c801c0c9abde26452b24cfaa6209ab588fdc7c7ab5c1b14ad463dac7f591ff",
+        "raw_symbol": "NQZ4",
+        "record_count": 25,
+        "source_rows": [
+          228,
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251,
+          252
+        ],
+        "tick_sizes": [
+          "0.25"
+        ],
+        "valid_from_UTC": "2022-05-22T13:30:00.000000000Z",
+        "valid_from_ns": 1653226200000000000,
+        "valid_until_UTC": "2024-12-20T14:30:00.000000000Z",
+        "valid_until_ns": 1734705000000000000
+      }
+    ],
+    "instrument_id": 106364,
+    "raw_symbol": "NQZ4",
+    "shared_fields": [
+      "rootNQ",
+      "instrument_id106364",
+      "raw_symbolNQZ4",
+      "valid_until_ns1734705000000000000",
+      "tick_size0.25",
+      "source file identity2024.parquet"
+    ]
+  },
+  "pilot_reported_price_quality_reference": {
+    "invalid_rows": 33665,
+    "quality_counts": {
+      "IntegrityError": 33241,
+      "ambiguous_definition": 33241,
+      "definition_not_available_at_bar_start": 424
+    },
+    "rows": 351696,
+    "scope": "Copied from already retained pilot result. No price-table scan or independent minute-count reconstruction.",
+    "source_path": "quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+    "source_sha256": "8bd0d4a923f05bd3c94c189f582f7f0ef316e33da697d5a69f66e907ddf24ce2"
+  },
+  "review_scope": "Only retained pilot worker JSON and admitted definition artifact metadata. No source data Parquet, raw or canonical price table, fixture, test, candidate import, compilation, study run, or source/test/tool edit.",
+  "schema": "jumbo-nq2024-definition-lineage-review-v1",
+  "status": "actual_retained_definition_metadata_review_ambiguity_preserved",
+  "unavailable_facts": [
+    "Admitted per-record metadata retains raw_fields_sha256 but not the actual security_update_action, event timestamp, provider receipt, or a prior-version supersession pointer. The schema lists these fields but their row values are not present in the permitted artifact.",
+    "A raw-field hash proves identity against source bytes; it does not disclose whether row228 action isA/M or whether activation was explicitly corrected.",
+    "No provider/venue correction notice or explicit statement that the historical activation field is erroneous is retained here.",
+    "The exact33241 affected minute identities were not re-read in this metadata-only review."
+  ],
+  "what_could_distinguish_revision_without_guessing": [
+    "An actual source/provider correction contract tying the update to the same raw contract and explicitly superseding the prior activation field, with the update known-at and exact source bytes.",
+    "If supplied source update actionM has documented semantics that revise this same raw instrument lifetime rather than allocate a new one, retain its actual row value and relevant source rule; actionM alone without that interpretation is not a new identity mapping.",
+    "Any future correction-aware identity rule must be separately versioned and tested against genuine distinct-symbol/expiry/reused-ID overlap cases, and applied only after its known-at. Earlier rows must not receive future correction knowledge. Current registered evidence remains unchanged."
+  ]
+}

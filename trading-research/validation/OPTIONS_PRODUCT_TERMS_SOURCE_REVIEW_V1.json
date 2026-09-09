@@ -1,0 +1,146 @@
+{
+  "classes": {
+    "NDX": {
+      "economic_settlement": "opening_component_prices",
+      "exercise": "european",
+      "multiplier": 100,
+      "settlement": "cash",
+      "source_ids": [
+        "nasdaq_2018_alert",
+        "nasdaq_ndx_historical",
+        "nasdaq_combined"
+      ]
+    },
+    "NDXP": {
+      "economic_settlement": "official_closing_component_prices",
+      "exercise": "european",
+      "multiplier": 100,
+      "settlement": "cash",
+      "source_ids": [
+        "nasdaq_2018_alert",
+        "nasdaq_ndxp",
+        "nasdaq_combined"
+      ]
+    },
+    "QQQ": {
+      "exercise": "american",
+      "settlement": "physical_shares",
+      "source_ids": [
+        "occ_equity_etf_primer",
+        "occ_weeklies"
+      ],
+      "standard_multiplier": 100,
+      "standard_terms_only": true
+    },
+    "SPX": {
+      "economic_settlement": "opening_component_prices",
+      "exercise": "european",
+      "multiplier": 100,
+      "settlement": "cash",
+      "source_ids": [
+        "cboe_spx_specs",
+        "cboe_spx_factsheet"
+      ]
+    },
+    "SPXW": {
+      "economic_settlement": "closing_component_prices",
+      "exercise": "european",
+      "multiplier": 100,
+      "settlement": "cash",
+      "source_ids": [
+        "cboe_spx_specs",
+        "cboe_spx_factsheet"
+      ]
+    },
+    "SPY": {
+      "exercise": "american",
+      "settlement": "physical_shares",
+      "source_ids": [
+        "occ_equity_etf_primer",
+        "occ_weeklies",
+        "cboe_spx_factsheet"
+      ],
+      "standard_multiplier": 100,
+      "standard_terms_only": true
+    },
+    "VIX": {
+      "economic_settlement": "VRO_special_opening_quotation",
+      "exercise": "european",
+      "multiplier": 100,
+      "settlement": "cash",
+      "source_ids": [
+        "cboe_vix_2015",
+        "cboe_vix_specs"
+      ]
+    }
+  },
+  "kind": "options_product_terms_source_review_v1",
+  "purpose": "Verified primary product-class facts for the pending D1valuation protocol. No candidateexecution or priceinversion here.",
+  "remaining_for_valuation_freeze": [
+    "Assign explicitly labelled model_maturity_ns forAMopen/PMactualcashclose; actualSOQ/payment/publication timestamps remainunknown absentfeed. Do notcall09:30a verifiedSOQcompletiontime.",
+    "ETFstandard100multipliercannotcertifyeveryadjusteddeliverable; retainunknownadjustmentstatus, sourceOSIroot/splits/exdateflags. No silentadjustmentfromstandardterms.",
+    "Historicaltradinghours andearlyexercise cutoff differfromeconomiccashclose; current2026hoursnotbackfilled.",
+    "Useactualacquiredexpirationdates; do notreconstructallcontractsfromcurrentlistingcalendar.",
+    "Rates/currentvintage andexdate-onlydividends supportretrospectivemodelconventions only; assumptions andsensitivity remainexplicit.",
+    "NDX/SPXintradaycash absent: parityforwardcanbe inferredfrom contemporaneousEuropeanquotes under declaredD, notlabelledcashspot."
+  ],
+  "sources": [
+    {
+      "facts": "From February2018, NDXP non-third-Friday weekly series are PM settled, while NDX traditional monthly series are AM settled. NDXP expiring series cease at16:00Eastern; NDX AM series cease the preceding day. This provides historical symbol-class evidence predating2020.",
+      "id": "nasdaq_2018_alert",
+      "publication_date": "2018-01-24",
+      "url": "https://nasdaqtrader.com/MicroNews.aspx?id=2018-04"
+    },
+    {
+      "facts": "Standard NDX cash settlement multiplies payoff index points by100. XQO uses component official opening prices on expiration, with documented last-sale fallback if an opening price is absent.",
+      "id": "nasdaq_ndx_historical",
+      "url": "https://www.nasdaqtrader.com/content/phlx/NDXProductSheet.pdf"
+    },
+    {
+      "facts": "NDX andNDXP are European exercise, cash settled,100USDperindexpoint. NDX usesXQOopeningprices; NDXP usesXQCofficialclosingprices.",
+      "id": "nasdaq_combined",
+      "url": "https://www.nasdaq.com/NDX_NDXP_Factsheet"
+    },
+    {
+      "facts": "NDXP usesEuropeanexercise andcashsettlement with100multiplier. Its payoff is based on component official closing prices; expiring trading ordinarily stops16:00Eastern. Index closing values can later change following price corrections, so economic close is not verified publication.",
+      "id": "nasdaq_ndxp",
+      "url": "https://www.nasdaq.com/NDXP-factsheet"
+    },
+    {
+      "facts": "SPX/SPXW standard multiplier100. SPXW expiration-day trading ordinarily ends16:00Eastern or13:00on a halfday; SPX traditional ends the preceding businessday. Current extended sessions are not assumed historically unchanged.",
+      "id": "cboe_spx_specs",
+      "page_snapshot_asof": "2024-03-19",
+      "url": "https://www.cboe.com/tradable-products/sp-500/spx-options/spx-specifications"
+    },
+    {
+      "facts": "SPX andSPXW areEuropean cashsettled. SPX usesopeningcomponentprices, SPXWclosingcomponentprices. The comparison table identifiesSPYasAmericanwithphysicalETFshares. Cashsettlement amount uses100multiplier.",
+      "id": "cboe_spx_factsheet",
+      "url": "https://cdn.cboe.com/resources/spx/spx-fact-sheet.pdf"
+    },
+    {
+      "facts": "WeeklyVIX series sharetheVIXoptionclass andstandardEuropeanexercise,100multiplier,cashsettlement. TheirVROsettlement uses aSpecialOpeningQuotation; weekly constituents differ fromstandardmonthlyconstituents. Tradingordinarilyends thebusinessdaybeforeexercise-settlement calculation. Holidayadjustments changeexpirationdates andtheconstituenttimeinterval.",
+      "id": "cboe_vix_2015",
+      "publication_date": "2015-10-02",
+      "url": "https://cdn.cboe.com/resources/regulation/circulars/regulatory/RG15-138.pdf"
+    },
+    {
+      "facts": "VIX/VIXW specification states100multiplier andlasttradingdayprecedingexercise-settlement calculation. Currenttradinghours are notbackfilledas2020historicalsessionevidence.",
+      "id": "cboe_vix_specs",
+      "page_snapshot_asof": "2024-03-19",
+      "url": "https://www.cboe.com/tradable-products/vix/vix-options/specifications"
+    },
+    {
+      "facts": "Standard equity/ETFoptions normallydeliver100shares, premiumquotedpershare, Americanexercise. Corporateactions canadjuststandardcontracts; astandardcontractrule isnot anindividualdeliverableaudit.",
+      "id": "occ_equity_etf_primer",
+      "publication_year": 2025,
+      "url": "https://www.theocc.com/getmedia/dfc83aa2-4a89-42d0-8de7-69e5a71f71a2/OCC-Primer-Options-101-EquityOptions-F.pdf"
+    },
+    {
+      "facts": "Weeklyequity/ETFcontracts normallyuse100shares andsameexercisestyleasstandardproduct. SomebroadETFclassestradeuntil16:15Eastern; certainexpiringseriesstop16:00. Exactexpirytrading/exercisecutoff cannotbe inferredfromequitycashclosealone.",
+      "id": "occ_weeklies",
+      "url": "https://www.theocc.com/clearance-and-settlement/clearing/weekly-options"
+    }
+  ],
+  "verified_at": "2026-09-09T01:30:05.226435+00:00",
+  "version": 1
+}

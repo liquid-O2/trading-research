@@ -1,0 +1,79 @@
+{
+  "scope": "Static exact-delta review; no source edits or candidate execution.",
+  "files": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/experiments/e0/runner.py",
+      "sha256": "f52bf35dfda4fb2ebf476457e87e4e0a9b27bd43a2ae2f031a7b89e64f7880a6",
+      "size_bytes": 56059
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/__main__.py",
+      "sha256": "44df882f607bdacef9f42a147e0447c19bad3fb308b4f4eac18121365a406c7b",
+      "size_bytes": 27685
+    },
+    {
+      "path": "/workspace/trading-research/tests/test_e0_runner_integration.py",
+      "sha256": "7f53616c3cece48a4052f718fe3c0ed00adb4cc40d1acb0b09c0aebb560178a0",
+      "size_bytes": 21863
+    },
+    {
+      "path": "/workspace/trading-research/tests/golden/e0_integration_v1.json",
+      "sha256": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43",
+      "size_bytes": 352801
+    },
+    {
+      "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md",
+      "sha256": "ee96fb31a84ba96a1bcf887e154bf2a12fbd04b688359c9264d18cbab6e941c9",
+      "size_bytes": 9099
+    },
+    {
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_PLAN.md",
+      "sha256": "53bbea7075011245f892bfdf876f84c4df5878cfd33c88365886473dc8574efe",
+      "size_bytes": 17372
+    },
+    {
+      "path": "/workspace/planning/trading-model/IMPLEMENTATION_BACKLOG.md",
+      "sha256": "72e894dc687a67fe46055f4a65e8b9b693640230512efbef62955212b5f01ea3",
+      "size_bytes": 27363
+    }
+  ],
+  "label_findings": {
+    "bounded_read": "Resolved statically: public loader limits declared size to4MiB; no-alias check plus dir_fd O_NOFOLLOW ancestor walk; NONBLOCK leaf and regular exact-size fstat before fdopen; bounded read and actual SHA validation; descriptors cleaned in finally.",
+    "scenario_join": "Resolved statically: inventory/result retain scenario_version and per-day source_path_versions; first and shared loads check both; CLI ties scenario_version to manifest scenario digest.",
+    "tests": "Existing F02 adds same-target scenario swap, actual oversized-file rejection before fdopen, leaf symlink and parent symlink rejection. These were inspected, not run.",
+    "remaining_blocking_findings": []
+  },
+  "ELRB-04": {
+    "status": "source/golden specification mismatch; separate baseline requirements unresolved, not implemented",
+    "evidence": [
+      {
+        "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md",
+        "lines": "17-19",
+        "finding": "Models section defines frequency/logistic/calibration recipes, not separate simple_time/simple_range strategies."
+      },
+      {
+        "path": "/workspace/planning/trading-model/E0_REFERENCE_EXPERIMENT.md",
+        "lines": "23-25",
+        "finding": "One deterministic sampled first-inward-contact fade rule, with1x/2x separately fixed brackets."
+      },
+      {
+        "path": "/workspace/planning/trading-model/IMPLEMENTATION_PLAN.md",
+        "lines": "88",
+        "finding": "Singular simple time/range strategy."
+      },
+      {
+        "path": "/workspace/planning/trading-model/IMPLEMENTATION_BACKLOG.md",
+        "lines": "58",
+        "finding": "Singular simple time/range competitor."
+      },
+      {
+        "path": "/workspace/trading-research/tests/golden/e0_integration_v1.json",
+        "lines": "3085-3089",
+        "finding": "Frozen INT09-F03 baseline_rows names always_flat,simple_time,simple_range without independent algorithm definitions."
+      }
+    ],
+    "combined_review_disposition": "Preserve frozen evidence and mark ELRB-04 unresolved specification mismatch. Review/validate the actual always_flat and defined combined rule under existing INT10 scope; state that this does not satisfy the two separately named INT09 baseline rows. Do not silently rename the combined rule twice, fabricate outputs, alter golden expectations, or claim complete INT09 baseline coverage.",
+    "remaining_scope": "Either obtain an explicit source/contract amendment mapping the mistaken two-name expectation to the single defined combined comparator, with a new version and audit trail, or obtain separately frozen exact simple_time and simple_range action/feature/clock/target recipes and register their implementation and validation. Neither resolution is inferred from current sources.",
+    "execution_impact": "Combined authorized review may proceed with an explicit unresolved ELRB-04 entry; overall complete-scope/pass claim must retain this exception."
+  }
+}

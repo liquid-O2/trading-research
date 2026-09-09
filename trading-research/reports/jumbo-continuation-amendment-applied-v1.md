@@ -1,0 +1,12 @@
+# Jumbo continuation resource amendment applied
+
+The user approved the same-family continuation on 2026-09-07 at 23:16 UTC. The immutable original scientific protocol and registration remain unchanged. The [separate authorization](../validation/JUMBO_CONTINUATION_AMENDMENT_V1_AUTHORIZED.json) raises the cumulative limits to **16 attempts and 12,000 CPU seconds**, retaining every prior attempt and cost. The CPU ceilings are 90 seconds for a check, 900 for extraction, 6,000 for fitting and 3,600 for confirmation. Memory stays 4 GiB; aggregate derived output stays 512 MiB per attempt.
+
+A finite elapsed-time watchdog permits each approved CPU ceiling: max(900 seconds, twice the hard CPU ceiling). It grants no extra CPU spending. Full stages still require a successful applicable verification and a complete measured projection within their phase, memory, output and remaining cumulative limits.
+
+Attempt11 passed all **419 tests**, confirmed the repaired actual quantile-tree provider, and reused the exact completed annual and source-resolution evidence. It then reached its 90-second CPU limit during the larger evaluation unit and remains failed. The completed20-date resource unit used **5.02 CPU seconds for scoring and 14.73 for serialization**, emitting a 123.58 MB uncompressed representation. The source correction reuse took0.70 CPU seconds and retained its original19.65-second source-stage evidence. These are resource measurements, not predictive-quality results.
+
+At the end of attempt 11, consumption was **11 attempts and 714.701235 CPU seconds**, leaving five attempts and 11,285.298765 seconds. [The complete failure review](jumbo-consolidated-check11-failure-review.json) retains all completed measurements and the resource-limit failure. The next correction will preserve all evaluation values and uncertainty while removing repeated storage overhead; it must complete the resource projection before full runs.
+
+
+[Attempt 12 subsequently succeeded](jumbo-consolidated-check12-resource-review.md): 432 tests, 73.970215 CPU seconds and complete resource projections. Cumulative completed consumption is now **788.671450 CPU seconds across twelve attempts**. Attempt 13 is running the feasible remaining descriptive extraction. Fit and confirmation remain gated while their report/model-storage workload estimates are corrected. Three attempts remain after extraction for one consolidated check, fitting and confirmation.

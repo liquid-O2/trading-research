@@ -1,0 +1,22 @@
+{
+  "kind": "profile_civil_owner_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/b80653e7d15a74c178590e0248186c443c04e435420f7b2881078fbb2bc780fa/execution.json",
+    "sha256": "39a9c6503397f84ce4a86d16f2d7c84c5240b62be0ff926268c4f3c7c63050b4",
+    "size_bytes": 50208
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/b80653e7d15a74c178590e0248186c443c04e435420f7b2881078fbb2bc780fa/worker.log",
+    "sha256": "40016c9f3321958a23f3a0b5f4dd9b8aab01469e32d5fbba2786100a815bc0c8",
+    "size_bytes": 2579
+  },
+  "exception": "test_null_empty_and_large_signed_list_values_roundtrip (tests.test_auction_flow_profile_reference.ProfileListStorageTests.test_null_empty_and_large_signed_list_values_roundtrip) ... ok\ntest_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected) ... ok\ntest_adjacent_same_collection_files_form_one_mass_other_collection_never_joins (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_adjacent_same_collection_files_form_one_mass_other_collection_never_joins) ... ok\ntest_civil_periods_reset_with_literal_disjoint_volumes (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_civil_periods_reset_with_literal_disjoint_volumes) ... \n  test_civil_periods_reset_with_literal_disjoint_volumes (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_civil_periods_reset_with_literal_disjoint_volumes) (variant='civil_ny_quarter') ... FAIL\n\n======================================================================\nFAIL: test_civil_periods_reset_with_literal_disjoint_volumes (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_civil_periods_reset_with_literal_disjoint_volumes) (variant='civil_ny_quarter')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tests/test_auction_flow_profile_reference.py\", line 1711, in test_civil_periods_reset_with_literal_disjoint_volumes\n    self.assertEqual(volumes, [first_vol * 5, second_vol * 5])\nAssertionError: Lists differ: [70] != [70, 140]\n\nSecond list contains 1 additional elements.\nFirst extra element 1:\n140\n\n- [70]\n+ [70, 140]\n\n----------------------------------------------------------------------\nRan 4 tests in 307.508s\n\nFAILED (failures=1)\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3066, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 1483, in profile_statistics\n    if not tests['success']:raise ValueError('profile-statistics regression failure; no actual reduction')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: profile-statistics regression failure; no actual reduction\n",
+  "resources": {
+    "cpu_seconds": 314.22718599999996,
+    "wall_seconds": 321.24139272700995,
+    "peak_rss_bytes": 2027180032,
+    "attempt_output_bytes": 199796
+  },
+  "finding": "Quarter4 expected140 volume missing. _civil_owned uses futures economic_date(anchor.end-1) so Dec31 lateevening shifts toJan1 nextyear and rejects both Q4/year from2020 owner. This is reproducible by date semantics, not arithmetic or output encoding. Required civil calendar ownership must use NewYork civil enddate; output economic_date remains explicitly futures label. Four full fixtures already307CPU: tests create full allmetric reports eachsmallfixture; need reuse measurement-only execution for geometry-only fixtures after preserving this observation, keep one complete stats/reuse fixture and actualpilot unchanged.",
+  "decision": "One consolidated civil-owner and fixture overhead fix, with literalQ4/year ownership/date tests; no full profile acceptance or blind rerun."
+}

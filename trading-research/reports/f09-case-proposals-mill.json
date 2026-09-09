@@ -1,0 +1,1901 @@
+{
+  "status": "source_based_case_proposals_only_not_registered_not_executed",
+  "author": "/root/f04_batch_review",
+  "recorded_at": "2026-09-06T21:28:16.869677+00:00",
+  "scope": "18 compact F09/shared activity-bar case proposals derived only from this agent's already-read source reports for chunks24-31 and50-65, plus required F09 parent/refinement/upgrade/phase contracts.",
+  "input_reports": [
+    {
+      "path": "reports/f09-source-reading-24-31.json",
+      "sha256": "9dce95be6ac2e722c59547c2fa979baaba8d42f54d2fb3054445af278f8689d5"
+    },
+    {
+      "path": "reports/f09-source-reading-50-65.json",
+      "sha256": "8d73e4ea6a3f827c3ce04796b5bd7e594f199beea0dcc3c3c0e2770dc359ee28"
+    }
+  ],
+  "planning_contracts_read": [
+    {
+      "path": "/workspace/planning/trading-model/components/FOUNDATIONS.md",
+      "sha256": "8874367de2db551b6f6104643abc05fb1f5f7716a3a01ca842b5553270d57b5b",
+      "read_ranges_inclusive": [
+        [
+          110,
+          122
+        ]
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/SYSTEM_REFINEMENT.md",
+      "sha256": "e1a07b23c36587dd6ed0f6b2735d35ae136df4697f2fe12937ac12cd9825cfd6",
+      "read_ranges_inclusive": [
+        [
+          118,
+          126
+        ]
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/UPGRADE_PATHS.md",
+      "sha256": "3b9607108ffd8d5b9777772f8728483c5c35f46180d2237263893359451343c8",
+      "read_ranges_inclusive": [
+        [
+          326,
+          350
+        ],
+        [
+          351,
+          361
+        ]
+      ]
+    },
+    {
+      "path": "/workspace/planning/trading-model/experiments/F.md",
+      "sha256": "a010fe1d7fcfa3cb4a45a288be9772fcede0290c0130082074d3e455d2b66bc2",
+      "read_ranges_inclusive": [
+        [
+          289,
+          320
+        ]
+      ]
+    }
+  ],
+  "provenance_metadata_note": "Exact source-ID/provenance spelling was resolved from existing manifest/routing metadata only. No original source was reread, and no new source behavior was imported beyond the two prior reports. Per-reference support is intersected with the assigned read ranges.",
+  "provenance_metadata": [
+    {
+      "path": "/tmp/f09-cross-source-reading.json",
+      "sha256": "44c2dcf81663067bb219018e6c3faede0403669e6c1c98993c77f3e76ed3e4a6"
+    },
+    {
+      "path": "/workspace/planning/trading-model/review/source_design_routing.json",
+      "sha256": "e05ad8c5a705b2276a0b93b71ad52c04f0c61cbbef517ea93794a69332a3e44f"
+    }
+  ],
+  "case_count": 18,
+  "cases": [
+    {
+      "proposal_id": "F09-MILL-01",
+      "title": "Final HTF bar publication is later than its represented interval",
+      "source_provenance": [
+        {
+          "source_id": "PIN034-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Bollinger Bands Trend Stop.txt",
+          "original_sha256": "c10048c5f8718b4a737b1c2ea7ca2b2e6a44822a9ae69c38cab61e95da622d41",
+          "routing_provenance": "— MTF Bollinger Bands Trend Stop.txt L8–78",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              8,
+              78
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN033-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Leptokurtic Directional Bias.txt",
+          "original_sha256": "0df396d98f3a3a0861e7dc15d24ddc140f6206c03ea3da225d863e49a9a2651a",
+          "routing_provenance": "L97–129,151–204,206–296",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              97,
+              129
+            ],
+            [
+              151,
+              204
+            ],
+            [
+              206,
+              296
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN069-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistical VWAP study Session and RTH VWAP.txt",
+          "original_sha256": "f71f7eae7e7ec3d46c51eebcc547a1df3a141ff871993da3176bb5cf80f48086",
+          "routing_provenance": "L363–417,423–462,599–612",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              363,
+              417
+            ],
+            [
+              423,
+              462
+            ],
+            [
+              599,
+              612
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.3",
+        "F09.7",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Current requested HTF values feed receiving-chart state; another source intentionally uses prior-bar values on confirmed bars. These distinct update clocks must not be collapsed.",
+      "shared_F09_assertions_to_preregister": [
+        "Emit explicit provisional/final versions with interval, input receipt, interval-close, watermark and actual-completion clocks. A final-only consumer cannot obtain eventual HTF OHLC at interval open.",
+        "An HTF value sampled repeatedly on a lower chart retains its HTF bar/version identity; chart [1] sampling and previous completed HTF bar are separate requests."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "Interval [0,10) contains prices 100 at 1 and 104 at 9. Required completeness watermark arrives at 12; construction completes at 13.",
+        "expected": "At cut 9 the forming high may be provisional. Final close 104 is unavailable at 10 or 12 and first usable at 13. A historical drawing at 0 does not change that."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-02",
+      "title": "Equal-valued consecutive bars retain distinct interval identities",
+      "source_provenance": [
+        {
+          "source_id": "PIN038-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Swing Highs and Lows.txt",
+          "original_sha256": "2a30a945f9970a02581847f51b9028a73fa0aafd02e47c9fa2f74e6aef9770ba",
+          "routing_provenance": "— MTF Swing Highs and Lows.txt L6–33,83–88,107–164",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              6,
+              33
+            ],
+            [
+              83,
+              88
+            ],
+            [
+              107,
+              164
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN038-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Swing Highs and Lows.txt",
+          "original_sha256": "2a30a945f9970a02581847f51b9028a73fa0aafd02e47c9fa2f74e6aef9770ba",
+          "routing_provenance": "L240–418",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              240,
+              418
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN036-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC Lines with Breakout & Retracement Labels.txt",
+          "original_sha256": "952c2f1ead9cd68899b775b11c126acbfa1ec7412bebafd52424721e3bf4d36a",
+          "routing_provenance": "— MTF OHLC Lines with Breakout & Retracement Labels.txt L21–25,83–100,120–167,202–286",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              21,
+              25
+            ],
+            [
+              83,
+              100
+            ],
+            [
+              120,
+              167
+            ],
+            [
+              202,
+              286
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "EX-F09.ACTIVITY_BARS-P1",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Pivot triggers compare prices and native event lookup uses equal-price/time-distance inference; interval detection also relies on chart geometry.",
+      "shared_F09_assertions_to_preregister": [
+        "Identify source bars by instrument, interval/session, aggregation definition and version, never only OHLC/price change.",
+        "Two equal-valued completed HTF bars each advance a bar-indexed consumer once; repeated delivery of one bar version does not."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "Two adjacent intervals [0,5) and [5,10) each have O=H=L=C=100 and V=1.",
+        "expected": "Two final source observations with distinct IDs; no false deduplication based on equal close or OHLC."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-03",
+      "title": "Half-open boundary assignment distinguishes missing first print from empty interval",
+      "source_provenance": [
+        {
+          "source_id": "PIN036-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC Lines with Breakout & Retracement Labels.txt",
+          "original_sha256": "952c2f1ead9cd68899b775b11c126acbfa1ec7412bebafd52424721e3bf4d36a",
+          "routing_provenance": "— MTF OHLC Lines with Breakout & Retracement Labels.txt L21–25,83–100,120–167,202–286",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              21,
+              25
+            ],
+            [
+              83,
+              100
+            ],
+            [
+              120,
+              167
+            ],
+            [
+              202,
+              286
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN032-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Key levels, MTF swing highs, lows & 4h candle boxes.txt",
+          "original_sha256": "34061c058f49cbd03d24b21fd3245923cc1ed2599eb853b7606bc142b62c8f0c",
+          "routing_provenance": "L350–393,521–541,693–830",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              350,
+              393
+            ],
+            [
+              693,
+              830
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN067-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistcal Daily Profile & Ranges.txt",
+          "original_sha256": "765e9d6e880d16c6425eb80aaf4a7a90ce5a35a2b27a10bab4afec268d700677",
+          "routing_provenance": "— Statistcal Daily Profile & Ranges.txt L37–40,79–83,127–175,177–248,310–325",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              37,
+              40
+            ],
+            [
+              79,
+              83
+            ],
+            [
+              127,
+              175
+            ],
+            [
+              177,
+              248
+            ],
+            [
+              310,
+              325
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.3",
+        "F09.8",
+        "SR-F09",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Minute-modulus/chart-count boundaries and session-start placeholders can misidentify missing boundary observations as starts or zero observations.",
+      "shared_F09_assertions_to_preregister": [
+        "Assign event at right endpoint to the next interval and capture actual first eligible trade as open; expose delayed first print/observed duration.",
+        "Complete coverage with no trades yields an empty trade interval with no invented OHLC; missing coverage yields incomplete/unknown. Stale carry, if separately enabled, is flagged and has zero traded mass."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "For [0,10), first observed eligible trade is at 3, price 101, size 2; next trade is exactly 10, price 99, size 1.",
+        "expected": "First bar open/close 101,V=2 and observed start 3. The trade at 10 belongs only to the next bar. With no events, an explicit complete-coverage declaration separates empty from missing."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-04",
+      "title": "Formation cutoff cannot truncate an opaque coarse bar",
+      "source_provenance": [
+        {
+          "source_id": "PIN036-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC Lines with Breakout & Retracement Labels.txt",
+          "original_sha256": "952c2f1ead9cd68899b775b11c126acbfa1ec7412bebafd52424721e3bf4d36a",
+          "routing_provenance": "— MTF OHLC Lines with Breakout & Retracement Labels.txt L21–25,83–100,120–167,202–286",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              21,
+              25
+            ],
+            [
+              83,
+              100
+            ],
+            [
+              120,
+              167
+            ],
+            [
+              202,
+              286
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN062-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Projections with stats.txt",
+          "original_sha256": "67f9be82ef6788fc7f5bde4d75710b36a04d900dcea5c5232853a2452a56db8e",
+          "routing_provenance": "— Session Range Projections with stats.txt L15–46,57–87,98–128,167–171,317–365,508–557,699–748",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              508,
+              557
+            ],
+            [
+              699,
+              748
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN073-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Time based Range Retracement with Stats.txt",
+          "original_sha256": "b07ccf0b3ed815810fa84c1480a0ec2079625a8ee5087d65d82e31f8fdbd7a52",
+          "routing_provenance": "— Time based Range Retracement with Stats.txt L15–71,148–376,448–521",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              15,
+              71
+            ],
+            [
+              148,
+              148
+            ],
+            [
+              178,
+              180
+            ],
+            [
+              193,
+              376
+            ],
+            [
+              448,
+              468
+            ],
+            [
+              474,
+              521
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.8",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Sources freeze ranges at session transitions, but requested durations and underlying chart bars need not divide each other.",
+      "shared_F09_assertions_to_preregister": [
+        "Build a formation from causal events or fully contained composable subbars. An opaque coarse bar spanning formation end cannot contribute its eventual high/low to the earlier formation.",
+        "Publish a 15-minute/session range only after end, watermark and actual construction; a pre-close lookup remains forming/incomplete."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "Formation ends at 10; supplied OHLC bar covers [8,12) and has high 110, but no finer evidence gives the time of that high.",
+        "expected": "Do not assign 110 to [0,10) or scale volume by duration. Reaggregate finer eligible events, or mark exact formation unavailable."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-05",
+      "title": "Reset inside a bar is an explicit partition boundary",
+      "source_provenance": [
+        {
+          "source_id": "PIN032-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Key levels, MTF swing highs, lows & 4h candle boxes.txt",
+          "original_sha256": "34061c058f49cbd03d24b21fd3245923cc1ed2599eb853b7606bc142b62c8f0c",
+          "routing_provenance": "L350–393,521–541,693–830",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              350,
+              393
+            ],
+            [
+              693,
+              830
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN063-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Statistical Levels.txt",
+          "original_sha256": "53aa1780291e4c38cd49171b0ea5658270b3341069d6c648bd47ee9457713fa0",
+          "routing_provenance": "— Session Statistical Levels.txt L150–238,710–758,1086–1179",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              150,
+              238
+            ],
+            [
+              710,
+              758
+            ],
+            [
+              1086,
+              1179
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN067-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistcal Daily Profile & Ranges.txt",
+          "original_sha256": "765e9d6e880d16c6425eb80aaf4a7a90ce5a35a2b27a10bab4afec268d700677",
+          "routing_provenance": "— Statistcal Daily Profile & Ranges.txt L37–40,79–83,127–175,177–248,310–325",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              37,
+              40
+            ],
+            [
+              79,
+              83
+            ],
+            [
+              127,
+              175
+            ],
+            [
+              177,
+              248
+            ],
+            [
+              310,
+              325
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN073-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Time based Range Retracement with Stats.txt",
+          "original_sha256": "b07ccf0b3ed815810fa84c1480a0ec2079625a8ee5087d65d82e31f8fdbd7a52",
+          "routing_provenance": "— Time based Range Retracement with Stats.txt L15–71,148–376,448–521",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              15,
+              71
+            ],
+            [
+              148,
+              148
+            ],
+            [
+              178,
+              180
+            ],
+            [
+              193,
+              376
+            ],
+            [
+              448,
+              468
+            ],
+            [
+              474,
+              521
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.2",
+        "SR-F09",
+        "EX-F09.ACTIVITY_BARS-P1"
+      ],
+      "observed_source_distinction": "Sources use differing ET session starts, overnight windows, regular-session flags and fixed-day drawing offsets.",
+      "shared_F09_assertions_to_preregister": [
+        "Use the F03 calendar/session version and reset event identity, including DST/repeated local times, rather than chart modulus or day-of-month.",
+        "An active time/activity bar cannot silently pool events across a reset. Register flush/reset behavior, partial-bar quality and no cross-reset moment/CVD carry unless explicitly declared."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "Activity threshold Q=5; size 3 occurs before a reset and size 2 after it.",
+        "expected": "Do not close one size-5 bar spanning reset. The pre-reset fragment remains explicitly partial/reset under the chosen policy; post-reset accumulation starts independently."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-06",
+      "title": "OHLC co-occurrence does not certify breakout-before-retracement",
+      "source_provenance": [
+        {
+          "source_id": "PIN030-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Initial Balance Statistical Mapping.txt",
+          "original_sha256": "95a702166725d3c25635fbb3feb87da20c7dde447f85b71f06b70e3d9690c961",
+          "routing_provenance": "L268–295,301–316,558–622",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              558,
+              622
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN036-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC Lines with Breakout & Retracement Labels.txt",
+          "original_sha256": "952c2f1ead9cd68899b775b11c126acbfa1ec7412bebafd52424721e3bf4d36a",
+          "routing_provenance": "L288–358",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              288,
+              358
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN063-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Statistical Levels.txt",
+          "original_sha256": "53aa1780291e4c38cd49171b0ea5658270b3341069d6c648bd47ee9457713fa0",
+          "routing_provenance": "L454–681,716–800,804–932",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              454,
+              681
+            ],
+            [
+              716,
+              800
+            ],
+            [
+              804,
+              932
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN065-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session standard deviations with stats.txt",
+          "original_sha256": "5046bae9ce39a8d9e93b05ed1456bd501df4f1b3871961515a2abdbdc4a07617",
+          "routing_provenance": "L651–692,699–786",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              651,
+              692
+            ],
+            [
+              699,
+              786
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.4",
+        "F09.8",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Several sources mark both sides or set touch then retrace within one OHLC bar; display precedence can silently select a first side.",
+      "shared_F09_assertions_to_preregister": [
+        "Bar output must preserve order capability/ambiguity and must not supply an invented first passage or reversal order to consumers.",
+        "Where eligible ordered trade events exist, derive event order directly; equal-timestamp events without ordering evidence leave extrema-order consumers unavailable or explicitly ambiguous."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "paths": "A: 100,106,94,100. B: 100,94,106,100. Both have O=100,H=106,L=94,C=100.",
+        "expected": "A crosses upper 105 before lower 95; B reverses that order. Identical OHLC cannot select either path or imply a native fill."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-07",
+      "title": "Ordered cumulative-flow extrema survive block composition",
+      "source_provenance": [
+        {
+          "source_id": "PIN079-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/confluence_suite",
+          "original_sha256": "0dac7c517ef9737c6cbdb29311e60733b532d884b319d39e9d1b2e1a50ddd391",
+          "routing_provenance": "L11–33,38–55,243–255,497–578",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              11,
+              33
+            ],
+            [
+              38,
+              55
+            ],
+            [
+              243,
+              255
+            ],
+            [
+              497,
+              578
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN065-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session standard deviations with stats.txt",
+          "original_sha256": "5046bae9ce39a8d9e93b05ed1456bd501df4f1b3871961515a2abdbdc4a07617",
+          "routing_provenance": "L651–692,699–786",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              651,
+              692
+            ],
+            [
+              699,
+              786
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.4",
+        "UP-F09",
+        "EX-F09-P1",
+        "EX-F09.ACTIVITY_BARS-P1"
+      ],
+      "observed_source_distinction": "The volume sentiment source is a candle proxy, while reversal source loops infer order from already-set flags. Neither provides true ordered cumulative trade extrema; the parent explicitly requires them.",
+      "shared_F09_assertions_to_preregister": [
+        "Keep trade signs and eligible source event identity from F05; quote/body-color/close-location proxies are distinct measures and cannot populate true CVD.",
+        "Prove and compare ordered summary composition: total increment sums, later block extrema shift by prior increment, and order is noncommutative. Literal traversal and chunked summaries match exact CVD OHLC."
+      ],
+      "remaining_gates": [
+        "True F05 sign/order evidence and full CVD consumer integration remain required; proxy source formulas/calibration are not replaced by the shared summary."
+      ],
+      "hand_reasoned_example": {
+        "events": "Starting CVD 0, path A increments +5,-5; path B increments -5,+5.",
+        "expected": "Both end at 0. A max=5,min=0; B max=0,min=-5. A summary retaining only final net 0 loses required information."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-08",
+      "title": "Whole-event activity bars retain overshoot and source cardinality",
+      "source_provenance": [
+        {
+          "source_id": "PIN066-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sessions & VP with prev session VP & daily weekly opens.txt",
+          "original_sha256": "a22692452a1a0b0adb69c0aadbf06d6bde3270248f203763e0db7f90bdf6e610",
+          "routing_provenance": "— Sessions & VP with prev session VP & daily weekly opens.txt L10–22,46–57,99–113,213–250",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              10,
+              22
+            ],
+            [
+              46,
+              57
+            ],
+            [
+              111,
+              113
+            ],
+            [
+              213,
+              234
+            ],
+            [
+              240,
+              250
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN077-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/VP History Widget.txt",
+          "original_sha256": "cd3233e423b4686b99b72e0a48bc479c75e186c7526bcf8c4df2f518d320dd17",
+          "routing_provenance": "— VP History Widget.txt L17–55,60–130",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              17,
+              34
+            ],
+            [
+              42,
+              55
+            ],
+            [
+              60,
+              130
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN079-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/confluence_suite",
+          "original_sha256": "0dac7c517ef9737c6cbdb29311e60733b532d884b319d39e9d1b2e1a50ddd391",
+          "routing_provenance": "L11–33,38–55,243–255,497–578",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              11,
+              33
+            ],
+            [
+              38,
+              55
+            ],
+            [
+              243,
+              255
+            ],
+            [
+              497,
+              578
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "SR-F09",
+        "UP-F09",
+        "EX-F09.ACTIVITY_BARS-P0",
+        "EX-F09.ACTIVITY_BARS-P1"
+      ],
+      "observed_source_distinction": "Assigned profile/proxy sources redistribute or reweight candle volume. Whole-event conservation is imposed by SR-F09, not claimed as an original source activity-bar implementation.",
+      "shared_F09_assertions_to_preregister": [
+        "Initial volume/count reference closes at the first whole event meeting frozen threshold and records overshoot, event count and actual completion.",
+        "A separate split-event variant must preserve one original event identity with allocations summing to its exact mass; allocations are not new independent observations. Every materialized clock conserves eligible source mass."
+      ],
+      "remaining_gates": [
+        "Choice/learning of activity threshold is C05 chronological discovery. Explicit allocation variant and downstream exposure comparisons need independent registration; proxy/profile formulas remain distinct."
+      ],
+      "hand_reasoned_example": {
+        "events": "Toy volume threshold Q=5. First trade size=12; next trade size=1.",
+        "expected": "Whole-event reference emits one completed V=12 bar with one trade and overshoot 7, then a forming V=1 bar. It must not fabricate two size-5 trade bars or three independent trades."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-09",
+      "title": "Source versus recomputed bar reconciliation is measure-qualified",
+      "source_provenance": [
+        {
+          "source_id": "PIN066-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sessions & VP with prev session VP & daily weekly opens.txt",
+          "original_sha256": "a22692452a1a0b0adb69c0aadbf06d6bde3270248f203763e0db7f90bdf6e610",
+          "routing_provenance": "— Sessions & VP with prev session VP & daily weekly opens.txt L10–22,46–57,99–113,213–250",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              10,
+              22
+            ],
+            [
+              46,
+              57
+            ],
+            [
+              111,
+              113
+            ],
+            [
+              213,
+              234
+            ],
+            [
+              240,
+              250
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN077-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/VP History Widget.txt",
+          "original_sha256": "cd3233e423b4686b99b72e0a48bc479c75e186c7526bcf8c4df2f518d320dd17",
+          "routing_provenance": "— VP History Widget.txt L17–55,60–130",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              17,
+              34
+            ],
+            [
+              42,
+              55
+            ],
+            [
+              60,
+              130
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN079-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/confluence_suite",
+          "original_sha256": "0dac7c517ef9737c6cbdb29311e60733b532d884b319d39e9d1b2e1a50ddd391",
+          "routing_provenance": "L11–33,38–55,243–255,497–578",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              11,
+              33
+            ],
+            [
+              38,
+              55
+            ],
+            [
+              243,
+              255
+            ],
+            [
+              497,
+              578
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.2",
+        "F09.4",
+        "F09.6",
+        "EX-F09-P2"
+      ],
+      "observed_source_distinction": "Lower-timeframe OHLC profile proxies, optional EMA volume and daily delta OI are different observations despite shared volume-like fields.",
+      "shared_F09_assertions_to_preregister": [
+        "Reconcile native and recomputed bars only after binding raw instrument, intervals, event eligibility/filter version, trade versus quote source, units and reset semantics.",
+        "Mass differences attributable to declared filtering are reported; unexplained discrepancies remain failures. Repeated daily OI across lower bars cannot be summed as new traded volume."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "One source daily OI delta is +8 and is forwarded to four lower-timeframe samples.",
+        "expected": "Four references to one OI observation do not constitute traded volume 32 or four fresh OI changes. An OI measure remains separate/unavailable for trade-volume conservation."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-10",
+      "title": "Corrections create new final versions without rewriting past decisions",
+      "source_provenance": [
+        {
+          "source_id": "PIN040-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/NQ Hourly Retracements 12y Stats with Levels.txt",
+          "original_sha256": "3c1e0c361c095bd6ab9f922a6c9deeea81b03db5aef466dbd3ebc92ee22558cc",
+          "routing_provenance": "— NQ Hourly Retracements 12y Stats with Levels.txt L105–158,185–313,372–438,508–619",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              109,
+              121
+            ],
+            [
+              147,
+              147
+            ],
+            [
+              185,
+              313
+            ],
+            [
+              377,
+              403
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN069-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistical VWAP study Session and RTH VWAP.txt",
+          "original_sha256": "f71f7eae7e7ec3d46c51eebcc547a1df3a141ff871993da3176bb5cf80f48086",
+          "routing_provenance": "L363–417,423–462,599–612",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              363,
+              417
+            ],
+            [
+              423,
+              462
+            ],
+            [
+              599,
+              612
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN083-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/session_statmap",
+          "original_sha256": "b584a009a40602796467359917e6fca17d7a2839d2502553c6dcd3973bcb8c72",
+          "routing_provenance": "L19–61,254–302,322–338,549–579",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              254,
+              302
+            ],
+            [
+              549,
+              579
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "SR-F09",
+        "UP-F09",
+        "EX-F09-P1",
+        "EX-F09-P7"
+      ],
+      "observed_source_distinction": "Prior-hour levels and rolling outcomes depend on earlier bars. The reviewed sources do not supply a complete correction protocol, so the parent correction contract must govern shared lineage.",
+      "shared_F09_assertions_to_preregister": [
+        "A late correction changes affected bar/block versions and invalidates dependent summaries, retaining the original as-of-cut version and immutable decision references.",
+        "Corrected input cannot be backdated into earlier final decisions. Restart and suffix-deletion reproduce the same prefix; untouched blocks retain evidence identity."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "Bar v1 finalized at 12 includes event e size 2. At 20 a correction changes e size to 3.",
+        "expected": "Before 20, v1 and its V remain unchanged. A newly completed v2 and dependent aggregates reflect +1 volume only from their new availability; old decisions retain v1."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-11",
+      "title": "Drawing changes cannot alter bar events or retroactively create history",
+      "source_provenance": [
+        {
+          "source_id": "PIN070-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statmap HTF no like for like lookback.txt",
+          "original_sha256": "5c6bd760ab624b024597bb0230343f64c54b2fe87744138dfdeeea0db81fde2f",
+          "routing_provenance": "L43–52,123–130,180–184,483–489,631–644,836–1004",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              43,
+              52
+            ],
+            [
+              483,
+              489
+            ],
+            [
+              836,
+              1004
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN071-07",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sweep, CISD, MTF FVG & Key Levels.txt",
+          "original_sha256": "ce1b530d6f069d136259dcefdc1322707dd19af7c682bc2f6c1d2f0ff7884c4d",
+          "routing_provenance": "L1362–1440,1442–1483",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              1362,
+              1440
+            ],
+            [
+              1442,
+              1483
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN071-08",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sweep, CISD, MTF FVG & Key Levels.txt",
+          "original_sha256": "ce1b530d6f069d136259dcefdc1322707dd19af7c682bc2f6c1d2f0ff7884c4d",
+          "routing_provenance": "L1084–1090,1477–1483",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              1477,
+              1483
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN082-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/nq_stats_mapper",
+          "original_sha256": "46079132e04e01aef28705f3c1a7deeaa8c0fd73f77a6eeafa74d9f31b25b296",
+          "routing_provenance": "L201–263,282–308,363–369,419–582",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              239,
+              239
+            ],
+            [
+              419,
+              419
+            ],
+            [
+              516,
+              551
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN039-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/NQ Hourly Retracement Levels.txt",
+          "original_sha256": "f926157af0493aeb46d93a36acf27ec9a42e7b4fb9678c297c8e99bee07112aa",
+          "routing_provenance": "L78–122,381–401,422–452,567–627,638–947",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              78,
+              122
+            ],
+            [
+              381,
+              401
+            ],
+            [
+              422,
+              452
+            ],
+            [
+              567,
+              627
+            ],
+            [
+              638,
+              947
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.7",
+        "F09.9",
+        "EX-F09-P1",
+        "EX-F09-P4"
+      ],
+      "observed_source_distinction": "Delete/redraw, back-extended levels, transparent invalidation and last_bar_index-1000 processing can make visible state endpoint-dependent.",
+      "shared_F09_assertions_to_preregister": [
+        "Equivalent bar requests with different label/visibility settings share identical numerical events and versions; chart deletion cannot erase input/level evidence.",
+        "Appending future events or changing viewport must not change historical bar/publication prefixes. Plot offsets never change event known_at or completion."
+      ],
+      "remaining_gates": [
+        "Full object lifecycle/indicator render adapters are outside the shared bar layer; only bar/version/availability invariants and thin consumer fixtures are proposed here."
+      ],
+      "hand_reasoned_example": {
+        "events": "An HTF-derived level is first constructed at 20 but drawn from coordinate 10; future chart length changes at 30.",
+        "expected": "No consumer lookup before 20 obtains it. Bar/evidence records at cuts <=20 remain identical after the suffix is added."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-12",
+      "title": "Threshold configuration freezes before activity formation or outcome measurement",
+      "source_provenance": [
+        {
+          "source_id": "PIN063-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Statistical Levels.txt",
+          "original_sha256": "53aa1780291e4c38cd49171b0ea5658270b3341069d6c648bd47ee9457713fa0",
+          "routing_provenance": "L454–681,716–800,804–932",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              454,
+              681
+            ],
+            [
+              716,
+              800
+            ],
+            [
+              804,
+              932
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN083-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/session_statmap",
+          "original_sha256": "b584a009a40602796467359917e6fca17d7a2839d2502553c6dcd3973bcb8c72",
+          "routing_provenance": "L19–61,254–302,322–338,549–579",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              254,
+              302
+            ],
+            [
+              549,
+              579
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN079-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/confluence_suite",
+          "original_sha256": "0dac7c517ef9737c6cbdb29311e60733b532d884b319d39e9d1b2e1a50ddd391",
+          "routing_provenance": "L11–33,38–55,243–255,497–578",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              11,
+              33
+            ],
+            [
+              38,
+              55
+            ],
+            [
+              243,
+              255
+            ],
+            [
+              497,
+              578
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.7",
+        "EX-F09.ACTIVITY_BARS-P0",
+        "EX-F09-P0"
+      ],
+      "observed_source_distinction": "Session thresholds are recomputed after adding the outcome; rolling removal uses changed averages, and presets alter effective settings.",
+      "shared_F09_assertions_to_preregister": [
+        "Each activity bar retains the immutable threshold/configuration version and its available training cutoff at birth; mid-formation changes require a new explicit definition/reset.",
+        "Expose immutable completed bar versions so a consumer fixture can retain the pre-outcome threshold version. Updating a historical estimator must not rewrite earlier frozen bar outcomes."
+      ],
+      "remaining_gates": [
+        "Rolling quantile/mean estimators, exact eviction of predictor contributions, scientific threshold choice and calibration are consumer/C05 responsibilities, not implemented as F09 arithmetic."
+      ],
+      "hand_reasoned_example": {
+        "events": "A toy activity bar is born with Q=5 after available prior training; two units arrive. A newly proposed Q=3 becomes available before the next unit.",
+        "expected": "The active Q=5 bar is not silently completed at V=3; either keep Q=5 or execute a separately registered reset/new-definition transition."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-13",
+      "title": "Only mature eligible observations enter an outcome denominator",
+      "source_provenance": [
+        {
+          "source_id": "PIN035-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF HTF market analysis toolkit.txt",
+          "original_sha256": "4326afc2423026ba3faff45b4e0bc6e9859af2cad4c7eb060f40f7846df9c28d",
+          "routing_provenance": "L808–815,827–945,946–1012",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              808,
+              815
+            ],
+            [
+              827,
+              1012
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN037-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC retracement stats.txt",
+          "original_sha256": "6cdf16187724f34b04762e84fbdaed5af470ca2aca0663399ed99227d6a107cb",
+          "routing_provenance": "L163–236,294–347",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              294,
+              347
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN062-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Range Projections with stats.txt",
+          "original_sha256": "67f9be82ef6788fc7f5bde4d75710b36a04d900dcea5c5232853a2452a56db8e",
+          "routing_provenance": "L924–1085,1094–1243",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              924,
+              1085
+            ],
+            [
+              1094,
+              1243
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN063-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Session Statistical Levels.txt",
+          "original_sha256": "53aa1780291e4c38cd49171b0ea5658270b3341069d6c648bd47ee9457713fa0",
+          "routing_provenance": "L730–746,804–932,974–977,1294–1354,1401–1509,1618–1623",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              730,
+              746
+            ],
+            [
+              804,
+              932
+            ],
+            [
+              974,
+              977
+            ],
+            [
+              1294,
+              1354
+            ],
+            [
+              1401,
+              1509
+            ],
+            [
+              1618,
+              1623
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN078-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Weekly Initial Balance.txt",
+          "original_sha256": "71dfb443cf6b7417834aae540c18cf483904cadc0dd5a618f50ed29b00a6bde7",
+          "routing_provenance": "L161–260,297–360",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              161,
+              260
+            ],
+            [
+              297,
+              360
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.3",
+        "F09.4",
+        "EX-F09-P3",
+        "EX-F09-P5"
+      ],
+      "observed_source_distinction": "Current sessions increment denominators before outcome completion; repeated touches and joint-event rates are presented alongside conditional-looking labels.",
+      "shared_F09_assertions_to_preregister": [
+        "Bar metadata separates forming, final-complete, final-incomplete/reset and empty-complete opportunities, with exact interval and horizon identity for consumer eligibility.",
+        "A thin consumer fixture counts only completed eligible outcome horizons, retaining no-touch outcomes; repeated delivery or multiple touch bars do not create additional independent sessions."
+      ],
+      "remaining_gates": [
+        "Predictor denominators, whether a rate is joint versus conditional, rolling cohort design, censoring model and calibration remain source-specific; F09 supplies truthful maturity/coverage identities only."
+      ],
+      "hand_reasoned_example": {
+        "events": "A completed eligible session has no touch; a second is still forming; a third has missing coverage.",
+        "expected": "A per-complete-session test has one eligible mature opportunity and zero successes, not three opportunities. This says nothing about calibrated hit probability."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-14",
+      "title": "Missingness and warmup never become fabricated zero-valued bars",
+      "source_provenance": [
+        {
+          "source_id": "PIN067-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistcal Daily Profile & Ranges.txt",
+          "original_sha256": "765e9d6e880d16c6425eb80aaf4a7a90ce5a35a2b27a10bab4afec268d700677",
+          "routing_provenance": "— Statistcal Daily Profile & Ranges.txt L37–40,79–83,127–175,177–248,310–325",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              37,
+              40
+            ],
+            [
+              79,
+              83
+            ],
+            [
+              127,
+              175
+            ],
+            [
+              177,
+              248
+            ],
+            [
+              310,
+              325
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN033-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Leptokurtic Directional Bias.txt",
+          "original_sha256": "0df396d98f3a3a0861e7dc15d24ddc140f6206c03ea3da225d863e49a9a2651a",
+          "routing_provenance": "— Leptokurtic Directional Bias.txt L19–45,72–149",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              19,
+              45
+            ],
+            [
+              72,
+              149
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN035-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF HTF market analysis toolkit.txt",
+          "original_sha256": "4326afc2423026ba3faff45b4e0bc6e9859af2cad4c7eb060f40f7846df9c28d",
+          "routing_provenance": "L808–815,827–945,946–1012",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              808,
+              815
+            ],
+            [
+              827,
+              1012
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN040-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/NQ Hourly Retracements 12y Stats with Levels.txt",
+          "original_sha256": "3c1e0c361c095bd6ab9f922a6c9deeea81b03db5aef466dbd3ebc92ee22558cc",
+          "routing_provenance": "— NQ Hourly Retracements 12y Stats with Levels.txt L105–158,185–313,372–438,508–619",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              109,
+              121
+            ],
+            [
+              147,
+              147
+            ],
+            [
+              185,
+              313
+            ],
+            [
+              377,
+              403
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.3",
+        "F09.10",
+        "EX-F09-P4"
+      ],
+      "observed_source_distinction": "Zero-initialized session arrays, unknown trend formatted bearish and all-zero lookup fallback can conflate lack of evidence with measured states.",
+      "shared_F09_assertions_to_preregister": [
+        "No prior trade price/volume/extrema is invented to initialize an interval; unset OHLC remains absent and incomplete quality is explicit.",
+        "Completed-but-empty, insufficient history, stale carry, missing source and valid exact zero quantities remain distinguishable at the bar interface."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "A new stream starts halfway through its first interval with no earlier coverage evidence.",
+        "expected": "The observed suffix may form a partial bar, but an assumed zero open/low or previous close cannot certify a complete interval. Warmup is not a neutral/bearish observation."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-15",
+      "title": "Extremum value, event identity and confirmation are separate",
+      "source_provenance": [
+        {
+          "source_id": "PIN038-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Swing Highs and Lows.txt",
+          "original_sha256": "2a30a945f9970a02581847f51b9028a73fa0aafd02e47c9fa2f74e6aef9770ba",
+          "routing_provenance": "— MTF Swing Highs and Lows.txt L6–33,83–88,107–164",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              6,
+              33
+            ],
+            [
+              83,
+              88
+            ],
+            [
+              107,
+              164
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN038-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Swing Highs and Lows.txt",
+          "original_sha256": "2a30a945f9970a02581847f51b9028a73fa0aafd02e47c9fa2f74e6aef9770ba",
+          "routing_provenance": "L240–418",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              240,
+              418
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN072-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/TTM Squeeze Divergence.txt",
+          "original_sha256": "78eee86e983bdd8d64cfe16698a25a2c67bf353c21c50dec15f07513361bf3fd",
+          "routing_provenance": "L41–127",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              41,
+              127
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN071-07",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sweep, CISD, MTF FVG & Key Levels.txt",
+          "original_sha256": "ce1b530d6f069d136259dcefdc1322707dd19af7c682bc2f6c1d2f0ff7884c4d",
+          "routing_provenance": "L1362–1440,1442–1483",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              1362,
+              1440
+            ],
+            [
+              1442,
+              1483
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.4",
+        "F09.8",
+        "EX-F09-P1"
+      ],
+      "observed_source_distinction": "Five-bar pivots use two right bars then backdate center time; repeated equal prices and constant-dt searches cannot recover exact native event identity.",
+      "shared_F09_assertions_to_preregister": [
+        "Bar extrema carry contributing event/source lineage and a declared tie policy; same-valued extrema do not imply identical events.",
+        "Provide completed bars with explicit source clock indexing to a small delayed-confirmation consumer; required right-side bars must be available before confirmation, regardless of backdated anchor."
+      ],
+      "remaining_gates": [
+        "Pivot equality variants, filter inversion, Fibonacci geometry, oscillator formulas and complete source implementations remain separately registered consumer work."
+      ],
+      "hand_reasoned_example": {
+        "events": "A candidate center high occurs in bar B2, requiring completed B3 and B4 for a two-right-bar pivot.",
+        "expected": "The center coordinate remains B2, but confirmation is no earlier than publication of B4 and actual consumer completion. A duplicate-price pivot later retains another event identity."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-16",
+      "title": "Price-volume moments compose only with explicit measure and order proofs",
+      "source_provenance": [
+        {
+          "source_id": "PIN069-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistical VWAP study Session and RTH VWAP.txt",
+          "original_sha256": "f71f7eae7e7ec3d46c51eebcc547a1df3a141ff871993da3176bb5cf80f48086",
+          "routing_provenance": "L485–571",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              485,
+              571
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN066-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sessions & VP with prev session VP & daily weekly opens.txt",
+          "original_sha256": "a22692452a1a0b0adb69c0aadbf06d6bde3270248f203763e0db7f90bdf6e610",
+          "routing_provenance": "— Sessions & VP with prev session VP & daily weekly opens.txt L10–22,46–57,99–113,213–250",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              10,
+              22
+            ],
+            [
+              46,
+              57
+            ],
+            [
+              111,
+              113
+            ],
+            [
+              213,
+              234
+            ],
+            [
+              240,
+              250
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN077-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/VP History Widget.txt",
+          "original_sha256": "cd3233e423b4686b99b72e0a48bc479c75e186c7526bcf8c4df2f518d320dd17",
+          "routing_provenance": "— VP History Widget.txt L17–55,60–130",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              17,
+              34
+            ],
+            [
+              42,
+              55
+            ],
+            [
+              60,
+              130
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "UP-F09",
+        "EX-F09-P2"
+      ],
+      "observed_source_distinction": "One source calls weighted RMS around changing anchors SD and median absolute offsets MAD; profile sources change grid while reallocating OHLC mass.",
+      "shared_F09_assertions_to_preregister": [
+        "For eligible raw trades, compose exact V, sum(price*size) and sum(price^2*size) across blocks; retain units and zero-volume behavior. OHLC composition requires ordered endpoints and extrema.",
+        "Do not claim a generic merge rule for anchor-dependent deviations, quantiles, profile bins or source statistics without retained sufficient state and a proved composition rule."
+      ],
+      "remaining_gates": [
+        "RMS versus centered variance, MAD definitions, quantile algorithm, profile POC/VA bugs and scientific calibration remain predictor/measurement work; no silent formula correction is authorized by this proposal."
+      ],
+      "hand_reasoned_example": {
+        "events": "Trades price 2,size 1 and price 4,size 1 partition into one or two blocks.",
+        "expected": "V=2, price-volume sum=6, squared-price-volume sum=20 under either partition. A changing per-bar anchor is extra evidence; these totals alone do not reproduce that source RMS/MAD."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-17",
+      "title": "Resolution adapters reject unsupported interval geometry and hidden definition changes",
+      "source_provenance": [
+        {
+          "source_id": "PIN036-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF OHLC Lines with Breakout & Retracement Labels.txt",
+          "original_sha256": "952c2f1ead9cd68899b775b11c126acbfa1ec7412bebafd52424721e3bf4d36a",
+          "routing_provenance": "— MTF OHLC Lines with Breakout & Retracement Labels.txt L21–25,83–100,120–167,202–286",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              21,
+              25
+            ],
+            [
+              83,
+              100
+            ],
+            [
+              120,
+              167
+            ],
+            [
+              202,
+              286
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN034-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Bollinger Bands Trend Stop.txt",
+          "original_sha256": "c10048c5f8718b4a737b1c2ea7ca2b2e6a44822a9ae69c38cab61e95da622d41",
+          "routing_provenance": "— MTF Bollinger Bands Trend Stop.txt L8–78",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              8,
+              78
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN079-04",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/confluence_suite",
+          "original_sha256": "0dac7c517ef9737c6cbdb29311e60733b532d884b319d39e9d1b2e1a50ddd391",
+          "routing_provenance": "L11–33,38–55,243–255,497–578",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              11,
+              33
+            ],
+            [
+              38,
+              55
+            ],
+            [
+              243,
+              255
+            ],
+            [
+              497,
+              578
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN075-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Time based ranges with stats.txt",
+          "original_sha256": "1b1e6f2ab59704eaad4706d08bfe43f78f01539c83a94f58ec36da6c97952332",
+          "routing_provenance": "L292–401,480–552",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              349,
+              401
+            ],
+            [
+              480,
+              552
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "F09.5",
+        "F09.6",
+        "F09.10",
+        "EX-F09-P0"
+      ],
+      "observed_source_distinction": "Custom durations can be zero or non-divisible; receiving-chart history differs from HTF history, presets can alter formulas, and displayed percentages use different denominators.",
+      "shared_F09_assertions_to_preregister": [
+        "Reject zero/unsupported durations and materialize each declared interval from causal eligible data rather than a guessed chart-bar count.",
+        "Cache key includes instrument, resolution, alignment/calendar, source measure/filter, threshold, reset and finality policy; equal numeric outputs from different definitions are not interchangeable."
+      ],
+      "remaining_gates": [
+        "Full source indicator formula, source-specific lifecycle, calibration and native evidence remain separate from these shared-layer assertions."
+      ],
+      "hand_reasoned_example": {
+        "events": "A requested 7-unit interval is supplied only by opaque 5-unit bars, with no finer events.",
+        "expected": "No exact 7-unit OHLC is fabricated by fractional weighting or rounding to a chart count. Request is unsupported unless the finer evidence exists."
+      }
+    },
+    {
+      "proposal_id": "F09-MILL-18",
+      "title": "One-pass shared summaries match independent builders with bounded retained evidence",
+      "source_provenance": [
+        {
+          "source_id": "PIN066-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Sessions & VP with prev session VP & daily weekly opens.txt",
+          "original_sha256": "a22692452a1a0b0adb69c0aadbf06d6bde3270248f203763e0db7f90bdf6e610",
+          "routing_provenance": "— Sessions & VP with prev session VP & daily weekly opens.txt L10–22,46–57,99–113,213–250",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              10,
+              22
+            ],
+            [
+              46,
+              57
+            ],
+            [
+              111,
+              113
+            ],
+            [
+              213,
+              234
+            ],
+            [
+              240,
+              250
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN077-01",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/VP History Widget.txt",
+          "original_sha256": "cd3233e423b4686b99b72e0a48bc479c75e186c7526bcf8c4df2f518d320dd17",
+          "routing_provenance": "— VP History Widget.txt L17–55,60–130",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              17,
+              34
+            ],
+            [
+              42,
+              55
+            ],
+            [
+              60,
+              130
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN069-03",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/Statistical VWAP study Session and RTH VWAP.txt",
+          "original_sha256": "f71f7eae7e7ec3d46c51eebcc547a1df3a141ff871993da3176bb5cf80f48086",
+          "routing_provenance": "L390–416,424–462,472–482,595–641",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              390,
+              416
+            ],
+            [
+              424,
+              462
+            ],
+            [
+              472,
+              482
+            ],
+            [
+              595,
+              641
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-50-65.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        },
+        {
+          "source_id": "PIN038-02",
+          "path": "/workspace/planning/trading-model/review/pine-extracted/Pinescript-indicators--main/MTF Swing Highs and Lows.txt",
+          "original_sha256": "2a30a945f9970a02581847f51b9028a73fa0aafd02e47c9fa2f74e6aef9770ba",
+          "routing_provenance": "L240–418",
+          "assigned_read_support_ranges_inclusive": [
+            [
+              240,
+              418
+            ]
+          ],
+          "reading_report": "reports/f09-source-reading-24-31.json",
+          "scope": "Only listed intersection was read in this delegated slice; route may include other clauses."
+        }
+      ],
+      "foundation_basis": [
+        "UP-F09",
+        "EX-F09-P2",
+        "EX-F09-P4",
+        "EX-F09.ACTIVITY_BARS-P2"
+      ],
+      "observed_source_distinction": "Repeated lower-timeframe/profile rebuilds and separately retained arrays motivate shared materialization; graphical object bounds are not numerical retention contracts.",
+      "shared_F09_assertions_to_preregister": [
+        "Compare literal ordered traversal and one-pass block summaries for each registered time/count/volume clock under alternate chunk boundaries, reset placement, duplicate delivery and restart.",
+        "Cap active resolutions and retained state with explicit refusal/archive policy. Report actual operation counts, memory and completion delay; do not assert speed from an algebraic proof alone."
+      ],
+      "remaining_gates": [
+        "Actual throughput/memory measurements, full consumer reruns, captured future receipts, crash/rollback cohorts and E0-E5 economic confirmation remain unperformed."
+      ],
+      "hand_reasoned_example": {
+        "events": "The same finite ordered tape is grouped as [e1,e2]|[e3] or [e1]|[e2,e3].",
+        "expected": "For each frozen clock, completed/provisional OHLC, mass, count, CVD extrema, correction lineage and publication cuts match the independent reference; grouping alone changes none."
+      }
+    }
+  ],
+  "common_remaining_gates": [
+    "Root must independently merge/preregister exact definitions, examples, expected outcomes and ports before implementation. Proposal numbers are local identifiers, not approved golden case IDs.",
+    "All predictor formulas, complete original indicators and their variants, source private/historical data, hard-coded-rate provenance, chronological calibration, activity-threshold learning and native market fidelity remain gated.",
+    "The toy thresholds and integer event clocks illustrate arithmetic/causality only; they are not scientific tolerances, tuned parameters, market latency estimates or performance evidence.",
+    "F09 may expose finality, completeness, source identity and deterministic arithmetic; it does not by itself repair every source statistic, establish intrabar fills or calibrate touch/outcome probabilities.",
+    "Full downstream M/C/L/P consumers, operational/captured-future parity and integrated one-account economic phases remain unperformed; no source or P0-P7 phase is claimed closed.",
+    "Actual E0-COMPLETE-PARENT-OUTRIGHTS and qualified native selected-contract cohorts remain unavailable; this proposal supplies no market admission or strategy execution authorization."
+  ],
+  "excluded_incremental_fragments": [
+    "Time based level retracement - stats.txt assigned lines136-137 are only blank/comment, so they add no executable case evidence.",
+    "Time based retracement by DOW - stats.txt and several mapper/magic-hours fragments are predominantly presentation; their estimator semantics require their separate previously reviewed substantive clauses."
+  ],
+  "execution": {
+    "source_rereads": 0,
+    "pine_project_execution": false,
+    "tests_imports_compile": false,
+    "goldens_or_code_created": false,
+    "planning_original_mutations": false
+  }
+}

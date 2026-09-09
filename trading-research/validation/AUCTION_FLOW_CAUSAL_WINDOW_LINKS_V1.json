@@ -1,0 +1,90 @@
+{
+  "cash_calendar": {
+    "kind": "cash_rth_calendar",
+    "path": "/workspace/trading-research/configs/cash-rth-calendar-research-v1.json",
+    "sha256": "f069df0ccbb8318f1c675a05d9deed64ad681ebe1e47dd8573a6b18266665818",
+    "size_bytes": 6922
+  },
+  "coverage": "whole intended atomic interval support must be present and consecutive; unknown/missing isnotzero. Strict complete constituent-minute masks for fractional futureboundaries are an explicitly conservative eligibility domain. Observed outcomes retained withcensored/incomplete flags; they are not completepathtruth.",
+  "cut_cadence_ns": 300000000000,
+  "cut_clock": "UTC five-minute boundaries; same cuts for every formation comparison, full minute populations retained separately",
+  "family_complete": false,
+  "formation_features": [
+    "ordered offset trueOHLC for all4sourcecohorts and ordinaryflow, exact summed volume/prints/unknown/excluded",
+    "price first/high/low/last from actual atoms, exact summedVWAPmoments and variance, coverage and coordinateflags",
+    "OFI orderedpath only completepressure; standing duration, duration-weighted means ontheir actualexposure, fullcoverage separately"
+  ],
+  "formation_interval": "[end-formation_minutes,end); feature known_at=end+latency; latency is assumed nothistoricalreceipt",
+  "formation_minutes": [
+    5,
+    15,
+    60,
+    240
+  ],
+  "forward_horizons_minutes": [
+    5,
+    15,
+    60
+  ],
+  "forward_interval": "[feature_known_at,feature_known_at+horizon), or[feature_known_at,actualcashclose); ordered physical trades, no preavailabilitylabels",
+  "identity": "root+physicalsourcepath+instrument+rawcontract coordinate+formation/end; no sourcevariant or instrument concatenation",
+  "kind": "auction_flow_causal_window_links_contract_v1",
+  "label_known_at": "target_end+latency, max with actual last required observation availability; label must mature within itsstage and acquiredend",
+  "latency_ns": [
+    250000000,
+    0,
+    1000000000
+  ],
+  "price_reference": "last priced original trade strictly before formationend and inside formation; timestamp/order/known_at and age retained; missing staysnull",
+  "remaining_session_target": "only cuts inside actual cashRTH; endpoint actual cashclose, distinct fixed-end target",
+  "selection": "all fixedcandidates frozen before outcomes; equalcuts and same-target paired comparison; no chosenwinner fromconfirmation",
+  "source_boundary": "missing preceding formation or following endpoint isexplicit left/rightcensor; never synthesize across unrelated acquisitions",
+  "source_population": "complete accepted 3589 physical source/date windows; no acquisition concatenation or roll joins",
+  "stage_policy": {
+    "ES": {
+      "calibration": [
+        "2024-01-01",
+        "2024-04-01"
+      ],
+      "confirmation": [
+        "2024-04-01",
+        "2024-09-01"
+      ],
+      "development": [
+        "2023-07-01",
+        "2024-01-01"
+      ],
+      "training": [
+        "2020-01-01",
+        "2021-01-01"
+      ]
+    },
+    "NQ": {
+      "calibration": [
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "confirmation": [
+        "2025-01-01",
+        "2026-09-04"
+      ],
+      "development": [
+        "2023-01-01",
+        "2024-01-01"
+      ],
+      "training": [
+        "2020-01-01",
+        "2023-01-01"
+      ]
+    },
+    "other_dates": "separate unassigned descriptive rows, not training or confirmation"
+  },
+  "targets": [
+    "observed buy/sell/unknown/prints and future pricedprints",
+    "terminal price displacement, high/low excursion from formationreference and exact extrema times/orders",
+    "future signedflow and no-new-trade/no-priced-trade branch",
+    "target coverage/coordinate/clockuncertainty, endpoint rightcensor and missingdomain reasons"
+  ],
+  "version": 1,
+  "within_stage": "formation start and labelknown_at must remain within same declared root stage; unsupported dates separate unassigned descriptive only"
+}

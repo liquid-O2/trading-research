@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/workspace/coordination/trading-research-cursor/worktrees/auction-parallel/**)",
+      "Read(/workspace/coordination/trading-research-cursor/auction-parallel-assignment.md)",
+      "Write(tools/run_auction_flow_study.py)",
+      "Write(tools/auction_flow_parallel.py)",
+      "Write(src/trading_research/research/auction_flow_preflight.py)",
+      "Write(tests/test_auction_flow_parallel.py)"
+    ],
+    "deny": [
+      "Shell(*)",
+      "WebFetch(*)",
+      "Mcp(*:*)",
+      "Read(/workspace/archive/**)",
+      "Write(/workspace/trading-research/**)",
+      "Write(/workspace/planning/**)",
+      "Write(/workspace/archive/**)",
+      "Write(/home/**)",
+      "Write(/tmp/**)",
+      "Write(/etc/**)",
+      "Write(.cursor/**)",
+      "Write(.git/**)",
+      "Write(AGENTS.md)",
+      "Write(references/**)",
+      "Write(validation/**)",
+      "Write(configs/**)",
+      "Write(pyproject.toml)",
+      "Write(uv.lock)"
+    ]
+  }
+}

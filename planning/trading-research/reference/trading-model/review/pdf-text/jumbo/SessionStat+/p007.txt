@@ -1,0 +1,30 @@
+===== /workspace/sources/documents/jumbo/SessionStat+.pdf PAGE 7/12 =====
+ Accuracy & Data Detection
+
+
+The levels in the indicator may differ when switching to a timeframe
+below 2 minutes by design, to gather additional accuracy in the
+levels. Consider using the indicator above 2-3 minute time-frame
+(unless using the 1 hour or 15 minute non-custom chosen session)
+
+Bar-Based Calculations and Session Detection:
+   The indicator uses bar_index and time-based conditions to
+    detect the start and end of periods or sessions. On lower
+    timeframes, there are more bars per session, which can lead to
+   more frequent updates or slight variations in how session
+    boundaries are detected due to timestamp granularity.
+    For example, a 1-minute chart has 5 times more bars than a 5-
+   minute chart, so the exact bar where a session starts or ends
+   might differ slightly, affecting when the indicator initializes or
+   updates session data.
+
+
+Practical Implications:
+    Visual Differences: On timeframes below 5 minutes, you might
+    notice levels appearing at slightly different prices or extending to
+    different bars due to the finer granularity of data and potential
+    misalignment in session detection.
+   Performance Considerations: Lower timeframes generate more
+    bars, increasing computational load and potentially causing the
+    indicator to process data differently, especially for custom
+    sessions with frequent updates.

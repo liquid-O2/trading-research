@@ -1,0 +1,206 @@
+{
+  "calendar_anchors": {
+    "civil_period_start": "00:00",
+    "kinds": [
+      "week",
+      "month",
+      "quarter",
+      "year"
+    ],
+    "role": "explicit civil-calendar construction; retain distinct disclosed source clocks",
+    "week_start": "Monday",
+    "zone": "America/New_York"
+  },
+  "coverage": "Explicit intended versus supplied intervals, local gap/unknown/invalid-trade exclusions, coordinate changes, no-volume and censored formation. Calendar/source gaps cannot be quiet zeros.",
+  "exact_unresolved_variants": [
+    "A historical discretionary final viewport cannot define an earlier anchor.",
+    "The source first-two-eligible-futures-days composite needs that actual calendar evidence; a cash-calendar substitute does not reproduce it.",
+    "Official settlement requires its own acquired publication evidence."
+  ],
+  "fixed_clocks": [
+    {
+      "calendar": "retained published cash calendar",
+      "id": "cash_rth",
+      "interval": "actual 09:30 open through actual close, including early closes",
+      "kind": "rth"
+    },
+    {
+      "calendar": "retained published cash calendar",
+      "id": "prior_cash_rth",
+      "interval": "latest earlier nonclosed cash date; complete value available at that actual close plus its source delay",
+      "kind": "prior_rth"
+    },
+    {
+      "end": "17:00",
+      "id": "observed_futures_18_17",
+      "kind": "day",
+      "start": "18:00",
+      "start_day_offset": -1,
+      "venue_status_certified": false,
+      "zone": "America/New_York"
+    },
+    {
+      "end": "09:30",
+      "id": "overnight_18_0930",
+      "kind": "overnight",
+      "start": "18:00",
+      "start_day_offset": -1,
+      "venue_status_certified": false,
+      "zone": "America/New_York"
+    },
+    {
+      "end": "09:00",
+      "id": "morning_06_09_ny",
+      "kind": "jumbo_named_range",
+      "start": "06:00",
+      "start_day_offset": 0,
+      "zone": "America/New_York"
+    },
+    {
+      "end": "09:00",
+      "id": "source_06_09_fixed_utc_minus4",
+      "kind": "jumbo_named_range",
+      "start": "06:00",
+      "start_day_offset": 0,
+      "zone": "Etc/GMT+4"
+    },
+    {
+      "end": "21:00",
+      "end_day_offset": 1,
+      "id": "source_monday_22_21_utc",
+      "kind": "jumbo_named_range",
+      "start": "22:00",
+      "start_day_offset": 0,
+      "weekday": 0,
+      "zone": "UTC"
+    },
+    {
+      "end": "21:00",
+      "end_day_offset": 1,
+      "id": "source_tuesday_22_21_utc",
+      "kind": "jumbo_named_range",
+      "start": "22:00",
+      "start_day_offset": 0,
+      "weekday": 1,
+      "zone": "UTC"
+    }
+  ],
+  "flow": "Concatenate exact zero-open constituent cumulative paths with offset closes, extrema and actual event clocks/orders; do not take extrema of closes. Preserve each fixed cohort and its excluded mass.",
+  "forward_remaining_target": "actual remaining cash session from an available cut; keep separate from formation length",
+  "forward_target_horizons_minutes": [
+    5,
+    15,
+    60
+  ],
+  "full_family_dependencies_remaining": [
+    "Train-only cohort/intensity/scale fits and their complete source/control variants.",
+    "Full causal structure, discretionary-sequence and memory populations beyond the anchor interfaces.",
+    "Individual Context labels/models, complete controlled Location populations, annual statistics and complete workload projection."
+  ],
+  "geometry": {
+    "exact_source_rows": "one tick, origin zero, all buy/sell/unknown/unpriced mass",
+    "neighboring_grids": [
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    "no_cartesian_product": true,
+    "poc_tie": "lower; retain all maximizers and plateaus",
+    "poc_tie_comparator": "upper",
+    "source_value_fractions": [
+      "17/25",
+      "7/10"
+    ],
+    "transformation_grid_known_at": "current feature cut; a future-profile target uses that frozen prefix grid and explicit overflow",
+    "triangular_mass_smoothing_scales": [
+      1,
+      2,
+      4
+    ],
+    "value_tie": "upper",
+    "value_tie_comparators": [
+      "lower",
+      "both"
+    ]
+  },
+  "kind": "auction_flow_exact_anchor_measurement_contract_v1",
+  "members": "Union overlapping time intervals only inside the same explicit acquired source lineage and raw physical coordinate; preserve all physical prints. Source variants are separate populations. Do not combine overlapping acquisitions or roll coordinates.",
+  "or15_status": "an optional named benchmark/dealing range; no general formation or activity-reference privilege",
+  "parent_protocol_sha256": "a70b281899acf5417290846d4e94d159b713a453b1f18c0997f07e44acb014b5",
+  "purpose": "Exact reusable formation, rolling, composite and delayed-selection auction/flow measurements over the already registered acquired source population. A calculation check is not family statistics or Context/Location quality.",
+  "registered_family": "Research-Auction-Flow-acquired-MBP-v1",
+  "research_execution_authorized_by_this_file": false,
+  "resources_changed": false,
+  "rolling_formation_minutes": [
+    5,
+    15,
+    60,
+    240
+  ],
+  "selection_rule": "A causal event/swing/dealing-range/composite anchor carries its actual selection and publication evidence. Its geometric start may be earlier, but no value is available before selection. Fixed clock declarations are known separately from data completion.",
+  "tpo": {
+    "bracket_minutes": [
+      15,
+      30,
+      60
+    ],
+    "initial_balance_minutes": [
+      30,
+      60
+    ],
+    "matrix": "exact bracket memberships retained or reproducible from original addressed atoms; a price crossing does not imply a visit",
+    "single_prints": "provisional until complete intended anchor and at least two completed brackets",
+    "source_bracket_minutes": 30,
+    "source_initial_balance_minutes": 60,
+    "visits": "actual priced trades, distinct bracket/price membership; separate OHLC range proxy"
+  },
+  "vwap": {
+    "moments": "exact integer sum(q), sum(p*q), sum(p*p*q); rational mean and variance",
+    "percent_band_fractions": [
+      "1/100",
+      "1/40",
+      "3/100"
+    ],
+    "robust": "weighted median and weighted absolute-deviation median; separately named scale 7413/5000 times MAD",
+    "rolling": "exact additions and removals of the same eligible atomic mass; never average constituent VWAPs",
+    "sd_band_multipliers": [
+      "1",
+      "2",
+      "5/2",
+      "3"
+    ],
+    "source_pin069": "bar-close-volume reanchor on a new completed-bar high inside fixed UTC-4 06\u201309; preserve retrospective bar origin and its later publication",
+    "source_proxies": [
+      "bar_close_times_volume",
+      "bar_hlc3_times_volume"
+    ],
+    "weighted_quantiles": [
+      "1/20",
+      "1/4",
+      "1/2",
+      "3/4",
+      "19/20"
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "artifact": "e0-final-source-delta-review",
+  "review_mode": "static_read_only",
+  "execution_policy": {
+    "imports": false,
+    "compile": false,
+    "tests": false,
+    "cli": false,
+    "source_or_test_edits": false,
+    "allowed_reads": ["grep", "sed", "nl -ba", "sha256sum", "git diff"]
+  },
+  "prior_review": {
+    "artifact": "/tmp/e0-root-integration-repair-review.json",
+    "sha256": "9f98ee5e79a2ce822397aea3af0a7a6cd6209abdd0b8c33ccc613c286fa3ab2d",
+    "preserved_findings": [
+      "E0-INT-REVIEW-001",
+      "E0-INT-REVIEW-002",
+      "E0-INT-REVIEW-003",
+      "E0-INT-REVIEW-004",
+      "E0-INT-REVIEW-005",
+      "E0-INT-REVIEW-006",
+      "E0-INT-REVIEW-007",
+      "E0-INT-REVIEW-008",
+      "E0-INT-REVIEW-009"
+    ],
+    "preservation_note": "The prior INT08/INT10/INT11 conclusions remain unchanged. Finding 008 is reclassified below as a bounded current-source invariant; finding 009 remains a mandatory report-validation requirement, not a current caller defect."
+  },
+  "current_sha256": {
+    "src/trading_research/experiments/e0/runner.py": "7cc76a794a9e29057c1b2cb5195ea7de24b624cafefd9903f7abaa5e40a121a6",
+    "tests/e0_source_fixtures.py": "88285bbf9be879f9f30b520d2a4e1d17476692329d7b626ae54d4ab1e03ed4d8",
+    "tests/e0_source_case_fixtures.py": "44b0a433a05e832516590bb4231b9ee5dd284e6cd29f87b4ee77e56de856b8f3",
+    "tests/test_e0_source_integration.py": "fdf05b672fcdb945fb06c5905f94ea45b7df06ef10424376514087c8ca52bd61",
+    "tests/golden/e0_integration_v1.json": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43",
+    "src/trading_research/experiments/e0/observations.py": "137d79be35df8371927ef5396bf0ad5dbc93b525788c26f472917c6ea94d9828",
+    "src/trading_research/experiments/e0/policy.py": "334f047b4a73879155b7aff2e23134632768835e6a5957c50bd39ae11fd908be",
+    "src/trading_research/experiments/e0/source_bridge.py": "960f7f84020537b2abfc7e4fd339eb646e8457113edd8ae832d24a5085bf71bd"
+  },
+  "delta_findings": [
+    {
+      "id": "E0-SOURCE-DELTA-001",
+      "severity": "pass",
+      "status": "confirmed",
+      "subject": "last completed minute requirement and fixture history",
+      "evidence": [
+        "runner.py:158-166 filters bars strictly before the cut, keeps the last 31, requires prior[-1].end_at == cut - MINUTE, then requires one-minute adjacency",
+        "tests/e0_source_fixtures.py:602-614 constructs exactly 32 bars: base=09:32, index 0 is 09:00 and index 31 is 09:31",
+        "tests/e0_source_fixtures.py:807 constructs cuts 09:31, 09:32 and 09:33"
+      ],
+      "negative_case": "test_e0_runner_integration.py:151-154 removes the 09:31 bar. At the 09:32 cut it still leaves 31 contiguous old bars (09:00-09:30), so the new final-minute assertion—not the length or adjacency checks—rejects it with the expected missing-last-minute dependency.",
+      "legitimate_learned_calls": "e0_learning_fixtures.py:217 calls e0_feature_values only for rows with contact. The retained native fixture places the learning contact at the base-2-second event, available before the 09:32 cut; VisitTracker consumes that visit, and no later 09:33 contact is produced. Thus legitimate learned feature calls use 09:32 with 09:31 as their last completed bar. The connected training and evaluation calls use the same typed day envelope and contact filter."
+    },
+    {
+      "id": "E0-SOURCE-DELTA-002",
+      "severity": "pass",
+      "status": "confirmed",
+      "subject": "typed synthetic policy evidence in INT03-F01",
+      "evidence": [
+        "tests/e0_source_case_fixtures.py:245-262 policy_choice builds E0ActionValue rows only from actual contact rows and the requested signed side",
+        "Each value has exact probabilities (1,0,0), exact declared net values, decision/cut clocks, candidate/object/source/decision-set identities, horizon/expiry, and E0SyntheticNumericalEvidence",
+        "The embedded evidence binds id/model_version to digest(payload), target_version to the typed policy, fold_id to the declared control, feature_version to the actual row version and source_version to the actual row source",
+        "score_and_decide_e0 receives the actual observations.E0DecisionSet and typed values, so selection is produced through the public policy port rather than an action-string shortcut"
+      ],
+      "scope": "This is an explicit INT03 arithmetic/control policy view. It is synthetic_numeric_control evidence and is not presented as E0CommittedPredictionEvidence or used as a production learned-branch fit."
+    },
+    {
+      "id": "E0-SOURCE-DELTA-003",
+      "severity": "pass",
+      "status": "confirmed",
+      "subject": "all current 19 source cases remain mapped",
+      "case_count": 19,
+      "test_methods": 19,
+      "case_groups": {
+        "INT01": ["F01", "F02", "F03"],
+        "INT02": ["F01", "F02", "F03"],
+        "INT03": ["F01", "F02", "F03"],
+        "INT04": ["F01", "F02", "F03"],
+        "INT05": ["F01", "F02", "F03"],
+        "INT12": ["F01", "F02", "F03"],
+        "SCOPE": ["F01"]
+      },
+      "fixture_helpers": [
+        "check_int02_f01",
+        "check_int02_f02",
+        "check_int02_f03",
+        "check_int03_f01",
+        "check_int03_f02",
+        "check_int03_f03",
+        "check_int05_f01",
+        "check_int05_f02",
+        "check_int05_f03"
+      ],
+      "result": "No source-case method was removed, renamed out of its frozen group, or replaced by a generated receipt assertion. INT01/04/12/SCOPE remain directly delegated to their operational-case helpers."
+    },
+    {
+      "id": "E0-SOURCE-DELTA-004",
+      "severity": "pass",
+      "status": "confirmed",
+      "subject": "current retained source fixture remains receipt-bound",
+      "evidence": [
+        "tests/e0_source_fixtures.py:775-791 creates NativeCoverageReceipt from the actual event tuple, using the event dataset/schema identities and raw retained rows",
+        "tests/e0_source_fixtures.py:108-119 exposes the runner day with market_state=continuous",
+        "tests/e0_source_fixtures.py:602-614 provides the full 09:00-09:31 completed-minute history needed by the 09:31/09:32 legitimate cuts"
+      ]
+    },
+    {
+      "id": "E0-SOURCE-DELTA-005",
+      "severity": "accepted_invariant",
+      "status": "reclassified_from_prior_008",
+      "subject": "current route vocabulary is fixed by the registered source code",
+      "detail": "The earlier restore observation remains technically true: runner restore reconstructs FillScenario using venue_first and strict_trade_through. Current E0RunManifest.__post_init__ requires scenarios == the module-level SCENARIOS tuple, and every current E0Scenario uses that route vocabulary. Therefore this is a bounded current-source invariant, not a current INT10 incompatibility. It becomes a defect only if route fields are added to registered scenarios without persisting them in the manifest/checkpoint."
+    },
+    {
+      "id": "E0-SOURCE-DELTA-006",
+      "severity": "mandatory_validation",
+      "status": "reclassified_from_prior_009",
+      "subject": "report validators remain required",
+      "detail": "E0NativeExecutionSource and E0ExecutionEvidence still defer full native receipt/path equivalence until rebuild/validate_replay. This remains an explicit validation contract rather than a current report-fixture gap: reporting._economic_join invokes item.__post_init__, native_source.rebuild and _compare_replay before economic completion, while INT11 supplies the typed NativeCoverageReceipt and actual VenuePath. Consumers must retain this validator call before treating standalone evidence as verified."
+    }
+  ],
+  "blocking_findings": [],
+  "conclusion": "The source-only delta review found no blocking defect. The new last-completed-minute gate is compatible with the retained 32-bar fixture and all legitimate learned feature calls. Current INT03 policy_choice uses typed synthetic control evidence with explicit lineage. All 19 source cases remain mapped. Prior route and report-validator observations are preserved and reclassified as a current-source invariant and a mandatory validation contract, respectively. No dynamic pass claim is made."
+}

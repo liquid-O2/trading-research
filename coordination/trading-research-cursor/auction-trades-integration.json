@@ -1,0 +1,44 @@
+{
+  "integrated_at": "2026-09-08T09:09:18.362254+00:00",
+  "status": "registered_check8_passed",
+  "worker_run": "/workspace/coordination/trading-research-cursor/runs/20260908T085710Z-35f9cedd",
+  "files": [
+    {
+      "path": "src/trading_research/research/auction_flow_windows.py",
+      "before_sha256": "e59bdbe270304c1b26beb4171d2f9bf4b5fbf78ca0bbf7e580343067d3cbfded",
+      "worker_sha256": "740721b035dfeba7b94cd5282fdb09086cea5de006b87fc1762f5ca1daa978b4",
+      "after_sha256": "5ba8f466eaba41f49b0e1ef2640881db185e7f915b3da56d2073e1f4875329ba"
+    },
+    {
+      "path": "src/trading_research/research/auction_flow_measurements.py",
+      "before_sha256": "60b1bfaf993b46890a7cbeede6a8a2af5fae434c72ce1e12c6c76ea75d485af7",
+      "worker_sha256": "f8449f67c1b3c815980e37189cc16b69d2b827c9de06e2508b32d4da1c4c1f3d",
+      "after_sha256": "153c1d9801ddfeaa6ce21d6f33ce0cef28747cf9995b8418796384b6fd2f4c25"
+    },
+    {
+      "path": "src/trading_research/research/auction_flow_pipeline.py",
+      "before_sha256": "3bc7bdf8bf68a33d48ad443c133871b8b6fcd535f33a27fb527917aa041cdac5",
+      "worker_sha256": "6e6c75a2e59a2aee087f15fff9a0a0d0b3b1555f252cc0b00bec90340a97e8bb",
+      "after_sha256": "6e6c75a2e59a2aee087f15fff9a0a0d0b3b1555f252cc0b00bec90340a97e8bb"
+    },
+    {
+      "path": "tests/test_auction_flow_prepared_trades.py",
+      "before_sha256": null,
+      "worker_sha256": "db202a3cdba848e848448470d6f350d7505b81c9fdde7f4c85a24ce6fa53a939",
+      "after_sha256": "78113a09091c3656915bcc13646057bbd5d42c4b5b0fe2b8280daf3163b38e07"
+    }
+  ],
+  "review_findings": [
+    "Public add must preserve larger accepted tables by bounded internal slices.",
+    "Prepared integer copy must not narrow unsigned native values.",
+    "Shared validated-array helpers must be private internal APIs."
+  ],
+  "supervisor_corrections": [
+    "Public TapeWindow.add splits larger input into bounded prepared batches.",
+    "Owned integer copies preserve original signed/unsigned domains and source addresses.",
+    "New validated arithmetic helpers are private.",
+    "Tests verify large-input frozen parity, source addresses above int64, caller mutation isolation and exact frozen-reference hashes."
+  ],
+  "registered_attempt_id": "ddf0d2c136a6cd4048045f53448fd96fff40f4d67096e221f0a3de1d13367455",
+  "review": "/workspace/trading-research/reports/auction-flow-prepared-trades-storage-check8-review.md"
+}

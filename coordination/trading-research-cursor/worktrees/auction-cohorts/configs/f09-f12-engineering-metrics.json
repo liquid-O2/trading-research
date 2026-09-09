@@ -1,0 +1,1869 @@
+{
+  "evidence_rule": "Required finite measurements must be populated by the exact successful registered assertions. Synthetic arithmetic, overlapping CPU scopes and shared process peak RSS remain explicitly labelled.",
+  "modules": {
+    "tests.test_arrival": {
+      "required_assertions": [
+        "tests.test_arrival.ArrivalTraceTests.test_batch_boundary",
+        "tests.test_arrival.ArrivalTraceTests.test_checkpoint_restore",
+        "tests.test_arrival.ArrivalTraceTests.test_identical_bytes",
+        "tests.test_arrival.ArrivalTraceTests.test_latency_denominator",
+        "tests.test_arrival.ArrivalTraceTests.test_local_resource_measurements",
+        "tests.test_arrival.ArrivalTraceTests.test_raw_before_decode"
+      ],
+      "schema": {
+        "required": {
+          "batch_boundary_comparison": {
+            "required": {
+              "actual_live_evidence": {
+                "const": false,
+                "type": "boolean"
+              },
+              "candidate_callback_calls": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "candidate_records_applied": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "reference_callback_calls": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "reference_rows_examined": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "durable_raw_boundary": {
+            "required": {
+              "measured_local_journal_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "ordered_operations": {
+                "const": [
+                  "write_all",
+                  "flush",
+                  "fsync",
+                  "decode"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "retained_raw_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "scope": {
+                "min_length": 1,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "local_resource_measurements": {
+            "required": {
+              "actual_live_evidence": {
+                "const": false,
+                "type": "boolean"
+              },
+              "callback": {
+                "required": {
+                  "calls": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "process_peak_rss_bytes": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "scope": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "driver": {
+                "required": {
+                  "counts": {
+                    "required": {
+                      "callback_attempts": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "callback_calls": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "checkpoint_bytes_serialized": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "checkpoint_history_rows_serialized": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "duplicate_write_retries": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "records_applied": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "restore_validation_records": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_record_bytes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "process_peak_rss_bytes": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "scope": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "journal": {
+                "required": {
+                  "counts": {
+                    "required": {
+                      "attempted_write_bytes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "committed_appends": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "decode_attempts": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "flush_calls": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "fsync_calls": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "write_attempts": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "written_bytes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "process_peak_rss_bytes": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "scope": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "scope": {
+                "min_length": 1,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "restart_comparison": {
+            "required": {
+              "candidate_callback_calls_including_prefix_verification": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "measured_checkpoint_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "restore_validation_records": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "scope": {
+                "min_length": 1,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "same_bytes_comparison": {
+            "required": {
+              "actual_live_evidence": {
+                "const": false,
+                "type": "boolean"
+              },
+              "candidate_callback_calls": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "measured_local_journal_bytes": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "reference_callback_calls": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "reference_rows_examined": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "synthetic_records": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "synthetic_latency_arithmetic": {
+            "required": {
+              "drops": {
+                "required": {
+                  "actual_live_evidence": {
+                    "const": false,
+                    "type": "boolean"
+                  },
+                  "drop_rate": {
+                    "const": [
+                      1,
+                      4
+                    ],
+                    "items": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "max_length": 2,
+                    "min_length": 2,
+                    "nullable": true,
+                    "type": "array"
+                  },
+                  "duplicate_receipts": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "expected_count": {
+                    "minimum": 0,
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "expected_evidence_id": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "generation": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "identity_contract": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "missing": {
+                    "minimum": 0,
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "reason": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "simulated_boundary": {
+                    "const": true,
+                    "type": "boolean"
+                  },
+                  "source_id": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "unique_received": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "window_id": {
+                    "min_length": 1,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "measurement_scope": {
+                "min_length": 1,
+                "type": "string"
+              },
+              "summary": {
+                "required": {
+                  "actual_live_evidence": {
+                    "const": false,
+                    "type": "boolean"
+                  },
+                  "actual_qualified_count": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "duplicate_samples": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "excluded": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "method": {
+                    "const": "source_to_receipt",
+                    "type": "string"
+                  },
+                  "n": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "p50": {
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "p95": {
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "p99": {
+                    "nullable": true,
+                    "type": "integer"
+                  },
+                  "provenance": {
+                    "const": "synthetic_fixture",
+                    "type": "string"
+                  },
+                  "reason": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "session_id": {
+                    "min_length": 1,
+                    "type": "string"
+                  },
+                  "simulated_boundary": {
+                    "const": true,
+                    "type": "boolean"
+                  },
+                  "source_id": {
+                    "min_length": 1,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "tests.test_artifact_graph": {
+      "required_assertions": [
+        "tests.test_artifact_graph.ArtifactGraphTests.test_f11_20_full_versus_incremental_exact_arithmetic"
+      ],
+      "schema": {
+        "required": {
+          "build_io": {
+            "required": {
+              "blob_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "manifest_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "pointer_publish_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "case_id": {
+            "const": "F11-20",
+            "type": "string"
+          },
+          "claim_scope": {
+            "min_length": 1,
+            "type": "string"
+          },
+          "commit_manifest_sha256": {
+            "max_length": 64,
+            "min_length": 64,
+            "type": "string"
+          },
+          "exact_manifest_parity": {
+            "const": true,
+            "type": "boolean"
+          },
+          "exact_value_parity": {
+            "const": true,
+            "type": "boolean"
+          },
+          "first_change_paths": {
+            "items": {
+              "max_length": 2,
+              "min_length": 2,
+              "type": "array"
+            },
+            "max_length": 4,
+            "min_length": 4,
+            "type": "array"
+          },
+          "full_arithmetic": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "operations": {
+                "required": {
+                  "add": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "multiply": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "source_reads": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "validated_edges": {
+                    "const": 4,
+                    "type": "integer"
+                  },
+                  "validated_nodes": {
+                    "const": 6,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "full_build": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "incremental_arithmetic": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "operations": {
+                "required": {
+                  "add": {
+                    "const": 1,
+                    "type": "integer"
+                  },
+                  "multiply": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "source_reads": {
+                    "const": 1,
+                    "type": "integer"
+                  },
+                  "validated_edges": {
+                    "const": 4,
+                    "type": "integer"
+                  },
+                  "validated_nodes": {
+                    "const": 6,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "incremental_build": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "incremental_build_io": {
+            "required": {
+              "blob_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "manifest_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "pointer_publish_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "manifest_bytes": {
+            "maximum": 2097152,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "old_arithmetic": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "operations": {
+                "required": {
+                  "add": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "multiply": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "source_reads": {
+                    "const": 2,
+                    "type": "integer"
+                  },
+                  "validated_edges": {
+                    "const": 4,
+                    "type": "integer"
+                  },
+                  "validated_nodes": {
+                    "const": 6,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "payload_bytes": {
+            "maximum": 33554432,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "plan_validation": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "rebuilt_ids": {
+            "items": {
+              "max_length": 64,
+              "min_length": 64,
+              "type": "string"
+            },
+            "max_length": 4,
+            "min_length": 4,
+            "type": "array"
+          },
+          "restore": {
+            "required": {
+              "cpu_seconds": {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              "peak_rss_bytes": {
+                "maximum": 4294967296,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "wall_seconds": {
+                "maximum": 240,
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "restore_io": {
+            "required": {
+              "blob_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "manifest_put_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "pointer_publish_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "read_calls": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "reused_ids": {
+            "items": {
+              "max_length": 64,
+              "min_length": 64,
+              "type": "string"
+            },
+            "max_length": 2,
+            "min_length": 2,
+            "type": "array"
+          },
+          "storage": {
+            "required": {
+              "audit_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "audits": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "commits": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "configuration_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "manifest_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "manifests": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "mutation_lock_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "orphan_blob_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "orphan_manifest_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "pointer_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "staging_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "staging_manifest_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "staging_payload_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              },
+              "unique_blob_bytes": {
+                "maximum": 1099511627776,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          },
+          "validated_edges": {
+            "const": 4,
+            "type": "integer"
+          },
+          "validated_nodes": {
+            "const": 6,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "tests.test_object_graph": {
+      "required_assertions": [
+        "tests.test_object_graph.ObjectGraphTests.test_f10_28_measured_targeted_update_vs_full_reference"
+      ],
+      "schema": {
+        "required": {
+          "case_id": {
+            "const": "F10-28",
+            "type": "string"
+          },
+          "dirty_ids": {
+            "items": {
+              "type": "string"
+            },
+            "max_length": 3,
+            "min_length": 3,
+            "type": "array"
+          },
+          "io_scope": {
+            "type": "string"
+          },
+          "literal_object_evaluations": {
+            "const": 1002,
+            "type": "integer"
+          },
+          "native_or_economic_certification": {
+            "const": false,
+            "type": "boolean"
+          },
+          "objects": {
+            "const": 1002,
+            "type": "integer"
+          },
+          "phases": {
+            "required": {
+              "checkpoint": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "construction": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "full_reference": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "literal_bytes_read": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "literal_object_evaluations": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "literal_records_decoded": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "literal_support_checks": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "indexed_query": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "restore": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "targeted_update": {
+                "required": {
+                  "cpu_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "operations": {
+                    "required": {
+                      "adjacency_edges_visited": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "admission_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "capacity_rows_checked": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "hot_entries_examined": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "index_rows_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_index_changes_folded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "integrity_rows_compared": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_bytes_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_decoded": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "journal_records_written": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "logical_index_bytes_read": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "object_evaluations": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "query_rows_returned": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "record_decodes": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "retained_members_validated": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sql_statements": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "sqlite_vm_steps_lower_bound_1000": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_batches_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "suffix_members_replayed": {
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "support_checks": {
+                        "minimum": 0,
+                        "type": "integer"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "rss_peak_after_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "rss_peak_before_bytes": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "wall_seconds": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "rss_scope": {
+            "type": "string"
+          },
+          "schema_version": {
+            "const": "F10.EngineeringMetrics.v2",
+            "type": "string"
+          },
+          "semantic_parity": {
+            "const": true,
+            "type": "boolean"
+          },
+          "sqlite_vm_scope": {
+            "type": "string"
+          },
+          "successful_assertion_id": {
+            "const": "tests.test_object_graph.ObjectGraphTests.test_f10_28_measured_targeted_update_vs_full_reference",
+            "type": "string"
+          },
+          "targeted_object_evaluations": {
+            "const": 3,
+            "type": "integer"
+          },
+          "timing_speedup_claimed": {
+            "const": false,
+            "type": "boolean"
+          },
+          "unaffected_versions": {
+            "const": 999,
+            "type": "integer"
+          },
+          "work_counter_definition": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "tests.test_shared_bars": {
+      "required_assertions": [
+        "tests.test_shared_bars.SharedBarTests.test_b26_single_matched_resource_comparison"
+      ],
+      "schema": {
+        "required": {
+          "activity_clocks": {
+            "const": 3,
+            "type": "integer"
+          },
+          "activity_work": {
+            "required": {
+              "activity_clock_compositions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_lineage_identity_items_copied": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_publication_block_references": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_publication_source_identity_references": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_source_dispatches": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_support_block_compositions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "activity_support_lineage_items_copied": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object",
+            "values": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "capture_construction_work": {
+            "required": {
+              "admission_proof_operations_hashed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "admission_proof_source_records_hashed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_admission_operations_visited": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_admitted_trade_records_visited": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_block_compositions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_block_id_identity_items_hashed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_block_source_records_hashed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_block_summaries_built": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_eligible_source_records_hashed": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_event_timestamp_index_entries": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_leaf_summaries_created": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "capture_lineage_identity_items_copied": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object",
+            "values": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "case_id": {
+            "const": "F09-B26",
+            "type": "string"
+          },
+          "checkpoint_bytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "checkpoint_cpu_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "checkpoint_wall_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "clocks": {
+            "const": 8,
+            "type": "integer"
+          },
+          "events": {
+            "const": 4096,
+            "type": "integer"
+          },
+          "exact_semantic_and_lineage_parity": {
+            "const": true,
+            "type": "boolean"
+          },
+          "family": {
+            "const": "F09-shared-bar-reference-v1",
+            "type": "string"
+          },
+          "literal_cpu_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "literal_source_visits": {
+            "const": 32768,
+            "type": "integer"
+          },
+          "literal_wall_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "native_market_evidence": {
+            "const": false,
+            "type": "boolean"
+          },
+          "process_peak_rss_bytes": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "repetitions": {
+            "const": 1,
+            "type": "integer"
+          },
+          "retained_blocks": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "retained_events": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "retained_publications": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "shared_activity_cpu_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_activity_wall_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_build_cpu_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_build_wall_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_capture_source_visits": {
+            "const": 4096,
+            "type": "integer"
+          },
+          "shared_query_compositions": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_query_cpu_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "shared_query_wall_ns": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "source_visit_scope": {
+            "min_length": 1,
+            "type": "string"
+          },
+          "time_clocks": {
+            "const": 5,
+            "type": "integer"
+          },
+          "time_query_work": {
+            "required": {
+              "query_binary_searches": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "query_blocks_visited": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "query_compositions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "query_lineage_identity_items_copied": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "type": "object",
+            "values": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "universal_speedup_claim": {
+            "const": false,
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "schema_version": "F09-F12.EngineeringMetrics.v1"
+}

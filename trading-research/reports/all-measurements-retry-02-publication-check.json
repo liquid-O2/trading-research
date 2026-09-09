@@ -1,0 +1,22 @@
+{
+  "scope": "Read-only review of measurement_ports publication receipt/adapters and MX07/MP19 fixtures; no imports, compilation, tests, candidate runs, or normalization.",
+  "verdict": "Receipt semantics approved within reviewed scope; one concrete MX07 exception-type fixture blocker.",
+  "findings": [
+    {
+      "severity": "medium",
+      "file": "tests/test_structure_pressure_memory.py",
+      "line": 59,
+      "description": "Early cut 9 expects DependencyUnavailable, but trade-backed swing source cut is 10. Adapter calls _current_swing before its final availability guard; common.validate_trade_window raises base ContractError for publication_cut < original observation cut. DependencyUnavailable is a subclass, so the asserted narrower exception does not match.",
+      "proposed_fix": "Move the source known/input-cut availability guard before current-source validation, or expect ContractError if that is the intended public error contract. Preserve the unchanged-head assertion."
+    }
+  ],
+  "approved_semantics": [
+    "Original computation clocks are validated and content-digest bound separately from completed-result F10 receipt clocks.",
+    "Result evidence becomes known only at publication; intake at that same time satisfies the unchanged universal external-input gate without backdating evidence.",
+    "Source recipe revalidation remains at original decision cut; later-than-computation corrections do not automatically rewrite frozen computation.",
+    "Location revision retains previous birth and original born_at; original TTL and raw lifetime checks still precede atomic commit.",
+    "Corrected source fixture intake 2/2/2 consistently receives evidence known at 2 while new_capture retains its actual source recipe at 1; corrected anchor and VWAP are subsequently available at 2.",
+    "Location evidence and object are staged together; historical object versions and frozen targets remain unchanged."
+  ],
+  "limits": "Static review only, focused on changed publication boundary and listed tests; no claim of test pass or comprehensive producer/security audit."
+}

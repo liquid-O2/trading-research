@@ -1,0 +1,78 @@
+{
+  "schema": "E0BudgetAmendmentStaticReviewV1",
+  "execution": "Source-only review and ORCH04 source additions; no candidate imports, compilation, tests, CLI or trial execution.",
+  "files": [
+    {
+      "path": "tools/amend_engineering_budget.py",
+      "sha256": "a6a6e1a8ff9aedd617d82b66bdf6914e974557c0064b574b4222ef612c41a477",
+      "size_bytes": 2438,
+      "ast": "readable",
+      "public_tests": 0
+    },
+    {
+      "path": "tools/engineering_batch_contract.py",
+      "sha256": "10dbb18fb416fbaea5f6ad8e6ac1e1e594a4a4a41b7115329c27afa94775c71d",
+      "size_bytes": 34626,
+      "ast_error": {
+        "line": 293,
+        "message": "expected an indented block after 'if' statement on line 292"
+      }
+    },
+    {
+      "path": "tests/test_engineering_resource_contracts.py",
+      "sha256": "c4e82377ee7a38c07d96f472ac717af060e725005b31321fdd122ec36d9dd269",
+      "size_bytes": 39022,
+      "ast": "readable",
+      "public_tests": 6
+    }
+  ],
+  "findings": [
+    {
+      "id": "AMD01",
+      "status": "reported_root_owns_fix",
+      "finding": "Misindented raise in validate_registrations is a syntax blocker."
+    },
+    {
+      "id": "AMD02",
+      "status": "reported_root_owns_fix",
+      "finding": "No single-child-per-parent restriction permits multiple sibling budgets despite no chaining."
+    },
+    {
+      "id": "AMD03",
+      "status": "reported_root_owns_fix",
+      "finding": "No exact E0-parent restriction permits amending arbitrary M-family originals."
+    },
+    {
+      "id": "AMD04",
+      "status": "reported_root_owns_fix",
+      "finding": "Registration tool writes amendment CAS before validation and registers family before report publication; invalid request or destination-directory can leave side effects."
+    },
+    {
+      "id": "AMD05",
+      "status": "reported_root_owns_fix",
+      "finding": "Amendment raw read checks size after unbounded read_bytes; retirement scans unvalidated amendment payloads before validated budget disposition."
+    }
+  ],
+  "positive": [
+    "Original parent budget payload is compared without rewriting its3/600 counters.",
+    "Child policy/resource fields are preserved from parent; amendment asserts1/180 and180/190/4GiB/360, no reset/no economic or model scope.",
+    "Deviation identities are exact local hashes/sizes and rejected-private/failed-retained/unknown CPU-RSS dispositions are checked.",
+    "Stable package_path symlink aliases reject.",
+    "Same child registration is naturally idempotent through TrialRegistry immutable registration."
+  ],
+  "ORCH04_additions": [
+    "Positive actual temp parent/child registry and original budget preservation.",
+    "Prior interrupted attempt retains reservation-charged unknown CPU basis and unknown wall/RSS.",
+    "Tampered amendment flags/budgets and changed deviation bytes reject without trial history mutation.",
+    "Alias, parent reuse, sibling and chaining negatives.",
+    "Same child registration idempotent; one child start/finish then second start rejects from1-attempt budget.",
+    "Exact fixed E0 parent/child and two pinned deviation report fixtures.",
+    "amend main invalidrequest,directory,alias,parentoverwrite exact registry-byte preservation; existingchild publication/rerun exact idempotency."
+  ],
+  "remaining": "Root implementation fixes and follow-up static review; tool-main invalid/rerun behavior assertion needs finalized preflight API. Added tests have not executed.",
+  "test_source": {
+    "sha256": "2a79d3cefc95a584110f11795d997e2a4e7ce37db435849567db2b19964cac76",
+    "size_bytes": 42200,
+    "public_methods": 6
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "allocation": [
+    {
+      "attempt": 17,
+      "authorized": true,
+      "phase": "consolidated_check"
+    },
+    {
+      "attempt": 18,
+      "authorized": true,
+      "phase": "fit"
+    },
+    {
+      "attempt": 19,
+      "authorized": true,
+      "phase": "confirmation"
+    },
+    {
+      "attempts": [
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "authorized": true,
+      "phase": "documented_correction_or_partition_reserve"
+    }
+  ],
+  "amendment_id": "jumbo-complete-workload-user-approved-2026-09-08-v2",
+  "approval": {
+    "answer": "1, but speed it up, it is 100% doable, use numba or vectorised stuff or use another language that is fast, also you arent even using the full hardware.",
+    "approved_at": "2026-09-08T08:18:47.330996Z",
+    "question": "May I apply the [prepared Jumbo resource amendment](/workspace/trading-research/reports/jumbo-complete-workload-continuation-proposal-v2.md) and run verification, full fitting and confirmation? It raises the total cap to 24 attempts and 20,000 CPU-seconds, with 10,000 seconds per fit, 6,500 per confirmation and 768 MiB output per attempt; memory stays at 4 GiB. All previous use remains counted. I\u2019m continuing Auction/flow while this is pending.",
+    "source": "explicit_user_approval"
+  },
+  "authorized_limits": {
+    "cpu_budget_seconds": 20000,
+    "max_attempts": 24
+  },
+  "base_family_sha256": "b335ee105370f34b5ec381ce1be41aad798ee14e1d7235d983ee833767f43d2c",
+  "base_protocol": {
+    "path": "validation/JUMBO_ACQUIRED_CONTRACT_STUDY_V1.json",
+    "sha256": "44917720ecd064431b83fcb489819989f6a4aceb270e962f1a472fb895b37562",
+    "size_bytes": 103065
+  },
+  "consumed_before_amendment": {
+    "attempts": 16,
+    "cpu_seconds": 1473.051801
+  },
+  "controls": [
+    "Append this same-family resource amendment; preserve the original registration and all earlier consumption.",
+    "Run no full stage until its current implementation and bounded resource feasibility are verified.",
+    "The implementation changes no paid-data, external-trading or live-operation authority."
+  ],
+  "execution_optimization_authorization": "The user explicitly requested faster vectorized/compiled calculation and better use of available hardware. Optimize within the approved total CPU, per-stage CPU, 4 GiB memory and output ceilings. Preserve all science, targets, comparisons, chronological cuts, independent checks and 1000 bootstrap replicates.",
+  "family": "Research-Jumbo-acquired-contract-OHLC-v1",
+  "kind": "family_budget_authorization_v1",
+  "maximum_individual_output_file_bytes": 536870912,
+  "measured_resource_review": {
+    "kind": "jumbo_complete_resource16_review_v1",
+    "path": "reports/jumbo-check16-complete-resource-review.json",
+    "sha256": "7b663ec53d4694f7de2169a6afb0d132b5a2113ca656285836cca07e031bf1a5",
+    "size_bytes": 6428
+  },
+  "prepared_execution_plan": {
+    "path": "validation/JUMBO_EXECUTION_V11.json",
+    "sha256": "32cc3415353794dcbc0f3497db47b339801ce84e522adbe3e73747e9978e05c7",
+    "size_bytes": 27707
+  },
+  "previous_limits": {
+    "cpu_budget_seconds": 12000,
+    "max_attempts": 16
+  },
+  "proposal": {
+    "path": "validation/JUMBO_COMPLETE_WORKLOAD_AMENDMENT_V2_PROPOSED.json",
+    "sha256": "a90bfc1fc08f091600cc54d1fbcbe62eac24e9724a86e45450e91122decb287c",
+    "size_bytes": 2971
+  },
+  "reason": "Apply the explicit approval of the prepared complete-workload continuation, preserving all sixteen attempts, all prior failures and 1473.051801 CPU seconds. Optimize duplicate computation and use bounded parallel hardware before full execution.",
+  "resource_limits": {
+    "cpu_seconds_per_phase": {
+      "code_check": 90,
+      "confirmation": 6500,
+      "extract": 900,
+      "fit": 10000
+    },
+    "cumulative_cpu_seconds_total": 20000,
+    "hard_cpu_margin_seconds": 10,
+    "maximum_attempts_total": 24,
+    "maximum_derived_output_bytes": 805306368,
+    "memory_bytes": 4294967296
+  }
+}

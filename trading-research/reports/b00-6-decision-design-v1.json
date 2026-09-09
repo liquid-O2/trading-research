@@ -1,0 +1,62 @@
+{
+  "kind": "b00-6-decision-design-draft",
+  "status": "UNREGISTERED_NO_CANDIDATE_EDITS",
+  "scope": [
+    "B00.6"
+  ],
+  "preparation": {
+    "path": "/workspace/trading-research/reports/b00-6-decision-source-preparation.json",
+    "sha256": "976051f2140b80252f5cd586b3d345b5e8f0680513938c61a77184b72683a374"
+  },
+  "protocol_draft": {
+    "path": "/tmp/b00-6-decision-protocol-draft.md",
+    "sha256": "0a40bc18226c5f88e4dfa5ac7900a110f8c47bf25e5f33bc5d5284bc031ccb67"
+  },
+  "golden_draft": {
+    "path": "/tmp/b00-6-decision-golden-draft.json",
+    "sha256": "79ef31cdd424b0d72605aa624d083cf38f8da362c275bf82d0363b4e6f25313b"
+  },
+  "files": {
+    "candidate": "src/trading_research/research/decision_contracts.py",
+    "reference": "references/decision_contracts_literal.py",
+    "tests": "tests/test_decision_contracts.py"
+  },
+  "ports": [
+    "FeeCharge",
+    "NetMark",
+    "incremental_rewards",
+    "RewardState",
+    "RewardSegment",
+    "compose_rewards",
+    "compare_complete_rewards",
+    "EvidenceFactor",
+    "EvidenceLedger",
+    "admit_evidence"
+  ],
+  "existing_direct_ports": [
+    "Target",
+    "Forecast.require",
+    "Band",
+    "Geometry",
+    "ObjectTarget",
+    "ExactPoint",
+    "reference_object_label",
+    "ObservationWindow",
+    "VenuePath",
+    "VenueQuote",
+    "FillScenario",
+    "VenuePath.marketable"
+  ],
+  "bounds": {
+    "marks": 64,
+    "segments": 64,
+    "factors": 64,
+    "atoms": 256
+  },
+  "ownership": "root only new files; Feynman owns existing labels/folds and communicates compatibility changes; no other candidate files mutated under this scope",
+  "full_family_closure": false,
+  "market_experiment": false,
+  "open_items": [
+    "Final actual object-label compatibility and batch resource/test-count envelope; root full draft review before registration."
+  ]
+}

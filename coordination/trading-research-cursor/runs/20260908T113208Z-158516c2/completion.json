@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 769.6674797818996,
+  "finished_at": "2026-09-08T11:44:57.747350+00:00",
+  "session_id": "666aee05-c500-47e6-8f01-2fbb1c9fe6c7",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 765389,
+    "duration_api_ms": 765389,
+    "is_error": false,
+    "result": "I'll implement only the two assigned files from the controller contract and existing kernels, without running tests or executing any checks. First I'm reading the contract and the surrounding probe/helper interfaces.The contract and probe files are in place. Next I\u2019ll read the cohort/anchor calling style and the structure/memory kernels so the new helper matches them exactly.Cohort calling style is clear. Next I\u2019ll read the structure and memory kernels plus storage, windows, and original measurement APIs.The assignment file is in the coordination repo. I\u2019ll read that plus the original measurements, storage, and fixture patterns next.Kernels and original measurements are in view. Next I\u2019ll read storage, windows, exclusion schema, CausalBar, and the fixture/test patterns.I have the kernels, contract, and calling style. Next I\u2019ll write the two assigned files only: the probe helper and its unexecuted fixture tests.The probe file was cut off mid-function. I\u2019ll read the tail and finish the remaining helpers and public entry.Cleaning up the truncated scalar path, double-counted work, and a few comparison bugs before writing tests.The probe helpers are complete. Next I\u2019ll write the focused fixture tests that exercise the public entry through real Parquet series and original reference producers.A few test and comparison issues need fixing: whole-path coordinate logic, the clear-only swing geometry, and cluster sort order when two clusters share the same first time and low.Implemented only the two assigned files: the public `check_structure_memory_unit` helper and focused fixture tests. Nothing else was written or executed.\n\nThe helper binds the frozen v1 contract, decodes trades/quotes/excluded through `read_series_tables` to exhaustion, keeps one prepared-batch set per raw instrument (1GiB / 65,536 / 50m bounds), and releases that storage in `finally`. Continuous swings go incomplete from the first F4, unknown action, or invalid-size non-snapshot address (physical source order, not a later minute gap). Clear `R` is counted and does not break flow. All five fixed swing scales run in one `DirectionalChangeStream`; every one-minute atom becomes a `CausalBar` and is checked against original `pivot_reference`. All five memory recipes run one-at-a-time on the full retained unit and the fixed root grid, with bounded 4096/256 scalar prefixes versus literal recurrences and the named zero-delay event-clock `build_memory` view. `passed` is set only after available required comparisons succeed. CPU stages close with a nonnegative orchestration residual.\n\nTests cover complete/same-time data, F4 between clean trades, invalid-size exclusion, clear-only vs gap, empty/quiet minutes, multi-instrument and source rejection, wrong clocks/contract/schema/row totals, structural unavailability, scalar timestamp-group unavailability, production-grid shape, fixture-local grids via the private helper, and closed CPU/cleanup. They use real Parquet/`BoundedOutputs` and original reference producers, not mocks of the candidate math.\n\n**Unexecuted-check caveat:** this worker did not import, compile, scan, or run the new tests or any registered study check. A worker completion message is not verification evidence. The controller still has to review the diff, wire the helper into the registered runner, and execute the actual validation.",
+    "session_id": "666aee05-c500-47e6-8f01-2fbb1c9fe6c7",
+    "request_id": "11919716-7654-4bec-a795-3e5cf29716a5",
+    "usage": {
+      "inputTokens": 246228,
+      "outputTokens": 87845,
+      "cacheReadTokens": 4354240,
+      "cacheWriteTokens": 0
+    }
+  }
+}

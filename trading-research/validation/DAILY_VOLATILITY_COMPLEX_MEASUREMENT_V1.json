@@ -1,0 +1,126 @@
+{
+  "authority": "User2026-09-08T20:41:08UTC asks completion of all Deliverable1 measurement/statistics/timing. Honest new acquired daily volatility complex family; no old family reset.",
+  "cash_calendar": {
+    "kind": "cash_rth_calendar",
+    "path": "/workspace/trading-research/configs/cash-rth-calendar-research-v1.json",
+    "sha256": "f069df0ccbb8318f1c675a05d9deed64ad681ebe1e47dd8573a6b18266665818",
+    "size_bytes": 6922
+  },
+  "curve_definitions": {
+    "constant_maturity_calendar_days": [
+      30,
+      60,
+      90
+    ],
+    "daily_change": "same-contract previous intended cash date only, missing observation remains unknown and roll cross-contract change separated",
+    "eligible": "finite positive level; contract_expiration>trade_date; reject duplicate non-identical same-contract/day per primary curve, retain explicit conflict disposition",
+    "front_second": [
+      "front level",
+      "second level",
+      "second-front points",
+      "second/front-1",
+      "DTE-front/DTE-second/tenor spacing"
+    ],
+    "index_relationships": "VIX3M-VIX and VIX3M/VIX-1; VXN-VIX and VXN/VIX-1; VVIX level/change; same-source variant date pair; source alias comparisons do not inflate independent dates. No official replication/no VVIX internal construction.",
+    "interpolation": "linear level between nearest eligible bracketing observed maturities ONLY; exact tenor direct. No extrapolation. Output bracket contracts, levels, weights and DTE. Explicit VX futures price proxy, not official VIX or risk-neutral variance interpolation.",
+    "price_basis": [
+      "settlement",
+      "close"
+    ],
+    "rank": "ascending expiration within duration_type, deterministic exact label tie; duplicate maturity retained/flagged, no double-weighting"
+  },
+  "family": "Research-Daily-Volatility-Complex-acquired-v1",
+  "full_family_complete": false,
+  "kind": "daily_volatility_complex_measurement_contract_v1",
+  "population": {
+    "dates": "All acquired primary dates, missing intended cash dates explicitly retained per source. Prior-to-2020 records counted/excluded, never used as extra primary support.",
+    "first_date": "2020-01-01",
+    "last_date": "2026-09-03",
+    "stages": {
+      "confirmation": [
+        "2025-01-01",
+        "2026-09-04"
+      ],
+      "development": [
+        "2023-01-01",
+        "2025-01-01"
+      ],
+      "training": [
+        "2020-01-01",
+        "2023-01-01"
+      ]
+    }
+  },
+  "remaining_dependencies": [
+    "Historical daily publication/receipt times unavailable; all intraday-as-known usages conditional blocked",
+    "VIX option IV/forward/internalVVIX and signedtape are separate acquired feeds; no official replication fromdailyindices",
+    "PredictiveContext and Location later"
+  ],
+  "resources": {
+    "cpu_budget_seconds": 2400,
+    "hard_cpu_margin": 10,
+    "max_attempts": 4,
+    "maximum_study_output_bytes": 536870912,
+    "memory_bytes": 2147483648,
+    "mode_cpu_seconds": {
+      "admit": 120,
+      "measure": 600
+    },
+    "per_attempt_output_bytes": 134217728,
+    "wall_seconds": 900
+  },
+  "scope_ids": [
+    "C16.VX_CURVE",
+    "C16.VVIX",
+    "C16.VOL_COMPLEX",
+    "C15.TERM"
+  ],
+  "source_clock": "Date-only observations. known_at_ns NULL; causal_feature_eligible FALSE. Neither file capture nor civil midnight certifies intraday publication. Historical FRED vintages retained, not inferred from latest values. Retrospective date associations only.",
+  "source_files": [
+    {
+      "path": "free-sources/cboe__vx-futures__normalized/all-contracts.parquet",
+      "size_bytes": 490735
+    },
+    {
+      "path": "free-sources/context__volatility__normalized/VIX.parquet",
+      "size_bytes": 49437
+    },
+    {
+      "path": "free-sources/context__volatility__normalized/VIX3M.parquet",
+      "size_bytes": 26432
+    },
+    {
+      "path": "free-sources/context__volatility__normalized/VVIX.parquet",
+      "size_bytes": 28411
+    },
+    {
+      "path": "free-sources/context__volatility__normalized/VXN.parquet",
+      "size_bytes": 35817
+    },
+    {
+      "path": "free-sources/context__volatility__normalized/fred-volatility.parquet",
+      "size_bytes": 106207
+    }
+  ],
+  "statistics": {
+    "block_length_dates": 5,
+    "bootstrap_replicates": 1000,
+    "confidence": 0.95,
+    "equal_date_means": true,
+    "groups": "source/duration_type/price_basis/year/stage/tenor; denominators, missing, duplicate/conflicts, nonfinite/nonpositive, expiry/roll, no-front and no-bracket retained. Paired changes and source differences only on exact valid common dates; no forward-fill.",
+    "minimum_dates": 100,
+    "minimum_events": 20,
+    "quantiles": [
+      0.01,
+      0.05,
+      0.25,
+      0.5,
+      0.75,
+      0.95,
+      0.99
+    ],
+    "seed": 20260908
+  },
+  "version": 1,
+  "vx_contracts": "Exact root+contract_expiration+duration_type+contract_label+product_display plus source hash; retain all acquired rows. Monthly and weekly term curves remain separate. No rank roll treated as same-contract change."
+}

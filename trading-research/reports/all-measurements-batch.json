@@ -1,0 +1,1435 @@
+{
+  "additional_contract_paths": [
+    "reports/all-measurements-pre-execution-clarifications.json",
+    "reports/all-measurements-review-binding-clarification.json",
+    "reports/b00-6-decision-design.json",
+    "reports/c01-f09-predecessor-interface-clarification.json",
+    "reports/c01-l01-design.json",
+    "reports/m01-m02-m10-design.json",
+    "reports/m03-m08-m09-m11-design.json",
+    "reports/m0407m13-design.json",
+    "reports/m12-l02-l03-design.json",
+    "reports/m12-measurement-design.json",
+    "reports/v01-v02-design.json",
+    "tests/fixtures/v01_v02_legacy_wire_schema.json"
+  ],
+  "baseline_verification": {
+    "kind": "verification",
+    "sha256": "549d4c3125fce9ab9dd31456a25fc00d20998eaf0eea8bc4e041db1ce157f138",
+    "size_bytes": 170881
+  },
+  "batch_review_path": "reports/all-measurements-batch-review.json",
+  "families": [
+    {
+      "case_map_path": "reports/c01-l01-case-test-map.json",
+      "case_report_path": "reports/c01-l01-case-coverage.json",
+      "coverage_path": "reports/c01-l01-implementation-coverage.json",
+      "extra_requirements": {
+        "CL-X01-capabilities": [
+          "CL-CROSS-01-FIELD-CAPABILITY"
+        ],
+        "CL-X02-interior-order": [
+          "CL-CROSS-02-ENDPOINT-ORDER"
+        ],
+        "CL-X03-window-bound": [
+          "CL-CROSS-03-WINDOW-ADMISSION-BOUND"
+        ],
+        "CL-X04-retention-bound": [
+          "CL-CROSS-04-RETENTION-BOUND"
+        ],
+        "CL-X05-atomic-batch": [
+          "CL-CROSS-05-F10-ATOMICITY"
+        ],
+        "CL-X06-restart": [
+          "CL-CROSS-06-RESTORE-CORRECTION"
+        ],
+        "CL-X07-malformed-scalar": [
+          "CL-CROSS-07-EXACT-SCALAR"
+        ],
+        "CL-X08-forged-or-wrong-bar": [
+          "CL-CROSS-08-FACTORY-PROVENANCE"
+        ],
+        "CL-X09-duplicate-and-conflict": [
+          "CL-CROSS-09-IDEMPOTENT-PUBLICATION"
+        ],
+        "CL-X10-frozen-cut": [
+          "CL-CROSS-10-FROZEN-CUT"
+        ],
+        "CL-X11-fractional-point": [
+          "CL-CROSS-11-FRACTIONAL-GEOMETRY"
+        ],
+        "CL-X12-malformed-restore": [
+          "CL-CROSS-12-RESTORE-INTEGRITY"
+        ],
+        "CL-X13-source-list-completeness": [
+          "CL-CROSS-13-SOURCE-OBLIGATION-DENOMINATOR"
+        ],
+        "CL-X14-relation-bound": [
+          "CL-CROSS-14-RELATION-CAPACITY"
+        ]
+      },
+      "family": "C01-L01-range-location-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "id",
+          "key": "fixtures"
+        },
+        {
+          "id_key": "id",
+          "key": "extra_vectors"
+        }
+      ],
+      "golden_to_preparation": {
+        "CL-E01": [
+          "CL-E01"
+        ],
+        "CL-E02": [
+          "CL-E02"
+        ],
+        "CL-E03": [
+          "CL-E03"
+        ],
+        "CL-E04": [
+          "CL-E04"
+        ],
+        "CL-G01": [
+          "CL-G01"
+        ],
+        "CL-G02": [
+          "CL-G02"
+        ],
+        "CL-G03": [
+          "CL-G03"
+        ],
+        "CL-L01": [
+          "CL-L01"
+        ],
+        "CL-L02": [
+          "CL-L02"
+        ],
+        "CL-L03": [
+          "CL-L03"
+        ],
+        "CL-L04": [
+          "CL-L04"
+        ],
+        "CL-L05": [
+          "CL-L05"
+        ],
+        "CL-P01": [
+          "CL-P01"
+        ],
+        "CL-R01": [
+          "CL-R01"
+        ],
+        "CL-R02": [
+          "CL-R02"
+        ],
+        "CL-R03": [
+          "CL-R03"
+        ],
+        "CL-S01": [
+          "CL-S01"
+        ],
+        "CL-S02": [
+          "CL-S02"
+        ],
+        "CL-S03": [
+          "CL-S03"
+        ],
+        "CL-T01": [
+          "CL-T01"
+        ],
+        "CL-T02": [
+          "CL-T02"
+        ],
+        "CL-T03": [
+          "CL-T03"
+        ],
+        "CL-T04": [
+          "CL-T04"
+        ],
+        "CL-T05": [
+          "CL-T05"
+        ],
+        "CL-T06": [
+          "CL-T06"
+        ],
+        "CL-T07": [
+          "CL-T07"
+        ],
+        "CL-T08": [
+          "CL-T08"
+        ],
+        "CL-X01-capabilities": [],
+        "CL-X02-interior-order": [],
+        "CL-X03-window-bound": [],
+        "CL-X04-retention-bound": [],
+        "CL-X05-atomic-batch": [],
+        "CL-X06-restart": [],
+        "CL-X07-malformed-scalar": [],
+        "CL-X08-forged-or-wrong-bar": [],
+        "CL-X09-duplicate-and-conflict": [],
+        "CL-X10-frozen-cut": [],
+        "CL-X11-fractional-point": [],
+        "CL-X12-malformed-restore": [],
+        "CL-X13-source-list-completeness": [],
+        "CL-X14-relation-bound": []
+      },
+      "prefix": "c01-l01",
+      "preparation_path": "reports/c01-l01-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/c01-l01-range-location-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_findings"
+      },
+      "test_modules": [
+        "tests.test_range_locations"
+      ]
+    },
+    {
+      "case_map_path": "reports/m12-l02-l03-case-test-map.json",
+      "case_report_path": "reports/m12-l02-l03-case-coverage.json",
+      "coverage_path": "reports/m12-l02-l03-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "M12-L02-L03-reference-location-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "case_id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "CL-01": [
+          "CL-01"
+        ],
+        "CL-02": [
+          "CL-02"
+        ],
+        "CL-03": [
+          "CL-03"
+        ],
+        "CL-04": [
+          "CL-04"
+        ],
+        "CL-05": [
+          "CL-05"
+        ],
+        "L02-01": [
+          "L02-01"
+        ],
+        "L02-02": [
+          "L02-02"
+        ],
+        "L02-03": [
+          "L02-03"
+        ],
+        "L02-04": [
+          "L02-04"
+        ],
+        "L02-05": [
+          "L02-05"
+        ],
+        "L02-06": [
+          "L02-06"
+        ],
+        "L02-07": [
+          "L02-07"
+        ],
+        "L02-08": [
+          "L02-08"
+        ],
+        "L02-09": [
+          "L02-09"
+        ],
+        "L02-10": [
+          "L02-10"
+        ],
+        "L02-11": [
+          "L02-11"
+        ],
+        "L03-01": [
+          "L03-01"
+        ],
+        "L03-02": [
+          "L03-02"
+        ],
+        "L03-03": [
+          "L03-03"
+        ],
+        "L03-04": [
+          "L03-04"
+        ],
+        "M12-01": [
+          "M12-01"
+        ],
+        "M12-02": [
+          "M12-02"
+        ],
+        "M12-03": [
+          "M12-03"
+        ],
+        "M12-04": [
+          "M12-04"
+        ],
+        "M12-05": [
+          "M12-05"
+        ],
+        "M12-06": [
+          "M12-06"
+        ],
+        "M12-07": [
+          "M12-07"
+        ],
+        "M12-08": [
+          "M12-08"
+        ],
+        "M12-09": [
+          "M12-09"
+        ],
+        "M12-10": [
+          "M12-10"
+        ],
+        "M12-11": [
+          "M12-11"
+        ],
+        "M12-12": [
+          "M12-12"
+        ]
+      },
+      "prefix": "m12-l02-l03",
+      "preparation_path": "reports/m12-l02-l03-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_case_proposals"
+      },
+      "registration_path": "reports/m12-l02-l03-reference-location-registration.json",
+      "source_clauses": {
+        "id_key": "source_id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_reference_locations"
+      ]
+    },
+    {
+      "case_map_path": "reports/b00-6-decision-case-test-map.json",
+      "case_report_path": "reports/b00-6-decision-case-coverage.json",
+      "coverage_path": "reports/b00-6-decision-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "B00-6-decision-contracts-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "case_id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "BC01": [
+          "BC01"
+        ],
+        "BC02": [
+          "BC02"
+        ],
+        "BC03": [
+          "BC03"
+        ],
+        "BC04": [
+          "BC04"
+        ],
+        "BC05": [
+          "BC05"
+        ],
+        "BC06": [
+          "BC06"
+        ],
+        "BC07": [
+          "BC07"
+        ],
+        "BC08": [
+          "BC08"
+        ],
+        "BC09": [
+          "BC09"
+        ],
+        "BC10": [
+          "BC10"
+        ],
+        "BC11": [
+          "BC11"
+        ],
+        "BC12": [
+          "BC12"
+        ],
+        "BC13": [
+          "BC13"
+        ],
+        "BC14": [
+          "BC14"
+        ],
+        "BC15": [
+          "BC15"
+        ],
+        "BC16": [
+          "BC16"
+        ],
+        "BC17": [
+          "BC17"
+        ],
+        "BC18": [
+          "BC18"
+        ],
+        "BC19": [
+          "BC19"
+        ],
+        "BC20": [
+          "BC20"
+        ],
+        "BC21": [
+          "BC21"
+        ],
+        "BC22": [
+          "BC22"
+        ],
+        "BC23": [
+          "BC23"
+        ],
+        "BC24": [
+          "BC24"
+        ],
+        "BC25": [
+          "BC25"
+        ]
+      },
+      "prefix": "b00-6-decision",
+      "preparation_path": "reports/b00-6-decision-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/b00-6-decision-contracts-registration.json",
+      "source_clauses": {
+        "id_key": "source_id",
+        "key": "source_obligations"
+      },
+      "test_modules": [
+        "tests.test_decision_contracts"
+      ]
+    },
+    {
+      "case_map_path": "reports/v01-v02-case-test-map.json",
+      "case_report_path": "reports/v01-v02-case-coverage.json",
+      "coverage_path": "reports/v01-v02-implementation-coverage.json",
+      "extra_requirements": {
+        "V02-26": [
+          "V01V02-CROSS-26-SEPARATE-ACTUAL-TARGET-END-AND-FORBIDDEN-DEPENDENCY-END"
+        ],
+        "V02-27": [
+          "V01V02-CROSS-27-ACTUAL-TEMPORAL-F11-COMMIT-RESTORE-SERVING"
+        ],
+        "V02-28": [
+          "V01V02-CROSS-28-INDEPENDENT-LEGACY-WIRE-BYTE-COMPATIBILITY"
+        ]
+      },
+      "family": "V01-V02-label-temporal-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "V01-01": [
+          "V01-01"
+        ],
+        "V01-02": [
+          "V01-02"
+        ],
+        "V01-03": [
+          "V01-03"
+        ],
+        "V01-04": [
+          "V01-04"
+        ],
+        "V01-05": [
+          "V01-05"
+        ],
+        "V01-06": [
+          "V01-06"
+        ],
+        "V01-07": [
+          "V01-07"
+        ],
+        "V01-08": [
+          "V01-08"
+        ],
+        "V01-09": [
+          "V01-09"
+        ],
+        "V01-10": [
+          "V01-10"
+        ],
+        "V01-11": [
+          "V01-11"
+        ],
+        "V01-12": [
+          "V01-12"
+        ],
+        "V01-13": [
+          "V01-13"
+        ],
+        "V01-14": [
+          "V01-14"
+        ],
+        "V01-15": [
+          "V01-15"
+        ],
+        "V01-16": [
+          "V01-16"
+        ],
+        "V01-17": [
+          "V01-17"
+        ],
+        "V01-18": [
+          "V01-18"
+        ],
+        "V01-19": [
+          "V01-19"
+        ],
+        "V01-20": [
+          "V01-20"
+        ],
+        "V01-21": [
+          "V01-21"
+        ],
+        "V01-22": [
+          "V01-22"
+        ],
+        "V01-23": [
+          "V01-23"
+        ],
+        "V01-24": [
+          "V01-24"
+        ],
+        "V01-25": [
+          "V01-25"
+        ],
+        "V01-26": [
+          "V01-26"
+        ],
+        "V01-27": [
+          "V01-27"
+        ],
+        "V01-28": [
+          "V01-28"
+        ],
+        "V01-29": [
+          "V01-29"
+        ],
+        "V01-30": [
+          "V01-30"
+        ],
+        "V01-31": [
+          "V01-31"
+        ],
+        "V01-32": [
+          "V01-32"
+        ],
+        "V01-33": [
+          "V01-33"
+        ],
+        "V01-34": [
+          "V01-34"
+        ],
+        "V01-35": [
+          "V01-35"
+        ],
+        "V01-36": [
+          "V01-36"
+        ],
+        "V02-01": [
+          "V02-01"
+        ],
+        "V02-02": [
+          "V02-02"
+        ],
+        "V02-03": [
+          "V02-03"
+        ],
+        "V02-04": [
+          "V02-04"
+        ],
+        "V02-05": [
+          "V02-05"
+        ],
+        "V02-06": [
+          "V02-06"
+        ],
+        "V02-07": [
+          "V02-07"
+        ],
+        "V02-08": [
+          "V02-08"
+        ],
+        "V02-09": [
+          "V02-09"
+        ],
+        "V02-10": [
+          "V02-10"
+        ],
+        "V02-11": [
+          "V02-11"
+        ],
+        "V02-12": [
+          "V02-12"
+        ],
+        "V02-13": [
+          "V02-13"
+        ],
+        "V02-14": [
+          "V02-14"
+        ],
+        "V02-15": [
+          "V02-15"
+        ],
+        "V02-16": [
+          "V02-16"
+        ],
+        "V02-17": [
+          "V02-17"
+        ],
+        "V02-18": [
+          "V02-18"
+        ],
+        "V02-19": [
+          "V02-19"
+        ],
+        "V02-20": [
+          "V02-20"
+        ],
+        "V02-21": [
+          "V02-21"
+        ],
+        "V02-22": [
+          "V02-22"
+        ],
+        "V02-23": [
+          "V02-23"
+        ],
+        "V02-24": [
+          "V02-24"
+        ],
+        "V02-25": [
+          "V02-25"
+        ],
+        "V02-26": [],
+        "V02-27": [],
+        "V02-28": []
+      },
+      "prefix": "v01-v02",
+      "preparation_path": "reports/v01-v02-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "id",
+        "key": "case_proposals"
+      },
+      "registration_path": "reports/v01-v02-label-temporal-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_v01_v02"
+      ]
+    },
+    {
+      "case_map_path": "reports/m01-m02-m10-case-test-map.json",
+      "case_report_path": "reports/m01-m02-m10-case-coverage.json",
+      "coverage_path": "reports/m01-m02-m10-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "M01-M02-M10-flow-intensity-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "case_id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "M-CAUSAL-PREFIX-001": [
+          "M-CAUSAL-PREFIX-001"
+        ],
+        "M-COMMON-001": [
+          "M-COMMON-001"
+        ],
+        "M-COMMON-002": [
+          "M-COMMON-002"
+        ],
+        "M-COMMON-003": [
+          "M-COMMON-003"
+        ],
+        "M-COMMON-004": [
+          "M-COMMON-004"
+        ],
+        "M-COMMON-005": [
+          "M-COMMON-005"
+        ],
+        "M-COMMON-006": [
+          "M-COMMON-006"
+        ],
+        "M-COMMON-007": [
+          "M-COMMON-007"
+        ],
+        "M-F11-FIT-001": [
+          "M-F11-FIT-001"
+        ],
+        "M01-DECAY-001": [
+          "M01-DECAY-001"
+        ],
+        "M01-PATH-001": [
+          "M01-PATH-001"
+        ],
+        "M01-RESET-001": [
+          "M01-RESET-001"
+        ],
+        "M01-UNKNOWN-001": [
+          "M01-UNKNOWN-001"
+        ],
+        "M02-AGGREGATION-001": [
+          "M02-AGGREGATION-001"
+        ],
+        "M02-BAND-001": [
+          "M02-BAND-001"
+        ],
+        "M02-EMPTY-001": [
+          "M02-EMPTY-001"
+        ],
+        "M02-FIXED-001": [
+          "M02-FIXED-001"
+        ],
+        "M02-FUTURE-001": [
+          "M02-FUTURE-001"
+        ],
+        "M02-OHLC-001": [
+          "M02-OHLC-001"
+        ],
+        "M02-OPEN-001": [
+          "M02-OPEN-001"
+        ],
+        "M02-PARTITION-001": [
+          "M02-PARTITION-001"
+        ],
+        "M02-QUANTILE-001": [
+          "M02-QUANTILE-001"
+        ],
+        "M02-SOFT-001": [
+          "M02-SOFT-001"
+        ],
+        "M02-WHOLE-001": [
+          "M02-WHOLE-001"
+        ],
+        "M10-BURST-001": [
+          "M10-BURST-001"
+        ],
+        "M10-COUNT-LIKELIHOOD-001": [
+          "M10-COUNT-LIKELIHOOD-001"
+        ],
+        "M10-EFFORT-001": [
+          "M10-EFFORT-001"
+        ],
+        "M10-MARKOUT-001": [
+          "M10-MARKOUT-001"
+        ],
+        "M10-MOTION-001": [
+          "M10-MOTION-001"
+        ],
+        "M10-OUTAGE-001": [
+          "M10-OUTAGE-001"
+        ],
+        "M10-PACE-001": [
+          "M10-PACE-001"
+        ],
+        "M10-PREWINDOW-001": [
+          "M10-PREWINDOW-001"
+        ],
+        "M10-RUN-001": [
+          "M10-RUN-001"
+        ],
+        "M10-SCALE-001": [
+          "M10-SCALE-001"
+        ],
+        "M10-SEASONAL-001": [
+          "M10-SEASONAL-001"
+        ],
+        "M10-SURFACE-001": [
+          "M10-SURFACE-001"
+        ],
+        "M10-ZERO-001": [
+          "M10-ZERO-001"
+        ]
+      },
+      "prefix": "m01-m02-m10",
+      "preparation_path": "reports/m01-m02-m10-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/m01-m02-m10-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_measurement_common",
+        "tests.test_measurement_flow",
+        "tests.test_measurement_intensity",
+        "tests.test_measurement_fits"
+      ]
+    },
+    {
+      "case_map_path": "reports/m03-m08-m09-m11-case-test-map.json",
+      "case_report_path": "reports/m03-m08-m09-m11-case-coverage.json",
+      "coverage_path": "reports/m03-m08-m09-m11-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "M03-M08-M09-M11-structure-pressure-memory-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "MD01": [
+          "MD01"
+        ],
+        "MD02": [
+          "MD02"
+        ],
+        "MD03": [
+          "MD03"
+        ],
+        "MD04": [
+          "MD04"
+        ],
+        "MD05": [
+          "MD05"
+        ],
+        "MD06": [
+          "MD06"
+        ],
+        "MD07": [
+          "MD07"
+        ],
+        "MD08": [
+          "MD08"
+        ],
+        "MD09": [
+          "MD09"
+        ],
+        "MD10": [
+          "MD10"
+        ],
+        "MD11": [
+          "MD11"
+        ],
+        "MD12": [
+          "MD12"
+        ],
+        "MD13": [
+          "MD13"
+        ],
+        "MD14": [
+          "MD14"
+        ],
+        "MD15": [
+          "MD15"
+        ],
+        "MD16": [
+          "MD16"
+        ],
+        "MM01": [
+          "MM01"
+        ],
+        "MM02": [
+          "MM02"
+        ],
+        "MM03": [
+          "MM03"
+        ],
+        "MM04": [
+          "MM04"
+        ],
+        "MM05": [
+          "MM05"
+        ],
+        "MM06": [
+          "MM06"
+        ],
+        "MM07": [
+          "MM07"
+        ],
+        "MM08": [
+          "MM08"
+        ],
+        "MM09": [
+          "MM09"
+        ],
+        "MM10": [
+          "MM10"
+        ],
+        "MM11": [
+          "MM11"
+        ],
+        "MM12": [
+          "MM12"
+        ],
+        "MM13": [
+          "MM13"
+        ],
+        "MM14": [
+          "MM14"
+        ],
+        "MM15": [
+          "MM15"
+        ],
+        "MM16": [
+          "MM16"
+        ],
+        "MM17": [
+          "MM17"
+        ],
+        "MQ01": [
+          "MQ01"
+        ],
+        "MQ02": [
+          "MQ02"
+        ],
+        "MQ03": [
+          "MQ03"
+        ],
+        "MQ04": [
+          "MQ04"
+        ],
+        "MQ05": [
+          "MQ05"
+        ],
+        "MQ06": [
+          "MQ06"
+        ],
+        "MQ07": [
+          "MQ07"
+        ],
+        "MQ08": [
+          "MQ08"
+        ],
+        "MQ09": [
+          "MQ09"
+        ],
+        "MQ10": [
+          "MQ10"
+        ],
+        "MQ11": [
+          "MQ11"
+        ],
+        "MQ12": [
+          "MQ12"
+        ],
+        "MQ13": [
+          "MQ13"
+        ],
+        "MQ14": [
+          "MQ14"
+        ],
+        "MQ15": [
+          "MQ15"
+        ],
+        "MQ16": [
+          "MQ16"
+        ],
+        "MQ17": [
+          "MQ17"
+        ],
+        "MS01": [
+          "MS01"
+        ],
+        "MS02": [
+          "MS02"
+        ],
+        "MS03": [
+          "MS03"
+        ],
+        "MS04": [
+          "MS04"
+        ],
+        "MS05": [
+          "MS05"
+        ],
+        "MS06": [
+          "MS06"
+        ],
+        "MS07": [
+          "MS07"
+        ],
+        "MS08": [
+          "MS08"
+        ],
+        "MS09": [
+          "MS09"
+        ],
+        "MS10": [
+          "MS10"
+        ],
+        "MS11": [
+          "MS11"
+        ],
+        "MS12": [
+          "MS12"
+        ],
+        "MX01": [
+          "MX01"
+        ],
+        "MX02": [
+          "MX02"
+        ],
+        "MX03": [
+          "MX03"
+        ],
+        "MX04": [
+          "MX04"
+        ],
+        "MX05": [
+          "MX05"
+        ],
+        "MX06": [
+          "MX06"
+        ],
+        "MX07": [
+          "MX07"
+        ],
+        "MX08": [
+          "MX08"
+        ]
+      },
+      "prefix": "m03-m08-m09-m11",
+      "preparation_path": "reports/m03-m08-m09-m11-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/m03-m08-m09-m11-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_structure_pressure_memory"
+      ]
+    },
+    {
+      "case_map_path": "reports/m12-measurement-case-test-map.json",
+      "case_report_path": "reports/m12-measurement-case-coverage.json",
+      "coverage_path": "reports/m12-measurement-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "M12-complete-reference-measurement-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "MR01": [
+          "MR01"
+        ],
+        "MR02": [
+          "MR02"
+        ],
+        "MR03": [
+          "MR03"
+        ],
+        "MR04": [
+          "MR04"
+        ],
+        "MR05": [
+          "MR05"
+        ],
+        "MR06": [
+          "MR06"
+        ],
+        "MR07": [
+          "MR07"
+        ],
+        "MR08": [
+          "MR08"
+        ],
+        "MR09": [
+          "MR09"
+        ],
+        "MR10": [
+          "MR10"
+        ],
+        "MR11": [
+          "MR11"
+        ],
+        "MR12": [
+          "MR12"
+        ],
+        "MR13": [
+          "MR13"
+        ],
+        "MR14": [
+          "MR14"
+        ],
+        "MR15": [
+          "MR15"
+        ],
+        "MR16": [
+          "MR16"
+        ],
+        "MR17": [
+          "MR17"
+        ],
+        "MR18": [
+          "MR18"
+        ],
+        "MR19": [
+          "MR19"
+        ],
+        "MR20": [
+          "MR20"
+        ],
+        "MR21": [
+          "MR21"
+        ],
+        "MR22": [
+          "MR22"
+        ],
+        "MR23": [
+          "MR23"
+        ],
+        "MR24": [
+          "MR24"
+        ],
+        "MR25": [
+          "MR25"
+        ],
+        "MR26": [
+          "MR26"
+        ],
+        "MR27": [
+          "MR27"
+        ],
+        "MR28": [
+          "MR28"
+        ],
+        "MR29": [
+          "MR29"
+        ],
+        "MR30": [
+          "MR30"
+        ],
+        "MR31": [
+          "MR31"
+        ],
+        "MR32": [
+          "MR32"
+        ],
+        "MR33": [
+          "MR33"
+        ],
+        "MR34": [
+          "MR34"
+        ],
+        "MR35": [
+          "MR35"
+        ],
+        "MR36": [
+          "MR36"
+        ],
+        "MR37": [
+          "MR37"
+        ],
+        "MR38": [
+          "MR38"
+        ],
+        "MR39": [
+          "MR39"
+        ],
+        "MR40": [
+          "MR40"
+        ],
+        "MR41": [
+          "MR41"
+        ]
+      },
+      "prefix": "m12-measurement",
+      "preparation_path": "reports/m12-measurement-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/m12-measurement-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_reference_geometry"
+      ]
+    },
+    {
+      "case_map_path": "reports/m0407m13-case-test-map.json",
+      "case_report_path": "reports/m0407m13-case-coverage.json",
+      "coverage_path": "reports/m0407m13-implementation-coverage.json",
+      "extra_requirements": {},
+      "family": "M04-M05-M06-M07-M13-auction-measurements-engineering-v1",
+      "golden_collections": [
+        {
+          "id_key": "case_id",
+          "key": "cases"
+        }
+      ],
+      "golden_to_preparation": {
+        "DP01": [
+          "DP01"
+        ],
+        "DP02": [
+          "DP02"
+        ],
+        "DP03": [
+          "DP03"
+        ],
+        "DP04": [
+          "DP04"
+        ],
+        "DP05": [
+          "DP05"
+        ],
+        "DP06": [
+          "DP06"
+        ],
+        "DP07": [
+          "DP07"
+        ],
+        "MA01": [
+          "MA01"
+        ],
+        "MA02": [
+          "MA02"
+        ],
+        "MA03": [
+          "MA03"
+        ],
+        "MA04": [
+          "MA04"
+        ],
+        "MA05": [
+          "MA05"
+        ],
+        "MA06": [
+          "MA06"
+        ],
+        "MA07": [
+          "MA07"
+        ],
+        "MA08": [
+          "MA08"
+        ],
+        "MF01": [
+          "MF01"
+        ],
+        "MF02": [
+          "MF02"
+        ],
+        "MF03": [
+          "MF03"
+        ],
+        "MF04": [
+          "MF04"
+        ],
+        "MF05": [
+          "MF05"
+        ],
+        "MF06": [
+          "MF06"
+        ],
+        "MF07": [
+          "MF07"
+        ],
+        "MF08": [
+          "MF08"
+        ],
+        "MF09": [
+          "MF09"
+        ],
+        "MF10": [
+          "MF10"
+        ],
+        "MP01": [
+          "MP01"
+        ],
+        "MP02": [
+          "MP02"
+        ],
+        "MP03": [
+          "MP03"
+        ],
+        "MP04": [
+          "MP04"
+        ],
+        "MP05": [
+          "MP05"
+        ],
+        "MP06": [
+          "MP06"
+        ],
+        "MP07": [
+          "MP07"
+        ],
+        "MP08": [
+          "MP08"
+        ],
+        "MP09": [
+          "MP09"
+        ],
+        "MP10": [
+          "MP10"
+        ],
+        "MP11": [
+          "MP11"
+        ],
+        "MP12": [
+          "MP12"
+        ],
+        "MP13": [
+          "MP13"
+        ],
+        "MP14": [
+          "MP14"
+        ],
+        "MP15": [
+          "MP15"
+        ],
+        "MP16": [
+          "MP16"
+        ],
+        "MP17": [
+          "MP17"
+        ],
+        "MP18": [
+          "MP18"
+        ],
+        "MP19": [
+          "MP19"
+        ],
+        "MT01": [
+          "MT01"
+        ],
+        "MT02": [
+          "MT02"
+        ],
+        "MT03": [
+          "MT03"
+        ],
+        "MT04": [
+          "MT04"
+        ],
+        "MT05": [
+          "MT05"
+        ],
+        "MT06": [
+          "MT06"
+        ],
+        "MT07": [
+          "MT07"
+        ],
+        "MT08": [
+          "MT08"
+        ],
+        "MT09": [
+          "MT09"
+        ],
+        "MT10": [
+          "MT10"
+        ],
+        "MT11": [
+          "MT11"
+        ],
+        "MW01": [
+          "MW01"
+        ],
+        "MW02": [
+          "MW02"
+        ],
+        "MW03": [
+          "MW03"
+        ],
+        "MW04": [
+          "MW04"
+        ],
+        "MW05": [
+          "MW05"
+        ],
+        "MW06": [
+          "MW06"
+        ],
+        "MW07": [
+          "MW07"
+        ],
+        "MW08": [
+          "MW08"
+        ],
+        "MW09": [
+          "MW09"
+        ],
+        "MW10": [
+          "MW10"
+        ],
+        "MW11": [
+          "MW11"
+        ],
+        "MW12": [
+          "MW12"
+        ]
+      },
+      "prefix": "m0407m13",
+      "preparation_path": "reports/m0407m13-source-preparation.json",
+      "prepared_cases": {
+        "id_key": "case_id",
+        "key": "hand_derived_cases"
+      },
+      "registration_path": "reports/m0407m13-registration.json",
+      "source_clauses": {
+        "id_key": "id",
+        "key": "source_clauses"
+      },
+      "test_modules": [
+        "tests.test_auction_measurements"
+      ]
+    }
+  ],
+  "id": "all-measurements-location-label-decision-v1",
+  "kind": "engineering_batch_contract_v1",
+  "pre_repair_review": {
+    "path": "reports/all-measurements-pre-repair-review.json",
+    "sha256": "2d8e52e39dcd68e9c90f949e5424a4d8d0607dff690db95f1dc82eb61f019672",
+    "size_bytes": 348
+  },
+  "review_paths": {
+    "reports/b00-6-decision-initial-static-review.json": "findings",
+    "reports/c01-l01-initial-static-review.json": "findings",
+    "reports/location-label-decision-orchestration-review.json": "findings",
+    "reports/location-label-decision-root-static-review.json": "findings",
+    "reports/m12-l02-l03-initial-static-review.json": "findings",
+    "reports/v01-v02-initial-static-review.json": "findings"
+  },
+  "review_text_path": "validation/ALL_MEASUREMENTS_CONSOLIDATED_REVIEW.md",
+  "tools": {
+    "contract_support": "tools/engineering_batch_contract.py",
+    "normalizer": "tools/map_engineering_batch.py",
+    "recorder": "tools/record_engineering_batch.py",
+    "supervisor": "tools/verify_engineering_batch.py"
+  }
+}

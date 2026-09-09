@@ -1,0 +1,234 @@
+{
+  "family": "V01-V02-label-temporal-engineering-v1",
+  "review": "complete_initial_static_review",
+  "reviewer": "/root/f04_merge_tests",
+  "entire_artifact_graph_read_before_edit": true,
+  "artifact_graph_original_lines": 1698,
+  "review_scope": [
+    "src/trading_research/research/labels.py",
+    "src/trading_research/research/object_labels.py",
+    "src/trading_research/research/models.py",
+    "src/trading_research/research/temporal_folds.py",
+    "src/trading_research/research/label_ledger.py",
+    "src/trading_research/operations/artifact_graph.py",
+    "references/v01_v02_literal.py",
+    "tests/test_v01_v02.py",
+    "reports/v01-v02-case-test-map.json"
+  ],
+  "method": "Read current source text in full for new candidate/reference/tests and modified label modules; full pre-edit graph plus all exact adapter changes and unchanged caller context reviewed. Static textual legacy field-list comparison, map IDs and method names only. No candidate import/compilation/execution.",
+  "files": [
+    {
+      "path": "src/trading_research/research/labels.py",
+      "sha256": "ea404eecf1b8a10f6c76f70f72572ff8da0114fc02e90d76855aa6dd4b48bc07",
+      "lines": 120
+    },
+    {
+      "path": "src/trading_research/research/object_labels.py",
+      "sha256": "5731f905945f0140f02dd5a4d1be750197acc69616515d21c9ffd385be7829ae",
+      "lines": 137
+    },
+    {
+      "path": "src/trading_research/research/models.py",
+      "sha256": "14927c8de694e6a9ac9f967afb29180c103449cab5b7fcc73ba578d55e80aae0",
+      "lines": 210
+    },
+    {
+      "path": "src/trading_research/research/temporal_folds.py",
+      "sha256": "de433de0bbd8e39615f991bed247c2e445ba315052ae53c7dc37bc8780190b47",
+      "lines": 409
+    },
+    {
+      "path": "src/trading_research/research/label_ledger.py",
+      "sha256": "ec1e75fe98aa7c7dcc756fb315f41ca08773439646ca51cf07b29b0f538147b8",
+      "lines": 441
+    },
+    {
+      "path": "src/trading_research/operations/artifact_graph.py",
+      "sha256": "f7af9aab8c551a2c16afc7017ee24b7ad78ebaf635fde793f1cbd19abea24143",
+      "lines": 1750
+    },
+    {
+      "path": "references/v01_v02_literal.py",
+      "sha256": "17ebb85d264806481929a1efaaa042ba5485306863a263f00aa25b0bd7e1cad7",
+      "lines": 136
+    },
+    {
+      "path": "tests/test_v01_v02.py",
+      "sha256": "e8ebe86bae7d910e9e348b22b9608cea473a76f55dbbb012131498f32d31a259",
+      "lines": 653
+    },
+    {
+      "path": "reports/v01-v02-case-test-map.json",
+      "sha256": "599ac149785f7aabba48ed554c4ac4ce195c5ff0f96920086314b22a19516690",
+      "lines": 6286
+    }
+  ],
+  "static_observations": {
+    "legacy_field_lists_compared": 23,
+    "legacy_field_list_changes": 0,
+    "named_unittest_methods": 66,
+    "golden_case_ids": 64,
+    "mapped_case_ids": 64,
+    "missing_mapped_method_names": 0,
+    "source_disposition_rows": 373,
+    "source_rows_with_narrow_named_case_mapping": 21,
+    "whole_source_closed_rows": 0
+  },
+  "findings": [
+    {
+      "id": "V01V02-STATIC-001",
+      "severity": "high",
+      "title": "V01-22 group weights contradict frozen unit mass per date",
+      "locations": [
+        "src/trading_research/research/label_ledger.py:grouped_weights",
+        "references/v01_v02_literal.py:equal_group_weights",
+        "tests/test_v01_v02.py:test_v01_22"
+      ],
+      "finding": "Candidate and independent reference divide by number of groups as well as rows per group. With1000 A rows and1 B row they return1/2000 and1/2, while the frozen case requires1/1000 and1. The test retains the correct frozen expectation and is predicted to fail.",
+      "proposed_repair": "Repair both independently to the predeclared unit mass per group; preserve the golden and test expectations.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-002",
+      "severity": "high",
+      "title": "Typed payload and real ledger adapters are incomplete",
+      "locations": [
+        "src/trading_research/research/label_ledger.py:LabelOutcome",
+        "src/trading_research/research/label_ledger.py:policy_outcome",
+        "tests/test_v01_v02.py:test_v01_14",
+        "tests/test_v01_v02.py:test_v01_31"
+      ],
+      "finding": "LabelOutcome validates a payload_kind tag but accepts any canonical JSON, including a generic scalar or numeric full-horizon payload in a censored record. OI/policy adapters return dictionaries rather than a typed ledger outcome. V01-14 stores object departure under price_path; V01-31 retains only the candidate and does not append/reconcile an actual policy nonfill outcome.",
+      "proposed_repair": "Add bounded per-kind payload schemas and explicit adapters returning retained LabelOutcome/ObservationEvidence records; ensure censored full-horizon fields remain null and policy/receipt provenance is retained. Complete corresponding real ledger tests without implementing root reward math.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-003",
+      "severity": "high",
+      "title": "Several resource checks happen after allocation or decoding",
+      "locations": [
+        "src/trading_research/research/label_ledger.py:_validate_record_size",
+        "src/trading_research/research/label_ledger.py:_append",
+        "src/trading_research/research/label_ledger.py:restore",
+        "src/trading_research/research/temporal_folds.py:restore_temporal_checkpoint",
+        "src/trading_research/research/models.py:_training",
+        "src/trading_research/research/object_labels.py:compatible_gap_evidence"
+      ],
+      "finding": "Ledger wire trees/checkpoint bytes are built before their byte bound is checked; restore constructs all encoded tuple records before cardinality checks; models._training materializes examples before temporal capacity validation; compatible_gap_evidence sorts/materializes points before4096 check. ObservationEvidence gaps/partial facts and future_profile_mass have no explicit collection preflight. These are finite eventually in many paths but do not satisfy the registered before-allocation contract.",
+      "proposed_repair": "Introduce bounded structural preflight/counting before serialization, restore construction and iterable materialization. Apply the same finite configuration to adjacent payload collections and direct temporal model callers.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-004",
+      "severity": "medium",
+      "title": "Configurable limits cannot actually increase beyond constructor defaults",
+      "locations": [
+        "src/trading_research/research/temporal_folds.py:TemporalSampleV1",
+        "src/trading_research/research/temporal_folds.py:TemporalFoldV1",
+        "src/trading_research/research/label_ledger.py:LabelOutcome"
+      ],
+      "finding": "V01V02LimitsV1 accepts any positive explicit limit, while record constructors hard-code default256-byte IDs,64 dependencies/parents,4096 population and65536-byte payload bounds. A registered upward local override fails before the supplied configuration can validate it; F11 must still retain its existing lower limits.",
+      "proposed_repair": "Separate minimal typed-record validation from explicit service limits, or obtain an explicit root contract disposition for hard maxima. Do not silently claim upward configurable behavior.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-005",
+      "severity": "high",
+      "title": "Capacity variants do not exactly cover all registered service boundaries",
+      "locations": [
+        "tests/test_v01_v02.py:test_capacity_variants"
+      ],
+      "finding": "Checkpoint test accepts a default-limit snapshot then rejects under changed B-1 configuration; it does not demonstrate an otherwise valid snapshot accepted at exact B with matching retained limits. Payload test exercises bounded_json directly rather than ledger append. Total-dependency variant uses one row rather than the frozen two-row total-bound fixture. Small-cap tests are otherwise present for all13 names.",
+      "proposed_repair": "Use independently encoded valid checkpoint/ledger record bytes and matching retained limit values for exact capacity and one-over variants; use two rows for the total dependency bound and preserve state bytes after rejection.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-006",
+      "severity": "medium",
+      "title": "Actual temporal missing-route negative currently fails on absent graph ID",
+      "locations": [
+        "tests/test_v01_v02.py:test_temporal_actual_oof_route"
+      ],
+      "finding": "The clean temporal producer/downstream route is fully constructed. The missing-route mutation replaces the consumer fold node but leaves downstream requests/fit edges referring to the old fold ID; badrequest is computed but unused. It therefore proves missing-node rejection, not the intended explicit producer-route gate.",
+      "proposed_repair": "Rebuild the affected read/fit/model IDs and coherent requests for the route-free fold, or construct an independent consistent bad closure, so the actual route check is reached.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-007",
+      "severity": "medium",
+      "title": "V01-20 reconciliation loses exact missing and duplicate IDs",
+      "locations": [
+        "src/trading_research/research/label_ledger.py:reconcile",
+        "tests/test_v01_v02.py:test_v01_20"
+      ],
+      "finding": "Current failures say only required candidate outcome omitted or duplicate identity. The frozen case calls for exact missing b and duplicate b diagnostics. Tests assert ContractError only, so they do not enforce the registered diagnostics.",
+      "proposed_repair": "Return or attach deterministic exact missing/duplicate identity evidence and assert the frozen b diagnostics in both cases.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-008",
+      "severity": "high",
+      "title": "Independent reference coverage is narrower than the registered64-case requirement",
+      "locations": [
+        "references/v01_v02_literal.py",
+        "tests/test_v01_v02.py"
+      ],
+      "finding": "Reference arithmetic exists for paths, exact object paths, compatible gap orders, temporal eligibility, group weights, OI queries, episode resets, censor bounds and old wire encoding. Many ledger/reconciliation/checkpoint/phase/route cases assert hand constants or candidate behavior only and have no independent literal result comparison. The case map names every64 method but must not imply complete literal-reference fidelity yet.",
+      "proposed_repair": "Add independent primitive ledger/reconciliation/phase/route reference checks and connect applicable existing methods, preserving all registered expected values. Keep declarations vs actual F11 proof distinctions explicit.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-009",
+      "severity": "medium",
+      "title": "OI endpoint accepts a revision for another position date",
+      "locations": [
+        "src/trading_research/research/label_ledger.py:oi_endpoint",
+        "src/trading_research/research/label_ledger.py:OIReport"
+      ],
+      "finding": "The receipt chain checks contract and supersedes linkage but not common endpoint position_date, ordering relative to prior position_date, or an initial unexpected supersedes value. A linked record for a different endpoint can replace the requested report delta.",
+      "proposed_repair": "Freeze and validate the next-report endpoint identity independently of receipt revision ID, and reject mismatched position dates/first predecessor evidence with a same-case revision variant.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-010",
+      "severity": "medium",
+      "title": "Retained legacy wire test depends on mutable temporary draft path",
+      "locations": [
+        "tests/test_v01_v02.py:test_v02_28"
+      ],
+      "finding": "The old wire schema is loaded directly from /tmp/v01-v02-legacy-wire-schema-draft.json without verifying its registered SHA. Registration retained the exact bytes, but the test should read that retained artifact or a pinned repo copy so later temp deletion/change cannot substitute reference evidence.",
+      "proposed_repair": "Use the registered retained byte reference or a pinned repository fixture and verify806d6339... before comparing old-wire vectors. Do not regenerate expected bytes from candidate dataclasses.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-011",
+      "severity": "medium",
+      "title": "Malformed observation identity still accepts non-string version",
+      "locations": [
+        "src/trading_research/research/labels.py:ObservationWindow",
+        "src/trading_research/research/object_labels.py:ObjectTarget"
+      ],
+      "finding": "The tightened legacy observation validation checks only truthiness of version, so a positive integer version remains accepted. Existing ObjectTarget likewise accepts bool side and untyped truthy identity values. V01-17 only tests an empty string, leaving the exact typed/canonical metadata requirement incomplete.",
+      "proposed_repair": "Tighten only malformed-input type checks and add same-case malformed variants; preserve all valid legacy signatures and serialized fields.",
+      "status": "open_awaiting_root_consolidated_repair"
+    },
+    {
+      "id": "V01V02-STATIC-012",
+      "severity": "medium",
+      "title": "Frozen temporal tamper variants are only partially asserted",
+      "locations": [
+        "tests/test_v01_v02.py:test_v02_26",
+        "tests/test_v01_v02.py:test_v02_27"
+      ],
+      "finding": "Tests cover forged fit membership, wrong request end, dependency bytes changed under old hash and wrong actual label end. They do not independently exercise a dependency record changed while its original retained bytes stay intact, matching hash/metadata tamper detection, actual label maturity mismatch, or explicit early fit_label/fit_feature admission of excluded a. Existing F11 code retains those gates, but the new typed path requires its own assertions.",
+      "proposed_repair": "Complete these same-case actual commit/read/restore tamper variants and isolate each intended gate with otherwise consistent evidence.",
+      "status": "open_awaiting_root_consolidated_repair"
+    }
+  ],
+  "repairs_applied_after_review": false,
+  "candidate_imported": false,
+  "compiled": false,
+  "tests_run": false,
+  "private_execution_attempts": 0,
+  "completion_claim": "Initial implementation and initial static review only. Open findings require the root consolidated batch repair before shared execution; no semantic pass or scientific/economic completion claim."
+}

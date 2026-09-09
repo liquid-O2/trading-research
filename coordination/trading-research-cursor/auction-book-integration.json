@@ -1,0 +1,23 @@
+{
+  "status": "controller_reviewed_draft_unverified",
+  "updated_at": "2026-09-08T11:35:40.435204+00:00",
+  "worker_run": "/workspace/coordination/trading-research-cursor/runs/20260908T110225Z-aa8e90f9",
+  "files": [
+    {
+      "path": "src/trading_research/research/auction_flow_book_recovery.py",
+      "worker_sha256": "428414d8519a70055b57cb0d7d9bb911edd988b6f96005f7d6cf4f678c8bee5c",
+      "size_bytes": 36063,
+      "canonical_sha256": "dfa66bd8ff197adb58307d25a2c4335f1061d0b08d1bab1b212d40d2b5cf02f3",
+      "canonical_size_bytes": 38950
+    },
+    {
+      "path": "tests/test_auction_flow_book_recovery.py",
+      "worker_sha256": "66e25ca442261f01eef94223ba9b879eebd5bf4b3645eb13c72a1451239147c3",
+      "size_bytes": 31374,
+      "canonical_sha256": "2bd9cafb680f6ae872205fc5bb5a88cbef9d2e4076d5a0b5794e9acf5db2f4ac",
+      "canonical_size_bytes": 32757
+    }
+  ],
+  "backup": "/workspace/coordination/trading-research-cursor/integration-auction-book-v1",
+  "review": "Complete repaired kernel/tests read. Controller replaced repeated index walks by sparse searchsorted, validated all carry primitive/address/episode shapes before encoding, added logical count constraints, separated current interval rows from cumulative counters, and added boundary tests. Full source comparison still pending; no candidate imports or execution. Static AST only."
+}

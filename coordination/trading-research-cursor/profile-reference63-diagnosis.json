@@ -1,0 +1,46 @@
+{
+  "kind": "profile_receipt_resolution_diagnosis_v1",
+  "execution": "/workspace/trading-research/reports/auction-flow-runs/b8e4d402ff412f365542094f7d1930ef2c184607798ec7c8576138f2077a1d3b/execution.json",
+  "cpu_seconds": 595.650502,
+  "peak_rss_bytes": 2101891072,
+  "attempt_output_bytes": 231112,
+  "tests_passed": 55,
+  "actual_failure": "\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3071, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 1513, in profile_statistics\n    actual=run_profile_statistics(population=population,window_population=windows,contract=contract,outputs=outputs,load_reference=load_reference,selected_partition_keys=selected)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1631, in run_profile_statistics\n    ref, part, measurement = compute_profile_partition(\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_reference.py\", line 4013, in compute_profile_partition\n    extracted = load_measurement_cells(unit)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_reference.py\", line 2070, in load_measurement_cells\n    raise IntegrityError('observation unit lost its accepted measurement receipt')\ntrading_research.errors.IntegrityError: observation unit lost its accepted measurement receipt\n",
+  "example_unit": {
+    "root": "NQ",
+    "source_path": "quantpad/cme__nq-continuous-futures__mbp-1/2021-01-04.parquet",
+    "source_window_start_ns": 1609718400000000000,
+    "source_window_end_ns": 1609804800000000000,
+    "original_refs": {
+      "canonical_raw_values_sha256": "9971dc48367fc3206510ba78d8c8c3e36cb19d64344320c18757f0948755f92c",
+      "measurement_sha256": "3632757b790640aa2e5e3d98dd20abee79d0a2265ba2c77157f1bf2c4bc4d4e2",
+      "receipt_reference": {
+        "kind": "auction_flow_source_window_receipt_v1",
+        "path": "/workspace/trading-research/reports/auction-flow-runs/eea751045b15bf143265901beda8afb8efade7074129706ebeb86417f79b73b7/outputs/source-file-090/artifacts/NQ-1609718400000000000-9cbfb092a1c3-window-receipt.json",
+        "sha256": "4457d1d3b9fbeaa6c0ac4b4e5c05c9322cc1be71a14262b654f40a9825e96ae6",
+        "size_bytes": 187159
+      },
+      "receipt_sha256": "4457d1d3b9fbeaa6c0ac4b4e5c05c9322cc1be71a14262b654f40a9825e96ae6"
+    },
+    "receipt": {
+      "kind": "auction_flow_source_window_receipt_v1",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/eea751045b15bf143265901beda8afb8efade7074129706ebeb86417f79b73b7/outputs/source-file-090/artifacts/NQ-1609718400000000000-9cbfb092a1c3-window-receipt.json",
+      "sha256": "4457d1d3b9fbeaa6c0ac4b4e5c05c9322cc1be71a14262b654f40a9825e96ae6",
+      "size_bytes": 187159
+    }
+  },
+  "receipt_measurement": {
+    "canonicalizer": "exact_measurement_domain_v1",
+    "cpu_seconds": 0.8448845679999977,
+    "encoding": "canonical-json-zstd-v1",
+    "kind": "auction_flow_full_window_measurements",
+    "path": "/workspace/trading-research/reports/auction-flow-runs/eea751045b15bf143265901beda8afb8efade7074129706ebeb86417f79b73b7/outputs/source-file-090/artifacts/NQ-1609718400000000000-9cbfb092a1c3-measurements.json.zst",
+    "roundtrip_exact": true,
+    "sha256": "74bf87a9e1c38ae823858ea6e9d6a8ca4a22cbaea791237b52e10d1004b30d4e",
+    "size_bytes": 2265808,
+    "uncompressed_sha256": "3632757b790640aa2e5e3d98dd20abee79d0a2265ba2c77157f1bf2c4bc4d4e2",
+    "uncompressed_size_bytes": 20976785
+  },
+  "cause": "Accepted observation unit stores receipt and original uncompressed measurement SHA, not direct measurement path. Consumer only searched direct keys; actual receipt points to measurement intact.",
+  "decision": "Resolve existing authenticated receipt.artifacts.measurement centrally; verify root/path/window, receipt SHA and original measurement SHA; use same resolver for partition identity, extraction and byte accounting. Keep frozen scientific contract and all55passed checks, add receipt-layout regression before next registered actual pilot."
+}

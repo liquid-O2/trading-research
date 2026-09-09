@@ -1,0 +1,550 @@
+{
+  "status": "static_review_complete_awaiting_root_consolidated_repair",
+  "family": "F11-artifact-closure-engineering-v1",
+  "scope_ids": [
+    "F11",
+    "F11.INPUT_AUDIT"
+  ],
+  "registered_golden": {
+    "path": "/workspace/trading-research/tests/golden/f11-artifacts.json",
+    "sha256": "efbdf49bcfaf626d847d8eec4d6694ab5ff2dbed4951107667b7d0290f1784ce",
+    "bytes": 37196
+  },
+  "registered_protocol": {
+    "path": "/workspace/trading-research/validation/F11_ARTIFACT_PROTOCOL.md",
+    "sha256": "bc5f9df2c6d4735b5ec128f6b8a7c4a21cd55c32dcef57338d2a77ad2926c80a",
+    "bytes": 10329
+  },
+  "source_preparation": {
+    "path": "/workspace/trading-research/reports/f11-source-preparation.json",
+    "sha256": "a8568d5860c7881fc174422d66a746546f2edfb915926470ae39fc5bbce53456",
+    "bytes": 68539
+  },
+  "case_count": 24,
+  "cases": [
+    {
+      "case_id": "F11-01",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_01_typed_identity_and_immutable_configuration",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 121,
+      "source_preparation_cases": [
+        "F11-PROP-03",
+        "F11-PROP-11"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "DRF-A26"
+      ],
+      "contract_basis": "identity, typed contracts and immutable configuration",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-02",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_02_roles_share_bytes_but_not_identity",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 143,
+      "source_preparation_cases": [
+        "F11-PROP-01"
+      ],
+      "source_ids": [
+        "DTM-A17",
+        "CRL-17"
+      ],
+      "contract_basis": "semantic role separation",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-03",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_03_original_completion_and_expiry",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 159,
+      "source_preparation_cases": [
+        "F11-PROP-02"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "DRF-A07"
+      ],
+      "contract_basis": "frozen decision and actual completion clocks",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-04",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_04_required_optional_actual_reads",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 181,
+      "source_preparation_cases": [
+        "F11-PROP-03"
+      ],
+      "source_ids": [
+        "DRF-A26",
+        "DTM-A17"
+      ],
+      "contract_basis": "F11.INPUT_AUDIT declaration versus actual reads",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-05",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_05_future_suffix_and_old_commit",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 198,
+      "source_preparation_cases": [
+        "F11-PROP-04"
+      ],
+      "source_ids": [
+        "DRF-A26",
+        "CRL-20"
+      ],
+      "contract_basis": "future projection and original provenance",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-06",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_06_complete_dag_stage_and_corruption",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 210,
+      "source_preparation_cases": [
+        "F11-PROP-05"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "DTM-A17"
+      ],
+      "contract_basis": "complete bounded DAG, retained read manifests",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-07",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_07_grouped_fold_rederivation",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 228,
+      "source_preparation_cases": [
+        "F11-PROP-06"
+      ],
+      "source_ids": [
+        "DTM-A17"
+      ],
+      "contract_basis": "full population and exact fold derivation",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-08",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_08_ancestral_oof_exclusion",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 242,
+      "source_preparation_cases": [
+        "F11-PROP-07"
+      ],
+      "source_ids": [
+        "DTM-A17",
+        "CRL-17"
+      ],
+      "contract_basis": "per-row transitive OOF gate",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-09",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_09_exact_target_unit_endpoints",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 255,
+      "source_preparation_cases": [
+        "F11-PROP-08"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "CRL-17"
+      ],
+      "contract_basis": "target definition, unit and frozen horizon",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-10",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_10_predeclared_routes_not_self_authorization",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 263,
+      "source_preparation_cases": [
+        "F11-PROP-09"
+      ],
+      "source_ids": [
+        "DTM-A17",
+        "CRL-17"
+      ],
+      "contract_basis": "explicit fit route authority",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-11",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_11_training_only_state_and_fit_clock",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 277,
+      "source_preparation_cases": [
+        "F11-PROP-10"
+      ],
+      "source_ids": [
+        "DTM-A17"
+      ],
+      "contract_basis": "fit-only transform state and label maturity",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-12",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_12_execution_identity_and_commit_alias",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 289,
+      "source_preparation_cases": [
+        "F11-PROP-11"
+      ],
+      "source_ids": [
+        "DRF-A26",
+        "DTM-A01"
+      ],
+      "contract_basis": "complete execution identity",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-13",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_13_same_value_version_invalidation",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 318,
+      "source_preparation_cases": [
+        "F11-PROP-12"
+      ],
+      "source_ids": [
+        "DRF-A26",
+        "EXT-031"
+      ],
+      "contract_basis": "same numeric value new provenance",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-14",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_14_calibration_cohort_targeted_rebuild",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 328,
+      "source_preparation_cases": [
+        "F11-PROP-13"
+      ],
+      "source_ids": [
+        "CRL-17",
+        "DTM-A17"
+      ],
+      "contract_basis": "new cohort changes calibrator closure",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-15",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_15_zero_effect_and_provenance_read",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 337,
+      "source_preparation_cases": [
+        "F11-PROP-14"
+      ],
+      "source_ids": [
+        "DRF-A26",
+        "DTM-A01"
+      ],
+      "contract_basis": "actual reads, transform ownership and provenance dependencies",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-16",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_16_actual_parameter_and_column_attestation",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 349,
+      "source_preparation_cases": [
+        "F11-PROP-15"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "DRF-A26"
+      ],
+      "contract_basis": "narrow existing model adapters",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-17",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_17_checkpoint_restore_detached_and_config",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 357,
+      "source_preparation_cases": [
+        "F11-PROP-15"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "CRL-20"
+      ],
+      "contract_basis": "bounded canonical checkpoint restore",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-18",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_18_actual_child_process_death",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 370,
+      "source_preparation_cases": [
+        "F11-PROP-16"
+      ],
+      "source_ids": [
+        "CEX-27",
+        "CRL-20"
+      ],
+      "contract_basis": "durable stage then one pointer; supervised actual child death after registration",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-19",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_19_manifest_only_reconstruction_and_absence",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 388,
+      "source_preparation_cases": [
+        "F11-PROP-17"
+      ],
+      "source_ids": [
+        "CEX-27",
+        "CRL-20",
+        "DTM-A01"
+      ],
+      "contract_basis": "reconstructible bytes and missing artifact gate",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-20",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_20_full_versus_incremental_exact_arithmetic",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 405,
+      "source_preparation_cases": [
+        "F11-PROP-18"
+      ],
+      "source_ids": [
+        "DTM-A01",
+        "DTM-A17"
+      ],
+      "contract_basis": "UP-F11 finite full-closure versus dependency graph comparison",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-21",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_21_inclusive_bounds_and_no_partial_state",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 437,
+      "source_preparation_cases": [
+        "F11-PROP-19"
+      ],
+      "source_ids": [
+        "CEX-27",
+        "CRL-20"
+      ],
+      "contract_basis": "declared resource bounds and preservation policy",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-22",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_22_tolerance_and_decision_consequence",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 472,
+      "source_preparation_cases": [
+        "F11-PROP-20"
+      ],
+      "source_ids": [
+        "DRF-A07"
+      ],
+      "contract_basis": "SR-F11 decision-sensitive numerical drift",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-23",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_23_failed_attempts_not_success_inputs",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 481,
+      "source_preparation_cases": [
+        "F11-PROP-21"
+      ],
+      "source_ids": [
+        "TECH-10",
+        "JCV-U06",
+        "CEX-27"
+      ],
+      "contract_basis": "F11 audit artifact versus successful run and V03 existing attempt lineage",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    },
+    {
+      "case_id": "F11-24",
+      "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_24_snapshot_velocity_receipt_lineage",
+      "test_path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "test_line": 495,
+      "source_preparation_cases": [
+        "F11-PROP-22"
+      ],
+      "source_ids": [
+        "EXT-031"
+      ],
+      "contract_basis": "stored source lineage; eligibility delegated to F06/F07/F12",
+      "status": "authored_unexecuted_full_static_review_complete_repairs_pending",
+      "assertion_scope": "Frozen finite case; gaps and required repairs are explicitly recorded in f11-initial-static-review.json. Mapping is not a passing-test claim.",
+      "remaining_broader_gates": [
+        "Native/private large cohorts, uninstrumented consumers, predictor/calibration quality, economic and future captured parity remain open."
+      ]
+    }
+  ],
+  "prepared_source_case_count": 22,
+  "test_modules": [
+    "tests.test_artifact_graph"
+  ],
+  "engineering_metrics": {
+    "mapping": "tests.test_artifact_graph.ENGINEERING_METRICS",
+    "method_id": "tests.test_artifact_graph.ArtifactGraphTests.test_f11_20_full_versus_incremental_exact_arithmetic",
+    "populated_only_during_registered_worker": true
+  },
+  "owned_path_hashes": [
+    {
+      "path": "/workspace/trading-research/src/trading_research/operations/artifact_graph.py",
+      "sha256": "d6636f61c9e71f9e329078c714111620ebfd569b91305f000fb9383286acbe98",
+      "bytes": 51221
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/operations/provenance.py",
+      "sha256": "b37dc4ec62916883eb2812d39ecbb22c6624f815fe773e717dca56b8cf2ec004",
+      "bytes": 6598
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/folds.py",
+      "sha256": "94b0956a8656eafe1038148cf3a50002a1e8aa96a137807f98dedc613b8fd61f",
+      "bytes": 8818
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/models.py",
+      "sha256": "41864c67a47aad9af102f5d42be26daae9c1148ed7b8ec979cf0a14a147ab43d",
+      "bytes": 12142
+    },
+    {
+      "path": "/workspace/trading-research/src/trading_research/research/calibration.py",
+      "sha256": "abed218d8db5c6c6462964a52d00f130330443d7845e600932631a601bdf69bd",
+      "bytes": 3650
+    },
+    {
+      "path": "/workspace/trading-research/references/artifact_graph_literal.py",
+      "sha256": "09be9ee6d9695c678957584410c27efe080836c5659a256a22e672f58166a3de",
+      "bytes": 4192
+    },
+    {
+      "path": "/workspace/trading-research/tests/test_artifact_graph.py",
+      "sha256": "cda9988920e9c5639c1ed325f7607fdaaf19947531ab1e61e81fdc2a4d6400c8",
+      "bytes": 37847
+    }
+  ],
+  "static_review": {
+    "path": "/workspace/trading-research/reports/f11-initial-static-review.json",
+    "sha256": "b9acdd6fb2fcc036e3c5e30bf34eb88e30b5fbbe649aa7ea37f035bc738aeef4",
+    "bytes": 16039
+  },
+  "remaining_broader_gates": [
+    "All real/native large-cohort data access, private inputs and externally captured receipt streams remain separately authorized/acquired dependencies.",
+    "No predictor/model fitting, learned routing, chronological calibration performance, held-out forecast/economic gain, all-indicator implementation or E0\u2013E5 policy run occurs in this family.",
+    "F11 gates can test synthetic fold/OOF ancestry without certifying real chronological cohorts or unseen future periods.",
+    "All unrelated uninstrumented third-party/native feature reads remain outside actual-read certification until separately integrated.",
+    "Full production storage concurrency, scale/compression, backend performance and explicit obsolete-cache retention policy remain separate measured comparisons.",
+    "Missing source replies/exports and DRF excluded archive details remain unavailable; no historical numerical claims adopted.",
+    "No provider connection, purchase, live velocity reconstruction or staleness policy is added; EXT-031 is a stored-event provenance fixture."
+  ],
+  "mapping_method": "Static source-text method declarations; full module/class/method IDs match the declared unittest class. Root preflight will independently inspect AST after repair.",
+  "execution": {
+    "project_imports": false,
+    "compilation": false,
+    "tests": false,
+    "candidate_execution": false,
+    "repairs": false,
+    "metadata_only": true
+  }
+}

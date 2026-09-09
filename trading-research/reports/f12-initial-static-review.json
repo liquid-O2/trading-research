@@ -1,0 +1,198 @@
+{
+  "candidate_compiled": false,
+  "candidate_executed": false,
+  "candidate_imported": false,
+  "candidate_modified_during_review": false,
+  "case_map": "36 frozen cases mapped to 36 concrete test methods; metadata checked without executing candidates",
+  "direct_bindings_reviewed": [
+    "src/trading_research/verify.py",
+    "tools/map_f09_f12.py",
+    "tools/verify_f09_f12.py F12 binding and static preflight"
+  ],
+  "family": "F12-arrival-trace-engineering-v1",
+  "findings": [
+    {
+      "finding_and_proposed_repair": "EligibilityIndex.snapshot expects (FieldKey, policy.id), but by_name supplies OperationPolicy. Both entry and protection paths need IDs; T13/T14/T20/T24 otherwise fail.",
+      "id": "F12-R01",
+      "location": "runtime/arrival.py:1264",
+      "severity": "blocking",
+      "status": "unfixed_initial_review",
+      "title": "quality callback policy key"
+    },
+    {
+      "finding_and_proposed_repair": "Semantic parity omits instrument/definition and control payload identities. recorded_action is transport in market/publication; changed buy/sell can classify transport_only. Include action, served vector, source identity and relevant control semantics in driver/reference, preserving timing separation and explicit numeric difference diagnostics.",
+      "id": "F12-R02",
+      "location": "runtime/arrival.py:755",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "semantic observation completeness"
+    },
+    {
+      "finding_and_proposed_repair": "F05/publication/order wrappers map ordinal to known/completed times without rejecting actual_capture. Require synthetic/model-only inputs and explicit logical clock scope; raw retained actual records are not wrapper-certified UTC evidence.",
+      "id": "F12-R03",
+      "location": "runtime/arrival.py:1147",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "logical clock wrapper gate"
+    },
+    {
+      "finding_and_proposed_repair": "last_economic omits initial_events; first older replay ACK can bypass wrapper stale gate. Same economic-known/version with contradictory payload is accepted; rejected stale ACK IDs are not retained for immutable-ID conflict checks. Seed initial boundary, retain all identities, reject contradictory same versions.",
+      "id": "F12-R04",
+      "location": "runtime/arrival.py:1424",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "order restart and immutable version"
+    },
+    {
+      "finding_and_proposed_repair": "Valid transaction body tagged snapshot can enter F05 because semantic_kind trade is not required. Gate it and add concrete T08 boundary assertion.",
+      "id": "F12-R05",
+      "location": "runtime/arrival.py:1154",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "F05 snapshot admission"
+    },
+    {
+      "finding_and_proposed_repair": "F05 quantity silently switches to last instrument; publication version IDs alias across source/instrument/definition. Bind explicit immutable scope or typed identities; generic market toy scope also needs declared constraints.",
+      "id": "F12-R06",
+      "location": "runtime/arrival.py:1183",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "wrapper source scope"
+    },
+    {
+      "finding_and_proposed_repair": "Repeated disconnect moves outage start; connected generation A-B-A and subscription reuse can pass; same-epoch boot marker accepted. Preserve first outage, track used epochs, retain opening and closing gap evidence.",
+      "id": "F12-R07",
+      "location": "runtime/arrival.py:338",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "control epochs and outage evidence"
+    },
+    {
+      "finding_and_proposed_repair": "Journal inspection/append call semantic control validation before raw commit, so structurally valid generation/sequence faults are rejected without raw retention or labelled archive corruption. Separate structural journal checks from replay semantic admission.",
+      "id": "F12-R08",
+      "location": "runtime/arrival.py:486",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "raw retention before control admission"
+    },
+    {
+      "finding_and_proposed_repair": "Existing empty archive silently initialized; quarantine releases source lock before copy and destination existence check races; hex tail evidence can exceed bound. Exclusive creation, immutable original/held lock or verified pin, and bounded binary evidence required.",
+      "id": "F12-R09",
+      "location": "runtime/arrival.py:567",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "archive creation and quarantine"
+    },
+    {
+      "finding_and_proposed_repair": "Caller can forge durable_local_journal on CommittedArrival; actual dispatch gate trusts string. Exact retry checks record SHA but not archived prefix proof. Require internal proof or explicit narrower trust contract plus retry proof validation.",
+      "id": "F12-R10",
+      "location": "runtime/arrival.py:391",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "commit proof trust boundary"
+    },
+    {
+      "finding_and_proposed_repair": "Replay callback/trace/definition/policy fields are mutable; quality entry/protection lists remain mutable after hash; journal path mutable. Freeze configuration and captured collections.",
+      "id": "F12-R11",
+      "location": "runtime/arrival.py:778",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "immutable configuration"
+    },
+    {
+      "finding_and_proposed_repair": "Unhashable enum/name inputs, surrogate Unicode and wrong body containers can raise TypeError/UnicodeError/AttributeError. Normalize bounded schema rejection before dispatch; add T34 cases.",
+      "id": "F12-R12",
+      "location": "runtime/arrival.py:137",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "schema error normalization"
+    },
+    {
+      "finding_and_proposed_repair": "Callback counter increments only on successful commit despite failed calls executed. Track attempted versus committed work; disclose full history serialization/rebuild scope instead of suggesting callbacks measure all work.",
+      "id": "F12-R13",
+      "location": "runtime/arrival.py:859",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "attempted work metrics"
+    },
+    {
+      "finding_and_proposed_repair": "delay_one sorts and rewrites trace IDs before validating original full trace, silently repairing invalid order/identity. Validate original first. T22 uses 3 source deliveries plus explicit decision at global ordinal 3; third source global ordinal 4 while conceptual eligible source list is [1,2,3]. Golden unchanged; selected original ordinal 2 and first cut25 retained.",
+      "id": "F12-R14",
+      "location": "runtime/arrival.py:975",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "counterfactual original validation"
+    },
+    {
+      "finding_and_proposed_repair": "latency_summary trusts arbitrary dict qualified flags; no bound, dedup or known method enforcement. Validate retained clock/provenance qualification, source identity, bounded unique sample identities and conflicts; actual_live_evidence remains false.",
+      "id": "F12-R15",
+      "location": "runtime/arrival.py:1058",
+      "severity": "high",
+      "status": "unfixed_initial_review",
+      "title": "telemetry evidence qualification"
+    },
+    {
+      "finding_and_proposed_repair": "Absent available_operations defaults to requested operation and grants capability. Require explicit synthetic operation evidence and update fixture input; disclose joint span constant or bind immutable policy.",
+      "id": "F12-R16",
+      "location": "runtime/arrival.py:1232",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "quality capability evidence"
+    },
+    {
+      "finding_and_proposed_repair": "Completion start clock not tied to job submission; duplicate business signature omits changed start clock. Publication timer duplicates timer ID; market timer ignores conflicting due info. Bind submission clocks and immutable completion/timer signatures.",
+      "id": "F12-R17",
+      "location": "runtime/arrival.py:1357",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "publication completion and timers"
+    },
+    {
+      "finding_and_proposed_repair": "Several tests assert golden constants for no effects, recovery dispatch and unsupported claims. Add observable fail-on-live-call guards, write/partial-write poisoning and no decode, malformed callback rollback, mutable config rejection, actual wrapper gate, F05 snapshot and core action parity assertions within registered cases. Existing fsync/decode/torn recovery and restart assertions are meaningful.",
+      "id": "F12-R18",
+      "location": "tests/test_arrival.py:1",
+      "severity": "medium",
+      "status": "unfixed_initial_review",
+      "title": "assertion gaps"
+    }
+  ],
+  "full_read_files": [
+    "src/trading_research/runtime/arrival.py",
+    "references/arrival_literal.py",
+    "tests/test_arrival.py"
+  ],
+  "initial_identities": [
+    {
+      "bytes": 85222,
+      "lines": 1465,
+      "path": "src/trading_research/runtime/arrival.py",
+      "sha256": "67d8d8bf1e7624cb68d15b04de3badcc7e35fae64a3b7ba5b9f8c0012c931c9f"
+    },
+    {
+      "bytes": 6108,
+      "lines": 102,
+      "path": "references/arrival_literal.py",
+      "sha256": "8f503f5cf328955798740bc84a2c993b0f4d60f3c6d6d88b9a9dc47ecae234d6"
+    },
+    {
+      "bytes": 47147,
+      "lines": 724,
+      "path": "tests/test_arrival.py",
+      "sha256": "1a8719af67ec58ff8fd31c0334c279f10ef8c8c8ed454062e833dfd0f3b2ddb3"
+    },
+    {
+      "bytes": 5007,
+      "lines": 266,
+      "path": "reports/f12-case-test-map.json",
+      "sha256": "f3be1f4b3d3b48898273087f0b8af1986d4c1ff69fbdef30c00a5f34393c9680"
+    }
+  ],
+  "kind": "complete_initial_static_review",
+  "reference_scope": "Independent list fold shares declared pure semantic callbacks, not independent semantic kernel implementation. Reference must receive same observation identity/action correction; framing/durability not covered by fold parity.",
+  "remaining_gates": [
+    "Root must authorize one coordinated repair after all owners finish initial review.",
+    "No candidate imports, compilation, tests or execution before root releases registered shared run.",
+    "Native capture, providers, broker effects, source clock certification, economic results, all-consumer integration and broader F12 closure remain gated."
+  ],
+  "repair_authorized": false
+}

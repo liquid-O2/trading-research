@@ -1,0 +1,44 @@
+--- a/src/trading_research/research/auction_flow_data.py
++++ b/src/trading_research/research/auction_flow_data.py
+@@ -10,6 +10,8 @@
+ from collections import Counter
+ from dataclasses import dataclass
+ import hashlib
++import math
++import struct
+ import time
+ from pathlib import Path
+ 
+@@ -261,6 +263,20 @@
+                 or record.get('t') != last['event_ns'] or record.get('source_order') != last['source_order']
+                 or record.get('source_row') != last['source_row'] or record.get('source_key') != last['source_key']):
+             raise IntegrityError('source continuation lost its source-clock policy or replay carry')
++        # Hash the encoded carry before this method; restore original numeric bits
++        # only for the terminal raw record consumed by the projector.
++        record = dict(record)
++        for name in ('price', 'bid_px', 'ask_px', 'size', 'bid_sz', 'ask_sz', 'flags'):
++            value = record.get(name)
++            if isinstance(value, dict):
++                bits = value.get('$float64_bits_le')
++                if (set(value) != {'$float64_bits_le'} or type(bits) is not str
++                        or len(bits) != 16 or any(c not in '0123456789abcdef' for c in bits)):
++                    raise IntegrityError('source continuation has invalid nonfinite raw-field encoding')
++                decoded = struct.unpack('<d', bytes.fromhex(bits))[0]
++                if math.isfinite(decoded):
++                    raise IntegrityError('finite raw carry fields must retain their original JSON representation')
++                record[name] = decoded
+         if any(type(record.get(name)) is not int for name in
+                ('t', 'source_row', 'source_order', 'instrument_id')):
+             raise IntegrityError('source continuation lost its source-clock policy or replay carry')
+@@ -293,7 +309,10 @@
+         if self.source_clock_policy != SOURCE_CLOCK_STRICT:
+             result['source_clock_policy'] = self.source_clock_policy
+             result['clock_highwater_ns'] = self.projector.prior_time
+-            result['last_original_record'] = None if self._last_original_record is None else dict(self._last_original_record)
++            result['last_original_record'] = None if self._last_original_record is None else {
++                name: ({'$float64_bits_le': struct.pack('<d', value).hex()}
++                       if type(value) is float and not math.isfinite(value) else value)
++                for name, value in self._last_original_record.items()}
+             result['disposed_snapshot_rows'] = self.projector.disposed_snapshot_rows
+         return {**result, 'sha256': digest(result)}
+ 

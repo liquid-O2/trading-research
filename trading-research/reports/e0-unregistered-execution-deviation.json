@@ -1,0 +1,130 @@
+{
+  "budget_disposition": {
+    "additional_private_candidate_compilations": 1,
+    "additional_private_candidate_imports": 4,
+    "available_combined_verification_attempt_established": false,
+    "budget_must_not_be_reset_or_hidden": true,
+    "frozen_address_space_bytes": 4294967296,
+    "frozen_cpu_seconds_per_family": 600,
+    "frozen_cpu_seconds_per_physical_attempt": 180,
+    "frozen_hard_cpu_seconds": 190,
+    "frozen_max_attempts_per_family": 3,
+    "frozen_wall_seconds": 360,
+    "minimum_completed_private_test_attempts": 3,
+    "required_next_step": "Finish all authorized implementation and the combined static source/code/test review; retain an explicit disposition for every private invocation and obtain a bounded verification budget amendment before another E0 candidate execution."
+  },
+  "candidate_execution_records": [
+    {
+      "id": "E0-PRIVATE-IMPORT-01",
+      "operation": "fixture_import_and_construction",
+      "reason": "SyntaxError in observations.py: unmatched closing parenthesis",
+      "status": "failed"
+    },
+    {
+      "id": "E0-PRIVATE-IMPORT-02",
+      "operation": "fixture_import_and_construction",
+      "reason": "KeyError: prior_session in admission.py",
+      "status": "failed"
+    },
+    {
+      "accepted_as_evidence": false,
+      "id": "E0-PRIVATE-IMPORT-03",
+      "operation": "fixture_import_and_construction",
+      "status": "completed"
+    },
+    {
+      "accepted_as_evidence": false,
+      "id": "E0-PRIVATE-IMPORT-04",
+      "operation": "fixture_import_and_construction",
+      "status": "completed"
+    },
+    {
+      "accepted_as_evidence": false,
+      "id": "E0-PRIVATE-COMPILE-01",
+      "operation": "candidate_py_compile",
+      "status": "completed"
+    },
+    {
+      "candidate_execution_established": false,
+      "exit_code": 127,
+      "id": "E0-PRIVATE-PYTEST-01",
+      "operation": "pytest",
+      "reason": "pytest command not found",
+      "status": "failed_to_start"
+    },
+    {
+      "accepted_as_evidence": false,
+      "errors": 6,
+      "failures": 0,
+      "id": "E0-PRIVATE-UNITTEST-01",
+      "methods": 19,
+      "operation": "unittest_source_integration",
+      "status": "failed"
+    },
+    {
+      "accepted_as_evidence": false,
+      "errors": 1,
+      "failures": 0,
+      "id": "E0-PRIVATE-UNITTEST-02",
+      "methods": 19,
+      "operation": "unittest_source_integration",
+      "reason": "duplicate object identity in E0 population",
+      "status": "failed"
+    },
+    {
+      "accepted_as_evidence": false,
+      "errors": 0,
+      "failures": 0,
+      "id": "E0-PRIVATE-UNITTEST-03",
+      "methods": 19,
+      "operation": "unittest_source_integration",
+      "status": "completed"
+    }
+  ],
+  "code_version_at_each_private_execution": null,
+  "commands": {
+    "candidate_py_compile": "python -m py_compile tests/e0_source_fixtures.py tests/test_e0_source_integration.py",
+    "fixture_import_and_construction": "PYTHONPATH=src:tests python - <<'PY'\nfrom e0_source_fixtures import shared_comparator_source\ns=shared_comparator_source()\nprint(len(s.per_day),len(s.canonical_events),s.cuts)\nfor d in s.per_day:\n print(d.day, d.range_06_09.width, d.prior_rth.width, len(d.canonical_events), d.operational.version)\nPY",
+    "pytest": "PYTHONPATH=src:tests pytest -q tests/test_e0_source_integration.py",
+    "unittest_source_integration": "PYTHONPATH=src:tests python -m unittest -v tests.test_e0_source_integration"
+  },
+  "corrective_work": [
+    "Stop all private candidate imports, compilation and tests.",
+    "Replace incomplete source tests with the exact frozen source case controls.",
+    "Preserve native B buying and A selling aggressor semantics.",
+    "Require the combined review and actual supervised telemetry for any subsequent verification.",
+    "Keep historical synthetic E0, primary 2020-onward, native eligibility and economic evidence separate."
+  ],
+  "disclosed_on": "2026-09-07",
+  "nature": "An assigned implementation worker executed private synthetic fixture imports, compiled candidate files and ran the source integration module before the required combined review and supervised verification.",
+  "protocol_path": "validation/E0_INTEGRATION_V1.md",
+  "protocol_rule": "No private candidate imports, compilation, tests or unregistered retries.",
+  "resources": {
+    "aggregate_wall_seconds": null,
+    "cpu_seconds": null,
+    "interpretation": "Tool-call wall observations do not establish process CPU, peak RSS, aggregate resource use or hard resource enforcement. Resources will not be reconstructed by rerunning the commands.",
+    "observed_tool_wall_seconds": {
+      "E0-PRIVATE-UNITTEST-02": 1.008386381,
+      "E0-PRIVATE-UNITTEST-03": 1.020298608
+    },
+    "os_limits_enforced": false,
+    "peak_rss_bytes": null,
+    "process_start_and_end_times": null
+  },
+  "schema": "e0-unregistered-execution-deviation-v1",
+  "scope_limits": {
+    "economic_market_result": false,
+    "excluded_archive_inspection_or_adoption": false,
+    "external_order": false,
+    "real_market_model_fit": false,
+    "synthetic_engineering_only": true
+  },
+  "status": "verification_not_accepted_budget_disposition_pending",
+  "verification_disposition": {
+    "all_private_passes_rejected": true,
+    "current_candidate_verified": false,
+    "failed_outcomes_retained": true,
+    "no_private_rerun_authorized_by_this_record": true,
+    "reason": "The required review, registration linkage, exact case coverage and measured resource enforcement were absent. The passing private module also contained assertions that did not exercise the exact frozen cases."
+  }
+}

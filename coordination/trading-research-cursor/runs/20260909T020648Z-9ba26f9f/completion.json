@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 768.7189962011762,
+  "finished_at": "2026-09-09T02:19:37.679425+00:00",
+  "session_id": "3b0b092d-5fbb-4b26-8bce-18e53ffbe607",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 764420,
+    "duration_api_ms": 764420,
+    "is_error": false,
+    "result": "This is a memory-allocation repair in `summarize_groups` and year-end retention, not another science rewrite. I\u2019ll read the refreshed files and the failed-run evidence first.I'll inspect `_group_intended`, `run`, and the test fixtures so the repair matches the live contracts.I have a clear diagnosis: `summarize_groups` materializes every metric at once, `run` keeps all years\u2019 groups until the end, and date aggregates are emitted as millions of Python dicts. I\u2019ll batch statistics, finalize each year, and write typed columns\u2014without changing the event or price algorithms.Next I\u2019ll add the decisive regressions: batched statistics vs the unchanged API, a two-year carry fixture, and a public JSON roundtrip.Repaired the observed statistical-memory failure in the two owned files. Event and price algorithms were not rewritten. Alignment is untouched. This worker did not run commands, imports, or tests.\n\n**`cross_market_descriptive.py`**\n1. **`summarize_groups`** now reduces at most `STAT_METRIC_BATCH` (128) metrics per `observed_date_statistics` call. `_moving_weights` is computed once per exact date universe and reused as `_bootstrap_state`. Date-mean cells are built only for the current batch. Event-count restore, distribution, seed `20260908`, 1000 replicates, 5-date blocks, 95% CI, and named missing/undefined groups are unchanged. `date_statistics.py` is not modified.\n2. **`run`** finalizes each selected year after `process_year`: that year\u2019s daily cash groups only, typed date-aggregate emit, batched statistics, stream into one `statistics.json` / `results.md`, then release that year\u2019s cells and units. `rel` / `ratio` / prior-calendar history, `event_seq`, and `label_ids[\"_next\"]` continue across years. First-year 2020 logical results stay the same contract (storage layout and resource fields may differ).\n3. **`_write_date_aggregates`** emits per-group typed columns through `_SeriesWriter.add_arrays` (same schema, sorted dates, sums/counts/means). No year-wide list of dicts. Flush still copies before the buffer shift.\n4. **Phase hooks** (measured elapsed only, not projected): `resources.phases` and each `partition_measurements[]` include `source_read`, `measurement`, `date_output`, `stats`, `report`, plus per-year `groups`, `date_aggregate_rows`, `statistic_groups`, `units`, `output_bytes`, `max_rss_kb`.\n\n**`tests/test_cross_market_descriptive.py`**\n- Batch vs unbatched vs batch 32 on **168** metrics (above 128), including the 1-vs-100 unequal-count case, CI/denominators/support, all keys retained, `_moving_weights` once per summarize (not per metric).\n- Public streaming JSON roundtrip, named undefined, UTF-8 `\\u0000`.\n- Bounded 2-year fixture: 10 tables; 2020 groups/date-agg/events match a 2020-only run; 2021 statistics match sequential `process_year` with explicit carry; 2021-only (no carry) differs on mapping reasons and event ids.\n\n**Remaining risks**\n- Streamed `statistics.json` is load-equivalent, not byte-identical to one `canonical_json` of the full object (key order).\n- `results.md` is streamed per year (findings before final counts). One year\u2019s group-line list is still built while writing.\n- Date-aggregate **row order** is per-year (that year\u2019s daily groups, then events), not \u201call dailies first.\u201d\n- Phase fields are hooks for root to measure; this worker invented no CPU/RSS numbers.\n- A production year still holds one year\u2019s wide sum/count dicts until that year is finalized (not seven years, and not 34,160\u00d7253 bootstrap matrices).\n\nRoot review, then one registered pilot.",
+    "session_id": "3b0b092d-5fbb-4b26-8bce-18e53ffbe607",
+    "request_id": "e9a461ba-a2c4-45d4-af5f-2fe2b33954c0",
+    "usage": {
+      "inputTokens": 400352,
+      "outputTokens": 73045,
+      "cacheReadTokens": 4956544,
+      "cacheWriteTokens": 0
+    }
+  }
+}

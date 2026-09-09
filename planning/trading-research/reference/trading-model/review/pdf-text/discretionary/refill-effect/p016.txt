@@ -1,0 +1,39 @@
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 16/24 =====
+  ETHOS ORDER FLOW / RESEARCH                                                   ROBUSTNESS
+06Why this is not overfitting
+
+ A profitable backtest is the cheapest object in finance. Anyone who mines enough
+  combinations finds a curve that goes up. So we attacked our own result seven ways. It
+  survives all seven. This is the strongest claim in the paper.
+
+
+  01   The hindsight audit. Every feature was tested for information leaks. One failed: a stored field that
+         predicted outcomes even at a zone's firsttouch, impossible without contamination. Removed and rebuilt
+          cleanly. The edge stood without it.
+
+  02   The scrambled-label placebo. Retrain the identical pipeline on shuffled labels: grading skill collapses to
+        a coin flip, and only 0.2% of shuffles match the real result. The machinery cannot manufacture an edge
+        from noise.
+
+  03    Strict chronological split. All choices were made on the first half of the data; only the untouched second
+          half is quoted throughout this paper.
+
+  04   The reverse split. Train on the latedata, test on the earlydata. The edge holds, slightly stronger. A one-
+        regime artifact fails exactly this test.
+
+  05    Rotating folds. Three time-slices, each held out in turn: mean R +0.14 to +0.22, win rate 63–67%,
+         grading skill 0.61–0.64 in every slice. No single lucky period carries the result.
+
+  06   The parameter plateau. All 100 exit configurations: performance on the first half of the data predicts
+        the second half with rank correlation 0.92, and the whole neighbourhood of the deployed setting stays
+          positive. The next page shows it.
+
+  07   A mechanism, not a pattern. Overfit patterns do not care how you execute; a real liquidity mechanism
+        does. The profit lives exactly where the mechanism says it must, on the passive side of the level, and
+         dies when you chase.
+
+
+
+
+
+                                                              ETHOS ORDER FLOW RESEARCH 16

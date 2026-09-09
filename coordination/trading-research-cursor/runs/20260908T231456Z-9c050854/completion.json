@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 333.17841415898874,
+  "finished_at": "2026-09-08T23:20:29.409901+00:00",
+  "session_id": "7fd0ec72-f2ac-4093-87f6-a88ddfd52270",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 328882,
+    "duration_api_ms": 328882,
+    "is_error": false,
+    "result": "I'll apply one consolidated correction on the same two owned files, starting from the review defects and the date-statistics return schema.I\u2019ll correct changes, year/stage denominators, grouped distributions, index lineage, and parquet round-trips in the same two files\u2014then add the named fixture tests.Rewriting the measurement module and tests in one pass so year/stage denominators, change dispositions, and parquet schemas match the review.The write stopped in `_counts`. I\u2019ll finish that function and the rest of `run()`.The same two owned files now contain one consolidated correction. Root can integrate after the physical-volatility snapshot finishes.\n\n**1. Changes / curves**\n- Identity/date/basis levels are resolved before any change: unique valid, alias+count, or explicit `conflict_identity` / `nonpositive` / `nonfinite` / `mixed_invalid_valid`.\n- Same-contract change is emitted only when **both** intended dates have one finite positive level. Conflicted or nonpositive current/previous blocks the change.\n- Maturity conflicts no longer silently become the front: remaining ranks are allowed only as `partial_curve`, and alias/conflict identities are written as JSON on the curve table.\n- Front keys include `path+sha`, so Cboe-labeled files cannot join.\n- Unknown duration originals use separate keys (`unexpected:quarterly`), not one mixed unexpected curve. Monthly/weekly stay the statistic families.\n\n**2. Statistics**\n- Metrics are batched on the matching year/stage intended universe, then combined. A 2020 mean no longer counts 2021\u20132026 as missing.\n- Compact records keep the real API fields: `estimate`, `actual_valid_date_count`, `actual_valid_event_count`, `valid_date_count`, `valid_event_count`, `missing_date_count`, `estimator`, `support`, CI `lower`/`upper`.\n- Calls use `_retain_replicate_estimates=False`.\n- `results.md` now has all-period and training/development/confirmation date-mean + 95% CI + support, not only pooled quantiles.\n\n**3. Distributions**\n- Grouped by source/path/duration/basis/year/stage/tenor.\n- Primary change distribution is the equal-date mean; event-weighted is a declared extra.\n- Front-roll gaps are deduped by date+curve identity.\n- Each group carries intended/observed/missing denominators. Raw invalid/expired/conflict rows stay in the tables.\n\n**4. Index sources**\n- Report states the admission facts: individual VIX/VIX3M/VXN are FRED (not independent Cboe), same 2026-09-03 realtime vintage as combined FRED; VVIX is Cboe; combined FRED is a comparison copy.\n- Index domain is finite positive. Invalid+valid is `mixed_invalid_valid`, not an alias.\n- Observations and relations keep full source-path/sha lineage and all vintages.\n- Comparison is exact same-symbol/date and does not add independent dates.\n\n**5. Parquet**\n- Fixed schemas, including nullable `int64` `known_at_ns`.\n- Read-back must `equals` after cast; ns type and null count are checked.\n- No silent stringify of numerics. Structured identities are explicit JSON strings. Empty outputs still use the intended schema.\n\n**6. Tests**\n- Unequal-tenor weights/price use `assertAlmostEqual`.\n- Added compact fixtures for conflict current/previous, nonpositive exclusion, alias count, year/stage denominators, separate date-mean vs event distributions, unknown-duration isolation, `partial_curve` identities, front path+hash, and index conflict/mixed/zero.\n\n**Remaining actual checks (root)**\n- Integrate these two files and run the registered measure worker against admission `bf2387e52d112c076b777a3e8a1c7382e0228c079ee87948725b47e2e48d955c`.\n- Confirm worker tests pass, CAS reads stay under 1\u202fMB, year/stage missing counts match each universe, individual-vs-combined FRED equality, and `results.md` CI tables.\n- `family_complete` stays false. Full C16 stays false until the other mechanisms run. Daily branch is complete only after that accepted measure run.",
+    "session_id": "7fd0ec72-f2ac-4093-87f6-a88ddfd52270",
+    "request_id": "97194e71-377b-4e99-94e0-bdc2bcafe0e1",
+    "usage": {
+      "inputTokens": 74751,
+      "outputTokens": 49186,
+      "cacheReadTokens": 1697664,
+      "cacheWriteTokens": 0
+    }
+  }
+}

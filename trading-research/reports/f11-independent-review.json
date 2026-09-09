@@ -1,0 +1,308 @@
+{
+  "status": "independent_initial_static_review_complete_no_repairs_no_execution",
+  "reviewer": "/root/f04_merge_tests",
+  "baseline_findings": "reports/f11-initial-static-review.json (22 findings read in full)",
+  "additional_findings": [
+    {
+      "id": "F11-I01",
+      "severity": "critical",
+      "location": "artifact_graph.py:480-550,642-697",
+      "finding": "Ordinary computed source/measurement/feature nodes are not subject to actual-read or inherited causal-clock validation. A future source row known at 200 can be a value/provenance dependency of a feature row whose caller-declared input_known_at is 100. Neither validate_closure nor _admit traverses those external row clocks for the feature; the feature may be read at cut 100. This does not require a label or fitted ancestor, so repairing R03 label laundering and R04 prediction expiry alone does not close it.",
+      "repair": "Require explicit retained row-level read/derivation evidence for computed measurement/feature nodes and reconcile every used external row against the original decision cut, inherited validity, actual completion and same-cut assembly. Externally supplied rows must remain explicitly external sources rather than unverified computed rows. Add a future-source -> ordinary-feature -> sanctioned input rejection and a legitimate same-cut derived positive case.",
+      "related_existing": [
+        "F11-R03",
+        "F11-R04",
+        "F11-R06",
+        "F11-R20"
+      ],
+      "frozen_cases": [
+        "F11-03",
+        "F11-05",
+        "F11-06"
+      ]
+    },
+    {
+      "id": "F11-I02",
+      "severity": "high",
+      "location": "artifact_graph.py:613-639",
+      "finding": "validate_oof_producer checks that the requested sample exists in the population and has the declared date, but never that it belongs to the request fold evaluation_ids. A purged sample outside the evaluation block, excluded from every producer training set, can pass as an OOF sample by retaining the true group and a compatible earlier fit. Exact population/target/time checks proposed in R07 should explicitly include evaluation membership and evaluation boundaries.",
+      "repair": "Require the requested row to be an actual evaluation member of the authoritative request fold, with its retained decision inside that fold interval; preserve independently declared cross-fold producer routes. Include a purged/outside-evaluation row negative case at the real OOF gate.",
+      "related_existing": [
+        "F11-R07",
+        "F11-R16"
+      ],
+      "frozen_cases": [
+        "F11-07",
+        "F11-08",
+        "F11-10"
+      ]
+    },
+    {
+      "id": "F11-I03",
+      "severity": "high",
+      "location": "artifact_graph.py:994-1029; models.py:predict_committed; calibration.py:predict_committed",
+      "finding": "The committed adapter performs float(_json(...)) without the existing finite scalar validator and checks only math.isfinite(result). Canonical JSON strings such as \"Infinity\" and booleans become floats; an infinite input to BinaryModel may yield sigmoid(infinity)=1 and pass the final finite check. Supplied FrequencyModel probabilities/cell counts/prior and BinaryModel scales are not domain-validated either, so finite out-of-range probabilities or zero-division can escape the intended typed admission. Matching immutable bytes is insufficient numerical validation.",
+      "repair": "Before arithmetic, accept only the registered finite scalar representation, reject strings/bools/nonfinite values, validate positive scales and finite coefficients/intercepts, coherent frequency counts/prior/cuts and calibration floor, and validate output with the probability contract. Preserve existing arithmetic for valid supplied state. Add negative adapter cases without fitting a model.",
+      "related_existing": [
+        "F11-R02",
+        "F11-R09",
+        "F11-R18"
+      ],
+      "frozen_cases": [
+        "F11-01",
+        "F11-16",
+        "F11-22"
+      ]
+    },
+    {
+      "id": "F11-I04",
+      "severity": "high",
+      "location": "artifact_graph.py:1009-1010",
+      "finding": "serve_bound_model unconditionally calls validate_oof_producer for every binding, including final-purpose requests. ReadRequest permits final requests without date_group/fold_node_id, so a legitimate final inference request necessarily fails the OOF fold check; a valid final model with prior training exposure also fails even when final inference target/time checks should govern. This is a distinct positive-path integration failure, not only the cross-session bypass in R09.",
+      "repair": "Dispatch explicitly by coherent session purpose: OOF uses authoritative evaluation exclusion and routes; final uses its own admitted fitted-state completion, target, row, horizon and input checks. Reject audit/fit-label purposes for serving. Add positive final and OOF committed adapter cases for supported model classes, plus wrong target/clock negatives.",
+      "related_existing": [
+        "F11-R09",
+        "F11-R17"
+      ],
+      "frozen_cases": [
+        "F11-10",
+        "F11-16"
+      ]
+    },
+    {
+      "id": "F11-I05",
+      "severity": "high",
+      "location": "artifact_graph.py:480-518,808-817; SemanticNodeSpec.id; ExecutionIdentity",
+      "finding": "Finite row/column/read/configuration size admission happens after semantic ID construction. validate_closure hashes every full node at line 484 before row/column bounds; arbitrary execution configuration bytes, row value bytes, namespace/slot strings or oversized nested read evidence can cause large recursive encoding before max_manifest_bytes is checked in commit. The configured payload bound only checks referenced blob sizes and does not bound these embedded semantic fields before hashing. ReadSession also has no standalone binding cardinality bound.",
+      "repair": "Add lightweight exact type/count/embedded-byte-size validation before recursive canonicalization or hashing, and enforce a bounded session declaration/manifest size before per-binding resolution. Retain the registered ceilings rather than silently truncating. Add bounded over-limit sentinels that prove rejection occurs before encoding/IO.",
+      "related_existing": [
+        "F11-R02",
+        "F11-R12",
+        "F11-R19",
+        "F11-R21"
+      ],
+      "frozen_cases": [
+        "F11-01",
+        "F11-04",
+        "F11-21"
+      ]
+    }
+  ],
+  "read_scope": [
+    {
+      "path": "src/trading_research/operations/artifact_graph.py",
+      "sha256": "d6636f61c9e71f9e329078c714111620ebfd569b91305f000fb9383286acbe98",
+      "line_count": 1083,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "references/artifact_graph_literal.py",
+      "sha256": "09be9ee6d9695c678957584410c27efe080836c5659a256a22e672f58166a3de",
+      "line_count": 107,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "tests/test_artifact_graph.py",
+      "sha256": "cda9988920e9c5639c1ed325f7607fdaaf19947531ab1e61e81fdc2a4d6400c8",
+      "line_count": 507,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/operations/provenance.py",
+      "sha256": "b37dc4ec62916883eb2812d39ecbb22c6624f815fe773e717dca56b8cf2ec004",
+      "line_count": 142,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/research/folds.py",
+      "sha256": "94b0956a8656eafe1038148cf3a50002a1e8aa96a137807f98dedc613b8fd61f",
+      "line_count": 179,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/research/models.py",
+      "sha256": "41864c67a47aad9af102f5d42be26daae9c1148ed7b8ec979cf0a14a147ab43d",
+      "line_count": 206,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/research/calibration.py",
+      "sha256": "abed218d8db5c6c6462964a52d00f130330443d7845e600932631a601bdf69bd",
+      "line_count": 68,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/errors.py",
+      "sha256": "953815593da1a10a45c4d3d4259e910aa0bf75accaaf1314ed4cd9928f14047e",
+      "line_count": 14,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "src/trading_research/operations/artifacts.py",
+      "sha256": "4b13058530d7a5ee95a2e39ebeea6d14c0f2930626330df1ed22c52b083e7c33",
+      "line_count": 160,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "tests/golden/f11-artifacts.json",
+      "sha256": "efbdf49bcfaf626d847d8eec4d6694ab5ff2dbed4951107667b7d0290f1784ce",
+      "line_count": 1497,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "validation/F11_ARTIFACT_PROTOCOL.md",
+      "sha256": "bc5f9df2c6d4735b5ec128f6b8a7c4a21cd55c32dcef57338d2a77ad2926c80a",
+      "line_count": 173,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "reports/f11-design.json",
+      "sha256": "162e182d49d0430eaf000fdc33c3ee0704d7f49b7c130b9724ca70c191f1c033",
+      "line_count": 478,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    },
+    {
+      "path": "reports/f11-initial-static-review.json",
+      "sha256": "b9acdd6fb2fcc036e3c5e30bf34eb88e30b5fbbe649aa7ea37f035bc738aeef4",
+      "line_count": 48,
+      "scope": "complete contents read; JSON parsed only as metadata, never project import"
+    }
+  ],
+  "partial_direct_callers": [
+    {
+      "path": "tests/test_research.py",
+      "lines": "55-180"
+    },
+    {
+      "path": "tests/test_quality.py",
+      "lines": "131-210"
+    },
+    {
+      "path": "tests/test_batch_review.py",
+      "lines": "365-390"
+    },
+    {
+      "path": "src/trading_research/runtime/ports.py",
+      "lines": "1-75; new F11.AUDIT declaration inspected"
+    },
+    {
+      "path": "src/trading_research/verify.py",
+      "lines": "1-130; new group/metric declaration inspected"
+    }
+  ],
+  "discovery": "Recursive text search of src/tests for predict_committed, validate_fold_population, InputAudit, compatible_checkpoint and serve_bound_model; only the three newly added model methods call serve_bound_model and no test calls predict_committed. rg unavailable, grep fallback used.",
+  "case_assessment": [
+    {
+      "case_id": "F11-01",
+      "assessment": "Existing R01/R02/R19 cover identity, mutation and exact errors; I03/I05 add numeric and pre-hash boundary gaps. Cross-namespace test expects IntegrityError although golden names ContractError; subclass acceptance is not exact error-class proof."
+    },
+    {
+      "case_id": "F11-02",
+      "assessment": "R17: label/final rejection uses private incomplete closure; no real downstream OOF positive admission or physical store dedup measurement."
+    },
+    {
+      "case_id": "F11-03",
+      "assessment": "R04/R19: inherited expiry replaced manually on output, no dependency inheritance or same-cut chain; I01 extends ordinary computed rows."
+    },
+    {
+      "case_id": "F11-04",
+      "assessment": "R06/R19/R22: optional/required basics exist; session coherence, deep changes and configured cardinality absent (I05)."
+    },
+    {
+      "case_id": "F11-05",
+      "assessment": "Old/new separate commits exercise prefix basics; no ordinary derived-row ancestry future gate (I01)."
+    },
+    {
+      "case_id": "F11-06",
+      "assessment": "R17: seven-node checkpoint shape is not actual typed stage proof; cycle only literal."
+    },
+    {
+      "case_id": "F11-07",
+      "assessment": "Fold primitive/production comparisons present; OOF assignment to evaluation population remains untested (I02)."
+    },
+    {
+      "case_id": "F11-08",
+      "assessment": "R16 definite erroneous future-fit assertion and reference-only three-ancestor checks; I02 adds purged-row admission."
+    },
+    {
+      "case_id": "F11-09",
+      "assessment": "Target variants exercise resolve directly; R05/R07 need retained population/label endpoint binding."
+    },
+    {
+      "case_id": "F11-10",
+      "assessment": "R07/R17 route fixture uses renamed same fold and logical keys; I04 final serving has no positive path."
+    },
+    {
+      "case_id": "F11-11",
+      "assessment": "R18: local rational normalization is disconnected from admitted model state; future label and completion constructor boundaries not all asserted."
+    },
+    {
+      "case_id": "F11-12",
+      "assessment": "R18: not every frozen substantive dependency variant reaches real fitted identity."
+    },
+    {
+      "case_id": "F11-13",
+      "assessment": "R13/R18: checkpoint version changes substitute equal-valued source evidence."
+    },
+    {
+      "case_id": "F11-14",
+      "assessment": "Rebuild membership is shape-only; exact full eligible calibration cohort versus taken-only substitution not established by omitted-label subcase (R08/R18)."
+    },
+    {
+      "case_id": "F11-15",
+      "assessment": "Required zero-effect reads present; undeclared z case and semantic read-to-consumer invalidation need explicit connection (R06/R18)."
+    },
+    {
+      "case_id": "F11-16",
+      "assessment": "R09: SuppliedState attestation does not exercise any actual predict_committed adapter; I03/I04 add numerical and final-path consequences."
+    },
+    {
+      "case_id": "F11-17",
+      "assessment": "R19: detached checkpoint basics present, content/root corruption absent."
+    },
+    {
+      "case_id": "F11-18",
+      "assessment": "Real fork/death code authored but unexecuted; R10/R11/R19 concurrency/accounting gaps remain. Root supervisor must include descendants in physical resource accounting."
+    },
+    {
+      "case_id": "F11-19",
+      "assessment": "R18: checkpoint toy reconstruction is not reconstruction of retained fitted transform/model/calibrator components."
+    },
+    {
+      "case_id": "F11-20",
+      "assessment": "R14: affected set fed from expected literals; semantic checkpoint graph disconnected from arithmetic; no demonstrated full/incremental semantic equality."
+    },
+    {
+      "case_id": "F11-21",
+      "assessment": "R19 plus I05: small bound cases exist but pre-hash input admission, session bound and isolated byte/accounting behavior incomplete."
+    },
+    {
+      "case_id": "F11-22",
+      "assessment": "R18: numerical decision is only literal, actual adapter scalar domain is unchecked (I03)."
+    },
+    {
+      "case_id": "F11-23",
+      "assessment": "R15: audit strings are not real trial/attempt lineage; partial refs unstored."
+    },
+    {
+      "case_id": "F11-24",
+      "assessment": "R18: source identity/receipt separation partially represented; no keepalive or pairing support gates; no acquisition/velocity certification."
+    }
+  ],
+  "integration_assessment": "New _training fold rederivation appears consistent with read existing learner callers; no demonstrated regression from that change by static inspection. Existing InputAudit required-by-default behavior is retained, with mutable audit gap R22. New committed model methods require R09 plus I03/I04 repairs. Existing flat/manual model and calibration paths retain their narrower prior scope and gain no semantic closure certification.",
+  "claim_limits": [
+    "All 24 named tests read against every frozen input/expected entry; no assertion has been executed or marked passed.",
+    "Static review identifies logical paths and coverage gaps, not measured runtime behavior or performance.",
+    "No candidate imports, AST/compile checks, predictor fitting, market reads, tests or subprocess death workers were run.",
+    "No F10 or F11 candidate/reference/test/adapter file was changed. Only this new review report was created.",
+    "No raw ArtifactStore or TrialRegistry API rewrite is recommended; repairs should remain in semantic boundary and narrow admitted adapters."
+  ],
+  "execution": {
+    "project_imports": false,
+    "compilation": false,
+    "tests": false,
+    "candidate_execution": false,
+    "repairs": false
+  },
+  "next_step": "Root merges initial owner and independent findings before authorizing the one coordinated repair pass."
+}

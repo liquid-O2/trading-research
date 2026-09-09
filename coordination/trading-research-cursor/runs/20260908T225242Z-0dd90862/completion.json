@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 707.4325740640052,
+  "finished_at": "2026-09-08T23:04:30.295330+00:00",
+  "session_id": "38b7a0b4-42a7-4e3b-8b07-93d03263dfbd",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 698840,
+    "duration_api_ms": 698840,
+    "is_error": false,
+    "result": "I'll apply one correction pass on the same two owned files\u2014no imports, tests, or data\u2014and start by reading the current module against each listed contract violation.Next I\u2019ll read the history, remaining, scale, seasonal, statistics, and `run()` sections so the fixes land on the actual contract bugs.I\u2019ll apply the domain, history, remaining, scale, and payload fixes in the module first, then add the independent regression fixtures.Domain helpers are in. Next I\u2019ll read the history, remaining, scale, and payload sections so the rest of the correction pass can land in one pass.I\u2019ll read the remaining helpers, tests, and frozen contract so the schema and fixture names match the existing API.I\u2019ll add shared lineage/stage helpers and extend the schemas, then rewrite history, remaining, and scale against those fields.Correction pass is in the two owned files only. Runner, frozen contract, catalogue, and docs were not touched. No imports, tests, or data were run.\n\n**Domain.** `true_range_ticks` now requires H\u2265L and positive-finite H/L/prev only (prev may sit outside the bar). `overnight_log_gap` / `close_log_return` / YZ opening use independent positive-finite ratio checks, so negative gaps stay valid.\n\n**History.** `feature_prior` interval, `known_at`, `contract_key`, and `window_version` come from intended history rows. Compact `source_lineage` lists distinct source/canonical/admission/variant plus previous-close provenance (including year-normal carry). Decision date is a label; `decision_cut_ns` + `causal_feature_eligible` require `known_at \u2264` current session start. `stage_purge` is explicit when formation\u2192known_at crosses stage bounds. `mean_true_range_ticks` is declared-n or NULL.\n\n**Remaining.** `known_at_ns = max(prefix_end+60s, observed_input_known_at)`. Incomplete prefix cannot complete. Feature id/version/contract are prefix-only. `join_eligible` = prefix complete + full target complete + same contract + stage-whole + applicable. Fixed 5/15/60 keep `nominal_target_end` / `actual_observed_end` / `horizon_censored`; they do not clip to cash close and claim a full horizon. Excursions are `max(0, \u00b7)`. `cut_after_close` is ineligible.\n\n**Scale.** Primary mean/sum/RV/GK/RS/semivariance use full-length bars only (60-min RTH: six full + one 30-min short). Short/partial stay in disposition + observed aggregates. Statistics require `scale_full_complete`.\n\n**Seasonal / pairs.** Cell `contract_key` / `window_version` come from the cell. Original-vs-primary differences require the same raw contract and a full valid pair; `changed_contract` is counted separately.\n\n**Suite / payload.** Failed suite prints and raises the full report; data does not run after failure. `_columns` default known is `start0+(offset+1)*M`; primary path fixtures use lag-60 `start0+(offset+2)*M`. `run` returns `computed_partitions` (source refs) and `source_versions` (including accepted-pilot versions, no disk search). Counts include 1676 / 252 / 252 / 15.\n\n**Regression names.**  \n`test_negative_opening_and_closing_gap_are_valid_logs`  \n`test_true_range_prev_above_and_below_range_keeps_gap`  \n`test_negative_opening_yz_is_valid`  \n`test_feature_prior_ignores_current_price_and_timestamp_mutation`  \n`test_mean_true_range_uses_declared_n_or_null`  \n`test_prefix_missing_last_minute_keeps_planned_known_after_cut`  \n`test_full_session_future_mutation_does_not_change_feature_id_or_version`  \n`test_fixed_60_near_close_is_censored_not_complete`  \n`test_all_future_above_reference_down_excursion_is_zero`  \n`test_six_full_plus_thirty_short_excludes_short_from_primary`  \n`test_missing_midbar_has_no_full_scale_comparison`  \n`test_seasonal_cell_uses_cell_contract_and_window_not_session`  \n`test_original_vs_primary_same_contract_pair_only`  \n`test_columns_known_at_is_start0_plus_offset_plus_one_minute`  \n`test_accepted_pilot_does_not_search_disk`",
+    "session_id": "38b7a0b4-42a7-4e3b-8b07-93d03263dfbd",
+    "request_id": "0ad22b71-a4f8-4ee2-93c8-f43a69e0acb5",
+    "usage": {
+      "inputTokens": 67828,
+      "outputTokens": 56549,
+      "cacheReadTokens": 2788992,
+      "cacheWriteTokens": 0
+    }
+  }
+}

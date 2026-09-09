@@ -1,0 +1,121 @@
+{
+  "schema": "e0-period-orchestration-final-cross-review-v1",
+  "recorded_on": "2026-09-07",
+  "workspace": "/workspace/trading-research",
+  "review_scope": {
+    "period": [
+      "src/trading_research/research/period.py",
+      "src/trading_research/data/cohorts.py",
+      "src/trading_research/research/folds.py",
+      "src/trading_research/research/temporal_folds.py",
+      "src/trading_research/research/models.py",
+      "src/trading_research/research/calibration.py",
+      "src/trading_research/measurements/measurement_fits.py",
+      "src/trading_research/research/protocols.py",
+      "tests/test_primary_period.py",
+      "tests/golden/primary_period_admission_v1.json"
+    ],
+    "orchestration": [
+      "tools/engineering_batch_contract.py",
+      "tools/verify_engineering_batch.py",
+      "tools/record_engineering_batch.py",
+      "tools/register_engineering_family.py",
+      "tests/test_engineering_resource_contracts.py",
+      "tests/golden/e0_period_orchestration_v1.json"
+    ]
+  },
+  "execution_status": {
+    "candidate_imported": false,
+    "candidate_compiled": false,
+    "candidate_tests_run": false,
+    "candidate_cli_run": false,
+    "market_or_economic_run": false,
+    "qualification": "Static source, test, golden, and byte-identity review only. This report does not claim a runtime pass."
+  },
+  "reviewed_identities": [
+    {"path": "src/trading_research/research/period.py", "sha256": "52f8c9d294a2474b48917e2bb76e268a383495eb0c50cd56a14e324d2724b64c", "size_bytes": 23626},
+    {"path": "src/trading_research/data/cohorts.py", "sha256": "9717e762c07dad09ea900089444f6910f9111cfbceaf1b7f4fabf277db6ccf3a", "size_bytes": 7974},
+    {"path": "src/trading_research/research/folds.py", "sha256": "ee54b0e02acdb5b674e9efdc2d0e8385b23a76d1ec2e5ba0e5cc1fe478459f2b", "size_bytes": 11601},
+    {"path": "src/trading_research/research/temporal_folds.py", "sha256": "3b92bc739cb8f65b68f7d5678a6f4d366e897c4c6621b3aabcb1de024e3e3b20", "size_bytes": 25324},
+    {"path": "src/trading_research/research/models.py", "sha256": "926fe21cd96ec7f7d08bc573651c63fdfe3932392c03096d8f7d9591d74b7f88", "size_bytes": 15881},
+    {"path": "src/trading_research/research/calibration.py", "sha256": "d0f935969f16fe4a14c25b4be9862a6b58aef289cbde1ac2db6f019628b58973", "size_bytes": 4532},
+    {"path": "src/trading_research/measurements/measurement_fits.py", "sha256": "318d6e940cde66c99d7350aa395c1e4bcc51dac834150aeddab5071591c2ffd2", "size_bytes": 22374},
+    {"path": "src/trading_research/research/protocols.py", "sha256": "7c825ff216afe9c8789c109aa2acb85fc76e820b42d841419521cc08c2d32297", "size_bytes": 20645},
+    {"path": "tools/engineering_batch_contract.py", "sha256": "b174dfe51e84c3344c1751d7549283ba6ca0faeee20de73b0c5476c10b08197a", "size_bytes": 37295},
+    {"path": "tools/verify_engineering_batch.py", "sha256": "cb284477984ab1ef174221ddfe93d15208fcb90e1e083e821f3bdf54dd5542c5", "size_bytes": 47311},
+    {"path": "tools/record_engineering_batch.py", "sha256": "edeb3730d715bb07f287f37b877dff096a3af8c146b8db9bbb58d5b199d76df3", "size_bytes": 16392},
+    {"path": "tools/register_engineering_family.py", "sha256": "3411cec5c4b070ba981cfda0033a6dcf74a2272e27010f35e18a2205f457709c", "size_bytes": 9124},
+    {"path": "tests/test_primary_period.py", "sha256": "526822394ed47d327ab5830f47caddfa659bc95371397f12af59a416f3d2c3b8", "size_bytes": 42764},
+    {"path": "tests/test_engineering_resource_contracts.py", "sha256": "7d400a4fc63920cf6ff33ecb02fdb72ea9837e61dc15502eb61f32661e1efaf7", "size_bytes": 43065},
+    {"path": "tests/golden/primary_period_admission_v1.json", "sha256": "c2e3d1c1c20d7b746f1cbd0bc9cba12421ba80536e765ace891d9c5b2d7b2cfd", "size_bytes": 25168},
+    {"path": "tests/golden/e0_period_orchestration_v1.json", "sha256": "be6b9b69d32214247cbc2aa63649c42a1353b6a0377361f41de59b33759de0ae", "size_bytes": 5407}
+  ],
+  "period_policy": {
+    "config": "configs/research-period.json",
+    "primary_scope": "primary_model",
+    "start_date_inclusive": "2020-01-01",
+    "start_ns_utc": 1577836800000000000,
+    "end_rule": "latest_eligible_observation_available_at_the_frozen_evaluation_cut",
+    "older_optional_scopes": ["jumbo_optional", "ohlc_optional"],
+    "legacy_omitted_scope": "diagnostic-only and cannot confer primary eligibility",
+    "source_quality_rule": "Period admission remains separate from artifact, source, maturity, calendar, terms, venue, universe, and dependency gates."
+  },
+  "method_coverage": [
+    {"area": "policy/scope/admission", "methods": ["ResearchPeriodPolicyV1.from_config", "ResearchScopeV1.primary", "PrimaryAdmissionV1.from_population", "validate_scope", "validate_primary_admission", "check_cohort_bounds", "check_sample_population", "check_protocol_dates"], "result": "all reviewed"},
+    {"area": "cohort admission", "methods": ["CohortRegistry.append", "CohortRegistry.append_primary"], "result": "typed primary admission, cut, population hash, artifact certification, and journal binding are present"},
+    {"area": "legacy folds", "methods": ["chronological_fold", "validate_fold_population", "chronological_primary_fold"], "result": "complete supplied population is rechecked, including manually constructed Fold declarations"},
+    {"area": "temporal folds", "methods": ["compile_temporal_fold", "validate_temporal_fold_population", "compile_primary_temporal_fold"], "result": "decision clocks, fold clocks, raw_past lookbacks, cut, and complete population admission are rechecked"},
+    {"area": "model/calibration", "methods": ["preflight_training", "fit_logistic", "fit_frequency", "fit_sigmoid_calibration"], "result": "primary preflight precedes feature reads/base predictions and binding is retained without changing legacy dataclass wire fields"},
+    {"area": "measurement fits", "methods": ["admit_measurement_fit", "_reopen", "validate_measurement_fit_payload"], "result": "actual retained temporal evidence and immutable primary admission are checked before fit serving"},
+    {"area": "evaluation protocol", "methods": ["EvaluationRegistry.register", "register_primary", "begin", "begin_primary", "finish", "finish_primary"], "result": "primary scope/policy/population/cut binding is retained and checked across registration, begin, finish, and retry/idempotency"},
+    {"area": "resource contract", "methods": ["resource_preset", "batch_resources", "configuration_resources", "validate_resource_binding", "final_resource_error"], "result": "legacy 240-second and explicit v2 360-second contracts are exact, typed, finite, and immutable"},
+    {"area": "supervisor/worker", "methods": ["configure_worker_resources", "worker_arguments", "worker", "validate_result", "validate_successful_completion", "finalize", "recover"], "result": "OS limits, worker acknowledgement, exact artifacts, final observations, process identity, actual PGID, launch token, and same-lifecycle recovery are bound"},
+    {"area": "registration/attachment", "methods": ["validate_registrations", "validate_review_support", "baseline_assertions", "record_engineering_batch.main", "register_engineering_family.main"], "result": "registration, review, baseline assertion population, immutable mapping inputs, exact resources, and attachment are checked before publication"}
+  ],
+  "frozen_case_coverage": [
+    {"id": "PERIOD-01", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort", "coverage": "one-nanosecond pre-boundary complete window reaches independent artifact read and raises the frozen pre_period_observation message before any cohort event"},
+    {"id": "PERIOD-02", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends", "coverage": "inclusive boundary passes, exact optional config is checked, malformed scope is rejected, and typed primary append succeeds"},
+    {"id": "PERIOD-03", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_03_prefix_without_range_stays_observed_only", "coverage": "observed row_prefix without concrete range is blocked for primary and retained under explicit diagnostic scope with state/action preserved"},
+    {"id": "PERIOD-04", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population", "coverage": "legacy/temporal fold compilation and validation, direct Fold declaration, model preflight/logistic/frequency, calibration, measurement fit, raw_past lookback, missing admission, post-cut clocks, typed wrappers, reversal invariance, and positive exact-boundary paths are covered"},
+    {"id": "PERIOD-05", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path", "coverage": "pre-period ordered date is rejected; corrected registration/begin/finish binds scope, policy, population, cut, model IDs, endpoint completion, restart, and idempotency"},
+    {"id": "PERIOD-06", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_06_inrange_missing_source_remains_source_failure", "coverage": "in-range period pass remains a missing-source/DependencyUnavailable outcome; standalone trades do not replace quote evidence and the retained action/journal stay unchanged"},
+    {"id": "PERIOD-07", "test": "PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks", "coverage": "in-range period pass remains independently blocked by multiplier/tick terms, verified venue, complete parent universe, definition, and volume/calendar lineage"},
+    {"id": "ORCH-01", "test": "EngineeringResourceContractTests.test_ORCH01_legacy_schema_and_frozen_allowance", "coverage": "legacy resource tuple and frozen 240-second registration remain exact; extra legacy resources reject"},
+    {"id": "ORCH-02", "test": "EngineeringResourceContractTests.test_ORCH02_exact_new_schema_cannot_coerce_or_expand", "coverage": "v2 exact fields, 360-second wall, missing/extra fields, bool/float coercion, unknown versions, and unknown batch schema reject"},
+    {"id": "ORCH-03", "test": "EngineeringResourceContractTests.test_ORCH03_last_observation_strict_boundaries", "coverage": "strict CPU/wall/RSS terminal boundaries, finite exact types, negatives, bools, and changed frozen configuration are checked"},
+    {"id": "ORCH-04", "test": "EngineeringResourceContractTests.test_ORCH04_registration_mismatch_is_read_only_and_baseline_is_complete", "coverage": "mixed family resources and same-family mutation reject before attempts; registry head/attempts stay unchanged; baseline omissions/duplicates reject"},
+    {"id": "ORCH-05", "test": "EngineeringResourceContractTests.test_ORCH05_worker_applies_real_limits_and_rejects_invalid_launch", "coverage": "subprocess RLIMIT_CPU/RLIMIT_AS/alarm values match both contracts and invalid launch values fail before worker suite import"},
+    {"id": "ORCH-06", "test": "EngineeringResourceContractTests.test_ORCH06_binding_and_same_lifecycle_recovery", "coverage": "final worker/config/ack binding, partial finalization, idempotent recovery, forged summaries, retained descendants, actual PGID/token ownership, PID reuse, and unchanged failed receipts are covered"}
+  ],
+  "findings": [],
+  "nonblocking_review_notes": [
+    "The static tests deliberately preserve the frozen limitations: they do not establish complete parent/source/phase closure, market data availability, economic performance, or a successful candidate execution.",
+    "The policy object permits direct construction with a caller-supplied valid-looking hash; primary consumers still require equality with the supplied policy hash, while the frozen path uses ResearchPeriodPolicyV1.from_config. Canonical constructor-only policy provenance is a future hardening option, not a finding against the reviewed frozen path.",
+    "The frozen tests assert the prescribed case vectors and public entry points; several expected prose fields remain represented by the case map's remaining declarations rather than being reasserted as runtime claims. The eventual registered run remains required."
+  ],
+  "static_checks": {
+    "frozen_period_golden_modified": false,
+    "frozen_orchestration_golden_modified": false,
+    "legacy_resource_contract_retained": true,
+    "v2_resource_contract_exact": true,
+    "source_quality_errors_preserve_their_own_identity": true,
+    "primary_scope_omission_cannot_upgrade_to_primary": true,
+    "direct_fold_declarations_revalidated_before_primary_training": true,
+    "orchestration_reviewed_without_candidate_execution": true
+  }
+  ,"metadata_only_correction": {
+    "kind": "byte-identity-and-raw-case-map-correction",
+    "corrected_from": "/tmp/e0-period-orchestration-final-cross-review.json",
+    "source_review_content_preserved": true,
+    "candidate_execution_performed": false,
+    "candidate_source_or_test_edits_performed": false,
+    "correction_scope": "Updated reviewed_identities to current read_bytes SHA-256 and byte counts; attached a compatible seven-case primary-period raw map. No review findings or execution claims were changed."
+  },
+  "primary_period_raw_case_map": {
+    "path": "/tmp/primary-period-final-raw-case-map.json",
+    "sha256": "e23e195b4979f248801e392c11769f9887d50009bda672e4598d31ac6f06b927",
+    "size_bytes": 8758,
+    "shape": "engineering_batch_contract raw map: test_modules, cases(case_id/assertion_ids/remaining), source_dispositions, remaining",
+    "case_count": 7
+  }
+}

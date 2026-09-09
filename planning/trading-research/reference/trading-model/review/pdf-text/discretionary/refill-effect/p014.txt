@@ -1,0 +1,39 @@
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 14/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                   OUT-OF-SAMPLE
+
+
+An independent engine agrees
+
+Equity curves from your own research code deserve suspicion. So we embedded the
+same signals into a strategy for Quant Charts' tick-level backtester, an engine we did not
+write, with its own fill logic, and ran it over the full year at its default sizing.
+
+
+  PERIOD                   TRADES        WIN RATE           PROFIT FACTOR         NET P&L
+
+  Q1 Dec–Mar                 64           68.8%                     1.80         +$2,112
+
+  Q2 Apr–Jun                 60           55.0%                     1.28         +$928
+
+  Q3 Jul–Sep                 65           55.4%                     1.73         +$1,410
+
+  Q4 Oct–Nov                 34           52.9%                     0.76         −$647
+
+  Year                       223          58.7%                     1.45         +$3,803
+
+
+Per-trade expectancy on this engine ≈ +0.07R, about half the research simulation's +0.14R, because its fills are stricter. We
+quote both rather than the friendlier one.
+
+
+   NOTE THE LOSING QUARTER
+
+   Q4, the most recent slice, lost money at every parameter setting we tried. The edge is regime-dependent:
+   weakest when volatility compressed late in the sample. We flag it and count it in every statistic, because
+   an edge that only appears when losing periods are trimmed away is not an edge.
+
+
+
+
+
+                                                            ETHOS ORDER FLOW RESEARCH 14

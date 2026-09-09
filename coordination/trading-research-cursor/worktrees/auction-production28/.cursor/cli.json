@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/workspace/coordination/trading-research-cursor/worktrees/auction-production28/**)",
+      "Read(/workspace/coordination/trading-research-cursor/auction-production28.md)",
+      "Read(/workspace/AGENTS.md)",
+      "Read(/workspace/planning/trading-research/**)",
+      "Read(/workspace/trading-research/src/**)",
+      "Read(/workspace/trading-research/tests/**)",
+      "Read(/workspace/trading-research/tools/**)",
+      "Read(/workspace/trading-research/validation/**)",
+      "Read(/workspace/coordination/trading-research-cursor/performance-throughput-schedule-metadata.json)",
+      "Write(src/trading_research/research/auction_flow_production.py)",
+      "Write(tests/test_auction_flow_production.py)",
+      "Write(tools/run_auction_flow_study.py)",
+      "Write(tools/auction_flow_parallel.py)",
+      "Write(tests/test_auction_flow_parallel.py)"
+    ],
+    "deny": [
+      "Shell(*)",
+      "WebFetch(*)",
+      "Mcp(*:*)",
+      "Read(/workspace/archive/**)",
+      "Write(/workspace/trading-research/**)",
+      "Write(/workspace/planning/**)",
+      "Write(/workspace/archive/**)",
+      "Write(/home/**)",
+      "Write(/tmp/**)",
+      "Write(/etc/**)",
+      "Write(.cursor/**)",
+      "Write(.git/**)",
+      "Write(AGENTS.md)",
+      "Write(references/**)",
+      "Write(validation/**)",
+      "Write(configs/**)",
+      "Write(pyproject.toml)",
+      "Write(uv.lock)"
+    ]
+  }
+}

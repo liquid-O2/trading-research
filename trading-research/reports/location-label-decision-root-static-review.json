@@ -1,0 +1,354 @@
+{
+  "all_initial_implementations_completed_before_review": true,
+  "candidate_execution": false,
+  "findings": [
+    {
+      "id": "ROOT-NEXT-01",
+      "paths": [
+        "src/trading_research/research/calibration.py"
+      ],
+      "problem": "Temporal calibration materializes examples and predicts from base models before complete population/membership preflight.",
+      "repair": "Validate bounded typed complete fold and examples before any base read or allocation.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "ROOT-NEXT-02",
+      "paths": [
+        "src/trading_research/research/label_ledger.py"
+      ],
+      "problem": "Observation evidence can end before the definition cut; candidate object version and optional definition identities are not fully bound/typed.",
+      "repair": "Reject pre-origin evidence and object-version mismatches, enforce exact optional identity types; preserve frozen schemas.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "ROOT-NEXT-03",
+      "paths": [
+        "src/trading_research/research/object_labels.py"
+      ],
+      "problem": "Unknown-order gap enumeration has no exact bounded batch/state/transition-work preflight.",
+      "repair": "Validate batch<=8 and state<=4096 limits; precharge factorial transitions against65536 before enumeration.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "ROOT-NEXT-04",
+      "paths": [
+        "tools/verify_engineering_batch.py",
+        "tools/record_engineering_batch.py"
+      ],
+      "problem": "Final process CPU/wall/RSS may exceed limits after last sampled check without changing success.",
+      "repair": "Check final finite resources against retained180CPU/190hard/4GiB/240wall contract before success and attachment.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-01",
+      "paths": [
+        "src/trading_research/measurements/common.py",
+        "src/trading_research/measurements/tape_intensity.py",
+        "src/trading_research/measurements/quotes.py",
+        "src/trading_research/measurements/reference_geometry.py"
+      ],
+      "problem": "Strict interval containment cannot admit an actually observed event exactly at the closed decision cut when coverage ends at that cut; opening-prefix certification has the same boundary error.",
+      "repair": "Admit the exact observed endpoint without certifying future duration, preserve half-open requested end, and use consistent point/support logic in consumers.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-02",
+      "paths": [
+        "src/trading_research/measurements/anchored.py"
+      ],
+      "problem": "Anchor capture hashes a MappingProxyType through a serializer that accepts dict only. Member binding also rejects legitimate late F09/anchor publication by comparing anchor cut with old source observation cut.",
+      "repair": "Use F10 supported canonical lineage hash; bind anchor formation to actual source membership and consumer publication, retaining independent source-cut/publication clocks.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-03",
+      "paths": [
+        "src/trading_research/measurements/measurement_fits.py",
+        "tests/test_measurement_fits.py"
+      ],
+      "problem": "Standardization and common fitted inference can accept caller values/context not joined to an actual same-row query ReadSession. Fit admission error classifications also disagree with predeclared future-fit vectors.",
+      "repair": "Require actual query reads for every public fitted query, validate schema/unit/row/cut/fold and actual fitted-upstream routes, compare exact configuration/context/epsilon, preserve intended future-start refusal.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-04",
+      "paths": [
+        "src/trading_research/measurements/structure.py"
+      ],
+      "problem": "Directional confirmation uses zero close with truthiness fallback, drops the first valid point after a gap, and later scale tuples have unchecked immutable representation.",
+      "repair": "Preserve zero explicitly, seed the new leg after a gap, freeze each leg threshold at actual birth, and validate the scale sequence without changing historical confirmation timing.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-05",
+      "paths": [
+        "src/trading_research/measurements/structure.py",
+        "src/trading_research/measurements/memory.py",
+        "src/trading_research/measurements/vwap.py"
+      ],
+      "problem": "Public mutable book/version pointers and unauthenticated multiscale predecessor dictionaries permit forged histories; recursive memory predecessor validation can exceed bounded chain work.",
+      "repair": "Bind complete predecessor recipes to immutable history, validate books before mutation, use bounded iterative replay/cycle rejection and exact checkpoint byte limits.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-06",
+      "paths": [
+        "src/trading_research/measurements/divergence.py"
+      ],
+      "problem": "At-extremum CVD sums all trades at the same timestamp and bar endpoints use interval start rather than the actual matching price event. Zero preceding scales reject raw-comparable cases.",
+      "repair": "Bind exact extremum event/order or expose ambiguity; select the actual within-bar extrema source; retain raw differences while zero normalized fields are null.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-07",
+      "paths": [
+        "src/trading_research/measurements/divergence.py"
+      ],
+      "problem": "Breach comparison requires full future opportunity coverage and hides an already observed breach in a complete common prefix.",
+      "repair": "Intersect actual declared opportunities with known observed prefix, certify positive breach causally, and never infer absence across missing source support.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-08",
+      "paths": [
+        "src/trading_research/measurements/divergence.py",
+        "src/trading_research/measurements/measurement_fits.py"
+      ],
+      "problem": "Residual basis permits bool/float/string Fraction coercion and inconsistent feature widths; fitted numeric query recipes need explicit retained observation bindings.",
+      "repair": "Require exact finite typed rational dimensions and source read joins; distinguish bounded numerical fit reconstruction from unimplemented producer/model claims.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-09",
+      "paths": [
+        "src/trading_research/measurements/quotes.py"
+      ],
+      "problem": "Quote F02 matching checks only part of the F10 raw instrument definition; pressure/quote-origin semantics must distinguish a snapshot seed from an economic quote observation.",
+      "repair": "Validate full F02 identity/tick/lifetime and causal economic quote freshness; keep source-address/order and structural initial snapshot distinctions explicit.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-10",
+      "paths": [
+        "src/trading_research/measurements/memory.py"
+      ],
+      "problem": "New visit effort counts small price-observation prints that do not qualify under the frozen historical effort threshold. Pending markouts expose future extrema/source observations.",
+      "repair": "Count only newly eligible whole-print effort with original threshold/cohort; restrict all partial diagnostics to actually available future observations and keep mature fields null until complete.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-11",
+      "paths": [
+        "src/trading_research/measurements/memory.py"
+      ],
+      "problem": "Attempt summaries allow reuse of identical label outcomes under separate attempt IDs and freshness compares only the last receipt of an episode.",
+      "repair": "Reject duplicate label identities, maintain cumulative source sets for each original episode and preserve count of attempts versus independent episodes.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-12",
+      "paths": [
+        "src/trading_research/measurements/profiles.py"
+      ],
+      "problem": "Profile multiscale persistence uses center-distance proximity in addition to overlap, and source proxy mass can treat unpriced volume as priced.",
+      "repair": "Use explicitly registered overlapping mode/basin correspondence; preserve unsupported/unpriced mass separately in each proxy and validate mass accounting.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-13",
+      "paths": [
+        "src/trading_research/measurements/tpo.py"
+      ],
+      "problem": "Completed early brackets depend on whole developing-window completeness; TPO status can mark a completed uncovered bracket as merely provisional.",
+      "repair": "Certify each bracket from its own actual known interval support and relevant price/history facts; mark uncovered completed brackets missing; preserve final-tail gate.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-14",
+      "paths": [
+        "src/trading_research/measurements/profiles.py",
+        "src/trading_research/measurements/vwap.py",
+        "src/trading_research/measurements/tpo.py"
+      ],
+      "problem": "Several explicit publication paths check capture availability but omit later anchor publication; transformed-recipe traversal and retained output byte bounds need consistent bounded admission.",
+      "repair": "Require max actual source/anchor computation availability, bound transform ancestry, and enforce registered source/retained byte/identity capacities at public boundaries.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-15",
+      "paths": [
+        "src/trading_research/measurements/measurement_ports.py"
+      ],
+      "problem": "CVD adapter indexes a tuple recipe as a dict and serializes private recipe state; divergence adapter unpacks three values into four names.",
+      "repair": "Use exact producer records and tuple recipe API; verify actual completed F10 publication for every supported producer.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-16",
+      "paths": [
+        "src/trading_research/measurements/measurement_ports.py",
+        "src/trading_research/measurements/reference_geometry.py"
+      ],
+      "problem": "Publication adapters validate sources only at historical capture time, so intervening known corrections can be published as current. Location-role corrections need actual old/new graph queries and original TTL proof.",
+      "repair": "Revalidate relevant actual source revisions at publication cut before mutation, keep original birth/anchor/expiry and reject stale available updates; extend real F10 correction tests.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-17",
+      "paths": [
+        "src/trading_research/measurements/source_clocks.py"
+      ],
+      "problem": "IB adapter uses nonexistent FormationWindow.clock_variant_id; combined weekly variant has only a dependency placeholder and the test proves only distinct definition names.",
+      "repair": "Use clock_variant; assemble the explicitly declared first two eligible actual daily range formations, with actual calendar selection and no future second-day availability.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-18",
+      "paths": [
+        "src/trading_research/measurements/reference_geometry.py"
+      ],
+      "problem": "ReferenceGraph is mutable and does not revalidate its retained graph state before consensus/checkpoint; period/open byte/identity limits and scale high/low capabilities are incompletely checked.",
+      "repair": "Retain authentic bounded recipes, validate configuration/state before use, enforce every explicit local limit and required actual bar fields before arithmetic.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-19",
+      "paths": [
+        "src/trading_research/measurements/reference_geometry.py",
+        "src/trading_research/measurements/measurement_ports.py"
+      ],
+      "problem": "Pending gap diagnostics count future-unavailable points and coverage metadata; location label maturity can omit the original horizon when coverage ends early.",
+      "repair": "Restrict partial facts/counts to visible evidence, explicitly gate full outcomes at their frozen horizon/actual certification, retain censored state for incomplete evidence.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-20",
+      "paths": [
+        "src/trading_research/measurements/oi_report_proxy.py"
+      ],
+      "problem": "OI append checks only report/prior bytes while checkpoint also retains consumed IDs, queries and limits, so a valid append/observe can exceed configured checkpoint capacity.",
+      "repair": "Preflight the exact complete retained state for both mutations; preserve daily revision identity and monotone bounded replay semantics.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-21",
+      "paths": [
+        "tests/test_structure_pressure_memory.py",
+        "tests/measurement_sources.py"
+      ],
+      "problem": "Initial fixtures have duplicate history_complete kwargs, an unsupported swing_snapshot reset_id argument, and correction/source shape mismatches; MD09 cohort print sizes contradict the frozen large10 result.",
+      "repair": "Repair only fixture construction/APIs; materialize small prints individually and assert the frozen cohort arithmetic; preserve original gold bytes.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-22",
+      "paths": [
+        "tests/test_structure_pressure_memory.py"
+      ],
+      "problem": "MX03 currently selects4096 window events plus initial snapshot despite4096 total-input cap; MS11 lacks actual F09 correction replay, and some lag/visit/attempt cases initially asserted arithmetic alone.",
+      "repair": "Exercise exactly4096 total recipes and one-over; add actual F09 correction/reopen, authentic lag kernels, visit decay and attempt producers against independent primitive calculations.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-23",
+      "paths": [
+        "tests/test_auction_measurements.py"
+      ],
+      "problem": "DP05 mixes hard channels with soft knots; MF05 omits required CVD anchor and reads nonexistent high/low; future append passes dict to TradeLedger; MT11 coverage extends beyond cut.",
+      "repair": "Use real typed APIs and legal causal source fixtures without weakening expected values or intended violation gates.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-24",
+      "paths": [
+        "tests/test_auction_measurements.py"
+      ],
+      "problem": "MA01/MA05 do not yet cover exact1024 fit capacity/reopened serving; MP19 lacks actual correction path; MT10 combined weekly variant is a name-only check.",
+      "repair": "Add bounded actual positive/one-over fit cases and clean committed reopen; assert all frozen location roles/TTL after correction and both real weekly source constructions.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-25",
+      "paths": [
+        "tests/test_reference_geometry.py"
+      ],
+      "problem": "MR03 replaces nonexistent Session.version; MR12 builds invalid PublicationClock before intended missing-official gate; MR15/MR19/MR38/MR40 omit some frozen age/adversary/capacity variants.",
+      "repair": "Use source_version and otherwise valid clocks, assert every frozen scalar/isolated negative plus exact period/serialized capacities through real public operations.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-26",
+      "paths": [
+        "tests/test_measurement_intensity.py"
+      ],
+      "problem": "M10 price-scale/zero-effort tests include an arithmetic-only surrogate alongside the new actual quote-origin fixture.",
+      "repair": "Make the actual F01/F02 quote and common trade producer assert frozen progress/ratio/zero-effort values and keep same-unit equivariance explicit.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-27",
+      "paths": [
+        "reports/m01-m02-m10-case-test-map.json",
+        "reports/m03-m08-m09-m11-case-test-map.json",
+        "reports/m12-measurement-case-test-map.json",
+        "reports/m0407m13-case-test-map.json"
+      ],
+      "problem": "Draft covered_mechanism values are lists while the normalizer requires a string; remaining-work fields include nonstring requirement records. Case presence alone cannot prove whole-source closure.",
+      "repair": "Normalize exact reviewed assertion bindings and honest source mechanisms/remaining work, keep all broad source closure false, and never equate method/name presence with test success.",
+      "severity": "high",
+      "status": "unfixed"
+    },
+    {
+      "id": "M-REVIEW-28",
+      "paths": [
+        "src/trading_research/measurements/footprint.py",
+        "src/trading_research/measurements/profiles.py",
+        "src/trading_research/measurements/measurement_ports.py"
+      ],
+      "problem": "Side/footprint sign and location exactness can be overstated with missing history or unknown directional mass; source derived recipe capacity claims need matching public tests.",
+      "repair": "Keep observed versus complete/certain support explicit; reject unsupported exact public roles and add actual per-family malformed/correction/capacity checks under the existing frozen cases.",
+      "severity": "high",
+      "status": "unfixed"
+    }
+  ],
+  "kind": "combined_static_review_v1",
+  "method": "Static source, API, frozen hand-vector and independent-reference trace; incorporates retained earlier independent reviews without repeating those passes.",
+  "positive_interface_checks": [
+    "SourceAddress.row/dataset_id/partition are actual supported fields.",
+    "ObjectRevision.roles is an actual supported tuple.",
+    "MemoryDefinition decay_clock=visits is a declared supported spelling."
+  ],
+  "recorded_at": "2026-09-07T09:16:28.255431+00:00",
+  "reviewer": "root",
+  "scope": "All initial M01-M13 implementations plus shared location/label/decision/orchestration integration"
+}

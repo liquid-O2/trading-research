@@ -1,0 +1,48 @@
+# How we establish whether each part is doing a good job
+
+We can identify the strongest supported version among a declared set of information, definitions, models and policies. Finite data cannot establish a globally best possible signal. This program makes the remaining uncertainty and the next useful experiment explicit. It applies to every Context, Location, flow, options, cross-market, selection and management specialist, and to deterministic data/measurement services through their appropriate invariants.
+
+The [complete upgrade paths](UPGRADE_PATHS.md) specify a further construction and fair comparison for every parent and child; [implementation constructions](UPGRADE_CONSTRUCTIONS.md) define shared contracts. Test source-faithful, corrected/earlier-upgraded and new variants distinctly. Separate information gain, representation improvement and model capacity; control geometry, delay, common uncertainty and resource budgets where they affect the comparison. A better deterministic measurement or engineering service can be selected on its appropriate evidence without inventing an alpha claim. All eligible families receive registered initial coverage; expensive or inconclusive branches cannot silently erase the rest of scope.
+
+## Six questions, six different kinds of evidence
+
+| Question | Evidence required | What a failure means |
+|---|---|---|
+| Is it calculating the intended thing? | Independent reference cases, units, contract/session conventions, source-faithful versus corrected definitions, invariance/metamorphic checks | Repair semantics before judging signal quality. A model cannot compensate for a sign error or a backdated range. |
+| Could we actually know it then? | Prefix deletion, delayed/revised inputs, availability/OOF lineage, restart and actual decision-scheduler tests | The result is unusable as a live predictor until repaired. Historical prediction accuracy does not excuse leakage. |
+| Does it predict its own target well? | Same-date held-out proper scores, calibration, learning curves, subgroup uncertainty and simple/strong reference models | Diagnose insufficient information, wrong horizon/target, underfitting, overfitting, measurement noise or inadequate sample support separately. |
+| Does it add information to what we already know? | OOF residual/incremental comparisons, input-matched model comparisons and registered interaction experiments | A good standalone predictor may duplicate another. A weak standalone feature may still contribute in a specific tested interaction. |
+| Does it improve our decisions? | Fixed-candidate tests, changed-generator tests with matched density, ranking/waiting/stop/exit interventions, and complete sequential one-mini costs/risk | Better forecast score can fail to improve entries or can arrive too late. Identify which link loses value. |
+| Is the result likely to survive? | Frozen outer evaluation, fixed-endpoint future test, timing/coverage/cost stress, drift and operating-condition support | Label supported, not met, or inconclusive. Keep regime limits and uncertainty visible. |
+
+No requirement says every calculator must generate alpha or every feature must be profitable in isolation. Exact arithmetic and independent account risk have invariant roles. For a proposed interaction-only contributor, register a 2×2 comparison before evaluation: neither input, A only, B only, A+B, with comparable capacity/search budgets. Integration still needs valid semantics and held-out joint benefit; an appealing post-hoc interaction is an exploratory result.
+
+## Volatility example
+
+For C15.ATM, first reproduce IV inversion and quote intervals, then verify that every quote, forward and expiry was available at the decision cut. Its physical forecast competes with seasonal/HAR/GARCH and physical-only tabular models on exactly the same future variance target. Evaluate QLIKE for strictly positive forecasts with a declared numerical floor, distribution scores/coverage for the associated return or variance distribution, and upside/downside tail calibration separately. Measurement-noise sensitivity compares eligible RV constructions on the same interval; it does not pick whichever label favors the model.
+
+Then add ATM, skew, curvature, term, event and VIX features in separate information experiments while holding the model class fixed. Hold the information fixed when comparing linear/GAM, tree and compact temporal classes. Compare independent specialist heads with a shared representation plus heads. Report error correlation and incremental value, not just how many models are present. The final test follows the forecast into C06/L04 P-zones, G04 reach, P02 stop/destination and G06/P policy; it measures complete daily net and risk under the same one-mini constraint.
+
+## Location example
+
+For L05 shelves, prove trade-volume conservation, causal anchor choice, node geometry and versioned births. Evaluate every generated shelf, including no-contact and failed contacts. Score reach by the fixed horizon, ordered favorable/adverse departure after contact, arrival delay and remaining room separately. Compare the exact source shelf, unsmoothed trade profile, alternative binning/smoothing, and learned topology using matched width, count, distance, age and session controls.
+
+Run one experiment holding the candidate set fixed to test a better scorer; run another holding the scorer/policy fixed to test a better generator. Finally re-evaluate the entire selected policy, since a new candidate can displace an old trade or consume the only position slot. High HOD/LOD coverage or a higher hit rate obtained by widening all bands is not sufficient. Internal EQ continuation, small options nodes and source-only receiver opportunities receive this same process without requiring unrelated confluence.
+
+## Diagnose a limit before adding more models
+
+Use chronological learning curves at prespecified fractions of training dates and matched compute. Falling training error with flat/worsening held-out error suggests a generalization problem; both errors remaining high motivates feature/target/fidelity checks. These are diagnostics, not proofs of a unique cause. Compare a stronger information-matched learner, simpler regularized learner, alternative causal target and better measurement separately. Error by mask/age/session may reveal a data problem that model complexity cannot fix.
+
+V07 adds synthetic positive controls: plant a known relationship in an isolated synthetic dataset, run its labels/splits/OOF/gating/selection path, and verify the pipeline recovers the known direction and policy effect within simulation uncertainty. Plant a future-only variable and require the availability checker to reject it. Null controls shuffle compatible dates/events while preserving declared dependence structure. These verify whether the harness can detect a controlled signal; they do not establish any real-market signal.
+
+An oracle exercise has a narrowly defined purpose. For a finite candidate/action set and declared replay scenarios, dynamic programming with future outcomes can calculate the best **in-set, foresight** one-position path under occupancy, costs and account rules. If it is exact, it bounds causal policies only within that same set and simulator. It is neither attainable live nor an upper bound on every undiscovered strategy. A beam search is a feasible diagnostic result, not an upper bound unless a separate relaxation proves it. A relaxed frictionless bound may be looser and must be labeled as such. This helps identify whether reach, candidate quality, timing, occupancy or selection is the bottleneck.
+
+## Choosing and stopping
+
+Before each confirmatory experiment, register the primary metric/target, cohort, baseline, candidate definitions, search budget, expected mechanism, minimum practically useful improvement, non-inferiority limits, interval procedure and final evaluation rule. Choose useful-effect thresholds from development economics and measurement error; they cannot be filled in after seeing confirmation results. All tried model/window/feature combinations count, including failed runs. Use nested chronological selection with untouched outer evaluation; OOF/calibration data cannot also serve as the final selection proof.
+
+For each component, publish a scorecard containing: tested variants and information set; semantic/causal results; effective dates/reports/episodes; prediction and calibration intervals; incremental and interaction effects; complete-policy net/risk/cost/latency changes; sensitivity failures; resource cost; selected version; and remaining uncertainty. Pair comparisons on the same dates and preserve dependencies. Report the objective gap even when a local component improves.
+
+Stop promoting a branch when it fails a critical invariant, exceeds its registered search/compute budget, or fails its useful-effect/non-inferiority rule with adequate support. Mark it inconclusive when the interval remains too wide, data are missing or a required assumption is unvalidated. A development plateau can justify prioritizing another experiment; it does not prove the theoretical information ceiling. An expansion into a new information set or hypothesis is a new registered research round. Do not keep reusing an outer/future period until one variant wins.
+
+The [per-component experiment files](SPECIALIST_EXPERIMENT_PROGRAM.md) specify local targets, fixtures and challengers. The [validation plan](VALIDATION_PLAN.md) governs promotion. These are acceptance protocols, not completed empirical scores or promises of perfection.

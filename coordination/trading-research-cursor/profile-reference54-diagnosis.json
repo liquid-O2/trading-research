@@ -1,0 +1,21 @@
+{
+  "kind": "profile_report_layout_diagnosis_v1",
+  "execution": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/e9f246063910a3476ec285ef219a796761a62662ae063a83a93618ccd3eeaf4c/execution.json",
+    "sha256": "c777d8faf11ff9556f2da7a9ca7308f37d13f5c7582bb495ede91b9633c3ddd1",
+    "size_bytes": 48670
+  },
+  "worker_log": {
+    "path": "/workspace/trading-research/reports/auction-flow-runs/e9f246063910a3476ec285ef219a796761a62662ae063a83a93618ccd3eeaf4c/worker.log",
+    "sha256": "a4e5e106eba0aa7536ec6817adf41550188899a0e7733122fc3d84879bc8ef31",
+    "size_bytes": 2471
+  },
+  "exception": "test_null_empty_and_large_signed_list_values_roundtrip (tests.test_auction_flow_profile_reference.ProfileListStorageTests.test_null_empty_and_large_signed_list_values_roundtrip) ... ok\ntest_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected) ... ERROR\n\n======================================================================\nERROR: test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected (tests.test_auction_flow_profile_reference.ProfileReferenceCorrectionTests.test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tests/test_auction_flow_profile_reference.py\", line 1567, in test_accepted_partition_reuse_matches_fresh_and_corrupt_neighbor_is_rejected\n    first = run_profile_statistics(\n            ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1679, in run_profile_statistics\n    _markdown_report(\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_profile_statistics.py\", line 1512, in _markdown_report\n    stream.write(('\\n'.join(lines) + '\\n').encode())\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 46, in write\n    raise ContractError('registered derived-output allowance exhausted before write')\ntrading_research.errors.ContractError: registered derived-output allowance exhausted before write\n\n----------------------------------------------------------------------\nRan 2 tests in 56.099s\n\nFAILED (errors=1)\nTraceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3066, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 1483, in profile_statistics\n    if not tests['success']:raise ValueError('profile-statistics regression failure; no actual reduction')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: profile-statistics regression failure; no actual reduction\n",
+  "resources": {
+    "cpu_seconds": 63.270313,
+    "wall_seconds": 71.08472516387701,
+    "peak_rss_bytes": 945229824,
+    "attempt_output_bytes": 194996
+  },
+  "reassessment": "All group parts now finalize within16MiB fixture file limit and peakRSS945MB. Failure moves to readable report withfull14fieldgroupmetadata andfullbootstrapJSON repeatedeverymetric. Preservefullnumeric artifacts; rendergroupidentity once thencompact metric table withCI andallquantiles plusundefinednames. Testartifactlimitsagentselected16MiB may be increased toexisting64MiBdefault ifneeded; productionfilelimit512MiBunchanged."
+}

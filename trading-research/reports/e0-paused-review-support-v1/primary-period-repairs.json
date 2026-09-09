@@ -1,0 +1,144 @@
+{
+  "schema": "PrimaryPeriodAdmissionRepairsV1",
+  "recorded_on": "2026-09-07",
+  "workspace": "/workspace/trading-research",
+  "execution_status": {
+    "candidate_imported": false,
+    "candidate_compiled": false,
+    "candidate_tests_run": false,
+    "private_candidate_run": false,
+    "static_json_validation_only": true,
+    "frozen_artifacts_changed": false,
+    "frozen_artifacts": [
+      "tests/golden/primary_period_admission_v1.json",
+      "validation/PRIMARY_PERIOD_ADMISSION_V1.md",
+      "reports/primary-period-registration.json"
+    ]
+  },
+  "frozen_policy_bindings": {
+    "config_path": "configs/research-period.json",
+    "config_kind": "ResearchPeriodPolicyV1",
+    "primary_scope": "primary_model",
+    "primary_start_date_inclusive": "2020-01-01",
+    "primary_start_ns_utc": 1577836800000000000,
+    "primary_end_rule": "latest_eligible_observation_available_at_the_frozen_evaluation_cut",
+    "optional_use_literals": [
+      "Jumbo source constructions and comparisons",
+      "ordinary OHLC context and comparisons"
+    ],
+    "older_scope_ids": ["jumbo_optional", "ohlc_optional"],
+    "future_endpoint_rule": "A future protocol endpoint may be planned beyond actual_cut_at; unobserved future rows/results remain unavailable.",
+    "primary_cut_rule": "Every retained primary sample clock and concrete cohort observation end is at or before actual_cut_at; protocol endpoint planning is the explicit future exception."
+  },
+  "repairs": [
+    {
+      "id": "PERIOD-REPAIR-CONFIG-EXACT-OPTIONAL-USES",
+      "source_clause_ids": ["PERIOD-SRC-CONFIG", "PERIOD-SRC-POLICY"],
+      "path": "src/trading_research/research/period.py",
+      "lines": "32-34, 104-132",
+      "change": "ResearchPeriodPolicyV1.from_config now compares older_data_optional_uses to the exact two frozen literal declarations, while retaining the byte-level config hash. Policy, scope, hash, date, boolean, and scalar fields receive exact type checks.",
+      "public_failure": "A changed optional-use label raises ContractError before a primary policy can be constructed."
+    },
+    {
+      "id": "PERIOD-REPAIR-TYPED-PRIMARY-WRAPPERS",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-V02"],
+      "paths": [
+        "src/trading_research/research/period.py:297-320",
+        "src/trading_research/data/cohorts.py:110-118",
+        "src/trading_research/research/folds.py:146-158",
+        "src/trading_research/research/temporal_folds.py:358-373",
+        "src/trading_research/research/protocols.py:166-228,257-274"
+      ],
+      "change": "Named primary wrappers validate ResearchScopeV1 before reading is_primary, require typed ResearchPeriodPolicyV1 and PrimaryAdmissionV1, and raise ContractError for malformed scope/admission objects. Consumer paths also validate admission shape before reading actual_cut_at, closing malformed-object AttributeError bypasses.",
+      "public_failure": "Primary scope plus admission=None reaches the period check and then fails closed at the consumer admission boundary; a complete in-period population cannot be promoted without its immutable envelope."
+    },
+    {
+      "id": "PERIOD-REPAIR-CONSUMER-POPULATION-CUT-BINDING",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-V02", "PERIOD-SRC-SOURCE"],
+      "paths": [
+        "src/trading_research/research/period.py:274-329,362-414",
+        "src/trading_research/data/cohorts.py:68-108",
+        "src/trading_research/research/folds.py:72-141",
+        "src/trading_research/research/temporal_folds.py:275-353",
+        "src/trading_research/research/models.py:58-83",
+        "src/trading_research/measurements/measurement_fits.py:43-82"
+      ],
+      "change": "Primary consumers now validate admission identity and actual cut before use, revalidate complete populations through recompilation, reject concrete sample clocks/dependencies after actual_cut_at, reject cohort observation_end after its frozen cut, and preserve source-quality gates as separate failures. Cohort primary journal entries retain research_scope and primary_admission instead of dropping the binding.",
+      "public_failure": "A too-early primary admission cut raises post_cut_training_or_dependency for fold/model paths; a changed cohort admission hash or cut raises an integrity failure before journal mutation."
+    },
+    {
+      "id": "PERIOD-REPAIR-PROTOCOL-ROUNDTRIP-BINDING",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-V02", "PERIOD-SRC-SOURCE"],
+      "path": "src/trading_research/research/protocols.py",
+      "lines": "98-274",
+      "change": "EvaluationRegistry persists research_scope, primary_admission, and actual_cut_at in explicit bindings. Register, begin, and finish compare the complete binding; omission, diagnostic downgrade, changed policy, changed population hash, and changed cut fail before append. Reopened journals restore the same binding. Legacy omitted-scope register/begin/finish continues to use an empty binding.",
+      "public_failure": "A primary finish with omitted scope/admission cannot silently append a legacy diagnostic result; a changed finish attempt leaves the append-only journal unchanged."
+    }
+  ],
+  "normalize_ready_case_map": [
+    {
+      "case_id": "PERIOD-01-before-boundary",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_01_before_boundary_rejects_primary_cohort",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-CONFIG", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["complete-looking pre-boundary cohort remains rejected", "typed primary admission is required and exact", "journal remains empty"]
+    },
+    {
+      "case_id": "PERIOD-02-exact-boundary",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_02_exact_boundary_passes_period_and_appends",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-CONFIG", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["exact optional config literals are enforced", "malformed scope wrapper raises ContractError", "boundary cohort appends with exact scope/population/cut binding"]
+    },
+    {
+      "case_id": "PERIOD-03-prefix-no-range",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_03_prefix_without_range_stays_observed_only",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["row prefix without a concrete range cannot be promoted", "primary admission is retained in the attempted path but no evidence is journaled"]
+    },
+    {
+      "case_id": "PERIOD-04-fold-boundary-and-lookback",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_04_fold_model_calibration_and_temporal_paths_recheck_population",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-V02", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["pre-period rows and raw_past lookback fail across legacy/temporal/model/calibration/F11 paths", "primary scope with admission omitted fails on an in-period population", "malformed named fold scope raises ContractError", "actual_cut upper bound rejects planned fold clocks after the frozen cut", "matching complete population reaches model and calibration paths"]
+    },
+    {
+      "case_id": "PERIOD-05-evaluation-registration",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_05_protocol_rejects_preperiod_date_and_runs_corrected_path",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-CONFIG", "PERIOD-SRC-V02", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["pre-period ordered date fails before missing primary admission is promoted", "registration/begin journal binding includes scope, policy hash, population hash, and actual cut", "reopened registry restores identical binding", "omitted begin/finish, diagnostic downgrade, wrong policy, changed population, and changed cut leave journal unchanged", "exact primary finish is idempotent", "changed result payload is rejected by append-only journal without mutation", "future endpoint remains a planned endpoint beyond actual_cut_at"]
+    },
+    {
+      "case_id": "PERIOD-06-period-pass-source-fail",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_06_inrange_missing_source_remains_source_failure",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-SOURCE"],
+      "repair_assertions": ["2022 extent passes the period gate", "missing MBP evidence remains state=missing with next_action", "exact primary cohort admission/cut is durable"]
+    },
+    {
+      "case_id": "PERIOD-07-terms-and-calendar-block",
+      "unittest": "tests.test_primary_period.PrimaryPeriodAdmissionTests.test_PERIOD_07_terms_and_verified_venue_are_independent_blocks",
+      "source_clause_ids": ["PERIOD-SRC-POLICY", "PERIOD-SRC-SOURCE", "PERIOD-SRC-E0"],
+      "repair_assertions": ["2020 extent passes only the period sub-check", "missing execution terms remain DependencyUnavailable", "unverified venue remains DependencyUnavailable", "E0 historical/calendar/universe gates remain separate"]
+    }
+  ],
+  "strict_protocol_state_contract": {
+    "registration_binding_fields": ["research_scope", "primary_admission", "actual_cut_at"],
+    "primary_binding": "scope.purpose_scope=primary_model; scope.policy_hash equals the loaded policy hash; admission.scope equals scope; admission.population_hash equals Protocol.sample_manifest_hash; actual_cut_at equals admission.actual_cut_at.",
+    "begin_rule": "Supplied binding must equal the registered binding exactly. Omitted scope/admission is accepted only when registration was legacy omitted-scope.",
+    "finish_rule": "Supplied binding must equal both registered and evaluation_started bindings exactly before result append. Primary finish cannot downgrade to legacy by omission.",
+    "reopen_rule": "A new EvaluationRegistry over the same journal reads identical binding payloads and preserves idempotent exact begin/finish behavior.",
+    "mutation_rule": "Binding or result failures happen before Journal.append; reuse of an existing result key with changed content is rejected by Journal idempotency and leaves all events unchanged.",
+    "legacy_rule": "Legacy register/begin/finish with no scope, policy, admission, or cut continues to use an empty binding and its existing journal payload shape."
+  },
+  "primary_scalar_identity_checks": {
+    "policy": "Exact frozen date, int64 nanosecond start, end rule, false pre-period flag, tuple of registered older scopes, and SHA-256 config hash.",
+    "scope": "Exact purpose text, nonempty string cohort/denominator IDs, and SHA-256 policy hash for primary.",
+    "admission": "Exact ResearchScopeV1 primary identity, SHA-256 population hash, and signed int64 actual_cut_at at or after the primary start.",
+    "population": "Complete retained population hash is checked at every primary fold, temporal fold, model, calibration, measurement, cohort, and protocol boundary.",
+    "cut_upper_bounds": "fit/evaluation/training clocks, sample decision/target/maturity/dependency clocks, dependency spans, and concrete cohort observation_end cannot exceed actual_cut_at; protocol endpoint planning is deliberately exempt.",
+    "protocol_runtime": "Protocol, report, started_at, finished_at, and model artifact key/value identities receive exact public-path checks."
+  },
+  "static_readiness": {
+    "status": "ready_for_parent_consolidated_review",
+    "remaining_work": "Run the single authorized consolidated verification only after root's whole-batch review and resource/E0 orchestration gates.",
+    "not_claimed": ["No candidate source was imported, compiled, or tested.", "No market data, model fit, economic run, order, or phase closure was performed."]
+  }
+}

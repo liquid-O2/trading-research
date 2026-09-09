@@ -1,0 +1,191 @@
+{
+  "schema": "e0-final-source-case-review-v1",
+  "review_mode": "static_read_only",
+  "runtime_actions": [],
+  "scope": {
+    "case_groups": ["E0-INT-02", "E0-INT-03", "E0-INT-05"],
+    "case_count": 9,
+    "fixture": "tests/e0_source_case_fixtures.py",
+    "golden": "tests/golden/e0_integration_v1.json",
+    "api_files": [
+      "src/trading_research/experiments/e0/observations.py",
+      "src/trading_research/experiments/e0/candidates.py"
+    ]
+  },
+  "byte_read_sha256": {
+    "tests/e0_source_case_fixtures.py": "2b0d19efdd156f2a55b1973cdf041e7c97d69ce8fe78fe6c838d489ace722741",
+    "src/trading_research/experiments/e0/observations.py": "137d79be35df8371927ef5396bf0ad5dbc93b525788c26f472917c6ea94d9828",
+    "src/trading_research/experiments/e0/candidates.py": "a31296fe3bba38eec90ca986dc1e135c0244bc69ef052339d265bdcb23acb64c",
+    "tests/golden/e0_integration_v1.json": "90728f48311ee13b7dd972539168aee8f265a9931ad04ae62bde51cce1dfdd43"
+  },
+  "cases": [
+    {
+      "case_id": "E0-INT-02-F01",
+      "method": "check_int02_f01",
+      "source_clause_ids": ["C01-RANGE", "L01", "L02", "L03", "E0-RANGES", "CC-01", "CC-03"],
+      "fixture_lines": "74-170",
+      "api_lines": ["observations.py:233-317", "candidates.py:96-111", "source_bridge.py:373-404"],
+      "static_result": "compatible",
+      "findings": [
+        "The provisional branch publishes through SharedBarEngine and range_version, retains incomplete coverage, and is rejected by freeze_e0_ranges before objects are materialized.",
+        "The final branch uses the actual RangeVersion parent IDs; source_alias maps those content IDs to the golden aliases only for reporting.",
+        "The 13-object assertion is bound to the public objects() producer and checks both exact level geometry and raw instrument identity."
+      ],
+      "concrete_followups": [
+        "Keep the existing alias assertion: aliases are reporting labels and must not be passed back into E0Object.source_version."
+      ]
+    },
+    {
+      "case_id": "E0-INT-02-F02",
+      "method": "check_int02_f02",
+      "source_clause_ids": ["C01-RANGE", "F09-BARS", "F10-OBJECTS", "CC-01", "E0-RANGES"],
+      "fixture_lines": "173-197",
+      "api_lines": ["observations.py:233-317", "candidates.py:53-83", "ranges.py:230-278"],
+      "static_result": "compatible_with_lineage_assertion_gap",
+      "findings": [
+        "The correction is appended at a later known_at and a new RangeVersion is produced from a new SharedBarEngine publication; the old context and population are serialized before the revision.",
+        "The old/new object sets are compared by their actual content versions and the old serialized bytes are rechecked, satisfying immutability behavior.",
+        "The case does not directly assert revised.supersedes on the frozen parent; it only checks the primitive supersedes field and distinct object versions."
+      ],
+      "concrete_followups": [
+        "Add assertions that new.range_06_09.supersedes equals old.range_06_09.source_version and that every revised E0Object retains the prior object lineage where the public object contract exposes it."
+      ]
+    },
+    {
+      "case_id": "E0-INT-02-F03",
+      "method": "check_int02_f03",
+      "source_clause_ids": ["C01-RANGE", "L03", "CC-02", "CC-03"],
+      "fixture_lines": "199-214",
+      "api_lines": ["candidates.py:159-161", "source_bridge.py:286-305", "source_bridge.py:373-404"],
+      "static_result": "compatible",
+      "findings": [
+        "Zero width is rejected by both freeze_e0_ranges and stop_distance with the golden DependencyUnavailable reason.",
+        "None reaches the predecessor-selection contract before any candidate comparison, while an explicitly different prior instrument reaches the cross-contract roll-mapping contract."
+      ],
+      "concrete_followups": []
+    },
+    {
+      "case_id": "E0-INT-03-F01",
+      "method": "check_int03_f01",
+      "source_clause_ids": ["E0-CANDIDATES", "V01", "F10-OBJECTS", "CC-02", "CC-03", "CC-05", "G08"],
+      "fixture_lines": "217-306",
+      "api_lines": ["observations.py:233-326", "candidates.py:114-156", "policy.py:558-692"],
+      "static_result": "compatible",
+      "findings": [
+        "The selected objects are derived from actual frozen range objects and then bound to the literal golden birth/known clocks; both signed rows and one background row are produced at every cut.",
+        "The policy bridge supplies declared typed E0ActionValue rows and lets score_and_decide_e0 preserve population order while selecting the first equal-value candidate, matching the learned and rule aliases.",
+        "Changing a sampled midpoint changes the real population hash and decision-set identity; future labels are not passed to the population builder."
+      ],
+      "concrete_followups": [
+        "Retain the explicit check that source_alias returns actual publication aliases only at the reporting edge; do not replace object_version or decision_set_id with golden IDs."
+      ]
+    },
+    {
+      "case_id": "E0-INT-03-F02",
+      "method": "check_int03_f02",
+      "source_clause_ids": ["E0-CANDIDATES", "V01", "CC-01", "CC-03", "CC-04"],
+      "fixture_lines": "344-380",
+      "api_lines": ["observations.py:233-326", "observations.py:366-375", "observations.py:421-468"],
+      "static_result": "compatible_with_coverage_boundary_gap",
+      "findings": [
+        "The path_coverage mapping is intentionally ignored by build_e0_decision_population for population construction, so alternate future gaps leave the population hash and no-midpoint reasons unchanged.",
+        "The separate native label path carries a typed coverage receipt and its gap is exposed through E0LabelBundle.coverage_annotation; the population bytes are checked before and after labeling.",
+        "The helper exercises the one event at the decision cut only as retained source evidence; _label_inputs correctly excludes it from the future path with a strict cut < event_at filter."
+      ],
+      "concrete_followups": [
+        "If the case is intended to prove coverage metadata integrity as well as separation, add a negative receipt-mismatch assertion; the current case proves separation but not source_id-to-address binding."
+      ]
+    },
+    {
+      "case_id": "E0-INT-03-F03",
+      "method": "check_int03_f03",
+      "source_clause_ids": ["F10-OBJECTS", "V01", "CC-01", "CC-03"],
+      "fixture_lines": "382-411",
+      "api_lines": ["observations.py:147-180", "observations.py:233-326", "candidates.py:53-83"],
+      "static_result": "compatible_with_lineage_assertion_gap",
+      "findings": [
+        "The earlier and later populations are built from separate immutable E0Object values and their serialized earlier rows are preserved.",
+        "The future birth and the old object with a future known_at both hit the public known_at exceeds decision cut contract.",
+        "The helper sets revised.supersedes but validates the alias map against the computed object hash rather than asserting the supersedes field through the population output."
+      ],
+      "concrete_followups": [
+        "Add direct assertions for revised.supersedes == old.version and later[0].object_version == revised.version so the F10 lineage claim cannot pass on aliases alone."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F01",
+      "method": "check_int05_f01",
+      "source_clause_ids": ["E0-LABELS", "E0-ACTION", "V01", "CC-01", "CC-04", "MDS-CANONICAL"],
+      "fixture_lines": "309-451",
+      "api_lines": ["observations.py:395-418", "observations.py:421-560", "object_labels.py:51-96"],
+      "static_result": "compatible",
+      "findings": [
+        "native_path retains canonical events, a NativeCoverageReceipt, provider order, raw bytes/hash, and separate known clocks before label_e0_candidate reads the native quote stream.",
+        "The sampled VisitTracker contact is built only from completed midpoint cuts, while reference_object_label sees the native intervening quote and keeps the two contacts separate.",
+        "The mixed-stream control selects bbo_midpoint and eligible_trade explicitly, so a native print cannot be silently reused as a midpoint observation."
+      ],
+      "concrete_followups": [
+        "Preserve the default bbo_midpoint call and the explicit eligible_trade control; changing either to an implicit union would violate MDS-CANONICAL."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F02",
+      "method": "check_int05_f02",
+      "source_clause_ids": ["E0-LABELS", "V01", "CC-01", "CC-04", "MDS-QUALITY"],
+      "fixture_lines": "453-487",
+      "api_lines": ["observations.py:421-468", "observations.py:508-560", "object_labels.py:51-96"],
+      "static_result": "compatible_with_receipt_semantics_followup",
+      "findings": [
+        "The three variants preserve the declared complete intervals, encode unknown provider order as None in both canonical events and the typed receipt, and route gaps/unknown same-time order through the public object label reducer.",
+        "The late MAYBE_BAD_BOOK row is retained in canonical evidence and maturity clocks but is excluded from valid native quote points, which is the intended censored path behavior.",
+        "The late variant checks status and maturity but does not assert the exact invalid-book gap interval or the retained receipt recovery facts."
+      ],
+      "concrete_followups": [
+        "Add exact coverage.gaps and native_event_ids assertions for the late invalid-book row; add a receipt mismatch negative test if this case is also the source-proof boundary."
+      ]
+    },
+    {
+      "case_id": "E0-INT-05-F03",
+      "method": "check_int05_f03",
+      "source_clause_ids": ["E0-LABELS", "V01", "CC-01", "CC-04", "MDS-CANONICAL"],
+      "fixture_lines": "489-519",
+      "api_lines": ["observations.py:563-616", "labels.py:73-110"],
+      "static_result": "compatible",
+      "findings": [
+        "The native point at the fixed endpoint is accepted by the <= target-end filter, while the later point is retained in the source path and reported through rejected_event_ids/rejection_reasons.",
+        "The typed Target and PathLabel carry the fixed horizon and barrier definition; changing the barrier distances changes both target signatures and target definitions.",
+        "The object label control is invoked separately and its departure result is not borrowed by the typed price-path label."
+      ],
+      "concrete_followups": [
+        "Keep the rejection reason assertion coupled to rejected_event_ids; a future implementation must not discard the post-end source row merely because the frozen target has matured."
+      ]
+    }
+  ],
+  "cross_case_findings": [
+    {
+      "severity": "follow_up",
+      "source_clause_ids": ["MDS-CANONICAL", "CC-04"],
+      "source_location": "src/trading_research/experiments/e0/source_bridge.py:88-121, 434-458",
+      "finding": "NativeCoverageReceipt binds schema, instrument, row count, source order, raw bytes/hash, event intervals, and recovery IDs, but the validation path does not compare receipt.source_id to CanonicalEvent.address.dataset_id and does not reject recovery_complete=False when no recovery identity/certificate is retained.",
+      "impact": "The current INT03/INT05 fixtures use matching source IDs, so the nine cases remain statically compatible; a source substitution or incomplete recovery could pass unless a contract-level check is added.",
+      "fix": "Bind source_id to every canonical address dataset_id (or an explicit registered source alias) and require recovery_complete semantics to agree with recovery_event_ids/recovery_certificate_ids before VenuePath construction."
+    },
+    {
+      "severity": "coverage_gap",
+      "source_clause_ids": ["F10-OBJECTS", "CC-01", "CC-03"],
+      "source_location": "tests/e0_source_case_fixtures.py:382-411",
+      "finding": "INT03-F03 sets the supersedes field but primarily validates manual aliases and content hashes.",
+      "impact": "A future implementation could preserve aliases while dropping revision lineage and the test would not detect it.",
+      "fix": "Add the direct supersedes assertions listed on INT03-F03."
+    },
+    {
+      "severity": "coverage_gap",
+      "source_clause_ids": ["CC-04", "MDS-QUALITY"],
+      "source_location": "tests/e0_source_case_fixtures.py:344-380, 453-487",
+      "finding": "Population/label separation and status outcomes are covered, but the negative receipt metadata path is not exercised.",
+      "impact": "The tests do not independently prove rejection of a mismatched raw hash, source ID, or complete interval.",
+      "fix": "Add one typed NativeCoverageReceipt tamper case that expects IntegrityError or DependencyUnavailable before any label is produced."
+    }
+  ],
+  "conclusion": "All nine INT02/INT03/INT05 methods are statically aligned with the public typed APIs and the frozen golden assertions. The two concrete test-strengthening items are revision supersedes checks and a negative native-receipt proof; the source_bridge source_id/recovery consistency check is the only cross-case contract follow-up identified by this read-only pass."
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "JumboOHLCIndependentCasesV1",
+  "scope": "Independently specified literal source examples only; no candidate import, execution, data scan or test run. These examples do not certify a market cohort.",
+  "conventions": {
+    "prices": "Exact integer ticks; fractions use [numerator,denominator].",
+    "relative_time": "Nonnegative nanoseconds from a date/contract-specific anchor T. One minute is60000000000ns.",
+    "bar": "[start,end) with O/H/L/C for actual eligible observations; available_at=known_at>=end. Bar extrema have interval-censored event times. Close is final observed price, not proof of a trade exactly at end.",
+    "formation": "[start,end), include only whole source bars; first/last required slots and complete declared coverage must be checked. No bar interpolation or OHLC-to-tick expansion.",
+    "label": "Completed bars after frozen range availability, exact named endpoint; report envelope reach separately from exact traded touch. A same-bar order is unknown unless the open establishes an earlier boundary event.",
+    "strict_break": "Upper price>H or lower price<L; inclusive envelope reach high>=H or low<=L. Reclaim means observed close strictly inside(L,H), known only at that close's publication.",
+    "range_geometry": "W=H-L; wick25=L+.25W; body25=.75C+.25O; lower_body25=min(O,C)+.25abs(C-O); upper edge projection=H+kW, distinct from L+kW.",
+    "calendar": "Use exact actual cash-calendar releases and timezone version. NY source-clock intervals and cash-session endpoints are separate definitions; no certified CME business-date inference."
+  },
+  "cases": [
+    {
+      "id": "JO01_half_open_and_delayed_final_publication",
+      "input": {"formation": [0,120000000000], "bars": [
+        {"start":0,"end":60000000000,"known_at":60000000000,"raw":"NQM4","ohlc":[100,104,98,102]},
+        {"start":60000000000,"end":120000000000,"known_at":122000000000,"raw":"NQM4","ohlc":[102,110,101,108]},
+        {"start":120000000000,"end":180000000000,"known_at":180000000000,"raw":"NQM4","ohlc":[108,999,1,500]}
+      ], "cuts":[120000000000,122000000000]},
+      "expected": {"at_first_cut":"final_range_unavailable_last_bar_not_known", "at_second_cut":{"ohlc":[100,110,98,108],"width":12,"available_at":122000000000},"included_bar_starts":[0,60000000000],"future_extreme_999_excluded":true,"no_backdated_final_at_formation_end":true}
+    },
+    {
+      "id":"JO02_timestamp_unit_mismatch",
+      "input":{"declared_unit":"ns","declared_duration_ns":60000000000,"bar_start":1717408800000,"bar_end":1717408860000,"candidate_millisecond_values_disguised_as_ns":true},
+      "expected":{"status":"rejected_unit_or_duration_mismatch","observed_delta_in_declared_ns":60000,"never_auto_multiply_or_guess":true}
+    },
+    {
+      "id":"JO03_missing_required_slot",
+      "input":{"formation":[0,180000000000],"required_starts":[0,60000000000,120000000000],"variants":{"missing_first":[60000000000,120000000000],"missing_middle":[0,120000000000],"missing_last":[0,60000000000]}},
+      "expected":{"all_variants":"incomplete_not_final","missing_first":"open_unknown; observed_first_open_not_true_formation_open","missing_middle":"H/L/full_range_unavailable; observed_extrema_only_diagnostic","missing_last":"close_and_full_extrema_unavailable","no_fill_from_previous_close":true,"no_zero_fill_for_absence":true}
+    },
+    {
+      "id":"JO04_duplicate_source_identity",
+      "input":{"rows":[{"raw":"NQM4","start":0,"end":60000000000,"ohlc":[100,105,99,102]}, {"raw":"NQM4","start":0,"end":60000000000,"ohlc":[100,106,99,102]}]},
+      "expected":{"status":"rejected_conflicting_duplicate_raw_interval","no_last_row_wins":true,"same_bytes_duplicate":"retain reconciliation identity or explicitly reject, never double-count","same_time_different_raw":"distinct cohorts, not merged"}
+    },
+    {
+      "id":"JO05_roll_boundary",
+      "input":{"formation":[0,120000000000],"bars":[{"raw":"NQM4","start":0,"end":60000000000,"ohlc":[100,105,99,102]}, {"raw":"NQU4","start":60000000000,"end":120000000000,"ohlc":[202,208,200,205]}]},
+      "expected":{"status":"excluded_cross_raw_contract_formation","never_report_width":109,"no_backadjusted_join":true,"prior_range_on_NQM4_to_current_NQU4":"raw_coordinate_comparison_unavailable_without_separately_defined_mapping"}
+    },
+    {
+      "id":"JO06_zero_width_observed",
+      "input":{"complete":true,"ohlc":[100,100,100,100]},
+      "expected":{"observed_width":0,"normalized_position":null,"range_scaled_extensions":"unavailable","raw_observed_flat_range_retained":true,"not_missing":true}
+    },
+    {
+      "id":"JO07_body_wick_and_edge_coordinate",
+      "input":{"ohlc":[110,140,100,130],"k":[133,100]},
+      "expected":{"W":40,"wick25":110,"EQ":120,"wick75":130,"body25":125,"lower_body25":115,"upper_edge_plus_1_33W":[966,5],"normalized_coordinate_L_plus_1_33W":[766,5],"lower_edge_minus_1_33W":[234,5],"edge_coordinate_difference":40}
+    },
+    {
+      "id":"JO08_strict_break_versus_inclusive_reach",
+      "input":{"frozen_range":[96,104],"bar":{"ohlc":[100,104,96,100]}},
+      "expected":{"inclusive_upper_envelope_reach":true,"inclusive_lower_envelope_reach":true,"strict_upper_break":false,"strict_lower_break":false,"strict_path_state":"no_break","first_inclusive_edge_order":"ambiguous","exact_traded_edge_prices":"proved_here_by_exact_observed_high104_and_low96; ordering_still_unknown"}
+    },
+    {
+      "id":"JO09_same_bar_dual_break",
+      "input":{"frozen_range":[96,104],"bar":{"start":0,"end":60000000000,"known_at":61000000000,"ohlc":[100,106,94,102]}},
+      "expected":{"strict_upper_break":true,"strict_lower_break":true,"first_side":"ambiguous","first_break_interval":[0,60000000000],"known_at":61000000000,"candle_color_does_not_order_extrema":true}
+    },
+    {
+      "id":"JO10_open_establishes_first_side",
+      "input":{"frozen_range":[96,104],"variants":{"open_above":[105,106,94,100],"open_below":[95,106,94,100],"open_at_upper":[104,106,94,100]}},
+      "expected":{"open_above_strict_order":"upper_then_lower","open_below_strict_order":"lower_then_upper","open_at_upper_strict_order":"ambiguous","open_at_upper_inclusive_first":"upper","first_at_open_time":"first_observation_within_open_slot; exact_event_timestamp_not_invented","known_only_after_source_open_price_available":true}
+    },
+    {
+      "id":"JO11_later_second_hit",
+      "input":{"frozen_range":[96,104],"bars":[{"start":0,"end":60000000000,"ohlc":[100,103,94,99]}, {"start":60000000000,"end":120000000000,"ohlc":[99,106,98,105]}]},
+      "expected":{"order":"lower_then_upper","first_interval":[0,60000000000],"second_interval":[60000000000,120000000000],"first_timestamp_exact":null,"second_timestamp_exact":null}
+    },
+    {
+      "id":"JO12_close_confirmed_reclaim",
+      "input":{"frozen_range":[96,104],"bars":[{"start":0,"end":60000000000,"known_at":61000000000,"ohlc":[100,108,99,106]}, {"start":60000000000,"end":120000000000,"known_at":123000000000,"ohlc":[106,107,101,102]}]},
+      "expected":{"after_first_bar":"upper_break_without_close_confirmed_reclaim","after_second_bar":"upper_break_then_close_confirmed_inside_reclaim","reclaim_confirmation_known_at":123000000000,"return_inside_event_interval":[60000000000,120000000000],"never_backdate_to_second_bar_open":true}
+    },
+    {
+      "id":"JO13_contact_bar_post_contact_bounds",
+      "input":{"target_price":100,"side":1,"contact_bar":{"start":0,"end":60000000000,"ohlc":[98,110,90,100]},"later_bar":{"start":60000000000,"end":120000000000,"ohlc":[100,106,99,104]}},
+      "expected":{"contact_by_first_close":"proved_by_observed_close100","first_contact_time":"interval_censored; earlier_touch_unresolved","after_contact_first_bar_favorable_bounds":[0,10],"after_contact_first_bar_adverse_bounds":[0,10],"full_horizon_favorable_bounds":[6,10],"full_horizon_adverse_bounds":[1,10],"terminal_from_contact":4,"using_contact_bar_high_and_low_as_exact_post_contact_excursions":"forbidden"}
+    },
+    {
+      "id":"JO14_gap_cross_without_touch",
+      "input":{"target_price":100,"prior_close":95,"next_bar":{"ohlc":[105,108,104,106]}},
+      "expected":{"gap_cross":true,"bar_envelope_contains_target":false,"observed_traded_touch":false,"do_not_interpolate_100":true}
+    },
+    {
+      "id":"JO15_empty_flat_carry_and_typed_payload",
+      "input":{"initial":100,"coverage":{"start":0,"end":60000000000,"certified_at":61000000000,"gaps":[]},"variants":{"actual_observation_empty":{"process":"actual_ohlc_price_observations","points":[]},"observed_flat":{"process":"actual_ohlc_price_observations","points":[[60000000000,100,61000000000]]},"certified_carry":{"process":"certified_last_observed_mark","points":[]},"carry_with_gap":{"process":"certified_last_observed_mark","points":[],"gaps":[[0,60000000000]]}}},
+      "expected":{"actual_observation_empty":{"label_status":"censored","payload_state":"censored","terminal":null,"up":null,"down":null,"first_barrier":null},"observed_flat":{"label_status":"observed","payload_state":"complete","terminal":0,"up":0,"down":0,"first_barrier":"neither"},"certified_carry":{"label_status":"observed","payload_state":"complete","terminal":0,"up":0,"down":0,"first_barrier":"neither"},"carry_with_gap":{"label_status":"censored","payload_state":"censored","terminal":null}}
+    },
+    {
+      "id":"JO16_DST_wall_clock_and_short_session",
+      "input":{"zone":"America/New_York","formation_local":"06:00-09:00","dates":["2024-03-08","2024-03-11"],"cash_early_close_date":"2024-11-29"},
+      "expected":{"2024-03-08_UTC":"[2024-03-08T11:00:00Z,2024-03-08T14:00:00Z)","2024-03-11_UTC":"[2024-03-11T10:00:00Z,2024-03-11T13:00:00Z)","2024-11-29_actual_cash_RTH_UTC":"[2024-11-29T14:30:00Z,2024-11-29T18:00:00Z)","Nov29_prior_RTH_for_Dec02":"Nov29 actual13:00NY close, not nonexistent16:00cash close or calendarSunday","spring_nonexistent_local_2024_03_10_02_30":"reject_without_silent_shift","fall_ambiguous_local_2024_11_03_01_30":"requires_explicit_fold; no_arbitrary_pick","cash_calendar_does_not_certify_futures_venue_status":true}
+    },
+    {
+      "id":"JO17_partial_bar_straddles_formation_boundary",
+      "input":{"formation":[0,180000000000],"source_bar":{"start":120000000000,"end":240000000000,"ohlc":[100,120,80,110]}},
+      "expected":{"status":"unavailable_exact_boundary_aggregation","do_not_assign_120_or_80_to_formation":true,"no_linear_split":true,"next_eligible_comparison":"source-aligned two-minute windows under separate exact definitions"}
+    }
+  ]
+}

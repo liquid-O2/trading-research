@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 903.0060739042237,
+  "finished_at": "2026-09-09T00:18:23.856996+00:00",
+  "session_id": "7ee6c362-5a89-4388-8cca-529930f2e66b",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 898813,
+    "duration_api_ms": 898813,
+    "is_error": false,
+    "result": "I'll start from the frozen contract, the review, and the current three owned files, then apply one correction pass that fixes as-of carry, stage leakage, and the 185M-row production path.Admission CAS is next: I\u2019ll inspect only its bounded samples and schema metadata so the production path can match real row counts and the NDXP Jan-2 late print.I have the defects and the 185M-row scale. Next I\u2019ll rewrite the three files for a columnar production path, correct as-of carry, and fix stage/year leakage.Writing the columnar measurement module first, then statistics and the integrated tests.The measurements file was cut off. I'll read the current end of it and the original files so I can finish the rewrite.I'll gather the original draft, tests, contract, and helper APIs so the remaining files match the frozen interface.Admission is parquet-scale (185M rows); I'll finish a complete columnar `run()` and the statistics/test files in one pass, without executing the candidate.Writing the complete measurement module, then statistics and tests.The file was cut off again at the end of `run()`. I'll append the remaining functions.The truncated last line is blocking a patch. I'll append the remainder of `run()` directly.I'll put the finish helpers in statistics so measurements stays complete, then rebuild measurements in two parts to avoid another truncated write.The truncated remnant is gone. I'll write measurements in two parts so the file stays complete and valid.Measurements file is complete and clean. Next I'll update the tests and fix a few statistics edge cases.Correction pass is in the same three owned files. Same `run(*, protocol, admitted, outputs, selected_dates=None)` API. No candidate import, test, or raw scan.\n\n**Owned files**\n- `options_oi_measurements.py` \u2014 columnar one-chain/date path\n- `options_oi_statistics.py` \u2014 group bags, `_summarize`, report\n- `test_options_oi_measurements.py` \u2014 prior cases plus integrated correction tests\n\n**What changed**\n1. **Scale:** Unique OSI/timestamp maps, bisect/previous-date map, vectorized sort/group, streaming Parquet, compact identity + file_id/row_index. Valid 185M rows stay in authenticated `/workspace/data`. Exceptions, membership, reports (first+last on one row), lifecycle (first_* and last_* columns), interval ledger + cut aggregates. Reconstruction predicate in `reconstruction.json`.\n2. **As-of:** Pending source-clock events persist past 15:00. Jan 2 `2020-01-03T01:15:01Z` is not visible on Jan 2 cuts and is available Jan 3 09:30. Same-time conflict is latest ambiguous state (no prior fallback). Universe is unique listing \u222a live OI \u222a future-today; 0 available when universe > 0; undefined when empty. Clocks NULL, causal false.\n3. **Stage/year:** `lifecycle_all` / `lifecycle_within_stage` / `lifecycle_within_year`. Crossing 20 stays in all-period only. `prior_date is None` is safe. Terminal boundary is a separate bag.\n4. **Stats:** Every prespecified metric kept (empty \u2192 undefined). Ratios only sent when both keys exist. Date-mean CI is one weight per date; `support.events` is raw contract/observation counts. Update deltas and position-mapping/clock flags are date series.\n5. **Identity:** OSI length 21, root == chain/symbol, exact millistrike, integer OI dtype, timestamp unit ns. Duplicate chain/date/role files are all consumed. JSON `{}` / empty_marker \u2192 0 rows, unknown coverage.\n6. **Report:** Escaped `|`, equal-date quantile label, numeric findings with support/CI/units and artifact links. No full-family claim.\n\n**Tests added (go through `run` / `run_statistics` / `reconstruct_asof_intervals`):** late Jan 2 print; same-time invalidates prior; prior+future one universe; listing-only 0 available; ns > 2**53; stage-crossing bags; missing metric/ratio; 2 vs 100 equal-date CI; wrong root / float OI / fine strike; multi-file consume; three-cut reconstruction.\n\nRoot still owns the registered pilot/full throughput gate. Family is not complete.",
+    "session_id": "7ee6c362-5a89-4388-8cca-529930f2e66b",
+    "request_id": "9f34d306-4d2f-489c-a183-ee488a7d0d47",
+    "usage": {
+      "inputTokens": 295101,
+      "outputTokens": 149065,
+      "cacheReadTokens": 10026176,
+      "cacheWriteTokens": 0
+    }
+  }
+}

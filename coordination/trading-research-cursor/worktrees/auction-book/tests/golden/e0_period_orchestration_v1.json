@@ -1,0 +1,235 @@
+{
+  "schema": "bounded-resource-golden-v1",
+  "cases": [
+    {
+      "case_id": "ORCH-01",
+      "source_case_ids": [
+        "ORCH-SC-01"
+      ],
+      "title": "Legacy resource contract remains exact",
+      "input": {
+        "batch_kind": "engineering_batch_contract_v1",
+        "resources": null,
+        "configuration_version": null
+      },
+      "expected": {
+        "resource_tuple": [
+          180,
+          190,
+          4294967296,
+          240
+        ],
+        "legacy_extra_resources": "reject",
+        "old_registrations_rewritten": false
+      }
+    },
+    {
+      "case_id": "ORCH-02",
+      "source_case_ids": [
+        "ORCH-SC-02"
+      ],
+      "title": "Explicit new bounded whole-suite allowance",
+      "input": {
+        "batch_kind": "engineering_batch_contract_v2",
+        "resources": {
+          "maximum_cpu_per_attempt": 180,
+          "hard_cpu_seconds": 190,
+          "address_space_bytes": 4294967296,
+          "wall_seconds": 360
+        }
+      },
+      "expected": {
+        "resource_tuple": [
+          180,
+          190,
+          4294967296,
+          360
+        ],
+        "invalid_wall_values": [
+          240,
+          359,
+          361,
+          true,
+          360.0
+        ],
+        "missing_or_extra_resource_fields": "reject",
+        "unknown_batch_or_resource_version": "reject"
+      }
+    },
+    {
+      "case_id": "ORCH-03",
+      "source_case_ids": [
+        "ORCH-SC-03"
+      ],
+      "title": "Observed strict terminal boundaries for both versions",
+      "input": {
+        "v1_pass": [
+          179.999,
+          239.999,
+          4294967295
+        ],
+        "v2_pass": [
+          179.999,
+          359.999,
+          4294967295
+        ],
+        "v2_fail_vectors": [
+          [
+            180,
+            359,
+            100
+          ],
+          [
+            179,
+            360,
+            100
+          ],
+          [
+            179,
+            359,
+            4294967296
+          ],
+          [
+            -1,
+            1,
+            1
+          ],
+          [
+            1,
+            -1,
+            1
+          ],
+          [
+            1,
+            1,
+            -1
+          ]
+        ],
+        "v1_wall_failure": [
+          179,
+          240,
+          100
+        ],
+        "configuration_mismatch_v1": [
+          180,
+          190,
+          4294967296,
+          360
+        ]
+      },
+      "expected": {
+        "passing_returns": null,
+        "each_failure": "nonempty explicit resource error",
+        "nonfinite_or_bool_or_wrong_type_observed_resources": "reject",
+        "changed_frozen_configuration": "reject"
+      }
+    },
+    {
+      "case_id": "ORCH-04",
+      "source_case_ids": [
+        "ORCH-SC-04"
+      ],
+      "title": "Registered family limits and batch must agree before reservations",
+      "input": {
+        "max_attempts": 3,
+        "cpu_budget_seconds": 600,
+        "v2_members_wall": [
+          360,
+          360
+        ],
+        "mixed_members_wall": [
+          240,
+          360
+        ],
+        "changed_same_family_wall": 360
+      },
+      "expected": {
+        "v2_same_contract": "accept",
+        "mixed": "reject before any trial attempt",
+        "mutating_existing_240_family": "reject and retain unchanged registry head",
+        "attempts_before_and_after_rejections": 0,
+        "baseline_assertion_population_omission": "reject"
+      }
+    },
+    {
+      "case_id": "ORCH-05",
+      "source_case_ids": [
+        "ORCH-SC-05"
+      ],
+      "title": "Worker enforces the exact retained launch contract",
+      "input": {
+        "valid_legacy": [
+          180,
+          190,
+          4294967296,
+          240
+        ],
+        "valid_v2": [
+          180,
+          190,
+          4294967296,
+          360
+        ],
+        "invalid_values": [
+          [
+            181,
+            190,
+            4294967296,
+            360
+          ],
+          [
+            180,
+            190,
+            4294967296,
+            361
+          ]
+        ]
+      },
+      "expected": {
+        "actual_subprocess_rlimit_cpu": [
+          180,
+          190
+        ],
+        "actual_subprocess_rlimit_as": [
+          4294967296,
+          4294967296
+        ],
+        "alarm_seconds_by_version": [
+          240,
+          360
+        ],
+        "worker_acknowledgement_and_supervisor_configuration": "identical version and limits",
+        "invalid_contract_before_candidate_import": "reject"
+      }
+    },
+    {
+      "case_id": "ORCH-06",
+      "source_case_ids": [
+        "ORCH-SC-06"
+      ],
+      "title": "Final supervisor/worker/attachment resource binding",
+      "input": {
+        "registered_v2_tuple": [
+          180,
+          190,
+          4294967296,
+          360
+        ],
+        "forged_worker_or_final_tuple": [
+          180,
+          190,
+          4294967296,
+          240
+        ],
+        "complete_baseline_count": 851
+      },
+      "expected": {
+        "forged_or_missing_v2_resource_contract": "reject before evidence attachment",
+        "all_previous_851_assertion_ids": "retained subset of exact unique full execution population",
+        "recovery_same_shared_execution": "no new worker or attempt",
+        "successful_shared_measurement_resources": "charged once per family without summing physical usage",
+        "old_failed_receipts": "unchanged"
+      }
+    }
+  ]
+}

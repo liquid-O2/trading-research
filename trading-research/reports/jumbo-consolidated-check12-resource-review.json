@@ -1,0 +1,135 @@
+{
+  "actual_calibration_calls": 12,
+  "actual_empirical_distribution_calls": 12,
+  "actual_optimizer_calls": 16,
+  "annual_parity": {
+    "exact_values": 13351620,
+    "floating_values": 110377,
+    "maximum_absolute_float_error": 0.0
+  },
+  "attempt_id": "95a43fb94bd91ce33ae503b9f38e2787999dd50872722d4b06d87dbeabab78db",
+  "authorization": {
+    "kind": "family_budget_authorization_v1",
+    "path": "validation/JUMBO_CONTINUATION_AMENDMENT_V1_AUTHORIZED.json",
+    "sha256": "ce9b7f5837b33118c9e80faa291d8d9868e620a1af3be13c627742a720b6c4ec",
+    "size_bytes": 4412
+  },
+  "complete_predictive_quality_comparison": false,
+  "cpu_seconds": 73.970215,
+  "derived_output_bytes": 26303471,
+  "evaluation_units": [
+    {
+      "classes": 6,
+      "compressed_output_bytes": 1010162,
+      "cpu_seconds": 3.446437215000003,
+      "dates": 20,
+      "grouped_artifact": {
+        "kind": "jumbo_resource_evaluation_grouped_gzip_v1",
+        "sha256": "f7dad253b936244693ab9f316e0f0046cab7b12aa79856fd13e4789cfb5aab75",
+        "size_bytes": 990530
+      },
+      "grouped_compressed_output_bytes": 990530,
+      "grouped_cpu_seconds": 3.4054395940000006,
+      "grouped_serialization_cpu_seconds": 4.254507389000004,
+      "groups": 433,
+      "metrics": 20,
+      "overall_artifact": {
+        "kind": "jumbo_resource_evaluation_overall_gzip_v1",
+        "sha256": "349136a22fc8d24a5584735f98bffb1b8792a98c7487826f757435bcf867d437",
+        "size_bytes": 19632
+      },
+      "overall_compressed_output_bytes": 19632,
+      "overall_cpu_seconds": 0.04099762100000248,
+      "overall_serialization_cpu_seconds": 0.013378703999997299,
+      "prediction_scope": "Artificial varying simplex resource probe on actual admitted labels; no quality claim",
+      "rows": 6896,
+      "serialization_cpu_seconds": 4.267886093000001,
+      "storage_schema": "jumbo-grouped-date-evaluation-tables-v1",
+      "storage_verification": {
+        "comparison": "Every published field; floats identical at64 bits, missing nonfinite values retain the existing JSON-null policy.",
+        "groups": 433,
+        "maximum_absolute_float_error": 0.0,
+        "missing_numbers_retained_as_null": 293838,
+        "passed": true,
+        "reference": "Exact registered check11 scorer; same20-date rows, metrics, predictions, group universes and1000 bootstrap weights.",
+        "scalar_values": 2574944
+      },
+      "storage_verification_cpu_seconds": 9.003116044000002,
+      "uncompressed_output_bytes": 18180023
+    },
+    {
+      "classes": 6,
+      "compressed_output_bytes": 1854010,
+      "cpu_seconds": 10.288926765,
+      "dates": 253,
+      "grouped_artifact": {
+        "kind": "jumbo_resource_evaluation_grouped_gzip_v1",
+        "sha256": "faab4b5c75dcb3ca29cefb5961a93315ce3b9e9adb3797af4f4c618d51656606",
+        "size_bytes": 1831728
+      },
+      "grouped_compressed_output_bytes": 1831728,
+      "grouped_cpu_seconds": 9.900948743,
+      "grouped_serialization_cpu_seconds": 4.514746508000002,
+      "groups": 433,
+      "metrics": 20,
+      "overall_artifact": {
+        "kind": "jumbo_resource_evaluation_overall_gzip_v1",
+        "sha256": "5b240575b6e4c0a4fd957716ae8f9f29abe2f8d12736435a84da95c16d8d27b4",
+        "size_bytes": 22282
+      },
+      "overall_compressed_output_bytes": 22282,
+      "overall_cpu_seconds": 0.38797802199999865,
+      "overall_serialization_cpu_seconds": 0.02469420200000627,
+      "prediction_scope": "Artificial varying simplex resource probe on actual admitted labels; no quality claim",
+      "rows": 90808,
+      "serialization_cpu_seconds": 4.539440710000008,
+      "storage_schema": "jumbo-grouped-date-evaluation-tables-v1",
+      "storage_verification": null,
+      "storage_verification_cpu_seconds": 0.0,
+      "uncompressed_output_bytes": 20274356
+    }
+  ],
+  "execution": {
+    "kind": "research_study_execution",
+    "path": "reports/jumbo-runs/95a43fb94bd91ce33ae503b9f38e2787999dd50872722d4b06d87dbeabab78db/execution.json",
+    "sha256": "b4ca461fbe324bdcf30c6439c9bada9a6630d8083493cc347a31ea7bfd977102",
+    "size_bytes": 31490
+  },
+  "interpretation": "Complete code/resource check. Extraction fits its phase ceiling. Fitting and confirmation remain infeasible under the current conservative estimates; no predictive-quality result is claimed.",
+  "model_projections": {
+    "projected_confirmation_extraction_cpu_seconds_conservative": 320.9864799875,
+    "projected_confirmation_model_cpu_seconds_conservative": 5255.9734542589995,
+    "projected_confirmation_total_cpu_seconds_conservative": 5576.9599342465,
+    "projected_fit_cpu_seconds_conservative": 9154.931865010654,
+    "projected_fit_output_bytes_conservative": 998483822.8882866,
+    "projected_full_model_peak_bytes_conservative": 3809953331,
+    "projected_matrix_array_bytes": 1031272320,
+    "projected_model_working_array_bytes": 2185173840,
+    "within_declared_confirmation_cap": false,
+    "within_declared_fit_cap": false
+  },
+  "next_action": "Run the complete descriptive extraction within its measured cap; correct the report and model-parameter workload mismatch and measure tree scaling before any fit or confirmation.",
+  "peak_rss_bytes": 1526001664,
+  "projections": {
+    "projected_extraction_output_bytes_conservative": 428635370.0,
+    "projected_remaining_extract_fit_confirmation_cpu_seconds": 15379.053300259653,
+    "projected_remaining_extraction_cpu_seconds_conservative": 647.1615010025,
+    "within_declared_extract_cap": true
+  },
+  "status": "succeeded",
+  "target_count": 116,
+  "tests": 432,
+  "version": "jumbo-consolidated-resource-review-v1",
+  "worker": {
+    "kind": "research_study_worker_report",
+    "path": "reports/jumbo-runs/95a43fb94bd91ce33ae503b9f38e2787999dd50872722d4b06d87dbeabab78db/worker.json",
+    "sha256": "378e6e6ebaa1191d94f4d2b3e80b26718357e5be1cc6995857a9d2e6af50eb96",
+    "size_bytes": 1078738
+  },
+  "worker_log": {
+    "kind": "research_study_worker_log",
+    "path": "reports/jumbo-runs/95a43fb94bd91ce33ae503b9f38e2787999dd50872722d4b06d87dbeabab78db/worker.log",
+    "sha256": "887600f83ff0188d6d899b1b92af4ea0581929ead886075ed567851729ca7cef",
+    "size_bytes": 101196
+  }
+}

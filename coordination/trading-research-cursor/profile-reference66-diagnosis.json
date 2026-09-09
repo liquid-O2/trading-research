@@ -1,0 +1,7 @@
+{
+  "execution": "/workspace/trading-research/reports/auction-flow-runs/16cd5680d00378316dc03888b86bc695c39346d9960d028c8081f72a96d906bf/execution.json",
+  "cpu_seconds": 6.566925,
+  "traceback": "Traceback (most recent call last):\n  File \"/workspace/trading-research/tools/run_auction_flow_study.py\", line 3071, in worker\n    return profile_statistics(authenticated,packet_path)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/tools/run_profile_reference_diagnostic66.py\", line 31, in diagnose\n    outputs=BoundedOutputs(Path(packet_path).parent/'outputs',maximum_total_bytes=cap['maximum_output_bytes']-cap['supervisor_output_reserve_bytes'],maximum_file_bytes=cap['maximum_output_file_bytes'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/trading-research/src/trading_research/research/auction_flow_storage.py\", line 75, in __init__\n    raise ContractError('explicit finite aggregate and individual artifact limits required')\ntrading_research.errors.ContractError: explicit finite aggregate and individual artifact limits required\n",
+  "candidate_reduction_executed": false,
+  "diagnosis": "Diagnostic total256MiB is smaller than inherited per-file512MiB. BoundedOutputs requiresfile<=total. Clamp diagnostic per-file to availabletotal; unchanged profile consumer and actualinputpopulation. No repeatedtests orrawMBPscan."
+}

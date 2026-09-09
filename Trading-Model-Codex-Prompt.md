@@ -1,0 +1,1 @@
+planning/trading-research/reference/Trading-Model-Codex-Prompt.md

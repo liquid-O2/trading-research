@@ -1,0 +1,20 @@
+{
+  "status": "implemented; static review only",
+  "owned_source": "src/trading_research/measurements/anchored.py",
+  "changes": [
+    "capture_anchor accepts optional accumulation_evidence_versions=() without changing AnchoredCapture schema.",
+    "Extra IDs must be a bounded immutable tuple of nonempty strings, unique and lexically sorted; overlap with actual formation evidence IDs is rejected.",
+    "Combined formation and accumulation evidence count is bounded before graph evidence lookup. Every evidence item must resolve as actual EvidenceVersion, exact same instrument, observed measurement purpose, and event/known clocks at or before cut.",
+    "Combined lineage is retained through graph.lineage_closure((anchor_version_id, *extra_ids), cut), with existing capture byte limit retained.",
+    "validate_anchor obtains actual formation IDs from the graph and derives extras from captured evidence by set difference; it reconstructs via capture_anchor and compares the entire capture, rejecting detached/altered payloads, missing formation rows, duplicate rows and noncanonical ordering.",
+    "bind_anchor_members remains unchanged: exact capture digest must occur in authenticated captured evidence."
+  ],
+  "default_compatibility": "Empty extras preserve original evidence tuple, lineage seed tuple, dataclass fields and serialized content/hash. Existing default producer behavior is unchanged.",
+  "integration_requirements": [
+    "Publisher must retain independent accumulation receipts as direct current ObjectRevision evidence, so F10 current-source checks apply to corrections.",
+    "Initial birth source origins must include the stable accumulation source ID; corrected receipts extend that same source identity without revising immutable formation anchor or its evidence source.",
+    "Capture is a historical read and does not independently select latest source revision. Current support remains enforced by F10 direct object evidence; old historical captures remain reconstructible at their original cut.",
+    "Root owns separate actual formation confirmation and MP19 fixture/publisher updates."
+  ],
+  "validation": "Read-only source inspection after patch; no imports, tests, compilation, private execution, normalizers or candidate runs. No other source files, goldens, maps, reviews, reports, or source planning modified."
+}

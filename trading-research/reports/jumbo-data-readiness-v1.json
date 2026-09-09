@@ -1,0 +1,330 @@
+{
+  "kind": "jumbo_range_path_timing_data_readiness",
+  "reviewed_on": "2026-09-07",
+  "scope": {
+    "study": "Jumbo range/path/timing study",
+    "primary_period": "2020-01-01 through latest eligible observation at the frozen evaluation cut",
+    "older_data": "Allowed only for separately declared Jumbo constructions or ordinary OHLC context; it is not part of the primary model cohort.",
+    "unread": ["/workspace/archive"],
+    "prohibitions_observed": [
+      "No new market partition scan or decode",
+      "No candidate generation, fitting, test execution, or CLI run",
+      "No source-code modification"
+    ],
+    "interpretation": "The inventory is metadata/readiness evidence. It does not certify a complete market history, venue receipt, broker clock, roll-free continuous series, or economic result. Named acquired-contract windows can be admitted under their own gates without inheriting the exact E0 parent-volume universe requirement."
+  },
+  "planning_inputs": [
+    {"path": "/workspace/trading-research/AGENTS.md", "sha256": "1e9ad457d050e4b4d0a60774259640d3e26735e2b8bb7e67d604e475322e8f48"},
+    {"path": "/workspace/planning/trading-research/PLAN.md", "sha256": "912f4b089f65724309167cb979c77000f36bba8a4d6b5f97876d2d14462e9021"},
+    {"path": "/workspace/planning/trading-research/IMPLEMENTATION_INSTRUCTIONS.md", "sha256": "12a10344d4f1631c1319c569acc1dc975fca69a5d36a8d0b85dda672b9fe1581"},
+    {"path": "/workspace/planning/trading-research/RESEARCH_SPEC.md", "sha256": "c7cfd3d53704cfa5339acd48d2be4392cd7d663fcf3e3742415a1d3917300e16"},
+    {"path": "/workspace/planning/trading-research/STATUS.md", "sha256": "81820abd1660a82ee9d3b238ddef4a621a7834f26e73befaeba0830e20d1516b"},
+    {"path": "/workspace/planning/trading-research/REVISION_RECEIPT.json", "sha256": "f30694bb27bbc8732b03653d4ceb337bf1b8f5e04ec5e0c12147164bdbdfba58"}
+  ],
+  "retained_evidence": [
+    {
+      "path": "/workspace/trading-research/evidence/artifacts/fa/fae56a271437f4e0db4179c82c8e975d7e452ecbdb062b0949c180be2271564e",
+      "kind": "supplied_dataset_catalog",
+      "sha256": "fae56a271437f4e0db4179c82c8e975d7e452ecbdb062b0949c180be2271564e",
+      "size_bytes": 261584,
+      "archive_metadata": {
+        "dataset_count": 111,
+        "file_count": 80198,
+        "known_parquet_rows": 37031891942,
+        "unreadable_parquet_files": 0,
+        "excluded_partial_files": 5,
+        "generated_at": "2026-09-05T17:08:19.890823+00:00",
+        "source_root": "/workspace/quantpad-data-pull",
+        "legacy_source_root": "/workspace/data",
+        "storage_method": "hard links to immutable completed source files; byte-identical and no additional disk copy"
+      }
+    },
+    {
+      "path": "/workspace/trading-research/reports/data-readiness-inventory.json",
+      "kind": "data_readiness_inventory",
+      "sha256": "7c5a6a4c3c1350f7e964234ee6540cb3c5714f86d2657e114654acf7f62704e6",
+      "inventory_version": "retained in file",
+      "dataset_count": 111,
+      "cohort_evidence_count": 1027,
+      "eligibility_rule": "Inventory completeness and prior audit depth are retained; eligibility remains operation- and cohort-specific."
+    },
+    {
+      "path": "/workspace/trading-research/reports/opening-minimum-gates.json",
+      "kind": "opening_definition_and_e0_gate_review",
+      "sha256": "2eb172ba8b34987afb2519d2b004a639da05bdf383ac1fc31a08a7ab50c47dd4",
+      "catalog_sha256": "fae56a271437f4e0db4179c82c8e975d7e452ecbdb062b0949c180be2271564e",
+      "catalog_size_bytes": 261584,
+      "catalog_nq_continuous_dataset_count": 6,
+      "catalog_nq_parent_outright_dataset_count": 0,
+      "exact_e0_cohort_frozen": false,
+      "exact_e0_runnable": false,
+      "exact_e0_missing_evidence": "Complete parent-contract coverage/equivalent causal proof, compatible preceding-session volumes, and selected-contract MBP for required windows.",
+      "independent_diagnostics_unblocked": true,
+      "market_day_completeness_assessed": false,
+      "new_market_tape_reads": 0,
+      "economic_runs": 0
+    },
+    {
+      "path": "/workspace/trading-research/reports/definitions-ten-partitions.json",
+      "kind": "raw_futures_definition_identity_field_audit",
+      "sha256": "797745fb42186fb0b1c9d0c6b7b2a6a4559d73a5e65c6781946ef2974865f1e0",
+      "size_bytes": 1396557,
+      "depth": "complete_selected_partitions",
+      "partitions": 10,
+      "rows": 2579,
+      "all_selected_rows_missing_contract_multiplier": true,
+      "limitations": [
+        "Raw identity is retained and missing multiplier is not guessed.",
+        "The audit does not certify all simultaneously listed outright contract tapes.",
+        "Provider receipt plus 250 ms is a modeled availability scenario, not actual strategy receipt."
+      ]
+    },
+    {
+      "path": "/workspace/quantpad-data-pull/manifests/futures-roll-map.json",
+      "kind": "unadjusted_instrument_roll_map",
+      "sha256": "b1d3714c6d17498e91f6131a4be1e4260d5651425a7e521dfc3e45030a87e55d",
+      "generated_at": "2026-09-05T16:54:49.989120+00:00",
+      "roots": {
+        "NQ": {"definition_files": 17, "bar_files": 17, "instruments": 65, "roll_segments": 65, "unresolved_instruments": 0, "start": "2010-09-06 15:20:00+00:00", "end": "2026-09-02 15:19:00+00:00"},
+        "ES": {"definition_files": 17, "bar_files": 17, "instruments": 65, "roll_segments": 65, "unresolved_instruments": 0, "start": "2010-09-06 15:20:00+00:00", "end": "2026-09-02 15:19:00+00:00"},
+        "YM": {"definition_files": 17, "bar_files": 17, "instruments": 65, "roll_segments": 65, "unresolved_instruments": 0, "start": "2010-09-06 15:21:00+00:00", "end": "2026-09-02 15:19:00+00:00"}
+      },
+      "roll_policy": "Use raw instrument_id, raw_symbol, expiration, activation, and the derived segment. Do not splice prices or treat a continuous symbol as a single contract without an explicit segment identity."
+    },
+    {
+      "path": "/workspace/quantpad-data-pull/manifests/nq-mbp1-validation.json",
+      "kind": "retained_nq_mbp1_validation_receipt",
+      "sha256": "3f0dfb526153183b3e566643684dfdb42d094b945b2e453ef70c40286076ed90",
+      "status": "clean within the validated extent",
+      "path_in_receipt": "/workspace/quantpad-data-pull/data/phase-4/glbx-mdp3/nq-c-0/mbp-1",
+      "expected_and_validated_partitions": 81,
+      "rows": 10536462981,
+      "bytes": 74941299968,
+      "schema": "t int64; action dictionary<string,int8>; side dictionary<string,int8>; price double; size int32; bid_px/ask_px double; bid_sz/ask_sz int32; instrument_id int32; flags int16",
+      "actions": ["A", "C", "F", "M", "R", "T"],
+      "sides": ["A", "B", "N"],
+      "warnings": [
+        "1537 sampled crossed top-of-book rows of 82943856",
+        "290 timestamp-reversal files/rows in the validated extent; maximum backstep 21976443366 ns",
+        "sampled nonfinite/reset prices: price=1, bid_px=7, ask_px=2"
+      ],
+      "scope_warning": "This receipt is a bounded validation extent and is not a strategy-receipt or full-history certification."
+    },
+    {
+      "path": "/workspace/trading-research/reports/compact-one-hour.json",
+      "kind": "retained_nq_mbp_compact_pilot",
+      "sha256": "349a7cb430689d673f2f88be5eb96abb6029a4f52396856c40d21a34ea893e0f",
+      "dataset": "quantpad/cme__nq-continuous-futures__mbp-1",
+      "source_part": "2024-03.parquet#row-group=168..174",
+      "window": {"start": 1710163800000000000, "end": 1710167400000000000, "basis": "event time"},
+      "raw_rows": 1444105,
+      "physical_rows_scanned": 1750000,
+      "quote_rows": 1388028,
+      "trades": 56077,
+      "volume": 75760,
+      "gaps": 0,
+      "unknown_volume": 0,
+      "unpriced_volume": 0,
+      "strategy_receipt": "missing",
+      "venue_status": "not supplied",
+      "resource_observation": {"cpu_seconds": 1.258646028, "peak_rss_bytes": 591323136},
+      "use": "A bounded resource and companion-data reference for the proposed NQ pilot, not an OHLC or economic result."
+    },
+    {
+      "path": "/workspace/trading-research/reports/trade-reconciliation-eight-hours.json",
+      "kind": "retained_trade_reconciliation_receipt",
+      "sha256": "e6e7a0b889f503cd3e26147286e71171ea2c91af8e50b2e0bfaf125c50bd31ec",
+      "nonempty_paired_windows": 7,
+      "all_observed_windows_match": false,
+      "paired_exact_windows": [
+        {"root": "NQ", "start": "2021-09-01T18:00:00+00:00", "mbp": "2021-09.parquet#row-groups=12,13,14", "trades": "2021-08-30.parquet#row-group=0", "rows": 23509},
+        {"root": "NQ", "start": "2022-03-10T14:30:00+00:00", "mbp": "2022-03.parquet#row-groups=201..205", "trades": "2022-03-07.parquet#row-groups=11,12", "rows": 83603},
+        {"root": "NQ", "start": "2023-11-24T17:00:00+00:00", "mbp": "2023-11.parquet#row-groups=423,424", "trades": "2023-11-20.parquet#row-group=9", "rows": 13372},
+        {"root": "NQ", "start": "2024-03-11T13:30:00+00:00", "mbp": "2024-03.parquet#row-groups=168..174", "trades": "2024-03-11.parquet#row-group=0", "rows": 56077},
+        {"root": "NQ", "start": "2025-09-18T13:30:00+00:00", "mbp": "2025-09.parquet#row-groups=291..295", "trades": "2025-09-15.parquet#row-group=4", "rows": 12230},
+        {"root": "ES", "start": "2020-01-01T23:00:00+00:00", "mbp": "2020-01.parquet#row-group=0", "trades": "2020.parquet#row-group=0", "rows": 3525},
+        {"root": "ES", "start": "2024-03-11T13:30:00+00:00", "mbp": "2024-03.parquet#row-groups=155..162", "trades": "2024.parquet#row-group=110", "rows": 52566}
+      ],
+      "known_nonpair": {"root": "ES", "start": "2022-03-10T14:30:00+00:00", "mbp_rows": 0, "standalone_trade_rows": 112476},
+      "scope": "Complete selected UTC hour conditional on supplied files; not a calendar/session, broker, recovery, roll, or full-history certification.",
+      "clock": "Event timestamps; actual strategy receipt not supplied."
+    }
+  ],
+  "datasets": {
+    "NQ": {
+      "continuous_symbol": "NQ.c.0",
+      "venue_dataset": "GLBX.MDP3",
+      "source_root": "/workspace/data/quantpad",
+      "datasets": [
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__definition", "source": "data/phase-1/glbx-mdp3/nq-c-0/definition", "files": 17, "coverage": "2010-2026", "rows": 4129, "bytes": 10810465, "status": "complete", "schema": "definition", "timestamp_profile": "quantpad-tick-ns-utc"},
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__mbp-1", "source": "data/phase-4/glbx-mdp3/nq-c-0/mbp-1", "files": 142, "coverage": "2019-12-30 through 2026-09; scoped use 2020 onward", "rows": 11536223348, "bytes": 82214535702, "status": "complete in catalog; bounded validation receipt covers 81 partitions", "schema": "mbp-1", "timestamp_profile": "quantpad-tick-ns-utc"},
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m", "source": "data/phase-1/glbx-mdp3/nq-c-0/ohlcv-1m", "files": 17, "coverage": "2010-2026; scoped use 2020 onward", "rows": 4695352, "bytes": 67502609, "status": "complete available continuous history in catalog; semantic cohort unassessed", "schema": "ohlcv-1m", "timestamp_profile": "quantpad-bar-ms-utc"},
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1s", "source": "data/phase-1/glbx-mdp3/nq-c-0/ohlcv-1s", "files": 17, "coverage": "2010-2026", "rows": 127979940, "bytes": 1238795913, "status": "complete available history in catalog; semantic cohort unassessed", "schema": "ohlcv-1s", "timestamp_profile": "quantpad-bar-ms-utc"},
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__statistics", "source": "data/phase-1/glbx-mdp3/nq-c-0/statistics", "files": 1, "coverage": "full available continuous history", "rows": 3835892, "bytes": 75322889, "status": "complete", "schema": "statistics", "timestamp_profile": "quantpad-tick-ns-utc"},
+        {"dataset_id": "quantpad/cme__nq-continuous-futures__trades", "source": "data/phase-4/glbx-mdp3/nq-c-0/trades", "files": 262, "coverage": "2021-08-30 through 2026-08-31; catalog scope says 2020 onward", "rows": 470160602, "bytes": 3571247141, "status": "complete in catalog; operation/cohort-specific", "schema": "trades", "timestamp_profile": "quantpad-tick-ns-utc"}
+      ]
+    },
+    "ES": {
+      "continuous_symbol": "ES.c.0",
+      "venue_dataset": "GLBX.MDP3",
+      "source_root": "/workspace/data/quantpad",
+      "datasets": [
+        {"dataset_id": "quantpad/cme__es-continuous-futures__definition", "source": "data/phase-1/glbx-mdp3/es-c-0/definition", "files": 17, "coverage": "2010-2026", "rows": 4127, "bytes": 10807812, "status": "complete", "schema": "definition", "timestamp_profile": "quantpad-tick-ns-utc"},
+        {"dataset_id": "quantpad/cme__es-continuous-futures__mbp-1", "source": "data/phase-4/glbx-mdp3/es-c-0/mbp-1", "files": 25, "coverage": "2020-01 through 2024-08 with declared missing months", "rows": 2951360512, "bytes": 19867766910, "status": "partial-paused", "schema": "mbp-1", "timestamp_profile": "quantpad-tick-ns-utc", "known_limit": "Do not use absent ES MBP months as no-trade evidence."},
+        {"dataset_id": "quantpad/cme__es-continuous-futures__ohlcv-1m", "source": "data/phase-1/glbx-mdp3/es-c-0/ohlcv-1m", "files": 17, "coverage": "2010-2026; scoped use 2020 onward", "rows": 4843530, "bytes": 63507630, "status": "complete available continuous history in catalog; semantic cohort operation-specific", "schema": "ohlcv-1m", "timestamp_profile": "quantpad-bar-ms-utc"},
+        {"dataset_id": "quantpad/cme__es-continuous-futures__statistics", "source": "data/phase-1/glbx-mdp3/es-c-0/statistics", "files": 1, "coverage": "full available continuous history", "rows": 1853081, "bytes": 40742209, "status": "complete", "schema": "statistics", "timestamp_profile": "quantpad-tick-ns-utc"},
+        {"dataset_id": "quantpad/cme__es-continuous-futures__trades", "source": "data/phase-4/glbx-mdp3/es-c-0/trades", "files": 7, "coverage": "2020-2026", "rows": 705089126, "bytes": 4454483864, "status": "complete in catalog; operation/cohort-specific", "schema": "trades", "timestamp_profile": "quantpad-tick-ns-utc"}
+      ]
+    }
+  },
+  "physical_schemas_and_clock_facts": {
+    "ohlcv_1m": {
+      "fields": {"t": "int64 milliseconds", "o": "double", "h": "double", "l": "double", "c": "double", "v": "double", "instrument_id": "int32"},
+      "timestamp_semantics": "t is the bar interval start, stored as a timezone-naive int64 epoch in milliseconds; values are raw/unadjusted.",
+      "receipt": "No strategy receipt field or actual receipt capture is supplied by the catalog."
+    },
+    "mbp_1": {
+      "fields": {"t": "int64 nanoseconds", "action": "dictionary<string,int8>", "side": "dictionary<string,int8>", "price": "double", "size": "int32", "bid_px": "double", "ask_px": "double", "bid_sz": "int32", "ask_sz": "int32", "instrument_id": "int32", "flags": "int16"},
+      "timestamp_semantics": "Event-time t; ts_recv/ts_ref may exist in source-specific definitions but are not a strategy receipt.",
+      "quality": "Retain crossed, reversal, nonfinite/reset, gap, snapshot, and unknown-state flags; do not infer recovered book state from volume matching."
+    },
+    "definition": {
+      "fields": ["t:int64", "ts_recv:int64", "raw_symbol:string", "instrument_id:int32", "instrument_class:dictionary<string,int8>", "strike_price:double", "expiration:int64", "activation:int64", "underlying:string", "min_price_increment:double", "min_lot_size:int32", "contract_multiplier:double", "currency:string", "security_update_action:dictionary<string,int8>"],
+      "terms": "The retained 2021-2025 identity audit has contract_multiplier missing on all 2579 selected rows. NQ has a dated external multiplier=20 USD/point available 2021-03-19; ES has no equivalent retained historical multiplier join. Each raw definition's min_price_increment remains authoritative where present."
+    },
+    "source_clock_variants": [
+      {"id": "source_high_anchor_06_09", "wall": "06:00-09:00", "zone": "Etc/GMT+4", "formation": "new_high_reset_exchange_weekday"},
+      {"id": "ny_rth_vwap", "wall": "09:30-16:00", "zone": "America/New_York", "formation": "rth_vwap"},
+      {"id": "ny_ib_60", "wall": "09:30-10:30", "zone": "America/New_York", "formation": "daily_ib"},
+      {"id": "exchange_ib_60", "wall": "08:30-09:30", "zone": "explicit_exchange_zone", "formation": "daily_ib"},
+      {"id": "weekly_combined_two_trading_days", "wall": "22:00-21:00", "zone": "UTC", "formation": "first_two_eligible_trading_days"}
+    ],
+    "clock_policy": "Keep event-time as a named baseline. Use provider-received timing only when the source supplies it, and model latency through an explicit LatencyScenario. Register 09:40-09:50 and other timing alternatives as separate wall-clock variants; do not fold them into the RTH clock."
+  },
+  "identity_and_roll_handling": {
+    "yearly_identity_audit": {
+      "NQ": {"2021": [["2770", "NQZ1"], ["2786", "NQM1"], ["3541", "NQH2"], ["4378", "NQH1"], ["828", "NQU1"]], "2022": [["10391", "NQU2"], ["13613", "NQZ2"], ["20631", "NQH3"], ["2895", "NQM2"], ["3541", "NQH2"]], "2023": [["20631", "NQH3"], ["2130", "NQU3"], ["260937", "NQZ3"], ["3522", "NQM3"], ["750", "NQH4"]], "2024": [["106364", "NQZ4"], ["13743", "NQM4"], ["42288528", "NQH5"], ["4358", "NQU4"], ["750", "NQH4"]], "2025": [["158704", "NQZ5"], ["42002475", "NQH6"], ["42005804", "NQM5"], ["42008487", "NQU5"], ["42288528", "NQH5"]]},
+      "ES": {"2021": [["1030", "ESU1"], ["3853", "ESM1"], ["5482", "ESH1"], ["5782", "ESH2"], ["8858", "ESZ1"]], "2022": [["206299", "ESH3"], ["206323", "ESZ2"], ["3403", "ESM2"], ["5782", "ESH2"], ["97042", "ESU2"]], "2023": [["17077", "ESH4"], ["206299", "ESH3"], ["314863", "ESZ3"], ["3445", "ESU3"], ["95414", "ESM3"]], "2024": [["118", "ESU4"], ["17077", "ESH4"], ["183748", "ESZ4"], ["5002", "ESH5"], ["5602", "ESM4"]], "2025": [["14160", "ESU5"], ["294973", "ESZ5"], ["42140878", "ESH6"], ["4916", "ESM5"], ["5002", "ESH5"]]}
+    },
+    "completeness": "simultaneous_parent_completeness_certified=false for each yearly observation; calendar expiry rank is not prior-volume selection proof.",
+    "admission_rule": "Every selected OHLC window must retain the raw instrument_id and map it to one dated definition/roll segment. If more than one ID occurs, or the boundary is ambiguous, split the window or mark it unavailable/censored."
+  },
+  "usable_windows": {
+    "primary_scope": "2020 onward only for primary model rows; 2010-2019 can support separately labeled Jumbo constructions or ordinary OHLC context.",
+    "metadata_ready": [
+      "NQ and ES 1-minute OHLCV have complete available-year file sets 2010-2026 in the retained catalog, with 2020-2026 files present under /workspace/data/quantpad.",
+      "NQ has the strongest companion event evidence: five exact MBP/trade paired hours from 2021-2025 plus the 2024 compact one-hour pilot.",
+      "ES 2024-03-11 13:30 UTC is an exact paired MBP/trade hour; ES 2022-03-10 14:30 UTC has 112476 standalone trades and no MBP rows, so it is a negative availability example rather than a usable execution window."
+    ],
+    "admissible_only_after_bounded_read": "A catalog file's presence does not prove that every requested minute exists, that one raw contract ID spans the window, or that a missing bar is no-trade. A window becomes an admitted OHLC study row only after schema, source immutability, interval, identity, and quality checks pass."
+  },
+  "missing_bar_semantics": {
+    "current_evidence": "The retained OHLC catalog supplies interval-start timestamps and OHLCV values but no explicit no-trade/closed/quality marker. The retained quality protocol defines a gap relative to a declared expected observation stream, not as merely no trades.",
+    "true_absent_bar_no_trade": "Not established by OHLC absence alone. A no-trade classification requires an explicitly declared open/session interval plus an independent complete same-window trade or MBP source showing no event, with the source's coverage/recovery status accepted.",
+    "feed_gap": "If a minute is expected by the declared clock and the OHLC row is absent while source completeness or companion event evidence is unresolved, record feed-gap/incomplete/censored; do not impute or call it no-trade.",
+    "closed_or_outside_window": "A missing row can be labeled closed/outside only when the applicable dated session/calendar boundary is available. The retained cash calendar is NYSE RTH context only and does not certify CME Globex or instrument status.",
+    "required_artifact_fields": ["expected_interval_id", "source_row_or_row_group_extent", "observed_bar_count", "instrument_ids", "companion_trade_or_mbp_extent", "coverage_state", "gap_or_no_trade_reason", "censoring_interval"]
+  },
+  "narrow_admission_actions": [
+    {"id": "JUMBO-A01", "action": "Declare NQ as the first pilot root and use a single exact UTC hour with existing companion evidence: 2024-03-11 13:30:00-14:30:00 UTC. Keep the OHLC file, MBP file, and trade file as separate source identities."},
+    {"id": "JUMBO-A02", "action": "Validate the full registered OHLC Arrow schema before yielding rows: t:int64 milliseconds, o/h/l/c/v:double, instrument_id:int32; preserve raw unadjusted values and the complete schema metadata."},
+    {"id": "JUMBO-A03", "action": "Use a bounded generic raw Arrow read for OHLC with explicit source-byte, row, output, batch, and row-group limits. The current complete PartitionStore admission is MBP-specific and cannot certify OHLC; add/register a typed OHLC admission boundary before claiming complete OHLC eligibility."},
+    {"id": "JUMBO-A04", "action": "Resolve each selected bar to one raw instrument_id, definition version, and roll segment. Reject or split mixed-ID windows; never splice adjusted prices across a roll."},
+    {"id": "JUMBO-A05", "action": "Compare OHLC expected minute membership against the retained NQ trade/MBP companion window. Classify absent minutes as no-trade only when companion coverage and calendar/session status establish it; otherwise keep them as missing/censored."},
+    {"id": "JUMBO-A06", "action": "Run the same admission on the other retained paired NQ hours and ES 2024-03-11. Keep ES MBP-paused months unavailable for path/execution claims even when ES OHLC exists."},
+    {"id": "JUMBO-A07", "action": "Register timing variants separately: event time, provider-received time when present, source_high_anchor_06_09, NY RTH, prior-RTH/overnight, weekly/combined, and a distinct 09:40-09:50 alternative. Do not treat the cash calendar as CME venue certification."},
+    {"id": "JUMBO-A08", "action": "Keep dollar/fee conclusions out of the first raw OHLC readiness pass. NQ's dated multiplier=20 is available from 2021-03-19; raw NQ/ES definition rows retain missing contract_multiplier and ES has no retained historical terms join."
+    }
+  ],
+  "available_read_paths": [
+    {"path": "/workspace/trading-research/src/trading_research/data/arrow_fields.py::parquet_raw_rows", "extent": "Generic bounded raw Arrow prefix; expected complete schema, ordered row groups, max rows/output/batch; retains exact row fields and IPC; prefix is not EOF or eligibility."},
+    {"path": "/workspace/trading-research/src/trading_research/data/readers.py::parquet_mbp", "extent": "Bounded MBP Parquet prefix with expected schema, ordered row groups, explicit LatencyScenario, and int64 nanosecond t; MBP only."},
+    {"path": "/workspace/trading-research/src/trading_research/data/readers.py::native_records", "extent": "Bounded native DBN prefix with metadata/schema/version and compressed/decompressed byte limits; useful for native sources, not the QuantPad OHLC Parquet files."},
+    {"path": "/workspace/trading-research/src/trading_research/data/partitions.py::PartitionStore.ingest_parquet", "extent": "Complete immutable MBP Parquet admission with exact schema, source snapshot hash, row counts, atomic manifest, and resource budget; currently requires MBP fields and is not an OHLC admission path."},
+    {"path": "/workspace/trading-research/src/trading_research/data/reconcile.py::run_reconciliation", "extent": "Retained eight fixed UTC-hour event reconciliation pathway; existing receipt is conditional on supplied files and does not certify calendar, venue, recovery, or full history."},
+    {"path": "/workspace/trading-research/src/trading_research/data/audit.py::run_pilot", "extent": "Retained four fixed-prefix audit pathway; use only with a new declared OHLC schema/source budget if extended."},
+    {"path": "/workspace/quantpad-data-pull/build_futures_roll_map.py", "extent": "Existing metadata pathway that joins definitions to bars and emits raw unadjusted roll segments; the retained manifest was already generated."}
+  ],
+  "pilot_selections": [
+    {
+      "priority": 1,
+      "root": "NQ",
+      "window_utc": "2024-03-11T13:30:00Z/2024-03-11T14:30:00Z",
+      "ohlcv_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+      "mbp_file": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2024-03.parquet",
+      "trade_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2024-03-11.parquet",
+      "why": "Existing compact pilot and exact MBP/trade reconciliation use this hour; it is a practical first metadata/coverage cross-check."
+    },
+    {
+      "priority": 2,
+      "root": "NQ",
+      "window_utc": "2021-09-01T18:00:00Z/2021-09-01T19:00:00Z",
+      "ohlcv_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2021.parquet",
+      "mbp_file": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2021-09.parquet",
+      "trade_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2021-08-30.parquet",
+      "why": "Earliest retained exact NQ paired hour; useful for a non-2024 check."
+    },
+    {
+      "priority": 3,
+      "root": "NQ",
+      "window_utc": "2022-03-10T14:30:00Z/2022-03-10T15:30:00Z",
+      "ohlcv_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2022.parquet",
+      "mbp_file": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2022-03.parquet",
+      "trade_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2022-03-07.parquet",
+      "why": "Retained exact NQ pair; use as a separate year/roll context and keep raw instrument_id visible."
+    },
+    {
+      "priority": 4,
+      "root": "ES",
+      "window_utc": "2024-03-11T13:30:00Z/2024-03-11T14:30:00Z",
+      "ohlcv_file": "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2024.parquet",
+      "mbp_file": "/workspace/data/quantpad/cme__es-continuous-futures__mbp-1/2024-03.parquet",
+      "trade_file": "/workspace/data/quantpad/cme__es-continuous-futures__trades/2024.parquet",
+      "why": "Retained exact ES paired hour; ES remains secondary because MBP coverage is partial-paused and historical ES multiplier terms are not retained."
+    }
+  ],
+  "exact_ohlcv_files_2020_onward": {
+    "NQ": [
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2020.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2021.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2022.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2023.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2024.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+      "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet"
+    ],
+    "ES": [
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2020.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2021.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2022.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2023.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2024.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2025.parquet",
+      "/workspace/data/quantpad/cme__es-continuous-futures__ohlcv-1m/2026.parquet"
+    ]
+  },
+  "bounded_pilot_read_plan": {
+    "phase_0_static": "Use the catalog, roll map, definition audit, source clocks, cash calendar, and companion reconciliation receipts already listed here. No market rows are decoded in this readiness artifact.",
+    "phase_1_one_hour": "For the priority-1 NQ hour, declare expected minute interval starts in UTC, select the complete source file and bounded row-group extent, verify exact OHLC schema/metadata and source stamp/hash, then retain every raw field and instrument_id. Record observed rows and the missing-minute classification without imputation.",
+    "phase_2_companion": "Use the already identified MBP/trade extents for the same hour. Require explicit source identities, event-time coverage, and recovery/quality states. Compare only within the declared hour; equality of trade multisets is corroboration, not book recovery or full coverage.",
+    "phase_3_identity": "Join each bar's instrument_id to the matching dated definition and roll segment. A mixed or ambiguous ID is split or censored. Keep continuous raw price and contract identity separate in all output tables.",
+    "phase_4_variants": "Repeat the admitted exact window for event time, provider-received time when present, 06:00-09:00 anchor, prior-RTH/overnight, NY RTH, weekly/combined, and the separate 09:40-09:50 alternative. Each variant gets its own coverage and missingness report.",
+    "phase_5_expand": "Only after the one-hour receipt is stable, add the remaining retained NQ paired hours and the ES 2024 pair. Expand by declared dates/windows rather than by assuming the full 2020-onward catalog is one eligible cohort.",
+    "resource_bounds": {"source_bytes": "positive explicit max per file", "rows": "positive explicit max per read", "output_bytes": "positive explicit max for retained raw fields/IPC", "batch_rows": "bounded and recorded", "memory": "report observed RSS; the existing NQ compact pilot observed 591323136 bytes peak"}
+  },
+  "source_hashes": {
+    "/workspace/trading-research/src/trading_research/data/readers.py": "4b20512e62dd570590af528d76b2bf35c8624f28ef29e3d89bd2c6f5c9222e11",
+    "/workspace/trading-research/src/trading_research/data/arrow_fields.py": "93fe77e4ee7d09c1fbff503b4920ab935bbc829f140a6943071099905417032c",
+    "/workspace/trading-research/src/trading_research/data/partitions.py": "a9be44a4a6ed0b57db9e97b5cf67443f3415a336e737e6ac808ac8189ec595b8",
+    "/workspace/trading-research/src/trading_research/data/cohorts.py": "9717e762c07dad09ea900089444f6910f9111cfbceaf1b7f4fabf277db6ccf3a",
+    "/workspace/trading-research/src/trading_research/measurements/source_clocks.py": "5f93eefbe7a1cc53ba879dcfee7d25b7f37c8c7c64f7799f813621ee55b2788b",
+    "/workspace/trading-research/configs/cash-rth-calendar.json": "75a036304953c4a4809fb267684d48b94ac31f4af89fc0bab8e04ea24dc964c5",
+    "/workspace/trading-research/configs/product-terms.json": "73f4ba82d709f830111a353e67931f59615005957a6668aae17e391ad6fe0467",
+    "/workspace/trading-research/configs/research-period.json": "92640d2d2c77fe3ef7baa3c6f29ce78327b17432cf7210c7002c39e2b964ec07"
+  },
+  "conclusion": {
+    "readiness": "NQ 1-minute OHLCV is metadata-ready for a narrow acquired-contract pilot, with exact companion MBP/trade receipts available for selected hours. ES 1-minute OHLCV is metadata-ready for a narrow context pilot, but ES MBP/terms gaps constrain path and dollar claims.",
+    "first_action": "Bounded read of NQ 2024-03-11 13:30-14:30 UTC using the exact OHLC file and the retained MBP/trade companions, followed by raw instrument/roll identity and missing-minute classification.",
+    "not_ready_for": ["global OHLC completeness certification", "true no-trade labels from OHLC absence alone", "venue/strategy receipt claims", "exact E0 parent-volume cohort", "ES historical dollar valuation without dated terms"]
+  }
+}

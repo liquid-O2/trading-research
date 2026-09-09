@@ -1,0 +1,488 @@
+{
+  "anchor_definitions": {
+    "calendar_anchors": {
+      "civil_period_start": "00:00",
+      "kinds": [
+        "week",
+        "month",
+        "quarter",
+        "year"
+      ],
+      "role": "explicit civil-calendar construction; retain distinct disclosed source clocks",
+      "week_start": "Monday",
+      "zone": "America/New_York"
+    },
+    "developing": "At each existing5minutecut, developing cashRTH and observed18-17 from declaredstart throughcut; fixedcompleted/priorRTH/calendar levels remainfrozen. Closedperiod computedonce, reusereference ratherthanrepeat fullgeometry.",
+    "fixed_clocks": [
+      {
+        "calendar": "retained published cash calendar",
+        "id": "cash_rth",
+        "interval": "actual 09:30 open through actual close, including early closes",
+        "kind": "rth"
+      },
+      {
+        "calendar": "retained published cash calendar",
+        "id": "prior_cash_rth",
+        "interval": "latest earlier nonclosed cash date; complete value available at that actual close plus its source delay",
+        "kind": "prior_rth"
+      },
+      {
+        "end": "17:00",
+        "id": "observed_futures_18_17",
+        "kind": "day",
+        "start": "18:00",
+        "start_day_offset": -1,
+        "venue_status_certified": false,
+        "zone": "America/New_York"
+      },
+      {
+        "end": "09:30",
+        "id": "overnight_18_0930",
+        "kind": "overnight",
+        "start": "18:00",
+        "start_day_offset": -1,
+        "venue_status_certified": false,
+        "zone": "America/New_York"
+      },
+      {
+        "end": "09:00",
+        "id": "morning_06_09_ny",
+        "kind": "jumbo_named_range",
+        "start": "06:00",
+        "start_day_offset": 0,
+        "zone": "America/New_York"
+      },
+      {
+        "end": "09:00",
+        "id": "source_06_09_fixed_utc_minus4",
+        "kind": "jumbo_named_range",
+        "start": "06:00",
+        "start_day_offset": 0,
+        "zone": "Etc/GMT+4"
+      },
+      {
+        "end": "21:00",
+        "end_day_offset": 1,
+        "id": "source_monday_22_21_utc",
+        "kind": "jumbo_named_range",
+        "start": "22:00",
+        "start_day_offset": 0,
+        "weekday": 0,
+        "zone": "UTC"
+      },
+      {
+        "end": "21:00",
+        "end_day_offset": 1,
+        "id": "source_tuesday_22_21_utc",
+        "kind": "jumbo_named_range",
+        "start": "22:00",
+        "start_day_offset": 0,
+        "weekday": 1,
+        "zone": "UTC"
+      }
+    ],
+    "lineage": "Keep sourcecollections monthly_acquisitions andweekly_acquisitions separate. Exactnonoverlapping consecutive sources insideonecollection may form one chronologicalanchor only withsameinstrument/contract andexplicitper-atom provenance. Overlapping contradictory ownership is unavailable, no arbitrarywinner. Nevermixacquisitionaliases tofillgaps.",
+    "period_status": "Observed geometry can exist onpartialperiods withcoverageFalse. Fullcalendarcoverage is certifiedonly fromexplicitconstituentintended intervals; do not interpret acquisitionbounds ascomplete venuecalendar. Samecontract required acrosswholeanchor.",
+    "rolling_minutes": [
+      5,
+      15,
+      60,
+      240
+    ]
+  },
+  "authority": "Latest user2026-09-08T20:41 asks complete Deliverable1 definitions/measurement/statistics/timing beforeContext. Operational registration stays samefamily andpreserves all priorattempts/CPU/output.",
+  "bar_proxy_variants": [
+    "equal_inclusive_rows",
+    "continuous_overlap",
+    "pin066_source",
+    "pin066_corrected",
+    "close",
+    "hlc3"
+  ],
+  "calendar": {
+    "path": "/workspace/trading-research/configs/cash-rth-calendar-research-v1.json",
+    "sha256": "f069df0ccbb8318f1c675a05d9deed64ad681ebe1e47dd8573a6b18266665818",
+    "size_bytes": 6922
+  },
+  "clock": {
+    "baseline_latency_ns": 250000000,
+    "cut_stride_ns": 300000000000,
+    "economic_date": "New York futures-clock date: local times18:00 onward assigned to next civil date; no assertion of a certified venue calendar",
+    "formation": "Only complete half-open minute atoms ending at/before formation cut. Actual feature known_at=max(inputknown,selectionknown), explicit latency scenario only as in windows46; exact-clock claims exclude clockuncertain atoms.",
+    "latencies_ns": [
+      0,
+      250000000,
+      1000000000
+    ],
+    "source_actual_receipt": "Acquired MBP ts_recv preserved in acceptedsource; calendar/aggregate publication includes declared processing delay. No new sourceclock assumption."
+  },
+  "family": "Research-Auction-Flow-acquired-MBP-v1",
+  "footprint": {},
+  "full_family_complete": false,
+  "future": {
+    "frozen_vs_developing": "Exactsamecut/contract source compare priorcompletedVAL/VAH againstcurrentdeveloping; boundarymotion separate fromfixedboundary pricecrossing. No namedrepair sequencefromOHLC extrema alone.",
+    "metrics": "Futurehigh/low/last relativefrozenPOC/VAL/VAH, touch/traverse andterminalinside/outside, observedno-new/censored/missing. Extremalrange doesnotidentifyfirsttouch/retestorder: preserveorderunidentified. Addedfuturemass/profiletargets usegridfrozenatcutwithnewoverflow, nevercompleted-sessionfuturegrid.",
+    "source": "Existing windows46labels atsamereceiver source_path/root/instrument_id/contract_key/cut_ns/scenario/horizon. All horizon5/15/60/remainingRTH, notjustfirst. Geometrybaselineformation andinputmaturity mustjoin withoutstageleak."
+  },
+  "geometry_estimands": [
+    "full POCmaximizers +namedscalar ties andplateaus",
+    "VA low/high achievedfraction overshoot",
+    "HVN/LVN/localpeak/interiorvalley anddominance margins",
+    "priced buy/sell/unknown vs signed/absolute delta extrema andconcentration; signedmass isnot probability",
+    "mass-normalized shape andsame-grid transport; growth andcoordinatechanges separate",
+    "exact anchoredVWAP/variance/quantiles anddeclaredSD/percent bands",
+    "diagonal/stacked footprint geometry asdefined inoriginal frozenanchorcontract",
+    "TPO visit/bracket-range proxy variants, initialbalance, provisional/finalsingleprints,tails",
+    "typed observedopen/priorclose references; certifiedopen/officialsettlement unavailablewithoutownpublicationevidence"
+  ],
+  "geometry_schedule": {
+    "completed_anchors": "All14meaningfulgeometryvariants and6bar-proxyvariants, namedindividually, noCartesianproduct. All sidechannels/unpriced/overflow retained.",
+    "developing_and_rolling": "One-tick70percentbaseline geometry at everyprespecifiedcut fordevelopingRTH/18-17 androlling5/15/60/240. Compare completedvariants ontheircommoncut populations; do notexpandCartesian."
+  },
+  "geometry_variants": [
+    {
+      "fraction": [
+        17,
+        25
+      ],
+      "id": "source-one-tick-value-17/25",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "source-one-tick-value-7/10",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-expansion-tie-lower",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "lower",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-expansion-tie-both",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "both",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-poc-tie-upper",
+      "origin": 0,
+      "poc_tie": "upper",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width2-origin0",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 2
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width2-origin1",
+      "origin": 1,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 2
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width4-origin0",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 4
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width4-origin1",
+      "origin": 1,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 4
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width8-origin0",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 8
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-width8-origin1",
+      "origin": 1,
+      "poc_tie": "lower",
+      "smoothing_scale": 0,
+      "value_tie": "upper",
+      "width": 8
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-triangular-scale1",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 1,
+      "value_tie": "upper",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-triangular-scale2",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 2,
+      "value_tie": "upper",
+      "width": 1
+    },
+    {
+      "fraction": [
+        7,
+        10
+      ],
+      "id": "value70-triangular-scale4",
+      "origin": 0,
+      "poc_tie": "lower",
+      "smoothing_scale": 4,
+      "value_tie": "upper",
+      "width": 1
+    }
+  ],
+  "groups": "collection/root/year/stage/session/anchor/variant/measurementstatus; owneligible andexactmatchedvariants separate; raw metricquantiles plus equal-date movingblockmeansCI. Missingunits andno-price/zero/no-event/censor denominators retained; table/report rowcounts reconciled.",
+  "input_populations": {
+    "anchor_contract": {
+      "path": "/workspace/trading-research/validation/AUCTION_FLOW_ANCHOR_CONTRACT_V1.json",
+      "sha256": "890c5949abc03312ccfc4a2e69eccc8efb2a5d9f9f3f8ad54740d03bee9cb89c",
+      "size_bytes": 6924
+    },
+    "anchor_detail": {
+      "path": "/workspace/trading-research/validation/AUCTION_FLOW_ANCHOR_DETAIL_SUPPLEMENT_V1.json",
+      "sha256": "7b8596612b075683d94c6a00101271252325421fcaa95ea0cb18bab6aee861e0",
+      "size_bytes": 3069
+    },
+    "observations39": {
+      "kind": "auction_flow_observation_population_v1",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/da450e4e3fa67d8b4a4e881454e0087d6aae28140f724423d9b8af5c60c99cd7/outputs/observation-population.json",
+      "sha256": "0d7ebb18975c807c609375bc8f56a82efc0f11625b1acf21a3f9656bc2ebe41e",
+      "size_bytes": 40990226
+    },
+    "receipt_catalog36": {
+      "path": "/workspace/trading-research/validation/AUCTION_FLOW_RETAINED_PRODUCTION_RECEIPTS_36.json",
+      "sha256": "472771aab645ec32b6418f54c0b56652e18de5cf7a32e5702728c69b1050f721",
+      "size_bytes": 1438467
+    },
+    "windows46": {
+      "kind": "auction_flow_window_population_v1",
+      "path": "/workspace/trading-research/reports/auction-flow-runs/02adf66b751df87252ef329007a84b3e3d2e60b8c9b69058f1c6ec90aa6a2eb4/outputs/window-population.json",
+      "sha256": "58153a7efbcebe6ee543640f2ecef023102a949e04f8ba20f4f2fe6812675722",
+      "size_bytes": 217339814
+    }
+  },
+  "kind": "auction_flow_profile_reference_statistics_contract_v1",
+  "operational": {
+    "concurrency": 8,
+    "full_cpu_seconds_ceiling": 48000,
+    "full_output_bytes_ceiling": 17179869184,
+    "full_partition_keys": "same13economic sourcecollection/root/year plan aswindowstatistics; neighbor/past supportmaybereadwithoutcountingoutsideprimarypartition",
+    "per_process_memory_bytes": 4294967296,
+    "pilot_cpu_seconds": 1800,
+    "pilot_partition_keys": [
+      [
+        "weekly_acquisitions",
+        "NQ",
+        2021
+      ]
+    ],
+    "projection": "Measured source-byte+atomic-cell+geometry-row work andoutput scaledwithmargin1.5; chooseactualsourcepartitions withinremaining familyCPU/output, no full launchifprojectionexceeds. Rootrunnerownsexecutioncontract."
+  },
+  "primary_population": {
+    "end": "2026-09-04",
+    "start": "2020-01-01"
+  },
+  "remaining_dependencies": [
+    "Actualsource studydoesnotestablishvenuecompleteannualpopulation forunacquiredintervals.",
+    "Certifiedsettlement/opens requireexactpublicationfeeds.",
+    "Executedtrade-dwell anddisplayedquoteoccupancy requiretheiractualretainedstream, cannotinferfromminutevisitTPO; subsequentstreambranch.",
+    "Causal swing/event/composite anddiscretionarypattern/structure/memory actualpopulations remain separate.",
+    "Context andLocationquality remain later."
+  ],
+  "scientific_scope": "Actual full eligible acquired-source profile/reference/TPO/VWAP/footprint geometry, source representation comparisons, developing/frozen boundaries and descriptive future contact/migration. Causal structure-selected anchors, exact discretionary sequences and memory remain subsequent same-family work. No Context or Location-quality fit.",
+  "scope_ids": [
+    "M04",
+    "M04.ANCHORS",
+    "M04.PROXY",
+    "M04.TOPOLOGY",
+    "M05",
+    "M06",
+    "M07",
+    "M12",
+    "M13",
+    "C07",
+    "C08"
+  ],
+  "stage_policy": {
+    "ES": {
+      "calibration": [
+        "2024-01-01",
+        "2024-04-01"
+      ],
+      "confirmation": [
+        "2024-04-01",
+        "2024-09-01"
+      ],
+      "development": [
+        "2023-07-01",
+        "2024-01-01"
+      ],
+      "training": [
+        "2020-01-01",
+        "2021-01-01"
+      ]
+    },
+    "NQ": {
+      "calibration": [
+        "2024-01-01",
+        "2025-01-01"
+      ],
+      "confirmation": [
+        "2025-01-01",
+        "2026-09-04"
+      ],
+      "development": [
+        "2023-01-01",
+        "2024-01-01"
+      ],
+      "training": [
+        "2020-01-01",
+        "2023-01-01"
+      ]
+    },
+    "other_dates": "separate unassigned descriptive rows, not training or confirmation"
+  },
+  "statistics": {
+    "block_length": 5,
+    "bootstrap_replicates": 1000,
+    "confidence": 0.95,
+    "distributions": "within-source observation-weighted exact sample quantiles and moments on metric-specific eligible values; raw observed measures and fully covered measures distinct",
+    "minimum_events": 20,
+    "minimum_independent_dates": 100,
+    "quantiles": [
+      0.01,
+      0.05,
+      0.25,
+      0.5,
+      0.75,
+      0.95,
+      0.99
+    ],
+    "seed": 20260908,
+    "source_variant_weighting": "separate source-variant analyses; exact matching rawstream aliases grouped for independent-date support, never concatenate duplicate minute rows as distinct market observations",
+    "uncertainty": "equal economic-date means, 1000 deterministic moving blocks of5ordered economicdates, 95% interval, sharedweights for paired metrics"
+  },
+  "tpo": {
+    "bracket_minutes": [
+      15,
+      30,
+      60
+    ],
+    "initial_balance_minutes": [
+      30,
+      60
+    ],
+    "matrix": "exact bracket memberships retained or reproducible from original addressed atoms; a price crossing does not imply a visit",
+    "single_prints": "provisional until complete intended anchor and at least two completed brackets",
+    "source_bracket_minutes": 30,
+    "source_initial_balance_minutes": 60,
+    "visits": "actual priced trades, distinct bracket/price membership; separate OHLC range proxy"
+  },
+  "version": 1,
+  "vwap": {
+    "moments": "exact integer sum(q), sum(p*q), sum(p*p*q); rational mean and variance",
+    "percent_band_fractions": [
+      "1/100",
+      "1/40",
+      "3/100"
+    ],
+    "robust": "weighted median and weighted absolute-deviation median; separately named scale 7413/5000 times MAD",
+    "rolling": "exact additions and removals of the same eligible atomic mass; never average constituent VWAPs",
+    "sd_band_multipliers": [
+      "1",
+      "2",
+      "5/2",
+      "3"
+    ],
+    "source_pin069": "bar-close-volume reanchor on a new completed-bar high inside fixed UTC-4 06\u201309; preserve retrospective bar origin and its later publication",
+    "source_proxies": [
+      "bar_close_times_volume",
+      "bar_hlc3_times_volume"
+    ],
+    "weighted_quantiles": [
+      "1/20",
+      "1/4",
+      "1/2",
+      "3/4",
+      "19/20"
+    ]
+  }
+}

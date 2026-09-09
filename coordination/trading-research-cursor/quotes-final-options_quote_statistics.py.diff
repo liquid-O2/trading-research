@@ -1,0 +1,500 @@
+--- src/trading_research/research/options_quote_statistics.py
++++ src/trading_research/research/options_quote_statistics.py
+@@ -9,6 +9,8 @@
+ from __future__ import annotations
+ 
+ from collections import defaultdict
++from pathlib import Path
++import json
+ import math
+ import time as pytime
+ 
+@@ -65,7 +67,8 @@
+     "action_present_fraction", "near_broad_agree_fraction", "near_broad_conflict_fraction",
+     "unmatched_sample_clock_fraction",
+     "raw_row_count", "unique_event_count",
+-    "known_unit_fraction", "known_half_fraction",
++    "mean_bid_raw", "mean_ask_raw", "mean_mid_raw",
++    "mean_bid_unique", "mean_ask_unique", "mean_mid_unique",
+ )
+ RATIO_SPECS = {
+     "usable_over_quoted": ("usable_quotes", "quoted_contracts"),
+@@ -75,12 +78,23 @@
+     "mean_bid": "price", "mean_ask": "price", "mean_mid": "price",
+     "mean_spread": "price", "mean_relative_spread": "fraction",
+     "mean_sample_age_s": "seconds", "mean_payload_age_s": "seconds",
++    "mean_bid_raw": "price", "mean_ask_raw": "price", "mean_mid_raw": "price",
++    "mean_bid_unique": "price", "mean_ask_unique": "price", "mean_mid_unique": "price",
+     "raw_row_count": "count", "unique_event_count": "count",
+ }
+ HIST_FOR_METRIC = {
+-    "mean_bid": "bid_raw", "mean_ask": "ask_raw", "mean_mid": "mid_raw",
+-    "mean_spread": "spread_raw", "mean_sample_age_s": "sample_age_s",
+-    "mean_payload_age_s": "payload_age_s",
++    "mean_bid": ("bid", "cut"),
++    "mean_ask": ("ask", "cut"),
++    "mean_mid": ("mid", "cut"),
++    "mean_spread": ("spread", "cut"),
++    "mean_sample_age_s": ("sample_age_s", "cut"),
++    "mean_payload_age_s": ("payload_age_s", "cut"),
++    "mean_bid_raw": ("bid", "raw_source"),
++    "mean_ask_raw": ("ask", "raw_source"),
++    "mean_mid_raw": ("mid", "raw_source"),
++    "mean_bid_unique": ("bid", "unique_source"),
++    "mean_ask_unique": ("ask", "unique_source"),
++    "mean_mid_unique": ("mid", "unique_source"),
+ }
+ 
+ 
+@@ -478,18 +492,11 @@
+             metrics[metric][day] = value
+             events[metric][day] = ev
+             sums.setdefault(metric, {})[day] = raw
+-        oi_den_items = []
+-        for item in items:
+-            quoted = int(item.get("quoted_count") or 0)
+-            listed_u = int(item.get("listed_unquoted") or 0) if item.get("listing_known") else 0
+-            den = quoted + listed_u
+-            if den:
+-                oi_den_items.append({"num": item.get("oi_available_count") or 0, "den": den})
+-        if oi_den_items:
+-            metrics["oi_covered_fraction"][day] = sum(
+-                item["num"] / item["den"] for item in oi_den_items
+-            ) / len(oi_den_items)
+-            events["oi_covered_fraction"][day] = sum(item["den"] for item in oi_den_items)
++        covered, ev, _ = _mean_frac(items, "oi_quoted_available_count", "oi_available_count")
++        if covered is None:
++            covered, ev, _ = _mean_frac(items, "oi_available_count", "quoted_count")
++        metrics["oi_covered_fraction"][day] = covered
++        events["oi_covered_fraction"][day] = ev
+         weights = [item.get("oi_weighted_quoted_fraction") for item in items
+                    if item.get("oi_weighted_quoted_fraction") is not None]
+         metrics["oi_weighted_quoted_fraction"][day] = None if not weights else sum(weights) / len(weights)
+@@ -501,17 +508,7 @@
+         events["empty_marker_fraction"][day] = n_cuts
+         metrics["no_sample_fraction"][day] = sum(1 for item in items if item.get("cut_status") == "no_sample") / n_cuts
+         events["no_sample_fraction"][day] = n_cuts
+-        quoted_any = extras["quoted_contracts"][day]
+-        if quoted_any:
+-            metrics["known_unit_fraction"][day] = 1.0
+-            metrics["known_half_fraction"][day] = 0.5
+-            events["known_unit_fraction"][day] = quoted_any
+-            events["known_half_fraction"][day] = quoted_any
+-    return {"metrics": metrics, "events": events, "raw_means": {
+-        name: raw_mean(
+-            sum((extras.get("_skip") or 0) for _ in ()), 0
+-        ) for name in ()
+-    }, "sums": sums, "extras": extras}
++    return {"metrics": metrics, "events": events, "sums": sums, "extras": extras}
+ 
+ 
+ def _quality_maps(quality_rows, *, family="all", right="all", dte="all"):
+@@ -653,42 +650,65 @@
+ def _merge_maps(*parts):
+     metrics = defaultdict(dict)
+     events = defaultdict(dict)
+-    raw_means = {}
+     extras = defaultdict(dict)
++    acc_s = defaultdict(float)
++    acc_n = defaultdict(int)
+     for part in parts:
+         if not part:
+             continue
+         for name, cells in (part.get("metrics") or {}).items():
+-            metrics[name].update(cells)
++            for day, value in cells.items():
++                metrics[name][day] = value
+         for name, cells in (part.get("events") or {}).items():
+-            events[name].update(cells)
++            for day, value in cells.items():
++                events[name][day] = (events[name].get(day) or 0) + (value or 0) if day in events[name] else value
+         for name, cells in (part.get("extras") or {}).items():
+             extras[name].update(cells)
+         for name, cells in (part.get("sums") or {}).items():
+-            total_s = total_n = 0
+-            present = False
+             for day, raw in cells.items():
+                 if isinstance(raw, tuple):
+-                    total_s += raw[0] or 0
+-                    total_n += raw[1] or 0
+-                    present = True
++                    acc_s[name] += float(raw[0] or 0)
++                    acc_n[name] += int(raw[1] or 0)
+                 elif raw is not None:
+-                    raw_means[name] = raw
+-            if present:
+-                raw_means[name] = raw_mean(total_s, total_n)
++                    acc_s[name] += float(raw)
++                    acc_n[name] += 1
++    raw_means = {name: raw_mean(acc_s[name], acc_n[name]) for name in acc_n if acc_n[name]}
+     return metrics, events, raw_means, extras
+ 
+ 
+-def _histograms_for(rows, dates, name):
++def _hist_key_parts(key):
++    parts = str(key).split("|")
++    if len(parts) != 6:
++        return None
++    return {
++        "metric": parts[0], "population": parts[1], "source_family": parts[2],
++        "cut": parts[3], "right": parts[4], "dte": parts[5],
++    }
++
++
++def _histograms_for(rows, dates, metric, population, family, cut, right, dte):
+     values, counts = [], []
+     for row in rows:
+         if row["request_date"] not in dates:
+             continue
+-        hist = (row.get("histograms") or {}).get(name)
+-        if not hist:
+-            continue
+-        values.extend(hist.get("v") or [])
+-        counts.extend(hist.get("c") or [])
++        for key, hist in (row.get("histograms") or {}).items():
++            parts = _hist_key_parts(key)
++            if parts is None:
++                continue
++            if parts["metric"] != metric or parts["population"] != population:
++                continue
++            if family not in (None, "all") and parts["source_family"] != family:
++                continue
++            if family in (None, "all") and parts["source_family"] == "union" and population != "cut":
++                continue
++            if cut not in (None, "all") and parts["cut"] not in {cut, "all", "-"}:
++                continue
++            if right not in (None, "all") and parts["right"] != right:
++                continue
++            if dte not in (None, "all") and parts["dte"] != dte:
++                continue
++            values.extend(hist.get("v") or [])
++            counts.extend(hist.get("c") or [])
+     return values, counts
+ 
+ 
+@@ -731,7 +751,11 @@
+         quality.extend(row.get("quality") or [])
+         for item in row.get("support") or []:
+             support.append({**item, "request_date": row["request_date"]})
+-        if row.get("paired_near_broad"):
++        if cut not in (None, "all"):
++            by_cut = row.get("paired_by_cut") or {}
++            if cut in by_cut:
++                paired[row["request_date"]] = by_cut[cut]
++        elif row.get("paired_near_broad"):
+             paired[row["request_date"]] = row["paired_near_broad"]
+     slices_by_date = {
+         row["request_date"]: row.get("slices") or {}
+@@ -742,32 +766,24 @@
+     slc = _slice_maps(slices_by_date, family=family, cut=cut, right=right, dte=dte) if use_slices else None
+     qual = _quality_maps(quality, family=family, right=right, dte=dte)
+     sup = _support_maps(support, cut=cut)
+-    pair = _paired_maps(paired) if family in (None, "all", "union") and right in (None, "all") and dte in (None, "all") else None
++    pair = _paired_maps(paired) if family in (None, "all", "union") else None
+     metrics, events, raw_means, extras = _merge_maps(cov, slc, qual, sup, pair)
+     for name in ("usable_quotes", "quoted_contracts", "quoted_listed", "listed_contracts"):
+         if name in extras:
+             metrics[name] = extras[name]
+             events[name] = extras[name]
+-    for row in chain_rows:
+-        if row["request_date"] not in dates:
+-            continue
+-        if row.get("mean_bid") is not None and "mean_bid" not in metrics:
+-            metrics["mean_bid"][row["request_date"]] = row["mean_bid"]
+-        if row.get("raw_bid_n"):
+-            events.setdefault("mean_bid", {})[row["request_date"]] = row["raw_bid_n"]
+-    bid_s = sum(int(row.get("raw_bid_sum") or 0) for row in chain_rows if row["request_date"] in dates)
+-    bid_n = sum(int(row.get("raw_bid_n") or 0) for row in chain_rows if row["request_date"] in dates)
+-    if bid_n and "mean_bid" not in raw_means:
+-        raw_means["mean_bid"] = raw_mean(bid_s, bid_n)
+-        for row in chain_rows:
+-            if row["request_date"] in dates and row.get("mean_bid") is not None:
+-                metrics.setdefault("mean_bid", {})[row["request_date"]] = row["mean_bid"]
+-                events.setdefault("mean_bid", {})[row["request_date"]] = row.get("raw_bid_n") or 0
+     raw_q = {}
+-    for metric, hist_name in HIST_FOR_METRIC.items():
++    selected_rows = [row for row in chain_rows if row["request_date"] in dates]
++    for metric, spec in HIST_FOR_METRIC.items():
++        hist_name, population = spec
+         values, counts = _histograms_for(
+-            [row for row in chain_rows if row["request_date"] in dates], dates, hist_name)
++            selected_rows, dates, hist_name, population, family, cut, right, dte)
+         raw_q[metric] = exact_quantiles_from_histogram(values, counts, cfg["quantiles"])
++        if metric not in raw_means:
++            total = sum(float(value) * int(count) for value, count in zip(values, counts))
++            n = sum(int(count) for count in counts)
++            if n:
++                raw_means[metric] = raw_mean(total, n)
+     selected = {name: metrics[name] for name in PRESPECIFIED if name in metrics}
+     selected.update({name: metrics[name] for name in extras})
+     return selected, events, raw_means, raw_q
+@@ -796,6 +812,11 @@
+             targets.add(("all", "all", right, "all"))
+         for dte in dtes:
+             targets.add(("all", "all", "all", dte))
++        for family in families:
++            for right in rights:
++                targets.add(("all", family, right, "all"))
++            for dte in dtes:
++                targets.add(("all", family, "all", dte))
+         for cut in cuts:
+             for family in families:
+                 targets.add((cut, family, "all", "all"))
+@@ -815,7 +836,7 @@
+                     },
+                 }
+                 continue
+-            emit = targets if uname == "all_period" else {("all", "all", "all", "all")}
++            emit = targets
+             for cut, family, right, dte in sorted(emit):
+                 metrics, events, raw_means, raw_q = _bundle_for(
+                     chain_rows, set(udates), family=family, cut=cut, right=right, dte=dte, cfg=cfg)
+@@ -844,7 +865,10 @@
+     return str(value).replace("|", "\\|")
+ 
+ 
+-def write_results_md(outputs, *, protocol, groups, cfg, counts, selected_dates, output_refs=None):
++def write_results_md(outputs, *, protocol, groups, cfg, counts, selected_dates, output_refs=None,
++                     chain_group_refs=None):
++    if not groups and chain_group_refs:
++        groups = load_group_statistics({"refs": {"chain_groups": chain_group_refs}})
+     lines = [
+         "# Options quote quality / support",
+         "",
+@@ -903,6 +927,8 @@
+             payload = metrics.get(metric)
+             if not payload:
+                 continue
++            support = payload.get("support") or {}
++            boot = payload.get("bootstrap") or {}
+             lines.append(
+                 f"- `{metric}` date-mean={_fmt(payload.get('estimate'))} "
+                 f"raw-mean={_fmt(payload.get('raw_mean'))} "
+@@ -910,8 +936,19 @@
+                 f"events={payload.get('actual_valid_event_count')} "
+                 f"missing={payload.get('missing_date_count')} "
+                 f"units={_fmt(payload.get('units'))} "
+-                f"sparse={_fmt((payload.get('support') or {}).get('sparse'))}"
++                f"sparse={_fmt(support.get('sparse'))}"
+             )
++            if boot:
++                lines.append(
++                    f"  - bootstrap {_fmt(boot.get('confidence'))} "
++                    f"[{_fmt(boot.get('lower'))}, {_fmt(boot.get('upper'))}] "
++                    f"valid_replicates={boot.get('valid_replicates')} "
++                    f"method={_fmt(boot.get('method'))}"
++                )
++            reasons = support.get("reasons") or []
++            if payload.get("estimate") is None or reasons:
++                why = reasons or ["undefined"]
++                lines.append(f"  - undefined/sparse reasons: {', '.join(str(item) for item in why)}")
+             q = payload.get("date_quantiles") or {}
+             if q and any(value is not None for value in q.values()):
+                 parts = ", ".join(f"q{level}={_fmt(value)}" for level, value in q.items())
+@@ -920,6 +957,21 @@
+             if rq and any(value is not None for value in rq.values()):
+                 parts = ", ".join(f"q{level}={_fmt(value)}" for level, value in rq.items())
+                 lines.append(f"  - raw quantiles: {parts}")
++        ratios = stats.get("ratios") or {}
++        for name, payload in ratios.items():
++            boot = payload.get("bootstrap") or {}
++            lines.append(
++                f"- ratio `{name}`={_fmt(payload.get('estimate'))} "
++                f"{payload.get('numerator')}/{payload.get('denominator')} "
++                f"dates={payload.get('actual_valid_date_count')}"
++            )
++            if boot:
++                lines.append(
++                    f"  - bootstrap [{_fmt(boot.get('lower'))}, {_fmt(boot.get('upper'))}]"
++                )
++            reasons = (payload.get("support") or {}).get("reasons") or []
++            if payload.get("estimate") is None or reasons:
++                lines.append(f"  - undefined/sparse reasons: {', '.join(str(item) for item in reasons) or 'undefined'}")
+         lines.append("")
+     lines.append(f"Statistics version: {VERSION}")
+     lines.append("")
+@@ -929,18 +981,68 @@
+     return outputs.reference("results.md", kind="options_quote_results_md_v1")
+ 
+ 
++def load_group_statistics(result):
++    """Public reconstructor for streamed chain group artifacts."""
++    groups = {}
++    refs = (result.get("refs") or {}).get("chain_groups") or {}
++    if isinstance(refs, dict):
++        for ref in refs.values():
++            if isinstance(ref, dict) and ref.get("path"):
++                payload = json.loads(Path(ref["path"]).read_text())
++                if isinstance(payload, dict):
++                    groups.update(payload)
++    if result.get("groups"):
++        groups.update(result["groups"])
++    return groups
++
++
++def iter_group_statistics(result):
++    groups = load_group_statistics(result)
++    for name, block in groups.items():
++        yield name, block
++
++
+ def run_statistics(date_aggregates, *, protocol, outputs, intended_all, selected_dates, chains, stages,
+                    read_counts=None, output_refs=None, group_refs=None):
+     if not isinstance(outputs, BoundedOutputs):
+         raise ContractError("registered BoundedOutputs required")
+     if type(date_aggregates) is not list:
+         raise ContractError("date aggregates list required")
+-    groups, cfg = build_group_statistics(
+-        date_aggregates, protocol=protocol, intended_all=intended_all,
+-        chains=chains, stages=stages, selected_dates=selected_dates,
+-    )
++    cfg = _cfg(protocol)
++    chain_group_files = {}
++    dist_files = {}
++    group_count = 0
++    md_groups = {}
++    for chain in chains:
++        chain_rows = [row for row in date_aggregates if row["chain"] == chain]
++        groups, cfg = build_group_statistics(
++            chain_rows, protocol=protocol, intended_all=intended_all,
++            chains=[chain], stages=stages, selected_dates=selected_dates,
++        )
++        group_count += len(groups)
++        chain_group_files[chain] = outputs.json(
++            f"groups-{chain.lower()}.json", groups, kind="options_quote_chain_groups_v1")
++        dist_files[chain] = outputs.json(
++            f"distributions-{chain.lower()}.json",
++            {
++                "kind": "options_quote_date_distributions_v1",
++                "quantiles": list(cfg["quantiles"]),
++                "groups": {name: {
++                    metric: {
++                        "date_quantiles": payload.get("date_quantiles"),
++                        "raw_quantiles": payload.get("raw_quantiles"),
++                    }
++                    for metric, payload in (block["statistics"].get("metrics") or {}).items()
++                } for name, block in groups.items()},
++            },
++            kind="options_quote_distributions_v1",
++        )
++        if len(chains) == 1:
++            md_groups = groups
++        else:
++            del groups
+     counts = {
+-        "group_count": len(groups),
++        "group_count": group_count,
+         "source_files_read": None if not read_counts else read_counts.get("source_files_read"),
+         "source_rows_read": None if not read_counts else read_counts.get("source_rows_read"),
+         "source_bytes_read": None if not read_counts else read_counts.get("source_bytes_read"),
+@@ -952,46 +1054,38 @@
+         "listed_contracts": None if not read_counts else read_counts.get("listed_contracts"),
+         "quoted_contracts": None if not read_counts else read_counts.get("quoted_contracts"),
+         "oi_matched_contracts": None if not read_counts else read_counts.get("oi_matched_contracts"),
++        "source_files_unique": None if not read_counts else read_counts.get("source_files_unique"),
++        "support_files_unique": None if not read_counts else read_counts.get("support_files_unique"),
+         "intended_chain_date_units": (
+             read_counts.get("intended_chain_date_units") if read_counts
+             else (None if selected_dates is None else len(selected_dates) * len(chains))
+         ),
+     }
+-    chain_group_files = {}
+-    for chain in chains:
+-        chain_groups = {name: block for name, block in groups.items() if name.startswith(f"{chain}|")}
+-        chain_group_files[chain] = outputs.json(
+-            f"groups-{chain.lower()}.json", chain_groups, kind="options_quote_chain_groups_v1")
+     stats_payload = {
+         "kind": VERSION,
+         "configuration": cfg,
+         "full_family_complete": False,
+-        "group_count": len(groups),
+-        "groups": groups,
++        "group_count": group_count,
+         "chain_group_refs": chain_group_files,
+         "partition_group_refs": group_refs,
+-        "note": "Complete metric tables are in groups and groups-*.json; not a 10-metric summary.",
++        "note": "Complete metric tables are in groups-*.json; iterate with load_group_statistics.",
+     }
+     stats_ref = outputs.json("statistics.json", stats_payload, kind="options_quote_statistics_v1")
+     dist_ref = outputs.json("distributions.json", {
+         "kind": "options_quote_date_distributions_v1",
+         "quantiles": list(cfg["quantiles"]),
+         "note": "Date quantiles are equal-date. Raw quantiles use exact typed histograms or rank interpolation.",
+-        "groups": {name: {
+-            metric: {
+-                "date_quantiles": payload.get("date_quantiles"),
+-                "raw_quantiles": payload.get("raw_quantiles"),
+-            }
+-            for metric, payload in (block["statistics"].get("metrics") or {}).items()
+-        } for name, block in groups.items()},
++        "parts": dist_files,
++        "group_count": group_count,
+     }, kind="options_quote_distributions_v1")
+     md_ref = write_results_md(
+-        outputs, protocol=protocol, groups=groups, cfg=cfg,
++        outputs, protocol=protocol, groups=md_groups, cfg=cfg,
+         counts=counts, selected_dates=selected_dates, output_refs=output_refs,
++        chain_group_refs=chain_group_files,
+     )
+     return {"refs": {"statistics": stats_ref, "distributions": dist_ref, "results_md": md_ref,
+                      "chain_groups": chain_group_files},
+-            "groups": groups, "configuration": cfg}
++            "groups": None, "configuration": cfg, "group_count": group_count}
+ 
+ 
+ def finish_quote_outputs(
+@@ -1003,6 +1097,7 @@
+     reconstruction_payload, family, version, remaining, sci_hash, impl_hashes, binding,
+     oi_identity, admit_id, parse_cpu, oi_support_cpu, listing_unknown_chains,
+     joined_coverage_complete, max_worker_bytes, max_source_file,
++    oi_listing_files_read=0, oi_listing_rows_read=0, oi_listing_bytes_read=0,
+ ):
+     identity_refs = ident_w.finish()
+     exception_refs = except_w.finish()
+@@ -1018,7 +1113,7 @@
+     from trading_research.research.options_quote_measurements import coverage_schema
+     schema = coverage_schema()
+     coverage_table = schema.empty_table() if not coverage_rows else pa.table(
+-        {field.name: [row.get(field.name) for field in schema] for field in schema},
++        {field.name: [row.get(field.name) for row in coverage_rows] for field in schema},
+         schema=schema,
+     )
+     stream = outputs.create("coverage.parquet")
+@@ -1065,6 +1160,8 @@
+             "oi_matched_contracts": oi_matched,
+             "support_files_read": support_files, "support_rows_read": support_rows,
+             "support_bytes_read": support_bytes,
++            "oi_listing_files_read": oi_listing_files_read,
++            "oi_listing_rows_read": oi_listing_rows_read,
+         },
+         output_refs=output_refs,
+     )
+@@ -1109,6 +1206,10 @@
+             "oi_matched_contracts": oi_matched,
+             "support_files_read": support_files, "support_rows_read": support_rows,
+             "support_bytes_read": support_bytes,
++            "oi_listing_files_read": oi_listing_files_read,
++            "oi_listing_rows_read": oi_listing_rows_read,
++            "oi_listing_bytes_read": oi_listing_bytes_read,
++            "alias_conflict_rows": alias_w.rows, "identity_rows": ident_w.rows,
+             "listing_unknown_chains": listing_unknown_chains, "chains": list(chains),
+         },
+         "resources": {
+@@ -1127,7 +1228,7 @@
+         },
+         "source_dates_processed": sorted(set(source_dates)),
+         "remaining_dependencies": list(remaining),
+-        "groups": stats["groups"],
++        "groups": None,
+         "clock_interpretation": {
+             "ts_event_ns": "exact recorded sampling/source clock",
+             "known_at_ns": None, "received_at_ns": None, "published_at_ns": None,
+@@ -1141,6 +1242,7 @@
+ __all__ = [
+     "VERSION", "PRESPECIFIED", "build_group_statistics", "date_balanced_point",
+     "date_quantiles", "empty_metric", "empty_ratio", "exact_quantiles_from_histogram",
+-    "exact_quantiles_from_values", "finish_quote_outputs", "raw_mean",
++    "exact_quantiles_from_values", "finish_quote_outputs", "iter_group_statistics",
++    "load_group_statistics", "raw_mean",
+     "run_statistics", "universe_dates",
+ ]

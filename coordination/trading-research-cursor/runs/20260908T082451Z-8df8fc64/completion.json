@@ -1,0 +1,24 @@
+{
+  "exit_code": 0,
+  "timed_out": false,
+  "wall_seconds": 737.538562702015,
+  "finished_at": "2026-09-08T08:37:09.070458+00:00",
+  "session_id": "b0573120-ba0b-4574-93db-e020324527c1",
+  "reported_model": "Cursor Grok 4.6 Extra High Fast",
+  "result": {
+    "type": "result",
+    "subtype": "success",
+    "duration_ms": 733211,
+    "duration_api_ms": 733211,
+    "is_error": false,
+    "result": "I'll implement per-family prediction reuse in the four allowed files only: read those sources and tests first, then add a bounded reuse context without changing protocols or running any execution.The four allowed files are located. Next I\u2019ll read the prediction, fitting, and test surfaces that the reuse context has to thread through.I have the prediction and fitting call sites. Next I\u2019ll read the existing tests so the reuse context matches current fixtures and call patterns.I\u2019ll check Target masks, evaluation helpers, and any handoff notes so the reuse keys stay aligned with existing forecast vs scoring rows.I have the call graph and fixtures. Next I\u2019ll add the per-family reuse context and thread it through the four functions without changing the numerical kernels.Next I\u2019ll wire the context through fitting: create it per family, pass it into emit/tune/calibrate/evaluate, and publish reuse diagnostics only.I\u2019ll verify the refactored forecast kernel and fitting wiring still match the original numerical path.`bind` should clear only when the family actually changes, so an initial bind does not drop valid unbound entries.I\u2019ll add the focused cached-versus-uncached tests and update the existing predictor mock so extra `reuse=` kwargs stay compatible.I\u2019ll compare cached and uncached bundles through `json_safe` so calibration backends with arrays don\u2019t break equality checks.Implemented a bounded **per-family prediction reuse context** and threaded it through tuning, calibration, selected assessment, publication, and confirmation. Existing callers that omit the context still take the original path.\n\n## What changed\n\n`PredictionReuseContext` lives in `jumbo_models.py` (no module-global cache). A lookup is shared only when **matrix identity**, **validated model identity** (`id` plus `_identity(record)`), and the **exact requested row mask** all match. Raw and final arrays stay distinct; intended forecast rows are never replaced by outcome-eligible scoring rows.\n\n`predict_model` still validates the model record, feature layout, and mask on every call, including cache hits. Hits return copies so later calibration or caller writes cannot corrupt a retained result. A result larger than **128 MiB** (distinct backing buffers, including retained masks) is computed and returned without being stored. LRU eviction makes room for smaller results; the context is cleared when the family binding changes and when `fit_domain` / `confirm_domain` leave a family.\n\n`fit_domain` and `confirm_domain` create one context per family, pass it into `choose_tuning_model`, `calibration_for`, `evaluate_target`, and `_emit_predictions`, then drop retained arrays. Compact `prediction_reuse` diagnostics (`hits`, `misses`, `retained_bytes`, `peak_retained_bytes`) sit on the domain result and family progress log only \u2014 not on model or scientific identities.\n\nNumerical kernels, protocols, targets, priors, estimators, fallbacks, and evaluation/bootstrap work are unchanged.\n\n## Tests\n\nFocused cached-vs-uncached checks cover categorical, interval, and fused continuous fixtures: tuning, calibration, selected assessments, published forecast populations, and confirmation. Additional cases cover different masks, changed model records, a different matrix, caller mutation, failed-model fallbacks, capacity/eviction/cleanup, family-change release, and a counted predictor that removes repeated identical calls while keeping distinct populations.\n\n## Remaining limitations\n\n- Reuse is opt-in; callers that do not pass a context still recompute.\n- Keys bind identities and mask bits, not a hash of feature values. A same-object matrix whose values change without a layout/`id` change can still hit.\n- An oversized result is correct but not retained, so the next identical call recomputes.\n- Diagnostics do not include timings. This checkout did not run imports, tests, scans, or fits; no runtime or speedup claim is made.\n- Contexts are per family, not study-wide. A later family recomputes even if model ids coincide.",
+    "session_id": "b0573120-ba0b-4574-93db-e020324527c1",
+    "request_id": "44d5e470-310f-4be3-a69a-51d58ded3ed2",
+    "usage": {
+      "inputTokens": 165206,
+      "outputTokens": 70274,
+      "cacheReadTokens": 2366848,
+      "cacheWriteTokens": 0
+    }
+  }
+}

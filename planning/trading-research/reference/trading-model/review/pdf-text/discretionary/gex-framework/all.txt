@@ -1,0 +1,693 @@
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 1/22 =====
+    ETHOS MENTORSHIP
+
+
+
+
+
+P A R T  O N E
+THE GEX
+FRAMEWORK
+
+What gamma exposure is, how dealer hedging actually moves
+NQ and ES, and how to use GEX as a regime filter, so you know
+whether the day wants to trend or chop before it starts.
+
+
+
+
+
+By Sires
+The Ethos mentorship
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 2/22 =====
+Contents
+
+
+What an option actually is                                                                                    B A S I C S    ›
+
+What really moves NQ and ES                                                                                B A S I C S    ›
+
+Dealer hedging, in plain English                                                                          M E C H A N I C S    ›
+
+Long gamma vs short gamma                                                                             M E C H A N I C S    ›
+
+The gamma flip                                                                                            M E C H A N I C S    ›
+
+Why this matters for you                                                                                  M E C H A N I C S    ›
+
+Regimes, the real mistake                                                                                F R A M E W O R K    ›
+
+GEX as a regime filter                                                                                     F R A M E W O R K    ›
+
+What GEX answers                                                                                        F R A M E W O R K    ›
+
+Pinning and gamma squeezes                                                                            F R A M E W O R K    ›
+
+The key levels                                                                                             F R A M E W O R K    ›
+
+Where to anchor GEX                                                                                     E X E C U T I O N    ›
+
+Reading it live in GEXRADAR                                                                              E X E C U T I O N    ›
+
+Where gamma lives: strikes                                                                               E X E C U T I O N    ›
+
+Vanna and charm                                                                                           A D V A N C E D    ›
+
+Confirming with orderflow                                                                                E X E C U T I O N    ›
+
+Your session checklist                                                                                    E X E C U T I O N    ›
+
+Common mistakes                                                                                        E X E C U T I O N    ›
+
+
+
+
+
+E T H O S  M E N T O R S H I P  02
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 3/22 =====
+What an option actually is
+
+
+An option is a contract. It gives you the right, but not the obligation, to buy or sell an asset at a set price (the strike)
+by a set date (the expiration). That one idea, the right without the obligation, is what makes the whole market behave
+the way it does.
+
+
+
+   THE APPLE FARMER
+
+    It is winter. Apples are coming in summer, so the harvest equipment will be in higher demand and cost more, say 300
+   now and 800 later. So you pay the seller 100 today, a premium, to reserve today's price for the summer. If it is worth
+   more later, you buy at the reserved price and you are up. If not, you walk away. Your only loss is the premium, and the
+    seller keeps it either way. That is an option.
+
+
+One language note that trips up orderflow traders: in options, a long is a call and a short is a put. Same idea as
+futures, just wrapped in a contract. Every one of those contracts has to be hedged by a dealer, and that hedging is
+what reaches across into NQ and ES.
+
+
+
+   CALL = LONG                                    PUT = SHORT
+
+   The right to buy at the strike. You profit if price rises.          The right to sell at the strike. You profit if price falls.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  03
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 4/22 =====
+What really moves NQ and ES
+
+
+The real engine behind ES and NQ is options flow. Options flow is the stream of options trades that creates hedging
+pressure in the futures market, pressure dealers must respond to in real time. Most of that flow feeds straight back
+into the futures you trade.
+
+NQ and ES are derivatives.
+
+Derivative comes from the word derive: they come from something else. Think of universities. There is no single
+university, but they all teach from the same curriculum handed down by the board. Price works the same way. The
+QQQ options complex is the origin point that NQ derives from, and SPY is the origin for ES. So when you read QQQ
+options, you are reading the source that moves NQ.
+
+ QQQ               NQ                ES
+   the options origin                                   derives from QQQ                                   derives from SPY
+
+
+This is why reading the futures chart alone leaves you blind to half the picture. The order that moved your candle
+often started in the options market.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  04
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 5/22 =====
+Dealer hedging, in plain English
+
+
+Market makers are the dealers. They move the market with billions, and they do not want directional risk. They want
+to stay delta-neutral. So they take the opposite side of almost every options trade and hedge it instantly.
+
+
+  A trader buys a call                                                                      dealer sells a call
+
+  A trader buys a put                                                                       dealer sells a put
+
+  A trader sells a call                                                                      dealer buys a call
+
+  A trader sells a put                                                                       dealer buys a put
+
+
+So dealers inherit the opposite risk of the trader, but they do not want it. They hedge it away instantly because they
+have so much capital to protect. This hedging is mechanical, automatic and constant, run by algorithms, not human
+discretion.
+
+
+    Dealer hedging is a force, and it is not optional. It leaves a footprint in the futures every single session. The rest of GEX
+     is just measuring how big that force is and which way it pushes.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  05
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 6/22 =====
+Long gamma vs short gamma
+
+
+GEX measures the dollar value of futures dealers must buy or sell to stay delta-neutral for a given move in price. The
+sign of that number is everything.
+
+
+  LONG GAMMA                             SHORT GAMMA
+    Positive GEX, stabilising                                        Negative GEX, amplifying
+
+        Volatility gets suppressed                                                Volatility expands
+
+       Price pins near big strikes                                     Breakouts run, levels break
+
+     Ranges and mean reversion                                   Trends and momentum
+     RANGE      TREND
+
+   When dealers are short gamma, a move forces them to trade in the same direction as price: they buy higher and sell
+    lower. That feedback loop, lower prices triggering more dealer selling, is why the sharpest trend days happen in
+    negative gamma.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  06
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 7/22 =====
+The gamma flip
+
+
+One price matters more than any other: the level where net dealer gamma crosses from positive to negative. It is
+called the zero gamma level, or the gamma flip, and it is the most useful line on the whole GEX map.
+
+
+
+
+
+Net GEX by strike. Red bars are negative gamma (amplifying), green bars are positive (stabilising). The gamma flip is
+where they cross; the call wall and max pain are marked too.
+
+Above the flip, dealers are net long gamma, so the regime is stabilising: expect range and mean reversion. Below the
+flip, dealers are net short gamma, so it is amplifying: expect trends and expansion. Crossing the flip intraday is a
+regime change, and one of the highest-value events you can watch for.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  07
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 8/22 =====
+Why this matters for you
+
+
+Once you see hedging as a force, price behaviour that looked random starts to make sense. Dealer gamma is why:
+
+       Price reverses with no news
+       You have all seen price rip into a level and reverse with zero news behind it. That is not random, it is dealer
+        hedging defending a strike. Once you know the regime you stop getting trapped by these.
+
+
+       Breakouts fail at certain strikes
+         In long gamma dealers fade strength, so a breakout into heavy positioning gets absorbed and snapped
+         back. If you are buying that breakout blind, you are walking straight into their hedging.
+
+
+       Trend days happen below the gamma flip
+       Below the flip dealers are short gamma and have to chase, buying higher and selling lower. That is the fuel
+        behind the big one-way days where every pullback just gets bought.
+
+
+      Range days happen above the gamma flip
+       Above the flip dealers are long gamma and suppress every move, so price chops and mean reverts. Trying to
+        run breakouts up here just bleeds the account.
+
+
+      0DTE can control the whole session
+       0DTE is now a huge chunk of the flow, and because it expires today it carries the entire session. That is
+         exactly why you read QQQ at 0DTE, not a contract expiring next month.
+
+
+
+     It always comes back to this: how much hedging pressure are dealers under, and in which direction. Answer that and
+   you know the kind of day to expect, more reliably than staring at the VIX.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  08
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 9/22 =====
+Regimes, the real mistake
+
+
+A market regime is a persistent structural environment in which price behaves. It is not just volatility being high or
+low. It is the statistical character of orderflow, liquidity and participation over a stretch of time. You have probably
+trained your eye to one regime without realising it.
+
+Most traders build a strategy that works in ONE regime,
+then trade it in ALL of them.
+
+When the regime shifts, they say my edge stopped working. It did not. The environment changed. The fix is not a new
+strategy, it is knowing which regime you are in and only running the layer of your edge built for it. That is why a
+serious strategy has layers: setups for trend days, and different setups for chop.
+
+
+
+   TREND LAYER                                    CHOP LAYER
+
+   high R, continuation, breakouts                                  scalps, failed auctions, fades
+
+
+
+
+
+E T H O S  M E N T O R S H I P  09
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 10/22 =====
+GEX as a regime filter
+
+
+GEX is shorthand for how the market is positioned in gamma and what that implies for hedging. Read as a regime, it
+tells you the day type before the open.
+
+
+  SHORT / NEG GAMMA                      LONG / POS GAMMA
+   Trend day                                             Chop day
+
+      Higher R, target the expansion                                  Smaller R, scalp rotations
+
+      Continuation and breakouts                                       Failed auctions and fades
+
+     Fewer trades, let it run                                         Skip the breakout chases
+     TREND       CHOP
+
+   GEX does not tell you exactly where to enter. It tells you how the day will move, so you pick the right kind of setup and
+    target. Context first, then confirmation, then execution.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  10
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 11/22 =====
+What GEX answers
+
+
+GEX is not a signal, it is a behavior filter. It will never tell you to buy or sell. It tells you how the day is wired to move,
+so you stop forcing the wrong style onto the wrong session.
+
+
+
+   QUESTION ONE                                  QUESTION TWO
+
+    Is hedging dampening moves or amplifying them?           Where are the strike walls that matter today? The
+   Long gamma dampens and stabilises, short gamma              levels where hedging clusters, the call wall, the put
+   amplifies and destabilises. This is the single most               wall and the gamma flip, are the lines price actually
+   important read of the day.                                     reacts to.
+
+
+
+   Use GEX as a behavior filter. In stabilising regimes expect more pinning and mean reversion. In destabilising regimes
+   expect more trend and fast traverses straight through levels.
+
+
+
+    Before the open, answer both questions for the session: are dealers calming the tape down or speeding it up, and
+   which strikes are they defending. That is your entire game plan in two lines, and it decides every setup you take that
+    day.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  11
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 12/22 =====
+Pinning and gamma squeezes
+
+
+Two behaviors fall straight out of the regime, and naming them is half the battle. One quietly kills trends, the other
+creates the violent ones.
+
+
+
+   PINNING — STRIKE GRAVITY                      GAMMA SQUEEZE — CONVEXITY
+
+   Spot spends time near a strike into expiration. Near         A move where dealer hedging reinforces direction.
+   the money gamma is highest, so when hedging is                Price pushes through a major strike, hedging demand
+    stabilising, price gets pulled into rotations around the           increases with the move, and it accelerates on thin
+    strike. The auction has a local attractor because                   liquidity and hedge chasing. It can happen both up and
+   hedging dampens every breakout attempt.                  down.
+
+
+
+   Many sessions are simply range days because hedging pressure punishes extension. When the dominant flow is selling
+    into upticks and buying into downticks, realised volatility compresses and the market rotates instead of trending.
+
+
+
+    Pinning looks like rotations that keep failing at a strike. A squeeze looks like that same strike breaking on aggression
+   and then accelerating away. Same level, opposite behavior, and the regime is what tells you which one to expect.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  12
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 13/22 =====
+The key levels
+
+
+Within a regime, a few strikes do most of the work. Treat them as context, never as guarantees.
+
+
+
+
+
+The GEX levels on price: call walls above (resistance), put walls below (support), the gamma flip in the middle, and max
+pain at the bottom.
+
+CALL WALL        Largest call gamma above. Resistance as dealers sell into it.
+
+
+PUT WALL         Largest put gamma below. Support as dealers buy into it.
+
+
+MAX PAIN          Strike where option value is lowest. Price often drifts toward it into expiry.
+
+
+
+    In long gamma the walls are hard boundaries, so fading toward them works. In short gamma the same walls break
+    easily, so trade the breakout through them.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  13
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 14/22 =====
+Where to anchor GEX
+
+
+You do not apply GEX everywhere. You anchor it to the places where positioning is real and hedging actually
+concentrates.
+
+
+  Major strikes                               High open interest
+   round numbers price respects                                   where the contracts pile up
+
+
+  Front expiry & 0DTE                         Into known events
+   the flow that drives today                                              CPI, FOMC, earnings
+
+
+
+   PRICE APPROACHES A KEY STRIKE FROM            PRICE IS ALREADY AT THE STRIKE
+   BELOW
+                                                               Ask: do the rotations stay contained, or does it start
+   Ask: does it reject (pin and chop) or accept (break and                                                                 trending away? That answer is your read for the next
+   squeeze)? The regime tells you which is the more likely                                                        move.
+   outcome.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  14
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 15/22 =====
+Reading it live in GEXRADAR
+
+
+Use 0DTE, the options expiring today, because you are intraday, and pull QQQ since it is the derivative of NQ. The
+terminal reads the gamma regime, the key levels and the hedging pressure for you.
+
+
+
+
+
+A long gamma read in GEXRADAR: the regime is mean-reverting and dealers suppress moves, so expect chop and rotations. The
+gamma regime, the key levels, the flip and the hedging-pressure gauge are all on one screen.
+
+In a short gamma read the same panel flips: the regime shows dealers amplifying instead of suppressing, the
+hedging-pressure gauge leans hard one way, and you switch from fading rotations to trading the trend and the
+breakout through the level.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  15
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 16/22 =====
+Where gamma lives: strikes
+
+
+Gamma is not spread evenly. It clusters at strikes, and the closer a strike is to price, the more sensitive it is. That is
+where hedging pressure concentrates.
+
+
+
+   ATM                             OTM                             ITM
+
+    Strike near price. Highest                Cheaper. Can create large              Behaves more like the stock.
+   gamma, most reactive to            gamma shifts if price                  Lower gamma, more delta-heavy.
+   movement.                            approaches.
+
+
+
+
+
+Gamma stacked by strike. The biggest concentrations are where hedging pressure clusters, and where price tends to react.
+
+
+  Gamma concentrates near the money, and hedging intensity rises as time-to-expiry compresses. That is why 0DTE
+   near the big strikes is where the strongest pinning and squeezes happen.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  16
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 17/22 =====
+Vanna and charm
+
+
+Gamma is the headline, but two slower forces explain the drift you see with no news. You do not need to calculate
+them, just know they exist and which way they push.
+
+
+
+   VANNA
+
+    Delta's sensitivity to implied volatility. When IV falls, dealers must buy to re-hedge. That is the engine behind the steady
+   grind higher after a VIX drop, the vol-compression rally.
+
+
+
+
+   CHARM
+
+    Delta's decay as time passes. Into expiry it quietly pulls price toward the biggest open-interest strikes. It is a big part of
+   why quiet days melt up toward max pain and the call wall.
+
+
+Put it together: a calm tape with IV drifting down into a large expiration gives dealers two reasons to keep buying.
+That is why low-volatility regimes grind higher and drift toward the high open-interest strikes.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  17
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 18/22 =====
+Confirming with orderflow
+
+
+This is the part most options-flow content skips, and it is the whole edge. GEX gives you context. Orderflow gives you
+the trigger. Never trade a GEX level on assumption alone.
+
+       In long gamma, confirm the fade
+         Price drifts up into the call wall or an extreme. Before you fade it, watch the DOM and the footprint for
+         absorption and real selling aggression. The dealer flow is on your side here, but the tape has to confirm
+       someone is actually defending that level.
+
+
+       In short gamma, confirm the break
+         Levels break easily in negative gamma, so do not sit there fading them. Wait for aggression and refills
+        pushing through the level, then trade the continuation. Fading a trend day is how you give it all back.
+
+
+      Use GEX to size and target
+         Short gamma earns the higher R and the wider targets because dealers are amplifying the move. Long
+      gamma is smaller R and faster exits. Same setup, the regime tells you how hard to press and how far to
+         actually target.
+
+
+
+    Context first (the regime), confirmation second (orderflow at the level), execution last. Run it in that order every session
+   and you stop guessing.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  18
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 19/22 =====
+Your session checklist
+
+
+      Read the regime first
+        Before you look at a single setup, pull QQQ 0DTE and read the gamma regime and where the flip sits. That
+       one read frames the whole session.
+
+
+      Above or below the flip
+       Above the flip is range and mean reversion. Below it is trend and expansion. If you remember one line from
+          this guide, make it this one.
+
+
+       Short gamma, trade the trend
+        Higher R, continuation and breakout setups, target the expansion and take fewer trades. On a day like this
+        you can take one trade and ride the entire move.
+
+
+      Long gamma, trade the chop
+        Smaller R, fade the extremes back toward the walls, scalp the rotations and skip the breakout chases. This
+           is where the scalp layer of the model earns its keep.
+
+
+       Confirm with orderflow
+        Never act on a GEX level on its own. Confirm with the DOM and the footprint first. GEX is the context, the
+        tape is the trigger.
+
+
+      Re-check after big moves
+       A large impulse can flip the regime mid-session. After a big expansion the read often turns long gamma, so
+        update before the next trade.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  19
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 20/22 =====
+Common mistakes
+
+
+The traders who lose money with GEX almost always make one of these. Avoid them and you are ahead of most of
+the crowd moving into options flow.
+
+       Trading GEX levels blindly
+         This is the big one. So many orderflow traders move into options flow and start trading the pinning and
+          call/put levels like they are gospel. They are not, they are heavily assumption based. Use them as context,
+        then confirm with the DOM and the footprint.
+
+
+       Ignoring the regime
+       Run your trend model on a long gamma chop day, or scalp fades on a short gamma trend day, and even a
+        good setup bleeds you. The regime decides which layer of your edge is even allowed to trade.
+
+
+       Treating pinning as a guarantee
+       A pin is a tendency, not a promise. Time of day matters, the open is not the midday is not the close, and one
+        event can break the whole thing. Never size like a pin is certain.
+
+
+      Not updating after an impulse
+      Gamma is not static intraday. After a big expansion the read can flip from short to long gamma, so re-read it
+         before the next trade or you are trading the old environment.
+
+
+       Using long-dated options
+       You are an intraday trader, so read 0DTE. Contracts expiring in weeks or months are not what is controlling
+         today's session, and reading them just gives you the wrong picture.
+
+
+
+    Every one of these is the same error: treating GEX as a signal instead of context. Keep it as context, confirm with the
+    tape, and you sidestep all five.
+
+
+
+
+
+E T H O S  M E N T O R S H I P  20
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 21/22 =====
+Now trade the regime.
+
+ You now know how to read the day before it starts. Inside Ethos you
+learn the KG models that actually trade these regimes, with live trading
+                        three times a week.
+
+
+   Read the regime before the open
+    Above the flip is chop, below the flip is trend.
+
+    Match the setup to the regime
+     Short gamma trade the trend, long gamma trade the chop.
+
+    Confirm every level with orderflow
+    GEX is context, the tape is the trigger.
+
+
+
+        START THE FREE 7 DAY TRIAL
+
+
+
+
+
+      Education only. Ethos does not sell signals and does not promise profit.
+       Trading futures and options carries substantial risk. © Ethos / Kanji
+
+===== /workspace/sources/documents/discretionary/gex-framework.pdf PAGE 22/22 =====
+             GEXRADAR
+
+                                 T H E  T E R M I N A L  I  U S E
+
+            Everything in this guide, the gamma regime, the key levels, the flip and the
+            hedging-pressure gauge, is read live in GEXRADAR. It is the cleanest GEX
+                   terminal I have found, and the one in every screenshot here.
+
+            15% OFF
+                            on the monthly sub with code SIRES
+
+
+
+
+                      GET 15% OFF GEXRADAR
+
+
+
+                                           gexradar.io
+
+
+
+
+
+This is an affiliate link. Using it supports the channel at no extra cost to you. Education only, not financial advice.

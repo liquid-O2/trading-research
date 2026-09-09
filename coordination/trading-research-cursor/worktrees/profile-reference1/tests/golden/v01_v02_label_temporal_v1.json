@@ -1,0 +1,2886 @@
+{
+  "artifact": "v01-v02-golden-draft",
+  "status": "draft_for_root_registration_only",
+  "case_count": 64,
+  "expected_values_origin": "Hand arithmetic and contract reasoning only, no candidate execution",
+  "cases": [
+    {
+      "id": "V01-01",
+      "name": "Same extrema and terminal, opposite first barriers",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 100,
+        "barriers": [
+          3,
+          3
+        ],
+        "up_path": [
+          [
+            1,
+            104
+          ],
+          [
+            2,
+            96
+          ],
+          [
+            10,
+            100
+          ]
+        ],
+        "down_path": [
+          [
+            1,
+            96
+          ],
+          [
+            2,
+            104
+          ],
+          [
+            10,
+            100
+          ]
+        ]
+      },
+      "expected": {
+        "both": {
+          "terminal_ticks": 0,
+          "maximum_up_ticks": 4,
+          "maximum_down_ticks": 4
+        },
+        "first": [
+          "upper",
+          "lower"
+        ]
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "DTM-A15",
+        "PIN017-03"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_path_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-02",
+      "name": "Coarse same-time opposite barriers are ambiguous",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 100,
+        "barriers": [
+          3,
+          3
+        ],
+        "points": [
+          [
+            1,
+            0,
+            104
+          ],
+          [
+            1,
+            1,
+            96
+          ],
+          [
+            10,
+            0,
+            100
+          ]
+        ],
+        "source_order_known": false
+      },
+      "expected": {
+        "first_barrier": "ambiguous",
+        "terminal_ticks": 0,
+        "status": "ambiguous"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "PIN007-02",
+        "PIN081-03"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_path_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-03",
+      "name": "One-sided excursions include origin zero",
+      "inputs": {
+        "initial": 100,
+        "paths": [
+          [
+            101,
+            103
+          ],
+          [
+            99,
+            97
+          ]
+        ],
+        "path_times": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "up_path": [
+          3,
+          0
+        ],
+        "down_path": [
+          0,
+          3
+        ]
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "VALIDATION_PLAN",
+        "CC-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_path_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-04",
+      "name": "Certified unchanged process versus missing future",
+      "inputs": {
+        "cut": 0,
+        "target_end": 10,
+        "initial": 100,
+        "events": [],
+        "full": {
+          "observed_end": 10,
+          "certificate": 11,
+          "process": "certified_last_observed_mark"
+        },
+        "partial": {
+          "observed_end": 5,
+          "certificate": 6
+        }
+      },
+      "expected": {
+        "full": {
+          "terminal_ticks": 0,
+          "first_barrier": "neither",
+          "status": "observed"
+        },
+        "partial": {
+          "terminal_ticks": null,
+          "status": "censored"
+        }
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "V01.LABEL_COVERAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "legacy carried-mark compatibility plus explicit observation-process ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-05",
+      "name": "Discrete gap through band is not a contact",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "points": [
+          [
+            3,
+            103
+          ],
+          [
+            4,
+            105
+          ]
+        ]
+      },
+      "expected": {
+        "reach_status": "no_contact",
+        "departure": "no_contact",
+        "gap_crossings": [
+          3
+        ]
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "PIN039-02",
+        "PIN052-02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-06",
+      "name": "Inclusive observable boundary contact",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "side": 1,
+        "a": 3,
+        "b": 2,
+        "points": [
+          [
+            1,
+            100
+          ],
+          [
+            2,
+            103
+          ]
+        ]
+      },
+      "expected": {
+        "contact_at": 1,
+        "contact_price": 100,
+        "departure": "favorable_first",
+        "first_barrier_at": 2
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "PIN026-01"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-07",
+      "name": "Contact-conditioned invalid origin rejected even with missing tape",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "contact_mode": "contact_at_cut",
+        "observed_end": 5
+      },
+      "expected": {
+        "raises": "ContractError before censor early return"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "UPK-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label validation repair",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-08",
+      "name": "Contact at end has zero remaining departure window",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "a": 3,
+        "b": 2,
+        "points": [
+          [
+            10,
+            100
+          ]
+        ]
+      },
+      "expected": {
+        "reach_status": "contact",
+        "contact_at": 10,
+        "departure": "unresolved",
+        "maximum_favorable_ticks": 0,
+        "maximum_adverse_ticks": 0,
+        "fixed_end": 10
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "T-HORIZON"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-09",
+      "name": "Root fixed-end hand vector adapter",
+      "inputs": {
+        "original_cut": 0,
+        "original_end": 10,
+        "contact": 9,
+        "favorable_event": 11,
+        "new_contract_cut": 9,
+        "new_contract_end": 19,
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "side": 1,
+        "a": 3,
+        "b": 2,
+        "original_points": [
+          [
+            9,
+            100
+          ]
+        ],
+        "separately_retargeted_initial": 100,
+        "separately_retargeted_contact_mode": "contact_at_cut",
+        "separately_retargeted_points": [
+          [
+            11,
+            103
+          ]
+        ]
+      },
+      "expected": {
+        "original": "contact with departure unresolved by10; event11 excluded",
+        "new_contract": "favorable event11 eligible under distinct target ID",
+        "root_fixture_owner": "B00.6 BC04/05/06; do not duplicate implementation"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "T-HORIZON",
+        "CC-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "ObjectTarget future_contact/contact_at_cut compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-10",
+      "name": "Future event beyond endpoint rejected",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "event_at": 11,
+        "points": [
+          [
+            11,
+            104
+          ]
+        ]
+      },
+      "expected": {
+        "raises": "ContractError, never implicit horizon reset"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "PIN081-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label/reference_path_label",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-11",
+      "name": "Revision creates a different immutable target",
+      "inputs": {
+        "old_object": "o-v1",
+        "old_band": [
+          99,
+          101
+        ],
+        "new_object": "o-v2",
+        "new_band": [
+          119,
+          121
+        ],
+        "initial": 110,
+        "points": [
+          [
+            1,
+            100
+          ],
+          [
+            2,
+            106
+          ]
+        ],
+        "end": 10
+      },
+      "expected": {
+        "old_reach": "contact",
+        "new_reach": "no_contact",
+        "old_target_unchanged": true,
+        "versions_differ": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "CC-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label compatibility and append-only ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-12",
+      "name": "Unknown contact batch does not invent contact price/order",
+      "inputs": {
+        "initial": 110,
+        "band": [
+          99,
+          101
+        ],
+        "events": [
+          [
+            1,
+            0,
+            100
+          ],
+          [
+            1,
+            1,
+            106
+          ]
+        ],
+        "source_order_known": false
+      },
+      "expected": {
+        "reach_status": "contact",
+        "contact_at": 1,
+        "contact_price": null,
+        "departure": "ambiguous"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-04",
+        "PIN026-01"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "reference_object_label compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-13",
+      "name": "Unknown-order no-contact batch crossing set is permutation-invariant",
+      "inputs": {
+        "initial": 95,
+        "band": [
+          99,
+          101
+        ],
+        "unknown_batch_prices": [
+          96,
+          105
+        ],
+        "later_price": 96,
+        "unknown_batch_at": 1,
+        "later_at": 2,
+        "source_order_known": false
+      },
+      "expected": {
+        "contact": false,
+        "compatible_gap_crossing_times": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "certain_crossing_time_set": [
+          1
+        ],
+        "possible_crossing_time_set": [
+          1,
+          2
+        ],
+        "permutations_equal_compatible_evidence": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-01",
+        "CC-04",
+        "PIN037-02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "add bounded gap evidence adjacent to legacy gap_crossings; do not invent exact counts",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-14",
+      "name": "Observed contact survives as partial fact during later outage",
+      "inputs": {
+        "cut": 0,
+        "end": 10,
+        "contact_at": 2,
+        "observation_gap": [
+          5,
+          7
+        ],
+        "initial": 99,
+        "band": [
+          100,
+          102
+        ],
+        "side": 1,
+        "a": 3,
+        "b": 2,
+        "points": [
+          [
+            2,
+            0,
+            100,
+            2
+          ],
+          [
+            4,
+            0,
+            101,
+            4
+          ],
+          [
+            7,
+            0,
+            101,
+            7
+          ],
+          [
+            10,
+            0,
+            100,
+            10
+          ]
+        ],
+        "point_columns": [
+          "at",
+          "sequence",
+          "price_fraction_integer",
+          "known_at"
+        ],
+        "coverage": {
+          "start": 0,
+          "end": 10,
+          "certified_through": 11,
+          "gaps": [
+            [
+              5,
+              7
+            ]
+          ],
+          "source_order_known": true,
+          "version": "V01-14:observation-v1"
+        },
+        "partial_fact_evidence": {
+          "kind": "observed_contact",
+          "at": 2,
+          "price": "100/1",
+          "known_at": 2,
+          "source_point_identity": [
+            2,
+            0
+          ],
+          "certified_prefix_end": 4,
+          "cannot_certify_full_departure": true
+        }
+      },
+      "expected": {
+        "full_horizon_state": "censored",
+        "partial_reach": "observed_contact_at2",
+        "full_departure": null,
+        "unknown_later_path_not_zero": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "UP-V01"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "new outcome ledger; legacy all-or-nothing dictionary remains compatible",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-15",
+      "name": "Administrative endpoint is complete, accidental loss is censoring",
+      "inputs": {
+        "declared_end": 8,
+        "observed_end": 8,
+        "alternative_declared_end": 10,
+        "cut": 0,
+        "initial": 100,
+        "points": [],
+        "certificate": 9
+      },
+      "expected": {
+        "end8": "complete",
+        "end10": "censored",
+        "targets_differ": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "V01.LABEL_COVERAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-16",
+      "name": "Gap boundaries and contradictory observation",
+      "inputs": {
+        "gap": [
+          4,
+          6
+        ],
+        "events_to_try": [
+          4,
+          5,
+          6
+        ],
+        "cut": 0,
+        "end": 10,
+        "initial": 100,
+        "event_price": 101,
+        "certificate": 11
+      },
+      "expected": {
+        "4": "reject contradictory observation",
+        "5": "reject contradictory observation",
+        "6": "allowed; gap right edge exclusive"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "T-GAP"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "ObservationWindow validation",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-17",
+      "name": "Observation metadata must be typed and canonical",
+      "inputs": {
+        "bad_inputs": [
+          "bool sequence",
+          "non-Ticks PathPoint price",
+          "non-bool source_order_known",
+          "overlapping gaps [2,5),[4,6)",
+          "empty observation version",
+          "future point at decision cut"
+        ]
+      },
+      "expected": {
+        "all": "ContractError with explicit reason; sorted nonoverlapping gap representation canonical"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-01",
+        "CC-02",
+        "F04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "PathPoint/ObservationWindow boundary validation",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-18",
+      "name": "Receipt maturity is independent from target end",
+      "inputs": {
+        "end": 10,
+        "coverage_certified": 12,
+        "event_known_at": [
+          11,
+          20
+        ],
+        "cut": 0,
+        "initial": 100,
+        "points": [
+          [
+            1,
+            0,
+            101,
+            11
+          ],
+          [
+            10,
+            0,
+            102,
+            20
+          ]
+        ],
+        "point_columns": [
+          "at",
+          "sequence",
+          "ticks",
+          "known_at"
+        ]
+      },
+      "expected": {
+        "maturity_at": 20,
+        "fixed_end": 10,
+        "fit_at15": "ineligible"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "SR-V02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "legacy labels + fold adapter",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-19",
+      "name": "Candidate population reconciliation includes rejected and untraded",
+      "inputs": {
+        "generated": [
+          "a",
+          "b",
+          "c"
+        ],
+        "decisions": {
+          "a": "selected",
+          "b": "rejected",
+          "c": "untraded"
+        },
+        "outcome_rows": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "expected": {
+        "generated_count": 3,
+        "retained_count": 3,
+        "missing": [],
+        "duplicate": [],
+        "rejected_count": 1,
+        "untraded_count": 1
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "CEX-01",
+        "AUT-07"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_ledger_candidates",
+          "requirement": "finite-resource:max_ledger_candidates",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_ledger_candidates",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V01-20",
+      "name": "Omission and duplicate label ownership fail",
+      "inputs": {
+        "generated": [
+          "a",
+          "b",
+          "c"
+        ],
+        "bad_outcomes": [
+          [
+            "a",
+            "c"
+          ],
+          [
+            "a",
+            "b",
+            "b",
+            "c"
+          ]
+        ]
+      },
+      "expected": {
+        "first_missing": [
+          "b"
+        ],
+        "second_duplicate": [
+          "b"
+        ],
+        "both": "reconciliation failure with exact IDs"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "V01.LABEL_COVERAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_ledger_outcomes",
+          "requirement": "finite-resource:max_ledger_outcomes",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_ledger_outcomes",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V01-21",
+      "name": "Known sampling inclusion versus unknown",
+      "inputs": {
+        "inclusion_probability": "1/4",
+        "unknown_probability": null
+      },
+      "expected": {
+        "inverse_probability_weight": "4",
+        "unknown_weight": null,
+        "unknown_weight_status": "unsupported"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "CC-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-22",
+      "name": "Density does not manufacture independent days",
+      "inputs": {
+        "dayA_nodes": 1000,
+        "dayB_nodes": 1,
+        "weighting": "equal day mass then equal within day"
+      },
+      "expected": {
+        "A_each_weight": "1/1000",
+        "B_each_weight": "1",
+        "total_day_masses": [
+          "1",
+          "1"
+        ],
+        "effective_date_count": 2,
+        "raw_candidate_count": 1001
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "DRF-A22"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-23",
+      "name": "Repeated prefixes share endpoint support",
+      "inputs": {
+        "forecasts": [
+          {
+            "cut": 0,
+            "end": 10,
+            "endpoint": "E"
+          },
+          {
+            "cut": 1,
+            "end": 10,
+            "endpoint": "E"
+          }
+        ]
+      },
+      "expected": {
+        "forecast_count": 2,
+        "endpoint_count": 1,
+        "target_versions_distinct": true,
+        "independent_endpoint_count": 1
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "UPK-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-24",
+      "name": "Co-contact ownership preserves objects without duplicate event evidence",
+      "inputs": {
+        "objects": [
+          "o1",
+          "o2"
+        ],
+        "bands": [
+          [
+            99,
+            101
+          ],
+          [
+            99,
+            101
+          ]
+        ],
+        "contact_event": "e2",
+        "price": 100,
+        "cut": 0,
+        "end": 10,
+        "initial": 110,
+        "contact_at": 2,
+        "known_at": 2,
+        "side": 1,
+        "a": 3,
+        "b": 2
+      },
+      "expected": {
+        "object_outcome_count": 2,
+        "co_contact_set": [
+          "o1",
+          "o2"
+        ],
+        "event_support_count": 1
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "UPK-04",
+        "CC-03"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_parent_groups_per_sample",
+          "requirement": "finite-resource:max_parent_groups_per_sample",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_parent_groups_per_sample",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          },
+          "fixture": "Same object target row with parents(p1,p2), then(p1,p2,p3); rows and target unchanged."
+        }
+      ]
+    },
+    {
+      "id": "V01-25",
+      "name": "Risk-set frames remain distinct",
+      "inputs": {
+        "clock_rows": [
+          "t0",
+          "t1",
+          "t2"
+        ],
+        "birth_rows": [
+          "o1",
+          "o2"
+        ],
+        "contact_rows": [
+          "o1@t2"
+        ],
+        "policy_rows": [
+          "p1"
+        ],
+        "no_touch_birth": "o2"
+      },
+      "expected": {
+        "clock_count": 3,
+        "birth_count": 2,
+        "contact_count": 1,
+        "policy_count": 1,
+        "o2": "present in birth/reach population, absent conditional-contact population"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "CRL-15",
+        "DRF-A10"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-26",
+      "name": "Continuing OI next-report label matures at publication",
+      "inputs": {
+        "contract": "C",
+        "position_date": "D",
+        "prior_oi": 10,
+        "next_oi": 12,
+        "report": "R1",
+        "report_known_at": 20
+      },
+      "expected": {
+        "delta_oi": 2,
+        "endpoint_id": "R1",
+        "maturity_at": 20,
+        "before20": "pending"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "TECH-11"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-27",
+      "name": "OI revision appends, never overwrites",
+      "inputs": {
+        "first_report": {
+          "id": "R1",
+          "known_at": 20,
+          "oi": 12
+        },
+        "revision": {
+          "id": "R2",
+          "supersedes": "R1",
+          "known_at": 25,
+          "oi": 11
+        },
+        "prior_oi": 10
+      },
+      "expected": {
+        "R1_delta": 2,
+        "R2_delta": 1,
+        "R1_retained": true,
+        "cut22_sees": "R1"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "OI_NEXT"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-28",
+      "name": "Expiry and missing publication are not zero OI",
+      "inputs": {
+        "contracts": {
+          "expired": {
+            "expiry": 15,
+            "report_absent": true
+          },
+          "continuing": {
+            "report_due": 20,
+            "report_absent": true
+          }
+        },
+        "prior_oi": 10,
+        "prior_report_id": "R0",
+        "prior_report_known_at": 10,
+        "missing_report_observation_boundary": 25,
+        "boundary_known_at": 25,
+        "receipt_observation": {
+          "start": 10,
+          "end": 25,
+          "certified_through": 25,
+          "receipt_gaps": [],
+          "missing_report_ids": [
+            "R1"
+          ]
+        },
+        "query_cuts": [
+          14,
+          15,
+          19,
+          20,
+          24,
+          25,
+          26
+        ]
+      },
+      "expected": {
+        "expired": "expiry_terminal_without_numeric_delta",
+        "continuing": "pending then censored/unknown per declared report observation boundary",
+        "numeric_zero_imputed": false
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "T-UNIVERSE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "explicit query statuses",
+          "queries": [
+            {
+              "cut": 14,
+              "expired": "pending",
+              "continuing": "pending",
+              "numeric_delta": null
+            },
+            {
+              "cut": 15,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "pending",
+              "numeric_delta": null
+            },
+            {
+              "cut": 19,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "pending",
+              "numeric_delta": null
+            },
+            {
+              "cut": 20,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "pending",
+              "numeric_delta": null
+            },
+            {
+              "cut": 24,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "pending",
+              "numeric_delta": null
+            },
+            {
+              "cut": 25,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "censored_missing_publication",
+              "numeric_delta": null
+            },
+            {
+              "cut": 26,
+              "expired": "expiry_terminal_without_numeric_delta",
+              "continuing": "censored_missing_publication",
+              "numeric_delta": null
+            }
+          ],
+          "rule": "Report due20 does not certify absence; at registered observed boundary25 absence is censored. Expiry terminal begins at15 independently."
+        }
+      ]
+    },
+    {
+      "id": "V01-29",
+      "name": "Shared OI endpoint cannot be counted per prefix as independent",
+      "inputs": {
+        "prefixes": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "report": "R1"
+      },
+      "expected": {
+        "label_rows": 3,
+        "report_support": 1,
+        "grouping": "same report and date"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V01",
+        "OI_NEXT"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-30",
+      "name": "Value label identity includes policy and simulator",
+      "inputs": {
+        "candidate": "a",
+        "policies": [
+          "full_exit",
+          "hold_to_deadline"
+        ],
+        "fill_models": [
+          "scenarioA",
+          "scenarioB"
+        ]
+      },
+      "expected": {
+        "distinct_label_definitions": 4,
+        "realized_causal_order_effect_claim": false,
+        "root_reward_math": "separate B00.6 ownership"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-04",
+        "UPK-09"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_ledger_definitions",
+          "requirement": "finite-resource:max_ledger_definitions",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_ledger_definitions",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V01-31",
+      "name": "No-fill is a complete policy outcome, not absent row",
+      "inputs": {
+        "candidate": "a",
+        "entry": "limit",
+        "cancel_at": 10,
+        "full_observation": true,
+        "filled": false
+      },
+      "expected": {
+        "fill_status": "nonfill",
+        "candidate_retained": true,
+        "price_reach_label_independent": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "DTM-A15",
+        "RFE-05",
+        "SRE-03"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-32",
+      "name": "Episode reset requires declared departure, not flicker",
+      "inputs": {
+        "band": [
+          99,
+          101
+        ],
+        "reset_distance": 2,
+        "prices": [
+          100,
+          102,
+          100,
+          104,
+          100
+        ],
+        "cut": 0,
+        "end": 10,
+        "price_times": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "source_order_known": true,
+        "known_times": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "first_contact_episode": 1,
+        "return_from102": "same episode because not at least2 beyond band upper101",
+        "return_from104": "new episode after qualifying departure",
+        "episode_count": 2
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-04",
+        "E0",
+        "PIN078-02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-33",
+      "name": "Append and restart preserve target and candidate identity",
+      "inputs": {
+        "prefix_events": [
+          "birth:a",
+          "reject:a",
+          "label:a@v1"
+        ],
+        "suffix": [
+          "revision:a@v2"
+        ]
+      },
+      "expected": {
+        "uninterrupted_equals_restore_suffix": true,
+        "v1_still_present": true,
+        "duplicate_identical_event": "idempotent",
+        "same_id_changed_payload": "reject"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-01",
+        "V01-P7"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_id_utf8_bytes",
+          "requirement": "finite-resource:max_id_utf8_bytes",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_id_utf8_bytes",
+          "supplied_limit": 8,
+          "at_capacity": {
+            "count_or_bytes": 8,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 9,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        },
+        {
+          "name": "capacity:max_payload_bytes",
+          "requirement": "finite-resource:max_payload_bytes",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_payload_bytes",
+          "supplied_limit": "B = exact independently encoded valid compact fixture byte length",
+          "at_capacity": {
+            "count_or_bytes": "B",
+            "expected": "accept exact B bytes"
+          },
+          "one_over": {
+            "supplied_limit": "B-1",
+            "count_or_bytes": "B",
+            "expected": "reject same valid payload/checkpoint before parse/mutation"
+          }
+        },
+        {
+          "name": "capacity:max_checkpoint_bytes",
+          "requirement": "finite-resource:max_checkpoint_bytes",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_checkpoint_bytes",
+          "supplied_limit": "B = exact independently encoded valid compact fixture byte length",
+          "at_capacity": {
+            "count_or_bytes": "B",
+            "expected": "accept exact B bytes"
+          },
+          "one_over": {
+            "supplied_limit": "B-1",
+            "count_or_bytes": "B",
+            "expected": "reject same valid payload/checkpoint before parse/mutation"
+          }
+        },
+        {
+          "name": "capacity:max_nested_depth",
+          "requirement": "finite-resource:max_nested_depth",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_nested_depth",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          },
+          "fixture": "root scalar depth0; tuple child adds1; valid canonical typed payload at depth2, otherwise identical nesting at depth3 rejects."
+        }
+      ]
+    },
+    {
+      "id": "V01-34",
+      "name": "Partial bounds do not imply independent random censoring",
+      "inputs": {
+        "complete": {
+          "favorable": 1,
+          "adverse": 1
+        },
+        "censored_count": 2
+      },
+      "expected": {
+        "favorable_rate_bounds": [
+          "1/4",
+          "3/4"
+        ],
+        "complete_case_rate": "1/2 descriptive only",
+        "missingness_assumption": "not assumed random"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "RFE-14"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "adjacent typed ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-35",
+      "name": "Frozen grid future mass distinguishes no new volume and missing tape",
+      "inputs": {
+        "initial_mass": [
+          2,
+          3
+        ],
+        "future_additions": [
+          0,
+          0
+        ],
+        "missing_future": true
+      },
+      "expected": {
+        "observed_zero_addition": {
+          "total": 5,
+          "no_new_volume": true
+        },
+        "missing": "censored, no numeric zero addition"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-03"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "ledger target-kind registration only; profile calculator belongs M/C",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V01-36",
+      "name": "Pre-contact arrival features cannot enter original-cut inputs",
+      "inputs": {
+        "original_cut": 0,
+        "contact_at": 5,
+        "arrival_feature_known_at": 5
+      },
+      "expected": {
+        "precontact_feature_admission": "reject",
+        "contact_landmark_feature_admission": "allowed at5 under new input cut",
+        "fixed_end_preserved": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-04",
+        "CC-04"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V01",
+      "api": "target/landmark manifest + F11 input gate integration",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-01",
+      "name": "Maturity and embargo exclusions",
+      "inputs": {
+        "samples": [
+          [
+            "past",
+            "d0",
+            1,
+            4,
+            3
+          ],
+          [
+            "late",
+            "d1",
+            5,
+            12,
+            8
+          ],
+          [
+            "carry",
+            "d1",
+            6,
+            10,
+            10
+          ],
+          [
+            "NQ",
+            "d2",
+            11,
+            15,
+            14
+          ],
+          [
+            "ES",
+            "d2",
+            12,
+            16,
+            15
+          ]
+        ],
+        "columns": [
+          "id",
+          "group",
+          "decision",
+          "label_known",
+          "dependency_end"
+        ],
+        "fit_at": 10,
+        "evaluation": [
+          11,
+          20
+        ],
+        "embargo": 1
+      },
+      "expected": {
+        "training": [
+          "past"
+        ],
+        "evaluation": [
+          "NQ",
+          "ES"
+        ],
+        "purged": {
+          "late": "label_not_mature_at_fit",
+          "carry": "dependency_interval_overlaps_evaluation_or_embargo"
+        }
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "CC-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "chronological_fold compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-02",
+      "name": "Same-date cross-asset split rejected",
+      "inputs": {
+        "samples": [
+          [
+            "NQ",
+            "d2",
+            11
+          ],
+          [
+            "ES",
+            "d2",
+            12
+          ]
+        ],
+        "evaluation": [
+          12,
+          20
+        ]
+      },
+      "expected": {
+        "raises": "ContractError: split correlated date group"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "DTM-A17",
+        "CC-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "chronological_fold compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-03",
+      "name": "Training start cannot cut date group",
+      "inputs": {
+        "samples": [
+          [
+            "a",
+            "d0",
+            1
+          ],
+          [
+            "b",
+            "d0",
+            2
+          ]
+        ],
+        "training_start": 2,
+        "evaluation_start": 10
+      },
+      "expected": {
+        "raises": "ContractError"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "CC-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "chronological_fold compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-04",
+      "name": "Closed maturity and forbidden overlap boundary",
+      "inputs": {
+        "fit_at": 10,
+        "evaluation_start": 11,
+        "embargo": 1,
+        "samples": [
+          {
+            "id": "mature",
+            "label_known": 10,
+            "dependency_end": 9
+          },
+          {
+            "id": "touch",
+            "label_known": 10,
+            "dependency_end": 10
+          }
+        ]
+      },
+      "expected": {
+        "mature": "admit",
+        "touch": "purge",
+        "rule": "maturity <= fit; dependency_end < evaluation_start - embargo"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "chronological_fold compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-05",
+      "name": "Legitimate shared historical raw lookback is legal",
+      "inputs": {
+        "train_label_end": 4,
+        "fit_at": 8,
+        "evaluation_cut": 10,
+        "train_raw": [
+          0,
+          3
+        ],
+        "evaluation_raw": [
+          0,
+          9
+        ],
+        "train_decision": 3,
+        "train_label_known_at": 5,
+        "evaluation_target_end": 12,
+        "evaluation_label_known_at": 13
+      },
+      "expected": {
+        "training_admitted": true,
+        "shared_raw_overlap_purged": false,
+        "reason": "no future outcome or fitted-state transfer"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UP-V02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "new explicit interval manifest",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-06",
+      "name": "Long endpoint report after fit excluded",
+      "inputs": {
+        "decision": 1,
+        "price_target_end": 5,
+        "report_known_at": 20,
+        "fit_at": 10,
+        "evaluation_start": 11
+      },
+      "expected": {
+        "admission": "purge label_not_mature_at_fit",
+        "price_target_end_stays": 5
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "OI_NEXT"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "explicit target-end/dependency distinction",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-07",
+      "name": "Carried state importing held-out label forbidden",
+      "inputs": {
+        "training_row": "a",
+        "evaluation_row": "b",
+        "state": "s",
+        "s_depends_on_label": "b",
+        "raw_history_overlap_only": false,
+        "actual_f11_fixture": {
+          "population": [
+            {
+              "id": "a",
+              "date_group": "d0",
+              "decision_at": 0,
+              "target_end": 4,
+              "label_known_at": 5,
+              "phase_role": "train"
+            },
+            {
+              "id": "b",
+              "date_group": "d1",
+              "decision_at": 10,
+              "target_end": 14,
+              "label_known_at": 15,
+              "phase_role": "outer"
+            }
+          ],
+          "fold": {
+            "fit_at": 8,
+            "evaluation_start": 10,
+            "evaluation_end": 20,
+            "training_ids": [
+              "a"
+            ],
+            "evaluation_ids": [
+              "b"
+            ]
+          },
+          "retained_label_nodes": [
+            {
+              "key": "label:a",
+              "row": "a",
+              "column": "label",
+              "value_json": "1",
+              "observed_at": 4,
+              "input_known_at": 5,
+              "target_start": 0,
+              "target_end": 4
+            },
+            {
+              "key": "label:b",
+              "row": "b",
+              "column": "label",
+              "value_json": "0",
+              "observed_at": 14,
+              "input_known_at": 15,
+              "target_start": 10,
+              "target_end": 14
+            }
+          ],
+          "raw_and_reads": {
+            "raw:a": {
+              "row_id": "a",
+              "column": "x",
+              "value_json": "1",
+              "observed_at": 0,
+              "input_known_at": 0
+            },
+            "training-read:a": {
+              "binding_column": "x",
+              "source": "raw:a",
+              "source_column": "x",
+              "purpose": "fit_feature",
+              "decision_cut": 0,
+              "assembled_at": 0,
+              "row_id": "a",
+              "date_group": "d0",
+              "fold": "fold"
+            }
+          },
+          "state_s": {
+            "kind": "transform",
+            "fit_cut": 8,
+            "actual_fit_completion_at": 8,
+            "training_sample_ids": [
+              "a"
+            ],
+            "training_groups": [
+              "d0"
+            ],
+            "training_label_refs": [
+              "LabelEvidence(a,label:a,label,target_ref)"
+            ],
+            "actual_training_read_manifests": [
+              "training-read:a"
+            ],
+            "dependencies": [
+              [
+                "fold",
+                "fold",
+                "provenance",
+                []
+              ],
+              [
+                "train",
+                "training-read:a",
+                "provenance",
+                []
+              ],
+              [
+                "labels",
+                "label:a",
+                "fit_label",
+                [
+                  "label"
+                ]
+              ]
+            ],
+            "payload": {
+              "means": [
+                1.0
+              ],
+              "scales": [
+                1.0
+              ]
+            },
+            "role": "scaler",
+            "payload_convention": "canonical JSON supplied normalization; one constant training x uses scale1 fallback."
+          },
+          "consumer_m": {
+            "kind": "transform",
+            "fit_cut": 8,
+            "actual_fit_completion_at": 8,
+            "training_sample_ids": [
+              "a"
+            ],
+            "dependencies_include": [
+              "s"
+            ],
+            "prediction_row": "b",
+            "prediction_cut": 10,
+            "role": "downstream_carried_state",
+            "payload": {
+              "means": [
+                1.0
+              ],
+              "scales": [
+                1.0
+              ]
+            },
+            "fit_evidence": "same honest complete a fit/read/label evidence as s",
+            "dependencies": [
+              [
+                "fold",
+                "fold",
+                "provenance",
+                []
+              ],
+              [
+                "train",
+                "training-read:a",
+                "provenance",
+                []
+              ],
+              [
+                "labels",
+                "label:a",
+                "fit_label",
+                [
+                  "label"
+                ]
+              ],
+              [
+                "state",
+                "s",
+                "provenance",
+                []
+              ]
+            ],
+            "commit_roots": [
+              "m"
+            ]
+          },
+          "bad_variant": {
+            "mutation": "append actual DependencyRef(slot=heldout,source_id=label:b.id,use=fit_label,columns=(label,)) to s; retain honest declared training refs a",
+            "expected": "commit closure rejects extra actual fit-label dependency on s, reachable from m; no declared interval substitute"
+          },
+          "concealment_variants": [
+            {
+              "mutation": "use=provenance for label:b edge",
+              "expected": "reject unreconciled label provenance on fitted state"
+            },
+            {
+              "mutation": "also add LabelEvidence(b,label:b,label,target_ref) and training row b to s",
+              "expected": "reject population mismatch and/or future maturity15>fit8"
+            }
+          ],
+          "required_actual_assertion": "Build actual SemanticNodeSpecs with IDs computed from retained bytes; clean state/control commit validates first. Mutations must be validated through actual F11 commit/closure, never only by searching a prose path."
+        }
+      },
+      "expected": {
+        "admission": "reject/purge with path a->s->label:b",
+        "not_a_raw_lookback_exclusion": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UP-V02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "temporal interval/role plan",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-08",
+      "name": "Indirect scaler in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "scaler",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->scaler",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-09",
+      "name": "Indirect feature_discovery in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "feature_discovery",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->feature_discovery",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-10",
+      "name": "Indirect residual_baseline in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "residual_baseline",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->residual_baseline",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-11",
+      "name": "Indirect encoder in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "encoder",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->encoder",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-12",
+      "name": "Indirect gate in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "gate",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->gate",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-13",
+      "name": "Indirect calibrator in-sample leakage",
+      "inputs": {
+        "evaluation_row": "b",
+        "evaluation_group": "d2",
+        "model": "m",
+        "upstream_role": "calibrator",
+        "upstream_training_groups": [
+          "d2"
+        ]
+      },
+      "expected": {
+        "admission": "ContractError",
+        "path": "m->calibrator",
+        "all_roles_checked": true
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "UPK-02",
+        "UPK-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof + proof-aware plan/F11 retained closure",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-14",
+      "name": "Missing learned dependency and cycle rejected",
+      "inputs": {
+        "graphs": {
+          "missing": {
+            "m": [
+              "s"
+            ]
+          },
+          "cycle": {
+            "m": [
+              "s"
+            ],
+            "s": [
+              "m"
+            ]
+          }
+        }
+      },
+      "expected": {
+        "missing": "ContractError missing fitted dependency",
+        "cycle": "ContractError cyclic fitted lineage"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V02",
+        "V02.LINEAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-15",
+      "name": "Explicit cross-fold upstream route",
+      "inputs": {
+        "root_fold": "f2",
+        "base_fold": "f1",
+        "routes": {
+          "base": "f1"
+        },
+        "evaluation_row": "b",
+        "b_not_in_any_training": true
+      },
+      "expected": {
+        "declared_matching_route": "admit",
+        "missing_or_wrong_route": "reject"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "V02.LINEAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof and F11 declared route integration",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-16",
+      "name": "Artifact declarations require actual population/read proof",
+      "inputs": {
+        "declared_training": [
+          "a"
+        ],
+        "actual_reads": [
+          "a",
+          "b"
+        ],
+        "evaluation_row": "b"
+      },
+      "expected": {
+        "admission": "reject before serving",
+        "existing_strong_path": "F11 committed graph verifies actual reads/population; direct legacy artifact tuple alone is insufficient proof"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "F11.INPUT_AUDIT"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "existing F11 read/commit validation; no duplicate verifier",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-17",
+      "name": "OOF schedule covers every required learned-edge row",
+      "inputs": {
+        "downstream_training": [
+          "a",
+          "b",
+          "c"
+        ],
+        "required_edge": "base->calibrator",
+        "producer_OOF_rows": [
+          "a",
+          "c"
+        ]
+      },
+      "expected": {
+        "missing": [
+          "b"
+        ],
+        "admission": "reject; no in-sample fill-in"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "V02.LINEAGE",
+        "CC-05"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "temporal fit plan coverage manifest",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_stages",
+          "requirement": "finite-resource:max_stages",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_stages",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        },
+        {
+          "name": "capacity:max_oof_edges",
+          "requirement": "finite-resource:max_oof_edges",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_oof_edges",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V02-18",
+      "name": "Outer-result selection cannot become development state",
+      "inputs": {
+        "phase": "outer_test",
+        "row": "b",
+        "label_used_to_choose": "window30",
+        "new_artifact_role": "feature_discovery"
+      },
+      "expected": {
+        "development_fit_admission": "reject",
+        "trial_disposition": "new contaminated/development experiment; old outer evidence retained"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V02",
+        "TECH-10"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "phase-role plan",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-19",
+      "name": "Upstream completion later than consumer or decision rejected",
+      "inputs": {
+        "upstream_fit": 12,
+        "consumer_fit": 11,
+        "decision": 15,
+        "alternative_model_fit": 16
+      },
+      "expected": {
+        "upstream_after_consumer": "reject",
+        "model_after_decision": "reject"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V02",
+        "CC-01"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_oof compatibility",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-20",
+      "name": "Conservative and exact interval plans preserve evaluation ownership",
+      "inputs": {
+        "evaluation_rows": [
+          "e1",
+          "e2"
+        ],
+        "candidate_training": [
+          "a",
+          "b"
+        ],
+        "a_raw_past_overlap_only": true,
+        "b_forbidden_label_overlap": true
+      },
+      "expected": {
+        "exact_training": [
+          "a"
+        ],
+        "conservative_training": [],
+        "both_evaluation": [
+          "e1",
+          "e2"
+        ],
+        "comparison": "usable support, no empirical quality claim"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UP-V02"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "temporal plan compiler and literal reference",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_total_dependencies",
+          "requirement": "finite-resource:max_total_dependencies",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_total_dependencies",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          },
+          "fixture": "2 sample rows with1 distinct typed dependency each at capacity; third distinct dependency exceeds total while per-sample cap remains64."
+        }
+      ]
+    },
+    {
+      "id": "V02-21",
+      "name": "Cache and restart include fold target and full learned closure",
+      "inputs": {
+        "base_key": {
+          "fold": "f1",
+          "target": "t1",
+          "upstream": "u1"
+        },
+        "mutations": [
+          {
+            "fold": "f2"
+          },
+          {
+            "target": "t2"
+          },
+          {
+            "upstream": "u2"
+          }
+        ]
+      },
+      "expected": {
+        "all_mutations_change_identity": true,
+        "stale_restore": "reject",
+        "same_manifest_restore": "identical plan"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "UPK-01",
+        "V02-P7"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "new manifest + existing artifact content identities",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-22",
+      "name": "Manifest population forgery rejected",
+      "inputs": {
+        "complete_samples": [
+          "a",
+          "b",
+          "e"
+        ],
+        "declared_fold_training": [
+          "a"
+        ],
+        "honest_training": [
+          "a",
+          "b"
+        ]
+      },
+      "expected": {
+        "validate_fold_population": "ContractError"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "V02.LINEAGE"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "validate_fold_population compatibility",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_temporal_population",
+          "requirement": "finite-resource:max_temporal_population",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_temporal_population",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V02-23",
+      "name": "Price endpoint and dependency span are different fields",
+      "inputs": {
+        "price_target_end": 10,
+        "carried_state_end": 15,
+        "label_maturity": 16
+      },
+      "expected": {
+        "target_end": 10,
+        "dependency_end": 15,
+        "maturity": 16,
+        "F11_legacy_adapter": "Actual temporal F11 adapter preserves end10 separately from dependency15; see V02-26/27 integration vectors."
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SR-V01",
+        "SR-V02",
+        "T-HORIZON"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "adjacent explicit interval manifest; shared interface flagged",
+      "status": "proposed_not_executed",
+      "variants": [
+        {
+          "name": "capacity:max_dependencies_per_sample",
+          "requirement": "finite-resource:max_dependencies_per_sample",
+          "provenance": "synthetic engineering guard, no new source attribution",
+          "limit": "max_dependencies_per_sample",
+          "supplied_limit": 2,
+          "at_capacity": {
+            "count_or_bytes": 2,
+            "expected": "accept otherwise valid exact-capacity fixture"
+          },
+          "one_over": {
+            "count_or_bytes": 3,
+            "expected": "ContractError before mutation/publication; previous state bytes unchanged"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V02-24",
+      "name": "Reverse-time schedule is diagnostic only",
+      "inputs": {
+        "train_decisions": [
+          20,
+          21
+        ],
+        "evaluation_decisions": [
+          10,
+          11
+        ]
+      },
+      "expected": {
+        "forward_evidence_admission": "reject",
+        "diagnostic_record": "explicit nondeployable label if separately registered"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "RFE-09",
+        "RFE-10",
+        "DTM-A17"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "phase-role chronological plan",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-25",
+      "name": "All four units retain eight evidence phases",
+      "inputs": {
+        "units": [
+          "V01",
+          "V01.LABEL_COVERAGE",
+          "V02",
+          "V02.LINEAGE"
+        ],
+        "phases": [
+          "P0",
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5",
+          "P6",
+          "P7"
+        ]
+      },
+      "expected": {
+        "phase_records": 32,
+        "P0": "preparation/design only",
+        "P1": "proposed semantic fixtures",
+        "P2_P5": "future exact-service comparisons and downstream evidence, not alpha requirement",
+        "P6": "pending complete authorized economic chain",
+        "P7": "synthetic parity proposed; actual future evidence pending"
+      },
+      "derivation": "Hand-derived from the stated finite vector and contract; no candidate/reference execution used.",
+      "source_ids": [
+        "SPECIALIST_EXPERIMENT_PROGRAM"
+      ],
+      "units": "Integer logical times and exact tick prices unless explicitly stated; no market data.",
+      "owner": "V02",
+      "api": "scope/evidence ledger",
+      "status": "proposed_not_executed"
+    },
+    {
+      "id": "V02-26",
+      "name": "Committed temporal exclusion with actual target end10",
+      "inputs": {
+        "a": [
+          0,
+          10,
+          11,
+          15
+        ],
+        "b": [
+          1,
+          9,
+          10,
+          9
+        ],
+        "columns": [
+          "decision",
+          "target_end",
+          "label_known",
+          "max_forbidden_end"
+        ],
+        "fit": 12,
+        "evaluation": [
+          14,
+          20
+        ]
+      },
+      "expected": {
+        "training": [
+          "b"
+        ],
+        "purged": [
+          "a"
+        ],
+        "a_label_end": 10,
+        "a_dependency_end": 15,
+        "forged_actual_a_fit": "reject"
+      },
+      "source_ids": [
+        "SR-V02",
+        "F11.INPUT_AUDIT",
+        "T-HORIZON"
+      ],
+      "owner": "V02",
+      "api": "new versioned temporal F11 adapter",
+      "status": "proposed_not_executed",
+      "derivation": "Hand arithmetic and static legacy serialization schema; no candidate execution."
+    },
+    {
+      "id": "V02-27",
+      "name": "Temporal commit restored and actually served",
+      "inputs": {
+        "a": [
+          0,
+          10,
+          11,
+          15
+        ],
+        "b": [
+          1,
+          9,
+          10,
+          9
+        ],
+        "fit": 16,
+        "evaluation_row": [
+          20,
+          30,
+          31
+        ],
+        "evaluation": [
+          20,
+          40
+        ],
+        "training_labels": [
+          1,
+          1
+        ],
+        "prior": "Beta(1,1)"
+      },
+      "expected": {
+        "training": [
+          "a",
+          "b"
+        ],
+        "a_label_end": 10,
+        "restored_prediction": "3/4",
+        "request_end": 30,
+        "tampered_target_or_reads_or_plan_or_route": "reject"
+      },
+      "source_ids": [
+        "SR-V02",
+        "F11.INPUT_AUDIT",
+        "T-HORIZON"
+      ],
+      "owner": "V02",
+      "api": "new versioned temporal F11 adapter",
+      "status": "proposed_not_executed",
+      "derivation": "Hand arithmetic and static legacy serialization schema; no candidate execution."
+    },
+    {
+      "id": "V02-28",
+      "name": "Real legacy committed/restore byte compatibility",
+      "inputs": {
+        "legacy_wire_schema": "/tmp/v01-v02-legacy-wire-schema-draft.json",
+        "workflow": "independently encoded old complete FrequencyModel closure -> commit -> fresh store -> restore model -> serve -> reencode"
+      },
+      "expected": {
+        "legacy_node_commit_model_bytes_unchanged": true,
+        "legacy_Sample_wire_sha256": "2aa829826ee746e98cfb194ef5c0b9ed30b713c5429d35d8a2b207a59054f3af",
+        "added_target_end_null_field": "reject",
+        "new_temporal_discriminator": "distinct"
+      },
+      "source_ids": [
+        "SR-V02",
+        "F11.INPUT_AUDIT",
+        "T-HORIZON"
+      ],
+      "owner": "V02",
+      "api": "new versioned temporal F11 adapter",
+      "status": "proposed_not_executed",
+      "derivation": "Hand arithmetic and static legacy serialization schema; no candidate execution."
+    }
+  ],
+  "fixture_defaults": {
+    "precedence": "Explicit case values and explicit variants override these defaults. No constructor parameter affecting outcomes may be selected by implementation. Integer times are logical UTC nanoseconds, exact int excluding bool. Array price/ratio encodings are converted exactly, never via float.",
+    "path_target": {
+      "id": "case-id:path",
+      "definition_version": "price-v1",
+      "asset": "ES",
+      "decision_at": 0,
+      "horizon_end": 10,
+      "observation_process": "certified_last_observed_mark",
+      "population": "clock",
+      "unit": "Unit.TICKS",
+      "capabilities": [
+        "Capability.TERMINAL_RETURN",
+        "Capability.EXCURSIONS",
+        "Capability.FIRST_PASSAGE"
+      ],
+      "object_version": null,
+      "geometry_id": null,
+      "policy_version": null
+    },
+    "path_call": {
+      "initial": "Ticks(100)",
+      "up_ticks": 3,
+      "down_ticks": 3,
+      "points": []
+    },
+    "point_expansion": {
+      "PathPoint": "(at,sequence,Ticks(integer_price),known_at)",
+      "ExactPoint": "(at,sequence,Fraction(integer_price,1),known_at)",
+      "two_column_event": "[at,price] -> sequence0, known_at=at",
+      "three_column_event": "[at,sequence,price] -> known_at=at",
+      "price_only_path": "prices at times1,2,... in array order, sequence0, known_at=at",
+      "empty_event_array": "No observed events; no invented endpoint point. Certified carried-mark process applies.",
+      "unknown_order": "Preserve supplied sequence as identity only; source_order_known=false forbids interpreting it as evidence."
+    },
+    "observation_window": {
+      "start": "case cut, default0",
+      "end": "explicit observed_end, otherwise target end, default10",
+      "certified_through": "explicit certificate/coverage_certified, otherwise observation end+1",
+      "gaps": [],
+      "source_order_known": true,
+      "version": "case-id:observation-v1",
+      "gap_convention": "[start,end); observations at gap start forbidden and at gap end allowed"
+    },
+    "object_target": {
+      "id": "case-id:object-target",
+      "object_version": "o-v1",
+      "cut": 0,
+      "end": 10,
+      "band": [
+        "Fraction(100,1)",
+        "Fraction(102,1)"
+      ],
+      "side": 1,
+      "favorable_distance": "Fraction(3,1)",
+      "adverse_distance": "Fraction(2,1)",
+      "observation_process": "certified_discrete_ticks",
+      "contact_mode": "future_contact",
+      "initial": "Fraction(99,1)"
+    },
+    "legacy_sample": {
+      "id": "explicit row id, otherwise a",
+      "date_group": "explicit group, otherwise d:<id>",
+      "decision_at": "explicit decision, otherwise0",
+      "dependency_end": "explicit dependency_end, otherwise decision_at+1",
+      "label_known_at": "explicit label_known, otherwise dependency_end+1",
+      "target_version": "target-v1, replaced by exact retained target ArtifactRef.sha256 only in actual F11 fixtures"
+    },
+    "fold_call": {
+      "id": "case-id:fold",
+      "fit_at": "explicit fit, otherwise evaluation_start",
+      "evaluation_start": 10,
+      "evaluation_end": "explicit end, otherwise evaluation_start+10",
+      "embargo_ns": 0,
+      "training_start": null
+    },
+    "ledger_candidate": {
+      "id": "explicit id, otherwise a",
+      "generator_event": "birth:<id>",
+      "decision_set": "set0",
+      "object_version": "o-v1",
+      "date_group": "d0",
+      "source_episode": "episode0",
+      "sampling_frame": "clock",
+      "created_at": 0,
+      "known_at": 0,
+      "decision": "untraded",
+      "inclusion_probability": null,
+      "endpoint_group": "E10",
+      "definition_id": "price-v1"
+    },
+    "typed_temporal_sample": {
+      "decision_at": "explicit decision, otherwise0",
+      "target_end": "explicit target_end, otherwise decision_at+1",
+      "label_known_at": "explicit maturity, otherwise target_end+1",
+      "phase_role": "train unless explicit outer/future/tune/calibrate",
+      "endpoint_group": "E:<id>",
+      "parent_groups": [],
+      "dependencies": [],
+      "target_version": "target-v1 or exact F11 retained target hash"
+    },
+    "synthetic_provenance": "These defaults and capacity variants are engineering fixture choices, not copied source parameter values or new original-reading credit."
+  },
+  "finite_limits": {
+    "record": "V01V02LimitsV1 (adjacent new configuration; no legacy dataclass changes)",
+    "defaults": {
+      "max_ledger_candidates": 4096,
+      "max_ledger_definitions": 1024,
+      "max_ledger_outcomes": 8192,
+      "max_temporal_population": 4096,
+      "max_dependencies_per_sample": 64,
+      "max_total_dependencies": 16384,
+      "max_stages": 64,
+      "max_oof_edges": 4096,
+      "max_parent_groups_per_sample": 64,
+      "max_id_utf8_bytes": 256,
+      "max_payload_bytes": 65536,
+      "max_checkpoint_bytes": 2097152,
+      "max_nested_depth": 32
+    },
+    "validation": "Every limit exact positive int, bool forbidden; configurable downward or upward only through explicit supplied limits retained with checkpoint/plan configuration. F11 applies min(applicable local limit, existing F11 limit).",
+    "enforcement": "Check capacity before append/extend, hashing, decoding or recursive allocation; no truncation. All iterable inputs consumed with at most capacity+1 observations; fail closed on one-over. UTF8 bytes are measured on canonical encoding; checkpoint restores enforce supplied limits before parsing and structural limits after bounded parse. Rejected mutation leaves ledger/plan/checkpoint unchanged.",
+    "serialization": "Checkpoint envelope includes exact limits; restoring under a different supplied limit configuration rejects unless explicitly validating an already decoded immutable snapshot without republishing. Legacy serialization unchanged."
+  },
+  "capacity_case_mapping": {
+    "max_ledger_candidates": "V01-19",
+    "max_ledger_definitions": "V01-30",
+    "max_ledger_outcomes": "V01-20",
+    "max_temporal_population": "V02-22",
+    "max_dependencies_per_sample": "V02-23",
+    "max_total_dependencies": "V02-20",
+    "max_stages": "V02-17",
+    "max_oof_edges": "V02-17",
+    "max_parent_groups_per_sample": "V01-24",
+    "max_id_utf8_bytes": "V01-33",
+    "max_payload_bytes": "V01-33",
+    "max_checkpoint_bytes": "V01-33",
+    "max_nested_depth": "V01-33"
+  }
+}

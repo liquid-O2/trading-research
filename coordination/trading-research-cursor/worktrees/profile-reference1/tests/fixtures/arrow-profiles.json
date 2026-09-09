@@ -1,0 +1,1464 @@
+{
+  "kind": "nominated_flat_arrow_physical_profiles",
+  "source": "data/manifests/schema-catalog.json",
+  "source_sha256": "36cfa8b245edb30b8c920bf3106de5c1b7338e80cbf471f1c12310e33fd13b0d",
+  "profiles": {
+    "b7eab2e94e7218ec99c7fc4f28d08c9526f618686f92d26a5f5337f0a758a62b": {
+      "fields": [
+        {
+          "name": "root",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "continuous_symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "raw_symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "instrument_class",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=uint32, ordered=0>"
+        },
+        {
+          "name": "underlying",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "expiration_ts_utc",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "activation",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "activation_ts_utc",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "min_price_increment",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "min_lot_size",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "contract_multiplier",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "currency",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "first_bar_ms",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "first_bar_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "last_bar_ms",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "last_bar_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "bar_rows",
+          "nullable": true,
+          "type": "uint32"
+        },
+        {
+          "name": "first_definition_ns",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "first_definition_ts_utc",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "last_definition_ns",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "last_definition_ts_utc",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "definition_events",
+          "nullable": true,
+          "type": "uint32"
+        }
+      ],
+      "datasets": [
+        "derived/continuous-futures__instrument-and-roll-maps"
+      ]
+    },
+    "da041bd340f53ece3070278b4e8765d324030153a7fbc4be881249847bd71316": {
+      "fields": [
+        {
+          "name": "root",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "continuous_symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "segment_start_ms",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "segment_start_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "segment_end_exclusive_ms",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "segment_end_exclusive_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "raw_symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration_ts_utc",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        }
+      ],
+      "datasets": [
+        "derived/continuous-futures__instrument-and-roll-maps"
+      ]
+    },
+    "13a216ab9fc42580f8ed0c84e116a7d8e6d778d8e554a97dcd4ed332fd2c0c22": {
+      "fields": [
+        {
+          "name": "trade_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "root",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "contract_expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "duration_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "product_display",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "contract_label",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "open",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "high",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "low",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "close",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "settlement",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "change",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "total_volume",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "efp",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "open_interest",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/cboe__vx-futures__normalized"
+      ]
+    },
+    "0b87d97d97569c9419cf6feb2281d47c5b21ef56800a430c9496881eb2731a5a": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "earnings_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "earnings_date_et",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "eps_estimate",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "reported_eps",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "surprise_pct",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__earnings__normalized"
+      ]
+    },
+    "8f4553cdc4ec39901a2836d419700a773ee25ff35348921ea174b2254d7bec5d": {
+      "fields": [
+        {
+          "name": "event_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "event_time_et",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "status",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__event-calendar__normalized"
+      ]
+    },
+    "b382eec1322b80c1b624f952c81910ac7cd0b5c87bbea0bfceb739c3ea290590": {
+      "fields": [
+        {
+          "name": "event_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "nullable": true,
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "event_time_et",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "null"
+        },
+        {
+          "name": "status",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__event-calendar__normalized"
+      ]
+    },
+    "82bfb3fef623d822f6b9fcbe1410e24b5f1aa47686c3efc2bd5fa819e1244b75": {
+      "fields": [
+        {
+          "name": "event_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "nullable": true,
+          "type": "null"
+        },
+        {
+          "name": "event_time_et",
+          "nullable": true,
+          "type": "null"
+        },
+        {
+          "name": "event_type",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "null"
+        },
+        {
+          "name": "status",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__event-calendar__normalized"
+      ]
+    },
+    "2468a562a64325b7546d66ac6385e98b388fc3f9ba00fd138790879eaf291946": {
+      "fields": [
+        {
+          "name": "date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "series_id",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "value",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "realtime_start",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "realtime_end",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__volatility__normalized"
+      ]
+    },
+    "cea532fdc0e85de8be455ba217c459911384f36db0648e2f2adea28c710cbf9e": {
+      "fields": [
+        {
+          "name": "date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "value",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/context__volatility__normalized"
+      ]
+    },
+    "a913656476276b9a5490910440485c189239b24a4a1b446d0b8d9ffddbc2bfb4": {
+      "fields": [
+        {
+          "name": "date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "series_id",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "name",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "tenor_days",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "rate_pct",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "realtime_start",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "realtime_end",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/fred__usd-rates__normalized"
+      ]
+    },
+    "3dc9a35f2e1c825d9caebc88cac099179e92273723dd5cfdb9a0751b99520e61": {
+      "fields": [
+        {
+          "name": "date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "source_symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "open",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "high",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "low",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "close",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "adjusted_close",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "volume",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/yahoo__cash-daily__normalized"
+      ]
+    },
+    "ecf01fcdfb5104c0f56ce3a44379247131f77616f61aaa9809e51c1097d6d8ac": {
+      "fields": [
+        {
+          "name": "ex_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "dividend",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "split_ratio",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "source",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "free-sources/yahoo__corporate-actions__normalized"
+      ]
+    },
+    "1a580325769ce1344204e6582e65ebf0dadc8c258e0c6799af8518f5047b0d5b": {
+      "fields": [
+        {
+          "name": "t",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ts_recv",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "raw_symbol",
+          "nullable": true,
+          "type": "string"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "instrument_class",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "strike_price",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "activation",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "underlying",
+          "nullable": true,
+          "type": "string"
+        },
+        {
+          "name": "min_price_increment",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "min_lot_size",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "contract_multiplier",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "currency",
+          "nullable": true,
+          "type": "string"
+        },
+        {
+          "name": "security_update_action",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        }
+      ],
+      "datasets": [
+        "quantpad/cme__es-continuous-futures__definition",
+        "quantpad/cme__nq-continuous-futures__definition",
+        "quantpad/cme__rty-continuous-futures__definition",
+        "quantpad/cme__ym-continuous-futures__definition"
+      ]
+    },
+    "187c276018696b83a970478b15eabbf6c089b94ac46643a25545dc3290d3b010": {
+      "fields": [
+        {
+          "name": "t",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "action",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "side",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "price",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "bid_px",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "ask_px",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "bid_sz",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "ask_sz",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "nullable": true,
+          "type": "int16"
+        }
+      ],
+      "datasets": [
+        "quantpad/cme__es-continuous-futures__mbp-1",
+        "quantpad/cme__nq-continuous-futures__mbp-1"
+      ]
+    },
+    "4e8935cc834421b35ea86126140d60386e1cd8e03039aeb1bbdcfc1596e9ea22": {
+      "fields": [
+        {
+          "name": "t",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "o",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "h",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "l",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "c",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "v",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        }
+      ],
+      "datasets": [
+        "quantpad/cme__es-continuous-futures__ohlcv-1m",
+        "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+        "quantpad/cme__nq-continuous-futures__ohlcv-1s",
+        "quantpad/cme__rty-continuous-futures__ohlcv-1m",
+        "quantpad/cme__ym-continuous-futures__ohlcv-1m",
+        "quantpad/nasdaq__qqq-etf__ohlcv-1m",
+        "quantpad/nyse-arca__spy-etf__ohlcv-1m",
+        "quantpad/opra__ndx-options__ohlcv-1d__reference",
+        "quantpad/opra__ndxp-options__ohlcv-1d__reference",
+        "quantpad/opra__qqq-options__ohlcv-1d__reference"
+      ]
+    },
+    "39b4c67dc09501f76726f7aba08d34c57c0045a1d84f7aef2abce1d968c29613": {
+      "fields": [
+        {
+          "name": "t",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ts_recv",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "ts_ref",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "quantity",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "sequence",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "stat_type",
+          "nullable": true,
+          "type": "int16"
+        },
+        {
+          "name": "channel_id",
+          "nullable": true,
+          "type": "int16"
+        },
+        {
+          "name": "update_action",
+          "nullable": true,
+          "type": "int8"
+        },
+        {
+          "name": "stat_flags",
+          "nullable": true,
+          "type": "int8"
+        }
+      ],
+      "datasets": [
+        "quantpad/cme__es-continuous-futures__statistics",
+        "quantpad/cme__nq-continuous-futures__statistics",
+        "quantpad/cme__rty-continuous-futures__statistics",
+        "quantpad/cme__ym-continuous-futures__statistics",
+        "quantpad/opra__ndxp-options__statistics__reference",
+        "quantpad/opra__qqq-options__statistics__reference"
+      ]
+    },
+    "37afbab36ffd07f3a1e1893bbc9c88c754988613533ff0bd2e8d27bf4facf302": {
+      "fields": [
+        {
+          "name": "t",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "side",
+          "nullable": true,
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "instrument_id",
+          "nullable": true,
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "nullable": true,
+          "type": "int16"
+        }
+      ],
+      "datasets": [
+        "quantpad/cme__es-continuous-futures__trades",
+        "quantpad/cme__nq-continuous-futures__trades",
+        "quantpad/cme__rty-continuous-futures__trades",
+        "quantpad/cme__ym-continuous-futures__trades"
+      ]
+    },
+    "587e8dbb1ed1e03b60acb3d645ca4b61677fcaf0c03bd564d3b12feef369d605": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "request_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "osi_symbol",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "thetadata-opra/opra__ndx-options__contracts",
+        "thetadata-opra/opra__ndxp-options__contracts",
+        "thetadata-opra/opra__qqq-options__contracts",
+        "thetadata-opra/opra__spx-options__contracts",
+        "thetadata-opra/opra__spxw-options__contracts",
+        "thetadata-opra/opra__spy-options__contracts"
+      ]
+    },
+    "d512ffec6dd1f8a9682ffa242cb7b9b7160f264ab9f3198bc86140dc7b95e119": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "open",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "high",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "low",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "close",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "volume",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "count",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "bid_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "ask_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_created",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "ts_last_trade",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "osi_symbol",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "thetadata-opra/opra__ndx-options__eod",
+        "thetadata-opra/opra__ndxp-options__eod",
+        "thetadata-opra/opra__qqq-options__eod",
+        "thetadata-opra/opra__spx-options__eod",
+        "thetadata-opra/opra__spxw-options__eod",
+        "thetadata-opra/opra__spy-options__eod"
+      ]
+    },
+    "b2980f57dc3e0ed3a4040ba9fd0a1be97993cc0b952e3d0ba27bf476753e58cd": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "open_interest",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "osi_symbol",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "thetadata-opra/opra__ndx-options__open-interest",
+        "thetadata-opra/opra__ndxp-options__open-interest",
+        "thetadata-opra/opra__qqq-options__open-interest",
+        "thetadata-opra/opra__spx-options__open-interest",
+        "thetadata-opra/opra__spxw-options__open-interest",
+        "thetadata-opra/opra__spy-options__open-interest",
+        "thetadata-opra/opra__vix-options__open-interest__dte60-full-chain"
+      ]
+    },
+    "1ba2089c210c3f3518bf68fbeca807aa0e2a82c89f485a3f457cab5a16aad067": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "bid_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "bid_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "ask_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "osi_symbol",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70",
+        "thetadata-opra/opra__ndx-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__ndxp-options__quote-1m__dte14__strike-range70",
+        "thetadata-opra/opra__ndxp-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__ndxp-options__quote-1m__dte60__atm3-legacy",
+        "thetadata-opra/opra__qqq-options__quote-1m__dte14__strike-range42",
+        "thetadata-opra/opra__qqq-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__qqq-options__quote-1m__dte60__atm3-legacy",
+        "thetadata-opra/opra__spx-options__quote-1m__dte14__strike-range90",
+        "thetadata-opra/opra__spx-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__spxw-options__quote-1m__dte14__strike-range90",
+        "thetadata-opra/opra__spxw-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__spxw-options__quote-1m__dte60__atm3-legacy",
+        "thetadata-opra/opra__spy-options__quote-1m__dte14__strike-range45",
+        "thetadata-opra/opra__spy-options__quote-1m__dte60__atm10",
+        "thetadata-opra/opra__vix-options__quote-1m__dte60-full-chain"
+      ]
+    },
+    "f3eb48ee0ebb272a162adb3425ece3319424b9de5937eacbc21c01a3c72d1d82": {
+      "fields": [
+        {
+          "name": "symbol",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "nullable": true,
+          "type": "large_string"
+        },
+        {
+          "name": "sequence",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition1",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition2",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition3",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition4",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "bid_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "bid",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "bid_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_size",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask_exchange",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "ask",
+          "nullable": true,
+          "type": "double"
+        },
+        {
+          "name": "ask_condition",
+          "nullable": true,
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "nullable": true,
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "ts_quote",
+          "nullable": true,
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "valid_for_volume",
+          "nullable": true,
+          "type": "bool"
+        },
+        {
+          "name": "osi_symbol",
+          "nullable": true,
+          "type": "large_string"
+        }
+      ],
+      "datasets": [
+        "thetadata-opra/opra__ndx-options__trade-quote__dte7__strike-range70",
+        "thetadata-opra/opra__ndxp-options__trade-quote__dte7__strike-range70",
+        "thetadata-opra/opra__qqq-options__trade-quote__dte7__strike-range42",
+        "thetadata-opra/opra__spx-options__trade-quote__dte7__strike-range90",
+        "thetadata-opra/opra__spxw-options__trade-quote__dte7__strike-range90",
+        "thetadata-opra/opra__spy-options__trade-quote__dte7__strike-range45"
+      ]
+    }
+  },
+  "scope": "physical field/type examples only; no semantic or full dataset eligibility"
+}

@@ -1,0 +1,92 @@
+{
+  "reviewer": "f04_batch_review",
+  "status": "complete_static_review_findings_collected_no_repairs_no_execution",
+  "execution": {"tests_run":0,"source_compilation":0,"market_reads":0,"production_test_reference_or_golden_mutations":false},
+  "identities": {
+    "src/trading_research/data/transactions.py":"5a4e12b54d09878cc8244e99c970e7e7181a6c3f956640fe286d86ec61f9ea2a",
+    "src/trading_research/data/transaction_matching.py":"d12c741e0ba27d77653206c63fd76770e45fb2af3b6cdacff1d9bff8ac06c604",
+    "src/trading_research/measurements/transaction_reducers.py":"78e18b23e7206b373144b05b0c85f0d35b7738ea1aaef1afda837b6e6517b71e",
+    "references/transactions_literal.py":"4062aeeb64f49e53ff8fda4a24758fb8dacb0894744665cea5576aaf22939d89",
+    "tests/test_transactions.py":"aaf37ba4e7af9796ff5bfcf60705b7784f4ed3f51752bc573cc04589d12b7fb5",
+    "tests/test_transaction_matching.py":"67b0ae90ab47ee2232b5bdee7b5908931303ae45f5092953b630a933b06b0800",
+    "src/trading_research/measurements/tape.py":"2968f4c0db9370f35b77b0455e05cafda73dcd561453c79da821634424ce59a8",
+    "src/trading_research/foundations/bars.py":"f3f08c5a65bc1145bf4ee4df33ea3b4f6f59a232ae9a69c613c8dab6cc36c58a",
+    "src/trading_research/measurements/auction.py":"8d0c26270f7975ff00596a02592fbeb2f24de7cab7cbe3c2c0ff45e65ac61d28",
+    "src/trading_research/runtime/ports.py":"7b627ddd42932cf594a444aa5f846ddc38d73474ccd1a76a36ae7ffd229893c3",
+    "src/trading_research/verify.py":"8d120b3e6302b996f176abde944a3d3978055176240f7d4cca3e0e6cf9f7813f",
+    "validation/F05_TRANSACTION_PROTOCOL.md":"e0a0232155900b257a8d7b0065f4adb981444ae4135af03f64f513e962245e34",
+    "tests/golden/f05-transactions.json":"924f96b39ab6d269c01f0f83d353c4bb6b4f5f3e619f627cb129de341d198c51",
+    "reports/f05-implementation-coverage.json":"5ec506a564f3d65bdc2a9cc2bd152c062f713ef57f6a3f6189902995397389c7"
+  },
+  "reviewed_extent": [
+    "Complete new transactions.py, transaction_matching.py, transaction_reducers.py, references/transactions_literal.py, tests/test_transactions.py and tests/test_transaction_matching.py; frozen protocol, all golden cases/timeline and all 28 coverage dispositions.",
+    "Affected tape Trade/TradeLedger/CorrectionImpact/TradeView contracts and CVD, CVDBar, RowGrid/profile, WeightedMoments/VWAP consumers; bar_reference, CausalBar and BarEngine callers; full auction TPO/dwell module; footprint consumer.",
+    "Runtime port additions, optional reconciliation route, inherited measurement/option/risk graph dependencies and binding validation; verify group/owner registration and runner.",
+    "Source-wide caller search for TransactionLedger, TransactionReducer, reconcile_observations, TradeView and changes; affected measurement/bar/TPO/dwell and batch-review test sections, full tests/test_ports.py, F05 adapter dependencies CanonicalEvent/SourceAddress/FuturesTerms. No hidden production caller inferred.",
+    "No source-faithful decoder IDs, raw MBP/book/compact/venue defaults, planning records or registered golden/protocol files changed by this reviewer."
+  ],
+  "findings": [
+    {
+      "id":"F05-SR-01","severity":"high","path":"src/trading_research/measurements/transaction_reducers.py","line":98,
+      "related_locations":["src/trading_research/data/transactions.py:295","src/trading_research/measurements/transaction_reducers.py:118","src/trading_research/measurements/transaction_reducers.py:151"],
+      "trigger":"After admitting a value and capturing a snapshot, assign reducer.config['start']=another anchor, reducer.config['row_ticks']=another grid, or ledger.config['definition_version']=another definition. Both public mappings and the config attributes themselves remain writable.",
+      "consequence":"Previously accumulated totals/rows keep the old definition while subsequent downdates and historical snapshot recomputation use the new definition. This can misplace mass, change prior-cut artifacts, bypass frozen bounds or produce unrestorable checkpoints. Ledger can emit mixed-definition deltas under one mutable configuration.",
+      "suggestion":"Store a validated immutable configuration privately, expose a read-only property, and require a new explicitly versioned reducer/ledger for a different configuration. Add mutation/reassignment rejection and prior-snapshot stability assertions. Root preliminary concern confirmed."
+    },
+    {
+      "id":"F05-SR-02","severity":"high","path":"src/trading_research/measurements/transaction_reducers.py","line":276,
+      "related_locations":["src/trading_research/measurements/transaction_reducers.py:235","src/trading_research/measurements/transaction_reducers.py:255"],
+      "trigger":"Apply root A at known_at=10, capture snapshot(10), then apply independent root B at the same allowed known_at=10 and checkpoint. Equivalently capture snapshot(30) before a subsequently admitted delta at 20. Both are currently legal public calls.",
+      "consequence":"The old immutable snapshot remains in _snapshots, but restore first applies every delta and then recomputes that snapshot solely by its cut. It includes B (or the newly admitted delta), changes the old ID and rejects its own valid checkpoint. Tests only restore snapshots whose cut is unaffected by later admissions.",
+      "suggestion":"Retain the exact admitted delta prefix/cursor for each captured artifact and replay snapshots at that recorded cursor, including same-cut histories; alternatively enforce and record a closed-cut contract before snapshot publication. Preserve old artifacts and add restart tests with snapshots between same-cut roots and before later admissions."
+    },
+    {
+      "id":"F05-SR-03","severity":"medium","path":"src/trading_research/measurements/transaction_reducers.py","line":245,
+      "related_locations":["src/trading_research/measurements/transaction_reducers.py:15","src/trading_research/measurements/transaction_reducers.py:63"],
+      "trigger":"Create two reducers with the same default definition_version but different anchors/grid origins/row widths/terms, then produce empty snapshots at the same cut, or snapshots whose finite included values happen to coincide.",
+      "consequence":"TransactionSnapshot omits the frozen reducer configuration identity, anchor, grid and unit/terms vector. These artifacts can have identical IDs despite representing different definitions and cannot independently explain their profile coordinates. Read-only config alone does not repair artifact identity.",
+      "suggestion":"Bind a canonical immutable reducer configuration hash (and required interpretable grid/anchor/unit metadata) into each snapshot. Cover same-number/different-definition snapshots, including empty snapshots."
+    },
+    {
+      "id":"F05-SR-04","severity":"high","path":"src/trading_research/data/transaction_matching.py","line":252,
+      "related_locations":["src/trading_research/data/transaction_matching.py:100","tests/test_transaction_matching.py:54","src/trading_research/runtime/ports.py:60"],
+      "trigger":"Observations are known at 12 and the candidate graph actually completes at 15; or a pairing proof is known at 30 and reconciliation completes later. The function has no completion parameter and labels max(inputs,proofs) as Reconciliation.known_at.",
+      "consequence":"The derived artifact advertises input-floor availability as if the computed reconciliation already existed. Neither API/docstring nor result identifies it as unpublished. Tests explicitly lock in input/proof maxima as known_at, and the graph advertises reconciliation clocks to semantic consumers.",
+      "suggestion":"Either explicitly mark this pure reference result unpublished and rename the field input_known_at with a separately timed publication envelope, or accept decision cut/actual completion and retain real output availability without a modeled second compute charge. Root preliminary clock concern confirmed."
+    },
+    {
+      "id":"F05-SR-05","severity":"high","path":"src/trading_research/data/transaction_matching.py","line":254,
+      "related_locations":["src/trading_research/data/transaction_matching.py:201","src/trading_research/data/transaction_matching.py:203","src/trading_research/data/transaction_matching.py:206","tests/test_transaction_matching.py:97"],
+      "trigger":"One left and one right trade have matching time/quantity but a missing price or condition. Unsupported fields suppress every candidate edge, so capacity=0 and the result reports distinct_print_count_conditional_bounds=(2,2). A q5 summary versus q2/q3 split prints likewise reports an exact count from incomparable aggregation records.",
+      "consequence":"Lack of comparability is promoted into evidence of distinct executions. The two observations with unknown key fields could still describe one execution; summary records are not execution-count units. A discrepancy label alongside an exact interval does not remove the false certainty.",
+      "suggestion":"Make the count bound unavailable for unsupported/comparison-ineligible components or include an explicitly conservative unknown-overlap contribution. Keep aggregation record counts separately named. Assert missing-key and summary cases do not certify distinct-execution counts."
+    },
+    {
+      "id":"F05-SR-06","severity":"high","path":"src/trading_research/measurements/transaction_reducers.py","line":300,
+      "related_locations":["src/trading_research/foundations/bars.py:132","src/trading_research/measurements/auction.py:68","src/trading_research/measurements/tape.py:286","tests/test_transactions.py:215"],
+      "trigger":"Two roots for the same instrument have independent channels/publishers/source sessions, equal event_at and different local source_order values (for example channel A order1 at price100 and channel B order2 at price101). TransactionTapeView exports both raw integers as Trade.order.",
+      "consequence":"Bar, CVD path and dwell consumers treat distinct numeric orders as a certified total order, yielding exact open/close or a chosen dwell price across unrelated source-order domains. The key scope test proves distinct identities but never exercises ordering consumers across those scopes.",
+      "suggestion":"Preserve an explicit order domain and require a common certified domain before total ordering; a conservative adapter can suppress order for cross-domain ties until that contract exists. Add tied cross-channel/session consumer fixtures preserving uncertain order."
+    },
+    {
+      "id":"F05-SR-07","severity":"high","path":"src/trading_research/data/transactions.py","line":553,
+      "related_locations":["src/trading_research/data/transactions.py:567","tests/test_transactions.py:282"],
+      "trigger":"Pass an MBP event from raw instrument A with a TransactionKey labelled instrument B, arbitrary publisher/channel metadata, and FuturesTerms from another root. Dataset/schema/source-row checks pass; the function never binds event.instrument_id or available publisher identity to the supplied key/terms.",
+      "consequence":"The new canonical adapter can silently relabel a raw contract and attach an unrelated multiplier/tick grid while producing an apparently valid transaction accepted by a matching reducer. This undermines the registered exact raw-instrument/definition identity contract; preserving raw bytes makes the error auditable but does not block it.",
+      "suggestion":"Require explicit typed instrument/definition mapping evidence at the adapter boundary and validate raw provider/instrument/publisher fields and terms against it. Where the source lacks a field, retain absence rather than inventing its value. Add wrong-instrument and wrong-terms adapter rejection fixtures."
+    },
+    {
+      "id":"F05-SR-08","severity":"high","path":"src/trading_research/measurements/transaction_reducers.py","line":195,
+      "related_locations":["src/trading_research/data/transactions.py:399","src/trading_research/data/transactions.py:411","src/trading_research/measurements/transaction_reducers.py:198"],
+      "trigger":"A pending cancel resolves with an original into Admission.deltas=(insert,cancel) at one completion cut. The public reducer.apply(insert_delta), or apply_batch((insert_delta,)), succeeds, after which snapshot(cut) publishes the original's mass before the cancel is applied.",
+      "consequence":"The ledger itself exposes only final chain state, but delta records have no atomic admission/batch identity or completeness marker and the consumer cannot recognize a partial resolution batch. A supported public call can publish the transient original expressly forbidden by the frozen pending-resolution contract.",
+      "suggestion":"Bind each delta to its atomic resolution batch with ordered membership/completeness evidence and require reducer publication only after a complete validated batch, or accept an immutable Admission envelope at the consumer boundary. Add a partial pending-resolution consumer attempt that must fail without publication or mutation."
+    }
+  ],
+  "additional_coverage_observations": [
+    "New full-recompute/reference comparisons exercise exact volume, profile, money and VWAP plus bar/TPO/dwell finite consumers. Native cohorts and broad consumer gates are accurately left open in coverage.",
+    "Reference aggregate is independent of the incremental contribution routine, but its profile rows are lower tick coordinates while existing profile_reference uses row indices. Current parity fixture width1/origin0 makes these representations coincide; a nontrivial grid fixture should compare via an explicit coordinate conversion instead of implying direct row equality.",
+    "Frozen G20 missing-gap state is not explicitly exercised with reducer(coverage_complete=False) and no rows in the new tests. Existing unresolved-condition and MBP bad-book assertions do not replace the zero-observation/missing-history distinction.",
+    "No runtime test result or phase closure is inferred from this static review. All findings must be dispositioned together before the root-owned consolidated repair and registered shared suite."
+  ]
+}

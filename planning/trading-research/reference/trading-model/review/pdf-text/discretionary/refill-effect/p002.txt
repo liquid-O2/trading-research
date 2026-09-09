@@ -1,0 +1,52 @@
+===== /workspace/sources/documents/discretionary/refill-effect.pdf PAGE 2/24 =====
+ETHOS ORDER FLOW / RESEARCH                                                     CONTENTS
+
+
+Contents
+
+
+What this paper shows  the three results, in one page                                          03
+
+Introduction  the claim, and why we tested it like academics                                        04
+
+The refill concept   zones, touches, and the one question that matters                                 05
+
+The data and the feature set  199M ticks and the honest baseline                                 08
+
+Selection  how grading the touches flips the sign                                                  09
+
+Where the money lives  the discovery that names the paper                                      10
+
+The out-of-sample record  79 untouched sessions, trade by trade                                 12
+
+An independent engine agrees  the same signals on software we didn't write                        14
+
+Why this is not overfitting  seven attacks on our own result                                     16
+
+Prop-firm economics  pass rates, sizing, and the daily stop                                       19
+
+The stat sheet  every number on one page                                                     23
+
+
+
+READ THIS FIRST
+
+The language, in plain English
+
+Zone: a price area where a burst of large aggressive orders     Touch: price returning to a zone later. Each touch is one
+traded. Someone with size fought there.                      event in this study.
+
+Feature: one measurable fact about a touch, known beforeit   R: result measured in risk units. Risk $80, make $240 → +3R.
+resolves (e.g. "did this zone hold earlier?"). The feature set is   Lose the stop → −1R.
+that checklist.
+
+Expectancy: the average R per trade. Positive means the        Profit factor: gross wins ÷ gross losses. Above 1.0 is
+approach makes money over many trades.                       profitable; 1.8 means $1.80 won per $1 lost.
+
+Out-of-sample: data the model never saw during tuning. The   Placebo test: rerun everything on scrambled labels. If the
+only performance that counts.                               "edge" survives, your machinery is lying to you.
+
+AUC: grading skill from 0.5 (coin flip) to 1.0 (perfect). 0.63 =   Drawdown: the give-back from a running peak. Prop
+a real, modest, usable signal.                                  evaluations fail you on it; we measure it everywhere.
+
+                                                            ETHOS ORDER FLOW RESEARCH 02

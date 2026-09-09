@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-09T00:28:31.378269+00:00",
+  "pilot": "7afd70dbe582775095dc3367834abdd4ba4a71ff2263dff0948587ba3d7b0816",
+  "checks": 39,
+  "source_rows": 1150347,
+  "measured_cpu_seconds": 65.796733319,
+  "supervised_cpu_seconds": 89.579493,
+  "actual_scale_rows": 161.13524093164932,
+  "projected_cpu_seconds": 21711.619780634992,
+  "projected_output_bytes": 5312932021.171165,
+  "caps": {
+    "cpu_seconds": 5000,
+    "output_bytes": 4294967296
+  },
+  "decision": "Do not launch full beyond frozen limits. Diagnose unchanged measured production path with one registered cProfile replay, then consolidate the repair. All previous attempts retained.",
+  "scientific_population_accepted": "pilot only; full pending",
+  "known_static_costs": [
+    "per-row Python parse/source arrays",
+    "per-contract nested report dicts and repeated sorting",
+    "wide repeated lifecycle reconstruction/dicts",
+    "date scalar aggregation loops"
+  ]
+}

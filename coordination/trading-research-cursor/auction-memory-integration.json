@@ -1,0 +1,23 @@
+{
+  "status": "controller_reviewed_draft_unverified",
+  "updated_at": "2026-09-08T11:19:15.833761+00:00",
+  "worker_run": "/workspace/coordination/trading-research-cursor/runs/20260908T110937Z-9f9cf6a6",
+  "files": [
+    {
+      "path": "src/trading_research/research/auction_flow_memory.py",
+      "worker_sha256": "6ebabb7b4cb93d2a205fd007a52545224f7959b4c87821e1499f689bc2aa263e",
+      "size_bytes": 34484,
+      "canonical_sha256": "2cce79a5971c425e3906762ef6638b54034346fb4d52c22bb109f556101ed3ea",
+      "canonical_size_bytes": 35137
+    },
+    {
+      "path": "tests/test_auction_flow_memory.py",
+      "worker_sha256": "11d48437f6b81372642559f42407e0739e4dfafe69d2e9775be4e562b0459d65",
+      "size_bytes": 48208,
+      "canonical_sha256": "03816d2db3dea41c5563fe3fbc7335d89ee47313c8592d20def3505c9f2f40d0",
+      "canonical_size_bytes": 49397
+    }
+  ],
+  "backup": "/workspace/coordination/trading-research-cursor/integration-auction-memory-v1",
+  "review": "Complete kernel and all tests read. Controller corrected early byte limits within a single large cluster and across clusters, added exact/one-over byte cases, used exact bounded uint64 batch quantity sums (<2**48), and removed repeated per-member integer type checks after vector validation. Original arithmetic/reference producers unchanged. Static AST only; awaiting registered execution."
+}
