@@ -28,6 +28,7 @@ These are proposed experiments, not attributed source rules. The user requests s
 - **path-first-labeler**: classify first break, return and second break before attaching overnight state.
 - **purge-sequence-labeler**: explicit prior-session sweep and clean-edge sequence.
 - **clock-grid/formation-bar-labeler**: measure sensitivity without changing the source label. No trained day predictor in Phase 1.
+- **sweep-fail-back versus hold-outside**: add the [session-fail-box](session-fail-boxes.md) labeler beside Judas, both single-break classes and the open-location switch. It uses completed 9–10/10–11/60-minute boxes and the **INFERRED** Asia 20–00 and London 02–05 variants. Compare print and 5-minute-close confirmation. A+ records sweep/no-sweep only. Final fail-back labels cannot enter an earlier open snapshot. Jumbo remains primary; OR/IB remains secondary.
 
 ## Phase 1 outcomes
 

@@ -18,6 +18,7 @@ Start with [the measurement contract](measurement-contract.md) and [acquired inv
 ## day-type
 
 - [Range breaks, clean edges and path classes](range-break-paths.md)
+- [Session-fail boxes and reference lines](session-fail-boxes.md)
 - [Jumbo’s Judas and two single-break classes](jumbo-day-classes.md)
 - [Cross-session containment, balance and open position](session-geometry.md)
 - [High/low timing and checkpoint survival](extreme-time-checkpoints.md)

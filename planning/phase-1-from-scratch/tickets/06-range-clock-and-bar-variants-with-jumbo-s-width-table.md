@@ -14,6 +14,8 @@
 
 Own all remaining source-clock/bar constructions, the fixed-grid experiments and the five-bin width table. Reuse ticket01’s accepted06–09 benchmark; do not recreate a different definition.
 
+Add the [session-fail clocks](../wiki/session-fail-boxes.md): GB-NYAM 09–10, GB-10-11, last completed 60 minutes, GB-Asia 20–00 (**INFERRED**) and GB-London 02–05 (**INFERRED**). Publish the associated TDO, 9:30-open, NWOG destination and completed-impulse golden-pocket location records from [SPEC](../SPEC.md#session-fail-boxes-and-fail-back). Reuse existing prior-day rails. Keep Jumbo London TBR/extensions separate. Tickets 09 and 51 consume these records; do not create another producer ticket.
+
 ## Vertical slice
 
 1. Freeze the cited source definition and this slice’s finite named variants. Resolve its questions before claiming faithful measurement. Preserve literal-source and causal/experimental identities when they differ.
@@ -24,10 +26,13 @@ Own all remaining source-clock/bar constructions, the fixed-grid experiments and
 
 Exact bin-boundary widths follow the resolved inclusivity rule; four path classes sum to eligible sessions. The published clock stays present even if an experiment performs better.
 
+A GB-NYAM [09:00,10:00) box is unavailable at 09:45 and freezes at 10:00. GB-10-11 freezes at 11:00. A later high cannot alter either box. An inferred Asia box spans the date boundary and retains its tag. For a completed down impulse H=100, L=90, the golden pocket is [95,96.18]. Friday settlement 100 and Sunday open 104 give NWOG [100,104] with destination role.
+
 Use this expected example plus a manually adjudicated real-data example from the cited definition. The implementation must not generate its own expected answer. Source empirical percentages and selected success charts are not golden results.
 
 ## Acceptance
 
+- [ ] Every added clock has formation/availability evidence and its source tags. TDO and the 9:30 open remain separate lines. NWOG and golden pockets retain destination/location roles. No GB-NYAM outcome starts before its completed box exists.
 - [ ] Every source construction within this ticket’s stated scope is represented by a faithful row or its explicit definition/data/defer status. No unsupported approximation is called faithful.
 - [ ] The named wiki upgrades owned by this ticket are measured through the same declared outcomes. Freeze a finite set of variants/ablation combinations; do not silently drop a required CVD, day class, zone or bar family.
 - [ ] Independent examples pass and every source/implementation disagreement is explained. Availability precedes outcomes; ambiguous OHLC order remains explicit.

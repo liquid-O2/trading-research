@@ -10,6 +10,10 @@
 
 **PRD story:** [S09](../PRD.md). **Wiki:** [jumbo day classes](../wiki/jumbo-day-classes.md). **Contract:** [SPEC](../SPEC.md).
 
+## Session-fail labeler
+
+Add `sweep-fail-print` and `sweep-fail-close5` versus the matching hold-outside variants beside Judas and both single-break classes. Reuse ticket 06's [session-fail boxes and reference lines](../wiki/session-fail-boxes.md). Apply [SPEC](../SPEC.md#session-fail-boxes-and-fail-back) to box returns and separate 5-minute close-through-TDO/PDL confirmations. Keep the A+ sweep-only label and golden-pocket location flags separate from failure. Emit label-known times for ticket 51's open-location comparison. Jumbo definitions and this ticket's dependencies stay unchanged.
+
 ## Vertical slice
 
 1. Freeze the cited source definition and this slice’s finite named variants. Resolve its questions before claiming faithful measurement. Preserve literal-source and causal/experimental identities when they differ.
@@ -20,10 +24,13 @@
 
 An extended-night single break and a compressed already-purged single break stay distinct despite identical final direction. Unmatched and unresolved sessions remain in coverage; future class cannot enter pre-open inputs.
 
+For a frozen [90,100] box with tick size 0.25, price 100 is only a touch. A later 100.25 is a sweep; a subsequent 5-minute close at 99.75 confirms close-based fail-back. Closes staying above 100 through a complete horizon produce the close-based hold variant. No eligible close or an incomplete horizon cannot produce a hold. The fail-back label is unavailable before the confirming close.
+
 Use this expected example plus a manually adjudicated real-data example from the cited definition. The implementation must not generate its own expected answer. Source empirical percentages and selected success charts are not golden results.
 
 ## Acceptance
 
+- [ ] The added labeler reports fail-back and hold-outside under distinct print/5-minute variants. No-sweep, boundary, failed-confirmation and censored populations remain visible. Source tags, reference IDs and causal label times survive into the common path table.
 - [ ] Every source construction within this ticket’s stated scope is represented by a faithful row or its explicit definition/data/defer status. No unsupported approximation is called faithful.
 - [ ] The named wiki upgrades owned by this ticket are measured through the same declared outcomes. Freeze a finite set of variants/ablation combinations; do not silently drop a required CVD, day class, zone or bar family.
 - [ ] Independent examples pass and every source/implementation disagreement is explained. Availability precedes outcomes; ambiguous OHLC order remains explicit.

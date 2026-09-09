@@ -32,6 +32,8 @@ These are proposed experiments, not attributed source rules. The user requests s
 
 ## Phase 1 outcomes
 
+[Session-fail boxes](session-fail-boxes.md) contributes completed 9–10, 10–11 and portable-hour paths, plus **INFERRED** Asia 20–00 and London 02–05 clocks. Compare `sweep-fail-print`, `sweep-fail-close5` and hold-outside on this same table, with separate TDO/PDL close-through confirmations. Count only after each object's known_at; GB-NYAM cannot contribute a 09:45 event. Match observation cutoffs and horizons before comparing to Jumbo. NWOG is a destination and the 9:30 open is a separate reaction line. OR/IB remains secondary.
+
 Recompute the five width bins and overall row, with all four classes, order, support and yearly intervals. Separately report each source horizon, midpoint/open/opposite-edge return, first passage time and maximum pre-return overshoot. Retain failures, untouched days and unresolved ordering.
 
 Use [the common measurement contract](measurement-contract.md) for availability, denominators, discovery and confirmation. A source percentage is a claim to recompute. It is never a pass threshold.

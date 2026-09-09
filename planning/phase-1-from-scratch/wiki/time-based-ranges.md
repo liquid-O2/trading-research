@@ -12,6 +12,8 @@ Other clocks retain separate identities: [DTT Time Based Ranges.txt, L1–507,98
 
 ## Computability and faithful reconstruction
 
+[Session-fail boxes](session-fail-boxes.md) adds GB-NYAM 09–10, GB-10-11, the last completed 60 minutes, GB-Asia 20–00 (**INFERRED**) and GB-London 02–05 (**INFERRED**) to the same clock grid. Each becomes eligible only after formation ends. GB 9–10 is a completed hour box used after 10:00, not the cash opening range; 09:45 is early. Jumbo 6–9 and Jumbo London TBR/extensions keep their existing identities. OR/IB remains secondary.
+
 NQ/ES minute history supports long samples. Trades and NQ MBP-1 support exact formation extrema and event order on their own shorter samples. Volume/dollar bars need trades. No full book is required.
 
 Keep every published clock immutable in its benchmark identity. Persist formation start/end and known_at. H/L are break/liquidity rails. Internal fractions are distinct objects. Freeze completed ranges; retain developing snapshots with later availability. Preserve source clock and NY-calendar versions separately where they disagree.
