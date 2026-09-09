@@ -1,6 +1,6 @@
 # Trading research workspace
 
-Private snapshot of the current workspace. **Research is stopped at the user's request; Deliverable 1 remains incomplete.** Nothing in this export authorizes resuming research jobs.
+Public snapshot of the current workspace. **Research is stopped at the user's request; Deliverable 1 remains incomplete.** Nothing in this export authorizes resuming research jobs.
 
 - [Start here](planning/trading-research/START_HERE.md): current instructions and research state.
 - [Research plan](planning/trading-research/PLAN.md) and [specification](planning/trading-research/RESEARCH_SPEC.md).
