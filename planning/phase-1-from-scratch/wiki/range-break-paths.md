@@ -8,6 +8,14 @@ Family: **day-type**. Measure faithful objects; experiment with named upgrades i
 
 [xfcmg2.pdf, pp.10–12,29; posts 2082104746077245851,2007108825904460106](../../../sources/documents/jumbo/xfcmg2.pdf#page=10) has a distinct 09:30–10:30 prior-value table and 09–10/10–11/11–12 sweep-to-open/EQ/opposite-edge rates. These cannot share a denominator. [NQ Stats RTH Breaks with stats.txt, L148–153](../../../sources/documents/indicators/Pinescript-indicators--main.zip) supplies hardcoded prior-range-open contingencies, not recomputed evidence.
 
+## 2026 conditional break expectancy
+
+The [28 August frame](https://x.com/JJumboFX/status/2093335135789719861) distinguishes **in-value versus in-range double-break expectancy**. Store RTH-open position against prior VAH/VAL and prior RTH H/L independently, then report marginal and joint high-only/low-only/both/neither rates with each cell's n. An open outside value can still be inside range; those populations cannot be pooled into a single inside/outside flag.
+
+Preserve the [open-in versus open-out switch](jumbo-day-classes.md#2026-open-location-switch): inside prior value/range supports the source's fade/EQ hypothesis; outside both with aligned 6–9 position and volume supports discarding the double-break fade. Count continuation and return failures in both contexts. The July 9 76% A-period claim has its own 09:30–10:00/OR-reference variants in [SPEC](../SPEC.md#ev-range-and-open-location-switch); it cannot inherit the 09–12 width-table or 09:30–10:30 denominator.
+
+[27 August](https://x.com/JJumboFX/status/2093020177696755878) motivates **5–9 ≈ 6–9** as a clock comparison, not an established equivalence. Keep the published 6–9 benchmark and compare 05:00–09:00 on matched dates, widths and outcomes. Small-range double-break % is not edge: narrow boxes mechanically ease both-edge visits. Preserve the source's approximately 45% AM single-break assertion as a claim to recompute, including held breakouts and neither-break days.
+
 ## Computability and faithful reconstruction
 
 Minutes support exclusive break classes but may leave within-minute order unknown. Trades resolve order on available samples. Prior value needs trade-derived or explicitly named approximate VP.

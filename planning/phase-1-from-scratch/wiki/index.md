@@ -10,6 +10,7 @@ Start with [the measurement contract](measurement-contract.md) and [acquired inv
 - [Extensions and sourced projection coordinates](extension-projections.md)
 - [Jumbo distance/filter probability regions](jumbo-p-zones.md)
 - [SessionStat historical high/low envelopes](sessionstat-envelopes.md)
+- [EV range: expected AM move](ev-range-expected-move.md)
 - [Empirical excursion, range and close distributions](distribution-envelopes.md)
 - [Timed returns to opens, midpoints and earlier rails](timed-retracements.md)
 - [Session raids and first re-entry](session-raid-and-return.md)

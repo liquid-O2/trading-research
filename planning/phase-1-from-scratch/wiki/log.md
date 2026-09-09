@@ -7,6 +7,7 @@
 | 13:29 | Requested process references read, including removed Matt Pocock skills recovered from repository history and all 23pstack playbooks. No worker or implementation instructions executed. |
 | 13:50 |55 mechanism/contract pages compiled. Every finding ID maps to the wiki. Source rules, hypotheses and proposed upgrades remain separate. |
 | Compilation decisions | Distinct P-zones/extensions; distinct80% claims and exhaustion meanings; final labels separated from earlier features; source code defects recorded as benchmark disagreements; family-native history preserved. |
+| 16:07 | Ingested `jumbo-x-wiki-pack.md` (partial May–September 2026 timeline): added EV range and open-location switch, conditional range/clock cautions and secondary OR attribution; existing BigTrades rules retained. Primary posts: 2093335135789719861, 2095172969035096454, 2082104746077245851, 2082205480877781167, 2075602926215561312, 2075238880060571966, 2093020177696755878, 2056797248604815569. Plan amendment is limited to PRD/SPEC, ticket 51 and the PHASE outcome; command shape unchanged. |
 
 The knowledge-compilation approach follows the [Pocock post](https://x.com/mattpocockuk/status/2097638166232457451). The supplied [Karpathy post](https://x.com/karpathy/status/2015883857489522876) concerns coding practice; it does not replace the requested wiki workflow. [Karpathy coding rules](https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md) apply to later execution.
 

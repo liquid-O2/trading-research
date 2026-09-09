@@ -13,6 +13,7 @@ The later research target remains one account, one NQ mini, $2,000 average daily
 ## Required behavior
 
 - Preserve range H/L as break/liquidity rails. Keep internal levels, extensions and Jumbo P-zones distinct. No ATL label.
+- Measure [EV range](wiki/ev-range-expected-move.md) as a distinct AM expected-move envelope and the [open-location switch](wiki/jumbo-day-classes.md#2026-open-location-switch), comparing EV/EQ reactions and in-value/in-range break expectancy across known-then inside/outside contexts; [ticket 51](tickets/51-ev-range-and-open-location-switch.md) supplies the matching report under the existing pass contract.
 - Label every eligible session’s four-way break path/order and the faithful Judas, extended-overnight single-break and already-purged/compressed single-break evidence. Retain width, balance, clean edges, prior RTH value/open position and sister SMT as known then. Compare experimental labelers; do not train a predictor.
 - Measure absorption sequences, refill/control changes, key zones, VP/value/delta/TPO/VWAP and options nodes. Each family has named upgrades on the same outcome contract.
 - Compute trade-CVD, OHLC-CVD, participant-separated trade-CVD, participant-separated OHLC-CVD and gamma CVD after their definitions resolve. SMT is continuous and multiscale, with NQ trade-level and 3–4-asset OHLC constructions.
