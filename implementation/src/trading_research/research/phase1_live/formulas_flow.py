@@ -9,15 +9,7 @@ import numpy as np
 from trading_research.research.phase1_live import TICK
 from trading_research.research.phase1_live.family_open import value_area
 from trading_research.research.phase1_live.formulas import daily_floor_pivots
-from trading_research.research.phase1_live.grid import (
-    G_DEFAULT,
-    first_close_break,
-    hold_after_break,
-    outcomes_at_level,
-    reject_after_touch,
-    to_ticks,
-    touch_level,
-)
+from trading_research.research.phase1_live.grid import reject_after_touch, to_ticks
 
 ABS_Q90_BUY = 3533.0
 ABS_Q90_SELL = 3441.0
@@ -97,11 +89,7 @@ def absorption_a_at_level(
     )
     vol_ok = g["vol"] >= vol_cut
     adv_ok = g["advance_ticks"] <= tick_tol / TICK + 1e-9
-    trapped = (np.sign(g["delta"]) == np.sign(-toward) or (toward < 0 and g["delta"] < 0) or (toward > 0 and g["delta"] > 0)) and adv_ok
-    if toward < 0:
-        trapped = g["delta"] < 0 and adv_ok
-    else:
-        trapped = g["delta"] > 0 and adv_ok
+    trapped = ((g["delta"] < 0) if toward < 0 else (g["delta"] > 0)) and adv_ok
     rev = False
     if reversal_px is not None and r_width:
         need = rev_frac * r_width
@@ -169,17 +157,11 @@ def r_f03_convergence(
     touch = touch_px is not None and abs(touch_px - price) <= 2 * TICK
     rej = False
     if conv and touch and close is not None and sigma:
-        r = 0.5 * sigma
-        if close >= price:
-            rej = close >= price + r
-        else:
-            rej = close <= price - r
-        if close >= price + r or close <= price - r:
-            # G-default reject from the touch side
-            if touch_px <= price:
-                rej = close >= price + r
-            else:
-                rej = close <= price - r
+        side = -1 if touch_px <= price else 1
+        ct = to_ticks([close])
+        ts = np.array([0], dtype=np.int64)
+        r_ticks = max(1, int(round(0.5 * sigma / TICK)))
+        rej = reject_after_touch(ct, ts, 0, int(round(price / TICK)), side, r_ticks, 15 * 60_000)
     return {
         "convergence": bool(conv),
         "tR": tR,
@@ -517,9 +499,9 @@ def r_f13_trapped_buyers(
     ) and not any_close_above
     r_width = intra_hi - intra_lo
     breakout = break_close < intra_lo
-    retest = abs(retest_high - intra_lo) <= 2 * TICK or (retest_high >= intra_lo - 2 * TICK and retest_high <= intra_lo + 2 * TICK)
-    body_lo, body_hi = body
-    hold = reject_close <= intra_lo - 0.5 * r_width and sell_in_body
+    retest = abs(retest_high - intra_lo) <= 2 * TICK
+    in_body = sell_in_body and body[0] <= body[1]
+    hold = reject_close <= intra_lo - 0.5 * r_width and in_body
     return {
         "paired": bool(paired),
         "two_failures": bool(two_fail),
@@ -570,32 +552,21 @@ def r_f15_ofm(
         first = absorbed[0][0]
         cat = [min(first, swing), max(first, swing)]
     tape_ok = tape_cut is not None and tape_pps >= tape_cut
-    release = cat is not None and ((release_close > swing) if cat[-1] == swing or first <= swing else release_close < swing)
-    if cat is not None:
-        if swing >= cat[1] or swing >= cat[0]:
-            hi = max(cat)
-            lo = min(cat)
-            if abs(swing - hi) <= abs(swing - lo):
-                release = release_close > hi
-            else:
-                release = release_close < lo
+    release = False
     fail = False
-    if cat is not None and fail_close is not None:
+    if cat is not None:
         lo, hi = min(cat), max(cat)
-        fail = fail_close < lo or fail_close > hi
-        if release_close > max(cat):
-            fail = fail_close < lo
-        else:
-            fail = fail_close > hi
+        squeeze_up = abs(swing - hi) <= abs(swing - lo)
+        release = release_close > hi if squeeze_up else release_close < lo
+        if fail_close is not None:
+            fail = fail_close < lo if squeeze_up else fail_close > hi
     refill = refill_touch is not None and cat is not None and min(cat) - 2 * TICK <= refill_touch <= max(cat) + 2 * TICK
     entry = False
     r_dist = None
     reach_1r = reach_2r = False
     if cat is not None and resqueeze_close is not None and fail_wick is not None:
-        if release_close > max(cat):
-            entry = resqueeze_close > fail_wick
-        else:
-            entry = resqueeze_close < fail_wick
+        squeeze_up = abs(swing - max(cat)) <= abs(swing - min(cat))
+        entry = resqueeze_close > fail_wick if squeeze_up else resqueeze_close < fail_wick
         if entry and stop is not None:
             r_dist = abs(resqueeze_close - stop)
             mfe = 0.0
@@ -630,10 +601,7 @@ def r_f16_balance_fade(
     failed_agg = wick_ok and no_close_beyond
     left = abs(left_px - range_hi) >= 0.25 * r_h or abs(left_px - range_lo) >= 0.25 * r_h
     trigger = failed_agg and left and abs(test_high - range_hi) <= 2 * TICK and abs_ok
-    reach = later_low <= target + 2 * TICK and later_low <= target + 2 * TICK
-    if later_low <= target + 2 * TICK and later_low + 100 >= target:
-        reach = abs(later_low - target) <= 2 * TICK or later_low <= target + 2 * TICK and later_low >= target - 10
-        reach = later_low <= target + 2 * TICK
+    reach = later_low <= target + 2 * TICK
     return {
         "fade_trigger": bool(trigger),
         "target_reach": bool(reach),
@@ -666,7 +634,6 @@ def r_f17_refill_zone(
     if cluster is None:
         return {"zone": None, "hold": False, "penetration": None}
     lo, hi = cluster
-    left = (leave_px - hi) >= 4 * TICK - 1e-12 if side < 0 else (lo - leave_px) >= 4 * TICK - 1e-12
     if side < 0:
         left = leave_px >= hi + 4 * TICK - 1e-12
         far = lo
@@ -687,7 +654,6 @@ def r_f18_squeeze(
     *, catalyst: list[float], release_close: float, tape_pps: float, tape_cut: float,
     any_close_through: bool, trigger_abs: bool, next_level: float, later_touch: float,
 ) -> dict:
-    lo, hi = min(catalyst), max(catalyst)
     fast = tape_pps >= tape_cut
     no_fail = not any_close_through
     cont = abs(later_touch - next_level) <= 2 * TICK or (
@@ -710,30 +676,20 @@ def r_r03_thesis(
     developing_overlap: bool = True,
 ) -> dict:
     if open_px > vah:
-        label = "long"
-        edge = vah
-        beyond = any_close_beyond or am_low < val and False
-        struct = am_low < val and any_close_beyond
-        if open_px > vah:
-            struct = any_close_beyond
+        label, edge = "long", vah
     elif open_px < val:
-        label = "short"
-        edge = val
-        struct = any_close_beyond or am_high > val and any_close_beyond
-        struct = bool(any_close_beyond)
+        label, edge = "short", val
     else:
-        label = "neutral"
-        edge = None
-        struct = False
+        label, edge = "neutral", None
+    if label == "short":
+        struct = bool(any_close_beyond) or am_high > val
+    elif label == "long":
+        struct = bool(any_close_beyond) or am_low < vah
+    else:
+        struct = bool(any_close_beyond)
     value_shift = not developing_overlap
     death = struct or value_shift or news
-    end = eval_min if not death else start_min
-    if not death:
-        end = session_end_min if eval_min >= session_end_min else eval_min
-        if eval_min < session_end_min:
-            end = max(eval_min, start_min)
-            # still alive at eval
-            end = session_end_min
+    end = eval_min if death else session_end_min
     alive = end - start_min
     return {
         "label": label,
@@ -883,14 +839,14 @@ def r_s07_areas(
     mae = trigger_close - later_low
     mfe_ticks = mfe / TICK
     mae_ticks = mae / TICK
-    win_35_188 = mae_ticks < 35 and mfe_ticks >= 188
+    win_35_188 = mae_ticks < stop_ticks[0] and mfe_ticks >= objective_ticks[0]
     return {
         "mfe": mfe,
         "mae": mae,
         "mfe_ticks": mfe_ticks,
         "mae_ticks": mae_ticks,
         "win_35_188": bool(win_35_188),
-        "survived_15": mae_ticks < 15,
+        "survived_15": mae_ticks < stop_ticks[1],
     }
 
 
@@ -899,7 +855,6 @@ def r_s08_minor_node(
     touch: float, reject_close: float, r_width: float,
     lvn: float, lvn_closes: list[float],
 ) -> dict:
-    setup = abs(hvn - balance_top) <= 2 * TICK or abs(hvn - balance_top) <= 1.0
     setup = abs(hvn - balance_top) <= 1.0 + 1e-12 and prior_rej >= 2 and all(d < 0 for d in deltas) and len(deltas) >= 3
     rej = reject_close <= touch - 0.5 * r_width
     slice_ = False
@@ -955,7 +910,6 @@ def r_p01_touch_revert(
         dn = l[i] <= lower
         if up and dn:
             side = "upper" if abs(h[i] - upper) <= abs(l[i] - lower) else "lower"
-            # nearer to this bar's open is specified; without open, nearer level
             idx = i
             break
         if up:
@@ -1013,7 +967,6 @@ def r_p02_hourly_sweep(
     depth = None
     if hi_sw:
         depth = (float(h.max()) - prev_h) / (prev_h - prev_l) * 100.0
-    after = False
     ret_s = ret_50 = ret_o = ret_opp = False
     if hi_sw:
         first = int(np.flatnonzero(h > prev_h)[0])
@@ -1052,6 +1005,8 @@ def r_p03_magic_hour(
     *, hour: int, box_h: float, box_l: float, break_side: str, excursion: float,
     later_high: float, later_low: float, t_break_min: float, t_target_min: float,
 ) -> dict:
+    if hour not in MAGIC_HOURS:
+        return {"mid": None, "ep": None, "zone": None, "win": False, "ttt_min": None, "inv_pct": None}
     mid = 0.5 * (box_h + box_l)
     w = box_h - box_l
     ep = abs(excursion) / w * 100.0
@@ -1061,8 +1016,10 @@ def r_p03_magic_hour(
         win = later_high >= mid
     else:
         win = later_low <= mid
+    stop_hr = MAGIC_HARD_STOP[hour]
+    win = bool(win) and (t_target_min / 60.0) < stop_hr
     dt = t_target_min - t_break_min
-    return {"mid": mid, "ep": ep, "zone": zone, "win": bool(win), "ttt_min": dt, "inv_pct": inv}
+    return {"mid": mid, "ep": ep, "zone": zone, "win": win, "ttt_min": dt, "inv_pct": inv, "hour": hour}
 
 
 def r_p04_raid(
@@ -1418,7 +1375,6 @@ def p3_14_level_tied(
     sweep_conf = sweep_at and sweep_close is not None and (
         sweep_close > sweep_px if sweep_px <= level else sweep_close < sweep_px
     )
-    cisd_at = cisd_close is not None and abs(level - cisd_close) <= 10  # close through the level
     cisd_at = cisd_close is not None and (
         (cisd_close < level and sweep_px is not None and sweep_px >= level) or
         (cisd_close > level and sweep_px is not None and sweep_px <= level)
@@ -1445,6 +1401,8 @@ def _case(cid: str, ok: bool, got, expected) -> dict:
 def flow_fixtures() -> dict:
     cases: list[dict] = []
 
+    vw, sg = running_vwap([100.0, 100.0], [100.0, 100.0], [100.0, 100.0], [10.0, 10.0])
+    cases.append(_case("R-F01.running_vwap", abs(float(vw[-1]) - 100.0) < 1e-12 and abs(float(sg[-1])) < 1e-12, float(vw[-1]), 100.0))
     lo, hi = vwap_band(100.0, 2.0, 2.0)
     cases.append(_case("R-F01.band", abs(hi - 104.0) < 1e-12, hi, 104.0))
     px = np.array([104.00, 104.25, 104.50])
@@ -1531,8 +1489,6 @@ def flow_fixtures() -> dict:
     cases.append(_case("R-F09.liftoff", f09["liftoff"] is True, f09["liftoff"], True))
     cases.append(_case("R-F09.entry", f09["entry_window"] == [100.75, 101.25], f09["entry_window"], [100.75, 101.25]))
 
-    lows = np.array([101.5, 101.2, 101.0, 100.5, 100.0, 100.5, 101.0] + [101.0] * 10 + [100.75] * 5 + [101.0] * 18 + [99.5])
-    # indices: fractal at 4 (100.0) with neighbors 101, 100.5, 100.0, 100.5, 101
     lows = np.zeros(45)
     highs = np.full(45, 103.0)
     closes = np.full(45, 101.0)
@@ -1716,6 +1672,8 @@ def flow_fixtures() -> dict:
     )
     cases.append(_case("R-S09.open_above", s09["open_above_value"] is True, s09["open_above_value"], True))
     cases.append(_case("R-S09.retest_hold", s09["retest_hold"] is True, s09["retest_hold"], True))
+    dva = developing_va({400: 10.0, 401: 80.0, 402: 10.0})
+    cases.append(_case("R-S09.developing_va", abs(dva["poc"] - 100.25) < 1e-12, dva["poc"], 100.25))
 
     chg = np.linspace(-1, 1, 20)
     chg = chg * (1.20 / sample_stdev(chg))
@@ -1826,6 +1784,7 @@ def flow_fixtures() -> dict:
     cases.append(_case("R-P14.structure", p14["structure"] == "sequential", p14["structure"], "sequential"))
     cases.append(_case("R-P14.hod_in", p14["hod_in_by_10am"] is True, p14["hod_in_by_10am"], True))
 
+    cases.append(_case("R-P15.nearest_rank_p50", abs(nearest_rank([85.0] * 60, 50) - 85.0) < 1e-12, nearest_rank([85.0] * 60, 50), 85.0))
     p15 = r_p15_ssl(open_px=16600.0, p_rng=85.0, p_mfe=52.0, p_mae=48.0, session_high=16655.0, session_low=16580.0)
     cases.append(_case("R-P15.mfe_hit", p15["mfe_p50_hit"] is True, p15["mfe_p50_hit"], True))
     cases.append(_case("R-P15.rng_hit", p15["rng_p50_hit"] is False, p15["rng_p50_hit"], False))
@@ -1885,5 +1844,4 @@ def flow_fixtures() -> dict:
         "n_cases": len(cases),
         "n_failed": len(failed),
         "groups": [{"name": "formulas_flow", "pass": not failed, "cases": cases}],
-        "failed": [{"id": c["id"], "got": c["got"], "expected": c["expected"]} for c in failed],
     }
