@@ -35,6 +35,8 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_p19_body_gap,
     r_f02_grid_div,
     r_f02_fakeout_grade,
+    r_s02_third_retest,
+    running_vwap,
     r_r04_smt_prior,
     sample_stdev,
 )
@@ -80,7 +82,7 @@ def _clock(bars, day, cid):
 
 def build_recipe_table() -> list[dict]:
     cached = load_rows("recipe_flags_F")
-    if cached and cached[0].get("recipe_rev") == 5:
+    if cached and cached[0].get("recipe_rev") == 7:
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
@@ -106,7 +108,7 @@ def build_recipe_table() -> list[dict]:
         op = open_rows.get(day.isoformat(), {})
         rec = {
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
-            "recipe_rev": 5,
+            "recipe_rev": 7,
             "j10_draw_reach": False, "j18_ob": False, "j19_pd_touch": False,
             "j21_extended": False, "j22_three_strike": False, "j24_mfe_pos": False,
             "j25_mid_hold": False,
@@ -118,7 +120,8 @@ def build_recipe_table() -> list[dict]:
             "p09_no_break": False, "p10_pp_touch": False, "p11_fvg_fill": False,
             "p12_cisd_var": False, "p14_hod_1000": False, "p15_ssl": False,
             "p17_1800_touch": False, "p19_body_gap4": False,
-            "s05_micro_break": False, "s09_vah_break": False, "p03_magic_win": False,
+            "s02_third_retest": False, "s05_micro_break": False, "s09_vah_break": False, "p03_magic_win": False,
+            "f01_eth_touch": False,
             "release_1000": False, "j20_delayed": False,
             "smt_pdh": False, "smt_pdl": False, "p18_cvd_div": False, "p18_fakeout": False,
         }
@@ -140,6 +143,29 @@ def build_recipe_table() -> list[dict]:
         val, vah, poc = op.get("VAL"), op.get("VAH"), pv.get("poc")
         pdh, pdl = row.get("prior_rth_high"), row.get("prior_rth_low")
         path = row.get("path_class")
+        if am["n"] >= 8 and val is not None:
+            rec["s02_third_retest"] = bool(r_s02_third_retest(
+                am["h"].tolist(), am["l"].tolist(), [0.0] * int(am["n"]),
+                level=float(val), r_width=w or 20.0, band_lo=float(val) - 2 * TICK, band_hi=float(val) + 2 * TICK,
+                from_above=True, later_close=float(am["c"][-1]), later_high=float(am["high"]),
+            )["third_test_short"])
+        if not rec["s02_third_retest"] and am["n"] >= 8 and vah is not None:
+            rec["s02_third_retest"] = bool(r_s02_third_retest(
+                am["h"].tolist(), am["l"].tolist(), [0.0] * int(am["n"]),
+                level=float(vah), r_width=w or 20.0, band_lo=float(vah) - 2 * TICK, band_hi=float(vah) + 2 * TICK,
+                from_above=False, later_close=float(am["c"][-1]), later_high=float(am["high"]),
+            )["third_test_short"])
+        on = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
+        if on["n"] >= 20 and "v" in on:
+            vw, sg = running_vwap(on["h"], on["l"], on["c"], on["v"])
+            t0930 = wall_ns(day, time(9, 30), 0) // 1_000_000
+            i_am = int(np.searchsorted(on["t"], t0930, "left"))
+            if i_am < vw.size:
+                up = vw[i_am:] + 2.0 * sg[i_am:]
+                dn = vw[i_am:] - 2.0 * sg[i_am:]
+                rec["f01_eth_touch"] = bool(
+                    np.any(on["h"][i_am:] >= up - 2 * TICK) or np.any(on["l"][i_am:] <= dn + 2 * TICK)
+                )
 
         if levels and am["n"]:
             fire = float(open_px) if open_px is not None else levels["EQ"]

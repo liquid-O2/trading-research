@@ -261,7 +261,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
                 objective=h or float(px_am.max()), later_high=float(px_am.max()), later_low=float(px_am.min()),
             )["refill_long"])
         if h is not None:
-            rec["s02_third_retest"] = int(np.sum(np.abs(px_am - h) <= 2 * TICK)) >= 3
+            rec["s02_third_retest"] = False
             rec["f13_trap_retest"] = bool(float(px_am.max()) >= h - 2 * TICK and float(px_am[-1]) < h)
             rec["f16_fade"] = bool(float(px_am.max()) >= h - 2 * TICK and rec["f06_abs_va"])
         rec["s07_mfe"] = bool(r_s07_areas(

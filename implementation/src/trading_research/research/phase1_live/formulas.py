@@ -162,6 +162,24 @@ def aplus_traded(sweeps: dict[str, bool]) -> bool:
     return bool(sweeps.get("nyam") or sweeps.get("asia") or sweeps.get("prev_hour"))
 
 
+def aplus_failback(sweeps: dict[str, bool], fails: dict[str, bool]) -> bool:
+    """A+ is sweep of the traded box plus fail-back inside. Sweep-only is a named weaker label."""
+    for key in ("nyam", "asia", "prev_hour"):
+        if sweeps.get(key) and fails.get(key):
+            return True
+    return False
+
+
+def halfgap_from_prior(open_px, prior_high, prior_low) -> dict:
+    if open_px is None or prior_high is None or prior_low is None:
+        return {"side": None, "level": None}
+    if open_px > prior_high:
+        return {"side": "high", "level": (prior_high + open_px) / 2.0}
+    if open_px < prior_low:
+        return {"side": "low", "level": (prior_low + open_px) / 2.0}
+    return {"side": None, "level": None}
+
+
 def purged_overnight(asia_h, asia_l, lon_h, lon_l, h69, l69) -> bool:
     """Asia and London H/L each taken by the 6-9 box (post-formation sweep), 1-tick tolerance."""
     if None in (asia_h, asia_l, lon_h, lon_l, h69, l69):
@@ -207,6 +225,13 @@ def pz_edge_setup(pz_lo, pz_hi, box_l, op, session_low) -> bool:
     overlap = pz_lo <= box_l <= pz_hi
     low_gt_op = session_low > op
     return bool(overlap and low_gt_op)
+
+
+def pz_edge_setup_high(pz_lo, pz_hi, box_h, op, session_high) -> bool:
+    if None in (pz_lo, pz_hi, box_h, op, session_high):
+        return False
+    overlap = pz_lo <= box_h <= pz_hi
+    return bool(overlap and session_high < op)
 
 
 def amt_drive(first30, open_px) -> bool:
@@ -672,6 +697,32 @@ def formula_fixtures() -> dict:
         "pass": aplus_traded({"nyam": True, "asia": False, "prev_hour": False}) is True,
         "got": aplus_traded({"nyam": True, "asia": False, "prev_hour": False}),
         "expected": True,
+    })
+    cases.append({
+        "id": "R-G11.sweep_only_not_aplus",
+        "pass": aplus_failback({"nyam": True}, {"nyam": False}) is False,
+        "got": aplus_failback({"nyam": True}, {"nyam": False}),
+        "expected": False,
+    })
+    cases.append({
+        "id": "R-G11.sweep_plus_failback",
+        "pass": aplus_failback({"nyam": True}, {"nyam": True}) is True,
+        "got": aplus_failback({"nyam": True}, {"nyam": True}),
+        "expected": True,
+    })
+    hg = halfgap_from_prior(110.0, 100.0, 80.0)
+    cases.append({
+        "id": "R-A13.halfgap_phod",
+        "pass": hg["side"] == "high" and abs(hg["level"] - 105.0) < 1e-12,
+        "got": hg,
+        "expected": {"side": "high", "level": 105.0},
+    })
+    hg2 = halfgap_from_prior(70.0, 100.0, 80.0)
+    cases.append({
+        "id": "R-A13.halfgap_plod",
+        "pass": hg2["side"] == "low" and abs(hg2["level"] - 75.0) < 1e-12,
+        "got": hg2,
+        "expected": {"side": "low", "level": 75.0},
     })
     cases.append({
         "id": "R-G11.no_sweep_not_aplus",

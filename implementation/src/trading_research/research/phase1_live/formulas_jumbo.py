@@ -24,6 +24,46 @@ from trading_research.research.phase1_live.grid import (
 )
 from trading_research.research.phase1_live.sessions import projections
 
+def overshoot_delta(width: float) -> float:
+    return 0.1 * float(width)
+
+
+def ladder_levels(p: dict, side: int) -> list[tuple[float, float]]:
+    if side > 0:
+        return [(0.1, p["mr01_high"]), (0.2, p["mr02_high"]), (0.3, p["mr03_high"]), (0.5, p["m05_high"])]
+    return [(0.1, p["mr01_low"]), (0.2, p["mr02_low"]), (0.3, p["mr03_low"]), (0.5, p["m05_low"])]
+
+
+def deepest_ladder(extreme: float, p: dict, side: int) -> tuple[float, float] | None:
+    last = None
+    for k, px in ladder_levels(p, side):
+        if side > 0:
+            if extreme + 1e-12 >= px:
+                last = (k, px)
+        else:
+            if extreme - 1e-12 <= px:
+                last = (k, px)
+    return last
+
+
+def overshoot_still_level(extreme: float, level: float, width: float, side: int) -> bool:
+    d = overshoot_delta(width)
+    if side > 0:
+        return level - 1e-12 <= extreme <= level + d
+    return level - d <= extreme <= level + 1e-12
+
+
+def band_133_166(p: dict, side: int) -> tuple[float, float]:
+    if side > 0:
+        return p["band133_166_high_near"], p["band133_166_high_far"]
+    return p["band133_166_low_near"], p["band133_166_low_far"]
+
+
+def band_touch(high: float, low: float, near: float, far: float, side: int) -> bool:
+    lo, hi = (near, far) if near <= far else (far, near)
+    return high >= lo and low <= hi
+
+
 T2 = 2 * TICK
 NY_BIGTRADE = 100
 LDN_BIGTRADE = 75
@@ -1224,6 +1264,29 @@ def jumbo_fixtures() -> dict:
     )
     cases.append(_case("P3-10.above", None if owed["above"] is None else {"level": owed["above"]["level"], "type": owed["above"]["type"], "dist": owed["above"]["dist"], "w69": round(owed["above"]["w69"], 2)}, {"level": 16700.0, "type": "naked_poc", "dist": 90.0, "w69": 1.33}))
     cases.append(_case("P3-10.below", owed["below"], None))
+    p = projections(18238.0, 18165.0)
+    cases.append(_case("R-J01.m05_low", p["m05_low"], 18128.5))
+    cases.append(_case("R-J01.m05_high", p["m05_high"], 18274.5))
+    cases.append(_case("R-J01.mr01_low", p["mr01_low"], 18157.7))
+    cases.append(_case("R-J01.overshoot_d", p["overshoot_d"], 7.3))
+    cases.append(_case("R-J01.overshoot_touch", overshoot_still_level(18121.2, p["m05_low"], p["W"], -1), True))
+    syn = outcomes_at_level(
+        {"n": 2, "h": np.array([81.0, 91.0]), "l": np.array([79.75, 89.0]), "c": np.array([80.5, 90.25]),
+         "t": np.array([0, 11 * 60_000])},
+        80.0, width=20.0, side=-1,
+    )
+    cases.append(_case("R-J01.synth_low_reject", {"touch": syn["touch"], "reject": syn["reject"]}, {"touch": True, "reject": True}))
+    syn_h = outcomes_at_level(
+        {"n": 2, "h": np.array([120.25, 110.0]), "l": np.array([118.0, 109.0]), "c": np.array([119.5, 109.5]),
+         "t": np.array([0, 12 * 60_000])},
+        120.0, width=20.0, side=1,
+    )
+    cases.append(_case("R-J01.synth_high_reject", {"touch": syn_h["touch"], "reject": syn_h["reject"]}, {"touch": True, "reject": True}))
+    p8 = projections(110.0, 90.0)
+    cases.append(_case("R-J08.band_high_near", p8["band133_166_high_near"], 136.6))
+    cases.append(_case("R-J08.band_high_far", p8["band133_166_high_far"], 143.2))
+    cases.append(_case("R-J08.band_touch", band_touch(140.0, 135.0, 136.6, 143.2, 1), True))
+    cases.append(_case("R-J08.overshoot_166", overshoot_still_level(144.5, p8["ext166_high"], p8["W"], 1), True))
     cases.append(_case("R-J20.delayed", j20_delayed(True, "bin.1000-1030"), True))
     cases.append(_case("R-J20.not_0830", j20_delayed(False, "bin.1000-1030"), False))
     cases.append(_case("R-J20.wrong_bin", j20_delayed(True, "bin.0940-0950"), False))

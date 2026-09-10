@@ -23,14 +23,21 @@ from trading_research.research.phase1_live.formulas import (
     absorption_candle_at_levels,
     ev_vix16_zones,
     gp_band_impulse,
+    halfgap_from_prior,
     hour_fail_count,
     midretrace_hold,
     purged_overnight,
     pz_edge_setup,
+    pz_edge_setup_high,
     reclaim_5m,
     resample_ohlcv,
     tdo_hit,
     vix_band,
+)
+from trading_research.research.phase1_live.formulas_jumbo import (
+    band_touch,
+    deepest_ladder,
+    ladder_levels,
 )
 from trading_research.research.phase1_live.sessions import projections
 from trading_research.research.phase1_live.slice import load_calendar, slice_dates
@@ -123,7 +130,7 @@ def _poc_shape(window) -> str | None:
 
 def build_level_table() -> list[dict]:
     cached = load_rows("level_grid_F")
-    if cached and cached[0].get("formula_rev") == 3:
+    if cached and cached[0].get("formula_rev") == 4:
         folder = load_red_folder()
         if folder["1000"] and not any(r.get("release_1000") for r in cached):
             dates = folder["1000"]
@@ -184,7 +191,7 @@ def build_level_table() -> list[dict]:
         rec["vix"] = vix.get(dates_iso[i - 1]) if i else None
         rec["vix_same_day"] = vix.get(iso)
         rec["vix_band"] = vix_band(rec["vix"])
-        rec["formula_rev"] = 3
+        rec["formula_rev"] = 4
 
         rec.update({
             "wick_high": False, "wick_low": False, "m05_touch": False, "m05_reject": False,
@@ -202,8 +209,10 @@ def build_level_table() -> list[dict]:
             "hour_fail_n": 0, "nyam_fail_n": int(bool(False)), "ten_eleven_fail": False,
             "fade_count": 0, "amt_80pct": False,
             "tpo_single_fill": False, "tpo_excess_hold": False,
-            "absorption_candle": False, "onh_touch": False, "onl_touch": False,
+            "absorption_candle": False, "onh_touch": False, "onl_touch": False, "onh_or_onl": False,
             "ib_single": False, "ib_hold": False, "ib_both": False,
+            "j01_ladder": False, "band133_pm_reject": False, "lon_band_reject": False,
+            "halfgap": None, "halfgap_touch": False, "pz_edge_setup_high": False,
         })
 
         if levels and am["n"]:
@@ -229,6 +238,13 @@ def build_level_table() -> list[dict]:
                     first_m05, first_side = m05l["touch_ms"], "low"
             rec["m05_bin"] = _bin_of(first_m05, int(am["t"][0]) if am["n"] else None)
             rec["m05_in_0940"] = rec["m05_bin"] == "bin.0940-0950" and rec["m05_reject"]
+            swept = 1 if rec["wick_high"] and (not rec["wick_low"] or (m05h["touch_ms"] or 0) <= (m05l["touch_ms"] or 10**18)) else (-1 if rec["wick_low"] else 0)
+            if swept:
+                deep = deepest_ladder(float(am["high"] if swept > 0 else am["low"]), levels, swept)
+                if deep is not None:
+                    k, px = deep
+                    ev = outcomes_at_level(am, px, width=w, side=swept)
+                    rec["j01_ladder"] = bool(ev["reject"] and _bin_of(ev["touch_ms"], int(am["t"][0])) == "bin.0940-0950")
             eq = outcomes_at_level(am, levels["EQ"], width=w, side=1)
             eq2 = outcomes_at_level(am, levels["EQ"], width=w, side=-1)
             rec["eq_touch"] = eq["touch"] or eq2["touch"]
@@ -244,9 +260,12 @@ def build_level_table() -> list[dict]:
                 ) or outcomes_at_level(am, levels["EQ"], width=w, side=hold_side, hold_h_min=15)["hold"]
             rec["ext100_am"] = am["high"] >= levels["ext100_high"] or am["low"] <= levels["ext100_low"]
             if first20["n"] and row.get("open_0930") is not None:
-                rec["open_to_m05_before_0940"] = (
-                    first20["high"] >= levels["m05_high"] or first20["low"] <= levels["m05_low"]
-                )
+                rec["open_to_m05_before_0940"] = False
+                for _k, px in ladder_levels(levels, 1) + ladder_levels(levels, -1):
+                    side = 1 if px >= levels["EQ"] else -1
+                    if outcomes_at_level(first20, px, width=w, side=side)["touch"]:
+                        rec["open_to_m05_before_0940"] = True
+                        break
             rec["op_hold"] = outcomes_at_level(am, row.get("open"), width=w, side=1, hold_h_min=15)["hold"] if row.get("open") is not None else False
 
         if levels and pm["n"]:
@@ -260,6 +279,13 @@ def build_level_table() -> list[dict]:
                 outcomes_at_level(pm, levels["ext166_high"], width=w, side=1)["reject"]
                 or outcomes_at_level(pm, levels["ext166_low"], width=w, side=-1)["reject"]
             )
+            rec["band133_pm_reject"] = False
+            if band_touch(pm["high"], pm["low"], levels["band133_166_high_near"], levels["band133_166_high_far"], 1):
+                rec["band133_pm_reject"] = outcomes_at_level(pm, levels["band133_166_high_near"], width=w, side=1)["reject"]
+            if band_touch(pm["high"], pm["low"], levels["band133_166_low_near"], levels["band133_166_low_far"], -1):
+                rec["band133_pm_reject"] = rec["band133_pm_reject"] or outcomes_at_level(
+                    pm, levels["band133_166_low_near"], width=w, side=-1,
+                )["reject"]
 
         if lon_box["high"] is not None and lon_out["n"]:
             lw = lon_box["high"] - lon_box["low"]
@@ -269,6 +295,13 @@ def build_level_table() -> list[dict]:
                 or outcomes_at_level(lon_out, lon_lv["m05_low"], width=lw, side=-1)["reject"]
             )
             rec["lon_ext133"] = lon_out["high"] >= lon_lv["ext133_high"] or lon_out["low"] <= lon_lv["ext133_low"]
+            rec["lon_band_reject"] = False
+            if band_touch(lon_out["high"], lon_out["low"], lon_lv["band133_166_high_near"], lon_lv["band133_166_high_far"], 1):
+                rec["lon_band_reject"] = outcomes_at_level(lon_out, lon_lv["band133_166_high_near"], width=lw, side=1)["reject"]
+            if band_touch(lon_out["high"], lon_out["low"], lon_lv["band133_166_low_near"], lon_lv["band133_166_low_far"], -1):
+                rec["lon_band_reject"] = rec["lon_band_reject"] or outcomes_at_level(
+                    lon_out, lon_lv["band133_166_low_near"], width=lw, side=-1,
+                )["reject"]
 
         # SessionStat median / min-average: one-sided from 09:00 open, 60-session lookback stored on env as we rebuild.
         rec["ss_med_reach"] = bool(env.get("ss_med_reach"))
@@ -390,9 +423,14 @@ def build_level_table() -> list[dict]:
                 b3["o"], b3["h"], b3["l"], b3["c"], b3["v"], lvls, body_frac=0.3, k=2.5, w69=w,
             )
 
-        rec["onh_touch"] = bool(overnight["high"] is not None and am["n"] and np.any(am["h"] >= overnight["high"]))
-        rec["onl_touch"] = bool(overnight["low"] is not None and am["n"] and np.any(am["l"] <= overnight["low"]))
+        rec["onh_touch"] = bool(overnight["high"] is not None and rth["n"] and np.any(rth["h"] >= overnight["high"]))
+        rec["onl_touch"] = bool(overnight["low"] is not None and rth["n"] and np.any(rth["l"] <= overnight["low"]))
         rec["onh_or_onl"] = rec["onh_touch"] or rec["onl_touch"]
+        hg = halfgap_from_prior(row.get("open_0930"), row.get("prior_rth_high"), row.get("prior_rth_low"))
+        rec["halfgap"] = hg["level"]
+        rec["halfgap_touch"] = False
+        if hg["level"] is not None and rth["n"]:
+            rec["halfgap_touch"] = bool(np.any(rth["h"] >= hg["level"]) and np.any(rth["l"] <= hg["level"]))
 
         if ib["high"] is not None and ib_out["n"]:
             path = path_class_from_closes(
@@ -435,6 +473,9 @@ def build_level_table() -> list[dict]:
         rec["w_rel"] = row.get("w_rel_prior_rth")
         rec["pz_edge_setup"] = pz_edge_setup(
             env.get("pz_lo"), env.get("pz_hi"), row.get("L"), row.get("open"), am["low"] if am["n"] else None,
+        )
+        rec["pz_edge_setup_high"] = pz_edge_setup_high(
+            env.get("pz_lo"), env.get("pz_hi"), row.get("H"), row.get("open"), am["high"] if am["n"] else None,
         )
         ny0816 = bars.window(wall_ns(day, time(8, 0), 0) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)
         rec["tdo_touch_ny"] = tdo_hit(ny0816, tdo)

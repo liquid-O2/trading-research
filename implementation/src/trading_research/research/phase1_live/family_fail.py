@@ -1,4 +1,4 @@
-"""Ticket 07 session-fail boxes. A+ = sweep observed. GB-NYAM events from 10:00."""
+"""Ticket 07 session-fail boxes. A+ = sweep plus fail-back of the traded GB box."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import numpy as np
 
 from trading_research.research.phase1_live import TICK
 from trading_research.research.phase1_live.clocks import CLOCKS, clock_bounds, wall_ns
+from trading_research.research.phase1_live.formulas import aplus_failback
 from trading_research.research.phase1_live.compute import load_rows, save_rows
 from trading_research.research.phase1_live.family_env import _flag_doc
 from trading_research.research.phase1_live.ohlc_index import OHLC1M, load_years, years_for_dates
@@ -56,7 +57,7 @@ def _failback(box, out, k_min=30):
 
 def build_fail_table():
     cached = load_rows("fail_F")
-    if cached and cached[0].get("aplus_box") == "nyam":
+    if cached and cached[0].get("aplus_box") == "nyam_fb":
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -126,9 +127,21 @@ def build_fail_table():
             if a is not None and b is not None and am["n"]:
                 lo, hi = min(a, b), max(a, b)
                 rec["nwog_fill"] = bool(np.any(am["h"] >= lo) and np.any(am["l"] <= hi))
-        rec["aplus"] = bool(rec.get("sweep_range.gb.nyam"))
-        rec["aplus_box"] = "nyam"
+        rec["aplus"] = aplus_failback(
+            {
+                "nyam": bool(rec.get("sweep_range.gb.nyam")),
+                "asia": bool(rec.get("sweep_range.gb.asia")),
+                "prev_hour": bool(rec.get("sweep_range.gb.10-11")),
+            },
+            {
+                "nyam": bool(rec.get("fail_range.gb.nyam")),
+                "asia": bool(rec.get("fail_range.gb.asia")),
+                "prev_hour": bool(rec.get("fail_range.gb.10-11")),
+            },
+        )
+        rec["aplus_box"] = "nyam_fb"
         rec["aplus_69"] = bool(rec.get("sweep_range.6-9.published"))
+        rec["aplus_sweep_only"] = bool(rec.get("sweep_range.gb.nyam"))
         rec["fail_any"] = any(rec.get(f"fail_{cid}") for cid in BOXES)
         rows.append(rec)
         prev = day
@@ -139,7 +152,7 @@ def build_fail_table():
 def fail_fixtures():
     cases = [
         {"id": "nyam_outcome_1000", "pass": CLOCKS["range.gb.nyam"].outcome_start.hour == 10, "got": CLOCKS["range.gb.nyam"].outcome_start.hour, "expected": 10},
-        {"id": "aplus_is_sweep", "pass": True, "got": "sweep observed", "expected": "not depth d"},
+        {"id": "aplus_is_sweep_plus_failback", "pass": True, "got": "sweep plus fail-back", "expected": "not sweep-only"},
         {"id": "tdo_is_level", "pass": True, "got": "lvl.tdo", "expected": "destination"},
         {"id": "london_ids", "pass": "range.gb.london" != "range.london.00-03", "got": True, "expected": True},
         {"id": "nwog_not_tdo", "pass": "nwog_fill" != "tdo_touch", "got": "nwog_fill", "expected": "not tdo_touch"},

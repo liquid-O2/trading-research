@@ -51,12 +51,23 @@ def projections(high: float, low: float) -> dict:
         "Q75": low + 0.75 * width,
         "m05_low": low - 0.5 * width,
         "m05_high": high + 0.5 * width,
+        "mr01_low": low - 0.1 * width,
+        "mr01_high": high + 0.1 * width,
+        "mr02_low": low - 0.2 * width,
+        "mr02_high": high + 0.2 * width,
+        "mr03_low": low - 0.3 * width,
+        "mr03_high": high + 0.3 * width,
         "ext100_low": low - 1.0 * width,
         "ext100_high": high + 1.0 * width,
         "ext133_low": low - 1.33 * width,
         "ext133_high": high + 1.33 * width,
         "ext166_low": low - 1.66 * width,
         "ext166_high": high + 1.66 * width,
+        "band133_166_low_far": low - 1.66 * width,
+        "band133_166_low_near": low - 1.33 * width,
+        "band133_166_high_near": high + 1.33 * width,
+        "band133_166_high_far": high + 1.66 * width,
+        "overshoot_d": 0.1 * width,
     }
 
 

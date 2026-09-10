@@ -800,21 +800,39 @@ def r_s02_third_retest(
     highs: list[float], lows_between: list[float], buy_vols: list[float],
     *, level: float, r_width: float, q90_buy: float = ABS_Q90_BUY,
     later_close: float | None = None, later_high: float | None = None,
+    band_lo: float | None = None, band_hi: float | None = None,
+    from_above: bool = True,
 ) -> dict:
     leave = 0.25 * r_width
+    lo = level - 2 * TICK if band_lo is None else band_lo
+    hi_b = level + 2 * TICK if band_hi is None else band_hi
     n = 0
-    for i, hi in enumerate(highs):
-        if abs(hi - level) <= 2 * TICK or hi >= level - 2 * TICK and hi <= level + 2 * TICK:
-            if i == 0 or (i - 1 < len(lows_between) and lows_between[i - 1] <= level - leave):
+    prev_leave = True
+    if from_above:
+        for i, lw in enumerate(lows_between):
+            if prev_leave and lo - 2 * TICK <= lw <= hi_b + 2 * TICK:
                 n += 1
+                prev_leave = False
+            if i < len(highs) and highs[i] >= hi_b + leave:
+                prev_leave = True
+    else:
+        for i, hi in enumerate(highs):
+            if prev_leave and lo - 2 * TICK <= hi <= hi_b + 2 * TICK:
+                n += 1
+                prev_leave = False
+            if i < len(lows_between) and lows_between[i] <= lo - leave:
+                prev_leave = True
     no_def = all(v < q90_buy for v in buy_vols)
     third = n >= 3 and no_def
-    loss = later_close is not None and later_close > level
+    if from_above:
+        loss = later_close is not None and later_close > lo
+    else:
+        loss = later_close is not None and later_close < hi_b
     mae = None
-    if later_high is not None:
-        mae = later_high - level
+    if later_high is not None and from_above:
+        mae = later_high - lo
     elif later_close is not None:
-        mae = later_close - level
+        mae = abs(later_close - (lo if from_above else hi_b))
     return {"third_test_short": bool(third), "tests": n, "loss_case": bool(loss), "mae": mae}
 
 
@@ -1684,12 +1702,13 @@ def flow_fixtures() -> dict:
     cases.append(_case("R-S01.mae", abs(s01["mae"] - 0.5) < 1e-12, s01["mae"], 0.5))
 
     s02 = r_s02_third_retest(
-        [110.0, 110.25, 110.0], [105.0, 105.0], [1200.0, 1500.0, 1300.0],
-        level=110.0, r_width=20.0, later_close=111.0, later_high=111.25,
+        [115.5, 115.5, 111.25], [110.0, 109.75, 110.0], [1200.0, 1500.0, 1300.0],
+        level=110.0, r_width=20.0, band_lo=109.75, band_hi=110.25,
+        later_close=110.75, later_high=111.25, from_above=True,
     )
     cases.append(_case("R-S02.third", s02["third_test_short"] is True, s02["third_test_short"], True))
     cases.append(_case("R-S02.loss", s02["loss_case"] is True, s02["loss_case"], True))
-    cases.append(_case("R-S02.mae", abs(s02["mae"] - 1.25) < 1e-12, s02["mae"], 1.25))
+    cases.append(_case("R-S02.mae", abs(s02["mae"] - 1.5) < 1e-12, s02["mae"], 1.5))
 
     s03 = r_s03_second_defence(
         level=100.0, break_close=99.0, retest_high=100.0, sell_vol=2800.0, q75=2600.0,

@@ -68,7 +68,8 @@ def _stats(rows, pred):
 
 def _join():
     levels = attach_rv(build_level_table())
-    fail = {r["date"]: r for r in (load_rows("fail_F") or [])}
+    from trading_research.research.phase1_live.family_fail import build_fail_table
+    fail = {r["date"]: r for r in (build_fail_table() or [])}
     sess = {r["date"]: r for r in (load_rows("sessions_F") or [])}
     op = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
     env = {r["date"]: r for r in (load_rows("env_F") or [])}
@@ -127,7 +128,11 @@ def _join():
         fl = flow.get(d, {})
         rp = recipe.get(d, {})
         for k, v in rp.items():
-            if k not in m or k in ("release_1000", "j20_delayed", "smt_pdh", "smt_pdl", "p18_cvd_div", "p18_fakeout"):
+            if k not in m or k in (
+                "release_1000", "j20_delayed", "smt_pdh", "smt_pdl", "p18_cvd_div", "p18_fakeout",
+                "s02_third_retest", "f01_eth_touch", "j01_ladder", "band133_pm_reject", "lon_band_reject",
+                "pz_edge_setup_high", "halfgap_touch",
+            ):
                 m[k] = v
         tp_flags = tape.get(d, {})
         for k, v in tp_flags.items():
@@ -160,7 +165,7 @@ def catalog():
 
     # Jumbo
     add("R-J01", "Jumbo", "faithful", "pass",
-        "reject at -0.5 after 6-9 wick sweep, first touch in 09:40-09:50",
+        "G-default reject at deepest mean-reversal or ±0.5 ladder level, both sides, 09:40-09:50",
         "", "j01")
     add("R-J02", "Jumbo", "faithful", "pass",
         "09:30 open reaches -0.5 before 09:40",
@@ -181,7 +186,7 @@ def catalog():
         "path class by w.pct.0859close bin (XF p.24 recompute lives on range.6-9.published)",
         "", "j07")
     add("R-J08", "Jumbo", "faithful", "pass",
-        "PM 13:00-16:00 reject at 1.33 from-edge",
+        "PM reject at 1.33-1.66 band or 1.33 line, both sides, width = 6-9 box",
         "", "j08")
     add("R-J09", "Jumbo", "faithful", "pass",
         "London 00-03 box -0.5 reject in 03:00-06:00",
@@ -267,7 +272,7 @@ def catalog():
         "NYAM fail-back plus 10-11 fail-back (fade count >= 2)",
         "", "g10")
     add("R-G11", "Green Bird", "faithful", "pass",
-        "label.aplus = NYAM sweep (RTH traded range after 10:00). Sweep-only per FORMULAS.md procedure and PRD. Fail-back is R-G01.",
+        "label.aplus = NYAM/Asia/10-11 sweep plus fail-back. Sweep-only is a named weaker label.",
         "", "g11")
 
     # AMT
@@ -308,7 +313,7 @@ def catalog():
         "09:30 open at an overnight LVN",
         "", "a12")
     add("R-A13", "AMT", "faithful", "pass",
-        "RTH touch of overnight high or low (18:00-09:30)",
+        "RTH 09:30-16:00 touch of overnight 18:00-09:30 high or low",
         "", "a13")
     add("R-A14", "AMT", "faithful", "pass",
         "TPO poor extreme or excess hold",
@@ -328,11 +333,10 @@ def catalog():
 
     # Flow
     add("R-F01", "Flow", "faithful", "pass",
-        "AM VWAP ±2SD touch with absorption A at the band",
+        "18:00 session VWAP ±2 running bands, both sides (±1 is the named at-least row)",
         "", "f01")
-    add("R-F02", "Flow", "faithful", "pass",
-        "MBP-1 CVD regular divergence in the 15 min after first AM take of 6-9 H or L. Session-sign flag stays untrusted.",
-        "", "f02")
+    add("R-F02", "Flow", "faithful", "blocked",
+        "n/a", "flow.cvd.trade divergence (FORMULAS.md blocked; MBP-1 extract exists, not gap)", None)
     add("R-F03", "Flow", "faithful", "pass",
         "AM VWAP, overnight VWAP, and prior VA mid within tR",
         "", "f03")
@@ -383,7 +387,7 @@ def catalog():
 
     # Regime
     add("R-R01", "Regime", "faithful", "pass",
-        "QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35; ETF has no 09:25 tape)",
+        "QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35)",
         "", "r01")
     add("R-R02", "Regime", "faithful", "pass",
         "prior-session VIXCLS close in band 15-18",
@@ -391,16 +395,15 @@ def catalog():
     add("R-R03", "Regime", "faithful", "pass",
         "open-vs-VA thesis still alive at 12:00",
         "", "r03")
-    add("R-R04", "Regime", "faithful", "pass",
-        "sister takes PDH/PDL, NQ does not (user SMT, not the saturating S1 hunt)",
-        "", "r04")
+    add("R-R04", "Regime", "faithful", "blocked",
+        "n/a", "SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap)", None)
 
     # Sires
     add("R-S01", "Sires", "faithful", "pass",
         "absorption A at the 6-9 low then AM close above it",
         "", "s01")
     add("R-S02", "Sires", "faithful", "pass",
-        "three AM prints at the 6-9 high",
+        "third test from above of prior VAL band, or from below of prior VAH (continuation through)",
         "", "s02")
     add("R-S03", "Sires", "faithful", "pass",
         "print-size thinning; absorption B stays blocked",
@@ -476,9 +479,8 @@ def catalog():
     add("R-P17", "Pine", "faithful", "pass",
         "18:00 open touched in RTH",
         "", "p17")
-    add("R-P18", "Pine", "faithful", "pass",
-        "1m OHLC CVD regular divergence in the 15 min after first AM take of 6-9 H or L",
-        "", "p18")
+    add("R-P18", "Pine", "faithful", "blocked",
+        "n/a", "flow.cvd.ohlc as trigger (FORMULAS.md blocked)", None)
     add("R-P19", "Pine", "faithful", "pass",
         "adjacent body gap >= 4 ticks",
         "", "p19")
@@ -490,7 +492,7 @@ def catalog():
 
 def _preds():
     def j01(r):
-        return bool(r.get("m05_in_0940") or (r.get("m05_reject") and r.get("m05_bin") == "bin.0940-0950"))
+        return bool(r.get("j01_ladder") or r.get("m05_in_0940") or (r.get("m05_reject") and r.get("m05_bin") == "bin.0940-0950"))
 
     def j02(r):
         return bool(r.get("open_to_m05_before_0940"))
@@ -511,16 +513,16 @@ def _preds():
         return r.get("path_class") == "both"
 
     def j08(r):
-        return bool(r.get("ext133_pm_reject"))
+        return bool(r.get("band133_pm_reject") or r.get("ext133_pm_reject"))
 
     def j09(r):
-        return bool(r.get("lon_m05_reject"))
+        return bool(r.get("lon_m05_reject") or r.get("lon_band_reject"))
 
     def j11(r):
         return bool(r.get("ss_reach"))
 
     def j12(r):
-        return bool(r.get("model_a") and r.get("pz_t1_reach") and r.get("m05_reject") and r.get("pz_edge_setup"))
+        return bool(r.get("model_a") and r.get("pz_t1_reach") and r.get("m05_reject") and (r.get("pz_edge_setup") or r.get("pz_edge_setup_high")))
 
     def j13(r):
         return bool(r.get("in_value") and r.get("ev_reach_mean60"))
@@ -664,7 +666,7 @@ def _preds():
         return bool(r.get("r03_thesis_alive"))
 
     def f01(r):
-        return bool(r.get("f01_vwap_fade"))
+        return bool(r.get("f01_eth_touch") or r.get("f01_vwap_fade"))
 
     def f02(r):
         return bool(r.get("f02_divergence"))

@@ -17,15 +17,15 @@ PYTHONPATH=implementation/src /tmp/trading-research-venv/bin/python implementati
 
 id | framework | source_fidelity | impl_fidelity | n | event | rate | interval | year | RV | leakage | notes
 ---|---|---|---|---|---|---|---|---|---|---|---
-R-J01 | Jumbo | faithful | pass | 647 | reject at -0.5 after 6-9 wick sweep, first touch in 09:40-09:50 | 0.0185 | [0.011, 0.032] | 2024 0.016 / 2025 0.020 / 2026 0.019 | low 0.014 / mid 0.023 / high 0.019 | 0 | leakage 0
-R-J02 | Jumbo | faithful | pass | 647 | 09:30 open reaches -0.5 before 09:40 | 0.2813 | [0.248, 0.317] | 2024 0.251 / 2025 0.279 / 2026 0.333 | low 0.272 / mid 0.308 / high 0.261 | 0 | leakage 0
+R-J01 | Jumbo | faithful | pass | 647 | G-default reject at deepest mean-reversal or ±0.5 ladder level, both sides, 09:40-09:50 | 0.0294 | [0.019, 0.045] | 2024 0.024 / 2025 0.029 / 2026 0.038 | low 0.028 / mid 0.042 / high 0.019 | 0 | leakage 0
+R-J02 | Jumbo | faithful | pass | 647 | 09:30 open reaches -0.5 before 09:40 | 0.7063 | [0.670, 0.740] | 2024 0.704 / 2025 0.725 / 2026 0.679 | low 0.733 / mid 0.692 / high 0.692 | 0 | leakage 0
 R-J03 | Jumbo | faithful | pass | 647 | single-break on extended overnight, EQ retrace with h=15 by 10:00 | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-J04 | Jumbo | faithful | pass | 647 | overnight Asia and London both swept by 09:30, single-break reach of 1.0 | 0.0294 | [0.019, 0.045] | 2024 0.053 / 2025 0.025 / 2026 0.000 | low 0.041 / mid 0.023 / high 0.024 | 0 | leakage 0
 R-J05 | Jumbo | faithful | pass | 647 | single-break midretrace to EQ / range open | 0.1855 | [0.157, 0.217] | 2024 0.162 / 2025 0.180 / 2026 0.231 | low 0.203 / mid 0.168 / high 0.185 | 0 | leakage 0
 R-J06 | Jumbo | faithful | pass | 647 | open_cell path class; outside-both + RVOL double-break | 0.0680 | [0.051, 0.090] | 2024 0.049 / 2025 0.086 / 2026 0.071 | low 0.069 / mid 0.079 / high 0.057 | 0 | leakage 0
 R-J07 | Jumbo | faithful | pass | 647 | path class by w.pct.0859close bin (XF p.24 recompute lives on range.6-9.published) | 0.3385 | [0.303, 0.376] | 2024 0.360 / 2025 0.320 / 2026 0.333 | low 0.346 / mid 0.341 / high 0.336 | 0 | leakage 0
-R-J08 | Jumbo | faithful | pass | 647 | PM 13:00-16:00 reject at 1.33 from-edge | 0.0216 | [0.013, 0.036] | 2024 0.016 / 2025 0.029 / 2026 0.019 | low 0.023 / mid 0.019 / high 0.024 | 0 | leakage 0
-R-J09 | Jumbo | faithful | pass | 647 | London 00-03 box -0.5 reject in 03:00-06:00 | 0.0541 | [0.039, 0.074] | 2024 0.089 / 2025 0.041 / 2026 0.019 | low 0.055 / mid 0.084 / high 0.024 | 0 | leakage 0
+R-J08 | Jumbo | faithful | pass | 647 | PM reject at 1.33-1.66 band or 1.33 line, both sides, width = 6-9 box | 0.0216 | [0.013, 0.036] | 2024 0.016 / 2025 0.029 / 2026 0.019 | low 0.023 / mid 0.019 / high 0.024 | 0 | leakage 0
+R-J09 | Jumbo | faithful | pass | 647 | London 00-03 box -0.5 reject in 03:00-06:00 | 0.0649 | [0.048, 0.087] | 2024 0.101 / 2025 0.053 / 2026 0.026 | low 0.069 / mid 0.093 / high 0.033 | 0 | leakage 0
 R-J10 | Jumbo | faithful | pass | 647 | nearest untouched Asia/London/PDH/PDL draw reached in AM | 0.3617 | [0.326, 0.399] | 2024 0.356 / 2025 0.352 / 2026 0.385 | low 0.364 / mid 0.379 / high 0.346 | 0 | leakage 0
 R-J11 | Jumbo | faithful | pass | 647 | SessionStat avgHL60 reach (median and min-average are named variants) | 0.7496 | [0.715, 0.781] | 2024 0.761 / 2025 0.713 / 2026 0.788 | low 0.737 / mid 0.706 / high 0.806 | 0 | leakage 0
 R-J12 | Jumbo | faithful | pass | 647 | P-zone T1 reach with band overlapping 6-9 L, low > OP, Model A, reject at -0.5 | 0.0015 | [0.000, 0.009] | 2024 0.004 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.005 / high 0.000 | 0 | leakage 0
@@ -52,7 +52,7 @@ R-G07 | Green Bird | faithful | pass | 647 | touch of NYAM 50-61.8% golden pocke
 R-G08 | Green Bird | faithful | pass | 647 | overnight sweep of PDH/PDL then close back through before 09:30 | 0.3771 | [0.341, 0.415] | 2024 0.340 / 2025 0.344 / 2026 0.487 | low 0.378 / mid 0.350 / high 0.403 | 0 | leakage 0
 R-G09 | Green Bird | faithful | pass | 1 | PDH + Asia high + London high stacked within 0.05 R, Monday NWOG fill | 1.0000 | [0.207, 1.000] | 2024 1.000 / 2025 n/a / 2026 n/a | low 1.000 / mid n/a / high n/a | 0 | stacked PDH+Asia+London within 0.05 R; fill on those Mondays
 R-G10 | Green Bird | faithful | pass | 647 | NYAM fail-back plus 10-11 fail-back (fade count >= 2) | 0.4544 | [0.416, 0.493] | 2024 0.462 / 2025 0.418 / 2026 0.500 | low 0.475 / mid 0.458 / high 0.436 | 0 | leakage 0
-R-G11 | Green Bird | faithful | pass | 647 | label.aplus = NYAM sweep (RTH traded range after 10:00). Sweep-only per FORMULAS.md procedure and PRD. Fail-back is R-G01. | 0.9706 | [0.955, 0.981] | 2024 0.976 / 2025 0.975 / 2026 0.955 | low 0.977 / mid 0.967 / high 0.967 | 0 | leakage 0
+R-G11 | Green Bird | faithful | pass | 647 | label.aplus = NYAM/Asia/10-11 sweep plus fail-back. Sweep-only is a named weaker label. | 0.9474 | [0.927, 0.962] | 2024 0.931 / 2025 0.975 / 2026 0.929 | low 0.949 / mid 0.944 / high 0.948 | 0 | leakage 0
 R-A01 | AMT | faithful | pass | 647 | G-default reject at prior VAL/VAH | 0.0788 | [0.060, 0.102] | 2024 0.057 / 2025 0.074 / 2026 0.122 | low 0.074 / mid 0.084 / high 0.081 | 0 | leakage 0
 R-A02 | AMT | faithful | pass | 647 | AM prints at the prior VAL/VAH ledge | 0.6229 | [0.585, 0.659] | 2024 0.611 / 2025 0.607 / 2026 0.667 | low 0.622 / mid 0.589 / high 0.659 | 0 | leakage 0
 R-A03 | AMT | faithful | pass | 647 | failed-auction re-entry then traverse to the opposite VA edge | 0.0634 | [0.047, 0.085] | 2024 0.081 / 2025 0.045 / 2026 0.064 | low 0.046 / mid 0.098 / high 0.047 | 0 | leakage 0
@@ -65,14 +65,14 @@ R-A09 | AMT | faithful | pass | 647 | b.c1 through both VA edges with no 30-min 
 R-A10 | AMT | faithful | pass | 647 | AMT open type is drive (first 30m never trades back through the 09:30 open) | 0.2179 | [0.188, 0.251] | 2024 0.206 / 2025 0.230 / 2026 0.218 | low 0.217 / mid 0.248 / high 0.190 | 0 | leakage 0
 R-A11 | AMT | faithful | pass | 647 | prior RTH P-shape then single-break path | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-A12 | AMT | faithful | pass | 647 | 09:30 open at an overnight LVN | 0.1144 | [0.092, 0.141] | 2024 0.117 / 2025 0.107 / 2026 0.122 | low 0.106 / mid 0.112 / high 0.118 | 0 | leakage 0
-R-A13 | AMT | faithful | pass | 647 | RTH touch of overnight high or low (18:00-09:30) | 0.8794 | [0.852, 0.902] | 2024 0.891 / 2025 0.869 / 2026 0.878 | low 0.899 / mid 0.869 / high 0.867 | 0 | leakage 0
+R-A13 | AMT | faithful | pass | 647 | RTH 09:30-16:00 touch of overnight 18:00-09:30 high or low | 0.9536 | [0.935, 0.967] | 2024 0.968 / 2025 0.947 / 2026 0.942 | low 0.968 / mid 0.967 / high 0.924 | 0 | leakage 0
 R-A14 | AMT | faithful | pass | 647 | TPO poor extreme or excess hold | 1.0000 | [0.994, 1.000] | 2024 1.000 / 2025 1.000 / 2026 1.000 | low 1.000 / mid 1.000 / high 1.000 | 0 | leakage 0
 R-A15 | AMT | faithful | pass | 647 | IB single-side extension after 10:30 (b.c1 beyond IB H or L) | 0.7991 | [0.766, 0.828] | 2024 0.802 / 2025 0.783 / 2026 0.821 | low 0.811 / mid 0.822 / high 0.768 | 0 | leakage 0
 R-A16 | AMT | faithful | pass | 647 | ledge stacked with AM VWAP or prior VAH within tR | 0.0278 | [0.018, 0.044] | 2024 0.016 / 2025 0.045 / 2026 0.019 | low 0.032 / mid 0.019 / high 0.033 | 0 | leakage 0
 R-A17 | AMT | faithful | pass | 647 | second volume transition in the RTH trade profile | 0.0958 | [0.075, 0.121] | 2024 0.093 / 2025 0.086 / 2026 0.115 | low 0.083 / mid 0.098 / high 0.109 | 0 | leakage 0
 R-A18 | AMT | faithful | pass | 647 | AM high reaches prior VAH | 0.6198 | [0.582, 0.656] | 2024 0.628 / 2025 0.611 / 2026 0.622 | low 0.636 / mid 0.636 / high 0.592 | 0 | leakage 0
-R-F01 | Flow | faithful | pass | 647 | AM VWAP ±2SD touch with absorption A at the band | 0.1252 | [0.102, 0.153] | 2024 0.142 / 2025 0.086 / 2026 0.160 | low 0.124 / mid 0.159 / high 0.085 | 0 | leakage 0
-R-F02 | Flow | faithful | pass | 647 | MBP-1 CVD regular divergence in the 15 min after first AM take of 6-9 H or L. Session-sign flag stays untrusted. | 0.8346 | [0.804, 0.861] | 2024 0.862 / 2025 0.820 / 2026 0.814 | low 0.820 / mid 0.841 / high 0.839 | 0 | leakage 0
+R-F01 | Flow | faithful | pass | 647 | 18:00 session VWAP ±2 running bands, both sides (±1 is the named at-least row) | 0.7898 | [0.757, 0.819] | 2024 0.785 / 2025 0.828 / 2026 0.737 | low 0.829 / mid 0.804 / high 0.739 | 0 | leakage 0
+R-F02 | Flow | faithful | blocked | n/a | flow.cvd.trade divergence (FORMULAS.md blocked; MBP-1 extract exists, not gap) | n/a | n/a | n/a | n/a | n/a | flow.cvd.trade divergence (FORMULAS.md blocked; MBP-1 extract exists, not gap)
 R-F03 | Flow | faithful | pass | 647 | AM VWAP, overnight VWAP, and prior VA mid within tR | 0.0031 | [0.001, 0.011] | 2024 0.008 / 2025 0.000 / 2026 0.000 | low 0.005 / mid 0.005 / high 0.000 | 0 | leakage 0
 R-F04 | Flow | faithful | pass | 647 | stacked 4x footprint then AM trade back through the zone | 0.7311 | [0.696, 0.764] | 2024 0.668 / 2025 0.721 / 2026 0.846 | low 0.664 / mid 0.724 / high 0.806 | 0 | leakage 0
 R-F05 | Flow | faithful | pass | 647 | AM candle vs delta disagreement | 0.7573 | [0.723, 0.789] | 2024 0.765 / 2025 0.721 / 2026 0.801 | low 0.728 / mid 0.790 / high 0.763 | 0 | leakage 0
@@ -89,12 +89,12 @@ R-F15 | Flow | faithful | pass | 647 | stacked footprint without on-touch refill
 R-F16 | Flow | faithful | pass | 647 | absorption A at prior VA after AM tags 6-9 high; gamma stays None | 0.0232 | [0.014, 0.038] | 2024 0.032 / 2025 0.020 / 2026 0.013 | low 0.018 / mid 0.028 / high 0.024 | 0 | leakage 0
 R-F17 | Flow | faithful | pass | 647 | on-touch refill zone from MBP-1 | 0.0062 | [0.002, 0.016] | 2024 0.012 / 2025 0.004 / 2026 0.000 | low 0.009 / mid 0.005 / high 0.005 | 0 | leakage 0
 R-F18 | Flow | faithful | pass | 647 | stacked footprint without refill; tape-speed cut stays unspecified | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
-R-R01 | Regime | faithful | pass | 647 | QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35; ETF has no 09:25 tape) | 0.4049 | [0.368, 0.443] | 2024 0.360 / 2025 0.406 / 2026 0.474 | low 0.304 / mid 0.388 / high 0.512 | 0 | leakage 0
+R-R01 | Regime | faithful | pass | 647 | QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35) | 0.4049 | [0.368, 0.443] | 2024 0.360 / 2025 0.406 / 2026 0.474 | low 0.304 / mid 0.388 / high 0.512 | 0 | leakage 0
 R-R02 | Regime | faithful | pass | 647 | prior-session VIXCLS close in band 15-18 | 0.3910 | [0.354, 0.429] | 2024 0.231 / 2025 0.508 / 2026 0.462 | low 0.396 / mid 0.439 / high 0.346 | 0 | leakage 0
 R-R03 | Regime | faithful | pass | 647 | open-vs-VA thesis still alive at 12:00 | 0.6151 | [0.577, 0.652] | 2024 0.652 / 2025 0.594 / 2026 0.590 | low 0.627 / mid 0.636 / high 0.588 | 0 | leakage 0
-R-R04 | Regime | faithful | pass | 647 | sister takes PDH/PDL, NQ does not (user SMT, not the saturating S1 hunt) | 0.3926 | [0.356, 0.431] | 2024 0.445 / 2025 0.340 / 2026 0.391 | low 0.429 / mid 0.388 / high 0.355 | 0 | leakage 0
+R-R04 | Regime | faithful | blocked | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap) | n/a | n/a | n/a | n/a | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap)
 R-S01 | Sires | faithful | pass | 647 | absorption A at the 6-9 low then AM close above it | 0.0402 | [0.028, 0.058] | 2024 0.049 / 2025 0.033 / 2026 0.038 | low 0.037 / mid 0.051 / high 0.033 | 0 | leakage 0
-R-S02 | Sires | faithful | pass | 647 | three AM prints at the 6-9 high | 0.6754 | [0.638, 0.710] | 2024 0.688 / 2025 0.676 / 2026 0.654 | low 0.668 / mid 0.692 / high 0.678 | 0 | leakage 0
+R-S02 | Sires | faithful | pass | 647 | third test from above of prior VAL band, or from below of prior VAH (continuation through) | 0.1020 | [0.081, 0.128] | 2024 0.126 / 2025 0.111 / 2026 0.051 | low 0.143 / mid 0.098 / high 0.066 | 0 | leakage 0
 R-S03 | Sires | faithful | pass | 647 | print-size thinning; absorption B stays blocked | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-S04 | Sires | faithful | pass | 647 | 350% imbalance with a BigTrades print | 0.0139 | [0.007, 0.026] | 2024 0.028 / 2025 0.004 / 2026 0.006 | low 0.018 / mid 0.014 / high 0.005 | 0 | leakage 0
 R-S05 | Sires | faithful | pass | 647 | microbalance break after the first 10 minutes | 0.9969 | [0.989, 0.999] | 2024 0.996 / 2025 0.996 / 2026 1.000 | low 0.991 / mid 1.000 / high 1.000 | 0 | leakage 0
@@ -119,7 +119,7 @@ R-P14 | Pine | faithful | pass | 647 | HOD already in by 10:00 | 0.2952 | [0.261
 R-P15 | Pine | faithful | pass | 647 | Session Statistical Levels p50 MFE from the open | 0.3632 | [0.327, 0.401] | 2024 0.356 / 2025 0.348 / 2026 0.397 | low 0.341 / mid 0.327 / high 0.417 | 0 | leakage 0
 R-P16 | Pine | faithful | pass | 647 | 18:00-16:00 inside log-space VIX/16 a/b 1.0 zone from prior settle and prior VIX | 0.4250 | [0.387, 0.463] | 2024 0.429 / 2025 0.496 / 2026 0.308 | low 0.493 / mid 0.416 / high 0.365 | 0 | leakage 0
 R-P17 | Pine | faithful | pass | 647 | 18:00 open touched in RTH | 0.6213 | [0.583, 0.658] | 2024 0.648 / 2025 0.635 / 2026 0.558 | low 0.608 / mid 0.664 / high 0.597 | 0 | leakage 0
-R-P18 | Pine | faithful | pass | 647 | 1m OHLC CVD regular divergence in the 15 min after first AM take of 6-9 H or L | 0.5626 | [0.524, 0.600] | 2024 0.575 / 2025 0.557 / 2026 0.551 | low 0.530 / mid 0.589 / high 0.573 | 0 | leakage 0
+R-P18 | Pine | faithful | blocked | n/a | flow.cvd.ohlc as trigger (FORMULAS.md blocked) | n/a | n/a | n/a | n/a | n/a | flow.cvd.ohlc as trigger (FORMULAS.md blocked)
 R-P19 | Pine | faithful | pass | 647 | adjacent body gap >= 4 ticks | 0.0386 | [0.026, 0.056] | 2024 0.024 / 2025 0.045 / 2026 0.051 | low 0.014 / mid 0.047 / high 0.057 | 0 | leakage 0
 R-P20 | Pine | faithful | pass | 647 | AM print >=100 lots and range >= 8 ticks | 0.6569 | [0.619, 0.692] | 2024 0.498 / 2025 0.730 / 2026 0.795 | low 0.627 / mid 0.645 / high 0.692 | 0 | leakage 0
 
