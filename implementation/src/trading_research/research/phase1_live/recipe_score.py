@@ -131,7 +131,8 @@ def _join():
             if k not in m or k in (
                 "release_1000", "j20_delayed", "smt_pdh", "smt_pdl", "p18_cvd_div", "p18_fakeout",
                 "s02_third_retest", "f01_eth_touch", "j01_ladder", "band133_pm_reject", "lon_band_reject",
-                "pz_edge_setup_high", "halfgap_touch",
+                "pz_edge_setup_high", "halfgap_touch", "a02_ledge_hold", "a06_naked_poc", "a18_single_reach",
+                "s01_refill", "s05_micro_break",
             ):
                 m[k] = v
         tp_flags = tape.get(d, {})
@@ -280,7 +281,7 @@ def catalog():
         "G-default reject at prior VAL/VAH",
         "", "a01")
     add("R-A02", "AMT", "faithful", "pass",
-        "AM prints at the prior VAL/VAH ledge",
+        "break, retest, hold at prior VAL or VAH ledge, both sides",
         "", "a02")
     add("R-A03", "AMT", "faithful", "pass",
         "failed-auction re-entry then traverse to the opposite VA edge",
@@ -328,7 +329,7 @@ def catalog():
         "second volume transition in the RTH trade profile",
         "", "a17")
     add("R-A18", "AMT", "faithful", "pass",
-        "AM high reaches prior VAH",
+        "VAL fade with unfilled singles above, or the VAH mirror",
         "", "a18")
 
     # Flow
@@ -366,24 +367,20 @@ def catalog():
     add("R-F12", "Flow", "faithful", "pass",
         "aggressive arrival: AM size median rising (slope rule; no invented q75)",
         "", "f12")
-    add("R-F13", "Flow", "faithful", "pass",
-        "AM tags 6-9 high then closes back below",
-        "", "f13")
+    add("R-F13", "Flow", "faithful", "gap",
+        "n/a", "dealing-range trap retest; 6-9 high close-back is a stand-in", None)
     add("R-F14", "Flow", "faithful", "pass",
         "350% imbalance tick plus a BigTrades print at a TBR level",
         "", "f14")
-    add("R-F15", "Flow", "faithful", "pass",
-        "stacked footprint without on-touch refill; gamma stays None",
-        "", "f15")
-    add("R-F16", "Flow", "faithful", "pass",
-        "absorption A at prior VA after AM tags 6-9 high; gamma stays None",
-        "", "f16")
+    add("R-F15", "Flow", "faithful", "gap",
+        "n/a", "OFM catalyst sequence; stack-without-refill is a stand-in", None)
+    add("R-F16", "Flow", "faithful", "gap",
+        "n/a", "dealing-range fade both sides; 6-9 high + VA absorption is a stand-in", None)
     add("R-F17", "Flow", "faithful", "pass",
         "on-touch refill zone from MBP-1",
         "", "f17")
-    add("R-F18", "Flow", "faithful", "pass",
-        "stacked footprint without refill; tape-speed cut stays unspecified",
-        "", "f18")
+    add("R-F18", "Flow", "faithful", "gap",
+        "n/a", "squeeze after catalyst; stack-without-refill is a stand-in", None)
 
     # Regime
     add("R-R01", "Regime", "faithful", "pass",
@@ -400,29 +397,24 @@ def catalog():
 
     # Sires
     add("R-S01", "Sires", "faithful", "pass",
-        "absorption A at the 6-9 low then AM close above it",
+        "absorption refill at prior VAL (long) or VAH (short)",
         "", "s01")
     add("R-S02", "Sires", "faithful", "pass",
         "third test from above of prior VAL band, or from below of prior VAH (continuation through)",
         "", "s02")
-    add("R-S03", "Sires", "faithful", "pass",
-        "print-size thinning; absorption B stays blocked",
-        "", "s03")
-    add("R-S04", "Sires", "faithful", "pass",
-        "350% imbalance with a BigTrades print",
-        "", "s04")
+    add("R-S03", "Sires", "faithful", "gap",
+        "n/a", "OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked.", None)
+    add("R-S04", "Sires", "faithful", "gap",
+        "n/a", "weekly trapped-seller OFM long; F14 flag is a stand-in", None)
     add("R-S05", "Sires", "faithful", "pass",
         "microbalance break after the first 10 minutes",
         "", "s05")
-    add("R-S06", "Sires", "faithful", "pass",
-        "6-9 high stacked with an RTH HVN within tR",
-        "", "s06")
-    add("R-S07", "Sires", "faithful", "pass",
-        "AM MAE under 15 ticks from the first print",
-        "", "s07")
-    add("R-S08", "Sires", "faithful", "pass",
-        "RTH profile has at least two HVNs, or a 6-9 LVN under a TBR level",
-        "", "s08")
+    add("R-S06", "Sires", "faithful", "gap",
+        "n/a", "two-reason band both sides; 6-9 high + HVN is a stand-in", None)
+    add("R-S07", "Sires", "faithful", "gap",
+        "n/a", "reaction-area MFE/MAE both sides; first-print MAE is a stand-in", None)
+    add("R-S08", "Sires", "faithful", "gap",
+        "n/a", "minor HVN band plus flip-to-long; HVN-count is a stand-in", None)
     add("R-S09", "Sires", "faithful", "pass",
         "open above developing VAH then break/retest after 10:00",
         "", "s09")
@@ -648,7 +640,7 @@ def _preds():
         return bool(r.get("onh_or_onl"))
 
     def a14(r):
-        return bool(r.get("tpo_poor") or r.get("tpo_excess_hold") or r.get("tpo_single_fill"))
+        return bool(r.get("tpo_poor"))
 
     def a15(r):
         return r.get("ib_path") in ("high-only", "low-only") or bool(r.get("ib_single"))

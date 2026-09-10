@@ -34,6 +34,7 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_f05_absorption_stack,
     r_r03_thesis,
     r_s01_refill_long,
+    r_s01_refill_short,
     r_s06_two_reason,
     r_s07_areas,
     reward_3tick,
@@ -122,7 +123,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
     q_sell = grid.get("abs_q90_sell")
     rec = {
         "date": session, "year": session[:4], "eligible": row.get("eligible"),
-        "tape_rev": 1,
+        "tape_rev": 3,
         "j15_bigtrade_level": False, "j16_two_sided_eq": False, "j17_node_under": False,
         "a02_ledge_hold": False, "a06_naked_poc": False, "a12_on_lvn": False,
         "a16_stacked": False, "a17_second_tx": False, "a18_single_reach": False,
@@ -254,12 +255,21 @@ def _score_one(session, ev, f_rows, open_rows, grid):
             low=float(px_am.min()), high=float(px_am.max()),
         ).get("disagree_bear"))
         if l is not None:
-            rec["s01_refill"] = bool(r_s01_refill_long(
-                range_low=l,
-                abs_ok=bool(absorption_a(ev, am0, am1, h, l, w or 20.0, vol_cut_buy=q_buy, vol_cut_sell=q_sell)),
-                min_print=float(px_am.min()), close_above=float(px_am[-1]),
-                objective=h or float(px_am.max()), later_high=float(px_am.max()), later_low=float(px_am.min()),
-            )["refill_long"])
+            rec["s01_refill"] = False
+            if val is not None:
+                rec["s01_refill"] = bool(r_s01_refill_long(
+                    range_low=float(val),
+                    abs_ok=bool(absorption_a(ev, am0, am1, vah or h, val, (vah - val) if vah else (w or 20.0), vol_cut_buy=q_buy, vol_cut_sell=q_sell)),
+                    min_print=float(px_am.min()), close_above=float(px_am[-1]),
+                    objective=vah or float(px_am.max()), later_high=float(px_am.max()), later_low=float(px_am.min()),
+                )["refill_long"])
+            if not rec["s01_refill"] and vah is not None:
+                rec["s01_refill"] = bool(r_s01_refill_short(
+                    range_high=float(vah),
+                    abs_ok=bool(absorption_a(ev, am0, am1, vah, val or l, (vah - val) if val else (w or 20.0), vol_cut_buy=q_buy, vol_cut_sell=q_sell)),
+                    max_print=float(px_am.max()), close_below=float(px_am[-1]),
+                    objective=val or float(px_am.min()), later_high=float(px_am.max()), later_low=float(px_am.min()),
+                )["refill_short"])
         if h is not None:
             rec["s02_third_retest"] = False
             rec["f13_trap_retest"] = bool(float(px_am.max()) >= h - 2 * TICK and float(px_am[-1]) < h)
@@ -293,7 +303,7 @@ def _score_chunk(path, f_rows, open_rows, grid):
 
 def build_tape_table() -> list[dict]:
     cached = load_rows("tape_flags_F")
-    if cached and cached[0].get("tape_rev") in (1, 2):
+    if cached and cached[0].get("tape_rev") == 3:
         return cached
     f_rows = {r["date"]: r for r in (load_rows("sessions_F") or [])}
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}

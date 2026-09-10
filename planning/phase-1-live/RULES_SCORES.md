@@ -54,23 +54,23 @@ R-G09 | Green Bird | faithful | pass | 1 | PDH + Asia high + London high stacked
 R-G10 | Green Bird | faithful | pass | 647 | NYAM fail-back plus 10-11 fail-back (fade count >= 2) | 0.4544 | [0.416, 0.493] | 2024 0.462 / 2025 0.418 / 2026 0.500 | low 0.475 / mid 0.458 / high 0.436 | 0 | leakage 0
 R-G11 | Green Bird | faithful | pass | 647 | label.aplus = NYAM/Asia/10-11 sweep plus fail-back. Sweep-only is a named weaker label. | 0.9474 | [0.927, 0.962] | 2024 0.931 / 2025 0.975 / 2026 0.929 | low 0.949 / mid 0.944 / high 0.948 | 0 | leakage 0
 R-A01 | AMT | faithful | pass | 647 | G-default reject at prior VAL/VAH | 0.0788 | [0.060, 0.102] | 2024 0.057 / 2025 0.074 / 2026 0.122 | low 0.074 / mid 0.084 / high 0.081 | 0 | leakage 0
-R-A02 | AMT | faithful | pass | 647 | AM prints at the prior VAL/VAH ledge | 0.6229 | [0.585, 0.659] | 2024 0.611 / 2025 0.607 / 2026 0.667 | low 0.622 / mid 0.589 / high 0.659 | 0 | leakage 0
+R-A02 | AMT | faithful | pass | 647 | break, retest, hold at prior VAL or VAH ledge, both sides | 0.6229 | [0.585, 0.659] | 2024 0.611 / 2025 0.607 / 2026 0.667 | low 0.622 / mid 0.589 / high 0.659 | 0 | leakage 0
 R-A03 | AMT | faithful | pass | 647 | failed-auction re-entry then traverse to the opposite VA edge | 0.0634 | [0.047, 0.085] | 2024 0.081 / 2025 0.045 / 2026 0.064 | low 0.046 / mid 0.098 / high 0.047 | 0 | leakage 0
 R-A04 | AMT | faithful | pass | 647 | open outside prior VA then two 30m periods inside (09:30-10:30) | 0.0587 | [0.043, 0.080] | 2024 0.045 / 2025 0.082 / 2026 0.045 | low 0.055 / mid 0.061 / high 0.062 | 0 | leakage 0
 R-A05 | AMT | faithful | pass | 647 | POC chop (two touches, no through-and-hold) | 0.3369 | [0.302, 0.374] | 2024 0.336 / 2025 0.340 / 2026 0.333 | low 0.346 / mid 0.336 / high 0.332 | 0 | leakage 0
 R-A06 | AMT | faithful | pass | 647 | RTH POC untraded overnight (naked POC) | 0.4900 | [0.452, 0.528] | 2024 0.466 / 2025 0.520 / 2026 0.481 | low 0.498 / mid 0.481 / high 0.488 | 0 | leakage 0
 R-A07 | AMT | faithful | pass | 647 | IB break, retest, hold | 0.0155 | [0.008, 0.028] | 2024 0.016 / 2025 0.016 / 2026 0.013 | low 0.018 / mid 0.019 / high 0.009 | 0 | leakage 0
-R-A08 | AMT | faithful | pass | 647 | re-accept hold after a VA break | 0.0340 | [0.023, 0.051] | 2024 0.061 / 2025 0.020 / 2026 0.013 | low 0.023 / mid 0.070 / high 0.009 | 0 | leakage 0
+R-A08 | AMT | faithful | pass | 647 | re-accept hold after a VA break | 0.0402 | [0.028, 0.058] | 2024 0.069 / 2025 0.029 / 2026 0.013 | low 0.023 / mid 0.075 / high 0.024 | 0 | leakage 0
 R-A09 | AMT | faithful | pass | 647 | b.c1 through both VA edges with no 30-min hold inside | 0.0433 | [0.030, 0.062] | 2024 0.045 / 2025 0.037 / 2026 0.051 | low 0.032 / mid 0.061 / high 0.038 | 0 | leakage 0
 R-A10 | AMT | faithful | pass | 647 | AMT open type is drive (first 30m never trades back through the 09:30 open) | 0.2179 | [0.188, 0.251] | 2024 0.206 / 2025 0.230 / 2026 0.218 | low 0.217 / mid 0.248 / high 0.190 | 0 | leakage 0
-R-A11 | AMT | faithful | pass | 647 | prior RTH P-shape then single-break path | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
+R-A11 | AMT | faithful | pass | 647 | prior RTH P-shape then single-break path | 0.0031 | [0.001, 0.011] | 2024 0.004 / 2025 0.000 / 2026 0.006 | low 0.000 / mid 0.009 / high 0.000 | 0 | leakage 0
 R-A12 | AMT | faithful | pass | 647 | 09:30 open at an overnight LVN | 0.1144 | [0.092, 0.141] | 2024 0.117 / 2025 0.107 / 2026 0.122 | low 0.106 / mid 0.112 / high 0.118 | 0 | leakage 0
 R-A13 | AMT | faithful | pass | 647 | RTH 09:30-16:00 touch of overnight 18:00-09:30 high or low | 0.9536 | [0.935, 0.967] | 2024 0.968 / 2025 0.947 / 2026 0.942 | low 0.968 / mid 0.967 / high 0.924 | 0 | leakage 0
 R-A14 | AMT | faithful | pass | 647 | TPO poor extreme or excess hold | 1.0000 | [0.994, 1.000] | 2024 1.000 / 2025 1.000 / 2026 1.000 | low 1.000 / mid 1.000 / high 1.000 | 0 | leakage 0
 R-A15 | AMT | faithful | pass | 647 | IB single-side extension after 10:30 (b.c1 beyond IB H or L) | 0.7991 | [0.766, 0.828] | 2024 0.802 / 2025 0.783 / 2026 0.821 | low 0.811 / mid 0.822 / high 0.768 | 0 | leakage 0
 R-A16 | AMT | faithful | pass | 647 | ledge stacked with AM VWAP or prior VAH within tR | 0.0278 | [0.018, 0.044] | 2024 0.016 / 2025 0.045 / 2026 0.019 | low 0.032 / mid 0.019 / high 0.033 | 0 | leakage 0
 R-A17 | AMT | faithful | pass | 647 | second volume transition in the RTH trade profile | 0.0958 | [0.075, 0.121] | 2024 0.093 / 2025 0.086 / 2026 0.115 | low 0.083 / mid 0.098 / high 0.109 | 0 | leakage 0
-R-A18 | AMT | faithful | pass | 647 | AM high reaches prior VAH | 0.6198 | [0.582, 0.656] | 2024 0.628 / 2025 0.611 / 2026 0.622 | low 0.636 / mid 0.636 / high 0.592 | 0 | leakage 0
+R-A18 | AMT | faithful | pass | 647 | VAL fade with unfilled singles above, or the VAH mirror | 0.6198 | [0.582, 0.656] | 2024 0.628 / 2025 0.611 / 2026 0.622 | low 0.636 / mid 0.636 / high 0.592 | 0 | leakage 0
 R-F01 | Flow | faithful | pass | 647 | 18:00 session VWAP ±2 running bands, both sides (±1 is the named at-least row) | 0.7898 | [0.757, 0.819] | 2024 0.785 / 2025 0.828 / 2026 0.737 | low 0.829 / mid 0.804 / high 0.739 | 0 | leakage 0
 R-F02 | Flow | faithful | blocked | n/a | flow.cvd.trade divergence (FORMULAS.md blocked; MBP-1 extract exists, not gap) | n/a | n/a | n/a | n/a | n/a | flow.cvd.trade divergence (FORMULAS.md blocked; MBP-1 extract exists, not gap)
 R-F03 | Flow | faithful | pass | 647 | AM VWAP, overnight VWAP, and prior VA mid within tR | 0.0031 | [0.001, 0.011] | 2024 0.008 / 2025 0.000 / 2026 0.000 | low 0.005 / mid 0.005 / high 0.000 | 0 | leakage 0
@@ -83,24 +83,24 @@ R-F09 | Flow | faithful | pass | 647 | print-size thinning in AM; stage 2 absorp
 R-F10 | Flow | faithful | pass | 647 | protected AM low: last 5 prints stay above the AM low by 2 ticks | 0.9985 | [0.991, 1.000] | 2024 1.000 / 2025 0.996 / 2026 1.000 | low 1.000 / mid 1.000 / high 0.995 | 0 | leakage 0
 R-F11 | Flow | faithful | pass | 647 | RTH POC within tR of an LVN | 0.0232 | [0.014, 0.038] | 2024 0.004 / 2025 0.033 / 2026 0.038 | low 0.023 / mid 0.009 / high 0.038 | 0 | leakage 0
 R-F12 | Flow | faithful | pass | 647 | aggressive arrival: AM size median rising (slope rule; no invented q75) | 0.8624 | [0.834, 0.887] | 2024 0.826 / 2025 0.857 / 2026 0.929 | low 0.820 / mid 0.855 / high 0.915 | 0 | leakage 0
-R-F13 | Flow | faithful | pass | 647 | AM tags 6-9 high then closes back below | 0.2968 | [0.263, 0.333] | 2024 0.308 / 2025 0.299 / 2026 0.276 | low 0.276 / mid 0.308 / high 0.308 | 0 | leakage 0
+R-F13 | Flow | faithful | gap | n/a | dealing-range trap retest; 6-9 high close-back is a stand-in | n/a | n/a | n/a | n/a | n/a | dealing-range trap retest; 6-9 high close-back is a stand-in
 R-F14 | Flow | faithful | pass | 647 | 350% imbalance tick plus a BigTrades print at a TBR level | 0.0139 | [0.007, 0.026] | 2024 0.028 / 2025 0.004 / 2026 0.006 | low 0.018 / mid 0.014 / high 0.005 | 0 | leakage 0
-R-F15 | Flow | faithful | pass | 647 | stacked footprint without on-touch refill; gamma stays None | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
-R-F16 | Flow | faithful | pass | 647 | absorption A at prior VA after AM tags 6-9 high; gamma stays None | 0.0232 | [0.014, 0.038] | 2024 0.032 / 2025 0.020 / 2026 0.013 | low 0.018 / mid 0.028 / high 0.024 | 0 | leakage 0
+R-F15 | Flow | faithful | gap | n/a | OFM catalyst sequence; stack-without-refill is a stand-in | n/a | n/a | n/a | n/a | n/a | OFM catalyst sequence; stack-without-refill is a stand-in
+R-F16 | Flow | faithful | gap | n/a | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in | n/a | n/a | n/a | n/a | n/a | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in
 R-F17 | Flow | faithful | pass | 647 | on-touch refill zone from MBP-1 | 0.0062 | [0.002, 0.016] | 2024 0.012 / 2025 0.004 / 2026 0.000 | low 0.009 / mid 0.005 / high 0.005 | 0 | leakage 0
-R-F18 | Flow | faithful | pass | 647 | stacked footprint without refill; tape-speed cut stays unspecified | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
+R-F18 | Flow | faithful | gap | n/a | squeeze after catalyst; stack-without-refill is a stand-in | n/a | n/a | n/a | n/a | n/a | squeeze after catalyst; stack-without-refill is a stand-in
 R-R01 | Regime | faithful | pass | 647 | QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35) | 0.4049 | [0.368, 0.443] | 2024 0.360 / 2025 0.406 / 2026 0.474 | low 0.304 / mid 0.388 / high 0.512 | 0 | leakage 0
 R-R02 | Regime | faithful | pass | 647 | prior-session VIXCLS close in band 15-18 | 0.3910 | [0.354, 0.429] | 2024 0.231 / 2025 0.508 / 2026 0.462 | low 0.396 / mid 0.439 / high 0.346 | 0 | leakage 0
 R-R03 | Regime | faithful | pass | 647 | open-vs-VA thesis still alive at 12:00 | 0.6151 | [0.577, 0.652] | 2024 0.652 / 2025 0.594 / 2026 0.590 | low 0.627 / mid 0.636 / high 0.588 | 0 | leakage 0
 R-R04 | Regime | faithful | blocked | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap) | n/a | n/a | n/a | n/a | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap)
-R-S01 | Sires | faithful | pass | 647 | absorption A at the 6-9 low then AM close above it | 0.0402 | [0.028, 0.058] | 2024 0.049 / 2025 0.033 / 2026 0.038 | low 0.037 / mid 0.051 / high 0.033 | 0 | leakage 0
+R-S01 | Sires | faithful | pass | 647 | absorption refill at prior VAL (long) or VAH (short) | 0.0325 | [0.021, 0.049] | 2024 0.045 / 2025 0.020 / 2026 0.032 | low 0.028 / mid 0.042 / high 0.028 | 0 | leakage 0
 R-S02 | Sires | faithful | pass | 647 | third test from above of prior VAL band, or from below of prior VAH (continuation through) | 0.1020 | [0.081, 0.128] | 2024 0.126 / 2025 0.111 / 2026 0.051 | low 0.143 / mid 0.098 / high 0.066 | 0 | leakage 0
-R-S03 | Sires | faithful | pass | 647 | print-size thinning; absorption B stays blocked | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
-R-S04 | Sires | faithful | pass | 647 | 350% imbalance with a BigTrades print | 0.0139 | [0.007, 0.026] | 2024 0.028 / 2025 0.004 / 2026 0.006 | low 0.018 / mid 0.014 / high 0.005 | 0 | leakage 0
-R-S05 | Sires | faithful | pass | 647 | microbalance break after the first 10 minutes | 0.9969 | [0.989, 0.999] | 2024 0.996 / 2025 0.996 / 2026 1.000 | low 0.991 / mid 1.000 / high 1.000 | 0 | leakage 0
-R-S06 | Sires | faithful | pass | 647 | 6-9 high stacked with an RTH HVN within tR | 0.0386 | [0.026, 0.056] | 2024 0.040 / 2025 0.041 / 2026 0.032 | low 0.037 / mid 0.042 / high 0.033 | 0 | leakage 0
-R-S07 | Sires | faithful | pass | 647 | AM MAE under 15 ticks from the first print | 0.0294 | [0.019, 0.045] | 2024 0.028 / 2025 0.029 / 2026 0.032 | low 0.037 / mid 0.023 / high 0.028 | 0 | leakage 0
-R-S08 | Sires | faithful | pass | 647 | RTH profile has at least two HVNs, or a 6-9 LVN under a TBR level | 0.4436 | [0.406, 0.482] | 2024 0.441 / 2025 0.426 / 2026 0.474 | low 0.406 / mid 0.472 / high 0.450 | 0 | leakage 0
+R-S03 | Sires | faithful | gap | n/a | OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked. | n/a | n/a | n/a | n/a | n/a | OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked.
+R-S04 | Sires | faithful | gap | n/a | weekly trapped-seller OFM long; F14 flag is a stand-in | n/a | n/a | n/a | n/a | n/a | weekly trapped-seller OFM long; F14 flag is a stand-in
+R-S05 | Sires | faithful | pass | 647 | microbalance break after the first 10 minutes | 0.5023 | [0.464, 0.541] | 2024 0.510 / 2025 0.504 / 2026 0.487 | low 0.525 / mid 0.491 / high 0.493 | 0 | leakage 0
+R-S06 | Sires | faithful | gap | n/a | two-reason band both sides; 6-9 high + HVN is a stand-in | n/a | n/a | n/a | n/a | n/a | two-reason band both sides; 6-9 high + HVN is a stand-in
+R-S07 | Sires | faithful | gap | n/a | reaction-area MFE/MAE both sides; first-print MAE is a stand-in | n/a | n/a | n/a | n/a | n/a | reaction-area MFE/MAE both sides; first-print MAE is a stand-in
+R-S08 | Sires | faithful | gap | n/a | minor HVN band plus flip-to-long; HVN-count is a stand-in | n/a | n/a | n/a | n/a | n/a | minor HVN band plus flip-to-long; HVN-count is a stand-in
 R-S09 | Sires | faithful | pass | 647 | open above developing VAH then break/retest after 10:00 | 0.1731 | [0.146, 0.204] | 2024 0.186 / 2025 0.160 / 2026 0.173 | low 0.161 / mid 0.192 / high 0.171 | 0 | leakage 0
 R-P01 | Pine | faithful | pass | 647 | 08:00 TBR 0.25-sigma touch then reversion to the open by 12:00 | 0.6136 | [0.576, 0.650] | 2024 0.628 / 2025 0.574 / 2026 0.654 | low 0.696 / mid 0.589 / high 0.569 | 0 | leakage 0
 R-P02 | Pine | faithful | pass | 647 | hourly sweep then retrace to the swept edge | 0.9845 | [0.972, 0.992] | 2024 0.988 / 2025 0.980 / 2026 0.987 | low 0.977 / mid 0.991 / high 0.986 | 0 | leakage 0
@@ -129,6 +129,10 @@ Phase 1 is not done. Green Bird section B rows are pass. These Jumbo, AMT, and f
 
 id | missing function
 ---|---
+R-F13 | dealing-range trap retest; 6-9 high close-back is a stand-in
+R-F15 | OFM catalyst sequence; stack-without-refill is a stand-in
+R-F16 | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in
+R-F18 | squeeze after catalyst; stack-without-refill is a stand-in
 
 ## Not started
 

@@ -36,6 +36,7 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_f02_grid_div,
     r_f02_fakeout_grade,
     r_s02_third_retest,
+    r_s05_microbalance,
     running_vwap,
     r_r04_smt_prior,
     sample_stdev,
@@ -45,8 +46,11 @@ from trading_research.research.phase1_live.formulas_jumbo import (
     a03_reentry_traverse,
     a05_poc_tell,
     a07_break_retest,
+    a02_ledge_retest_hold,
+    a06_failed_auction,
     a08_reaccept,
     a09_traverse_nohold,
+    a18_bias,
     j10_draw,
     j18_ob_bear,
     j18_ob_bull,
@@ -82,7 +86,7 @@ def _clock(bars, day, cid):
 
 def build_recipe_table() -> list[dict]:
     cached = load_rows("recipe_flags_F")
-    if cached and cached[0].get("recipe_rev") == 7:
+    if cached and cached[0].get("recipe_rev") == 8:
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
@@ -108,7 +112,7 @@ def build_recipe_table() -> list[dict]:
         op = open_rows.get(day.isoformat(), {})
         rec = {
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
-            "recipe_rev": 7,
+            "recipe_rev": 8,
             "j10_draw_reach": False, "j18_ob": False, "j19_pd_touch": False,
             "j21_extended": False, "j22_three_strike": False, "j24_mfe_pos": False,
             "j25_mid_hold": False,
@@ -239,11 +243,25 @@ def build_recipe_table() -> list[dict]:
         if val is not None and vah is not None and am["n"] and poc is not None:
             fade = a01_fade(am, val, vah, poc)
             rec["a01_fade"] = bool(fade["val_reject"] or fade["vah_reject"])
+            rec["a02_ledge_hold"] = bool(
+                a02_ledge_retest_hold(am, am, val, vah - val, break_side=-1).get("ledge_retest_hold")
+                or a02_ledge_retest_hold(am, am, vah, vah - val, break_side=1).get("ledge_retest_hold")
+            )
+            rec["a06_naked_poc"] = bool(a06_failed_auction(am, val, vah, poc, break_side=-1).get("fa_setup") or a06_failed_auction(
+                am, val, vah, poc, break_side=1,
+            ).get("fa_setup"))
             trav = a03_reentry_traverse(rth if rth["n"] else am, val, vah, open_px=open_px)
             rec["a03_traverse"] = bool(trav["traverse"])
             tell = a05_poc_tell(am, poc, val, vah)
             rec["a05_poc_chop"] = tell["poc_case"] == "chop"
-            rec["a08_reaccept"] = bool(a08_reaccept(rth if rth["n"] else am, val, vah, break_side=-1 if (open_px or 0) < val else 1)["reaccept"])
+            rec["a08_reaccept"] = bool(
+                a08_reaccept(rth if rth["n"] else am, val, vah, break_side=-1)["reaccept"]
+                or a08_reaccept(rth if rth["n"] else am, val, vah, break_side=1)["reaccept"]
+            )
+            rec["a18_single_reach"] = bool(a18_bias(am, val, vah, [int(round((vah + 4 * TICK) / TICK))], r=vah - val)["bullish"] or a18_bias(
+                {"n": am["n"], "h": am["h"], "l": am["l"], "c": am["c"], "t": am["t"]},
+                val, vah, [int(round((val - 4 * TICK) / TICK))], r=vah - val,
+            )["bullish"])
             rec["a09_traverse_nohold"] = bool(a09_traverse_nohold(am, val, vah)["traverse_nohold"])
         if ib["high"] is not None and ib_out["n"] and val is not None:
             rec["a07_ib_retest"] = bool(a07_break_retest(
@@ -259,7 +277,8 @@ def build_recipe_table() -> list[dict]:
                 for tk, v in zip(ticks, pr["v"]):
                     acc[int(tk)] = acc.get(int(tk), 0.0) + float(v)
                 vols = [acc[k] for k in sorted(acc)]
-                rec["a11_prior_p"] = vp_p_shape(vols) == "P" and path in ("high-only", "low-only")
+                shape = vp_p_shape(vols)
+                rec["a11_prior_p"] = (shape == "P" and path == "high-only") or (shape == "b" and path == "low-only")
 
         if win0812["n"] and len(closes) >= 5:
             chg = np.diff(np.log(np.maximum(np.array(closes[-20:], dtype=np.float64), 1e-9))) * 100.0
@@ -365,7 +384,14 @@ def build_recipe_table() -> list[dict]:
             micro = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(9, 40), 0) // 1_000_000)
             rest = bars.window(wall_ns(day, time(9, 40), 0) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
             if micro["high"] is not None and rest["n"]:
-                rec["s05_micro_break"] = bool(np.any(rest["c"] > micro["high"]) or np.any(rest["c"] < micro["low"]))
+                s05 = r_s05_microbalance(
+                    rest["c"], rest["l"], rest["h"], r_height=w or 20.0,
+                    break_close=float(rest["c"][-1]), htf=float(micro["high"]),
+                    later_high=float(rest["h"].max()), later_low=float(rest["l"].min()),
+                )
+                rec["s05_micro_break"] = bool(s05.get("breakout_long") or (
+                    s05.get("box") and float(rest["c"][-1]) < s05["box"][0]
+                ))
         if rth["n"] >= 40 and open_px is not None:
             pre = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(10, 0), 0) // 1_000_000)
             post = bars.window(wall_ns(day, time(10, 0), 0) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)

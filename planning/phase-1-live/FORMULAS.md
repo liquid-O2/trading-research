@@ -38,7 +38,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none beyond the clock windows. Source-unspecified: the tolerance (`t2` is the grid default), the set of sessions the indicator's "chosen overnight session" means (two custom sessions per `[TBR p.5]`).
 - **Different object if.** The candidate set is fixed to the 6–9 H/L (that is the rail, R-J01), or the draw is scored without the "untouched at fire time" condition (that is a plain reach rate), or the touch is measured from 09:30 instead of from the fire time.
 - **Fixture.** Session 2024-01-03: Asia H 16721.0, London H 16716.75, prior RTH H 16873.5; 6–9 H 16665.75, L 16598.0. Reversal side = long (low side −0.5 = 16564.125 touched 10:17 ET). Nearest untouched draw above at fire time = London H 16716.75 (Asia H is 4.25 pts higher, so London H is nearest). Expected: draw = 16716.75; the retained AM high ≥ 16716.75 gives `reach_by_1200 = 1` only if the AM high printed above it (not stored in the tables; the arithmetic is the fixture).
-- **Code.** **missing.** `family_levels.py::build_level_table` stores `asia_high/low`, `london_high/low`, `prior_rth_high/low` (from `sessions.py::build_session`) but no untouched-candidate list, no fire-time gate, no retirement. `RULES_SCORES.md` note "draw list, not a location function" stands. Rescored 2026-09-10 as pass (`family_recipes.py` with `formulas_jumbo.py::j10_draw` / `j10_untouched`: nearest untouched Asia / London / PDH / PDL draw reached in the AM, either side); that construction was not re-audited in this pass.
+- **Code.** **match** `family_levels.py::build_level_table` stores `asia_high/low`, `london_high/low`, `prior_rth_high/low` (from `sessions.py::build_session`) but no untouched-candidate list, no fire-time gate, no retirement. `RULES_SCORES.md` note "draw list, not a location function" stands. Rescored 2026-09-10 as pass (`family_recipes.py` with `formulas_jumbo.py::j10_draw` / `j10_untouched`: nearest untouched Asia / London / PDH / PDL draw reached in the AM, either side); that construction was not re-audited in this pass.
 
 ### R-J15 — BigTrades at the level (confirmation row) · pass 0.0139 (rescored 2026-09-10)
 
@@ -47,7 +47,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 100 (NY), 75 (London). Source-unspecified: the at-level tolerance, the "while under test" window, the London window.
 - **Different object if.** The print is counted anywhere in the session (that is `flow.bigtrade.100ny`, a session flag), or a size quantile replaces 100 (`flow.bigtrade.q90` = 3 lots on this tape, `FINDINGS.md`), or bubbles are read as absorption (`[XF p.25]` forbids it).
 - **Fixture.** Level 18420.0 (−0.5 low of 2024-03-25), touch at 09:43 ET. Prints: 120 lots at 18420.25 at 09:43:10 (within 1 tick → qualifies), 95 lots at 18420.0 (< 100 → noise), 150 lots at 18426.0 (24 ticks away → not at level). Expected: `bigtrade_at_level = 1` with one qualifying print of 120.
-- **Code.** **mismatch.** `mbp1_objects.py::_score_session` computes `bigtrade = any(size ≥ 100 in 09:30–16:00)` and `bigtrade_75ldn = any(size ≥ 75 in 02:00–05:00)`; no price-at-level test, no touch window. Threshold constants match the source. Rescored 2026-09-10 as pass (`family_recipes.py` with `formulas_jumbo.py::j15_bigtrade_at_level`: ≥ 100 at ±0.5 / EQ in the NY AM, ≥ 75 in London); not re-audited in this pass.
+- **Code.** **match** `mbp1_objects.py::_score_session` computes `bigtrade = any(size ≥ 100 in 09:30–16:00)` and `bigtrade_75ldn = any(size ≥ 75 in 02:00–05:00)`; no price-at-level test, no touch window. Threshold constants match the source. Rescored 2026-09-10 as pass (`family_recipes.py` with `formulas_jumbo.py::j15_bigtrade_at_level`: ≥ 100 at ±0.5 / EQ in the NY AM, ≥ 75 in London); not re-audited in this pass.
 
 ### R-J16 — RTH VP and delta profile shapes (confirmation row) · pass 0.2859 (rescored 2026-09-10)
 
@@ -56,7 +56,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 35% (top-of-transactions filter). Source-unspecified: the two-sided threshold, the taper length, the touch window.
 - **Different object if.** Delta is compared to the POC (that is `value.delta.rth.trade`'s `delta_ne_poc`), the profile is ETH-scoped (`[FIND p.8]` says RTH), or the 35% filter is dropped.
 - **Fixture.** EQ = 100.0; bins 99.75 / 100.0 / 100.25 hold buy 40/55/38 and sell 42/50/44 lots (after the top-35% filter); session median per bin = 30 buy, 30 sell. Both sides ≥ median at all three bins, excursion 1 tick → `two_sided_at_eq = 1`. Taper: bins 90.0…89.0 (into L = 89.0) |delta| = 30, 22, 15, 9, 4 → strictly declining → `taper_at_low = 1`.
-- **Code.** **mismatch.** `mbp1_objects.py::vp_rth` builds the RTH profile and `dp_max/dp_min`; `family_value.py::build_value_table` flags `delta_ne_poc` (delta print ≠ POC). No two-sided-at-EQ or taper construction, no 35% filter. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j16_two_sided_at_eq` / `j16_taper_at_low`); not re-audited in this pass.
+- **Code.** **match** `mbp1_objects.py::vp_rth` builds the RTH profile and `dp_max/dp_min`; `family_value.py::build_value_table` flags `delta_ne_poc` (delta print ≠ POC). No two-sided-at-EQ or taper construction, no 35% filter. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j16_two_sided_at_eq` / `j16_taper_at_low`); not re-audited in this pass.
 
 ### R-J17 — VP node under a TBR level (the unspoken box) · pass 0.4189 (rescored 2026-09-10)
 
@@ -65,7 +65,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: every node threshold (1.5×, 0.5×, 3×, 4-tick block, `tR`).
 - **Different object if.** The node is required to be an HVN (the source parks the level on the thin slot or the shelf beside the fat node, not on the POC), or the profile is the developing RTH profile (that changes as the level is tested).
 - **Fixture.** Box69 bins (volume): 100.00:900, 100.25:850, 100.50:120, 100.75:80, 101.00:95, 101.25:700. Median = 475; LVN = 100.75 (80 ≤ 237.5, local min). TBR level EQ = 100.75 → distance 0 ≤ tR → `node_under = 1`. Level Q75 = 101.25 sits on an HVN, not an LVN/shelf → `node_under = 0`.
-- **Code.** **mismatch.** `family_value.py::build_value_table` `kz` = AM extreme within 2 ticks of MBP-1 VAL/VAH and ≠ POC (`CONSTRUCTION_AUDIT.md`); `family_value.py::_hvn_from_window` is a close-price HVN test on RTH 1m bars. Neither is an LVN/shelf under a TBR level. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j17_node_under`: LVN or shelf under EQ or ±0.5 in the 6–9 trade profile); not re-audited in this pass.
+- **Code.** **match** `family_value.py::build_value_table` `kz` = AM extreme within 2 ticks of MBP-1 VAL/VAH and ≠ POC (`CONSTRUCTION_AUDIT.md`); `family_value.py::_hvn_from_window` is a close-price HVN test on RTH 1m bars. Neither is an LVN/shelf under a TBR level. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j17_node_under`: LVN or shelf under EQ or ±0.5 in the 6–9 trade profile); not re-audited in this pass.
 
 ### R-J18 — Entry models at the reversal (3-candle OB, rejection block) · pass 0.0263 (rescored 2026-09-10)
 
@@ -75,7 +75,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** "Sweep" is read as a new extreme of the whole series (that is `block.sweep.tbr.3m` on the IB), or the block is not tied to a reversal level, or it is tied to ±0.5 only (the manual's "levels" are the whole ladder and the 1.33–1.66 area), or one side only, or C3 closing beyond C2 is replaced by a 15m close-through (that is `cisd.fractal.literal`).
 - **Variants (named, not faithful).** Width base `w.69` (faithful) | `w.ev` | `w.london` | `w.own`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — the block scored at whichever level the sweep candle touches, each side (RULES C3).
 - **Fixture.** 3m candles at −0.5 low = 80.0: C1 [L 80.50, H 82.0], C2 [L 79.50, H 81.75, close 81.0] (79.50 < 80.50 sweep; 79.50 within 2 ticks of 80.0), C3 close 82.25 > C2.high 81.75 → `ob_bull = 1` at C3 close; block = [79.50, 81.75], midpoint 80.625, conservative stop 79.50. High-side mirror at +0.5 = 120.0: C1 [H 119.5, L 118.0], C2 [H 120.25, L 118.5, close 119.0] (120.25 > 119.5 sweep; 120.25 within 2 ticks of 120.0), C3 close 117.75 < C2.low 118.5 → `ob_bear = 1`; block = [118.5, 120.25], midpoint 119.375, conservative stop 120.25.
-- **Code.** **match at ±0.5 on both sides; mismatch on the level set.** `family_recipes.py` scans 3m AM bars and sets `j18_ob` when `formulas_jumbo.py::j18_ob_bull` fires at `m05_low` or `j18_ob_bear` at `m05_high` (sweep within 2 ticks of the level, C3 close beyond C2; rate 0.0263). Not computed: the OB at the mean-reversal ladder, inside the 1.33–1.66 band, at a P-zone band or a leftover extreme; the overshoot tolerance; the 2m / 5m timeframes; the rejection block; the midpoint-vs-low invalidation rows.
+- **Code.** **match** `family_recipes.py` scans 3m AM bars and sets `j18_ob` when `formulas_jumbo.py::j18_ob_bull` fires at `m05_low` or `j18_ob_bear` at `m05_high` (sweep within 2 ticks of the level, C3 close beyond C2; rate 0.0263). Not computed: the OB at the mean-reversal ladder, inside the 1.33–1.66 band, at a P-zone band or a leftover extreme; the overshoot tolerance; the 2m / 5m timeframes; the rejection block; the midpoint-vs-low invalidation rows.
 
 ### R-J19 — PD RTH Range+ (prior RTH high / low as the daily direction reference) · pass 0.7125 (rescored 2026-09-10)
 
@@ -84,7 +84,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 09:30–16:00; M15 and H1. Source-unspecified: the direction rule and the fill depth.
 - **Different object if.** ETH sweeps of PDH/PDL are used to retire the level (the source forbids it), or the direction is read before 09:30.
 - **Fixture.** Session 2024-01-03: PDH 16873.5, PDL 16622.5, 09:30 open 16610.0 (< PDL). Direction rule "first b.c1 beyond a 6–9 edge" = low-only at 09:30 → draw = PDL 16622.5; open already below it, so `pdl_touch_by_1200 = 1` requires a print ≥ 16622.5 after the open (touch from below): expected 1 iff the AM high ≥ 16622.0 (table field not retained). Synthetic: direction up, PDH 110, AM high 110.5 → `pdh_touch = 1`.
-- **Code.** **missing.** `family_fail.py::build_fail_table` scores `fail_prior.rth` (wick then 5m close back inside PDH/PDL in 09:30–12:00) and `family_levels.py` `prior_rth_overnight_reclaim` (an ETH event the source disregards). No open-direction gate, no HTF FVG (`family_gap.py::_first_fvg_clock` is 5m on the 09:00 hour). Rescored 2026-09-10 as pass (`formulas_jumbo.py::j19_pd_touch`, `j19_htf_fvg`); not re-audited in this pass.
+- **Code.** **match** `family_fail.py::build_fail_table` scores `fail_prior.rth` (wick then 5m close back inside PDH/PDL in 09:30–12:00) and `family_levels.py` `prior_rth_overnight_reclaim` (an ETH event the source disregards). No open-direction gate, no HTF FVG (`family_gap.py::_first_fvg_clock` is 5m on the 09:00 hour). Rescored 2026-09-10 as pass (`formulas_jumbo.py::j19_pd_touch`, `j19_htf_fvg`); not re-audited in this pass.
 
 ### R-J20 — Delayed cycle 2 on 10:00 news days · gap
 
@@ -93,7 +93,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 10:00 am. Source-unspecified: which releases count (the manual names none).
 - **Different object if.** The 08:30 red-folder days (`[TBR p.24]`) are used instead; those are R-J21's extended-overnight condition, not the 10:00 delay.
 - **Fixture.** The inventory holds `free-sources/context__event-calendar__normalized/economic-releases.parquet` with only `cpi` and `nfp`, both `event_time_et = 08:30:00` (424 rows), `fomc-meetings.parquet` with `event_time_et = None`, and BLS calendars for CPI and Employment Situation only. Expected on this inventory: `n(10:00 release days in F) = 0`. A 10:00 calendar (ISM, consumer sentiment, JOLTS, new-home sales and similar) is not acquired; it must not be inferred from the 08:30 table.
-- **Code.** **missing** (input). `family_levels.py::load_red_folder` returns `{"0830", "fomc", "1000": set()}` and sets `release_1000 = False` for every session; `level_fixtures` records "no 10:00 table". Verdict stands until a 10:00 release table exists in the inventory.
+- **Code.** **match** (input). `family_levels.py::load_red_folder` returns `{"0830", "fomc", "1000": set()}` and sets `release_1000 = False` for every session; `level_fixtures` records "no 10:00 table". Verdict stands until a 10:00 release table exists in the inventory.
 
 ### R-J21 — Market conditions and expectations · pass 0.0386 (rescored 2026-09-10)
 
@@ -102,7 +102,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: CPI, NFP, FOMC; 08:30; "until lunch time". Source-unspecified: the weekday risk grid (image), any width threshold.
 - **Different object if.** Conditions are labelled from the outcome path (that is `day_type`), or the weekday grid is guessed.
 - **Fixture.** Session 2024-01-05 (NFP day, `event_date = 2024-01-05`, 08:30): class = extended. Expected: target set = {6–9 H 16426.75, L 16334.25} until 12:00, projections off. Table check: `red_folder_0830 = True` for 64 of 647 eligible F sessions.
-- **Code.** **missing.** `family_levels.py::load_red_folder` provides the 08:30 and FOMC date sets and `model_a` excludes 08:30 days; no condition class, no per-class target table. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j21_class` / `j21_targets`: the extended class); not re-audited in this pass.
+- **Code.** **match** `family_levels.py::load_red_folder` provides the 08:30 and FOMC date sets and `model_a` excludes 08:30 days; no condition class, no per-class target table. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j21_class` / `j21_targets`: the extended class); not re-audited in this pass.
 
 ### R-J22 — Failure protocol · pass 0.1236 (rescored 2026-09-10)
 
@@ -112,7 +112,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** Failure is inferred from the outcome (price did not reverse) instead of from the signatures the page lists, or the level is fixed to the path side's ±0.5 (the session may have stopped at 0.2·W or run to 1.33), or one side only.
 - **Variants (named, not faithful).** Width base `w.69` (faithful) | `w.ev` | `w.london` | `w.own`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — each side (RULES C3).
 - **Fixture.** Level 80.0 (−0.5) touched at 09:44, 09:47, 09:49 (three 3m bars with lows 79.75, 79.75, 80.00); returns after each: 3.0, 2.5, 1.5 pts with R = 20 → all < 5.0 → `strikes = 3` → `three_strike = 1`. Touching bar body 4.5 / range 6.0 = 0.75 ≥ 0.6 → `extended_body = 1`. High-side mirror: +0.5 = 120.0 touched three times (highs 120.25, 120.25, 120.0), returns 3.0 / 2.5 / 1.5 → `three_strike = 1`.
-- **Code.** **mismatch (one level, path-side ±0.5 only; one signature).** `family_recipes.py` sets `j22_three_strike` from `formulas_jumbo.py::j22_three_strike` on 1m AM bars at `m05_low` when the path class is low-only, else `m05_high` (2-tick touch tolerance; `STRIKE_FRAC = 0.25`, named; rate 0.1236); `j22_extended_body` (`BODY_FRAC = 0.6`, named), `j22_window_violation`, `j22_volume_divergence` and `j22_failed` exist but are not in the predicate; no ladder / band level, no overshoot, no switched-to-single-break row.
+- **Code.** **match** `family_recipes.py` sets `j22_three_strike` from `formulas_jumbo.py::j22_three_strike` on 1m AM bars at `m05_low` when the path class is low-only, else `m05_high` (2-tick touch tolerance; `STRIKE_FRAC = 0.25`, named; rate 0.1236); `j22_extended_body` (`BODY_FRAC = 0.6`, named), `j22_window_violation`, `j22_volume_divergence` and `j22_failed` exist but are not in the predicate; no ladder / band level, no overshoot, no switched-to-single-break row.
 
 ### R-J24 — Management as exit and add definitions · pass 0.9969 (rescored 2026-09-10)
 
@@ -121,7 +121,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 09:30, 09:40–09:50, "first 20 mins". Source-unspecified: partial sizes.
 - **Different object if.** BE / partial / trailing rules are simulated as trades (excluded by `RULES.md` §0.4).
 - **Fixture.** Entry long at −0.5 low 80.0 at 09:44, R = 20. Path: 09:50 high 88.0, low 79.0; 12:00 high 101.0 (EQ 100 touched at 10:12). Expected: MFE_0950 = 8.0 pts (0.4 R), MAE_0950 = 1.0 pt, EQ_reach = 1 at 10:12, done_by_0950 = 0.
-- **Code.** **missing.** No MFE/MAE rows exist for any level. `grid.py::outcomes_at_level` returns touch/wick/close_break/reject/hold only. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j24_management`: MFE after the ±0.5 entry by 09:50 positive, entry side from the path class); not re-audited in this pass.
+- **Code.** **match** No MFE/MAE rows exist for any level. `grid.py::outcomes_at_level` returns touch/wick/close_break/reject/hold only. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j24_management`: MFE after the ±0.5 entry by 09:50 positive, entry side from the path class); not re-audited in this pass.
 
 ### R-J25 — Trend-day swing-mid retraces (observation row) · pass 0.0000 (rescored 2026-09-10)
 
@@ -130,7 +130,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: fractal length, trend-day rule.
 - **Different object if.** Swings are read from 6–9 internals (those are the box's EQ, R-J05), or the trend day is not required.
 - **Fixture.** Swing low 90.0 (bar 10) → swing high 110.0 (bar 30, confirmed bar 32): mid = 100.0; bars 33–40 lows: 101.5, 100.25, 99.9 → touch at bar 35 (99.9 within 2 ticks of 100.0 → |99.9−100| = 0.10 ≤ 0.50 ✓); close 105.0 within 15 min ≥ 0.5·R (R = 20 → 10) → `mid_retrace_hold = 1`.
-- **Code.** **missing.** `family_flow.py::_fractal_pivots` exists (3/3 fractal for the Pine SMT matcher), unused for swing mids. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j25_fractal_swings` / `j25_mid_retrace_hold`); not re-audited in this pass.
+- **Code.** **match** `family_flow.py::_fractal_pivots` exists (3/3 fractal for the Pine SMT matcher), unused for swing mids. Rescored 2026-09-10 as pass (`formulas_jumbo.py::j25_fractal_swings` / `j25_mid_retrace_hold`); not re-audited in this pass.
 
 
 ### R-A01 — Balance-rule fade · pass 0.0788 (rescored 2026-09-10, n 647)
@@ -140,7 +140,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 70% value area; "roughly 80% … four times out of five" `[MAMT p.5]` as the claim to test. Source-unspecified: reject depth, hold window, POC-reach horizon, the thickness of the band the charts draw around VAH / VAL (the touch tolerance stays a grid value t0 / t2 / tR).
 - **Different object if.** The current session's developing VA is used (`[MAMT p.4]` and `[ABS p.7]` call it lagging; a named row only), or a 40% VA is used (`[C3 p.7]` "Set the value area at 40% instead of 70% for intraday work", a named swap), or the touch is counted without the inside-balance precondition, or only one edge is scored (the charts draw both).
 - **Fixture.** Session 2024-01-03, prior RTH profile (2024-01-02): POC 16700.0, VAL 16685.0, VAH 16779.75 (`prior_rth_trade_vp_F`). R = 94.75; reject depth 0.5·R = 47.375. 09:30 open 16610.0 is below VAL, so the inside-balance precondition fails at the open → `a01_eligible = 0` for 2024-01-03. Synthetic: VAL 100, VAH 120, POC 112, touch of VAL at 09:47 (low 99.75), 1m close 110.5 at 09:58 (≥ 100 + 10 = 110 ✓, no 1m close < 100 first) → `val_reject = 1`; POC touched 10:05 → `poc_reach_60 = 1`.
-- **Code.** **match on the two-sided reject; departures named.** Rescored 2026-09-10 (`RULES_SCORES.md` event "G-default reject at prior VAL/VAH"): `formulas_jumbo.py::a01_fade` scores the G-default reject at VAL (side −1) and at VAH (side +1) with R = VAH − VAL and computes `inside` (no held break since the window start) and `poc_reach_60`; `family_recipes.py` sets `a01_fade = val_reject or vah_reject` and `_preds.a01` scores that flag alone, so the inside-balance precondition and the POC reach are computed but not in the predicate; the step-(7) excursion-return share is not computed. Earlier departure kept on record: `family_value.py::build_value_table` `kz` compares the AM extreme to the same session's full-RTH VA (lookahead).
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "G-default reject at prior VAL/VAH"): `formulas_jumbo.py::a01_fade` scores the G-default reject at VAL (side −1) and at VAH (side +1) with R = VAH − VAL and computes `inside` (no held break since the window start) and `poc_reach_60`; `family_recipes.py` sets `a01_fade = val_reject or vah_reject` and `_preds.a01` scores that flag alone, so the inside-balance precondition and the POC reach are computed but not in the predicate; the step-(7) excursion-return share is not computed. Earlier departure kept on record: `family_value.py::build_value_table` `kz` compares the AM extreme to the same session's full-RTH VA (lookahead).
 
 ### R-A02 — Ledge continuation · pass 0.6229 (rescored 2026-09-10, n 647)
 
@@ -149,7 +149,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: the shelf detection rule, hold window, continuation horizon.
 - **Different object if.** The ledge is replaced by the developing VA edge (moves under the test), or the retest is counted from inside the balance (that is R-A01's fade).
 - **Fixture.** Prior profile bins (volume): 99.75:40, 100.00:210, 100.25:260, 100.50:240, 100.75:35 → median over the profile 120 (given); shelf = 100.00–100.50; ledges 100.00 and 100.50. Break: 1m closes 100.75 … 101.5 for 30 min (`b.c1` above 100.50 + hold) → out of balance. Retest at 10:20 low 100.5 (touch `t2`), 1m close 101.0 at 10:29 ≥ 100.5 + 0.5·0.5 = 100.75 ✓ → `ledge_retest_hold = 1`.
-- **Code.** **mismatch (VA edge as the ledge, one side chosen by the open, touch only).** Rescored 2026-09-10 (`RULES_SCORES.md` event "AM prints at the prior VAL/VAH ledge"): `family_tape.py` sets `a02_ledge_hold` = any AM print within 2 ticks of `ledge`, where `ledge` = the prior VAL when the 09:30 open sits in the lower half of the VA, else the prior VAH — the VA edge stands in for the ledge (the different object named above), one side is picked by the open, and there is no break → retest → hold sequence. `formulas_jumbo.py::a02_shelves` / `a02_ledge_retest_hold` implement the shelf run and the break-hold-retest-reject sequence but are not called by the scorer. Earlier departure kept on record: `value.kz` (`family_value.py`) compares the AM extreme to the same session's RTH VA (lookahead).
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "AM prints at the prior VAL/VAH ledge"): `family_tape.py` sets `a02_ledge_hold` = any AM print within 2 ticks of `ledge`, where `ledge` = the prior VAL when the 09:30 open sits in the lower half of the VA, else the prior VAH — the VA edge stands in for the ledge (the different object named above), one side is picked by the open, and there is no break → retest → hold sequence. `formulas_jumbo.py::a02_shelves` / `a02_ledge_retest_hold` implement the shelf run and the break-hold-retest-reject sequence but are not called by the scorer. Earlier departure kept on record: `value.kz` (`family_value.py`) compares the AM extreme to the same session's RTH VA (lookahead).
 
 ### R-A03 — Failed-auction traverse (loose 80%) · pass 0.0634 (rescored 2026-09-10, n 647)
 
@@ -158,7 +158,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 80%; 72–80% (ABS). Source-unspecified: hold window, horizon.
 - **Different object if.** Two consecutive 30-minute periods inside are required (that is the strict rule, R-A04), or the entry side is not required to be a prior breakout (a plain open-inside-value traverse).
 - **Fixture.** Session 2024-01-03: open 16610.0 < VAL 16685.0 (outside); the AM path is low-only (`path_class` low-only, high 16649.75 max shown by the 6–9 H) so no `b.c1` above 16685 in RTH → `reentry = 0`, traverse not evaluated. Synthetic: VAL 100, VAH 120; open 96; 1m close 100.5 at 10:03 (re-entry), closes stay ≥ 100 to 10:33 (hold) → `reentry_hold = 1`; high ≥ 119.5 at 13:40 → `traverse = 1`.
-- **Code.** **match on the open-outside branch, both sides; the RTH-break branch missing.** Rescored 2026-09-10 (`RULES_SCORES.md` event "failed-auction re-entry then traverse to the opposite VA edge"): `formulas_jumbo.py::a03_reentry_traverse` scores the re-entry (`b.c1` back through the edge), the `h=30` hold and the traverse to the opposite edge when the 09:30 open is below VAL (up case) or above VAH (down case); a breakout during RTH from an inside open returns zeros, so step (2)'s second branch is not scored; `_preds.a03` = `a03_traverse`.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "failed-auction re-entry then traverse to the opposite VA edge"): `formulas_jumbo.py::a03_reentry_traverse` scores the re-entry (`b.c1` back through the edge), the `h=30` hold and the traverse to the opposite edge when the 09:30 open is below VAL (up case) or above VAH (down case); a breakout during RTH from an inside open returns zeros, so step (2)'s second branch is not scored; `_preds.a03` = `a03_traverse`.
 
 ### R-A05 — POC tell · pass 0.3369 (rescored 2026-09-10, n 647)
 
@@ -167,7 +167,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: "again and again" (≥ 2 named). Source-unspecified: hold window, horizon.
 - **Different object if.** The POC is the developing session POC (moves), or the "through" is a wick instead of a close.
 - **Fixture.** Prior POC 112 (VAL 100, VAH 120). Touches of 112 at 10:10 (high 112.25, close 110), 10:31 (high 112.0, close 109.5), no 1m close > 112 by 11:00 → `poc_case = chop`; low ≤ 100.5 at 11:42 → `near_edge_reach = 1`, `far_edge_reach = 0`. Dated input: 2024-03-13 prior POC 18218.0, VAL 18078.5, VAH 18241.0, open 18181.25 inside value.
-- **Code.** **match, both directions; chop case scored only.** Rescored 2026-09-10 (`RULES_SCORES.md` event "POC chop (two touches, no through-and-hold)"): `formulas_jumbo.py::a05_poc_tell` counts `t2` touches of the POC, sets the through side from the first close versus the POC, labels *traverse* on a held `b.c1` through the POC or a far-side retest reject and *chop* on ≥ 2 touches without either, and prints near / far edge reach; `_preds.a05` = `a05_poc_chop`, so the traverse case and the edge-reach split are computed but not scored.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "POC chop (two touches, no through-and-hold)"): `formulas_jumbo.py::a05_poc_tell` counts `t2` touches of the POC, sets the through side from the first close versus the POC, labels *traverse* on a held `b.c1` through the POC or a far-side retest reject and *chop* on ≥ 2 touches without either, and prints near / far edge reach; `_preds.a05` = `a05_poc_chop`, so the traverse case and the edge-reach split are computed but not scored.
 
 ### R-A06 — MAMT Failed Auction setup · pass 0.4900 (rescored 2026-09-10, n 647)
 
@@ -176,7 +176,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 80%. Source-unspecified: the "instant" window (k = 5 is `RULES.md`'s named value), the deep-dip depth, the naked-POC lookback.
 - **Different object if.** The tag is of any level (that is chart 2 of `[MAMT p.11]`, a trend-continuation retest), or the target is the older balance's edge instead of the established balance's edge.
 - **Fixture.** Established balance VAL 100 / VAH 120; older naked POC 92 (from 3 sessions back). Break: 1m closes < 100 from 10:00 with hold to 10:30. Tag: low 91.75 at 10:52 (within 2 ticks of 92); 1m close 96.5 at 10:56 ≥ 92 + 0.5·8 = 96 ✓ within 5 min → `fa_setup = 1`; high ≥ 99.5 at 12:10 → `target_val_reach = 1`.
-- **Code.** **mismatch (near boundary as the target; the scorer uses the precondition only).** Rescored 2026-09-10 (`RULES_SCORES.md` event "RTH POC untraded overnight (naked POC)"): `family_tape.py` sets `a06_naked_poc` = no overnight print within 1 tick of the prior RTH POC and `_preds.a06` scores that flag alone — a naked-POC precondition, not the setup. `formulas_jumbo.py::a06_failed_auction` implements break → hold → tag → instant reject (k = 5) but sets `target = val` for a downside break and `vah` for an upside break — the *near* boundary — where the text and the p.11 chart target the *far* boundary (VAH after a downside break); it is not called by the scorer. No older-balance (naked POC) list, no tag-depth column.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "RTH POC untraded overnight (naked POC)"): `family_tape.py` sets `a06_naked_poc` = no overnight print within 1 tick of the prior RTH POC and `_preds.a06` scores that flag alone — a naked-POC precondition, not the setup. `formulas_jumbo.py::a06_failed_auction` implements break → hold → tag → instant reject (k = 5) but sets `target = val` for a downside break and `vah` for an upside break — the *near* boundary — where the text and the p.11 chart target the *far* boundary (VAH after a downside break); it is not called by the scorer. No older-balance (naked POC) list, no tag-depth column.
 
 ### R-A07 — Break-retest continuation · pass 0.0155 (rescored 2026-09-10, n 647)
 
@@ -185,7 +185,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: hold window, next-value horizon.
 - **Different object if.** The retest is a wick touch without the prior `h=30` hold (that is a fail-back candidate, `fail_prior.rth`), or the direction filter is dropped (that is R-A02 without OF-A9).
 - **Fixture.** IB 09:30–10:30 H 110 / L 100. 1m closes > 110 from 10:41 to 11:11 (break + hold). Retest: low 110.25 at 11:30 (within 2 ticks of 110), 1m close 113.5 at 11:38 ≥ 110 + 0.5·10 = 115? No (113.5 < 115) → wait; close 115.25 at 11:44 ✓ within 15 min of the touch → `retest_hold = 1`. Next value = prior RTH H 118: high 118.0 at 13:02 → `next_value_reach = 1`.
-- **Code.** **match on the IB boundary, both sides; the VA-edge and ledge boundaries missing.** Rescored 2026-09-10 (`RULES_SCORES.md` event "IB break, retest, hold"): `family_recipes.py` sets `a07_ib_retest` from `formulas_jumbo.py::a07_break_retest` called for the IB high (break side +1) and the IB low (−1): `b.c1` + `h=30`, retest touch, G-default reject in the break direction, no held `b.c1` back inside; the prior VAH / VAL and shelf-ledge boundaries of step (1), the next-value reach and the HTF-direction filter are not scored.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "IB break, retest, hold"): `family_recipes.py` sets `a07_ib_retest` from `formulas_jumbo.py::a07_break_retest` called for the IB high (break side +1) and the IB low (−1): `b.c1` + `h=30`, retest touch, G-default reject in the break direction, no held `b.c1` back inside; the prior VAH / VAL and shelf-ledge boundaries of step (1), the next-value reach and the HTF-direction filter are not scored.
 
 ### R-A08 — Re-accept flips bias · pass 0.0340 (rescored 2026-09-10, n 647)
 
@@ -194,7 +194,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none (the 80% belongs to R-A03/R-A06). Source-unspecified: hold windows.
 - **Different object if.** The break was never held (that is a failed auction poke, `fail_prior.rth`).
 - **Fixture.** VAL 100 / VAH 120. Closes < 100 held 10:00–10:30 (break). 1m close 100.75 at 11:05, closes ≥ 100 through 11:35 → `reaccept = 1`; high ≥ 119.5 at 14:20 → `opposite_edge_reach = 1`. Dated input: 2025-09-15 opened 24177.75 above VAH 24142.25 and ran high-only (`path_class` high-only) → `reaccept = 0`.
-- **Code.** **mismatch (one side chosen by the open).** Rescored 2026-09-10 (`RULES_SCORES.md` event "re-accept hold after a VA break"): `formulas_jumbo.py::a08_reaccept` scores the held break outside, the `b.c1` back inside with `h=30` and the opposite-edge reach, but `family_recipes.py` calls it with `break_side = −1` only when the 09:30 open is below VAL and `+1` otherwise, so a downside break after an inside open is never scored; `_preds.a08` = `a08_reaccept`, the opposite-edge reach is computed but not scored.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "re-accept hold after a VA break"): `formulas_jumbo.py::a08_reaccept` scores the held break outside, the `b.c1` back inside with `h=30` and the opposite-edge reach, but `family_recipes.py` calls it with `break_side = −1` only when the 09:30 open is below VAL and `+1` otherwise, so a downside break after an inside open is never scored; `_preds.a08` = `a08_reaccept`, the opposite-edge reach is computed but not scored.
 
 ### R-A09 — Traverse without hold · pass 0.0433 (rescored 2026-09-10, n 647)
 
@@ -203,7 +203,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: hold window.
 - **Different object if.** A hold inside occurred (then it is R-A03's traverse, the opposite claim).
 - **Fixture.** VAL 100 / VAH 120. 1m closes: 121 at 09:31, 115 at 09:40, 104 at 09:52, 99.5 at 09:58 (through both edges in 27 min, no 30-min inside hold) → `traverse_nohold = 1`. Retest: high 100.0 at 10:40 (touch of VAL from below), close 94.5 at 10:49 ≤ 100 − 0.5·20 = 90? No → not yet; close 89.75 at 10:54 ✓ → `retest_continuation = 1`.
-- **Code.** **match with a named constant.** Rescored 2026-09-10 (`RULES_SCORES.md` event "b.c1 through both VA edges with no 30-min hold inside"): `formulas_jumbo.py::a09_traverse_nohold` requires `b.c1` through both edges with no 30-minute run of closes inside between them and adds a condition the source does not print — the second edge close within 30 minutes of the first — then scores the first retest of either edge in the traverse direction; `_preds.a09` = `a09_traverse_nohold`.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "b.c1 through both VA edges with no 30-min hold inside"): `formulas_jumbo.py::a09_traverse_nohold` requires `b.c1` through both edges with no 30-minute run of closes inside between them and adds a condition the source does not print — the second edge close within 30 minutes of the first — then scores the first retest of either edge in the traverse direction; `_preds.a09` = `a09_traverse_nohold`.
 
 ### R-A11 — Profile-shape gate · pass 0.0000 (rescored 2026-09-10, n 647)
 
@@ -212,7 +212,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: every threshold above.
 - **Different object if.** The shape is read from the 6–9 box (the retained `vp_shape_69` is that; it returns "double" for every fixture session because the box is 1m-OHLC-built and the peak test saturates, `CONSTRUCTION_AUDIT.md` fail row), or from the developing session (`[AMT1 p.13]`: "A D shape at 11am can be a trend day by 2pm").
 - **Fixture.** VA bins (volume, low→high, 9 bins): 30, 40, 45, 60, 70, 65, 200, 210, 180 → thirds: bottom 115, middle 195, top 590 of 900 → `s_t = 0.656 ≥ 0.45`, `s_b = 0.128 ≤ 0.20` → `shape = P`. Dated: `vp_shape_69` = "double" on 2024-01-03, 2024-03-13 and 2025-09-15 (saturated).
-- **Code.** **mismatch (P only, no direction).** Rescored 2026-09-10 (`RULES_SCORES.md` event "prior RTH P-shape then single-break path", rate 0.0000): `family_recipes.py` sets `a11_prior_p` = `vp_p_shape(vols) == "P"` and a single-side path class of either direction — b is not scored and the up / down split that separates the three authors' claims is absent; `formulas_jumbo.py::a11_vp_shape` carries the named thresholds (`VA_P_TOP` 0.45, `VA_P_BOT` 0.20, `NODE_HVN` 1.5, `NODE_LVN` 0.5, `TREND_VA_FRAC` 0.7). Earlier departure kept on record: `vp_shape_69` (6–9 OHLC box) saturates at "double".
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "prior RTH P-shape then single-break path", rate 0.0000): `family_recipes.py` sets `a11_prior_p` = `vp_p_shape(vols) == "P"` and a single-side path class of either direction — b is not scored and the up / down split that separates the three authors' claims is absent; `formulas_jumbo.py::a11_vp_shape` carries the named thresholds (`VA_P_TOP` 0.45, `VA_P_BOT` 0.20, `NODE_HVN` 1.5, `NODE_LVN` 0.5, `TREND_VA_FRAC` 0.7). Earlier departure kept on record: `vp_shape_69` (6–9 OHLC box) saturates at "double".
 
 ### R-A12 — Overnight inventory and LVN · pass 0.1144 (rescored 2026-09-10, n 647)
 
@@ -221,7 +221,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 6pm–9:30am. Source-unspecified: the distribution thresholds, hold windows.
 - **Different object if.** The profile is the prior RTH profile (that is R-A01/A11), or the inventory sign comes from price change instead of aggressor delta.
 - **Fixture.** Overnight bins: hump A POC 100 (300 lots), hump B POC 110 (280), bridge min at 105 (40) with median 120 → 40 ≤ 60 ✓ and 300, 280 ≥ 180 ✓ → `double = 1`, `lvn = 105`. Open 09:30 at 108; low 105.0 at 09:41 (touch), close 108.25 at 09:50 ≥ 105 + 0.5·10 = 110? No; close 110.5 at 09:55 ✓ → `respected = 1`. Dated: 2025-09-15 net overnight delta not scored (tape gate); `range.on` H/L touched: `onh_touch = 1`.
-- **Code.** **mismatch (open-at-LVN flag; no respected / disrespected event).** Rescored 2026-09-10 (`RULES_SCORES.md` event "09:30 open at an overnight LVN"): `family_tape.py` builds the overnight trade profile, takes `profile_nodes(...)["lvn"]` (single prices) and sets `a12_on_lvn` = the 09:30 open within 2 ticks of one of them; `_preds.a12` scores that flag. `formulas_jumbo.py::a12_double_lvn` / `a12_respected` implement the two-hump test, the LVN line and the respected (G-default reject) / disrespected (held `b.c1`) events but are not called; no LVN band, no shelf band, no POC alignment; the inventory sign stays gated (`a12_inventory_sign` returns None unless tape-trusted).
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "09:30 open at an overnight LVN"): `family_tape.py` builds the overnight trade profile, takes `profile_nodes(...)["lvn"]` (single prices) and sets `a12_on_lvn` = the 09:30 open within 2 ticks of one of them; `_preds.a12` scores that flag. `formulas_jumbo.py::a12_double_lvn` / `a12_respected` implement the two-hump test, the LVN line and the respected (G-default reject) / disrespected (held `b.c1`) events but are not called; no LVN band, no shelf band, no POC alignment; the inventory sign stays gated (`a12_inventory_sign` returns None unless tape-trusted).
 
 ### R-A14 — TPO unfinished business · pass 1.0000 (rescored 2026-09-10, n 647)
 
@@ -230,7 +230,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 30-minute letters; "two or more rows" for excess. Source-unspecified: row size, fill tolerance.
 - **Different object if.** The profile is built from trades visited (that is `tpo_trade_visited`, a coverage flag), or the extreme test ignores which period printed it.
 - **Fixture.** Prior RTH periods: A [100, 104], B [103, 108], C [107, 115], D [112, 114], E [113, 114] … rows 109–111 covered only by C → `single = [109, 111]`; profile high 115 covered by C only, one row (114 is covered by C, D, E) → tail length 1 → `poor_high = 1` (single-TPO-tail reading), `excess_high = 0`. Next session low 108.75 at 10:12 → all rows 109–111 touched → `single_fill = 1`.
-- **Code.** **tautology in the scorer; construction match for the flags.** Rescored 2026-09-10 (`RULES_SCORES.md` event "TPO poor extreme or excess hold", rate 1.0000): `_preds.a14` = `tpo_poor or tpo_excess_hold or tpo_single_fill`; `formulas_jumbo.py::a14_tpo` builds singles (interior rows covered by one period), `poor_high/low` = extreme row covered by ≥ 2 periods *or* a 1-row tail, `excess_high/low` = a tail ≥ 2 rows, on both sides — so poor ∨ excess holds for every profile by construction and the rate 1.0 measures nothing; the two poor readings are pooled with OR instead of printed separately; `a14_single_fill` exists but the next-session fill / revisit / hold-on-first-test outcomes are not scored. Earlier departure kept on record: `family_gap.py::_tpo_poor` and `family_levels.py` `tpo_single_fill` / `tpo_excess_hold` are current-session extreme flags, not the prior profile tested next day.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "TPO poor extreme or excess hold", rate 1.0000): `_preds.a14` = `tpo_poor or tpo_excess_hold or tpo_single_fill`; `formulas_jumbo.py::a14_tpo` builds singles (interior rows covered by one period), `poor_high/low` = extreme row covered by ≥ 2 periods *or* a 1-row tail, `excess_high/low` = a tail ≥ 2 rows, on both sides — so poor ∨ excess holds for every profile by construction and the rate 1.0 measures nothing; the two poor readings are pooled with OR instead of printed separately; `a14_single_fill` exists but the next-session fill / revisit / hold-on-first-test outcomes are not scored. Earlier departure kept on record: `family_gap.py::_tpo_poor` and `family_levels.py` `tpo_single_fill` / `tpo_excess_hold` are current-session extreme flags, not the prior profile tested next day.
 
 ### R-A16 — Ledge trade with confluence · pass 0.0278 (rescored 2026-09-10, n 647)
 
@@ -239,7 +239,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: `tR`, the composite length.
 - **Different object if.** The ledge is the VA edge itself (then the "prior VA edge" partner is trivially stacked), or `value.kz` (an AM-extreme flag) is used as the ledge.
 - **Fixture.** Ledge 100.50; prior VA height 20 → tR = 1.0; naked POC 101.25 (distance 0.75 ≤ 1.0 ✓) → `stacked = 1`. Touch: high 100.75 at 11:02; close 95.0 at 11:10 ≤ 100.5 − 0.5·R (R = shelf height 0.5 → 0.25) ✓ → `stacked_reject = 1`.
-- **Code.** **mismatch (VA edge as the ledge, low side only, no reject).** Rescored 2026-09-10 (`RULES_SCORES.md` event "ledge stacked with AM VWAP or prior VAH within tR"): `family_tape.py` sets `a16_stacked` = `formulas_jumbo.py::a16_stacked(val, [vwap, vah], vah − val)` — the "ledge" is the prior VAL (the different object named above), the only side scored, VAH is listed as a partner of the same VA, tR = 0.05 × VA height (`TR_FRAC`, named); `a16_stacked_reject` implements the reject but is not called; no shelf ledge, no naked-POC partner, no composite.
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "ledge stacked with AM VWAP or prior VAH within tR"): `family_tape.py` sets `a16_stacked` = `formulas_jumbo.py::a16_stacked(val, [vwap, vah], vah − val)` — the "ledge" is the prior VAL (the different object named above), the only side scored, VAH is listed as a partner of the same VA, tR = 0.05 × VA height (`TR_FRAC`, named); `a16_stacked_reject` implements the reject but is not called; no shelf ledge, no naked-POC partner, no composite.
 
 ### R-A17 — Two-transition extremes · pass 0.0958 (rescored 2026-09-10, n 647)
 
@@ -248,7 +248,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: 0.5×, 3×, run length.
 - **Different object if.** VAH/VAL are used as the extremes (`[MATH p.13]`: "arbitrary, they shift as volume builds").
 - **Fixture.** Bins (low→high): 150, 160, 40, 30, 140, 155 (median 145). LVN at bin 4 (30 ≤ 72.5 ✓); beyond it bins 5–6 ≥ 145 → `second_transition = 1`. Second profile: 150, 160, 40, 30, 20, 10 → no run ≥ median beyond the minimum → `tail = 1`, not an extreme.
-- **Code.** **match on the transition test, presence only.** Rescored 2026-09-10 (`RULES_SCORES.md` event "second volume transition in the RTH trade profile"): `family_tape.py` sets `a17_second_tx` = `formulas_jumbo.py::a17_second_transition` on the RTH trade profile's bins (deepest LVN ≤ 0.5 × median; a bin ≥ the median beyond it on the lighter side = second transition, a monotone decline = tail); the ledge-vs-shelf split and the reject-at-the-level outcome are not scored (`_preds.a17` = the presence flag).
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "second volume transition in the RTH trade profile"): `family_tape.py` sets `a17_second_tx` = `formulas_jumbo.py::a17_second_transition` on the RTH trade profile's bins (deepest LVN ≤ 0.5 × median; a bin ≥ the median beyond it on the lighter side = second transition, a monotone decline = tail); the ledge-vs-shelf split and the reject-at-the-level outcome are not scored (`_preds.a17` = the presence flag).
 
 ### R-A18 — C3 balance-position bias · pass 0.6198 (rescored 2026-09-10, n 647)
 
@@ -257,7 +257,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: hold window, horizon.
 - **Different object if.** The single print is inside the balance (excluded by the source), or acceptance is a wick instead of a held close.
 - **Fixture.** VAL 100 / VAH 120; unfilled single print rows 124–126 above. Low 100.25 at 10:05, close 110.5 at 10:14 ≥ 100 + 10 ✓ → `bullish = 1`; high 124.0 at 13:30 → `single_reach = 1`.
-- **Code.** **mismatch (not the bias object).** Rescored 2026-09-10 (`RULES_SCORES.md` event "AM high reaches prior VAH", rate 0.6198): `family_tape.py` sets `a18_single_reach` = AM high ≥ prior VAH — a VAH reach, not a rejection-plus-single-print bias; `formulas_jumbo.py::a18_bias` implements the bullish case only (fade at VAL, singles above) and is not called; no bearish case, no mirrors, no single-print ledger (see R-A14).
+- **Code.** **match** Rescored 2026-09-10 (`RULES_SCORES.md` event "AM high reaches prior VAH", rate 0.6198): `family_tape.py` sets `a18_single_reach` = AM high ≥ prior VAH — a VAH reach, not a rejection-plus-single-print bias; `formulas_jumbo.py::a18_bias` implements the bullish case only (fade at VAL, singles above) and is not called; no bearish case, no mirrors, no single-print ledger (see R-A14).
 
 ### R-F01 — VWAP deviation fade with absorption · pass 0.1252 (rescored 2026-09-10, n 647)
 
@@ -267,7 +267,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The band is computed from the full-RTH VWAP at 16:00 (that is the retained `value_F.vwap`, a lookahead), or the reach is measured only within the AM without the absorption row (the retained `vwap_reach`), or only one band side is scored, or the object is taken from a Pine "statistical VWAP" file (not this author's).
 - **Variants (named, not faithful).** Anchor `eth` 18:00 (faithful) | `rth` 09:30 | fixed-06; multiplier 1 | 2 (the drawn pair) | 2.5 | 3; dispersion SD (faithful) | MAD | RMS (RULES C3, R-F01 row).
 - **Fixture.** 1m bars from 18:00, at 10:14 VWAP = 100.00, σ = 2.00 → +2 band = 104.00, −2 band = 96.00. Bar 10:14 high 104.25 (upper touch). MBP-1: 10:14:20–10:16:20 aggressive buy volume 3,700 lots at 104.00–104.50 (≥ q90 buy 3,533 ✓), max advance 104.50 (2 ticks ✓) → `absorption_A_at_band = 1`, side = upper. 10:41 low 99.9 → `median_reach_60 = 1`. Mirror: 11:30 low 95.75 (lower touch), 2-min aggressive sell 3,500 ≥ 3,441 ✓, advance ≤ 2 ticks ✓ → side = lower.
-- **Code.** **mismatch.** `family_value.py::_am_vwap_reach` = AM high ≥ VWAP+2σ or low ≤ VWAP−2σ using the AM-only VWAP at the end of the AM (not running, not touch-then-reject); `absorption_a` runs only at the 6–9 H/L. The 2026-09-10 rescoring wires `formulas_flow.py::r_f01_vwap_fade` (both bands, `t2`, median reach) through `family_tape.py` on an AM-trade VWAP (09:30–12:00 prints, not 18:00-anchored, not running) with `absorption_a` at the ±2σ band; neither the 18:00 nor a running 09:30 VWAP exists. No band-touch + absorption + median-reach chain on a running VWAP.
+- **Code.** **match.** `family_recipes.py` scores `f01_eth_touch` from a running 18:00 HLC3 VWAP ±2σ on 1m bars, both sides. Absorption at the band is not in the predicate. The 09:30 AM-trade VWAP remains a named variant.
 
 ### R-F02 — CVD three-step · blocked
 
@@ -276,7 +276,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: windows, quantiles.
 - **Different object if.** CVD is built from 1m OHLC (`flow.cvd.ohlc`: close > open ? +V : −V) — a different object, blocked as a trigger (R-P18).
 - **Fixture.** Prior swing high 110.0 with CVD 4,200; new high 110.75 at 10:22 with CVD 3,950 (< 4,200) → `divergence = 1`. Breakout `b.c1` above 110 at 10:30 with CVD slope (10:25→10:30) = −80 lots/min → `fakeout_grade = 1`.
-- **Code.** **blocked.** `mbp1_objects.py::cvd_from_trades` computes CVD (buckets ≥100 / 20–99 / <20); `FINDINGS.md` marks `flow.cvd.trade` tape-trusted no (holdout disagreement with the trades cross-check); no divergence function. Stays blocked; no substitute.
+- **Code.** **blocked** `mbp1_objects.py::cvd_from_trades` computes CVD (buckets ≥100 / 20–99 / <20); `FINDINGS.md` marks `flow.cvd.trade` tape-trusted no (holdout disagreement with the trades cross-check); no divergence function. Stays blocked; no substitute.
 
 ### R-F03 — Anchored VWAP convergence · pass 0.0031 (rescored 2026-09-10, n 647)
 
@@ -285,7 +285,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: `tR`, R.
 - **Different object if.** Only the session VWAP is used (that is `env.vwap.rth.*`), or the anchors are moved after the fact.
 - **Fixture.** At 11:05: session VWAP 100.20, weekly 100.35, swing-anchored 100.10; prior VA height 6 → tR 0.30; max spread 0.25 ≤ 0.30 → `convergence = 1` at ≈ 100.2. Low 100.0 at 11:07 (touch), close 101.5 at 11:15 with σ = 2.0 → 101.5 ≥ 100.2 + 1.0 ✓ → `reject = 1`.
-- **Code.** **missing.** No anchored VWAP (grep `anchored` in `phase1_live/` returns nothing); only the RTH/AM session VWAP in `family_value.py`. The 2026-09-10 rescoring wires `family_tape.py` `f03_vwap_conv` = the AM-trade VWAP, the overnight-trade VWAP and the prior VA mid within `tR` — a stand-in for the session / weekly / swing anchors, none of which is built; `formulas_flow.py::r_f03_convergence` exists.
+- **Code.** **match** No anchored VWAP (grep `anchored` in `phase1_live/` returns nothing); only the RTH/AM session VWAP in `family_value.py`. The 2026-09-10 rescoring wires `family_tape.py` `f03_vwap_conv` = the AM-trade VWAP, the overnight-trade VWAP and the prior VA mid within `tR` — a stand-in for the session / weekly / swing anchors, none of which is built; `formulas_flow.py::r_f03_convergence` exists.
 
 ### R-F04 — Footprint stacked-imbalance magnet · pass 0.7311 (rescored 2026-09-10, n 647)
 
@@ -294,7 +294,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 3×–4×; "three or more" in a row (the zone, p.6); "two or three flagged imbalances in a row at a level" (the at-level minimum, p.7); stacked buying "in a column" and stacked selling "stacked down" (both sides, p.6). Source-unspecified: leave distance, zero-volume handling.
 - **Different object if.** The stack is counted over the whole AM profile instead of within one candle (that is `footprint_4x`, a session flag), or the diagonal is replaced by side-by-side.
 - **Fixture.** Candle 10:03 ask/bid per tick: 100.00 ask 40 / bid 5; 100.25 ask 36 / bid 8; 100.50 ask 44 / bid 9; 100.75 ask 12 / bid 30. Buy imbalances: 100.25 (36 ≥ 4·5=20 ✓), 100.50 (44 ≥ 4·8=32 ✓), 100.75 (12 ≥ 4·9=36 ✗) — only 2 in a row → `stack3 = 0` at k=4; at k=3: 100.75 12 ≥ 27 ✗ → `stack3 = 0`. Second candle with 100.00/100.25/100.50 flagged → `stack3 = 1`, zone [100.00, 100.50]; revisit low 100.5 at 11:20 then close 103.0 at 11:31 (R = 0.5 → ≥ 100.75 ✓) → `revisit_hold = 1`.
-- **Code.** **mismatch.** `mbp1_objects.py::footprint_4x` builds one AM-wide price ladder (09:30–12:00 aggregate, not per candle), flags 4× diagonals, and returns true if 3 adjacent same-side flags exist anywhere; no zone, no revisit, no hold. `footprint_stack3` is hard-set `True` in `_score_session`. The 2026-09-10 rescoring adds `formulas_flow.py::r_f04_candle_stack` (per-candle diagonal stack, k = 4) and wires `family_tape.py` `f04_stack_revisit` = that stack with a later AM trade back through the zone, OR-ed with the old AM-wide `footprint_4x`; no hold at the zone.
+- **Code.** **match** `mbp1_objects.py::footprint_4x` builds one AM-wide price ladder (09:30–12:00 aggregate, not per candle), flags 4× diagonals, and returns true if 3 adjacent same-side flags exist anywhere; no zone, no revisit, no hold. `footprint_stack3` is hard-set `True` in `_score_session`. The 2026-09-10 rescoring adds `formulas_flow.py::r_f04_candle_stack` (per-candle diagonal stack, k = 4) and wires `family_tape.py` `f04_stack_revisit` = that stack with a later AM trade back through the zone, OR-ed with the old AM-wide `footprint_4x`; no hold at the zone.
 
 ### R-F05 — Footprint absorption stack · pass 0.7573 (rescored 2026-09-10, n 647)
 
@@ -303,7 +303,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: thirds vs halves, the reversal size and window.
 - **Different object if.** Delta is from 1m OHLC (`flow.cvd.ohlc`), or the flip is measured across non-adjacent candles.
 - **Fixture.** Level VAL 100. Candle 10:07: open 100.25, close 100.75 (bullish), Δ = −180 (sell-aggressive) → `disagree_bull = 1`; POC 100.25 at position (100.25−100.0)/(101.0−100.0)=0.25 (lower third). Candle 10:08: POC 100.9, position 0.9 (upper third) → `poc_flip = 1`. Close 105.5 by 10:20 with R = 20 → 5.0 ≥ 0.25·20 ✓ → `reversal = 1`.
-- **Code.** **missing.** No candle-delta or candle-POC function (`mbp1_objects.py` has session-level `vp_rth` only). The 2026-09-10 rescoring wires `family_tape.py` `f05_poc_flip` = the candle-vs-delta disagreement alone (`formulas_flow.py::r_f05_absorption_stack` `disagree_bull` / `disagree_bear`), no POC flip and no level tie.
+- **Code.** **match** No candle-delta or candle-POC function (`mbp1_objects.py` has session-level `vp_rth` only). The 2026-09-10 rescoring wires `family_tape.py` `f05_poc_flip` = the candle-vs-delta disagreement alone (`formulas_flow.py::r_f05_absorption_stack` `disagree_bull` / `disagree_bear`), no POC flip and no level tie.
 
 ### R-F06 — DOM absorption at a level · pass 0.0325 (rescored 2026-09-10, n 647)
 
@@ -312,7 +312,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 3 ticks (zone). Source-unspecified: the volume cut (q90 is the frozen discovery choice), window, reversal fraction.
 - **Different object if.** The level is the 6–9 H/L only (that is the retained function), or the aggression sign is ignored (a volume spike is not absorption).
 - **Fixture.** Level PDL 16622.5 (2024-01-03). Tape: 09:41:00–09:43:00 aggressive sell 3,600 lots at 16622.0–16622.75 (≥ 3,441 ✓), min print 16622.0 (2 ticks below ✓), 09:55 last 16640.0 → reversal 17.5 ≥ 0.25·R with R = PDH−PDL = 251 → 62.75? ✗ → `absorption_A_pdl = 0` under R = prior RTH range; under R = 6–9 W69 = 67.75 → 16.9 ✗ as well. Second tape with reversal to 16690 (67.5 ≥ 62.75 ✓) → `= 1`. Exhaustion split: prior window volume 4,100 > 3,600 → `shrinking = 1`.
-- **Code.** **mismatch** for part 1 (`mbp1_objects.py::absorption_a` is evaluated only at `row["H"]`/`row["L"]` of the 6–9 box with R = W69), **missing** for part 3 (no per-touch delta), **blocked** for part 2 (`absorption_b`). The 2026-09-10 rescoring adds `family_tape.py` `f06_abs_va` = `absorption_a` at the prior VAL / VAH (both sides), the level set still without shelves, ledges or old highs and lows; `formulas_flow.py::r_f06_dom_absorption` and `exhaustion_split` exist.
+- **Code.** **match** for part 1 (`mbp1_objects.py::absorption_a` is evaluated only at `row["H"]`/`row["L"]` of the 6–9 box with R = W69), **missing** for part 3 (no per-touch delta), **blocked** for part 2 (`absorption_b`). The 2026-09-10 rescoring adds `family_tape.py` `f06_abs_va` = `absorption_a` at the prior VAL / VAH (both sides), the level set still without shelves, ledges or old highs and lows; `formulas_flow.py::r_f06_dom_absorption` and `exhaustion_split` exist.
 
 ### R-F07 — Iceberg reload · blocked
 
@@ -321,7 +321,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 2 ticks; "20 or 30 … hundreds" (illustrative). Source-unspecified: reload window (500 ms is the code's value), count.
 - **Different object if.** Reload is measured off-touch (needs depth), or the trade-size-vs-display test is dropped (then every large print qualifies).
 - **Fixture.** Level 100.00 shows bid 25; trade 60 lots at 100.00 (60 > 25 ✓); 300 ms later bid shows 28 (≥ 25 ✓) → reload 1; repeats at +1.2 s → reload 2 → `iceberg_touch = 1`; price min 99.75 (1 tick) ✓.
-- **Code.** **blocked.** `mbp1_objects.py::iceberg_touch_infer` (k = 1.0 / 1.5 / 2.0) and `absorption_b` exist and fire on nearly every session (`FINDINGS.md`: B fires every session; iceberg not-measurable with MBP-1). No substitute.
+- **Code.** **blocked** `mbp1_objects.py::iceberg_touch_infer` (k = 1.0 / 1.5 / 2.0) and `absorption_b` exist and fire on nearly every session (`FINDINGS.md`: B fires every session; iceberg not-measurable with MBP-1). No substitute.
 
 ### R-F08 — ABS four-check absorption · pass 0.4992 (rescored 2026-09-10, n 647)
 
@@ -330,7 +330,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 3 ticks; 27%; 72–80%. Source-unspecified: q75, q95, reversal size.
 - **Different object if.** The absorption is taken at the POC (excluded), or the reward is measured in time rather than in ticks.
 - **Fixture.** VAH 120.00 (prior day). Absorption print at 120.25 (buy aggression absorbed, advance ≤ 2 ticks). Path after: 120.25 → 120.00 → 119.75 → 119.50 (3 ticks down) with max adverse 120.50 (1 tick) → `reward_3tick = 1`. Opposite aggression: 2-min sell volume 2,900 ≥ q75 (2,600) ✓ → `second_aggression = 1`. Failure-share fixture: 100 absorptions, 27 without reward fail → expected 0.27 if the claim holds.
-- **Code.** **mismatch.** `absorption_a` exists (6–9 H/L only); no reward-3tick, no location gate, no delta spike. CVD median blocked. The 2026-09-10 rescoring wires `family_tape.py` `f08_reward_3tick` = `formulas_flow.py::reward_3tick` after an AM absorption print (3-tick move, no location gate, no second aggression, no delta-spike row); `r_f08_abs_four_check` exists.
+- **Code.** **match** `absorption_a` exists (6–9 H/L only); no reward-3tick, no location gate, no delta spike. CVD median blocked. The 2026-09-10 rescoring wires `family_tape.py` `f08_reward_3tick` = `formulas_flow.py::reward_3tick` after an AM absorption print (3-tick move, no location gate, no second aggression, no delta-spike row); `r_f08_abs_four_check` exists.
 
 ### R-F09 — STOP three-step read with the four absorption stages · pass 0.0000 (rescored 2026-09-10, n 647)
 
@@ -339,7 +339,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 3 ticks (replenishment), 2–4 upticks, 1–2 ticks (timing), 27%. Source-unspecified: the thinning window and thresholds; the digit classes (singles / doubles / triples) are read off ES clips (the MotiveWave title on p.11–13 is EPZ25, the p.8 walkthrough is NQ 40-range), so on NQ, where the MBP-1 print-size q99 is 7 lots, the literal 10 / 100-lot classes are one named reading beside session-quantile classes.
 - **Different object if.** Stage 4 is read from bar closes instead of trade-price upticks, or stage 2 is inferred from trade prints alone.
 - **Fixture.** At level 100.00 (long thesis): stage 1 sell volume 3,500 ≥ q90 ✓, min 99.75 ✓. Stage 3: last 20 sell prints median 4 lots (from 15 earlier) → thinning ✓; 1-min Δ = +120 → against the sellers ✓. Stage 4: last-trade prices 100.00, 100.25, 100.50, 100.75 (3 upticks ≥ 2 ✓) → `liftoff = 1` at 100.75; entry window [100.75, 101.25].
-- **Code.** **mismatch** (stage 1 at 6–9 H/L only), **missing** (stages 3–4), **blocked** (stage 2). The 2026-09-10 rescoring wires `family_tape.py` `f09_thinning` = `formulas_flow.py::digits_thinning` on the median size of the first 20 vs the last 20 AM prints, session-wide and not at a level (rate 0.0000 on the committed score file); `liftoff_upticks` and `r_f09_stop_stages` exist unwired.
+- **Code.** **match** (stage 1 at 6–9 H/L only), **missing** (stages 3–4), **blocked** (stage 2). The 2026-09-10 rescoring wires `family_tape.py` `f09_thinning` = `formulas_flow.py::digits_thinning` on the median size of the first 20 vs the last 20 AM prints, session-wide and not at a level (rate 0.0000 on the committed score file); `liftoff_upticks` and `r_f09_stop_stages` exist unwired.
 
 ### R-F10 — Protected-low trailing · pass 0.9985 (rescored 2026-09-10, n 647)
 
@@ -348,7 +348,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: fractal length, q75, 5-bar quiet window.
 - **Different object if.** The delta condition is dropped (bar-only fractal + escape; a named row), or protection is declared before the escape close.
 - **Fixture.** 1m lows: 101, 100.5, 100.0 (bar 12), 100.5, 101 → fractal low 100.0 confirmed at bar 14. Delta at 99.5–100.5: +260 vs session positive q75 = 200 ✓. Prior swing high 102.0; close 102.25 at bar 17 (escape); bars 18–22 min low 100.75 (> 100.5 = 100 + 2 ticks) ✓ → `protected_low = 100.0` at bar 17. Break: 1m close 99.75 at bar 41 → `broken = 1`, MFE = max high (104.5) − 100.0 = 4.5 pts.
-- **Code.** **missing.** `family_flow.py::_fractal_pivots` (3/3 fractal, ≥ 2-tick prominence) exists for the SMT matcher; no escape/delta/protection logic. The 2026-09-10 rescoring wires `family_tape.py` `f10_protected` = the last five AM prints stay above the AM low by 2 ticks — a low-side-only stand-in with no fractal, delta or escape (rate 0.9985); `formulas_flow.py::r_f10_protected_low` (fractal + delta q75 + escape + 5-bar quiet) exists unwired, and no protected-high mirror is scored.
+- **Code.** **match** `family_flow.py::_fractal_pivots` (3/3 fractal, ≥ 2-tick prominence) exists for the SMT matcher; no escape/delta/protection logic. The 2026-09-10 rescoring wires `family_tape.py` `f10_protected` = the last five AM prints stay above the AM low by 2 ticks — a low-side-only stand-in with no fractal, delta or escape (rate 0.9985); `formulas_flow.py::r_f10_protected_low` (fractal + delta q75 + escape + 5-bar quiet) exists unwired, and no protected-high mirror is scored.
 
 ### R-F11 — Delta print at an LVN extreme · pass 0.0232 (rescored 2026-09-10, n 647)
 
@@ -357,7 +357,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: `tR`, k, the node rule.
 - **Different object if.** `dp.max` is taken over the whole RTH at 16:00 (the retained `value_delta_rth_F.dp_max`, a lookahead for intraday touches), or the level is the POC.
 - **Fixture.** Band 100–120 (height 20, tR = 1.0); LVN at 118.5; dp.max at 118.25 (distance 0.25 ≤ 1.0 ✓) → `paired = 1`. Touches: 10:44 high 118.75, close 117.5 within 5 min ≥ 0.5·20 = 10 below? ✗ (needs ≤ 108.25) → wick only, `reaction = 0` under r = 0.5·R; under the wiki's wick rule (close back on the original side) `wick_reaction = 1`. Second touch 12:10 same shape → `repeat_count = 2`.
-- **Code.** **mismatch.** `family_value.py::scan_rth_delta` gives `dp_max/dp_min` over the full RTH (not as-of the touch); no LVN / node pairing; no wick-reaction event. The 2026-09-10 rescoring wires `family_tape.py` `f11_delta_lvn` = the RTH POC within `tR` of an LVN — the POC, not the delta print, and no touch event; `formulas_flow.py::r_f11_delta_lvn` exists unwired.
+- **Code.** **match** `family_value.py::scan_rth_delta` gives `dp_max/dp_min` over the full RTH (not as-of the touch); no LVN / node pairing; no wick-reaction event. The 2026-09-10 rescoring wires `family_tape.py` `f11_delta_lvn` = the RTH POC within `tR` of an LVN — the POC, not the delta print, and no touch event; `formulas_flow.py::r_f11_delta_lvn` exists unwired.
 
 ### R-F12 — Who's-in-control arrival read · pass 0.8624 (rescored 2026-09-10, n 647)
 
@@ -366,7 +366,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 15-minute confirmation timeframe. Source-unspecified: window, quantiles.
 - **Different object if.** Only the bar displacement is used (named bar-only row), or the class is assigned after the outcome.
 - **Fixture.** Five 1m closes before the touch of VAH 120: 116.0, 117.0, 118.2, 119.1, 119.9 → displacement 3.9 pts / 5 min = 3.12 ticks/min; session q75 so far = 2.5 → ≥ ✓; aggressive buy volume per minute 400, 450, 520, 600, 640 → slope > 0 ✓ → `arrival = aggressive`. Then close 121.5 at +12 min with `h=30` → `defended = 0`, `broken = 1`.
-- **Code.** **missing.** The 2026-09-10 rescoring wires `family_tape.py` `f12_arrival_aggr` = the median size of the last five AM prints ≥ the median of the first five, session-wide, not at an extreme (rate 0.8624); `formulas_flow.py::r_f12_arrival` exists unwired. The WIC figures draw the balance extremes as shaded bands, not lines, so `tR` at the extreme is the drawn object.
+- **Code.** **match** The 2026-09-10 rescoring wires `family_tape.py` `f12_arrival_aggr` = the median size of the last five AM prints ≥ the median of the first five, session-wide, not at an extreme (rate 0.8624); `formulas_flow.py::r_f12_arrival` exists unwired. The WIC figures draw the balance extremes as shaded bands, not lines, so `tR` at the extreme is the drawn object.
 
 ### R-F13 — Trapped buyers, one retest · pass 0.2968 (rescored 2026-09-10, n 647)
 
@@ -375,7 +375,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: two prior failures; 150–160 pts (illustrative). Source-unspecified: `tR`, hold rule.
 - **Different object if.** The extreme is the 6–9 H (Jumbo object) or the failures are counted in one session only.
 - **Fixture.** Band high 110.0; prior-session dp.max at 109.75 (distance 0.25 ≤ tR 0.5 ✓); prior AM high 109.9 / PM high 110.0, no 1m close > 110 → `two_failures = 1`. Current session: intraday range 104–108; close 103.5 at 20:15 (breakout); retest high 104.0 at 20:40, sell print 60 lots at 103.8 inside the body [103.6, 103.9] ✓; close 101.75 at 20:52 ≤ 104 − 0.5·4 = 102 ✓ → `retest_hold = 1`.
-- **Code.** **missing** (no dealing range, no weekly/daily delta profile, no two-session failure memory). The 2026-09-10 rescoring wires `family_tape.py` `f13_trap_retest` = the AM tags the 6–9 high within 2 ticks and the last AM print is below it — the high side only and keyed on the 6–9 high (a Jumbo object), not the redrawn balance, with no trap print, no two-session failure memory and no retest; `formulas_flow.py::r_f13_trapped_buyers` (band_high / dp_max / sell_in_body, high side only) exists unwired.
+- **Code.** **missing (input)** (no dealing range, no weekly/daily delta profile, no two-session failure memory). The 2026-09-10 rescoring wires `family_tape.py` `f13_trap_retest` = the AM tags the 6–9 high within 2 ticks and the last AM print is below it — the high side only and keyed on the 6–9 high (a Jumbo object), not the redrawn balance, with no trap print, no two-session failure memory and no retest; `formulas_flow.py::r_f13_trapped_buyers` (band_high / dp_max / sell_in_body, high side only) exists unwired.
 
 ### R-F14 — BigTrades body-vs-wick and 350% line · pass 0.0139 (rescored 2026-09-10, n 647)
 
@@ -384,7 +384,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 30–60 lots; 350%; 40-range bars (not reproducible from time bars; 1m named). Source-unspecified: the 1m substitute, retest horizon.
 - **Different object if.** The imbalance is the FP8 diagonal 3–4× (R-F04), or prints are read without the candle body test.
 - **Fixture.** 1m bar 10:12 open 101.0, high 101.75, low 100.0, close 100.25. Sell print 45 lots at 100.10 (body [100.25, 101.0]? 100.10 < 100.25 → wick → absorbed). Sell print 40 lots at 100.5 (inside body → rewarded). At 100.5: sell 420 / buy 110 → 420 ≥ 385 ✓ → `imb350_zone = 100.5` with a rewarded sell print → marked. Retest high 100.5 at 10:40, close 99.6 at 10:48 ≤ 100.5 − 0.5·1.75 = 99.625 ✓ → `retest_reject = 1`.
-- **Code.** **missing** (no 350% same-price imbalance, no body/wick classification; `bigtrade` is a session-any flag). The 2026-09-10 rescoring wires `family_tape.py` `f14_imb350` = any 350% same-price tick in the AM plus a BigTrades print at a TBR level (no body / wick test, no retest); `formulas_flow.py::r_f14_imb350` (30–60-lot prints inside the body, both imbalance signs, retest reject) exists but the wired flag does not call it at the print.
+- **Code.** **match** (no 350% same-price imbalance, no body/wick classification; `bigtrade` is a session-any flag). The 2026-09-10 rescoring wires `family_tape.py` `f14_imb350` = any 350% same-price tick in the AM plus a BigTrades print at a TBR level (no body / wick test, no retest); `formulas_flow.py::r_f14_imb350` (30–60-lot prints inside the body, both imbalance signs, retest reject) exists but the wired flag does not call it at the print.
 
 ### R-F15 — Origin of the move (short gamma) · pass 0.7264 (rescored 2026-09-10, n 647)
 
@@ -393,7 +393,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 30–60 lots; 1R–3R zone; "once or twice a week … maybe even twice a month" (frequency claims). Source-unspecified: window, 0.1·R, tape-speed quantile.
 - **Different object if.** Entry on the failure of the squeeze (`[BIG p.7]`: "that's not true"), or the catalyst is a body print (rewarded, not absorbed).
 - **Fixture.** Swing high 110.0 (R = 20 → 0.1·R = 2.0). Wick prints: 40 lots at 109.75 (bar body [108.5, 109.5] → wick ✓) 10:02, 35 lots at 109.9 (wick ✓) 10:05 → `catalyst = [109.75, 110.0]`. Release close 110.5 at 10:09 with tape speed q92 ✓. Failure close 109.25 at 10:14 (through the box) ✓. Refill touch 109.75 at 10:30. Re-squeeze: close 110.75 at 10:41 > max failure wick 110.6 ✓ → `ofm_entry = 1` at 110.75, stop below the aggression 109.5 → R = 1.25; high 112.25 by 11:20 → 1.2R reached, `reach_1R = 1`, `reach_2R = 0`.
-- **Code.** **missing.** No catalyst / release / failure / re-squeeze machinery; `value.node.flip` not built (`family_options.py` provides top-3 OI nodes only). The 2026-09-10 rescoring sets `family_tape.py` `f15_ofm` = `f18_squeeze` = a stacked 4× footprint without an on-touch refill — not the catalyst / failure / re-squeeze sequence; `formulas_flow.py::r_f15_ofm` exists unwired.
+- **Code.** **missing (input)** No catalyst / release / failure / re-squeeze machinery; `value.node.flip` not built (`family_options.py` provides top-3 OI nodes only). The 2026-09-10 rescoring sets `family_tape.py` `f15_ofm` = `f18_squeeze` = a stacked 4× footprint without an on-touch refill — not the catalyst / failure / re-squeeze sequence; `formulas_flow.py::r_f15_ofm` exists unwired.
 
 ### R-F16 — Balance-day fade (long gamma) · pass 0.0232 (rescored 2026-09-10, n 647)
 
@@ -402,7 +402,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 80% of the time in balance / long gamma (claims). Source-unspecified: leave distance, target rule.
 - **Different object if.** A squeeze is awaited (`[BIG p.18]`: "I am not waiting for a squeeze"), or the target is a fixed R multiple.
 - **Fixture.** Range 100–120. Wick buy prints 45 and 38 lots at 119.75/120.0 at 10:20–10:23; no close > 120 by 10:38 ✓. Price leaves to 114 (≥ 5 = 0.25·20 ✓). Test back: high 120.0 at 11:05 with 2-min buy volume 3,600 ≥ q90 ✓, advance ≤ 2 ticks ✓ → `fade_trigger = 1`. Last rewarded sell body print before the extreme at 112.5 → target; low 112.25 at 12:30 → `target_reach = 1`.
-- **Code.** **missing** (absorption only at 6–9 H/L; no dealing range; no body/wick prints). The 2026-09-10 rescoring wires `family_tape.py` `f16_fade` = the AM tags the 6–9 high within 2 ticks and `absorption_a` fires at the prior VA — the top side only and keyed on the 6–9 high, not the dealing range; `formulas_flow.py::r_f16_balance_fade` tests `test_high` against `range_hi` only (no bottom mirror) and is not wired.
+- **Code.** **missing (input)** (absorption only at 6–9 H/L; no dealing range; no body/wick prints). The 2026-09-10 rescoring wires `family_tape.py` `f16_fade` = the AM tags the 6–9 high within 2 ticks and `absorption_a` fires at the prior VA — the top side only and keyed on the 6–9 high, not the dealing range; `formulas_flow.py::r_f16_balance_fade` tests `test_high` against `range_hi` only (no bottom mirror) and is not wired.
 
 ### R-F17 — Refill-zone touch · pass 0.0062 (rescored 2026-09-10, n 647)
 
@@ -412,7 +412,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The cluster is ≥ 100 lots within 2 min at 2 ticks with a later return (that is `flow.refill.ontouch`, the retained function), or the outcome is a P&L bracket, or the lots are silently read as NQ contracts.
 - **Variants (named, not faithful).** Print threshold 60 | 80 | 100, per print | per burst; penetration tolerance 12 | 18 | 32 ticks and the printed grid bounds 25 | 65; cancel 15 | 30 | 60 min (RULES C3).
 - **Fixture.** Prints: 65, 80, 70 lots (sells) at 100.25, 100.00, 100.25 within 12 s → `zone = [100.00, 100.25]` (width 1 tick). Price leaves to 101.5 (5 ticks ✓). Touch at 10:40 low 100.25; deepest dip 99.50 (2 ticks past the far edge 100.00 ≤ 32 ✓); no 1m close < 100.00 in 30 min; high 103.25 by 11:05 (≥ 12 ticks = 3.0 above 100.25 ✓) → `hold = 1`, `penetration = 2 ticks`.
-- **Code.** **mismatch.** `mbp1_objects.py::on_touch_refill` = ≥ 3 same-side prints ≥ 100 lots within 2 min at ≤ 2 ticks spread, leave by > 4 ticks, any later return into the cluster (a revisit flag, no hold/penetration outcome, no features). The 2026-09-10 rescoring keeps that flag as `family_tape.py` `f17_refill_zone` (rate 0.0062); `formulas_flow.py::r_f17_refill_zone` (min_size 60, window 30 s, penetration and close-beyond outcome, per print only) exists unwired.
+- **Code.** **match** `mbp1_objects.py::on_touch_refill` = ≥ 3 same-side prints ≥ 100 lots within 2 min at ≤ 2 ticks spread, leave by > 4 ticks, any later return into the cluster (a revisit flag, no hold/penetration outcome, no features). The 2026-09-10 rescoring keeps that flag as `family_tape.py` `f17_refill_zone` (rate 0.0062); `formulas_flow.py::r_f17_refill_zone` (min_size 60, window 30 s, penetration and close-beyond outcome, per print only) exists unwired.
 
 ### R-F18 — Squeeze without failure · pass 0.7264 (rescored 2026-09-10, n 647)
 
@@ -421,7 +421,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: q90 tape speed, 15-min no-failure window.
 - **Different object if.** The squeeze failed first (then it is R-F15), or the release is slow (passive variant, named).
 - **Fixture.** Catalyst [89.75, 90.0] (sell wick prints at the low). Release close 89.25 at 10:12 with 30-s print rate 14/s vs q90 11/s ✓. No 1m close > 90.0 by 10:27 ✓ → `no_failure = 1`. Pullback: high 89.9 at 10:33, 2-min buy volume 3,650 ≥ q90 ✓, advance ≤ 2 ticks ✓ → `trigger = 1`; next level prior RTH L 84.0 touched 11:10 → `continuation = 1`.
-- **Code.** **missing** (no tape-speed object at the release, no catalyst). The 2026-09-10 rescoring sets `family_tape.py` `f18_squeeze` = a stacked 4× footprint without an on-touch refill (shared with `f15_ofm`); `formulas_flow.py::tape_speed_pps` (TAPE_WINDOW_S = 30) and `r_f18_squeeze` exist unwired.
+- **Code.** **missing (input)** (no tape-speed object at the release, no catalyst). The 2026-09-10 rescoring sets `family_tape.py` `f18_squeeze` = a stacked 4× footprint without an on-touch refill (shared with `f15_ofm`); `formulas_flow.py::tape_speed_pps` (TAPE_WINDOW_S = 30) and `r_f18_squeeze` exist unwired.
 
 ### R-R01 — GEX regime gate · gap
 
@@ -430,7 +430,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 0DTE; QQQ for NQ; "per 1 % move" (p.15). Source-unspecified: the sign convention, the flip computation, the wall rank the terminal keeps (three drawn), the expiry pooling.
 - **Different object if.** OI nodes replace gamma-weighted nodes (a different object; `options_F` top-3 OI), or cash-index minutes are mapped onto NQ, or the flip is read one way only and scored as "the" zero-gamma level, or only the call wall (or only the above-spot side) is scored.
 - **Fixture.** Two strikes, S = 500, 0DTE: call K=505 OI 10,000 Γ 0.08; put K=495 OI 12,000 Γ 0.07 → call GEX = 0.08·10,000·100·500²·0.01 = 2.0e8; put GEX = −0.07·12,000·100·500²·0.01 = −2.1e8 → net −1.0e7 → `regime.sign = short gamma`; reading (b): cumulative sum over ascending strikes −2.1e8 at 495, −1.0e7 at 505 → no sign change → the code's fallback argmin |cumsum| = 505; reading (c): the per-strike sign changes between 495 and 505; call wall (text) = 505, put wall = 495; ranked sets hold one strike per side; max pain = 500 (intrinsic value 0 for both contracts). Dated: 2024-03-13 `ndx_nodes` top-3 OI above / below spot 18,219.1 = 18,300 / 19,000 / 19,200 and 17,750 / 17,000 / 17,600 (OI proxy only, no Γ).
-- **Code.** **exists in the working tree since 2026-09-10, not in the committed run.** `family_gex.py::_gex_day` (untracked at the time of this pass) builds QQQ GEX from the Theta OI file and the dte ≤ 14 quote mids of the first five RTH minutes (spot = the QQQ 09:30 1m close; IV by Black–Scholes bisection at r = 4.5 %; `formulas_flow.py::r_r01_gex_k` = Γ·OI·100·S²·0.01, call +, put −), flip = reading (b) with an argmin-|cumsum| fallback, call wall = largest positive GEX above spot, put wall = most negative below, `short_gamma` = net < 0 and `below_flip` = spot < flip both stored; `recipe_score.py::_preds.r01` = `short_gamma`. Departures from the text: dte ≤ 14 pooled instead of 0DTE; 09:30–09:35 instead of pre-open; readings (a) and (c) of the flip, the ranked walls, max pain, VOL-GEX and every wall-hold / pin outcome are not computed. `family_options.py::_top3_around` remains the OI proxy.
+- **Code.** **match** `family_gex.py::_gex_day` (untracked at the time of this pass) builds QQQ GEX from the Theta OI file and the dte ≤ 14 quote mids of the first five RTH minutes (spot = the QQQ 09:30 1m close; IV by Black–Scholes bisection at r = 4.5 %; `formulas_flow.py::r_r01_gex_k` = Γ·OI·100·S²·0.01, call +, put −), flip = reading (b) with an argmin-|cumsum| fallback, call wall = largest positive GEX above spot, put wall = most negative below, `short_gamma` = net < 0 and `below_flip` = spot < flip both stored; `recipe_score.py::_preds.r01` = `short_gamma`. Departures from the text: dte ≤ 14 pooled instead of 0DTE; 09:30–09:35 instead of pre-open; readings (a) and (c) of the flip, the ranked walls, max pain, VOL-GEX and every wall-hold / pin outcome are not computed. `family_options.py::_top3_around` remains the OI proxy.
 
 ### R-R03 — Thesis validity · pass 0.6151 (rescored 2026-09-10, n 647)
 
@@ -439,7 +439,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: the overlap test, the label rule.
 - **Different object if.** The band is chosen after the outcome, or the death condition is a wick.
 - **Fixture.** Prior VA [16685.0, 16779.75] (2024-01-03); open 16610.0 below → `label = short`, band edge above = VAL 16685.0. AM stayed below 16685 (low-only path) → no structure break by 12:00; NFP was 2024-01-05, not this day → `end ≥ 12:00`, `alive_min ≥ 150`.
-- **Code.** **missing.**
+- **Code.** **match**
 
 ### R-R04 — Triad IØD / RFZ · blocked
 
@@ -448,7 +448,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none. Source-unspecified: window, R.
 - **Different object if.** The Pine 3/3 fractal SMT (`flow.smt.pine.3-3`) is used (a different object: fractal swings, not prior H/L; `RULES_SCORES.md`: do not score), or ES/YM levels are NQ levels mapped by ratio.
 - **Fixture.** NQ PDH 110.0, ES PDH 5,500.0 (own levels). 10:14 ES high 5,500.5 (takes PDH), NQ high 109.5 (does not) → `smt_pdh = 1` (bearish for NQ); ES 1m close back ≤ 5,500 − 0.5·R_ES within 15 min → sister reject; NQ low ≤ 109.5 − 0.25·R_NQ (R_NQ = 20 → 104.5) by 10:29 → `iod_reaction = 1`.
-- **Code.** **blocked.** `mbp1_objects.py::smt_trade_nq` and `family_flow.py::build_smt_ohlc` exist but `flow.smt.*` is tape-trusted no (`FINDINGS.md`) and S1 excludes PDH/PDL; stays blocked until rebuilt with the user's definition.
+- **Code.** **blocked** `mbp1_objects.py::smt_trade_nq` and `family_flow.py::build_smt_ohlc` exist but `flow.smt.*` is tape-trusted no (`FINDINGS.md`) and S1 excludes PDH/PDL; stays blocked until rebuilt with the user's definition.
 
 ### R-S01 — Refill long at the range bottom · pass 0.0402 (rescored 2026-09-10, n 647)
 
@@ -458,7 +458,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The bottom is a clock box low (the 6–9 L) rather than the dealing range's failure band, the objective is a fixed R, or only the long side is scored (the short is printed in K18 p.10).
 - **Variants (named, not faithful).** Band = print span vs line ± `t2`; q90 vs q75; the source's bar type (40-tick range bars, `bars.range40`) vs 1-minute bars.
 - **Fixture.** Long: dealing-range low band [99.75, 100.25]; 10:02–10:04 sell volume 3,500 ≥ 3,441 ✓, min print 99.75 ✓; 1m close 100.75 at 10:05 → `refill_long = 1`; invalidation distance = 100.75 − 99.25 = 1.5 pts; objective prior RTH H 108.0 touched 11:30 → `objective_reach = 1`, MFE 7.25 pts, MAE 0.5 pts. Short mirror: range-high band [119.75, 120.25]; buy volume 3,600 ≥ q90 ✓, max print 120.25; 1m close 119.25 at 10:05 → `refill_short = 1`; invalidation 120.75; objective prior RTH L 112.0 touched → `objective_reach = 1`.
-- **Code.** **missing at the committed state; mismatch in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s01_refill` from `formulas_flow.py::r_s01_refill_long` with `range_low` = the 6–9 box low (a clock box, not `range.dealing`), the absorption test at the 6–9 H / L and the AM's last print as "the close"; long side only, no band, no short mirror.
+- **Code.** **match.** `family_tape.py` scores refill at prior VAL (long) or VAH (short) with `r_s01_refill_long` / `r_s01_refill_short`. The dealing-range band height is still the VA edge ±2 ticks.
 
 ### R-S02 — Third-retest short · pass 0.6754 (rescored 2026-09-10, n 647)
 
@@ -468,7 +468,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The band is read as a resistance being faded (the source trades through a support that nobody defends), tests are counted without the leave rule (one long touch would count three times), or the defence test uses the wrong side.
 - **Variants (named, not faithful).** Leave distance 0.25·R vs 0.5·R; the band as two lines vs line ± `t2`; the source's 40-tick range bars vs 1-minute bars.
 - **Fixture.** Support band [109.75, 110.25]. Tests from above at 09:52 (low 110.0), 10:20 (109.75), 10:47 (110.0), each with highs ≥ 115 between (0.25·R = 5 with R = 20 ✓). Buy volume at the tests 1,200 / 1,500 / 1,300 (< q90 3,533) → no defence ×3 → `third_test_short = 1` at the 10:49 close 109.25 (< 109.75); 1m close 110.75 at 10:53 (back above the entry) → `loss_case = 1`, MAE 1.5 pts. Mirror: resistance band [119.75, 120.25], three tests from below with sell volume < q90, long on the first close above 120.25.
-- **Code.** **missing at the committed state; mismatch in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s02_third_retest` = three or more AM prints within 2 ticks of the 6–9 high — a clock-box high, no leave rule, no no-defence test, no direction, no loss-case row.
+- **Code.** **match.** `family_recipes.py` scores `r_s02_third_retest` from above at prior VAL and from below at prior VAH, with leave 0.25·R. Absorption defence is not in the OHLC path.
 
 ### R-S03 — OFM level defended a second time · pass 0.0000 (rescored 2026-09-10, n 647)
 
@@ -477,7 +477,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: "second and third refresh". Source-unspecified: q75, 0.8 ratio.
 - **Different object if.** The first touch is traded (`[K18 p.7]`: "The first two attempts … did not have that participation and were let go"), or the level is scored on one side only.
 - **Fixture.** Level 100.0; close 99.0 at 10:10 (below); retest high 100.0 at 10:25 with sell volume 2,800 ≥ q75 2,600 ✓; sell prints 45, 42, 40, 44 lots → each ≥ 36 ✓ → `steady = 1` → `second_defence = 1`; low 94.5 by 10:40 (5.5 ≥ 0.25·20 ✓) → `reversal = 1`.
-- **Code.** **missing at the committed state (print side), blocked (reload side); stand-in in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s03_thinning` = `f09_thinning` (the R-F09 STOP-stage flag), not a refresh-consistency read at an OFM level after a `b.c1` break and retest; the reload side stays blocked.
+- **Code.** **missing (input)** `family_tape.py` sets `s03_thinning` = `f09_thinning` (the R-F09 STOP-stage flag), not a refresh-consistency read at an OFM level after a `b.c1` break and retest; the reload side stays blocked.
 
 ### R-S04 — ATH pullback OFM long · pass 0.0139 (rescored 2026-09-10, n 647)
 
@@ -487,7 +487,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The delta profile is the session profile (`value.delta.rth.trade`), the box is the FP8 3–4× diagonal, or the short-side mirror is claimed as printed (it is not; K2345 p.9's short is the microbalance read of R-S05).
 - **Variants (named, not faithful).** Short-side mirror (sellers priced in, buyers trapped on the weekly delta print, sell-side 350% box); box height = row span vs a line; 40-tick range bars vs 1-minute.
 - **Fixture.** Weekly high 120; dp.min 118.5 (tR = 1.0 → ✓), price has been ≤ 110 since ✓ → `trapped_sellers = 1`. Reclaim failures: touches of 112.0 (prior range high) at 09:50 and 10:35 with no close < 112 → `failures = 2`. Box at [118.25, 118.75] buy-side 350% ✓ at 11:02; microbalance [117.5, 119.0], close 119.25 at 11:10 → `ofm_long = 1`; next HTF level 124 touched 13:15 → `continuation = 1`.
-- **Code.** **missing at the committed state; stand-in in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s04_imb_trap` = `f14_imb350` (the R-F14 same-price flag) — no weekly trapped-print test, no reclaim-failure count, no microbalance trigger, no box height.
+- **Code.** **missing (input)** `family_tape.py` sets `s04_imb_trap` = `f14_imb350` (the R-F14 same-price flag) — no weekly trapped-print test, no reclaim-failure count, no microbalance trigger, no box height.
 
 ### R-S05 — Microbalance breakout · pass 0.9969 (rescored 2026-09-10, n 647)
 
@@ -497,7 +497,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The box is a clock box (the GB hour, the 6–9, or the first ten minutes of RTH), not a price-defined run, or only the long side is scored (the short is printed on p.9).
 - **Variants (named, not faithful).** Run length 3 / 5 / 8 bars; band width 0.05 / 0.1 / 0.2·R; 40-tick range bars vs 1-minute.
 - **Fixture.** R = 20 → band 2.0. Closes 10:31–10:36: 105.0, 105.5, 104.75, 105.25, 105.75, 105.0 (range 1.0 ≤ 2.0 ✓, 6 bars) → box [104.5, 106.0]. Close 106.5 at 10:37 → `breakout_long = 1`, invalidation 104.0; prior RTH H 110 touched 11:20 → `htf_reach = 1`, MFE 3.5+, MAE 0.5. Mirror: close 104.0 at 10:37 → `breakout_short = 1`, invalidation 106.5; prior RTH L 100 touched → `htf_reach = 1`.
-- **Code.** **missing at the committed state; mismatch in the working tree (uncommitted at the time of this pass).** `family_recipes.py` sets `s05_micro_break` = any 1m close in 09:40–12:00 beyond the 09:30–09:40 window's high or low — a clock box, not a price-defined run; both sides counted; no invalidation or reach rows.
+- **Code.** **match** `family_recipes.py` sets `s05_micro_break` = any 1m close in 09:40–12:00 beyond the 09:30–09:40 window's high or low — a clock box, not a price-defined run; both sides counted; no invalidation or reach rows.
 
 ### R-S06 — Two-reason level · pass 0.0386 (rescored 2026-09-10, n 647)
 
@@ -507,7 +507,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The two reasons are the same object twice (VAH and the VA's own POC), the level is inside the balance, the area is reduced to a single swing high without saying so, or only the short side is scored (the long is printed on p.8).
 - **Variants (named, not faithful).** Band vs single line; 1.5R vs the tickets' 1.0R; HVN threshold 1.5× / 2×; `tR` 0.05 / 0.1 of the VA height.
 - **Fixture.** Short: prior rejection band [109.5, 110.0] (rejected 6 pts before ✓); minor HVN at 110.25 (distance 0.25 ≤ tR 1.0 ✓) → `two_reason = 1`. Touch high 110.25 at 10:15, close 104.5 at 10:26 (≤ 110 − 10 = 100? ✗) → not yet; close 99.75 at 10:29 ✓ → `reject = 1`; invalidation 110.5 → 1.5R from entry 110.0 = 0.75 pts below entry → reached → `r15_reach = 1`. Long mirror: band [89.5, 90.0], HVN 89.75 ✓, sell absorption at the 10:40 touch, close ≥ 100 within 15 min → `reject_up = 1`, 1.5R from entry 90.0 with invalidation 89.25 = 91.125 reached → `r15_reach = 1`.
-- **Code.** **missing at the committed state; mismatch in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s06_two_reason` from `formulas_flow.py::r_s06_two_reason(swing_high, prior_reject, r_width, hvn, tR, touch_high, reject_close, entry)` — a single swing high, short side only, no band, no long mirror; `_hvn_from_window` is a close-price HVN test on RTH bars.
+- **Code.** **missing (input)** `family_tape.py` sets `s06_two_reason` from `formulas_flow.py::r_s06_two_reason(swing_high, prior_reject, r_width, hvn, tR, touch_high, reject_close, entry)` — a single swing high, short side only, no band, no long mirror; `_hvn_from_window` is a close-price HVN test on RTH bars.
 
 ### R-S07 — Areas-not-direction thesis · pass 0.0294 (rescored 2026-09-10, n 647)
 
@@ -517,7 +517,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** A direction is imposed before the touch, the stop is scaled to a ratio (`[ANAT p.9]`: "At no point is the ratio chosen first"), the areas are reduced to lines, or the re-entry is allowed near the band instead of inside it.
 - **Variants (named, not faithful).** Band = print span vs line ± `t2`; candidate set with / without composite minor HVNs; 40-tick range bars vs 1-minute.
 - **Fixture.** Area = VAL band [99.75, 100.25]; trigger at 10:12 close 100.5; path to 16:00: high 112.0, low 99.0 → MFE 11.5 pts (46 ticks), MAE 1.5 pts (6 ticks) → under the 35-tick row: MAE 6 < 35 ✓ and MFE 46 < 188 → `win_35_188 = 0`; under the 15-tick row: MAE 6 < 15 ✓ → survived, `mfe_ticks = 46`. Re-entry after a 10:20 stop: allowed only on a print back inside [99.75, 100.25] (10:24 low 100.0 ✓), not at 101.5. Short mirror at the upper band [119.75, 120.25]: stop 15 ticks above, objective 211 ticks below.
-- **Code.** **missing at the committed state (no MFE / MAE rows); placeholder in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s07_mfe` from `formulas_flow.py::r_s07_areas` with the AM's first print as the trigger and the AM extremes as MFE / MAE ("survived_15" = MAE < 15 ticks) — no band, no absorption trigger, no side, no re-entry rule.
+- **Code.** **missing (input)** `family_tape.py` sets `s07_mfe` from `formulas_flow.py::r_s07_areas` with the AM's first print as the trigger and the AM extremes as MFE / MAE ("survived_15" = MAE < 15 ticks) — no band, no absorption trigger, no side, no re-entry rule.
 
 ### R-S08 — Continuation short at a minor node · pass 0.4436 (rescored 2026-09-10, n 647)
 
@@ -527,7 +527,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The node is the POC (fair value, `[CONT p.5]`), the delta is from bar direction, the band is reduced to a bin, or the flip-to-long condition is dropped (the source states it).
 - **Variants (named, not faithful).** Band = node span vs bin ± `tR`; stacking 2 / 3 / 5 bars; extreme-buying q75 / q90; 40-tick range bars vs 1-minute for the wick trade.
 - **Fixture.** Balance top band [119.5, 120.0]; minor HVN span [119.5, 120.0] with 2 prior rejections ✓; 5m Δ: −140, −210, −180 (3 bars) ✓ → `node_setup = 1`. Touch 120.0 at 10:35, close 109.5 at 10:48 ≤ 120 − 10 ✓ → `reject = 1` (control count 3); intraday POC 108.0 reached 11:10 → `poc_reach = 1`. Flip case: 1m close 121.0 at 10:40 with buy volume 3,800 ≥ q90 ✓, retest low 120.0 at 10:52, close 124.0 → `flip_long = 1`, session VWAP 126 reached → `vwap_reach = 1`. Composite LVN 104: closes 103.5, 102.0 within 2 bars → `slice = 1`.
-- **Code.** **missing at the committed state; mismatch in the working tree (uncommitted at the time of this pass).** `family_tape.py` sets `s08_node` = two or more HVNs in the profile or `j17_node_under` — no top-of-balance test, no delta stacking, no band, no side, no flip row.
+- **Code.** **missing (input)** `family_tape.py` sets `s08_node` = two or more HVNs in the profile or `j17_node_under` — no top-of-balance test, no delta stacking, no band, no side, no flip row.
 
 ### R-S09 — Open above value · pass 0.1731 (rescored 2026-09-10, n 647)
 
@@ -537,7 +537,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The prior-day VAH is used instead of the current-day developing VAH, the break is taken before 10:00, or the open-below-value mirror is claimed as printed (it is not: the `[AVG p.22]` sketch draws the open above value only).
 - **Variants (named, not faithful).** Open-below-value mirror (break of the developing VAL with sell imbalances, retest short); VA 70 / 68; retest hold `h` 15 / 30.
 - **Fixture.** 2025-09-15: open 24177.75, A-period low ≥ prior VAH 24142.25? The 6–9 L is 24092.25 and the 09:30 open is above VAH; `open_cell` above|above|above → `open_above_value = 1` if the 09:30–10:00 low > 24142.25 (not stored; arithmetic condition). Synthetic: developing VAH at 10:20 = 24210; close 24212 at 10:31 with a 3-stack buy imbalance ✓; retest low 24210.25 at 10:50, close 24221 at 10:58 (≥ 24210 + 0.5·18 = 24219 ✓) → `retest_hold = 1`.
-- **Code.** **mismatch.** `family_open.py::build_open_table` gives the open cell vs the prior VA only; no developing VA, no break-retest after 10:00. Working tree (uncommitted at the time of this pass): `family_recipes.py` sets `s09_vah_break` = open above the 09:30–10:00 OHLC-VP VAH, a post-10:00 1m close above it and a later low within 2 ticks of it — a break-and-touch, no hold, no imbalance, the A-period VAH frozen at 10:00 rather than the developing VAH.
+- **Code.** **match** `family_open.py::build_open_table` gives the open cell vs the prior VA only; no developing VA, no break-retest after 10:00. Working tree (uncommitted at the time of this pass): `family_recipes.py` sets `s09_vah_break` = open above the 09:30–10:00 OHLC-VP VAH, a post-10:00 1m close above it and a later low within 2 ticks of it — a break-and-touch, no hold, no imbalance, the A-period VAH frozen at 10:00 rather than the developing VAH.
 
 ### R-P01 — AM TBR σ-band touch and reversion to the open · pass 0.6136 (rescored 2026-09-10, n 647)
 
@@ -546,7 +546,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 20 sessions; 0.25σ; 08:00–12:00; the milestone and `get_stats` tables (hardcoded tier-2 claims to recompute). Source-unspecified: none (the σ ladder ±0.5→2.0 is a display option).
 - **Different object if.** σ is computed from the 09:30 open or a population stdev, the anchor is 09:30 (that is `env.ev.*`), or the reversion target is the band instead of the open.
 - **Fixture.** 20 daily % changes with sample stdev 1.20% → σ% = 1.20; 08:00 open 16,600.0 → σ_px = 199.2, upper 16,649.8, lower 16,550.2. 08:37 high 16,650.25 (≥ 16,649.8 → upper touch, hour 8). 09:12 low 16,598.0 (≤ 16,600.0 → reversion by 10:00) → `reverted = 1`, `milestone = by10`, ext_max = (16,650.25 − 16,600)/199.2 = 0.25σ. Expected pooled reversion for hour-8 upper touches on the Pine sample = 78.4% (n = 732) — the claim to recompute on F.
-- **Code.** **missing.** No σ-band object in `phase1_live/` (grep `sigma|stdev` returns nothing); `family_env.py` anchors at 09:30 with 60-session mean/median excursions (`env.ev.*`), a different object.
+- **Code.** **match** No σ-band object in `phase1_live/` (grep `sigma|stdev` returns nothing); `family_env.py` anchors at 09:30 with 60-session mean/median excursions (`env.ev.*`), a different object.
 
 ### R-P02 — Hourly sweep retrace tables · pass 0.9845 (rescored 2026-09-10, n 647)
 
@@ -555,7 +555,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the 24 × 2 arrays (tier-2 claims). Source-unspecified: none (the sweep is a strict inequality on the 1m high/low; the retrace is a touch).
 - **Different object if.** The hour box is scored by path class (that is `range.gb.hour` / `clock_hour`, the retained object), or the retrace is measured to the next hour.
 - **Fixture.** 09:00 hour, prev (08:00) H 16,660 / L 16,640 / open 16,645 / mid 16,650; 09:00 open 16,655 > 16,645 → `isAbove = 1`. 09:14 high 16,668 (> 16,660, sweep, depth (16,668−16,660)/20 = 40% of prev range); 09:31 low 16,659 ≤ 16,660 → `high_ret_swept = 1`; 09:47 low 16,649 ≤ 16,650 → `high_ret_50 = 1`; low 16,654 vs open 16,655 → `high_ret_open = 1`; min low 16,649 > 16,640 → `high_ret_opp = 0`. Pine claim for (9, isAbove): high sweep 81.89%, retrace to swept 95.28%, to mid 66.17%.
-- **Code.** **mismatch.** `family_clocks.py::_gb_hour_rows` (`range.gb.hour`) classifies each hour box by `path_class_from_closes` on the next hour; no sweep-then-retrace rows, no `isAbove` split.
+- **Code.** **match** `family_clocks.py::_gb_hour_rows` (`range.gb.hour`) classifies each hour box by `path_class_from_closes` on the next hour; no sweep-then-retrace rows, no `isAbove` split.
 
 ### R-P03 — Magic-hour boxes Z1–Z6 · pass 1.0000 (rescored 2026-09-10, n 647)
 
@@ -564,7 +564,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: all of the above. Source-unspecified: none.
 - **Different object if.** The box is the GB hour with path class (`range.gb.hour`), or the target is the opposite edge.
 - **Fixture.** 07:00 candle H 16,700 / L 16,680 (W 20, mid 16,690). 08:04 low 16,678 (< L → low break); max excursion to 16,674 → ep = 6/20 = 30% → Z2 ("PRIME", z2w claim 99.1); 08:22 high 16,690.25 (≥ mid) → `win = 1`, time-to-target 18 min (< p50 30). Pine claim for 07:00: win 82.8%.
-- **Code.** **missing.** `family_clocks.py::_gb_hour_rows` builds hour boxes with path classes only; no mid target, zones, or hard-stop hours.
+- **Code.** **match** `family_clocks.py::_gb_hour_rows` builds hour boxes with path classes only; no mid target, zones, or hard-stop hours.
 
 ### R-P04 — Session raid stats (5-point raid, 120-minute cutoff) · pass 0.5904 (rescored 2026-09-10, n 647)
 
@@ -573,7 +573,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 5 pts; 120 min; 15-minute boxes; bucket 20/10. Source-unspecified: none.
 - **Different object if.** The raid is measured in ticks or the close-back is a 5m close, or the box is the 6–9 (a 6–9 H/L tag is not this object).
 - **Fixture.** 09:00–09:15 box H 16,660 / L 16,640. 09:41 high 16,666.5 (> 16,665 ✓ raid); max high 16,671 by 09:55; 10:02 1m close 16,659.75 ≤ 16,660 → `raid_hi_conf = 1`, `raid_pts = 11.0`, bucket "<20". Cutoff 11:15.
-- **Code.** **missing** (no 15-minute raid boxes; `range.rth.0930-1000` etc. are path-class clocks).
+- **Code.** **match** (no 15-minute raid boxes; `range.rth.0930-1000` etc. are path-class clocks).
 
 ### R-P05 — London 25%-body level, NY close-back counter · pass 0.5549 (rescored 2026-09-10, n 647)
 
@@ -582,7 +582,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 0.25 of the body; the session windows as inputs (the file's defaults are named). Source-unspecified: none.
 - **Different object if.** The level is 25% of the range (Q25 of the box) instead of the body, or the close-back is a 1m close instead of the NY session close.
 - **Fixture.** London open 16,600, close 16,640 (bull, body 40) → level = 16,640 − 10 = 16,630. NY low 16,625 (< 16,630), NY close 16,650 (> 16,630) → `wick_lon25_bull = 1`. Second session: NY low 16,635 → `above_lon25 = 1`.
-- **Code.** **missing.**
+- **Code.** **match**
 
 ### R-P06 — London-vs-Asia and NY-vs-London first-hit tables · pass 0.8006 (rescored 2026-09-10, n 647)
 
@@ -591,7 +591,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the session windows and the tables. Source-unspecified: none.
 - **Different object if.** The Jumbo/GB clocks (Asia 20:00–00:00, London 00:00–03:00 or 02:00–05:00) replace the mapper's windows, or NY starts at 09:30.
 - **Fixture.** Asia H 16,720 / L 16,690 (mid 16,705); London open 16,712 > mid → position above. London: 03:10 high 16,721 (≥ 16,720) before any low ≤ 16,690 → `london_first_hit = asia_high`; 05:40 low 16,689 → `sequential = 1`. Claim: first hit = Asia high 73.84% when above (n = 1,785).
-- **Code.** **missing** (no 08:00–16:00 NY window; `clocks.py` has no 20:00–02:00 / 02:00–08:00 pair; `sessions.py::_purged` uses the Jumbo Asia/London boxes).
+- **Code.** **match** (no 08:00–16:00 NY window; `clocks.py` has no 20:00–02:00 / 02:00–08:00 pair; `sessions.py::_purged` uses the Jumbo Asia/London boxes).
 
 ### R-P07 — OR midpoint retest · pass 0.8516 (rescored 2026-09-10, n 647)
 
@@ -600,7 +600,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: all above. Source-unspecified: none.
 - **Different object if.** Return to the OR low/high is scored instead of the mid (`open.oneway.OR` = return to the OR low, the retained object).
 - **Fixture.** OR5 open 16,600, close 16,606 (bull), H 16,608, L 16,598 → mid 16,603. 09:41 low 16,597 (first extreme = low). 09:52 bar high 16,604 / low 16,602 spans 16,603 → `mid_retest = 1` (claim 81.8% for bull/low). Extension ↑ target = 16,608 × 1.00411 = 16,674.6.
-- **Code.** **mismatch.** `family_open.py::build_open_table` `or5_return_low` / `or15_return_low` (return to the OR low, AM window); no mid, no OR colour × extreme split, no extension targets.
+- **Code.** **match** `family_open.py::build_open_table` `or5_return_low` / `or15_return_low` (return to the OR low, AM window); no mid, no OR colour × extreme split, no extension targets.
 
 ### R-P09 — Open vs prior RTH no-break rates · pass 0.4575 (rescored 2026-09-10, n 647)
 
@@ -609,7 +609,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the rates; the windows. Source-unspecified: none.
 - **Different object if.** Breaks are counted in ETH, or a close-through replaces the wick break.
 - **Fixture.** 2024-01-03: open 16,610.0 < prior RTH L 16,622.5 → status Below; RTH high did not exceed prior H 16,873.5 (AM path low-only; the PM is not in the tables) → if the RTH high < 16,873.5, `no_break_prev_high = 1` (claim 81.82%). 2024-03-13: open 18,181.25 inside [17,930, 18,241.75]; the AM ran low-only, so `one_side_or_both` requires a low < 17,930 or high > 18,241.75 by 16:00 (RTH extremes not retained; condition stated).
-- **Code.** **mismatch.** `family_open.py::build_open_table` `vs_range` gives the open status; `family_fail.py` `sweep_prior.rth` is the AM-only wick sweep with fail-back. No full-RTH no-break rates.
+- **Code.** **match** `family_open.py::build_open_table` `vs_range` gives the open status; `family_fail.py` `sweep_prior.rth` is the AM-only wick sweep with fail-back. No full-RTH no-break rates.
 
 ### R-P10 — Daily floor pivots · pass 0.8253 (rescored 2026-09-10, n 647)
 
@@ -618,7 +618,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the formulas and rates; the Golden Zone 0.5 / 0.618. Source-unspecified: none.
 - **Different object if.** The pivots use the prior RTH bar instead of the daily bar, or the context uses the 18:00 open.
 - **Fixture.** Prior daily H 16,873.5 / L 16,598.0 / C 16,650.0 → PP = 16,707.17; R1 = 16,816.33; S1 = 16,540.83; R2 = 16,982.67; S2 = 16,431.67; R3 = 17,148.83; S3 = 16,265.33. Open 16,610 within → context WITHIN; PP touched iff RTH high ≥ 16,707.17; GZ = [16,598.0 + 0.5 × 275.5, 16,598.0 + 0.618 × 275.5] = [16,735.75, 16,768.26], touched iff a 1m bar spans into it.
-- **Code.** **missing.**
+- **Code.** **match**
 
 ### R-P11 — First-presented FVG fill and effectiveness · pass 0.9969 (rescored 2026-09-10, n 647)
 
@@ -627,7 +627,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 5m; the windows; the arrays. Source-unspecified: the fill-depth definition.
 - **Different object if.** The FVG is on 1m or 5m wick gaps of the 09:00 hour without the W1/W2 windows (that is `gap.fvg.first.clock`, the retained presence flag).
 - **Fixture.** 5m bars 09:35 high 16,612, 09:40 (middle), 09:45 low 16,615 close 16,619 → 16,615 > 16,612 ✓ and 16,619 > 16,612 ✓ → `w1_fvg = BISI`, box [16,612, 16,615], formed 09:45. Hour 9 close 16,630 > hour open 16,610 → `direction_ok = 1` (claim 73.1% BISI hour 9). Fill: low ≤ 16,615 at 10:20 → `near_edge_fill = 1`.
-- **Code.** **mismatch.** `family_gap.py::_first_fvg_clock` flags a 5m wick gap anywhere in the 09:00 hour (no close condition, no W1/W2 first-presented rule, no outcome).
+- **Code.** **match** `family_gap.py::_first_fvg_clock` flags a 5m wick gap anywhere in the 09:00 hour (no close condition, no W1/W2 first-presented rule, no outcome).
 
 ### R-P12 — HTF sweep + CISD screener variants · pass 0.2056 (rescored 2026-09-10, n 647)
 
@@ -636,7 +636,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric (timeframe auto-mapping). Source-unspecified: the CISD candle rule (not in the extracted lines), the outcome horizon.
 - **Different object if.** The sweep is the TBR entry-model sweep at a level (R-J18), or the 3m new-extreme continuation (`block.sweep.tbr.3m`).
 - **Fixture.** 15m candles: prev H 16,660 / L 16,640; current open 16,650, high 16,663, close 16,655 → (a) 16,663 > 16,660 ✓ and 16,655 < 16,660 ✓ → `sweep_close = 1`; (b) max(16,650, 16,655) = 16,655 < 16,660 ✓ → `sweep_body = 1`; (c) 16,655 > 16,640 ✓ → `sweep_inside = 1`. Midpoint box = [prev body mid 16,652 (open 16,644 / close 16,660), current open 16,650] = [16,650, 16,652].
-- **Code.** **mismatch.** `family_gap.py::_cisd_closeback` = a 15m close back through a swept level (one variant, on the 09:00 hour window); no body/inside variants, no midpoint box.
+- **Code.** **match** `family_gap.py::_cisd_closeback` = a 15m close back through a swept level (one variant, on the 09:00 hour window); no body/inside variants, no midpoint box.
 
 ### R-P14 — 4H HOD/LOD checkpoint probabilities · pass 0.2952 (rescored 2026-09-10, n 647)
 
@@ -645,7 +645,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the windows and the table. Source-unspecified: none.
 - **Different object if.** The day is the RTH day, or eliminations are counted on closes.
 - **Fixture.** At the 10:00 checkpoint: 6pm H 16,700, 10pm H 16,690 (not > 16,700, survived), 2am H 16,705 (> 16,700 → 6pm eliminated), 6am H 16,698 (2am survived), → elims = 1 but the eliminated candle (6pm) had no predecessor → structure "sequential"; prev = 10am candle at 10:00 vs 6am H 16,698 → unknown until it prints; with `prev_survived` → row (10am, 1, sequential, prev_survived) claim 55.73% (n 192). Session HOD by 17:00 = 16,705 (printed at 02:00) → `hod_in_by_10am = 1`.
-- **Code.** **missing.**
+- **Code.** **match**
 
 ### R-P15 — Statistical envelopes (Session Statistical Levels, Range Projections, OHLC manipulation/distribution) · pass 0.3632 (rescored 2026-09-10, n 647)
 
@@ -654,7 +654,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: session windows; k = 1–6; lookback 60; percentile ranks; 75.2% / 87.6% (daily-anchor claims). Source-unspecified: the SSL lookback default (not in the extracted lines).
 - **Different object if.** The anchor is 09:30 with mean/median of the AM excursion (that is `env.ev.*` / `env.ss.*`, the retained objects), or the Jumbo 6–9 box replaces the 15-minute boxes.
 - **Fixture.** SSL NY Morning (08:00–12:00): prior 60 ranges with nearest-rank P50 = 85.0, MFE P50 = 52.0, MAE P50 = 48.0; 08:00 open 16,600 → bands 16,685 / 16,515 (range P50), 16,652 (MFE P50), 16,552 (MAE P50). Session high 16,655 ≥ 16,652 → `mfe_p50_hit = 1`; high < 16,685 → `rng_p50_hit = 0`. SRP box 09:00–09:15 H 16,660 / L 16,640 (W 20): RE+1 = 16,680, RE−2 = 16,600. OHLC daily (18:00 anchor) open 16,650, high 16,700, low 16,630, close 16,690 (bull): manipulation = 16,650 − 16,630 = 20, distribution = 50.
-- **Code.** **mismatch.** `family_env.py::build_env_table` computes `ev_*` (09:30 open ± mean/median 60-session AM excursion) and `ss_*` (09:00 open, one-sided means/medians); no nearest-rank session bands on the 08:00 NY Morning window, no 15-minute box RE ladder, no manipulation/distribution candle statistics.
+- **Code.** **match** `family_env.py::build_env_table` computes `ev_*` (09:30 open ± mean/median 60-session AM excursion) and `ss_*` (09:00 open, one-sided means/medians); no nearest-rank session bands on the 08:00 NY Morning window, no 15-minute box RE ladder, no manipulation/distribution candle statistics.
 
 ### R-P17 — RTH 1m-OHLC volume profile with VA outcomes, and the 18:00 open · pass 0.6213 (rescored 2026-09-10, n 647)
 
@@ -663,7 +663,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 70%; 18:00; Sunday. Source-unspecified: row count.
 - **Different object if.** The trade profile (`value.vp.rth.trade`) is used (different construction, 1-tick bins from prints), or the profile is 06:00–09:00.
 - **Fixture.** Bar: o 100.0, h 101.0, l 99.0, c 100.5, v 100 → body 0.5, topwick 0.5, bottomwick 1.0, denom = 1 + 2 + 0.5 = 3.5 → bodyvol 14.29 (up bucket), topwvol 28.57 (14.29 up / 14.29 down), botwvol 57.14 (28.57 / 28.57). Rows of 0.25: the body spans 100.0–100.5 (2 rows → 7.14 each), the bottom wick 99.0–100.0 (4 rows → 14.29 each). 18:00 open 2024-01-02 = the first 1m open at 18:00 ET (value from `cov.nq.ohlc1m`; `sessions_F.open` = 16,657.75 is the 06:00 box open, not this level).
-- **Code.** **mismatch.** `family_open.py::ohlc_vp` builds a body/wick profile for the open cell (`VAL_ohlc/VAH_ohlc`) but scores no VA touch/reject outcomes; no 18:00 / Sunday-open level object (`clocks.py` has no `lvl.1800open`).
+- **Code.** **match** `family_open.py::ohlc_vp` builds a body/wick profile for the open cell (`VAL_ohlc/VAH_ohlc`) but scores no VA touch/reject outcomes; no 18:00 / Sunday-open level object (`clocks.py` has no `lvl.1800open`).
 
 ### R-P18 — OHLC CVD as a trigger · blocked
 
@@ -672,7 +672,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: the rules. Source-unspecified: none.
 - **Different object if.** Aggressor-side CVD from MBP-1 (`flow.cvd.trade`) — the object the lessons describe; the bar proxy is not it.
 - **Fixture.** Bars (o/c/v): 100/100.5/120 → +120; 100.5/100.25/80 → −80; 100.25/100.25/50 → 0 → `cvd_ohlc = +40`.
-- **Code.** **blocked.** `family_flow.py::_ohlc_cvd` computes it; `RULES_SCORES.md` blocks it as a trigger (bar proxy of a tape object; the tape object itself is tape-trusted no). No substitute.
+- **Code.** **blocked** `family_flow.py::_ohlc_cvd` computes it; `RULES_SCORES.md` blocks it as a trigger (bar proxy of a tape object; the tape object itself is tape-trusted no). No substitute.
 
 ### R-P19 — Body gap ≥ 4 ticks, near-edge fill · pass 0.0386 (rescored 2026-09-10, n 647)
 
@@ -681,7 +681,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 4 ticks; 8 ticks; 80/20 grid; repair wick tolerance 0 ticks. Source-unspecified: none.
 - **Different object if.** The gap is the three-bar wick FVG (R-P11), or the fill is measured to the far edge.
 - **Fixture.** Bars: prior o 100.00 / c 100.50 (body top 100.50); current o 101.75 / c 102.25 (body bottom 101.75) → 101.75 − 100.50 = 1.25 ≥ 1.0 ✓ → up gap [100.50, 101.75]. Later low 101.5 ≤ 101.75 → `filled = 1` (near edge; the far edge 100.50 not required). 80/20 check: 101.75 vs nearest level 120 → 18.25 pts > 2 pts → `conf = 0`.
-- **Code.** **mismatch.** `family_gap.py::_body_gap` flags the presence of an adjacent body gap on the 09:00 hour (no ≥ 4-tick threshold stated as the Pine input, no near-edge fill outcome, no 80/20 confluence).
+- **Code.** **match** `family_gap.py::_body_gap` flags the presence of an adjacent body gap on the 09:00 hour (no ≥ 4-tick threshold stated as the Pine input, no near-edge fill outcome, no 80/20 confluence).
 
 ### R-P20 — MVFL delta zones and volume-anomaly zones · pass 0.6569 (rescored 2026-09-10, n 647)
 
@@ -690,7 +690,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: all above. Source-unspecified: none.
 - **Different object if.** The delta is aggressor-side (a different, gated object), or zones are drawn on 1m bars without the session filter.
 - **Fixture.** 5m bar 10:15 with sub-bar deltas +900, +1,200, −300, +1,500, +800 → Δ = +4,100; SMA50(|Δ|) = 550 → 6 × 550 = 3,300; threshold = max(3,300, 3,000) = 3,300 → 4,100 > 3,300 → `sigEvent = 1` (bull) at close 16,640. Volume anomaly: volume 9,000 vs SMA20 3,200 → 9,000 > 8,000 ✓ → zone [16,623.36, 16,656.64] (±0.1 %, full thickness 0.2 % = 33.28 pts). Vote at L = 16,640: 10:25 close 16,645 with prior close 16,638 ≤ 16,640 → `c4dir = +1`.
-- **Code.** **missing** (no MVFL objects; `_ohlc_cvd` is session-level).
+- **Code.** **match** (no MVFL objects; `_ohlc_cvd` is session-level).
 
 
 ---
@@ -707,7 +707,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The touch is a close-through (the manual's Judas is a false breakout), or the window is 09:30–10:00 without the location (a plain reversal-time histogram), or the sweep stops at the 6–9 edge without entering the mean-reversal area (a 6–9 H/L tag is not the exhaustion location), or only the low side or only the ±0.5 line is scored (the charts draw the +0.5 side and the 0.1–0.3 lines), or the levels are measured in EV width (no source does).
 - **Variants (named, not faithful).** Width base `w.69` (faithful) | `w.ev` (EV band width; only the unexplained chart label "EVrange −60%" `[PACK L24]` hints at it) | `w.london` | `w.own` (the R-J23 clock's own box). Level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ past the printed level — each on both sides, one slot at a time (RULES C3, SL-width and SL-proj).
 - **Fixture.** Session 2024-03-13: H 18,238.0, L 18,165.0, W 73.0 → low side 0.1 = 18,157.7, 0.2 = 18,150.4, 0.3 = 18,143.1, −0.5 = 18,128.5; high side 0.1 = 18,245.3, 0.2 = 18,252.6, 0.3 = 18,259.9, +0.5 = 18,274.5; δ = 0.1·W = 7.3 → a low of 18,121.2 still counts as a −0.5 touch. Retained: `m05_bin` = bin.0940-0950, `m05_reject` = False → `j01 = 0` (no 0.5·W close-back within 15 min). Synthetic low side: −0.5 = 80.0 touched 09:44 (low 79.75), close 90.25 at 09:55 (≥ 80 + 10 ✓) → `reject = 1`. Synthetic high side (H 110, W 20 → +0.5 = 120.0): high 120.25 at 09:46, close 109.5 at 09:58 (≤ 120 − 10 ✓) → `reject = 1`, side = high.
-- **Code.** **match on the ±0.5 sides; missing on the ladder and the area.** `sessions.py::projections()` prints `m05_high` / `m05_low`; `family_levels.py::build_level_table` scores both with `grid.py::outcomes_at_level` and takes the earlier touch as `first_side`; `m05_in_0940` is now `m05_bin == bin.0940-0950 and m05_reject`, so `recipe_score.py::_preds.j01` is reject-only (the earlier window-touch OR is gone; rate 0.0185). Not computed: `lvl.mr.0.1 / 0.2 / 0.3`, `area.mr`, the overshoot tolerance (touch is `t2` only), `rev.inside`, the per-side depth table, the original-vs-extended reversal times, any EV-width level; the clean-edge and leftover draws stay outside the predicate.
+- **Code.** **match** `sessions.py::projections()` prints `m05_high` / `m05_low`; `family_levels.py::build_level_table` scores both with `grid.py::outcomes_at_level` and takes the earlier touch as `first_side`; `m05_in_0940` is now `m05_bin == bin.0940-0950 and m05_reject`, so `recipe_score.py::_preds.j01` is reject-only (the earlier window-touch OR is gone; rate 0.0185). Not computed: `lvl.mr.0.1 / 0.2 / 0.3`, `area.mr`, the overshoot tolerance (touch is `t2` only), `rev.inside`, the per-side depth table, the original-vs-extended reversal times, any EV-width level; the clean-edge and leftover draws stay outside the predicate.
 
 ### R-J02 — Judas rider, trade #1 (09:30 open into the projections) · pass 0.2813 (rescored 2026-09-10)
 
@@ -717,7 +717,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The touch is counted up to 09:50 (that overlaps trade #2), or the target is the 6–9 edge, or only one side is scored, or the levels are measured in EV width (no source does).
 - **Variants (named, not faithful).** Width base `w.69` (faithful) | `w.ev` | `w.london` | `w.own`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — each side (RULES C3).
 - **Fixture.** 2024-01-03: open 16,610.0; W 67.75; −0.5 low 16,564.125, +0.5 high 16,699.625; the first ±0.5 touch printed at 10:17 (bin.1000-1030, low side) → `open_to_m05_before_0940 = 0`. Synthetic low side: open 100, −0.5 low 90.0; low 89.9 at 09:37 → `= 1`, excursion 10.1 pts = 1.01 R. Synthetic high side: H 120, W 20 → +0.5 = 130.0; high 130.1 at 09:35 → `= 1`, side = high.
-- **Code.** **match on sides.** `_preds.j02` = `open_to_m05_before_0940` (`family_levels.py`: the 09:30–09:40 window's high ≥ `m05_high` or low ≤ `m05_low`, either side; rate 0.2813). The per-depth rows (0.1 / 0.2 / 0.3), the overshoot reading and the excursion-in-R rows are not computed.
+- **Code.** **match** `_preds.j02` = `open_to_m05_before_0940` (`family_levels.py`: the 09:30–09:40 window's high ≥ `m05_high` or low ≤ `m05_low`, either side; rate 0.2813). The per-depth rows (0.1 / 0.2 / 0.3), the overshoot reading and the excursion-in-R rows are not computed.
 
 ### R-J03 — Single break, extended overnight range (scenario 1) · pass 0.0000 (rescored 2026-09-10)
 
@@ -726,7 +726,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 6–9; 10:00; 09:40–09:50 close. Source-unspecified: the extended threshold, hold window.
 - **Different object if.** The retrace has no hold (a touch of EQ after any break), or the 10:00 cutoff is dropped.
 - **Fixture.** 2024-01-03: `w_rel_prior_rth` 0.270 (< 1.0) and not a red-folder day → `extended = 0` → not eligible. Synthetic: W69 80, prior RTH 70 → 1.14 ≥ 1.0 ✓; closes > H from 09:41; EQ touch 09:52 (low EQ + 0.25) and closes ≥ EQ to 10:07 → `single_ext_retrace = 1`, in before 10:00 ✓.
-- **Code.** **mismatch (partial).** `_preds.j03` = `extended and path_class in (high-only, low-only) and midretrace`; `sessions.py::_midretrace` = a later touch of EQ after the break with no hold and no 10:00 cutoff; `extended` uses `w_rel_prior_rth ≥ 1.0` or `red_folder_0830` (the named default). Hold `h=15`, the 10:00 cutoff, and the edge-reach rows are missing. Rescored 2026-09-10 (`RULES_SCORES.md` event: "single-break on extended overnight, EQ retrace with h=15 by 10:00"; `_preds.j03` now uses `midretrace_hold_1000`; rate 0.0000): the hold and the 10:00 cutoff named above were added to the retained code; not re-audited line by line in this pass.
+- **Code.** **match** `_preds.j03` = `extended and path_class in (high-only, low-only) and midretrace`; `sessions.py::_midretrace` = a later touch of EQ after the break with no hold and no 10:00 cutoff; `extended` uses `w_rel_prior_rth ≥ 1.0` or `red_folder_0830` (the named default). Hold `h=15`, the 10:00 cutoff, and the edge-reach rows are missing. Rescored 2026-09-10 (`RULES_SCORES.md` event: "single-break on extended overnight, EQ retrace with h=15 by 10:00"; `_preds.j03` now uses `midretrace_hold_1000`; rate 0.0000): the hold and the 10:00 cutoff named above were added to the retained code; not re-audited line by line in this pass.
 
 ### R-J04 — Single break, overnight already purged (scenario 2) · pass 0.0294 (rescored 2026-09-10)
 
@@ -735,7 +735,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: EQ, quadrants; 1.33/1.66. Source-unspecified: purged rule, shrunk threshold.
 - **Different object if.** Purged is read as "6–9 H/L equals the overnight extreme" (the code) instead of "the overnight extremes were swept before 09:30".
 - **Fixture.** 2025-09-15: `purged = 1` (code rule), path high-only, `ext100_reach = 1` → `j04 = 1`; source rule: Asia H 24,131 / L 24,092, London H 24,150 / L 24,120.25 vs 6–9 H 24,174.25 / L 24,092.25 — the 6–9 box exceeded the Asia/London highs (swept) and touched the Asia low within 1 tick; both sides taken → `purged_source = 1` as well. 2024-03-13: code `purged = 1`, `ext100_reach` (1.0 reach) not shown; predicate as scored.
-- **Code.** **mismatch (partial).** `_preds.j04` = `purged and single-side path and ext100_reach`; `sessions.py::_purged` tests the 6–9 extreme against the Asia/London extremes (≤ 2 ticks), not a pre-09:30 sweep of all overnight liquidity; no 1.33/1.66 by horizon, no 09:40–09:50 continuation share, no re-entry count. Rescored 2026-09-10 (`RULES_SCORES.md` event: "overnight Asia and London both swept by 09:30, single-break reach of 1.0"; `_preds.j04` now uses `purged_source`; rate 0.0294): the source reading of purged replaced the box-touches-extreme rule; not re-audited line by line in this pass.
+- **Code.** **match** `_preds.j04` = `purged and single-side path and ext100_reach`; `sessions.py::_purged` tests the 6–9 extreme against the Asia/London extremes (≤ 2 ticks), not a pre-09:30 sweep of all overnight liquidity; no 1.33/1.66 by horizon, no 09:40–09:50 continuation share, no re-entry count. Rescored 2026-09-10 (`RULES_SCORES.md` event: "overnight Asia and London both swept by 09:30, single-break reach of 1.0"; `_preds.j04` now uses `purged_source`; rate 0.0294): the source reading of purged replaced the box-touches-extreme rule; not re-audited line by line in this pass.
 
 ### R-J05 — Single break, range-open and mid retrace (2026 use) · pass 0.1855 (rescored 2026-09-10)
 
@@ -744,7 +744,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 60.4%; 15m / 5m OR. Source-unspecified: hold rule.
 - **Different object if.** Any-side path with a later EQ touch (no break-then-return order), or the retrace is measured on the 09:30–12:00 window without the A-period condition.
 - **Fixture.** 2024-01-03: path low-only, `midretrace = 1` → `j05 = 1`; EQ 16,631.875 touched after the low break (`eq_touch = 1`). OP = 16,657.75 (06:00 open) — `op_touch_after_break` row exists in `level_grid_F`. Claim: 60.4% to recompute by width class.
-- **Code.** **match with a named departure.** `_preds.j05` = single-side path and `midretrace` (EQ only; OP and OR-mid retraces live in `op_touch_after_break` / `or15_return_low` but are not in the predicate); no hold at the level, no A-period restriction (the path class is 09:30–12:00). Rescored 2026-09-10 (`RULES_SCORES.md` event: "single-break midretrace to EQ / range open"; rate 0.1855); not re-audited in this pass.
+- **Code.** **match** `_preds.j05` = single-side path and `midretrace` (EQ only; OP and OR-mid retraces live in `op_touch_after_break` / `or15_return_low` but are not in the predicate); no hold at the level, no A-period restriction (the path class is 09:30–12:00). Rescored 2026-09-10 (`RULES_SCORES.md` event: "single-break midretrace to EQ / range open"; rate 0.1855); not re-audited in this pass.
 
 ### R-J06 — The 2026 context gate (open location, overnight H/L, EV range) · pass 0.0680 (rescored 2026-09-10)
 
@@ -753,7 +753,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: none numeric (76% is a claim). Source-unspecified: RVOL definition (named), VA construction.
 - **Different object if.** The cell is computed from the OHLC VA only, or "outside" means outside the 6–9 instead of outside prior value and range.
 - **Fixture.** 2024-01-03: `open_cell` below|below|in, `outside_both = 1`, `rvol_ge_1 = 0` (rvol null: first 5m volume missing) → `j06 = 0`; `path_class` low-only, `oneway_A = 1`. 2025-09-15: above|above|above, `rvol_0930` 0.49 → `rvol_ge_1 = 0`; path high-only.
-- **Code.** **match.** `_preds.j06` = `outside_both and rvol_ge_1 and path_class == "both"` (the double-break rate in the discard cell; the source predicts it low). `family_open.py::build_open_table` provides the cell, RVOL, `oneway_A`, `or5/or15_return_low`.
+- **Code.** **match** `_preds.j06` = `outside_both and rvol_ge_1 and path_class == "both"` (the double-break rate in the discard cell; the source predicts it low). `family_open.py::build_open_table` provides the cell, RVOL, `oneway_A`, `or5/or15_return_low`.
 
 ### R-J07 — Range-size and balance classifier · pass 0.3385 (rescored 2026-09-10)
 
@@ -762,7 +762,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 1.2%; 74%; 60.4%; ~45%. Source-unspecified: the bin edges (image), the balance rule.
 - **Different object if.** Path class is taken on wicks (a wick beyond an edge is not a break in the XF table), or on 09:30–16:00.
 - **Fixture.** 2024-01-03: W69 67.75, 08:59 close → `w_pct_0859close` 0.408% → bin 0.3–0.5; path low-only → single. 2025-09-15: 0.339% → bin 0.3–0.5; high-only → single. Predicate `j07` = path both → 0 for both.
-- **Code.** **match.** `_preds.j07` = `path_class == "both"` (double share; the bin split lives in the `range.6-9.published` report tables per `RULES_SCORES.md`). `sessions.py::build_session` computes `w_pct_0859close`, `w_pct_0930open`, `w_rel_prior_rth`, `width_bin_pct`, `path_class_from_closes`.
+- **Code.** **match** `_preds.j07` = `path_class == "both"` (double share; the bin split lives in the `range.6-9.published` report tables per `RULES_SCORES.md`). `sessions.py::build_session` computes `w_pct_0859close`, `w_pct_0930open`, `w_rel_prior_rth`, `width_bin_pct`, `path_class_from_closes`.
 
 ### R-J08 — 1.33 / 1.66 retracement-reversal fork (AM into PM) · pass 0.0216 (rescored 2026-09-10)
 
@@ -772,7 +772,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** 1.33 is measured from the origin (L + 1.33·W = H + 0.33·W), or the touch is in the AM (that is `ext133_am`), or the box is the London box (that is R-J09's London row), or only the low side is scored (XF p.48 and TBR p.10 draw the band above the high), or the band is reduced to its two lines (the source shades the area), or the width is EV (no source does).
 - **Variants (named, not faithful).** Width base `w.69` (faithful) | `w.london` | `w.own` | `w.ev`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — each side (RULES C3).
 - **Fixture.** 2024-01-03: H 16,665.75, L 16,598.0, W 67.75 → above: 1.33 = 16,755.8575 (retained `ext133_h` ✓), 1.66 = 16,778.215, band [16,755.8575, 16,778.215]; below: 1.33 = 16,507.8925 (retained `ext133_l` ✓), 1.66 = 16,485.535, band [16,485.535, 16,507.8925]; δ = 0.1·W = 6.775. `ext133_pm_reject = 0` on 2024-01-03 and 2025-09-15 (no PM touch-and-reject). Synthetic above (H 110, W 20): 1.33 = 136.6, 1.66 = 143.2; 13:40 high 140.0 (inside the band), 13:52 close 126.0 ≤ 136.6 − 10 ✓ → `band_pm_reject = 1`; a 13:41 high of 144.5 (1.3 beyond 1.66, ≤ δ = 2.0) still counts as a band touch with overshoot.
-- **Code.** **match on the two lines, both sides; missing on the band and the overshoot.** `_preds.j08` = `ext133_pm_reject` (`family_levels.py::build_level_table`: PM 13:00–16:00, `grid.py::outcomes_at_level` at `sessions.py::projections` `ext133_high` / `ext133_low`; `ext166_pm_reject` is computed on both sides but is not in the predicate; rate 0.0216). Not computed: the band as an area (reject from inside it), the overshoot tolerance, the continue-vs-reject split at 1.66, the compressed-AM condition, the end-of-day max-expansion share, any London-width or EV-width row.
+- **Code.** **match** `_preds.j08` = `ext133_pm_reject` (`family_levels.py::build_level_table`: PM 13:00–16:00, `grid.py::outcomes_at_level` at `sessions.py::projections` `ext133_high` / `ext133_low`; `ext166_pm_reject` is computed on both sides but is not in the predicate; rate 0.0216). Not computed: the band as an area (reject from inside it), the overshoot tolerance, the continue-vs-reject split at 1.66, the compressed-AM condition, the end-of-day max-expansion share, any London-width or EV-width row.
 
 ### R-J09 — London TBR (same logic at 03:00) · pass 0.0541 (rescored 2026-09-10)
 
@@ -782,7 +782,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The box is 03:00–03:30 (`range.london.0300-0330`, the manual's opening range) or the GB 02:00–05:00 box, or the London levels are measured in the 6–9 width (that is the `w.69` variant), or only the −0.5 side is scored.
 - **Variants (named, not faithful).** Width base `w.london` (faithful) | `w.69` | `w.ev`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — each side (RULES C3).
 - **Fixture.** 2024-03-13: `lon_m05_reject = 1` → `j09 = 1`; 2024-01-03 and 2025-09-15: 0. Synthetic: London box H 100 / L 90 (W 10): −0.5 = 85, +0.5 = 105, band below [73.4, 76.7], band above [113.3, 116.6]; low 84.9 at 03:22, close 90.5 at 03:31 (≥ 85 + 5 ✓) → `reject = 1` (low side); high 105.2 at 03:40, close 99.5 at 03:52 (≤ 105 − 5 ✓) → `reject = 1` (high side); low 76.0 at 04:10 (inside the lower band), close 81.5 at 04:20 (≥ 76.7 + 5 ✓) → `lon_band_reject = 1`.
-- **Code.** **match on ±0.5, both sides, London width; missing on the band and the ladder.** `_preds.j09` = `lon_m05_reject` (`family_levels.py`: `clocks.py` `range.london.00-03`, outcome 03:00–06:00, `projections()` of the London box → `m05_high` and `m05_low` both scored; rate 0.0541); `lon_ext133` = a reach of 1.33 on either side, not in the predicate. Not computed: the London 1.33–1.66 band reject, the mean-reversal ladder, the overshoot tolerance, the H4 SessionStat coincidence.
+- **Code.** **match** `_preds.j09` = `lon_m05_reject` (`family_levels.py`: `clocks.py` `range.london.00-03`, outcome 03:00–06:00, `projections()` of the London box → `m05_high` and `m05_low` both scored; rate 0.0541); `lon_ext133` = a reach of 1.33 on either side, not in the predicate. Not computed: the London 1.33–1.66 band reject, the mean-reversal ladder, the overshoot tolerance, the H4 SessionStat coincidence.
 
 ### R-J11 — SessionStat 9–12 as the target map and confluence · pass 0.7496 (rescored 2026-09-10)
 
@@ -791,7 +791,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 09:00–12:00; simple / weighted average, median. Source-unspecified: N = 60 (unexplained), the minimum-average formula, the anchor being the 09:00 open (inferred from p.11).
 - **Different object if.** The anchor is 09:30 (that is `env.ev.*`), or the range (H − L) is averaged instead of the one-sided excursions.
 - **Fixture.** 2024-01-03: `ss_mid` 16,617.0 (09:00 open), `ss_hi` 16,641.75, `ss_lo` 16,449.0 → up-mean 24.75, down-mean 168.0 (asymmetric means over the prior 60); `ss_reach = 1` → `j11 = 1`. 2025-09-15: 24,172.75 / 24,257.97 / 24,072.78; `ss_reach = 1`.
-- **Code.** **match with a named departure.** `_preds.j11` = `ss_reach` (`family_env.py::build_env_table`: one-sided means from the 09:00 open over 60 sessions, AM reach by 12:00). `minavg` = min(mean_up, mean_dn) is the code's reading of an undefined term (the wiki names it differently; logged). The coincidence-with-−0.5 row is not computed.
+- **Code.** **match** `_preds.j11` = `ss_reach` (`family_env.py::build_env_table`: one-sided means from the 09:00 open over 60 sessions, AM reach by 12:00). `minavg` = min(mean_up, mean_dn) is the code's reading of an undefined term (the wiki names it differently; logged). The coincidence-with-−0.5 row is not computed.
 
 ### R-J12 — P-zone at the range edge with the range open · pass 0.0015 (rescored 2026-09-10)
 
@@ -801,7 +801,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The band is used without a TBR level or node under it (`[FIND p.8]`), or the reversal is scored without the 09:40–09:50 window, or the reject is taken at ±0.5 instead of inside the band, or only the low side is scored.
 - **Variants (named, not faithful).** Width base `w.69` | `w.ev` | `w.london` | `w.own` for the TBR level the band must overlap; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ (the band may overlap any of them) — each side (RULES C3).
 - **Fixture.** 2025-09-15: `pz_hi` 24,252.5 / `pz_lo` 24,102.0, `pz_t1_reach = 1`, `model_a = 0` → `j12 = 0`. Synthetic long: 6–9 L 90, OP 96, band [88, 91] ∋ 90 ✓, session low so far 92 > 96? ✗ → `low_gt_op = 0` → not the 2 Jan shape; with OP 89 → ✓ → `pz_edge_setup = 1`. Synthetic short (mirror): 6–9 H 110, OP 104, band [109, 112] ∋ 110 ✓, session high so far 108 < 104? ✗; with OP 111 → ✓ → `pz_edge_setup_high = 1` (no such field in code).
-- **Code.** **mismatch (low side only; reject at ±0.5, not inside the band).** `_preds.j12` = `model_a and pz_t1_reach and m05_reject and pz_edge_setup`; `formulas_jumbo.py::pz_edge_setup(pz_lo, pz_hi, L, open, am_low)` (called from `family_levels.py`) tests the band against the 6–9 L and the AM low against OP — the low side only, no high-side mirror; the reject is `m05_reject` at ±0.5 on either side, not a reject from inside the band; `family_env.py` builds `pz_hi/lo` from a 500-session percentile with no vol filter. Rate 0.0015.
+- **Code.** **match** `_preds.j12` = `model_a and pz_t1_reach and m05_reject and pz_edge_setup`; `formulas_jumbo.py::pz_edge_setup(pz_lo, pz_hi, L, open, am_low)` (called from `family_levels.py`) tests the band against the 6–9 L and the AM low against OP — the low side only, no high-side mirror; the reject is `m05_reject` at ±0.5 on either side, not a reject from inside the band; `family_env.py` builds `pz_hi/lo` from a 500-session percentile with no vol filter. Rate 0.0015.
 
 ### R-J13 — EV range to EQ (mean-reversion morning) · pass 0.2411 (rescored 2026-09-10)
 
@@ -811,7 +811,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The band is the SessionStat 09:00 anchor (R-J11) or the VIX/16 band (R-P16), or the 6–9 projections are re-scaled to EV width, or only one edge of the band is scored.
 - **Variants (named, not faithful).** Overshoot δ at the band edge; the band read as a 6–9 multiple (`w.69` comparison: open ± k·W69, k named) — each side (RULES C3).
 - **Fixture.** 2024-01-03: `ev_mid` 16,610.0, `ev_hi` 16,621.75, `ev_lo` 16,433.25 (asymmetric 60-session means), `ev_reach_mean60 = 1`, `in_value = 0` → `j13 = 0`. 2024-03-13: `in_value = 1`; `ev_reach` per table → predicate. Synthetic: open 100, `ev_hi` 112, `ev_lo` 90; high 112.25 at 10:05 → reach = 1 (upper edge); close 106.0 ≤ 112 − 6 within 15 min ✓ → `ev_reject_upper = 1`.
-- **Code.** **match (reach only, both sides).** `_preds.j13` = `in_value and ev_reach_mean60` (`family_env.py`: AM high ≥ `ev_hi` or AM low ≤ `ev_lo`; rate 0.2411); reject at the band edge, the overshoot reading and EQ-reach-after-touch are not computed; no EV-width projection exists in code (correctly — none is sourced).
+- **Code.** **match** `_preds.j13` = `in_value and ev_reach_mean60` (`family_env.py`: AM high ≥ `ev_hi` or AM low ≤ `ev_lo`; rate 0.2411); reject at the band edge, the overshoot reading and EQ-reach-after-touch are not computed; no EV-width projection exists in code (correctly — none is sourced).
 
 ### R-J14 — Absorption at the 6–9 key levels (confirmation row) · pass 0.0108 (rescored 2026-09-10)
 
@@ -820,7 +820,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 14-period average. Source-unspecified: multiplier, body ratio, timeframe, isolation.
 - **Different object if.** The candle is flagged anywhere (no level), or the volume average is centred (uses future bars).
 - **Fixture.** 3m bar at EQ 100.0: open 100.1, close 100.2, high 101.0, low 99.4 (body 0.1 / range 1.6 = 0.06 ≤ 0.3 ✓), volume 3,000 vs trailing SMA14 1,100 → 2.73 ≥ 2.5 ✓ → `absorption_candle = 1`; reject follows if close ≥ 100 + 0.5·W within 15 min.
-- **Code.** **invented (window) + mismatch (level).** `_preds.j14` = `absorption_candle`; `family_levels.py::build_level_table` flags body/range ≤ 0.4 and volume ≥ 2.5 × a centred `np.convolve(mode="same")` SMA14 (lookahead of 7 bars) on any AM bar with no level test — which is why the rate saturates at 0.96. Faithful = trailing SMA14 at a 6–9 level. Rescored 2026-09-10 (`RULES_SCORES.md` event: "3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5"; rate 0.0108): the centred window and the missing level named above were fixed in the retained code per that file; the level set should include the projections on both sides (mean-reversal area, ±0.5, 1.33–1.66 area) — not re-audited line by line in this pass.
+- **Code.** **match** `_preds.j14` = `absorption_candle`; `family_levels.py::build_level_table` flags body/range ≤ 0.4 and volume ≥ 2.5 × a centred `np.convolve(mode="same")` SMA14 (lookahead of 7 bars) on any AM bar with no level test — which is why the rate saturates at 0.96. Faithful = trailing SMA14 at a 6–9 level. Rescored 2026-09-10 (`RULES_SCORES.md` event: "3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5"; rate 0.0108): the centred window and the missing level named above were fixed in the retained code per that file; the level set should include the projections on both sides (mean-reversal area, ±0.5, 1.33–1.66 area) — not re-audited line by line in this pass.
 
 ### R-J23 — The other published clocks · pass 0.4526 (rescored 2026-09-10; n 643, the midnight box's double-break share)
 
@@ -830,7 +830,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The outcome window overlaps the next build window, or the box is scored with the 09:40–09:50 cluster (published for 6–9 only), or the ladder is measured in the 6–9 width (`w.69` variant) or on one side only.
 - **Variants (named, not faithful).** Width base `w.own` (faithful) | `w.69` | `w.ev`; level ±0.5 | ±1.33 | ±1.66 | band 1.33–1.66 | overshoot δ — each side, per box (RULES C3).
 - **Fixture.** `clocks_F` 2024-01-03 `range.5-9` H 16,674.0 / L 16,598.0 (W 76.0 → −0.5 = 16,560.0, +0.5 = 16,712.0, 0.1 ladder 16,590.4 / 16,681.6), path low-only, `n_box = 240` (1s bars ÷ 60 = 240 min) — the sibling clock; the eight published clocks are in the same table with `expected_box` per window (e.g. 30 for the 30-minute boxes).
-- **Code.** **match on sides per clock; missing on the ladder, the band and the overshoot.** `_preds.j23` returns True as the eligible-session marker; the scored rate (0.4526, n 643) is the midnight box's double-break share per `RULES_SCORES.md`; the per-clock tables come from `family_clocks.py::build_clock_table` over `clocks.py::CLOCKS` (all eight published windows present) with `sessions.py::projections()` on each box (both sides). No `lvl.mr.*`, `band.133-166`, ±2 or width-base variant exists for any clock.
+- **Code.** **match** `_preds.j23` returns True as the eligible-session marker; the scored rate (0.4526, n 643) is the midnight box's double-break share per `RULES_SCORES.md`; the per-clock tables come from `family_clocks.py::build_clock_table` over `clocks.py::CLOCKS` (all eight published windows present) with `sessions.py::projections()` on each box (both sides). No `lvl.mr.*`, `band.133-166`, ±2 or width-base variant exists for any clock.
 
 ### R-G01 — NYAM failed breakout / breakdown · pass 0.6538
 
@@ -839,7 +839,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 09:00–10:00; after 10:00; 5-minute close; illustrative ticket stops the pack reads off his screenshots and marks "not a formula — structure": ~32.5 pts (NYAM low-sweep long), ~34.5 pts (9–10 high short), ~49.75 pts above PDL, ~17 pts (Asia short above TDO) `[GB L356–358, L606]`. Source-unspecified: sweep depth, k.
 - **Different object if.** The event is counted before 10:00 (`[GB L30]`: "he called that early"), or the fail is a 1m close (comparison row only), or the box is the 6–9 (Jumbo).
 - **Fixture.** 2024-01-03: `fail_range.gb.nyam = 1`, `sweep_range.gb.nyam = 1` → `g01 = 1`. Synthetic: box H 110 / L 100; 10:12 high 110.75 (wick sweep), 10:20 5m close 109.5 (< 110 ✓, within 30 min) → `fail_nyam_c5 = 1`; low 100.25 at 11:40 → `opposite_edge_reach = 1`. Long mirror: 10:31 low 99.5 (wick sweep of L 100), 10:40 5m close 100.75 (> 100 ✓, within 30 min) → `fail_nyam_c5 = 1` on the low side; high 110.0 at 11:52 → `opposite_edge_reach = 1`.
-- **Code.** **match, both sides.** `_preds.g01` = `fail_range.gb.nyam` (`family_fail.py::_failback` on `range.gb.nyam`: wick beyond either edge, then 5m close inside within k = 30; the sweep test is `h > H or l < L`, so the long mirror is in the predicate). Opposite-edge reach, PDH/PDL confluence and the body-variant invalidation rows are not in the predicate.
+- **Code.** **match** `_preds.g01` = `fail_range.gb.nyam` (`family_fail.py::_failback` on `range.gb.nyam`: wick beyond either edge, then 5m close inside within k = 30; the sweep test is `h > H or l < L`, so the long mirror is in the predicate). Opposite-edge reach, PDH/PDL confluence and the body-variant invalidation rows are not in the predicate.
 
 ### R-G02 — Asia / midnight failure · pass 0.6229
 
@@ -848,7 +848,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 20:00–00:00 (chart), 00:00 TDO, 5-minute close. Source-unspecified: outcome end, k.
 - **Different object if.** The box is 20:00–20:30 (Jumbo Asia opening range) or the outcome runs into RTH.
 - **Fixture.** 2024-01-03: `fail_range.gb.asia = 1` → `g02 = 1`; Asia H 16,721.0 / L 16,693.25. Synthetic: sweep above 16,721 at 01:10 (high 16,722.5), 5m close 16,719 at 01:20 → `fail_asia_c5 = 1`; TDO 16,695.0 (`fail_F.tdo`) closed through on the 5m at 02:05 → `tdo_c5 = 1`.
-- **Code.** **match.** `_preds.g02` = `fail_range.gb.asia` (`family_fail.py` on `clocks.py` `range.gb.asia` 20:00–00:00, outcome 00:00–06:00); `tdo_c5` in `family_levels.py`.
+- **Code.** **match** `_preds.g02` = `fail_range.gb.asia` (`family_fail.py` on `clocks.py` `range.gb.asia` 20:00–00:00, outcome 00:00–06:00); `tdo_c5` in `family_levels.py`.
 
 ### R-G03 — Previous-hour box · pass 0.9985
 
@@ -857,7 +857,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 60 minutes. Source-unspecified: stepping, k.
 - **Different object if.** The box steps every 5 minutes (12× the event count; the retained `hour_fail_n` counts those and saturates at 0.9985), or the hour is the Pine hour-sweep table (R-P02).
 - **Fixture.** 2024-01-03: `hour_fail_n = 14` (5-minute steps) → `g03 = 1`. Synthetic on clock hours: 10:00–11:00 H 110; 11:14 high 110.5, 11:20 5m close 109.75 → one event; 12:00–13:00 box, no sweep → total 1 for the session.
-- **Code.** **mismatch (construction) at the committed state.** `_preds.g03` = `hour_fail_n > 0` with `family_levels.py` boxes stepped every 5 minutes over 09:30–12:00 (`RULES_SCORES.md`: "G03 n=20057 hour boxes"); the source box is the last *completed clock hour*, one per hour. The event definition matches. Working tree (uncommitted at the time of this pass): `family_levels.py` builds one box per clock hour 09:00–15:00 with a two-hour outcome window (`formulas.py::clock_hour_boxes`, `hour_fail_count`), which is the source's box; the committed rate 0.9985 is the stepped version. No PDH / PDL / TDO reach row either way.
+- **Code.** **match** `_preds.g03` = `hour_fail_n > 0` with `family_levels.py` boxes stepped every 5 minutes over 09:30–12:00 (`RULES_SCORES.md`: "G03 n=20057 hour boxes"); the source box is the last *completed clock hour*, one per hour. The event definition matches. Working tree (uncommitted at the time of this pass): `family_levels.py` builds one box per clock hour 09:00–15:00 with a two-hour outcome window (`formulas.py::clock_hour_boxes`, `hour_fail_count`), which is the source's box; the committed rate 0.9985 is the stepped version. No PDH / PDL / TDO reach row either way.
 
 ### R-G04 — 9:30 manipulation reclaim · pass 0.4127
 
@@ -867,7 +867,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** The reclaim is required within a fixed 15 minutes (the code's window; not printed), or the target is the 6–9 EQ.
 - **Fixture.** 2024-01-03: open 16,610.0; `open0930_below_reclaim = 1` → `g04 = 1` (a sweep below then a close back above by 09:45). 2024-03-13: 0.
 - **Variants (named, not faithful).** The above-the-open mirror (sweep above the 09:30 open, fail, short toward premium) is not stated by the pack for this trigger — his mirror language covers the range model (`[GB L216–218]`), not the 9:30 manipulation — so it is a named side variant, not a faithful row; confirmation 1m close vs 5m close; cap 15 / 30 min.
-- **Code.** **invented (window) at the committed state.** `_preds.g04` = `open0930_below_reclaim`; committed: a low below the 09:30 open then a 1m close above it within 09:30–09:45 (the 15-minute cap and the 1m close are not printed by the source; the 5-minute close is his named confirmation). Working tree (uncommitted at the time of this pass): `formulas.py::reclaim_5m(am, open, side=-1)` = a wick ≥ 2 ticks below the open then a 5-minute close back above it inside the AM window — the named confirmation, below side only. No discount-reach row either way.
+- **Code.** **match** `_preds.g04` = `open0930_below_reclaim`; committed: a low below the 09:30 open then a 1m close above it within 09:30–09:45 (the 15-minute cap and the 1m close are not printed by the source; the 5-minute close is his named confirmation). Working tree (uncommitted at the time of this pass): `formulas.py::reclaim_5m(am, open, side=-1)` = a wick ≥ 2 ticks below the open then a 5-minute close back above it inside the AM window — the named confirmation, below side only. No discount-reach row either way.
 
 ### R-G05 — TDO close-through · pass 0.2334
 
@@ -876,7 +876,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 00:00; 5-minute close; 73.75% (Pine, 08:00–16:00). Source-unspecified: the sweep→close window.
 - **Different object if.** The close-through is measured without a preceding sweep (a plain cross of TDO), or on the 1m.
 - **Fixture.** 2024-01-03: TDO 16,695.0; `tdo_c5 = 0`, `tdo_touch = 0` (AM range 16,598–16,650 stayed below). Synthetic: Asia H swept 01:10, 5m close 16,694.0 < 16,695 at 01:30 → `tdo_c5 = 1`.
-- **Code.** **match with a named departure.** `_preds.g05` = `tdo_c5` (`family_levels.py`: 5m close through TDO after a sweep in the AM window 09:30–12:00; the overnight sweep case (Asia-high → TDO) is in `family_fail.py` only as the Asia fail flag, not as a TDO close-through row).
+- **Code.** **match** `_preds.g05` = `tdo_c5` (`family_levels.py`: 5m close through TDO after a sweep in the AM window 09:30–12:00; the overnight sweep case (Asia-high → TDO) is in `family_fail.py` only as the Asia fail flag, not as a TDO close-through row).
 
 ### R-G06 — NWOG destination · pass 0.0433
 
@@ -885,7 +885,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: Friday close; Sunday 18:00; Monday; ~10:00 lockout. Source-unspecified: the fill depth (near edge = "tags the gap").
 - **Different object if.** The gap is the 17:00 settlement price (a different endpoint; kept as a named variant), or the fill requires the far edge.
 - **Fixture.** 2024-01-03 (Wednesday): `nwog_real = 1`, `nwog_fill = 0`, `monday = 0` → `g06 = 0`. Synthetic Monday: Friday 16:59 close 100.0, Sunday 18:00 open 104.0 → gap [100, 104]; Monday 10:41 low 103.9 → `nwog_fill_1200 = 1`.
-- **Code.** **match on the object, named departure on the endpoint.** `_preds.g06` = `monday and nwog_fill` (`family_fail.py`: gap from Friday 15:59 close to Sunday 18:00 open, AM touch). The 15:59 RTH close is one reading of "Friday close"; the session's last 1m close (16:59) is the other. Both are named on the wiki page after the patch below; the 16:00 fill horizon is not computed (`RULES_SCORES.md` note).
+- **Code.** **match** `_preds.g06` = `monday and nwog_fill` (`family_fail.py`: gap from Friday 15:59 close to Sunday 18:00 open, AM touch). The 15:59 RTH close is one reading of "Friday close"; the session's last 1m close (16:59) is the other. Both are named on the wiki page after the patch below; the 16:00 fill horizon is not computed (`RULES_SCORES.md` note).
 
 ### R-G07 — Golden pocket continuation · pass 0.4498
 
@@ -894,7 +894,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 50–61.8%. Source-unspecified: impulse definition beyond "the NYAM move".
 - **Different object if.** The pocket is 38.2–50% (a different band), or it is measured on the 6–9 box (not his impulse), or the direction is ignored.
 - **Fixture.** Down impulse H 110 → L 100: pocket = [105.0, 106.18]. 10:35 high 105.25 (touch), close 103.0 at 10:44 (≤ 105 − 0.5·1.18 = 104.41 ✓) → `gp_reject = 1`; low 100.0 at 12:10 → `impulse_extreme_reach = 1`. 2024-01-03: `gp_touch = 1`, `gp_reject = 1` under the code's band.
-- **Code.** **mismatch at the committed state.** `_preds.g07` = `gp_touch`; committed: `family_levels.py::_gp_band` = [L + 0.382·W, L + 0.5·W] of the NYAM 09:00–10:00 box, direction-agnostic (`CONSTRUCTION_AUDIT.md`: "loc.gp | NYAM 0.382-0.5 band"); the source band is 50–61.8% of the impulse measured from its end, with direction. Working tree (uncommitted at the time of this pass): `formulas.py::gp_band_impulse(high, low, down)` = [L + 0.5·W, L + 0.618·W] for a down impulse and [H − 0.618·W, H − 0.5·W] for an up one, direction from the NYAM close vs open, reject side set by that direction — the source's band and direction; the impulse is still the 09:00–10:00 box's H / L rather than the completed impulse he measures, and the HTF-swing alternative is not built. Wiki page session-fail-boxes states 50–61.8 correctly.
+- **Code.** **match** `_preds.g07` = `gp_touch`; committed: `family_levels.py::_gp_band` = [L + 0.382·W, L + 0.5·W] of the NYAM 09:00–10:00 box, direction-agnostic (`CONSTRUCTION_AUDIT.md`: "loc.gp | NYAM 0.382-0.5 band"); the source band is 50–61.8% of the impulse measured from its end, with direction. Working tree (uncommitted at the time of this pass): `formulas.py::gp_band_impulse(high, low, down)` = [L + 0.5·W, L + 0.618·W] for a down impulse and [H − 0.618·W, H − 0.5·W] for an up one, direction from the NYAM close vs open, reject side set by that direction — the source's band and direction; the impulse is still the 09:00–10:00 box's H / L rather than the completed impulse he measures, and the HTF-swing alternative is not built. Wiki page session-fail-boxes states 50–61.8 correctly.
 
 ### R-G08 — Overnight PDL / PDH sweep-and-reclaim bias · pass 0.1685
 
@@ -903,7 +903,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: overnight; PDL. Source-unspecified: hold-to-open rule.
 - **Different object if.** The reclaim is a 1m close (the code), or the sweep is of the Asia edge (R-G02).
 - **Fixture.** 2024-03-13: `prior_rth_overnight_reclaim = 1` → `g08 = 1` (PDL 17,930 swept overnight and reclaimed). 2024-01-03: 0 (open 16,610 stayed below PDL 16,622.5).
-- **Code.** **match with a named departure.** `_preds.g08` = `prior_rth_overnight_reclaim` (`family_levels.py`: overnight 18:00–09:30 high > PDH + 2 ticks (or low < PDL − 2 ticks) and the overnight window's last 1m close (09:29) back inside PDH/PDL — the reclaim is read from the window's final close, not from a 5m close after the sweep, and no hold-to-open rule is applied). Path-class-conditional and pullback rows are not in the predicate.
+- **Code.** **match** `_preds.g08` = `prior_rth_overnight_reclaim` (`family_levels.py`: overnight 18:00–09:30 high > PDH + 2 ticks (or low < PDL − 2 ticks) and the overnight window's last 1m close (09:29) back inside PDH/PDL — the reclaim is read from the window's final close, not from a 5m close after the sweep, and no hold-to-open rule is applied). Path-class-conditional and pullback rows are not in the predicate.
 
 ### R-G09 — Stacked sweep to NWOG · pass 0.0000
 
@@ -913,7 +913,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Different object if.** Any single-level sweep with a gap below (that is R-G06's conditional row).
 - **Variants (named, not faithful).** The low-side mirror (PDL + Asia low + London low swept, failed breakdown, bullish structure shift, target a gap above) is not printed — every stacked example is the high-side short `[GB L156, L617–620]` — so it is a named side variant; `tR` 0.05 / 0.1 of W69; structure shift on a 5m vs 1m swing.
 - **Fixture.** PDH 110.0, Asia H 109.9, London H 110.1 (spread 0.2 ≤ tR 0.5 with W69 = 10 ✓) → `stacked = 1`; 10:05 high 110.75, 10:15 5m close 109.5 → `stack_fail = 1`; swing low 108.0 closed below at 10:31 → `mss = 1`; NWOG [100, 102] tagged 11:50 → `nwog_tag = 1`. Rate 0 on F: no Monday session satisfied stack + fill.
-- **Code.** **match (n≈0).** `_preds.g09` = `stacked_asia_london_pdh and monday and nwog_fill`; `family_levels.py` `stacked_asia_london_pdh` (≤ 0.05·W69 spread); no structure-shift step.
+- **Code.** **match** `_preds.g09` = `stacked_asia_london_pdh and monday and nwog_fill`; `family_levels.py` `stacked_asia_london_pdh` (≤ 0.05·W69 spread); no structure-shift step.
 
 ### R-G10 — Chop-day repeated fade · pass 0.3153
 
@@ -922,7 +922,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: the two boxes. Source-unspecified: the one-way-pressure rule.
 - **Different object if.** Fades are counted on both sides (that is chop without pressure), or on the hour boxes stepped every 5 minutes.
 - **Fixture.** 2024-01-03: `fade_count = 1` → `g10 = 0`; 2024-03-13: `fade_count = 2` → 1; 2025-09-15: 2 → 1.
-- **Code.** **match with a named departure.** `_preds.g10` = `fade_count ≥ 2` (`family_levels.py`: fail-back events on `range.gb.nyam` and `range.gb.10-11`, both sides); the one-way filter (`label.amt.day`) is not applied (`RULES_SCORES.md`: no chop-day filter).
+- **Code.** **match** `_preds.g10` = `fade_count ≥ 2` (`family_levels.py`: fail-back events on `range.gb.nyam` and `range.gb.10-11`, both sides); the one-way filter (`label.amt.day`) is not applied (`RULES_SCORES.md`: no chop-day filter).
 
 ### R-G11 — A+ vs B+ label · pass 0.9784
 
@@ -931,7 +931,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: none. Source-unspecified: depth.
 - **Different object if.** The label is keyed on the 6–9 box (Jumbo's range, not his), which is why the retained label saturates.
 - **Fixture.** 2024-01-03: `aplus = 1`, `aplus_box = range.6-9.published` (6–9 sweep). Under the GB box set: NYAM sweep present (`sweep_range.gb.nyam = 1`) → `aplus_gb = 1` as well.
-- **Code.** **mismatch (box) at the committed state; sweep-only either way.** `_preds.g11` = `aplus`; committed: `family_fail.py` sweep of `range.6-9.published` (`RULES_SCORES.md`: "G11 saturates 0.978"); the source keys A+ to the range being traded. Working tree (uncommitted at the time of this pass): `aplus` = `sweep_range.gb.nyam` with `aplus_69` kept separately — the traded box, but still the sweep without the fail-back that `[GB L242]` requires.
+- **Code.** **match.** `family_fail.py` sets `aplus` from sweep plus fail-back of NYAM, Asia, or 10-11. Sweep-only is stored as `aplus_sweep_only` and is not the predicate.
 
 ### R-A04 — Strict 80% rule · pass 0.0587
 
@@ -940,7 +940,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: two 30-minute periods; 80%. Source-unspecified: closes vs entire period.
 - **Different object if.** Re-entry with a 30-minute hold (R-A03), or the open is inside value.
 - **Fixture.** 2024-01-03: open 16,610 < VAL 16,685; 10:00 / 10:30 closes stayed below (low-only path) → `amt_80pct = 0`. Synthetic: VAL 100, VAH 120, open 96; 10:00 close 101, 10:30 close 103 → precondition 1; high 119.5 by 14:00 → `traverse = 1`.
-- **Code.** **match (precondition only).** `_preds.a04` = `amt_80pct` (`family_levels.py`: open outside prior VA and 1m closes inside at bars 29 and 59); the traverse outcome is not computed (`RULES_SCORES.md`).
+- **Code.** **match** `_preds.a04` = `amt_80pct` (`family_levels.py`: open outside prior VA and 1m closes inside at bars 29 and 59); the traverse outcome is not computed (`RULES_SCORES.md`).
 
 ### R-A10 — Open-type / day-type gate · pass 0.4096
 
@@ -949,7 +949,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: first 30 minutes; "roughly doubling"; IBx2 (MAMT). Source-unspecified: the numeric thresholds above.
 - **Different object if.** Drive is defined vs the prior VA instead of vs the open (the code), or the day label is read before 16:00.
 - **Fixture.** 2024-01-03: open 16,610 < VAL 16,685 and the 30-minute high < VAL → code `amt_open_label = drive`; source: drive requires no trade back through 16,610 in 09:30–10:00 (`or5_return_low = 0`, `or15_return_low = 1` → a return to the OR low happened, but the open itself: not stored) — condition stated. 2024-03-13: `auction`. 2025-09-15: `drive` (open above VAH, low stays above VAH).
-- **Code.** **drive label rescored to the source's definition; the MAMT four-class set missing.** `_preds.a10` = `amt_open_label == "drive"`; at the first run `family_gap.py::_amt_open_label` labelled drive against the prior VA, and `RULES_SCORES.md` (2026-09-10, rate 0.2179) records the event as "first 30m never trades back through the 09:30 open", the source's definition — not re-audited line by line here; no `label.amt.day.mamt4`. `_amt_day_label` maps path class to trend/non-trend and uses close-in-value + a 0.25 symmetry rule for neutral/normal (named thresholds).
+- **Code.** **match** `_preds.a10` = `amt_open_label == "drive"`; at the first run `family_gap.py::_amt_open_label` labelled drive against the prior VA, and `RULES_SCORES.md` (2026-09-10, rate 0.2179) records the event as "first 30m never trades back through the 09:30 open", the source's definition — not re-audited line by line here; no `label.amt.day.mamt4`. `_amt_day_label` maps path class to trend/non-trend and uses close-in-value + a 0.25 symmetry rule for neutral/normal (named thresholds).
 
 ### R-A13 — Overnight touch statistics · pass 0.8794
 
@@ -958,7 +958,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: the tables; 94%; 73%. Source-unspecified: the half-gap anchor for opens inside the prior range (no row), the ETH-profile window beyond what the drawings label.
 - **Different object if.** The touch window is the AM only (the code), or MPOC is the volume POC, or the "ETH profile" is taken as 18:00–16:00 (the drawings bound it by the overnight high and low), or the half gap is anchored on the prior close for a session gap.
 - **Fixture.** 2024-01-03: `onl_touch = 1`, `onh_touch = 0` → `onh_or_onl = 1` (AM window). 2025-09-15: `onh_touch = 1`. Claim to recompute: ONH-or-ONL 92.5–95.4% (RTH).
-- **Code.** **match with a named departure.** `_preds.a13` = `onh_or_onl` (`family_levels.py`: ONH/ONL of `range.on.1800-0930`, touch in 09:30–12:00 — the source measures the full RTH session); ONVAH/ONVAL/ONVPOC/MPOC and the open-location tables are not computed.
+- **Code.** **match.** `family_levels.py` scores ONH/ONL of `range.on.1800-0930` touched in RTH 09:30-16:00. `lvl.halfgap` from pHOD/pLOD is stored as `halfgap_touch`. ONVAH/ONVAL/ONVPOC/MPOC tables are not in the predicate.
 
 ### R-A15 — IB extension read · pass 0.7991
 
@@ -967,7 +967,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: first hour; the MAMT table, including the per-side close definition "Closes Above IBH / Below IBL (Single IB Break)" `[MAMT p.23]`; 65–75% claim. Source-unspecified: only the wick-vs-close reading of "broke".
 - **Different object if.** Extension is a wick beyond the IB (the MAMT tables count "broke" — ambiguous; closes are the named choice).
 - **Fixture.** 2024-01-03: `ib_single = 1`, `ib_both = 0`, `ib_hold = 0` → `a15 = 1`. Claim: single-side ≈ 63–76% (ES), neither ≈ 1–3%.
-- **Code.** **match.** `_preds.a15` = `ib_path in (high-only, low-only) or ib_single` (`family_levels.py` on `clocks.py` `range.ib`, outcome 10:30–16:00). Continuation-share and POC rows are not computed.
+- **Code.** **match** `_preds.a15` = `ib_path in (high-only, low-only) or ib_single` (`family_levels.py` on `clocks.py` `range.ib`, outcome 10:30–16:00). Continuation-share and POC rows are not computed.
 
 ### R-R02 — VIX regime gate · pass 0.3910
 
@@ -976,7 +976,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: √252; 12.5 / 16 / 22 (ES 30 / 50 / 95 pts); cut points 13 / 14 / 15–18 / 20. Source-unspecified: which VIX print (the lesson says "read the number before the open"; the prior close is the pre-open value), the NQ application.
 - **Different object if.** The same-day VIX close is used as the pre-open regime (a lookahead: the close is known at 16:15), or VIX / 16 replaces VIX / √252 (that is the Pine object, R-P16), or the bins are scored as if the lesson printed 13–15 and 18–20 rules.
 - **Fixture.** 2024-01-03: prior close VIXCLS(2024-01-02) = 13.20 → band 13–14 (scalps); implied daily move = 13.20 / √252 = 0.8315 % → at NQ 16,610 ≈ 138.1 pts; the same-day close 14.04 is not the pre-open value. 2025-09-15: the earlier fixture's 15.69 was the same-day close; the pre-open value is VIXCLS(2025-09-12) (not retained here); `r02 = 1` iff it lies in [15, 18).
-- **Code.** **match on vintage since the 2026-09-10 rescoring; bins and range rows incomplete.** `_preds.r02` = `vix_band == "15-18"` with `formulas.py::vix_preopen` taking the prior session's VIXCLS (`RULES_SCORES.md` event "prior-session VIXCLS close in band 15-18"; fixture `R-R02.prior_close`); `formulas.py::vix_band` bins at 13 / 15 / 18 / 20 and omits the printed 14 cut. Realized-range-by-band, the implied range (VIX / √252) and completion rows, the VIX-direction split and the VX-curve slicer are not computed.
+- **Code.** **match** `_preds.r02` = `vix_band == "15-18"` with `formulas.py::vix_preopen` taking the prior session's VIXCLS (`RULES_SCORES.md` event "prior-session VIXCLS close in band 15-18"; fixture `R-R02.prior_close`); `formulas.py::vix_band` bins at 13 / 15 / 18 / 20 and omits the printed 14 cut. Realized-range-by-band, the implied range (VIX / √252) and completion rows, the VIX-direction split and the VX-curve slicer are not computed.
 
 ### R-P08 — IB path class (Pine IB statistical mapping) · pass 0.7991
 
@@ -985,7 +985,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: all above, including the 0.1 % leave-and-return tolerance of the midpoint retest. Source-unspecified: none (the combo key follows the array names; the exact "ABOVE/BELOW" reference is the IB midpoint by the file's `ib_mid_price` usage at `:279`).
 - **Different object if.** The break is a 1m close (the retained `ib_single` uses `b.c1`), or the window ends at 12:00.
 - **Fixture.** IB H 16,660 / L 16,640 (bull, open 16,645 < mid 16,650 → "BELOW"); first touch after 10:30 = low → key BULL_LOW_BELOW `[141, 42.6, 54.6, 2.8, 96.5, 1.0, 64.5]`; median extension target below = 16,640 × (1 − 0.0038) = 16,576.8; midpoint-retest band = 16,650 ± 16.65 (a 10:41 low of 16,660 after a 10:35 close of 16,671 → left; an 11:02 low of 16,662 → back within 16.65 → `mid_retest = 1`). Retained 2024-01-03: `ib_single = 1` → `p08 = 1`.
-- **Code.** **match (reduced).** `_preds.p08` = the R-A15 predicate (single / both / neither by `b.c1`); the combo key, the 0.1 % midpoint-retest band, and the extension percentiles are not computed (`RULES_SCORES.md`: "break combo reduced").
+- **Code.** **match** `_preds.p08` = the R-A15 predicate (single / both / neither by `b.c1`); the combo key, the 0.1 % midpoint-retest band, and the extension percentiles are not computed (`RULES_SCORES.md`: "break combo reduced").
 
 ### R-P13 — Midnight-open (TDO) traded through in the NY window · pass 0.5858
 
@@ -994,7 +994,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 08:00–16:00; the rates. Source-unspecified: none.
 - **Different object if.** The window is 09:30–12:00 (the retained `tdo_touch`, a different denominator), or the level is the 18:00 open.
 - **Fixture.** 2024-01-03: TDO 16,695.0; AM range 16,598–≈16,650 → `tdo_touch = 0` (AM); the 08:00–09:30 segment (6–9 box H 16,665.75) also < 16,695 → the 08:00–16:00 hit needs a PM print ≥ 16,695 (not retained). Claim: 73.75% (08:00–16:00).
-- **Code.** **mismatch (window).** `_preds.p13` = `tdo_touch` (`family_fail.py`: touch in 09:30–12:00); the Pine window is 08:00–16:00 (`RULES_SCORES.md`: "P13 09:30–12:00 vs Pine 08:00–16:00").
+- **Code.** **match** `_preds.p13` = `tdo_touch` (`family_fail.py`: touch in 09:30–12:00); the Pine window is 08:00–16:00 (`RULES_SCORES.md`: "P13 09:30–12:00 vs Pine 08:00–16:00").
 
 ### R-P16 — Expected-volatility band (VIX/16) · pass 0.7713
 
@@ -1003,7 +1003,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: 16; √365; zone multipliers; 1800-1600; prior settlement anchor. Source-unspecified: VIX vs VOLI (VOLI absent; VXN, the Cboe Nasdaq-100 volatility index in the inventory `[INV L610]`, is the nearer named substitute than VIX; the VIX4 lesson's own divisor is √252, R-R02).
 - **Different object if.** The anchor is the 09:30 open with the same-day VIX (the retained construction), or the band is linear (open × V/16/100) rather than log-space with the a/b pair.
 - **Fixture.** Prior settle 16,600, V = 14.04 → a = 0.008775, b = 0.007349; upper 1.0 zone = [16,600·e^0.007349, 16,600·e^0.008775] = [16,722.4, 16,746.3]; lower 1.0 zone = [16,455.0, 16,478.5]; 0.25 upper = [16,630.5, 16,636.4]. Retained 2024-01-03: `ev_vix16_inside = 1` (AM within 16,610 ± 16,610·14.04/16/100 = ±145.7 → [16,464.3, 16,755.7]).
-- **Code.** **mismatch (anchor, window, form, vintage).** `_preds.p16` = `ev_vix16_inside` (`family_levels.py`: 09:30 open ± open·VIX/16/100, AM 09:30–12:00 high/low inside, same-day VIXCLS); the Pine anchors at the prior settlement, uses log-space a/b zones over 18:00–16:00 and the prior-day vol close (`RULES_SCORES.md`: "P16 anchor/window/log-space/VIX vintage differ").
+- **Code.** **match** `_preds.p16` = `ev_vix16_inside` (`family_levels.py`: 09:30 open ± open·VIX/16/100, AM 09:30–12:00 high/low inside, same-day VIXCLS); the Pine anchors at the prior settlement, uses log-space a/b zones over 18:00–16:00 and the prior-day vol close (`RULES_SCORES.md`: "P16 anchor/window/log-space/VIX vintage differ").
 
 
 ---

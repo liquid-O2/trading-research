@@ -776,6 +776,24 @@ def r_r03_thesis(
     }
 
 
+def r_s01_refill_short(
+    *, range_high: float, abs_ok: float | bool, max_print: float, close_below: float,
+    objective: float, later_high: float, later_low: float,
+) -> dict:
+    refill = bool(abs_ok) and close_below < range_high
+    inval = max_print + 2 * TICK
+    dist = inval - close_below
+    reach = later_low <= objective + 2 * TICK
+    return {
+        "refill_short": bool(refill),
+        "inval_px": inval,
+        "inval_dist": dist,
+        "objective_reach": bool(reach),
+        "mfe": close_below - later_low,
+        "mae": later_high - close_below,
+    }
+
+
 def r_s01_refill_long(
     *, range_low: float, abs_ok: float | bool, min_print: float, close_above: float,
     objective: float, later_high: float, later_low: float,
