@@ -16,9 +16,11 @@ from trading_research.research.phase1_live.formulas import (
     vp_p_shape,
 )
 from trading_research.research.phase1_live.formulas_flow import (
+    MAGIC_HOURS,
     r_p01_sigma_bands,
     r_p01_touch_revert,
     r_p02_hourly_sweep,
+    r_p03_magic_hour,
     r_p04_raid,
     r_p05_london_25,
     r_p06_first_hit,
@@ -72,7 +74,7 @@ def _clock(bars, day, cid):
 
 def build_recipe_table() -> list[dict]:
     cached = load_rows("recipe_flags_F")
-    if cached and cached[0].get("recipe_rev") == 1:
+    if cached and cached[0].get("recipe_rev") == 2:
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
@@ -90,7 +92,7 @@ def build_recipe_table() -> list[dict]:
         op = open_rows.get(day.isoformat(), {})
         rec = {
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
-            "recipe_rev": 1,
+            "recipe_rev": 2,
             "j10_draw_reach": False, "j18_ob": False, "j19_pd_touch": False,
             "j21_extended": False, "j22_three_strike": False, "j24_mfe_pos": False,
             "j25_mid_hold": False,
@@ -102,7 +104,7 @@ def build_recipe_table() -> list[dict]:
             "p09_no_break": False, "p10_pp_touch": False, "p11_fvg_fill": False,
             "p12_cisd_var": False, "p14_hod_1000": False, "p15_ssl": False,
             "p17_1800_touch": False, "p19_body_gap4": False,
-            "s05_micro_break": False, "s09_vah_break": False,
+            "s05_micro_break": False, "s09_vah_break": False, "p03_magic_win": False,
         }
         h69, l69, w = row.get("H"), row.get("L"), row.get("W69")
         levels = None if h69 is None or l69 is None or not w else projections(h69, l69)
@@ -243,6 +245,27 @@ def build_recipe_table() -> list[dict]:
                 hour_ok = True
                 break
         rec["p02_hour_retrace"] = hour_ok
+        magic = False
+        for hr in MAGIC_HOURS:
+            off = -1 if hr == 23 else 0
+            box = bars.window(wall_ns(day, time(hr, 0), off) // 1_000_000, wall_ns(day, time((hr + 1) % 24, 0), 0 if hr != 23 else 0) // 1_000_000)
+            if hr == 23:
+                box = bars.window(wall_ns(day, time(23, 0), -1) // 1_000_000, wall_ns(day, time(0, 0), 0) // 1_000_000)
+            nxt = bars.window(wall_ns(day, time((hr + 1) % 24, 0), 0 if hr != 23 else 0) // 1_000_000, wall_ns(day, time((hr + 2) % 24, 0), 0) // 1_000_000)
+            if hr == 23:
+                nxt = bars.window(wall_ns(day, time(0, 0), 0) // 1_000_000, wall_ns(day, time(1, 0), 0) // 1_000_000)
+            if box["high"] is None or nxt["n"] == 0:
+                continue
+            brk = "high" if (nxt["high"] or 0) > box["high"] else "low"
+            exc = (nxt["high"] - box["high"]) if brk == "high" else (box["low"] - nxt["low"])
+            got = r_p03_magic_hour(
+                hour=hr, box_h=box["high"], box_l=box["low"], break_side=brk, excursion=exc or 0.0,
+                later_high=nxt["high"], later_low=nxt["low"], t_break_min=hr * 60 + 4, t_target_min=hr * 60 + 20,
+            )
+            if got.get("win"):
+                magic = True
+                break
+        rec["p03_magic_win"] = magic
         if nyam["high"] is not None and nyam_out["n"]:
             t_min = (nyam_out["t"] - nyam_out["t"][0]) / 60_000.0
             raid = r_p04_raid(

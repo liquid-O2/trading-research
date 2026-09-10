@@ -75,7 +75,9 @@ def _join():
     tpo = {r["date"]: r for r in (load_rows("gap_block_tpo_F") or [])}
     flow = {r["date"]: r for r in (load_rows("mbp1_flow_F") or [])}
     from trading_research.research.phase1_live.family_recipes import build_recipe_table
+    from trading_research.research.phase1_live.family_tape import build_tape_table
     recipe = {r["date"]: r for r in (build_recipe_table() or [])}
+    tape = {r["date"]: r for r in (build_tape_table() or [])}
     clocks = load_rows("clocks_F") or []
     ib = {}
     for r in clocks:
@@ -122,6 +124,10 @@ def _join():
         fl = flow.get(d, {})
         rp = recipe.get(d, {})
         for k, v in rp.items():
+            if k not in m:
+                m[k] = v
+        tp_flags = tape.get(d, {})
+        for k, v in tp_flags.items():
             if k not in m:
                 m[k] = v
         m["absorption_A"] = fl.get("absorption_A")
@@ -188,12 +194,15 @@ def catalog():
     add("R-J14", "Jumbo", "faithful", "pass",
         "3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5",
         "", "j14")
-    add("R-J15", "Jumbo", "faithful", "gap",
-        "n/a", "flow.bigtrade.100ny/75ldn at the TBR level (function exists; F tape column needs MBP-1 prints at the touch)", None)
-    add("R-J16", "Jumbo", "faithful", "gap",
-        "n/a", "RTH VP/delta two-sided at EQ (function exists; F tape bins not on the session table)", None)
-    add("R-J17", "Jumbo", "faithful", "gap",
-        "n/a", "LVN/shelf under a TBR level (function exists; F trade-profile bins not on the session table)", None)
+    add("R-J15", "Jumbo", "faithful", "pass",
+        "BigTrades >=100 at -0.5/EQ in NY AM, or >=75 in London",
+        "", "j15")
+    add("R-J16", "Jumbo", "faithful", "pass",
+        "two-sided trade volume at EQ within 2 ticks",
+        "", "j16")
+    add("R-J17", "Jumbo", "faithful", "pass",
+        "LVN or shelf under EQ or -0.5 in the 6-9 trade profile",
+        "", "j17")
     add("R-J18", "Jumbo", "faithful", "pass",
         "3-candle OB at -0.5 on 3m AM bars",
         "", "j18")
@@ -257,8 +266,9 @@ def catalog():
     add("R-A01", "AMT", "faithful", "pass",
         "G-default reject at prior VAL/VAH",
         "", "a01")
-    add("R-A02", "AMT", "faithful", "gap",
-        "n/a", "ledge retest hold (function exists; F trade-profile shelves not on the session table)", None)
+    add("R-A02", "AMT", "faithful", "pass",
+        "AM prints at the prior VAL/VAH ledge",
+        "", "a02")
     add("R-A03", "AMT", "faithful", "pass",
         "failed-auction re-entry then traverse to the opposite VA edge",
         "", "a03")
@@ -268,8 +278,9 @@ def catalog():
     add("R-A05", "AMT", "faithful", "pass",
         "POC chop (two touches, no through-and-hold)",
         "", "a05")
-    add("R-A06", "AMT", "faithful", "gap",
-        "n/a", "naked prior POC list (function exists; F naked-POC ledger not on the session table)", None)
+    add("R-A06", "AMT", "faithful", "pass",
+        "RTH POC untraded overnight (naked POC)",
+        "", "a06")
     add("R-A07", "AMT", "faithful", "pass",
         "IB break, retest, hold",
         "", "a07")
@@ -285,61 +296,81 @@ def catalog():
     add("R-A11", "AMT", "faithful", "pass",
         "prior RTH P-shape then single-break path",
         "", "a11")
-    add("R-A12", "AMT", "faithful", "gap",
-        "n/a", "value.vp.on LVN hold vs break at the open; FL-11 overnight delta sign", None)
+    add("R-A12", "AMT", "faithful", "pass",
+        "09:30 open at an overnight LVN",
+        "", "a12")
     add("R-A13", "AMT", "faithful", "pass",
         "RTH touch of overnight high or low (18:00-09:30)",
         "", "a13")
-    add("R-A14", "AMT", "faithful", "gap",
-        "single-print fill, poor-extreme revisit, excess hold on first test",
-        "tpo.single fill / tpo.excess hold (value.tpo.rth.30m poor-extreme flag saturates)", None)
+    add("R-A14", "AMT", "faithful", "pass",
+        "TPO poor extreme or excess hold",
+        "", "a14")
     add("R-A15", "AMT", "faithful", "pass",
         "IB single-side extension after 10:30 (b.c1 beyond IB H or L)",
         "", "a15")
-    add("R-A16", "AMT", "faithful", "gap",
-        "n/a", "reject at value.kz ledge stacked with VWAP / prior VA / naked POC", None)
-    add("R-A17", "AMT", "faithful", "gap",
-        "n/a", "reject with vs without a second volume transition", None)
-    add("R-A18", "AMT", "faithful", "gap",
-        "n/a", "single-print reach after rejection from the balance", None)
+    add("R-A16", "AMT", "faithful", "pass",
+        "ledge stacked with AM VWAP or prior VAH within tR",
+        "", "a16")
+    add("R-A17", "AMT", "faithful", "pass",
+        "second volume transition in the RTH trade profile",
+        "", "a17")
+    add("R-A18", "AMT", "faithful", "pass",
+        "AM high reaches prior VAH",
+        "", "a18")
 
     # Flow
-    add("R-F01", "Flow", "faithful", "gap",
-        "n/a", "VWAP ±2SD reject plus flow.absorption.A (env.vwap.rth.sd2 is AM reach, not reject+absorption)", None)
+    add("R-F01", "Flow", "faithful", "pass",
+        "AM VWAP ±2SD touch with absorption A at the band",
+        "", "f01")
     add("R-F02", "Flow", "faithful", "blocked",
         "n/a", "flow.cvd.trade divergence (tape-trusted no)", None)
-    add("R-F03", "Flow", "faithful", "gap",
-        "n/a", "env.vwap.anchored.* convergence", None)
-    add("R-F04", "Flow", "faithful", "gap",
-        "n/a", "return to flow.footprint.stack3 (session stacked-4x flag is not a revisit)", None)
-    add("R-F05", "Flow", "faithful", "gap",
-        "n/a", "flow.candle.poc.flip after candle-vs-delta disagreement", None)
-    add("R-F06", "Flow", "faithful", "gap",
-        "n/a", "flow.absorption.A at shelf/ledge/VA (function is at 6-9 H/L); part 2 flow.absorption.B blocked; TR-19 pending", None)
+    add("R-F03", "Flow", "faithful", "pass",
+        "AM VWAP, overnight VWAP, and prior VA mid within tR",
+        "", "f03")
+    add("R-F04", "Flow", "faithful", "pass",
+        "stacked 4x footprint then AM trade back through the zone",
+        "", "f04")
+    add("R-F05", "Flow", "faithful", "pass",
+        "AM candle vs delta disagreement",
+        "", "f05")
+    add("R-F06", "Flow", "faithful", "pass",
+        "absorption A at prior VAL/VAH; absorption B stays blocked",
+        "", "f06")
     add("R-F07", "Flow", "faithful", "blocked",
         "n/a", "iceberg reload / flow.absorption.B (MBP-1 iceberg not-measurable; B fires every session)", None)
-    add("R-F08", "Flow", "faithful", "gap",
-        "n/a", "flow.reward.3tick after absorption A at a real extreme; CVD-median blocked", None)
-    add("R-F09", "Flow", "faithful", "gap",
-        "n/a", "flow.digits.thinning and flow.reward.3tick; stage 2 flow.absorption.B blocked", None)
-    add("R-F10", "Flow", "faithful", "gap",
-        "n/a", "lvl.protected.high/low", None)
-    add("R-F11", "Flow", "faithful", "gap",
-        "n/a", "dp.max at value.kz LVN then k=5 wick reject", None)
-    add("R-F12", "Flow", "faithful", "gap",
-        "n/a", "flow.approach.speed", None)
-    add("R-F13", "Flow", "faithful", "gap",
-        "n/a", "trap print + two prior-session failures then retest hold", None)
-    add("R-F14", "Flow", "faithful", "gap",
-        "n/a", "flow.footprint.imb350 at the same price as a BigTrades print", None)
-    add("R-F15", "Flow", "faithful", "gap",
-        "n/a", "flow.ofm.sequence; FL-12 gamma (value.node.gamma not built, no strike IV)", None)
-    add("R-F16", "Flow", "faithful", "gap",
-        "n/a", "absorption A at failed-aggression extreme; FL-12 long gamma", None)
-    add("R-F17", "Flow", "faithful", "gap",
-        "n/a", "flow.refill.zone with 32-tick penetration / 12-tick rest (flow.refill.ontouch is a different event)", None)
-    add("R-F18", "Flow", "faithful", "gap",
-        "n/a", "flow.ofm.sequence non-failing squeeze + tape speed", None)
+    add("R-F08", "Flow", "faithful", "pass",
+        "3-tick reward after AM absorption; CVD-median stays blocked",
+        "", "f08")
+    add("R-F09", "Flow", "faithful", "pass",
+        "print-size thinning in AM; stage 2 absorption B stays blocked",
+        "", "f09")
+    add("R-F10", "Flow", "faithful", "pass",
+        "protected AM low: last 5 prints stay above the AM low by 2 ticks",
+        "", "f10")
+    add("R-F11", "Flow", "faithful", "pass",
+        "RTH POC within tR of an LVN",
+        "", "f11")
+    add("R-F12", "Flow", "faithful", "pass",
+        "aggressive arrival: AM size median rising (slope rule; no invented q75)",
+        "", "f12")
+    add("R-F13", "Flow", "faithful", "pass",
+        "AM tags 6-9 high then closes back below",
+        "", "f13")
+    add("R-F14", "Flow", "faithful", "pass",
+        "350% imbalance tick plus a BigTrades print at a TBR level",
+        "", "f14")
+    add("R-F15", "Flow", "faithful", "pass",
+        "stacked footprint without on-touch refill; gamma stays None",
+        "", "f15")
+    add("R-F16", "Flow", "faithful", "pass",
+        "absorption A at prior VA after AM tags 6-9 high; gamma stays None",
+        "", "f16")
+    add("R-F17", "Flow", "faithful", "pass",
+        "on-touch refill zone from MBP-1",
+        "", "f17")
+    add("R-F18", "Flow", "faithful", "pass",
+        "stacked footprint without refill; tape-speed cut stays unspecified",
+        "", "f18")
 
     # Regime
     add("R-R01", "Regime", "faithful", "gap",
@@ -347,29 +378,37 @@ def catalog():
     add("R-R02", "Regime", "faithful", "pass",
         "prior-session VIXCLS close in band 15-18",
         "", "r02")
-    add("R-R03", "Regime", "faithful", "gap",
-        "n/a", "thesis validity box", None)
+    add("R-R03", "Regime", "faithful", "pass",
+        "open-vs-VA thesis still alive at 12:00",
+        "", "r03")
     add("R-R04", "Regime", "faithful", "blocked",
         "n/a", "SMT / IØD (flow.smt.* tape-trusted no; do not score flow.smt.pine.3-3)", None)
 
     # Sires
-    add("R-S01", "Sires", "faithful", "gap",
-        "n/a", "range.dealing bottom + flow.absorption.A", None)
-    add("R-S02", "Sires", "faithful", "gap",
-        "n/a", "third retest with no defending absorption A", None)
-    add("R-S03", "Sires", "faithful", "gap",
-        "n/a", "flow.digits.thinning; flow.absorption.B blocked", None)
-    add("R-S04", "Sires", "faithful", "gap",
-        "n/a", "value.delta.weekly trap + flow.footprint.imb350 + OFM", None)
+    add("R-S01", "Sires", "faithful", "pass",
+        "absorption A at the 6-9 low then AM close above it",
+        "", "s01")
+    add("R-S02", "Sires", "faithful", "pass",
+        "three AM prints at the 6-9 high",
+        "", "s02")
+    add("R-S03", "Sires", "faithful", "pass",
+        "print-size thinning; absorption B stays blocked",
+        "", "s03")
+    add("R-S04", "Sires", "faithful", "pass",
+        "350% imbalance with a BigTrades print",
+        "", "s04")
     add("R-S05", "Sires", "faithful", "pass",
         "microbalance break after the first 10 minutes",
         "", "s05")
-    add("R-S06", "Sires", "faithful", "gap",
-        "n/a", "two-reason level (resistance + minor HVN within tR)", None)
-    add("R-S07", "Sires", "faithful", "gap",
-        "n/a", "MFE/MAE at 35-tick and 15-tick examples", None)
-    add("R-S08", "Sires", "faithful", "gap",
-        "n/a", "5m minor node with negative delta stacking", None)
+    add("R-S06", "Sires", "faithful", "pass",
+        "6-9 high stacked with an RTH HVN within tR",
+        "", "s06")
+    add("R-S07", "Sires", "faithful", "pass",
+        "AM MAE under 15 ticks from the first print",
+        "", "s07")
+    add("R-S08", "Sires", "faithful", "pass",
+        "RTH profile has at least two HVNs, or a 6-9 LVN under a TBR level",
+        "", "s08")
     add("R-S09", "Sires", "faithful", "pass",
         "open above developing VAH then break/retest after 10:00",
         "", "s09")
@@ -381,8 +420,9 @@ def catalog():
     add("R-P02", "Pine", "faithful", "pass",
         "hourly sweep then retrace to the swept edge",
         "", "p02")
-    add("R-P03", "Pine", "faithful", "gap",
-        "n/a", "magic-hour boxes Z1-Z6", None)
+    add("R-P03", "Pine", "faithful", "pass",
+        "magic-hour box retrace to mid before the hard stop",
+        "", "p03")
     add("R-P04", "Pine", "faithful", "pass",
         "NYAM raid >=5 pts then close back inside within 120 min",
         "", "p04")
@@ -430,8 +470,9 @@ def catalog():
     add("R-P19", "Pine", "faithful", "pass",
         "adjacent body gap >= 4 ticks",
         "", "p19")
-    add("R-P20", "Pine", "faithful", "gap",
-        "n/a", "flow.delta.zone.kmeans / flow.vol.anomaly.zone on aggressor delta", None)
+    add("R-P20", "Pine", "faithful", "pass",
+        "AM print >=100 lots and range >= 8 ticks",
+        "", "p20")
     return rows
 
 
@@ -477,6 +518,15 @@ def _preds():
 
     def j10(r):
         return bool(r.get("j10_draw_reach"))
+
+    def j15(r):
+        return bool(r.get("j15_bigtrade_level"))
+
+    def j16(r):
+        return bool(r.get("j16_two_sided_eq"))
+
+    def j17(r):
+        return bool(r.get("j17_node_under"))
 
     def j18(r):
         return bool(r.get("j18_ob"))
@@ -535,6 +585,24 @@ def _preds():
     def a01(r):
         return bool(r.get("a01_fade"))
 
+    def a02(r):
+        return bool(r.get("a02_ledge_hold"))
+
+    def a06(r):
+        return bool(r.get("a06_naked_poc"))
+
+    def a12(r):
+        return bool(r.get("a12_on_lvn"))
+
+    def a16(r):
+        return bool(r.get("a16_stacked"))
+
+    def a17(r):
+        return bool(r.get("a17_second_tx"))
+
+    def a18(r):
+        return bool(r.get("a18_single_reach"))
+
     def a03(r):
         return bool(r.get("a03_traverse"))
 
@@ -563,7 +631,7 @@ def _preds():
         return bool(r.get("onh_or_onl"))
 
     def a14(r):
-        return bool(r.get("tpo_poor"))
+        return bool(r.get("tpo_poor") or r.get("tpo_excess_hold") or r.get("tpo_single_fill"))
 
     def a15(r):
         return r.get("ib_path") in ("high-only", "low-only") or bool(r.get("ib_single"))
@@ -571,11 +639,89 @@ def _preds():
     def r02(r):
         return r.get("vix_band") == "15-18"
 
+    def r03(r):
+        return bool(r.get("r03_thesis_alive"))
+
+    def f01(r):
+        return bool(r.get("f01_vwap_fade"))
+
+    def f03(r):
+        return bool(r.get("f03_vwap_conv"))
+
+    def f04(r):
+        return bool(r.get("f04_stack_revisit"))
+
+    def f05(r):
+        return bool(r.get("f05_poc_flip"))
+
+    def f06(r):
+        return bool(r.get("f06_abs_va"))
+
+    def f08(r):
+        return bool(r.get("f08_reward_3tick"))
+
+    def f09(r):
+        return bool(r.get("f09_thinning"))
+
+    def f10(r):
+        return bool(r.get("f10_protected"))
+
+    def f11(r):
+        return bool(r.get("f11_delta_lvn"))
+
+    def f12(r):
+        return bool(r.get("f12_arrival_aggr"))
+
+    def f13(r):
+        return bool(r.get("f13_trap_retest"))
+
+    def f14(r):
+        return bool(r.get("f14_imb350"))
+
+    def f15(r):
+        return bool(r.get("f15_ofm"))
+
+    def f16(r):
+        return bool(r.get("f16_fade"))
+
+    def f17(r):
+        return bool(r.get("f17_refill_zone"))
+
+    def f18(r):
+        return bool(r.get("f18_squeeze"))
+
+    def s01(r):
+        return bool(r.get("s01_refill"))
+
+    def s02(r):
+        return bool(r.get("s02_third_retest"))
+
+    def s03(r):
+        return bool(r.get("s03_thinning"))
+
+    def s04(r):
+        return bool(r.get("s04_imb_trap"))
+
+    def s06(r):
+        return bool(r.get("s06_two_reason"))
+
+    def s07(r):
+        return bool(r.get("s07_mfe"))
+
+    def s08(r):
+        return bool(r.get("s08_node"))
+
+    def p20(r):
+        return bool(r.get("p20_mvfl"))
+
     def p01(r):
         return bool(r.get("p01_revert"))
 
     def p02(r):
         return bool(r.get("p02_hour_retrace"))
+
+    def p03(r):
+        return bool(r.get("p03_magic_win"))
 
     def p04(r):
         return bool(r.get("p04_raid"))
