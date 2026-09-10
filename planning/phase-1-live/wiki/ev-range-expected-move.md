@@ -1,7 +1,7 @@
 # EV range (AM expected-move envelope)
 
 ## Definition
-The EV range is Jumbo's 2026 "AM vol expected range": a statistical stretch band for the New York morning around a reference price, computed from recent volatility `[XF p.7 L83]` `[PACK L17, L22–28]`. It is not a P-zone, not the 1.33 / 1.66 extension, and not the SessionStat 9–12 boundary `[PACK L28, L83]`. Its midpoint is its own target ID; the 6–9 EQ is a different target ID `[BRIEF]`. His exact estimator and reference price are unpublished → named variants.
+The EV range is Jumbo's 2026 "AM vol expected range": a statistical stretch band for the New York morning around a reference price, computed from recent volatility `[XF p.7 L83]` `[PACK L17, L22–28]`. It is not a P-zone, not the 1.33 / 1.66 extension, and not the SessionStat 9–12 boundary `[PACK L28, L83]`. Its midpoint is its own target ID; the 6–9 EQ is a different target ID `[BRIEF]`. His exact estimator and reference price are unpublished → named variants. The 28 Aug 2026 chart draws the EVRange line above and below the 6–9 box (sell limits at the upper line beside the overnight high, the fade marked at the lower line) `[XF p.7 chart]`; the label "EVrange −60%" seen on some charts `[PACK L24]` is unexplained. No source projects the 6–9 ladder in EV width, so `w.ev` on the projection pages is a named test variant, never a faithful row.
 
 ## Citations
 - 28 Aug 2026 recap lists "am vol expected range" beside the double-break expectancy split `[XF p.7 L81–83]` `[PACK L13–17]`; "discard mean reversion and range double breaks when these things align" `[PACK L35]`; inside prior value → "EQ / EV mean-revert" `[PACK L43]`.
@@ -27,7 +27,7 @@ Estimator grid:
 Reference variants: `ref.0930open` (default), `ref.0900open` (09:00 NY print; disclosed mean-60 construction in the closed grids), `ref.eq69`, `ref.0900close`, `ref.tdo`. Window variants: 09:30–12:00 (default), 09:00–12:00, 09:30–10:30. Lookback 20 / 60 / 250 named. Every band emits its own midpoint ID `ev.mid.<variant>`. EQ of 6–9 is a different target ID from `ev.mid.*`.
 
 ## Outcomes
-- reach, overshoot (band units), reject at band, time-to-touch, and whether the band level sits inside or outside prior RTH value (tag `in-value` / `out-of-value`) `[BRIEF]`.
+- reach per side, overshoot (band units, and the `proj.overshoot.δ` reading), reject at either band edge, time-to-touch, and whether the band level sits inside or outside prior RTH value (tag `in-value` / `out-of-value`) `[BRIEF]`.
 - Coverage calibration: share of sessions whose AM H and L both fall inside the band (target ≈ the estimator's nominal quantile).
 - Faithful disagreements: sessions where the row's reach label differs from `env.ev.mean60`.
 - Coincidence with 1.33 / 1.66 and SessionStat levels (distance ≤ `tR`), reported as counts.

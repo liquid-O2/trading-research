@@ -1,7 +1,7 @@
 # Clock grid and bar types
 
 ## Definition
-A fixed, pre-declared set of windows. Each window yields a box with the same internals as the 6–9 box (H, L, open, close, EQ, Q25, Q75, projections) and reports the same outcome table. The grid is regularized toward published clocks; no free-form morning box is searched `[BRIEF]`. The question Phase 1 answers is "which clock family wins by session, regime, and day class" as a measured table, not a deployed selector `[BRIEF]` `[JJX L157: derived ranges = a search over clocks, not a free-form box]`.
+A fixed, pre-declared set of windows. Each window yields a box with the same internals as the 6–9 box (H, L, open, close, EQ, Q25, Q75, and the projection ladder on both sides in the box's own height: mean-reversal 0.1 / 0.2 / 0.3, ±0.5, ±1, the 1.33–1.66 area, ±2) and reports the same outcome table. The grid is regularized toward published clocks; no free-form morning box is searched `[BRIEF]`. The question Phase 1 answers is "which clock family wins by session, regime, and day class" as a measured table, not a deployed selector `[BRIEF]` `[JJX L157: derived ranges = a search over clocks, not a free-form box]`.
 
 ## Citations
 - Jumbo published: 06:00–09:00 ONS `[TBR p.7 L111]`; Asia opening range 20:00–20:30, London opening range 03:00–03:30 `[TBR p.7 L108–110]`; London TBR = same internals with 03:00 and 06:00 lines `[FIND p.4–5 L86–95]`, "box into 03:00, same geometry" `[JJX L53]`; gold clocks GC 08:20, CL 09:00 `[XF p.8 L111–112]` (not run in Phase 1; NQ only).
@@ -32,7 +32,7 @@ A fixed, pre-declared set of windows. Each window yields a box with the same int
 Reversal-time bins (for the 6–9 box outcomes): `bin.0940-0950`, `bin.0930-0950` (first 20 min), `bin.0950-1000`, `bin.1000-1030`, `bin.1030-1200`.
 
 ## Upgrades
-- Bar type: `bars.time-1s` (default), `bars.vol-elapsed` (box closes after the 60-session median window volume), `bars.dollar` (notional), `bars.trade-count`. Each clock row × bar type is a variant; rows whose coverage table cannot be told apart from another row are merged in the report (`[BRIEF]`: if two variants cannot be told apart by a coverage table, keep one).
+- Bar type: `bars.time-1s` (default), `bars.vol-elapsed` (box closes after the 60-session median window volume), `bars.dollar` (notional), `bars.trade-count`, `bars.range40` (40-tick range bars — the bar type of the Sires execution charts, chart header "40 Range" `[NYAM p.4]` `[K18 p.7]` `[K2345 p.5]`, "the 40 range or 1 minute" `[CONT p.5]`; a named row for the Sires recipes, built from 1-second bars). Each clock row × bar type is a variant; rows whose coverage table cannot be told apart from another row are merged in the report (`[BRIEF]`: if two variants cannot be told apart by a coverage table, keep one).
 - Regime slices as columns only: vol tercile from [vol-estimators](vol-estimators.md), day class from [range-path-class](range-path-class.md).
 
 ## Outcomes

@@ -18,7 +18,7 @@ Default set `G-default` = touch `t2`, break `b.c1`, reject `r=0.5, k=15`, hold `
 - User: touch/reject/hold/break = one shared named variant grid across families `[BRIEF]`.
 
 ## Faithful object
-Each source's own confirmation is a named row: `grid.gb.c5` (5-minute close back), `grid.jumbo.projection-reject` (reject at −0.5 with `r=0.5`), `grid.pine.raid5-120` (5 pts, 120 min).
+Each source's own confirmation is a named row: `grid.gb.c5` (5-minute close back), `grid.jumbo.projection-reject` (reject at the projection ladder on the swept side — mean-reversal 0.1 / 0.2 / 0.3, ±0.5, the 1.33–1.66 area, overshoot δ allowed — with `r=0.5`; both sides, [tbr-6-9-range](tbr-6-9-range.md)), `grid.pine.raid5-120` (5 pts, 120 min).
 
 ## Upgrades
 None beyond the enumerated grid. Adding a cell requires a source citation or a QUESTIONS.md entry.

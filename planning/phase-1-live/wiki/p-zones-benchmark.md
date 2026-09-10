@@ -23,7 +23,7 @@ Benchmark `pz.approx.A` (disclosed-distance-approximation): at clock `t` ∈ {09
 
 ## Outcomes
 - Touch / reject / hold / break at box edges (grid); reversal-inside-box rate = reject with `r=0.5`; time-to-touch.
-- When EV band, −0.5 projection and P-zone box disagree on where the AM extreme printed, which one was closest (distance ranking, no P&L).
+- When the EV band, the ±0.5 / mean-reversal area and the P-zone box disagree on where the AM extreme printed, which one was closest (distance ranking per side, no P&L); the box may overlap either 6–9 edge (the 2 Jan 2026 example is the low side; the high-side mirror is the same object).
 - Faithful disagreements: sessions whose reject label differs from `pz.approx.A`.
 
 ## Links

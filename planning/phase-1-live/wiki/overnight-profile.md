@@ -9,7 +9,7 @@ The volume profile of 18:00–09:30 ET (`value.vp.on`): its shape (one distribut
 - Overnight VP shape as a balance metric for the 6–9 box already sits on [range-path-class](range-path-class.md); this page is the full 18:00–09:30 profile.
 
 ## Faithful object
-`value.vp.on`: trade-level profile 18:00–09:29:59, 1-tick bins, POC, VA 70% expanded from POC; double distribution = two local maxima each ≥ 1.5× the median bin separated by a bin ≤ 0.5× the median (the ON LVN), else single (named approximation using the [value-and-profiles](value-and-profiles.md) thresholds); ON shelf = the ledge rule from `value.kz`; inventory sign = sign of Σ(aggressive buy − aggressive sell) over the window (`[unmeasured]` tape object; bar proxy `flow.cvd.ohlc` named). `known_at` 09:30.
+`value.vp.on`: trade-level profile 18:00–09:29:59, 1-tick bins, POC, VA 70% expanded from POC; double distribution = two local maxima each ≥ 1.5× the median bin separated by a bin ≤ 0.5× the median, else single (named approximation using the [value-and-profiles](value-and-profiles.md) thresholds); the ON LVN is the band of bridge bins ≤ 0.5× the median (the p.14 drawing boxes the whole low-volume stretch between the humps; the minimum-volume price is the line variant); the ON shelf = the ledge band at the edge of the hump nearest the open (the p.14 box at the upper hump's edge; the VA edge is a named alternative); `poc_alignment` = the developing RTH POC inside the LVN band (drawn on p.14, not defined); inventory sign = sign of Σ(aggressive buy − aggressive sell) over the window (`[unmeasured]` tape object; bar proxy `flow.cvd.ohlc` named). `known_at` 09:30.
 
 ## Upgrades
 - OHLC-1m profile; VA 68 / 40; 4-tick bins; window 20:00–09:30.

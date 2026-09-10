@@ -6,6 +6,7 @@ The confirmation Ethos requires after an absorption print before it counts: pric
 ## Citations
 - 27% failure without a reward system; the three-tick rule read on time and sales, speed of tape or CVD `[ABS p.3–5, p.13]`; the retest of the reward system as the entry `[ABS p.9]`; reward vs result, 18-tick median dip `[STOP p.7]`; upticks 2–4, entry within a tick or two `[STOP p.12, p.14]`; delayed reward `[STOP p.13]`; 3-tick aggression toward the absorbed side or fails 27% `[AVG p.24, p.28–29]`.
 - The 27% figure is the presenter's own record, not an audited statistic `[ABS p.14]` `[STOP p.16]`.
+- Drawn: the passive wall is a horizontal band and the reward-system retest returns into that band; the CVD median is a straight line on the CVD panel `[ABS p.4, p.9]` (figures); the two entry clips that define the digit read are ES (MotiveWave EPZ25) `[STOP p.11–13]`, the walkthrough is NQ 40-range `[STOP p.8]`.
 
 ## Faithful object
 `flow.reward.3tick`: after a `flow.absorption.A` event at price P with absorbed side A, reward = the first ≥ 3-tick displacement against A that starts within 3 ticks of P, within 5 minutes (named), while A's aggressive prints in that span are smaller than in the absorption window (no refresh; see [digit-thinning](digit-thinning.md)); late reward = a qualifying displacement that starts 6–8 ticks from P, counted as none. `[unmeasured]` tape object.

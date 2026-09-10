@@ -8,7 +8,7 @@ A VWAP started at a moment that mattered rather than at the session start: from 
 - Event timestamps from the normalized event and release calendars `[INV L552–555, L580, L601–604]`.
 
 ## Faithful object
-`env.vwap.anchored.swing`: trade-price VWAP from the last confirmed 5-bar fractal swing high (for a falling anchor) or low on 5-minute NQ bars, `known_at` = confirmation bar; `.event` from the timestamp of the last scheduled CPI / FOMC / NFP release; `.session` = RTH 09:30 (identical to `env.vwap.rth`); `.weekly` from Sunday 18:00; `.monthly` from the first session's 18:00. Convergence flag = ≥ 2 anchored VWAPs within `tR`.
+`env.vwap.anchored.swing`: trade-price VWAP from the last confirmed 5-bar fractal swing high (for a falling anchor) or low on 5-minute NQ bars, `known_at` = confirmation bar; `.event` from the timestamp of the last scheduled CPI / FOMC / NFP release; `.session` = the exchange session from 18:00 ET (the lesson's "Session" anchor, `env.vwap.eth`; the 09:30 cash open is the `.event` session-open anchor and `env.vwap.rth` the named RTH row); `.weekly` from Sunday 18:00; `.monthly` from the first session's 18:00. Convergence flag = ≥ 2 anchored VWAPs within `tR`.
 
 ## Upgrades
 - HLC3 × bar-volume proxy; ±1 / 2 SD bands on each anchor; anchor at the 6–9 open or the 03:00 London analog.

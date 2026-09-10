@@ -11,15 +11,17 @@ A session-fail event: price trades beyond a named box edge (sweep), then fails b
 
 ## Faithful object
 Box list (all NQ, ET): `box.6-9` (Jumbo), `box.gb.nyam` (09:00–10:00, outcomes from 10:00), `box.gb.10-11`, `box.gb.hour` (last completed hour), `box.gb.asia` (20:00–00:00), `box.gb.london` (02:00–05:00), `box.jumbo.london` (00:00–03:00, separate row), `box.prior-rth` (PDH / PDL), `lvl.tdo` (00:00 print), `lvl.nwog` (Friday close — the session's last 1-minute close before 17:00 — vs the Sunday 18:00 open, two lines `[GB L60, L69]`; the 15:59 RTH close and the 17:00 settlement are named endpoint variants, not the source's words), `lvl.0930open`.
-Event `fail.<box>.<grid>`: `b.wick` beyond an edge, then fail-back inside under `grid.gb.c5` (faithful GB) or `b.c1` (comparison), within `k=30`. `lvl.tdo` uses the GB 5-minute close-back only. Golden pocket `loc.gp` = the 50–61.8% band of the last completed impulse (swing from last fail event extreme to the subsequent extreme); emitted as a location flag on events, never as an event. `label.aplus` = a sweep was observed (`true` / `false` / `unknown` if coverage is insufficient). Depth `d` is a separate upgrade, not the A+ definition `[GB L93]`.
+Event `fail.<box>.<grid>`: `b.wick` beyond an edge, then fail-back inside under `grid.gb.c5` (faithful GB) or `b.c1` (comparison), within `k=30`. `lvl.tdo` uses the GB 5-minute close-back only. Golden pocket `loc.gp` = the 50–61.8% band of the last completed impulse (swing from last fail event extreme to the subsequent extreme); emitted as a location flag on events, never as an event. `label.aplus` = a sweep of the traded box plus the failure back inside under `grid.gb.c5` was observed ("A+ | Sweep of the relevant range plus failure back inside" `[GB L242]`; `true` / `false` / `unknown` if coverage is insufficient); `label.aplus.sweep-only` = the sweep alone, the necessary condition he states ("No sweep = not A+" `[GB L93, L147]`), a named weaker variant. Depth `d` is a separate upgrade, not the A+ definition `[GB L93]`.
 
 ## Upgrades
 - Sweep depth `d` (2 ticks / 5 pts / 0.1·R); confirmation `b.c1` vs `b.c5` vs 15-minute hold inside; time cap `k`.
+- Invalidation read on bodies, not wicks: a 1m / 5m close beyond the sweep extreme instead of a tick through it ("The bodies tell the story. The wicks do the damage" `[GB L92, L622]`); the ticket stops the pack reads off his screenshots (~17 pts Asia, ~32–35 pts NYAM, ~49.75 pts above PDL, 19.25 pts on the hour short) are illustrative, "not a formula — structure" `[GB L356–358, L606, L687]`.
+- Side: every box is scored on both edges ("Exact mirror" `[GB L216–227]`); the 9:30 manipulation (`lvl.0930open`) and the stacked-sweep-to-NWOG case are stated on one side only (below the open, long; highs, short) and their mirrors are named side variants `[GB L30, L90, L156, L617–620]`.
 - Box source from the clock grid; trade-level vs 1-second bars.
 
 ## Outcomes
 - Event counts per box per session; agreement matrix vs Jumbo labels (Judas / single-extended / single-purged / neither) = the "fail-back vs Jumbo labels" table; faithful disagreements = sessions where `fail.6-9.gb.c5` and `judas.depth.any` disagree.
-- Post-event: reject / hold / break of the swept edge (grid); reach of the opposite edge; reach of magnets `lvl.tdo`, `lvl.nwog`, PDH / PDL; time-to-target; whether the event extreme sits inside `loc.gp`.
+- Post-event: reject / hold / break of the swept edge (grid); reach of the opposite edge; reach of magnets `lvl.tdo`, `lvl.nwog`, PDH / PDL (the 27 Aug hour-box short sells back through TDO toward PDH `[GB L687]`); time-to-target; whether the event extreme sits inside `loc.gp`.
 - NWOG: fill rate by 12:00 and by 16:00 on Mondays; TDO: touch rate in 09:30–12:00 (tier-2 comparison: midnight-open hit 73.75% overall `[PINE nq_stats_mapper:311–313]`).
 
 ## Links

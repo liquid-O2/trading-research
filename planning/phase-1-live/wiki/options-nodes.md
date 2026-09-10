@@ -12,7 +12,7 @@ This page must not collapse to QQQ / SPY, and no QQQ / SPY print is ever labeled
 - The acquired Theta files carry **no underlying price column**: `quote-1m` = symbol, expiration, strike, right, bid / ask size / exchange / price / condition, request_date, ts_event, osi_symbol; `trade_quote` adds the trade fields and ts_quote; `eod` adds OHLC, volume, count, closing NBBO (`/workspace/data/thetadata-opra/opra__ndx-options__quote-1m__dte14__strike-range70`, same for SPX; schema read from the stored parquet). So the "OPRA quote underlying" spot source is absent for NDX, NDXP, SPX, SPXW.
 - Acquired daily cash: `free-sources/yahoo__cash-daily__normalized` = QQQ, SPY, NDX, SPX daily OHLCV, 2010-01-04 → 2026-09-04, date-only `[INV L713–718]`.
 - CME NQ.OPT definition / OHLCV-1m / statistics / trades 2020-01 → 2026-09 `[INV L98–120]`; QQQ / SPY 1-minute from 2018-09 `[INV L253–263]`.
-- User: levels from gamma / OI heat maps, multi-asset `[DTM L22, L24]`; NDX levels felt better than QQQ on NQ `[CEX L348]` (user).
+- User: levels from gamma / OI heat maps, multi-asset `[DTM L22, L24]`; NDX levels feel more accurate than QQQ on NQ `[CEX L565]` (user; the earlier L348 was a blank line); the gamma level on one index may fire while the sister's level is weaker or unhit `[CEX L455–456]` (user).
 
 ## Spot for distance-to-level (`spot_at_t`)
 

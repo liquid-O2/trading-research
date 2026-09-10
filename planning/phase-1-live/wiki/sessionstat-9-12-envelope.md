@@ -17,7 +17,7 @@ SessionStat+ draws average and median session highs and lows over a lookback, "m
 - Session 09:30–16:00 RTH high / low as its own row `env.ss.rth.avgHL60` (medians and minimum-average likewise) `[SS p.10]`.
 
 ## Outcomes
-Same table as [ev-range-expected-move](ev-range-expected-move.md): reach, overshoot, reject, time-to-touch, in/out of prior value; coincidence counts with 1.33 / 1.66 and −0.5 projections; calibration by vol tercile (his choppy / low-vol failure claim `[SS p.11]`).
+Same table as [ev-range-expected-move](ev-range-expected-move.md): reach, overshoot, reject, time-to-touch, in/out of prior value; coincidence counts with the 1.33 / 1.66 area and the ±0.5 / mean-reversal area on either side (the 6 Jul 2026 chart shades the coincidence boxes above and below the session `[XF p.19]`); calibration by vol tercile (his choppy / low-vol failure claim `[SS p.11]`).
 
 ## Links
 [ev-range-expected-move](ev-range-expected-move.md) · [extensions-1-33-1-66](extensions-1-33-1-66.md) · [clock-grid-and-bars](clock-grid-and-bars.md)

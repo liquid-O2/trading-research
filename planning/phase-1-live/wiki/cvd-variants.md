@@ -4,7 +4,7 @@
 CVD = the running sum of aggressive buy volume minus aggressive sell volume `[STOP p.3 L40–44]` `[VWAP p.5 L61]`. The user asked for several CVD methods, including a gamma CVD `[DTM L23]`. Phase 1 computes five named variants on the same sessions and reports where they disagree; participants are size / aggressor proxies, gamma CVD is a declared weight table, no dealer identities `[BRIEF]`.
 
 ## Citations
-- Delta as a filter, delta prints, trapped crowds `[STOP p.2 L10–13, p.9 L169–171]`; is the aggression rewarded `[RD p.6 L78–89]`; CVD rolling over as trigger `[STOP p.9 L171]`; VWAP + CVD confluence `[VWAP p.5–6 L61–85]`.
+- Delta as a filter, delta prints, trapped crowds `[STOP p.2 L10–13, p.9 L169–171]`; is the aggression rewarded `[RD p.6 L78–89]`; CVD rolling over as trigger `[STOP p.9 L171]`; VWAP + CVD confluence `[VWAP p.5–6 L61–85]`. The "CVD median" is a plotted line on the CVD panel (`[ABS p.5]` "Plot the median line"; `[BIG p.12]` "CVD below its median"; `[STOP p.8]` "rolling over its median") whose construction no source states; when CVD is rebuilt the median is a named variant (session median of CVD so far; rolling median), never a constant.
 - Databento `side` = aggressor, not customer vs dealer `[DRFL L215–219]` (assistant restating the vendor schema); MBP-1 trades carry side, size, order count `[JJX L159]`.
 - OHLC-level delta proxies: Pine up/down volume rule by close position `[PINE Confluence Suite.txt:243–255]`.
 
