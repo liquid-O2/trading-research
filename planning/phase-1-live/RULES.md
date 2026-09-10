@@ -1,0 +1,755 @@
+# RULES.md — sourced recipe rules for Phase 1 objects
+
+Planning only. This file names, from the sources, every location, operating framework, trigger, filter and invalidation that is computable on the data we hold, every recipe an author actually states, the one-slot swaps allowed off each recipe, and the gate that keeps discovery behind scores. It does not start the runner and it does not add a ticket. Inventory rule: if a source (live wiki, Jumbo PDFs and tweets, Green Bird pack, discretionary PDFs, conversation user turns, Pine and indicator files) states it and it is computable, it is here; anything not traceable to a source is not here.
+
+## 0. Contract
+
+### 0.1 The five slots
+
+| slot | what it is | what it is not |
+|---|---|---|
+| **LC Location (price)** | a price, band or box computable before the touch, with a `known_at` | a behaviour rule, a day label, a regime |
+| **OF Operating framework** | how a source says to behave at a location (accept vs reject, initiative vs responsive, open type, balance vs imbalance, sweep + fail-back, delta divergence, profile rotation, and every other distinct rule below) | a price; a single flag that compresses several authors |
+| **TR Trigger** | the event, computable from bars or tape, that says "now" | a location or a filter |
+| **FL Filter** | a per-session or per-touch condition that admits or excludes the recipe | a trigger |
+| **IV Invalidation** | the rule that ends the idea: close through, hold outside, opposite edge, time, print broken | a target by itself (targets are outcomes in Phase 1) |
+
+Kept distinct on purpose: AMT is an operating framework and is never listed as a location; TPO poor high / low, excess and single prints are **structures** (locations of a specific kind); prior-day, IB, session and RTH profiles are **profile locations**; day types, open types, gamma regime and VIX bands are **filters**.
+
+### 0.2 Tags and the trigger-eligibility gate
+
+- `[wiki:id]` id already defined on a wiki page (`wiki/index.md`, `SPEC.md` §5). `[new:id]` computable from a source but not yet registered; registering it is a wiki edit, listed in A7. `[not-measurable]` per `QUESTIONS_RESOLVED.md`. `[tier N]` follows the wiki citation key; assistant proposals in conversations are tier 4 and only ever appear in D3.
+- **Tape-trust gate (from `FINDINGS.md`).** A tape-derived flag whose FINDINGS row says `tape trusted? = no` cannot occupy the TR slot until it is rebuilt and re-measured. Rows: `flow.cvd.trade` (sign nonzero every session), `flow.smt.trade.nq`, `flow.smt.ohlc.4` (fire every session), `flow.absorption.B` (fires every session), `flow.bigtrade.q90` (q90 = 3 lots). Eligible tape triggers today: `flow.absorption.A`, `flow.bigtrade.100ny`, `flow.bigtrade.75ldn` (`tape trusted? = yes`). Tape objects with no FINDINGS row (`value.delta.rth.trade`, `flow.footprint.diag.4x`, `flow.refill.ontouch`, `flow.ofm.sequence`, `flow.cvd.{ohlc,part.*,gamma}`, trade-visited `value.tpo.rth.30m`, and every `[new:flow.*]` below) are `[unmeasured]`: usable as locations, blocked as triggers until they print a FINDINGS row. Bar-grid events (touch / reject / hold / break / fail-back on 1-second and 1-minute bars, `wiki/touch-reject-hold-break-grid.md`) are not tape objects; their FINDINGS rows read `no` only because the column asks about Phase 2 tape promotion. They stay eligible triggers. If the stricter reading is intended, every recipe below still stands with its bar-grid trigger replaced by one of the three trusted tape triggers, which is a listed swap.
+
+### 0.3 Citation key
+
+Keys from `wiki/index.md` are reused unchanged: `[TBR p.N]`, `[XF p.N]`, `[SS p.N]`, `[FIND p.N]`, `[JJX L#]`, `[GB L#]`, `[PACK L#]`, `[PINE file:L#]`, `[INV L#]`, `[DTM L#]`, `[DRFL L#]`, `[CEX L#]`, `[CRAW A#]`. Page numbers are PDF page indices (cover = p.1); on the Ether / Ethos PDFs they equal the printed footer.
+
+| key | file under `sources/documents/discretionary/` |
+|---|---|
+| `[AMT1]` | amt-lesson-1.pdf (14 pp) |
+| `[AMTL]` | amt-on-live-markets.pdf (14 pp) |
+| `[MAMT]` | mastering-amt-vp.pdf (27 pp) |
+| `[MATH]` | the-math-behind-auction-market-theory.pdf (16 pp) |
+| `[TPO]` | tpo-lesson-3.pdf (10 pp) |
+| `[VP2]` | vp-lesson-2.pdf (9 pp) |
+| `[RTVP]` | reading-the-volume-profile.pdf (13 pp) |
+| `[FP8]` / `[FP9]` | fp-lesson-8.pdf / fp-lesson-9.pdf (8 pp each) |
+| `[VWAP]` | vwap-lesson-10.pdf (9 pp) |
+| `[DOM5]` / `[DOM6]` / `[DOM7]` | dom-lesson-5/6/7.pdf (8 pp each) |
+| `[ABS]` | your-mistakes-with-absorption.pdf (14 pp) |
+| `[STOP]` | stop-re-entering.pdf (17 pp) |
+| `[RD]` | reading-delta.pdf (11 pp) |
+| `[WIC]` | whos-in-control.pdf (12 pp) |
+| `[TRAP]` | trapped-buyers-one-retest.pdf (13 pp) |
+| `[BIG]` | only-trade-big-trades.pdf (19 pp) |
+| `[OFM]` | origin-of-the-move.pdf (19 pp) |
+| `[REF]` | refill-effect.pdf (24 pp) |
+| `[GEX]` | gex-framework.pdf (22 pp) |
+| `[VIX4]` | vix-lesson-4.pdf (10 pp) |
+| `[C1]` / `[C2]` / `[C3]` | code-1-thesis.pdf / code-2-risk.pdf / code-3-orderflow.pdf (8 pp each) |
+| `[NYAM]` | ny-am-session.pdf (12 pp) |
+| `[K18]` | 18k-payout-session.pdf (15 pp) |
+| `[K2345]` | 2345-funded-session.pdf (11 pp) |
+| `[K10]` | 10k-first-month.pdf (16 pp) |
+| `[ANAT]` | anatomy-of-a-losing-start.pdf (12 pp) |
+| `[CONT]` | a-clean-continuation-short.pdf (14 pp) |
+| `[AVG]` | average-unprofitable-trader.pdf (33 pp) |
+| `[DATA]` / `[EMO]` | data-engine.pdf / emotion.pdf (process only; no price objects) |
+| `[MVFL L#]` | `sources/documents/indicators/momentum-volume-flow-levels.txt` (the "institutional indicator" of `[CEX L7]`, tier 2) |
+| `[OSF L#]` | `sources/documents/indicators/Open Source Fractal - Customized.txt` (same file as `[PINE Open Source Fractal - Customized.txt]`) |
+
+### 0.4 Reading rules
+
+1. Every recipe in B is one author's own framework + location + trigger (+ filter + invalidation as the author states them). Nothing is combined across authors inside B.
+2. C changes exactly one slot of one recipe at a time. Variants add, they do not multiply.
+3. D happens only after every B recipe and every C variant has a score line. Learned P-zones, free-form clocks, two-slot swaps, and every tier-4 proposal live in D3 until then.
+4. Phase 1 scores are descriptive (touch / reject / hold / break / fail-back, reach of the author's target, time-to-touch, MFE / MAE in points from the author's invalidation distance), with `n` and Wilson 95% per `SPEC.md` §10. No P&L, no sizing, no account rules; management rows are recorded as invalidation and outcome definitions only.
+
+---
+
+## A. Slot inventories
+
+### A1. Locations (LC)
+
+#### A1.1 Clock boxes (H, L, open, close, EQ, Q25, Q75, and the projections of A1.2 on every box)
+
+| id | window (ET) | source | status |
+|---|---|---|---|
+| `range.6-9.published` | 06:00–09:00 ONS, main NY model | `[TBR p.7, p.8]` `[XF p.7]` | wiki |
+| `range.5-9`, `range.7-9`, `range.8-9` | 5–9 family, "any window 5–9 behaves similarly" | `[XF p.7]` `[PACK L49]` (08:00 line per `wiki/clock-grid-and-bars.md`) | wiki |
+| `range.asia.2000-2030` | Asia opening range | `[TBR p.7]` | wiki |
+| `range.midnight.0000-0030` | midnight opening range | `[TBR p.7]` | **new** |
+| `range.london.0300-0330` | London opening range | `[TBR p.7]` | wiki |
+| `range.london.00-03` | London TBR box into 03:00, same internals; 03:00 open analog, 06:00 handoff line | `[FIND p.4–5]` `[JJX L53]` `[XF p.40]` | wiki |
+| `range.rth.0930-1000` | equities opening range (A period) | `[TBR p.7]` `[TBR p.16]` | **new** (outcome row `open.oneway.A.0930-1000` exists; the box itself does not) |
+| `range.rth.1000-1030` | RTH AM second window | `[TBR p.7]` | **new** |
+| `range.lunch.1200-1230` | lunch opening range | `[TBR p.7]` | **new** (comparison only; lunch is a documented leak `[XF p.21]` `[FIND p.5]`) |
+| `range.moc.1500-1530` | MOC macro session | `[TBR p.7]` | **new** (comparison only) |
+| `range.or.5m`, `range.or.15m` | 09:30–09:35 / 09:30–09:45, mid only | `[XF p.25, p.15]` | wiki |
+| `range.ib` | 09:30–10:30 initial balance (A+B) | `[TPO p.8]` `[XF p.8]` (no edge) `[MAMT p.19, p.23]` | wiki, comparison row |
+| `range.gb.nyam` | 09:00–10:00, events counted from 10:00 | `[GB L28–30, L178, L195–196]` | wiki |
+| `range.gb.10-11` | 10:00–11:00 second NY box | `[GB L49, L449, L671]` | wiki |
+| `range.gb.hour` | last completed 60 minutes | `[GB L32–33, L439–441, L685–687]` | wiki |
+| `range.gb.asia` | ≈20:00–00:00 (HIS CHART, INFERRED) | `[GB L35–40]` | wiki |
+| `range.gb.london` | ≈02:00–05:00 (INFERRED) | `[GB L48, L53–54]` | wiki |
+| `range.on.1800-0930` | overnight high / low (ONH, ONL) | `[MAMT p.15, p.21]` | **new** |
+| `range.dealing` | dealing range: band bounded by the last failed swing on each side (fractal swing, named approximation) | `[ANAT p.3]` `[K18 p.4]` `[CONT p.9]` | **new** |
+| `range.4h.{18,22,02,06,10,14}` | 4H candle boxes | `[PINE 4H HOD LOD Checkpoint Analysis.txt:49–61]` | grid candidate only |
+| gold 08:20 / Sunday 18:00, CL 09:00 | not NQ | `[XF p.8, p.34]` `[FIND p.6, p.10]` | not run (NQ only) |
+| JJX families: NY end 09:30 starts {00,03,05,06,07,08,09}; London end 03:00 starts {20:00 prior,00,01,02} | derived-range search inside named families | `[JJX L177–199]` (assistant, tier 4) `[JJX L148]` (user) | D3 only beyond the rows above |
+
+#### A1.2 Box internals and projections (per box)
+
+| id / level | definition | source |
+|---|---|---|
+| H, L, EQ, Q25, Q75, range open (first print), range close (last print) | box internals | `[TBR p.4]` `[FIND p.12]` |
+| `-0.5` each side | mean-reversal level, half the range beyond the broken side | `[TBR p.5, p.8, p.30]` `[FIND p.12]` |
+| `1.0` | measured move | `[FIND p.7]` `[PINE 6 to 9 Session and Levels.txt]` |
+| `env.ext.133.from-edge`, `env.ext.166.from-edge` | retracement / reversal levels beyond edge, from 6–9 or London box | `[TBR p.21]` `[XF p.9, p.31, p.33, p.48]` |
+| `env.ext.133.from-origin`, `env.ext.133.from-eq` | coordinate variants | `[PINE MTF OHLC Lines with Breakout & Retracement Labels.txt:293–307]` |
+| `±2.0` deviation | Pine restatement | `[PINE 6 to 9 Session and Levels.txt:1–120]` |
+| `bin.0940-0950`, `bin.0930-0950`, `bin.0950-1000`, `bin.1000-1030`, `bin.1030-1200` | reversal-time bins | `[TBR p.8, p.30]` `[XF p.15, p.47]` |
+| windows 09:00–12:00 (3-hour "PO3"), AM 09:30–12:00, lunch 12:00–13:00, PM 13:00–16:00 | framing windows | `[TBR p.16, p.19, p.36]` `[SS p.10]` |
+
+#### A1.3 Profiles (locations built from volume or time at price)
+
+| id | scope | levels | source | status |
+|---|---|---|---|---|
+| `value.vp.rth.trade` / `value.vp.rth.ohlc1m` | prior RTH 09:30–16:00 | VAH, VAL, POC; VA 70 / 68 / 40 | `[AMT1 p.5]` `[RTVP p.4]` `[C3 p.7]` `[XF p.14]` `[TBR p.32–33]` | wiki |
+| developing RTH VP | current session, known as-of each minute; VAH / VAL flagged lagging | `[MAMT p.4]` `[ABS p.7]` `[MATH p.9]` | wiki (developing variant) |
+| `value.vp.eth.prior` + `lvl.mpoc.eth` | prior 18:00–16:00 profile: high, low, VAH, VAL, POC, mid (MPOC) | `[MAMT p.15–16]` | **new** |
+| `value.vp.on` | overnight 18:00–09:30 profile: single vs double distribution, ON LVN, ON shelf, ONVAH / ONVAL / ONVPOC | `[MAMT p.14, p.21]` | **new** |
+| `value.vp.box69` | range profile of the 6–9 box (balance shape input) | `[XF p.44]` `[FIND p.8]` | wiki (overnight-only scope upgrade) |
+| `value.vp.dealing` | VP of the current dealing range; its POC | `[CONT p.9]` `[RD p.9]` | **new** |
+| `value.vp.composite.{5d,20d,250d}` | weekly / monthly / yearly composite HVN, LVN, shelves | `[VP2 p.6]` `[BIG p.10]` `[CONT p.7]` `[K10 p.12]` | **new** |
+| `value.kz` | HVN, LVN, two-sided LVN, ledge (instant cut-off), shelf (taper), minor volume node, naked prior POC | `[VP2 p.3–6]` `[MATH p.13]` `[ABS p.6–7]` `[BIG p.10]` `[CONT p.4]` `[FIND p.7–8]` | wiki (minor volume node = local LVN; keep the name) |
+| `value.tpo.rth.30m` | TPO POC / VAH / VAL; IB H/L at 10:30 | `[TPO p.3–4, p.8]` | wiki |
+| TPO structures: `tpo.single`, `tpo.excess`, `tpo.poor.{high,low}` | single prints, ≥2 tail rows of one letter, weak / no tail | `[TPO p.5–7]` `[C3 p.6]` `[AVG p.30]` | wiki flags on `value.tpo.rth.30m` |
+| `value.delta.rth.trade` | per-price aggressive buy − sell; `dp.max` / `dp.min` (delta print), taper into the extreme | `[XF p.14, p.23]` `[RD p.6–7]` `[TRAP p.4]` `[STOP p.9]` | wiki, `[unmeasured]` |
+| `value.delta.weekly` | weekly delta profile print (who got trapped, who is covering) | `[K18 p.4]` `[K2345 p.4]` | **new**, `[unmeasured]` |
+| `flow.delta.spike` | per-price delta spike at VAH / VAL where control changed hands | `[ABS p.10–11]` | **new**, `[unmeasured]` |
+| `lvl.prior-rth.q{25,50,75}` | prior-day RTH quadrants | `[DTM L19]` `[DRFL L906]` (user) `[TBR p.32]` | **new** |
+| `lvl.pclose`, `lvl.popen`, `lvl.halfgap`, `lvl.pib.{high,low}` | prior close / open, half gap, prior IB | `[MAMT p.21–23]` | **new** (touch-rate rows) |
+| `lvl.owed.nearest` | nearest unfinished business above / below: naked POC, single print, poor extreme, leftover session H/L | `[TPO p.5–9]` `[VP2 p.6]` `[FIND p.5, p.9]` `[ANAT p.10]` `[K10 p.12]` | **new** (derived list) |
+
+#### A1.4 Envelopes
+
+| id | construction | source | status |
+|---|---|---|---|
+| `env.ev.{mean60,median60,p75,p90,rv20,gk20,yz20,har,iv,vix16}` × `ref.*` | AM expected-move band | `[XF p.7]` `[PACK L17–31]` | wiki |
+| `env.ss.{avgHL60,medHL60,minavg60}` + projections | SessionStat 09:00–12:00 | `[SS p.6, p.10]` `[XF p.19, p.45]` | wiki |
+| `env.ss.rth.avgHL60` | SessionStat 09:30–16:00 | `[SS p.10]` | **new** |
+| `env.ss.weighted60` | weighted-average variant (formula not printed) | `[SS p.3, p.6]` | wiki (named variant) |
+| `pz.approx.A`, `pz.approx.B` | disclosed P-zone approximations | `[XF p.28–30]` `[FIND p.7–8]` | wiki |
+| `env.tbr.sigma025` | ±0.25σ of 20-day daily % stdev, touch → reversion to open by 12:00 | `[PINE AM TBR - NQ Stats.txt]` | **new** (tier-2 recompute) |
+| `env.pine.manip.{avg,median,p25,p75}` | manipulation / distribution excursion from the open (AMD phase envelope) | `[PINE Statistical OHLC Projections HTF.txt:141–158, 322–341]` | **new** (tier-2 recompute) |
+| `env.pine.sessionstat.P10-P90` | Session Statistical Levels percentile bands | `[PINE Session Statistical Levels.txt]` | grid candidate |
+| `env.vwap.rth.sd{1,2,2.5,3}` | RTH VWAP ± volume-weighted SD; median = "POC of the session so far" | `[VWAP p.3–4, p.8]` `[PINE Statistical VWAP study…]` | wiki (`sd2`), **new** (1, 2.5, 3) |
+| `env.vwap.anchored.{swing,event,session,weekly,monthly}` | VWAP anchored at a swing, an event (CPI / FOMC / open), or a week / month | `[VWAP p.7]` | **new** |
+| VIX → ES point table (12.5 ≈ 30, 16 ≈ 50, 22 ≈ 95) | expected daily range (ES; NQ scaling is a named map) | `[VIX4 p.4]` | filter input, not a level |
+
+#### A1.5 Flow-built prints (tape locations)
+
+| id | construction | source | status |
+|---|---|---|---|
+| `flow.absorption.A` price | q90 2-min aggressive volume at a level, ≤2-tick advance, ≥0.25R reversal | `[ABS p.8–9]` `[MATH p.8]` `[TBR p.31]` | wiki, trusted |
+| `flow.absorption.B` price | BBO reload ≥50% within 500 ms, ≥2 repeats | `[DOM6 p.6]` `[DOM7 p.4]` `[JJX L159]` | wiki, tape-trusted no |
+| `flow.absorption.candle.jumbo` | small body + volume ≥ k × 14-period average (k unpublished → named grid; MVFL uses 2.5 × avg20) | `[TBR p.31, p.35]` `[XF p.44–46]` `[MVFL L40–41]` | **new** (bar object) |
+| `flow.bigtrade.100ny` / `75ldn` / `30-60` / `q99` | single prints ≥ threshold; Ethos 30–60 on a 40-range chart, adjusted with session volume | `[XF p.25]` `[BIG p.3]` `[OFM p.4]` | wiki, 100/75 trusted |
+| `flow.refill.zone` | cluster of large aggressive prints (60–100 lots in seconds); width, print count, session location | `[REF p.5, p.8]` `[OFM p.2]` | **new** (the wiki has the event `flow.refill.ontouch`) |
+| `flow.ofm.catalyst` | cluster of absorbed aggression drawn at the lowest (highest) first aggression | `[OFM p.2, p.5–6]` `[BIG p.7]` | **new**, `[unmeasured]` |
+| `flow.footprint.diag.4x` (3×), `flow.footprint.stack3` (stack ≥3, 2 named) | diagonal imbalance ask(p) vs bid(p−tick); stacked = unfinished auction magnet | `[FP8 p.5–6]` | wiki / **new** |
+| `flow.footprint.imb350` | same-price 350% buyer / seller divergence line; marked only where it sits at the same price as aggression | `[BIG p.5]` `[K2345 p.5]` | **new** |
+| `flow.candle.poc`, `flow.candle.poc.flip` | per-candle max-volume price; flip = POC jumps to the other side of the candle | `[FP9 p.5]` `[FP8 p.6]` | **new** |
+| `lvl.protected.{high,low}` | swing extreme whose defending delta print held and that price has stopped retesting | `[RD p.4–5]` `[K18 p.8]` `[ANAT p.3]` | **new** |
+| `flow.delta.zone.kmeans` | k-means (k=4 per side) zones of delta events ≥6× avg-50 delta (floor 3000), min thickness 0.4 ATR-14 | `[MVFL L19–37, L181–411]` | **new** (tier-2 rebuild on aggressor delta `[CEX L16]`) |
+| `flow.vol.anomaly.zone` | bar volume >2.5× avg-20 → zone 0.2% of price, merged within 0.5% | `[MVFL L39–46, L98–176]` | **new** (bar object) |
+
+#### A1.6 Candle objects
+
+| id | construction | source | status |
+|---|---|---|---|
+| `block.sweep.tbr.3m` (2 / 3 / 5 m) | C2 sweeps C1, C3 closes beyond C2; block = C2 wick; aggressive stop at OB midpoint, conservative at OB low | `[TBR p.27–28]` | wiki |
+| rejection block | sweep-candle wick; closure above the sweep candle confirms | `[TBR p.29]` | wiki (block page) |
+| `cisd.fractal.literal` | opposing-run change in state of delivery as coded, causal replay | `[OSF L1–118, L306–342, L523–951]` `[PINE HTF Sweep Model with CISD Table.txt:112–179]` | wiki |
+| `gap.fvg.first.clock`, `gap.body.adjacent` | first three-bar wick gap per hour; body gap ≥4 ticks | `[TBR p.33, p.35]` `[PINE First presented FVG…:81–85,148–170]` `[PINE 8020 System.txt]` | wiki |
+| H1 / M15 imbalances as draw | PD RTH Range+ confluence | `[TBR p.33]` | wiki (HTF FVG variant) |
+
+#### A1.7 Green Bird levels
+
+| id | definition | source | status |
+|---|---|---|---|
+| `box.gb.nyam`, `box.gb.10-11`, `box.gb.hour`, `box.gb.asia`, `box.gb.london` | box edges as in A1.1 | `[GB L28–54]` | wiki |
+| `box.prior-rth` (PDH / PDL) | previous day high / low, confluence | `[GB L64, L141]` `[TBR p.32–34]` | wiki |
+| `lvl.tdo` | first print of 00:00 ET | `[GB L24–26, L142]` | wiki |
+| `lvl.nwog` | Friday settle (and Friday close) vs Sunday 18:00 open; destination, not entry | `[GB L59–60, L68–69, L155, L615–621]` | wiki |
+| `lvl.0930open` | cash open; 9:30 manipulation reference | `[GB L30, L56–57, L90]` | wiki |
+| `loc.gp` | 50–61.8% of the completed impulse (NYAM high→low or HTF swing) | `[GB L73–76, L255–263]` | wiki |
+| `loc.pd50` | 50% premium / discount split of the impulse | `[GB L144, L292–296]` `[XF p.44]` (PD RTH box, demoted) | **new** (location variant of `loc.gp`) |
+| `lvl.1800open` | 18:00 daily open (NWOG endpoint; Pine daily-open line) | `[PINE Sessions & VP with prev session VP & daily weekly opens.txt]` `[GB L60]` | **new** |
+| CPI high / low boxes, 7:30 NY true open, "above TDO = short" | excluded | `[GB L50–51, L310]` `QUESTIONS_RESOLVED §45` | excluded |
+
+#### A1.8 Options nodes
+
+| id | definition | source | status |
+|---|---|---|---|
+| `value.node.oi.{ndx,ndxp,spx,spxw}.top3` (+ qqq, spy, nqopt) | top-3 OI strikes above / below spot at 09:25, dte ≤14 | `[GEX p.14, p.16]` `[DRFL L10, L325, L906]` `[INV L297–380]` | wiki |
+| `value.node.gamma.<product>.top3` | \|gamma × OI\| nodes | `[GEX p.16]` `[DTM L21–22]` | wiki |
+| `value.node.flip.<product>` | zero-gamma level (aggregate root, named sign scenario) | `[GEX p.7]` `[CEX L86]` | wiki upgrade |
+| `value.node.{callwall,putwall,maxpain}.<product>` | largest call gamma above, largest put gamma below, min option value strike | `[GEX p.13]` | **new** |
+| KG1 levels, GEXRADAR hedging-pressure gauge, Vol Signals nodes, Skylit | vendor engines | `[K10 p.6]` `[GEX p.15, p.22]` `[DTM L21–25]` | not-measurable; our nodes are the disclosed substitute |
+
+#### A1.9 AMD as area or phase
+
+No source draws an "AMD zone" box. Sourced uses: (a) phase framing, 09:00–12:00 read as a 3-hour PO3 candle with accumulation = build window, manipulation = Judas leg, distribution = move to projections `[TBR p.6, p.16, p.19]`; (b) the 9:30 manipulation sweep below the open `[GB L30, L90]`; (c) "walking the dog" = manipulation of the box, then the real move `[FIND p.11]` `[XF p.31]`; (d) manipulation / distribution excursion statistics from the open `[PINE Statistical OHLC Projections HTF.txt]`. Computable objects: phase labels `phase.amd.{acc,manip,dist}` on the 6–9 → 09:30 → projection path (a relabel of `path_class` + `judas.depth.*`, no new geometry) and the envelope `env.pine.manip.*` in A1.4. Nothing else is claimed.
+
+### A2. Operating frameworks (OF)
+
+One row per distinct behaviour rule a source states. Each produces a computable per-session or per-touch label (right column) so recipes in B can name it.
+
+| id | author | rule (as stated) | label / object it produces | source |
+|---|---|---|---|---|
+| OF-J1 | Jumbo | Judas / false-breakout reversal: sweep of a box edge extends to exhaustion (−0.5 / P-zone / SessionStat), reverses through EQ toward the untouched edge; A+ = done before 10:00 | `judas.depth.any`, `judas.depth.-0.5`, reversal-bin label | `[TBR p.6, p.8, p.20]` `[FIND p.4, p.7]` `[XF p.29, p.48]` |
+| OF-J2 | Jumbo | Single break: one edge taken, opposite edge clean; entries from EQ / quadrants / range open; 09:40–09:50 is continuation or add, not a fade | `path_class` single-high / single-low, `single-extended` / `single-purged` | `[TBR p.12]` `[FIND p.4, p.7]` `[XF p.12]` |
+| OF-J3 | Jumbo | Open-location switch: RTH open inside prior value / range → mean-reversion morning (fade, EQ / EV targets); outside both with above-average RVOL → discard mean reversion and double-break fade | `open_cell` (27), `rvol_0930` | `[XF p.8, p.10, p.16–17]` `[PACK L35–44]` `[FIND p.6–7]` |
+| OF-J4 | Jumbo | Range-size / balance classifier: width % bins drive double vs single break; balanced vs imbalanced overnight; already-purged edges; sister indices | `width_pct`, `balance`, `edge_clean`, `day_type` | `[XF p.7, p.23–24]` `[FIND p.6–7]` `[JJX L56]` |
+| OF-J5 | Jumbo | AM / PM rotation and the 1.33–1.66 fork: AM consolidation → PM expansion to higher projections; AM expansion → PM consolidation between AM levels; 1.33–1.66 continues AM or reverses the whole AM through PM | `corr.am-pm`, `ext_133_touch`, `ext_166_touch` after 12:00 | `[TBR p.21, p.36]` `[XF p.31, p.33, p.48]` `[FIND p.5–6]` |
+| OF-J6 | Jumbo | Market conditions: CPI / NFP / FOMC weeks lower expectations; extended overnight → targets limited to range H/L until lunch; range-bound → inner levels, scalps; expansive → higher projections, re-entry plausible; unfavourable days AM off-limits, PM has the moves | `cal.redfolder`, `cond.{extended,rangebound,expansive}` | `[TBR p.22–24]` |
+| OF-J7 | Jumbo | Delayed cycle 2: on 10:00 release days the real reversal comes after the release, not 09:40–09:50 | `cal.1000release`, reversal bin shift | `[TBR p.18]` `[FIND p.10]` |
+| OF-J8 | Jumbo | Failure recognition: no rejection signature at the projection, continuous momentum, extended bodies, time-window violations, 3-strike rule, volume divergence → setup failed, exit and observe, switch to single-break or PM | `fail.{norejection,extendedbody,3strike,window}` | `[TBR p.37]` |
+| OF-J9 | Jumbo | London TBR: same geometry ending at 03:00; London 1.33–1.66 reversals; London H4 SessionStat + absorption at the reversal; which session is clean this cycle is an input | `range.london.00-03` labels, `label.clean.session.rollingN` | `[FIND p.4–5, p.9]` `[XF p.25, p.40, p.46]` |
+| OF-J10 | Jumbo | Unfinished business: leftover Asia / London / RTH highs and lows are the draw after the 09:40 reverse; lines deleted once purged; not an entry | `lvl.owed.nearest`, purge deletion | `[TBR p.11, p.33–34]` `[XF p.30, p.33, p.48]` `[FIND p.5, p.9]` |
+| OF-J11 | Jumbo | PD RTH Range+: only RTH price action counts; ETH sweeps are disregarded; wait for RTH open to show direction; prior RTH H/L and M15 / H1 imbalances are draws on liquidity | `box.prior-rth` reach labels | `[TBR p.32–34]` |
+| OF-J12 | Jumbo | Confirmation stack at location: reclaim / 3-candle, absorption candle or imbalance in it, delta taper, VP shelf, BigTrades ≥ threshold; one alone is not a trade | confirmation count at the touch | `[TBR p.31, p.35]` `[XF p.23, p.25, p.27, p.45]` `[FIND p.3, p.9, p.12]` |
+| OF-J13 | Jumbo | Management leaks (recorded as invalidation / exit definitions): front-run exit at range-mid rejection; one-and-done in the first 20 min; flip after the first idea dies at the level; lunch is not A+; BE at 09:50 while location is valid is a leak | exit-reason labels | `[XF p.3, p.15, p.21, p.26]` `[FIND p.10–12]` |
+| OF-J14 | Jumbo | Statistical framing: all stats inside 09:00–12:00; 86.46% at −0.5 is a location stat, not P(win) | recompute rows | `[TBR p.30]` `[XF p.47]` `[FIND p.10]` |
+| OF-G1 | Green Bird | Failed breakout / failed breakdown of a session or hour box: sweep, cannot hold, back inside → trade toward the opposite edge; a sweep alone is not a signal | `fail.<box>.gb.c5`, `label.aplus` | `[GB L85–88, L109–119, L188–246]` |
+| OF-G2 | Green Bird | Wait for the box to close: NYAM traded only after 10:00; 09:45 entry called early | event clock ≥10:00 | `[GB L29–30, L178, L195–196, L633]` |
+| OF-G3 | Green Bird | Confirmation = 5-minute close back through the level (box edge, TDO, PDL), then "wait a few points" | `grid.gb.c5` | `[GB L26, L89, L210, L324, L503]` |
+| OF-G4 | Green Bird | 9:30 manipulation: sweep below the open, reclaim, long toward discount | reclaim label at `lvl.0930open` | `[GB L30, L56–57, L90]` |
+| OF-G5 | Green Bird | TDO is confirmation and magnet, never a standalone long / short switch; failures that close through TDO on the 5m are the ones he takes | `tdo_touch`, close-through label | `[GB L24–26, L51, L612]` |
+| OF-G6 | Green Bird | NWOG is the destination: fresh gap Sunday 18:00; close the trade when the gap is tagged; Monday = NWOG day | `nwog_fill` | `[GB L59–60, L68–69, L615–621, L673–675]` |
+| OF-G7 | Green Bird | Golden pocket: bias first, retrace into 50–61.8%, clean rejection / failure, then the trade; invalidation above the zone | `loc.gp` touch + reject | `[GB L73–81, L249–296]` |
+| OF-G8 | Green Bird | Overnight sweep-and-reclaim sets next-day bias; during NYAM buy pullbacks into discount / pocket rather than fading a fresh range | overnight reclaim label | `[GB L313, L443–450, L543–544]` |
+| OF-G9 | Green Bird | Confluence stacking: PDH / PDL, TDO close, golden pocket, MTF agreement raise the grade; B+ (no sweep) is not the model | confluence count | `[GB L146–147, L242–245]` |
+| OF-G10 | Green Bird | Path of least resistance on chop days: repeat the fade at every failed pop on the heavy side | one-way-pressure label | `[GB L91, L669–671]` |
+| OF-G11 | Green Bird | Bodies tell the story, wicks do the damage: body closes decide failure; wickless bottom is suspicious | body-vs-wick break variants | `[GB L92, L158, L622]` |
+| OF-A1 | AMT (Sires / Saint) | Balance vs imbalance; rule one: inside balance the extremes hold, fade edges toward POC until acceptance outside | balance state, `label.amt.day` | `[AMT1 p.4, p.9]` `[AMTL p.3]` `[MATH p.14]` |
+| OF-A2 | AMT | Rule two: out of balance, the ledges of the prior balance carry the move (support becomes resistance) | ledge retest label | `[AMT1 p.9]` `[MAMT p.12]` |
+| OF-A3 | AMT | Acceptance vs rejection at an extreme: acceptance builds volume outside and holds the retest; failed auction is quiet on the break, wicks, snaps back within a few rotations | accept / reject label (grid hold vs reject) | `[AMT1 p.8]` `[AMTL p.5–6, p.13]` |
+| OF-A4 | AMT | Failed auction, loose 80%: break out, re-enter prior value → traverse to the other side about 80% (72–80%) | traverse outcome | `[AMT1 p.7]` `[AMTL p.8–9]` `[ABS p.12]` `[MAMT p.5]` |
+| OF-A5 | AMT | Failed auction, strict rule: open outside prior VA, two consecutive 30-minute periods inside → 80% full traverse | `label.amt.80pct.two-period` | `[MAMT p.18]` |
+| OF-A6 | AMT | POC tell for 80 / 20: repeated failure to hold through POC → the chop case; aggressive push through POC with a retest that holds → the traverse case | POC-hold count | `[AMTL p.9]` `[RTVP p.5]` |
+| OF-A7 | AMT (MAMT) | The Failed Auction setup, narrow: balance → break → tag a prior balance's POC → instant rejection → target the established balance's VAH (from above) or VAL (from below) | setup flag with older-POC tag | `[MAMT p.9–11, p.26]` |
+| OF-A8 | AMT | Three entries on a balance boundary: break + retest → continuation; come back inside and re-accept → fade to the other side; traverse straight through → that side priced in | break-retest / re-accept / traverse labels | `[MAMT p.12]` `[RTVP p.6]` |
+| OF-A9 | AMT | Higher-timeframe auction outranks the lower-timeframe trigger; inside balance near the lower boundary a short gets less leniency | HTF balance position | `[MAMT p.13]` `[MATH p.14]` `[WIC p.10]` |
+| OF-A10 | AMT | Day types: trend (continuation only), normal (fade extremes to POC), normal variation (one push then fade), neutral (small size), non-trend (stand down); six-type Steidlmayer original | `label.amt.day` | `[AMT1 p.10]` `[MAMT p.18, p.20]` |
+| OF-A11 | AMT | Open types in the first 30 minutes: drive (never fade), test-drive (level behind the risk), rejection-reverse (two-sided, rejection extreme is the reference), auction (balance day, fade early extremes) | `label.amt.open.30m` | `[AMT1 p.11]` |
+| OF-A12 | AMT | Profile shape: D fade edges; P late in a rally / b late in a sell-off are warnings not signals; double distribution → each hump its own value, the bridge is the line; trending profile → nothing to trade; P / B shapes → read the range at the top / bottom for continuation | `balance.vp-shape` (D / P / b / B / trend / double) | `[AMT1 p.6]` `[RTVP p.7–11]` `[MAMT p.7–8]` |
+| OF-A13 | AMT | Overnight inventory: net long / short 18:00–09:30 carries into the open; the overnight LVN (double distribution) or shelf is respected or disrespected at the open | `on_inventory_sign`, `on_lvn_respected` | `[MAMT p.14, p.26]` |
+| OF-A14 | AMT | Overnight statistics as timing context: ONH or ONL touched ~94%; open inside prior ETH balance → ETH MPOC hit ~73%; use as reasons not to take a level early | touch rows for A1.3 | `[MAMT p.15–16, p.21]` |
+| OF-A15 | AMT / TPO | Unfinished vs finished business: fresh single prints and poor extremes pull; excess holds on first test; stack TPO with a VP shelf | structure touch outcomes | `[TPO p.5–9]` `[C3 p.6]` |
+| OF-A16 | AMT / TPO | IB read: range extension = one side in control; IB holds all day = rotational (fade IB edges to POC); early one-sided break = trend | IB extension label | `[TPO p.8]` `[MAMT p.19]` |
+| OF-A17 | VP2 | Trade the ledge, not the middle of the shelf; shelves and ledges are fixed, VAH / VAL / POC drift; naked POCs are targets; composite HVNs are heavyweight; stack with VWAP / VA edge / old POC | `value.kz` roles | `[VP2 p.4–8]` |
+| OF-A18 | MATH | Participation = provide + withdraw + consume; imbalance is not an oracle, replenishment is the question; don't fade discovery; absorption needs high aggression + low response efficiency + holding-and-refilling opposite side; exhaustion = replenishment stops | state labels B / A / D / E / W at the touch (proxy) | `[MATH p.5–8, p.10]` |
+| OF-A19 | MATH | Real extremes need a second transition: an LVN, shelf or ledge counts only with a return to balance behind it; VAH / VAL are lagging; trade the current auction, not last week's; HTF cycle first, LTF trigger second | `kz.two-transition` flag | `[MATH p.9, p.12–14]` |
+| OF-A20 | C3 | Price stays in a balance, leaves it, or returns to a previous one; objectives are single prints and balances; avoid levels inside a balance; rejection from a balance with an unfilled single print above → bullish bias; acceptance below a balance → bearish; 40% VA intraday | bias label, `value.vp` VA 40 | `[C3 p.6–7]` |
+| OF-F1 | Ethos DOM | Aggressive vs passive; delta is the running score; aggression with movement = continuation, aggression without movement = absorption | delta-vs-displacement label | `[DOM5 p.4–5, p.7]` |
+| OF-F2 | Ethos DOM | Speed of tape and spread: fast tape into a level that holds = absorption worth trading; spread widening = liquidity pulling, do not lean on the level | `flow.tape.speed`, `flow.spread.width` (**new**, MBP-1) | `[DOM5 p.6]` `[OFM p.5]` |
+| OF-F3 | Ethos DOM | Absorption vs exhaustion: big volume with no movement (someone is there, reverses harder) vs shrinking volume with no movement (nobody left, drifts); stopping volume | volume-at-stall label | `[DOM6 p.7]` |
+| OF-F4 | Ethos DOM | Stacking shows intent, pulling shows fluff; iceberg reloads, spoof vanishes; behind-the-touch behaviour is not measurable with MBP-1, at-touch reload is `flow.absorption.B` | at-touch reload only | `[DOM6 p.5–6]` `[DOM7 p.4–7]` `[JJX L298–346]` |
+| OF-F5 | Ethos footprint | Diagonal read; 3–4× imbalance; three or more stacked = unfinished auction magnet; candle POC is a magnet on the retest; prints matter only at your levels | A1.5 footprint ids | `[FP8 p.4–7]` |
+| OF-F6 | Ethos footprint | Absorption = candle and delta disagree; POC flip = control changed hands; delta divergence (regular, exhaustion print); full stack = level → absorption → flip | `flow.candle.poc.flip`, divergence flags | `[FP9 p.3–7]` |
+| OF-F7 | Ethos VWAP / CVD | Premium / discount by deviation: trades live beyond ±1, ideally at ±2, only with absorption; CVD grades every move (divergence, breakout on flat CVD = fakeout, stall with CVD climbing = absorption zone); anchored VWAP convergence | VWAP band touch + absorption | `[VWAP p.4–7, p.9]` |
+| OF-F8 | Ethos absorption (ABS) | Four checks: reward system (3-tick move within 3 ticks of the print; opposing side not refreshing; correct side of the CVD median); absorption only fades, never continues; location must be a real extreme (shelf, ledge, LVN, minor node, prior-day VA), never POC; effort → passive wall → no reward → second aggression; enter on the retest of the reward system; delta spike at VAH / VAL marks control change | `flow.reward.3tick` (**new**), location class at print | `[ABS p.3–13]` |
+| OF-F9 | Ethos STOP | Three-step read: location → reward vs result → delta filter; absorption confirms in four stages (initial defence, replenishment ≥3 ticks, exhaustion of the aggressor's prints, lift-off); entry within 1–2 ticks of confirmation; re-entry passes every box from zero; 27% of absorptions fail without pacing confirmation | stage labels; `flow.digits.thinning` (**new**) | `[STOP p.6–15]` `[AVG p.24–26]` |
+| OF-F10 | Ethos Reading Delta | Protected low / high: partial below the sellers who last defended, trail behind each new protected level; the highest delta print is the rewarded side; a large delta print at an LVN / minor node extreme gives repeatable intra-wick reactions | `lvl.protected.*`, dp.max side | `[RD p.4–9]` |
+| OF-F11 | Ethos Who's In Control | How price arrives at the extreme (aggressive → expect defence; slow drift → expect break); a previous balance's break + retest confirms control; an aggressive push that fades on delta = trapped side that fuels the reverse; drop to 15 m for confirmation | `flow.approach.speed` (**new**), break-retest label | `[WIC p.3–10]` |
+| OF-F12 | Ethos Trapped Buyers | Balance redrawn to fit price; extreme reached, not exceeded; heavy one-sided delta at the extreme = trapped positioning; a level that failed twice in prior sessions; intraday breakout then retest; target inside the session's normal range | prior-failure count, retest label | `[TRAP p.3–12]` |
+| OF-F13 | Ethos BigTrades | Aggression = effort, the next candle = reward; body print = paid, wick print = absorbed; both sides absorbed = nobody in control, wait for the break; imbalance (350%) counts only at the same price as aggression; passive moves (no aggression on your side) are short-term swings | body / wick print class | `[BIG p.4–6, p.13, p.18]` |
+| OF-F14 | Ethos BigTrades | Regime split: origin-of-the-move (drive after a failed squeeze, entered on the retest, thin volume behind, HTF rejecting) only in short gamma; balance-day fade (extreme where aggression failed, enter on the test back into it, target where the other side last had control) is the 80% case in long gamma | gamma regime × recipe | `[BIG p.7–11, p.14–16, p.18]` |
+| OF-F15 | Ethos OFM | Squeeze catalyst → release (speed of tape) → failure back through the catalyst → refill below → re-squeeze entry on the retest; stop beyond the aggression that built it; passive variant (tape dies at the failure) | `flow.ofm.sequence` stages | `[OFM p.4–14]` `[CONT p.10–11]` |
+| OF-F16 | Ethos Refill (research) | Zone memory decides the touch: memory + location carry the signal (flow alone AUC 0.54); fade-every-touch loses; winners dip 18 ticks past the touch; be the resting order inside the zone, not the chase | touch-grading features (memory, construction, location, flow) | `[REF p.8–12, p.16, p.23]` `[OFM p.15–16]` |
+| OF-R1 | Ethos GEX | Gamma regime before the open: above the flip = range / mean reversion (fade toward walls with absorption), below = trend / expansion (trade the break through walls with aggression); 0DTE drives the session; re-check after big impulses; vanna / charm drift toward high-OI strikes | `gamma_regime`, distance to flip | `[GEX p.6–14, p.18–20]` |
+| OF-R2 | Ethos VIX | VIX level sets expected range and risk band; intraday ES-vs-VIX direction reads; pre-event rise, post-event crush; contango vs backwardation, VVIX; balance + VIX dropping → rotations, balance + VIX rising → expect the range break; range-completion (realized vs implied) → chop | `vix_band`, `vx_slope`, range-fuel | `[VIX4 p.3–9]` |
+| OF-R3 | Ethos thesis (C1 / C3) | A bias needs an invalidation; it dies on structure break, value shift, or new information; thesis box validity; no direction in the thesis, only areas of reaction and an owed objective | `thesis.alive` band | `[C1 p.3–4]` `[C3 p.7]` `[ANAT p.4, p.10]` |
+| OF-R4 | Ethos triad (C1) | IØD: a sister takes the AMT object first, the weaker index falls faster on the rejection; RFZ: a sister fills your single print first, read the reaction; correlated divergence = fade the over-extended leg | SMT at AMT objects (blocked until rebuilt) | `[C1 p.5, p.7]` `[CEX L78]` (user definition) |
+| OF-S1 | Sires live | Refill trade: sellers absorbed at the bottom of the range, stop just below the buyers in control, target the HTF objective | absorption at range bottom + HTF owed level | `[NYAM p.4–5]` `[K18 p.11]` |
+| OF-S2 | Sires live | A level rejected twice with no defence on the third retest is a low-risk trade that can still fail; refreshing size on the second defence is the tell that separates the two | refresh consistency count | `[NYAM p.6–7]` `[K18 p.7, p.11]` |
+| OF-S3 | Sires live | Pre-file entry: small, deliberate, before confirmation, as buffer; not a conviction trade | entry class label | `[K18 p.5–6, p.14]` |
+| OF-S4 | Sires live | Protected-high trailing (trailing convexity): stop moves only after price closes beyond the prior swing with real aggression; low starting R:R is not a reason to skip a strong level | `lvl.protected.*` sequence | `[K18 p.8–9, p.14]` `[NYAM p.8–9]` `[K10 p.9]` |
+| OF-S5 | Sires live | Extreme absorption at resistance: CVD dying while price holds or drifts up = passive limits consumed and reloaded; a level currently being tested, not merely one that worked before | CVD-vs-price stall (blocked until CVD rebuilt) | `[K2345 p.6]` |
+| OF-S6 | Sires live | All-time-high environment: neutral objective, wait for the pullback, trade within the directional push; 350% divergence box + small imbalance flags an OFM long where sellers were trapped before | `flow.footprint.imb350` + `value.delta.weekly` | `[K2345 p.4–5]` |
+| OF-S7 | Sires live | Two independent reasons at one price (marked resistance + minor HVN, or own level + gamma level); stop above the rejection high; second-tap absorption long | confluence pair | `[K10 p.6–8]` |
+| OF-S8 | Sires live | Thesis order: current auction (imbalance → new balance forming) → looked-left reaction history → objective at the HTF HVN / yearly POC; do not short into a demand level where sellers were absorbed | HTF-bias veto | `[K10 p.12–13]` |
+| OF-S9 | Sires live | Re-entry only if price returns to the level; stop just past the level where the reason is gone; target = the HTF level owed; daily objective then stop; max loss half the objective | re-entry gate; `lvl.owed.nearest` | `[ANAT p.6–11]` |
+| OF-S10 | Sires live | Continuation filter: every entry agrees with the HTF thesis; minor volume node + delta stacking against it; established balance top = default shorts unless a close above with extreme buying flips to retest longs toward VWAP; refill zone = same side winning more than once; squeeze (no failure) vs OFM re-entry (after a failed squeeze) | HTF bias, refill count, squeeze class | `[CONT p.4–5, p.8, p.10–13]` |
+| OF-S11 | Sires (AVG) | Open above value: TPO opens fully above prior VAH, wait ~10:00 for the day type, break of the current VAH on aggressive buying imbalances, retest defended → long; still subject to time of day, DOM at the retest, and an HTF objective | `open_cell` above-value × VAH break-retest | `[AVG p.21–22]` |
+| OF-S12 | Sires (AVG) | DOM in three reads: location (who should be in control; price seeks value 60–80%) → pacing (effort vs reward) → digits (thinning to singles vs building to triples) | `flow.digits.thinning` | `[AVG p.25–26, p.28]` |
+| OF-P1 | Pine tier 2 | Hardcoded statistics are claims to recompute on F and L: σ-band reversion, hourly sweeps, magic hours, raids, engulfment first-hits, ORB / IB tables, FVG effectiveness, midnight-open hit | recompute rows | `wiki/sources-pine-archive.md` |
+| OF-P2 | Indicator (MVFL) | Bias by vote with hysteresis (4 of 7 votes to flip): SMA200 trend, delta events ≥6× average, SQA vs SMA50, delta-zone break / rejection, MTF confirmation, SMA5 cross, volume-anomaly break / rejection; London and NY session filter | `bias.mvfl` (rebuild on aggressor delta per `[CEX L16]`) | `[MVFL L2–56, L58–70, L79–102, L139–150, L414–432]` |
+
+### A3. Triggers (TR)
+
+| id | event | data | eligibility | source |
+|---|---|---|---|---|
+| TR-1 | touch `t0 / t2 / tR` of a level in the window | 1 s bars / trades | eligible | grid page; `[TBR p.20]` |
+| TR-2 | reject `r ∈ {0.25, 0.5}` within `k ∈ {5, 15, 30}` min after touch or wick break, no `b.c1` (`grid.jumbo.projection-reject`) | 1 m bars | eligible | grid page; `[TBR p.20, p.30]` |
+| TR-3 | break `b.wick d ∈ {2 ticks, 5 pts, 0.1R}`, `b.c1`, `b.c5` | bars | eligible | grid page; `[GB L89]` `[PINE Session Raid Stats.txt:36–37]` |
+| TR-4 | hold `h ∈ {15, 30}` after `b.c1` (acceptance) | bars | eligible | grid page; `[AMT1 p.8]` |
+| TR-5 | fail-back: `b.wick` then `b.c1` or `b.c5` back inside within `k` (`grid.gb.c5`) | bars | eligible | `[GB L89, L210]` `[TBR p.8]` |
+| TR-6 | reclaim: back through the level and hold on the original side (`b.c1` + `h`) | bars | eligible | `[GB L88, L90]` `[FIND p.7, p.10]` |
+| TR-7 | mid-retrace: after a break, return to EQ / range open, then hold | bars | eligible | `[XF p.12, p.15, p.23]` `[FIND p.4]` |
+| TR-8 | time trigger: inside `bin.0940-0950`; after 10:00 (GB); after the 10:00 release; IB close 10:30; two consecutive 30 m periods inside prior VA | clock | eligible | `[TBR p.8, p.18]` `[GB L29]` `[TPO p.8]` `[MAMT p.18]` |
+| TR-9 | 3-candle OB / rejection block on 2 / 3 / 5 m (`block.sweep.tbr.3m`) | bars | eligible | `[TBR p.27–29]` |
+| TR-10 | CISD as coded (`cisd.fractal.literal`) | bars | eligible | `[OSF]` |
+| TR-11 | first-presented FVG formed (3rd bar close) / filled | bars | eligible | `[PINE First presented FVG…]` |
+| TR-12 | absorption candle (`flow.absorption.candle.jumbo`): small body + volume ≥ k × SMA14 | bars | eligible (bar object; k is a named grid) | `[TBR p.31, p.35]` `[MVFL L40–41]` |
+| TR-13 | `flow.absorption.A` at the level | MBP-1 | eligible (trusted) | `[ABS p.8–9]` `[MATH p.8]` |
+| TR-14 | `flow.bigtrade.100ny` / `75ldn` print at the level | MBP-1 | eligible (trusted) | `[XF p.25]` |
+| TR-15 | `flow.reward.3tick`: after an absorption print, ≥3-tick move toward the absorbed side within 3 ticks / short window, opposing side not refreshing | MBP-1 | `[unmeasured]` | `[ABS p.4]` `[STOP p.10, p.14]` `[AVG p.24]` |
+| TR-16 | 4-stage absorption: initial defence → replenishment ≥3 ticks → aggressor prints thinning (`flow.digits.thinning`) → lift-off (2–4 upticks with aggression) | MBP-1 | `[unmeasured]` (replenishment uses at-touch reload only) | `[STOP p.10, p.12]` |
+| TR-17 | footprint diagonal imbalance 3× / 4×; stack ≥3 (2); candle-vs-delta disagreement; candle POC flip | trades | `[unmeasured]` | `[FP8 p.5–6]` `[FP9 p.3–5]` |
+| TR-18 | same-price 350% imbalance at the same price as aggression | trades | `[unmeasured]` | `[BIG p.5]` `[K2345 p.5]` |
+| TR-19 | delta spike at VAH / VAL; highest delta print side; per-candle delta vs candle direction | trades | `[unmeasured]` | `[ABS p.10–11]` `[RD p.6–7]` `[FP9 p.4]` |
+| TR-20 | refill touch: return into `flow.refill.zone`, penetration depth (12 ticks in, 18-tick median dip), hold | trades | `[unmeasured]` | `[REF p.10–12]` |
+| TR-21 | OFM sequence: catalyst → release → fail through catalyst → refill → re-squeeze retest; passive variant (tape speed dies) | trades | `[unmeasured]` | `[OFM p.5–6, p.14]` |
+| TR-22 | `flow.tape.speed` spike / death; `flow.spread.width` widening | MBP-1 | `[unmeasured]` (**new**) | `[DOM5 p.6]` `[OFM p.5]` |
+| TR-23 | `flow.approach.speed`: aggressive vs drifting arrival at the extreme | trades / bars | `[unmeasured]` (**new**) | `[WIC p.4]` `[REF p.8]` |
+| TR-24 | CVD divergence / breakout on flat CVD / stall with CVD climbing; CVD median side | trades | **blocked** (`flow.cvd.trade` tape-trusted no) | `[VWAP p.6]` `[ABS p.5]` `[STOP p.8]` `[FP9 p.6]` |
+| TR-25 | SMT / IØD / RFZ: sister takes the level first, other does not | 1 m sisters | **blocked** (`flow.smt.*` tape-trusted no) | `[FIND p.3]` `[C1 p.5]` `[CEX L78]` |
+| TR-26 | BBO reload ≥50% within 500 ms ×2 (`flow.absorption.B`); iceberg reload | MBP-1 | **blocked** (fires every session) | `[DOM7 p.4]` `[JJX L171]` |
+| TR-27 | intraday cross of the gamma flip; price at call / put wall | daily OI + spot | eligible as daily-known level events; intraday gamma is a lag proxy | `[GEX p.7, p.13, p.19]` |
+| TR-28 | ES-vs-VIX intraday divergence | VIX minutes | not in inventory (daily VIX / VX only) → filter, not trigger | `[VIX4 p.6]` |
+| TR-29 | stacking / pulling behind the touch; spoof vanish | depth | not-measurable (MBP-1) | `[DOM6 p.5]` `[DOM7 p.5–7]` |
+
+### A4. Filters (FL)
+
+| id | filter | values | source |
+|---|---|---|---|
+| FL-1 | year | 2024 / 2025 / 2026 (and L for recompute rows) | `FINDINGS.md` |
+| FL-2 | realized-vol tercile | `vol.rv20`, `vol.gk20`, `vol.yz20`, `vol.har`; windows 10 / 20 / 60; overnight RV | `[DTM L23]` `[JJX L149, L205–216]` |
+| FL-3 | implied-vol regime | `vol.iv.atm`, `vol.skew25`, `vol.vx.slope`, VVIX; contango / backwardation | `[VIX4 p.8]` `[CEX L83]` |
+| FL-4 | VIX band | <13 no edge / 13–15 / 15–18 sweet spot / 18–20 / >20 widen | `[VIX4 p.4–5]` |
+| FL-5 | session | NY AM / London / Asia / PM; clean-session rolling label | `[FIND p.9, p.11]` `[XF p.40]` `[MVFL L51–56]` |
+| FL-6 | RVOL 09:30–09:35 vs 60-session median | ≥1.0, ≥1.5 | `[PACK L40]` `[XF p.7]` |
+| FL-7 | width bin | `w.pct` bins {0–0.3, 0.3–0.5, 0.5–0.8, 0.8–1.2, 1.2+}; `w.rel-prior-rth` bins | `[XF p.23–24]` |
+| FL-8 | day type | Judas / single-extended / single-purged / neither; `balance`; `edge_clean` | `[TBR p.12]` `[FIND p.7]` |
+| FL-9 | open cell | 27 cells; in-value / in-range-not-value / outside-both | `[XF p.8, p.11]` |
+| FL-10 | AMT labels | `label.amt.open.30m`, `label.amt.day`, profile shape D / P / b / B / trend / double | `[AMT1 p.6, p.10–11]` `[RTVP p.7–11]` |
+| FL-11 | overnight inventory | net delta sign 18:00–09:30 (trade-level); ON LVN respected / disrespected | `[MAMT p.14]` |
+| FL-12 | gamma regime | above / below flip per product; long / short; distance to flip; near-flip ambiguous | `[GEX p.7, p.10]` `[BIG p.14]` `[K18 p.4]` `[CONT p.6]` |
+| FL-13 | calendar | CPI / NFP / FOMC week and day; 10:00 release; pre-event / post-crush; OPEX; contract roll; DST mismatch weeks; half days | `[TBR p.22–23]` `[VIX4 p.7]` `[GB L177, L693]` `[CEX L94]` |
+| FL-14 | weekday | Monday (NWOG), Friday (GB preference, contradictory), Sunday Globex | `[GB L176, L179, L621, L673]` |
+| FL-15 | window fuel | realized range / expected range so far; range completion | `[VIX4 p.5]` `[CEX L36]` (assistant) |
+| FL-16 | prior-failure count at the level | 0 / 1 / 2+ prior-session failures; held earlier this session; prior-day defence (memory) | `[TRAP p.5]` `[NYAM p.6]` `[REF p.8]` |
+| FL-17 | location class of the print | extreme (shelf / ledge / LVN / minor node / prior-day VA) vs POC / inside balance | `[ABS p.6–7]` `[C3 p.6]` |
+| FL-18 | sister-index hunt / relative strength | blocked until SMT rebuilt; `edge_clean` and purged labels stand in | `[FIND p.3, p.7]` `[TBR p.12]` |
+| FL-19 | CVD median side | blocked until CVD rebuilt | `[ABS p.5]` `[BIG p.12]` |
+| FL-20 | coverage flags | per dataset present / partial / missing; >10% rule | `wiki/data-coverage.md` |
+| FL-21 | instrument scope | NQ execute, ES / SPX complex as information; no overnight hold | `[DTM L266–268]` `[JJX L465]` |
+
+### A5. Invalidations (IV)
+
+| id | rule | source |
+|---|---|---|
+| IV-1 | 1-minute close through the level (`b.c1`) | grid page |
+| IV-2 | 5-minute close through the level (`b.c5`) | `[GB L89]` `[GB L26]` |
+| IV-3 | hold outside `h ∈ {15, 30}` = acceptance = true breakout | grid page; `[AMT1 p.8]` `[GB L245]` |
+| IV-4 | opposite edge reached (first objective = other side of the box; trade complete) | `[GB L213, L363–366]` `[TBR p.12]` |
+| IV-5 | time: reversal window missed (no reversal by 10:00 in `bin.0940-0950` recipes); position closed at the start of the reversal window (Judas rider); no interest after 10:00 on extended days; cancel after 30 min (refill); lunch not A+ | `[TBR p.8, p.12, p.37]` `[REF p.12]` `[FIND p.12]` |
+| IV-6 | beyond the sweep wick / beyond the pocket / stop right above PDL | `[GB L94, L212, L353–358]` |
+| IV-7 | OB midpoint (aggressive) / OB low (conservative) / rejection-block midpoint | `[TBR p.27–29]` |
+| IV-8 | beyond the aggression print that built the entry (OFM); below the absorption (refill) | `[OFM p.6–7, p.12]` `[NYAM p.4]` |
+| IV-9 | protected low / high broken (highest-delta protected level) | `[RD p.5]` `[K18 p.8]` |
+| IV-10 | 3-strike rule; extended bodies through the projection; no rejection signature; volume divergence | `[TBR p.37]` |
+| IV-11 | band retirement: 1-minute close beyond the P-zone far edge; liquidity line deleted once purged | `[TBR p.11]` `wiki/p-zones-benchmark.md` |
+| IV-12 | bias death: structure break, value shift, new information; thesis box violated | `[C1 p.4]` `[C3 p.7]` |
+| IV-13 | replenishment stops (exhaustion) / pull at the touch | `[MATH p.8]` `[STOP p.10]` `[JJX L338–342]` |
+| IV-14 | regime flip after a large impulse (re-read gamma) | `[GEX p.19–20]` |
+| IV-15 | re-entry only if price returns to the same level; otherwise the idea is finished | `[ANAT p.7]` `[STOP p.14]` |
+| IV-16 | −4R daily stop; daily objective reached; max loss half the objective; consistency cap | `[REF p.21]` `[STOP p.15]` `[ANAT p.11]` `[K2345 p.9]` (account rules: recorded, not Phase 1 objects) |
+
+### A6. Not computable or excluded
+
+| item | reason | source |
+|---|---|---|
+| hidden book, off-touch refill, icebergs, stacking / pulling behind the touch, spoof detection | needs MBP-10 / MBO | `QUESTIONS_RESOLVED` §35; `[JJX L310–314]` |
+| dealer inventory, customer vs dealer identity | not in data | `[DRFL L207–224]` |
+| Skylit Heatseeker / Flowseeker / Atlas, KG1, GEXRADAR, Vol Signals, DeepCharts Big Trades settings for other instruments | vendor engines; only disclosed substitutes | `[K10 p.6]` `[GEX p.15]` `[BIG p.3]` `[FIND p.13]` |
+| P-zone auto-learn weights, London build-window start, delta-profile row size, SessionStat lookback rationale, London reversal histogram, win-rate ledger | unpublished | `[FIND p.13]` |
+| cash NDX / SPX minute bars; VIX intraday | not in inventory | `wiki/data-coverage.md` |
+| "kg one retest" model, trailing-convexity full rule set | not defined in the public PDFs | `[NYAM p.9]` `[OFM p.13]` |
+| 3-day liquidity map | named, undefined | `[FIND p.3]` |
+| ES trade-level objects inside F | ES MBP-1 ends 2024-08-30 | `[INV L142–148]` |
+| 25-pt partials, fleet / DLL, 7:30 true open, "above TDO = short", wickless model, CPI boxes as a family, premium / discount box as a standalone signal, IB stats as edge, always-fade 6–9, TradingView OF POC, bubbles-as-absorption, 86.46% as a win rate | excluded by source or by closed decision | `QUESTIONS_RESOLVED` §45; `[PACK L86–92]` `[FIND p.11]` `[XF p.8, p.25–26]` |
+
+### A7. Wiki coverage delta
+
+New ids to register (each has a source row above; registering is a wiki edit, not a ticket): `range.midnight.0000-0030`, `range.rth.0930-1000`, `range.rth.1000-1030`, `range.lunch.1200-1230`, `range.moc.1500-1530`, `range.on.1800-0930`, `range.dealing`, `value.vp.eth.prior`, `lvl.mpoc.eth`, `value.vp.on`, `value.vp.dealing`, `value.vp.composite.*`, `value.delta.weekly`, `flow.delta.spike`, `lvl.prior-rth.q*`, `lvl.pclose`, `lvl.popen`, `lvl.halfgap`, `lvl.pib.*`, `lvl.owed.nearest`, `env.ss.rth.avgHL60`, `env.tbr.sigma025`, `env.pine.manip.*`, `env.vwap.rth.sd{1,2.5,3}`, `env.vwap.anchored.*`, `flow.absorption.candle.jumbo`, `flow.refill.zone`, `flow.ofm.catalyst`, `flow.footprint.stack3`, `flow.footprint.imb350`, `flow.candle.poc`, `flow.candle.poc.flip`, `lvl.protected.*`, `flow.delta.zone.kmeans`, `flow.vol.anomaly.zone`, `flow.reward.3tick`, `flow.digits.thinning`, `flow.tape.speed`, `flow.spread.width`, `flow.approach.speed`, `loc.pd50`, `lvl.1800open`, `value.node.{callwall,putwall,maxpain}.*`, `phase.amd.*`, `label.clean.session.rollingN`, `label.amt.80pct.two-period`, `bias.mvfl`.
+
+Wiki ids with no author recipe of their own (they enter only through swaps in C): `range.gb.london` as a Jumbo clock, `range.ib` (comparison), `env.ext.133.from-origin`, `env.ext.133.from-eq`, `flow.cvd.part.*`, `flow.cvd.gamma`, `flow.smt.pine.3-3`, `vol.*` as levels, `value.node.oi.nqopt.top3`.
+
+---
+
+## B. Sourced recipes
+
+Format: **id** · OF · LC · TR · FL · IV · Score (what Phase 1 prints for it) · Cites · Status (`ready` = every slot on eligible objects; `ready-bar` = bar trigger stands in for a blocked tape trigger the author names; `pending` = trigger unmeasured; `blocked` = trigger tape-trusted no; `context` = a gate, scored as a label table).
+
+### B1. Jumbo (Time-Based Ranges, X archive, findings, X pack, conversation)
+
+**R-J01 Judas reversal at −0.5 (trade #2)** · OF-J1 · LC `range.6-9.published` −0.5 on the swept side (level set also EQ as pass-through, opposite edge as draw) · TR-2 reject at −0.5 inside `bin.0940-0950` (rejection candles, multiple wicks) · FL-8 day type ≠ single-purged, FL-7 width not 1.2+, FL-9 open inside prior value or range, FL-13 no 10:00 release · IV-10 extended bodies / 3-strike; IV-1 `b.c1` beyond −0.5; IV-5 no reversal by 10:00; IV-4 EQ then clean edge reached · Score: reject-at-−0.5 rate in 09:00–12:00 (recompute of 86.46% and p.12 depth table), reversal-time bin shares, EQ reach, clean-edge reach, time-to-touch · `[TBR p.8, p.12–13, p.20, p.30, p.37]` `[XF p.29, p.47]` `[FIND p.4, p.7, p.10]` · ready.
+
+**R-J02 Judas rider (trade #1)** · OF-J1 · LC 6–9 edge on the side being swept, projection −0.5 as target · TR-3 `b.wick` / `b.c1` beyond the edge after 09:30 · FL as R-J01 · IV-5 flat at 09:40 (start of the reversal window); IV-4 −0.5 reached · Score: share of sessions where the first break after 09:30 reaches −0.5 before 09:40; excursion distribution · `[TBR p.8]` · ready.
+
+**R-J03 Single break, extended overnight (scenario 1)** · OF-J2 + OF-J6 · LC EQ, Q25, Q75 of `range.6-9.published`; targets range H / L only · TR-7 first break (`b.c1`) then return to EQ / quadrant and hold (`h=15`) · FL-7 `w.rel-prior-rth ≥ 1.0` or FL-13 08:30 red-folder day · IV-1 close back through EQ against the break; IV-5 no position interest after 10:00; IV-4 range H / L reached · Score: single-break rate, mid-retrace rate (60.4%), reach of the far edge by 10:00 / 12:00 · `[TBR p.12–13, p.24]` `[XF p.23]` `[FIND p.4, p.7]` · ready.
+
+**R-J04 Single break, purged / compressed (scenario 2)** · OF-J2 + OF-J4 · LC EQ, Q25, Q75; targets 1.0 then 1.33 / 1.66 · TR-3 `b.c1` beyond a quadrant / EQ in the break direction; `bin.0940-0950` counts as continuation / add · FL-8 purged (Asia or London H / L taken before 09:30) or `w.rel-prior-rth ≤ 0.5`; FL-18 stand-in labels · IV-1 close back through EQ; IV-4 1.0 / 1.33 reached · Score: expansion reach by 10:30 / 12:00 conditional on purged; 09:40–09:50 continuation share · `[TBR p.12]` `[FIND p.4, p.7]` · ready.
+
+**R-J05 Single break, range-open / mid retrace (2026 use)** · OF-J2 · LC range open (OP) and EQ of `range.6-9.published`; `range.or.15m` mid as the second stat · TR-7 return to OP / mid after the A-period break, hold · FL-9 open outside prior value and range (single-break context), FL-6 RVOL · IV-1 close back through OP; IV-4 opposite projection / one-and-done exit in the first 20 min · Score: OP / mid retrace rate after first break; hold rate at OP · `[XF p.12, p.14–15, p.23]` `[FIND p.4, p.7, p.10]` · ready.
+
+**R-J06 Open-location switch (context gate)** · OF-J3 · LC `open_cell` (prior VA 70 trade-VP × prior range × current 6–9) · TR none (pre-open at 09:30) · FL-6 RVOL ≥1.0 / ≥1.5 · IV n/a · Score: path-class shares per cell (XF p.11 rows), `open.dbx.*` split, `open.oneway.A.0930-1000`, `open.oneway.OR.5m/15m` · `[XF p.8, p.10–11, p.16–17]` `[PACK L35–44]` · context.
+
+**R-J07 Range-size / balance gate** · OF-J4 · LC width in points and % (`w.pct.0859close`, `w.pct.0930open`, `w.rel-prior-rth`), `balance.body-ratio`, `balance.vp-shape`, `edge_clean` · TR none · FL none · IV n/a · Score: XF p.24 table recompute on F and L, mid-retrace 60.4%, ~45% single-break base rate, double-break by balance state · `[XF p.7, p.23–24]` `[FIND p.6–7]` `[JJX L56]` · context.
+
+**R-J08 1.33 / 1.66 AM-PM fork** · OF-J5 · LC `env.ext.133.from-edge`, `env.ext.166.from-edge` (6–9 or London box) · TR-2 reject (whole-AM reverse) vs TR-4 hold beyond (continuation) after 12:00 · FL AM class: compressed AM (`w.rel-prior-rth ≤ 0.5` or AM range small) vs expansive AM · IV-1 `b.c5` beyond 1.66 · Score: touch by 12:00 / 16:00; PM reach of 1.33 / 1.66 on compressed-AM sessions; reject vs continue shares · `[TBR p.21, p.36]` `[XF p.31, p.33, p.48]` `[FIND p.5–6]` · ready.
+
+**R-J09 London TBR** · OF-J9 · LC `range.london.00-03` internals, −0.5, 1.33 / 1.66; 03:00 open analog; outcomes 03:00–06:00 · TR-6 reclaim at −0.5 / 1.33 or TR-12 absorption candle · FL-5 London-clean rolling label · IV-1 / IV-5 (06:00 handoff) · Score: same table as 6–9; London 1.33–1.66 reject rate · `[FIND p.4–5]` `[XF p.25, p.40, p.46]` `[JJX L53]` · ready.
+
+**R-J10 Leftover session H/L as the draw** · OF-J10 · LC untouched Asia / London / prior RTH H / L (`box.gb.asia`, `box.jumbo.london`, `box.prior-rth`; deleted once purged) · TR none (target rule after R-J01 fires) · FL R-J01 fired · IV-11 purge deletion · Score: reach of the nearest untouched session extreme by 10:30 / 12:00 after a −0.5 reversal · `[TBR p.11, p.33]` `[XF p.30, p.33, p.48]` `[FIND p.5, p.9]` · ready.
+
+**R-J11 SessionStat 9–12 confluence** · OF-J12 · LC `env.ss.avgHL60` / `medHL60` / `minavg60` within `tR` of −0.5 or 1.33 · TR-2 reject at the coincidence · FL-2 vol tercile (choppy / low-vol failure claim) · IV-3 hold beyond · Score: reach, overshoot, reject at coincidence vs at either alone · `[SS p.6, p.10–11]` `[XF p.19, p.45]` `[FIND p.5, p.7]` · ready.
+
+**R-J12 P-zone fade** · OF-J1 + OF-J12 · LC `pz.approx.A` band overlapping the 6–9 low / high and range open ("P-zone + low > range open"); 09:30 / 09:00 / 10:00 anchors · TR-2 reject inside the band in `bin.0940-0950` · FL as R-J01 · IV-11 far-edge close · Score: reversal-inside-box rate; distance ranking of EV vs −0.5 vs P-zone to the AM extreme · `[XF p.8, p.16, p.28–29, p.35]` `[FIND p.7–8]` · ready.
+
+**R-J13 EV-range scalp to EQ** · OF-J3 · LC `env.ev.mean60` (and grid) band; target `ev.mid.*` and 6–9 EQ · TR-2 reject at the band · FL-9 open inside prior value / range · IV-3 hold beyond the band · Score: reach, overshoot, reject, EQ reach after band touch · `[XF p.7]` `[PACK L22–31, L43]` · ready.
+
+**R-J14 Absorption at the 6–9 key levels** · OF-J12 · LC 6–9 edges, EQ, −0.5 · TR-12 absorption candle (small body, volume ≥ k × SMA14; imbalance inside the candle as a named add) · FL none · IV-1 · Score: reject rate after an absorption candle at a level vs without · `[TBR p.31, p.35]` `[XF p.27, p.44–46]` `[FIND p.9]` · ready (bar object; k grid declared).
+
+**R-J15 BigTrades at the level** · OF-J12 · LC any 6–9 level · TR-14 print ≥100 (NY) / ≥75 (London) at the level · FL-5 session · IV-1 · Score: reject rate given a BigTrades print at the touch; overlap with `flow.absorption.A` (must not be identical) · `[XF p.25]` `[FIND p.9, p.12]` · ready (trusted).
+
+**R-J16 Delta-profile shapes** · OF-J12 · LC EQ (two-sided delta absorption at mid) and range low (taper) · TR-19 · FL none · IV-1 · Score: absorption-at-mid and taper-at-low shares; reject rate given shape · `[XF p.14, p.23]` `[FIND p.8]` · pending.
+
+**R-J17 VP shelf box under a TBR level** · OF-J12 · LC `value.kz` LVN / HVN shelf within `tR` of a TBR level (unspoken box) · TR-2 · FL none · IV-1 · Score: reject at TBR level with vs without a node under it · `[FIND p.7–8]` `[XF p.14]` · ready.
+
+**R-J18 3-candle OB / rejection-block entry at a reversal** · OF-J1 · LC −0.5 / P-zone / leftover extreme · TR-9 · FL none · IV-7 · Score: formation rate at the level; reject vs continuation after confirmation · `[TBR p.27–29]` · ready.
+
+**R-J19 PD RTH Range+ draw** · OF-J11 · LC PDH / PDL (`box.prior-rth`), M15 / H1 first-presented FVG · TR-1 touch after the RTH open (ETH disregarded) · FL none · IV-3 · Score: touch by 12:00 / 16:00 given the RTH open direction; fill of HTF FVG · `[TBR p.32–35]` · ready.
+
+**R-J20 Delayed cycle 2 on 10:00 news** · OF-J7 · LC as R-J01 · TR-2 after the 10:00 release · FL-13 10:00 release day · IV-5 · Score: reversal-bin shift on release days · `[TBR p.18]` `[FIND p.10]` · ready.
+
+**R-J21 Calendar / conditions expectation** · OF-J6 · LC targets (range H / L vs projections) · TR none · FL-13 · IV n/a · Score: projection reach by condition class · `[TBR p.22–24]` · context.
+
+**R-J22 Failure protocol** · OF-J8 · LC −0.5 · TR none · FL none · IV-10 as the object · Score: 3-strike count, extended-body share, share of failures that became single-break · `[TBR p.37]` · context.
+
+**R-J23 Other TBR clocks** · OF-J1 / OF-J2 on `range.midnight.0000-0030`, `range.asia.2000-2030`, `range.london.0300-0330`, `range.rth.0930-1000`, `range.rth.1000-1030`, `range.lunch.1200-1230`, `range.moc.1500-1530` · same slots as R-J01 / R-J03 with the box swapped · `[TBR p.7]` · ready (comparison rows; lunch and MOC expected weak `[XF p.21]`).
+
+**R-J24 Management as exit definitions** · OF-J13 · exits: mid-rejection front-run, one-and-done first 20 min, flip after the idea dies, no lunch A+ · Score: outcome rows only (MFE / MAE at those exit rules) · `[XF p.3, p.15, p.21, p.26]` `[FIND p.11–12]` · context.
+
+### B2. Green Bird
+
+**R-G01 NYAM failed breakout / breakdown** · OF-G1 + OF-G2 + OF-G3 · LC `box.gb.nyam` edges; bonus PDH / PDL · TR-5 sweep after 10:00 then `grid.gb.c5` back inside · FL after 10:00; `label.aplus` = sweep observed · IV-3 hold outside (true breakout); IV-6 beyond the wick; IV-4 opposite edge · Score: `fail.box.gb.nyam.c5` counts, opposite-edge reach, PDH / PDL confluence share, agreement with Judas labels · `[GB L28–30, L188–246, L395–422]` · ready.
+
+**R-G02 Asia / midnight failure** · OF-G1 + OF-G5 · LC `box.gb.asia` H / L, `lvl.tdo` · TR-5 sweep of the Asia edge, then 5 m close back inside and / or through TDO · FL overnight session · IV-3; IV-6 · Score: fail-back counts, TDO close-through share, Asia-low reach · `[GB L35–40, L424–437, L612–613]` · ready.
+
+**R-G03 Previous-hour box** · OF-G1 · LC `box.gb.hour` · TR-5 · FL 09:30–12:00 (5-minute steps) and PM · IV-3, IV-6, IV-4 · Score: events per hour box; repeat-fade counts · `[GB L32–33, L439–441, L685–687]` · ready.
+
+**R-G04 9:30 manipulation reclaim** · OF-G4 · LC `lvl.0930open` · TR-6 sweep below the open, reclaim and hold · FL none · IV-1 · Score: reclaim rate; reach of discount / pocket after reclaim · `[GB L30, L56–57, L90]` · ready.
+
+**R-G05 TDO close-through** · OF-G5 · LC `lvl.tdo` · TR-5 with `b.c5` through TDO after a sweep · FL none · IV-2 · Score: `tdo_touch` in 09:30–12:00 (tier-2 midnight-open hit 73.75%), close-through rate · `[GB L24–26, L142, L612]` `[PINE nq_stats_mapper:311–313]` · ready.
+
+**R-G06 NWOG destination** · OF-G6 · LC `lvl.nwog` (settle and close endpoints) · TR none (target) · FL-14 Monday · IV n/a · Score: `nwog_fill` by 12:00 / 16:00 on Mondays; fill after a midnight / open sweep failure · `[GB L59–60, L68–69, L615–621, L673–675]` · ready.
+
+**R-G07 Golden pocket continuation** · OF-G7 · LC `loc.gp` (NYAM impulse or HTF swing) · TR-2 rejection in the pocket, or TR-5 sweep + `b.c5` at a level inside it ("10 am hourly low reclaim + pocket") · FL bias from OF-G8 · IV-6 beyond the zone · Score: touch of the pocket, reject vs traverse, reach of the impulse extreme · `[GB L73–81, L249–296, L537–547]` · ready.
+
+**R-G08 Overnight PDL / PDH sweep-and-reclaim bias** · OF-G8 · LC `box.prior-rth` · TR-6 overnight sweep + reclaim · FL none · IV-1 · Score: next-morning path class conditional on the overnight reclaim; NYAM pullback-to-discount reach · `[GB L313, L443–450, L543–544]` · ready.
+
+**R-G09 Stacked sweep to NWOG** · OF-G9 + OF-G6 · LC PDH + Asia high + London high within `tR`; target `lvl.nwog` · TR-5 failed breakout under `grid.gb.c5` · FL Monday / unfilled gap below · IV-3 · Score: gap tag rate after the stacked failure · `[GB L156, L615–620]` · ready.
+
+**R-G10 Chop-day repeated fade** · OF-G10 · LC `box.gb.nyam`, `box.gb.10-11` · TR-5 repeated · FL one-way-pressure label (`label.amt.day` normal / neutral with a directional lean) · IV-3 · Score: fade count per session and reject share · `[GB L669–671]` · ready.
+
+**R-G11 A+ vs B+ label** · OF-G9 · `label.aplus` true iff a sweep was observed; depth `d` a separate upgrade · Score: outcome shares by label · `[GB L93, L147, L244]` · context.
+
+### B3. AMT and profile lessons
+
+**R-A01 Balance-rule fade** · OF-A1 + OF-A3 · LC prior-day VAH / VAL (fixed) toward POC; current-day VAH / VAL flagged lagging · TR-2 reject at the edge + TR-13 at the edge · FL-10 normal / neutral day, FL-17 · IV-3 acceptance outside · Score: grid at VAH / VAL / POC, POC reach after an edge touch · `[AMT1 p.5, p.9, p.13–14]` `[AMTL p.6]` `[MAMT p.4]` `[ABS p.7]` · ready.
+
+**R-A02 Ledge continuation** · OF-A2 · LC `value.kz` ledge of the prior balance / broken VA edge · TR-3 `b.c1` beyond then TR-1 retest + TR-4 hold · FL out-of-balance state · IV-1 close back inside · Score: retest hold rate; continuation reach to the next node · `[AMT1 p.9]` `[MAMT p.12]` · ready.
+
+**R-A03 Failed-auction traverse (loose 80%)** · OF-A4 · LC prior VA edge re-entered · TR-3 `b.c1` back inside + TR-4 hold · FL none · IV-1 back out · Score: traverse to the opposite edge given re-entry (72–80% claim; separate denominator) · `[AMT1 p.7–8]` `[AMTL p.8–9]` `[ABS p.12]` · ready.
+
+**R-A04 Strict 80% rule** · OF-A5 · LC prior-day VA · TR-8 open outside VA then two consecutive 30 m periods inside · FL open outside VA · IV-1 · Score: full-traverse rate (`label.amt.80pct.two-period`) · `[MAMT p.18]` · ready.
+
+**R-A05 POC tell** · OF-A6 · LC POC of the balance · TR: ≥2 touches without `h` hold (chop case) vs `b.c1` through + retest hold (traverse case) · FL inside balance after re-entry · IV n/a · Score: VAL / VAH reach split by POC behaviour · `[AMTL p.9]` `[RTVP p.5]` · ready.
+
+**R-A06 MAMT Failed Auction setup** · OF-A7 · LC older balance's POC (naked prior POC) after a break from the established balance · TR-2 instant rejection (r=0.5, k=5) at that POC · FL balance → break sequence present · IV-3 acceptance at the older POC · Score: return to the established balance's VAH / VAL (the 80% claim on its own denominator) · `[MAMT p.9–11, p.26]` · ready.
+
+**R-A07 Break-retest continuation** · OF-A8 · LC broken balance boundary (VAH / VAL, shelf, IB edge) · TR-3 `b.c1` + TR-1 retest + TR-4 hold · FL HTF direction agrees (OF-A9) · IV-1 back inside · Score: hold rate on the retest; reach of the next value area · `[RTVP p.6, p.8]` `[MAMT p.12]` `[WIC p.5, p.8]` `[TRAP p.6–7]` · ready.
+
+**R-A08 Re-accept flips bias** · OF-A8 · LC balance boundary · TR-3 back inside + TR-4 hold · IV-1 · Score: opposite-edge reach · `[MAMT p.12]` · ready (same objects as R-A03; kept as MAMT's own row).
+
+**R-A09 Traverse without hold** · OF-A8 · LC whole balance · TR: `b.c1` through both edges with no `h` hold inside · Score: continuation share on later retests · `[MAMT p.12]` · ready.
+
+**R-A10 Open-type / day-type gate** · OF-A10 + OF-A11 · LC prior value / range references for the test-drive · TR-8 first 30 minutes · Score: `label.amt.open.30m` vs `label.amt.day` transition matrix; fade vs continuation outcome by label; agreement with Jumbo `day_type` · `[AMT1 p.10–11]` `[MAMT p.18, p.20]` · context.
+
+**R-A11 Profile-shape gate** · OF-A12 · LC `balance.vp-shape` of prior RTH / overnight / composite · Score: next-session path class and edge-reject rate by shape; trending-profile "no trade" share · `[AMT1 p.6]` `[RTVP p.7–11]` `[MAMT p.7–8]` · context.
+
+**R-A12 Overnight inventory and LVN** · OF-A13 · LC `value.vp.on` LVN / shelf · TR-4 hold vs TR-3 break at the open · FL-11 net overnight delta sign · IV-1 · Score: respected / disrespected shares; open direction vs inventory sign · `[MAMT p.14, p.26]` · pending (delta sign needs trades; bar proxy is a named variant).
+
+**R-A13 Overnight touch statistics** · OF-A14 · LC `range.on.1800-0930` H / L, ONVAH / ONVAL / ONVPOC, `lvl.mpoc.eth`, `lvl.pib.*`, `lvl.pclose`, `lvl.halfgap` · TR-1 touch in RTH · Score: MAMT p.21–23 tables recomputed on NQ (94% ONH-or-ONL, 73% MPOC given open inside the prior ETH balance) · `[MAMT p.15–16, p.21–23]` · ready.
+
+**R-A14 TPO unfinished business** · OF-A15 · LC `tpo.single`, `tpo.poor.*` (targets), `tpo.excess` (holds) · TR-1 touch · IV-1 · Score: single-print fill / repair, poor-extreme revisit, excess hold on first test · `[TPO p.5–9]` `[C3 p.6]` · ready.
+
+**R-A15 IB extension read** · OF-A16 · LC `range.ib` · TR-3 `b.c1` beyond IB after 10:30 · Score: continuation share after a single-side extension; rotation share when IB holds; comparison to `range.6-9.published` (expected null) · `[TPO p.8]` `[MAMT p.19, p.23]` `[XF p.8]` · ready.
+
+**R-A16 Ledge trade with confluence** · OF-A17 · LC `value.kz` ledge stacked with VWAP band, prior VA edge or naked POC · TR-2 + TR-13 · FL-17 · IV-3 · Score: reject at a stacked ledge vs a lone ledge · `[VP2 p.4–8]` · ready.
+
+**R-A17 Two-transition extremes** · OF-A19 · LC LVN / shelf / ledge with a return to balance behind it vs tails · TR-2 · Score: reject rate with vs without the second transition · `[MATH p.13, p.15]` · ready.
+
+**R-A18 C3 balance-position bias** · OF-A20 · LC balance edges; single print above / below · TR-2 rejection from the balance (bullish with an unfilled single above) or TR-4 acceptance below (bearish) · FL avoid levels inside the balance · IV-12 · Score: single-print reach after rejection · `[C3 p.6–7]` · ready.
+
+### B4. Flow lessons
+
+**R-F01 VWAP deviation fade with absorption** · OF-F7 · LC `env.vwap.rth.sd1 / sd2 / sd2.5 / sd3` · TR-1 touch beyond ±1 (ideally ±2) + TR-13 · FL draw beyond the band not still open (`lvl.owed.nearest` beyond the band) · IV-3 · Score: reversal to the VWAP median given touch + absorption vs touch alone · `[VWAP p.3–4, p.9]` · ready.
+
+**R-F02 CVD three-step** · OF-F7 · LC any level · TR-24 · blocked (`flow.cvd.trade` tape-trusted no; rebuild spec: divergence = price new extreme vs CVD not, within the grid window, per construction) · `[VWAP p.6]` `[FP9 p.6]` · blocked.
+
+**R-F03 Anchored VWAP convergence** · OF-F7 · LC `env.vwap.anchored.*` where session, weekly and swing / event anchors converge (≤ `tR`) · TR-2 + TR-13 · Score: reject rate at convergences · `[VWAP p.7]` · ready.
+
+**R-F04 Footprint stacked-imbalance magnet** · OF-F5 · LC `flow.footprint.stack3` zone · TR-1 return + TR-17 · Score: revisit and hold rate; overlap with `flow.absorption.A` (must not be identical) · `[FP8 p.6–7]` · pending.
+
+**R-F05 Footprint absorption stack** · OF-F6 · LC VP ledge / value edge / old POC · TR-17 candle-vs-delta disagreement, then candle POC flip · FL location class · IV-1 · Score: reversal share after disagreement; after disagreement + flip · `[FP9 p.3–7]` · pending.
+
+**R-F06 DOM absorption at a level** · OF-F1 + OF-F3 · LC shelf / ledge / value edge / old H-L · TR-13 (`flow.absorption.A`) with TR-22 fast tape into the level · FL none · IV-13 · Score: reversal ≥0.25R share; absorption vs exhaustion split by volume-at-stall · `[DOM5 p.7]` `[DOM6 p.3–7]` · ready (tape speed pending).
+
+**R-F07 Iceberg reload** · OF-F4 · LC level · TR-26 · blocked (`flow.absorption.B` fires every session; iceberg inference is a weak flag per `[JJX L171]`) · `[DOM7 p.4]` · blocked.
+
+**R-F08 ABS four-check absorption** · OF-F8 · LC real extreme only (shelf / ledge / LVN / minor node / prior-day VA), never POC · TR-13 then TR-15 reward system (3-tick), then TR-19 second aggression; enter on the retest of the reward system · FL-17; reversal-only (not against the CVD median — blocked, stand-in: not in a discovery leg by OF-A18) · IV-13 · Score: 27% failure claim without the reward system vs with; reject at extreme vs at POC (coin-flip claim) · `[ABS p.3–13]` · pending.
+
+**R-F09 STOP three-step with four stages** · OF-F9 · LC level from the thesis (HTF auction position) · TR-16 (defence → replenishment ≥3 ticks → thinning digits → lift-off 2–4 upticks), entry within 1–2 ticks · FL location says who should be in control · IV-15, IV-16 · Score: stage-transition counts; outcome by stage entered · `[STOP p.6–15]` · pending.
+
+**R-F10 Protected-low trailing** · OF-F10 · LC `lvl.protected.low` / `high` · TR-19 highest delta print side confirms · IV-9 · Score: break rate of protected levels; MFE after each new protected level · `[RD p.4–5]` `[K18 p.8]` · pending.
+
+**R-F11 Delta print at an LVN extreme** · OF-F10 · LC `value.kz` LVN / minor node with `dp.max` at it · TR-1 touch → wick reaction (TR-2 with k=5) · Score: repeat-reaction count per zone · `[RD p.9]` · pending.
+
+**R-F12 Who's-in-control arrival read** · OF-F11 · LC balance extreme · TR-23 approach speed (aggressive vs drift) then TR-2 / TR-4 · FL prior balance break-retest state · IV-1 · Score: defence rate by arrival class · `[WIC p.3–5, p.8–9]` · pending.
+
+**R-F13 Trapped buyers, one retest** · OF-F12 · LC redrawn balance extreme with `dp.max` at it; intraday range off the session open · TR-3 intraday breakout + TR-1 retest + TR-4 hold · FL-16 two prior-session failures at the level · IV-6 · Score: retest-hold rate given the trap print and prior failures; reach inside the normal session range (SessionStat Asia) · `[TRAP p.3–12]` · pending.
+
+**R-F14 BigTrades body-vs-wick and 350% line** · OF-F13 · LC `flow.footprint.imb350` at the same price as a BigTrades print · TR-14 + TR-18; wait for the retest · FL both sides absorbed → wait for the break · IV-8 · Score: retest reaction rate; body vs wick print outcome split · `[BIG p.4–6]` · ready for TR-14, pending for TR-18.
+
+**R-F15 Origin of the move (short gamma)** · OF-F14 + OF-F15 · LC `flow.ofm.catalyst`, refill area below, wicks above · TR-21 drive takes out the wicks after the failed squeeze; entry on the retest · FL-12 short gamma; HTF: balance left, thin volume behind, level that should reject; CVD not against (blocked, stand-in none) · IV-8 · Score: A+ frequency; retest availability; reach 1–3R in points · `[BIG p.7–11, p.18]` `[OFM p.6–14]` `[CONT p.10]` · pending.
+
+**R-F16 Balance-day fade (long gamma)** · OF-F14 · LC extreme where aggression failed to get paid · TR-1 test back into it + TR-13 · FL-12 long gamma · IV-3 · Score: reach of where the other side last had control · `[BIG p.15–16, p.18]` · ready.
+
+**R-F17 Refill-zone touch** · OF-F16 · LC `flow.refill.zone` · TR-20 touch with penetration ≤ 32 ticks, resting 12 ticks inside, cancel 30 min · FL memory (held earlier / prior day), construction, location, flow-state features · IV-5 30 min; IV-8 · Score: hold rate (42% base), by memory decile; median dip past the touch (18 ticks); PF 1.80 vs 0.81 is an execution claim, recorded as penetration-depth outcomes only · `[REF p.5, p.8–12, p.23]` · pending.
+
+**R-F18 Squeeze without failure** · OF-S10 · LC catalyst; entry where buyers hit the move and get absorbed · TR-21 fast release (tape speed) with no failure, then TR-13 · IV-8 · Score: continuation after a non-failing squeeze · `[CONT p.11]` `[OFM p.5]` · pending.
+
+### B5. Regime lessons
+
+**R-R01 GEX regime gate** · OF-R1 · LC `value.node.flip.<product>`, call / put walls, max pain · TR-27 · FL-12 · IV-14 · Score: path class, edge-reject rate and range / expected range by regime; wall hold rate above vs below the flip; pin distance at close · `[GEX p.6–14, p.18–20]` `[CEX L86, L110]` · context (daily-known levels; 0DTE intraday is a lag proxy).
+
+**R-R02 VIX regime gate** · OF-R2 · LC none · FL-4, FL-3, FL-13 · Score: realized range by VIX band; edge-reject rate by contango / backwardation; fade vs break shares by VIX direction (daily) · `[VIX4 p.4–9]` · context.
+
+**R-R03 Thesis validity** · OF-R3 · LC thesis box (validity band) · IV-12 · Score: label table only · `[C1 p.3–4]` `[C3 p.7]` · context.
+
+**R-R04 Triad IØD / RFZ** · OF-R4 · TR-25 · blocked until SMT is rebuilt with `[CEX L78]` (prior H / L taken on one index but not another, multi-timeframe) at level set S1 ∪ {VAH, VAL, single prints} · `[C1 p.5, p.7]` · blocked.
+
+### B6. Live-session case studies (Sires)
+
+**R-S01 Refill long at the range bottom** · OF-S1 · LC bottom of the dealing range where sellers were absorbed · TR-13 · IV-8 · Score: reach of the HTF objective · `[NYAM p.4–5]` · ready.
+
+**R-S02 Third-retest short** · OF-S2 · LC level rejected twice · TR-1 third retest with no defence (no `flow.absorption.A` for the other side) · FL-16 · IV-6 · Score: hold rate on third tests (the loss case) · `[NYAM p.6–7]` · ready.
+
+**R-S03 OFM defended a second time** · OF-S2 + OF-F15 · LC OFM level · TR-20 second defence with refreshing size (consistency across refreshes) · FL-12 near-flip ambiguous allowed · IV-9 · Score: outcome by refresh consistency · `[K18 p.7–8, p.11, p.14]` · pending.
+
+**R-S04 ATH pullback OFM long** · OF-S6 · LC where sellers were trapped on the weekly delta profile; `flow.footprint.imb350` box · TR-18 + TR-21 · FL sellers failed to reclaim the prior range (repeated) · IV-9 · Score: continuation after the flagged box · `[K2345 p.4–5]` · pending.
+
+**R-S05 Microbalance breakout** · OF-S10 · LC short-term microbalance · TR-3 `b.c1` beyond it · IV-9 protected low · Score: reach of the HTF level · `[K2345 p.7–9]` · ready.
+
+**R-S06 Two-reason level** · OF-S7 · LC marked resistance + minor HVN (or + gamma node) within `tR` · TR-2 · IV-6 above the rejection high · Score: reject rate with two reasons vs one; 1.5R reach in points · `[K10 p.6–8]` · ready.
+
+**R-S07 Areas-not-direction thesis** · OF-S9 · LC reaction areas both sides + owed objective · TR-13 "something is holding" · IV-15, IV-16 · Score: 44%-win-rate-shaped outcome distribution (MFE / MAE) at 35-tick and 15-tick stop examples · `[ANAT p.4–11]` · ready.
+
+**R-S08 Continuation short at a minor node** · OF-S10 · LC 5 m minor volume node with negative delta stacking; established balance top; yearly-composite low-participation zone · TR-2 at the node; TR-3 + retest for re-entry · FL HTF bias short; FL-12 gamma (exit rule) · IV-15 re-entry gate · Score: same-side control count at the refill zone; slice-through vs stall at composite LVNs · `[CONT p.4–9, p.12–13]` · pending (delta stacking) / ready (node geometry).
+
+**R-S09 Open above value** · OF-S11 · LC prior VAH, current-day developing VAH · TR-8 wait ~10:00, then TR-3 `b.c1` above the current VAH with buy imbalances (TR-17) and TR-1 retest + TR-4 hold · FL open cell above value · IV-1 · Score: retest-hold rate; reach of the HTF objective; time-of-day split · `[AVG p.21–22]` · ready-bar (imbalance add pending).
+
+### B7. Pine and indicator tier-2 claims (recompute rows; frameworks OF-P1 / OF-P2)
+
+**R-P01** σ-band ±0.25σ touch → reversion to open by 12:00 (hour-8 78.4% n=732) · LC `env.tbr.sigma025` · TR-1 / TR-2 · `[PINE AM TBR - NQ Stats.txt]`.
+**R-P02** Hourly sweep of prior-hour H / L by NY hour, conditioned on open vs prior open; retrace to the swept level ≈90–95% · LC `range.gb.hour` · TR-3 / TR-7 · `[PINE NQ Hourly Retracements 12y Stats with Levels.txt:185–313]`.
+**R-P03** Magic-hour box break → mid target (07:00 82.8 … 23:00 68.5); zones Z1–Z6 by extension % · LC hour boxes · TR-3 then TR-7 · `[PINE magic_hours:55–184]`.
+**R-P04** Raid ≥5 pts with 120-min close-back · LC any range · TR-5 (`grid.pine.raid5-120`) · `[PINE Session Raid Stats.txt:36–37]`.
+**R-P05** London 25%-body level wick-and-close-back · `[PINE Session Range Candles + 25% Level.txt:930–953]`.
+**R-P06** NY vs Asia / London engulfment first-hit tables · LC Asia / London H / L / mid · `[PINE NY vs Asia Statistical Levels.txt]` `[PINE NQ Statistical Mapper.txt:282–369]`.
+**R-P07** ORB 5 m / 15 m extreme-first → next break; midpoint retest 81.8–88.4% · LC `range.or.*` · `[PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:141–144, 873–1189]`.
+**R-P08** IB break combos · LC `range.ib` · `[PINE Initial Balance Statistical Mapping.txt]`.
+**R-P09** Open vs prior RTH → no-break rates (84.11 / 81.82; inside 14.30 / 72.66 / 13.04) · LC `box.prior-rth` · `[PINE NQ Stats RTH Breaks with stats.txt]`.
+**R-P10** Floor-pivot gap context (context rows only, not a family) · `[PINE Daily Floor Pivots.txt:1159–1196]`.
+**R-P11** First-presented FVG per hour and hardcoded effectiveness · LC `gap.fvg.first.clock` · `[PINE First presented FVG…:254–304, 342–353]`.
+**R-P12** HTF sweep + CISD screener; body / wick / close variants · LC `block.*`, `cisd.*` · `[PINE HTF Sweep Model with CISD Table.txt:136–142, 300–408]` `[OSF]`.
+**R-P13** Midnight-open hit 73.75% · LC `lvl.tdo` · `[PINE nq_stats_mapper:311–313]`.
+**R-P14** 4H HOD / LOD checkpoint elimination (10:00 checkpoint HOD-in 68.90% n=582) · column `hod_lod_time` · `[PINE 4H HOD LOD Checkpoint Analysis.txt:556–730]`.
+**R-P15** Session percentile bands P10–P90; RE×1…6; manipulation / distribution from the open · LC `env.pine.*` · `[PINE Session Statistical Levels.txt]` `[PINE Session Range Projections with stats.txt]` `[PINE Statistical OHLC Projections HTF.txt]`.
+**R-P16** VIX/16 daily bands; 75.2% inside ±1 SD · LC `env.ev.vix16` · `[PINE Expected Volatility .txt]` `[PINE NQ Stats Price Distributions.txt]`.
+**R-P17** Bar-distributed VP, 70% VA, daily 18:00 and Sunday weekly open lines · LC `value.vp.rth.ohlc1m`, `lvl.1800open`, `lvl.nwog` · `[PINE Sessions & VP with prev session VP & daily weekly opens.txt:216–289]`.
+**R-P18** OHLC delta proxy · `flow.cvd.ohlc` · blocked as trigger with the other CVD rows · `[PINE Confluence Suite.txt:243–255]`.
+**R-P19** Body gap ≥4 ticks near-edge fill · `gap.body.adjacent` · `[PINE 8020 System.txt]`.
+**R-P20** MVFL bias vote: delta events ≥6× avg-50 (floor 3000) k-means zones as break / rejection levels; volume-anomaly zones (2.5× avg-20) as break / rejection levels; hysteresis 4 of 7 · LC `flow.delta.zone.kmeans`, `flow.vol.anomaly.zone` · TR-3 / TR-2 at those zones · rebuild on aggressor delta before scoring `[CEX L16]` · `[MVFL L19–46, L139–150, L181–432]` · pending.
+
+### B8. Conversation-sourced definitions (user turns; tier 1; no recipes beyond the authors above)
+
+- SMT definition: a prior high / low taken on one index but not another, at multiple timeframes `[CEX L78]`; sister indices as a classify input `[FIND p.3]` → rebuild spec for `flow.smt.*` before any TR-25 use.
+- Single-break days trade continuation inside the range at EQ / 75 / 25, or prior-day RTH 25 / 50 / 75 `[DTM L19]` `[DRFL L906]` → `lvl.prior-rth.q*` as a location swap on R-J03 / R-J04.
+- Gamma levels complement the 6–9; NDX levels felt better than QQQ on NQ; cross-asset reactions (SPX hits, NQ reverses without its own level) `[DRFL L325, L906, L1092]` `[CEX L284–285, L348]` → native + mapped node rows on `wiki/options-nodes.md`; cross-asset zone mapping is D3.
+- Regime from GK / YZ / HAR-RV, not VIX alone `[DTM L23]` `[JJX L149]` → FL-2.
+- Derived ranges inside named families; no free-form box `[JJX L148]` (user) → A1.1 grid; free-form search is D3.
+- Absorption confirmation by pulling and stacking `[JJX L294]` → not measurable behind the touch; at-touch proxies only (OF-F4).
+- Execute NQ, ES / SPXW as context, no overnight holds, prop firms `[DTM L266–268]` → FL-21.
+
+---
+
+## C. Swaps (one slot at a time)
+
+### C1. Rules
+
+1. A swap changes exactly one slot of one B recipe; the other four stay at the author's values. Two-slot changes are D.
+2. Swapped values come only from the A inventories. The tape-trust gate applies to every TR swap.
+3. Variants add: for recipe R with admissible sets of sizes `|L|, |O|, |T|, |F|, |I|`, the count is `|L| + |O| + |T| + |F| + |I|`, never the product.
+4. An OF swap is admitted only where the second framework is stated by a source at the same location kind (listed per recipe); it is still one slot.
+5. Rows whose coverage tables cannot be told apart are merged and the merge listed (`[METHOD]`, `wiki/clock-grid-and-bars.md`).
+6. Every variant prints the same score line as its parent, with `faithful_of = parent`.
+
+### C2. Named swap sets
+
+| set | members | size |
+|---|---|---|
+| **SL-clock** | `range.5-9`, `range.7-9`, `range.8-9`, `range.london.00-03`, `range.london.0300-0330`, `range.asia.2000-2030`, `range.midnight.0000-0030`, `range.gb.asia`, `range.gb.london`, `range.gb.nyam`, `range.gb.10-11`, `range.gb.hour`, `range.rth.0930-1000`, `range.rth.1000-1030`, `range.lunch.1200-1230`, `range.moc.1500-1530`, `range.or.5m`, `range.or.15m`, `range.ib`, `range.on.1800-0930` | 20 |
+| **SL-bar** | `bars.vol-elapsed`, `bars.dollar`, `bars.trade-count`, trade-level H / L | 4 |
+| **SL-proj** | −0.5, 1.0, 1.33 / 1.66 beyond-edge, 1.33 from-origin, 1.33 from-eq, ±2.0 | 6 |
+| **SL-inner** | EQ, Q25, Q75, range open, range close, `lvl.prior-rth.q{25,50,75}` | 8 |
+| **SL-env** | `env.ev.*` (10 estimators × 5 refs), `env.ss.{avgHL60, medHL60, minavg60, weighted60, rth.avgHL60}`, `pz.approx.{A,B}`, `env.tbr.sigma025`, `env.pine.manip.*` (4), `env.pine.sessionstat.P10-P90`, `env.vwap.rth.sd{1,2,2.5,3}`, `env.vwap.anchored.*` (5) | 72 |
+| **SL-value** | prior VAH / VAL / POC (trade VP; OHLC VP; VA 70 / 68 / 40), developing VAH / VAL, `value.vp.eth.prior` (+ MPOC), `value.vp.on` (ONVAH / ONVAL / ONVPOC / ON LVN / ON shelf), `value.vp.composite.{5d,20d,250d}`, `value.vp.box69`, `value.vp.dealing`, TPO VAH / VAL / POC | 25 |
+| **SL-kz** | HVN, LVN, two-sided LVN, ledge, shelf, minor volume node, naked POC, `kz.two-transition` | 8 |
+| **SL-tpo** | `tpo.single`, `tpo.excess`, `tpo.poor.high`, `tpo.poor.low`, IB H / L | 5 |
+| **SL-flow** | `flow.absorption.A` price, `flow.bigtrade.100ny` cluster, `flow.refill.zone`, `flow.ofm.catalyst`, `flow.footprint.stack3`, `flow.footprint.imb350`, `dp.max` / `dp.min`, `flow.delta.spike`, `lvl.protected.{high,low}`, `flow.delta.zone.kmeans`, `flow.vol.anomaly.zone`, `flow.absorption.candle.jumbo` | 13 |
+| **SL-candle** | `block.sweep.tbr.{2,3,5}m`, rejection block, `cisd.fractal.literal`, `gap.fvg.first.clock` (1 / 3 / 5 / 15 m), `gap.body.adjacent` | 10 |
+| **SL-gb** | `lvl.tdo`, `lvl.nwog` (2 endpoints), `lvl.0930open`, PDH, PDL, `loc.gp`, `loc.pd50`, `lvl.1800open` | 9 |
+| **SL-node** | OI top3 × 7 products, gamma top3 × 4, flip × 4, call wall / put wall / max pain × 4 | 35 |
+| **SL-owed** | `lvl.owed.nearest` above / below | 2 |
+| **ST-grid** | touch {t0, t2, tR}; reject r {0.25, 0.5} × k {5, 15, 30}; break {b.wick d ∈ 3, b.c1, b.c5}; hold h {15, 30}; fail-back {b.c1, b.c5} × k {15, 30}; reclaim; mid-retrace | 21 |
+| **ST-candle** | `block.sweep.tbr.{2,3,5}m`, rejection block, `cisd.fractal.literal`, FVG formed / filled, `flow.absorption.candle.jumbo` k ∈ {1.5, 2.0, 2.5} | 10 |
+| **ST-tape-ok** | `flow.absorption.A`, `flow.bigtrade.100ny`, `flow.bigtrade.75ldn` | 3 |
+| **ST-tape-pending** | TR-15 … TR-23 objects (reward 3-tick, four stages, footprint diag 3× / 4×, stack, candle-delta disagreement, POC flip, 350% line, delta spike, dp.max side, refill touch, OFM sequence, tape speed, spread, approach speed, digits) | 16 |
+| **ST-time** | `bin.0940-0950`, `bin.0930-0950`, `bin.0950-1000`, `bin.1000-1030`, after 10:00, after the 10:00 release, 10:30 IB close, two 30 m periods, 03:00–06:00 London, PM 13:00–16:00 | 10 |
+| **ST-blocked** | CVD (5 constructions), SMT (3 rows), `flow.absorption.B`, `flow.bigtrade.q90` | 10 (listed, not run) |
+| **SO** | second-framework swaps admitted at the same location kind: {OF-J1 ↔ OF-G1 on any box edge; OF-J2 ↔ OF-A8 break-retest on any box edge; OF-A1 ↔ OF-F7 at value edges vs VWAP bands; OF-A4 ↔ OF-A7 at prior value; OF-F8 ↔ OF-F9 at any absorption print; OF-F14 short-gamma ↔ long-gamma leg} | 6 pairs |
+| **SF** | FL-1 … FL-17, FL-20, FL-21 (each as a slice, one at a time) | 19 |
+| **SI** | IV-1 … IV-15 (IV-16 recorded, not swapped) | 15 |
+
+### C3. Admissible swaps per recipe
+
+| recipe | LC | OF | TR | FL | IV | variants |
+|---|---|---|---|---|---|---|
+| R-J01 | SL-clock (20) + SL-bar (4) + SL-proj (6) + SL-env (72) + SL-flow (13) | SO: OF-G1 (1) | ST-grid (21) + ST-candle (10) + ST-tape-ok (3) + ST-time (10) | SF (19) | SI (15) | 194 |
+| R-J02 | SL-clock (20) + SL-proj (6) | — | ST-grid (21) | SF (19) | SI (15) | 81 |
+| R-J03 | SL-clock (20) + SL-inner (8) + SL-value (25) | SO: OF-A8 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 112 |
+| R-J04 | SL-clock (20) + SL-inner (8) + SL-proj (6) | SO: OF-A8 (1) | ST-grid (21) + ST-tape-ok (3) + ST-time (10) | SF (19) | SI (15) | 103 |
+| R-J05 | SL-clock (20) + SL-inner (8) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 86 |
+| R-J06 | SL-value (25) (value source / VA % / range reference) | — | — | SF (19) | — | 44 |
+| R-J07 | width metrics `w.pct.0859close` / `w.pct.0930open` / `w.rel-prior-rth`; balance metrics (2) | — | — | SF (19) | — | 24 |
+| R-J08 | SL-clock (20) + SL-proj (6) + SL-env (72) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 156 |
+| R-J09 | JJX London starts (4) + SL-proj (6) + SL-env (72) | SO: OF-G1 (1) | ST-grid (21) + ST-candle (10) + ST-tape-ok (3) | SF (19) | SI (15) | 151 |
+| R-J10 | SL-owed (2) + SL-tpo (5) + SL-kz (8) + SL-gb (9) | — | — | SF (19) | SI (15) | 58 |
+| R-J11 | SL-env (72) + SL-proj (6) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 136 |
+| R-J12 | P-zone upgrades (history-60, vol-scaled, volume-filter, VP-node-snap, `pz.approx.B`, anchors 09:00 / 09:30 / 10:00 / 18:00) (9) + SL-env (72) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 139 |
+| R-J13 | SL-env (72) + SL-inner (8) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 138 |
+| R-J14 | SL-inner (8) + SL-proj (6) + SL-kz (8) | — | ST-candle k grid (3) + ST-tape-ok (3) + ST-tape-pending (16) | SF (19) | SI (15) | 78 |
+| R-J15 | SL-inner (8) + SL-proj (6) + SL-kz (8) + SL-gb (9) | — | thresholds {100, 75, 50, 30–60, q99} (5) | SF (19) | SI (15) | 70 |
+| R-J16 | SL-inner (8) | — | ST-tape-pending (16) | SF (19) | SI (15) | 58 |
+| R-J17 | SL-kz (8) × distance tR | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 66 |
+| R-J18 | SL-proj (6) + SL-env (72) + SL-owed (2) | — | ST-candle (10) | SF (19) | IV-7 variants (2) | 111 |
+| R-J19 | SL-gb (9) + SL-candle (10) | — | ST-grid (21) | SF (19) | SI (15) | 74 |
+| R-J20 | as R-J01 | — | ST-time (10) | FL-13 variants (3) | SI (15) | 28 |
+| R-J23 | (each of the 7 boxes is itself the swap of R-J01 / R-J03) | — | — | — | — | 14 |
+| R-G01 | SL-clock (20) + SL-gb (9) | SO: OF-J1 (1) | ST-grid (21) + ST-tape-ok (3) + depth d (3) + cap k (3) | SF (19) | SI (15) | 94 |
+| R-G02 | SL-clock (20) + SL-gb (9) | SO: OF-J1 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 88 |
+| R-G03 | step 5 / 15 / 30 min (3) + SL-clock (20) | SO: OF-J1 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 82 |
+| R-G04 | `lvl.0930open` → `lvl.1800open`, TDO, range open (3) | — | ST-grid (21) | SF (19) | SI (15) | 58 |
+| R-G05 | SL-gb (9) | — | ST-grid (21) | SF (19) | SI (15) | 64 |
+| R-G06 | endpoint settle / close (2) | — | — | FL-14 (3) | — | 5 |
+| R-G07 | impulse source NYAM / 6–9 height / HTF swing (3) + `loc.pd50` (1) | — | ST-grid (21) + ST-candle (10) + ST-tape-ok (3) | SF (19) | SI (15) | 72 |
+| R-G08 | SL-gb (9) + SL-clock (20) | — | ST-grid (21) | SF (19) | SI (15) | 84 |
+| R-G09 | stack members from SL-gb + SL-clock edges (any 3 within tR) | — | ST-grid (21) | SF (19) | SI (15) | 55 |
+| R-G10 | SL-clock (20) | — | ST-grid (21) | SF (19) | SI (15) | 75 |
+| R-A01 | SL-value (25) + SL-kz (8) | SO: OF-F7 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 92 |
+| R-A02 | SL-kz (8) + SL-value (25) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 91 |
+| R-A03 | SL-value (25) | SO: OF-A7 (1) | ST-grid (21) | SF (19) | SI (15) | 81 |
+| R-A04 | SL-value (25) | — | period 15 / 30 / 60 m (3) | SF (19) | SI (15) | 62 |
+| R-A05 | POC source trade / OHLC / TPO (3) | — | touch counts {2, 3} (2) | SF (19) | SI (15) | 39 |
+| R-A06 | naked-POC age (1 / 3 / 5 sessions) (3) + SL-value (25) | SO: OF-A4 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 87 |
+| R-A07 | SL-value (25) + SL-kz (8) + SL-clock (20) | SO: OF-J2 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 112 |
+| R-A08 / R-A09 | SL-value (25) | — | ST-grid (21) | SF (19) | SI (15) | 80 each |
+| R-A10 / R-A11 | label sources (prior RTH / overnight / composite) (3) | — | — | SF (19) | — | 22 each |
+| R-A12 | ON profile scope 18:00–09:30 vs 20:00–09:30 (2) | — | ST-grid (21) | SF (19) | SI (15) | 57 |
+| R-A13 | SL-value (25) + SL-clock (20) | — | ST-grid touch (3) | SF (19) | — | 67 |
+| R-A14 | period 15 / 30 / 60 m, row 1 pt / 4 ticks, trade-visited / OHLC (6) | — | ST-grid (21) | SF (19) | SI (15) | 61 |
+| R-A15 | `range.ib` → SL-clock (20) | — | ST-grid (21) | SF (19) | SI (15) | 75 |
+| R-A16 | SL-kz (8) + confluence partner from SL-env / SL-value (2 sets) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 68 |
+| R-A17 | SL-kz (8) | — | ST-grid (21) | SF (19) | SI (15) | 63 |
+| R-A18 | SL-tpo (5) + SL-value (25) | — | ST-grid (21) | SF (19) | SI (15) | 85 |
+| R-F01 | band 1 / 2 / 2.5 / 3, anchor ETH / RTH / fixed-06, dispersion SD / MAD / RMS (10) + SL-value (25) | SO: OF-A1 (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 94 |
+| R-F03 | anchor pairs (5) | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 63 |
+| R-F04 / R-F05 | stack 2 / 3, ratio 3× / 4× (4) + SL-kz (8) | — | ST-tape-pending (16) | SF (19) | SI (15) | 62 each |
+| R-F06 | SL-kz (8) + SL-value (25) + SL-gb (9) | — | ST-tape-ok (3) + ST-tape-pending (16) | SF (19) | SI (15) | 95 |
+| R-F08 | SL-kz (8) + SL-value (25) (prior-day VA) | SO: OF-F9 (1) | ST-tape-ok (3) + ST-tape-pending (16) | SF (19) | SI (15) | 87 |
+| R-F09 | thesis level from SL-value / SL-kz (33) | SO: OF-F8 (1) | stage entered 1 / 2 / 3 / 4 (4) | SF (19) | SI (15) | 72 |
+| R-F10 / R-F11 | SL-kz (8) | — | ST-tape-pending (16) | SF (19) | SI (15) | 58 each |
+| R-F12 / R-F13 | SL-value (25) + `range.dealing` (1) | — | ST-grid (21) + ST-tape-pending (16) | SF (19) | SI (15) | 97 each |
+| R-F14 | SL-flow (13) | — | thresholds (5) + ST-tape-pending (16) | SF (19) | SI (15) | 68 |
+| R-F15 | SL-flow (13) | SO: long-gamma leg (1) | ST-tape-pending (16) | SF (19) | SI (15) | 64 |
+| R-F16 | SL-flow (13) + SL-kz (8) | SO: short-gamma leg (1) | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 80 |
+| R-F17 | zone print threshold 60 / 80 / 100 (3) + depth 12 / 18 / 32 ticks (3) | — | ST-tape-pending (16) | memory / construction / location / flow (4) + SF (19) | cancel 15 / 30 / 60 min (3) + SI (15) | 63 |
+| R-F18 | SL-flow (13) | — | ST-tape-pending (16) | SF (19) | SI (15) | 63 |
+| R-R01 | products (7) + node kinds (4) | — | TR-27 variants (2) | SF (19) | SI (15) | 47 |
+| R-R02 | — | — | — | FL-3 / FL-4 / FL-13 variants (8) | — | 8 |
+| R-S01 … R-S09 | SL-kz (8) + SL-value (25) + SL-flow (13) per recipe | — | ST-grid (21) + ST-tape-ok (3) | SF (19) | SI (15) | 104 each |
+| R-P01 … R-P20 | one location family each (as listed) | — | ST-grid (21) | FL-1 (year) + slice L (2) | — | 23 + family size each |
+
+Totals are sums; they are printed by the runner, not fixed here. Merges by indistinguishable coverage tables are expected to collapse most SL-env and SL-clock members (`wiki/clock-grid-and-bars.md`).
+
+---
+
+## D. Discovery only after scores
+
+### D1. Score line (per recipe and per variant)
+
+`recipe | variant | faithful_of | n | year | slice | touch | reject|touch | hold|break | fail-back|wick | target1 reach | target2 reach | time-to-touch p50 | MFE p50 | MAE p50 | grid-flip count | status`
+
+- Every share carries `n` and a Wilson 95% interval; `better` only when intervals do not overlap the parent (`SPEC.md` §6).
+- Slices: year (FL-1), day type (FL-8), open cell (FL-9), vol tercile (FL-2), gamma regime (FL-12), session (FL-5). One slice per line; no pooled multi-slice claims.
+- Recompute rows (R-J06, R-J07, R-A13, R-P*) print the quoted source cell beside the recomputed cell.
+- MFE / MAE are in points from the author's invalidation distance (`[C2 p.4]`); no P&L, no R-multiples on account size.
+
+### D2. Gate
+
+Discovery starts only when all four hold: (1) every `ready` and `ready-bar` recipe in B has a score line on F; (2) every C variant of those recipes has a score line or a listed merge; (3) every `pending` trigger has a FINDINGS row (measured, and a trust verdict); (4) every `blocked` object (CVD, SMT, absorption B, bigtrade q90) has either a rebuilt definition with a new FINDINGS row or a `not-measurable` row. Until then, no discovery row is run.
+
+### D3. Discovery queue (sourced, deferred, in this order)
+
+1. Rebuilds: CVD divergence as an event (five constructions, divergence at box edges within the grid window) `[VWAP p.6]` `wiki/cvd-variants.md`; SMT as prior-H/L-taken-on-one-index-not-another, multi-scale, at S1 ∪ AMT objects `[CEX L78]` `[C1 p.5]`; absorption B with a tighter reload rule; BigTrades on the tape's own size distribution (per-ticker thresholds) `[FIND p.10]` `[JJX L220]`; MVFL zones on aggressor delta `[CEX L16]`.
+2. Two-slot swaps, only on recipes whose one-slot variants printed `better`.
+3. Derived ranges: starts on a 15-minute grid inside the NY (end 09:30) and London (end 03:00) families, regularized toward 06:00 / 03:00 `[JJX L177–199]` (tier 4); Jumbo's "any 5–9 window" `[XF p.7]` is the null.
+4. Learned P-zones (Phase 3) `wiki/p-zones-benchmark.md`; P-zone as "several generators agree" `[JJX L231]` (tier 4).
+5. Cross-asset zone mapping (beta-adjusted, residual-width zones) and basket non-confirmation `[CEX L290–295]` (tier 4); native + mapped node disagreement stays a Phase 1 column.
+6. Gamma density, vanna / charm, 0DTE share, implied-hedging-flow tests `[CEX L109–111, L145–148]` (tier 4); `[GEX p.17]` is the only tier-2 source for vanna / charm.
+7. Exit-hazard model and regime clustering `[CEX L116, L125]` (tier 4); session picker `[CEX L93]` (tier 4) — the rolling clean-session label (OF-J9) is the Phase 1 stand-in.
+8. Dealer positioning inference from next-day OI as a retrospective calibration label `[DRFL L279, L318, L815]`.
+9. Skylit / KG1 / GEXRADAR reproductions: not before 1–8; disclosed substitutes only.
+
+### D4. Stop
+
+This file is complete when every slot value above has a source, every recipe has its author's five slots and a status, every recipe has a bounded one-slot swap list, and the discovery queue holds every tier-4 idea and every unmeasured tape flag. Nothing here starts a run; `PHASE.md` remains the stop for measurement.

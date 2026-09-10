@@ -1,0 +1,47 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+env	env.ev.gk20	unbuilt	none	0	n/a	SPEC upgrade; no report; GK band not in family_env.py
+env	env.ev.har	unbuilt	none	0	n/a	SPEC upgrade; no report; HAR band not in family_env.py
+env	env.ev.iv	unbuilt	none	0	n/a	SPEC upgrade; no report; ATM-IV AM band not in family_env.py
+env	env.ev.mean60	pass	pass	0	n/a	family_env.py:42-63 ref.0930open ± prior-60 AM 09:30-12:00 one-sided means; ev_mid is open not EQ (2 coincidental equals); leakage 0; other refs 0900open/eq69/0900close/tdo unbuilt
+env	env.ev.mean60.ref.0900close	unbuilt	none	0	n/a	SPEC ref.0900close; no report; family_env.py only ref.0930open
+env	env.ev.mean60.ref.0900open	unbuilt	none	0	n/a	SPEC ref.0900open; no report; family_env.py only ref.0930open
+env	env.ev.mean60.ref.eq69	unbuilt	none	0	n/a	SPEC ref.eq69; no report; family_env.py:53 ev_mid is 0930 open not EQ
+env	env.ev.mean60.ref.tdo	unbuilt	none	0	n/a	SPEC ref.tdo; no report; family_env.py only ref.0930open
+env	env.ev.median60	pass	pass	0	n/a	family_env.py:51-66 median of same AM one-sided excursions; ref.0930open; faithful_of env.ev.mean60 disagreements 82; other refs unbuilt
+env	env.ev.p75	unbuilt	none	0	n/a	SPEC upgrade; no report; p75 AM excursion band not in family_env.py
+env	env.ev.p90	unbuilt	none	0	n/a	SPEC upgrade; no report; p90 AM excursion band not in family_env.py
+env	env.ev.rv20	unbuilt	none	0	n/a	SPEC upgrade; no report; scaled RV band not in family_env.py (vol.rv20 is a feature only)
+env	env.ev.vix16	unbuilt	none	0	n/a	SPEC upgrade; no report; VIX/16 band not in family_env.py; VIX parquet exists free-sources
+env	env.ev.yz20	unbuilt	none	0	n/a	SPEC upgrade; no report; YZ band not in family_env.py
+env	env.ext.050	unbuilt	none	0	n/a	SPEC upgrade −0.5 projection; no env report; sessions.py:52-53 has m05 geometry unused here
+env	env.ext.100	unbuilt	none	0	n/a	SPEC upgrade measured move; no report; family_env.py only k=1.33/1.66
+env	env.ext.133.from-edge	pass	pass	0	n/a	family_env.py:79-85 H+1.33*W69 / L-1.33*W69; env_F 667/667 match sessions 1s H/L; fixture 110+1.33*20=136.6 family_env.py:186
+env	env.ext.133.from-edge.london	unbuilt	none	0	n/a	SPEC London box source; no report; family_env.py:79-86 uses W69 only
+env	env.ext.133.from-eq	unbuilt	none	0	n/a	SPEC upgrade; no report; not in family_env.py
+env	env.ext.133.from-origin	unbuilt	none	0	n/a	SPEC upgrade L+kW / H−kW; no report; not in family_env.py
+env	env.ext.166.from-edge	pass	pass	0	n/a	family_env.py:83-86 H+1.66*W69 / L-1.66*W69; AM 09:30-12:00 reach; faithful_of env.ext.133.from-edge
+env	env.ss.avgHL60	fail	pass	0	n/a	_tables/env_F.parquet 657/657 ss_hi/ss_lo = ss_mid ± half 09:00-12:00 H-L; family_env.py:27-29 cache skips one-sided :71-77; wiki wants open+mean(H-open) / open-mean(open-L)
+env	env.ss.medHL60	unbuilt	none	0	n/a	SPEC/wiki upgrade; no report; family_env.py has no median 09:00-12:00 sides
+env	env.ss.minavg60	unbuilt	none	0	n/a	SPEC/wiki named min-average approx; no report; not in family_env.py
+env	env.vwap.rth.sd2	fail	fail	0	n/a	SPEC env upgrade; report under value/; family_value.py:30 vwap_reach=False on MBP path; :64-75 full-RTH HLC3 VWAP vs AM (lookahead)
+env	pz.approx.A	fail	fail	0	n/a	family_env.py:87-97 500-session hist ok (pz_history=500) but np.percentile linear p90 envelope not nearest-rank T1-T4 50/75/90/95/99; warmup 30; pz_is_approx hardcoded pass:True :189
+env	pz.approx.A.VP-node-snap	unbuilt	none	0	n/a	SPEC upgrade; no report; not in family_env.py
+env	pz.approx.A.history-60	unbuilt	none	0	n/a	SPEC upgrade; no report; code uses 500 not 60 family_env.py:90
+env	pz.approx.A.vol-scaled	unbuilt	none	0	n/a	SPEC upgrade; no report; not in family_env.py
+env	pz.approx.A.volume-filter	unbuilt	none	0	n/a	SPEC upgrade; no report; not in family_env.py
+env	pz.approx.B	unbuilt	none	0	n/a	SPEC 0.5R/1.0R beyond 6-9 edges; no report; not in family_env.py
+env	pz.learned	pass	pass	0	n/a	family_env.py:204-217 status=deferred n=0 Phase 3; wiki/p-zones-benchmark.md deferred not a fail
+vol	vol.gk10	unbuilt	none	0	n/a	SPEC window-10 upgrade; no report; family_vol.py mean of last 20 only :60
+vol	vol.gk20	pass	pass	0	n/a	family_vol.py:19-24,40,47 GK on session 18:00-17:00 OHLC; gk20=mean of 20 daily GK variance (not sqrt-σ); fixture _gk(100,110,90,105)>0
+vol	vol.gk60	unbuilt	none	0	n/a	SPEC window-60 upgrade; no report
+vol	vol.har	pass	pass	0	n/a	family_vol.py:61-63 0.5*RV1+0.3*mean5+0.2*mean22 on RTH 1m RV incl today; n=626
+vol	vol.iv.atm	not-measurable	pass	0	n/a	family_vol.py:158-174 stub status=not-measurable; NDX quote-1m exists thetadata-opra/opra__ndx-options__quote-1m__dte14; not in SPEC §5 NM list
+vol	vol.rv.overnight	unbuilt	none	0	n/a	SPEC/wiki 18:00-09:30 as-of-09:29 upgrade; no report; family_vol.py:41 uses RTH 09:30-16:00
+vol	vol.rv10	unbuilt	none	0	n/a	SPEC window-10 upgrade; no report; family_vol.py mean of last 20 :59
+vol	vol.rv20	pass	pass	0	n/a	family_vol.py:41-47 RTH 09:30-16:00 1m RV mean-20 incl today (wiki groups 18:00-17:00 OHLC); terciles frozen F :73-87; leakage hardcoded 0
+vol	vol.rv60	unbuilt	none	0	n/a	SPEC window-60 upgrade; no report
+vol	vol.skew25	unbuilt	none	0	n/a	SPEC/wiki faithful; no report no function; NDX quotes present
+vol	vol.vx.slope	unbuilt	none	0	n/a	SPEC/wiki faithful VX1−VIX; no report no function; Cboe VX + VIX parquet present
+vol	vol.yz10	unbuilt	none	0	n/a	SPEC window-10 upgrade; no report
+vol	vol.yz20	unbuilt	none	0	n/a	SPEC/wiki faithful; family_vol.py:52-58 appends yz_o/yz_c/yz_rs (GK as RS) then never emits yz20
+vol	vol.yz60	unbuilt	none	0	n/a	SPEC window-60 upgrade; no report

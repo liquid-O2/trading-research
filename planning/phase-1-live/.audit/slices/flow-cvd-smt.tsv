@@ -1,0 +1,12 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+flow	flow.cvd.trade	fail	pass	0	n/a	wiki/cvd-variants.md:12 18:00 1s series; published is session-sum not 1s mbp1_objects.py:77-90 extract 18:00-16:00 mbp1_extract.py:3; cvd_trade_F cache is 09:30-12:00 (no reset col); current scan_trade_cvd family_flow.py:38-39 18:00-12:00 sum still not 1s; family_env.py:132 truthy sign rate 1.0; xcheck 125; side A/B ok
+flow	flow.cvd.ohlc	fail	pass	0	n/a	family_flow.py:21-27 sign(c-o) on 09:30-12:00 1m not Pine close-in-range (c-l vs h-c); no 18:00 reset; family_env.py:132 disagreements 0 (nonzero signs truthy) vs actual sign mismatch 468/668
+flow	flow.cvd.part.trade	fail	pass	0	n/a	mbp1_objects.py:85-96 only >=100 session-sum sign not three CVD streams (>=100/20-99/<20); family_flow.py:72-74 part_* are volume not delta; same window as cvd_from_trades
+flow	flow.cvd.part.ohlc	fail	fail	0	n/a	published report aliases cvd_ohlc_sign (disagreements 0, no split param); current family_flow.py:156-164 top-tercile still sign(c-o) not close-in-range; flow_fixtures family_flow.py:213 hardcoded pass:true
+flow	flow.cvd.part.q75	fail	pass	0	n/a	mbp1_objects.py:560-568 full-extract sum size>=q75=2; family_env.py:132 truthy sign rate 1.0; by_rv aliases cvd_part_sign family_flow.py:294
+flow	flow.cvd.part.q90	fail	pass	0	n/a	mbp1_objects.py:560-568 full-extract sum size>=q90=3; family_env.py:132 truthy sign rate 1.0; by_rv aliases cvd_part_sign family_flow.py:294
+flow	flow.cvd.gamma	not-measurable	pass	0	n/a	family_flow.py:251 _nm_row no w(price) function; SPEC.md:39 upgrade not in NM list SPEC.md:48; ticket 05 deferred; value.node.gamma unbuilt
+flow	flow.smt.ohlc.4	fail	fail	0	n/a	wiki/smt-divergence.md:12 S1 Asia/London/6-9/PDH hunted(level); family_flow.py:107-128 running-high lag 1/5/15 on 09:30-12:00 1m; flow_fixtures family_flow.py:214 hardcoded pass:true; holdout rate 1.0
+flow	flow.smt.pine.3-3	fail	fail	0	n/a	family_flow.py:167-172 first3 vs last3 AM HH/HL not OSF 3/3 lookback 200/mintick/min 2-tick/overlap 2/12-bar merge wiki/smt-divergence.md:13; flow_fixtures hardcoded
+flow	flow.smt.trade.nq	fail	fail	0	n/a	mbp1_objects.py:313-349 AM running H/L vs sister 1m running ext lag 5m not tick-precise S1 hunt; k<=0 returns True :342-343; 439/446 true; not 6-9-edge event
+flow	flow.smt.trade.es	not-measurable	pass	0	n/a	SPEC.md:48 wiki F NM ES MBP-1 ends 2024-08-30; family_flow.py:255 _nm_row

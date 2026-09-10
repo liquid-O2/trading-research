@@ -1,0 +1,37 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+path	balance.body-ratio	unbuilt	none	0	n/a	SPEC upgrade; no path report; field only family_open.py:233
+path	balance.vp-shape	unbuilt	none	0	n/a	SPEC/wiki upgrade; no report and no function
+path	corr.am-pm	unbuilt	none	0	n/a	SPEC upgrade; no report and no function
+path	edge.clean	unbuilt	none	0	n/a	SPEC/wiki untouched-edge; no path report; open aliases not purged family_open.py:234
+path	judas.depth.-0.5	pass	pass	0	n/a	sessions.py:70-99,185 m05 then close through EQ; family_path.py:84-90 vs judas.any; fixtures.py:91-137; leak=0
+path	path.6-9.published	pass	pass	0	n/a	sessions.py:169-173 b.c1 09:30-12:00; fixtures.py:61-137; leak=0; width tables not mixed
+path	path.midretrace	pass	pass	0	n/a	sessions.py:102-123,196; measured in path.6-9.published.json summary.midretrace k=339/647; leak=0
+path	w.pct.0859close	pass	pass	0	n/a	sessions.py:178; table in path.6-9.published.json and range.6-9.published.json width_tables.w_pct_0859close
+path	w.pct.0930open	fail	pass	0	n/a	sessions.py:179 field only; family_range.py:48-67 _width_tables omits w_pct_0930open; no variant JSON
+path	w.rel-prior-rth	pass	pass	0	n/a	sessions.py:180,227-229 separate table not XF p.24; 2024-01-03 WpriorRTH=251 from 09:30-16:00 not ETH
+path	window.1030	unbuilt	none	0	n/a	SPEC 09:30-10:30; no path report; family_open.py:225 path_class_1030 only
+path	window.1600	unbuilt	none	0	n/a	SPEC 09:30-16:00; no report and no function
+range	bin.0930-0950	pass	pass	0	n/a	sessions.py:290-291 first 20m includes 0940-0950 family_clocks.py:357-361; leak 0 via known_at 09:00<09:30
+range	bin.0940-0950	pass	pass	0	n/a	sessions.py:288-289; family_clocks.py:350-397; leak=0; fixtures.py:91-137
+range	bin.0950-1000	pass	pass	0	n/a	sessions.py:292-293; family_clocks.py:350-397; leak=0; fixtures.py:91-137
+range	bin.1000-1030	pass	pass	0	n/a	sessions.py:294-295; family_clocks.py:350-397; leak=0; fixtures.py:91-137
+range	bin.1030-1200	pass	pass	0	n/a	sessions.py:296-297; family_clocks.py:350-397; leak=0; fixtures.py:91-137
+range	range.5-9	pass	pass	0	clean	clocks.py:37-38 05:00-09:00; family_clocks.py:83 1m; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.6-9.dollar-bars	pass	pass	0	clean	family_clocks.py:147-180 1m close*vol*20 vs 60-median; 278 known_at != vol-elapsed; leak=0
+range	range.6-9.published	pass	pass	0	clean	sessions.py:144-173 06:00-09:00 1s; fixtures.py:91-137; 2024-01-02 H=16976.5 L=16817.0 vs 1s median_h=16856 n_at_H=2 neighbor 0.25pt; 2024-01-03 WpriorRTH from 09:30-16:00 not ETH
+range	range.6-9.trade-count	fail	pass	0	n/a	family_clocks.py:251-265 clones 6-9 path; closed_early=317 but disagree always 0; wiki bars.trade-count box-close not implemented
+range	range.6-9.trade-level	pass	pass	0	clean	family_clocks.py:187-250 trades 06:00-09:00 H/L; F max|dH vs 1s|=0; 2024-01-02 match; leak=0
+range	range.6-9.vol-elapsed	pass	pass	0	clean	compute.py:84-127 1m cum vol vs causal 60-median; leak=0; 2024-01-02 median None so full 6-9=1s H/L
+range	range.7-9	pass	pass	0	clean	clocks.py:40-41 07:00-09:00; family_clocks.py:83 1m; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.8-9	pass	pass	0	clean	clocks.py:43-44 08:00-09:00; family_clocks.py:83 1m; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.asia.2000-2030	pass	pass	0	clean	clocks.py:53-55 prior-day 20:00-20:30; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.gb.10-11	pass	pass	0	clean	clocks.py:67-68 10:00-11:00 RTH; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.gb.asia	pass	pass	0	clean	clocks.py:57-58 20:00-00:00; distinct from london clocks.py:411-412; 2024-01-02 1s H/L match; leak=0
+range	range.gb.hour	pass	pass	0	clean	family_clocks.py:96-134 last 60m every 5m 09:30-12:00; step0 08:30-09:30 per wiki; leak=0
+range	range.gb.london	pass	pass	0	clean	clocks.py:60-61 02:00-05:00 distinct from range.london.00-03; 2024-01-02 1s H/L match; leak=0
+range	range.gb.nyam	pass	pass	0	clean	clocks.py:63-66 09:00-10:00 outcomes 10:00; nyam_violation=0 family_clocks.py:45-50; leak=0
+range	range.ib	pass	pass	0	clean	clocks.py:76-78 09:30-10:30 outcomes 10:30-16:00; 2024-01-02 IB H=16873.5 != ETH-inclusive 17036.75; leak=0
+range	range.london.00-03	pass	pass	0	clean	clocks.py:46-47 00:00-03:00 outcomes 03:00-06:00; 2024-01-02 1s H/L match; leak=0
+range	range.london.0300-0330	pass	pass	0	clean	clocks.py:49-51 03:00-03:30; 2024-01-02 1s H/L=1m=stored; leak=0
+range	range.or.15m	pass	pass	0	clean	clocks.py:73-74 09:30-09:45; 2024-01-02 first bar 09:30 H=16873.5 != ETH 17038.5; leak=0
+range	range.or.5m	pass	pass	0	clean	clocks.py:70-72 09:30-09:35; 2024-01-02 first bar 09:30 H=16873.5 != ETH 17038.5; leak=0

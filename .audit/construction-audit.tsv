@@ -1,0 +1,8 @@
+ts	phase	decision	why	evidence	result
+2026-09-10T08:47:14Z	frame	stated exit condition	table complete with no remaining fixable fail; Skylit not-measurable; CONSTRUCTION_AUDIT.md written	planning/phase-1-live/CONSTRUCTION_AUDIT.md	open
+2026-09-10T08:47:14Z	wake	skip Cursor /loop	this harness has no /loop command; drive iterations in-session	playbooks/autonomous-run.md	skipped
+2026-09-10T08:47:15Z	pr	skip opening a PR	user said STOP when the table is complete	user_query	skipped
+2026-09-10T08:50:46Z	swarm	spawned 9 family audit workers	coverage partition of live families; workers write slice TSVs only	planning/phase-1-live/.audit/slices	open
+2026-09-10T09:20:42Z	iterate	fixed options SS CVD value gap fail iceberg SMT S1	construction mismatches vs wiki/SPEC	planning/phase-1-live/CONSTRUCTION_AUDIT.md	predicate moved
+2026-09-10T09:20:42Z	stop	wrote CONSTRUCTION_AUDIT.md with 148 rows	16 remaining honest fails, 31 unbuilt, 18 not-measurable, Skylit not-measurable	planning/phase-1-live/CONSTRUCTION_AUDIT.md	predicate met
+2026-09-10T09:26:22Z	verify	flipped six pass rows to fail after table proof	gap FVG/body/sweep3 all 647/647; kz 429/429; part.q75/q90 still full-extract	gap_block_tpo_F.parquet; value.kz.json primary.rate=1.0; cvd_trade_F reset=18:00; smt_ohlc_F s1=True; env_F ss_hi-ss_mid != ss_mid-ss_lo	23 fail remain honest

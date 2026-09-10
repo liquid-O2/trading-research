@@ -1,0 +1,22 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+options	value.dealer.inventory	not-measurable	none	0	n/a	SPEC/wiki NM; family_options.py:537 participant identity not in inventory
+options	value.hidden.book	not-measurable	none	0	n/a	SPEC/wiki NM; family_options.py:538 hidden book needs MBP-10/MBO
+options	value.node.gamma.<product>.top3	unbuilt	none	0	n/a	SPEC/wiki upgrade; no report and no function
+options	value.node.oi.ndx.top3	fail	fail	0	flagged	_top3_around family_options.py:114-122 ranks (exp,strike,right) not summed-OI strikes; L110-113 global top3 if spot None; report mixes mapped_nq and lacks spot_at_t/distance/tagged/near/known_at
+options	value.node.oi.ndx.top3.mapped_nq	not-measurable	none	0	n/a	wiki experiment; family_options.py:512-518 no cash-index minutes for contemporaneous median; no report JSON
+options	value.node.oi.ndxp.top3	fail	fail	0	flagged	same as ndx: family_options.py:114-122 contracts not strikes; L110-113; report sample_nodes mapped_nq mixed, missing wiki row fields
+options	value.node.oi.ndxp.top3.mapped_nq	not-measurable	none	0	n/a	family_options.py:512-518; no cash-index minutes; no report JSON
+options	value.node.oi.nq.opt.top3	fail	fail	0	flagged	report clones NDX sample/status not-measurable; code L321-346 empty OI despite DBN /workspace/data/databento/cme__nq-options-on-futures__statistics; L500-507 alias of nqopt
+options	value.node.oi.nqopt.top3	fail	none	0	n/a	wiki id; family_options.py:321-346 OI_vintage=unavailable and nodes empty while DBN statistics exist (not parquet); no nqopt report JSON
+options	value.node.oi.qqq.top3	fail	fail	0	flagged	report native=false faithful_of ndx, daily-cash mapped_nq mixed; code L282-286 1m via 09:25-miss→prior RTH last but ATR yahoo daily L237 not 1m-built; L114-122 contracts not strikes
+options	value.node.oi.qqq.top3.mapped_nq	fail	none	0	clean	family_options.py:298-302,428-438 stores strike×median ratio but keeps QQQ distances; wiki wants measured vs NQ with NQ ATR; no report JSON
+options	value.node.oi.spx.top3	fail	fail	0	flagged	same as ndx: family_options.py:114-122 (report 4000 PUT twice); L110-113; report mapped_nq mixed, missing wiki row fields
+options	value.node.oi.spx.top3.mapped_nq	not-measurable	none	0	n/a	family_options.py:512-518; no cash-index minutes; no report JSON
+options	value.node.oi.spxw.top3	fail	fail	0	flagged	same as ndx: family_options.py:114-122 contracts not strikes; L110-113; report mapped_nq mixed, missing wiki row fields
+options	value.node.oi.spxw.top3.mapped_nq	not-measurable	none	0	n/a	family_options.py:512-518; no cash-index minutes; no report JSON
+options	value.node.oi.spy.top3	fail	fail	0	flagged	report native=false faithful_of ndx, daily-cash mapped_nq mixed; code L282-286 1m fallback, ATR yahoo daily L238; L114-122 contracts not strikes
+options	value.node.oi.spy.top3.mapped_nq	fail	none	0	clean	family_options.py:298-302,428-438 not remeasured vs NQ ATR; no report JSON
+options	value.node.oi.top3.index	fail	none	0	n/a	wiki faithful; family_options.py:519-536 copies ndx n/primary; no report JSON
+options	value.skylit.atlas	not-measurable	none	0	n/a	wiki/SPEC value.skylit.*; unpublished; no report
+options	value.skylit.flowseeker	not-measurable	none	0	n/a	wiki/SPEC value.skylit.*; unpublished; no report
+options	value.skylit.heatseeker	not-measurable	none	0	n/a	wiki/SPEC NM; report status=deferred; code family_options.py:539 not-measurable

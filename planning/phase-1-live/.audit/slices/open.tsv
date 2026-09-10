@@ -1,0 +1,9 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+open	open.dbx.in-range-not-value	pass	pass	0	n/a	family_open.py:219,408 vs_range==in and vs_value!=in n=166 disjoint from in_value/outside_both; primary 6-9 both 09:30-12:00; loc_code fixtures 458-463; leakage 0
+open	open.dbx.in-value	pass	pass	0	n/a	family_open.py:218,407 vs_value==in n=212 disjoint; primary path_class both 09:30-12:00; loc_code fixtures 458-463; leakage 0
+open	open.dbx.outside-both	pass	pass	0	n/a	family_open.py:217,409 vs_value and vs_range not in n=254; union with other dbx=632/647; loc_code fixtures 458-463; leakage 0
+open	open.oneway.A.0930-1000	pass	pass	0	n/a	family_open.py:188-195,411-427 09:30-10:00 6-9 path one-side 110/141 outside+RVOL>=1; not pooled with OR.5m 48/141 or OR.15m 46/141; fixture loc_code 458-463 (two_denominators string cmp 462); leakage 0
+open	open.oneway.OR.15m	pass	pass	0	clean	family_open.py:203,212,442-447 frozen OR15 low return 09:45-12:00 n=46/141; not pooled with A-period; 1m OR H/L clocks.py:73-74; leakage 0
+open	open.oneway.OR.5m	pass	pass	0	clean	family_open.py:202,211,428-441 frozen OR5 low return after 09:35 until 10:00 (clock outcome 12:00 unused) n=48/141; long example OR low only; not pooled with A-period; leakage 0
+open	open.switch.ohlc-vp	fail	pass	0	n/a	family_open.py:72-80 ohlc_vp bins 1m close×vol not Pine body/wick H-L (wiki upgrades); 107 cell_disagree; prior window 09:30-16:00:163; loc_code fixtures 458-463; leakage 0
+open	open.switch.published	pass	pass	0	n/a	family_open.py:91-107,162-174 trade VP 09:30-16:00 (2024-01-02 stored poc/VAL/VAH/vol=496978 matches; 16:00-17:00 ETH 15888 excluded); 27 cells _cell_table:265-270; loc_code+value_area fixtures 458-463; leakage 0

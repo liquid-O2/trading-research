@@ -1,0 +1,8 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+value	env.vwap.rth.sd2	fail	fail	0	n/a	family_value.py:30 vwap_reach=False on MBP path; family_value.py:64-75 1m fallback is full-RTH HLC3 VWAP vs AM (lookahead) not as-of-minute trade VWAP; fixtures hardcoded family_value.py:111-118
+value	value.dealer.inventory	not-measurable	none	0	n/a	SPEC NM; participant identity not in inventory family_value.py:151
+value	value.delta.rth.trade	fail	fail	0	n/a	family_value.py:147 aliases vp_touch; dp_max/dp_min computed mbp1_objects.py:387-388 then dropped :531; no taper; fixtures hardcoded family_value.py:111-118
+value	value.hidden.book	not-measurable	none	0	n/a	SPEC NM; hidden book needs MBP-10/MBO family_value.py:150
+value	value.kz	fail	fail	0	n/a	family_value.py:34 kz=poc is not None; 1m fallback vs_value==in family_value.py:95; not HVN/LVN/two-sided LVN/ledge; fixtures hardcoded family_value.py:111-118
+value	value.vp.rth.ohlc1m	unbuilt	none	0	n/a	SPEC upgrade; no report; close×vol helper only family_open.py:72-80 not Pine body/wick; VA 68/40 4-tick ETH/ON scope also unbuilt
+value	value.vp.rth.trade	fail	fail	0	n/a	family_value.py:29,146 vp_touch=VAL is not None not VAH/VAL/POC grid; fixtures hardcoded family_value.py:111-118; vp_rth clock is RTH 09:30-16:00 mbp1_objects.py:22-26,350-389

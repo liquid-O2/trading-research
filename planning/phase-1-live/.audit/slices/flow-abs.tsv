@@ -1,0 +1,22 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+flow	flow.absorption.A	pass	pass	0	n/a	mbp1_objects.py:198-234 2m roll + frozen discovery q90 (wiki session q90) at 6-9 H/L ≤2 ticks then 0.25*W69/15m; overlap A=17/big=365/both=17 not identical; no absA case in mbp1_fixtures()
+flow	flow.absorption.A.q75	pass	pass	0	n/a	mbp1_objects.py:521-523 2m window frozen q75; k=66/429; by_rv_tercile aliases absorption_A family_flow.py:275-277
+flow	flow.absorption.A.w1m	fail	pass	0	n/a	mbp1_objects.py:515-517 1m roll vs frozen 2m q90 (3532/3445); k=0/429
+flow	flow.absorption.A.w5m	fail	pass	0	n/a	mbp1_objects.py:518-520 5m roll vs frozen 2m q90 not 5m q90; k=181/429
+flow	flow.absorption.B	pass	pass	0	n/a	mbp1_objects.py:101-152 BBO reload ≥shown+0.5*consumed in 500ms twice; session AM trade q90 not frozen; fixture absB_twice literals; rate 1.0
+flow	flow.bigtrade.100ny	pass	pass	0	n/a	mbp1_objects.py:505 NY 09:30-16:00 any size>=100 session bool not tagged side/price; 365/429; not identical to A
+flow	flow.bigtrade.75ldn	pass	pass	0	n/a	mbp1_objects.py:494-506 London 02:00-05:00 (range.gb.london) size>=75; 101/429; not Jumbo 00:00-03:00
+flow	flow.bigtrade.q50	pass	pass	0	n/a	mbp1_objects.py:507 frozen discovery q50=1 lot; rate 1.0; by_rv_tercile aliases bigtrade
+flow	flow.bigtrade.q75	pass	pass	0	n/a	mbp1_objects.py:508 frozen discovery q75=2 lots; rate 1.0; by_rv_tercile aliases bigtrade
+flow	flow.bigtrade.q90	pass	pass	0	n/a	mbp1_objects.py:509 frozen discovery q90=3 lots; rate 1.0; FINDINGS tape-trusted no
+flow	flow.bigtrade.q99	pass	pass	0	n/a	mbp1_objects.py:510 frozen discovery q99=7 lots; rate 1.0
+flow	flow.bigtrade.30-60	unbuilt	none	0	n/a	wiki faithful Ethos comparison; no report JSON
+flow	flow.footprint.diag.4x	fail	pass	0	n/a	mbp1_objects.py:237-274 AM-session 4x aggregate not per-bar; line 274 return True skips stacked≥3; rate 1.0 not identical to A 17/429; fixture footprint_4x 40vs10 literals
+flow	flow.footprint.stack3	unbuilt	none	0	n/a	wiki/footprint-imbalance-zones.md faithful; no report JSON
+flow	flow.footprint.imb350	unbuilt	none	0	n/a	wiki/footprint-imbalance-zones.md faithful; no report JSON
+flow	flow.refill.ontouch	pass	pass	0	n/a	mbp1_objects.py:277-308 cluster ≥3 same-side size>=100 within 2m leave 4 ticks return; no prior-touch count; k=1/429; no ontouch case in mbp1_fixtures()
+flow	flow.refill.offtouch	not-measurable	pass	0	n/a	SPEC/wiki not-measurable (MBP-10/MBO); report status=not-measurable family_flow.py:255
+flow	flow.refill.zone	unbuilt	none	0	n/a	wiki/refill-zone.md faithful location; no report JSON
+flow	flow.iceberg.touch.infer	fail	pass	0	n/a	not in wiki faithful list; wiki iceberg detection not-measurable with MBP-1; report measured rate 1.0 mbp1_objects.py:155-184; fixture iceberg_touch literals
+flow	flow.iceberg.touch.k15	fail	pass	0	n/a	not in wiki faithful list; k=1.5 still rate 1.0; wiki iceberg not-measurable
+flow	flow.iceberg.touch.k20	fail	pass	0	n/a	not in wiki faithful list; k=2.0 still rate 1.0; wiki iceberg not-measurable

@@ -1,0 +1,14 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+fail	fail.box.6-9.gb.c5	fail	fail	0	n/a	clocks.py:33-36 06:00-09:00/09:30-12:00 match; _failback family_fail.py:22-54 1m wick+c5 k=30 (t5 start drops same-bar); fixtures family_fail.py:116-125 not synthetic (aplus_is_sweep/tdo_is_level pass:true); fail_vs_day_type uses fail_any=1.0 not fail.6-9 vs judas.depth.any
+fail	fail.box.gb.nyam.gb.c5	fail	fail	0	n/a	clocks.py:63-66 09:00-10:00 outcomes 10:00; nyam_early=0; same _failback/fixtures family_fail.py:22-54,116-125; faithful_of 6-9 but SPEC each box is faithful
+fail	fail.box.gb.10-11.gb.c5	fail	fail	0	n/a	clocks.py:67-69 10:00-11:00/11:00-12:00 match; same _failback/fixtures family_fail.py:22-54,116-125
+fail	fail.box.gb.hour.gb.c5	unbuilt	none	0	n/a	wiki last completed hour; no fail-family event or report; range.gb.hour is path-class family_clocks.py:96-120
+fail	fail.box.gb.asia.gb.c5	fail	fail	0	n/a	clocks.py:57-59 20:00-00:00/00:00-06:00 match; same _failback/fixtures family_fail.py:22-54,116-125
+fail	fail.box.gb.london.gb.c5	fail	fail	0	n/a	clocks.py:60-62 02:00-05:00/05:00-09:30 match ≠ jumbo 00-03; same _failback/fixtures family_fail.py:22-54,116-125
+fail	fail.box.jumbo.london.gb.c5	fail	fail	0	n/a	clocks.py:46-48 00:00-03:00/03:00-06:00 match; flag fail_range.london.00-03 family_fail.py:141; same _failback/fixtures
+fail	fail.box.prior-rth.gb.c5	fail	fail	0	n/a	clocks.py:79-81 same-day 09:30-16:00 outcome 16:00-17:00 not PDH/PDL; sessions.py:313 prior_rth_window unused; k=94/647
+fail	lvl.tdo	fail	fail	0	n/a	family_fail.py:92-96 00:00 1m open (untagged INFERRED) then AM through-touch 379/647, not GB 5m close-back after sweep
+fail	lvl.nwog	fail	fail	0	n/a	does not alias tdo_touch; family_fail.py:101-108,147 nwog_fill=Monday Friday 16:00 close vs Sunday 18:00 AM overlap (66/125 Mon) reported n=647; not 17:00 settle; two lines not stored; nwog_not_tdo is string compare
+fail	lvl.0930open	fail	fail	0	n/a	family_fail.py:97-98 AM 09:30-12:00 through-touch of 09:30 open is tautological rate 1.0; not cash-open fail-back
+fail	loc.gp	unbuilt	none	0	n/a	wiki 50-61.8% of last completed impulse, location flag only; no function
+fail	label.aplus	fail	fail	0	n/a	family_fail.py:91 OR of all BOXES sweeps; eligible rate 1.0; never unknown; aplus_is_sweep pass:true family_fail.py:119

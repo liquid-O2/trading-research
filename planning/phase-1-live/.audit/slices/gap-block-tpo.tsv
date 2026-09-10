@@ -1,0 +1,8 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+gap	gap.fvg.first.clock	fail	fail	0	n/a	family_gap.py:17-25 _fvg any 1m wick-gap in 09:30-12:00 (line 68 CLOCKS range.6-9.published outcome) not first-per-hour; _fx:88-93 hardcoded pass:true
+gap	gap.body.adjacent	fail	fail	0	n/a	family_gap.py:72-73 close vs prior open±range on AM 1m, not consecutive body-to-body gap; same 09:30-12:00 window; _fx:88-93 hardcoded pass:true
+block	block.sweep.tbr.3m	fail	fail	0	n/a	family_gap.py:113 flag=cisd; _cisd:28-39 is 1m wick-beyond-2bar-extreme close-back, not 3m C2-sweeps-C1 C3-close-beyond-C2; _fx:88-93 hardcoded pass:true
+block	cisd.fractal.literal	fail	fail	0	n/a	family_gap.py:114 shares cisd flag with block.sweep.tbr.3m (1m three-candle, not OSF opposing-run); faithful_of wrongly block.sweep.tbr.3m; _fx:88-93 hardcoded pass:true
+tpo	value.tpo.rth.30m	fail	fail	0	n/a	family_gap.py:42-52 last 30m unique H/L, not TPO poor-extreme; no POC/single-prints/excess/IB; 1m count-reshape not 1pt letters; _fx:88-93 hardcoded pass:true
+tpo	label.amt.open.30m	fail	fail	0	n/a	family_gap.py:78 amt_open aliases day_type==judas, not drive/test-drive/rejection-reverse/auction; faithful_of value.tpo.rth.30m; _fx:88-93 hardcoded pass:true
+tpo	label.amt.day	fail	fail	0	n/a	family_gap.py:79 amt_day aliases path_class==both, not trend/normal/normal-variation/neutral/non-trend; faithful_of value.tpo.rth.30m; _fx:88-93 hardcoded pass:true
