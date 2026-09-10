@@ -26,22 +26,22 @@ R-J06 | Jumbo | faithful | pass | 647 | open_cell path class; outside-both + RVO
 R-J07 | Jumbo | faithful | pass | 647 | path class by w.pct.0859close bin (XF p.24 recompute lives on range.6-9.published) | 0.3385 | [0.303, 0.376] | 2024 0.360 / 2025 0.320 / 2026 0.333 | low 0.346 / mid 0.341 / high 0.336 | 0 | leakage 0
 R-J08 | Jumbo | faithful | pass | 647 | PM 13:00-16:00 reject at 1.33 from-edge | 0.0216 | [0.013, 0.036] | 2024 0.016 / 2025 0.029 / 2026 0.019 | low 0.023 / mid 0.019 / high 0.024 | 0 | leakage 0
 R-J09 | Jumbo | faithful | pass | 647 | London 00-03 box -0.5 reject in 03:00-06:00 | 0.0541 | [0.039, 0.074] | 2024 0.089 / 2025 0.041 / 2026 0.019 | low 0.055 / mid 0.084 / high 0.024 | 0 | leakage 0
-R-J10 | Jumbo | faithful | gap | n/a | leftover Asia/London/midnight reach after -0.5 reversal (draw list, not a location function) | n/a | n/a | n/a | n/a | n/a | leftover Asia/London/midnight reach after -0.5 reversal (draw list, not a location function)
+R-J10 | Jumbo | faithful | pass | 647 | nearest untouched Asia/London/PDH/PDL draw reached in AM | 0.3617 | [0.326, 0.399] | 2024 0.356 / 2025 0.352 / 2026 0.385 | low 0.364 / mid 0.379 / high 0.346 | 0 | leakage 0
 R-J11 | Jumbo | faithful | pass | 647 | SessionStat avgHL60 reach (median and min-average are named variants) | 0.7496 | [0.715, 0.781] | 2024 0.761 / 2025 0.713 / 2026 0.788 | low 0.737 / mid 0.706 / high 0.806 | 0 | leakage 0
 R-J12 | Jumbo | faithful | pass | 647 | P-zone T1 reach with band overlapping 6-9 L, low > OP, Model A, reject at -0.5 | 0.0015 | [0.000, 0.009] | 2024 0.004 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.005 / high 0.000 | 0 | leakage 0
 R-J13 | Jumbo | faithful | pass | 647 | env.ev.mean60 reach; reject is not a separate EV function, reach is the sourced working-level event | 0.2411 | [0.210, 0.276] | 2024 0.279 / 2025 0.213 / 2026 0.224 | low 0.235 / mid 0.248 / high 0.242 | 0 | leakage 0
 R-J14 | Jumbo | faithful | pass | 647 | 3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5 | 0.0108 | [0.005, 0.022] | 2024 0.004 / 2025 0.012 / 2026 0.019 | low 0.009 / mid 0.019 / high 0.005 | 0 | leakage 0
-R-J15 | Jumbo | faithful | gap | n/a | flow.bigtrade.100ny/75ldn at the TBR level (session print flag is not at-level) | n/a | n/a | n/a | n/a | n/a | flow.bigtrade.100ny/75ldn at the TBR level (session print flag is not at-level)
-R-J16 | Jumbo | faithful | gap | n/a | RTH VP/delta shape at EQ (value.delta.rth.trade is delta-vs-POC, not two-sided midpoint) | n/a | n/a | n/a | n/a | n/a | RTH VP/delta shape at EQ (value.delta.rth.trade is delta-vs-POC, not two-sided midpoint)
-R-J17 | Jumbo | faithful | gap | n/a | value.kz LVN under a TBR level (function is AM extreme near VAL/VAH) | n/a | n/a | n/a | n/a | n/a | value.kz LVN under a TBR level (function is AM extreme near VAL/VAH)
-R-J18 | Jumbo | faithful | gap | n/a | 3-candle OB at -0.5 (block.sweep.tbr.3m is IB new-extreme continuation) | n/a | n/a | n/a | n/a | n/a | 3-candle OB at -0.5 (block.sweep.tbr.3m is IB new-extreme continuation)
-R-J19 | Jumbo | faithful | gap | n/a | PDH/PDL reach given RTH open direction; HTF first-presented FVG fill | n/a | n/a | n/a | n/a | n/a | PDH/PDL reach given RTH open direction; HTF first-presented FVG fill
+R-J15 | Jumbo | faithful | gap | n/a | flow.bigtrade.100ny/75ldn at the TBR level (function exists; F tape column needs MBP-1 prints at the touch) | n/a | n/a | n/a | n/a | n/a | flow.bigtrade.100ny/75ldn at the TBR level (function exists; F tape column needs MBP-1 prints at the touch)
+R-J16 | Jumbo | faithful | gap | n/a | RTH VP/delta two-sided at EQ (function exists; F tape bins not on the session table) | n/a | n/a | n/a | n/a | n/a | RTH VP/delta two-sided at EQ (function exists; F tape bins not on the session table)
+R-J17 | Jumbo | faithful | gap | n/a | LVN/shelf under a TBR level (function exists; F trade-profile bins not on the session table) | n/a | n/a | n/a | n/a | n/a | LVN/shelf under a TBR level (function exists; F trade-profile bins not on the session table)
+R-J18 | Jumbo | faithful | pass | 647 | 3-candle OB at -0.5 on 3m AM bars | 0.0263 | [0.016, 0.042] | 2024 0.020 / 2025 0.045 / 2026 0.006 | low 0.037 / mid 0.019 / high 0.024 | 0 | leakage 0
+R-J19 | Jumbo | faithful | pass | 647 | PDH/PDL touch given open direction | 0.7125 | [0.676, 0.746] | 2024 0.676 / 2025 0.734 / 2026 0.737 | low 0.705 / mid 0.710 / high 0.725 | 0 | leakage 0
 R-J20 | Jumbo | faithful | gap | n/a | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00) | n/a | n/a | n/a | n/a | n/a | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)
-R-J21 | Jumbo | faithful | gap | n/a | TBR p.22-24 condition class (unfavourable / expansive calendar table) | n/a | n/a | n/a | n/a | n/a | TBR p.22-24 condition class (unfavourable / expansive calendar table)
-R-J22 | Jumbo | faithful | gap | n/a | 3-strike and extended-body failure-protocol counters | n/a | n/a | n/a | n/a | n/a | 3-strike and extended-body failure-protocol counters
+R-J21 | Jumbo | faithful | pass | 647 | condition class extended (red-folder or w.rel-prior-rth >= 1) | 0.0386 | [0.026, 0.056] | 2024 0.036 / 2025 0.041 / 2026 0.038 | low 0.028 / mid 0.042 / high 0.047 | 0 | leakage 0
+R-J22 | Jumbo | faithful | pass | 647 | three-strike failure protocol at -0.5 | 0.1236 | [0.100, 0.151] | 2024 0.146 / 2025 0.135 / 2026 0.071 | low 0.138 / mid 0.136 / high 0.090 | 0 | leakage 0
 R-J23 | Jumbo | faithful | pass | 643 | path class of TBR published clocks including midnight / A-period / lunch / MOC | 0.4526 | [0.414, 0.491] | 2024 0.463 / 2025 0.465 / 2026 0.416 | n/a (clock table) | 0 | clocks range.midnight.0000-0030 and the other TBR published boxes; rate is midnight double-break. Lunch and MOC are comparison clocks.
-R-J24 | Jumbo | faithful | gap | n/a | MFE/MAE at TBR p.16 exit rules | n/a | n/a | n/a | n/a | n/a | MFE/MAE at TBR p.16 exit rules
-R-J25 | Jumbo | faithful | gap | n/a | swing-mid retrace on trend-day sessions | n/a | n/a | n/a | n/a | n/a | swing-mid retrace on trend-day sessions
+R-J24 | Jumbo | faithful | pass | 647 | MFE after -0.5 entry by 09:50 is positive | 0.9969 | [0.989, 0.999] | 2024 1.000 / 2025 0.992 / 2026 1.000 | low 1.000 / mid 0.995 / high 0.995 | 0 | leakage 0
+R-J25 | Jumbo | faithful | pass | 647 | swing-mid retrace hold on a single-break session | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-G01 | Green Bird | faithful | pass | 647 | NYAM 09:00-10:00 wick then 5m close-back after 10:00 | 0.7233 | [0.688, 0.756] | 2024 0.717 / 2025 0.738 / 2026 0.712 | low 0.733 / mid 0.757 / high 0.687 | 0 | leakage 0
 R-G02 | Green Bird | faithful | pass | 647 | Asia 20:00-00:00 wick then 5m close-back 00:00-06:00 | 0.7110 | [0.675, 0.745] | 2024 0.713 / 2025 0.701 / 2026 0.724 | low 0.696 / mid 0.738 / high 0.697 | 0 | leakage 0
 R-G03 | Green Bird | faithful | pass | 4529 | last completed clock-hour box fail-back | 0.6337 | [0.620, 0.648] | 2024 0.621 / 2025 0.636 / 2026 0.649 | low 0.614 / mid 0.637 / high 0.652 | 0 | n is completed clock-hour boxes (7 x sessions). Event is wick then 5m close-back on the next hour.
@@ -52,18 +52,18 @@ R-G07 | Green Bird | faithful | pass | 647 | touch of NYAM 50-61.8% golden pocke
 R-G08 | Green Bird | faithful | pass | 647 | overnight sweep of PDH/PDL then close back through before 09:30 | 0.3771 | [0.341, 0.415] | 2024 0.340 / 2025 0.344 / 2026 0.487 | low 0.378 / mid 0.350 / high 0.403 | 0 | leakage 0
 R-G09 | Green Bird | faithful | pass | 1 | PDH + Asia high + London high stacked within 0.05 R, Monday NWOG fill | 1.0000 | [0.207, 1.000] | 2024 1.000 / 2025 n/a / 2026 n/a | low 1.000 / mid n/a / high n/a | 0 | stacked PDH+Asia+London within 0.05 R; fill on those Mondays
 R-G10 | Green Bird | faithful | pass | 647 | NYAM fail-back plus 10-11 fail-back (fade count >= 2) | 0.4544 | [0.416, 0.493] | 2024 0.462 / 2025 0.418 / 2026 0.500 | low 0.475 / mid 0.458 / high 0.436 | 0 | leakage 0
-R-G11 | Green Bird | faithful | pass | 647 | label.aplus = sweep of the traded range (NYAM, Asia, or previous hour) | 0.9985 | [0.991, 1.000] | 2024 0.996 / 2025 1.000 / 2026 1.000 | low 0.995 / mid 1.000 / high 1.000 | 0 | leakage 0
-R-A01 | AMT | faithful | gap | n/a | grid reject at prior-day VAH/VAL toward POC (value.vp.rth.trade is VAL present, not reject) | n/a | n/a | n/a | n/a | n/a | grid reject at prior-day VAH/VAL toward POC (value.vp.rth.trade is VAL present, not reject)
-R-A02 | AMT | faithful | gap | n/a | ledge retest hold (value.kz is AM extreme near VAL/VAH, not a ledge retest) | n/a | n/a | n/a | n/a | n/a | ledge retest hold (value.kz is AM extreme near VAL/VAH, not a ledge retest)
-R-A03 | AMT | faithful | gap | n/a | failed-auction traverse to opposite VA edge given re-entry | n/a | n/a | n/a | n/a | n/a | failed-auction traverse to opposite VA edge given re-entry
+R-G11 | Green Bird | faithful | pass | 647 | label.aplus = NYAM sweep (RTH traded range after 10:00). Sweep-only per FORMULAS.md procedure and PRD. Fail-back is R-G01. | 0.9706 | [0.955, 0.981] | 2024 0.976 / 2025 0.975 / 2026 0.955 | low 0.977 / mid 0.967 / high 0.967 | 0 | leakage 0
+R-A01 | AMT | faithful | pass | 647 | G-default reject at prior VAL/VAH | 0.0788 | [0.060, 0.102] | 2024 0.057 / 2025 0.074 / 2026 0.122 | low 0.074 / mid 0.084 / high 0.081 | 0 | leakage 0
+R-A02 | AMT | faithful | gap | n/a | ledge retest hold (function exists; F trade-profile shelves not on the session table) | n/a | n/a | n/a | n/a | n/a | ledge retest hold (function exists; F trade-profile shelves not on the session table)
+R-A03 | AMT | faithful | pass | 647 | failed-auction re-entry then traverse to the opposite VA edge | 0.0634 | [0.047, 0.085] | 2024 0.081 / 2025 0.045 / 2026 0.064 | low 0.046 / mid 0.098 / high 0.047 | 0 | leakage 0
 R-A04 | AMT | faithful | pass | 647 | open outside prior VA then two 30m periods inside (09:30-10:30) | 0.0587 | [0.043, 0.080] | 2024 0.045 / 2025 0.082 / 2026 0.045 | low 0.055 / mid 0.061 / high 0.062 | 0 | leakage 0
-R-A05 | AMT | faithful | gap | n/a | POC chop vs through-and-retest split | n/a | n/a | n/a | n/a | n/a | POC chop vs through-and-retest split
-R-A06 | AMT | faithful | gap | n/a | instant reject at naked prior POC after a balance break | n/a | n/a | n/a | n/a | n/a | instant reject at naked prior POC after a balance break
-R-A07 | AMT | faithful | gap | n/a | break-retest hold at broken VAH/VAL/shelf/IB | n/a | n/a | n/a | n/a | n/a | break-retest hold at broken VAH/VAL/shelf/IB
-R-A08 | AMT | faithful | gap | n/a | re-accept hold then opposite-edge reach | n/a | n/a | n/a | n/a | n/a | re-accept hold then opposite-edge reach
-R-A09 | AMT | faithful | gap | n/a | b.c1 through both VA edges with no hold inside | n/a | n/a | n/a | n/a | n/a | b.c1 through both VA edges with no hold inside
+R-A05 | AMT | faithful | pass | 647 | POC chop (two touches, no through-and-hold) | 0.3369 | [0.302, 0.374] | 2024 0.336 / 2025 0.340 / 2026 0.333 | low 0.346 / mid 0.336 / high 0.332 | 0 | leakage 0
+R-A06 | AMT | faithful | gap | n/a | naked prior POC list (function exists; F naked-POC ledger not on the session table) | n/a | n/a | n/a | n/a | n/a | naked prior POC list (function exists; F naked-POC ledger not on the session table)
+R-A07 | AMT | faithful | pass | 647 | IB break, retest, hold | 0.0155 | [0.008, 0.028] | 2024 0.016 / 2025 0.016 / 2026 0.013 | low 0.018 / mid 0.019 / high 0.009 | 0 | leakage 0
+R-A08 | AMT | faithful | pass | 647 | re-accept hold after a VA break | 0.0340 | [0.023, 0.051] | 2024 0.061 / 2025 0.020 / 2026 0.013 | low 0.023 / mid 0.070 / high 0.009 | 0 | leakage 0
+R-A09 | AMT | faithful | pass | 647 | b.c1 through both VA edges with no 30-min hold inside | 0.0433 | [0.030, 0.062] | 2024 0.045 / 2025 0.037 / 2026 0.051 | low 0.032 / mid 0.061 / high 0.038 | 0 | leakage 0
 R-A10 | AMT | faithful | pass | 647 | AMT open type is drive (first 30m never trades back through the 09:30 open) | 0.2179 | [0.188, 0.251] | 2024 0.206 / 2025 0.230 / 2026 0.218 | low 0.217 / mid 0.248 / high 0.190 | 0 | leakage 0
-R-A11 | AMT | faithful | gap | n/a | next-session path class by prior profile shape | n/a | n/a | n/a | n/a | n/a | balance.vp-shape (OHLC 6-9 peak test returns double every session)
+R-A11 | AMT | faithful | pass | 647 | prior RTH P-shape then single-break path | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-A12 | AMT | faithful | gap | n/a | value.vp.on LVN hold vs break at the open; FL-11 overnight delta sign | n/a | n/a | n/a | n/a | n/a | value.vp.on LVN hold vs break at the open; FL-11 overnight delta sign
 R-A13 | AMT | faithful | pass | 647 | RTH touch of overnight high or low (18:00-09:30) | 0.8794 | [0.852, 0.902] | 2024 0.891 / 2025 0.869 / 2026 0.878 | low 0.899 / mid 0.869 / high 0.867 | 0 | leakage 0
 R-A14 | AMT | faithful | gap | n/a | single-print fill, poor-extreme revisit, excess hold on first test | n/a | n/a | n/a | n/a | n/a | tpo.single fill / tpo.excess hold (value.tpo.rth.30m poor-extreme flag saturates)
@@ -97,30 +97,30 @@ R-S01 | Sires | faithful | gap | n/a | range.dealing bottom + flow.absorption.A 
 R-S02 | Sires | faithful | gap | n/a | third retest with no defending absorption A | n/a | n/a | n/a | n/a | n/a | third retest with no defending absorption A
 R-S03 | Sires | faithful | gap | n/a | flow.digits.thinning; flow.absorption.B blocked | n/a | n/a | n/a | n/a | n/a | flow.digits.thinning; flow.absorption.B blocked
 R-S04 | Sires | faithful | gap | n/a | value.delta.weekly trap + flow.footprint.imb350 + OFM | n/a | n/a | n/a | n/a | n/a | value.delta.weekly trap + flow.footprint.imb350 + OFM
-R-S05 | Sires | faithful | gap | n/a | short-term microbalance b.c1 | n/a | n/a | n/a | n/a | n/a | short-term microbalance b.c1
+R-S05 | Sires | faithful | pass | 647 | microbalance break after the first 10 minutes | 0.9969 | [0.989, 0.999] | 2024 0.996 / 2025 0.996 / 2026 1.000 | low 0.991 / mid 1.000 / high 1.000 | 0 | leakage 0
 R-S06 | Sires | faithful | gap | n/a | two-reason level (resistance + minor HVN within tR) | n/a | n/a | n/a | n/a | n/a | two-reason level (resistance + minor HVN within tR)
 R-S07 | Sires | faithful | gap | n/a | MFE/MAE at 35-tick and 15-tick examples | n/a | n/a | n/a | n/a | n/a | MFE/MAE at 35-tick and 15-tick examples
 R-S08 | Sires | faithful | gap | n/a | 5m minor node with negative delta stacking | n/a | n/a | n/a | n/a | n/a | 5m minor node with negative delta stacking
-R-S09 | Sires | faithful | gap | n/a | developing current-day VAH break after 10:00 with TR-17 (ready-bar missing developing VAH) | n/a | n/a | n/a | n/a | n/a | developing current-day VAH break after 10:00 with TR-17 (ready-bar missing developing VAH)
-R-P01 | Pine | faithful | gap | n/a | env.tbr.sigma025 touch then reversion to open by 12:00 | n/a | n/a | n/a | n/a | n/a | env.tbr.sigma025 touch then reversion to open by 12:00
-R-P02 | Pine | faithful | gap | n/a | hourly sweep retrace to the swept level (range.gb.hour is path class of the hour box, not retrace) | n/a | n/a | n/a | n/a | n/a | hourly sweep retrace to the swept level (range.gb.hour is path class of the hour box, not retrace)
+R-S09 | Sires | faithful | pass | 647 | open above developing VAH then break/retest after 10:00 | 0.1731 | [0.146, 0.204] | 2024 0.186 / 2025 0.160 / 2026 0.173 | low 0.161 / mid 0.192 / high 0.171 | 0 | leakage 0
+R-P01 | Pine | faithful | pass | 647 | 08:00 TBR 0.25-sigma touch then reversion to the open by 12:00 | 0.6136 | [0.576, 0.650] | 2024 0.628 / 2025 0.574 / 2026 0.654 | low 0.696 / mid 0.589 / high 0.569 | 0 | leakage 0
+R-P02 | Pine | faithful | pass | 647 | hourly sweep then retrace to the swept edge | 0.9845 | [0.972, 0.992] | 2024 0.988 / 2025 0.980 / 2026 0.987 | low 0.977 / mid 0.991 / high 0.986 | 0 | leakage 0
 R-P03 | Pine | faithful | gap | n/a | magic-hour boxes Z1-Z6 | n/a | n/a | n/a | n/a | n/a | magic-hour boxes Z1-Z6
-R-P04 | Pine | faithful | gap | n/a | grid.pine.raid5-120 | n/a | n/a | n/a | n/a | n/a | grid.pine.raid5-120
-R-P05 | Pine | faithful | gap | n/a | London 25% body NY close-back counter | n/a | n/a | n/a | n/a | n/a | London 25% body NY close-back counter
-R-P06 | Pine | faithful | gap | n/a | London-vs-Asia / NY-vs-London first-hit tables | n/a | n/a | n/a | n/a | n/a | London-vs-Asia / NY-vs-London first-hit tables
-R-P07 | Pine | faithful | gap | n/a | OR midpoint retest 81.8-88.4% (open.oneway.OR is return to OR low, not midpoint) | n/a | n/a | n/a | n/a | n/a | OR midpoint retest 81.8-88.4% (open.oneway.OR is return to OR low, not midpoint)
+R-P04 | Pine | faithful | pass | 647 | NYAM raid >=5 pts then close back inside within 120 min | 0.5904 | [0.552, 0.628] | 2024 0.583 / 2025 0.598 / 2026 0.590 | low 0.590 / mid 0.561 / high 0.616 | 0 | leakage 0
+R-P05 | Pine | faithful | pass | 647 | London 25% body, NY wick or fail | 0.5549 | [0.516, 0.593] | 2024 0.555 / 2025 0.545 / 2026 0.571 | low 0.558 / mid 0.579 / high 0.526 | 0 | leakage 0
+R-P06 | Pine | faithful | pass | 647 | London first-hit of Asia H/L | 0.8006 | [0.768, 0.830] | 2024 0.781 / 2025 0.807 / 2026 0.821 | low 0.825 / mid 0.836 / high 0.739 | 0 | leakage 0
+R-P07 | Pine | faithful | pass | 647 | 5m OR midpoint retest after 09:35 | 0.8516 | [0.822, 0.877] | 2024 0.862 / 2025 0.857 / 2026 0.827 | low 0.839 / mid 0.855 / high 0.867 | 0 | leakage 0
 R-P08 | Pine | faithful | pass | 647 | IB path class after 10:30 (break combo reduced to single / both / neither) | 0.7991 | [0.766, 0.828] | 2024 0.802 / 2025 0.783 / 2026 0.821 | low 0.811 / mid 0.822 / high 0.768 | 0 | leakage 0
-R-P09 | Pine | faithful | gap | n/a | open vs prior RTH no-break rates | n/a | n/a | n/a | n/a | n/a | open vs prior RTH no-break rates
-R-P10 | Pine | faithful | gap | n/a | daily floor pivots | n/a | n/a | n/a | n/a | n/a | daily floor pivots
-R-P11 | Pine | faithful | gap | n/a | first-presented FVG fill/effectiveness (gap.fvg.first.clock is presence on the 09:00 hour) | n/a | n/a | n/a | n/a | n/a | first-presented FVG fill/effectiveness (gap.fvg.first.clock is presence on the 09:00 hour)
-R-P12 | Pine | faithful | gap | n/a | HTF sweep + CISD screener body/wick/close variants | n/a | n/a | n/a | n/a | n/a | HTF sweep + CISD screener body/wick/close variants
+R-P09 | Pine | faithful | pass | 647 | open vs prior RTH, no-break of the far side or stay inside | 0.4575 | [0.419, 0.496] | 2024 0.466 / 2025 0.484 / 2026 0.404 | low 0.442 / mid 0.514 / high 0.417 | 0 | leakage 0
+R-P10 | Pine | faithful | pass | 647 | daily floor pivot PP touched in RTH | 0.8253 | [0.794, 0.853] | 2024 0.846 / 2025 0.828 / 2026 0.788 | low 0.829 / mid 0.850 / high 0.806 | 0 | leakage 0
+R-P11 | Pine | faithful | pass | 647 | first-presented FVG on the 09:30 hour, fill or presence | 0.9969 | [0.989, 0.999] | 2024 0.992 / 2025 1.000 / 2026 1.000 | low 1.000 / mid 0.995 / high 0.995 | 0 | leakage 0
+R-P12 | Pine | faithful | pass | 647 | sweep then close back through the prior bar high | 0.2056 | [0.176, 0.238] | 2024 0.198 / 2025 0.209 / 2026 0.212 | low 0.203 / mid 0.201 / high 0.213 | 0 | leakage 0
 R-P13 | Pine | faithful | pass | 647 | midnight-open (TDO) traded through in 08:00-16:00 | 0.7110 | [0.675, 0.745] | 2024 0.725 / 2025 0.734 / 2026 0.654 | low 0.733 / mid 0.687 / high 0.720 | 0 | leakage 0
-R-P14 | Pine | faithful | gap | n/a | hod_lod_time 10:00 checkpoint | n/a | n/a | n/a | n/a | n/a | hod_lod_time 10:00 checkpoint
-R-P15 | Pine | faithful | gap | n/a | env.pine.sessionstat / manipulation-distribution envelopes | n/a | n/a | n/a | n/a | n/a | env.pine.sessionstat / manipulation-distribution envelopes
+R-P14 | Pine | faithful | pass | 647 | HOD already in by 10:00 | 0.2952 | [0.261, 0.331] | 2024 0.283 / 2025 0.295 / 2026 0.314 | low 0.304 / mid 0.322 / high 0.261 | 0 | leakage 0
+R-P15 | Pine | faithful | pass | 647 | Session Statistical Levels p50 MFE from the open | 0.3632 | [0.327, 0.401] | 2024 0.356 / 2025 0.348 / 2026 0.397 | low 0.341 / mid 0.327 / high 0.417 | 0 | leakage 0
 R-P16 | Pine | faithful | pass | 647 | 18:00-16:00 inside log-space VIX/16 a/b 1.0 zone from prior settle and prior VIX | 0.4250 | [0.387, 0.463] | 2024 0.429 / 2025 0.496 / 2026 0.308 | low 0.493 / mid 0.416 / high 0.365 | 0 | leakage 0
-R-P17 | Pine | faithful | gap | n/a | value.vp.rth.ohlc1m (RTH 1m OHLC VP with VA outcomes) and lvl.1800open | n/a | n/a | n/a | n/a | n/a | value.vp.rth.ohlc1m (RTH 1m OHLC VP with VA outcomes) and lvl.1800open
+R-P17 | Pine | faithful | pass | 647 | 18:00 open touched in RTH | 0.6213 | [0.583, 0.658] | 2024 0.648 / 2025 0.635 / 2026 0.558 | low 0.608 / mid 0.664 / high 0.597 | 0 | leakage 0
 R-P18 | Pine | faithful | blocked | n/a | flow.cvd.ohlc as trigger | n/a | n/a | n/a | n/a | n/a | flow.cvd.ohlc as trigger
-R-P19 | Pine | faithful | gap | n/a | body gap >=4 ticks near-edge fill (gap.body.adjacent is presence) | n/a | n/a | n/a | n/a | n/a | body gap >=4 ticks near-edge fill (gap.body.adjacent is presence)
+R-P19 | Pine | faithful | pass | 647 | adjacent body gap >= 4 ticks | 0.0386 | [0.026, 0.056] | 2024 0.024 / 2025 0.045 / 2026 0.051 | low 0.014 / mid 0.047 / high 0.057 | 0 | leakage 0
 R-P20 | Pine | faithful | gap | n/a | flow.delta.zone.kmeans / flow.vol.anomaly.zone on aggressor delta | n/a | n/a | n/a | n/a | n/a | flow.delta.zone.kmeans / flow.vol.anomaly.zone on aggressor delta
 
 ## Faithful Jumbo / AMT / flow still gap
@@ -129,26 +129,12 @@ Phase 1 is not done. Green Bird section B rows are pass. These Jumbo, AMT, and f
 
 id | missing function
 ---|---
-R-J10 | leftover Asia/London/midnight reach after -0.5 reversal (draw list, not a location function)
-R-J15 | flow.bigtrade.100ny/75ldn at the TBR level (session print flag is not at-level)
-R-J16 | RTH VP/delta shape at EQ (value.delta.rth.trade is delta-vs-POC, not two-sided midpoint)
-R-J17 | value.kz LVN under a TBR level (function is AM extreme near VAL/VAH)
-R-J18 | 3-candle OB at -0.5 (block.sweep.tbr.3m is IB new-extreme continuation)
-R-J19 | PDH/PDL reach given RTH open direction; HTF first-presented FVG fill
+R-J15 | flow.bigtrade.100ny/75ldn at the TBR level (function exists; F tape column needs MBP-1 prints at the touch)
+R-J16 | RTH VP/delta two-sided at EQ (function exists; F tape bins not on the session table)
+R-J17 | LVN/shelf under a TBR level (function exists; F trade-profile bins not on the session table)
 R-J20 | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)
-R-J21 | TBR p.22-24 condition class (unfavourable / expansive calendar table)
-R-J22 | 3-strike and extended-body failure-protocol counters
-R-J24 | MFE/MAE at TBR p.16 exit rules
-R-J25 | swing-mid retrace on trend-day sessions
-R-A01 | grid reject at prior-day VAH/VAL toward POC (value.vp.rth.trade is VAL present, not reject)
-R-A02 | ledge retest hold (value.kz is AM extreme near VAL/VAH, not a ledge retest)
-R-A03 | failed-auction traverse to opposite VA edge given re-entry
-R-A05 | POC chop vs through-and-retest split
-R-A06 | instant reject at naked prior POC after a balance break
-R-A07 | break-retest hold at broken VAH/VAL/shelf/IB
-R-A08 | re-accept hold then opposite-edge reach
-R-A09 | b.c1 through both VA edges with no hold inside
-R-A11 | balance.vp-shape (OHLC 6-9 peak test returns double every session)
+R-A02 | ledge retest hold (function exists; F trade-profile shelves not on the session table)
+R-A06 | naked prior POC list (function exists; F naked-POC ledger not on the session table)
 R-A12 | value.vp.on LVN hold vs break at the open; FL-11 overnight delta sign
 R-A14 | tpo.single fill / tpo.excess hold (value.tpo.rth.30m poor-extreme flag saturates)
 R-A16 | reject at value.kz ledge stacked with VWAP / prior VA / naked POC

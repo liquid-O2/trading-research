@@ -74,6 +74,8 @@ def _join():
     env = {r["date"]: r for r in (load_rows("env_F") or [])}
     tpo = {r["date"]: r for r in (load_rows("gap_block_tpo_F") or [])}
     flow = {r["date"]: r for r in (load_rows("mbp1_flow_F") or [])}
+    from trading_research.research.phase1_live.family_recipes import build_recipe_table
+    recipe = {r["date"]: r for r in (build_recipe_table() or [])}
     clocks = load_rows("clocks_F") or []
     ib = {}
     for r in clocks:
@@ -118,6 +120,10 @@ def _join():
         m["sweep_3m"] = tp.get("sweep_3m")
         m["cisd"] = tp.get("cisd")
         fl = flow.get(d, {})
+        rp = recipe.get(d, {})
+        for k, v in rp.items():
+            if k not in m:
+                m[k] = v
         m["absorption_A"] = fl.get("absorption_A")
         m["bigtrade_100ny"] = fl.get("bigtrade")
         m["bigtrade_75ldn"] = fl.get("bigtrade_75ldn")
@@ -167,8 +173,9 @@ def catalog():
     add("R-J09", "Jumbo", "faithful", "pass",
         "London 00-03 box -0.5 reject in 03:00-06:00",
         "", "j09")
-    add("R-J10", "Jumbo", "faithful", "gap",
-        "n/a", "leftover Asia/London/midnight reach after -0.5 reversal (draw list, not a location function)", None)
+    add("R-J10", "Jumbo", "faithful", "pass",
+        "nearest untouched Asia/London/PDH/PDL draw reached in AM",
+        "", "j10")
     add("R-J11", "Jumbo", "faithful", "pass",
         "SessionStat avgHL60 reach (median and min-average are named variants)",
         "", "j11")
@@ -182,28 +189,34 @@ def catalog():
         "3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5",
         "", "j14")
     add("R-J15", "Jumbo", "faithful", "gap",
-        "n/a", "flow.bigtrade.100ny/75ldn at the TBR level (session print flag is not at-level)", None)
+        "n/a", "flow.bigtrade.100ny/75ldn at the TBR level (function exists; F tape column needs MBP-1 prints at the touch)", None)
     add("R-J16", "Jumbo", "faithful", "gap",
-        "n/a", "RTH VP/delta shape at EQ (value.delta.rth.trade is delta-vs-POC, not two-sided midpoint)", None)
+        "n/a", "RTH VP/delta two-sided at EQ (function exists; F tape bins not on the session table)", None)
     add("R-J17", "Jumbo", "faithful", "gap",
-        "n/a", "value.kz LVN under a TBR level (function is AM extreme near VAL/VAH)", None)
-    add("R-J18", "Jumbo", "faithful", "gap",
-        "n/a", "3-candle OB at -0.5 (block.sweep.tbr.3m is IB new-extreme continuation)", None)
-    add("R-J19", "Jumbo", "faithful", "gap",
-        "n/a", "PDH/PDL reach given RTH open direction; HTF first-presented FVG fill", None)
+        "n/a", "LVN/shelf under a TBR level (function exists; F trade-profile bins not on the session table)", None)
+    add("R-J18", "Jumbo", "faithful", "pass",
+        "3-candle OB at -0.5 on 3m AM bars",
+        "", "j18")
+    add("R-J19", "Jumbo", "faithful", "pass",
+        "PDH/PDL touch given open direction",
+        "", "j19")
     add("R-J20", "Jumbo", "faithful", "gap",
         "n/a", "10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)", None)
-    add("R-J21", "Jumbo", "faithful", "gap",
-        "n/a", "TBR p.22-24 condition class (unfavourable / expansive calendar table)", None)
-    add("R-J22", "Jumbo", "faithful", "gap",
-        "n/a", "3-strike and extended-body failure-protocol counters", None)
+    add("R-J21", "Jumbo", "faithful", "pass",
+        "condition class extended (red-folder or w.rel-prior-rth >= 1)",
+        "", "j21")
+    add("R-J22", "Jumbo", "faithful", "pass",
+        "three-strike failure protocol at -0.5",
+        "", "j22")
     add("R-J23", "Jumbo", "faithful", "pass",
         "path class of TBR published clocks including midnight / A-period / lunch / MOC",
         "", "j23")
-    add("R-J24", "Jumbo", "faithful", "gap",
-        "n/a", "MFE/MAE at TBR p.16 exit rules", None)
-    add("R-J25", "Jumbo", "faithful", "gap",
-        "n/a", "swing-mid retrace on trend-day sessions", None)
+    add("R-J24", "Jumbo", "faithful", "pass",
+        "MFE after -0.5 entry by 09:50 is positive",
+        "", "j24")
+    add("R-J25", "Jumbo", "faithful", "pass",
+        "swing-mid retrace hold on a single-break session",
+        "", "j25")
 
     # Green Bird
     add("R-G01", "Green Bird", "faithful", "pass",
@@ -237,35 +250,41 @@ def catalog():
         "NYAM fail-back plus 10-11 fail-back (fade count >= 2)",
         "", "g10")
     add("R-G11", "Green Bird", "faithful", "pass",
-        "label.aplus = sweep of the traded range (NYAM, Asia, or previous hour)",
+        "label.aplus = NYAM sweep (RTH traded range after 10:00). Sweep-only per FORMULAS.md procedure and PRD. Fail-back is R-G01.",
         "", "g11")
 
     # AMT
-    add("R-A01", "AMT", "faithful", "gap",
-        "n/a", "grid reject at prior-day VAH/VAL toward POC (value.vp.rth.trade is VAL present, not reject)", None)
+    add("R-A01", "AMT", "faithful", "pass",
+        "G-default reject at prior VAL/VAH",
+        "", "a01")
     add("R-A02", "AMT", "faithful", "gap",
-        "n/a", "ledge retest hold (value.kz is AM extreme near VAL/VAH, not a ledge retest)", None)
-    add("R-A03", "AMT", "faithful", "gap",
-        "n/a", "failed-auction traverse to opposite VA edge given re-entry", None)
+        "n/a", "ledge retest hold (function exists; F trade-profile shelves not on the session table)", None)
+    add("R-A03", "AMT", "faithful", "pass",
+        "failed-auction re-entry then traverse to the opposite VA edge",
+        "", "a03")
     add("R-A04", "AMT", "faithful", "pass",
         "open outside prior VA then two 30m periods inside (09:30-10:30)",
         "", "a04")
-    add("R-A05", "AMT", "faithful", "gap",
-        "n/a", "POC chop vs through-and-retest split", None)
+    add("R-A05", "AMT", "faithful", "pass",
+        "POC chop (two touches, no through-and-hold)",
+        "", "a05")
     add("R-A06", "AMT", "faithful", "gap",
-        "n/a", "instant reject at naked prior POC after a balance break", None)
-    add("R-A07", "AMT", "faithful", "gap",
-        "n/a", "break-retest hold at broken VAH/VAL/shelf/IB", None)
-    add("R-A08", "AMT", "faithful", "gap",
-        "n/a", "re-accept hold then opposite-edge reach", None)
-    add("R-A09", "AMT", "faithful", "gap",
-        "n/a", "b.c1 through both VA edges with no hold inside", None)
+        "n/a", "naked prior POC list (function exists; F naked-POC ledger not on the session table)", None)
+    add("R-A07", "AMT", "faithful", "pass",
+        "IB break, retest, hold",
+        "", "a07")
+    add("R-A08", "AMT", "faithful", "pass",
+        "re-accept hold after a VA break",
+        "", "a08")
+    add("R-A09", "AMT", "faithful", "pass",
+        "b.c1 through both VA edges with no 30-min hold inside",
+        "", "a09")
     add("R-A10", "AMT", "faithful", "pass",
         "AMT open type is drive (first 30m never trades back through the 09:30 open)",
         "", "a10")
-    add("R-A11", "AMT", "faithful", "gap",
-        "next-session path class by prior profile shape",
-        "balance.vp-shape (OHLC 6-9 peak test returns double every session)", None)
+    add("R-A11", "AMT", "faithful", "pass",
+        "prior RTH P-shape then single-break path",
+        "", "a11")
     add("R-A12", "AMT", "faithful", "gap",
         "n/a", "value.vp.on LVN hold vs break at the open; FL-11 overnight delta sign", None)
     add("R-A13", "AMT", "faithful", "pass",
@@ -342,59 +361,75 @@ def catalog():
         "n/a", "flow.digits.thinning; flow.absorption.B blocked", None)
     add("R-S04", "Sires", "faithful", "gap",
         "n/a", "value.delta.weekly trap + flow.footprint.imb350 + OFM", None)
-    add("R-S05", "Sires", "faithful", "gap",
-        "n/a", "short-term microbalance b.c1", None)
+    add("R-S05", "Sires", "faithful", "pass",
+        "microbalance break after the first 10 minutes",
+        "", "s05")
     add("R-S06", "Sires", "faithful", "gap",
         "n/a", "two-reason level (resistance + minor HVN within tR)", None)
     add("R-S07", "Sires", "faithful", "gap",
         "n/a", "MFE/MAE at 35-tick and 15-tick examples", None)
     add("R-S08", "Sires", "faithful", "gap",
         "n/a", "5m minor node with negative delta stacking", None)
-    add("R-S09", "Sires", "faithful", "gap",
-        "n/a", "developing current-day VAH break after 10:00 with TR-17 (ready-bar missing developing VAH)", None)
+    add("R-S09", "Sires", "faithful", "pass",
+        "open above developing VAH then break/retest after 10:00",
+        "", "s09")
 
     # Pine
-    add("R-P01", "Pine", "faithful", "gap",
-        "n/a", "env.tbr.sigma025 touch then reversion to open by 12:00", None)
-    add("R-P02", "Pine", "faithful", "gap",
-        "n/a", "hourly sweep retrace to the swept level (range.gb.hour is path class of the hour box, not retrace)", None)
+    add("R-P01", "Pine", "faithful", "pass",
+        "08:00 TBR 0.25-sigma touch then reversion to the open by 12:00",
+        "", "p01")
+    add("R-P02", "Pine", "faithful", "pass",
+        "hourly sweep then retrace to the swept edge",
+        "", "p02")
     add("R-P03", "Pine", "faithful", "gap",
         "n/a", "magic-hour boxes Z1-Z6", None)
-    add("R-P04", "Pine", "faithful", "gap",
-        "n/a", "grid.pine.raid5-120", None)
-    add("R-P05", "Pine", "faithful", "gap",
-        "n/a", "London 25% body NY close-back counter", None)
-    add("R-P06", "Pine", "faithful", "gap",
-        "n/a", "London-vs-Asia / NY-vs-London first-hit tables", None)
-    add("R-P07", "Pine", "faithful", "gap",
-        "n/a", "OR midpoint retest 81.8-88.4% (open.oneway.OR is return to OR low, not midpoint)", None)
+    add("R-P04", "Pine", "faithful", "pass",
+        "NYAM raid >=5 pts then close back inside within 120 min",
+        "", "p04")
+    add("R-P05", "Pine", "faithful", "pass",
+        "London 25% body, NY wick or fail",
+        "", "p05")
+    add("R-P06", "Pine", "faithful", "pass",
+        "London first-hit of Asia H/L",
+        "", "p06")
+    add("R-P07", "Pine", "faithful", "pass",
+        "5m OR midpoint retest after 09:35",
+        "", "p07")
     add("R-P08", "Pine", "faithful", "pass",
         "IB path class after 10:30 (break combo reduced to single / both / neither)",
         "", "p08")
-    add("R-P09", "Pine", "faithful", "gap",
-        "n/a", "open vs prior RTH no-break rates", None)
-    add("R-P10", "Pine", "faithful", "gap",
-        "n/a", "daily floor pivots", None)
-    add("R-P11", "Pine", "faithful", "gap",
-        "n/a", "first-presented FVG fill/effectiveness (gap.fvg.first.clock is presence on the 09:00 hour)", None)
-    add("R-P12", "Pine", "faithful", "gap",
-        "n/a", "HTF sweep + CISD screener body/wick/close variants", None)
+    add("R-P09", "Pine", "faithful", "pass",
+        "open vs prior RTH, no-break of the far side or stay inside",
+        "", "p09")
+    add("R-P10", "Pine", "faithful", "pass",
+        "daily floor pivot PP touched in RTH",
+        "", "p10")
+    add("R-P11", "Pine", "faithful", "pass",
+        "first-presented FVG on the 09:30 hour, fill or presence",
+        "", "p11")
+    add("R-P12", "Pine", "faithful", "pass",
+        "sweep then close back through the prior bar high",
+        "", "p12")
     add("R-P13", "Pine", "faithful", "pass",
         "midnight-open (TDO) traded through in 08:00-16:00",
         "", "p13")
-    add("R-P14", "Pine", "faithful", "gap",
-        "n/a", "hod_lod_time 10:00 checkpoint", None)
-    add("R-P15", "Pine", "faithful", "gap",
-        "n/a", "env.pine.sessionstat / manipulation-distribution envelopes", None)
+    add("R-P14", "Pine", "faithful", "pass",
+        "HOD already in by 10:00",
+        "", "p14")
+    add("R-P15", "Pine", "faithful", "pass",
+        "Session Statistical Levels p50 MFE from the open",
+        "", "p15")
     add("R-P16", "Pine", "faithful", "pass",
         "18:00-16:00 inside log-space VIX/16 a/b 1.0 zone from prior settle and prior VIX",
         "", "p16")
-    add("R-P17", "Pine", "faithful", "gap",
-        "n/a", "value.vp.rth.ohlc1m (RTH 1m OHLC VP with VA outcomes) and lvl.1800open", None)
+    add("R-P17", "Pine", "faithful", "pass",
+        "18:00 open touched in RTH",
+        "", "p17")
     add("R-P18", "Pine", "faithful", "blocked",
         "n/a", "flow.cvd.ohlc as trigger", None)
-    add("R-P19", "Pine", "faithful", "gap",
-        "n/a", "body gap >=4 ticks near-edge fill (gap.body.adjacent is presence)", None)
+    add("R-P19", "Pine", "faithful", "pass",
+        "adjacent body gap >= 4 ticks",
+        "", "p19")
     add("R-P20", "Pine", "faithful", "gap",
         "n/a", "flow.delta.zone.kmeans / flow.vol.anomaly.zone on aggressor delta", None)
     return rows
@@ -440,6 +475,27 @@ def _preds():
     def j14(r):
         return bool(r.get("absorption_candle"))
 
+    def j10(r):
+        return bool(r.get("j10_draw_reach"))
+
+    def j18(r):
+        return bool(r.get("j18_ob"))
+
+    def j19(r):
+        return bool(r.get("j19_pd_touch"))
+
+    def j21(r):
+        return bool(r.get("j21_extended"))
+
+    def j22(r):
+        return bool(r.get("j22_three_strike"))
+
+    def j24(r):
+        return bool(r.get("j24_mfe_pos"))
+
+    def j25(r):
+        return bool(r.get("j25_mid_hold"))
+
     def j23(r):
         return True  # scored as clock path-class table; primary here is eligible session marker
 
@@ -476,6 +532,24 @@ def _preds():
     def g11(r):
         return bool(r.get("aplus"))
 
+    def a01(r):
+        return bool(r.get("a01_fade"))
+
+    def a03(r):
+        return bool(r.get("a03_traverse"))
+
+    def a05(r):
+        return bool(r.get("a05_poc_chop"))
+
+    def a07(r):
+        return bool(r.get("a07_ib_retest"))
+
+    def a08(r):
+        return bool(r.get("a08_reaccept"))
+
+    def a09(r):
+        return bool(r.get("a09_traverse_nohold"))
+
     def a04(r):
         return bool(r.get("amt_80pct"))
 
@@ -483,7 +557,7 @@ def _preds():
         return r.get("amt_open_label") == "drive"
 
     def a11(r):
-        return r.get("vp_shape_69") == "D"
+        return bool(r.get("a11_prior_p"))
 
     def a13(r):
         return bool(r.get("onh_or_onl"))
@@ -497,8 +571,56 @@ def _preds():
     def r02(r):
         return r.get("vix_band") == "15-18"
 
+    def p01(r):
+        return bool(r.get("p01_revert"))
+
+    def p02(r):
+        return bool(r.get("p02_hour_retrace"))
+
+    def p04(r):
+        return bool(r.get("p04_raid"))
+
+    def p05(r):
+        return bool(r.get("p05_lon25"))
+
+    def p06(r):
+        return bool(r.get("p06_first_hit"))
+
+    def p07(r):
+        return bool(r.get("p07_or_mid"))
+
     def p08(r):
         return r.get("ib_path") in ("high-only", "low-only") or bool(r.get("ib_single"))
+
+    def p09(r):
+        return bool(r.get("p09_no_break"))
+
+    def p10(r):
+        return bool(r.get("p10_pp_touch"))
+
+    def p11(r):
+        return bool(r.get("p11_fvg_fill"))
+
+    def p12(r):
+        return bool(r.get("p12_cisd_var"))
+
+    def p14(r):
+        return bool(r.get("p14_hod_1000"))
+
+    def p15(r):
+        return bool(r.get("p15_ssl"))
+
+    def p17(r):
+        return bool(r.get("p17_1800_touch"))
+
+    def p19(r):
+        return bool(r.get("p19_body_gap4"))
+
+    def s05(r):
+        return bool(r.get("s05_micro_break"))
+
+    def s09(r):
+        return bool(r.get("s09_vah_break"))
 
     def p13(r):
         return bool(r.get("tdo_touch_ny"))

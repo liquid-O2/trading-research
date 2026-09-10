@@ -166,7 +166,7 @@ fail | fail.box.gb.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; le
 fail | fail.box.gb.nyam.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.jumbo.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.prior-rth.gb.c5 | pass | pass | 0 | n/a | prior session 09:30-16:00 PDH/PDL, AM fail-back
-fail | label.aplus | pass | pass | 0 | n/a | sweep of NYAM, Asia, or 10-11 (traded range), not 6-9
+fail | label.aplus | pass | pass | 0 | n/a | NYAM sweep only (RTH traded range after 10:00). Sweep-only per procedure/PRD. Fail-back is R-G01.
 fail | loc.gp | pass | pass | 0 | n/a | NYAM 0.382-0.5 band, outcomes from 10:00
 fail | lvl.tdo.c5 | pass | pass | 0 | n/a | wick of 00:00 print then 5m close back through
 fail | lvl.0930open.below | pass | pass | 0 | n/a | sweep below 09:30 open then reclaim by 09:45

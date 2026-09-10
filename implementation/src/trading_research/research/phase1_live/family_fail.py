@@ -56,7 +56,7 @@ def _failback(box, out, k_min=30):
 
 def build_fail_table():
     cached = load_rows("fail_F")
-    if cached and cached[0].get("aplus_box") == "traded":
+    if cached and cached[0].get("aplus_box") == "nyam":
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -126,10 +126,8 @@ def build_fail_table():
             if a is not None and b is not None and am["n"]:
                 lo, hi = min(a, b), max(a, b)
                 rec["nwog_fill"] = bool(np.any(am["h"] >= lo) and np.any(am["l"] <= hi))
-        rec["aplus"] = bool(
-            rec.get("sweep_range.gb.nyam") or rec.get("sweep_range.gb.asia") or rec.get("sweep_range.gb.10-11")
-        )
-        rec["aplus_box"] = "traded"
+        rec["aplus"] = bool(rec.get("sweep_range.gb.nyam"))
+        rec["aplus_box"] = "nyam"
         rec["aplus_69"] = bool(rec.get("sweep_range.6-9.published"))
         rec["fail_any"] = any(rec.get(f"fail_{cid}") for cid in BOXES)
         rows.append(rec)
