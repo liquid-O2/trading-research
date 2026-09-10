@@ -105,3 +105,77 @@ def reject_after_touch(close_ticks, t_ms, touch_ms, level: int, side: int, r_tic
             return True
         i += 1
     return False
+
+
+def hold_after_break(close_ticks, t_ms, break_ms, level: int, side: int, h_ms: int) -> bool:
+    """After b.c1, every 1-minute close stays beyond the level for h_ms."""
+    if break_ms is None or t_ms.size == 0:
+        return False
+    start = int(np.searchsorted(t_ms, break_ms, "left"))
+    end_ms = break_ms + h_ms
+    if start >= t_ms.size:
+        return False
+    i = start
+    last = None
+    while i < t_ms.size and t_ms[i] <= end_ms:
+        c = int(close_ticks[i])
+        if side == 1 and c <= level:
+            return False
+        if side == -1 and c >= level:
+            return False
+        last = int(t_ms[i])
+        i += 1
+    return last is not None and last >= end_ms - 60_000
+
+
+def failback_wick_c5(high_ticks, low_ticks, close_ticks, t_ms, high: int, low: int, k_min: int = 30) -> tuple[bool, bool]:
+    """Wick beyond high or low, then a 5-minute close back inside within k_min."""
+    if t_ms.size < 5:
+        return False, False
+    wick_up = first_wick_break(high_ticks, low_ticks, t_ms, high, 1, 2)
+    wick_dn = first_wick_break(high_ticks, low_ticks, t_ms, low, -1, 2)
+    first = None
+    if wick_up is None:
+        first = wick_dn
+    elif wick_dn is None:
+        first = wick_up
+    else:
+        first = min(wick_up, wick_dn)
+    if first is None:
+        return False, False
+    t5, c5 = resample_close(t_ms, close_ticks, 5 * 60_000)
+    limit = first + k_min * 60_000
+    for ts, cl in zip(t5, c5):
+        if ts < first:
+            continue
+        if ts > limit:
+            break
+        if low < int(cl) < high:
+            return True, True
+    return True, False
+
+
+def outcomes_at_level(window: dict, level_px: float, *, width: float, side: int,
+                      reject_r: float = 0.5, reject_k_min: int = 15, hold_h_min: int = 30) -> dict:
+    """G-default at one price. side +1 is resistance (reject down), -1 is support (reject up)."""
+    empty = {"touch": False, "touch_ms": None, "wick": False, "close_break": False,
+             "reject": False, "hold": False}
+    if window["n"] == 0 or level_px is None or not width:
+        return empty
+    level = int(round(level_px / TICK))
+    ht = to_ticks(window["h"])
+    lt = to_ticks(window["l"])
+    ct = to_ticks(window["c"])
+    t = window["t"]
+    touch_ms = touch_level(ht, lt, t, level, G_DEFAULT["touch_ticks"])
+    wick_ms = first_wick_break(ht, lt, t, level, side, 2)
+    c1_ms = first_close_break(ct, t, level, side)
+    r_ticks = max(1, int(round(reject_r * width / TICK)))
+    return {
+        "touch": touch_ms is not None,
+        "touch_ms": touch_ms,
+        "wick": wick_ms is not None,
+        "close_break": c1_ms is not None,
+        "reject": reject_after_touch(ct, t, touch_ms, level, side, r_ticks, reject_k_min * 60_000),
+        "hold": hold_after_break(ct, t, c1_ms, level, side, hold_h_min * 60_000),
+    }

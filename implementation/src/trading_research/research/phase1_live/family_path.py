@@ -134,6 +134,8 @@ def report_path():
     fixtures = run_ticket01_fixtures()
     f_rows, _, _ = ensure_tables(with_l=False)
     docs = path_documents(f_rows, fixtures)
+    from trading_research.research.phase1_live.family_levels import report_levels
+    docs.extend(report_levels())
     for doc in docs:
         write_report(doc)
     return docs

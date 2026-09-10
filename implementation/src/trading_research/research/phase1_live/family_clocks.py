@@ -25,6 +25,8 @@ CLOCK_IDS = (
     "range.london.00-03", "range.london.0300-0330", "range.asia.2000-2030",
     "range.gb.asia", "range.gb.london", "range.gb.nyam", "range.gb.10-11",
     "range.or.5m", "range.or.15m", "range.ib",
+    "range.midnight.0000-0030", "range.rth.0930-1000", "range.rth.1000-1030",
+    "range.lunch.1200-1230", "range.moc.1500-1530", "range.on.1800-0930",
 )
 BIN_IDS = ("bin.0940-0950", "bin.0930-0950", "bin.0950-1000", "bin.1000-1030", "bin.1030-1200")
 TRADES = "/workspace/data/quantpad/cme__nq-continuous-futures__trades"
@@ -74,7 +76,8 @@ def _clock_row(day, spec, bars, faithful_path):
 
 def build_clock_table() -> list[dict]:
     cached = load_rows("clocks_F")
-    if cached:
+    have = {r.get("clock") for r in cached}
+    if cached and "range.midnight.0000-0030" in have and "range.on.1800-0930" in have:
         return cached
     f_rows = load_rows("sessions_F")
     faithful = {r["date"]: r.get("path_class") for r in f_rows}

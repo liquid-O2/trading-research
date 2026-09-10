@@ -79,6 +79,30 @@ CLOCKS = {
     "prior.rth": Clock(
         "prior.rth", _t(9, 30), _t(16), 0, 0, _t(16), _t(17), 0, 0, "prior RTH 09:30-16:00",
     ),
+    "range.midnight.0000-0030": Clock(
+        "range.midnight.0000-0030", _t(0), _t(0, 30), 0, 0, _t(0, 30), _t(3), 0, 0,
+        "TBR midnight opening range",
+    ),
+    "range.rth.0930-1000": Clock(
+        "range.rth.0930-1000", _t(9, 30), _t(10), 0, 0, _t(10), _t(12), 0, 0,
+        "TBR equities opening range A period",
+    ),
+    "range.rth.1000-1030": Clock(
+        "range.rth.1000-1030", _t(10), _t(10, 30), 0, 0, _t(10, 30), _t(12), 0, 0,
+        "TBR RTH AM second window",
+    ),
+    "range.lunch.1200-1230": Clock(
+        "range.lunch.1200-1230", _t(12), _t(12, 30), 0, 0, _t(12, 30), _t(16), 0, 0,
+        "TBR lunch opening range comparison",
+    ),
+    "range.moc.1500-1530": Clock(
+        "range.moc.1500-1530", _t(15), _t(15, 30), 0, 0, _t(15, 30), _t(16), 0, 0,
+        "TBR MOC comparison",
+    ),
+    "range.on.1800-0930": Clock(
+        "range.on.1800-0930", _t(18), _t(9, 30), -1, 0, _t(9, 30), _t(12), 0, 0,
+        "overnight 18:00-09:30 H/L",
+    ),
 }
 
 

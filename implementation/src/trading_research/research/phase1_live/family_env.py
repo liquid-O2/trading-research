@@ -25,7 +25,7 @@ def _am(bars, day):
 
 def build_env_table():
     cached = load_rows("env_F")
-    if cached and "pz_t1_reach" in cached[0]:
+    if cached and "pz_t1_reach" in cached[0] and "ext100_reach" in cached[0] and "ss_med_reach" in cached[0]:
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -84,6 +84,18 @@ def build_env_table():
         ext166_l = None if w is None else l - 1.66 * w
         ext_reach_133 = None if ext133_h is None or am["n"] == 0 else (am["high"] >= ext133_h or am["low"] <= ext133_l)
         ext_reach_166 = None if ext166_h is None or am["n"] == 0 else (am["high"] >= ext166_h or am["low"] <= ext166_l)
+        ext100_h = None if w is None else h + 1.0 * w
+        ext100_l = None if w is None else l - 1.0 * w
+        ext_reach_100 = None if ext100_h is None or am["n"] == 0 else (am["high"] >= ext100_h or am["low"] <= ext100_l)
+        med_ss_up = float(np.median(ss_up_hist[-60:])) if ss_up_hist else None
+        med_ss_dn = float(np.median(ss_dn_hist[-60:])) if ss_dn_hist else None
+        ss_hi_med = None if med_ss_up is None or ss_mid is None else ss_mid + med_ss_up
+        ss_lo_med = None if med_ss_dn is None or ss_mid is None else ss_mid - med_ss_dn
+        ss_med_reach = None if ss_hi_med is None or ss_w["n"] == 0 else (ss_w["high"] >= ss_hi_med or ss_w["low"] <= ss_lo_med)
+        minavg = None if mean_ss_up is None or mean_ss_dn is None else min(mean_ss_up, mean_ss_dn)
+        ss_hi_min = None if minavg is None or ss_mid is None else ss_mid + minavg
+        ss_lo_min = None if minavg is None or ss_mid is None else ss_mid - minavg
+        ss_minavg_reach = None if ss_hi_min is None or ss_w["n"] == 0 else (ss_w["high"] >= ss_hi_min or ss_w["low"] <= ss_lo_min)
         # P-zone 500-session percentiles from 09:30 open
         pz = {}
         if len(pz_up) >= 30 and ref is not None:
@@ -112,7 +124,8 @@ def build_env_table():
             "ev_reach_mean60": reach, "ev_reach_median60": reach_med, "ev_cal_mean60": cal,
             "ss_mid": ss_mid, "ss_hi": ss_hi, "ss_lo": ss_lo, "ss_reach": ss_reach,
             "ext133_h": ext133_h, "ext133_l": ext133_l, "ext133_reach": ext_reach_133,
-            "ext166_reach": ext_reach_166,
+            "ext166_reach": ext_reach_166, "ext100_reach": ext_reach_100,
+            "ss_med_reach": ss_med_reach, "ss_minavg_reach": ss_minavg_reach,
             "pz_hi": pz_hi, "pz_lo": pz_lo, "pz_reach": pz_reach, "pz_t1_reach": pz_t1_reach,
             "pz_t1_hi": pz_t1_hi, "pz_t1_lo": pz_t1_lo, "pz_t4_hi": pz_t4_hi, "pz_t4_lo": pz_t4_lo,
             "pz_history": min(len(pz_up), 500),
@@ -210,6 +223,9 @@ def report_env():
         _flag_doc("env", "env.ss.avgHL60", rows, "ss_reach", None, fixtures, extra={"window": "09:00-12:00", "anchor": "09:00 open", "sides": "mean(H-open) and mean(open-L)"}),
         _flag_doc("env", "env.ext.133.from-edge", rows, "ext133_reach", None, fixtures, extra={"k": 1.33, "coord": "from-edge"}),
         _flag_doc("env", "env.ext.166.from-edge", rows, "ext166_reach", "env.ext.133.from-edge", fixtures, extra={"k": 1.66, "coord": "from-edge", "faithful_flag": "ext133_reach"}),
+        _flag_doc("env", "env.ext.100", rows, "ext100_reach", "env.ext.133.from-edge", fixtures, extra={"k": 1.0, "coord": "from-edge", "faithful_flag": "ext133_reach"}),
+        _flag_doc("env", "env.ss.medHL60", rows, "ss_med_reach", "env.ss.avgHL60", fixtures, extra={"window": "09:00-12:00", "estimator": "median", "faithful_flag": "ss_reach"}),
+        _flag_doc("env", "env.ss.minavg60", rows, "ss_minavg_reach", "env.ss.avgHL60", fixtures, extra={"window": "09:00-12:00", "estimator": "min of one-sided means", "faithful_flag": "ss_reach"}),
         _flag_doc("env", "pz.approx.A", rows, "pz_t1_reach", None, fixtures, extra={"history": 500, "bands": "T1 p50-p75 through T4 p95-p99", "primary": "reached T1 (excursion >= p50)"}),
         {
             "family": "env", "variant": "pz.learned", "faithful_of": None, "n": 0, "n_unit": "sessions",

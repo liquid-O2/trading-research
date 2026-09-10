@@ -62,10 +62,18 @@ range | range.london.00-03 | pass | pass | 0 | clean | clock matches wiki; leaka
 range | range.london.0300-0330 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
 range | range.or.15m | pass | pass | 0 | clean | 09:30-09:45 RTH only
 range | range.or.5m | pass | pass | 0 | clean | 09:30-09:35 RTH only
-path | balance.body-ratio | unbuilt | none | 0 | n/a | SPEC upgrade; no path report
-path | balance.vp-shape | unbuilt | none | 0 | n/a | SPEC upgrade; no function
+range | range.midnight.0000-0030 | pass | pass | 0 | n/a | 00:00-00:30, outcomes 00:30-03:00
+range | range.rth.0930-1000 | pass | pass | 0 | n/a | 09:30-10:00 A period, outcomes 10:00-12:00
+range | range.rth.1000-1030 | pass | pass | 0 | n/a | 10:00-10:30, outcomes 10:30-12:00
+range | range.lunch.1200-1230 | pass | pass | 0 | n/a | lunch comparison, outcomes 12:30-16:00
+range | range.moc.1500-1530 | pass | pass | 0 | n/a | MOC comparison, outcomes 15:30-16:00
+range | range.on.1800-0930 | pass | pass | 0 | n/a | overnight 18:00-09:30 H/L
+range | onh_or_onl | pass | pass | 0 | n/a | RTH touch of overnight high or low
+path | balance.body-ratio | pass | pass | 0 | n/a | body/W69 >= 0.5 on the 6-9 box
+path | balance.vp-shape | fail | pass | 0 | n/a | 6-9 OHLC peak test returns double on every F session; not a shape
 path | corr.am-pm | unbuilt | none | 0 | n/a | SPEC upgrade; no function
-path | edge.clean | unbuilt | none | 0 | n/a | SPEC upgrade; no path report
+path | edge.clean | pass | pass | 0 | n/a | not purged (Asia/London H/L still off the 6-9 extremes)
+path | grid.jumbo.projection-reject | pass | pass | 0 | n/a | G-default reject at -0.5 of 6-9, r=0.5 k=15, not a 6-9 H/L tag
 path | judas.depth.-0.5 | pass | pass | 0 | n/a | m05 then close through EQ
 path | path.6-9.published | pass | pass | 0 | n/a | b.c1 09:30-12:00 on 6-9 H/L; width tables not mixed
 path | path.midretrace | pass | pass | 0 | n/a | measured inside path.6-9.published.json summary.midretrace
@@ -90,18 +98,18 @@ env | env.ev.median60 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; f
 env | env.ev.p75 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ev.p90 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ev.rv20 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
-env | env.ev.vix16 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
+env | env.ev.vix16 | pass | pass | 0 | n/a | 09:30 open ± (VIX/16) percent; daily VIX, no strike IV
 env | env.ev.yz20 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ext.050 | unbuilt | none | 0 | n/a | SPEC upgrade; no env report
-env | env.ext.100 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
+env | env.ext.100 | pass | pass | 0 | n/a | H+1.0*W69 / L-1.0*W69 AM reach
 env | env.ext.133.from-edge | pass | pass | 0 | n/a | H+1.33*W69 / L-1.33*W69
-env | env.ext.133.from-edge.london | unbuilt | none | 0 | n/a | London box source; no report
+env | env.ext.133.from-edge.london | pass | pass | 0 | n/a | 1.33 of range.london.00-03, outcome 03:00-06:00
 env | env.ext.133.from-eq | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ext.133.from-origin | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ext.166.from-edge | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 env | env.ss.avgHL60 | pass | pass | 0 | n/a | 09:00 open + mean(H-open) / open - mean(open-L) over prior 60
-env | env.ss.medHL60 | unbuilt | none | 0 | n/a | wiki upgrade; no report
-env | env.ss.minavg60 | unbuilt | none | 0 | n/a | wiki named min-average; no report
+env | env.ss.medHL60 | pass | pass | 0 | n/a | 09:00 open ± 60-session median one-sided excursions
+env | env.ss.minavg60 | pass | pass | 0 | n/a | 09:00 open ± min(mean up, mean down)
 env | pz.approx.A | pass | pass | 0 | n/a | T1-T4 adjacent bands from 500-session history; primary is T1 reach (excursion >= p50); 573/647
 env | pz.learned | unbuilt | pass | 0 | n/a | Phase 3 learned P-zone; deferred on purpose
 vol | vol.gk20 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
@@ -112,6 +120,7 @@ vol | vol.skew25 | unbuilt | none | 0 | n/a | SPEC faithful; no report
 vol | vol.vx.slope | unbuilt | none | 0 | n/a | SPEC faithful; no report
 vol | vol.yz20 | unbuilt | none | 0 | n/a | SPEC faithful; no report
 flow | flow.absorption.A | pass | pass | 0 | n/a | 2m q90 at 6-9 H/L, <=2 ticks, 0.25R / 15m
+flow | flow.absorption.candle.jumbo | pass | pass | 0 | n/a | AM 1m small body (body/range <=0.4) and vol >= 2.5 x SMA14
 flow | flow.absorption.A.q75 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.absorption.A.w1m | pass | pass | 0 | n/a | 1m roll vs own-window q90, not frozen 2m; 37/429, 36 disagreements vs A
 flow | flow.absorption.A.w5m | pass | pass | 0 | n/a | 5m roll vs own-window q90, not frozen 2m; 38/429, 43 disagreements vs A
@@ -151,13 +160,15 @@ value | value.vp.rth.trade | pass | pass | 0 | n/a | RTH 09:30-16:00 trade VP; V
 fail | fail.box.6-9.gb.c5 | pass | pass | 0 | n/a | 06:00-09:00 box, wick then 5m close-back k=30
 fail | fail.box.gb.10-11.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.gb.asia.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
-fail | fail.box.gb.hour.gb.c5 | unbuilt | none | 0 | n/a | wiki last completed hour fail event; no fail report
+fail | fail.box.gb.hour.gb.c5 | pass | pass | 0 | n/a | 60-min box at 5m steps 09:30-12:00; session-any saturates; score uses per-box rate
 fail | fail.box.gb.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.gb.nyam.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.jumbo.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.prior-rth.gb.c5 | pass | pass | 0 | n/a | prior session 09:30-16:00 PDH/PDL, AM fail-back
 fail | label.aplus | pass | pass | 0 | n/a | 6-9 sweep only, not OR of every box; 633/647
-fail | loc.gp | unbuilt | none | 0 | n/a | wiki 50-61.8% location flag; no function
+fail | loc.gp | pass | pass | 0 | n/a | NYAM 0.382-0.5 band, outcomes from 10:00
+fail | lvl.tdo.c5 | pass | pass | 0 | n/a | wick of 00:00 print then 5m close back through
+fail | lvl.0930open.below | pass | pass | 0 | n/a | sweep below 09:30 open then reclaim by 09:45
 fail | lvl.0930open | pass | pass | 0 | n/a | 09:30-09:45 sweep >=2 ticks then reclaim; 503/647, not AM through-touch
 fail | lvl.nwog | pass | pass | 0 | n/a | Monday Friday 16:00 close vs Sunday 18:00 open, AM overlap
 fail | lvl.tdo | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
@@ -165,6 +176,7 @@ gap | gap.body.adjacent | pass | pass | 0 | n/a | 5m body gaps on the 09 hour; 5
 gap | gap.fvg.first.clock | pass | pass | 0 | n/a | first 5m wick gap on the 09:00 hour; 574/647, not all-day
 block | block.sweep.tbr.3m | pass | pass | 0 | n/a | 3m new-extreme continuation on IB; 508/647, not saturating
 block | cisd.fractal.literal | pass | pass | 0 | n/a | 15m C2 takes extreme, C3 closes through far side; 526/647, 220 disagreements vs 3m sweep. Not the Pine fractal matcher.
+tpo | label.amt.80pct.two-period | pass | pass | 0 | n/a | open outside prior VA, A and B period closes inside
 tpo | label.amt.day | pass | pass | 0 | n/a | exclusive labels trend/normal/normal-variation/neutral/non-trend; PHASE flag is trend; 409/647
 tpo | label.amt.open.30m | pass | pass | 0 | n/a | exclusive labels drive/test-drive/rejection-reverse/auction from first 30m vs prior VA; PHASE flag is drive; 265/647
 tpo | value.tpo.rth.30m | pass | pass | 0 | n/a | 30m periods, 1-point poor extreme = single-period high or low row
@@ -193,22 +205,21 @@ options | value.skylit.heatseeker | not-measurable | pass | 0 | n/a | unpublishe
 
 ## Counts
 
-n = 152. pass = 103. fail = 0. unbuilt = 31. not-measurable = 18.
+n = 164. pass = 124. fail = 1. unbuilt = 21. not-measurable = 18. The fail is `balance.vp-shape` (always double).
 
-## Why 31 are unbuilt
+## Why 21 are still unbuilt
 
-Unbuilt means SPEC or wiki names the id and there is no function and no report. It is not a failed build. The 31 rows are named upgrades (or a later-phase object) that tickets 01–09 never wrote.
+Unbuilt means SPEC or wiki names the id and there is no function and no report. It is not a failed build. These remaining rows are named upgrades that no faithful RULES.md section B recipe required this turn, or a later-phase object.
 
 | group | n | ids |
 |---|---|---|
-| path upgrades | 6 | `balance.body-ratio`, `balance.vp-shape`, `corr.am-pm`, `edge.clean`, `window.1030`, `window.1600` |
-| EV / extension / SessionStat upgrades | 15 | `env.ev.{p75,p90,rv20,gk20,yz20,har,iv,vix16}`, `env.ext.{050,100,133.from-eq,133.from-origin,133.from-edge.london}`, `env.ss.{medHL60,minavg60}` |
+| path upgrades unused by B | 3 | `corr.am-pm`, `window.1030`, `window.1600` |
+| EV / extension unused by B | 10 | `env.ev.{p75,p90,rv20,gk20,yz20,har,iv}`, `env.ext.{050,133.from-eq,133.from-origin}` |
 | Phase 3 | 1 | `pz.learned` (deferred on purpose) |
 | vol SPEC faithful with no report | 3 | `vol.yz20`, `vol.skew25`, `vol.vx.slope` |
 | flow extras | 2 | `flow.bigtrade.30-60`, `flow.ofm.sequence` |
 | value upgrade | 1 | `value.vp.rth.ohlc1m` |
-| fail extras | 2 | `fail.box.gb.hour.gb.c5`, `loc.gp` |
-| options gamma | 1 | `value.node.gamma.ndx.top3` |
+| options gamma | 1 | `value.node.gamma.ndx.top3` (no strike IV; not approximated from OI) |
 
-Faithful objects that do have reports are not in this list. `vol.rv20`, `vol.gk20`, and `vol.har` are built. The three missing vol rows are in SPEC §5 as faithful and were never implemented.
+Faithful objects that do have reports are not in this list. `vol.rv20`, `vol.gk20`, and `vol.har` are built. The three missing vol rows are in SPEC §5 as faithful and were never implemented. `value.vp.rth.ohlc1m` is named by R-P17 and stays unbuilt this turn.
 
