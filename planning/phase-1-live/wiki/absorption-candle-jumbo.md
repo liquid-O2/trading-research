@@ -5,10 +5,10 @@ Jumbo's bar-level absorption object: a small-body candle with high volume at a k
 
 ## Citations
 - Concept and the small-body / high-volume signature `[TBR p.31]`; multiplier against a 14-period average, first-presented FVG display in the same settings `[TBR p.35]`; update: bull / bear colouring, isolation, absorption imbalances, MTF imbalance selection `[XF p.44]`; "used the imbalance in the absorption candle" `[XF p.45]`; absorption at the key levels of the 6–9 `[XF p.27]`; absorption zone at the reversal `[XF p.46]`; stack description `[FIND p.9, p.12]`.
-- The multiplier value is not printed; the only sourced bar-volume multiplier in the files is 2.5 × a 20-bar average `[MVFL L40–41]`.
+- The multiplier value, the body ratio and the chart timeframe are not printed by any Jumbo source; they are source-unspecified. No Pine constant is borrowed for this Jumbo object (the MVFL 2.5 × SMA20 rule belongs to a different, tier-2 indicator and is not his).
 
 ## Faithful object
-`flow.absorption.candle.jumbo`: on 3-minute NQ bars (2 and 5 named `[TBR p.27]`), body / range ≤ 0.3 (named) and volume ≥ k × SMA14(volume), k ∈ {1.5, 2.0, 2.5} as named rows; located within `tR` of a 6–9 level; bullish / bearish by close vs open; isolation = no other flagged candle within 5 bars (named). Imbalance-inside-candle = a diagonal footprint imbalance (`flow.footprint.diag.4x`) inside that candle, a tape add.
+`flow.absorption.candle.jumbo`: on 3-minute NQ bars (the entry-model timeframes 2 / 3 / 5 m `[TBR p.27]` are named for the candle; the indicator's own timeframe is not printed), body / range ≤ 0.3 (named) and volume ≥ k × trailing SMA14(volume) `[TBR p.35]`, k ∈ {1.5, 2.0, 2.5} as named rows (k is not printed); located within `tR` of a 6–9 level; bullish / bearish by close vs open; isolation = no other flagged candle within 5 bars (named). Imbalance-inside-candle = a diagonal footprint imbalance (`flow.footprint.diag.4x`) inside that candle, a tape add.
 
 ## Upgrades
 - Timeframe; body ratio; k; isolation window; at any level from the clock grid or `value.kz`.

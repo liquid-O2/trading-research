@@ -7,7 +7,7 @@ Every candle has its own point of control, the price where the most volume trade
 - POC flip definition and read `[FP9 p.5]`; stack: level, then absorption, then flip `[FP9 p.7]`; per-candle value area and POC, magnet on the retest `[FP8 p.6]`; timeframe dependence `[XF p.26]`.
 
 ## Faithful object
-`flow.candle.poc`: per 1-minute NQ candle, the max-volume price from trades; position = (POC − low) / (high − low). `flow.candle.poc.flip`: consecutive candles at a level (within `tR`) whose POC position moves from the lower third to the upper third (bullish flip) or the reverse; `known_at` = second candle close. `[unmeasured]` tape objects.
+`flow.candle.poc`: per 1-minute NQ candle, the max-volume price from trades; position = (POC − low) / (high − low). `flow.candle.poc.flip`: consecutive candles at a level (within `tR`) whose POC position moves from the lower third to the upper third (bullish flip) or the reverse (thirds are named; the source says "the other side of the candle" `[FP9 p.5]`, so halves are the closer reading and are printed beside thirds); `known_at` = second candle close. `[unmeasured]` tape objects.
 
 ## Upgrades
 - Halves instead of thirds; 2 / 5-minute candles; flip within one candle's sub-bars (1-second) as a named row; combined with the candle-vs-delta disagreement from [absorption-and-big-trades](absorption-and-big-trades.md).

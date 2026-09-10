@@ -8,7 +8,7 @@ A price area where a burst of large aggressive market orders traded, sixty, eigh
 - Refill area where sellers previously failed `[BIG p.8]`; refill zone = the same side winning the argument more than once `[CONT p.8]`; refill clock `[OFM p.2, p.5]`.
 
 ## Faithful object
-`flow.refill.zone`: a cluster of ≥ 3 aggressive prints on the same side, each ≥ 60 lots (80 and 100 named; 100 = Jumbo's NY BigTrades threshold), within 30 seconds; bounds = min / max trade price of the cluster; `known_at` = last print. Per later touch, frozen features: memory (held earlier this session, defended on the prior day), construction (print count, total size, width), location (distance to prior VA edges, session extremes, the open), flow (delta into the touch, [approach-speed](approach-speed.md)). `[unmeasured]` tape object.
+`flow.refill.zone`: a cluster of ≥ 3 aggressive prints on the same side, each ≥ 60 lots (80 and 100 named; 100 = Jumbo's NY BigTrades threshold), within 30 seconds (named; the paper says "hitting in seconds" and prints no window); bounds = min / max trade price of the cluster; `known_at` = last print. Per later touch, frozen features: memory (held earlier this session, defended on the prior day), construction (print count, total size, width), location (distance to prior VA edges, session extremes, the open), flow (delta into the touch, [approach-speed](approach-speed.md)). `[unmeasured]` tape object.
 
 ## Upgrades
 - Size 80 / 100; cluster window 10 / 60 s; merge zones overlapping by ≥ 50%; prior-day memory on / off.

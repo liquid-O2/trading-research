@@ -10,7 +10,7 @@ Published clocks inside the box model: Judas trade from 09:30 into the projectio
 - Reversal share by projection depth in the 09:00–12:00 window `[TBR p.12, table read by zoom]`: lower side 0.1 ≈ 87%, 0.2 ≈ 82%, 0.3 ≈ 78%, 0.5 ≈ 70%; upper side ≈ 85 / 80 / 74 / 66%.
 - 2026 use: "average time of reversal in the 9–12 window over 15 years, highest count 9:40–9:50" `[XF p.47 L624]`; "Full reversal during 9:40-9:50" `[XF p.29 L382]`; "almost any time window between 5am and 9am will behave similarly" `[XF p.7 L93]` `[PACK L49]`; "Simple 6-9 range and OR mid retracements" `[XF p.14 L187]`; "nothing beats being done in the first 20 mins" `[XF p.15 L205]`; ORs are reference only `[XF p.25 L317]` `[PACK L62]`; IB stats are not edge `[XF p.8 L106–107]`.
 - Sessions correlation AM / Lunch / PM `[TBR p.36 L540–543]`. Failure signatures: extended bodies at projections, extended moves, 3-strike rule `[TBR p.37 L568–585]`.
-- Pine restatement of the same geometry: session 0600–0900, 25/50/75 levels, ±0.5/1.0/2.0 deviations, 1.33/1.66 extensions, prior RTH H/L, 9:40–9:50 zone `[PINE 6 to 9 Session and Levels.txt:1–120]`.
+- A third-party Pine file restates the same geometry (session 0600–0900, 25/50/75, ±0.5/1.0/2.0, 1.33/1.66, prior RTH H/L, 9:40–9:50 zone) `[PINE 6 to 9 Session and Levels.txt:1–120]`; it is not Jumbo's script and is not a source for this object — comparison rows only (FORMULAS.md §0.1).
 - Extended overnight range vs purged/compressed range scenarios `[TBR p.12 L175–190, p.24 L315–328]`; user asks to improve the time ranges and adapt them `[DTM L19]` `[JJX L146–148]`.
 
 ## Faithful object

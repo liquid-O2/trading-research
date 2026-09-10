@@ -14,7 +14,7 @@ One thin family. Jumbo 2026 demotes OR/IB as the **main** box `[XF p.8 L106–10
 
 ## Faithful object
 - `value.tpo.rth.30m`: 30-minute periods 09:30–16:00, row size 1 NQ point (named), trade-visited rows when MBP-1 exists else OHLC-spanned as a tagged proxy. Emit POC, single prints, excess, poor-extreme flags, IB high/low at 10:30 known_at.
-- `label.amt.open.30m`: drive / test-drive / rejection-reverse / auction from the first 30 minutes vs prior value/range, primitives stored before the exclusive label.
+- `label.amt.open.30m`: from the first 30 minutes, per `[AMT1 p.11]`: drive = price drives one way straight off the open and never trades back through the 09:30 open; test-drive = a key reference (prior low, prior value edge) is tested first, then the drive away; rejection-reverse = auctions one way, gets rejected and trades back through the open; auction = rotation around the open. Primitives stored before the exclusive label. The retained code labels drive vs the prior value area instead of vs the open (FORMULAS.md R-A10).
 - `label.amt.day`: trend / normal / normal-variation / neutral / non-trend from completed RTH; developing snapshots at 30/60/120m with later known_at. Unmatched stays unmatched.
 
 ## Upgrades

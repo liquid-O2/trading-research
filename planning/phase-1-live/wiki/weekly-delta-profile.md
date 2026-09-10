@@ -8,7 +8,7 @@ The per-price delta profile over the trailing week, used before the open to see 
 - Heavy one-sided delta at an extreme read as trapped positioning, not strength `[TRAP p.4]`; an aggressive push that fades on delta = trapped side `[WIC p.6]`.
 
 ## Faithful object
-`value.delta.weekly`: per-price (aggressive buy − aggressive sell) from NQ trades over the trailing 5 completed sessions (18:00–16:00 each), 1-tick bins; `dp.max` / `dp.min` prices; trapped-print flag = |delta| ≥ q90 of the profile at a price within `tR` of the weekly high or low that price has since left by ≥ 0.5·R (R = the weekly range). `known_at` = prior close. `[unmeasured]` tape object.
+`value.delta.weekly`: per-price (aggressive buy − aggressive sell) from NQ trades over the trailing 5 completed sessions (18:00–16:00 each), 1-tick bins (trailing 5, the bin size, q90 and 0.5·R are named; the sources say "weekly delta profile / print" and print no numbers); `dp.max` / `dp.min` prices; trapped-print flag = |delta| ≥ q90 of the profile at a price within `tR` of the weekly high or low that price has since left by ≥ 0.5·R (R = the weekly range). `known_at` = prior close. `[unmeasured]` tape object.
 
 ## Upgrades
 - Calendar week (Sunday 18:00) vs trailing 5; 4-tick bins; bar-level proxy from `flow.cvd.ohlc`.

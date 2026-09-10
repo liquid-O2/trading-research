@@ -7,7 +7,7 @@ A single outsized delta print at an extreme, read as the moment control changed 
 - Delta spike at VAH and VAL, same tell opposite direction `[ABS p.10–11, p.13]`; exhaustion print `[FP9 p.6]`; delta as a filter, print zones at the highs `[STOP p.9]`; delta print = highest point of the delta profile `[RD p.6–7]`.
 
 ## Faithful object
-`flow.delta.spike`: per-price delta from trades aggregated per 1-minute bar; spike = |delta| ≥ q95 of that session's per-bar |delta| so far, located within `tR` of a VAH / VAL (prior-day fixed by default) or of any level under test, with price advance beyond the level ≤ 2 ticks in the next 3 bars; side = sign. `[unmeasured]` tape object.
+`flow.delta.spike`: per-price delta from trades aggregated per 1-minute bar; spike = |delta| ≥ q95 of that session's per-bar |delta| so far (q95, `tR`, the 2-tick advance and the 3-bar window are named; the source prints no numbers, only "a high Delta spike" `[ABS p.11]`), located within `tR` of a VAH / VAL (prior-day fixed by default) or of any level under test, with price advance beyond the level ≤ 2 ticks in the next 3 bars; side = sign. `[unmeasured]` tape object.
 
 ## Upgrades
 - q90 / q99; per-price instead of per-bar; current-day VAH / VAL (lagging) as a named row; combined with the reward system on [reward-system-3tick](reward-system-3tick.md).

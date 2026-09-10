@@ -9,7 +9,7 @@ SessionStat+ draws average and median session highs and lows over a lookback, "m
 - Pine restatements: pre-market 06:00–09:00 levels with 09:00–12:00 stats, σ-levels, fib 0.236/0.382/0.618, per-weekday first-hit counts `[PINE Pre-market session levels and stats.txt]` and `[PINE session_statmap]`; Session Statistical Levels percentile bands P10–P90 `[PINE Session Statistical Levels.txt]`.
 
 ## Faithful object
-`env.ss.avgHL60`: session open at 09:00; upper = open + mean(H − open), lower = open − mean(open − L) over the prior 60 sessions of the 09:00–12:00 window. `env.ss.medHL60` uses medians. `env.ss.minavg60` uses the minimum-average rule (average of the lower half of excursions; the manual's exact formula is not printed → named approximation). Projection rows extend by one average range beyond each level `[SS p.6 L89]`.
+`env.ss.avgHL60`: session open at 09:00; upper = open + mean(H − open), lower = open − mean(open − L) over the prior 60 sessions of the 09:00–12:00 window. `env.ss.medHL60` uses medians. `env.ss.minavg60`: the manual says only "the minimum average of the session, which reflects price movements of shorter swings" `[SS p.6]` and prints no formula; two named readings, no default: (a) the average of the lower half of the excursions, (b) min(mean up-excursion, mean down-excursion) applied to both sides (the retained code). Neither is the source's formula. Projection rows extend by one average range beyond each level `[SS p.6 L89]`.
 
 ## Upgrades
 - Lookback 20 / 60 / 250; weighted average variant `[SS p.3 L28]`; per-weekday variant `[PINE Pre-market session levels and stats.txt]`.

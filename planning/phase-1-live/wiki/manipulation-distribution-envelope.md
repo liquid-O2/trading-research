@@ -9,10 +9,10 @@ Levels projected from a session open using the average and median of two excursi
 - Jumbo frames 09:00–12:00 as a 3-hour PO3 candle `[TBR p.16, p.19]`.
 
 ## Faithful object
-`env.pine.manip.avg`: over the prior 60 sessions, for the session candle 09:30–16:00 (RTH, named default), compute manipulation and distribution per the functions above; levels at today's 09:30 open ± mean manipulation (both sides drawn) and ± mean distribution; `.median`, `.p25`, `.p75` likewise; `known_at` 09:30.
+`env.pine.manip.avg`: over the prior 60 sessions, for the candle the file draws — the daily candle anchored at 18:00 by default, with 4H / 8H / 12H and the NY-midnight daily as its options `[PINE Statistical OHLC Projections HTF.txt:8–15]` (the RTH 09:30–16:00 candle is a named variant, not the default) — compute manipulation and distribution per the functions above over the last 60 same-slot candles; levels at that candle's open ± mean manipulation (both sides drawn) and ± mean distribution; `.median`, `.p25`, `.p75` likewise; `known_at` 09:30.
 
 ## Upgrades
-- Candle = 09:00–12:00 window (Jumbo PO3) or the 6–9 → 12:00 path; lookback 20 / 250; like-for-like filter by weekday.
+- Candle = RTH 09:30–16:00 (named), 09:00–12:00 window (Jumbo PO3) or the 6–9 → 12:00 path; lookback 20 / 250; like-for-like filter by weekday.
 
 ## Outcomes
 - Reach, overshoot, reject at each level; share of sessions whose adverse excursion stays inside the manipulation band (calibration); coincidence with −0.5 and EV bands (≤ `tR`).

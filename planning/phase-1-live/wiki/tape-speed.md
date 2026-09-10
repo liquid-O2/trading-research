@@ -7,7 +7,7 @@ How fast prints are hitting: a tape that rips at a level is urgency arriving, a 
 - Speed of tape and the spread `[DOM5 p.6]`; squeeze release / passive failure `[OFM p.2, p.5, p.14]`; contested level `[ANAT p.3]`; the read stack `[NYAM p.3]` `[K18 p.3, p.8]`.
 
 ## Faithful object
-`flow.tape.speed`: NQ trade events per second and lots per second from MBP-1, rolling 5-second and 30-second windows; spike = window rate ≥ q90 of the session so far, death = ≤ q10; sampled at first touch of a level and over the 60 seconds after a `b.c1` break. `[unmeasured]` tape object.
+`flow.tape.speed`: NQ trade events per second and lots per second from MBP-1, rolling 5-second and 30-second windows; spike = window rate ≥ q90 of the session so far, death = ≤ q10 (the windows and q90 / q10 are named; the source prints no numbers); sampled at first touch of a level and over the 60 seconds after a `b.c1` break. `[unmeasured]` tape object.
 
 ## Upgrades
 - Windows 1 / 10 / 60 s; per-side rate; normalized by the time-of-day median across the prior 20 sessions.

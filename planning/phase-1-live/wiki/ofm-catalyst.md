@@ -8,7 +8,7 @@ The cluster of absorbed aggression that sets a squeeze up, drawn at the lowest (
 - The failure of the squeeze is not the entry; the drive is `[BIG p.7–8]`; OFM retaken after a failed squeeze; a squeeze with no failure is a different case `[CONT p.10–11]`.
 
 ## Faithful object
-`flow.ofm.catalyst`: ≥ 2 same-side aggressive prints ≥ 30 lots (Ethos 30–60 on NQ; 100 named) whose fill price sits in the wick of their 1-minute bar (absorbed), within 5 minutes and within 0.1·R of a swing extreme; box = from the first absorbed print to the extreme; `known_at` = close of the bar after the last print. Stage flags: release (1-minute close beyond the extreme with a `flow.tape.speed` spike), failure (`b.c1` back through the catalyst), refill (return into the box), re-squeeze (retest of the failure area then `b.c1` in the squeeze direction). `[unmeasured]` tape object.
+`flow.ofm.catalyst`: ≥ 2 same-side aggressive prints ≥ 30 lots (Ethos 30–60 on NQ; 100 named) whose fill price sits in the wick of their 1-minute bar (absorbed), within 5 minutes and within 0.1·R of a swing extreme (the 5-minute window and 0.1·R are named; the 30-lot minimum is printed `[OFM p.4]`); box = from the first absorbed print to the extreme; `known_at` = close of the bar after the last print. Stage flags: release (1-minute close beyond the extreme with a `flow.tape.speed` spike), failure (`b.c1` back through the catalyst), refill (return into the box), re-squeeze (retest of the failure area then `b.c1` in the squeeze direction). `[unmeasured]` tape object.
 
 ## Upgrades
 - Print threshold 60 / 100; wick vs body classification by fill price vs bar body; window 3 / 10 min; passive variant (release with tape speed at or below the session median).

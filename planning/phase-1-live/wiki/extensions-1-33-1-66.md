@@ -4,7 +4,7 @@
 Levels at 1.33 and 1.66 times the box height, projected beyond the box high and low, from the 6–9 range (and from the London box when London is the clock) `[TBR p.21 L260–261]` `[PACK L66, L82]` `[JJX L53]`. They are retracement / reversal levels for single-break days, monitored for interaction `[TBR p.21]`, and the fork for compressed-AM → PM expansion `[FIND p.6 L125]`. They are not P-zones and must not be called ATL `[BRIEF]`.
 
 ## Citations
-- "1.33 1.66 Retracement/Reversal levels… monitor the interaction at these levels" `[TBR p.21 L259–261]`; chart shows −133% / −166% under the low, 28 Jul 2026 `[PACK L66]`; Pine geometry: fib ext 1.33/1.66 from H/L of the 06:00–09:00 session `[PINE 6 to 9 Session and Levels.txt]`; TBR-style ±1.0 / ±2.0 deviations in the same file.
+- "1.33 1.66 Retracement/Reversal levels… monitor the interaction at these levels" `[TBR p.21 L259–261]`; chart shows −133% / −166% under the low, 28 Jul 2026 `[PACK L66]`; the coordinate is fixed by his own chart labels (−133% / −166% under the low = 1.33 / 1.66 range-multiples beyond the edge) `[PACK L66]`; the FIND replication fib list `[FIND p.16]` read literally would give the from-origin reading and is kept only as a named alternative; the Pine archive file `6 to 9 Session and Levels.txt` is a third-party restatement, not Jumbo's script, and is not a source for this object.
 - Lock: width table uses 6–9 H−L and prior RTH H−L; extensions come from the 6–9 range, not P-zones `[BRIEF]`.
 
 ## Faithful object
@@ -12,7 +12,7 @@ Levels at 1.33 and 1.66 times the box height, projected beyond the box high and 
 
 ## Upgrades
 - Box source: `range.london.00-03` (London row) `[PACK L82]`; any grid clock as a comparison.
-- Coordinate: **beyond-edge** (faithful, TBR figure and `6 to 9 Session and Levels.txt`) vs **range-origin** `env.ext.133.from-origin` = L+k·W / H−k·W (`MTF OHLC Lines with Breakout & Retracement Labels.txt:293–307`). These disagree; both are printed.
+- Coordinate: **beyond-edge** (faithful: his chart labels `[PACK L66]` and the TBR p.21 figure) vs **range-origin** `env.ext.133.from-origin` = L+k·W / H−k·W (`MTF OHLC Lines with Breakout & Retracement Labels.txt:293–307`). These disagree; both are printed.
 - Anchor: from edge vs from EQ (`env.ext.133.from-eq`) — named because some Pine files anchor at open.
 
 ## Outcomes
