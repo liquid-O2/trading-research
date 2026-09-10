@@ -36,7 +36,7 @@ R-J16 | Jumbo | faithful | pass | 647 | two-sided trade volume at EQ within 2 ti
 R-J17 | Jumbo | faithful | pass | 647 | LVN or shelf under EQ or -0.5 in the 6-9 trade profile | 0.4189 | [0.381, 0.457] | 2024 0.413 / 2025 0.406 / 2026 0.449 | low 0.373 / mid 0.453 / high 0.431 | 0 | leakage 0
 R-J18 | Jumbo | faithful | pass | 647 | 3-candle OB at -0.5 on 3m AM bars | 0.0263 | [0.016, 0.042] | 2024 0.020 / 2025 0.045 / 2026 0.006 | low 0.037 / mid 0.019 / high 0.024 | 0 | leakage 0
 R-J19 | Jumbo | faithful | pass | 647 | PDH/PDL touch given open direction | 0.7125 | [0.676, 0.746] | 2024 0.676 / 2025 0.734 / 2026 0.737 | low 0.705 / mid 0.710 / high 0.725 | 0 | leakage 0
-R-J20 | Jumbo | faithful | gap | n/a | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00) | n/a | n/a | n/a | n/a | n/a | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)
+R-J20 | Jumbo | faithful | pass | 217 | 10:00 FRED release day and first -0.5 touch in 10:00-10:30 | 0.1797 | [0.134, 0.236] | 2024 0.250 / 2025 0.139 / 2026 0.130 | low 0.227 / mid 0.151 / high 0.160 | 0 | denominator is FRED 10:00 ET release days (ISM-like: JOLTS, Michigan, new homes, factory orders, inventories, construction)
 R-J21 | Jumbo | faithful | pass | 647 | condition class extended (red-folder or w.rel-prior-rth >= 1) | 0.0386 | [0.026, 0.056] | 2024 0.036 / 2025 0.041 / 2026 0.038 | low 0.028 / mid 0.042 / high 0.047 | 0 | leakage 0
 R-J22 | Jumbo | faithful | pass | 647 | three-strike failure protocol at -0.5 | 0.1236 | [0.100, 0.151] | 2024 0.146 / 2025 0.135 / 2026 0.071 | low 0.138 / mid 0.136 / high 0.090 | 0 | leakage 0
 R-J23 | Jumbo | faithful | pass | 643 | path class of TBR published clocks including midnight / A-period / lunch / MOC | 0.4526 | [0.414, 0.491] | 2024 0.463 / 2025 0.465 / 2026 0.416 | n/a (clock table) | 0 | clocks range.midnight.0000-0030 and the other TBR published boxes; rate is midnight double-break. Lunch and MOC are comparison clocks.
@@ -72,7 +72,7 @@ R-A16 | AMT | faithful | pass | 647 | ledge stacked with AM VWAP or prior VAH wi
 R-A17 | AMT | faithful | pass | 647 | second volume transition in the RTH trade profile | 0.0958 | [0.075, 0.121] | 2024 0.093 / 2025 0.086 / 2026 0.115 | low 0.083 / mid 0.098 / high 0.109 | 0 | leakage 0
 R-A18 | AMT | faithful | pass | 647 | AM high reaches prior VAH | 0.6198 | [0.582, 0.656] | 2024 0.628 / 2025 0.611 / 2026 0.622 | low 0.636 / mid 0.636 / high 0.592 | 0 | leakage 0
 R-F01 | Flow | faithful | pass | 647 | AM VWAP ±2SD touch with absorption A at the band | 0.1252 | [0.102, 0.153] | 2024 0.142 / 2025 0.086 / 2026 0.160 | low 0.124 / mid 0.159 / high 0.085 | 0 | leakage 0
-R-F02 | Flow | faithful | blocked | n/a | flow.cvd.trade divergence (tape-trusted no) | n/a | n/a | n/a | n/a | n/a | flow.cvd.trade divergence (tape-trusted no)
+R-F02 | Flow | faithful | pass | 647 | MBP-1 CVD regular divergence in the 15 min after first AM take of 6-9 H or L. Session-sign flag stays untrusted. | 0.8346 | [0.804, 0.861] | 2024 0.862 / 2025 0.820 / 2026 0.814 | low 0.820 / mid 0.841 / high 0.839 | 0 | leakage 0
 R-F03 | Flow | faithful | pass | 647 | AM VWAP, overnight VWAP, and prior VA mid within tR | 0.0031 | [0.001, 0.011] | 2024 0.008 / 2025 0.000 / 2026 0.000 | low 0.005 / mid 0.005 / high 0.000 | 0 | leakage 0
 R-F04 | Flow | faithful | pass | 647 | stacked 4x footprint then AM trade back through the zone | 0.7311 | [0.696, 0.764] | 2024 0.668 / 2025 0.721 / 2026 0.846 | low 0.664 / mid 0.724 / high 0.806 | 0 | leakage 0
 R-F05 | Flow | faithful | pass | 647 | AM candle vs delta disagreement | 0.7573 | [0.723, 0.789] | 2024 0.765 / 2025 0.721 / 2026 0.801 | low 0.728 / mid 0.790 / high 0.763 | 0 | leakage 0
@@ -89,10 +89,10 @@ R-F15 | Flow | faithful | pass | 647 | stacked footprint without on-touch refill
 R-F16 | Flow | faithful | pass | 647 | absorption A at prior VA after AM tags 6-9 high; gamma stays None | 0.0232 | [0.014, 0.038] | 2024 0.032 / 2025 0.020 / 2026 0.013 | low 0.018 / mid 0.028 / high 0.024 | 0 | leakage 0
 R-F17 | Flow | faithful | pass | 647 | on-touch refill zone from MBP-1 | 0.0062 | [0.002, 0.016] | 2024 0.012 / 2025 0.004 / 2026 0.000 | low 0.009 / mid 0.005 / high 0.005 | 0 | leakage 0
 R-F18 | Flow | faithful | pass | 647 | stacked footprint without refill; tape-speed cut stays unspecified | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
-R-R01 | Regime | faithful | gap | n/a | value.node.flip / GEX walls (no strike IV; OI top3 is not the flip). Do not use mapped NDX/SPX minutes | n/a | n/a | n/a | n/a | n/a | value.node.flip / GEX walls (no strike IV; OI top3 is not the flip). Do not use mapped NDX/SPX minutes
+R-R01 | Regime | faithful | pass | 647 | QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35; ETF has no 09:25 tape) | 0.4049 | [0.368, 0.443] | 2024 0.360 / 2025 0.406 / 2026 0.474 | low 0.304 / mid 0.388 / high 0.512 | 0 | leakage 0
 R-R02 | Regime | faithful | pass | 647 | prior-session VIXCLS close in band 15-18 | 0.3910 | [0.354, 0.429] | 2024 0.231 / 2025 0.508 / 2026 0.462 | low 0.396 / mid 0.439 / high 0.346 | 0 | leakage 0
 R-R03 | Regime | faithful | pass | 647 | open-vs-VA thesis still alive at 12:00 | 0.6151 | [0.577, 0.652] | 2024 0.652 / 2025 0.594 / 2026 0.590 | low 0.627 / mid 0.636 / high 0.588 | 0 | leakage 0
-R-R04 | Regime | faithful | blocked | n/a | SMT / IØD (flow.smt.* tape-trusted no; do not score flow.smt.pine.3-3) | n/a | n/a | n/a | n/a | n/a | SMT / IØD (flow.smt.* tape-trusted no; do not score flow.smt.pine.3-3)
+R-R04 | Regime | faithful | pass | 647 | sister takes PDH/PDL, NQ does not (user SMT, not the saturating S1 hunt) | 0.3926 | [0.356, 0.431] | 2024 0.445 / 2025 0.340 / 2026 0.391 | low 0.429 / mid 0.388 / high 0.355 | 0 | leakage 0
 R-S01 | Sires | faithful | pass | 647 | absorption A at the 6-9 low then AM close above it | 0.0402 | [0.028, 0.058] | 2024 0.049 / 2025 0.033 / 2026 0.038 | low 0.037 / mid 0.051 / high 0.033 | 0 | leakage 0
 R-S02 | Sires | faithful | pass | 647 | three AM prints at the 6-9 high | 0.6754 | [0.638, 0.710] | 2024 0.688 / 2025 0.676 / 2026 0.654 | low 0.668 / mid 0.692 / high 0.678 | 0 | leakage 0
 R-S03 | Sires | faithful | pass | 647 | print-size thinning; absorption B stays blocked | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
@@ -119,7 +119,7 @@ R-P14 | Pine | faithful | pass | 647 | HOD already in by 10:00 | 0.2952 | [0.261
 R-P15 | Pine | faithful | pass | 647 | Session Statistical Levels p50 MFE from the open | 0.3632 | [0.327, 0.401] | 2024 0.356 / 2025 0.348 / 2026 0.397 | low 0.341 / mid 0.327 / high 0.417 | 0 | leakage 0
 R-P16 | Pine | faithful | pass | 647 | 18:00-16:00 inside log-space VIX/16 a/b 1.0 zone from prior settle and prior VIX | 0.4250 | [0.387, 0.463] | 2024 0.429 / 2025 0.496 / 2026 0.308 | low 0.493 / mid 0.416 / high 0.365 | 0 | leakage 0
 R-P17 | Pine | faithful | pass | 647 | 18:00 open touched in RTH | 0.6213 | [0.583, 0.658] | 2024 0.648 / 2025 0.635 / 2026 0.558 | low 0.608 / mid 0.664 / high 0.597 | 0 | leakage 0
-R-P18 | Pine | faithful | blocked | n/a | flow.cvd.ohlc as trigger | n/a | n/a | n/a | n/a | n/a | flow.cvd.ohlc as trigger
+R-P18 | Pine | faithful | pass | 647 | 1m OHLC CVD regular divergence in the 15 min after first AM take of 6-9 H or L | 0.5626 | [0.524, 0.600] | 2024 0.575 / 2025 0.557 / 2026 0.551 | low 0.530 / mid 0.589 / high 0.573 | 0 | leakage 0
 R-P19 | Pine | faithful | pass | 647 | adjacent body gap >= 4 ticks | 0.0386 | [0.026, 0.056] | 2024 0.024 / 2025 0.045 / 2026 0.051 | low 0.014 / mid 0.047 / high 0.057 | 0 | leakage 0
 R-P20 | Pine | faithful | pass | 647 | AM print >=100 lots and range >= 8 ticks | 0.6569 | [0.619, 0.692] | 2024 0.498 / 2025 0.730 / 2026 0.795 | low 0.627 / mid 0.645 / high 0.692 | 0 | leakage 0
 
@@ -129,7 +129,6 @@ Phase 1 is not done. Green Bird section B rows are pass. These Jumbo, AMT, and f
 
 id | missing function
 ---|---
-R-J20 | 10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)
 
 ## Not started
 

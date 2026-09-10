@@ -116,6 +116,82 @@ def exhaustion_split(stall_vol: float, prior_vol: float) -> dict:
     return {"shrinking": bool(shrinking), "big": bool(not shrinking)}
 
 
+def r_f02_regular_div(prior_px: float, prior_cvd: float, new_px: float, new_cvd: float, *, side: str = "high") -> bool:
+    if side == "high":
+        return bool(new_px > prior_px and new_cvd < prior_cvd)
+    return bool(new_px < prior_px and new_cvd > prior_cvd)
+
+
+def r_f02_fakeout_grade(cvd_slope: float) -> bool:
+    return bool(cvd_slope <= 0)
+
+
+def r_f02_div_at_level(extreme, cvd, level, cvd_ref, *, side: str = "high") -> bool:
+    if level is None or cvd_ref is None:
+        return False
+    e = _arr(extreme)
+    x = _arr(cvd)
+    if e.size == 0:
+        return False
+    if side == "high":
+        return bool(np.any((e > float(level)) & (x + 1e-9 < float(cvd_ref))))
+    return bool(np.any((e < float(level)) & (x > float(cvd_ref) + 1e-9)))
+
+
+def r_f02_grid_div(extreme, cvd, i_touch, *, side: str = "high", horizon: int = 15) -> bool:
+    if i_touch is None or i_touch < 0:
+        return False
+    e = _arr(extreme)
+    x = _arr(cvd)
+    i0 = int(i_touch)
+    if i0 >= e.size:
+        return False
+    i1 = min(i0 + horizon, e.size)
+    e = e[i0:i1]
+    x = x[i0:i1]
+    if e.size < 2:
+        return False
+    if side == "high":
+        return bool(np.any((e[1:] > e[0]) & (x[1:] + 1e-9 < x[0])))
+    return bool(np.any((e[1:] < e[0]) & (x[1:] > x[0] + 1e-9)))
+
+
+def r_f02_div_series(hi, cvd, lo=None) -> bool:
+    h = _arr(hi)
+    x = _arr(cvd)
+    if h.size < 2:
+        return False
+    peak = np.maximum.accumulate(h)
+    cvd_hi = np.maximum.accumulate(x)
+    bear = bool(np.any((h[1:] > peak[:-1] + 1e-9) & (x[1:] + 1e-9 < cvd_hi[:-1])))
+    if lo is None:
+        return bear
+    l = _arr(lo)
+    trough = np.minimum.accumulate(l)
+    cvd_lo = np.minimum.accumulate(x)
+    bull = bool(np.any((l[1:] < trough[:-1] - 1e-9) & (x[1:] > cvd_lo[:-1] + 1e-9)))
+    return bear or bull
+
+
+def r_p18_ohlc_cvd(o, c, v) -> dict:
+    o, c, v = _arr(o), _arr(c), _arr(v)
+    delta = np.where(c > o, v, np.where(c < o, -v, 0.0))
+    return {"cvd": float(delta.sum()), "delta": delta}
+
+
+def r_r04_smt_prior(nq_level, sis_level, nq_ext, sis_ext, *, side: str = "high") -> bool:
+    if nq_level is None or sis_level is None or nq_ext is None or sis_ext is None:
+        return False
+    if side == "high":
+        return bool(sis_ext > sis_level and not (nq_ext > nq_level))
+    return bool(sis_ext < sis_level and not (nq_ext < nq_level))
+
+
+def r_r01_gex_k(gamma: float, oi: float, spot: float, *, call: bool) -> float:
+    g = float(gamma) * float(oi) * 100.0 * float(spot) * float(spot) * 0.01
+    return g if call else -g
+
+
 def r_f01_vwap_fade(
     vwap: float, sigma: float, *, band_m: float = 2.0,
     bar_high: float | None = None, bar_low: float | None = None,
@@ -1836,6 +1912,47 @@ def flow_fixtures() -> dict:
     cases.append(_case("P3-14.body_fill", p314["body_fill"] is True, p314["body_fill"], True))
     cases.append(_case("P3-14.sweep_at_level", p314["sweep_at_level"] is True, p314["sweep_at_level"], True))
     cases.append(_case("P3-14.tpo_fill", p314["tpo_fill"] is True, p314["tpo_fill"], True))
+
+    cases.append(_case(
+        "R-F02.divergence",
+        r_f02_regular_div(110.0, 4200.0, 110.75, 3950.0, side="high") is True,
+        True, True,
+    ))
+    cases.append(_case("R-F02.fakeout_grade", r_f02_fakeout_grade(-80.0) is True, True, True))
+    hi = np.array([110.0, 110.75], dtype=np.float64)
+    cvd = np.array([4200.0, 3950.0], dtype=np.float64)
+    cases.append(_case("R-F02.series", r_f02_div_series(hi, cvd) is True, True, True))
+    cases.append(_case(
+        "R-F02.at_level",
+        r_f02_div_at_level([110.0, 110.75], [4200.0, 3950.0], 110.0, 4200.0, side="high") is True,
+        True, True,
+    ))
+    cases.append(_case(
+        "R-F02.grid_window",
+        r_f02_grid_div([110.0, 110.75], [4200.0, 3950.0], 0, side="high", horizon=15) is True,
+        True, True,
+    ))
+
+    p18 = r_p18_ohlc_cvd([100.0, 100.5, 100.25], [100.5, 100.25, 100.25], [120.0, 80.0, 50.0])
+    cases.append(_case("R-P18.cvd_ohlc", abs(p18["cvd"] - 40.0) < 1e-12, p18["cvd"], 40.0))
+
+    cases.append(_case(
+        "R-R04.smt_pdh",
+        r_r04_smt_prior(110.0, 5500.0, 109.5, 5500.5, side="high") is True,
+        True, True,
+    ))
+    cases.append(_case(
+        "R-R04.both_take_is_not_smt",
+        r_r04_smt_prior(110.0, 5500.0, 110.5, 5500.5, side="high") is False,
+        False, False,
+    ))
+
+    call_g = r_r01_gex_k(0.08, 10_000.0, 500.0, call=True)
+    put_g = r_r01_gex_k(0.07, 12_000.0, 500.0, call=False)
+    net = call_g + put_g
+    cases.append(_case("R-R01.call_gex", abs(call_g - 2.0e8) < 1e-6, call_g, 2.0e8))
+    cases.append(_case("R-R01.put_gex", abs(put_g + 2.1e8) < 1e-6, put_g, -2.1e8))
+    cases.append(_case("R-R01.short_gamma", bool(net < 0), True, True))
 
     failed = [c for c in cases if not c["pass"]]
     return {

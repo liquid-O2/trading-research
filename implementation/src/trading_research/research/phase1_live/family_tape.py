@@ -27,6 +27,8 @@ from trading_research.research.phase1_live.formulas_jumbo import (
 from trading_research.research.phase1_live.formulas_flow import (
     digits_thinning,
     r_f01_vwap_fade,
+    r_f02_grid_div,
+    r_f02_fakeout_grade,
     r_f03_convergence,
     r_f04_candle_stack,
     r_f05_absorption_stack,
@@ -93,7 +95,8 @@ def _session_slices(table):
     starts = np.concatenate(([0], breaks))
     ends = np.concatenate((breaks, [n]))
     cols = {}
-    for name in ("t", "price", "size", "side", "bid", "ask", "bid_sz", "ask_sz", "is_trade"):
+    names = [n for n in ("t", "price", "size", "side", "bid", "ask", "bid_sz", "ask_sz", "is_trade") if n in table.column_names]
+    for name in names:
         arr = table.column(name).to_numpy()
         cols[name] = arr[order] if order is not None else arr
     for a, b in zip(starts, ends):
@@ -310,4 +313,89 @@ def build_tape_table() -> list[dict]:
         print(f"  tape {n}", flush=True)
     rows = [by_date[d] for d in sorted(by_date)]
     save_rows("tape_flags_F", rows)
+    return rows
+
+
+def _f02_one(session, ev, f_rows):
+    row = f_rows.get(session)
+    if row is None:
+        return None
+    day = date.fromisoformat(session)
+    globex = _ns(day, dtime(18, 0), -1)
+    am1 = _ns(day, dtime(12, 0))
+    t, px, sz, sd = _trades(ev, globex, am1)
+    rec = {"date": session, "eligible": row.get("eligible"), "f02_divergence": False, "f02_fakeout": False, "cvd_step_rev": 3}
+    if t.size < 50:
+        return rec
+    minute = t // 60_000_000_000
+    order = np.argsort(minute, kind="mergesort")
+    minute, px, sz, sd = minute[order], px[order], sz[order], sd[order]
+    breaks = np.flatnonzero(minute[1:] != minute[:-1]) + 1
+    starts = np.concatenate(([0], breaks))
+    ends = np.concatenate((breaks, [minute.size]))
+    n = starts.size
+    hi = np.empty(n, dtype=np.float64)
+    lo = np.empty(n, dtype=np.float64)
+    dlt = np.empty(n, dtype=np.float64)
+    cl = np.empty(n, dtype=np.float64)
+    mins = np.empty(n, dtype=np.int64)
+    for i, (a, b) in enumerate(zip(starts, ends)):
+        hi[i] = float(px[a:b].max())
+        lo[i] = float(px[a:b].min())
+        cl[i] = float(px[b - 1])
+        mins[i] = int(minute[a])
+        signed = np.where(sd[a:b] > 0, sz[a:b], 0.0) - np.where(sd[a:b] < 0, sz[a:b], 0.0)
+        dlt[i] = float(signed.sum())
+    cvd = np.cumsum(dlt)
+    t0930 = _ns(day, dtime(9, 30)) // 60_000_000_000
+    i_am = int(np.searchsorted(mins, t0930, "left"))
+    h69, l69 = row.get("H"), row.get("L")
+    if h69 is not None:
+        hits = np.flatnonzero((np.arange(n) >= i_am) & (hi > h69))
+        if hits.size:
+            rec["f02_divergence"] = r_f02_grid_div(hi, cvd, int(hits[0]), side="high")
+    if not rec["f02_divergence"] and l69 is not None:
+        hits = np.flatnonzero((np.arange(n) >= i_am) & (lo < l69))
+        if hits.size:
+            rec["f02_divergence"] = r_f02_grid_div(lo, cvd, int(hits[0]), side="low")
+    if h69 is not None:
+        brk = np.flatnonzero((np.arange(n) >= i_am) & (cl > h69))
+        if brk.size:
+            i = int(brk[0])
+            i0 = max(i_am, i - 5)
+            rec["f02_fakeout"] = r_f02_fakeout_grade(float(cvd[i] - cvd[i0]))
+    return rec
+
+
+def _f02_chunk(path, f_rows):
+    out = []
+    table = pq.read_table(path, columns=["session", "t", "price", "size", "side", "is_trade"])
+    for session, ev in _session_slices(table):
+        try:
+            rec = _f02_one(session, ev, f_rows)
+        except Exception as exc:
+            print(f"f02 fail {session} {type(exc).__name__}: {exc}", flush=True)
+            continue
+        if rec is not None:
+            out.append(rec)
+    del table
+    return out
+
+
+def build_f02_table() -> list[dict]:
+    cached = load_rows("cvd_step_F")
+    if cached and cached[0].get("cvd_step_rev") == 3:
+        return cached
+    f_rows = {r["date"]: r for r in (load_rows("sessions_F") or [])}
+    chunks = list_complete_chunks()
+    print(f"f02 chunks={len(chunks)} workers={TAPE_WORKERS}", flush=True)
+    by_date = {}
+    with ThreadPoolExecutor(max_workers=TAPE_WORKERS) as pool:
+        parts = list(pool.map(lambda p: _f02_chunk(p, f_rows), chunks))
+    for recs in parts:
+        for rec in recs:
+            by_date[rec["date"]] = rec
+    rows = [by_date[d] for d in sorted(by_date)]
+    save_rows("cvd_step_F", rows)
+    print(f"f02 n={len(rows)}", flush=True)
     return rows

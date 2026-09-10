@@ -270,6 +270,10 @@ def j19_htf_fvg(h, l, c) -> dict:
     return first_presented_fvg(h, l, c)
 
 
+def j20_delayed(release_1000: bool, reversal_bin: str | None) -> bool:
+    return bool(release_1000 and reversal_bin == "bin.1000-1030")
+
+
 def j21_class(
     *,
     red_folder_0830: bool = False,
@@ -1220,6 +1224,9 @@ def jumbo_fixtures() -> dict:
     )
     cases.append(_case("P3-10.above", None if owed["above"] is None else {"level": owed["above"]["level"], "type": owed["above"]["type"], "dist": owed["above"]["dist"], "w69": round(owed["above"]["w69"], 2)}, {"level": 16700.0, "type": "naked_poc", "dist": 90.0, "w69": 1.33}))
     cases.append(_case("P3-10.below", owed["below"], None))
+    cases.append(_case("R-J20.delayed", j20_delayed(True, "bin.1000-1030"), True))
+    cases.append(_case("R-J20.not_0830", j20_delayed(False, "bin.1000-1030"), False))
+    cases.append(_case("R-J20.wrong_bin", j20_delayed(True, "bin.0940-0950"), False))
 
     failed = [c for c in cases if not c["pass"]]
     return {

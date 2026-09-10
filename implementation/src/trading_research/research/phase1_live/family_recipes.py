@@ -31,7 +31,11 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_p12_sweep_cisd,
     r_p14_hod_checkpoint,
     r_p15_ssl,
+    r_p18_ohlc_cvd,
     r_p19_body_gap,
+    r_f02_grid_div,
+    r_f02_fakeout_grade,
+    r_r04_smt_prior,
     sample_stdev,
 )
 from trading_research.research.phase1_live.formulas_jumbo import (
@@ -45,6 +49,7 @@ from trading_research.research.phase1_live.formulas_jumbo import (
     j18_ob_bear,
     j18_ob_bull,
     j19_pd_touch,
+    j20_delayed,
     j21_class,
     j22_three_strike,
     j24_management,
@@ -52,7 +57,8 @@ from trading_research.research.phase1_live.formulas_jumbo import (
     j25_mid_retrace_hold,
 )
 from trading_research.research.phase1_live.grid import first_close_break, to_ticks
-from trading_research.research.phase1_live.ohlc_index import OHLC1M, load_years, years_for_dates
+from trading_research.research.phase1_live.family_levels import load_red_folder
+from trading_research.research.phase1_live.ohlc_index import OHLC1M, SISTERS_1M, load_years, years_for_dates
 from trading_research.research.phase1_live.sessions import projections
 from trading_research.research.phase1_live.slice import load_calendar, slice_dates
 
@@ -74,14 +80,22 @@ def _clock(bars, day, cid):
 
 def build_recipe_table() -> list[dict]:
     cached = load_rows("recipe_flags_F")
-    if cached and cached[0].get("recipe_rev") == 2:
+    if cached and cached[0].get("recipe_rev") == 5:
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
     prior_vp = {r["date"]: r for r in (load_rows("prior_rth_trade_vp_F") or [])}
     calendar = load_calendar()
     dates = list(slice_dates(calendar, "F"))
-    bars = load_years(OHLC1M, years_for_dates(dates))
+    years = years_for_dates(dates)
+    bars = load_years(OHLC1M, years)
+    sisters = {}
+    for name, root in SISTERS_1M.items():
+        try:
+            sisters[name] = load_years(root, years)
+        except FileNotFoundError:
+            sisters[name] = None
+    folder = load_red_folder()
     by_date = {r["date"]: r for r in f_rows}
     closes = []
     rows = []
@@ -92,7 +106,7 @@ def build_recipe_table() -> list[dict]:
         op = open_rows.get(day.isoformat(), {})
         rec = {
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
-            "recipe_rev": 2,
+            "recipe_rev": 5,
             "j10_draw_reach": False, "j18_ob": False, "j19_pd_touch": False,
             "j21_extended": False, "j22_three_strike": False, "j24_mfe_pos": False,
             "j25_mid_hold": False,
@@ -105,6 +119,8 @@ def build_recipe_table() -> list[dict]:
             "p12_cisd_var": False, "p14_hod_1000": False, "p15_ssl": False,
             "p17_1800_touch": False, "p19_body_gap4": False,
             "s05_micro_break": False, "s09_vah_break": False, "p03_magic_win": False,
+            "release_1000": False, "j20_delayed": False,
+            "smt_pdh": False, "smt_pdl": False, "p18_cvd_div": False, "p18_fakeout": False,
         }
         h69, l69, w = row.get("H"), row.get("L"), row.get("W69")
         levels = None if h69 is None or l69 is None or not w else projections(h69, l69)
@@ -333,6 +349,46 @@ def build_recipe_table() -> list[dict]:
 
         if rth["n"] and rth["high"] is not None and rth["low"] is not None:
             rng_hist.append(rth["high"] - rth["low"])
+        iso = day.isoformat()
+        rec["release_1000"] = iso in folder["1000"]
+        rec["j20_delayed"] = j20_delayed(rec["release_1000"], row.get("reversal_bin"))
+        if prev is not None:
+            nq_pr = bars.window(wall_ns(prev, time(9, 30), 0) // 1_000_000, wall_ns(prev, time(16, 0), 0) // 1_000_000)
+            nq_am_h = am["high"] if am["n"] else None
+            nq_am_l = am["low"] if am["n"] else None
+            pdh_n, pdl_n = nq_pr.get("high"), nq_pr.get("low")
+            for sname, sb in sisters.items():
+                if sb is None or pdh_n is None:
+                    continue
+                spr = sb.window(wall_ns(prev, time(9, 30), 0) // 1_000_000, wall_ns(prev, time(16, 0), 0) // 1_000_000)
+                sam = sb.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
+                if spr["high"] is None or sam["n"] == 0:
+                    continue
+                if r_r04_smt_prior(pdh_n, spr["high"], nq_am_h, sam["high"], side="high"):
+                    rec["smt_pdh"] = True
+                if r_r04_smt_prior(pdl_n, spr["low"], nq_am_l, sam["low"], side="low"):
+                    rec["smt_pdl"] = True
+        on_am = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
+        if on_am["n"] >= 10:
+            p18 = r_p18_ohlc_cvd(on_am["o"], on_am["c"], on_am["v"])
+            running = np.cumsum(p18["delta"])
+            t0930 = wall_ns(day, time(9, 30), 0) // 1_000_000
+            i_am = int(np.searchsorted(on_am["t"], t0930, "left"))
+            if h69 is not None:
+                hits = np.flatnonzero((np.arange(on_am["n"]) >= i_am) & (on_am["h"] > h69))
+                if hits.size:
+                    rec["p18_cvd_div"] = r_f02_grid_div(on_am["h"], running, int(hits[0]), side="high")
+            if not rec["p18_cvd_div"] and l69 is not None:
+                hits = np.flatnonzero((np.arange(on_am["n"]) >= i_am) & (on_am["l"] < l69))
+                if hits.size:
+                    rec["p18_cvd_div"] = r_f02_grid_div(on_am["l"], running, int(hits[0]), side="low")
+            if h69 is not None:
+                ct = on_am["c"]
+                brk = np.flatnonzero((np.arange(on_am["n"]) >= i_am) & (ct > h69))
+                if brk.size:
+                    i = int(brk[0])
+                    i0 = max(i_am, i - 5)
+                    rec["p18_fakeout"] = r_f02_fakeout_grade(float(running[i] - running[i0]))
         if sess["n"]:
             closes.append(sess["close"])
         elif rth["n"]:
@@ -340,4 +396,12 @@ def build_recipe_table() -> list[dict]:
         rows.append(rec)
         prev = day
     save_rows("recipe_flags_F", rows)
+    print(
+        "recipe n="
+        f"{len(rows)} release_1000={sum(bool(r.get('release_1000')) for r in rows)}"
+        f" j20={sum(bool(r.get('j20_delayed')) for r in rows)}"
+        f" smt={sum(bool(r.get('smt_pdh') or r.get('smt_pdl')) for r in rows)}"
+        f" p18={sum(bool(r.get('p18_cvd_div')) for r in rows)}",
+        flush=True,
+    )
     return rows

@@ -65,6 +65,12 @@ class Phase1LiveFixtureTests(unittest.TestCase):
         self.assertEqual(ids[-1], "R-P20")
         self.assertEqual(len(set(ids)), 105)
 
+    def test_cvd_smt_gex_news_are_pass(self):
+        by = {r["id"]: r for r in catalog()}
+        for rid in ("R-J20", "R-F02", "R-R01", "R-R04", "R-P18"):
+            self.assertEqual(by[rid]["impl_fidelity"], "pass", rid)
+        self.assertEqual(by["R-F07"]["impl_fidelity"], "blocked")
+
 
 if __name__ == "__main__":
     unittest.main()

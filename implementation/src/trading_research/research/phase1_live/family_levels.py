@@ -42,7 +42,7 @@ VIX_PATH = Path("/workspace/data/free-sources/context__volatility__normalized/VI
 
 
 def load_red_folder() -> dict[str, set[str]]:
-    """CPI/NFP at 08:30 and FOMC decision dates. There is no 10:00 release table."""
+    """CPI/NFP at 08:30, FOMC dates, and FRED 10:00 ET releases."""
     out = {"0830": set(), "fomc": set(), "1000": set()}
     if CAL_PATH.is_file():
         t = pq.read_table(CAL_PATH, columns=["event_date", "event_type", "event_time_et"])
@@ -57,6 +57,11 @@ def load_red_folder() -> dict[str, set[str]]:
         for d in t.column("event_date").to_pylist():
             if d is not None:
                 out["fomc"].add(d.isoformat() if hasattr(d, "isoformat") else str(d))
+    p1000 = Path("/workspace/implementation/reports/phase1-live/_tables/release_1000_dates.json")
+    if p1000.is_file():
+        import json
+        doc = json.loads(p1000.read_text())
+        out["1000"].update(doc.get("dates") or [])
     return out
 
 
@@ -119,6 +124,12 @@ def _poc_shape(window) -> str | None:
 def build_level_table() -> list[dict]:
     cached = load_rows("level_grid_F")
     if cached and cached[0].get("formula_rev") == 3:
+        folder = load_red_folder()
+        if folder["1000"] and not any(r.get("release_1000") for r in cached):
+            dates = folder["1000"]
+            for r in cached:
+                r["release_1000"] = r["date"] in dates
+            save_rows("level_grid_F", cached)
         return cached
     from trading_research.research.phase1_live.family_env import build_env_table
     from trading_research.research.phase1_live.family_open import build_open_table
@@ -169,7 +180,7 @@ def build_level_table() -> list[dict]:
         rec["edge_clean"] = op.get("edge_clean")
         rec["red_folder_0830"] = iso in folder["0830"]
         rec["fomc_day"] = iso in folder["fomc"]
-        rec["release_1000"] = False
+        rec["release_1000"] = iso in folder["1000"]
         rec["vix"] = vix.get(dates_iso[i - 1]) if i else None
         rec["vix_same_day"] = vix.get(iso)
         rec["vix_band"] = vix_band(rec["vix"])
@@ -451,7 +462,7 @@ def level_fixtures() -> dict:
         {"id": "m05_from_edge", "pass": abs((110 + 0.5 * 20) - 120) < 1e-9, "got": 110 + 0.5 * 20, "expected": 120},
         {"id": "reject_resistance", "pass": got["touch"] is True and got["reject"] is True, "got": [got["touch"], got["reject"]], "expected": [True, True]},
         {"id": "gp_band", "pass": abs(gp_band_impulse(110, 100, down=True)[0] - 105.0) < 1e-9, "got": gp_band_impulse(110, 100, down=True), "expected": (105.0, 106.18)},
-        {"id": "no_1000_calendar", "pass": True, "got": "release_1000 always false", "expected": "no 10:00 table"},
+        {"id": "fred_1000_calendar", "pass": len(load_red_folder()["1000"]) > 0, "got": len(load_red_folder()["1000"]), "expected": "FRED 10:00 dates"},
     ]
     return {"ticket": "levels", "pass": all(c["pass"] for c in cases), "n_cases": len(cases),
             "n_failed": sum(1 for c in cases if not c["pass"]),

@@ -75,9 +75,12 @@ def _join():
     tpo = {r["date"]: r for r in (load_rows("gap_block_tpo_F") or [])}
     flow = {r["date"]: r for r in (load_rows("mbp1_flow_F") or [])}
     from trading_research.research.phase1_live.family_recipes import build_recipe_table
-    from trading_research.research.phase1_live.family_tape import build_tape_table
+    from trading_research.research.phase1_live.family_tape import build_f02_table, build_tape_table
+    from trading_research.research.phase1_live.family_gex import build_gex_table
     recipe = {r["date"]: r for r in (build_recipe_table() or [])}
     tape = {r["date"]: r for r in (build_tape_table() or [])}
+    f02 = {r["date"]: r for r in (build_f02_table() or [])}
+    gex = {r["date"]: r for r in (build_gex_table() or [])}
     clocks = load_rows("clocks_F") or []
     ib = {}
     for r in clocks:
@@ -124,12 +127,16 @@ def _join():
         fl = flow.get(d, {})
         rp = recipe.get(d, {})
         for k, v in rp.items():
-            if k not in m:
+            if k not in m or k in ("release_1000", "j20_delayed", "smt_pdh", "smt_pdl", "p18_cvd_div", "p18_fakeout"):
                 m[k] = v
         tp_flags = tape.get(d, {})
         for k, v in tp_flags.items():
             if k not in m:
                 m[k] = v
+        for src in (f02.get(d, {}), gex.get(d, {})):
+            for k, v in src.items():
+                if k not in m or k in ("f02_divergence", "f02_fakeout", "short_gamma", "below_flip", "net_gex", "flip"):
+                    m[k] = v
         m["absorption_A"] = fl.get("absorption_A")
         m["bigtrade_100ny"] = fl.get("bigtrade")
         m["bigtrade_75ldn"] = fl.get("bigtrade_75ldn")
@@ -209,8 +216,9 @@ def catalog():
     add("R-J19", "Jumbo", "faithful", "pass",
         "PDH/PDL touch given open direction",
         "", "j19")
-    add("R-J20", "Jumbo", "faithful", "gap",
-        "n/a", "10:00 release calendar (inventory has CPI/NFP at 08:30 and FOMC date-only, not 10:00)", None)
+    add("R-J20", "Jumbo", "faithful", "pass",
+        "10:00 FRED release day and first -0.5 touch in 10:00-10:30",
+        "", "j20")
     add("R-J21", "Jumbo", "faithful", "pass",
         "condition class extended (red-folder or w.rel-prior-rth >= 1)",
         "", "j21")
@@ -322,8 +330,9 @@ def catalog():
     add("R-F01", "Flow", "faithful", "pass",
         "AM VWAP ±2SD touch with absorption A at the band",
         "", "f01")
-    add("R-F02", "Flow", "faithful", "blocked",
-        "n/a", "flow.cvd.trade divergence (tape-trusted no)", None)
+    add("R-F02", "Flow", "faithful", "pass",
+        "MBP-1 CVD regular divergence in the 15 min after first AM take of 6-9 H or L. Session-sign flag stays untrusted.",
+        "", "f02")
     add("R-F03", "Flow", "faithful", "pass",
         "AM VWAP, overnight VWAP, and prior VA mid within tR",
         "", "f03")
@@ -373,16 +382,18 @@ def catalog():
         "", "f18")
 
     # Regime
-    add("R-R01", "Regime", "faithful", "gap",
-        "n/a", "value.node.flip / GEX walls (no strike IV; OI top3 is not the flip). Do not use mapped NDX/SPX minutes", None)
+    add("R-R01", "Regime", "faithful", "pass",
+        "QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35; ETF has no 09:25 tape)",
+        "", "r01")
     add("R-R02", "Regime", "faithful", "pass",
         "prior-session VIXCLS close in band 15-18",
         "", "r02")
     add("R-R03", "Regime", "faithful", "pass",
         "open-vs-VA thesis still alive at 12:00",
         "", "r03")
-    add("R-R04", "Regime", "faithful", "blocked",
-        "n/a", "SMT / IØD (flow.smt.* tape-trusted no; do not score flow.smt.pine.3-3)", None)
+    add("R-R04", "Regime", "faithful", "pass",
+        "sister takes PDH/PDL, NQ does not (user SMT, not the saturating S1 hunt)",
+        "", "r04")
 
     # Sires
     add("R-S01", "Sires", "faithful", "pass",
@@ -465,8 +476,9 @@ def catalog():
     add("R-P17", "Pine", "faithful", "pass",
         "18:00 open touched in RTH",
         "", "p17")
-    add("R-P18", "Pine", "faithful", "blocked",
-        "n/a", "flow.cvd.ohlc as trigger", None)
+    add("R-P18", "Pine", "faithful", "pass",
+        "1m OHLC CVD regular divergence in the 15 min after first AM take of 6-9 H or L",
+        "", "p18")
     add("R-P19", "Pine", "faithful", "pass",
         "adjacent body gap >= 4 ticks",
         "", "p19")
@@ -518,6 +530,9 @@ def _preds():
 
     def j10(r):
         return bool(r.get("j10_draw_reach"))
+
+    def j20(r):
+        return bool(r.get("j20_delayed"))
 
     def j15(r):
         return bool(r.get("j15_bigtrade_level"))
@@ -636,14 +651,23 @@ def _preds():
     def a15(r):
         return r.get("ib_path") in ("high-only", "low-only") or bool(r.get("ib_single"))
 
+    def r01(r):
+        return bool(r.get("short_gamma"))
+
     def r02(r):
         return r.get("vix_band") == "15-18"
+
+    def r04(r):
+        return bool(r.get("smt_pdh") or r.get("smt_pdl"))
 
     def r03(r):
         return bool(r.get("r03_thesis_alive"))
 
     def f01(r):
         return bool(r.get("f01_vwap_fade"))
+
+    def f02(r):
+        return bool(r.get("f02_divergence"))
 
     def f03(r):
         return bool(r.get("f03_vwap_conv"))
@@ -759,6 +783,9 @@ def _preds():
     def p17(r):
         return bool(r.get("p17_1800_touch"))
 
+    def p18(r):
+        return bool(r.get("p18_cvd_div"))
+
     def p19(r):
         return bool(r.get("p19_body_gap4"))
 
@@ -860,6 +887,10 @@ def score_all():
             mondays = [r for r in joined if r.get("eligible") and r.get("monday")]
             st = _stats(mondays, lambda r: bool(r.get("nwog_fill")))
             notes = "denominator is Mondays; 16:00 fill not computed (AM 09:30-12:00 overlap only)"
+        elif spec["id"] == "R-J20":
+            days = [r for r in joined if r.get("eligible") and r.get("release_1000")]
+            st = _stats(days, lambda r: bool(r.get("j20_delayed")))
+            notes = "denominator is FRED 10:00 ET release days (ISM-like: JOLTS, Michigan, new homes, factory orders, inventories, construction)"
         elif spec["id"] == "R-G09":
             mondays = [r for r in joined if r.get("eligible") and r.get("monday") and r.get("stacked_asia_london_pdh")]
             if not mondays:
