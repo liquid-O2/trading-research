@@ -13,6 +13,7 @@ from trading_research.research.phase1_live.clocks import CLOCKS, clock_bounds, w
 from trading_research.research.phase1_live.compute import load_rows, save_rows
 from trading_research.research.phase1_live.family_env import _flag_doc
 from trading_research.research.phase1_live.family_open import loc_code, ohlc_vp, value_area
+from trading_research.research.phase1_live.formulas import kz_prior_va
 from trading_research.research.phase1_live.grid import to_ticks
 from trading_research.research.phase1_live.ohlc_index import OHLC1M, load_years, years_for_dates
 from trading_research.research.phase1_live.report import quality_failures, write_report
@@ -119,14 +120,18 @@ def build_value_table():
         dates = [date.fromisoformat(r["date"]) for r in mbp if r.get("date")]
         bars = load_years(OHLC1M, years_for_dates(dates or list(slice_dates(calendar, "F"))))
         delta_map = scan_rth_delta(list(slice_dates(calendar, "F")))
+        prior_vp = {r["date"]: r for r in (load_rows("prior_rth_trade_vp_F") or [])}
+        date_keys = [r["date"] for r in mbp]
         rows = []
-        for r in mbp:
+        for i, r in enumerate(mbp):
             base = f_rows.get(r["date"], {})
             day = date.fromisoformat(r["date"])
             am = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
             rth = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)
             dlt = delta_map.get(r["date"], {})
             dp_max = r.get("dp_max") if r.get("dp_max") is not None else dlt.get("dp_max")
+            prev_iso = date_keys[i - 1] if i else None
+            pv = prior_vp.get(prev_iso, {})
             rows.append({
                 "date": r["date"], "year": r["year"], "eligible": r.get("eligible"),
                 "vp_touch": r.get("VAL") is not None,
@@ -134,13 +139,10 @@ def build_value_table():
                 "absorption_A": r.get("absorption_A"),
                 "bigtrade": r.get("bigtrade"),
                 "overlap": bool(r.get("absorption_A") and r.get("bigtrade")),
-                "kz": bool(
-                    r.get("VAL") is not None and r.get("VAH") is not None and r.get("poc") is not None
-                    and am["n"] > 0
-                    and (
-                        (abs(am["low"] - r["VAL"]) <= 2 * TICK and r["VAL"] != r["poc"])
-                        or (abs(am["high"] - r["VAH"]) <= 2 * TICK and r["VAH"] != r["poc"])
-                    )
+                "kz": kz_prior_va(
+                    am["low"] if am["n"] else None,
+                    am["high"] if am["n"] else None,
+                    pv.get("VAL"), pv.get("VAH"), pv.get("poc"),
                 ),
                 "delta_ne_poc": bool(dlt.get("delta_ne_poc") or (dp_max is not None and r.get("poc") is not None and dp_max != r.get("poc"))),
                 "VAL": r.get("VAL"), "VAH": r.get("VAH"), "poc": r.get("poc"),

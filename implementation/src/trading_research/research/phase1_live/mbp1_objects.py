@@ -556,7 +556,8 @@ def _score_session(session, ev, grid, f_rows, sisters, trades_cvd):
         "iceberg_k15": iceberg_touch_infer(ev, am0, am1, k=1.5),
         "iceberg_k20": iceberg_touch_infer(ev, am0, am1, k=2.0),
         "smt_trade_nq": smt_trade_nq(ev, am0, am1, sisters, day, row),
-        "footprint_stack3": True, "smt_s1": True,
+        "footprint_stack3": bool(footprint_4x(ev, am0, am1)), "smt_s1": bool(smt_trade_nq(ev, am0, am1, sisters, day, row)),
+        "stack3_computed": True,
         "tpo_trade": tpo_trade_visited(ev, am0, rth_end),
         "poc": vp["poc"], "VAL": vp["VAL"], "VAH": vp["VAH"], "vp_n": vp["n"],
         "dp_max": vp.get("dp_max"), "dp_min": vp.get("dp_min"),
@@ -583,7 +584,14 @@ def _score_chunk(path, score_set, grid, f_rows, sisters, trades_cvd):
 
 def build_mbp1_flow_table():
     cached = load_rows("mbp1_flow_F")
-    if cached and cached[0].get("footprint_stack3") and cached[0].get("smt_s1"):
+    if cached and cached[0].get("stack3_computed"):
+        return cached
+    if cached:
+        for rec in cached:
+            rec["footprint_stack3"] = bool(rec.get("footprint_4x"))
+            rec["smt_s1"] = bool(rec.get("smt_trade_nq"))
+            rec["stack3_computed"] = True
+        save_rows("mbp1_flow_F", cached)
         return cached
     from trading_research.research.phase1_live.threshold_grid import discovery_dates, freeze_size_grid, GRID_PATH
     from trading_research.research.phase1_live.mbp1_extract import list_extracted_sessions

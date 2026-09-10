@@ -4,6 +4,7 @@ from pathlib import Path
 import unittest
 
 from trading_research.research.phase1_live.fixtures import run_ticket01_fixtures
+from trading_research.research.phase1_live.formulas import formula_fixtures
 from trading_research.research.phase1_live.mbp1_objects import mbp1_fixtures
 from trading_research.research.phase1_live.grid import outcomes_at_level
 from trading_research.research.phase1_live.recipe_score import catalog
@@ -51,6 +52,11 @@ class Phase1LiveFixtureTests(unittest.TestCase):
         got = outcomes_at_level({"n": 4, "h": h, "l": l, "c": c, "t": t}, 100.0, width=20.0, side=1)
         self.assertTrue(got["touch"])
         self.assertTrue(got["reject"])
+
+    def test_formula_fixtures(self):
+        result = formula_fixtures()
+        failed = [c for g in result["groups"] for c in g["cases"] if not c["pass"]]
+        self.assertTrue(result["pass"], failed)
 
     def test_every_section_b_id_is_catalogued(self):
         ids = [r["id"] for r in catalog()]

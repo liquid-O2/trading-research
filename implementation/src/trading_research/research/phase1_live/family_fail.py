@@ -56,7 +56,7 @@ def _failback(box, out, k_min=30):
 
 def build_fail_table():
     cached = load_rows("fail_F")
-    if cached and cached[0].get("prior_is_prior") and cached[0].get("aplus_box") == "range.6-9.published":
+    if cached and cached[0].get("aplus_box") == "traded":
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -76,7 +76,6 @@ def build_fail_table():
             "nyam_early": 0, "aplus": False, "tdo_touch": False, "nwog_fill": False,
             "prior_is_prior": True,
         }
-        aplus = False
         for cid in BOXES:
             spec = CLOCKS[cid]
             box_day = prev if cid == "prior.rth" else day
@@ -95,8 +94,6 @@ def build_fail_table():
             sweep, fb, _ = _failback(box, out)
             rec[f"sweep_{cid}"] = sweep
             rec[f"fail_{cid}"] = fb
-            if cid == "range.6-9.published":
-                aplus = sweep
         tdo = bars.window(wall_ns(day, time(0, 0), 0) // 1_000_000, wall_ns(day, time(0, 1), 0) // 1_000_000)
         rec["tdo"] = tdo["open"]
         am = bars.window(clock_bounds(day, CLOCKS["range.6-9.published"])["outcome_start_ms"],
@@ -129,8 +126,11 @@ def build_fail_table():
             if a is not None and b is not None and am["n"]:
                 lo, hi = min(a, b), max(a, b)
                 rec["nwog_fill"] = bool(np.any(am["h"] >= lo) and np.any(am["l"] <= hi))
-        rec["aplus"] = aplus
-        rec["aplus_box"] = "range.6-9.published"
+        rec["aplus"] = bool(
+            rec.get("sweep_range.gb.nyam") or rec.get("sweep_range.gb.asia") or rec.get("sweep_range.gb.10-11")
+        )
+        rec["aplus_box"] = "traded"
+        rec["aplus_69"] = bool(rec.get("sweep_range.6-9.published"))
         rec["fail_any"] = any(rec.get(f"fail_{cid}") for cid in BOXES)
         rows.append(rec)
         prev = day

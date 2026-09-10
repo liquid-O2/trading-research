@@ -77,7 +77,8 @@ def _clock_row(day, spec, bars, faithful_path):
 def build_clock_table() -> list[dict]:
     cached = load_rows("clocks_F")
     have = {r.get("clock") for r in cached}
-    if cached and "range.midnight.0000-0030" in have and "range.on.1800-0930" in have:
+    hour_ok = any(r.get("hour_clock") for r in cached if r.get("clock") == "range.gb.hour")
+    if cached and "range.midnight.0000-0030" in have and "range.on.1800-0930" in have and hour_ok:
         return cached
     f_rows = load_rows("sessions_F")
     faithful = {r["date"]: r.get("path_class") for r in f_rows}
@@ -98,10 +99,10 @@ def build_clock_table() -> list[dict]:
 
 def _gb_hour_rows(day, bars, faithful_path):
     rows = []
-    for step in range(0, 151, 5):
-        end = wall_ns(day, time(9, 30), 0) + step * 60 * 1_000_000_000
-        start = end - 60 * 60 * 1_000_000_000
-        out_end = wall_ns(day, time(12, 0), 0)
+    for hr in range(9, 16):
+        start = wall_ns(day, time(hr, 0), 0)
+        end = wall_ns(day, time(hr + 1, 0), 0)
+        out_end = wall_ns(day, time(min(hr + 2, 17), 0), 0)
         box = bars.window(start // 1_000_000, end // 1_000_000)
         out = bars.window(end // 1_000_000, out_end // 1_000_000)
         failure = box["high"] is None or box["low"] is None or box["high"] <= box["low"]
@@ -116,7 +117,8 @@ def _gb_hour_rows(day, bars, faithful_path):
             "date": day.isoformat(),
             "year": str(day.year),
             "clock": "range.gb.hour",
-            "step_min": step,
+            "step_min": hr * 60,
+            "hour_clock": True,
             "eligible": (not drop) and (not failure),
             "failure": failure,
             "drop_coverage": drop,

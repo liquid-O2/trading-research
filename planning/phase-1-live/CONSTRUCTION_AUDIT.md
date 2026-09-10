@@ -29,10 +29,11 @@ Dated spike check used NY session 2024-01-02 on `cov.nq.ohlc1s` for `range.6-9.p
 - SessionStat `env.ss.avgHL60` is one-sided from the 09:00 open.
 - CVD trade resets 18:00 and samples at 12:00.
 - SMT OHLC uses S1 Asia/London/6-9 hunt.
-- Value delta is aggressor delta vs POC, not a VP alias. VWAP uses 09:30-12:00 only. KZ is an HVN local max.
+- Value delta is aggressor delta vs POC, not a VP alias. VWAP uses 09:30-12:00 only. KZ is the AM extreme within 2 ticks of the *prior* session VAL/VAH, not the same-session full-RTH VA.
 - FVG is first 5m wick gap on the 09:00 hour. 3m TBR sweep is new-extreme continuation. CISD is 15m close-through, not the 3m sweep.
 - NWOG is Friday close vs Sunday 18:00. Prior-RTH fail box uses the previous session. Iceberg reports are not-measurable.
 - MBP-1 tape objects are scored from QuantPad `cme__nq-continuous-futures__mbp-1` week extracts. `incomplete_spans` requires a readable parquet whose row count matches the json. Extract default is 20 workers on this 21 vCPU / 80 GiB box. Absorption/footprint/iceberg inner loops are numba or bincount. The trades-tape fallback is gone.
+- `vol.rv20` / `gk20` / `har` / terciles use only prior sessions. VIX gate uses the prior VIXCLS close. Absorption candle is trailing SMA14 at a 6-9 level on 3m bars. Previous-hour boxes are completed clock hours. `footprint_stack3` equals `footprint_4x`. `smt_s1` equals `smt_trade_nq`. A+ is a sweep of NYAM, Asia, or the 10-11 box, not the 6-9 H/L.
 
 ## Table
 
@@ -54,7 +55,7 @@ range | range.8-9 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fix
 range | range.asia.2000-2030 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
 range | range.gb.10-11 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
 range | range.gb.asia | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
-range | range.gb.hour | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
+range | range.gb.hour | pass | pass | 0 | clean | completed clock hours, not 5-minute steps
 range | range.gb.london | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
 range | range.gb.nyam | pass | pass | 0 | clean | 09:00-10:00, outcomes from 10:00; nyam_violation=0
 range | range.ib | pass | pass | 0 | clean | 09:30-10:30; 2024-01-02 IB high is not ETH-inclusive
@@ -112,15 +113,15 @@ env | env.ss.medHL60 | pass | pass | 0 | n/a | 09:00 open ± 60-session median o
 env | env.ss.minavg60 | pass | pass | 0 | n/a | 09:00 open ± min(mean up, mean down)
 env | pz.approx.A | pass | pass | 0 | n/a | T1-T4 adjacent bands from 500-session history; primary is T1 reach (excursion >= p50); 573/647
 env | pz.learned | unbuilt | pass | 0 | n/a | Phase 3 learned P-zone; deferred on purpose
-vol | vol.gk20 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
-vol | vol.har | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
+vol | vol.gk20 | pass | pass | 0 | n/a | prior-session-only mean of gk
+vol | vol.har | pass | pass | 0 | n/a | prior-session-only HAR weights 0.5/0.3/0.2 on rv history
 vol | vol.iv.atm | not-measurable | pass | 0 | n/a | ATM IV not built as a session object
-vol | vol.rv20 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
+vol | vol.rv20 | pass | pass | 0 | n/a | prior-session-only rv20/gk20/har; terciles exclude the session being scored
 vol | vol.skew25 | unbuilt | none | 0 | n/a | SPEC faithful; no report
 vol | vol.vx.slope | unbuilt | none | 0 | n/a | SPEC faithful; no report
 vol | vol.yz20 | unbuilt | none | 0 | n/a | SPEC faithful; no report
 flow | flow.absorption.A | pass | pass | 0 | n/a | 2m q90 at 6-9 H/L, <=2 ticks, 0.25R / 15m
-flow | flow.absorption.candle.jumbo | pass | pass | 0 | n/a | AM 1m small body (body/range <=0.4) and vol >= 2.5 x SMA14
+flow | flow.absorption.candle.jumbo | pass | pass | 0 | n/a | 3m trailing SMA14 at a 6-9 level, body/range <=0.3, k=2.5
 flow | flow.absorption.A.q75 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.absorption.A.w1m | pass | pass | 0 | n/a | 1m roll vs own-window q90, not frozen 2m; 37/429, 36 disagreements vs A
 flow | flow.absorption.A.w5m | pass | pass | 0 | n/a | 5m roll vs own-window q90, not frozen 2m; 38/429, 43 disagreements vs A
@@ -154,7 +155,7 @@ value | env.vwap.rth.sd2 | pass | pass | 0 | n/a | 09:30-12:00 HLC3 VWAP ±2SD, 
 value | value.dealer.inventory | not-measurable | pass | 0 | n/a | not-measurable as printed
 value | value.delta.rth.trade | pass | pass | 0 | n/a | RTH aggressor delta vs POC; 45 disagreements with VP
 value | value.hidden.book | not-measurable | pass | 0 | n/a | not-measurable as printed
-value | value.kz | pass | pass | 0 | n/a | AM extreme within 2 ticks of MBP-1 VAL/VAH, not POC; 17/429, 412 disagreements vs VP touch
+value | value.kz | pass | pass | 0 | n/a | AM extreme within 2 ticks of prior-session VAL/VAH, not same-session full-RTH VA
 value | value.vp.rth.ohlc1m | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 value | value.vp.rth.trade | pass | pass | 0 | n/a | RTH 09:30-16:00 trade VP; VAL present flag
 fail | fail.box.6-9.gb.c5 | pass | pass | 0 | n/a | 06:00-09:00 box, wick then 5m close-back k=30
@@ -165,7 +166,7 @@ fail | fail.box.gb.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; le
 fail | fail.box.gb.nyam.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.jumbo.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.prior-rth.gb.c5 | pass | pass | 0 | n/a | prior session 09:30-16:00 PDH/PDL, AM fail-back
-fail | label.aplus | pass | pass | 0 | n/a | 6-9 sweep only, not OR of every box; 633/647
+fail | label.aplus | pass | pass | 0 | n/a | sweep of NYAM, Asia, or 10-11 (traded range), not 6-9
 fail | loc.gp | pass | pass | 0 | n/a | NYAM 0.382-0.5 band, outcomes from 10:00
 fail | lvl.tdo.c5 | pass | pass | 0 | n/a | wick of 00:00 print then 5m close back through
 fail | lvl.0930open.below | pass | pass | 0 | n/a | sweep below 09:30 open then reclaim by 09:45

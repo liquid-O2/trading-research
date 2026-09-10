@@ -112,17 +112,19 @@ def _tpo_poor(rth) -> bool:
 
 
 def _amt_open_label(first30, val, vah, open_px) -> str | None:
-    if first30["n"] == 0 or open_px is None or val is None or vah is None:
+    if first30["n"] == 0 or open_px is None:
         return None
+    from trading_research.research.phase1_live.formulas import amt_drive
+    if amt_drive(first30, open_px):
+        return "drive"
     hi, lo, close = first30["high"], first30["low"], first30["close"]
-    if open_px > vah:
-        return "drive" if lo is not None and lo > vah else "test-drive"
-    if open_px < val:
-        return "drive" if hi is not None and hi < val else "test-drive"
-    wick_out = (hi is not None and hi > vah) or (lo is not None and lo < val)
-    close_in = close is not None and val <= close <= vah
-    if wick_out and close_in:
+    crossed = bool(np.any(first30["c"] > open_px) and np.any(first30["c"] < open_px))
+    if crossed:
         return "rejection-reverse"
+    if val is not None and vah is not None:
+        touched = (hi is not None and (hi >= vah - 2 * 0.25 or (lo is not None and lo <= val + 2 * 0.25)))
+        if touched:
+            return "test-drive"
     return "auction"
 
 
@@ -149,7 +151,7 @@ def _amt_day_label(rth, path_class, val, vah) -> str | None:
 
 def build_gap_table():
     cached = load_rows("gap_block_tpo_F")
-    if cached and cached[0].get("clock_tf") == 5:
+    if cached and cached[0].get("drive_skip_open"):
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
@@ -183,7 +185,7 @@ def build_gap_table():
             "amt_day": amt_day_label == "trend",
             "amt_open_label": amt_open_label,
             "amt_day_label": amt_day_label,
-            "clock_hour": 9, "clock_tf": 5,
+            "clock_hour": 9, "clock_tf": 5, "drive_vs_open": True, "drive_skip_open": True,
             "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
             "leakage": 0, "failure": row["failure"], "drop_coverage": row["drop_coverage"],
             "missing_bars": row["missing_1s"], "non_touch_m05": row["non_touch_m05"],

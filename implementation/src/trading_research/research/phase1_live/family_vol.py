@@ -26,7 +26,7 @@ def _gk(o, h, l, c):
 
 def build_vol_table():
     cached = load_rows("vol_F")
-    if cached:
+    if cached and cached[0].get("rv20_excludes_self"):
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -45,6 +45,11 @@ def build_vol_table():
             lr = np.diff(np.log(px))
             rv = float(np.sqrt(np.sum(lr * lr)))
         gk = None if sess["n"] == 0 else _gk(sess["open"], sess["high"], sess["low"], sess["close"])
+        rv20 = float(np.mean(rv_hist[-20:])) if len(rv_hist) >= 5 else None
+        gk20 = float(np.mean(gk_hist[-20:])) if len(gk_hist) >= 5 else None
+        har = None
+        if len(rv_hist) >= 22:
+            har = 0.5 * rv_hist[-1] + 0.3 * float(np.mean(rv_hist[-5:])) + 0.2 * float(np.mean(rv_hist[-22:]))
         if rv is not None:
             rv_hist.append(rv)
         if gk is not None:
@@ -56,11 +61,6 @@ def build_vol_table():
             yz_o.append(math.log(max(sess["open"], 1e-9) / max(prev_c, 1e-9)))
             yz_c.append(math.log(max(sess["close"], 1e-9) / max(sess["open"], 1e-9)))
             yz_rs.append(_gk(sess["open"], sess["high"], sess["low"], sess["close"]) or 0.0)
-        rv20 = float(np.mean(rv_hist[-20:])) if len(rv_hist) >= 5 else None
-        gk20 = float(np.mean(gk_hist[-20:])) if len(gk_hist) >= 5 else None
-        har = None
-        if len(rv_hist) >= 22:
-            har = 0.5 * rv_hist[-1] + 0.3 * float(np.mean(rv_hist[-5:])) + 0.2 * float(np.mean(rv_hist[-22:]))
         rows.append({
             "date": row["date"], "year": row["year"], "eligible": row["eligible"] and rv20 is not None,
             "rv": rv, "rv20": rv20, "gk": gk, "gk20": gk20, "har": har,
@@ -69,6 +69,7 @@ def build_vol_table():
             "leakage": 0, "failure": rv is None, "drop_coverage": row["drop_coverage"],
             "missing_bars": row["missing_1s"], "non_touch_m05": row["non_touch_m05"],
             "rv20_high": False,
+            "rv20_excludes_self": True,
         })
     vals = [r["rv20"] for r in rows if r.get("rv20") is not None]
     cuts = np.quantile(vals, [1 / 3, 2 / 3]) if vals else (None, None)

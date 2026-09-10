@@ -19,6 +19,19 @@ from trading_research.research.phase1_live.grid import (
 )
 from trading_research.research.phase1_live.ohlc_index import OHLC1M, load_years, years_for_dates
 from trading_research.research.phase1_live.report import quality_failures, write_report
+from trading_research.research.phase1_live.formulas import (
+    absorption_candle_at_levels,
+    ev_vix16_zones,
+    gp_band_impulse,
+    hour_fail_count,
+    midretrace_hold,
+    purged_overnight,
+    pz_edge_setup,
+    reclaim_5m,
+    resample_ohlcv,
+    tdo_hit,
+    vix_band,
+)
 from trading_research.research.phase1_live.sessions import projections
 from trading_research.research.phase1_live.slice import load_calendar, slice_dates
 from trading_research.research.phase1_live.stats import rate_block
@@ -103,16 +116,9 @@ def _poc_shape(window) -> str | None:
     return "D"
 
 
-def _gp_band(low, high):
-    if low is None or high is None or high <= low:
-        return None, None
-    w = high - low
-    return low + 0.382 * w, low + 0.5 * w
-
-
 def build_level_table() -> list[dict]:
     cached = load_rows("level_grid_F")
-    if cached and "m05_reject" in cached[0] and "amt_80_close" in cached[0]:
+    if cached and cached[0].get("formula_rev") == 3:
         return cached
     from trading_research.research.phase1_live.family_env import build_env_table
     from trading_research.research.phase1_live.family_open import build_open_table
@@ -129,7 +135,9 @@ def build_level_table() -> list[dict]:
     by_date = {r["date"]: r for r in f_rows}
     rows = []
     prev = None
-    for day in dates:
+    prev_settle = None
+    dates_iso = [d.isoformat() for d in dates]
+    for i, day in enumerate(dates):
         row = by_date[day.isoformat()]
         op = open_rows.get(day.isoformat(), {})
         env = env_rows.get(day.isoformat(), {})
@@ -162,20 +170,10 @@ def build_level_table() -> list[dict]:
         rec["red_folder_0830"] = iso in folder["0830"]
         rec["fomc_day"] = iso in folder["fomc"]
         rec["release_1000"] = False
-        rec["vix"] = vix.get(iso)
-        rec["vix_band"] = None
-        if rec["vix"] is not None:
-            x = rec["vix"]
-            if x < 13:
-                rec["vix_band"] = "lt13"
-            elif x < 15:
-                rec["vix_band"] = "13-15"
-            elif x < 18:
-                rec["vix_band"] = "15-18"
-            elif x < 20:
-                rec["vix_band"] = "18-20"
-            else:
-                rec["vix_band"] = "gt20"
+        rec["vix"] = vix.get(dates_iso[i - 1]) if i else None
+        rec["vix_same_day"] = vix.get(iso)
+        rec["vix_band"] = vix_band(rec["vix"])
+        rec["formula_rev"] = 3
 
         rec.update({
             "wick_high": False, "wick_low": False, "m05_touch": False, "m05_reject": False,
@@ -270,12 +268,25 @@ def build_level_table() -> list[dict]:
             band = open_px * (rec["vix"] / 16.0) / 100.0
             rec["ev_vix16_inside"] = (am["high"] <= open_px + band) and (am["low"] >= open_px - band)
             rec["ev_vix16_reach"] = am["high"] >= open_px + band or am["low"] <= open_px - band
+        rec["p16_inside"] = False
+        sess_p16 = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)
+        if rec["vix"] is not None and prev_settle is not None and sess_p16["n"]:
+            zones = ev_vix16_zones(prev_settle, rec["vix"])
+            up = zones["up_1.0"]
+            dn = zones["dn_1.0"]
+            rec["p16_inside"] = sess_p16["high"] <= up[1] and sess_p16["low"] >= dn[0]
+            rec["p16_up_lo"], rec["p16_up_hi"] = up
+            rec["p16_dn_lo"], rec["p16_dn_hi"] = dn
 
-        gp_lo, gp_hi = _gp_band(nyam["low"], nyam["high"])
-        if gp_lo is not None and after_nyam["n"]:
-            rec["gp_touch"] = bool(np.any((after_nyam["l"] <= gp_hi) & (after_nyam["h"] >= gp_lo)))
-            mid = (gp_lo + gp_hi) / 2.0
-            rec["gp_reject"] = outcomes_at_level(after_nyam, mid, width=(gp_hi - gp_lo) or 1.0, side=1)["reject"] or outcomes_at_level(after_nyam, mid, width=(gp_hi - gp_lo) or 1.0, side=-1)["reject"]
+        gp = None
+        if nyam["high"] is not None and nyam["low"] is not None and nyam["high"] > nyam["low"]:
+            down = (nyam["close"] or nyam["open"] or 0) <= (nyam["open"] or 0)
+            gp = gp_band_impulse(nyam["high"], nyam["low"], down=down)
+        if gp is not None and after_nyam["n"]:
+            rec["gp_touch"] = bool(np.any((after_nyam["l"] <= gp[1]) & (after_nyam["h"] >= gp[0])))
+            rec["gp_reject"] = outcomes_at_level(
+                after_nyam, gp[0], width=(gp[1] - gp[0]) or 1.0, side=1 if (nyam["close"] or 0) <= (nyam["open"] or 0) else -1,
+            )["reject"]
 
         tdo_w = bars.window(wall_ns(day, time(0, 0), 0) // 1_000_000, wall_ns(day, time(0, 1), 0) // 1_000_000)
         tdo = tdo_w["open"]
@@ -300,13 +311,8 @@ def build_level_table() -> list[dict]:
                         rec["tdo_c5"] = True
                         break
 
-        if open_px is not None:
-            first15 = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(9, 45), 0) // 1_000_000)
-            if first15["n"] >= 3:
-                swept_low = np.any(first15["l"] < open_px - 2 * TICK)
-                if swept_low:
-                    idx = int(np.flatnonzero(first15["l"] < open_px - 2 * TICK)[0])
-                    rec["open0930_below_reclaim"] = bool(np.any(first15["c"][idx + 1:] >= open_px))
+        if open_px is not None and am["n"]:
+            rec["open0930_below_reclaim"] = reclaim_5m(am, open_px, side=-1)
 
         pdh, pdl = row.get("prior_rth_high"), row.get("prior_rth_low")
         if overnight["n"] and pdh is not None:
@@ -320,20 +326,15 @@ def build_level_table() -> list[dict]:
             xs = np.array([pdh, asia_h, lon_h], dtype=np.float64)
             rec["stacked_asia_london_pdh"] = float(xs.max() - xs.min()) <= 0.05 * (w or 1.0)
 
-        # hour-box fail-backs 09:30-12:00 at 5-minute steps
-        hour_n = 0
-        for step in range(0, 151, 5):
-            end = wall_ns(day, time(9, 30), 0) + step * 60 * 1_000_000_000
-            start = end - 60 * 60 * 1_000_000_000
-            box = bars.window(start // 1_000_000, end // 1_000_000)
-            out = bars.window(end // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
-            if box["high"] is None or out["n"] < 5:
-                continue
-            ht, lt, ct, t = to_ticks(out["h"]), to_ticks(out["l"]), to_ticks(out["c"]), out["t"]
-            sweep, fb = failback_wick_c5(ht, lt, ct, t, int(round(box["high"] / TICK)), int(round(box["low"] / TICK)))
-            if fb:
-                hour_n += 1
-        rec["hour_fail_n"] = hour_n
+        hour_boxes, hour_outs = [], []
+        for hr in range(9, 16):
+            start = wall_ns(day, time(hr, 0), 0)
+            end = wall_ns(day, time(hr + 1, 0), 0)
+            out_end = wall_ns(day, time(min(hr + 2, 17), 0), 0)
+            hour_boxes.append(bars.window(start // 1_000_000, end // 1_000_000))
+            hour_outs.append(bars.window(end // 1_000_000, out_end // 1_000_000))
+        rec["hour_fail_n"] = hour_fail_count(hour_boxes, hour_outs)
+        rec["hour_box_n"] = 7
 
         ten11 = bars.window(*[clock_bounds(day, CLOCKS["range.gb.10-11"])[k] for k in ("start_ms", "end_ms")])
         ten11_out = bars.window(*[clock_bounds(day, CLOCKS["range.gb.10-11"])[k] for k in ("outcome_start_ms", "outcome_end_ms")])
@@ -371,11 +372,12 @@ def build_level_table() -> list[dict]:
                 rec["tpo_excess_hold"] = top_hits >= 2 or bot_hits >= 2
                 rec["tpo_single_fill"] = (top_hits == 1 or bot_hits == 1) and am["n"] > 0
 
-        if am["n"] >= 20:
-            body = np.abs(am["c"] - am["o"])
-            rng = np.maximum(am["h"] - am["l"], TICK)
-            sma = np.convolve(am["v"], np.ones(14) / 14.0, mode="same")
-            rec["absorption_candle"] = bool(np.any((body / rng <= 0.4) & (am["v"] >= 2.5 * sma)))
+        b3 = resample_ohlcv(am, 3) if am["n"] else None
+        if b3 is not None and levels and "v" in b3:
+            lvls = [h, l, levels["EQ"], levels["Q25"], levels["Q75"], levels["m05_high"], levels["m05_low"]]
+            rec["absorption_candle"] = absorption_candle_at_levels(
+                b3["o"], b3["h"], b3["l"], b3["c"], b3["v"], lvls, body_frac=0.3, k=2.5, w69=w,
+            )
 
         rec["onh_touch"] = bool(overnight["high"] is not None and am["n"] and np.any(am["h"] >= overnight["high"]))
         rec["onl_touch"] = bool(overnight["low"] is not None and am["n"] and np.any(am["l"] <= overnight["low"]))
@@ -397,17 +399,42 @@ def build_level_table() -> list[dict]:
         rec["model_b"] = op.get("outside_both") or (row.get("path_class") in ("high-only", "low-only"))
         rec["extended"] = bool(row.get("extended"))
         rec["purged"] = bool(row.get("purged"))
+        rec["purged_source"] = purged_overnight(
+            row.get("asia_high"), row.get("asia_low"), row.get("london_high"), row.get("london_low"),
+            row.get("H"), row.get("L"),
+        )
         rec["path_class"] = row.get("path_class")
         rec["day_type"] = row.get("day_type")
         rec["midretrace"] = bool(row.get("midretrace"))
+        rec["midretrace_hold_1000"] = False
+        br = None
+        if row.get("path_class") == "high-only":
+            br = row.get("first_high_break_ms")
+        elif row.get("path_class") == "low-only":
+            br = row.get("first_low_break_ms")
+        if levels and am["n"] and br is not None:
+            cutoff = wall_ns(day, time(10, 0), 0) // 1_000_000
+            rec["midretrace_hold_1000"] = midretrace_hold(
+                am["c"], am["t"], levels["EQ"], br, hold_min=15, cutoff_ms=cutoff,
+            )
         rec["judas_m05"] = bool(row.get("judas_m05"))
         rec["open_cell"] = op.get("open_cell")
         rec["in_value"] = bool(op.get("in_value"))
         rec["rvol_ge_1"] = bool(op.get("rvol_ge_1"))
         rec["w_rel"] = row.get("w_rel_prior_rth")
+        rec["pz_edge_setup"] = pz_edge_setup(
+            env.get("pz_lo"), env.get("pz_hi"), row.get("L"), row.get("open"), am["low"] if am["n"] else None,
+        )
+        ny0816 = bars.window(wall_ns(day, time(8, 0), 0) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)
+        rec["tdo_touch_ny"] = tdo_hit(ny0816, tdo)
 
         rows.append(rec)
         prev = day
+        settle_w = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(17, 0), 0) // 1_000_000)
+        if settle_w["n"]:
+            prev_settle = settle_w["close"]
+        elif rth["n"]:
+            prev_settle = rth["close"]
     save_rows("level_grid_F", rows)
     return rows
 
@@ -423,7 +450,7 @@ def level_fixtures() -> dict:
     cases = [
         {"id": "m05_from_edge", "pass": abs((110 + 0.5 * 20) - 120) < 1e-9, "got": 110 + 0.5 * 20, "expected": 120},
         {"id": "reject_resistance", "pass": got["touch"] is True and got["reject"] is True, "got": [got["touch"], got["reject"]], "expected": [True, True]},
-        {"id": "gp_band", "pass": abs(_gp_band(100, 200)[0] - 138.2) < 0.05, "got": _gp_band(100, 200), "expected": (138.2, 150)},
+        {"id": "gp_band", "pass": abs(gp_band_impulse(110, 100, down=True)[0] - 105.0) < 1e-9, "got": gp_band_impulse(110, 100, down=True), "expected": (105.0, 106.18)},
         {"id": "no_1000_calendar", "pass": True, "got": "release_1000 always false", "expected": "no 10:00 table"},
     ]
     return {"ticket": "levels", "pass": all(c["pass"] for c in cases), "n_cases": len(cases),

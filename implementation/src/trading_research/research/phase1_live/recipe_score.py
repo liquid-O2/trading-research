@@ -147,10 +147,10 @@ def catalog():
         "09:30 open reaches -0.5 before 09:40",
         "", "j02")
     add("R-J03", "Jumbo", "faithful", "pass",
-        "single-break path class on extended overnight, EQ retrace",
+        "single-break on extended overnight, EQ retrace with h=15 by 10:00",
         "", "j03")
     add("R-J04", "Jumbo", "faithful", "pass",
-        "purged single-break reach of 1.0 / 1.33 from 6-9 edge",
+        "overnight Asia and London both swept by 09:30, single-break reach of 1.0",
         "", "j04")
     add("R-J05", "Jumbo", "faithful", "pass",
         "single-break midretrace to EQ / range open",
@@ -173,13 +173,13 @@ def catalog():
         "SessionStat avgHL60 reach (median and min-average are named variants)",
         "", "j11")
     add("R-J12", "Jumbo", "faithful", "pass",
-        "P-zone T1 reach with 6-9 overlap and Model A",
+        "P-zone T1 reach with band overlapping 6-9 L, low > OP, Model A, reject at -0.5",
         "", "j12")
     add("R-J13", "Jumbo", "faithful", "pass",
         "env.ev.mean60 reach; reject is not a separate EV function, reach is the sourced working-level event",
         "", "j13")
     add("R-J14", "Jumbo", "faithful", "pass",
-        "absorption candle (body/range <=0.4 and vol >= 2.5 x SMA14) in AM",
+        "3m absorption candle at a 6-9 level, trailing SMA14, body/range <=0.3, k=2.5",
         "", "j14")
     add("R-J15", "Jumbo", "faithful", "gap",
         "n/a", "flow.bigtrade.100ny/75ldn at the TBR level (session print flag is not at-level)", None)
@@ -213,10 +213,10 @@ def catalog():
         "Asia 20:00-00:00 wick then 5m close-back 00:00-06:00",
         "", "g02")
     add("R-G03", "Green Bird", "faithful", "pass",
-        "last-completed-hour box fail-back, any 5m step 09:30-12:00",
+        "last completed clock-hour box fail-back",
         "", "g03")
     add("R-G04", "Green Bird", "faithful", "pass",
-        "sweep below 09:30 open then reclaim by 09:45",
+        "sweep below 09:30 open then 5m close reclaim",
         "", "g04")
     add("R-G05", "Green Bird", "faithful", "pass",
         "TDO wick then 5m close back through midnight open",
@@ -225,7 +225,7 @@ def catalog():
         "Monday NWOG fill by 12:00 (Friday 16:00 close vs Sunday 18:00 open)",
         "", "g06")
     add("R-G07", "Green Bird", "faithful", "pass",
-        "touch of NYAM 50-61.8% golden pocket after 10:00",
+        "touch of NYAM 50-61.8% golden pocket after 10:00, measured from impulse end",
         "", "g07")
     add("R-G08", "Green Bird", "faithful", "pass",
         "overnight sweep of PDH/PDL then close back through before 09:30",
@@ -237,8 +237,8 @@ def catalog():
         "NYAM fail-back plus 10-11 fail-back (fade count >= 2)",
         "", "g10")
     add("R-G11", "Green Bird", "faithful", "pass",
-        "label.aplus = 6-9 wick sweep observed",
-        "saturates 0.978; locked A+ definition is 6-9 sweep only, not a trigger", "g11")
+        "label.aplus = sweep of the traded range (NYAM, Asia, or previous hour)",
+        "", "g11")
 
     # AMT
     add("R-A01", "AMT", "faithful", "gap",
@@ -261,7 +261,7 @@ def catalog():
     add("R-A09", "AMT", "faithful", "gap",
         "n/a", "b.c1 through both VA edges with no hold inside", None)
     add("R-A10", "AMT", "faithful", "pass",
-        "AMT open type is drive (first 30m vs prior VA)",
+        "AMT open type is drive (first 30m never trades back through the 09:30 open)",
         "", "a10")
     add("R-A11", "AMT", "faithful", "gap",
         "next-session path class by prior profile shape",
@@ -326,7 +326,7 @@ def catalog():
     add("R-R01", "Regime", "faithful", "gap",
         "n/a", "value.node.flip / GEX walls (no strike IV; OI top3 is not the flip). Do not use mapped NDX/SPX minutes", None)
     add("R-R02", "Regime", "faithful", "pass",
-        "VIX daily band 15-18 (lesson sweet spot)",
+        "prior-session VIXCLS close in band 15-18",
         "", "r02")
     add("R-R03", "Regime", "faithful", "gap",
         "n/a", "thesis validity box", None)
@@ -380,14 +380,14 @@ def catalog():
     add("R-P12", "Pine", "faithful", "gap",
         "n/a", "HTF sweep + CISD screener body/wick/close variants", None)
     add("R-P13", "Pine", "faithful", "pass",
-        "midnight-open (TDO) traded through in 09:30-12:00",
+        "midnight-open (TDO) traded through in 08:00-16:00",
         "", "p13")
     add("R-P14", "Pine", "faithful", "gap",
         "n/a", "hod_lod_time 10:00 checkpoint", None)
     add("R-P15", "Pine", "faithful", "gap",
         "n/a", "env.pine.sessionstat / manipulation-distribution envelopes", None)
     add("R-P16", "Pine", "faithful", "pass",
-        "AM excursion inside VIX/16 band from 09:30 open",
+        "18:00-16:00 inside log-space VIX/16 a/b 1.0 zone from prior settle and prior VIX",
         "", "p16")
     add("R-P17", "Pine", "faithful", "gap",
         "n/a", "value.vp.rth.ohlc1m (RTH 1m OHLC VP with VA outcomes) and lvl.1800open", None)
@@ -408,10 +408,10 @@ def _preds():
         return bool(r.get("open_to_m05_before_0940"))
 
     def j03(r):
-        return bool(r.get("extended") and r.get("path_class") in ("high-only", "low-only") and r.get("midretrace"))
+        return bool(r.get("extended") and r.get("path_class") in ("high-only", "low-only") and r.get("midretrace_hold_1000"))
 
     def j04(r):
-        return bool(r.get("purged") and r.get("path_class") in ("high-only", "low-only") and r.get("ext100_reach"))
+        return bool(r.get("purged_source") and r.get("path_class") in ("high-only", "low-only") and r.get("ext100_reach"))
 
     def j05(r):
         return bool(r.get("path_class") in ("high-only", "low-only") and r.get("midretrace"))
@@ -432,7 +432,7 @@ def _preds():
         return bool(r.get("ss_reach"))
 
     def j12(r):
-        return bool(r.get("model_a") and r.get("pz_t1_reach") and r.get("m05_reject"))
+        return bool(r.get("model_a") and r.get("pz_t1_reach") and r.get("m05_reject") and r.get("pz_edge_setup"))
 
     def j13(r):
         return bool(r.get("in_value") and r.get("ev_reach_mean60"))
@@ -501,10 +501,10 @@ def _preds():
         return r.get("ib_path") in ("high-only", "low-only") or bool(r.get("ib_single"))
 
     def p13(r):
-        return bool(r.get("tdo_touch"))
+        return bool(r.get("tdo_touch_ny"))
 
     def p16(r):
-        return bool(r.get("ev_vix16_inside"))
+        return bool(r.get("p16_inside"))
 
     return {k: v for k, v in locals().items() if callable(v)}
 
@@ -564,27 +564,30 @@ def score_all():
         elif spec["id"] == "R-G03":
             elig = [r for r in joined if r.get("eligible")]
             k = int(sum(r.get("hour_fail_n") or 0 for r in elig))
-            n = 31 * len(elig)
+            n = int(sum(r.get("hour_box_n") or 7 for r in elig))
             primary = rate_block(k, n)
-            flags = np.array([float(r.get("hour_fail_n") or 0) / 31.0 for r in elig], dtype=np.float64)
+            flags = np.array([
+                float(r.get("hour_fail_n") or 0) / float(r.get("hour_box_n") or 7)
+                for r in elig
+            ], dtype=np.float64)
             dates = [r["date"] for r in elig]
             years = {}
             for y in ("2024", "2025", "2026"):
                 idx = np.array([d.startswith(y) for d in dates], dtype=bool)
                 ky = int(sum(elig[i].get("hour_fail_n") or 0 for i in range(len(elig)) if idx[i]))
-                ny = 31 * int(idx.sum())
+                ny = int(sum(elig[i].get("hour_box_n") or 7 for i in range(len(elig)) if idx[i]))
                 years[y] = rate_block(ky, ny)
             terc = {}
             for name in ("low", "mid", "high"):
                 sub = [r for r in elig if r.get("vol_tercile_rv") == name]
                 ky = int(sum(r.get("hour_fail_n") or 0 for r in sub))
-                terc[name] = rate_block(ky, 31 * len(sub))
+                terc[name] = rate_block(ky, int(sum(r.get("hour_box_n") or 7 for r in sub)))
             st = {
                 "n": n, "rate": primary["rate"],
                 "interval": _fmt_int(*(primary.get("wilson_95") or [None, None])),
                 "year": _fmt_year(years), "rv": _fmt_rv(terc), "leakage": 0,
             }
-            notes = "n is hour boxes (31 steps x sessions). Session-any saturates; this is the per-box fail-back rate."
+            notes = "n is completed clock-hour boxes (7 x sessions). Event is wick then 5m close-back on the next hour."
         elif spec["id"] == "R-G06":
             mondays = [r for r in joined if r.get("eligible") and r.get("monday")]
             st = _stats(mondays, lambda r: bool(r.get("nwog_fill")))
