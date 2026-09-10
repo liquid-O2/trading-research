@@ -56,7 +56,7 @@ def _failback(box, out, k_min=30):
 
 def build_fail_table():
     cached = load_rows("fail_F")
-    if cached and cached[0].get("prior_is_prior"):
+    if cached and cached[0].get("prior_is_prior") and cached[0].get("aplus_box") == "range.6-9.published":
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -95,14 +95,30 @@ def build_fail_table():
             sweep, fb, _ = _failback(box, out)
             rec[f"sweep_{cid}"] = sweep
             rec[f"fail_{cid}"] = fb
-            aplus = aplus or sweep
+            if cid == "range.6-9.published":
+                aplus = sweep
         tdo = bars.window(wall_ns(day, time(0, 0), 0) // 1_000_000, wall_ns(day, time(0, 1), 0) // 1_000_000)
         rec["tdo"] = tdo["open"]
         am = bars.window(clock_bounds(day, CLOCKS["range.6-9.published"])["outcome_start_ms"],
                          clock_bounds(day, CLOCKS["range.6-9.published"])["outcome_end_ms"])
         rec["tdo_touch"] = bool(tdo["open"] is not None and am["n"] and (np.any(am["l"] <= tdo["open"]) and np.any(am["h"] >= tdo["open"])))
         open_px = row.get("open_0930")
-        rec["open0930_touch"] = bool(open_px is not None and am["n"] and np.any(am["l"] <= open_px) and np.any(am["h"] >= open_px))
+        first15 = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(9, 45), 0) // 1_000_000)
+        rec["open0930_touch"] = False
+        if open_px is not None and first15["n"] >= 3:
+            sweep = np.any(first15["h"] > open_px + 2 * TICK) or np.any(first15["l"] < open_px - 2 * TICK)
+            reclaim = False
+            if sweep:
+                beyond = (first15["h"] > open_px + 2 * TICK) | (first15["l"] < open_px - 2 * TICK)
+                first = int(np.flatnonzero(beyond)[0]) if np.any(beyond) else None
+                if first is not None:
+                    later = first15["c"][first + 1:]
+                    reclaim = bool(np.any((later <= open_px) & (first15["h"][first] > open_px + 2 * TICK)) or np.any((later >= open_px) & (first15["l"][first] < open_px - 2 * TICK)))
+                    if first15["h"][first] > open_px + 2 * TICK:
+                        reclaim = bool(np.any(later <= open_px))
+                    else:
+                        reclaim = bool(np.any(later >= open_px))
+            rec["open0930_touch"] = bool(sweep and reclaim)
         rec["nwog_fill"] = False
         rec["nwog_real"] = True
         if day.weekday() == 0:
@@ -114,6 +130,7 @@ def build_fail_table():
                 lo, hi = min(a, b), max(a, b)
                 rec["nwog_fill"] = bool(np.any(am["h"] >= lo) and np.any(am["l"] <= hi))
         rec["aplus"] = aplus
+        rec["aplus_box"] = "range.6-9.published"
         rec["fail_any"] = any(rec.get(f"fail_{cid}") for cid in BOXES)
         rows.append(rec)
         prev = day

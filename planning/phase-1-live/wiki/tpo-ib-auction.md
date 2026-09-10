@@ -21,7 +21,7 @@ One thin family. Jumbo 2026 demotes OR/IB as the **main** box `[XF p.8 L106–10
 - Period 15/30/60m; trade-visited vs OHLC-spanned rows.
 - Tail 2/3-row excess; single-row vs flat-multiple-period poor extreme.
 - IB as `range.ib` already on the clock grid (expected null vs 6–9). Do not promote it here.
-- 80% claims as **separate rows** with their own denominators: generic re-entry, hold-inside, open-outside/two-period-inside, older-POC failed auction `[AMT1 p.7–9]` `[MAMT p.9–12]`. Do not pool.
+- 80% claims as **separate rows** with their own denominators: generic re-entry, hold-inside, open-outside/two-period-inside (`label.amt.80pct.two-period` `[MAMT p.18]`), older-POC failed auction `[AMT1 p.7–9]` `[MAMT p.9–12]`. Do not pool.
 
 ## Outcomes
 Excess hold on first test; poor-extreme revisit; single-print fill/repair; IB extension (comparison); AMT vs Jumbo label agreement matrix; unmatched/ambiguous counts. Shared grid on TPO structures. Final day label is an outcome, never a pre-open feature.

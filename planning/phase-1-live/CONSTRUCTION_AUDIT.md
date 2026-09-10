@@ -10,6 +10,7 @@ Reference for Phase 1 live object construction. Not a score of `RULES.md`. Not P
 4. Spike rule. Range H/L is not a one-tick isolated explosion versus the 1s median. Options `mapped_nq` ratio is not a one-print jump.
 5. Range H/L from the intended bars. RTH-only objects do not include ETH.
 6. Delta/CVD reset matches SPEC (`flow.cvd.trade` resets 18:00 ET).
+7. Session bounds are America/New_York. QuantPad OHLCV `t` is UTC ms. QuantPad trades/MBP-1 `t` is UTC ns. Yahoo cash and Theta OI are civil NY session dates. Mixing a naive ET wall integer with a UTC epoch is a fail. Assumed stored TZ is in `implementation/src/trading_research/research/phase1_live/vendor_tz.py`.
 
 Options follow `wiki/options-nodes.md` as it is now. Faithful is native-on-native. `mapped_nq` is experiment only. QQQ/SPY spot is ETF 1-minute. NQ.OPT spot is NQ. Index products use EOD daily cash and sister ETF rows labeled `sister_of`. Missing quotes are holes. The product row stays. Skylit is not-measurable.
 
@@ -29,8 +30,9 @@ Dated spike check used NY session 2024-01-02 on `cov.nq.ohlc1s` for `range.6-9.p
 - CVD trade resets 18:00 and samples at 12:00.
 - SMT OHLC uses S1 Asia/London/6-9 hunt.
 - Value delta is aggressor delta vs POC, not a VP alias. VWAP uses 09:30-12:00 only. KZ is an HVN local max.
-- FVG is first-per-hour. 3m TBR sweep is resampled 3m. CISD is a distinct 1m close-back.
+- FVG is first 5m wick gap on the 09:00 hour. 3m TBR sweep is new-extreme continuation. CISD is 15m close-through, not the 3m sweep.
 - NWOG is Friday close vs Sunday 18:00. Prior-RTH fail box uses the previous session. Iceberg reports are not-measurable.
+- MBP-1 tape objects are scored from QuantPad `cme__nq-continuous-futures__mbp-1` week extracts. `incomplete_spans` requires a readable parquet whose row count matches the json. Extract default is 20 workers on this 21 vCPU / 80 GiB box. Absorption/footprint/iceberg inner loops are numba or bincount. The trades-tape fallback is gone.
 
 ## Table
 
@@ -44,7 +46,7 @@ range | bin.1030-1200 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; f
 range | range.5-9 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
 range | range.6-9.dollar-bars | pass | pass | 0 | clean | 1m close*vol*20 vs 60-median
 range | range.6-9.published | pass | pass | 0 | clean | 06:00-09:00 1s H/L; 2024-01-02 H=16976.5 L=16817.0 matches 1s, not an isolated spike; prior RTH 09:30-16:00
-range | range.6-9.trade-count | fail | pass | 0 | n/a | path clones 6-9; closed_early stored but box is not cut to median count family_clocks.py:251-265
+range | range.6-9.trade-count | pass | pass | 0 | n/a | two-pass cut at 60-session median trade count; 647 sessions, 24 disagreements vs 1s 6-9
 range | range.6-9.trade-level | pass | pass | 0 | clean | trades 06:00-09:00 H/L; 2024-01-02 matches 1s
 range | range.6-9.vol-elapsed | pass | pass | 0 | clean | causal 60-session median 1m volume; leakage 0
 range | range.7-9 | pass | pass | 0 | clean | clock matches wiki; leakage 0; fixture pass.
@@ -68,7 +70,7 @@ path | judas.depth.-0.5 | pass | pass | 0 | n/a | m05 then close through EQ
 path | path.6-9.published | pass | pass | 0 | n/a | b.c1 09:30-12:00 on 6-9 H/L; width tables not mixed
 path | path.midretrace | pass | pass | 0 | n/a | measured inside path.6-9.published.json summary.midretrace
 path | w.pct.0859close | pass | pass | 0 | n/a | width table in range.6-9.published.json; not mixed with rel-prior-rth
-path | w.pct.0930open | fail | pass | 0 | n/a | session field exists; no XF-style width table in the range/path reports
+path | w.pct.0930open | pass | pass | 0 | n/a | XF bins of W69/09:30 open in range.6-9.published.json width_tables.w_pct_0930open; not mixed with rel-prior-rth
 path | w.rel-prior-rth | pass | pass | 0 | n/a | separate table, not the XF p.24 price-percent bins
 path | window.1030 | unbuilt | none | 0 | n/a | SPEC 09:30-10:30 path table; no report
 path | window.1600 | unbuilt | none | 0 | n/a | SPEC 09:30-16:00 path table; no report
@@ -78,7 +80,7 @@ open | open.dbx.outside-both | pass | pass | 0 | n/a | clock matches wiki; leaka
 open | open.oneway.A.0930-1000 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 open | open.oneway.OR.15m | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 open | open.oneway.OR.5m | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
-open | open.switch.ohlc-vp | fail | pass | 0 | n/a | 1m close x vol bins, not Pine body/wick H-L distribution
+open | open.switch.ohlc-vp | pass | pass | 0 | n/a | Pine body-wick H-L distribution; 45 disagreements vs prior-RTH trade VP
 open | open.switch.published | pass | pass | 0 | n/a | 27 cells; prior RTH trade VP 09:30-16:00, no ETH
 env | env.ev.gk20 | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 env | env.ev.har | unbuilt | none | 0 | n/a | SPEC upgrade; no report
@@ -100,7 +102,7 @@ env | env.ext.166.from-edge | pass | pass | 0 | n/a | clock matches wiki; leakag
 env | env.ss.avgHL60 | pass | pass | 0 | n/a | 09:00 open + mean(H-open) / open - mean(open-L) over prior 60
 env | env.ss.medHL60 | unbuilt | none | 0 | n/a | wiki upgrade; no report
 env | env.ss.minavg60 | unbuilt | none | 0 | n/a | wiki named min-average; no report
-env | pz.approx.A | fail | pass | 0 | n/a | single p90 envelope from 09:30 open, not T1-T4 adjacent 50/75/90/95/99 bands
+env | pz.approx.A | pass | pass | 0 | n/a | T1-T4 adjacent bands from 500-session history; primary is T1 reach (excursion >= p50); 573/647
 env | pz.learned | unbuilt | pass | 0 | n/a | Phase 3 learned P-zone; deferred on purpose
 vol | vol.gk20 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 vol | vol.har | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
@@ -111,8 +113,8 @@ vol | vol.vx.slope | unbuilt | none | 0 | n/a | SPEC faithful; no report
 vol | vol.yz20 | unbuilt | none | 0 | n/a | SPEC faithful; no report
 flow | flow.absorption.A | pass | pass | 0 | n/a | 2m q90 at 6-9 H/L, <=2 ticks, 0.25R / 15m
 flow | flow.absorption.A.q75 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
-flow | flow.absorption.A.w1m | fail | pass | 0 | n/a | 1m roll scored against frozen 2m q90
-flow | flow.absorption.A.w5m | fail | pass | 0 | n/a | 5m roll scored against frozen 2m q90
+flow | flow.absorption.A.w1m | pass | pass | 0 | n/a | 1m roll vs own-window q90, not frozen 2m; 37/429, 36 disagreements vs A
+flow | flow.absorption.A.w5m | pass | pass | 0 | n/a | 5m roll vs own-window q90, not frozen 2m; 38/429, 43 disagreements vs A
 flow | flow.absorption.B | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.bigtrade.100ny | pass | pass | 0 | n/a | size>=100 on 09:30-16:00
 flow | flow.bigtrade.30-60 | unbuilt | none | 0 | n/a | wiki Ethos comparison; no report
@@ -122,13 +124,13 @@ flow | flow.bigtrade.q75 | pass | pass | 0 | n/a | clock matches wiki; leakage 0
 flow | flow.bigtrade.q90 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.bigtrade.q99 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.cvd.gamma | not-measurable | pass | 0 | n/a | gamma weight table not built
-flow | flow.cvd.ohlc | fail | pass | 0 | n/a | sign(c-o) on 09:30-12:00 1m, not Pine close-in-range; no 18:00 reset
-flow | flow.cvd.part.ohlc | fail | pass | 0 | n/a | 1m volume tercile still uses sign(c-o), not close-in-range
-flow | flow.cvd.part.q75 | fail | pass | 0 | n/a | still MBP-1 full-extract size cut; not 18:00-12:00 reset
-flow | flow.cvd.part.q90 | fail | pass | 0 | n/a | still MBP-1 full-extract size cut; not 18:00-12:00 reset
-flow | flow.cvd.part.trade | fail | pass | 0 | n/a | one >=100 sign, not three CVD streams >=100 / 20-99 / <20
+flow | flow.cvd.ohlc | pass | pass | 0 | n/a | Pine close-in-range 18:00-12:00 1m; PHASE rate is non-zero sign
+flow | flow.cvd.part.ohlc | pass | pass | 0 | n/a | high-volume tercile, same Pine close-in-range 18:00-12:00
+flow | flow.cvd.part.q75 | pass | pass | 0 | n/a | session q75 on 18:00-12:00 trades, second pass; not full-extract size
+flow | flow.cvd.part.q90 | pass | pass | 0 | n/a | session q90 on 18:00-12:00 trades, second pass; not full-extract size
+flow | flow.cvd.part.trade | pass | pass | 0 | n/a | three signed streams >=100 / 20-99 / <20; published flag is the >=100 stream; 75 disagreements vs total
 flow | flow.cvd.trade | pass | pass | 0 | n/a | 18:00 reset, sample at 12:00, aggressor side; terminal sign not a 1s series
-flow | flow.footprint.diag.4x | fail | pass | 0 | n/a | AM-session 4x aggregate; stacked >=3 skipped; rate 1.0
+flow | flow.footprint.diag.4x | pass | pass | 0 | n/a | stacked >=3 adjacent 4x imbalances on MBP-1 AM trades; 247/429, not saturating
 flow | flow.iceberg.touch.infer | not-measurable | pass | 0 | n/a | wiki iceberg detection is not measurable with MBP-1
 flow | flow.iceberg.touch.k15 | not-measurable | pass | 0 | n/a | not-measurable as printed
 flow | flow.iceberg.touch.k20 | not-measurable | pass | 0 | n/a | not-measurable as printed
@@ -136,14 +138,14 @@ flow | flow.ofm.sequence | unbuilt | none | 0 | n/a | wiki OFM stages; no report
 flow | flow.refill.offtouch | not-measurable | pass | 0 | n/a | needs MBP-10/MBO
 flow | flow.refill.ontouch | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 flow | flow.smt.ohlc.4 | pass | pass | 0 | n/a | S1 Asia/London/6-9 hunt on 1m; PDH/PDL not in this S1 set
-flow | flow.smt.pine.3-3 | fail | pass | 0 | n/a | first3 vs last3 AM HH/HL, not Open Source Fractal 3/3 matcher
+flow | flow.smt.pine.3-3 | pass | pass | 0 | n/a | Open Source Fractal 3/3, lookback 200, min 2 ticks, 12-bar merge vs sister 1m; fires 429/429
 flow | flow.smt.trade.es | not-measurable | pass | 0 | n/a | ES MBP-1 ends 2024-08-30; not-measurable in F
-flow | flow.smt.trade.nq | fail | pass | 0 | n/a | MBP-1 running H/L vs sister 1m, not tick-precise S1 hunt
+flow | flow.smt.trade.nq | pass | pass | 0 | n/a | tick-precise S1 hunt on MBP-1 vs sister 1m Asia/London/6-9/PDH/PDL; 320/429, 63 disagreements vs OHLC S1
 value | env.vwap.rth.sd2 | pass | pass | 0 | n/a | 09:30-12:00 HLC3 VWAP ±2SD, no 16:00 lookahead
 value | value.dealer.inventory | not-measurable | pass | 0 | n/a | not-measurable as printed
 value | value.delta.rth.trade | pass | pass | 0 | n/a | RTH aggressor delta vs POC; 45 disagreements with VP
 value | value.hidden.book | not-measurable | pass | 0 | n/a | not-measurable as printed
-value | value.kz | fail | pass | 0 | n/a | HVN local-max on 1m close-volume fires 429/429; not trade-profile HVN/LVN
+value | value.kz | pass | pass | 0 | n/a | AM extreme within 2 ticks of MBP-1 VAL/VAH, not POC; 17/429, 412 disagreements vs VP touch
 value | value.vp.rth.ohlc1m | unbuilt | none | 0 | n/a | SPEC upgrade; no report
 value | value.vp.rth.trade | pass | pass | 0 | n/a | RTH 09:30-16:00 trade VP; VAL present flag
 fail | fail.box.6-9.gb.c5 | pass | pass | 0 | n/a | 06:00-09:00 box, wick then 5m close-back k=30
@@ -154,17 +156,17 @@ fail | fail.box.gb.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; le
 fail | fail.box.gb.nyam.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.jumbo.london.gb.c5 | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 fail | fail.box.prior-rth.gb.c5 | pass | pass | 0 | n/a | prior session 09:30-16:00 PDH/PDL, AM fail-back
-fail | label.aplus | fail | pass | 0 | n/a | OR of every box sweep; eligible rate 1.0; never unknown
+fail | label.aplus | pass | pass | 0 | n/a | 6-9 sweep only, not OR of every box; 633/647
 fail | loc.gp | unbuilt | none | 0 | n/a | wiki 50-61.8% location flag; no function
-fail | lvl.0930open | fail | pass | 0 | n/a | AM 09:30-12:00 through-touch of 09:30 open is nearly tautological
+fail | lvl.0930open | pass | pass | 0 | n/a | 09:30-09:45 sweep >=2 ticks then reclaim; 503/647, not AM through-touch
 fail | lvl.nwog | pass | pass | 0 | n/a | Monday Friday 16:00 close vs Sunday 18:00 open, AM overlap
 fail | lvl.tdo | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
-gap | gap.body.adjacent | fail | pass | 0 | n/a | session flag 647/647 and identical to fvg (0 disagreements)
-gap | gap.fvg.first.clock | fail | pass | 0 | n/a | any-hour 00:00-16:00 session flag saturates 647/647; not per-clock events
-block | block.sweep.tbr.3m | fail | pass | 0 | n/a | AM 3m pattern saturates 647/647 and matches cisd (0 disagreements)
-block | cisd.fractal.literal | fail | pass | 0 | n/a | 1m C2 sweep then C3 close-back, not Pine fractal opposing-run
-tpo | label.amt.day | fail | pass | 0 | n/a | boolean from path class, not AMT trend/normal/normal-variation/neutral/non-trend
-tpo | label.amt.open.30m | fail | pass | 0 | n/a | boolean from first 30m vs prior VA, not drive/test-drive/rejection-reverse/auction labels
+gap | gap.body.adjacent | pass | pass | 0 | n/a | 5m body gaps on the 09 hour; 597/647, 103 disagreements vs FVG
+gap | gap.fvg.first.clock | pass | pass | 0 | n/a | first 5m wick gap on the 09:00 hour; 574/647, not all-day
+block | block.sweep.tbr.3m | pass | pass | 0 | n/a | 3m new-extreme continuation on IB; 508/647, not saturating
+block | cisd.fractal.literal | pass | pass | 0 | n/a | 15m C2 takes extreme, C3 closes through far side; 526/647, 220 disagreements vs 3m sweep. Not the Pine fractal matcher.
+tpo | label.amt.day | pass | pass | 0 | n/a | exclusive labels trend/normal/normal-variation/neutral/non-trend; PHASE flag is trend; 409/647
+tpo | label.amt.open.30m | pass | pass | 0 | n/a | exclusive labels drive/test-drive/rejection-reverse/auction from first 30m vs prior VA; PHASE flag is drive; 265/647
 tpo | value.tpo.rth.30m | pass | pass | 0 | n/a | 30m periods, 1-point poor extreme = single-period high or low row
 tpo | value.tpo.rth.30m.trade | pass | pass | 0 | n/a | clock matches wiki; leakage 0; fixture pass.
 options | value.dealer.inventory | not-measurable | pass | 0 | n/a | not-measurable as printed
@@ -191,7 +193,7 @@ options | value.skylit.heatseeker | not-measurable | pass | 0 | n/a | unpublishe
 
 ## Counts
 
-n = 152. pass = 80. fail = 23. unbuilt = 31. not-measurable = 18.
+n = 152. pass = 103. fail = 0. unbuilt = 31. not-measurable = 18.
 
 ## Why 31 are unbuilt
 

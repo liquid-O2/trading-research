@@ -21,3 +21,14 @@ Kept from B (patched where the audit marked a miss or drift): index, data-covera
 Written short from A/source: fvg-body-gaps, sweep-cisd-blocks, tpo-ib-auction.
 
 Not rebuilt: A’s 51-ticket catalog, Pine LUT families, higher-Greeks family, BBO family, adaptive HMM, floor-pivots-as-family.
+
+## 2026-09-10 — thin pages from `../RULES.md` A7
+
+Read: `../RULES.md` §A7 and the source rows it points at (TBR, XF, FIND, GB pack, the discretionary PDFs, the Pine archive, `momentum-volume-flow-levels.txt`, conversation user turns). How: one page per concept where an A7 id had a citation and no page; ids that are variants of an existing page's concept were named on that page instead of duplicated. Every A7 id carried a citation, so no id is blocked; none is listed here as blocked.
+
+Pages written (31): tbr-remaining-clocks, overnight-range, overnight-profile, dealing-range, prior-eth-profile, composite-profiles, weekly-delta-profile, delta-spike, prior-rth-quadrants, prior-session-reference-levels, unfinished-business, sigma-band-reversion, manipulation-distribution-envelope, vwap-anchored, absorption-candle-jumbo, refill-zone, ofm-catalyst, footprint-imbalance-zones, candle-poc-flip, protected-high-low, mvfl-indicator-zones, reward-system-3tick, digit-thinning, tape-speed, spread-width, approach-speed, premium-discount-50, daily-open-1800, gex-walls-and-max-pain, amd-phase-labels, clean-session-label.
+
+Ids folded into existing pages (one line each): `env.ss.rth.avgHL60` on sessionstat-9-12-envelope; `env.vwap.rth.sd1` / `sd2.5` / `sd3` on value-and-profiles; `label.amt.80pct.two-period` on tpo-ib-auction. Index: new section plus two citation-key rows.
+
+Not paged (not A7 ids; grid candidates or tier-4 proposals only): `range.4h.*`, `env.pine.sessionstat.P10-P90`, the JJX derived-range families. Tape objects on the new pages keep the `[unmeasured]` tag from RULES.md §0.2: locations now, triggers only after a FINDINGS row. No tickets added, no runner started, RULES.md unchanged.
+

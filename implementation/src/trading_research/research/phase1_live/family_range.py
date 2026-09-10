@@ -9,7 +9,7 @@ import numpy as np
 from trading_research.research.phase1_live.compute import add_vol_elapsed, build_slice, load_rows, save_rows
 from trading_research.research.phase1_live.fixtures import run_ticket01_fixtures
 from trading_research.research.phase1_live.report import quality_failures, write_report
-from trading_research.research.phase1_live.sessions import XF_WIDTH_BINS, _bin_label
+from trading_research.research.phase1_live.sessions import XF_WIDTH_BINS, _bin_label, width_bin
 from trading_research.research.phase1_live.stats import (
     by_year, paired_diff, rate_block, session_bootstrap_rate, status_from_intervals,
 )
@@ -49,21 +49,26 @@ def _width_tables(rows):
     w69 = [r["W69"] for r in rows if r.get("W69") is not None]
     wprior = [r["WpriorRTH"] for r in rows if r.get("WpriorRTH") is not None]
     pct = {}
+    pct0930 = {}
     rel = {}
     for lo, hi in XF_WIDTH_BINS:
         lab = _bin_label(lo, hi)
         pct_rows = [r for r in rows if r.get("width_bin_pct") == lab]
+        pct0930_rows = [r for r in rows if width_bin(r.get("w_pct_0930open")) == lab]
         rel_rows = [r for r in rows if r.get("width_bin_rel") == lab]
         pct[lab] = _path_share_block(pct_rows)
+        pct0930[lab] = _path_share_block(pct0930_rows)
         rel[lab] = _path_share_block(rel_rows)
     pct["all"] = _path_share_block(rows)
+    pct0930["all"] = _path_share_block(rows)
     rel["all"] = _path_share_block(rows)
     return {
         "W69_points": {"n": len(w69), "mean": None if not w69 else float(np.mean(w69)), "p50": None if not w69 else float(np.median(w69))},
         "WpriorRTH_points": {"n": len(wprior), "mean": None if not wprior else float(np.mean(wprior)), "p50": None if not wprior else float(np.median(wprior))},
         "w_pct_0859close": pct,
+        "w_pct_0930open": pct0930,
         "w_rel_prior_rth": rel,
-        "note": "w_rel_prior_rth bins are not the XF p.24 price-% table",
+        "note": "w_rel_prior_rth bins are not the XF p.24 price-% table; w_pct_0930open uses the same XF bins on W69/09:30 open",
     }
 
 

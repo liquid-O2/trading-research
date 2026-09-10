@@ -19,17 +19,69 @@ TRADES = Path("/workspace/data/quantpad/cme__nq-continuous-futures__trades")
 
 
 def _ohlc_cvd(window):
+    """Pine close-in-range. Up volume = v * (close-low)/(high-low)."""
     if window["n"] == 0:
         return 0.0, 0.0, 0.0
-    sign = np.sign(window["c"] - window["o"])
-    buy = float(window["v"][sign > 0].sum())
-    sell = float(window["v"][sign < 0].sum())
+    o, h, l, c, v = window["o"], window["h"], window["l"], window["c"], window["v"]
+    rng = np.maximum(h - l, 1e-12)
+    up = v * (c - l) / rng
+    down = v * (h - c) / rng
+    buy = float(up.sum())
+    sell = float(down.sum())
     return buy - sell, buy, sell
+
+
+def _fractal_pivots(h, l, left=3, right=3, min_ticks=2):
+    out_h, out_l = [], []
+    n = h.size
+    if n < left + right + 1:
+        return out_h, out_l
+    for i in range(left, n - right):
+        window_h = h[i - left:i + right + 1]
+        window_l = l[i - left:i + right + 1]
+        if h[i] >= window_h.max() and (h[i] - window_h.min()) >= min_ticks * TICK:
+            if np.sum(window_h == h[i]) == 1 or np.argmax(window_h) == left:
+                out_h.append(i)
+        if l[i] <= window_l.min() and (window_l.max() - l[i]) >= min_ticks * TICK:
+            if np.sum(window_l == l[i]) == 1 or np.argmin(window_l) == left:
+                out_l.append(i)
+    return out_h, out_l
+
+
+def _fractal_33_smt(nq_am, sisters: dict) -> bool:
+    """Open Source Fractal 3/3 confirmed-pivot matcher. Lookback 200, min 2 ticks, 12-bar merge."""
+    if nq_am["n"] < 15:
+        return False
+    n = min(int(nq_am["n"]), 200)
+    h = nq_am["h"][-n:]
+    l = nq_am["l"][-n:]
+    nq_ph, nq_pl = _fractal_pivots(h, l)
+    if not nq_ph and not nq_pl:
+        return False
+    start_ms = int(nq_am["t"][0])
+    end_ms = int(nq_am["t"][-1]) + 60_000
+    for name, sb in sisters.items():
+        if sb is None:
+            continue
+        sw = sb.window(start_ms, end_ms)
+        if sw["n"] < 15:
+            continue
+        m = min(int(sw["n"]), 200)
+        sh, sl = _fractal_pivots(sw["h"][-m:], sw["l"][-m:])
+        sis_h = sw["h"][-m:]
+        sis_l = sw["l"][-m:]
+        for i in nq_ph:
+            if not any(abs(i - j) <= 12 and abs(sis_h[j] - h[i]) <= 2 * TICK for j in sh):
+                return True
+        for i in nq_pl:
+            if not any(abs(i - j) <= 12 and abs(sis_l[j] - l[i]) <= 2 * TICK for j in sl):
+                return True
+    return False
 
 
 def scan_trade_cvd(dates):
     cached = load_rows("cvd_trade_F")
-    if cached and cached[0].get("reset") == "18:00":
+    if cached and cached[0].get("reset") == "18:00" and cached[0].get("streams") == 3:
         return {r["date"]: r for r in cached}
     import pyarrow.parquet as pq
     keys = [d.isoformat() for d in dates]
@@ -41,7 +93,10 @@ def scan_trade_cvd(dates):
     ends = np.array(ends, dtype=np.int64)
     buy = {k: 0.0 for k in keys}
     sell = {k: 0.0 for k in keys}
-    part = {k: {"big": 0.0, "mid": 0.0, "sml": 0.0} for k in keys}
+    part = {k: {"big": 0.0, "mid": 0.0, "sml": 0.0, "big_buy": 0.0, "big_sell": 0.0,
+                "mid_buy": 0.0, "mid_sell": 0.0, "sml_buy": 0.0, "sml_sell": 0.0,
+                "q75_buy": 0.0, "q75_sell": 0.0, "q90_buy": 0.0, "q90_sell": 0.0} for k in keys}
+    sizes = {k: [] for k in keys}
     files = sorted(TRADES.glob("2024*.parquet")) + sorted(TRADES.glob("2025*.parquet")) + sorted(TRADES.glob("2026*.parquet"))
     for i, path in enumerate(files):
         table = pq.read_table(path, columns=["t", "size", "side"])
@@ -69,19 +124,68 @@ def scan_trade_cvd(dates):
             bmask = is_buy[sl]
             buy[k] += float(s[bmask].sum())
             sell[k] += float(s[~bmask].sum())
-            part[k]["big"] += float(s[s >= 100].sum())
-            part[k]["mid"] += float(s[(s >= 20) & (s < 100)].sum())
-            part[k]["sml"] += float(s[s < 20].sum())
+            bb, ss = bmask, ~bmask
+            part[k]["big_buy"] += float(s[bb & (s >= 100)].sum())
+            part[k]["big_sell"] += float(s[ss & (s >= 100)].sum())
+            part[k]["mid_buy"] += float(s[bb & (s >= 20) & (s < 100)].sum())
+            part[k]["mid_sell"] += float(s[ss & (s >= 20) & (s < 100)].sum())
+            part[k]["sml_buy"] += float(s[bb & (s < 20)].sum())
+            part[k]["sml_sell"] += float(s[ss & (s < 20)].sum())
+            sizes[k].append(s)
         if (i + 1) % 40 == 0:
             print(f"  cvd trades {i+1}/{len(files)}", flush=True)
+    q75 = {}
+    q90 = {}
+    for k in keys:
+        arr = np.concatenate(sizes[k]) if sizes[k] else np.zeros(0)
+        q75[k] = float(np.quantile(arr, 0.75)) if arr.size else None
+        q90[k] = float(np.quantile(arr, 0.90)) if arr.size else None
+    for i, path in enumerate(files):
+        table = pq.read_table(path, columns=["t", "size", "side"])
+        t = table.column("t").to_numpy()
+        sz = table.column("size").to_numpy().astype(np.float64)
+        side = table.column("side").to_numpy()
+        side = np.asarray(side.astype(str) if hasattr(side, "astype") else side).astype(str)
+        idx = np.searchsorted(starts, t, side="right") - 1
+        clipped = np.clip(idx, 0, len(keys) - 1)
+        ok = (idx >= 0) & (idx < len(keys)) & (t >= starts[clipped]) & (t < ends[clipped])
+        if not np.any(ok):
+            continue
+        idx = idx[ok]
+        sz = sz[ok]
+        is_buy = np.isin(np.asarray(side[ok]), ("A", "a", "Buy", "BUY"))
+        for j in np.unique(idx):
+            sl = idx == j
+            k = keys[int(j)]
+            s = sz[sl]
+            bb = is_buy[sl]
+            c75, c90 = q75[k], q90[k]
+            if c75:
+                part[k]["q75_buy"] += float(s[bb & (s >= c75)].sum())
+                part[k]["q75_sell"] += float(s[(~bb) & (s >= c75)].sum())
+            if c90:
+                part[k]["q90_buy"] += float(s[bb & (s >= c90)].sum())
+                part[k]["q90_sell"] += float(s[(~bb) & (s >= c90)].sum())
     rows = []
     for k in keys:
         cvd = buy[k] - sell[k]
+        big = part[k]["big_buy"] - part[k]["big_sell"]
+        mid = part[k]["mid_buy"] - part[k]["mid_sell"]
+        sml = part[k]["sml_buy"] - part[k]["sml_sell"]
+        q75c = part[k]["q75_buy"] - part[k]["q75_sell"]
+        q90c = part[k]["q90_buy"] - part[k]["q90_sell"]
+        def sgn(x):
+            return 1 if x > 0 else (-1 if x < 0 else 0)
         rows.append({
             "date": k, "buy": buy[k], "sell": sell[k], "cvd": cvd,
-            "part_big": part[k]["big"], "part_mid": part[k]["mid"], "part_sml": part[k]["sml"],
-            "cvd_sign": 1 if cvd > 0 else (-1 if cvd < 0 else 0),
-            "reset": "18:00", "sample_end": "12:00",
+            "part_big": big, "part_mid": mid, "part_sml": sml,
+            "cvd_sign": sgn(cvd),
+            "cvd_part_sign": sgn(big),
+            "cvd_part_mid_sign": sgn(mid),
+            "cvd_part_sml_sign": sgn(sml),
+            "cvd_part_q75_sign": sgn(q75c),
+            "cvd_part_q90_sign": sgn(q90c),
+            "reset": "18:00", "sample_end": "12:00", "streams": 3,
         })
     save_rows("cvd_trade_F", rows)
     return {r["date"]: r for r in rows}
@@ -157,7 +261,7 @@ def build_smt_ohlc(dates, nq_bars):
 
 def build_flow_table():
     cached = load_rows("flow_cvd_smt_F")
-    if cached and cached and "cvd_part_ohlc_sign" in cached[0]:
+    if cached and cached[0].get("pine_range") and cached[0].get("fractal_33"):
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -165,30 +269,32 @@ def build_flow_table():
     bars = load_years(OHLC1M, years_for_dates(dates))
     trade = scan_trade_cvd(dates)
     smt = build_smt_ohlc(dates, bars)
+    sisters = {}
+    years = sorted({d.year for d in dates} | {min(d.year for d in dates) - 1})
+    for name, root in SISTERS_1M.items():
+        try:
+            sisters[name] = load_years(root, years)
+        except FileNotFoundError:
+            sisters[name] = None
     rows = []
     by_date = {r["date"]: r for r in f_rows}
     for day in dates:
         row = by_date[day.isoformat()]
         b = clock_bounds(day, CLOCKS["range.6-9.published"])
         am = bars.window(b["outcome_start_ms"], b["outcome_end_ms"])
-        ohlc_cvd, _, _ = _ohlc_cvd(am)
+        sess = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
+        ohlc_cvd, _, _ = _ohlc_cvd(sess)
         part_ohlc = 0.0
-        if am["n"]:
-            cut = float(np.quantile(am["v"], 2.0 / 3.0))
-            mask = am["v"] >= cut
+        if sess["n"]:
+            cut = float(np.quantile(sess["v"], 2.0 / 3.0))
+            mask = sess["v"] >= cut
             if np.any(mask):
-                sign = np.sign(am["c"][mask] - am["o"][mask])
-                buy = float(am["v"][mask][sign > 0].sum())
-                sell = float(am["v"][mask][sign < 0].sum())
-                part_ohlc = buy - sell
+                sub = {k: sess[k][mask] if isinstance(sess[k], np.ndarray) else sess[k] for k in ("o", "h", "l", "c", "v")}
+                sub["n"] = int(mask.sum())
+                part_ohlc, _, _ = _ohlc_cvd(sub)
         tr = trade.get(day.isoformat(), {})
         sm = smt.get(day.isoformat(), {})
-        # pine 3/3: last 3 NQ minutes vs last 3 of first 15 minutes extreme
-        pine = False
-        if am["n"] >= 6:
-            first = am["h"][:3].max()
-            last = am["h"][-3:].max()
-            pine = last > first and am["l"][-3:].min() > am["l"][:3].min()
+        pine = _fractal_33_smt(am, sisters)
         rows.append({
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
             "cvd_trade": tr.get("cvd"), "cvd_trade_sign": tr.get("cvd_sign"),
@@ -198,7 +304,7 @@ def build_flow_table():
             "cvd_part_big": tr.get("part_big"),
             "cvd_agree_ohlc": (tr.get("cvd_sign") == (1 if ohlc_cvd > 0 else (-1 if ohlc_cvd < 0 else 0))),
             "smt_ohlc": sm.get("smt_event"), "smt_n": sm.get("n_events") or 0,
-            "smt_pine": pine,
+            "smt_pine": pine, "pine_range": True, "fractal_33": True,
             "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
             "leakage": 0, "failure": tr.get("cvd") is None, "drop_coverage": row["drop_coverage"],
             "missing_bars": row["missing_1s"], "non_touch_m05": row["non_touch_m05"],
@@ -244,8 +350,11 @@ def ensure_mbp1():
 def report_flow():
     from trading_research.research.phase1_live.mbp1_objects import build_mbp1_flow_table, mbp1_fixtures
     from trading_research.research.phase1_live.threshold_grid import attach_rv, slice_blocks
-    fixtures = mbp1_fixtures()
+    from trading_research.research.phase1_live.mbp1_extract import list_complete_chunks
     ensure_mbp1()
+    if not list_complete_chunks():
+        raise RuntimeError("no MBP-1 session tables; PHASE line without those tables is a fail")
+    fixtures = mbp1_fixtures()
     rows = attach_rv(build_mbp1_flow_table())
     if not rows:
         raise RuntimeError("no MBP-1 session tables; PHASE line without those tables is a fail")
@@ -257,6 +366,12 @@ def report_flow():
         tr = trade_cvd.get(r["date"], {})
         if tr.get("cvd_sign") is not None:
             r["cvd_trade_sign"] = tr["cvd_sign"]
+        if tr.get("cvd_part_sign") is not None:
+            r["cvd_part_sign"] = tr["cvd_part_sign"]
+        if tr.get("cvd_part_q75_sign") is not None:
+            r["cvd_part_q75_sign"] = tr["cvd_part_q75_sign"]
+        if tr.get("cvd_part_q90_sign") is not None:
+            r["cvd_part_q90_sign"] = tr["cvd_part_q90_sign"]
         r["cvd_ohlc_sign"] = o.get("cvd_ohlc_sign")
         r["cvd_part_ohlc_sign"] = o.get("cvd_part_ohlc_sign")
         r["smt_ohlc"] = o.get("smt_ohlc")
@@ -265,7 +380,7 @@ def report_flow():
     docs = [
         _flag_doc("flow", "flow.cvd.trade", rows, "cvd_trade_sign", None, fixtures, extra={"source": "cov.nq.mbp1", "reset": "18:00", "sample_end": "12:00"}),
         _flag_doc("flow", "flow.cvd.ohlc", rows, "cvd_ohlc_sign", "flow.cvd.trade", fixtures, extra={"faithful_flag": "cvd_trade_sign"}),
-        _flag_doc("flow", "flow.cvd.part.trade", rows, "cvd_part_sign", "flow.cvd.trade", fixtures, extra={"buckets": ">=100", "faithful_flag": "cvd_trade_sign"}),
+        _flag_doc("flow", "flow.cvd.part.trade", rows, "cvd_part_sign", "flow.cvd.trade", fixtures, extra={"buckets": ">=100 / 20-99 / <20", "reset": "18:00", "faithful_flag": "cvd_trade_sign"}),
         _flag_doc("flow", "flow.cvd.part.ohlc", rows, "cvd_part_ohlc_sign", "flow.cvd.trade", fixtures, extra={"faithful_flag": "cvd_trade_sign", "split": "1m volume tercile"}),
         _nm_row("flow.cvd.gamma", "gamma CVD stays deferred; not an MBP-1 tape object", fixtures),
         _flag_doc("flow", "flow.smt.ohlc.4", rows, "smt_ohlc", None, fixtures, extra={"assets": "NQ ES YM RTY"}),

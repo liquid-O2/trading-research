@@ -25,7 +25,7 @@ def _am(bars, day):
 
 def build_env_table():
     cached = load_rows("env_F")
-    if cached:
+    if cached and "pz_t1_reach" in cached[0]:
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -92,11 +92,18 @@ def build_env_table():
             for q in (50, 75, 90, 95, 99):
                 pz[f"up_p{q}"] = float(np.percentile(arr_u, q))
                 pz[f"dn_p{q}"] = float(np.percentile(arr_d, q))
-            pz_hi = ref + pz["up_p90"]
-            pz_lo = ref - pz["dn_p90"]
+            # T1 = p50-p75, T2 = p75-p90, T3 = p90-p95, T4 = p95-p99. Reach T1 = excursion >= p50.
+            pz_hi = ref + pz["up_p50"]
+            pz_lo = ref - pz["dn_p50"]
+            pz_t1_hi = ref + pz["up_p75"]
+            pz_t1_lo = ref - pz["dn_p75"]
+            pz_t4_hi = ref + pz["up_p99"]
+            pz_t4_lo = ref - pz["dn_p99"]
             pz_reach = am["n"] > 0 and (am["high"] >= pz_hi or am["low"] <= pz_lo)
+            pz_t1_reach = pz_reach
         else:
-            pz_hi = pz_lo = pz_reach = None
+            pz_hi = pz_lo = pz_reach = pz_t1_reach = None
+            pz_t1_hi = pz_t1_lo = pz_t4_hi = pz_t4_lo = None
         mid_eq_same = ev_mid is not None and eq is not None and abs(ev_mid - eq) < TICK
         rows.append({
             "date": row["date"], "year": row["year"], "eligible": row["eligible"] and ref is not None,
@@ -106,7 +113,9 @@ def build_env_table():
             "ss_mid": ss_mid, "ss_hi": ss_hi, "ss_lo": ss_lo, "ss_reach": ss_reach,
             "ext133_h": ext133_h, "ext133_l": ext133_l, "ext133_reach": ext_reach_133,
             "ext166_reach": ext_reach_166,
-            "pz_hi": pz_hi, "pz_lo": pz_lo, "pz_reach": pz_reach, "pz_history": min(len(pz_up), 500),
+            "pz_hi": pz_hi, "pz_lo": pz_lo, "pz_reach": pz_reach, "pz_t1_reach": pz_t1_reach,
+            "pz_t1_hi": pz_t1_hi, "pz_t1_lo": pz_t1_lo, "pz_t4_hi": pz_t4_hi, "pz_t4_lo": pz_t4_lo,
+            "pz_history": min(len(pz_up), 500),
             "mid_eq_same": mid_eq_same,
             "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
             "leakage": 0 if row["known_at_ns"] <= row["outcome_start_ns"] else 1,
@@ -185,6 +194,7 @@ def env_fixtures():
         {"id": "ev_mid_ne_eq", "pass": 100 != 95, "got": [100, 95], "expected": "open != EQ"},
         {"id": "ext_from_edge", "pass": abs((110 + 1.33 * 20) - 136.6) < 1e-9, "got": 110 + 1.33 * 20, "expected": 136.6},
         {"id": "ss_onesided", "pass": abs((100 + 12) - 112) < 1e-12 and abs((100 - 8) - 92) < 1e-12, "got": [100 + 12, 100 - 8], "expected": [112, 92]},
+        {"id": "pz_t1_p50", "pass": abs((100 + 10) - 110) < 1e-12, "got": 100 + 10, "expected": 110},
         {"id": "ids_distinct", "pass": len({ "env.ev.mean60", "env.ss.avgHL60", "env.ext.133.from-edge", "pz.approx.A" }) == 4, "got": 4, "expected": 4},
         {"id": "pz_is_approx", "pass": True, "got": "pz.approx.A", "expected": "approximation not Jumbo formula"},
     ]
@@ -200,7 +210,7 @@ def report_env():
         _flag_doc("env", "env.ss.avgHL60", rows, "ss_reach", None, fixtures, extra={"window": "09:00-12:00", "anchor": "09:00 open", "sides": "mean(H-open) and mean(open-L)"}),
         _flag_doc("env", "env.ext.133.from-edge", rows, "ext133_reach", None, fixtures, extra={"k": 1.33, "coord": "from-edge"}),
         _flag_doc("env", "env.ext.166.from-edge", rows, "ext166_reach", "env.ext.133.from-edge", fixtures, extra={"k": 1.66, "coord": "from-edge", "faithful_flag": "ext133_reach"}),
-        _flag_doc("env", "pz.approx.A", rows, "pz_reach", None, fixtures, extra={"history": 500, "note": "disclosed approximation, not Jumbo formula"}),
+        _flag_doc("env", "pz.approx.A", rows, "pz_t1_reach", None, fixtures, extra={"history": 500, "bands": "T1 p50-p75 through T4 p95-p99", "primary": "reached T1 (excursion >= p50)"}),
         {
             "family": "env", "variant": "pz.learned", "faithful_of": None, "n": 0, "n_unit": "sessions",
             "faithful_disagreements": "-", "status": "deferred", "slice": "F", "grid": "G-default",

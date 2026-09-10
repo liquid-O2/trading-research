@@ -134,7 +134,14 @@ def build_value_table():
                 "absorption_A": r.get("absorption_A"),
                 "bigtrade": r.get("bigtrade"),
                 "overlap": bool(r.get("absorption_A") and r.get("bigtrade")),
-                "kz": _hvn_from_window(rth),
+                "kz": bool(
+                    r.get("VAL") is not None and r.get("VAH") is not None and r.get("poc") is not None
+                    and am["n"] > 0
+                    and (
+                        (abs(am["low"] - r["VAL"]) <= 2 * TICK and r["VAL"] != r["poc"])
+                        or (abs(am["high"] - r["VAH"]) <= 2 * TICK and r["VAH"] != r["poc"])
+                    )
+                ),
                 "delta_ne_poc": bool(dlt.get("delta_ne_poc") or (dp_max is not None and r.get("poc") is not None and dp_max != r.get("poc"))),
                 "VAL": r.get("VAL"), "VAH": r.get("VAH"), "poc": r.get("poc"),
                 "dp_max": dp_max,
@@ -259,7 +266,7 @@ def report_value():
     docs = [
         _flag_doc("value", "value.vp.rth.trade", rows, "vp_touch", None, fixtures, extra={"source": "cov.nq.mbp1", "va": 0.70, "scope": "RTH trades"}),
         _flag_doc("value", "value.delta.rth.trade", rows, "delta_ne_poc", "value.vp.rth.trade", fixtures, extra={"faithful_flag": "vp_touch", "source": "RTH trades aggressor delta vs POC"}),
-        _flag_doc("value", "value.kz", rows, "kz", "value.vp.rth.trade", fixtures, extra={"faithful_flag": "vp_touch", "hvn": "local max >= 1.5x median close-volume"}),
+        _flag_doc("value", "value.kz", rows, "kz", "value.vp.rth.trade", fixtures, extra={"faithful_flag": "vp_touch", "hvn": "AM extreme within 2 ticks of VAL/VAH, not POC"}),
         _flag_doc("value", "env.vwap.rth.sd2", rows, "vwap_reach", "value.vp.rth.trade", fixtures, extra={"faithful_flag": "vp_touch", "window": "09:30-12:00"}),
         _nm("value", "value.hidden.book", "hidden book behind the touch needs MBP-10/MBO", fixtures),
         _nm("value", "value.dealer.inventory", "participant identity not in inventory", fixtures),

@@ -24,8 +24,11 @@ from trading_research.research.phase1_live.slice import load_calendar, slice_dat
 MBP1 = Path("/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1")
 OUT = TABLE_ROOT / "mbp1"
 COLS = ["t", "action", "side", "price", "size", "bid_px", "ask_px", "bid_sz", "ask_sz"]
-CPU_SOFT = 180
-WALL_SOFT = 330
+CPU_SOFT = 900
+WALL_SOFT = 900
+# This box: 21 vCPU / 80 GiB. Host cpu_count() reports the node, not the cgroup.
+# 48 workers OOM'd. 20 is vCPU-1, ~40 GiB at ~2 GiB/worker.
+EXTRACT_WORKERS = 20
 SCHEMA = pa.schema([
     pa.field("session", pa.string()),
     pa.field("t", pa.int64()),
@@ -69,18 +72,32 @@ def month_chunks(year: int, month: int) -> list[tuple[date, date]]:
     return chunks
 
 
-def _decode(col):
+def _is_trade(col) -> np.ndarray:
     chunk = col.combine_chunks()
     if pa.types.is_dictionary(chunk.type):
-        chunk = chunk.dictionary_decode()
-    return np.asarray(chunk.to_numpy(zero_copy_only=False))
+        names = np.asarray(chunk.dictionary.to_numpy(zero_copy_only=False)).astype(str)
+        idx = np.asarray(chunk.indices.to_numpy())
+        hit = np.flatnonzero(names == "T")
+        if hit.size == 0:
+            return np.zeros(idx.shape[0], dtype=bool)
+        return idx == int(hit[0])
+    names = np.asarray(chunk.to_numpy(zero_copy_only=False)).astype(str)
+    return names == "T"
 
 
-def _side_code(side) -> np.ndarray:
-    out = np.zeros(side.shape[0], dtype=np.int8)
-    s = side.astype(str)
-    out[np.isin(s, ("A", "a"))] = 1
-    out[np.isin(s, ("B", "b"))] = -1
+def _side_code(col) -> np.ndarray:
+    chunk = col.combine_chunks()
+    if pa.types.is_dictionary(chunk.type):
+        names = np.asarray(chunk.dictionary.to_numpy(zero_copy_only=False)).astype(str)
+        idx = np.asarray(chunk.indices.to_numpy())
+        table = np.zeros(names.shape[0], dtype=np.int8)
+        table[np.isin(names, ("A", "a"))] = 1
+        table[np.isin(names, ("B", "b"))] = -1
+        return table[idx]
+    names = np.asarray(chunk.to_numpy(zero_copy_only=False)).astype(str)
+    out = np.zeros(names.shape[0], dtype=np.int8)
+    out[np.isin(names, ("A", "a"))] = 1
+    out[np.isin(names, ("B", "b"))] = -1
     return out
 
 
@@ -107,17 +124,41 @@ def chunk_paths(start: date, end: date) -> tuple[Path, Path]:
     return OUT / f"{name}.parquet", OUT / f"{name}.json"
 
 
+def _parquet_ok(data_path: Path, expected_rows: int | None) -> bool:
+    if not data_path.is_file() or data_path.stat().st_size < 8:
+        return False
+    try:
+        n = pq.ParquetFile(data_path).metadata.num_rows
+    except Exception:
+        return False
+    if expected_rows is not None and int(n) != int(expected_rows):
+        return False
+    return True
+
+
+def _chunk_done(start: date, end: date) -> dict | None:
+    data_path, meta_path = chunk_paths(start, end)
+    if not meta_path.is_file():
+        return None
+    meta = json.loads(meta_path.read_text())
+    if meta.get("status") != "complete":
+        return None
+    if not _parquet_ok(data_path, meta.get("n_rows")):
+        return None
+    return meta
+
+
 def extract_chunk(start: date, end: date, *, calendar=None) -> dict:
     OUT.mkdir(parents=True, exist_ok=True)
     data_path, meta_path = chunk_paths(start, end)
-    if meta_path.is_file() and data_path.is_file():
-        meta = json.loads(meta_path.read_text())
-        if meta.get("status") == "complete":
-            return meta
+    done = _chunk_done(start, end)
+    if done is not None:
+        return done
     calendar = calendar or load_calendar()
     f_dates = slice_dates(calendar, "F")
     days = [d for d in f_dates if start <= d <= end]
     if not days:
+        _write_parts(data_path, [])
         meta = {"chunk": chunk_id(start, end), "status": "complete", "n_rows": 0, "n_sessions": 0, "note": "no F dates"}
         meta_path.write_text(json.dumps(meta))
         return meta
@@ -162,8 +203,7 @@ def extract_chunk(start: date, end: date, *, calendar=None) -> dict:
                     continue
                 tbl = pf.read_row_group(i, columns=COLS)
                 t = tbl.column("t").to_numpy()
-                act = _decode(tbl.column("action")).astype(str)
-                is_trade = act == "T"
+                is_trade = _is_trade(tbl.column("action"))
                 idx = np.searchsorted(g0, t, side="right") - 1
                 valid = (idx >= 0) & (idx < len(days))
                 idxc = np.clip(idx, 0, len(days) - 1)
@@ -172,7 +212,7 @@ def extract_chunk(start: date, end: date, *, calendar=None) -> dict:
                 keep = in_globex & (is_trade | in_am)
                 if not np.any(keep):
                     continue
-                side = _side_code(_decode(tbl.column("side"))[keep])
+                side = _side_code(tbl.column("side"))[keep]
                 part = pa.table({
                     "session": sess[idxc[keep]],
                     "t": t[keep],
@@ -218,7 +258,7 @@ def _write_parts(path: Path, parts: list):
         pq.write_table(pa.table({n: [] for n in SCHEMA.names}, schema=SCHEMA), path, compression="zstd")
         return
     table = pa.concat_tables(parts)
-    pq.write_table(table, path, compression="zstd")
+    pq.write_table(table, path, compression="zstd", compression_level=1, use_dictionary=["session"])
 
 
 def extract_month(year: int, month: int) -> list[dict]:
@@ -248,11 +288,8 @@ def incomplete_spans(slice_id: str = "F") -> list[tuple[date, date]]:
     missing = []
     for y, m in months:
         for start, end in month_chunks(y, m):
-            _, meta_path = chunk_paths(start, end)
-            if meta_path.is_file():
-                body = json.loads(meta_path.read_text())
-                if body.get("status") == "complete":
-                    continue
+            if _chunk_done(start, end) is not None:
+                continue
             missing.append((start, end))
     return missing
 
@@ -262,7 +299,14 @@ def _extract_span(pair):
     return extract_chunk(start, end)
 
 
-def extract_F(workers: int = 8) -> list[dict]:
+def _extract_workers(requested: int | None) -> int:
+    if requested is not None:
+        return max(1, int(requested))
+    return EXTRACT_WORKERS
+
+
+def extract_F(workers: int | None = None) -> list[dict]:
+    workers = _extract_workers(workers)
     missing = incomplete_spans("F")
     if not missing:
         print("mbp1 F extract complete", flush=True)
@@ -286,7 +330,7 @@ def list_complete_chunks() -> list[Path]:
     for meta in sorted(OUT.glob("*.json")):
         body = json.loads(meta.read_text())
         parquet = meta.with_suffix(".parquet")
-        if body.get("status") == "complete" and parquet.is_file():
+        if body.get("status") == "complete" and _parquet_ok(parquet, body.get("n_rows")):
             paths.append(parquet)
     return paths
 
@@ -297,6 +341,7 @@ def list_extracted_sessions() -> list[str]:
         return dates
     for meta in sorted(OUT.glob("*.json")):
         body = json.loads(meta.read_text())
-        if body.get("status") == "complete":
+        parquet = meta.with_suffix(".parquet")
+        if body.get("status") == "complete" and _parquet_ok(parquet, body.get("n_rows")):
             dates.extend(body.get("sessions") or [])
     return sorted(set(dates))

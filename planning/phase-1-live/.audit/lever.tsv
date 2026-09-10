@@ -1,0 +1,119 @@
+family	id	audit	fixture	leakage	spike_flag	notes
+block	block.sweep.tbr.3m	pass	pass	0	n/a	report present
+block	cisd.fractal.literal	pass	pass	0	n/a	report present
+env	env.ev.mean60	pass	pass	0	n/a	report present
+env	env.ev.median60	pass	pass	0	n/a	report present
+env	env.ext.133.from-edge	pass	pass	0	n/a	report present
+env	env.ext.166.from-edge	pass	pass	0	n/a	report present
+env	env.ss.avgHL60	fail	pass	0	n/a	code uses half of H-L width; wiki is one-sided 09:00 excursions
+env	pz.approx.A	pass	pass	0	n/a	report present
+env	pz.learned	pass	pass	0	n/a	report present
+fail	fail.box.6-9.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.gb.10-11.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.gb.asia.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.gb.london.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.gb.nyam.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.jumbo.london.gb.c5	pass	pass	0	n/a	report present
+fail	fail.box.prior-rth.gb.c5	pass	pass	0	n/a	report present
+fail	label.aplus	pass	pass	0	n/a	report present
+fail	lvl.0930open	pass	pass	0	n/a	report present
+fail	lvl.nwog	pass	pass	0	n/a	report present
+fail	lvl.tdo	pass	pass	0	n/a	report present
+flow	flow.absorption.A	pass	pass	0	n/a	report present
+flow	flow.absorption.A.q75	pass	pass	0	n/a	report present
+flow	flow.absorption.A.w1m	pass	pass	0	n/a	report present
+flow	flow.absorption.A.w5m	pass	pass	0	n/a	report present
+flow	flow.absorption.B	pass	pass	0	n/a	report present
+flow	flow.bigtrade.100ny	pass	pass	0	n/a	report present
+flow	flow.bigtrade.75ldn	pass	pass	0	n/a	report present
+flow	flow.bigtrade.q50	pass	pass	0	n/a	report present
+flow	flow.bigtrade.q75	pass	pass	0	n/a	report present
+flow	flow.bigtrade.q90	pass	pass	0	n/a	report present
+flow	flow.bigtrade.q99	pass	pass	0	n/a	report present
+flow	flow.cvd.gamma	not-measurable	pass	0	n/a	report present
+flow	flow.cvd.ohlc	pass	pass	0	n/a	report present
+flow	flow.cvd.part.ohlc	pass	pass	0	n/a	report present
+flow	flow.cvd.part.q75	pass	pass	0	n/a	report present
+flow	flow.cvd.part.q90	pass	pass	0	n/a	report present
+flow	flow.cvd.part.trade	pass	pass	0	n/a	report present
+flow	flow.cvd.trade	pass	pass	0	n/a	check 18:00 reset vs AM-only sum in family_flow.scan_trade_cvd
+flow	flow.footprint.diag.4x	pass	pass	0	n/a	report present
+flow	flow.iceberg.touch.infer	not-measurable	pass	0	n/a	report present
+flow	flow.iceberg.touch.k15	not-measurable	pass	0	n/a	report present
+flow	flow.iceberg.touch.k20	not-measurable	pass	0	n/a	report present
+flow	flow.refill.offtouch	not-measurable	pass	0	n/a	report present
+flow	flow.refill.ontouch	pass	pass	0	n/a	report present
+flow	flow.smt.ohlc.4	pass	pass	0	n/a	report present
+flow	flow.smt.pine.3-3	pass	pass	0	n/a	report present
+flow	flow.smt.trade.es	not-measurable	pass	0	n/a	report present
+flow	flow.smt.trade.nq	pass	pass	0	n/a	report present
+gap	gap.body.adjacent	pass	pass	0	n/a	report present
+gap	gap.fvg.first.clock	pass	pass	0	n/a	report present
+open	open.dbx.in-range-not-value	pass	pass	0	n/a	report present
+open	open.dbx.in-value	pass	pass	0	n/a	report present
+open	open.dbx.outside-both	pass	pass	0	n/a	report present
+open	open.oneway.A.0930-1000	pass	pass	0	n/a	report present
+open	open.oneway.OR.15m	pass	pass	0	n/a	report present
+open	open.oneway.OR.5m	pass	pass	0	n/a	report present
+open	open.switch.ohlc-vp	pass	pass	0	n/a	report present
+open	open.switch.published	pass	pass	0	n/a	report present
+options	value.dealer.inventory	not-measurable	pass	0	n/a	report present
+options	value.hidden.book	not-measurable	pass	0	n/a	report present
+options	value.node.oi.ndx.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.ndx.top3.mapped_nq	not-measurable	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.ndxp.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.ndxp.top3.mapped_nq	not-measurable	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.nq.opt.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.nqopt.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.qqq.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.qqq.top3.mapped_nq	fail	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near; ETF marked non-native
+options	value.node.oi.spx.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.spx.top3.mapped_nq	not-measurable	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.spxw.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.spxw.top3.mapped_nq	not-measurable	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.spy.top3	fail	pass	0	n/a	missing strike; missing distance fields; missing tagged; missing near
+options	value.node.oi.spy.top3.mapped_nq	fail	pass	0	pending-ratio	missing strike; missing distance fields; missing tagged; missing near; ETF marked non-native
+options	value.node.oi.top3.index	pass	pass	0	n/a	report present
+options	value.skylit.atlas	not-measurable	pass	0	n/a	report present
+options	value.skylit.flowseeker	not-measurable	pass	0	n/a	report present
+options	value.skylit.heatseeker	not-measurable	pass	0	n/a	report present
+path	judas.depth.-0.5	pass	pass	0	n/a	report present
+path	path.6-9.published	pass	pass	0	n/a	report present
+range	bin.0930-0950	pass	pass	0	n/a	report present
+range	bin.0940-0950	pass	pass	0	n/a	report present
+range	bin.0950-1000	pass	pass	0	n/a	report present
+range	bin.1000-1030	pass	pass	0	n/a	report present
+range	bin.1030-1200	pass	pass	0	n/a	report present
+range	range.5-9	pass	pass	0	pending-1s	no window in report
+range	range.6-9.dollar-bars	pass	pass	0	pending-1s	report present
+range	range.6-9.published	pass	pass	0	pending-1s	report present
+range	range.6-9.trade-count	pass	pass	0	pending-1s	report present
+range	range.6-9.trade-level	pass	pass	0	pending-1s	report present
+range	range.6-9.vol-elapsed	pass	pass	0	pending-1s	report present
+range	range.7-9	pass	pass	0	pending-1s	no window in report
+range	range.8-9	pass	pass	0	pending-1s	no window in report
+range	range.asia.2000-2030	pass	pass	0	pending-1s	no window in report
+range	range.gb.10-11	pass	pass	0	pending-1s	no window in report
+range	range.gb.asia	pass	pass	0	pending-1s	no window in report
+range	range.gb.hour	pass	pass	0	pending-1s	report present
+range	range.gb.london	pass	pass	0	pending-1s	no window in report
+range	range.gb.nyam	pass	pass	0	pending-1s	no window in report
+range	range.ib	pass	pass	0	pending-1s	no window in report
+range	range.london.00-03	pass	pass	0	pending-1s	no window in report
+range	range.london.0300-0330	pass	pass	0	pending-1s	no window in report
+range	range.or.15m	pass	pass	0	pending-1s	no window in report
+range	range.or.5m	pass	pass	0	pending-1s	no window in report
+tpo	label.amt.day	pass	pass	0	n/a	report present
+tpo	label.amt.open.30m	pass	pass	0	n/a	report present
+tpo	value.tpo.rth.30m	pass	pass	0	n/a	report present
+tpo	value.tpo.rth.30m.trade	pass	pass	0	n/a	report present
+value	env.vwap.rth.sd2	pass	pass	0	n/a	report present
+value	value.dealer.inventory	not-measurable	pass	0	n/a	report present
+value	value.delta.rth.trade	fail	pass	0	n/a	delta row aliases vp_touch
+value	value.hidden.book	not-measurable	pass	0	n/a	report present
+value	value.kz	pass	pass	0	n/a	report present
+value	value.vp.rth.trade	pass	pass	0	n/a	report present
+vol	vol.gk20	pass	pass	0	n/a	report present
+vol	vol.har	pass	pass	0	n/a	report present
+vol	vol.iv.atm	not-measurable	pass	0	n/a	report present
+vol	vol.rv20	pass	pass	0	n/a	report present

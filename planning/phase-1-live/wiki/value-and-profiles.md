@@ -20,7 +20,7 @@ The RTH-scoped volume profile (09:30–16:00) with POC, VAH and VAL; prior-day v
 ## Upgrades
 - `value.vp.rth.ohlc1m` (Pine-style bar distribution) vs trade-level; VA 70 vs 68 vs 40; bin 1 tick vs 4 ticks; scope RTH vs 18:00–16:00 vs overnight-only (for balance / imbalance of the box).
 - Developing (intraday) vs completed prior-day profile.
-- VWAP anchors: ETH / RTH / fixed-06; dispersion SD / MAD / RMS; bands 1 / 2 / 2.5 / 3 `[VWAP p.3–8]`.
+- VWAP anchors: ETH / RTH / fixed-06; dispersion SD / MAD / RMS; bands 1 / 2 / 2.5 / 3 as `env.vwap.rth.sd1`, `env.vwap.rth.sd2.5`, `env.vwap.rth.sd3` beside `env.vwap.rth.sd2` `[VWAP p.3–8]`; swing / event / weekly / monthly anchors → [vwap-anchored](vwap-anchored.md).
 - TPO / AMT labels → [tpo-ib-auction](tpo-ib-auction.md), not duplicated here.
 
 ## Outcomes

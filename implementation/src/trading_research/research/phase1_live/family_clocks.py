@@ -138,6 +138,8 @@ def build_dollar_and_trade():
     dollar = load_rows("range_dollar_F")
     trade_level = load_rows("range_trade_level_F")
     trade_count = load_rows("range_trade_count_F")
+    if trade_count and not trade_count[0].get("cut_box"):
+        trade_count = []
     if dollar and trade_level and trade_count:
         return dollar, trade_level, trade_count
     f_rows = load_rows("sessions_F")
@@ -220,10 +222,47 @@ def _scan_trades(f_rows, dates, bars_1m):
             lo[k] = mn if lo[k] is None else min(lo[k], mn)
         if (i + 1) % 40 == 0:
             print(f"  trades files {i+1}/{len(files)}", flush=True)
+    hist = []
+    target = {}
+    by_date = {r["date"]: r for r in f_rows}
+    for day in dates:
+        k = day.isoformat()
+        hist.append(cnt[k])
+        median = float(np.median(hist[-61:-1])) if len(hist) >= 21 else (float(np.median(hist[:-1])) if len(hist) > 1 else None)
+        target[k] = int(median) if median and median > 0 else None
+    cut_hi = {k: None for k in keys}
+    cut_lo = {k: None for k in keys}
+    cut_t = {k: None for k in keys}
+    seen = {k: 0 for k in keys}
+    for i, path in enumerate(files):
+        table = pq.read_table(path, columns=["t", "price"])
+        t = table.column("t").to_numpy()
+        px = table.column("price").to_numpy()
+        order = np.argsort(t, kind="mergesort")
+        t, px = t[order], px[order]
+        idx = np.searchsorted(starts, t, side="right") - 1
+        clipped = np.clip(idx, 0, len(keys) - 1)
+        ok = (idx >= 0) & (idx < len(keys)) & (t >= starts[clipped]) & (t < ends[clipped])
+        if not np.any(ok):
+            continue
+        for j, price, ts in zip(idx[ok], px[ok], t[ok]):
+            k = keys[int(j)]
+            cap = target[k]
+            if cap is None:
+                continue
+            if seen[k] >= cap:
+                continue
+            seen[k] += 1
+            p = float(price)
+            cut_hi[k] = p if cut_hi[k] is None else max(cut_hi[k], p)
+            cut_lo[k] = p if cut_lo[k] is None else min(cut_lo[k], p)
+            if seen[k] == cap:
+                cut_t[k] = int(ts)
+        if (i + 1) % 40 == 0:
+            print(f"  trade-count cut {i+1}/{len(files)}", flush=True)
     counts = []
     trade_level = []
     hist = []
-    by_date = {r["date"]: r for r in f_rows}
     for day in dates:
         k = day.isoformat()
         row = by_date[k]
@@ -248,20 +287,30 @@ def _scan_trades(f_rows, dates, bars_1m):
             "non_touch_m05": row["non_touch_m05"],
             "H": hi[k], "L": lo[k], "trade_count": cnt[k],
         })
-        # trade-count bar uses count as elapsed activity; without per-trade timestamps retained,
-        # the box end is 09:00 when the session count is below the median, else 09:00 still
-        # (end timestamp needs the running count). Store count vs median; path uses full 6-9
-        # when count < median (box not closed early) which we cannot cut without a second pass.
+        ch, cl = cut_hi[k], cut_lo[k]
+        if ch is None or cl is None:
+            ch, cl = hi[k], lo[k]
+        cut_fail = ch is None or cl is None or ch <= cl
+        cut_path = {"path_class": None}
+        if not cut_fail and out["n"]:
+            cut_path = path_class_from_closes(
+                to_ticks(out["c"]), out["t"],
+                int(round(ch / TICK)), int(round(cl / TICK)),
+            )
+        known_cut = cut_t[k] if cut_t[k] is not None else row["known_at_ns"]
         counts.append({
-            "date": k, "year": row["year"], "eligible": row["eligible"],
-            "path_class": row.get("path_class"), "faithful_path": row.get("path_class"),
-            "disagree": False,
-            "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
-            "leakage": 0, "failure": False, "drop_coverage": row["drop_coverage"],
+            "date": k, "year": row["year"],
+            "eligible": row["eligible"] and not cut_fail,
+            "path_class": cut_path.get("path_class"), "faithful_path": row.get("path_class"),
+            "disagree": cut_path.get("path_class") != row.get("path_class") if cut_path.get("path_class") else False,
+            "known_at_ns": known_cut, "outcome_start_ns": row["outcome_start_ns"],
+            "leakage": 0 if known_cut <= row["outcome_start_ns"] else 1,
+            "failure": cut_fail, "drop_coverage": row["drop_coverage"],
             "missing_bars": 0 if cnt[k] else row["missing_1s"],
             "non_touch_m05": row["non_touch_m05"],
             "trade_count": cnt[k], "median_count": median,
-            "closed_early": bool(median is not None and cnt[k] >= median),
+            "closed_early": bool(target[k] is not None and cnt[k] >= (target[k] or 0)),
+            "H": ch, "L": cl, "cut_box": True, "cut_t_ns": cut_t[k],
         })
     return trade_level, counts
 

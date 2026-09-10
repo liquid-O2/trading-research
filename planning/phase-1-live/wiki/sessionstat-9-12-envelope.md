@@ -14,6 +14,7 @@ SessionStat+ draws average and median session highs and lows over a lookback, "m
 ## Upgrades
 - Lookback 20 / 60 / 250; weighted average variant `[SS p.3 L28]`; per-weekday variant `[PINE Pre-market session levels and stats.txt]`.
 - Anchor 09:00 open (faithful) vs 09:30 open (comparison with EV rows).
+- Session 09:30–16:00 RTH high / low as its own row `env.ss.rth.avgHL60` (medians and minimum-average likewise) `[SS p.10]`.
 
 ## Outcomes
 Same table as [ev-range-expected-move](ev-range-expected-move.md): reach, overshoot, reject, time-to-touch, in/out of prior value; coincidence counts with 1.33 / 1.66 and −0.5 projections; calibration by vol tercile (his choppy / low-vol failure claim `[SS p.11]`).

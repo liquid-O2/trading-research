@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date, time as dtime
+from concurrent.futures import ThreadPoolExecutor
+from datetime import date, time as dtime, timedelta
 
 import numpy as np
 import pyarrow.parquet as pq
+from numba import njit
 
 from trading_research.foundations.calendar import local_timestamp
 from trading_research.research.phase1_live import TICK, ZONE
@@ -19,11 +21,156 @@ NS2M = 2 * 60 * 1_000_000_000
 NS15M = 15 * 60 * 1_000_000_000
 
 
+@njit(cache=True)
+def _absorption_a_scan(t, px, buy_roll, sell_roll, q_buy, q_sell, high, low, tick_tol, width, ns15m, tick):
+    n = t.size
+    two_tick = 2.0 * tick
+    rev = 0.25 * width
+    for i in range(n):
+        toward_high = buy_roll[i] >= q_buy and abs(px[i] - high) <= tick_tol
+        toward_low = sell_roll[i] >= q_sell and abs(px[i] - low) <= tick_tol
+        if not (toward_high or toward_low):
+            continue
+        end = t[i] + ns15m
+        k = i + 1
+        while k < n and t[k] < end:
+            k += 1
+        pmax = px[i]
+        pmin = px[i]
+        for j in range(i + 1, k):
+            if px[j] > pmax:
+                pmax = px[j]
+            if px[j] < pmin:
+                pmin = px[j]
+        if toward_high:
+            if (pmax - high) <= two_tick and (high - pmin) >= rev:
+                return True
+        else:
+            if (low - pmin) <= two_tick and (pmax - low) >= rev:
+                return True
+    return False
+
+
+@njit(cache=True)
+def _absorption_b_scan(t, is_trade, side, size, bid, ask, bid_sz, ask_sz, q90, tick, ns500):
+    n = t.size
+    maxk = 4096
+    keys = np.empty(maxk, np.int64)
+    counts = np.zeros(maxk, np.int64)
+    nkeys = 0
+    half_tick = tick * 0.5
+    for j in range(n):
+        if (not is_trade[j]) or side[j] == 0 or size[j] < q90:
+            continue
+        consumed = int(size[j])
+        if consumed <= 0:
+            continue
+        if side[j] > 0:
+            px = ask[j]
+            shown = int(ask_sz[j])
+            limit = t[j] + ns500
+            hit = False
+            k = j + 1
+            need = shown + 0.5 * consumed
+            while k < n and t[k] < limit:
+                if abs(ask[k] - px) <= half_tick and int(ask_sz[k]) >= need:
+                    hit = True
+                    break
+                k += 1
+        else:
+            px = bid[j]
+            shown = int(bid_sz[j])
+            limit = t[j] + ns500
+            hit = False
+            k = j + 1
+            need = shown + 0.5 * consumed
+            while k < n and t[k] < limit:
+                if abs(bid[k] - px) <= half_tick and int(bid_sz[k]) >= need:
+                    hit = True
+                    break
+                k += 1
+        if hit:
+            key = int(round(px / tick))
+            found = -1
+            for i in range(nkeys):
+                if keys[i] == key:
+                    found = i
+                    break
+            if found < 0:
+                if nkeys >= maxk:
+                    continue
+                keys[nkeys] = key
+                counts[nkeys] = 1
+                nkeys += 1
+                found = nkeys - 1
+            else:
+                counts[found] += 1
+            if counts[found] >= 2:
+                return True
+    return False
+
+
+@njit(cache=True)
+def _iceberg_scan(t, is_trade, side, size, bid, ask, bid_sz, ask_sz, ratio, tick, ns500):
+    n = t.size
+    half_tick = tick * 0.5
+    for j in range(n):
+        if (not is_trade[j]) or side[j] == 0:
+            continue
+        buy = side[j] > 0
+        shown = int(ask_sz[j] if buy else bid_sz[j])
+        px = ask[j] if buy else bid[j]
+        floor = shown if shown > 1 else 1
+        if int(size[j]) <= ratio * floor:
+            continue
+        limit = t[j] + ns500
+        i = j + 1
+        while i < n and t[i] < limit:
+            book_px = ask[i] if buy else bid[i]
+            book_sz = int(ask_sz[i] if buy else bid_sz[i])
+            if abs(book_px - px) <= half_tick and book_sz > shown:
+                return True
+            i += 1
+    return False
+
+
+def _flow_workers() -> int:
+    # 21 vCPU / 80 GiB. Each thread holds one week table. 12 ≈ 20-30 GiB.
+    return 12
+
+
 def _am_ns(day: date):
     start = local_timestamp(day, dtime(9, 30), ZONE)
     end = local_timestamp(day, dtime(12, 0), ZONE)
     rth_end = local_timestamp(day, dtime(16, 0), ZONE)
     return start, end, rth_end
+
+
+def _session_slices(table, only=None):
+    sess = np.asarray(table.column("session").combine_chunks().to_numpy(zero_copy_only=False))
+    n = sess.size
+    if n == 0:
+        return
+    order = None
+    if n > 1 and np.any(sess[1:] < sess[:-1]):
+        order = np.argsort(sess, kind="mergesort")
+        sess = sess[order]
+    if n > 1:
+        breaks = np.flatnonzero(sess[1:] != sess[:-1]) + 1
+    else:
+        breaks = np.empty(0, dtype=np.int64)
+    starts = np.concatenate(([0], breaks))
+    ends = np.concatenate((breaks, [n]))
+    cols = {}
+    for name in ("t", "price", "size", "side", "bid", "ask", "bid_sz", "ask_sz", "is_trade"):
+        arr = table.column(name).to_numpy()
+        cols[name] = arr[order] if order is not None else arr
+    only = set(only) if only else None
+    for a, b in zip(starts, ends):
+        sid = str(sess[a])
+        if only is not None and sid not in only:
+            continue
+        yield sid, {k: v[a:b] for k, v in cols.items()}
 
 
 def iter_sessions(only=None):
@@ -37,41 +184,7 @@ def iter_sessions(only=None):
             sess_meta = set(body.get("sessions") or [])
             if sess_meta and not (sess_meta & only):
                 continue
-        table = pq.read_table(path)
-        sessions = table.column("session").to_pylist()
-        # split by session without pandas
-        sess = np.asarray(sessions)
-        if sess.size == 0:
-            continue
-        order = np.argsort(sess, kind="mergesort")
-        sess_s = sess[order]
-        breaks = np.flatnonzero(sess_s[1:] != sess_s[:-1]) + 1
-        starts = np.r_[0, breaks]
-        ends = np.r_[breaks, sess_s.size]
-        t = table.column("t").to_numpy()[order]
-        price = table.column("price").to_numpy()[order]
-        size = table.column("size").to_numpy()[order]
-        side = table.column("side").to_numpy()[order]
-        bid = table.column("bid").to_numpy()[order]
-        ask = table.column("ask").to_numpy()[order]
-        bid_sz = table.column("bid_sz").to_numpy()[order]
-        ask_sz = table.column("ask_sz").to_numpy()[order]
-        is_trade = table.column("is_trade").to_numpy()[order]
-        for a, b in zip(starts, ends):
-            sid = str(sess_s[a])
-            if only and sid not in only:
-                continue
-            yield sid, {
-                "t": t[a:b],
-                "price": price[a:b],
-                "size": size[a:b],
-                "side": side[a:b],
-                "bid": bid[a:b],
-                "ask": ask[a:b],
-                "bid_sz": bid_sz[a:b],
-                "ask_sz": ask_sz[a:b],
-                "is_trade": is_trade[a:b],
-            }
+        yield from _session_slices(pq.read_table(path), only)
 
 
 def cvd_from_trades(ev, t0=None, t1=None) -> dict:
@@ -118,40 +231,13 @@ def absorption_b(ev, am0: int, am1: int) -> bool:
     if not np.any(trade_mask):
         return False
     q90 = float(np.quantile(size[trade_mask], 0.9))
-    trade_i = np.flatnonzero(trade_mask & (size >= q90))
-    reloads_by_px = {}
-    for j in trade_i:
-        consumed = int(size[j])
-        if consumed <= 0:
-            continue
-        if int(side[j]) > 0:
-            px = float(ask[j])
-            shown = int(ask_sz[j])
-            limit = t[j] + NS500
-            k = j + 1
-            hit = False
-            while k < t.size and t[k] < limit:
-                if abs(float(ask[k]) - px) <= TICK / 2 and int(ask_sz[k]) >= shown + 0.5 * consumed:
-                    hit = True
-                    break
-                k += 1
-        else:
-            px = float(bid[j])
-            shown = int(bid_sz[j])
-            limit = t[j] + NS500
-            k = j + 1
-            hit = False
-            while k < t.size and t[k] < limit:
-                if abs(float(bid[k]) - px) <= TICK / 2 and int(bid_sz[k]) >= shown + 0.5 * consumed:
-                    hit = True
-                    break
-                k += 1
-        if hit:
-            key = round(px / TICK)
-            reloads_by_px[key] = reloads_by_px.get(key, 0) + 1
-            if reloads_by_px[key] >= 2:
-                return True
-    return False
+    return bool(_absorption_b_scan(
+        t, np.asarray(is_trade, dtype=np.bool_),
+        np.asarray(side, dtype=np.int8), np.asarray(size, dtype=np.int32),
+        np.asarray(bid, dtype=np.float64), np.asarray(ask, dtype=np.float64),
+        np.asarray(bid_sz, dtype=np.int32), np.asarray(ask_sz, dtype=np.int32),
+        q90, TICK, NS500,
+    ))
 
 
 def iceberg_touch_infer(ev, am0: int, am1: int, *, k: float = 1.0) -> bool:
@@ -168,22 +254,13 @@ def iceberg_touch_infer(ev, am0: int, am1: int, *, k: float = 1.0) -> bool:
     ask = ev["ask"][am]
     bid_sz = ev["bid_sz"][am]
     ask_sz = ev["ask_sz"][am]
-    ratio = k
-    for j in np.flatnonzero(is_trade & (side != 0)):
-        buy = int(side[j]) > 0
-        shown = int(ask_sz[j] if buy else bid_sz[j])
-        px = float(ask[j] if buy else bid[j])
-        if int(size[j]) <= ratio * max(shown, 1):
-            continue
-        limit = t[j] + NS500
-        i = j + 1
-        while i < t.size and t[i] < limit:
-            book_px = float(ask[i] if buy else bid[i])
-            book_sz = int(ask_sz[i] if buy else bid_sz[i])
-            if abs(book_px - px) <= TICK / 2 and book_sz > shown:
-                return True
-            i += 1
-    return False
+    return bool(_iceberg_scan(
+        t, np.asarray(is_trade, dtype=np.bool_),
+        np.asarray(side, dtype=np.int8), np.asarray(size, dtype=np.int32),
+        np.asarray(bid, dtype=np.float64), np.asarray(ask, dtype=np.float64),
+        np.asarray(bid_sz, dtype=np.int32), np.asarray(ask_sz, dtype=np.int32),
+        float(k), TICK, NS500,
+    ))
 
 
 def _roll_aggressive(t, size, side, window_ns):
@@ -215,25 +292,12 @@ def absorption_a(ev, am0: int, am1: int, high: float | None, low: float | None, 
     buy_roll, sell_roll = _roll_aggressive(t, size, side, window_ns)
     q_buy = vol_cut_buy if vol_cut_buy is not None else float(np.quantile(buy_roll, 0.9))
     q_sell = vol_cut_sell if vol_cut_sell is not None else float(np.quantile(sell_roll, 0.9))
-    for i in range(t.size):
-        toward_high = buy_roll[i] >= q_buy and abs(px[i] - high) <= tick_tol
-        toward_low = sell_roll[i] >= q_sell and abs(px[i] - low) <= tick_tol
-        if not (toward_high or toward_low):
-            continue
-        end = t[i] + NS15M
-        k = i
-        while k < t.size and t[k] < end:
-            k += 1
-        path = px[i:k]
-        if path.size == 0:
-            continue
-        if toward_high:
-            if (path.max() - high) <= 2 * TICK and (high - path.min()) >= 0.25 * width:
-                return True
-        else:
-            if (low - path.min()) <= 2 * TICK and (path.max() - low) >= 0.25 * width:
-                return True
-    return False
+    return bool(_absorption_a_scan(
+        np.asarray(t, dtype=np.int64), np.asarray(px, dtype=np.float64),
+        np.asarray(buy_roll, dtype=np.float64), np.asarray(sell_roll, dtype=np.float64),
+        float(q_buy), float(q_sell), float(high), float(low), float(tick_tol),
+        float(width), NS15M, TICK,
+    ))
 
 
 def footprint_4x(ev, am0: int, am1: int) -> bool:
@@ -245,35 +309,27 @@ def footprint_4x(ev, am0: int, am1: int) -> bool:
     side = ev["side"][tr][am]
     if px.size == 0:
         return False
-    buy = {}
-    sell = {}
-    for p, s, d in zip(px, size, side):
-        p = int(p)
-        if d > 0:
-            buy[p] = buy.get(p, 0.0) + float(s)
-        elif d < 0:
-            sell[p] = sell.get(p, 0.0) + float(s)
-    flags = {}
-    for p, b in buy.items():
-        opp = sell.get(p - 1, 0.0)
-        if opp > 0 and b >= 4.0 * opp:
-            flags[p] = 1
-    for p, s in sell.items():
-        opp = buy.get(p + 1, 0.0)
-        if opp > 0 and s >= 4.0 * opp:
-            flags[p] = -1
-    if not flags:
-        return False
-    keys = sorted(flags)
-    run = 1
-    for i in range(1, len(keys)):
-        if keys[i] == keys[i - 1] + 1 and flags[keys[i]] == flags[keys[i - 1]]:
-            run += 1
-            if run >= 3:
-                return True
-        else:
-            run = 1
-    return True
+    lo = int(px.min())
+    hi = int(px.max())
+    n = hi - lo + 1
+    buy = np.zeros(n, dtype=np.float64)
+    sell = np.zeros(n, dtype=np.float64)
+    buy_i = side > 0
+    sell_i = side < 0
+    if np.any(buy_i):
+        buy += np.bincount((px[buy_i] - lo).astype(np.int64), weights=size[buy_i], minlength=n)
+    if np.any(sell_i):
+        sell += np.bincount((px[sell_i] - lo).astype(np.int64), weights=size[sell_i], minlength=n)
+    flags = np.zeros(n, dtype=np.int8)
+    if n >= 2:
+        buy_im = (sell[:-1] > 0) & (buy[1:] >= 4.0 * sell[:-1])
+        flags[1:][buy_im] = 1
+        sell_im = (buy[1:] > 0) & (sell[:-1] >= 4.0 * buy[1:])
+        flags[:-1][sell_im] = -1
+    if n >= 3:
+        same = (flags[2:] != 0) & (flags[2:] == flags[1:-1]) & (flags[1:-1] == flags[:-2])
+        return bool(np.any(same))
+    return False
 
 
 def on_touch_refill(ev, am0: int, am1: int) -> bool:
@@ -310,42 +366,61 @@ def on_touch_refill(ev, am0: int, am1: int) -> bool:
     return False
 
 
-def smt_trade_nq(ev, am0: int, am1: int, sisters: dict, day: date) -> bool:
+def smt_trade_nq(ev, am0: int, am1: int, sisters: dict, day: date, row: dict | None = None) -> bool:
+    """Tick-precise S1 hunt. NQ trades beyond Asia/London/6-9/PDH/PDL. Sister 1m has not."""
+    from trading_research.research.phase1_live.clocks import CLOCKS, clock_bounds
     tr = ev["is_trade"]
     t = ev["t"][tr]
     am = (t >= am0) & (t < am1)
-    t = t[am]
     px = ev["price"][tr][am]
-    if t.size < 10:
+    if px.size < 10 or row is None:
         return False
-    nq_h = np.maximum.accumulate(px)
-    nq_l = np.minimum.accumulate(px)
-    new_h = np.r_[False, nq_h[1:] > nq_h[:-1]]
-    new_l = np.r_[False, nq_l[1:] < nq_l[:-1]]
-    if not np.any(new_h) and not np.any(new_l):
+    nq_levels = [
+        ("asia_h", row.get("asia_high"), "high"),
+        ("asia_l", row.get("asia_low"), "low"),
+        ("ldn_h", row.get("london_high"), "high"),
+        ("ldn_l", row.get("london_low"), "low"),
+        ("h69", row.get("H"), "high"),
+        ("l69", row.get("L"), "low"),
+        ("pdh", row.get("prior_rth_high"), "high"),
+        ("pdl", row.get("prior_rth_low"), "low"),
+    ]
+    hunted = []
+    for lid, lvl, side in nq_levels:
+        if lvl is None:
+            continue
+        if side == "high" and np.any(px > lvl):
+            hunted.append((lid, side, float(lvl)))
+        if side == "low" and np.any(px < lvl):
+            hunted.append((lid, side, float(lvl)))
+    if not hunted:
         return False
+    asia = clock_bounds(day, CLOCKS["range.gb.asia"])
+    london = clock_bounds(day, CLOCKS["range.london.00-03"])
+    box69 = clock_bounds(day, CLOCKS["range.6-9.published"])
+    prior = clock_bounds(day - timedelta(days=1), CLOCKS["prior.rth"])
     for name, bars in sisters.items():
         if bars is None:
             continue
-        sw = bars.window(am0 // 1_000_000, am1 // 1_000_000)
-        if sw["n"] < 5:
-            continue
-        sh = np.maximum.accumulate(sw["h"])
-        sl = np.minimum.accumulate(sw["l"])
-        st = sw["t"]
-        for direction, new_flag, nq_ext, sis_ext in ((1, new_h, nq_h, sh), (-1, new_l, nq_l, sl)):
-            hits = np.flatnonzero(new_flag)
-            step = max(1, hits.size // 32)
-            for j in hits[::step]:
-                deadline = t[j] // 1_000_000 + 5 * 60_000
-                k = int(np.searchsorted(st, deadline, "right"))
-                if k <= 0:
-                    return True
-                last = sis_ext[min(k, sis_ext.size) - 1]
-                if direction > 0 and last < nq_ext[j] - TICK:
-                    return True
-                if direction < 0 and last > nq_ext[j] + TICK:
-                    return True
+        sis = {
+            "asia_h": bars.window(asia["start_ms"], asia["end_ms"]).get("high"),
+            "asia_l": bars.window(asia["start_ms"], asia["end_ms"]).get("low"),
+            "ldn_h": bars.window(london["start_ms"], london["end_ms"]).get("high"),
+            "ldn_l": bars.window(london["start_ms"], london["end_ms"]).get("low"),
+            "h69": bars.window(box69["start_ms"], box69["end_ms"]).get("high"),
+            "l69": bars.window(box69["start_ms"], box69["end_ms"]).get("low"),
+            "pdh": bars.window(prior["start_ms"], prior["end_ms"]).get("high"),
+            "pdl": bars.window(prior["start_ms"], prior["end_ms"]).get("low"),
+        }
+        am_s = bars.window(am0 // 1_000_000, am1 // 1_000_000)
+        for lid, side, _lvl in hunted:
+            sl = sis.get(lid)
+            if sl is None or am_s["n"] == 0:
+                return True
+            if side == "high" and not np.any(am_s["h"] > sl):
+                return True
+            if side == "low" and not np.any(am_s["l"] < sl):
+                return True
     return False
 
 
@@ -359,12 +434,10 @@ def vp_rth(ev, am0: int, rth_end: int) -> dict:
     if px.size == 0:
         return {"poc": None, "VAL": None, "VAH": None, "n": 0}
     lo, hi = int(px.min()), int(px.max())
-    vol = np.zeros(hi - lo + 1, dtype=np.float64)
-    delta = np.zeros_like(vol)
-    for p, s, d in zip(px, size, side):
-        i = int(p) - lo
-        vol[i] += float(s)
-        delta[i] += float(s) * float(d)
+    rel = (px - lo).astype(np.int64)
+    n = hi - lo + 1
+    vol = np.bincount(rel, weights=size, minlength=n)
+    delta = np.bincount(rel, weights=size * side.astype(np.float64), minlength=n)
     poc_i = int(np.argmax(vol))
     target = 0.70 * float(vol.sum())
     a = b = poc_i
@@ -399,25 +472,118 @@ def tpo_trade_visited(ev, am0: int, rth_end: int) -> bool:
     px = ev["price"][tr][rth]
     if t.size < 30:
         return False
-    bucket = (t - am0) // (30 * 60 * 1_000_000_000)
+    bucket = ((t - am0) // (30 * 60 * 1_000_000_000)).astype(np.int64)
     n_b = int(bucket.max()) + 1
     highs = np.full(n_b, -np.inf)
     lows = np.full(n_b, np.inf)
-    for b, p in zip(bucket, px):
-        i = int(b)
-        if p > highs[i]:
-            highs[i] = p
-        if p < lows[i]:
-            lows[i] = p
+    np.maximum.at(highs, bucket, px)
+    np.minimum.at(lows, bucket, px)
     valid = np.isfinite(highs)
     if valid.sum() < 2:
         return False
     return bool(highs[valid][-1] > highs[valid][:-1].max() or lows[valid][-1] < lows[valid][:-1].min())
 
 
+def _discover_chunk(path, disc_set):
+    size_disc, vol2_buy, vol2_sell = [], [], []
+    for session, ev in _session_slices(pq.read_table(path), disc_set):
+        day = date.fromisoformat(session)
+        am0, am1, rth_end = _am_ns(day)
+        tr = ev["is_trade"]
+        t = ev["t"][tr]
+        ny = (t >= am0) & (t < rth_end)
+        size_disc.append(ev["size"][tr][ny].astype(np.float64))
+        am = (t >= am0) & (t < am1)
+        if int(am.sum()) >= 20:
+            br, sr = _roll_aggressive(t[am], ev["size"][tr][am].astype(np.float64), ev["side"][tr][am], NS2M)
+            vol2_buy.append(br)
+            vol2_sell.append(sr)
+    return size_disc, vol2_buy, vol2_sell
+
+
+def _score_session(session, ev, grid, f_rows, sisters, trades_cvd):
+    row = f_rows.get(session)
+    if row is None:
+        return None
+    day = date.fromisoformat(session)
+    am0, am1, rth_end = _am_ns(day)
+    globex = local_timestamp(day - timedelta(days=1), dtime(18, 0), ZONE)
+    order = np.argsort(ev["t"], kind="mergesort")
+    ev = {k: v[order] for k, v in ev.items()}
+    q90 = grid["size"].get("q90")
+    q75 = grid["size"].get("q75")
+    q50 = grid["size"].get("q50")
+    q99 = grid["size"].get("q99")
+    cvd = cvd_from_trades(ev, globex, am1)
+    cvd75 = _cvd_cut(ev, q75)
+    cvd90 = _cvd_cut(ev, q90)
+    vp = vp_rth(ev, am0, rth_end)
+    xcheck = trades_cvd.get(session)
+    tr = ev["is_trade"]
+    ny = (ev["t"] >= am0) & (ev["t"] < rth_end) & tr
+    ny_size = ev["size"][ny]
+    ldn0 = local_timestamp(day, dtime(2, 0), ZONE)
+    ldn1 = local_timestamp(day, dtime(5, 0), ZONE)
+    ldn = (ev["t"] >= ldn0) & (ev["t"] < ldn1) & tr
+    return {
+        "date": session, "year": session[:4], "eligible": row.get("eligible"),
+        "score": True, "discovery": False,
+        "cvd_trade": cvd["cvd"], "cvd_trade_sign": cvd["cvd_sign"],
+        "cvd_part": cvd["cvd_part"], "cvd_part_sign": cvd["cvd_part_sign"],
+        "cvd_part_q75_sign": cvd75["cvd_part_sign"] if cvd75 else 0,
+        "cvd_part_q90_sign": cvd90["cvd_part_sign"] if cvd90 else 0,
+        "part_big": cvd["part_big"], "n_big": cvd["n_big"], "n_trades": cvd["n_trades"],
+        "bigtrade": bool(np.any(ny_size >= 100)),
+        "bigtrade_75ldn": bool(np.any(ev["size"][ldn] >= 75)) if np.any(ldn) else False,
+        "bigtrade_q50": bool(q50 and np.any(ny_size >= q50)),
+        "bigtrade_q75": bool(q75 and np.any(ny_size >= q75)),
+        "bigtrade_q90": bool(q90 and np.any(ny_size >= q90)),
+        "bigtrade_q99": bool(q99 and np.any(ny_size >= q99)),
+        "absorption_B": absorption_b(ev, am0, am1),
+        "absorption_A": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
+                                     window_ns=NS2M, tick_tol=2 * TICK,
+                                     vol_cut_buy=grid["abs_q90_buy"], vol_cut_sell=grid["abs_q90_sell"]),
+        "absorption_A_w1m": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
+                                         window_ns=60_000_000_000, tick_tol=2 * TICK),
+        "absorption_A_w5m": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
+                                         window_ns=5 * 60_000_000_000, tick_tol=2 * TICK),
+        "absorption_A_q75": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
+                                         window_ns=NS2M, tick_tol=2 * TICK,
+                                         vol_cut_buy=grid["abs_q75_buy"], vol_cut_sell=grid["abs_q75_sell"]),
+        "footprint_4x": footprint_4x(ev, am0, am1),
+        "refill_ontouch": on_touch_refill(ev, am0, am1),
+        "iceberg_touch": iceberg_touch_infer(ev, am0, am1, k=1.0),
+        "iceberg_k15": iceberg_touch_infer(ev, am0, am1, k=1.5),
+        "iceberg_k20": iceberg_touch_infer(ev, am0, am1, k=2.0),
+        "smt_trade_nq": smt_trade_nq(ev, am0, am1, sisters, day, row),
+        "footprint_stack3": True, "smt_s1": True,
+        "tpo_trade": tpo_trade_visited(ev, am0, rth_end),
+        "poc": vp["poc"], "VAL": vp["VAL"], "VAH": vp["VAH"], "vp_n": vp["n"],
+        "dp_max": vp.get("dp_max"), "dp_min": vp.get("dp_min"),
+        "xcheck_cvd": None if xcheck is None else xcheck.get("cvd"),
+        "xcheck_disagree": False if xcheck is None or xcheck.get("cvd") is None else (
+            (1 if xcheck["cvd"] > 0 else -1 if xcheck["cvd"] < 0 else 0) != cvd["cvd_sign"]
+        ),
+        "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
+        "leakage": 0, "failure": cvd["n_trades"] == 0,
+        "drop_coverage": row.get("drop_coverage"), "missing_bars": row.get("missing_1s") or 0,
+        "non_touch_m05": row.get("non_touch_m05"), "source": "cov.nq.mbp1",
+        "grid": grid["size"],
+    }
+
+
+def _score_chunk(path, score_set, grid, f_rows, sisters, trades_cvd):
+    out = []
+    for session, ev in _session_slices(pq.read_table(path), score_set):
+        rec = _score_session(session, ev, grid, f_rows, sisters, trades_cvd)
+        if rec is not None:
+            out.append(rec)
+    return out
+
+
 def build_mbp1_flow_table():
     cached = load_rows("mbp1_flow_F")
-    if cached:
+    if cached and cached[0].get("footprint_stack3") and cached[0].get("smt_s1"):
         return cached
     from trading_research.research.phase1_live.threshold_grid import discovery_dates, freeze_size_grid, GRID_PATH
     from trading_research.research.phase1_live.mbp1_extract import list_extracted_sessions
@@ -436,22 +602,19 @@ def build_mbp1_flow_table():
     present = [s for s in list_extracted_sessions() if s in f_rows]
     disc, score = discovery_dates(present)
     disc_set = set(disc)
-    size_disc = []
-    vol2_buy, vol2_sell = [], []
-    print(f"discovery n={len(disc)} score n={len(score)}", flush=True)
-    for session, ev in iter_sessions(only=disc_set):
-        day = date.fromisoformat(session)
-        am0, am1, rth_end = _am_ns(day)
-        tr = ev["is_trade"]
-        t = ev["t"][tr]
-        ny = (t >= am0) & (t < rth_end)
-        size_disc.append(ev["size"][tr][ny].astype(np.float64))
-        am = (t >= am0) & (t < am1)
-        if am.sum() >= 20:
-            br, sr = _roll_aggressive(t[am], ev["size"][tr][am].astype(np.float64), ev["side"][tr][am], NS2M)
-            vol2_buy.append(br)
-            vol2_sell.append(sr)
+    chunks = list_complete_chunks()
+    workers = _flow_workers()
+    print(f"discovery n={len(disc)} score n={len(score)} chunks={len(chunks)} workers={workers}", flush=True)
+    size_disc, vol2_buy, vol2_sell = [], [], []
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        parts = list(pool.map(lambda p: _discover_chunk(p, disc_set), chunks))
+    for sizes, vb, vs in parts:
+        size_disc.extend(sizes)
+        vol2_buy.extend(vb)
+        vol2_sell.extend(vs)
     sizes = np.concatenate(size_disc) if size_disc else np.array([])
+    if sizes.size == 0:
+        raise RuntimeError("mbp1 discovery produced no trade sizes; extract parquets missing or empty")
     grid = {
         "discovery_n": len(disc),
         "score_n": len(score),
@@ -472,81 +635,17 @@ def build_mbp1_flow_table():
     print("froze", grid["size"], "abs_q90_buy", grid["abs_q90_buy"], flush=True)
     score_set = set(score)
     by_sess = {}
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        nested = list(pool.map(
+            lambda p: _score_chunk(p, score_set, grid, f_rows, sisters, trades_cvd),
+            chunks,
+        ))
     n_done = 0
-    q90 = grid["size"].get("q90")
-    q75 = grid["size"].get("q75")
-    q50 = grid["size"].get("q50")
-    q99 = grid["size"].get("q99")
-    for session, ev in iter_sessions(only=score_set):
-        row = f_rows.get(session)
-        if row is None:
-            continue
-        day = date.fromisoformat(session)
-        am0, am1, rth_end = _am_ns(day)
-        from datetime import timedelta as _td
-        globex = local_timestamp(day - _td(days=1), dtime(18, 0), ZONE)
-        order = np.argsort(ev["t"], kind="mergesort")
-        ev = {k: v[order] for k, v in ev.items()}
-        cvd = cvd_from_trades(ev, globex, am1)
-        cvd75 = _cvd_cut(ev, q75)
-        cvd90 = _cvd_cut(ev, q90)
-        vp = vp_rth(ev, am0, rth_end)
-        xcheck = trades_cvd.get(session)
-        tr = ev["is_trade"]
-        ny = (ev["t"] >= am0) & (ev["t"] < rth_end) & tr
-        ny_size = ev["size"][ny]
-        ldn0 = local_timestamp(day, __import__("datetime").time(2, 0), ZONE)
-        ldn1 = local_timestamp(day, __import__("datetime").time(5, 0), ZONE)
-        ldn = (ev["t"] >= ldn0) & (ev["t"] < ldn1) & tr
-        by_sess[session] = {
-            "date": session, "year": session[:4], "eligible": row.get("eligible"),
-            "score": True, "discovery": False,
-            "cvd_trade": cvd["cvd"], "cvd_trade_sign": cvd["cvd_sign"],
-            "cvd_part": cvd["cvd_part"], "cvd_part_sign": cvd["cvd_part_sign"],
-            "cvd_part_q75_sign": cvd75["cvd_part_sign"] if cvd75 else 0,
-            "cvd_part_q90_sign": cvd90["cvd_part_sign"] if cvd90 else 0,
-            "part_big": cvd["part_big"], "n_big": cvd["n_big"], "n_trades": cvd["n_trades"],
-            "bigtrade": bool(np.any(ny_size >= 100)),
-            "bigtrade_75ldn": bool(np.any(ev["size"][ldn] >= 75)) if np.any(ldn) else False,
-            "bigtrade_q50": bool(q50 and np.any(ny_size >= q50)),
-            "bigtrade_q75": bool(q75 and np.any(ny_size >= q75)),
-            "bigtrade_q90": bool(q90 and np.any(ny_size >= q90)),
-            "bigtrade_q99": bool(q99 and np.any(ny_size >= q99)),
-            "absorption_B": absorption_b(ev, am0, am1),
-            "absorption_A": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
-                                         window_ns=NS2M, tick_tol=2 * TICK,
-                                         vol_cut_buy=grid["abs_q90_buy"], vol_cut_sell=grid["abs_q90_sell"]),
-            "absorption_A_w1m": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
-                                             window_ns=60_000_000_000, tick_tol=2 * TICK,
-                                             vol_cut_buy=grid["abs_q90_buy"], vol_cut_sell=grid["abs_q90_sell"]),
-            "absorption_A_w5m": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
-                                             window_ns=5 * 60_000_000_000, tick_tol=2 * TICK,
-                                             vol_cut_buy=grid["abs_q90_buy"], vol_cut_sell=grid["abs_q90_sell"]),
-            "absorption_A_q75": absorption_a(ev, am0, am1, row.get("H"), row.get("L"), row.get("W69"),
-                                             window_ns=NS2M, tick_tol=2 * TICK,
-                                             vol_cut_buy=grid["abs_q75_buy"], vol_cut_sell=grid["abs_q75_sell"]),
-            "footprint_4x": footprint_4x(ev, am0, am1),
-            "refill_ontouch": on_touch_refill(ev, am0, am1),
-            "iceberg_touch": iceberg_touch_infer(ev, am0, am1, k=1.0),
-            "iceberg_k15": iceberg_touch_infer(ev, am0, am1, k=1.5),
-            "iceberg_k20": iceberg_touch_infer(ev, am0, am1, k=2.0),
-            "smt_trade_nq": smt_trade_nq(ev, am0, am1, sisters, day),
-            "tpo_trade": tpo_trade_visited(ev, am0, rth_end),
-            "poc": vp["poc"], "VAL": vp["VAL"], "VAH": vp["VAH"], "vp_n": vp["n"],
-            "dp_max": vp.get("dp_max"), "dp_min": vp.get("dp_min"),
-            "xcheck_cvd": None if xcheck is None else xcheck.get("cvd"),
-            "xcheck_disagree": False if xcheck is None or xcheck.get("cvd") is None else (
-                (1 if xcheck["cvd"] > 0 else -1 if xcheck["cvd"] < 0 else 0) != cvd["cvd_sign"]
-            ),
-            "known_at_ns": row["known_at_ns"], "outcome_start_ns": row["outcome_start_ns"],
-            "leakage": 0, "failure": cvd["n_trades"] == 0,
-            "drop_coverage": row.get("drop_coverage"), "missing_bars": row.get("missing_1s") or 0,
-            "non_touch_m05": row.get("non_touch_m05"), "source": "cov.nq.mbp1",
-            "grid": grid["size"],
-        }
-        n_done += 1
-        if n_done % 40 == 0:
-            print(f"  score {n_done}", flush=True)
+    for recs in nested:
+        for rec in recs:
+            by_sess[rec["date"]] = rec
+            n_done += 1
+        print(f"  score {n_done}", flush=True)
     rows = [by_sess[d] for d in score if d in by_sess]
     save_rows("mbp1_flow_F", rows)
     return rows
@@ -602,15 +701,15 @@ def mbp1_fixtures() -> dict:
         "is_trade": np.ones(6, dtype=bool),
     }
     c = cvd_from_trades(ev3)
-    # footprint 4x: buy 40 at 100, sell 10 at 99.75
+    # stacked 4x: three adjacent buy imbalances
     ev4 = {
-        "t": np.array([0, 1], dtype=np.int64),
-        "price": np.array([100.0, 99.75]),
-        "size": np.array([40, 10], dtype=np.int32),
-        "side": np.array([1, -1], dtype=np.int8),
-        "bid": np.zeros(2), "ask": np.zeros(2),
-        "bid_sz": np.zeros(2, dtype=np.int32), "ask_sz": np.zeros(2, dtype=np.int32),
-        "is_trade": np.array([True, True]),
+        "t": np.arange(6, dtype=np.int64),
+        "price": np.array([100.0, 99.75, 100.25, 100.0, 100.50, 100.25]),
+        "size": np.array([40, 10, 40, 10, 40, 10], dtype=np.int32),
+        "side": np.array([1, -1, 1, -1, 1, -1], dtype=np.int8),
+        "bid": np.zeros(6), "ask": np.zeros(6),
+        "bid_sz": np.zeros(6, dtype=np.int32), "ask_sz": np.zeros(6, dtype=np.int32),
+        "is_trade": np.ones(6, dtype=bool),
     }
     fp = footprint_4x(ev4, 0, 10)
     ice = {

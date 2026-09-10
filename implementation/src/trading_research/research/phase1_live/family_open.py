@@ -70,13 +70,22 @@ def value_area(tick_vol: dict, frac: float = 0.70):
 
 
 def ohlc_vp(window: dict, frac=0.70):
+    """Pine-style body-wick profile. Half the volume on [low, high], half on the body."""
     if window["n"] == 0:
         return None, None, None
-    ticks = to_ticks(window["c"])
-    vol = window["v"]
     acc = defaultdict(float)
-    for t, v in zip(ticks, vol):
-        acc[int(t)] += float(v)
+    for o, h, l, c, v in zip(window["o"], window["h"], window["l"], window["c"], window["v"]):
+        lo_t = int(round(float(l) / TICK))
+        hi_t = int(round(float(h) / TICK))
+        b_lo = int(round(min(float(o), float(c)) / TICK))
+        b_hi = int(round(max(float(o), float(c)) / TICK))
+        n_rng = max(1, hi_t - lo_t + 1)
+        n_body = max(1, b_hi - b_lo + 1)
+        half = float(v) * 0.5
+        for tk in range(lo_t, hi_t + 1):
+            acc[tk] += half / n_rng
+        for tk in range(b_lo, b_hi + 1):
+            acc[tk] += half / n_body
     return value_area(acc, frac)
 
 
@@ -132,7 +141,7 @@ def scan_prior_rth_trade_vp(dates) -> dict:
 
 def build_open_table():
     cached = load_rows("open_switch_F")
-    if cached:
+    if cached and cached[0].get("ohlc_vp") == "body-wick":
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -238,6 +247,7 @@ def build_open_table():
             "drop_coverage": row["drop_coverage"], "missing_bars": row["missing_1s"],
             "non_touch_m05": row["non_touch_m05"],
             "cell_disagree": cell != cell_ohlc,
+            "ohlc_vp": "body-wick",
         })
         prev = day
     save_rows("open_switch_F", rows)
@@ -341,7 +351,7 @@ def open_documents(rows, fixtures):
         "status": status_from_intervals(*session_bootstrap_rate(ohlc_both), *session_bootstrap_rate(np.ones(len(elig)))),
         "slice": "F",
         "grid": "G-default",
-        "params": {"va": 0.70, "vp": "ohlc1m"},
+        "params": {"va": 0.70, "vp": "ohlc1m body-wick"},
         "summary": {
             "n": len(elig),
             "primary": rate_block(int(ohlc_both.sum()), len(elig)),
