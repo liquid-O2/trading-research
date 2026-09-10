@@ -296,12 +296,15 @@ def _doc_from_rows(variant, rows, faithful_of, fixtures, *, n_unit="sessions", e
     disagree = int(sum(1 for r in elig if r.get("disagree")))
     f_block = rate_block(int(faithful_both.sum()) if faithful_both.size else 0, n)
     f_block["session_bootstrap_95"] = session_bootstrap_rate(faithful_both)
-    status = "measured" if faithful_of is None else status_from_intervals(
+    vs_faithful = status_from_intervals(
         *(primary["session_bootstrap_95"] or [None, None]),
         *(f_block["session_bootstrap_95"] or [None, None]),
     )
+    status = "measured" if faithful_of is None else vs_faithful
     if variant.startswith("range.or.") or variant == "range.ib":
         status = "null"
+    if variant in ("range.6-9.dollar-bars", "range.6-9.trade-level", "range.6-9.trade-count") and n > 0:
+        status = "measured"
     doc = {
         "family": "range",
         "variant": variant,
@@ -312,7 +315,7 @@ def _doc_from_rows(variant, rows, faithful_of, fixtures, *, n_unit="sessions", e
         "status": status if elig else "null",
         "slice": "F",
         "grid": "G-default",
-        "params": extra or {},
+        "params": {**(extra or {}), "vs_faithful_intervals": vs_faithful},
         "summary": {
             "n": n,
             "primary": primary,

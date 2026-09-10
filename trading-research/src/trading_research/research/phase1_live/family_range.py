@@ -196,7 +196,7 @@ def range_documents(f_rows, l_rows, vol_rows, fixtures) -> list[dict]:
     up_primary["session_bootstrap_95"] = session_bootstrap_rate(au)
     f_primary = rate_block(int(af.sum()) if af.size else 0, int(af.size))
     f_primary["session_bootstrap_95"] = session_bootstrap_rate(af)
-    status = status_from_intervals(
+    vs_faithful = status_from_intervals(
         *(up_primary["session_bootstrap_95"] or [None, None]),
         *(f_primary["session_bootstrap_95"] or [None, None]),
     )
@@ -208,11 +208,11 @@ def range_documents(f_rows, l_rows, vol_rows, fixtures) -> list[dict]:
         "n": len(elig_u),
         "n_unit": "sessions",
         "faithful_disagreements": disagree,
-        "status": status if elig_u else "null",
+        "status": "measured" if elig_u else "not-measurable",
         "slice": "F",
         "grid": "G-default",
         "window": {"start": "06:00", "end": "vol-median", "outcome_start": "09:30", "outcome_end": "12:00"},
-        "params": {"volume_lookback_sessions": 60},
+        "params": {"volume_lookback_sessions": 60, "built_on": "F 1m volume", "vs_faithful_intervals": vs_faithful},
         "summary": {
             "n": len(elig_u),
             "primary": up_primary,
@@ -227,6 +227,7 @@ def range_documents(f_rows, l_rows, vol_rows, fixtures) -> list[dict]:
             "unavailable_map": 0,
             "unavailable_oi": 0,
             "path_class_counts": _path_counts(elig_u),
+            "vs_faithful_intervals": vs_faithful,
         },
         "source_claims": [],
         "fixtures": fixtures,
