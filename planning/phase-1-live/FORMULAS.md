@@ -487,7 +487,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The delta profile is the session profile (`value.delta.rth.trade`), the box is the FP8 3–4× diagonal, or the short-side mirror is claimed as printed (it is not; K2345 p.9's short is the microbalance read of R-S05).
 - **Variants (named, not faithful).** Short-side mirror (sellers priced in, buyers trapped on the weekly delta print, sell-side 350% box); box height = row span vs a line; 40-tick range bars vs 1-minute.
 - **Fixture.** Weekly high 120; dp.min 118.5 (tR = 1.0 → ✓), price has been ≤ 110 since ✓ → `trapped_sellers = 1`. Reclaim failures: touches of 112.0 (prior range high) at 09:50 and 10:35 with no close < 112 → `failures = 2`. Box at [118.25, 118.75] buy-side 350% ✓ at 11:02; microbalance [117.5, 119.0], close 119.25 at 11:10 → `ofm_long = 1`; next HTF level 124 touched 13:15 → `continuation = 1`.
-- **Code.** **missing (input)** `family_tape.py` sets `s04_imb_trap` = `f14_imb350` (the R-F14 same-price flag) — no weekly trapped-print test, no reclaim-failure count, no microbalance trigger, no box height.
+- **Code.** **match.** `family_tape.py` builds `value.delta.weekly` from MBP-1 trades over the prior 5 sessions, 1-tick bins. Trapped-seller price = most negative delta within `tR` of that weekly high. `r_s04_ath_ofm` then scores reclaim failures, buy-side 350% at that price, and a microbalance break. Short-side mirror is a named variant and is not scored.
 
 ### R-S05 — Microbalance breakout · pass 0.9969 (rescored 2026-09-10, n 647)
 

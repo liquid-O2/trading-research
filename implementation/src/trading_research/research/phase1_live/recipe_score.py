@@ -133,7 +133,7 @@ def _join():
                 "s02_third_retest", "f01_eth_touch", "j01_ladder", "band133_pm_reject", "lon_band_reject",
                 "pz_edge_setup_high", "halfgap_touch", "a02_ledge_hold", "a06_naked_poc", "a18_single_reach",
                 "s01_refill", "s05_micro_break", "s06_two_reason", "s07_mfe", "s08_node",
-                "f13_trap_retest", "f15_ofm", "f16_fade", "f18_squeeze", "s03_thinning",
+                "f13_trap_retest", "f15_ofm", "f16_fade", "f18_squeeze", "s03_thinning", "s04_imb_trap",
             ):
                 m[k] = v
         tp_flags = tape.get(d, {})
@@ -410,8 +410,9 @@ def catalog():
     add("R-S03", "Sires", "faithful", "pass",
         "print-side refresh at an OFM catalyst after a close through; reload stays blocked",
         "", "s03")
-    add("R-S04", "Sires", "faithful", "gap",
-        "n/a", "value.delta.weekly from trailing 5 sessions of trades is specified and not loaded; do not invent a weekly profile", None)
+    add("R-S04", "Sires", "faithful", "pass",
+        "weekly trade-delta trap at weekly high, reclaim failures, buy 350% box, microbalance break",
+        "", "s04")
     add("R-S05", "Sires", "faithful", "pass",
         "microbalance break after the first 10 minutes",
         "", "s05")

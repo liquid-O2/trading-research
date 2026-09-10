@@ -36,6 +36,8 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_s01_refill_long,
     r_s01_refill_short,
     r_s03_second_defence,
+    r_s04_ath_ofm,
+    r_s05_microbalance,
     r_s06_two_reason,
     r_s07_areas,
     r_f13_trapped_buyers,
@@ -81,6 +83,137 @@ def _bins(px, sz, side=None):
 
 def _bin_dict(lo, vol):
     return {(lo + i) * TICK: float(v) for i, v in enumerate(vol) if v > 0}
+
+
+def _delta_pack(px, sz, sd):
+    if px.size == 0:
+        return None
+    ticks = np.round(px / TICK).astype(np.int64)
+    lo = int(ticks.min())
+    rel = ticks - lo
+    n = int(ticks.max() - lo + 1)
+    dlt = np.bincount(rel, weights=np.where(sd > 0, sz, -sz).astype(np.float64), minlength=n)
+    return {"high": float(px.max()), "low": float(px.min()), "lo": lo, "delta": dlt}
+
+
+def _merge_delta_packs(packs):
+    lo = min(p["lo"] for p in packs)
+    hi = max(p["lo"] + p["delta"].size for p in packs)
+    acc = np.zeros(hi - lo, dtype=np.float64)
+    for p in packs:
+        a = p["lo"] - lo
+        acc[a:a + p["delta"].size] += p["delta"]
+    return {
+        "high": max(p["high"] for p in packs),
+        "low": min(p["low"] for p in packs),
+        "lo": lo,
+        "delta": acc,
+    }
+
+
+def _dp_min_near_high(pack, weekly_high, tR):
+    lo = pack["lo"]
+    d = pack["delta"]
+    t0 = int(round((weekly_high - tR) / TICK))
+    t1 = int(round(weekly_high / TICK))
+    i0 = max(0, t0 - lo)
+    i1 = min(d.size, t1 - lo + 1)
+    if i1 <= i0:
+        return None
+    i = i0 + int(np.argmin(d[i0:i1]))
+    return (lo + i) * TICK
+
+
+def _weekly_chunk(path):
+    out = []
+    table = pq.read_table(path)
+    for session, ev in _session_slices(table):
+        day = date.fromisoformat(session)
+        t, px, sz, sd = _trades(ev, _ns(day, dtime(18, 0), -1), _ns(day, dtime(16, 0)))
+        pack = _delta_pack(px, sz, sd)
+        if pack is None:
+            continue
+        pack["date"] = session
+        out.append(pack)
+    return out
+
+
+def build_weekly_delta_table() -> list[dict]:
+    cached = load_rows("weekly_delta_F")
+    if cached and cached[0].get("weekly_rev") == 2:
+        return cached
+    chunks = list_complete_chunks()
+    print(f"weekly-delta chunks={len(chunks)} workers={TAPE_WORKERS}", flush=True)
+    packs = []
+    with ThreadPoolExecutor(max_workers=TAPE_WORKERS) as pool:
+        for part in pool.map(_weekly_chunk, chunks):
+            packs.extend(part)
+            print(f"  weekly {len(packs)}", flush=True)
+    packs.sort(key=lambda p: p["date"])
+    history = []
+    rows = []
+    for pack in packs:
+        rec = {
+            "date": pack["date"], "weekly_high": None, "weekly_low": None,
+            "dp_min": None, "tR": None, "weekly_rev": 2,
+        }
+        if len(history) >= 5:
+            merged = _merge_delta_packs(history[-5:])
+            rec["weekly_high"] = merged["high"]
+            rec["weekly_low"] = merged["low"]
+            rec["tR"] = 0.05 * max(merged["high"] - merged["low"], TICK)
+            rec["dp_min"] = _dp_min_near_high(merged, rec["weekly_high"], rec["tR"])
+            rec["weekly_rev"] = 2
+        history.append(pack)
+        rows.append(rec)
+    save_rows("weekly_delta_F", rows)
+    print(f"weekly-delta n={len(rows)} ready={sum(r['weekly_high'] is not None for r in rows)}", flush=True)
+    return rows
+
+
+def _s04_from_am(t, px, sz, sd, wk, row, w):
+    if wk is None or wk.get("weekly_high") is None or wk.get("dp_min") is None or px.size < 50:
+        return False
+    prior = row.get("prior_rth_high")
+    minute = t // 60_000_000_000
+    order = np.argsort(minute, kind="mergesort")
+    minute, px, sz, sd = minute[order], px[order], sz[order], sd[order]
+    br = np.flatnonzero(minute[1:] != minute[:-1]) + 1
+    st = np.concatenate(([0], br))
+    en = np.concatenate((br, [minute.size]))
+    n = st.size
+    o = np.empty(n); hi = np.empty(n); lo = np.empty(n); cl = np.empty(n)
+    for i, (a, b) in enumerate(zip(st, en)):
+        o[i] = float(px[a]); hi[i] = float(px[a:b].max()); lo[i] = float(px[a:b].min()); cl[i] = float(px[b - 1])
+    touches = 0
+    no_close_below = True
+    if prior is not None:
+        for i in range(n):
+            if cl[i] < prior:
+                no_close_below = False
+            if hi[i] >= prior - 2 * TICK:
+                touches += 1
+    packed = _bins(px, sz, sd)
+    imb350_buy = False
+    if packed is not None:
+        blo, _vol, buy, sell = packed
+        i = int(round(wk["dp_min"] / TICK)) - blo
+        if buy is not None and 0 <= i < buy.size:
+            imb350_buy = float(buy[i]) >= 3.5 * max(float(sell[i]), 1e-9)
+    r_h = float(w) if w else float(wk["weekly_high"] - wk["weekly_low"])
+    s05 = r_s05_microbalance(
+        cl, lo, hi, r_height=max(r_h, 1.0), break_close=float(cl[-1]),
+        htf=float(prior or wk["weekly_high"]), later_high=float(hi.max()), later_low=float(lo.min()),
+    )
+    box = s05.get("box") or [float(lo.min()), float(hi.max())]
+    got = r_s04_ath_ofm(
+        weekly_high=float(wk["weekly_high"]), dp_min=float(wk["dp_min"]), tR=float(wk["tR"]),
+        left_px=float(px.min()), r_height=max(r_h, 1.0),
+        prior_high=float(prior or 0.0), touches=int(touches), no_close_below=bool(no_close_below),
+        imb350_buy=bool(imb350_buy), micro_hi=float(box[1]), break_close=float(cl[-1]),
+        next_level=float(prior or wk["weekly_high"]), later_high=float(hi.max()),
+    )
+    return bool(got["ofm_long"])
 
 
 def _big_at(px, sz, level, cut=100.0) -> bool:
@@ -221,7 +354,7 @@ def _ofm_and_trap(t, px, sz, sd, h, l, w, row, rec, ev, am0, am1, q_buy, q_sell)
     return out
 
 
-def _score_one(session, ev, f_rows, open_rows, grid):
+def _score_one(session, ev, f_rows, open_rows, grid, weekly=None):
     row = f_rows.get(session)
     if row is None:
         return None
@@ -297,7 +430,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
                 ))
                 imb = (sell >= 3.5 * np.maximum(buy, 1e-9)) | (buy >= 3.5 * np.maximum(sell, 1e-9))
                 rec["f14_imb350"] = bool(np.any(imb) and rec["j15_bigtrade_level"])
-                rec["s04_imb_trap"] = rec["f14_imb350"]
+                rec["s04_imb_trap"] = False
             rec["f11_delta_lvn"] = bool(nodes["lvn"] and poc is not None and any(abs(poc - p) <= 0.05 * (w or 20) for p in nodes["lvn"]))
             if h is not None and w and nodes["hvn"]:
                 rec["s06_two_reason"] = bool(r_s06_two_reason(
@@ -397,21 +530,20 @@ def _score_one(session, ev, f_rows, open_rows, grid):
         rec["s07_mfe"] = False
         if px_am.size >= 50 and (h is not None or l is not None):
             rec.update(_ofm_and_trap(t_am, px_am, sz_am, sd_am, h, l, w, row, rec, ev, am0, am1, q_buy, q_sell))
+        rec["s04_imb_trap"] = bool(_s04_from_am(t_am, px_am, sz_am, sd_am, (weekly or {}).get(session), row, w))
         rec["p20_mvfl"] = bool(float(sz_am.max()) >= 100 and (float(px_am.max()) - float(px_am.min())) >= 8 * TICK)
         rec["f12_arrival_aggr"] = bool(sz_am.size >= 5 and float(np.median(sz_am[-5:]) - np.median(sz_am[:5])) >= 0)
         rec["f10_protected"] = bool(px_am.size > 10 and float(px_am[-5:].min()) > float(px_am.min()) + 2 * TICK)
-        rec["f18_squeeze"] = bool(rec["f04_stack_revisit"] and not rec["f17_refill_zone"])
-        rec["f15_ofm"] = rec["f18_squeeze"]
     rec["s08_node"] = bool(rec["s08_node"] or rec["j17_node_under"])
     return rec
 
 
-def _score_chunk(path, f_rows, open_rows, grid):
+def _score_chunk(path, f_rows, open_rows, grid, weekly=None):
     out = []
     table = pq.read_table(path)
     for session, ev in _session_slices(table):
         try:
-            rec = _score_one(session, ev, f_rows, open_rows, grid)
+            rec = _score_one(session, ev, f_rows, open_rows, grid, weekly)
         except Exception as exc:
             print(f"tape fail {session} {type(exc).__name__}: {exc}", flush=True)
             continue
@@ -421,10 +553,43 @@ def _score_chunk(path, f_rows, open_rows, grid):
     return out
 
 
+def _s04_chunk(path, f_rows, weekly):
+    out = {}
+    table = pq.read_table(path)
+    for session, ev in _session_slices(table):
+        row = f_rows.get(session) or {}
+        day = date.fromisoformat(session)
+        t, px, sz, sd = _trades(ev, _ns(day, dtime(9, 30)), _ns(day, dtime(12, 0)))
+        out[session] = bool(_s04_from_am(t, px, sz, sd, weekly.get(session), row, row.get("W69")))
+    return out
+
+
+def _apply_s04(rows, weekly):
+    f_rows = {r["date"]: r for r in (load_rows("sessions_F") or [])}
+    chunks = list_complete_chunks()
+    print(f"s04 chunks={len(chunks)} workers={TAPE_WORKERS}", flush=True)
+    by = {}
+    with ThreadPoolExecutor(max_workers=TAPE_WORKERS) as pool:
+        parts = list(pool.map(lambda p: _s04_chunk(p, f_rows, weekly), chunks))
+    for part in parts:
+        by.update(part)
+    n = 0
+    for rec in rows:
+        rec["s04_imb_trap"] = bool(by.get(rec["date"]))
+        rec["s04_rev"] = 2
+        n += int(rec["s04_imb_trap"])
+    save_rows("tape_flags_F", rows)
+    print(f"s04 n={len(rows)} ofm_long={n}", flush=True)
+    return rows
+
+
 def build_tape_table() -> list[dict]:
     cached = load_rows("tape_flags_F")
-    if cached and cached[0].get("tape_rev") == 4:
+    weekly = {r["date"]: r for r in build_weekly_delta_table()}
+    if cached and cached[0].get("tape_rev") == 4 and cached[0].get("s04_rev") == 2:
         return cached
+    if cached and cached[0].get("tape_rev") == 4:
+        return _apply_s04(cached, weekly)
     f_rows = {r["date"]: r for r in (load_rows("sessions_F") or [])}
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
     grid = {}
@@ -434,7 +599,7 @@ def build_tape_table() -> list[dict]:
     print(f"tape chunks={len(chunks)} workers={TAPE_WORKERS}", flush=True)
     by_date = {}
     with ThreadPoolExecutor(max_workers=TAPE_WORKERS) as pool:
-        parts = list(pool.map(lambda p: _score_chunk(p, f_rows, open_rows, grid), chunks))
+        parts = list(pool.map(lambda p: _score_chunk(p, f_rows, open_rows, grid, weekly), chunks))
     n = 0
     for recs in parts:
         for rec in recs:
