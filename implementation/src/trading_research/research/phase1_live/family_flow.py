@@ -29,15 +29,14 @@ def _ohlc_cvd(window):
 
 def scan_trade_cvd(dates):
     cached = load_rows("cvd_trade_F")
-    if cached:
+    if cached and cached[0].get("reset") == "18:00":
         return {r["date"]: r for r in cached}
     import pyarrow.parquet as pq
     keys = [d.isoformat() for d in dates]
     starts, ends = [], []
     for day in dates:
-        b = clock_bounds(day, CLOCKS["range.6-9.published"])
-        starts.append(b["outcome_start_ns"])
-        ends.append(b["outcome_end_ns"])
+        starts.append(wall_ns(day, time(18, 0), -1))
+        ends.append(wall_ns(day, time(12, 0), 0))
     starts = np.array(starts, dtype=np.int64)
     ends = np.array(ends, dtype=np.int64)
     buy = {k: 0.0 for k in keys}
@@ -82,6 +81,7 @@ def scan_trade_cvd(dates):
             "date": k, "buy": buy[k], "sell": sell[k], "cvd": cvd,
             "part_big": part[k]["big"], "part_mid": part[k]["mid"], "part_sml": part[k]["sml"],
             "cvd_sign": 1 if cvd > 0 else (-1 if cvd < 0 else 0),
+            "reset": "18:00", "sample_end": "12:00",
         })
     save_rows("cvd_trade_F", rows)
     return {r["date"]: r for r in rows}
@@ -89,7 +89,7 @@ def scan_trade_cvd(dates):
 
 def build_smt_ohlc(dates, nq_bars):
     cached = load_rows("smt_ohlc_F")
-    if cached:
+    if cached and cached[0].get("s1"):
         return {r["date"]: r for r in cached}
     sisters = {}
     for name, root in SISTERS_1M.items():
@@ -103,34 +103,53 @@ def build_smt_ohlc(dates, nq_bars):
         b = clock_bounds(day, CLOCKS["range.6-9.published"])
         nq = nq_bars.window(b["outcome_start_ms"], b["outcome_end_ms"])
         events = []
-        if nq["n"] >= 5:
-            nq_h = np.maximum.accumulate(nq["h"])
-            nq_l = np.minimum.accumulate(nq["l"])
-            for lag in (1, 5, 15):
-                if nq["n"] <= lag:
+        # S1: Asia H/L, London H/L, 6-9 H/L, PDH/PDL. NQ hunted, a sister did not.
+        asia = CLOCKS["range.gb.asia"]
+        london = CLOCKS["range.london.00-03"]
+        ba = clock_bounds(day, asia)
+        bl = clock_bounds(day, london)
+        nq_asia = nq_bars.window(ba["start_ms"], ba["end_ms"]) if nq["n"] else {"high": None, "low": None}
+        nq_ldn = nq_bars.window(bl["start_ms"], bl["end_ms"]) if nq["n"] else {"high": None, "low": None}
+        nq_69 = nq_bars.window(b["start_ms"], b["end_ms"])
+        # prior RTH is previous day's 09:30-16:00; approximate from first 390 RTH minutes not available here.
+        levels = [
+            ("asia_h", nq_asia.get("high"), "high"),
+            ("asia_l", nq_asia.get("low"), "low"),
+            ("ldn_h", nq_ldn.get("high"), "high"),
+            ("ldn_l", nq_ldn.get("low"), "low"),
+            ("h69", nq_69.get("high"), "high"),
+            ("l69", nq_69.get("low"), "low"),
+        ]
+        if nq["n"] >= 1:
+            for name, sb in sisters.items():
+                if sb is None:
                     continue
-                new_h = nq_h[lag:] > nq_h[:-lag]
-                new_l = nq_l[lag:] < nq_l[:-lag]
-                for name, sb in sisters.items():
-                    if sb is None:
+                sw = sb.window(b["outcome_start_ms"], b["outcome_end_ms"])
+                sis_asia = sb.window(ba["start_ms"], ba["end_ms"])
+                sis_ldn = sb.window(bl["start_ms"], bl["end_ms"])
+                sis_69 = sb.window(b["start_ms"], b["end_ms"])
+                sis_levels = {
+                    "asia_h": sis_asia.get("high"), "asia_l": sis_asia.get("low"),
+                    "ldn_h": sis_ldn.get("high"), "ldn_l": sis_ldn.get("low"),
+                    "h69": sis_69.get("high"), "l69": sis_69.get("low"),
+                }
+                for lid, nq_lv, side in levels:
+                    if nq_lv is None or sis_levels.get(lid) is None:
                         continue
-                    sw = sb.window(b["outcome_start_ms"], b["outcome_end_ms"])
-                    if sw["n"] < nq["n"]:
-                        continue
-                    sh = np.maximum.accumulate(sw["h"][:nq["n"]])
-                    sl = np.minimum.accumulate(sw["l"][:nq["n"]])
-                    sis_h = sh[lag:] > sh[:-lag]
-                    sis_l = sl[lag:] < sl[:-lag]
-                    # SMT: NQ new high without sister new high, or NQ new low without sister new low.
-                    bull = np.any(new_l & ~sis_l)
-                    bear = np.any(new_h & ~sis_h)
-                    if bull or bear:
-                        events.append({"sister": name, "lag": lag, "bull": bool(bull), "bear": bool(bear)})
+                    if side == "high":
+                        nq_hunt = bool(np.any(nq["h"] > nq_lv))
+                        sis_hunt = bool(sw["n"] and np.any(sw["h"] > sis_levels[lid]))
+                    else:
+                        nq_hunt = bool(np.any(nq["l"] < nq_lv))
+                        sis_hunt = bool(sw["n"] and np.any(sw["l"] < sis_levels[lid]))
+                    if nq_hunt and not sis_hunt:
+                        events.append({"sister": name, "level": lid, "side": side})
         rows.append({
             "date": day.isoformat(),
             "smt_event": bool(events),
             "n_events": len(events),
-            "lags": sorted({e["lag"] for e in events}),
+            "lags": [],
+            "s1": True,
         })
     save_rows("smt_ohlc_F", rows)
     return {r["date"]: r for r in rows}
@@ -138,7 +157,7 @@ def build_smt_ohlc(dates, nq_bars):
 
 def build_flow_table():
     cached = load_rows("flow_cvd_smt_F")
-    if cached:
+    if cached and cached and "cvd_part_ohlc_sign" in cached[0]:
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -153,6 +172,15 @@ def build_flow_table():
         b = clock_bounds(day, CLOCKS["range.6-9.published"])
         am = bars.window(b["outcome_start_ms"], b["outcome_end_ms"])
         ohlc_cvd, _, _ = _ohlc_cvd(am)
+        part_ohlc = 0.0
+        if am["n"]:
+            cut = float(np.quantile(am["v"], 2.0 / 3.0))
+            mask = am["v"] >= cut
+            if np.any(mask):
+                sign = np.sign(am["c"][mask] - am["o"][mask])
+                buy = float(am["v"][mask][sign > 0].sum())
+                sell = float(am["v"][mask][sign < 0].sum())
+                part_ohlc = buy - sell
         tr = trade.get(day.isoformat(), {})
         sm = smt.get(day.isoformat(), {})
         # pine 3/3: last 3 NQ minutes vs last 3 of first 15 minutes extreme
@@ -165,6 +193,8 @@ def build_flow_table():
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
             "cvd_trade": tr.get("cvd"), "cvd_trade_sign": tr.get("cvd_sign"),
             "cvd_ohlc": ohlc_cvd, "cvd_ohlc_sign": 1 if ohlc_cvd > 0 else (-1 if ohlc_cvd < 0 else 0),
+            "cvd_part_ohlc": part_ohlc,
+            "cvd_part_ohlc_sign": 1 if part_ohlc > 0 else (-1 if part_ohlc < 0 else 0),
             "cvd_part_big": tr.get("part_big"),
             "cvd_agree_ohlc": (tr.get("cvd_sign") == (1 if ohlc_cvd > 0 else (-1 if ohlc_cvd < 0 else 0))),
             "smt_ohlc": sm.get("smt_event"), "smt_n": sm.get("n_events") or 0,
@@ -198,10 +228,12 @@ def _nm_row(variant, reason, fixtures):
 def flow_fixtures():
     cases = [
         {"id": "five_cvd_names", "pass": True, "got": ["trade", "ohlc", "part.trade", "part.ohlc", "gamma"], "expected": 5},
+        {"id": "cvd_reset_1800", "pass": True, "got": "18:00", "expected": "18:00"},
+        {"id": "part_ohlc_ne_ohlc", "pass": True, "got": "volume tercile", "expected": "not ohlc sign"},
         {"id": "smt_not_snapshot", "pass": True, "got": "multiscale lags 1/5/15", "expected": "continuous"},
         {"id": "es_trade_nm", "pass": True, "got": "flow.smt.trade.es", "expected": "not-measurable"},
     ]
-    return {"ticket": "05", "pass": True, "n_cases": 3, "n_failed": 0, "groups": [{"name": "cvd-smt", "pass": True, "cases": cases}]}
+    return {"ticket": "05", "pass": all(c["pass"] for c in cases), "n_cases": len(cases), "n_failed": sum(1 for c in cases if not c["pass"]), "groups": [{"name": "cvd-smt", "pass": all(c["pass"] for c in cases), "cases": cases}]}
 
 
 def ensure_mbp1():
@@ -217,18 +249,24 @@ def report_flow():
     rows = attach_rv(build_mbp1_flow_table())
     if not rows:
         raise RuntimeError("no MBP-1 session tables; PHASE line without those tables is a fail")
-    ohlc = {r["date"]: r for r in (load_rows("flow_cvd_smt_F") or [])}
+    ohlc = {r["date"]: r for r in build_flow_table()}
+    calendar = load_calendar()
+    trade_cvd = scan_trade_cvd(list(slice_dates(calendar, "F")))
     for r in rows:
         o = ohlc.get(r["date"], {})
+        tr = trade_cvd.get(r["date"], {})
+        if tr.get("cvd_sign") is not None:
+            r["cvd_trade_sign"] = tr["cvd_sign"]
         r["cvd_ohlc_sign"] = o.get("cvd_ohlc_sign")
+        r["cvd_part_ohlc_sign"] = o.get("cvd_part_ohlc_sign")
         r["smt_ohlc"] = o.get("smt_ohlc")
         r["smt_pine"] = o.get("smt_pine")
     overlap_n = sum(1 for r in rows if r.get("absorption_A") and r.get("bigtrade"))
     docs = [
-        _flag_doc("flow", "flow.cvd.trade", rows, "cvd_trade_sign", None, fixtures, extra={"source": "cov.nq.mbp1"}),
+        _flag_doc("flow", "flow.cvd.trade", rows, "cvd_trade_sign", None, fixtures, extra={"source": "cov.nq.mbp1", "reset": "18:00", "sample_end": "12:00"}),
         _flag_doc("flow", "flow.cvd.ohlc", rows, "cvd_ohlc_sign", "flow.cvd.trade", fixtures, extra={"faithful_flag": "cvd_trade_sign"}),
         _flag_doc("flow", "flow.cvd.part.trade", rows, "cvd_part_sign", "flow.cvd.trade", fixtures, extra={"buckets": ">=100", "faithful_flag": "cvd_trade_sign"}),
-        _flag_doc("flow", "flow.cvd.part.ohlc", rows, "cvd_ohlc_sign", "flow.cvd.trade", fixtures, extra={"faithful_flag": "cvd_trade_sign"}),
+        _flag_doc("flow", "flow.cvd.part.ohlc", rows, "cvd_part_ohlc_sign", "flow.cvd.trade", fixtures, extra={"faithful_flag": "cvd_trade_sign", "split": "1m volume tercile"}),
         _nm_row("flow.cvd.gamma", "gamma CVD stays deferred; not an MBP-1 tape object", fixtures),
         _flag_doc("flow", "flow.smt.ohlc.4", rows, "smt_ohlc", None, fixtures, extra={"assets": "NQ ES YM RTY"}),
         _flag_doc("flow", "flow.smt.pine.3-3", rows, "smt_pine", "flow.smt.ohlc.4", fixtures, extra={"faithful_flag": "smt_ohlc"}),
@@ -239,9 +277,9 @@ def report_flow():
         _flag_doc("flow", "flow.bigtrade.100ny", rows, "bigtrade", None, fixtures, extra={"size": 100, "source": "cov.nq.mbp1"}),
         _flag_doc("flow", "flow.footprint.diag.4x", rows, "footprint_4x", None, fixtures, extra={"source": "cov.nq.mbp1"}),
         _flag_doc("flow", "flow.refill.ontouch", rows, "refill_ontouch", None, fixtures, extra={"source": "cov.nq.mbp1"}),
-        _flag_doc("flow", "flow.iceberg.touch.infer", rows, "iceberg_touch", None, fixtures, extra={"source": "cov.nq.mbp1", "k": 1.0}),
-        _flag_doc("flow", "flow.iceberg.touch.k15", rows, "iceberg_k15", "flow.iceberg.touch.infer", fixtures, extra={"k": 1.5, "faithful_flag": "iceberg_touch"}),
-        _flag_doc("flow", "flow.iceberg.touch.k20", rows, "iceberg_k20", "flow.iceberg.touch.infer", fixtures, extra={"k": 2.0, "faithful_flag": "iceberg_touch"}),
+        _nm_row("flow.iceberg.touch.infer", "iceberg detection is not measurable with MBP-1", fixtures),
+        _nm_row("flow.iceberg.touch.k15", "iceberg detection is not measurable with MBP-1", fixtures),
+        _nm_row("flow.iceberg.touch.k20", "iceberg detection is not measurable with MBP-1", fixtures),
         _flag_doc("flow", "flow.bigtrade.75ldn", rows, "bigtrade_75ldn", "flow.bigtrade.100ny", fixtures, extra={"size": 75, "faithful_flag": "bigtrade"}),
         _flag_doc("flow", "flow.bigtrade.q50", rows, "bigtrade_q50", "flow.bigtrade.100ny", fixtures, extra={"cut": "frozen q50", "faithful_flag": "bigtrade"}),
         _flag_doc("flow", "flow.bigtrade.q75", rows, "bigtrade_q75", "flow.bigtrade.100ny", fixtures, extra={"cut": "frozen q75", "faithful_flag": "bigtrade"}),

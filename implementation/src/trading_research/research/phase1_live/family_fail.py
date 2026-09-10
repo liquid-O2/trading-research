@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from datetime import time
+from datetime import time, timedelta
 
 import numpy as np
 
@@ -56,7 +56,7 @@ def _failback(box, out, k_min=30):
 
 def build_fail_table():
     cached = load_rows("fail_F")
-    if cached:
+    if cached and cached[0].get("prior_is_prior"):
         return cached
     f_rows = load_rows("sessions_F")
     calendar = load_calendar()
@@ -64,6 +64,7 @@ def build_fail_table():
     bars = load_years(OHLC1M, years_for_dates(dates))
     by_date = {r["date"]: r for r in f_rows}
     rows = []
+    prev = None
     for day in dates:
         row = by_date[day.isoformat()]
         rec = {
@@ -73,13 +74,19 @@ def build_fail_table():
             "leakage": 0, "failure": row["failure"], "drop_coverage": row["drop_coverage"],
             "missing_bars": row["missing_1s"], "non_touch_m05": row["non_touch_m05"],
             "nyam_early": 0, "aplus": False, "tdo_touch": False, "nwog_fill": False,
+            "prior_is_prior": True,
         }
         aplus = False
         for cid in BOXES:
             spec = CLOCKS[cid]
-            b = clock_bounds(day, spec)
+            box_day = prev if cid == "prior.rth" else day
+            if cid == "prior.rth" and prev is None:
+                rec[f"sweep_{cid}"] = False
+                rec[f"fail_{cid}"] = False
+                continue
+            b = clock_bounds(box_day, spec)
             box = bars.window(b["start_ms"], b["end_ms"])
-            out = bars.window(b["outcome_start_ms"], b["outcome_end_ms"])
+            out = bars.window(*([clock_bounds(day, CLOCKS["range.6-9.published"])[k] for k in ("outcome_start_ms", "outcome_end_ms")] if cid == "prior.rth" else (b["outcome_start_ms"], b["outcome_end_ms"])))
             if cid == "range.gb.nyam":
                 ten = b["outcome_start_ms"]
                 # any wick before 10:00 is a violation if we used 09:00-10:00 as outcome
@@ -94,9 +101,22 @@ def build_fail_table():
         am = bars.window(clock_bounds(day, CLOCKS["range.6-9.published"])["outcome_start_ms"],
                          clock_bounds(day, CLOCKS["range.6-9.published"])["outcome_end_ms"])
         rec["tdo_touch"] = bool(tdo["open"] is not None and am["n"] and (np.any(am["l"] <= tdo["open"]) and np.any(am["h"] >= tdo["open"])))
+        open_px = row.get("open_0930")
+        rec["open0930_touch"] = bool(open_px is not None and am["n"] and np.any(am["l"] <= open_px) and np.any(am["h"] >= open_px))
+        rec["nwog_fill"] = False
+        rec["nwog_real"] = True
+        if day.weekday() == 0:
+            friday = day - timedelta(days=3)
+            sun_open = bars.window(wall_ns(day, time(18, 0), -1) // 1_000_000, wall_ns(day, time(18, 1), -1) // 1_000_000)
+            fri_close = bars.window(wall_ns(friday, time(15, 59), 0) // 1_000_000, wall_ns(friday, time(16, 0), 0) // 1_000_000)
+            a, b = sun_open["open"], fri_close["close"]
+            if a is not None and b is not None and am["n"]:
+                lo, hi = min(a, b), max(a, b)
+                rec["nwog_fill"] = bool(np.any(am["h"] >= lo) and np.any(am["l"] <= hi))
         rec["aplus"] = aplus
         rec["fail_any"] = any(rec.get(f"fail_{cid}") for cid in BOXES)
         rows.append(rec)
+        prev = day
     save_rows("fail_F", rows)
     return rows
 
@@ -107,8 +127,9 @@ def fail_fixtures():
         {"id": "aplus_is_sweep", "pass": True, "got": "sweep observed", "expected": "not depth d"},
         {"id": "tdo_is_level", "pass": True, "got": "lvl.tdo", "expected": "destination"},
         {"id": "london_ids", "pass": "range.gb.london" != "range.london.00-03", "got": True, "expected": True},
+        {"id": "nwog_not_tdo", "pass": "nwog_fill" != "tdo_touch", "got": "nwog_fill", "expected": "not tdo_touch"},
     ]
-    return {"ticket": "07", "pass": True, "n_cases": 4, "n_failed": 0, "groups": [{"name": "fail", "pass": True, "cases": cases}]}
+    return {"ticket": "07", "pass": all(c["pass"] for c in cases), "n_cases": len(cases), "n_failed": sum(1 for c in cases if not c["pass"]), "groups": [{"name": "fail", "pass": all(c["pass"] for c in cases), "cases": cases}]}
 
 
 def report_fail():
@@ -126,9 +147,13 @@ def report_fail():
         _flag_doc("fail", "fail.box.gb.nyam.gb.c5", rows, "fail_range.gb.nyam", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
         _flag_doc("fail", "fail.box.gb.london.gb.c5", rows, "fail_range.gb.london", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
         _flag_doc("fail", "fail.box.jumbo.london.gb.c5", rows, "fail_range.london.00-03", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
+        _flag_doc("fail", "fail.box.gb.asia.gb.c5", rows, "fail_range.gb.asia", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
+        _flag_doc("fail", "fail.box.gb.10-11.gb.c5", rows, "fail_range.gb.10-11", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
+        _flag_doc("fail", "fail.box.prior-rth.gb.c5", rows, "fail_prior.rth", "fail.box.6-9.gb.c5", fixtures, extra={"faithful_flag": "fail_range.6-9.published"}),
         _flag_doc("fail", "label.aplus", rows, "aplus", None, fixtures, extra={"def": "sweep observed"}),
         _flag_doc("fail", "lvl.tdo", rows, "tdo_touch", None, fixtures, extra={"role": "level/destination"}),
-        _flag_doc("fail", "lvl.nwog", rows, "tdo_touch", "lvl.tdo", fixtures, extra={"role": "level/destination", "faithful_flag": "tdo_touch", "note": "Friday settlement vs Sunday 18:00 stored as destination; fill proxy is TDO-touch until weekly settlement join"}),
+        _flag_doc("fail", "lvl.nwog", rows, "nwog_fill", "lvl.tdo", fixtures, extra={"faithful_flag": "tdo_touch", "role": "Friday 16:00 close vs Sunday 18:00 open"}),
+        _flag_doc("fail", "lvl.0930open", rows, "open0930_touch", None, fixtures, extra={"role": "level"}),
     ]
     for doc in docs:
         doc["summary"]["fail_vs_day_type"] = matrix

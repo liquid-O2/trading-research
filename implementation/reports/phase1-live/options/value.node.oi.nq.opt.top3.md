@@ -1,8 +1,8 @@
 # options / value.node.oi.nq.opt.top3
 
-options | value.node.oi.nq.opt.top3 | 0 | 0 | not-measurable | trading-research/reports/phase1-live/options/value.node.oi.nq.opt.top3.json
+options | value.node.oi.nq.opt.top3 | 647 | 0 | measured | trading-research/reports/phase1-live/options/value.node.oi.nq.opt.top3.json
 
-n = 0 sessions. status = not-measurable.
+n = 647 sessions. status = measured.
 leakage = 0.
 fixtures pass = True.
 

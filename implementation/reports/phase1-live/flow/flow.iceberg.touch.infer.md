@@ -1,8 +1,8 @@
 # flow / flow.iceberg.touch.infer
 
-flow | flow.iceberg.touch.infer | 429 | 0 | measured | trading-research/reports/phase1-live/flow/flow.iceberg.touch.infer.json
+flow | flow.iceberg.touch.infer | 0 | - | not-measurable | trading-research/reports/phase1-live/flow/flow.iceberg.touch.infer.json
 
-n = 429 sessions. status = measured.
+n = 0 sessions. status = not-measurable.
 leakage = 0.
 fixtures pass = True.
 

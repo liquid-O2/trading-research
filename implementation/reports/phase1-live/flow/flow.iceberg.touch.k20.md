@@ -1,8 +1,8 @@
 # flow / flow.iceberg.touch.k20
 
-flow | flow.iceberg.touch.k20 | 429 | 0 | null | trading-research/reports/phase1-live/flow/flow.iceberg.touch.k20.json
+flow | flow.iceberg.touch.k20 | 0 | - | not-measurable | trading-research/reports/phase1-live/flow/flow.iceberg.touch.k20.json
 
-n = 429 sessions. status = null.
+n = 0 sessions. status = not-measurable.
 leakage = 0.
 fixtures pass = True.
 

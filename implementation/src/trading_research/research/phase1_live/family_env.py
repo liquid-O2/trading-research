@@ -33,7 +33,7 @@ def build_env_table():
     bars = load_years(OHLC1M, years_for_dates(dates))
     by_date = {r["date"]: r for r in f_rows}
     up_hist, down_hist = [], []
-    ss_hist = []
+    ss_up_hist, ss_dn_hist = [], []
     pz_up, pz_down = [], []
     rows = []
     for day in dates:
@@ -64,14 +64,16 @@ def build_env_table():
         reach_med = None
         if ev_hi_med is not None and am["n"]:
             reach_med = am["high"] >= ev_hi_med or am["low"] <= ev_lo_med
-        # SessionStat 09:00-12:00 width
+        # SessionStat 09:00-12:00: open + mean(H-open), open - mean(open-L). Not half of H-L.
         ss_w = bars.window(wall_ns(day, time(9, 0), 0) // 1_000_000, wall_ns(day, time(12, 0), 0) // 1_000_000)
-        ss_width = None if ss_w["n"] == 0 else ss_w["high"] - ss_w["low"]
-        ss_mean = float(np.mean(ss_hist[-60:])) if ss_hist else None
         open9 = bars.window(wall_ns(day, time(9, 0), 0) // 1_000_000, wall_ns(day, time(9, 0), 0) // 1_000_000 + 60_000)
         ss_mid = open9["open"]
-        ss_hi = None if ss_mean is None or ss_mid is None else ss_mid + ss_mean / 2
-        ss_lo = None if ss_mean is None or ss_mid is None else ss_mid - ss_mean / 2
+        ss_up = None if ss_w["n"] == 0 or ss_mid is None else max(0.0, ss_w["high"] - ss_mid)
+        ss_dn = None if ss_w["n"] == 0 or ss_mid is None else max(0.0, ss_mid - ss_w["low"])
+        mean_ss_up = float(np.mean(ss_up_hist[-60:])) if ss_up_hist else None
+        mean_ss_dn = float(np.mean(ss_dn_hist[-60:])) if ss_dn_hist else None
+        ss_hi = None if mean_ss_up is None or ss_mid is None else ss_mid + mean_ss_up
+        ss_lo = None if mean_ss_dn is None or ss_mid is None else ss_mid - mean_ss_dn
         ss_reach = None if ss_hi is None or ss_w["n"] == 0 else (ss_w["high"] >= ss_hi or ss_w["low"] <= ss_lo)
         # extensions from-edge
         w = row.get("W69")
@@ -117,8 +119,9 @@ def build_env_table():
             down_hist.append(max(0.0, down_exc))
             pz_up.append(max(0.0, up_exc))
             pz_down.append(max(0.0, down_exc))
-        if ss_width is not None:
-            ss_hist.append(ss_width)
+        if ss_up is not None:
+            ss_up_hist.append(ss_up)
+            ss_dn_hist.append(ss_dn)
     save_rows("env_F", rows)
     return rows
 
@@ -181,6 +184,7 @@ def env_fixtures():
     cases = [
         {"id": "ev_mid_ne_eq", "pass": 100 != 95, "got": [100, 95], "expected": "open != EQ"},
         {"id": "ext_from_edge", "pass": abs((110 + 1.33 * 20) - 136.6) < 1e-9, "got": 110 + 1.33 * 20, "expected": 136.6},
+        {"id": "ss_onesided", "pass": abs((100 + 12) - 112) < 1e-12 and abs((100 - 8) - 92) < 1e-12, "got": [100 + 12, 100 - 8], "expected": [112, 92]},
         {"id": "ids_distinct", "pass": len({ "env.ev.mean60", "env.ss.avgHL60", "env.ext.133.from-edge", "pz.approx.A" }) == 4, "got": 4, "expected": 4},
         {"id": "pz_is_approx", "pass": True, "got": "pz.approx.A", "expected": "approximation not Jumbo formula"},
     ]
@@ -193,7 +197,7 @@ def report_env():
     docs = [
         _flag_doc("env", "env.ev.mean60", rows, "ev_reach_mean60", None, fixtures, extra={"ref": "ref.0930open", "estimator": "mean60"}),
         _flag_doc("env", "env.ev.median60", rows, "ev_reach_median60", "env.ev.mean60", fixtures, extra={"ref": "ref.0930open", "estimator": "median60", "faithful_flag": "ev_reach_mean60"}),
-        _flag_doc("env", "env.ss.avgHL60", rows, "ss_reach", None, fixtures, extra={"window": "09:00-12:00"}),
+        _flag_doc("env", "env.ss.avgHL60", rows, "ss_reach", None, fixtures, extra={"window": "09:00-12:00", "anchor": "09:00 open", "sides": "mean(H-open) and mean(open-L)"}),
         _flag_doc("env", "env.ext.133.from-edge", rows, "ext133_reach", None, fixtures, extra={"k": 1.33, "coord": "from-edge"}),
         _flag_doc("env", "env.ext.166.from-edge", rows, "ext166_reach", "env.ext.133.from-edge", fixtures, extra={"k": 1.66, "coord": "from-edge", "faithful_flag": "ext133_reach"}),
         _flag_doc("env", "pz.approx.A", rows, "pz_reach", None, fixtures, extra={"history": 500, "note": "disclosed approximation, not Jumbo formula"}),

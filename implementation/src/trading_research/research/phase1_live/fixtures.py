@@ -136,8 +136,27 @@ def fixture_session_synthetic() -> dict:
     return {"name": "session_synthetic", "pass": all(c["pass"] for c in checks), "cases": checks}
 
 
+def fixture_spike_hl() -> dict:
+    """Isolated one-tick high vs 1s median is a spike. Confirmed high is clean."""
+    h = np.full(20, 100.0)
+    l = np.full(20, 99.0)
+    h[10] = 100.25
+    second = float(np.partition(h, -2)[-2])
+    isolated = bool(int((h == h.max()).sum()) == 1 and (h.max() - second) >= 0.25)
+    h2 = np.full(20, 100.0)
+    h2[8] = 110.0
+    h2[9] = 110.0
+    second2 = float(np.partition(h2, -2)[-2])
+    isolated2 = bool(int((h2 == h2.max()).sum()) == 1 and (h2.max() - second2) >= 0.25)
+    checks = [
+        {"id": "spike.one_tick_isolated", "pass": isolated is True, "got": isolated, "expected": True},
+        {"id": "spike.confirmed_high_clean", "pass": isolated2 is False, "got": isolated2, "expected": False},
+    ]
+    return {"name": "spike_hl", "pass": all(c["pass"] for c in checks), "cases": checks}
+
+
 def run_ticket01_fixtures() -> dict:
-    groups = [fixture_box_geometry(), fixture_path_high_only(), fixture_path_both_order(), fixture_session_synthetic()]
+    groups = [fixture_box_geometry(), fixture_path_high_only(), fixture_path_both_order(), fixture_session_synthetic(), fixture_spike_hl()]
     cases = [c for g in groups for c in g["cases"]]
     return {
         "ticket": "01",

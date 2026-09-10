@@ -74,8 +74,10 @@ def iter_sessions(only=None):
             }
 
 
-def cvd_from_trades(ev) -> dict:
+def cvd_from_trades(ev, t0=None, t1=None) -> dict:
     tr = ev["is_trade"]
+    if t0 is not None and t1 is not None:
+        tr = tr & (ev["t"] >= t0) & (ev["t"] < t1)
     side = ev["side"][tr]
     size = ev["size"][tr].astype(np.float64)
     buy = float(size[side > 0].sum())
@@ -481,9 +483,11 @@ def build_mbp1_flow_table():
             continue
         day = date.fromisoformat(session)
         am0, am1, rth_end = _am_ns(day)
+        from datetime import timedelta as _td
+        globex = local_timestamp(day - _td(days=1), dtime(18, 0), ZONE)
         order = np.argsort(ev["t"], kind="mergesort")
         ev = {k: v[order] for k, v in ev.items()}
-        cvd = cvd_from_trades(ev)
+        cvd = cvd_from_trades(ev, globex, am1)
         cvd75 = _cvd_cut(ev, q75)
         cvd90 = _cvd_cut(ev, q90)
         vp = vp_rth(ev, am0, rth_end)
@@ -529,6 +533,7 @@ def build_mbp1_flow_table():
             "smt_trade_nq": smt_trade_nq(ev, am0, am1, sisters, day),
             "tpo_trade": tpo_trade_visited(ev, am0, rth_end),
             "poc": vp["poc"], "VAL": vp["VAL"], "VAH": vp["VAH"], "vp_n": vp["n"],
+            "dp_max": vp.get("dp_max"), "dp_min": vp.get("dp_min"),
             "xcheck_cvd": None if xcheck is None else xcheck.get("cvd"),
             "xcheck_disagree": False if xcheck is None or xcheck.get("cvd") is None else (
                 (1 if xcheck["cvd"] > 0 else -1 if xcheck["cvd"] < 0 else 0) != cvd["cvd_sign"]
