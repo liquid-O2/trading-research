@@ -1,6 +1,0 @@
-# Hardware
-
-- GPU: NVIDIA RTX A4000
-- vCPUs: 21
-- RAM: 83 GB
-- VRAM: 16 GB

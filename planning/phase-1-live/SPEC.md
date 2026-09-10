@@ -48,7 +48,7 @@ Every constant is a named parameter. No hidden thresholds.
 Not-measurable rows (always printed): `flow.refill.offtouch`, `value.dealer.inventory`, `value.hidden.book`, `value.skylit.*`, `flow.smt.trade.es` (in F).
 
 ## 6. Report format and the PHASE line
-- Path: `trading-research/reports/phase1-live/<family>/<variant>.json` (canonical JSON via the repo's `operations.artifacts.canonical_json`) and `<variant>.md` twin.
+- Path: `implementation/reports/phase1-live/<family>/<variant>.json` (canonical JSON via the repo's `operations.artifacts.canonical_json`) and `<variant>.md` twin.
 - Line: `family | variant | n | faithful disagreements | experiment status | report path`.
 - `n` = sessions in the slice after the coverage rule. `faithful disagreements` = sessions where the variant's primary label differs from its `faithful_of` row (0 for faithful rows; `-` for not-measurable).
 - `experiment status` ∈ {`measured`, `null`, `worse`, `better`, `deferred`, `not-measurable`}. `null` / `worse` / `better` apply only to upgrade rows; "better" requires the Wilson 95% intervals not to overlap; otherwise `null`. No P&L.
@@ -58,7 +58,7 @@ Not-measurable rows (always printed): `flow.refill.offtouch`, `value.dealer.inve
 Per session, in `sessions[].labels`: `path_class`, `break_order`, `day_type`, `open_cell`, `balance`, `edge_clean`, `width_pct`, `width_rel_prior_rth`, `rvol_0930`, `vol_tercile_{rv,gk,yz,iv}`, `ev_reach_{mean60,median60}`, `ss_reach`, `ext_133_touch`, `ext_166_touch`, `pz_reject`, `smt_event_S1`, `cvd_div_trade`, `absorption_A_at_extreme`, `bigtrade_count_ny`, `fail_events_by_box`, `tdo_touch`, `nwog_fill`, `hod_lod_time`, `am_extreme_time`, `am_extreme_nearest_object`, `aplus_sweep`, `node_top3_by_product`, `fvg_first_filled`, `cisd_event`, `tpo_poor_extreme`, `amt_open_label`. Phase 2 predicts from these; Phase 3 learns location from `levels` + `outcomes`. Nothing else is specified.
 
 ## 8. Runner and resource conventions
-- One registered runner, `trading-research/tools/run_phase1_objects.py`, modes `check`, `run --family <f> --slice F|L`, `report`; it uses the repo's retained-artifact helpers and canonical JSON; it never writes outside `trading-research/reports/phase1-live/` and the retained artifact store.
+- One registered runner, `implementation/tools/run_phase1_objects.py`, modes `check`, `run --family <f> --slice F|L`, `report`; it uses the repo's retained-artifact helpers and canonical JSON; it never writes outside `implementation/reports/phase1-live/` and the retained artifact store.
 - Runs execute under the applicable approved resource limits (E0 envelope today: CPU soft 180 s / hard 190 s, 4 GiB address space, 360 s wall per run). MBP-1 work is chunked per calendar month. A larger budget is requested through the existing budget path, not assumed.
 - Pinned interpreter `/tmp/trading-research-venv/bin/python`. Failures, elapsed time and CPU are retained, never reset.
 

@@ -1,1 +1,0 @@
-../planning/trading-research/history/implementation-documents/DESIGN_REVIEW.md

@@ -29,7 +29,7 @@ Nothing here blocks Phase 1. Each item is closed by a named default; alternative
 23. **SMT.** Faithful continuous object = `flow.smt.ohlc.4`. Trade-level NQ = `flow.smt.trade.nq`. Pine 3/3 matcher = `flow.smt.pine.3-3`. Not a GB edge. `wiki/smt-divergence.md`.
 24. **FVG / CISD / TPO.** Measured as their own families (ticket 08). Not added to GB pages. IB stays a clock-grid comparison row. `wiki/fvg-body-gaps.md`, `wiki/sweep-cisd-blocks.md`, `wiki/tpo-ib-auction.md`.
 25. **Coverage rule.** Drop a session from a family when a needed window misses > 10% of expected 1-second bars. `wiki/data-coverage.md`.
-26. **Report location.** `trading-research/reports/phase1-live/`. `SPEC.md` §6.
+26. **Report location.** `implementation/reports/phase1-live/`. `SPEC.md` §6.
 27. **Resource budget.** Runs stay inside the current E0 envelope by chunking per month; a larger budget goes through the existing budget-amendment path. `SPEC.md` §8.
 
 ## Not measurable with the data we hold (printed as rows, never estimated)

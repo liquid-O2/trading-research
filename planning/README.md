@@ -1,5 +1,6 @@
 # Planning
 
-The one canonical planning folder is [trading-research](trading-research/START_HERE.md).
+- `phase-1-live/` is the live plan.
+- `phase-1-fable/`, `phase-1-from-scratch/`, and `phase-1-compare/` are prior Phase 1 plan trees. Do not edit them.
 
-`trading-model` and `archives` are compatibility links into it, retained for immutable historical references. They are not separate active plans.
+Implementation is `/workspace/implementation/`.

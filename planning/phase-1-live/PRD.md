@@ -39,7 +39,7 @@ Execute NQ, ES is information. No overnight hold across the day boundary (nothin
 12. **Provenance.** Every printed variant id is defined on exactly one wiki page; every quoted number carries a citation.
 
 ## Acceptance for Phase 1 as a whole
-All stories pass on F. Reports live under `trading-research/reports/phase1-live/` as canonical JSON plus a Markdown twin. No file under the must-not-change list has a changed hash.
+All stories pass on F. Reports live under `implementation/reports/phase1-live/` as canonical JSON plus a Markdown twin. No file under the must-not-change list has a changed hash.
 
 ## Out of scope but recorded
 `QUESTIONS_RESOLVED.md` lists closed variant grids and not-measurable rows. Nothing there blocks Phase 1.
