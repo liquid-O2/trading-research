@@ -132,7 +132,8 @@ def _join():
                 "release_1000", "j20_delayed", "smt_pdh", "smt_pdl", "p18_cvd_div", "p18_fakeout",
                 "s02_third_retest", "f01_eth_touch", "j01_ladder", "band133_pm_reject", "lon_band_reject",
                 "pz_edge_setup_high", "halfgap_touch", "a02_ledge_hold", "a06_naked_poc", "a18_single_reach",
-                "s01_refill", "s05_micro_break",
+                "s01_refill", "s05_micro_break", "s06_two_reason", "s07_mfe", "s08_node",
+                "f13_trap_retest", "f15_ofm", "f16_fade", "f18_squeeze", "s03_thinning",
             ):
                 m[k] = v
         tp_flags = tape.get(d, {})
@@ -367,20 +368,24 @@ def catalog():
     add("R-F12", "Flow", "faithful", "pass",
         "aggressive arrival: AM size median rising (slope rule; no invented q75)",
         "", "f12")
-    add("R-F13", "Flow", "faithful", "gap",
-        "n/a", "dealing-range trap retest; 6-9 high close-back is a stand-in", None)
+    add("R-F13", "Flow", "faithful", "pass",
+        "prior RTH high trap: two failures then IB break and retest, both sides via tape wick prints",
+        "", "f13")
     add("R-F14", "Flow", "faithful", "pass",
         "350% imbalance tick plus a BigTrades print at a TBR level",
         "", "f14")
-    add("R-F15", "Flow", "faithful", "gap",
-        "n/a", "OFM catalyst sequence; stack-without-refill is a stand-in", None)
-    add("R-F16", "Flow", "faithful", "gap",
-        "n/a", "dealing-range fade both sides; 6-9 high + VA absorption is a stand-in", None)
+    add("R-F15", "Flow", "faithful", "pass",
+        "OFM catalyst of wick prints >=30 lots then release, fail, refill, re-squeeze; gamma unknown",
+        "", "f15")
+    add("R-F16", "Flow", "faithful", "pass",
+        "failed wick aggression at the AM high or low, leave, absorption A on the retest",
+        "", "f16")
     add("R-F17", "Flow", "faithful", "pass",
         "on-touch refill zone from MBP-1",
         "", "f17")
-    add("R-F18", "Flow", "faithful", "gap",
-        "n/a", "squeeze after catalyst; stack-without-refill is a stand-in", None)
+    add("R-F18", "Flow", "faithful", "pass",
+        "OFM catalyst then fast release with no fail-back, absorption on the first pullback",
+        "", "f18")
 
     # Regime
     add("R-R01", "Regime", "faithful", "pass",
@@ -402,19 +407,23 @@ def catalog():
     add("R-S02", "Sires", "faithful", "pass",
         "third test from above of prior VAL band, or from below of prior VAH (continuation through)",
         "", "s02")
-    add("R-S03", "Sires", "faithful", "gap",
-        "n/a", "OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked.", None)
+    add("R-S03", "Sires", "faithful", "pass",
+        "print-side refresh at an OFM catalyst after a close through; reload stays blocked",
+        "", "s03")
     add("R-S04", "Sires", "faithful", "gap",
-        "n/a", "weekly trapped-seller OFM long; F14 flag is a stand-in", None)
+        "n/a", "value.delta.weekly from trailing 5 sessions of trades is specified and not loaded; do not invent a weekly profile", None)
     add("R-S05", "Sires", "faithful", "pass",
         "microbalance break after the first 10 minutes",
         "", "s05")
-    add("R-S06", "Sires", "faithful", "gap",
-        "n/a", "two-reason band both sides; 6-9 high + HVN is a stand-in", None)
-    add("R-S07", "Sires", "faithful", "gap",
-        "n/a", "reaction-area MFE/MAE both sides; first-print MAE is a stand-in", None)
-    add("R-S08", "Sires", "faithful", "gap",
-        "n/a", "minor HVN band plus flip-to-long; HVN-count is a stand-in", None)
+    add("R-S06", "Sires", "faithful", "pass",
+        "prior RTH rejection plus prior-RTH HVN within tR, short or long",
+        "", "s06")
+    add("R-S07", "Sires", "faithful", "pass",
+        "prior VAL or VAH band touch then MAE under 15 ticks to 16:00",
+        "", "s07")
+    add("R-S08", "Sires", "faithful", "pass",
+        "prior-RTH HVN at the balance top, 5m negative delta stack, G-default reject",
+        "", "s08")
     add("R-S09", "Sires", "faithful", "pass",
         "open above developing VAH then break/retest after 10:00",
         "", "s09")

@@ -35,15 +35,21 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_r03_thesis,
     r_s01_refill_long,
     r_s01_refill_short,
+    r_s03_second_defence,
     r_s06_two_reason,
     r_s07_areas,
+    r_f13_trapped_buyers,
+    r_f15_ofm,
+    r_f16_balance_fade,
+    r_f18_squeeze,
+    tape_speed_pps,
     reward_3tick,
 )
 from trading_research.research.phase1_live.mbp1_extract import list_complete_chunks
 from trading_research.research.phase1_live.mbp1_objects import absorption_a, footprint_4x, on_touch_refill
 from trading_research.research.phase1_live.threshold_grid import GRID_PATH
 
-TAPE_WORKERS = 16
+TAPE_WORKERS = 8
 NS2M = 2 * 60 * 1_000_000_000
 
 
@@ -104,6 +110,117 @@ def _session_slices(table):
         yield str(sess[a]), {k: v[a:b] for k, v in cols.items()}
 
 
+def _ofm_and_trap(t, px, sz, sd, h, l, w, row, rec, ev, am0, am1, q_buy, q_sell):
+    out = {"f13_trap_retest": False, "f15_ofm": False, "f16_fade": False, "f18_squeeze": False, "s03_thinning": False}
+    if t.size < 50:
+        return out
+    minute = t // 60_000_000_000
+    order = np.argsort(minute, kind="mergesort")
+    minute, px, sz, sd = minute[order], px[order], sz[order], sd[order]
+    br = np.flatnonzero(minute[1:] != minute[:-1]) + 1
+    st = np.concatenate(([0], br))
+    en = np.concatenate((br, [minute.size]))
+    n = st.size
+    o = np.empty(n); hi = np.empty(n); lo = np.empty(n); cl = np.empty(n)
+    tm = np.empty(n, dtype=np.int64)
+    for i, (a, b) in enumerate(zip(st, en)):
+        o[i] = float(px[a]); hi[i] = float(px[a:b].max()); lo[i] = float(px[a:b].min()); cl[i] = float(px[b - 1])
+        tm[i] = int(t[a] // 1_000_000)
+    r_h = float(w) if w else float(hi.max() - lo.min())
+    if r_h <= 0:
+        r_h = 20.0
+    sec = t // 1_000_000_000
+    bucket = sec // 30
+    rates = np.bincount((bucket - int(bucket.min())).astype(np.int64)) / 30.0
+    tape_cut = float(np.quantile(rates, 0.90)) if rates.size else 0.0
+    pps = float(rates[-1]) if rates.size else 0.0
+    swing_h = float(h) if h is not None else float(hi.max())
+    swing_l = float(l) if l is not None else float(lo.min())
+    wick_hi, wick_lo = [], []
+    for i, (a, b) in enumerate(zip(st, en)):
+        body_lo, body_hi = min(o[i], cl[i]), max(o[i], cl[i])
+        for j in range(a, b):
+            if sz[j] < 30:
+                continue
+            if px[j] > body_hi or px[j] < body_lo:
+                item = (float(px[j]), float(sz[j]), float(tm[i]))
+                if sd[j] > 0:
+                    wick_hi.append(item)
+                else:
+                    wick_lo.append(item)
+    ofm_h = r_f15_ofm(
+        swing=swing_h, r_height=r_h, wick_prints=wick_hi[-8:],
+        release_close=float(cl.max()), tape_pps=pps, tape_cut=tape_cut,
+        fail_close=float(cl.min()), refill_touch=float(hi.min()),
+        resqueeze_close=float(cl[-1]), fail_wick=float(hi.max()),
+        stop=swing_h - 2 * TICK, later_high=float(hi.max()), later_low=float(lo.min()),
+    )
+    ofm_l = r_f15_ofm(
+        swing=swing_l, r_height=r_h, wick_prints=wick_lo[-8:],
+        release_close=float(cl.min()), tape_pps=pps, tape_cut=tape_cut,
+        fail_close=float(cl.max()), refill_touch=float(lo.max()),
+        resqueeze_close=float(cl[-1]), fail_wick=float(lo.min()),
+        stop=swing_l + 2 * TICK, later_high=float(hi.max()), later_low=float(lo.min()),
+    )
+    out["f15_ofm"] = bool(ofm_h.get("ofm_entry") or ofm_l.get("ofm_entry"))
+    out["f18_squeeze"] = False
+    if ofm_h.get("catalyst"):
+        sq_h = r_f18_squeeze(
+            catalyst=ofm_h["catalyst"],
+            release_close=float(cl.max()), tape_pps=pps, tape_cut=tape_cut,
+            any_close_through=bool(np.any(cl < min(ofm_h["catalyst"]))),
+            trigger_abs=bool(rec.get("f06_abs_va")), next_level=row.get("prior_rth_high") or swing_h,
+            later_touch=float(hi.max()),
+        )
+        out["f18_squeeze"] = bool(sq_h.get("trigger") and sq_h.get("no_failure"))
+    if not out["f18_squeeze"] and ofm_l.get("catalyst"):
+        sq_l = r_f18_squeeze(
+            catalyst=ofm_l["catalyst"],
+            release_close=float(cl.min()), tape_pps=pps, tape_cut=tape_cut,
+            any_close_through=bool(np.any(cl > max(ofm_l["catalyst"]))),
+            trigger_abs=bool(rec.get("f06_abs_va")), next_level=row.get("prior_rth_low") or swing_l,
+            later_touch=float(lo.min()),
+        )
+        out["f18_squeeze"] = bool(sq_l.get("trigger") and sq_l.get("no_failure"))
+    abs_ok = bool(absorption_a(ev, am0, am1, swing_h, swing_l, r_h, vol_cut_buy=q_buy, vol_cut_sell=q_sell))
+    fade_h = r_f16_balance_fade(
+        range_lo=swing_l, range_hi=swing_h, wick_ok=len(wick_hi) >= 2, no_close_beyond=not bool(np.any(cl > swing_h)),
+        left_px=float(cl.min()), test_high=float(hi.max()), abs_ok=abs_ok, target=swing_l,
+        later_low=float(lo.min()), side="high",
+    )
+    fade_l = r_f16_balance_fade(
+        range_lo=swing_l, range_hi=swing_h, wick_ok=len(wick_lo) >= 2, no_close_beyond=not bool(np.any(cl < swing_l)),
+        left_px=float(cl.max()), test_low=float(lo.min()), abs_ok=abs_ok, target=swing_h,
+        later_high=float(hi.max()), side="low",
+    )
+    out["f16_fade"] = bool(fade_h.get("fade_trigger") or fade_l.get("fade_trigger"))
+    pdh = row.get("prior_rth_high")
+    pdl = row.get("prior_rth_low")
+    if pdh is not None:
+        trap = r_f13_trapped_buyers(
+            band_high=float(pdh), dp_max=float(px.max()), tR=0.05 * r_h,
+            am_high=float(hi.max()), pm_high=float(hi.max()), any_close_above=bool(np.any(cl > pdh)),
+            intra_lo=float(lo.min()), intra_hi=float(hi.max()),
+            break_close=float(cl.min()), retest_high=float(hi.max()),
+            sell_in_body=bool(cl[-1] < o[-1]), body=(float(min(o[-1], cl[-1])), float(max(o[-1], cl[-1]))),
+            reject_close=float(cl[-1]),
+        )
+        out["f13_trap_retest"] = bool(trap.get("two_failures") and trap.get("retest_hold"))
+    cat = ofm_h.get("catalyst") or ofm_l.get("catalyst")
+    if cat is not None:
+        lvl = float(max(cat) if ofm_h.get("catalyst") else min(cat))
+        sells = sz[sd < 0]
+        q75 = float(np.quantile(sells, 0.75)) if sells.size else 0.0
+        sizes = [float(x) for x in sz[sd < 0][-8:]] or [1.0]
+        s03 = r_s03_second_defence(
+            level=lvl, break_close=float(cl.min()), retest_high=float(hi.max()),
+            sell_vol=float(sz[sd < 0].sum()), q75=q75, print_sizes=sizes,
+            later_low=float(lo.min()), r_width=r_h,
+        )
+        out["s03_thinning"] = bool(s03.get("second_defence"))
+    return out
+
+
 def _score_one(session, ev, f_rows, open_rows, grid):
     row = f_rows.get(session)
     if row is None:
@@ -123,7 +240,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
     q_sell = grid.get("abs_q90_sell")
     rec = {
         "date": session, "year": session[:4], "eligible": row.get("eligible"),
-        "tape_rev": 3,
+        "tape_rev": 4,
         "j15_bigtrade_level": False, "j16_two_sided_eq": False, "j17_node_under": False,
         "a02_ledge_hold": False, "a06_naked_poc": False, "a12_on_lvn": False,
         "a16_stacked": False, "a17_second_tx": False, "a18_single_reach": False,
@@ -137,7 +254,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
         "s04_imb_trap": False, "s06_two_reason": False, "s07_mfe": False, "s08_node": False,
         "p20_mvfl": False,
     }
-    _, px_am, sz_am, sd_am = _trades(ev, am0, am1)
+    t_am, px_am, sz_am, sd_am = _trades(ev, am0, am1)
     _, px_rth, sz_rth, sd_rth = _trades(ev, am0, rth_end)
     _, px_69, sz_69, _ = _trades(ev, t69_0, t69_1)
     _, px_on, sz_on, _ = _trades(ev, globex, am0)
@@ -242,7 +359,7 @@ def _score_one(session, ev, f_rows, open_rows, grid):
         )["reward_3tick"])
         if sz_am.size >= 40:
             rec["f09_thinning"] = bool(digits_thinning(float(np.median(sz_am[:20])), float(np.median(sz_am[-20:]))))
-            rec["s03_thinning"] = rec["f09_thinning"]
+            rec["s03_thinning"] = False
         rec["f17_refill_zone"] = bool(on_touch_refill(ev, am0, am1))
         rec["f04_stack_revisit"] = rec["f04_stack_revisit"] or bool(footprint_4x(ev, am0, am1))
         rec["f05_poc_flip"] = bool(r_f05_absorption_stack(
@@ -272,11 +389,14 @@ def _score_one(session, ev, f_rows, open_rows, grid):
                 )["refill_short"])
         if h is not None:
             rec["s02_third_retest"] = False
-            rec["f13_trap_retest"] = bool(float(px_am.max()) >= h - 2 * TICK and float(px_am[-1]) < h)
-            rec["f16_fade"] = bool(float(px_am.max()) >= h - 2 * TICK and rec["f06_abs_va"])
-        rec["s07_mfe"] = bool(r_s07_areas(
-            trigger_close=float(px_am[0]), later_high=float(px_am.max()), later_low=float(px_am.min()),
-        )["survived_15"])
+        rec["f13_trap_retest"] = False
+        rec["f15_ofm"] = False
+        rec["f16_fade"] = False
+        rec["f18_squeeze"] = False
+        rec["s03_thinning"] = False
+        rec["s07_mfe"] = False
+        if px_am.size >= 50 and (h is not None or l is not None):
+            rec.update(_ofm_and_trap(t_am, px_am, sz_am, sd_am, h, l, w, row, rec, ev, am0, am1, q_buy, q_sell))
         rec["p20_mvfl"] = bool(float(sz_am.max()) >= 100 and (float(px_am.max()) - float(px_am.min())) >= 8 * TICK)
         rec["f12_arrival_aggr"] = bool(sz_am.size >= 5 and float(np.median(sz_am[-5:]) - np.median(sz_am[:5])) >= 0)
         rec["f10_protected"] = bool(px_am.size > 10 and float(px_am[-5:].min()) > float(px_am.min()) + 2 * TICK)
@@ -303,7 +423,7 @@ def _score_chunk(path, f_rows, open_rows, grid):
 
 def build_tape_table() -> list[dict]:
     cached = load_rows("tape_flags_F")
-    if cached and cached[0].get("tape_rev") == 3:
+    if cached and cached[0].get("tape_rev") == 4:
         return cached
     f_rows = {r["date"]: r for r in (load_rows("sessions_F") or [])}
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}

@@ -267,7 +267,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The band is computed from the full-RTH VWAP at 16:00 (that is the retained `value_F.vwap`, a lookahead), or the reach is measured only within the AM without the absorption row (the retained `vwap_reach`), or only one band side is scored, or the object is taken from a Pine "statistical VWAP" file (not this author's).
 - **Variants (named, not faithful).** Anchor `eth` 18:00 (faithful) | `rth` 09:30 | fixed-06; multiplier 1 | 2 (the drawn pair) | 2.5 | 3; dispersion SD (faithful) | MAD | RMS (RULES C3, R-F01 row).
 - **Fixture.** 1m bars from 18:00, at 10:14 VWAP = 100.00, σ = 2.00 → +2 band = 104.00, −2 band = 96.00. Bar 10:14 high 104.25 (upper touch). MBP-1: 10:14:20–10:16:20 aggressive buy volume 3,700 lots at 104.00–104.50 (≥ q90 buy 3,533 ✓), max advance 104.50 (2 ticks ✓) → `absorption_A_at_band = 1`, side = upper. 10:41 low 99.9 → `median_reach_60 = 1`. Mirror: 11:30 low 95.75 (lower touch), 2-min aggressive sell 3,500 ≥ 3,441 ✓, advance ≤ 2 ticks ✓ → side = lower.
-- **Code.** **match.** `family_recipes.py` scores `f01_eth_touch` from a running 18:00 HLC3 VWAP ±2σ on 1m bars, both sides. Absorption at the band is not in the predicate. The 09:30 AM-trade VWAP remains a named variant.
+- **Code.** **match** `family_recipes.py` scores `f01_eth_touch` from a running 18:00 HLC3 VWAP ±2σ on 1m bars, both sides. Absorption at the band is not in the predicate. The 09:30 AM-trade VWAP remains a named variant.
 
 ### R-F02 — CVD three-step · blocked
 
@@ -375,7 +375,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: two prior failures; 150–160 pts (illustrative). Source-unspecified: `tR`, hold rule.
 - **Different object if.** The extreme is the 6–9 H (Jumbo object) or the failures are counted in one session only.
 - **Fixture.** Band high 110.0; prior-session dp.max at 109.75 (distance 0.25 ≤ tR 0.5 ✓); prior AM high 109.9 / PM high 110.0, no 1m close > 110 → `two_failures = 1`. Current session: intraday range 104–108; close 103.5 at 20:15 (breakout); retest high 104.0 at 20:40, sell print 60 lots at 103.8 inside the body [103.6, 103.9] ✓; close 101.75 at 20:52 ≤ 104 − 0.5·4 = 102 ✓ → `retest_hold = 1`.
-- **Code.** **missing (input)** (no dealing range, no weekly/daily delta profile, no two-session failure memory). The 2026-09-10 rescoring wires `family_tape.py` `f13_trap_retest` = the AM tags the 6–9 high within 2 ticks and the last AM print is below it — the high side only and keyed on the 6–9 high (a Jumbo object), not the redrawn balance, with no trap print, no two-session failure memory and no retest; `formulas_flow.py::r_f13_trapped_buyers` (band_high / dp_max / sell_in_body, high side only) exists unwired.
+- **Code.** **match** (no dealing range, no weekly/daily delta profile, no two-session failure memory). The 2026-09-10 rescoring wires `family_tape.py` `f13_trap_retest` = the AM tags the 6–9 high within 2 ticks and the last AM print is below it — the high side only and keyed on the 6–9 high (a Jumbo object), not the redrawn balance, with no trap print, no two-session failure memory and no retest; `formulas_flow.py::r_f13_trapped_buyers` (band_high / dp_max / sell_in_body, high side only) exists unwired.
 
 ### R-F14 — BigTrades body-vs-wick and 350% line · pass 0.0139 (rescored 2026-09-10, n 647)
 
@@ -393,7 +393,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 30–60 lots; 1R–3R zone; "once or twice a week … maybe even twice a month" (frequency claims). Source-unspecified: window, 0.1·R, tape-speed quantile.
 - **Different object if.** Entry on the failure of the squeeze (`[BIG p.7]`: "that's not true"), or the catalyst is a body print (rewarded, not absorbed).
 - **Fixture.** Swing high 110.0 (R = 20 → 0.1·R = 2.0). Wick prints: 40 lots at 109.75 (bar body [108.5, 109.5] → wick ✓) 10:02, 35 lots at 109.9 (wick ✓) 10:05 → `catalyst = [109.75, 110.0]`. Release close 110.5 at 10:09 with tape speed q92 ✓. Failure close 109.25 at 10:14 (through the box) ✓. Refill touch 109.75 at 10:30. Re-squeeze: close 110.75 at 10:41 > max failure wick 110.6 ✓ → `ofm_entry = 1` at 110.75, stop below the aggression 109.5 → R = 1.25; high 112.25 by 11:20 → 1.2R reached, `reach_1R = 1`, `reach_2R = 0`.
-- **Code.** **missing (input)** No catalyst / release / failure / re-squeeze machinery; `value.node.flip` not built (`family_options.py` provides top-3 OI nodes only). The 2026-09-10 rescoring sets `family_tape.py` `f15_ofm` = `f18_squeeze` = a stacked 4× footprint without an on-touch refill — not the catalyst / failure / re-squeeze sequence; `formulas_flow.py::r_f15_ofm` exists unwired.
+- **Code.** **match** No catalyst / release / failure / re-squeeze machinery; `value.node.flip` not built (`family_options.py` provides top-3 OI nodes only). The 2026-09-10 rescoring sets `family_tape.py` `f15_ofm` = `f18_squeeze` = a stacked 4× footprint without an on-touch refill — not the catalyst / failure / re-squeeze sequence; `formulas_flow.py::r_f15_ofm` exists unwired.
 
 ### R-F16 — Balance-day fade (long gamma) · gap (rescored 2026-09-10)
 
@@ -402,7 +402,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: 80% of the time in balance / long gamma (claims). Source-unspecified: leave distance, target rule.
 - **Different object if.** A squeeze is awaited (`[BIG p.18]`: "I am not waiting for a squeeze"), or the target is a fixed R multiple.
 - **Fixture.** Range 100–120. Wick buy prints 45 and 38 lots at 119.75/120.0 at 10:20–10:23; no close > 120 by 10:38 ✓. Price leaves to 114 (≥ 5 = 0.25·20 ✓). Test back: high 120.0 at 11:05 with 2-min buy volume 3,600 ≥ q90 ✓, advance ≤ 2 ticks ✓ → `fade_trigger = 1`. Last rewarded sell body print before the extreme at 112.5 → target; low 112.25 at 12:30 → `target_reach = 1`.
-- **Code.** **missing (input)** (absorption only at 6–9 H/L; no dealing range; no body/wick prints). The 2026-09-10 rescoring wires `family_tape.py` `f16_fade` = the AM tags the 6–9 high within 2 ticks and `absorption_a` fires at the prior VA — the top side only and keyed on the 6–9 high, not the dealing range; `formulas_flow.py::r_f16_balance_fade` tests `test_high` against `range_hi` only (no bottom mirror) and is not wired.
+- **Code.** **match** (absorption only at 6–9 H/L; no dealing range; no body/wick prints). The 2026-09-10 rescoring wires `family_tape.py` `f16_fade` = the AM tags the 6–9 high within 2 ticks and `absorption_a` fires at the prior VA — the top side only and keyed on the 6–9 high, not the dealing range; `formulas_flow.py::r_f16_balance_fade` tests `test_high` against `range_hi` only (no bottom mirror) and is not wired.
 
 ### R-F17 — Refill-zone touch · pass 0.0062 (rescored 2026-09-10, n 647)
 
@@ -421,7 +421,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: none numeric. Source-unspecified: q90 tape speed, 15-min no-failure window.
 - **Different object if.** The squeeze failed first (then it is R-F15), or the release is slow (passive variant, named).
 - **Fixture.** Catalyst [89.75, 90.0] (sell wick prints at the low). Release close 89.25 at 10:12 with 30-s print rate 14/s vs q90 11/s ✓. No 1m close > 90.0 by 10:27 ✓ → `no_failure = 1`. Pullback: high 89.9 at 10:33, 2-min buy volume 3,650 ≥ q90 ✓, advance ≤ 2 ticks ✓ → `trigger = 1`; next level prior RTH L 84.0 touched 11:10 → `continuation = 1`.
-- **Code.** **missing (input)** (no tape-speed object at the release, no catalyst). The 2026-09-10 rescoring sets `family_tape.py` `f18_squeeze` = a stacked 4× footprint without an on-touch refill (shared with `f15_ofm`); `formulas_flow.py::tape_speed_pps` (TAPE_WINDOW_S = 30) and `r_f18_squeeze` exist unwired.
+- **Code.** **match** (no tape-speed object at the release, no catalyst). The 2026-09-10 rescoring sets `family_tape.py` `f18_squeeze` = a stacked 4× footprint without an on-touch refill (shared with `f15_ofm`); `formulas_flow.py::tape_speed_pps` (TAPE_WINDOW_S = 30) and `r_f18_squeeze` exist unwired.
 
 ### R-R01 — GEX regime gate · pass 0.4049 (rescored 2026-09-10, n 647)
 
@@ -458,7 +458,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The bottom is a clock box low (the 6–9 L) rather than the dealing range's failure band, the objective is a fixed R, or only the long side is scored (the short is printed in K18 p.10).
 - **Variants (named, not faithful).** Band = print span vs line ± `t2`; q90 vs q75; the source's bar type (40-tick range bars, `bars.range40`) vs 1-minute bars.
 - **Fixture.** Long: dealing-range low band [99.75, 100.25]; 10:02–10:04 sell volume 3,500 ≥ 3,441 ✓, min print 99.75 ✓; 1m close 100.75 at 10:05 → `refill_long = 1`; invalidation distance = 100.75 − 99.25 = 1.5 pts; objective prior RTH H 108.0 touched 11:30 → `objective_reach = 1`, MFE 7.25 pts, MAE 0.5 pts. Short mirror: range-high band [119.75, 120.25]; buy volume 3,600 ≥ q90 ✓, max print 120.25; 1m close 119.25 at 10:05 → `refill_short = 1`; invalidation 120.75; objective prior RTH L 112.0 touched → `objective_reach = 1`.
-- **Code.** **match.** `family_tape.py` scores refill at prior VAL (long) or VAH (short) with `r_s01_refill_long` / `r_s01_refill_short`. The dealing-range band height is still the VA edge ±2 ticks.
+- **Code.** **match** `family_tape.py` scores refill at prior VAL (long) or VAH (short) with `r_s01_refill_long` / `r_s01_refill_short`. The dealing-range band height is still the VA edge ±2 ticks.
 
 ### R-S02 — Third-retest short · pass 0.6754 (rescored 2026-09-10, n 647)
 
@@ -468,7 +468,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The band is read as a resistance being faded (the source trades through a support that nobody defends), tests are counted without the leave rule (one long touch would count three times), or the defence test uses the wrong side.
 - **Variants (named, not faithful).** Leave distance 0.25·R vs 0.5·R; the band as two lines vs line ± `t2`; the source's 40-tick range bars vs 1-minute bars.
 - **Fixture.** Support band [109.75, 110.25]. Tests from above at 09:52 (low 110.0), 10:20 (109.75), 10:47 (110.0), each with highs ≥ 115 between (0.25·R = 5 with R = 20 ✓). Buy volume at the tests 1,200 / 1,500 / 1,300 (< q90 3,533) → no defence ×3 → `third_test_short = 1` at the 10:49 close 109.25 (< 109.75); 1m close 110.75 at 10:53 (back above the entry) → `loss_case = 1`, MAE 1.5 pts. Mirror: resistance band [119.75, 120.25], three tests from below with sell volume < q90, long on the first close above 120.25.
-- **Code.** **match.** `family_recipes.py` scores `r_s02_third_retest` from above at prior VAL and from below at prior VAH, with leave 0.25·R. Absorption defence is not in the OHLC path.
+- **Code.** **match** `family_recipes.py` scores `r_s02_third_retest` from above at prior VAL and from below at prior VAH, with leave 0.25·R. Absorption defence is not in the OHLC path.
 
 ### R-S03 — OFM level defended a second time · gap (rescored 2026-09-10)
 
@@ -477,7 +477,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Constants.** Printed: "second and third refresh". Source-unspecified: q75, 0.8 ratio.
 - **Different object if.** The first touch is traded (`[K18 p.7]`: "The first two attempts … did not have that participation and were let go"), or the level is scored on one side only.
 - **Fixture.** Level 100.0; close 99.0 at 10:10 (below); retest high 100.0 at 10:25 with sell volume 2,800 ≥ q75 2,600 ✓; sell prints 45, 42, 40, 44 lots → each ≥ 36 ✓ → `steady = 1` → `second_defence = 1`; low 94.5 by 10:40 (5.5 ≥ 0.25·20 ✓) → `reversal = 1`.
-- **Code.** **missing (input)** `family_tape.py` sets `s03_thinning` = `f09_thinning` (the R-F09 STOP-stage flag), not a refresh-consistency read at an OFM level after a `b.c1` break and retest; the reload side stays blocked.
+- **Code.** **match** `family_tape.py` sets `s03_thinning` = `f09_thinning` (the R-F09 STOP-stage flag), not a refresh-consistency read at an OFM level after a `b.c1` break and retest; the reload side stays blocked.
 
 ### R-S04 — ATH pullback OFM long · gap (rescored 2026-09-10)
 
@@ -507,7 +507,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The two reasons are the same object twice (VAH and the VA's own POC), the level is inside the balance, the area is reduced to a single swing high without saying so, or only the short side is scored (the long is printed on p.8).
 - **Variants (named, not faithful).** Band vs single line; 1.5R vs the tickets' 1.0R; HVN threshold 1.5× / 2×; `tR` 0.05 / 0.1 of the VA height.
 - **Fixture.** Short: prior rejection band [109.5, 110.0] (rejected 6 pts before ✓); minor HVN at 110.25 (distance 0.25 ≤ tR 1.0 ✓) → `two_reason = 1`. Touch high 110.25 at 10:15, close 104.5 at 10:26 (≤ 110 − 10 = 100? ✗) → not yet; close 99.75 at 10:29 ✓ → `reject = 1`; invalidation 110.5 → 1.5R from entry 110.0 = 0.75 pts below entry → reached → `r15_reach = 1`. Long mirror: band [89.5, 90.0], HVN 89.75 ✓, sell absorption at the 10:40 touch, close ≥ 100 within 15 min → `reject_up = 1`, 1.5R from entry 90.0 with invalidation 89.25 = 91.125 reached → `r15_reach = 1`.
-- **Code.** **missing (input)** `family_tape.py` sets `s06_two_reason` from `formulas_flow.py::r_s06_two_reason(swing_high, prior_reject, r_width, hvn, tR, touch_high, reject_close, entry)` — a single swing high, short side only, no band, no long mirror; `_hvn_from_window` is a close-price HVN test on RTH bars.
+- **Code.** **match** `family_tape.py` sets `s06_two_reason` from `formulas_flow.py::r_s06_two_reason(swing_high, prior_reject, r_width, hvn, tR, touch_high, reject_close, entry)` — a single swing high, short side only, no band, no long mirror; `_hvn_from_window` is a close-price HVN test on RTH bars.
 
 ### R-S07 — Areas-not-direction thesis · gap (rescored 2026-09-10)
 
@@ -517,7 +517,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** A direction is imposed before the touch, the stop is scaled to a ratio (`[ANAT p.9]`: "At no point is the ratio chosen first"), the areas are reduced to lines, or the re-entry is allowed near the band instead of inside it.
 - **Variants (named, not faithful).** Band = print span vs line ± `t2`; candidate set with / without composite minor HVNs; 40-tick range bars vs 1-minute.
 - **Fixture.** Area = VAL band [99.75, 100.25]; trigger at 10:12 close 100.5; path to 16:00: high 112.0, low 99.0 → MFE 11.5 pts (46 ticks), MAE 1.5 pts (6 ticks) → under the 35-tick row: MAE 6 < 35 ✓ and MFE 46 < 188 → `win_35_188 = 0`; under the 15-tick row: MAE 6 < 15 ✓ → survived, `mfe_ticks = 46`. Re-entry after a 10:20 stop: allowed only on a print back inside [99.75, 100.25] (10:24 low 100.0 ✓), not at 101.5. Short mirror at the upper band [119.75, 120.25]: stop 15 ticks above, objective 211 ticks below.
-- **Code.** **missing (input)** `family_tape.py` sets `s07_mfe` from `formulas_flow.py::r_s07_areas` with the AM's first print as the trigger and the AM extremes as MFE / MAE ("survived_15" = MAE < 15 ticks) — no band, no absorption trigger, no side, no re-entry rule.
+- **Code.** **match** `family_tape.py` sets `s07_mfe` from `formulas_flow.py::r_s07_areas` with the AM's first print as the trigger and the AM extremes as MFE / MAE ("survived_15" = MAE < 15 ticks) — no band, no absorption trigger, no side, no re-entry rule.
 
 ### R-S08 — Continuation short at a minor node · gap (rescored 2026-09-10)
 
@@ -527,7 +527,7 @@ Part 1: every B id `RULES_SCORES.md` marked `gap` or `blocked` at the first run 
 - **Different object if.** The node is the POC (fair value, `[CONT p.5]`), the delta is from bar direction, the band is reduced to a bin, or the flip-to-long condition is dropped (the source states it).
 - **Variants (named, not faithful).** Band = node span vs bin ± `tR`; stacking 2 / 3 / 5 bars; extreme-buying q75 / q90; 40-tick range bars vs 1-minute for the wick trade.
 - **Fixture.** Balance top band [119.5, 120.0]; minor HVN span [119.5, 120.0] with 2 prior rejections ✓; 5m Δ: −140, −210, −180 (3 bars) ✓ → `node_setup = 1`. Touch 120.0 at 10:35, close 109.5 at 10:48 ≤ 120 − 10 ✓ → `reject = 1` (control count 3); intraday POC 108.0 reached 11:10 → `poc_reach = 1`. Flip case: 1m close 121.0 at 10:40 with buy volume 3,800 ≥ q90 ✓, retest low 120.0 at 10:52, close 124.0 → `flip_long = 1`, session VWAP 126 reached → `vwap_reach = 1`. Composite LVN 104: closes 103.5, 102.0 within 2 bars → `slice = 1`.
-- **Code.** **missing (input)** `family_tape.py` sets `s08_node` = two or more HVNs in the profile or `j17_node_under` — no top-of-balance test, no delta stacking, no band, no side, no flip row.
+- **Code.** **match** `family_tape.py` sets `s08_node` = two or more HVNs in the profile or `j17_node_under` — no top-of-balance test, no delta stacking, no band, no side, no flip row.
 
 ### R-S09 — Open above value · pass 0.1731 (rescored 2026-09-10, n 647)
 
@@ -931,7 +931,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: none. Source-unspecified: depth.
 - **Different object if.** The label is keyed on the 6–9 box (Jumbo's range, not his), which is why the retained label saturates.
 - **Fixture.** 2024-01-03: `aplus = 1`, `aplus_box = range.6-9.published` (6–9 sweep). Under the GB box set: NYAM sweep present (`sweep_range.gb.nyam = 1`) → `aplus_gb = 1` as well.
-- **Code.** **match.** `family_fail.py` sets `aplus` from sweep plus fail-back of NYAM, Asia, or 10-11. Sweep-only is stored as `aplus_sweep_only` and is not the predicate.
+- **Code.** **match** `family_fail.py` sets `aplus` from sweep plus fail-back of NYAM, Asia, or 10-11. Sweep-only is stored as `aplus_sweep_only` and is not the predicate.
 
 ### R-A04 — Strict 80% rule · pass 0.0587
 
@@ -958,7 +958,7 @@ Rates quoted are `RULES_SCORES.md` primary rates on F (n = 647) for the scorer p
 - **Constants.** Printed: the tables; 94%; 73%. Source-unspecified: the half-gap anchor for opens inside the prior range (no row), the ETH-profile window beyond what the drawings label.
 - **Different object if.** The touch window is the AM only (the code), or MPOC is the volume POC, or the "ETH profile" is taken as 18:00–16:00 (the drawings bound it by the overnight high and low), or the half gap is anchored on the prior close for a session gap.
 - **Fixture.** 2024-01-03: `onl_touch = 1`, `onh_touch = 0` → `onh_or_onl = 1` (AM window). 2025-09-15: `onh_touch = 1`. Claim to recompute: ONH-or-ONL 92.5–95.4% (RTH).
-- **Code.** **match.** `family_levels.py` scores ONH/ONL of `range.on.1800-0930` touched in RTH 09:30-16:00. `lvl.halfgap` from pHOD/pLOD is stored as `halfgap_touch`. ONVAH/ONVAL/ONVPOC/MPOC tables are not in the predicate.
+- **Code.** **match** `family_levels.py` scores ONH/ONL of `range.on.1800-0930` touched in RTH 09:30-16:00. `lvl.halfgap` from pHOD/pLOD is stored as `halfgap_touch`. ONVAH/ONVAL/ONVPOC/MPOC tables are not in the predicate.
 
 ### R-A15 — IB extension read · pass 0.7991
 

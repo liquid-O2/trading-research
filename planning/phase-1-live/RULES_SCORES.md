@@ -83,24 +83,24 @@ R-F09 | Flow | faithful | pass | 647 | print-size thinning in AM; stage 2 absorp
 R-F10 | Flow | faithful | pass | 647 | protected AM low: last 5 prints stay above the AM low by 2 ticks | 0.9985 | [0.991, 1.000] | 2024 1.000 / 2025 0.996 / 2026 1.000 | low 1.000 / mid 1.000 / high 0.995 | 0 | leakage 0
 R-F11 | Flow | faithful | pass | 647 | RTH POC within tR of an LVN | 0.0232 | [0.014, 0.038] | 2024 0.004 / 2025 0.033 / 2026 0.038 | low 0.023 / mid 0.009 / high 0.038 | 0 | leakage 0
 R-F12 | Flow | faithful | pass | 647 | aggressive arrival: AM size median rising (slope rule; no invented q75) | 0.8624 | [0.834, 0.887] | 2024 0.826 / 2025 0.857 / 2026 0.929 | low 0.820 / mid 0.855 / high 0.915 | 0 | leakage 0
-R-F13 | Flow | faithful | gap | n/a | dealing-range trap retest; 6-9 high close-back is a stand-in | n/a | n/a | n/a | n/a | n/a | dealing-range trap retest; 6-9 high close-back is a stand-in
+R-F13 | Flow | faithful | pass | 647 | prior RTH high trap: two failures then IB break and retest, both sides via tape wick prints | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-F14 | Flow | faithful | pass | 647 | 350% imbalance tick plus a BigTrades print at a TBR level | 0.0139 | [0.007, 0.026] | 2024 0.028 / 2025 0.004 / 2026 0.006 | low 0.018 / mid 0.014 / high 0.005 | 0 | leakage 0
-R-F15 | Flow | faithful | gap | n/a | OFM catalyst sequence; stack-without-refill is a stand-in | n/a | n/a | n/a | n/a | n/a | OFM catalyst sequence; stack-without-refill is a stand-in
-R-F16 | Flow | faithful | gap | n/a | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in | n/a | n/a | n/a | n/a | n/a | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in
+R-F15 | Flow | faithful | pass | 647 | OFM catalyst of wick prints >=30 lots then release, fail, refill, re-squeeze; gamma unknown | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
+R-F16 | Flow | faithful | pass | 647 | failed wick aggression at the AM high or low, leave, absorption A on the retest | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-F17 | Flow | faithful | pass | 647 | on-touch refill zone from MBP-1 | 0.0062 | [0.002, 0.016] | 2024 0.012 / 2025 0.004 / 2026 0.000 | low 0.009 / mid 0.005 / high 0.005 | 0 | leakage 0
-R-F18 | Flow | faithful | gap | n/a | squeeze after catalyst; stack-without-refill is a stand-in | n/a | n/a | n/a | n/a | n/a | squeeze after catalyst; stack-without-refill is a stand-in
+R-F18 | Flow | faithful | pass | 647 | OFM catalyst then fast release with no fail-back, absorption on the first pullback | 0.7264 | [0.691, 0.759] | 2024 0.660 / 2025 0.717 / 2026 0.846 | low 0.654 / mid 0.724 / high 0.801 | 0 | leakage 0
 R-R01 | Regime | faithful | pass | 647 | QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35) | 0.4049 | [0.368, 0.443] | 2024 0.360 / 2025 0.406 / 2026 0.474 | low 0.304 / mid 0.388 / high 0.512 | 0 | leakage 0
 R-R02 | Regime | faithful | pass | 647 | prior-session VIXCLS close in band 15-18 | 0.3910 | [0.354, 0.429] | 2024 0.231 / 2025 0.508 / 2026 0.462 | low 0.396 / mid 0.439 / high 0.346 | 0 | leakage 0
 R-R03 | Regime | faithful | pass | 647 | open-vs-VA thesis still alive at 12:00 | 0.6151 | [0.577, 0.652] | 2024 0.652 / 2025 0.594 / 2026 0.590 | low 0.627 / mid 0.636 / high 0.588 | 0 | leakage 0
 R-R04 | Regime | faithful | blocked | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap) | n/a | n/a | n/a | n/a | n/a | SMT / IØD (FORMULAS.md blocked until user SMT is the scored object; extract exists, not gap)
 R-S01 | Sires | faithful | pass | 647 | absorption refill at prior VAL (long) or VAH (short) | 0.0325 | [0.021, 0.049] | 2024 0.045 / 2025 0.020 / 2026 0.032 | low 0.028 / mid 0.042 / high 0.028 | 0 | leakage 0
 R-S02 | Sires | faithful | pass | 647 | third test from above of prior VAL band, or from below of prior VAH (continuation through) | 0.1020 | [0.081, 0.128] | 2024 0.126 / 2025 0.111 / 2026 0.051 | low 0.143 / mid 0.098 / high 0.066 | 0 | leakage 0
-R-S03 | Sires | faithful | gap | n/a | OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked. | n/a | n/a | n/a | n/a | n/a | OFM second defence print-side; F09 thinning is a stand-in. Reload stays blocked.
+R-S03 | Sires | faithful | pass | 647 | print-side refresh at an OFM catalyst after a close through; reload stays blocked | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-S04 | Sires | faithful | gap | n/a | weekly trapped-seller OFM long; F14 flag is a stand-in | n/a | n/a | n/a | n/a | n/a | weekly trapped-seller OFM long; F14 flag is a stand-in
 R-S05 | Sires | faithful | pass | 647 | microbalance break after the first 10 minutes | 0.5023 | [0.464, 0.541] | 2024 0.510 / 2025 0.504 / 2026 0.487 | low 0.525 / mid 0.491 / high 0.493 | 0 | leakage 0
-R-S06 | Sires | faithful | gap | n/a | two-reason band both sides; 6-9 high + HVN is a stand-in | n/a | n/a | n/a | n/a | n/a | two-reason band both sides; 6-9 high + HVN is a stand-in
-R-S07 | Sires | faithful | gap | n/a | reaction-area MFE/MAE both sides; first-print MAE is a stand-in | n/a | n/a | n/a | n/a | n/a | reaction-area MFE/MAE both sides; first-print MAE is a stand-in
-R-S08 | Sires | faithful | gap | n/a | minor HVN band plus flip-to-long; HVN-count is a stand-in | n/a | n/a | n/a | n/a | n/a | minor HVN band plus flip-to-long; HVN-count is a stand-in
+R-S06 | Sires | faithful | pass | 647 | prior RTH rejection plus prior-RTH HVN within tR, short or long | 0.0464 | [0.033, 0.065] | 2024 0.069 / 2025 0.020 / 2026 0.051 | low 0.055 / mid 0.037 / high 0.047 | 0 | leakage 0
+R-S07 | Sires | faithful | pass | 647 | prior VAL or VAH band touch then MAE under 15 ticks to 16:00 | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
+R-S08 | Sires | faithful | pass | 647 | prior-RTH HVN at the balance top, 5m negative delta stack, G-default reject | 0.0000 | [-0.000, 0.006] | 2024 0.000 / 2025 0.000 / 2026 0.000 | low 0.000 / mid 0.000 / high 0.000 | 0 | leakage 0
 R-S09 | Sires | faithful | pass | 647 | open above developing VAH then break/retest after 10:00 | 0.1731 | [0.146, 0.204] | 2024 0.186 / 2025 0.160 / 2026 0.173 | low 0.161 / mid 0.192 / high 0.171 | 0 | leakage 0
 R-P01 | Pine | faithful | pass | 647 | 08:00 TBR 0.25-sigma touch then reversion to the open by 12:00 | 0.6136 | [0.576, 0.650] | 2024 0.628 / 2025 0.574 / 2026 0.654 | low 0.696 / mid 0.589 / high 0.569 | 0 | leakage 0
 R-P02 | Pine | faithful | pass | 647 | hourly sweep then retrace to the swept edge | 0.9845 | [0.972, 0.992] | 2024 0.988 / 2025 0.980 / 2026 0.987 | low 0.977 / mid 0.991 / high 0.986 | 0 | leakage 0
@@ -129,10 +129,6 @@ Phase 1 is not done. Green Bird section B rows are pass. These Jumbo, AMT, and f
 
 id | missing function
 ---|---
-R-F13 | dealing-range trap retest; 6-9 high close-back is a stand-in
-R-F15 | OFM catalyst sequence; stack-without-refill is a stand-in
-R-F16 | dealing-range fade both sides; 6-9 high + VA absorption is a stand-in
-R-F18 | squeeze after catalyst; stack-without-refill is a stand-in
 
 ## Not started
 

@@ -37,6 +37,10 @@ from trading_research.research.phase1_live.formulas_flow import (
     r_f02_fakeout_grade,
     r_s02_third_retest,
     r_s05_microbalance,
+    r_s06_two_reason,
+    r_s07_areas,
+    r_s08_minor_node,
+    r_f13_trapped_buyers,
     running_vwap,
     r_r04_smt_prior,
     sample_stdev,
@@ -61,6 +65,7 @@ from trading_research.research.phase1_live.formulas_jumbo import (
     j24_management,
     j25_fractal_swings,
     j25_mid_retrace_hold,
+    profile_nodes,
 )
 from trading_research.research.phase1_live.grid import first_close_break, to_ticks
 from trading_research.research.phase1_live.family_levels import load_red_folder
@@ -86,7 +91,7 @@ def _clock(bars, day, cid):
 
 def build_recipe_table() -> list[dict]:
     cached = load_rows("recipe_flags_F")
-    if cached and cached[0].get("recipe_rev") == 8:
+    if cached and cached[0].get("recipe_rev") == 9:
         return cached
     f_rows = load_rows("sessions_F")
     open_rows = {r["date"]: r for r in (load_rows("open_switch_F") or [])}
@@ -112,7 +117,7 @@ def build_recipe_table() -> list[dict]:
         op = open_rows.get(day.isoformat(), {})
         rec = {
             "date": row["date"], "year": row["year"], "eligible": row["eligible"],
-            "recipe_rev": 8,
+            "recipe_rev": 9,
             "j10_draw_reach": False, "j18_ob": False, "j19_pd_touch": False,
             "j21_extended": False, "j22_three_strike": False, "j24_mfe_pos": False,
             "j25_mid_hold": False,
@@ -124,7 +129,9 @@ def build_recipe_table() -> list[dict]:
             "p09_no_break": False, "p10_pp_touch": False, "p11_fvg_fill": False,
             "p12_cisd_var": False, "p14_hod_1000": False, "p15_ssl": False,
             "p17_1800_touch": False, "p19_body_gap4": False,
-            "s02_third_retest": False, "s05_micro_break": False, "s09_vah_break": False, "p03_magic_win": False,
+            "s02_third_retest": False, "s05_micro_break": False, "s06_two_reason": False,
+            "s07_mfe": False, "s08_node": False, "s09_vah_break": False, "p03_magic_win": False,
+            "f13_trap_retest": False,
             "f01_eth_touch": False,
             "release_1000": False, "j20_delayed": False,
             "smt_pdh": False, "smt_pdl": False, "p18_cvd_div": False, "p18_fakeout": False,
@@ -392,6 +399,48 @@ def build_recipe_table() -> list[dict]:
                 rec["s05_micro_break"] = bool(s05.get("breakout_long") or (
                     s05.get("box") and float(rest["c"][-1]) < s05["box"][0]
                 ))
+        if val is not None and vah is not None and am["n"] and prev is not None:
+            pr = bars.window(wall_ns(prev, time(9, 30), 0) // 1_000_000, wall_ns(prev, time(16, 0), 0) // 1_000_000)
+            if pr["n"] >= 9:
+                acc = {}
+                ticks = to_ticks((pr["h"] + pr["l"] + pr["c"]) / 3.0)
+                for tk, v in zip(ticks, pr["v"]):
+                    acc[int(tk)] = acc.get(int(tk), 0.0) + float(v)
+                nodes = profile_nodes({k * TICK: acc[k] for k in acc})
+                hvn = nodes["hvn"][0] if nodes.get("hvn") else None
+                tR = 0.05 * max(vah - val, 1.0)
+                rw = w or max(pr["high"] - pr["low"], 1.0)
+                if hvn is not None:
+                    s6s = r_s06_two_reason(
+                        swing_high=float(pr["high"]), prior_reject=float(pr["high"] - pr["close"]),
+                        r_width=rw, hvn=float(hvn), tR=tR, touch_high=float(am["high"]),
+                        reject_close=float(am["close"]), entry=float(am["open"] or am["close"]), side="short",
+                    )
+                    s6l = r_s06_two_reason(
+                        swing_high=float(pr["low"]), prior_reject=float(pr["close"] - pr["low"]),
+                        r_width=rw, hvn=float(hvn), tR=tR, touch_high=float(am["low"]),
+                        reject_close=float(am["close"]), entry=float(am["open"] or am["close"]),
+                        side="long", swing_low=float(pr["low"]), touch_low=float(am["low"]),
+                    )
+                    rec["s06_two_reason"] = bool((s6s["two_reason"] and s6s["reject"]) or (s6l["two_reason"] and s6l["reject"]))
+                n_rej = int(np.sum(am["h"] >= float(pr["high"]) - 2 * TICK))
+                d5 = []
+                b5 = resample_ohlcv(am, 5)
+                if b5 is not None and b5["n"] >= 3:
+                    d5 = [float(b5["c"][i] - b5["o"][i]) for i in range(b5["n"] - 3, b5["n"])]
+                if hvn is not None and d5:
+                    s8 = r_s08_minor_node(
+                        hvn=float(hvn), balance_top=float(pr["high"]), prior_rej=n_rej,
+                        deltas=d5, touch=float(am["high"]), reject_close=float(am["close"]), r_width=rw,
+                        lvn=float((nodes.get("lvn") or [pr["low"]])[0]),
+                        lvn_closes=[float(x) for x in am["c"][-5:]],
+                    )
+                    rec["s08_node"] = bool(s8.get("node_setup") and s8.get("reject"))
+        if val is not None and rth["n"] and am["n"]:
+            rec["s07_mfe"] = bool(
+                r_s07_areas(trigger_close=float(am["close"]), later_high=float(rth["high"]), later_low=float(rth["low"]))["survived_15"]
+                and (np.any(np.abs(am["l"] - val) <= 2 * TICK) or np.any(np.abs(am["h"] - vah) <= 2 * TICK) if vah is not None else False)
+            )
         if rth["n"] >= 40 and open_px is not None:
             pre = bars.window(wall_ns(day, time(9, 30), 0) // 1_000_000, wall_ns(day, time(10, 0), 0) // 1_000_000)
             post = bars.window(wall_ns(day, time(10, 0), 0) // 1_000_000, wall_ns(day, time(16, 0), 0) // 1_000_000)

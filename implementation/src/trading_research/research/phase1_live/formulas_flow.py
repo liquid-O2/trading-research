@@ -670,14 +670,19 @@ def r_f15_ofm(
 
 def r_f16_balance_fade(
     *, range_lo: float, range_hi: float, wick_ok: bool, no_close_beyond: bool,
-    left_px: float, test_high: float, abs_ok: bool, target: float, later_low: float,
-    day_label: str | None = None,
+    left_px: float, test_high: float | None = None, test_low: float | None = None,
+    abs_ok: bool, target: float, later_low: float | None = None, later_high: float | None = None,
+    day_label: str | None = None, side: str = "high",
 ) -> dict:
     r_h = range_hi - range_lo
     failed_agg = wick_ok and no_close_beyond
     left = abs(left_px - range_hi) >= 0.25 * r_h or abs(left_px - range_lo) >= 0.25 * r_h
-    trigger = failed_agg and left and abs(test_high - range_hi) <= 2 * TICK and abs_ok
-    reach = later_low <= target + 2 * TICK
+    if side == "high":
+        trigger = failed_agg and left and test_high is not None and abs(test_high - range_hi) <= 2 * TICK and abs_ok
+        reach = later_low is not None and later_low <= target + 2 * TICK
+    else:
+        trigger = failed_agg and left and test_low is not None and abs(test_low - range_lo) <= 2 * TICK and abs_ok
+        reach = later_high is not None and later_high >= target - 2 * TICK
     return {
         "fade_trigger": bool(trigger),
         "target_reach": bool(reach),
@@ -926,20 +931,33 @@ def r_s05_microbalance(
 
 def r_s06_two_reason(
     *, swing_high: float, prior_reject: float, r_width: float, hvn: float, tR: float,
-    touch_high: float, reject_close: float, entry: float,
+    touch_high: float, reject_close: float, entry: float, side: str = "short",
+    swing_low: float | None = None, touch_low: float | None = None,
 ) -> dict:
     r1 = prior_reject >= 0.25 * r_width
-    r2 = abs(hvn - swing_high) <= tR + 1e-12
-    two = r1 and r2
-    rej = reject_close <= swing_high - 0.5 * r_width
-    inval = touch_high + 2 * TICK
-    r_stop = inval - entry
-    t15 = entry - 1.5 * r_stop
+    if side == "short":
+        r2 = abs(hvn - swing_high) <= tR + 1e-12
+        two = r1 and r2
+        rej = reject_close <= swing_high - 0.5 * r_width
+        inval = touch_high + 2 * TICK
+        r_stop = inval - entry
+        t15 = entry - 1.5 * r_stop
+        r15 = reject_close <= t15
+    else:
+        lo = swing_low if swing_low is not None else swing_high
+        r2 = abs(hvn - lo) <= tR + 1e-12
+        two = r1 and r2
+        rej = reject_close >= lo + 0.5 * r_width
+        tl = touch_low if touch_low is not None else lo
+        inval = tl - 2 * TICK
+        r_stop = entry - inval
+        t15 = entry + 1.5 * r_stop
+        r15 = reject_close >= t15
     return {
         "two_reason": bool(two),
         "reject": bool(rej),
         "inval": inval,
-        "r15_reach": bool(reject_close <= t15),
+        "r15_reach": bool(r15),
     }
 
 
