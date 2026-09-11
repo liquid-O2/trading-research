@@ -1,0 +1,1567 @@
+[
+  {
+    "id": "R-F01",
+    "title": "VWAP deviation fade with absorption",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "VWAP:3",
+      "VWAP:4",
+      "VWAP:7",
+      "VWAP:8"
+    ],
+    "source": "The settings show Session anchor, standard-deviation mode and enabled 1/2 bands; the price-source field is visibly truncated H+L+… rather than a fully readable HLC3 formula. Third multiplier 3 is disabled; prose also names 2.5/3. The p3 handwritten upper −2/lower +2 signs are reversed relative to the displayed geometry, and its description of VWAP as POC is mathematically wrong. HLC3 remains the declared implementation input, not independently established by the clipped field.",
+    "finding": "The ETH running HLC3 geometry is implemented, but f01 ORs its touch-only flag with the final-AM trade-VWAP absorption flag. The latter fixes noon bands retrospectively. Neither branch requires local absorption at the causal ETH band, the open-draw filter, or subsequent median reach. July 10 is a touch positive with f01_vwap_fade=false; August 31 has neither flag.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "family_tape.py::_score_one",
+      "formulas_flow.py::running_vwap",
+      "recipe_score.py::_preds.f01"
+    ],
+    "fix": [
+      "Retain running sums V, PV and P2V from the exchange 18:00 reopen: VWAP=PV/V; sigma=sqrt(max(P2V/V−VWAP²,0)); bands=VWAP±m×sigma. Keep the literal source sign annotation in the audit; use explicitly labelled upper/lower bands. Separate 18:00 and 09:30 anchors and each multiplier in storage. Preserve HLC3 as an explicit declared input pending full source-setting evidence; record the difference between bar-typical-price dispersion and actual-trade-price dispersion. Reject missing anchor history rather than accepting an arbitrary 20-bar suffix.",
+      "For a completed-bar signal, compute touch at its completion and freeze that band price for the named absorption test; for an intrabar trigger use the previous completed band or actual streaming updates, never the final noon band. Require an actual interval overlap, not merely high>=upper when the whole candle is above it.",
+      "At the same band episode, require side-correct aggression within two ticks of the band, the declared two-minute q90 test, <=2-tick advance and the chosen confirmation. Evaluate an untouched draw within one sigma beyond the band using only the then-live level ledger. Label these numeric additions as research defaults. For each beyond-band high or low, freshness begins at that reference’s known_at and ends at its first revisit independently; a level consumed before the band episode cannot act as an outstanding draw.",
+      "Remove the OR between unrelated touch and absorption variants. Store touch, absorption, draw filter and median reach separately, measuring median reach after confirmation over the named 60-minute horizon. Publish confirmation and target rates conditional on touches, by side and anchor. Specify whether the VWAP target is frozen at confirmation or follows the running mean; store the chosen target path and compare only after confirmation. Do not call a volume-weighted mean a modal POC or statistical median."
+    ],
+    "acceptance": [
+      "July 10, 2026 must retain ETH touch=true and final-AM absorption=false; touch alone cannot certify a fade.",
+      "August 31, 2026 remains a no-ETH-band-touch morning although it crosses the narrower retrospectively computed AM band.",
+      "Changing afternoon/noon trades cannot change a previously confirmed ETH-band episode. Distinct POC and VWAP must remain distinct.",
+      "A candle entirely beyond an available band without overlap is not automatically a new touch; missing session-open data must yield an unavailable anchored value."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Confirm the reversed handwritten signs on VWAP p.3 are annotation errors before certifying that particular figure; the p.8 settings define the conventional upper/lower bands.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Source settings visibly enable 1 and 2 bands, with third 3 disabled; the mean-price field is truncated H+L+… and does not independently prove every HLC3 character. Reversed handwritten signs, text 2.5/3 and the VWAP-as-POC statement remain explicit source discrepancies."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The ETH branch uses running one-minute HLC3 VWAP but only tests one-sided reach; the other branch uses final-AM trade VWAP and sigma retrospectively. Neither joins local absorption at that same available band with a live-draw filter."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "f01 ORs touch-only with an unrelated final-AM absorption flag and never requires post-confirmation VWAP reach. The union has no coherent source fade denominator."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 reaches ETH running bands while the final-AM absorption branch is false; August 31 misses ETH bands despite crossing narrower final-AM bands. The plots do not establish a complete absorption fade."
+        }
+      },
+      "source_refs": [
+        "VWAP:3",
+        "VWAP:4",
+        "VWAP:7",
+        "VWAP:8"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F01-A-2026-07-10.png",
+          "sha256": "0acc6e4d609fa85f4becd6d3d7cb14cc88aa46759fa878d67767d42c5be233a2"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-31",
+          "plot": "plots/R-F01-B-2026-08-31.png",
+          "sha256": "e5805226ed18a382d82909298a7427fa86be5d3cd475a15a5b46e536d32e96f3"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F02",
+    "title": "CVD divergence, breakout grade and absorption",
+    "oks": [
+      "yes",
+      "blocked",
+      "blocked",
+      "blocked"
+    ],
+    "sources": [
+      "VWAP:6",
+      "FP9:6"
+    ],
+    "source": "The source distinguishes regular divergence, breakout participation and a delta extreme without price extension. The numerical swing, slope and exhaustion windows are research definitions. OHLC-signed volume is a different object.",
+    "finding": "The retained recipe is correctly blocked by the trade-CVD trust gate. Helpers exist, but the staged source events are not certified by a trusted FINDINGS row. The two diagnostic charts show price and executions only and cannot prove CVD divergence.",
+    "targets": [
+      "mbp1_objects.py::cvd_from_trades",
+      "formulas_flow.py::r_f02_regular_div",
+      "formulas_flow.py::r_f02_grid_div",
+      "family_flow.py",
+      "recipe_score.py::catalog"
+    ],
+    "fix": [
+      "Preserve blocked status and a machine-readable trust reason. In a separately authorized rebuild, establish aggressor-side conventions, unknown-side treatment, contract identity, event ordering and complete session coverage before accumulating CVD=sum(buy−sell) from the declared anchor.",
+      "Cross-check the execution stream against the independent trade feed by date, contract, quantity and sign; store disagreement counts and eligibility. Only a passing, explicit FINDINGS trust decision may enable CVD-dependent events.",
+      "Then bind each price swing to the CVD value available at that swing and its confirmation time. Compare later price extremes and CVD at the same timestamp; invert the breakout-slope rule for downside breaks. Keep regular divergence, exhaustion with two later complete bars, and at-level absorption as separate observations. Preserve CVD at the corresponding price swing, never an independent prior maximum/minimum of CVD. Declare equality handling separately: no new CVD extreme includes equality in a named non-confirmation variant, while the existing strict-divergence helper requires a lower/higher value.",
+      "Report event-specific denominators and timing. A CVD session-sign flag, blocked value, or unavailable swing must never become a false/no-divergence observation. Keep any OHLC-volume analogue under a separate proxy name. A high/low used as the breakout reference must be unvisited at episode start; its first contact may initiate a later confirmed breakout but does not rearm after a failed episode. Keep FP9 huge-delta/no-extension exhaustion distinct from DOM shrinking-aggression exhaustion."
+    ],
+    "acceptance": [
+      "July 10 and January 28 price/tape charts remain diagnostic while the trust gate is blocked.",
+      "Prior high 110/CVD4200 followed by high110.75/CVD3950 qualifies only after the new swing is confirmed; downside mirrors reverse comparisons.",
+      "An exhaustion definition needing two future bars has known_at at the end of the second bar, not the original spike."
+    ],
+    "leakage": "blocked; future confirmation must remain unavailable",
+    "proxy": "no: gate retained",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Regular divergence, participation at a breakout and aggression without price progress are source-supported; numerical swing, slope, quantile and confirmation windows remain named choices. OHLC-signed volume is a different input."
+        },
+        "code_ok": {
+          "verdict": "blocked",
+          "reason": "Current catalog intentionally blocks the trade-CVD recipe under the retained trust decision. Available helpers, including the grid comparison and a series helper comparing independent cumulative extrema, do not establish an audited same-swing CVD implementation."
+        },
+        "score_event_ok": {
+          "verdict": "blocked",
+          "reason": "No eligible true/false recipe sample is emitted while blocked. Preserving that gate is correct; a session-sign trust failure and an unavailable event cannot become a no-divergence observation."
+        },
+        "chart_ok": {
+          "verdict": "blocked",
+          "reason": "Both diagnostic price/execution charts were re-viewed. July 10’s 27 and January 28’s 22 displayed large prints do not certify a CVD trajectory, confirmed divergence or breakout grade."
+        }
+      },
+      "source_refs": [
+        "VWAP:6",
+        "FP9:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F02-A-2026-07-10.png",
+          "sha256": "f9012e2831a6c227f5157e1a1b056c438a1befc41cfe9b056869ede5037ab23a"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-F02-B-2026-01-28.png",
+          "sha256": "bee1d69d6d161c7ff0afee38a62d1d35a73da1921e647224cf47a21d5eee2642"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F03",
+    "title": "Session, weekly and anchored VWAP convergence",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "VWAP:7"
+    ],
+    "source": "The lesson combines the session VWAP with weekly and a swing/event anchor. An overnight mean and a prior value-area midpoint do not supply those anchors. The source gives no universal convergence distance or automatic major-swing definition.",
+    "finding": "Current code compares final AM trade VWAP, overnight trade VWAP and prior VA midpoint. December 3, 2024 gives 21201.74/21202.91/21204.125 and a true spread predicate; July 10 spreads them widely. Neither is the documented anchor set, and neither scores a confirmed touch/rejection.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f03_convergence",
+      "family_value.py",
+      "recipe_score.py::_preds.f03"
+    ],
+    "fix": [
+      "Create independent cumulative HLC3-volume accumulators for exchange session, Sunday 18:00 week, first trading session of month, documented event time and last confirmed five-minute swing. Store anchor timestamp and selection rule; use null for an unavailable event time. Anchor a newly confirmed swing at its source bar only when confirmation becomes available; backfilled values may be retained for computation but cannot be advertised as earlier known signals. Monthly session membership follows the exchange trading date, not a naive calendar-day midnight reset.",
+      "At each complete minute compare session, weekly and one declared other anchor. For the named tolerance use max(VWAPs)−min(VWAPs)<=0.05×fixed prior VA height. Freeze the candidate band and anchor identities when convergence becomes observable.",
+      "Require a later actual two-tick band touch, then the named reversal with R equal to the available session sigma, and a separate local absorption flag. Do not replace an absent weekly anchor with a price midpoint. The source convergence can exist at a swing already revisited; its VWAP accumulator has a separate lifecycle from an active external high/low. Any external draw or fixed high/low confluence still requires the user’s first-visit ledger.",
+      "Compare rejection rates at eligible convergences with lone-session-VWAP episodes using the same hours, confirmation, horizon and event unit. Retain the present three-scalar coincidence only under its literal name."
+    ],
+    "acceptance": [
+      "December 3 is a positive for the existing scalar coincidence, not for the source anchor construction.",
+      "July 10 is a scalar-spread negative; missing source anchors keep source assessment unavailable.",
+      "A future swing cannot move an earlier anchor, and trades after a signal cannot change its VWAP inputs."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "The source does not publish the major-swing/event-anchor selection algorithm; a five-minute fractal is only a named research choice.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The source combines session, weekly and a swing/event anchored VWAP. It does not publish a universal major-swing selector, convergence tolerance or dispersion-based reversal definition."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current inputs are final-AM trade VWAP, overnight trade VWAP and prior VA midpoint. The source weekly and selected event/swing accumulators are not constructed, and the AM value is unavailable until noon."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only three-scalar convergence is scored; the producer ignores touch and rejection outputs, supplies no later close, and has no comparable lone-VWAP event cohort."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. December 3’s 21201.74/21202.91/21204.125 scalars satisfy the proxy; July 10’s do not. Unscored ETH curves are explicitly labelled and cannot supply the missing source anchor set."
+        }
+      },
+      "source_refs": [
+        "VWAP:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2024-12-03",
+          "plot": "plots/R-F03-A-2024-12-03.png",
+          "sha256": "2e4e71db9aa8060d39279d34752a57dabb3a350ac6c92a8c4854a6f7726ff8ed"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F03-B-2026-07-10.png",
+          "sha256": "526c7bdf2d2a4d070fa0c9f590d7ae1755c97b3c649a5df0aaedff0fc849db93"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F04",
+    "title": "Per-candle diagonal stack and later revisit",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "FP8:4",
+      "FP8:5",
+      "FP8:6",
+      "FP8:7"
+    ],
+    "source": "FP8 p.5 highlights ask cells 220/410/512 while the printed diagonal bids 4120/3980/2110 do not satisfy the described 3–4× rule. FORMULAS resolves this by calling the drawing illustrative, contrary to the instruction to stop on a source/figure conflict. The conflict must remain open. The corrected explicit pairs are 220@6663.75 versus 4120@6663.50, 410@6663.50 versus 3980@6663.25, and 512@6663.25 versus 2110@6663.00.",
+    "finding": "The helper named candle_stack is called on the entire current RTH profile; an AM min/max overlap is then ORed with the old whole-AM footprint flag. July 10 is true even though the returned RTH zone 30075.50–30077.50 is never reached in AM. No later departure, revisit or hold is established.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f04_candle_stack",
+      "formulas_flow.py::r_f04_revisit_hold",
+      "mbp1_objects.py::footprint_4x",
+      "FORMULAS.md::R-F04"
+    ],
+    "fix": [
+      "Stop faithful certification until the highlighted-cell conflict is resolved. Preserve text-diagonal k=3 and k=4 as explicitly named candidates; do not silently pick the text over the picture.",
+      "If the text reading is selected, aggregate buy/sell executions per tick within each completed candle. Buy flag at p requires buy(p)>=k×sell(p−tick); sell requires sell(p)>=k×buy(p+tick). Handle zero opposition with positive own volume, and retain three adjacent same-side flags in one candle as a zone. Enumerate all same-side contiguous zones, storing side and constituent row IDs; do not return only the longest zone or silently give buy precedence where both comparisons qualify.",
+      "Freeze all zone bounds at candle completion. Search after formation for a departure of the named four ticks and a subsequent overlap; only then evaluate direction-specific rejection using the declared zone/candle R and horizon. Never use current full-RTH volume for an AM zone. Require the touch argument to establish an actual interval overlap after departure; r_f04_revisit_hold currently ignores it. A zone’s first retest consumes its untouched status, while that same episode may confirm later; do not silently reset it for a new first test.",
+      "Remove the whole-AM OR shortcut. Publish stack presence, later revisit and subsequent hold as separate events, with eligible formed zones as the initial denominator and censored end-of-session observations explicit."
+    ],
+    "acceptance": [
+      "July 10 returned RTH zone cannot count as an AM revisit; October 8 zone25343–25344 is also above the AM maximum.",
+      "Three flags split across two candles do not form a one-candle stack; three adjacent prices in one candle can.",
+      "The literal p.5 highlighted cells fail the text ratio and must keep source_ok=no until clarified."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Resolve FP8 p.5 highlighted asks versus printed diagonal bids; which numerical cells or comparison rule in the figure is wrong?",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Targeted p5 verification confirms asks 220/410/512 pair one tick lower with bids 4120/3980/2110, failing both 3× and 4×. FORMULAS cannot waive that figure/text contradiction by declaring the illustration non-authoritative."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "candle_stack receives the full RTH ladder and returns only the longest qualifying zone without its side. The producer compares AM extrema with that future zone and ORs a separate whole-AM footprint flag; the revisit helper itself ignores later_touch."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Stack presence or whole-window overlap is not a later departure, return and hold. The scored OR can be true even where the returned RTH zone is never visited during AM."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10’s zone 30075.50–30077.50 and October 8’s zone 25343–25344 lie above their AM highs. The true first case is supplied by the separate footprint flag, not the drawn zone’s revisit."
+        }
+      },
+      "source_refs": [
+        "FP8:4",
+        "FP8:5",
+        "FP8:6",
+        "FP8:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F04-A-2026-07-10.png",
+          "sha256": "cef181e279a8805ac6a925e22f4bcace4e35d61c3e510089a44b0269d695a5e8"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-F04-B-2025-10-08.png",
+          "sha256": "21d1065f06346f6dc631b2e4ac0c42d8ffc446acb5b7fcc1cf815364fc3c2e61"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F05",
+    "title": "At-level delta disagreement and intrabar POC flip",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "FP9:4",
+      "FP9:5",
+      "FP9:7"
+    ],
+    "source": "FP9 p.5 explicitly describes the flip as living inside a single candle. Its BEFORE/AFTER seven-row profiles show the POC moving from the sixth row to the second row within that candle. FORMULAS instead specifies adjacent candles, which is a different construction. The source sequence is location, absorption and flip; exact high/low position cutoffs are not printed. Native p5 does not publish numeric volumes or a tie-breaking policy; the lower highlighted row is the intended teaching state, not proof of a unique mathematical maximum.",
+    "finding": "The producer treats the entire AM as one candle and scores price/delta disagreement only. July 10 O29834.75/C29944.25 with delta−443 is true; January 2 falls with delta−457 and is false. Full-RTH POC is passed to the helper but does not affect the scored disagreement fields; the defect is missing candle/level/flip chronology, not a direct POC dependency of that flag.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f05_absorption_stack",
+      "recipe_score.py::_preds.f05"
+    ],
+    "fix": [
+      "Correct FORMULAS: source POC flip is intrabar. Preserve adjacent completed-candle POC movement only as a separately named variant. Record the source candle type and any one-minute substitute explicitly.",
+      "For each declared candle, process executions in time order and maintain open, current high/low/last, cumulative signed delta and the full per-tick cumulative volume profile. At a known level, record the first as-of state with upward price and negative delta, or downward price and positive delta. Keep missing/unknown aggressor volume separate. If the decision is intrabar, use the as-of candle state and publish any later invalidation; final candle color cannot be backdated onto an earlier flip. If a completed-candle variant is chosen, preserve that later known_at explicitly.",
+      "After that absorption state, track POC changes within the same candle. Require an actual POC price move in the intended direction, together with the named lower-to-upper position change; do not create a flip solely because the running candle bounds expanded. Store both profile snapshots, the contributing executions and the timestamp of the qualifying update. Halves/thirds remain explicit research variants pending a source decision. Specify POC tie handling before looking at later outcomes. Require the illustrated directional price change as well as relative position; equal maxima do not justify selecting the favorable row after the fact.",
+      "Measure the named0.25×fixed balance-height reversal within15minutes after the observed flip, separately from disagreement-only outcomes. A final-AM delta sign or a POC change between two completed candles cannot satisfy the source intrabar event. Reference highs/lows must be fresh at the initiating touch; the same touch episode can confirm intrabar after the active line has ended, without creating a new fresh reference."
+    ],
+    "acceptance": [
+      "July10 remains only a whole-AM disagreement in the current producer; no intrabar flip is constructed.",
+      "The FP9 p.5 lower-sixth-row to upper-second-row example must be representable inside one candle; identical completed POCs across candles do not refute an intrabar move.",
+      "An adjacent-candle POC jump with no intrabar transition is a separate variant. Expanding the high/low range without changing POC price cannot create a flip."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "fixture": "FORMULAS uses adjacent candles against explicit single-candle source",
+    "definition_decision": "FP9 p.5 establishes the same-candle POC flip but does not specify halves versus thirds as the numerical position cutoffs.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The source explicitly places the POC flip inside one candle; FORMULAS instead requires adjacent candles. The native schematic highlights a lower-to-upper shift, but near/equal maxima and absent numeric volumes do not publish a deterministic tie or position threshold."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current code treats the whole AM as one candle and computes only aggregate price/delta disagreement. Final-RTH POC is passed but does not affect the scored fields; no at-level intrabar volume sequence is built."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The scored disagreement boolean omits the level, subsequent same-candle POC flip and post-flip reversal. A whole-AM delta sign cannot validate the complete ordered stack."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed after correcting their footer to source intrabar POC flip. July 10’s rising AM with delta −443 disagrees; January 2’s falling AM with delta −457 agrees. Neither proves the source flip."
+        }
+      },
+      "source_refs": [
+        "FP9:4",
+        "FP9:5",
+        "FP9:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F05-A-2026-07-10.png",
+          "sha256": "ed641508c070161688f170c066a71f05acfa0673043a438c772eefd12730a99e"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-02",
+          "plot": "plots/R-F05-B-2026-01-02.png",
+          "sha256": "f7a7703575daec31db80b759ed2df899ee7910a67ff4fda715bb29e27ae41524"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F06",
+    "title": "Side-specific aggression absorbed at a marked level",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "DOM6:3",
+      "DOM6:4",
+      "DOM6:6",
+      "DOM6:7",
+      "DOM5:6"
+    ],
+    "source": "The source requires aggression into a previously marked level, little progress and a reversal. It distinguishes exhaustion and visible replenishment. Three ticks is an illustrated zone; q90, two minutes and 0.25R are research defaults. FORMULAS has an arithmetic error: 17.5 exceeds 0.25×67.75=16.9375.",
+    "finding": "The current prior-VA scan uses two-minute aggression summed across all prices, then future 15-minute extrema. On August 21 its first true print is 09:31:59 at29402.50 near VAH29402, with buy4610/sell3892; the incoming path is already descending from above. This does not verify buyer aggression arriving upward into the band. Shelves, old extremes, local delta, speed and exhaustion states are not joined.",
+    "targets": [
+      "mbp1_objects.py::_roll_aggressive",
+      "mbp1_objects.py::_absorption_a_scan",
+      "mbp1_objects.py::absorption_a",
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f06_dom_absorption",
+      "FORMULAS.md::R-F06 fixture"
+    ],
+    "fix": [
+      "Freeze each marked level and its own R before approach. Retain separate prior VA, profile ledge, prior H/L and session-box objects. Define a side-specific arrival episode; a fall into VAH from above is not automatically a buy-into-resistance test. Track first visits from each high/low’s known_at independently; end the line on contact and allow only the episode initiated then to seek confirmation. A later return after a failed attempt is not a new fresh-level test.",
+      "For the named two-minute window count only aggressive volume of the approaching side inside the level band, preserving buy/sell/unknown quantities. Apply the frozen discovery q90 in the matching volume unit, maximum outward advance<=2 ticks, and store the actual contributing executions. Store local-band delta separately from all-price touch-window delta. The helper aggressive_at_level filters volume by the band but currently totals delta and extrema over all prices, so that helper also needs explicit scope alignment.",
+      "After the stall, evaluate >=0.25R reversal within 15 minutes and timestamp its confirmation. Attach local signed delta, causal 30-second speed and the previous-window exhaustion comparison separately. Keep displayed-size reload blocked under its existing trust/input gate. Separate the stall/advance observation interval from the later reversal horizon. Record the first confirming execution and prior invalidation, rather than claiming the initiating print knew the entire following 15-minute maximum/minimum. Missing tail coverage is censored.",
+      "Score levels and sides separately, distinguishing stall, confirmed reversal and reload. Correct the fixture: 17.5 fails for R251 but passes for R67.75. Do not reuse one range height for unrelated level families."
+    ],
+    "acceptance": [
+      "August 21 first true legacy scan must be labelled all-price aggression; inspect local band flow before any source-positive classification.",
+      "July 10 has no true legacy prior-VA absorption scan; a volume spike elsewhere must not create one.",
+      "17.5>=16.9375 is true. Removing remote-price executions must not remove a genuinely local absorption event."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "fixture": "FORMULAS arithmetic contradicts its stated W69 threshold",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Audit axes use America/New_York with date-specific daylight saving. The configured 18:00 exchange-session VWAP and 09:30–12:00 AM tape are distinct scopes; source display axes do not independently establish EST. Session/weekly resets must follow the instrument’s exchange calendar, including holidays and incomplete histories. Candle close signals are available at completion; trade-sequence signals use the qualifying execution timestamp and any required later confirmation.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The source requires marked location, arriving aggression without progress and subsequent reversal; numerical cutoffs are named. FORMULAS incorrectly rejects a 17.5-point move against 0.25×67.75=16.9375, so its worked source-facing specification is not faithful."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The connected scan totals two-minute aggression across all prices and selects a print near either prior value edge; it tests future 15-minute extrema with no arrival direction, local band-only delta or frozen stall episode."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The score is an unordered/global-volume prior-VA absorption flag. It omits the source level families and cannot establish local aggression, exhaustion, replenishment or a decision timestamp before its confirmation observations."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. August 21’s 09:31:59 qualifying print descends into VAH from above with all-price buy/sell totals 4610/3892; July 10’s original scan is false. A local buyer-into-resistance event is not demonstrated by the positive chart."
+        }
+      },
+      "source_refs": [
+        "DOM6:3",
+        "DOM6:4",
+        "DOM6:6",
+        "DOM6:7",
+        "DOM5:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-21",
+          "plot": "plots/R-F06-A-2026-08-21.png",
+          "sha256": "58c55f6a3ab89f7235f3809786843296e25a95bf8c1be804e934740ea3ffb2c9"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F06-B-2026-07-10.png",
+          "sha256": "04d904f2866f60248c73f785dd49a2aa8bd2c0e93a249320a1288aa7be2373d9"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F07",
+    "title": "At-touch reload inference and iceberg limitation",
+    "oks": [
+      "yes",
+      "blocked",
+      "blocked",
+      "blocked"
+    ],
+    "sources": [
+      "DOM7:3",
+      "DOM7:4",
+      "DOM7:5"
+    ],
+    "source": "The source differentiates size that replenishes as trades execute from quotes that disappear before trading, then waits for added participation. MBP-1 can support a limited at-touch quote/trade inference; it cannot identify hidden reserve size or off-touch depth as fact.",
+    "finding": "The retained iceberg recipe remains blocked. Existing BBO reload flags saturate and do not establish the source sequence. Available diagnostic executions on July10/January28 are insufficient to certify an iceberg, and no depth substitute was plotted.",
+    "targets": [
+      "mbp1_objects.py::iceberg_touch_infer",
+      "mbp1_objects.py::absorption_b",
+      "recipe_score.py::catalog",
+      "FINDINGS.md"
+    ],
+    "fix": [
+      "Retain blocked status and distinguish data limitations from failed validation. Do not acquire or fabricate MBP-10/MBO in this audit. If a future task enables an at-touch inference, explicitly name it BBO reload evidence rather than identified iceberg size.",
+      "Join each execution with the last valid pre-trade displayed quantity at exactly the traded BBO price. Require positive displayed size, trade size exceeding the chosen ratio and a later same-price replenishment within the named 500ms window; reject stale/crossed/missing quotes. Use the actual execution price and last quote strictly preceding it, not an assumed trade-row BBO state. Zero displayed quantity is unknown rather than an easy denominator; a quote returning to the same price after a through-break is not an uninterrupted hold.",
+      "Count distinct execution/replenishment cycles at the same level, with the named two-cycle threshold, price hold and subsequent participation within two ticks. A cancelled quote without execution must not count as replenishment. Store raw timestamps and causal quote provenance. Key cycles by side as well as price and episode. One later quote update cannot confirm multiple overlapping depletion cycles; distinguish the existing one-cycle iceberg helper from the source’s named two-cycle inference.",
+      "Before unblocking, validate at-touch inference against appropriate independent evidence and publish false positives, eligible contacts and unknown observations. Keep off-touch reload unavailable unless the required depth input is actually present. A marked external high/low is eligible only before its first revisit; a reload sequence may develop within that initial episode after the line ends. Do not rearm the same high/low merely because a subsequent quote refreshes."
+    ],
+    "acceptance": [
+      "Both dated price/tape plots remain blocked for iceberg confirmation.",
+      "A 60-lot execution against displayed25 followed by same-price28 can form one inference cycle; a disappearing25 with no execution cannot.",
+      "Multiple snapshots of a single refresh count once, and stale display sizes cannot satisfy a cycle."
+    ],
+    "leakage": "blocked; causal quote/trade alignment required",
+    "proxy": "no: gate retained",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source distinguishes traded depletion with visible replenishment from unexecuted disappearing size, then requires additional participation. Hidden reserve quantity and off-touch depth are not directly observable from the available BBO snapshots."
+        },
+        "code_ok": {
+          "verdict": "blocked",
+          "reason": "The current iceberg recipe remains blocked. iceberg_touch_infer accepts one later size increase, while absorption_b counts price-keyed events using final-AM q90 and can combine sides or overlapping reload evidence; these helpers do not certify the source sequence."
+        },
+        "score_event_ok": {
+          "verdict": "blocked",
+          "reason": "No passing iceberg event sample is scored. The retained input/trust gate must stay explicit; adding a weak BBO inference would require its own measured object and validation rather than relabelling hidden inventory as observed."
+        },
+        "chart_ok": {
+          "verdict": "blocked",
+          "reason": "Both diagnostic price/large-print charts were re-viewed. July 10 and January 28 supply no hidden-size identity, reliable multi-cycle replenishment sequence or off-touch depth proof."
+        }
+      },
+      "source_refs": [
+        "DOM7:3",
+        "DOM7:4",
+        "DOM7:5"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F07-A-2026-07-10.png",
+          "sha256": "dfa0298157380dd9450aba3ba46a7620772aa1e7d05fc50665300b3aee2f4f92"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-F07-B-2026-01-28.png",
+          "sha256": "429f4ba0fabb7f395e8078c262681a16d305931f1bf19375878be58f21f7e96b"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F08",
+    "title": "Absorption location, three-tick reward and reward retest",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "ABS:3",
+      "ABS:4",
+      "ABS:6",
+      "ABS:7",
+      "ABS:9",
+      "ABS:11"
+    ],
+    "source": "ABS p.11 repeats the same buyer-spike/opposition-losing annotation at both edges while the VAL body text describes buyers regaining control. FORMULAS elects the body text; source/figure agreement must instead remain unresolved. The wall and reward retest are bands, and the CVD-median subcheck retains its separate trust limitation. The lower p11 highlight is below VAL before the later reclaim, rather than an instantaneous VAL test. The p4 CVD panel uses a white/sloping reference whose mean/median formula is unpublished; price and CVD units cannot be compared directly. This document’s reversal-only and POC non-example restrictions do not apply to every other author or setup.",
+    "finding": "The producer has no absorption event ID: it takes the first AM trade as origin, the first20 trade signs as direction, and the last80 prices as reward window. January28 returns a 547-tick short reward over the morning; July10 fails with an adverse opening-to-noon move. Neither tests three ticks after absorption, local context, second aggression or reward retest.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::reward_3tick",
+      "formulas_flow.py::r_f08_abs_four_check",
+      "recipe_score.py::_preds.f08",
+      "FORMULAS.md::R-F08"
+    ],
+    "fix": [
+      "Stop the conflicting p.11 sign/role classification until clarified. Preserve spike sign, active side, passive side, edge and outcome direction as separate fields; do not infer passive absorption from buy delta alone. Treat the exact reward definition, side mapping and window as unresolved source inputs. Preserve candidate readings by explicit variant name; the next step describes a proposed first-passage comparison, not an already certified author algorithm.",
+      "For the explicitly named reversal/first-passage candidate, use a qualified at-level absorption episode outside its declared POC exclusion band as origin. From its actual print/confirmation, scan executions in chronological order for three favorable ticks before more than three adverse ticks; stop at the first disqualifying excursion. The original first-AM price has no role. The POC’s profile scope and numerical exclusion distance need their own declared settings; do not make this a universal ban. Any external high/low used for location must be fresh before this first-touch episode.",
+      "After reward, require the named reversal-side aggression threshold from past observations and then a separate retest of the reward band. Store band bounds and exact entry-availability time. Keep CVD-median and local delta-spike comparisons blocked or separate until trusted. Keep the wall, reward endpoint and reward-retest band as separate objects; do not copy a three-tick DOM zone from another lesson as if it were this author’s setting. CVD versus its own reference may be compared only in common delta units, never raw market price versus CVD.",
+      "Publish location-qualified absorption count, reward rate, retest availability and subsequent reversal separately. Do not force 27% failures or compare an unconditioned AM direction flag with that source claim. Separate a prefix-valid three-tick reward followed by later adversity from adversity before reward; the current full-sample extrema erase this order."
+    ],
+    "acceptance": [
+      "January28 legacy true must not survive as a demonstrated absorption reward without an actual origin event.",
+      "120.25→120→119.75→119.50 is a three-tick short reward if adverse travel has not first exceeded three ticks.",
+      "A path that breaches four adverse ticks then later gains three must fail the named first-passage reading; the VAL source annotation remains unresolved.",
+      "Candidate first-passage success cannot be retroactively erased by prices after its first confirmation; source certification still awaits the exact reward definition."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Resolve ABS p.11: at VAL, which side is active, which is passively absorbing, and which repeated buyer-spike caption is incorrect?",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "ABS p11 repeats the buyer/opposition/passive-seller annotation at the lower and upper extremes despite the contradictory lower-path description. Three-tick replenishment/reward has no complete published event-window definition, and the CVD reference formula is absent; FORMULAS silently chooses readings."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The producer uses the first AM trade as an absorption origin, first-20 trade signs as direction and last-80 prices as a reward sample. The helper tests entire-sample favorable/adverse maxima with no first-passage order, actual absorption or source reward-band retest."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The reward-only scalar omits fixed location, second aggression and entry availability. Its roughly half-true daily sample has no justified relationship to the source’s undocumented 27% failure cohort."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 28’s 547-tick opening-to-noon short move is not three ticks after absorption; July 10’s chosen short direction is adverse by noon. Neither chart supplies a source-qualified origin or resolves the source roles."
+        }
+      },
+      "source_refs": [
+        "ABS:3",
+        "ABS:4",
+        "ABS:6",
+        "ABS:7",
+        "ABS:9",
+        "ABS:11"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-F08-A-2026-01-28.png",
+          "sha256": "03d338ae099a516e7add75d6db206d7a8822505b15513d1a5f54109f3f899515"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F08-B-2026-07-10.png",
+          "sha256": "07957ec1baddff243825a08f797bd51c1a3886c6c589ae805d22581216bd8373"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F09",
+    "title": "Ordered STOP defense, exhaustion and lift-off",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "STOP:6",
+      "STOP:7",
+      "STOP:9",
+      "STOP:10",
+      "STOP:11",
+      "STOP:12",
+      "STOP:14"
+    ],
+    "source": "The source stages are defense, replenishment, exhaustion and lift-off, with a two-to-four-tick reward and entry within one-to-two ticks. ES digit classes and NQ40-range illustrations are distinct. The 10-lot median threshold on NQ is a research reading, not a portable author constant. STOP p11/p13 are the same November 7 EPZ25 area, while the purported correct p12 example is November 13 at a different price and SIM1. They are not one continuous before/after clip or verified live NQ fills.",
+    "finding": "Only first20 versus last20 AM size medians are scored. Both dated cases give1/1, and all647 observations are false. This does not establish absence of local thinning or lift-off. Replenishment remains blocked; the available stage helpers are not assembled into a chronological event.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::digits_thinning",
+      "formulas_flow.py::liftoff_upticks",
+      "formulas_flow.py::r_f09_stop_stages",
+      "recipe_score.py::_preds.f09"
+    ],
+    "fix": [
+      "Start a stage record from a validated side-specific defense at a fixed thesis band. Store instrument and candle/tape construction. Keep literal ES digit classes separate from named NQ literal or causal-quantile classes. If the thesis level is an external high/low, begin only from its first unvisited contact; preserve that episode through the later stages without extending or rearming the consumed line.",
+      "For exhaustion compare the same aggressor side in local, successive20-print windows after defense: named median>=10 then <10, plus a completed-minute delta turn against that aggressor. Never compare all-side opening and closing prints.",
+      "After exhaustion scan consecutive trade-price upticks/downticks for the named2/3/4-tick reward with no intervening opposite tick. Define entry availability at the confirmation print and its one-to-two-tick band. Keep replenishment unknown; a reduced1→3→4 sequence must be labelled partial. Require the run direction to match the proposed absorber/reversal side and return its actual confirmation index, not the final input print. Store both count of price changes and price distance in ticks; specify jump handling and treat unchanged prints explicitly rather than silently interpreting them as opposite moves.",
+      "Measure stage transitions and post-confirmation0.25R reversal over15minutes with eligible prior stages as denominators. Do not equate a0/647 session-median statistic with source failure rate or the complement of27%. Require stage1 before stage3 before stage4, with invalidation at each step. A later favorable run cannot attach to an unrelated earlier defense solely because both occurred in AM."
+    ],
+    "acceptance": [
+      "July10 and January28 median1/1 cases remain negatives for the literal session-sample thinning flag only.",
+      "An actual local sell-median15→4 with positive delta, followed by three consecutive upticks, can form the named reduced sequence.",
+      "A missing replenishment stage stays unknown rather than automatically true; an intervening downtick restarts bullish lift-off counting.",
+      "A bullish run early in an array followed by an opposite move must be reported at the original qualifying print, with subsequent invalidation separate; it cannot inherit the array’s final entry price."
+    ],
+    "leakage": "AM-end samples; blocked replenishment remains explicit",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source separates defense, replenishment, opponent exhaustion and lift-off, with a 2–4-tick reward and 1–2-tick entry distance. Its three-tick replenishment is not the same object as trade-price reward; numerical NQ digit thresholds are unnamed by the author."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Only first/last-20 all-side AM size medians are connected. liftoff_upticks can find either-direction runs anywhere but reports the final sample price and net direction; stage helpers do not enforce one causal sequence or align lift-off with the absorber’s intended direction."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "All 647 session-median observations are false, without measuring any local stage transitions. A partial 1→3→4 sequence must remain partial while replenishment is blocked, and cannot reproduce a full-source failure rate."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 and January 28 show first/last medians 1/1 despite local large prints and changing prices; their flags are negatives only for that coarse size comparison, not evidence of absent local defense or lift-off."
+        }
+      },
+      "source_refs": [
+        "STOP:6",
+        "STOP:7",
+        "STOP:9",
+        "STOP:10",
+        "STOP:11",
+        "STOP:12",
+        "STOP:14"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F09-A-2026-07-10.png",
+          "sha256": "dfc547396b54425459c72c11b925304cd92f0973cd5c6e88446e938cd59c960e"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-F09-B-2026-01-28.png",
+          "sha256": "50f3fb04446f8eb8079b31cf9843686746f02ef658801da07d3cfa3902a998f8"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F10",
+    "title": "Protected swing after local delta and escape",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "RD:4",
+      "RD:5",
+      "K18:8"
+    ],
+    "source": "The source protects successive lows/highs after local aggression, a small balance and an escape. The fractal, delta percentile and five-bar quiet period are research definitions. FORMULAS declares protection at escape even though its own five later quiet bars have not yet happened.",
+    "finding": "The score is last-five AM prints above the final AM low by two ticks, true646/647. July10 compares prices near29943.50 with29675; the only negative March28 finishes at19542, the morning low. There is no swing, local delta, escape, five-bar protection or high-side mirror.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f10_protected_low",
+      "family_flow.py::_fractal_pivots",
+      "recipe_score.py::_preds.f10",
+      "FORMULAS.md::R-F10 fixture"
+    ],
+    "fix": [
+      "Construct confirmed2/2 one-minute fractals for the named five-bar definition, or retain the existing3/3 matcher under a distinct variant. A pivot becomes known only after all right-side bars close. Select the prior opposite swing using information available then. Validate pivot index, right-side confirmation and escape order; the supplied escape cannot occur before the pivot is known, and a break cannot precede protection.",
+      "Build per-price signed delta as of the candidate, within the low/high±2-tick band. Compare the relevant sign with the causal positive/negative per-price q75 in matching units. Then require a complete close beyond the prior opposite swing.",
+      "Scan the next five complete bars for no two-tick retest. Mark protection only at the last quiet-bar completion; correct the fixture timestamp from escape bar17 to quiet-confirmation bar22 completion. Implement the protected-high mirror and subsequent complete-close invalidation. Return separate pivot_known_at, escape_known_at and protected_known_at. The existing helper’s confirmed_at=fractal_i+2 is not the protection timestamp. Begin all outcome/MFE calculations after quiet confirmation.",
+      "Track a chronological sequence of live protected levels, replacement by newly confirmed levels, first break, time-to-break and post-confirmation MFE through16:00. Report break rates conditional on protected levels, not near-universal end-of-AM distance from the minimum. Under the user’s rule, each newly confirmed protected high/low stops projecting as an active reference at its first exact revisit. Keep the author’s subsequent complete-close break as a separate historical invalidation/outcome field; the close-break rule cannot extend an already visited active line."
+    ],
+    "acceptance": [
+      "July10 legacy true must not become a protected-swing event without the missing sequence; March28 noon low has no five later bars yet.",
+      "Changing any of the five quiet bars can affect protection only when that bar becomes available.",
+      "A final five-print sample spanning19ms is never a substitute for five complete one-minute bars."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "fixture": "known_at occurs before its five-bar quiet prerequisite",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Source protection follows a local balance escape and absence of a return. FORMULAS’ named five-bar quiet prerequisite is not met at its stated escape-time signal; its own worked known_at is early."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current code compares the last five prints with the final AM low, without a pivot, delta, escape or high-side mirror. The unused helper also returns pivot confirmation rather than protection time, omits chronological index guards and starts MFE at escape before quiet confirmation."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The 646/647 flag measures noon distance from the morning low, not protected-structure formation or its later break. Historical close-break invalidation must be separated from the user’s first-revisit active-line lifetime."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10’s late prints near 29943.50 are far above 29675; March 28’s final sample includes low 19542 and spans about 19ms. Neither establishes five later complete quiet bars."
+        }
+      },
+      "source_refs": [
+        "RD:4",
+        "RD:5",
+        "K18:8"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F10-A-2026-07-10.png",
+          "sha256": "47630c128a9424fbc787db075720291346b5937930c674d0bc7bbe579a476a7e"
+        },
+        {
+          "case": "B",
+          "date": "2025-03-28",
+          "plot": "plots/R-F10-B-2025-03-28.png",
+          "sha256": "d87144e72feaccbbe729debcfcd09e09c421aca46b3bcf947f8d5c7918bb8f46"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F11",
+    "title": "Delta-print pairing with an LVN at a balance extreme",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "RD:7",
+      "RD:9",
+      "RD:10"
+    ],
+    "source": "The source pairs concentrated signed delta with a low/minor volume node at either balance extreme and shows repeated wick reactions. It does not equate a volume POC with a delta print. The node detector, tolerance and reversal fraction in FORMULAS are research rules; its fixture separates a wick rejection from a much larger0.5R follow-through.",
+    "finding": "The score pairs full-current-RTH volume POC with an LVN in that same final profile. July23 POC28810 lies next to LVN28810.25; July10 POC30050 is far from the nearest LVNs. No signed-delta extremum, as-of dealing range, touch, wick reaction or repeat count is used.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "family_value.py::scan_rth_delta",
+      "formulas_flow.py::r_f11_delta_lvn",
+      "formulas_jumbo.py::profile_nodes",
+      "recipe_score.py::_preds.f11"
+    ],
+    "fix": [
+      "Require a fixed or causally developing dealing-range episode with explicit start, bounds and confirmation. Build volume and signed-delta profiles over the identical executed-trade population available before each candidate; retain the literal source profile scope.",
+      "Find dp.max as price of maximum positive delta and dp.min as price of most negative delta, preserving ties. Pair only a same-profile LVN/minor-node extreme within named0.05×range height; do not substitute the volume POC. Keep the node detector and zero-bin grid explicit.",
+      "For each paired level scan independent visits. Record a >=2-tick wick through the level with complete close back, then separately measure0.5R follow-through within five minutes. A wick-only source reaction must not inherit the stricter follow-through label. Implement the lower-side mirror (wick below then close above). Gate every reaction on a valid pairing, actual contact and side; enforce the five-minute horizon by timestamps, not by assuming a supplied close is timely.",
+      "Count repeated reactions per fixed zone through16:00, requiring departure/reset between visits. Report paired levels, touched levels, wick reactions and follow-through conditional counts, with no use of afternoon profile data in morning features. Repeated source reactions belong to a documented profile-zone episode, not rearmed unvisited high/low references. End any separately displayed external or structural high/low line on its first revisit, while preserving labelled historical zone interactions."
+    ],
+    "acceptance": [
+      "July23 proximity of volumePOC28810 to LVN28810.25 is not evidence of a delta-print pairing.",
+      "The FORMULAS118.25 example closing117.5 is wick-only; it fails a10-point follow-through requirement.",
+      "Two adjacent wick bars in one visit count once, and future volume cannot relocate an already tested fixed node."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Reading Delta pairs concentrated signed aggression with a local volume-node extreme and repeated wick reactions on both sides. Highest delta print refers to aggression magnitude, not highest price; the source-specific profile reaction is separate from ABS’s contradictory lower-side example."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The connected producer pairs final-RTH volume POC with a same-profile LVN. The unused delta/LVN helper is high-side only, can count reaction without a valid pairing and has no timestamps or independent-visit grouping."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only POC/LVN proximity is scored, omitting signed delta, causal dealing-range selection, contact and repeated reactions. The fixture’s wick-only close is distinct from the much larger half-range follow-through."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 23’s POC 28810 is close to LVN 28810.25; July 10’s POC 30050 is over 20 points from the nearest selected LVNs. These retrospective volume distances cannot certify delta-print reactions."
+        }
+      },
+      "source_refs": [
+        "RD:7",
+        "RD:9",
+        "RD:10"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-23",
+          "plot": "plots/R-F11-A-2026-07-23.png",
+          "sha256": "9f33f0aab3e9ea8da9a5788a7e01564dd002cb7b753d7f404ddd00b92bdc0638"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F11-B-2026-07-10.png",
+          "sha256": "12758edd93f20d1b9ee1e331c789b6709f7449f6b259e6833e92d9975d9e6df8"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F12",
+    "title": "Aggressive or drifting approach to a balance band",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "WIC:4",
+      "WIC:5",
+      "WIC:9"
+    ],
+    "source": "The source judges how price arrives at an extreme and later confirms a genuine break/retest. It draws bands and names a15-minute check. Five-minute speed, volume slope and percentile cuts are research definitions, not values supplied by the lesson. In p4 the same extreme is described through different sides’ control and later defense/break language. The complete directional mapping remains source-stopped; the observed class and subsequent outcome can still be recorded separately as named research observations.",
+    "finding": "The score compares median size of the last five AM prints with the first five. Equality1=1 makes July10 aggressive; August28 gives2→1 and false. Neither identifies arrival at an extreme or uses displacement, directional volume, five-minute bins or the15-minute confirmation.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f12_arrival",
+      "recipe_score.py::_preds.f12"
+    ],
+    "fix": [
+      "Freeze the eligible prior-value/dealing-range band and its break/retest state. Find the first actual approach touch, with approach direction and feature cutoff before that touch. Use the drawn band identity rather than replacing every extreme with a zero-width line. Keep the directional fast/slow implication unresolved until the source side and endpoint are specified. For external highs/lows, test freshness since known_at and retire at first contact; distinguish the initiating episode from later historical retests.",
+      "For the named five-minute variant compute toward-level displacement in ticks/minute from complete minute closes and toward-level aggressive volume in each minute. Compare speed with causal prior-approach q75/q25; classify aggressive only when speed>=q75 and the five-bin volume slope>=0, drift when speed<=q25 or slope<0, otherwise mixed. Use timestamps: five equally spaced minute closes span four elapsed minutes. A 3.9-point displacement then equals 3.9 ticks/minute on a 0.25 grid; to measure five full minutes use endpoints five minutes apart. Declare regression versus endpoint slope, sign it toward the target, and implement the downward mirror.",
+      "Store the source15-minute confirmation separately with known_at at bar completion. From touch onward test rejection versus a complete break plus30-minute outside hold, preserving which side of the band is defended. A close on the starting side without an actual confirmed rejection is not automatically defended. Verify the outside hold and later retest independently of the arrival label.",
+      "Report outcomes conditional on class and eligible break/retest context. Remove the first/last-five median shortcut; retain missing five-minute tape coverage or unavailable prior quantiles as unknown."
+    ],
+    "acceptance": [
+      "July10 equal one-lot medians cannot establish an aggressive arrival.",
+      "An identical final five-print sample at a different hour cannot change a previously classified approach.",
+      "Rapid price approach with falling directional volume and slow approach with rising volume must remain distinguishable; neither is an automatic source signal."
+    ],
+    "leakage": "final-AM samples substituted for pre-touch arrival",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "For WIC p4, clarify which side of the reached balance is expected to be defended after aggressive versus slow arrival before certifying a directional class-to-outcome rule.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation axes are America/New_York with date-specific daylight saving; AM samples cover 09:30–12:00 and current final-RTH profiles close at 16:00. These configured clocks do not prove the zones of cropped source tickets. Match instrument, contract, event sequence and timestamp convention; ES/EPZ25, MNQ, NQ and source 40-range candles are separate populations. A confirmed bar event is known at completion; a trade event is known only after every required execution/quote update.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "WIC supports assessing the approach and confirming an actual break/retest, but its aggressive-versus-slow discussion leaves the defended side and expected endpoint ambiguous. A deterministic fast=hold/slow=break mapping is not fully source-resolved; numerical five-minute rules are named choices."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current code compares first/last-five AM size medians. The unused arrival helper uses upward-only displacement, divides by sample count rather than actual elapsed time and uses endpoint volume difference; neither implements a side-aware approach to the drawn band."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The daily median comparison is not an arrival-conditioned defense/break outcome. Equality is treated as aggressive despite no measured price speed, level, prerequisite state or 15-minute confirmation."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10’s 1=1 medians produce true and August 28’s 2→1 false; no source approach-band episode or class-specific confirmed outcome is identified on either."
+        }
+      },
+      "source_refs": [
+        "WIC:4",
+        "WIC:5",
+        "WIC:9"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F12-A-2026-07-10.png",
+          "sha256": "33f1ad9a86f880d02eee1234436db0804f47e873df60fee888fcf3c212c5d84d"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-28",
+          "plot": "plots/R-F12-B-2026-08-28.png",
+          "sha256": "d32a81cc824cd742628aef0eadc2c7b946e25cc9affd56a10c84eac23d43ee56"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F13",
+    "title": "Prior-session trapped aggression and later break/retest",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "TRAP:3",
+      "TRAP:4",
+      "TRAP:5",
+      "TRAP:6",
+      "TRAP:8",
+      "TRAP:9"
+    ],
+    "source": "The source aligns a balance with traded structure, shows heavy buying at its upper extreme, two failures in prior AM/PM, and a later intraday break followed by a body-aggression retest. Both sides are a documented mirror; the150–160-point Asia remark is illustrative. TRAP’s MNQ three-minute August 10 screenshot shows a 29729.25/29736.75/29678.75 overlay and 501.5 realized P&L, separately from the actual fill arrows. Its upper delta concentration is not the lower high-volume node; preserve signed-delta magnitude and profile position separately.",
+    "finding": "Current code is wired to the high-side helper, but substitutes prior RTH high, maximum AM price as dp.max and the same current-AM high for both AM and PM failures. It passes min(AM closes) as break_close and min(AM lows) as intra_lo; break_close<intra_lo is impossible for valid bars. The pairing result is ignored and the low mirror is absent.",
+    "targets": [
+      "family_tape.py::_ofm_and_trap",
+      "formulas_flow.py::r_f13_trapped_buyers",
+      "recipe_score.py::_preds.f13"
+    ],
+    "fix": [
+      "Create the declared causally redrawn balance from confirmed swings and preserve each version. Freeze the relevant prior-session signed delta profile and select its positive/negative extreme within named0.05R. A maximum traded price is not dp.max. Freeze each confirmed range version before testing its break; never replace an earlier boundary with the minimum of the eventual outcome window. Restore signed per-price delta, not a maximum price alias.",
+      "Find distinct actual band touches in prior AM and prior PM, with no qualifying outward close, using the same fixed level. Store both episode timestamps; one current AM aggregate cannot fill both roles. Require the trap-delta pairing rather than merely compute and discard it. Preserve the author’s two historical profile-zone failures as context. Under the user’s active-reference rule, any separately projected external high/low ends at its first revisit on each side independently; those historical failures cannot rearm a consumed prior high. A newly confirmed intraday boundary has its own identity and known_at.",
+      "Freeze the current intraday range at its own confirmation. Search strictly later for a close through it, a separate retest from the outside and an actual same-side aggressive execution inside the retest candle body, followed by the named rejection. Build the low-side mirror with reversed inequalities. Require actual execution price inside the retest body and aggressor side from the tape; final candle color alone is insufficient. Gate the full setup on valid delta pairing and both distinct earlier episodes.",
+      "Measure retest availability, hold and subsequent target reach from those events. Choose any Asia statistical target using past sessions, not the illustrative150–160 points. Remove the impossible whole-window-minimum break comparison and publish prior-pattern eligibility as the denominator."
+    ],
+    "acceptance": [
+      "For every valid OHLC array min(close)>=min(low); the present strict break comparison cannot be a positive event.",
+      "July10 and January28 zero flags do not demonstrate absence of source traps.",
+      "A prior AM failure and a distinct prior PM failure can qualify; duplicating one failure cannot. A later actual break below a frozen earlier low is possible.",
+      "An already visited prior high cannot become fresh by waiting until the next AM; its low remains independently eligible only if not visited and coverage is complete."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The author identifies two earlier AM/PM upper-area failures, signed aggression at a causally refitted balance and a later intraday break/retest. The 150–160-point Asia statement is context, and the source execution overlay does not certify exact fills."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The current caller supplies one current-AM high for both earlier failures and max traded price for the signed delta extreme; pairing is not gated. Its min(close)<min(low) comparison is impossible for valid OHLC, and the low-side mirror is missing."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "All 647 false flags reflect an impossible aggregate breakout test rather than incidence of the source sequence. Eligibility, separate failure episodes, an earlier frozen breakout boundary and the later body-aggression retest are not measured."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 stays below prior high 29993.50 during AM; January 28’s 11:50 return to prior high 26114.25 is already stale because that high was visited January 27 at 16:45. Neither supplies the source two-session trap and intraday retest."
+        }
+      },
+      "source_refs": [
+        "TRAP:3",
+        "TRAP:4",
+        "TRAP:5",
+        "TRAP:6",
+        "TRAP:8",
+        "TRAP:9"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F13-A-2026-07-10.png",
+          "sha256": "44f6d15b5e057002ef6e617996c343fc39f824b256b6358e8c3689b12d6c0f1c"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-F13-B-2026-01-28.png",
+          "sha256": "7aef53ad4d6842510a1f77bd06448ed60fa533e5f9121d4e6c3d6e52157c07a0"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F14",
+    "title": "Colocated BigTrades imbalance, body/wick and retest",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "BIG:3",
+      "BIG:4",
+      "BIG:5",
+      "BIG:6"
+    ],
+    "source": "The figures use NQ40-range bars and30–60 display settings, with a350% imbalance line attached to the aggression print. Body prints are rewarded and wick prints absorbed. A one-minute substitute is a named variant. The wording350 percent more and a3.5× platform ratio should not be silently treated as a resolved numerical identity.",
+    "finding": "The code takes any same-price3.5× imbalance in the entire current RTH, then ANDs it with an independent Jumbo-level BigTrades flag. March9 is true without a matched candle, price or side. July10 is false because the independent Jumbo flag is false. There is no body/wick classification, matching print or later retest.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_f14_imb350",
+      "recipe_score.py::_preds.f14",
+      "FORMULAS.md::R-F14"
+    ],
+    "fix": [
+      "Preserve the source40-range chart construction and print-display settings. Specify range-bar formation and the meaning of the display maximum before author-exact reconstruction; build a one-minute variant only under that name. Resolve3.5× platform ratio versus literal4.5× reading if numerical source certification is required.",
+      "Within each completed candle compute same-price buy/sell totals and select the actual30–60-lot print under the literal display reading, with>=30 separately named. Require the relevant same-side imbalance at that exact price and nonzero own-side quantity; do not join an unrelated Jumbo print. Reject unknown/zero aggressor side and missing or zero own-side volume. Record the opposing-volume zero case explicitly; missing both sides cannot pass a ratio by 0>=0.",
+      "Classify each print against its own candle body interval, preserving side, price and completion time. Keep rewarded-body and absorbed-wick events separate. At both-side wick absorption record waiting status until a later confirmed range break. A completed body classification is known at candle close. Also record favorable response after the print if claiming that the print was rewarded; do not backdate a final body or attach a later print to earlier reward. Return every matched print with its own identity rather than overwrite all with the last match.",
+      "Freeze the print line and optional named body area. Require departure then actual retest overlap before evaluating direction-specific0.5×candle-range rejection within15minutes. The helper must check retest contact, not merely receive an unused retest_high argument. Report matched prints, retests and outcomes separately. Distinguish the print-area retest from an external high/low freshness gate. External or newly projected structural extremes stop on first revisit, while a declared print-zone memory interaction retains its own lifecycle. Require actual retest low/high interval overlap, not proximity of one supplied extreme alone."
+    ],
+    "acceptance": [
+      "March9 current true must be labelled an aggregate conjunction until a same-candle/same-price print is identified.",
+      "A sell40 at100.5 inside body[100.25,101] is rewarded; a sell45 at100.10 is absorbed, even in the same candle.",
+      "A favorable later close without a retest of the saved line cannot count as retest-reject."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Confirm the40-range bar construction, whether60 is a display cap, and whether the350% platform threshold means3.5× opposing volume; these are not determined by the one-minute implementation.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The NQ 40-range construction and 30–60 display setting are visible, but a maximum display cap and 350% platform ratio versus literal 350% more are not uniquely resolved. A one-minute or Jumbo-threshold substitution is a different variant."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The producer ANDs a full-RTH same-price imbalance with an independent Jumbo large-print flag. The unused helper keeps the last matched body print, admits unknown side and zero/zero volume as imbalance, and never uses retest_high to require contact."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The current aggregate conjunction has no same-candle/same-price/side matching or subsequent retest denominator. March 9 true and July 10 false do not grade the source print-line response."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. Their final-RTH profiles and separate Jumbo geometry do not locate a source 40-range print and its later retest. Source brackets were drawn during review and cannot validate an execution outcome."
+        }
+      },
+      "source_refs": [
+        "BIG:3",
+        "BIG:4",
+        "BIG:5",
+        "BIG:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-03-09",
+          "plot": "plots/R-F14-A-2026-03-09.png",
+          "sha256": "976d3386b905eb5b1e5ea66d6747b792d738c5cd4509066f34f375ae20aaa8e4"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F14-B-2026-07-10.png",
+          "sha256": "e237815e5b62177dbd7a3c62857274c0af1f9a7005b65a16ee03867e552d518b"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F15",
+    "title": "Ordered catalyst, failed squeeze, refill and re-squeeze",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "OFM:2",
+      "OFM:4",
+      "OFM:5",
+      "OFM:6",
+      "OFM:7",
+      "OFM:8",
+      "OFM:9",
+      "OFM:10",
+      "OFM:14",
+      "BIG:7",
+      "BIG:8",
+      "BIG:14",
+      "BIG:18",
+      "CONT:10"
+    ],
+    "source": "The source distinguishes the first absorbed aggression line from its box and requires a failed attempt before the re-squeeze. The drawings show both long and short versions; entries on the first failure are a different event. The five-minute cluster,0.1R and30-second speed quantile are research definitions. Short-gamma and CVD checks need their own trustworthy, causally available inputs. OFM p14’s passive first touch is a separate entry path, while the research classifier’s favorable post-touch labels coexist with negative mechanical strategies; they are not execution returns. Source catalyst 29890.75 and SQC near 29908.64 are distinct. Replay SIM1/+565 and the x8 frame’s still-open long/floating −20 do not prove all captions are realized outcomes.",
+    "finding": "The current helper is wired, contrary to stale FORMULAS text, but ofm_entry uses only a comparison of resqueeze_close with fail_wick; it ignores the computed release, failure, refill and tape flags. The caller supplies final-AM extrema, last-eight wick prints and6–9 swings without event order. Retained F15 differs from fresh tape on22/33 replay dates; July10 and source-dateJuly9 are retained true but fresh false with no qualifying catalyst.",
+    "targets": [
+      "family_tape.py::_ofm_and_trap",
+      "formulas_flow.py::r_f15_ofm",
+      "recipe_score.py::_preds.f15",
+      "FORMULAS.md::R-F15"
+    ],
+    "fix": [
+      "Invalidate affected tape caches using producer/source/input/schema identity. Build a causally confirmed dealing-range swing, then same-side wick-print clusters in the named five-minute window near that swing. Retain all qualifying prints in time order; mark the first absorbed print line and separate area[first print,extreme]. Do not substitute the final eight AM prints. Keep the first catalyst line, full wick area and SQC as separate records. Any selected external high/low must be unvisited since its own known_at; the initial contact can start the catalyst episode after the active line ends. Do not substitute an already consumed extreme.",
+      "Implement a state machine per cluster and side: catalyst known→fast release beyond the extreme→later complete close back through the catalyst→later refill/retest→re-squeeze beyond the failure wicks. Persist each transition and reset on invalidation. Calculate tape speed at release using only the past30seconds and a baseline available then.",
+      "Require release, failure, refill and re-squeeze in order for the named aggressive F15 entry. Select direction explicitly from swing side rather than its incidental position inside the catalyst. Apply causally available short-gamma, CVD and HTF gates only to the BIG aggressive-continuation variant that requires them, with unknown inputs recorded as partial eligibility. Preserve OFM’s passive first-touch/memory/location variant as a separate branch with its own prerequisites and outcome; do not impose fast tape or short gamma on every OFM example.",
+      "At confirmed entry freeze the stop beyond the actual aggression, compute R=abs(entry−stop)>0, and measure directional post-entry1R/2R/3R reach through the declared horizon. Do not use the maximum of long and short MFE. Report setup frequency, retest availability and conditional outcomes separately. Keep drawn/review brackets, replay fills and manual live fills separate. Stops belong beyond the actual local protected aggression/intermediate wick, not automatically two ticks beyond a whole-session extreme."
+    ],
+    "acceptance": [
+      "July10 and July9 retained positives must display fresh=false and cannot support the published470/647 frequency under current code.",
+      "A close beyond a wick with no preceding failure/refill must fail OFM even when it qualifies as a separate squeeze.",
+      "Changing earlier whole-AM extrema cannot create a stage out of order; a mirrored short sequence uses its own directional stop and MFE.",
+      "A source passive first-touch observation must not fail solely because the optional aggressive variant’s gamma/speed inputs are unavailable; it must not count as a passed aggressive re-squeeze either."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The failed-squeeze/re-squeeze branch is supported, with the catalyst line distinct from its area and from SQC. Short-gamma/CVD requirements belong to BIG’s aggressive continuation variant; the separate passive first-touch branch in OFM must remain separate."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The current helper is wired but ofm_entry ignores its own release, failure, refill and speed results. Final-AM extrema, an unordered last-eight-print catalyst and incidental swing position cannot supply the required ordered events or direction."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The retained frequency is stale relative to current replay on 22 of 33 diagnostic dates. A close beyond a supplied failure wick without earlier prerequisite states is not an OFM entry, and bidirectional maximum MFE is not directional post-entry reward."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both main charts and July 9 source-date chart were re-viewed. July 10 and July 9 retained positives have fresh=false with no current catalyst; October 8 agrees false. Similar morning price shapes do not recreate the source failed release, refill and renewed drive."
+        }
+      },
+      "source_refs": [
+        "OFM:2",
+        "OFM:4",
+        "OFM:5",
+        "OFM:6",
+        "OFM:7",
+        "OFM:8",
+        "OFM:9",
+        "OFM:10",
+        "OFM:14",
+        "BIG:7",
+        "BIG:8",
+        "BIG:14",
+        "BIG:18",
+        "CONT:10"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F15-A-2026-07-10.png",
+          "sha256": "475f2d4283f464cee9114421ff0017bb568dcd3ed0f40f38d71f08c7c61e6c37"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-F15-B-2025-10-08.png",
+          "sha256": "428913a2011957158eb99f5026794d46d89c557886eb0832da24d87f0ea0ee34"
+        },
+        {
+          "case": "source-date",
+          "date": "2026-07-09",
+          "plot": "plots/R-F15-source-date-2026-07-09.png",
+          "sha256": "3c31760b664fd813d5b611cf1288c1613b8240277f9209034966ec96e71fce18"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F16",
+    "title": "Failed aggression at a balance edge, then fade retest",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "BIG:15",
+      "BIG:16",
+      "BIG:18"
+    ],
+    "source": "The source fades a retest of failed aggression at either edge and targets the last area where the opposite side was rewarded. Its drawn9-point stop/33-point target is an annotation, not a filled trade or a universal bracket. Long-gamma context is separate from a balance-day label.",
+    "finding": "The current helper has both mirrors, but the caller supplies6–9 extremes, wick counts from all AM, a whole-AM no-close condition, unordered extrema for departure/return and an absorption-any-side flag. Its leave test can be satisfied by distance from the opposite edge. The target is the opposite6–9 edge rather than the prior rewarded opposite print. Both selected cases are false under the substitute geometry.",
+    "targets": [
+      "family_tape.py::_ofm_and_trap",
+      "formulas_flow.py::r_f16_balance_fade",
+      "recipe_score.py::_preds.f16"
+    ],
+    "fix": [
+      "Fix a causally known dealing-range edge and its local wick-aggression area. Require qualifying failed aggression at that edge and no complete outward close over the named15minutes. Preserve the declared time/range-bar variant and avoid counting remote wick prints. Begin the local sequence from a causal edge, with both highs and lows tracked independently. If it is an external or structural reference, retire the active line at first revisit and retain subsequent interactions as a labelled absorption-zone episode, not renewed unvisited-level eligibility.",
+      "After failure confirmation require price to leave toward the interior by>=0.25R measured from the tested edge only. Find a later actual retest of that saved area. At that retest require side-correct local absorption; an absorption at the opposite edge or earlier in AM cannot qualify.",
+      "Before the failed extreme, identify the latest opposite-side body print that was rewarded and freeze its price as target. Use long-gamma context only if its scenario and timestamp pass R01; a normal/neutral day label is a separate retrospective or causal variant, with its availability stated. The last rewarded opposite print must itself be known before it is selected, with signed side and post-print response. Do not require new own-side reward or a squeeze to enter this balance fade. If selecting an external high/low target, exclude any previously reached one; the source print-area target has a separately documented lifecycle.",
+      "Score retest confirmation and subsequent target reach through16:00, conditional on failed edge aggression. Keep both mirrors, event order, band penetration and invalidation explicit; do not substitute fixed R multiples or the opposite box edge for the source target."
+    ],
+    "acceptance": [
+      "July10 closes through both6–9 extremes, and January28 does not supply the named upper-edge retest; current false values are not author-pattern incidence estimates.",
+      "At upper120 in range100–120, a departure to119 is only1point, not a5point departure merely because it is19points from the lower edge.",
+      "A source target112.5 from prior rewarded selling remains112.5 even if the range low is100; target touches before the retest do not count."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "BIG explicitly fades still-unrewarded aggression at a balance edge on the later test and targets the earlier opposite-side control area. It does not require the fade trader’s own aggressive reward or a squeeze; numerical departure and hold windows are named research choices."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The helper’s leave condition can use the opposite edge; the caller joins whole-AM wick/no-close/extreme inputs with absorption at any side. Its target is the opposite 06–09 boundary rather than the prior rewarded opposite print."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Neither dated false flag is a conditional source fade estimate. There is no causal failure confirmation, later side-correct retest and frozen source target with post-trigger reach."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 closes through both 06–09 edges, and January 28 never reaches that high while trading through its low. The required as-of balance and earlier opposite control area are not supplied."
+        }
+      },
+      "source_refs": [
+        "BIG:15",
+        "BIG:16",
+        "BIG:18"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F16-A-2026-07-10.png",
+          "sha256": "ff773bd107fdfcf5ed018e7cc25f66fcc6305a2b6dc253e4727bd6a403289522"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-F16-B-2026-01-28.png",
+          "sha256": "8425835e738df07376a422ed02afcf83d3a83097ea6b4b2196102943f9397518"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F17",
+    "title": "Refill-zone formation, return and held response",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "cannot-tell"
+    ],
+    "sources": [
+      "REF:5",
+      "REF:7",
+      "REF:8",
+      "REF:10",
+      "REF:12",
+      "REF:17",
+      "REF:18",
+      "REF:23"
+    ],
+    "source": "The source pools NQ/MNQ; its datedJanuary10 example is MNQ with>=40 displayed, while text mentions60/80/100 in seconds. Per-print versus burst, exact formation window, defender side and hold denominator are not uniquely specified. The12/32/96 bracket is an execution illustration, not a definition proving the42% hold statistic.",
+    "finding": "Current on_touch_refill requires>=100-lot prints in a two-minute,<=2-tick cluster, checks only the first three signs and can include later opposite-side prints in its bounds. It waits until two minutes after cluster start, then departure in the large-print direction and any later return. January23 produces21928.25–21928.75 and a return near11:23; there is no hold/penetration outcome. January10 NQ is not the MNQ source reconstruction.",
+    "targets": [
+      "mbp1_objects.py::on_touch_refill",
+      "formulas_flow.py::r_f17_refill_zone",
+      "family_tape.py::_score_one",
+      "recipe_score.py::_preds.f17"
+    ],
+    "fix": [
+      "Keep author-exact certification open until instrument units, per-print/burst interpretation, clustering, defended side and hold definition are resolved. Preserve the present NQ100-lot/two-minute/two-tick revisit under its literal variant name. Do not use NQ executions as MNQ screenshot evidence.",
+      "For a declared variant, filter every contributing execution by side, size and time, and store its actual prices. Choose an explicit formation clock: a fixed two-minute window becomes known at window end; a streaming threshold variant freezes the zone when its required count/size is first met. Last qualifying print is not proof a future fixed window is complete. Freeze bounds before departure and never widen them afterward. Keep source 30-second/60–80–100 choices distinct from the current 120-second/100/two-tick object.",
+      "After completed formation require a declared departure and a distinct return, recording the side from observed defense rather than assuming active buy always means passive sellers or vice versa. Match leave direction between producer and helper; the current functions use opposite side conventions. Require an actual observed return interval to overlap frozen bounds; touch_px cannot remain unused. State strict >4 versus >=4 ticks explicitly and derive defended direction consistently across producer/helper. External high/low location features must use their first-visit lifetime; a source refill zone’s repeated-memory feature is a distinct object.",
+      "Measure penetration, close-through, subsequent departure and censoring as distinct touch outcomes. Keep the named32-tick/30-minute/12-tick research measurement separate from the12/32/96 execution bracket and from the source42% claim. Add memory/location/flow features frozen at each touch; report per-touch denominators. Require timestamps for the full outcome window and label incomplete coverage as censored. Do not score a favorable distant later extreme without a real intervening return. Keep claimed classifier cohort, market/limit fill cohort and account-path simulations separate; the source’s 64 limit and 312 market trades are not one denominator."
+    ],
+    "acceptance": [
+      "January23 qualifies as the current revisit variant, but a later return alone does not prove a hold.",
+      "The sourceJanuary10 MNQ chart remains an instrument mismatch against the NQ diagnostic; no false source-negative conclusion is allowed.",
+      "A fourth opposite-side large print cannot silently widen a same-side zone; the source hold definition must be resolved before comparing42%."
+    ],
+    "leakage": "known_at unrecorded; source hold unmeasured",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "NQ versus MNQ units, per-print versus burst aggregation, cluster width/window, defending side and the denominator behind42% need a declared definition; the source bracket does not publish all of them.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The source pools NQ/MNQ and gives different display/burst thresholds; clustering, defender side and hold denominator remain unpublished. The 12/32/96 bracket and classifier claims do not uniquely define a source hold event."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The current producer checks only the first three cluster signs and may widen with later opposite prints, then waits a full two minutes and departs in the active-print direction. The unused helper uses the opposite convention, ignores touch_px and enforces no timestamped return or horizon."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only revisit is scored, not hold, penetration, close-through or a later defended departure. Four daily revisit positives cannot be compared to 42% per-touch hold, and memory grading is absent."
+        },
+        "chart_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Two main charts and the January 10 source-date chart were re-viewed. January 23 shows the current 21928.25–21928.75 revisit near 11:23 without a scored hold; July 10 lacks a current cluster. January 10 NQ cannot settle the MNQ source zone."
+        }
+      },
+      "source_refs": [
+        "REF:5",
+        "REF:7",
+        "REF:8",
+        "REF:10",
+        "REF:12",
+        "REF:17",
+        "REF:18",
+        "REF:23"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2025-01-23",
+          "plot": "plots/R-F17-A-2025-01-23.png",
+          "sha256": "4dd8614576a7044df3b26805ce9b5015b04449d64a968ff3544e1d62d41ff606"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-F17-B-2026-07-10.png",
+          "sha256": "92be48ee06da6b153e431c6dac69f9880b14947ff8bd179fc16a3e0f21cb9c14"
+        },
+        {
+          "case": "source-date",
+          "date": "2025-01-10",
+          "plot": "plots/R-F17-source-date-2025-01-10.png",
+          "sha256": "0a8b5d42469cfde5ee8facb00cfa587bc4c2f59ddea2a47c516fa5636fbcedaa"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-F18",
+    "title": "Fast squeeze without the prior failure",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "CONT:11",
+      "OFM:5",
+      "OFM:14"
+    ],
+    "source": "The source fast squeeze proceeds without the failed first attempt of OFM. It then absorbs opposing aggression at the first pullback. Speed of Tape(10) is visible but the unit of10 is not stated;30seconds, q90 and the15-minute no-failure interval are named choices.",
+    "finding": "Current code is wired but the helper ignores release_close and catalyst in its trigger logic. It uses last30seconds of AM speed versus a whole-AM threshold, no-close-through over all AM and the independent prior-VA absorption flag. Continuation is computed but not scored. Fresh replay changes26/33 dates, and July10 retained true is fresh false with no catalyst.",
+    "targets": [
+      "family_tape.py::_ofm_and_trap",
+      "formulas_flow.py::r_f18_squeeze",
+      "formulas_flow.py::tape_speed_pps",
+      "recipe_score.py::_preds.f18"
+    ],
+    "fix": [
+      "Invalidate stale tape rows as in F15. Build the same causally frozen catalyst object, but route a release into the no-failure branch rather than requiring OFM failure/refill. Require a complete close beyond the relevant extreme and side-correct fast tape at that release. Gate on the actual release, catalyst side and valid range even though the current helper accepts and ignores those inputs. Preserve first catalyst line separately from area bounds.",
+      "Compute the named30-second print rate and q90 from only prior observations. Preserve the unresolved10-unit source setting as metadata. Search only after release for a close back through the catalyst; for a15-minute no-failure prerequisite, its known_at cannot precede the end of that interval.",
+      "After confirmed no-failure state, require the first qualifying pullback and opposing aggression absorbed locally there. Define explicitly whether a pullback before the15-minute confirmation is deferred or starts a separate shorter-window variant; never use unrelated morning VA absorption. Check that opposing aggression belongs to the first eligible pullback and is absorbed in that local interval. An earlier day-level absorption flag cannot be reused. Do not require the failed-first-attempt sequence that defines F15.",
+      "Freeze the next eligible source level in the squeeze direction at trigger, then measure actual interval overlap and directional MFE afterward through16:00. Score release, no-failure, trigger and target reach separately. A prior failed squeeze belongs to F15, and passive/slow variants remain separately named. Scan both candidate highs and lows from each reference’s known_at; stop each active line at first revisit. Select only still-unvisited targets ahead of the trigger, with coverage sufficient to establish freshness. If none exists, return target unavailable rather than manufacture the opposite 06–09 boundary."
+    ],
+    "acceptance": [
+      "July10 retained true must remain marked fresh=false; October8 is false under both retained and fresh predicates.",
+      "A fast tape reading at11:59 cannot qualify a10:05 release, and an absorption before release cannot be its pullback trigger.",
+      "A close back through the catalyst after release cancels the named no-failure candidate; target movement before the trigger is excluded."
+    ],
+    "leakage": "event order / future aggregates",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "The unit and reset of Speed of Tape(10) are unresolved. The30-second research speed must retain its separate definition.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York, date-specific DST, one-minute bar-start timestamps and 09:30–12:00 tape. Source NQ 40-range, MNQ three-minute and tick/R16 charts have distinct construction and instrument units. TRAP’s visible August 10 23:51 UTC crosshair does not supply every fill timestamp; REF’s January 10 MNQ caption gives 09:36–09:44 ET. Bar-derived events become available after completion, and a fixed-window cluster after its window closes. Do not infer source chart timezones from PDF export or post times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The fast, no-prior-failure squeeze and absorption of opposing aggression at its first pullback are supported. The Speed of Tape(10) unit/reset remains unresolved; 30 seconds, q90 and a 15-minute no-failure prerequisite are declared variants."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The wired helper ignores catalyst and release_close in its trigger. The caller supplies end-of-AM speed, a whole-AM threshold/no-failure aggregate and independent prior-VA absorption rather than a release and its first pullback."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Current replay differs from retained F18 on 26 of 33 diagnostic dates. Continuation is computed but not part of the scored trigger, and a speed reading at noon cannot backdate release qualification."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 retained true is fresh false with no qualifying catalyst; October 8 is false under both. Visible rises and pullbacks do not identify a source-linked fast release/no-failure/first-pullback absorption episode."
+        }
+      },
+      "source_refs": [
+        "CONT:11",
+        "OFM:5",
+        "OFM:14"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-F18-A-2026-07-10.png",
+          "sha256": "3818e951916dd95921a06924271aa362e322af788f994c2e2ed219d03c6cf0d1"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-F18-B-2025-10-08.png",
+          "sha256": "98825e4b1dcb2a761b1bd41859387d985fc1308d20c9a0db499412f94ccdacc3"
+        }
+      ]
+    }
+  }
+]

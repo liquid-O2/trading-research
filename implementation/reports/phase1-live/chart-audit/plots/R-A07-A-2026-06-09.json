@@ -1,0 +1,174 @@
+{
+  "case": {
+    "id": "R-A07",
+    "case": "A",
+    "date": "2026-06-09",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 10,
+    "negative_count": 637
+  },
+  "production_session": {
+    "date": "2026-06-09",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5971,
+    "expected_1s": 10800,
+    "missing_1s": 4829,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29739.5,
+    "L": 29617.75,
+    "open": 29680.5,
+    "close": 29735.25,
+    "EQ": 29678.625,
+    "Q25": 29648.1875,
+    "Q75": 29709.0625,
+    "W69": 121.75,
+    "volume": 31215.0,
+    "close_0859": 29735.25,
+    "open_0930": 29737.0,
+    "w_pct_0859close": 0.4094467004649364,
+    "w_pct_0930open": 0.4094226048357265,
+    "WpriorRTH": 411.5,
+    "w_rel_prior_rth": 0.29586877278250306,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 29743.0,
+    "prior_rth_low": 29331.5,
+    "asia_high": 29593.0,
+    "asia_low": 29303.5,
+    "london_high": 29674.75,
+    "london_low": 29569.0,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1781012580000,
+    "first_low_break_ms": 1781014200000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1781010000000000000,
+    "outcome_start_ns": 1781011800000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1781012760000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 29386.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 29598.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 29450.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 29737.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "box",
+      "label": "ib formation",
+      "low": 29365.0,
+      "high": 29848.25,
+      "start": 9.5,
+      "end": 10.5,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "ib H",
+      "price": 29848.25,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "ib L",
+      "price": 29365.0,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "ib EQ",
+      "price": 29606.625,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#285fa8",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-06-08",
+    "range.ib": {
+      "n": 60,
+      "missing": 0,
+      "open": 29737.0,
+      "high": 29848.25,
+      "low": 29365.0,
+      "close": 29444.0
+    },
+    "tape_window": {
+      "date": "2026-06-08",
+      "from": 9.5,
+      "to": 16,
+      "trades": 385805,
+      "buy_volume": 265755.0,
+      "sell_volume": 265251.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-06-08_2026-06-14.parquet"
+  ],
+  "plot": "plots/R-A07-A-2026-06-09.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 631,
+    "code": "def a07(r):\n        return bool(r.get(\"a07_ib_retest\"))"
+  },
+  "event": "IB break, retest, hold",
+  "detail_window": [
+    10.416666666666668,
+    10.916666666666668
+  ]
+}

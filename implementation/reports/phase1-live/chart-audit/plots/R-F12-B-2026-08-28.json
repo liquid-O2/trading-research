@@ -1,0 +1,144 @@
+{
+  "case": {
+    "id": "R-F12",
+    "case": "B",
+    "date": "2026-08-28",
+    "code_result": false,
+    "selection": "code-negative",
+    "positive_count": 558,
+    "negative_count": 89
+  },
+  "production_session": {
+    "date": "2026-08-28",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 4930,
+    "expected_1s": 10800,
+    "missing_1s": 5870,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29665.0,
+    "L": 29593.25,
+    "open": 29606.0,
+    "close": 29659.0,
+    "EQ": 29629.125,
+    "Q25": 29611.1875,
+    "Q75": 29647.0625,
+    "W69": 71.75,
+    "volume": 17307.0,
+    "close_0859": 29659.0,
+    "open_0930": 29628.5,
+    "w_pct_0859close": 0.24191645031862166,
+    "w_pct_0930open": 0.24216548255902257,
+    "WpriorRTH": 280.75,
+    "w_rel_prior_rth": 0.25556544968833483,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 29704.5,
+    "prior_rth_low": 29423.75,
+    "asia_high": 29707.0,
+    "asia_low": 29594.25,
+    "london_high": 29670.5,
+    "london_low": 29594.5,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1787924400000,
+    "first_low_break_ms": 1787923860000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1787922000000000000,
+    "outcome_start_ns": 1787923800000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1787924580000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 29503.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 29631.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 29575.5,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 29628.5,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-08-27",
+    "am_aggregates": {
+      "first": 29628.5,
+      "last": 29552.5,
+      "delta": -128.0,
+      "first5_size_median": 2.0,
+      "last5_size_median": 1.0,
+      "first20_size_median": 2.0,
+      "last20_size_median": 1.0
+    },
+    "tape_window": {
+      "date": "2026-08-28",
+      "from": 9.5,
+      "to": 12,
+      "trades": 198458,
+      "buy_volume": 132724.0,
+      "sell_volume": 132852.0,
+      "unknown_volume": 0.0
+    },
+    "prints_ge_30": 22,
+    "prints_ge_75": 0,
+    "prints_ge_100": 0
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-08-22_2026-08-28.parquet"
+  ],
+  "plot": "plots/R-F12-B-2026-08-28.png",
+  "notes": [
+    "Actual first5 / last5 AM print-size medians = 2 / 1; no level-specific arrival/stage."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 700,
+    "code": "def f12(r):\n        return bool(r.get(\"f12_arrival_aggr\"))"
+  },
+  "event": "aggressive arrival: AM size median rising (slope rule; no invented q75)",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

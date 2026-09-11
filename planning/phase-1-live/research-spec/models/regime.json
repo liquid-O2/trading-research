@@ -1,0 +1,485 @@
+[
+  {
+    "id": "R-R01",
+    "role": "context",
+    "research_decision": "Build native, point-in-time option exposure scenarios with explicit pricing, OI vintage, scope and root finding; dealer inventory remains unobserved.",
+    "inputs": [
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D08",
+      "D10"
+    ],
+    "engines": [
+      "E00",
+      "E10"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-F15",
+      "R-F16"
+    ],
+    "bindings": {
+      "native_products": "NDX, NDXP, SPX, SPXW, QQQ, SPY separately; no price-coordinate pooling",
+      "primary_product": "NDXP for NQ consumer context",
+      "snapshots": "every 5 minutes 09:35–15:55, latest available inputs only",
+      "default_expiry": "same-day expiration at true settlement timestamp",
+      "European_pricing": "E10 parity-forward Black; native cash branch only if acquired",
+      "American_ETF_pricing": "E10 CRR and declared dividend approximation",
+      "walls": "same-right strike gamma maxima; keep OI-only walls separate",
+      "consumer": "F15 BIG, F16 optional gate; no direct option orders",
+      "quote_spread_sensitivity": "0.15,0.30,0.50; diagnostic only, never selected for better PnL",
+      "option_flow_pressure": "E10 previous complete 5 minute signed delta-notional transaction pressure; optional output with 80% quantity/sign/Greek coverage, never dealer-position inference"
+    },
+    "parameters": {
+      "scenario": {
+        "default": "call_plus_put_minus",
+        "grid": [
+          "call_plus_put_minus",
+          "all_short",
+          "all_long"
+        ],
+        "units": "position-sign hypothesis",
+        "meaning": "explicit scenarios, not observed dealer ownership"
+      },
+      "expiry_cohort": {
+        "default": "0DTE",
+        "grid": [
+          "0DTE",
+          "1_to_7DTE"
+        ],
+        "units": "calendar DTE",
+        "meaning": "separate populations; never silently pooled"
+      },
+      "gamma_neutral_fraction": {
+        "default": 0.1,
+        "grid": [
+          0.05,
+          0.1,
+          0.2
+        ],
+        "units": "abs net/gross",
+        "meaning": "E10 neutral threshold"
+      },
+      "max_relative_spread": {
+        "default": 0.3,
+        "grid": [
+          0.3
+        ],
+        "units": "quote relative spread",
+        "meaning": "Fixed baseline quality cap; 0.15 and 0.50 are separately reported coverage sensitivities, excluded from alpha selection."
+      },
+      "strike_scope": {
+        "default": "stored_wide",
+        "grid": [
+          "stored_wide",
+          "within_2pct",
+          "within_5pct"
+        ],
+        "units": "native forward/spot moneyness",
+        "meaning": "subsets of actually acquired scope; coverage ratio denominator matches selected scope"
+      },
+      "gamma_stress_threshold": {
+        "default": -0.25,
+        "grid": [
+          -0.1,
+          -0.25,
+          -0.5
+        ],
+        "units": "net gamma / gross absolute gamma",
+        "meaning": "E10 stress-boundary root, separately named from zero-gamma flip; test subsequent realized volatility rather than asserting a volatility switch"
+      }
+    },
+    "algorithm": [
+      "Create contract metadata and actual OI publication vintages, expiry instants, multipliers and exercise styles. As-of join each quote/spot/rate; known_at is maximum availability, not a request-date assumption.",
+      "Apply D06 quality and declared scope. Build European index forward from synchronized put-call pairs or native acquired cash; ETF spot is its own completed minute close. No NQ-to-NDX or ES-to-SPX level copy.",
+      "Solve IV and Greeks under E10 with convergence/no-arbitrage checks, then aggregate each sign scenario by native product and expiry cohort. Export calls, puts, net/gross and missing OI coverage separately.",
+      "Reprice aggregate gamma over E10 grid, find genuine sign-change roots, select nearest root and export all roots. Compute same-right gamma/OI walls and native distance features. Missing flip is no_flip, not zero gamma.",
+      "Fit native level-response/path distributions and test fixed NQ consumer gates only with fully available snapshots. A snapshot changes only when its inputs change; wall updates have their own expiry, not session-high first-visit semantics.",
+      "Compute E10 gamma-stress roots at the selected threshold and optional signed option-flow pressure. Keep those objects separate from flip/walls and evaluate later realized-volatility/consumer responses; missing trade-quote pressure does not suppress a valid gamma snapshot."
+    ],
+    "outputs": {
+      "native_snapshot_id": "string",
+      "underlying_coordinate": "enum(spot,forward)",
+      "OI_vintage": "UTC ns",
+      "scope_coverage": "fraction",
+      "net_gamma": "dollars per1pct move",
+      "gamma_regime": "enum",
+      "flip_roots": "native prices[]",
+      "call_wall": "native price?",
+      "put_wall": "native price?",
+      "gamma_stress_roots": "native prices[]",
+      "option_flow_pressure": "float[-1,1]?",
+      "option_flow_coverage": "fraction"
+    },
+    "controls": [
+      "OI-only walls",
+      "unsigned gross exposure vs signed scenarios",
+      "same consumer without options gate",
+      "0DTE vs1–7DTE"
+    ],
+    "acceptance_cases": [
+      "A zero-to-positive cumulative sequence is not a negative/positive flip.",
+      "NDXP OI published 06:30 cannot be used 00:00 that day.",
+      "Daily full-chain OI plus scoped minute quotes does not imply full intraday-chain coverage.",
+      "Equal NDX and NQ numeric prices do not authorize treating them as the same underlying."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "regime",
+    "title": "Native options, gamma scenario and level-conditioned regime",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_regime.json",
+    "audit_record_sha256": "506d47cb7c82c291c2725fad15fd19ca2385997bebe2d8efb06a0af65060fb8a",
+    "source_references": [
+      "GEX:6",
+      "GEX:7",
+      "GEX:13",
+      "GEX:14",
+      "GEX:15",
+      "GEX:19",
+      "REFIMG:1"
+    ],
+    "grid_screen_config_count": 10
+  },
+  {
+    "id": "R-R02",
+    "role": "context",
+    "research_decision": "Use prior-known VIX bands and explicitly scaled return-volatility forecasts, then test their usefulness instead of interpreting membership as performance.",
+    "inputs": [
+      "D01",
+      "D04",
+      "D08"
+    ],
+    "engines": [
+      "E00",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-A01",
+      "R-F18"
+    ],
+    "bindings": {
+      "VIX_bands": "<13,[13,14),[14,15),[15,18),[18,20),>=20",
+      "context_at": "09:30 with previous published session VIX",
+      "price_anchor": "previous complete NQ RTH close",
+      "raw_scale": "anchor*VIX/(100*sqrt(252)), a return-volatility point scale, not full high-low width",
+      "consumer": "J01/A01/F18 context only; no same-day VIX close feature"
+    },
+    "parameters": {
+      "volatility_index": {
+        "default": "VIX",
+        "grid": [
+          "VIX",
+          "VXN"
+        ],
+        "units": "native index series",
+        "meaning": "VXN variant requires its actual D08 history; missing is unavailable"
+      },
+      "calibration": {
+        "default": "raw",
+        "grid": [
+          "raw",
+          "prior_q68_absolute_return"
+        ],
+        "units": "enum",
+        "meaning": "raw index return-volatility scale or type7 q68 of prior normalized absolute return ratios, as defined in the algorithm"
+      },
+      "history_sessions": {
+        "default": 120,
+        "grid": [
+          60,
+          120,
+          252
+        ],
+        "units": "sessions",
+        "meaning": "only used by calibration/conditional probability history"
+      }
+    },
+    "algorithm": [
+      "Find last published volatility-index observation available before decision, preserving date and publication lag through holidays.",
+      "Assign exact nonoverlapping VIX bands for VIX; for VXN keep the same numeric boundaries as an explicitly different research categorization and export raw value.",
+      "Compute raw point scale. For calibrated variant take type7 q68 of prior N absolute NQ close-to-close return divided by corresponding prior-known index/(100sqrt252), then multiply current raw scale by that ratio. Samples crossing an un adjusted contract roll are excluded.",
+      "Measure future absolute close return and full high-low range as distinct labels, calibrate coverage/pinball loss, and test fixed consumers versus no-volatility context. Do not draw full-width bands without naming the scale convention."
+    ],
+    "outputs": {
+      "volatility_value": "index points",
+      "band": "enum",
+      "available_at": "UTC ns",
+      "raw_return_scale": "NQ points",
+      "calibrated_scale": "NQ points?",
+      "future_abs_return": "points?"
+    },
+    "controls": [
+      "raw vs realized calibration",
+      "VIX vs VXN when available",
+      "unconditional consumer"
+    ],
+    "acceptance_cases": [
+      "VIX14 belongs[14,15), not[13,14).",
+      "VIX15.84 belongs[15,18);14.95 does not.",
+      "Today eventual VIX close cannot gate today 09:30."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "regime",
+    "title": "Prior-close VIX band and source regime comparisons",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_regime.json",
+    "audit_record_sha256": "62bd90e76a4ef19d0f21c2b0be753c2284eb9168bf5b12bdf7ee74cff843af08",
+    "source_references": [
+      "VIX4:3",
+      "VIX4:4",
+      "VIX4:5",
+      "VIX4:6",
+      "VIX4:7",
+      "VIX4:8",
+      "VIX4:9"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-R03",
+    "role": "management",
+    "research_decision": "Measure thesis survival from actual creation to the first qualified invalidation cause, preserving the delay between a breach and its confirmation.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J24",
+      "R-S07"
+    ],
+    "bindings": {
+      "thesis_source": "consumer parent decision supplies side and broad frozen balance/area; no automatic noon thesis",
+      "structural_death": "long: close below lower edge then outside hold; short above upper edge; neutral either",
+      "profile_death": "developing RTH VA overlap fraction below threshold in3 consecutive complete-minute snapshots, only after 10:00",
+      "news_death": "actual scheduled CPI, NFP, FOMC, ISM release time after thesis start when selected",
+      "objective_completion": "target first visit, separate from death",
+      "consumer": "J24/S07 diagnostics or explicitly timed thesis-exit variant"
+    },
+    "parameters": {
+      "cause_set": {
+        "default": "structural",
+        "grid": [
+          "structural",
+          "structural_and_profile",
+          "structural_profile_news"
+        ],
+        "units": "enum",
+        "meaning": "required inputs depend on selected causes"
+      },
+      "structural_hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "complete subsequent outside closes"
+      },
+      "overlap_cutoff": {
+        "default": 0.25,
+        "grid": [
+          0.1,
+          0.25,
+          0.5
+        ],
+        "units": "overlap fraction",
+        "meaning": "intersection length/min(developing VA width, thesis width), both positive"
+      }
+    },
+    "algorithm": [
+      "At actual parent creation freeze thesis ID, side, band, objectives and initial availability. A new thesis needs a new ID; do not redraw the old band.",
+      "Track structural breach start and full-hold confirmation independently. First exact revisit retires any external objective, but does not automatically kill structural thesis.",
+      "For enabled profile cause compute as-of E03 VA overlap and its three-snapshot confirmation. For enabled news cause use verified actual release time and calendar coverage; unknown required cause history makes complete survival unknown.",
+      "End at earliest qualified confirmation/release, retaining tied causes. Lifetime is end-start; alive-at-noon is right-censored at noon, not presumed alive until 16:00. Paired thesis-exit tests use identical parent entries."
+    ],
+    "outputs": {
+      "thesis_id": "string",
+      "start_at": "UTC ns",
+      "breach_started_at": "UTC ns?",
+      "death_known_at": "UTC ns?",
+      "causes": "enum[]",
+      "alive_minutes": "float?",
+      "objective_complete_at": "UTC ns?"
+    },
+    "controls": [
+      "structural cause only",
+      "profile/news additions",
+      "fixed parent exit for any trade consumer"
+    ],
+    "acceptance_cases": [
+      "Breach 10:00 with 30subsequent held closes is known 10:30, not 10:00.",
+      "Objective reached 10:15 and structural death 11:00 are different events.",
+      "No observations after 12:00 imply censoring, not survival to 16:00."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "regime",
+    "title": "Thesis lifetime and first invalidation cause",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_regime.json",
+    "audit_record_sha256": "bb8b0eef674d8641f1194f461a1e7b6a2084a119c2dc2decd204db2ecb10a466",
+    "source_references": [
+      "C1:3",
+      "C1:4",
+      "C1:6",
+      "C3:7"
+    ],
+    "grid_screen_config_count": 7,
+    "conditional_inputs": {
+      "cause_set=structural_profile_news": [
+        "D09"
+      ]
+    }
+  },
+  {
+    "id": "R-R04",
+    "role": "context",
+    "research_decision": "Rebuild native NQ/ES/YM comparison objects and first-take/first-fill state; use each market’s own levels and units.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03",
+      "E08"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-G09",
+      "R-J01"
+    ],
+    "bindings": {
+      "markets": "NQ, ES, YM baseline; optional RTY replaces YM",
+      "clock": "09:30–12:00",
+      "primary_event": "NQ first fresh prior RTH H/L take with at least one covered sister untaken at same event time",
+      "sister_staleness": "last trade<=5 seconds old and complete intervening feed coverage",
+      "directional_outcome": "NQ high first mismatch -> later short response; low first -> long response, a research hypothesis",
+      "consumer": "G09/J01 optional filter"
+    },
+    "parameters": {
+      "third_market": {
+        "default": "YM",
+        "grid": [
+          "YM",
+          "RTY"
+        ],
+        "units": "root",
+        "meaning": "actual own data, no ratio mapping"
+      },
+      "object_type": {
+        "default": "prior_extreme",
+        "grid": [
+          "prior_extreme",
+          "prior_VA_reaction",
+          "TPO_first_fill"
+        ],
+        "units": "enum",
+        "meaning": "three separate event definitions in algorithm"
+      },
+      "response_fraction": {
+        "default": 0.1,
+        "grid": [
+          0.05,
+          0.1,
+          0.25
+        ],
+        "units": "each own J69 width",
+        "meaning": "post-event15 minute response, no cross-market price subtraction"
+      },
+      "sister_agreement_seconds": {
+        "default": 60,
+        "grid": [
+          0,
+          60,
+          300
+        ],
+        "units": "seconds",
+        "meaning": "diagnostic lag window after first event; not available at first take"
+      }
+    },
+    "algorithm": [
+      "Build corresponding prior RTH high/low, VP70 and TPO ledgers per market with real calendar and first-visit history. Reject missing maps/coverage; ES BBO is not needed for price-based sister events.",
+      "For prior_extreme, observe exact first takes and compare persistent taken/not_taken states asof NQ event. Co-timed events without cross-market ordering are co-first/ambiguous, not fabricated leaders. Later sister agreement is a new timestamped state.",
+      "For prior_VA_reaction, compare same-side E02 reactions at each own prior VA edge using own4 tick threshold. For TPO_first_fill, match runs by(origin trading date, singleton period letter, ordinal from low); require equal run counts for that letter across selected markets, then compare each own first contact/full repair times. No price-level mapping is used.",
+      "After eligible event measure each sister and NQ response in its own width/ticks over15 minutes; a sister-first full repair can invalidate the paired target at that time. Test causal first-event features in consumers, never eventual whole AM agreement."
+    ],
+    "outputs": {
+      "native_object_ids": "map<string>",
+      "first_event_market": "enum",
+      "taken_states": "map<enum>",
+      "lead_lag_seconds": "map<float?>",
+      "NQ_response": "bool?",
+      "coverage": "map<state>"
+    },
+    "controls": [
+      "NQ event without sister filter",
+      "native prior H/L vs VA vs TPO event types",
+      "YM vs RTY when qualified"
+    ],
+    "acceptance_cases": [
+      "NQ30000 is compared to its own NQ high, never ES6000.",
+      "A sister high taken overnight stays taken after price returns below it.",
+      "A TPO run only partially filled has not reached full repair.",
+      "Missing sister data means unknown, not divergence."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "regime",
+    "title": "Native triad level-taking, SMT and first-fill reaction",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_regime.json",
+    "audit_record_sha256": "6273b9242f06cc194e9fe5cd74dfaa066c366c31867e9af15458f7421893d325",
+    "source_references": [
+      "C1:5",
+      "C1:7"
+    ],
+    "grid_screen_config_count": 8
+  }
+]

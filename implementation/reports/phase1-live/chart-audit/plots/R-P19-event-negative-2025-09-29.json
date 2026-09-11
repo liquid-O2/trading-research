@@ -1,0 +1,97 @@
+{
+  "case": {
+    "id": "R-P19",
+    "date": "2025-09-29",
+    "case": "event-negative",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 25,
+    "negative_count": 622,
+    "audit_sequence": {
+      "date": "2025-09-29",
+      "kind": "all-RTH-pairs-no-gap"
+    }
+  },
+  "production_session": {
+    "date": "2025-09-29",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5140,
+    "expected_1s": 10800,
+    "missing_1s": 5660,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 24909.5,
+    "L": 24853.75,
+    "open": 24872.0,
+    "close": 24900.0,
+    "EQ": 24881.625,
+    "Q25": 24867.6875,
+    "Q75": 24895.5625,
+    "W69": 55.75,
+    "volume": 22690.0,
+    "close_0859": 24900.0,
+    "open_0930": 24850.75,
+    "w_pct_0859close": 0.22389558232931728,
+    "w_pct_0930open": 0.2243393056547589,
+    "WpriorRTH": 217.0,
+    "w_rel_prior_rth": 0.2569124423963134,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 24737.0,
+    "prior_rth_low": 24520.0,
+    "asia_high": 24818.0,
+    "asia_low": 24765.0,
+    "london_high": 24855.5,
+    "london_low": 24813.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1759153440000,
+    "first_low_break_ms": 1759160100000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1759150800000000000,
+    "outcome_start_ns": 1759152600000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1759153620000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [],
+  "helpers": {
+    "body_gap": {
+      "gap": false,
+      "filled": false,
+      "conf": false
+    },
+    "audit_sequence": {
+      "date": "2025-09-29",
+      "kind": "all-RTH-pairs-no-gap"
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P19-event-negative-2025-09-29.png",
+  "notes": [
+    "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+    "Read-only scan of every adjacent complete RTH pair finds zero gaps of 4 ticks or more on this date."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 793,
+    "code": "def p19(r):\n        return bool(r.get(\"p19_body_gap4\"))"
+  },
+  "event": "adjacent body gap >= 4 ticks",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

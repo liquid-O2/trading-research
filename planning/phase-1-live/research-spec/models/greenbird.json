@@ -1,0 +1,1232 @@
+[
+  {
+    "id": "R-G01",
+    "role": "signal",
+    "research_decision": "Use the first-visit NYAM sweep episode, a completed fail-back, and a separately tested full-excursion or local-control stop.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E07",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "GB_NYAM",
+      "entry_window": "10:00–11:30",
+      "target": "opposite GB_NYAM edge, fresh at confirmation and ahead of expected entry",
+      "stop": "selected stop_mode; fixed outward buffer2 ticks",
+      "exit_horizon": "12:00",
+      "sides": "upper short and lower long"
+    },
+    "parameters": {
+      "sweep_ticks": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "strict excursion after exact first visit"
+      },
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "complete clock-aligned fail-back candle"
+      },
+      "fail_deadline_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "from first visit"
+      },
+      "stop_mode": {
+        "default": "full_excursion",
+        "grid": [
+          "full_excursion",
+          "local_control"
+        ],
+        "units": "enum",
+        "meaning": "full observed sweep extreme+2 ticks; local E07 CONTROL_STOP"
+      }
+    },
+    "algorithm": [
+      "Freeze the complete 09:00–10:00 range and create independent H/L references at 10:00.",
+      "Run E02 SWEEP_FAIL on each first visit, allowing the sweep-containing bar to confirm only at its later completed close. Equality consumes the reference even before strict sweep.",
+      "At confirmation reject if the opposite edge was already visited. Freeze target and chosen structural stop; local control may lie inside the full wick and is explicitly a different research model.",
+      "Enter through E11; export failure given first sweep and target after filled entry separately. Subsequent retests cannot rearm the same external edge."
+    ],
+    "outputs": {
+      "range_id": "string",
+      "visited_side": "enum",
+      "sweep_depth": "ticks",
+      "failure_at": "UTC ns?",
+      "stop_basis": "enum",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "one-minute vs five-minute fail-back",
+      "full excursion vs local control",
+      "sweep without fail-back as descriptive control"
+    ],
+    "acceptance_cases": [
+      "H120, L100, first high print120 then121 and complete 5m close119.75 yields short confirmation if deadline met; target100 must still be fresh.",
+      "Opposite low touched before confirmation makes fresh-opposite-target baseline ineligible.",
+      "A target drawing that extends beyond the chart is not a filled limit."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "NYAM sweep and failed breakout",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "7a7cc403b7d032fd1c59908677d7ee1267eaaf2f81a5029edfbe10b167ec4f7a",
+    "source_references": [
+      "GB:28",
+      "GB:209",
+      "GB:395",
+      "GBRAW:22",
+      "GBRAW:25",
+      "GBRAW:39",
+      "GBRAW:58"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-G02",
+    "role": "signal",
+    "research_decision": "Use the completed Asia range and optional same-episode midnight-open confirmation; midnight is not cash open.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E07",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "ASIA",
+      "entry_window": "00:00–05:30",
+      "TDO": "first print in 00:00 minute with actual availability",
+      "target": "opposite ASIA edge, fresh and ahead",
+      "stop": "full sweep excursion+2 ticks",
+      "exit_horizon": "06:00"
+    },
+    "parameters": {
+      "sweep_ticks": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "E02 first-visit sweep"
+      },
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fail-back candle"
+      },
+      "TDO_gate": {
+        "default": false,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "if true require a completed close after sweep below TDO for short/above for long by episode expiry; entry at later of failure and TDO condition"
+      },
+      "fail_deadline_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "from first visit"
+      }
+    },
+    "algorithm": [
+      "Freeze 20:00–00:00 Asia box, independently create midnight open when its first print is known.",
+      "Run E02 SWEEP_FAIL during 00:00–06:00; confirmation must be before 05:30 for entry.",
+      "If TDO_gate is enabled, search a completed selected-timeframe close on the required side after the sweep. This is a post-sweep close state, not necessarily a new crossing; delay entry until both conditions exist and recheck target freshness then.",
+      "Use E11 with opposite-edge target and full excursion stop. Record optional gate attrition and delayed entries separately."
+    ],
+    "outputs": {
+      "asia_failure_at": "UTC ns?",
+      "TDO_close_at": "UTC ns?",
+      "TDO_price": "points",
+      "opposite_edge_fresh": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "failure only",
+      "failure plus TDO close"
+    ],
+    "acceptance_cases": [
+      "TDO100 and high-side fail close99 passes optional short gate; a missing midnight print is unavailable only for the gated variant.",
+      "An 01:11 snapshot with target not yet reached stays un reached even if 01:18 reaches.",
+      "Asia low consumed 02:21 is no longer a fresh target at 03:00."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Asia failure and TDO confirmation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "e653b42e23b216702be916727249bc029ac106b3b2645a0dca5d1f31cd9942a9",
+    "source_references": [
+      "GB:24",
+      "GB:35",
+      "GB:427",
+      "GBRAW:26",
+      "GBRAW:27",
+      "GBRAW:45",
+      "GBRAW:59"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-G03",
+    "role": "signal",
+    "research_decision": "Evaluate every completed hour independently over exactly its next hour, then aggregate using actual eligible-hour counts.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E07",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "formation_hours": "09:00–10:00 through 14:00–15:00 baseline; next-hour actions 10:00–16:00",
+      "entry_cutoff": "5 minutes before each outcome end",
+      "target": "opposite same-hour edge, still fresh",
+      "stop": "full sweep excursion+2 ticks",
+      "exit_horizon": "hour formation end+60 minutes",
+      "denominator": "eligible completed boxes; both sides belong to their own episodes"
+    },
+    "parameters": {
+      "sweep_ticks": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "E02 strict depth"
+      },
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fail-back candle"
+      },
+      "hour_scope": {
+        "default": "RTH_next_hour",
+        "grid": [
+          "RTH_next_hour",
+          "include_08_09"
+        ],
+        "units": "enum",
+        "meaning": "alternative adds08–09 box trading09–10; no15–16 box trading after RTH"
+      }
+    },
+    "algorithm": [
+      "Enumerate configured hours from the real calendar; require formation and next-hour coverage, no literal number of boxes.",
+      "Create new H/L IDs at each hour end and run E02 first-visit failures with a30-minute deadline bounded by that outcome hour.",
+      "Reject targets already visited by confirmation and submit E11 before the five-minute entry cutoff. Flatten by that hour end even if later price would reach target.",
+      "Report k failures / n eligible boxes, episodes, trades and any-success-per-day separately, clustering uncertainty by session."
+    ],
+    "outputs": {
+      "hour_box_id": "string",
+      "hour_eligible": "bool?",
+      "hour_failure": "bool?",
+      "first_confirm_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "same-clock unconditional hourly path",
+      "08–09 inclusion as separate clock scope"
+    ],
+    "acceptance_cases": [
+      "A09–10 box has outcome10–11, never10–12.",
+      "Missing two boxes gives a smaller actual n, not a hard coded7.",
+      "Two failures on two new hour IDs are distinct; two retouches of one consumed high are not."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Completed previous-hour failure",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "1bfc98d8636d9c8ed7f0e2dc545326005cc84ea2277b4bdb311050ec294ac15b",
+    "source_references": [
+      "GB:32",
+      "GB:439",
+      "GB:685",
+      "GBRAW:20",
+      "GBRAW:22",
+      "GBRAW:37",
+      "GBRAW:38",
+      "GBRAW:56"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-G04",
+    "role": "signal",
+    "research_decision": "Define a symmetric opening-price manipulation/reclaim with explicit hold and risk; it is a research extension of the qualitative source.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E07",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "open": "09:30 first-minute opening print",
+      "entry_window": "09:30–10:00",
+      "side": "undercut/reclaim long; overshoot/fail-back short",
+      "target": "1.5R0 from expected entry",
+      "stop": "full pre confirmation manipulation extreme+2 ticks",
+      "exit_horizon": "11:00",
+      "open_lifecycle": "reusable open object, one first episode per side per day"
+    },
+    "parameters": {
+      "manipulation_ticks": {
+        "default": 2,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "excursion beyond open"
+      },
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "first complete close through open by1 tick"
+      },
+      "hold_minutes": {
+        "default": 3,
+        "grid": [
+          0,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "subsequent complete closes on reclaimed side;0 means no extra hold"
+      }
+    },
+    "algorithm": [
+      "Create 09:30 open with real availability; include opening-bar manipulation only when execution ordering proves it follows the open.",
+      "For long require print<=open-manipulation_ticks, then a complete close>=open+1 tick; short mirrors. The first completed directional reclaim wins; an unordered simultaneous case is ambiguous.",
+      "Complete the selected subsequent hold, failing on a close back through open. Freeze manipulation extreme through confirmation, stop and target.",
+      "Enter E11 only before 10:00. A separately measured GP retrace cannot use the future final impulse; baseline uses fixed 1.5R target."
+    ],
+    "outputs": {
+      "manipulation_at": "UTC ns?",
+      "reclaim_at": "UTC ns?",
+      "hold_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "reclaim without hold",
+      "2/4/8 tick manipulation depths"
+    ],
+    "acceptance_cases": [
+      "Open100, print99.5,5m close100.25 can confirm long only at that bar end.",
+      "A reclaim at 09:59 followed by3-minute hold misses 10:00 entry deadline.",
+      "The final09–10 box cannot be used by a 09:36 opening entry."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "09:30 manipulation and reclaim",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "8a888d86eccb1da164de281816a0c1eb2d03eca66c33232b89124171c013d9bf",
+    "source_references": [
+      "GB:30",
+      "GB:88",
+      "GB:90",
+      "GBRAW:25",
+      "GBRAW:45",
+      "GBRAW:58",
+      "GBRAW:40"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-G05",
+    "role": "component",
+    "research_decision": "Separate true midnight-open crossing from simply being on one side, and attach it to the same already-recorded fresh sweep episode.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02"
+    ],
+    "dependencies": [
+      "R-G01",
+      "R-G02",
+      "R-G03"
+    ],
+    "consumers": [
+      "R-G01",
+      "R-G02",
+      "R-G03"
+    ],
+    "bindings": {
+      "parents": "G01/G02/G03 confirmed sweep episodes",
+      "TDO": "00:00 opening print",
+      "cross_direction": "after high sweep cross below TDO; after low sweep cross above TDO",
+      "consumer": "delayed parent entry wrapper; never re grade an already filled entry using future data"
+    },
+    "parameters": {
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "complete clock-aligned crossing bars"
+      },
+      "deadline_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "from parent first sweep"
+      },
+      "confirmation_type": {
+        "default": "cross",
+        "grid": [
+          "cross",
+          "close_state"
+        ],
+        "units": "enum",
+        "meaning": "cross requires previous completed close on opposite/equal side and new close strictly beyond; state only requires new close beyond"
+      }
+    },
+    "algorithm": [
+      "Load a specific parent episode with reference ID, side and first-visit history, plus TDO available that date.",
+      "Search only bars closing after its sweep. For strict short cross require previous close>=TDO and current close<TDO; bullish mirror.",
+      "Emit known_at at the actual crossing close, bounded by deadline and parent expiry. If consumed reference later retouches it is still the old episode, not a new qualifying sweep.",
+      "A gated-entry consumer waits until max(parent_confirmation,TDO_confirmation), rechecks target and order eligibility then, and reports its delay against a matched control."
+    ],
+    "outputs": {
+      "parent_episode_id": "string",
+      "TDO_cross_at": "UTC ns?",
+      "TDO_state": "enum",
+      "gate_known_at": "UTC ns?"
+    },
+    "controls": [
+      "close-state vs actual cross",
+      "parent failure without TDO gate"
+    ],
+    "acceptance_cases": [
+      "Entire window below TDO is a short state but not a new downward cross.",
+      "An unrelated later sweep cannot upgrade an earlier entry.",
+      "Missing TDO cannot become false cross or a guessed cash open."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "TDO close-through after a named sweep",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "46511991701aabda4ce1b3d3c20279d44f0903c0d9b9cb0dcf249c940e04fde6",
+    "source_references": [
+      "GB:24",
+      "GB:142",
+      "GB:612",
+      "GBRAW:20",
+      "GBRAW:21",
+      "GBRAW:25",
+      "GBRAW:27"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-G06",
+    "role": "management",
+    "research_decision": "Build an exact scheduled-close-to-Sunday-open NWOG and test untouched versus partially filled destinations on fixed parent entries.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [
+      "R-G01",
+      "R-G02",
+      "R-G03"
+    ],
+    "consumers": [],
+    "bindings": {
+      "parents": "G01, G02, G03 entries separately",
+      "gap": "E09 NWOG same contract",
+      "target": "near/mid/far selected edge ahead",
+      "stop": "unchanged parent stop",
+      "exit_horizons": [
+        "parent horizon",
+        "RTH close"
+      ],
+      "availability": "born at actual Sunday opening print; opening print does not count return"
+    },
+    "parameters": {
+      "gap_state": {
+        "default": "untouched",
+        "grid": [
+          "untouched",
+          "not_fully_filled"
+        ],
+        "units": "enum",
+        "meaning": "strict E09 return vs far-edge completion"
+      },
+      "target_edge": {
+        "default": "near",
+        "grid": [
+          "near",
+          "mid",
+          "far"
+        ],
+        "units": "enum",
+        "meaning": "near relative to approach from current price; must lie ahead"
+      },
+      "friday_endpoint": {
+        "default": "globex_close",
+        "grid": [
+          "globex_close",
+          "rth_close"
+        ],
+        "units": "enum",
+        "meaning": "calendar last print before 17:00 or 16:00 typical; never call settlement"
+      }
+    },
+    "algorithm": [
+      "Build gap endpoints using selected actual schedule and same contract; a zero gap is no_gap.",
+      "Track post-formation return, near/mid/far fill over all ETH/RTH events with E09 opening-endpoint exception.",
+      "At each parent decision require selected gap-state and an ahead destination. Freeze target version and compare only identical entries with qualified gap, reporting subset coverage.",
+      "Replay target policy under E11; a target visited before entry is handled as observed execution timing, not back filled success."
+    ],
+    "outputs": {
+      "gap_id": "string",
+      "formed_at": "UTC ns",
+      "first_return_at": "UTC ns?",
+      "filled_at": "UTC ns?",
+      "paired_net_R0": "float?"
+    },
+    "controls": [
+      "parent target",
+      "untouched vs partial-gap destination",
+      "Globex vs RTH Friday endpoint"
+    ],
+    "acceptance_cases": [
+      "Friday100 Sunday110 creates[100,110]; forming110 print does not make it returned.",
+      "Later109 penetrates gap and makes untouched false; full fill remains false until100 or below.",
+      "A contract roll between Friday/Sunday makes baseline gap unavailable."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Unfilled NWOG as a destination",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "806d581597ec5afbbb6fc8facbf7fa0f4701a6787d7c54b6d6069ba606ccbb98",
+    "source_references": [
+      "GB:59",
+      "GB:68",
+      "GB:615",
+      "GB:673",
+      "GBRAW:16",
+      "GBRAW:19",
+      "GBRAW:36",
+      "GBRAW:37"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-G07",
+    "role": "signal",
+    "research_decision": "Construct golden pockets from causally confirmed directional swings, with explicit timeframe and continuation confirmation.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E08",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "entry_window": "09:30–15:00",
+      "leg": "most recent E08 confirmed alternating swing",
+      "pocket": "50–61.8% retracement of that leg",
+      "direction": "sign(B-A)",
+      "stop": "adverse leg start A+2 ticks outward",
+      "target": "unvisited leg endpoint B baseline; fixed 1.5R alternative",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "swing_minutes": {
+        "default": 5,
+        "grid": [
+          5,
+          15,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "fixed complete bars"
+      },
+      "pivot_sides": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "bars",
+        "meaning": "strict l=r"
+      },
+      "confirmation": {
+        "default": "reaction",
+        "grid": [
+          "reaction",
+          "MSS"
+        ],
+        "units": "enum",
+        "meaning": "E02 reaction4 ticks or E08 causal1mMSS after pocket touch"
+      },
+      "target_mode": {
+        "default": "leg_endpoint",
+        "grid": [
+          "leg_endpoint",
+          "fixed_1.5R"
+        ],
+        "units": "enum",
+        "meaning": "no implicit fallback from missing target"
+      }
+    },
+    "algorithm": [
+      "Build chronological confirmed pivots and select latest complete directional leg before touch. The currently forming high/low is forbidden.",
+      "Compute pocket from ordered A, B and freeze; reject a pocket already touched after B occurred but before B confirmation for first-touch baseline.",
+      "At first eligible subsequent overlap require selected reaction/MSS in leg direction. Any external high/low confluence must have been fresh before its own first visit.",
+      "Freeze stop and target. Endpoint target must still be unvisited and ahead; otherwise no_target for endpoint variant. Enter E11 and retain no-fill/expired cases."
+    ],
+    "outputs": {
+      "leg_ids": "string[2]",
+      "leg_known_at": "UTC ns",
+      "pocket": "points[2]",
+      "confirm_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "50% line only with same leg",
+      "reaction vs MSS confirmation"
+    ],
+    "acceptance_cases": [
+      "Up leg100->120 gives pocket[107.64,110]; down120->100 gives[110,112.36].",
+      "Cropped source swing high does not authorize deriving it from target price.",
+      "A pullback before pivot confirmation isnot a causal post confirmation entry."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Golden-pocket continuation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "974488f0f849960a24be13fe7cf8e40a5ca60a6b09fb8884268d2495ab5a19c5",
+    "source_references": [
+      "GB:73",
+      "GB:79",
+      "GB:258",
+      "GB:537",
+      "GBRAW:23",
+      "GBRAW:24",
+      "GBRAW:25",
+      "GBRAW:35",
+      "GBRAW:50",
+      "GBRAW:51"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-G08",
+    "role": "context",
+    "research_decision": "Create a timed directional bias from a fresh overnight prior-extreme failure, with explicit hold and invalidation.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-G01",
+      "R-G07"
+    ],
+    "bindings": {
+      "reference": "previous completed RTH H/L baseline",
+      "episode_window": "prior RTH close–09:30",
+      "bias": "high failure -> bearish; low failure -> bullish",
+      "invalidation": "complete 5m close beyond observed sweep extreme by2 ticks, opposite confirmed bias, or 12:00 expiry",
+      "consumer": "G01/G07 directional filter; missing bias is no filter qualification, not opposite bias"
+    },
+    "parameters": {
+      "prior_scope": {
+        "default": "prior_rth",
+        "grid": [
+          "prior_rth",
+          "prior_eth"
+        ],
+        "units": "enum",
+        "meaning": "actual previous calendar session"
+      },
+      "hold_minutes": {
+        "default": 5,
+        "grid": [
+          0,
+          5,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "subsequent completed 1m closes on reclaimed side"
+      },
+      "sweep_ticks": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "E02 first visit strict sweep"
+      }
+    },
+    "algorithm": [
+      "Build prior reference and track first visits immediately from its close, including 16:00–18:00 trading where scheduled.",
+      "Run E02 SWEEP_FAIL with 5m close/30m deadline before 09:30; retain each direction episode.",
+      "After hold emit bias at actual completion; subsequent adverse close or opposite confirmed bias terminates it. A terminated bias never rearms from same consumed reference.",
+      "At each consumer decision join latest active bias, preserving absence/unavailable. Evaluate forward outcomes and exact gating costs with matched control."
+    ],
+    "outputs": {
+      "bias": "enum(long,short,none,unavailable)",
+      "confirmed_at": "UTC ns?",
+      "valid_until": "UTC ns?",
+      "cause": "enum"
+    },
+    "controls": [
+      "no bias filter",
+      "RTH vs full session prior reference"
+    ],
+    "acceptance_cases": [
+      "Final 09:29 close cannot replace the ordered sweep/reclaim history.",
+      "A16:45 first visit on prior day consumes that side before overnight window entry.",
+      "A later invalidation cannot remove the earlier recorded bias interval."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Overnight prior-extreme reclaim sets bias",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "52fb49c4d3397cc3c01fa201c21ddc14d80e47b967a4758c76fb2ef8b35692f4",
+    "source_references": [
+      "GB:313",
+      "GB:443",
+      "GB:543",
+      "GBRAW:26",
+      "GBRAW:30",
+      "GBRAW:31",
+      "GBRAW:32",
+      "GBRAW:40",
+      "GBRAW:52",
+      "GBRAW:53",
+      "GBRAW:54"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-G09",
+    "role": "signal",
+    "research_decision": "Define a fresh multi-reference sweep, fail-back and MSS followed by a live NWOG destination; test mirrored direction explicitly.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E08",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "reference_set": "PRIOR_RTH, ASIA,GB_LONDON H/L",
+      "entry_window": "09:30–11:30",
+      "stack": "at least 2 distinct price clusters first visited within 15 minutes",
+      "failure": "5m close back beyond all swept edges toward range",
+      "MSS": "E08 1m opposite pivot close break after fail back",
+      "target": "untouched NWOG near edge ahead",
+      "stop": "stack episode extreme+2 ticks",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "direction_scope": {
+        "default": "both",
+        "grid": [
+          "both",
+          "short_only",
+          "long_only"
+        ],
+        "units": "enum",
+        "meaning": "mirrors are named research variants"
+      },
+      "stack_width_fraction": {
+        "default": 0.05,
+        "grid": [
+          0.025,
+          0.05,
+          0.1
+        ],
+        "units": "W69",
+        "meaning": "max-min original reference prices <= fraction*W69"
+      },
+      "minimum_clusters": {
+        "default": 2,
+        "grid": [
+          2,
+          3
+        ],
+        "units": "clusters",
+        "meaning": "within 2 ticks references count one price cluster"
+      },
+      "pivot_sides": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "1m bars",
+        "meaning": "MSS pivot confirmation"
+      }
+    },
+    "algorithm": [
+      "At 09:30 form candidate same-side stacks from available references; each must be fresh before its sweep, actual GB_LONDON clock 02:00–05:00.",
+      "Require strict 1 tick sweeps of minimum distinct clusters within 15 minutes, then a complete 5m close below all high stack levels for short or above all low stack levels for long.",
+      "Require later causal MSS and still-live untouched NWOG ahead; gap return before confirmation makes baseline ineligible. Earliest MSS after fail back qualifies.",
+      "Execute E11 with stack extreme stop and gap near edge target. Empty qualified stacks remain n=0; no all-day fallback."
+    ],
+    "outputs": {
+      "stack_ids": "string[]",
+      "cluster_count": "int",
+      "failback_at": "UTC ns?",
+      "MSS_at": "UTC ns?",
+      "gap_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "single-reference failure with same MSS/NWOG",
+      "stack without MSS as diagnostic"
+    ],
+    "acceptance_cases": [
+      "Two IDs at same price count one cluster.",
+      "A PDH consumed Sunday cannot be re swept fresh Monday.",
+      "Gap tagged 09:30 before MSS09:35 isnot untouched target at entry."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Stacked high sweep, bearish shift, NWOG target",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "49958a25d32fd7e62df2a728784f2f2e94ae6d0134e617f3d45cd0e4303db916",
+    "source_references": [
+      "GB:156",
+      "GB:615",
+      "GBRAW:13",
+      "GBRAW:16",
+      "GBRAW:19",
+      "GBRAW:36",
+      "GBRAW:37",
+      "GBRAW:45",
+      "GBRAW:56"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-G10",
+    "role": "signal",
+    "research_decision": "Define pressure causally and trade repeated same-side failures only across independently completed boxes.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E05",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "boxes": "G03 baseline hour set",
+      "pressure": "last 15 completed 1m closes >=share below their own as-of RTH VWAP -> short; >=share above -> long; else neutral",
+      "entry": "G03 first-visit failure on pressure side; each new box has new ID",
+      "target": "fresh opposite edge of that box",
+      "stop": "full sweep extreme+2 ticks",
+      "exit": "own next-hour end",
+      "session_cap": "3filled entries, one per box"
+    },
+    "parameters": {
+      "pressure_share": {
+        "default": 0.8,
+        "grid": [
+          0.7,
+          0.8,
+          0.9
+        ],
+        "units": "fraction",
+        "meaning": "strict side of contemporaneous VWAP; equality neither"
+      },
+      "required_event_number": {
+        "default": 1,
+        "grid": [
+          1,
+          2
+        ],
+        "units": "same-side episodes",
+        "meaning": "1 trades first and subsequent;2 waits for second independently formed reference failure"
+      },
+      "close_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fail back timeframe"
+      }
+    },
+    "algorithm": [
+      "Build as-of RTH VWAP and completed hour refs; require15known1m closes for pressure.",
+      "RunG03-style SWEEP_FAIL; at confirmation evaluate pressure using each close contemporaneous VWAP, not current VWAP applied backward.",
+      "Maintain count of qualifying same-side failures on different box IDs. Opposite pressure resets the count; neutral pauses without increment. Trade only at/after required number.",
+      "Submit E11 using selected box target/stop; a cover is an exit, not an opposite-side setup. Report references, attempts, trades and repeated same-side sessions separately."
+    ],
+    "outputs": {
+      "pressure": "enum",
+      "pressure_share": "float",
+      "same_side_event_number": "int",
+      "box_id": "string",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "hour failure without pressure",
+      "first vs second-event entry"
+    ],
+    "acceptance_cases": [
+      "One low failure and one high failure are not two repeated shorts.",
+      "A09:36 scalp cannot use completed 09–10box.",
+      "Two retouches of same consumed high cannot increment reference count."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "Repeated fades on the pressure side",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "e885e59d1d13397f7d613afca89e2c6df68251a829930249ed0f0f38c849d991",
+    "source_references": [
+      "GB:669",
+      "GBRAW:36",
+      "GBRAW:37",
+      "GBRAW:38",
+      "GBRAW:57"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-G11",
+    "role": "component",
+    "research_decision": "Replace incomplete author A+ labels with an explicitly named four-item research quality score on a particular episode.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E06",
+      "E09"
+    ],
+    "dependencies": [
+      "R-G01",
+      "R-G02",
+      "R-G03"
+    ],
+    "consumers": [
+      "R-G01",
+      "R-G02",
+      "R-G03"
+    ],
+    "bindings": {
+      "parents": "G01/G02/G03 pending confirmed failure episodes",
+      "score_items": [
+        "same-reference fresh strict sweep+fail back",
+        "fresh opposite target ahead",
+        "post-sweep TDO close on trade side",
+        "local ABSORB of opposing aggression available before grade"
+      ],
+      "grade": "Q0..Q4 only; no author A+ equivalence",
+      "consumer": "parent entry wrapper atgradeknown_at; recheck target freshness then"
+    },
+    "parameters": {
+      "minimum_score": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "items",
+        "meaning": "count known true; any required item unavailable ->grade unavailable, not zero"
+      },
+      "flow_seconds": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "seconds",
+        "meaning": "E06 observation from first touch; matched history"
+      },
+      "TDO_required": {
+        "default": false,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "if true explicitly requires TDO item regardless sum"
+      }
+    },
+    "algorithm": [
+      "Join all four items to the same episode/reference/side, with item availability and evidence IDs.",
+      "The flow window starts at first touch. Fix grade_at=max(parent failure confirmation, flow-window end). Do not wait for a later favorable TDO close.",
+      "At grade_at, evaluate all four items from available evidence. The TDO item is true if a qualifying completed post-sweep close exists by grade_at; otherwise false when TDO and bars are complete, or unavailable when inputs are missing. Recompute target freshness at grade_at. Unknown required input makes the grade unavailable.",
+      "For trading consumer compare parent price-only entry at the same grade clock againstminimum_score gate, rechecking target/order eligibility. Existing already-filled parent trades are diagnostic only, never retroactively upgraded."
+    ],
+    "outputs": {
+      "episode_id": "string",
+      "quality_score": "int0..4?",
+      "items": "bool?[4]",
+      "grade_known_at": "UTC ns",
+      "consumer_gate": "bool?"
+    },
+    "controls": [
+      "un graded delay-matched parent",
+      "each one-item ablation"
+    ],
+    "acceptance_cases": [
+      "A later unrelated failure cannot raise quality of an earlier entry.",
+      "Missing flow is unavailable, not score0.",
+      "A high-side failure cannot satisfy the low-side entry sweep item."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "greenbird",
+    "title": "A+ grade belongs to the traded setup",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_greenbird.json",
+    "audit_record_sha256": "527fabb366790fd9a2f9876d9db7f61fde34db4c0b511dd869e11511c3f51501",
+    "source_references": [
+      "GB:93",
+      "GB:147",
+      "GB:242",
+      "GBRAW:6",
+      "GBRAW:18",
+      "GBRAW:20",
+      "GBRAW:22",
+      "GBRAW:40",
+      "GBRAW:57"
+    ],
+    "grid_screen_config_count": 6
+  }
+]

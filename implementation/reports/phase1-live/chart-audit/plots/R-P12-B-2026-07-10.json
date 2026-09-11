@@ -1,0 +1,147 @@
+{
+  "case": {
+    "id": "R-P12",
+    "case": "B",
+    "date": "2026-07-10",
+    "code_result": false,
+    "selection": "code-negative",
+    "positive_count": 133,
+    "negative_count": 514
+  },
+  "production_session": {
+    "date": "2026-07-10",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5353,
+    "expected_1s": 10800,
+    "missing_1s": 5447,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29887.75,
+    "L": 29771.25,
+    "open": 29820.75,
+    "close": 29800.0,
+    "EQ": 29829.5,
+    "Q25": 29800.375,
+    "Q75": 29858.625,
+    "W69": 116.5,
+    "volume": 24095.0,
+    "close_0859": 29800.0,
+    "open_0930": 29834.75,
+    "w_pct_0859close": 0.39093959731543626,
+    "w_pct_0930open": 0.3904842507478695,
+    "WpriorRTH": 379.0,
+    "w_rel_prior_rth": 0.3073878627968338,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 29993.5,
+    "prior_rth_low": 29614.5,
+    "asia_high": 29963.5,
+    "asia_low": 29804.25,
+    "london_high": 29948.75,
+    "london_low": 29775.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1783690320000,
+    "first_low_break_ms": 1783693920000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1783688400000000000,
+    "outcome_start_ns": 1783690200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1783691340000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "first 09:30 candle reference",
+      "low": 29812.5,
+      "high": 29876.0,
+      "start": 9.516666666666667,
+      "end": 9.75,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "code previous 1m H",
+      "price": 29876.0,
+      "start": 9.516666666666667,
+      "end": 9.75,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code previous 1m L",
+      "price": 29812.5,
+      "start": 9.516666666666667,
+      "end": 9.75,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "box",
+      "label": "helper previous-body-mid to current-open",
+      "low": 29855.25,
+      "high": 29874.75,
+      "start": 9.533333333333333,
+      "end": 9.75,
+      "color": "#be4b33"
+    },
+    {
+      "kind": "line",
+      "label": "unscored helper midbox low",
+      "price": 29855.25,
+      "start": 9.533333333333333,
+      "end": 9.75,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "unscored helper midbox high",
+      "price": 29874.75,
+      "start": 9.533333333333333,
+      "end": 9.75,
+      "color": "#8453a4",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "p12_sweep_cisd": {
+      "sweep_close": false,
+      "sweep_body": false,
+      "sweep_inside": false,
+      "mid_box": [
+        29855.25,
+        29874.75
+      ]
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P12-B-2026-07-10.png",
+  "notes": [
+    "Code inspects only the first two one-minute RTH candles; no literal HTF CISD run."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 778,
+    "code": "def p12(r):\n        return bool(r.get(\"p12_cisd_var\"))"
+  },
+  "event": "sweep then close back through the prior bar high",
+  "detail_window": [
+    9.5,
+    9.75
+  ]
+}

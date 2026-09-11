@@ -1,0 +1,134 @@
+{
+  "case": {
+    "id": "R-F07",
+    "case": "A",
+    "date": "2024-11-18",
+    "code_result": "blocked \u00b7 diagnostic iceberg_touch=true",
+    "blocked_diag": "iceberg_touch=true",
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 439,
+    "negative_count": 7
+  },
+  "production_session": {
+    "date": "2024-11-18",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6829,
+    "expected_1s": 10800,
+    "missing_1s": 3971,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 20590.0,
+    "L": 20481.5,
+    "open": 20587.75,
+    "close": 20555.5,
+    "EQ": 20535.75,
+    "Q25": 20508.625,
+    "Q75": 20562.875,
+    "W69": 108.5,
+    "volume": 38247.0,
+    "close_0859": 20555.5,
+    "open_0930": 20557.0,
+    "w_pct_0859close": 0.5278392644304444,
+    "w_pct_0930open": 0.5278007491365472,
+    "WpriorRTH": 368.5,
+    "w_rel_prior_rth": 0.2944369063772049,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 20773.75,
+    "prior_rth_low": 20405.25,
+    "asia_high": 20657.0,
+    "asia_low": 20593.25,
+    "london_high": 20656.75,
+    "london_low": 20578.25,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1731942660000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1731938400000000000,
+    "outcome_start_ns": 1731940200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1731943680000,
+    "m05_side": "high",
+    "reversal_bin": "bin.1000-1030",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 20417.75,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 20588.75,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 20490.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 20557.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2024-11-15",
+    "tape_window": {
+      "date": "2024-11-18",
+      "from": 9.5,
+      "to": 12,
+      "trades": 128588,
+      "buy_volume": 96026.0,
+      "sell_volume": 99765.0,
+      "unknown_volume": 0.0
+    },
+    "prints_ge_30": 5,
+    "prints_ge_75": 1,
+    "prints_ge_100": 0
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-11-15_2024-11-21.parquet"
+  ],
+  "plot": "plots/R-F07-A-2024-11-18.png",
+  "notes": [
+    "Scorer is blocked. Available tape is diagnostic only; no faithful trigger generated."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": null,
+  "event": "n/a",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

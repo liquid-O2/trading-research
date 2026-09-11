@@ -1,0 +1,1100 @@
+[
+  {
+    "id": "R-G01",
+    "title": "NYAM sweep and failed breakout",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:28",
+      "GB:209",
+      "GB:395",
+      "GBRAW:22",
+      "GBRAW:25",
+      "GBRAW:39",
+      "GBRAW:58"
+    ],
+    "source": "Raw September 8 explicitly waits for the completed 09–10 range, then a low sweep, failure/reclaim and a long toward its high; August 28 shows the high-side short mirror. September 8 range H 29686.75 comes from the 09:30 wick, not the earlier candle body, while range L is about 29455 and PDL about 29469 is a separate reclaim. However, its drawn stop 29436.75 lies ABOVE the full sweep low near 29424. FORMULAS’ universal sweep-wick stop is therefore not established by that drawing; its separate “49.75 above PDL” description is an entry-to-stop distance misread. Original stop revisions remain unavailable. The August 31 pre-10 short is another model, not permission to use an unfinished 09–10 box.",
+    "finding": "The source-dated August 28 replay places the NQ 09–10 box at H 29703.25 / L 29562.75, consistent in position and path with the approximate MNQ source bounds near 29704 / 29562. The code nevertheless accepts any beyond-edge wick, groups five observed rows, timestamps confirmation at block start and retains no stop/target episode or freshness ledger. Extended high/low lines persist after their visits. Source snapshot targets, pending limits and realized fills are not interchangeable.",
+    "targets": [
+      "family_fail.py::_failback",
+      "family_fail.py::build_fail_table",
+      "recipe_score.py::_preds.g01",
+      "grid.py::failback_wick_c5"
+    ],
+    "fix": [
+      "Preserve the source contradiction explicitly: do not rewrite FORMULAS or implement an assumed universal stop beyond the full sweep wick. Store separately any original stop order, subsequent stop revision, position-tool drawing and actual sweep extreme. Mark missing initial risk as unknown.",
+      "Construct H=max(high), L=min(low) over the complete declared 09:00–10:00 interval and freeze at 10:00. Record instrument, contract, timezone, actual contributing bars and coverage. Compare NQ versus MNQ only with their feed/basis difference stated; do not force approximate screenshot labels onto exact NQ ticks.",
+      "Apply the user’s September 11 clarification to BOTH highs and lows independently: freeze each reference under its own ID; scan all prices from known_at; store first_revisit_at; end the active line at that first visit. An exact visit consumes freshness even if it is shallower than the named two-tick sweep threshold. The episode begun on that visit can still confirm afterward, but later revisits cannot be new fresh setups. A new completed hour/session creates a new reference; missing intervening coverage makes freshness unknown. Keep historical box geometry separate from active target lines.",
+      "Unify the two failure detectors into an event routine with explicit depth, clock-bar size and expiry. For the existing named research variant: high sweep >=H+2 ticks or low sweep <=L−2 ticks; confirmation is a complete five-minute close strictly inside (L,H), known at its actual end, within 30 minutes of the sweep. Keep the author’s unspecified numerical thresholds separate from those defaults.",
+      "Return one episode with reference ID, side, first visit, sweep time/extreme, first inside close and expiry/invalidation. Include the sweep-containing five-minute bar when its close follows the sweep; inspect execution order or mark ambiguity if needed. A later failed attempt cannot reset the original reference’s freshness.",
+      "Attach opposite-edge reach, PDL/PDH confluence and optional TDO close as separate ordered outcomes. Freeze the selected target before the trade and verify it was still unvisited then. Report day-level any-failure, failure given eligible first sweeps, and target reach given confirmation under precise separate labels. Never count parked limits or drawn potential R as fills."
+    ],
+    "acceptance": [
+      "July 10, 2026: H 29968.50 / L 29790.50; first low revisit/sweep is 10:32, inside close 29881.25 is known 10:40, and the previously unvisited high is first reached 11:25. The low line ends at 10:32 and high line at 11:25; the 11:00-area repeat low visit is not fresh.",
+      "October 8, 2025: first high visit/sweep at 10:00 receives no five-minute inside close by 10:30. A later return must not rearm that high or pass the original 30-minute variant.",
+      "August 28, 2026: replay H 29703.25 / L 29562.75, high sweep at 10:00 and inside close known 10:05 reproduce the source order. The source 10:13 snapshot has reached the first opposite-edge objective but not the lower remaining limits or final drawing target.",
+      "A one-tick visit retires freshness but fails the two-tick sweep variant. A confirming bar starting 29 minutes after the sweep and ending 34 minutes after fails expiry. Removing one minute must make that clock bar incomplete rather than shift its alignment.",
+      "September 8 drawing entry 29469.25, stop 29436.75 and target 29686.75 must remain separate from the lower full sweep wick, the range-low reclaim, the PDL reclaim and four uneven pending exits."
+    ],
+    "leakage": "confirmation timing / coverage / consumed-reference reuse",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "fixture": "helper checks pass; producer uses a different depth / grouping engine",
+    "definition_decision": "The initial stop placement and modification history cannot be recovered from a final position-tool drawing. Do not promote it to a universal mechanical stop rule.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation bars use America/New_York. Raw September 8 / August 28 desktop charts explicitly display UTC-4; their 09–10 boxes therefore support the date-specific NY mapping. Raw September 3 desktop and April 23 gallery likewise show UTC-4 and Asia 20–00. This does not establish an IANA setting for every source chart or a winter clock. Mobile phone/post times and compiler ET annotations are not independent axis evidence. Preserve source display times and verified offsets separately from the configured strategy clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The completed-box failure sequence is directly supported, but the full FORMULAS recipe overstates the initial stop rule and misreads a ticket distance. Stop faithful certification at those contradictions rather than inventing a stop buffer."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_fail._failback uses strict any-tick overshoot instead of the documented named two-tick variant, row-count groups instead of complete clock bars, and block-start timestamps. It omits per-side reference lifetime and linked invalidation/target records."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "468/647 is a day-level flag from that reduced detector. It is not a sweep-conditioned failure rate, opposite-edge reach rate, or trade result, and it cannot certify the full source sequence."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The frozen box geometry is plausible on August 28, but the plotted active extensions outlive their first visits and the implementation lacks the source’s distinct PDL/TDO confirmations, stop state and ordered target events."
+        }
+      },
+      "source_refs": [
+        "GB:28",
+        "GB:209",
+        "GB:395",
+        "GBRAW:22",
+        "GBRAW:25",
+        "GBRAW:39",
+        "GBRAW:58"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G01-A-2026-07-10.png",
+          "sha256": "98f286d1afb15767852c354d129355e3d66243756bd8a1cce1ec88bfc50ba2c7"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-G01-B-2025-10-08.png",
+          "sha256": "154556e3daf4df6f2d2fe341bc81e454aeaa82675eace651e9b9a546a4cd0849"
+        },
+        {
+          "case": "source-date",
+          "date": "2026-08-28",
+          "plot": "plots/R-G01-source-date-2026-08-28.png",
+          "sha256": "8d815348adbe3c971b0b6ad22db9667513a3c5605bae316fbee87f465e7f1ab7"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G02",
+    "title": "Asia failure and TDO confirmation",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:24",
+      "GB:35",
+      "GB:427",
+      "GBRAW:26",
+      "GBRAW:27",
+      "GBRAW:45",
+      "GBRAW:59"
+    ],
+    "source": "Raw September 3 shows an Asia rectangle from displayed 20:00 to 00:00, a post-midnight high sweep and return below; the reply says below midnight open as well “in this case.” TDO confirmation is an optional linked condition, not a universal prerequisite. The actual pink AS.L is about 29132.5, above the drawing target 29126.50; label proximity to current price does not redefine it. The 01:11 desktop snapshot has not reached either, whereas the later 01:18 mobile snapshot crosses both. April 23 independently shows the same Asia clock with local UTC-4.",
+    "finding": "The completed Asia geometry is supported: April 23 replay H 27098 / L 26848 includes the early 20:15-area downside wick and matches the approximate source box near 27100 / 26849. The code inherits the reduced fail-back engine, does not retain active high/low lifetimes, and does not join overnight failure to TDO confirmation or target reach. The 06:00 endpoint and 30-minute expiry remain named research choices.",
+    "targets": [
+      "clocks.py::CLOCKS",
+      "family_fail.py::_failback",
+      "family_fail.py::build_fail_table",
+      "recipe_score.py::_preds.g02"
+    ],
+    "fix": [
+      "Keep the completed 20:00–00:00 Asia box separate from Jumbo’s 20:00–20:30 opening range. Use a declared session clock with independently verified date-specific source mapping. Freeze at 00:00 only after complete formation coverage.",
+      "Apply the user’s September 11 clarification to BOTH highs and lows independently: freeze each reference under its own ID; scan all prices from known_at; store first_revisit_at; end the active line at that first visit. An exact visit consumes freshness even if it is shallower than the named two-tick sweep threshold. The episode begun on that visit can still confirm afterward, but later revisits cannot be new fresh setups. A new completed hour/session creates a new reference; missing intervening coverage makes freshness unknown. Keep historical box geometry separate from active target lines.",
+      "Consume the repaired G01 first-visit episode routine over the named 00:00–06:00 observation horizon. Preserve high and low sides separately, five-minute completion time and expiry; do not replace later distinct reference IDs with repeated attempts at the same consumed line.",
+      "Attach the actual 00:00 opening print to each overnight episode. A high-side sweep may subsequently close below TDO; a low-side sweep may close above it. Expose this as optional confirmation with its own timestamp and denominator. An AM TDO flag cannot confirm an earlier overnight event retroactively.",
+      "Store Asia opposite-edge reach separately from a manually selected runner target or broker order. Check the target side’s freshness at selection; record reached_at and snapshot time. Report failure given first sweep, TDO confirmation given that failure and opposite-edge reach after confirmation by each stated horizon.",
+      "Retain September 3 source snapshots as ordered evidence: 01:11 unreached and 01:18 later reached. Do not infer an exact TDO price from the crowded entry label, or an original stop beyond the full sweep wick from the final drawing."
+    ],
+    "acceptance": [
+      "July 10, 2026: Asia H 29963.50 / L 29804.25, first low visit 02:21 and inside five-minute close known 02:35. Low freshness ends at 02:21; subsequent visits are not new first-sweep setups. No high visit occurs by 06:00.",
+      "January 2, 2026: H 25638.25 first visited 00:55; five-minute closes through 01:25 do not return inside. First later inside close from 01:30–01:35 is too late for the 30-minute variant, although several one-minute candles dipped inside earlier.",
+      "April 23, 2026: complete Asia 20–00 gives H 27098 / L 26848 with 240 retained one-minute rows; neither edge is visited by 06:00. A separate London-low event in the source is not an Asia failure.",
+      "September 3 source pink low about 29132.5, drawing target 29126.50 and current 29126.00 must be three separate coordinates. The earlier snapshot cannot inherit the later reach.",
+      "Missing post-midnight bars make freshness/outcome eligibility unknown. Changing later morning prices cannot change the frozen Asia box or already completed overnight episode."
+    ],
+    "leakage": "confirmation timing / coverage / consumed-reference reuse",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Source display offset is established for these specific desktop snapshots; an archive-wide IANA clock and exact crowded September 3 TDO tick remain unpublished.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation bars use America/New_York. Raw September 8 / August 28 desktop charts explicitly display UTC-4; their 09–10 boxes therefore support the date-specific NY mapping. Raw September 3 desktop and April 23 gallery likewise show UTC-4 and Asia 20–00. This does not establish an IANA setting for every source chart or a winter clock. Mobile phone/post times and compiler ET annotations are not independent axis evidence. Preserve source display times and verified offsets separately from the configured strategy clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The raw posts and actual rectangle support a completed 20–00 Asia box and mirrored sweep/failure concept, with TDO expressly conditional. The supplied numerical expiry/outcome defaults are distinguishable from author wording."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Clock geometry is plausible on the matched date, but the detector uses any strict overshoot and row-group timestamps, with no per-side freshness or sweep-to-TDO/target episode."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "460/647 is the reduced Asia failure flag on eligible days, not the conditional TDO confirmation or opposite-edge outcome. It also ignores whether a reference had already been consumed."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The April 23 box is well placed, but the July 10 low remains extended after its first 02:21 revisit and later repeats cannot be fresh. Source AS.L, selected runner target and reached-at-snapshot status are not represented by the single flag."
+        }
+      },
+      "source_refs": [
+        "GB:24",
+        "GB:35",
+        "GB:427",
+        "GBRAW:26",
+        "GBRAW:27",
+        "GBRAW:45",
+        "GBRAW:59"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G02-A-2026-07-10.png",
+          "sha256": "e2cd5f3491e46fb910af319cedd3894e48d61ea91084c859ea1feba419dffd1c"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-02",
+          "plot": "plots/R-G02-B-2026-01-02.png",
+          "sha256": "7de462b4d26a4e5cea2a84a89a81c836bf080b1cad02b5a19882b413a6dbc9db"
+        },
+        {
+          "case": "source-date",
+          "date": "2026-04-23",
+          "plot": "plots/R-G02-source-date-2026-04-23.png",
+          "sha256": "1e9a21be968544121c365e445df68d41825592987cba51d67cb8ef1f39d2147e"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G03",
+    "title": "Completed previous-hour failure",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:32",
+      "GB:439",
+      "GB:685",
+      "GBRAW:20",
+      "GBRAW:22",
+      "GBRAW:37",
+      "GBRAW:38",
+      "GBRAW:56"
+    ],
+    "source": "Raw August 27 describes a sweep and failure of the previous completed hour, with two claimed trade attempts. Its chart uses the completed 10–11 box and a later 11:00-hour high sweep; the selected runner target near the earlier 09–10 low is not automatically the 10–11 low. The afternoon London-high fade is a different episode. A developing gray hour box in the September snapshots is not known before that hour ends.",
+    "finding": "Current code builds seven completed 09–10 through 15–16 boxes and tests each during the following ONE hour. Current recipe_score has a special aggregate branch: 2870/4529 = 0.633694; the 646/647 any-day flag used for chart selection and old 0.9985 headline are distinct. Remaining defects are hard-coded seven-box eligibility despite incomplete hours, premature resample timestamps, lost per-side episodes/freshness, and absent linked targets. The old “14 failures” fixture and claimed two-hour outcome do not describe this code.",
+    "targets": [
+      "formulas.py::clock_hour_boxes",
+      "formulas.py::hour_fail_count",
+      "family_levels.py::build_level_table",
+      "grid.py::resample_close",
+      "recipe_score.py::_preds.g03",
+      "family_clocks.py::_doc_from_rows"
+    ],
+    "fix": [
+      "Keep one record per completed clock hour with exact formation start/end, known_at, H/L, actual coverage and its configured outcome interval. For the present sampled variant, 09–10 through 15–16 each uses only the following hour; 16–17 is outside RTH and must be labeled or excluded from an RTH-only population.",
+      "Apply the user’s September 11 clarification to BOTH highs and lows independently: freeze each reference under its own ID; scan all prices from known_at; store first_revisit_at; end the active line at that first visit. An exact visit consumes freshness even if it is shallower than the named two-tick sweep threshold. The episode begun on that visit can still confirm afterward, but later revisits cannot be new fresh setups. A new completed hour/session creates a new reference; missing intervening coverage makes freshness unknown. Keep historical box geometry separate from active target lines.",
+      "Use the repaired G01 event routine on each eligible reference side. Preserve first visit, first qualifying sweep, complete five-minute close, confirmation time and expiry. Distinguish multiple trade attempts within one consumed sweep episode from new fresh signals; do not infer two independent source setups from a caption’s two realized scalps.",
+      "Derive hour_box_n from complete usable records, never literal 7 or the fallback r.get(hour_box_n) or 7. Derive successful boxes from those records and aggregate k/n. Keep any-hour-per-day and actual episode counts in separate fields; cluster uncertainty by session when observations share a day.",
+      "Retain the current per-hour recipe_score branch and repair its inputs/eligibility rather than replacing it with a day-level boolean. Replace stale stepped-hour fixtures/documentation and family_clocks selectors that still expect the old configuration.",
+      "Attach the source-selected destination by reference ID: latest box opposite edge, earlier session extreme, PDH/PDL/TDO or runner level as appropriate. Require that a high/low destination is still unvisited at selection, and count only post-confirmation reach before invalidation/horizon. Do not assign the August 27 final drawing to an already paid objective."
+    ],
+    "acceptance": [
+      "July 10, 2026 retains three successful hour boxes out of seven; one shown episode is the 09–10 low visit 10:32 and later inside close. The denominator is seven usable boxes for this date, not one day.",
+      "June 9, 2025: 09–10 H 21819.75 is first reached at 10:09 and its first excursion holds; retained hour_fail_n is zero. Do not substitute the old stepped-box count.",
+      "August 27, 2026: replay 09–10 H 29605 / L 29423.75 and 10–11 H 29623.50 / L 29478.50 correspond to the source’s approximate two boxes. The after-11 gray-high failure is not the earlier 09–10-high event shown before 11.",
+      "A missing construction or confirming minute removes the affected hour from the usable denominator; zero eligible hours must stay zero. Appending 16:00–17:00 observations cannot change earlier hour records.",
+      "Verify the current aggregate is 2870/4529 on retained inputs, while 646/647 is explicitly only any-hour-per-day. A repeated visit to the same hour high does not create a new fresh reference; the next completed hour does."
+    ],
+    "leakage": "confirmation timing / per-hour coverage / consumed-reference reuse",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "fixture": "Current clock-hour helper fixtures pass; old 14-failure fixture and stepped-hour documentation are stale",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation bars use America/New_York. Raw September 8 / August 28 desktop charts explicitly display UTC-4; their 09–10 boxes therefore support the date-specific NY mapping. Raw September 3 desktop and April 23 gallery likewise show UTC-4 and Asia 20–00. This does not establish an IANA setting for every source chart or a winter clock. Mobile phone/post times and compiler ET annotations are not independent axis evidence. Preserve source display times and verified offsets separately from the configured strategy clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The completed previous clock-hour object and subsequent failure are directly supported by raw August 27. Named sampled hours and outcome horizons must remain research choices, not an author-wide trading restriction."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The hour loop is now clock-aligned, but hour_box_n is always 7 and the helper timestamps five-minute closes at their last one-minute starts without completeness checks. No level lifetime or per-side episode ledger is retained."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The current scorer correctly has an hour-box numerator/denominator branch, so the earlier audit’s daily-denominator accusation is withdrawn for current code. Its denominator still includes unavailable hours and its successes inherit the event/timestamp defects; target and per-trade performance remain absent."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Source-dated August 27 box positions broadly agree with the source, but active lines do not stop at first visits, and the selected source runner target is not simply the latest hour’s opposite edge. Developing later boxes are historical overlays, not earlier known inputs."
+        }
+      },
+      "source_refs": [
+        "GB:32",
+        "GB:439",
+        "GB:685",
+        "GBRAW:20",
+        "GBRAW:22",
+        "GBRAW:37",
+        "GBRAW:38",
+        "GBRAW:56"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G03-A-2026-07-10.png",
+          "sha256": "1a1817b47afe903dfe9b3709b6b67ec55bb6fa8e98fa4ecf8a5340153ab794f6"
+        },
+        {
+          "case": "B",
+          "date": "2025-06-09",
+          "plot": "plots/R-G03-B-2025-06-09.png",
+          "sha256": "1f9998ebcbc729af42e6ddbb3553672cc75b9973a554de48fe61324cbc5bc13a"
+        },
+        {
+          "case": "source-date",
+          "date": "2026-08-27",
+          "plot": "plots/R-G03-source-date-2026-08-27.png",
+          "sha256": "a25b89c4bb71b46d76b07958ec293216f5479b8d44bc5f48b39c5282c2f037f9"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G04",
+    "title": "09:30 manipulation and reclaim",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:30",
+      "GB:88",
+      "GB:90",
+      "GBRAW:25",
+      "GBRAW:45",
+      "GBRAW:58",
+      "GBRAW:40"
+    ],
+    "source": "Raw September 1 reply 2094833602018038153 explicitly states the 09:30 manipulation below, reclaim, long toward a retracement and stop at lows. The older pack quotes it. It does not publish a complete hold duration, impulse-selection rule or expiry. Raw five-minute confirmation wording is explicit for PDL/TDO episodes; it does not independently make every 09:30 reclaim identical. April 28 and August 31 screenshots demonstrate other pre-10 trades but do not disclose this full long recipe. Source hold/target semantics remain incomplete.",
+    "finding": "The current implementation scans the AM window for a two-tick undercut then a five-minute reclaim, with equality accepted and no hold or target episode. Exact July 10 bars show its FIRST undercut is already in the 09:30 bar, and the first sampled reclaim close 29902.75 is known 09:35, not the later 09:45 reclaim described in the earlier audit. A later large undercut proves the bare flag does not certify sustained hold.",
+    "targets": [
+      "formulas.py::reclaim_5m",
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.g04"
+    ],
+    "fix": [
+      "Keep the qualitative source recipe incomplete until its hold and impulse-selection rules are documented. Do not turn the pack’s wording into an invented universal hold duration, 09:45 deadline or automatic long/short mirror.",
+      "Use the actual 09:30 opening print with known_at=09:30; missing opening data makes the level unavailable. Evaluate subsequent prices including the opening bar only with causal ordering. Preserve opening-price lifecycle separately from the user’s first-visit retirement rule for session highs/lows; any high/low used as a confluence or target must satisfy that rule on both sides.",
+      "For the explicitly named two-tick/five-minute variant, require low<=open−2 ticks and a complete close STRICTLY above open, timestamped at the five-minute end. Keep event timestamps, side, sweep extreme and expiry; use a corresponding separately named upper-side variant only if selected, not an unmarked source equivalence.",
+      "Expose the unspecified hold rule as a required definition or a clearly named research parameter set: duration, allowed closes, tolerance and invalidation. Record the initial sweep low as an observation; do not assume every final chart stop equals it.",
+      "If adding retracement outcomes later, freeze the preceding completed impulse and 50–61.8 pocket before entry, or leave that outcome unavailable. Check target freshness for any referenced high/low. Report reclaim, declared hold and target reach separately, with outcome order and censoring."
+    ],
+    "acceptance": [
+      "July 10, 2026: first qualifying undercut is 09:30; the 09:30–09:35 group ends at 09:35 with close 29902.75. Store that completion time, not 09:34 and not the later 09:45 reclaim.",
+      "January 10, 2025: 09:30 open 21192.50 is undercut and no completed AM reclaim above it occurs. Pre-open bars do not confirm a level before its opening print.",
+      "A close exactly equal to the open fails strict reclaim. A later breach invalidates a declared hold variant but does not erase the historical fact that an earlier reclaim occurred.",
+      "Appending AM extrema cannot change a target impulse already selected; absent source hold parameters remain unknown, not automatic success."
+    ],
+    "leakage": "confirmation timing / coverage / source-definition gap",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Need a source definition of hold and preceding impulse for this specific 09:30 model; the raw pre-10 screenshots do not supply those numerical rules.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation bars use America/New_York. Raw September 8 / August 28 desktop charts explicitly display UTC-4; their 09–10 boxes therefore support the date-specific NY mapping. Raw September 3 desktop and April 23 gallery likewise show UTC-4 and Asia 20–00. This does not establish an IANA setting for every source chart or a winter clock. Mobile phone/post times and compiler ET annotations are not independent axis evidence. Preserve source display times and verified offsets separately from the configured strategy clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The qualitative open-reclaim concept is explicit in the raw September 1 reply, but the supplied raw evidence does not resolve its full hold/impulse mechanics or certify a universal five-minute rule for this specific open setup."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "reclaim_5m accepts equality, uses prematurely timestamped/incompletely checked five-minute groups, and omits hold, stop and frozen target selection. These are concrete deficiencies even without choosing the unknown source parameters."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "525/647 is an AM undercut/reclaim presence flag, not a held reclaim, a discount-target event or trade outcome. Its first event on July 10 is earlier than the previously narrated chart event."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The 09:30 opening level is now plotted only from availability, but the implementation has no source hold/target geometry; later adverse movement is hidden by the single positive flag."
+        }
+      },
+      "source_refs": [
+        "GB:30",
+        "GB:88",
+        "GB:90",
+        "GBRAW:25",
+        "GBRAW:45",
+        "GBRAW:58",
+        "GBRAW:40"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G04-A-2026-07-10.png",
+          "sha256": "0c45e9fe3cb1b15c7b4c394b8dc9b48ba5e11ead6f2725073657f1970d6445bf"
+        },
+        {
+          "case": "B",
+          "date": "2025-01-10",
+          "plot": "plots/R-G04-B-2025-01-10.png",
+          "sha256": "0a474276eb0731b78457c45eb7fd55f054c8ef938bb5478d9478a8fcc4911b6f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G05",
+    "title": "TDO close-through after a named sweep",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:24",
+      "GB:142",
+      "GB:612",
+      "GBRAW:20",
+      "GBRAW:21",
+      "GBRAW:25",
+      "GBRAW:27"
+    ],
+    "source": "Raw September 9 replies explicitly correct the level to the MIDNIGHT opening price. September 3 names a close below it after an Asia-high sweep “in this case,” and September 9 shows a completed-range high sweep followed by a separate TDO crossing. A later literal TDO retest is not universal: the actual September 9 retracement peaks below TDO despite an illustrative zigzag touching it. A TDO wick alone is not the named-edge sweep, and a Pine touch statistic is another event.",
+    "finding": "The producer treats the first AM bar already beyond TDO as a wick, chooses its earliest side, and looks for an opposite close without any separate reference ID. It can miss a later genuine crossing and has no overnight association. January 28’s undercut/reclaim around 09:36–09:39 remains a retained false because the earlier already-above-TDO state selected the opposite branch. The source’s high/low reference must also have been fresh before its first sweep.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "grid.py::first_wick_break",
+      "grid.py::resample_close",
+      "recipe_score.py::_preds.g05"
+    ],
+    "fix": [
+      "Create TDO from the actual declared-midnight opening print, retaining contract, price, timestamp, clock evidence and coverage. Do not take a later minute if midnight is absent or infer a screenshot TDO tick from its adjacent entry label.",
+      "Consume a named reference-sweep episode with reference_id, high/low side, known_at, first_visit and sweep_time. Apply the user’s freshness requirement to BOTH swept highs and lows from their own completion time, including visits before the AM scan. A previously consumed reference cannot be a fresh setup.",
+      "For a high-side sweep, search subsequent complete five-minute closes below TDO; for a low-side sweep, search above TDO. Preserve the actual close-completion time and specified expiry/invalidation. A close may confirm the same first-visit episode after its reference line has stopped.",
+      "Maintain standalone TDO touch, actual cross and sweep-linked confirmation as separate events. Starting a window wholly above or below TDO is a state, not a newly observed sweep. Scan causally linked episodes rather than choosing a single first side for the whole day.",
+      "Support the explicitly scoped overnight and AM variants with separate eligible sweep populations. Do not make TDO confirmation mandatory in source rows where it is optional, impose an exact TDO retest from a blue schematic, or transfer Pine’s 08–16 touch denominator to this setup."
+    ],
+    "acceptance": [
+      "A path starting below TDO with no separate named-edge sweep has no source TDO-confirmation setup, even if it later closes above TDO.",
+      "January 28, 2026: TDO 26220.25 is undercut around 09:36–09:38 and reclaimed; preserve this real crossing while requiring a separately identified fresh reference sweep before it can qualify as the source setup.",
+      "An Asia-high first sweep at 01:10 followed by a completed 01:30 close below TDO belongs to that overnight episode. An AM-only flag cannot supply or erase its confirmation.",
+      "September 9 midnight correction remains authoritative. A source retracement that peaks below TDO must not fail an invented exact-retest requirement; the projected blue zigzag is not an execution.",
+      "Consuming one reference high does not consume the opposite low or a newly completed hour’s high. Missing intervening bars makes freshness unknown, not fresh."
+    ],
+    "leakage": "confirmation timing / unlinked sweep / consumed-reference reuse",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "The midnight definition is resolved by raw author replies; preserve date-specific clock evidence and leave any exact crowded source TDO tick unclaimed.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation bars use America/New_York. Raw September 8 / August 28 desktop charts explicitly display UTC-4; their 09–10 boxes therefore support the date-specific NY mapping. Raw September 3 desktop and April 23 gallery likewise show UTC-4 and Asia 20–00. This does not establish an IANA setting for every source chart or a winter clock. Mobile phone/post times and compiler ET annotations are not independent axis evidence. Preserve source display times and verified offsets separately from the configured strategy clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Midnight opening price and a later close through it after a named high/low sweep are explicitly supported by raw replies. They are distinguishable from mandatory TDO confirmation for every GB trade or an exact retest rule."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_levels selects an unqualified earliest TDO-side wick, lacks the separate swept level, timestamps closes early and scans only AM. It does not enforce that the swept high/low was unvisited."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "220/647 measures this standalone AM wick/close flag. It does not count TDO confirmation given a specific first sweep, and may miss the intended overnight source population."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The midnight line itself is an opening-price object, but the plotted crossings do not identify a preceding fresh Asia/NYAM/PD reference sweep or its event order. The January 28 false illustrates the side-selection defect."
+        }
+      },
+      "source_refs": [
+        "GB:24",
+        "GB:142",
+        "GB:612",
+        "GBRAW:20",
+        "GBRAW:21",
+        "GBRAW:25",
+        "GBRAW:27"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G05-A-2026-07-10.png",
+          "sha256": "4c16a83ae282380a125c00123c79a8d4fc22bdd5606c85c53b52f1cad476cd6f"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-G05-B-2026-01-28.png",
+          "sha256": "4b0f94c142c354b4b0887186974ac530fd29137e7936ae95bb673cbeac1d11ed"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G06",
+    "title": "Unfilled NWOG as a destination",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:59",
+      "GB:68",
+      "GB:615",
+      "GB:673",
+      "GBRAW:16",
+      "GBRAW:19",
+      "GBRAW:36",
+      "GBRAW:37"
+    ],
+    "source": "Raw August 17 explicitly describes a New York-open short after a midnight sweep/failure and closes when NWOG is hit. August 3 names a fresh gap printed Sunday at 6PM EST. September 8 shows two NWOG lines at 29530.50 / 29524.75 below the Asia-low target, still below current price in the earlier snapshot. These support a distinct destination and ordered reach, not an automatic Monday entry. The raw source does not identify the exact Friday closing minute or fully quantify gap-formation/first-tag semantics.",
+    "finding": "Current code uses Friday 15:59 one-minute close and Sunday 18:00 open, whereas FORMULAS’ preferred endpoint is Friday 16:59 close. It scores only Monday AM aggregate overlap and ignores prior visits, live state, entry direction and target chronology. August 31’s plotted band was already traded overnight before the AM re-touch; August 24’s band was also visited Sunday but is not reached during AM. Neither is a fresh unfilled-gap AM target.",
+    "targets": [
+      "family_fail.py::build_fail_table",
+      "recipe_score.py::_preds.g06",
+      "FORMULAS.md::R-G06"
+    ],
+    "fix": [
+      "Keep Friday 15:59-close and 16:59-close as explicitly named endpoint variants pending a source definition; do not relabel either as settlement. Use the instrument exchange calendar and actual completed last-trading-session print around holidays. Preserve the underlying contract and endpoint timestamps.",
+      "Define gap formation separately from a later visit: the Sunday opening endpoint creates the interval and cannot, by itself, make every gap instantly retired. Store lower/upper boundaries, formation_time and the published or explicitly named post-formation return rule. Leave faithful semantics unresolved if the source does not settle them.",
+      "Maintain an ordered gap state: formed, active, first tagged, retired. Scan the entire post-formation history, not only 09:30 onward. At a candidate entry require a still-live destination ahead of the trade; approach determines the near edge. Keep exact edge touch, named two-tick proximity and full-gap traversal as separate observations.",
+      "Link the entry’s midnight/open/high-low failure episode by ID, then measure first subsequent near-edge tag by the declared noon/RTH-close horizons. Apply the user’s first-revisit rule to any session-high/low trigger independently of the gap’s own formation convention.",
+      "Preserve the old any-AM-overlap field only as a descriptive comparison. Report eligible active gaps, confirmed entries with a live destination, post-entry first tags and censored/invalidated outcomes separately. A scheduled limit or source arrow is not an observed fill."
+    ],
+    "acceptance": [
+      "August 31, 2026 code band [29496.50,29540.00] is visited well before AM; its 09:31 re-touch cannot be a fresh unfilled-gap destination.",
+      "August 24, 2026 code band [29392.25,29395.75] is visited Sunday, while AM remains below it. Distinguish already-retired from still-active-but-not-hit and from a plain AM negative.",
+      "A formation opening print must not create and retire every gap simultaneously. Test a gap above and below price with the appropriate near edge and actual post-formation chronology.",
+      "An unavailable Friday endpoint or missing intervening trading produces unknown eligibility. A pre-entry tag never counts as the entry’s destination outcome.",
+      "September 8 source NWOG 29530.50/29524.75 must not be replaced by AS.L 29571.00 or treated as reached while current price remains above them."
+    ],
+    "leakage": "prior visitation ignored / missing entry-to-target chronology",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Exact source Friday endpoint and the first eligible post-formation revisit must be specified; the supplied figures do not identify a universal close-minute convention.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The NWOG destination is supported by raw posts and figures, but the exact closing endpoint and first eligible post-formation tag are not published well enough to certify FORMULAS’ full numerical definition."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_fail constructs a calendar-day Friday RTH-close variant and tests whole-AM high/low overlap. It has no exchange-holiday endpoint lookup, live gap state or post-entry event linkage."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "66/125 is Monday AM overlap, not first reach of a still-unfilled destination after a confirmed entry. The conditional sequence and 16:00 outcome are absent."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The charts display the implemented Friday/Sunday band correctly, but carry it after overnight visits and cannot certify the source’s still-live destination. The visible September 8 NWOG pair is separate from AS.L and a drawn trade target."
+        }
+      },
+      "source_refs": [
+        "GB:59",
+        "GB:68",
+        "GB:615",
+        "GB:673",
+        "GBRAW:16",
+        "GBRAW:19",
+        "GBRAW:36",
+        "GBRAW:37"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-31",
+          "plot": "plots/R-G06-A-2026-08-31.png",
+          "sha256": "739c181b8f4568b4380a50487f239001eb03872fadcab929eb7eb9f17efb722f"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-24",
+          "plot": "plots/R-G06-B-2026-08-24.png",
+          "sha256": "e60704a2374f07d11d4873a9b030e3bb949db6f1bb447f0ee412a753eb31194a"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G07",
+    "title": "Golden-pocket continuation",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:73",
+      "GB:79",
+      "GB:258",
+      "GB:537",
+      "GBRAW:23",
+      "GBRAW:24",
+      "GBRAW:25",
+      "GBRAW:35",
+      "GBRAW:50",
+      "GBRAW:51"
+    ],
+    "source": "Raw September 1 defines 50–61.8% of the NYAM high-to-low move, then a PDL sweep, five-minute close below and retracement entry. Its rebound exceeds both small plotted hour-box highs, so its unshown larger impulse cannot be replaced by either box. August 12 separately describes HTF bullish fib retracement plus a lower-timeframe/hour-low failed breakdown. The daily gallery fib uses H 30975.25 / L 22984.75 and the correctly oriented 50–61.8 pocket; it is not an intraday 09–10 impulse. Full automatic anchor/HTF selection remains unpublished.",
+    "finding": "The current mirrored 50–61.8 algebra is correct for supplied endpoints, but the producer chooses the 09–10 box and its net candle sign as the impulse and direction. FORMULAS allows that box as if interchangeable with the measured source impulse. The scorer then uses only gp_touch, while its separate rejection helper is not the stated source sequence. The raw figure now supplies direct evidence that this shortcut is not the author’s measured move.",
+    "targets": [
+      "formulas.py::gp_band_impulse",
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.g07"
+    ],
+    "fix": [
+      "Stop the faithful row at the anchor contradiction. Keep the current NYAM-box pocket as a named proxy. Require a sourced/manual annotated impulse record before constructing a source-compatible band: ordered start/end extreme, their timestamps, completion/confirmation time, timeframe, direction, contract and adjustment method.",
+      "Preserve exact orientation with W=H−L: a down H→L impulse gives [L+0.5W,L+0.618W]; an up L→H impulse gives [H−0.618W,H−0.5W]. Store unrounded values plus the declared executable tick rounding. Do not infer direction solely from the time-box close/open.",
+      "For September 1, leave the cropped impulse high unknown; do not derive it from the later bounce, hour-box high or drawn risk distance. Keep the daily 7990.50-point swing and July 29 overnight pocket as separate source variants with their own price-adjustment and clock evidence.",
+      "After overlap require the explicitly selected confirmation: linked PDL/other-level sweep plus completed failure, or a separately named research rejection. Store the reference’s first visit and apply the user’s freshness gate to BOTH high/low references and high/low destinations. The existing pocket overlap alone cannot supply that confirmation.",
+      "Freeze the selected pocket, entry, invalidation and target before the outcome scan. A target high/low already consumed is not fresh. Report overlap, confirmed setup and post-entry target reach separately; unknown impulse, HTF bias, stop or execution order yields an unavailable source event rather than automatic success."
+    ],
+    "acceptance": [
+      "Synthetic down 110→100 gives [105,106.18]; up 100→110 gives [103.82,105]. The same numerical extrema do not imply the same directional pocket.",
+      "July 10, 2026’s box-derived pocket is 29858.496–29879.50 and overlaps after 10:00; the sharp 10:32 traversal is not automatically a confirmed long continuation.",
+      "October 8, 2025’s proxy pocket 25104.028–25119.25 remains below post-10 price and is untouched. Do not search for another hindsight impulse to turn it into a positive.",
+      "September 1 source bounce above both small hour-box highs cannot be a 50% retracement of those boxes. Stop 29303.50 versus drawing entry 29253.75 gives 49.75 risk; it is not 49.75 above PDL or proof of a fib anchor.",
+      "Daily gallery H 30975.25 / L 22984.75 gives unrounded midpoint 26980 and 61.8% level 26037.121, displayed 26037 under the quarter-point drawing policy. Current 27360.50 is above the pocket, not already inside it.",
+      "Changing future AM extremes or the later screenshot’s position average must not change a previously selected impulse or certify an earlier target fill."
+    ],
+    "leakage": "unproven impulse/bias provenance / missing ordered confirmation",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Automatic completed-impulse/HTF selection and the cropped September 1 anchor are unpublished. The repair must accept explicit source annotations or keep the faithful event unavailable.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The source’s larger completed impulse is not the small 09–10 box: September 1 retracement rises above both displayed hour highs. FORMULAS’ interchangeable box/impulse wording must stop source certification; unknown anchors cannot be back-solved from the desired fib."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "gp_band_impulse mirrors the ratio correctly, but family_levels supplies wrong/unproven anchors and direction from a net hourly candle, with no causal HTF bias or named sweep-confirmation episode."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "459/647 is overlap with that proxy pocket. A traversal or touch is not confirmed continuation, rejection, or later impulse-extreme reach."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "July 10 and October 8 visibly plot the box-derived pocket, not an author-selected completed impulse. The source’s larger/daily/overnight pockets have distinct anchors and lifetimes; no faithful source anchor is present in these plots."
+        }
+      },
+      "source_refs": [
+        "GB:73",
+        "GB:79",
+        "GB:258",
+        "GB:537",
+        "GBRAW:23",
+        "GBRAW:24",
+        "GBRAW:25",
+        "GBRAW:35",
+        "GBRAW:50",
+        "GBRAW:51"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G07-A-2026-07-10.png",
+          "sha256": "09e5b7cc23378e6deb66cbeea88e577163b2fa87a713dde4dfc5f8b853e07539"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-G07-B-2025-10-08.png",
+          "sha256": "b9cb69307f29ec7d14fd3e9c3ea707f54d092d52c121f14b9966c57be715b143"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G08",
+    "title": "Overnight prior-extreme reclaim sets bias",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:313",
+      "GB:443",
+      "GB:543",
+      "GBRAW:26",
+      "GBRAW:30",
+      "GBRAW:31",
+      "GBRAW:32",
+      "GBRAW:40",
+      "GBRAW:52",
+      "GBRAW:53",
+      "GBRAW:54"
+    ],
+    "source": "The pack describes overnight prior-low sweep/reclaim establishing next-AM bias; the raw archive distinguishes previous-day, previous-week and opening-range levels and shows several pre-completion overnight longs. Raw PDL wording expands to previous day’s low without publishing RTH versus full-session construction. November 19 is a PREVIOUS-WEEK low reclaim, not interchangeable with PDL. The August 11–12 long begins before Asia finishes and targets changing prior-day/TDO references; its final drawings do not publish a universal overnight PDL algorithm or hold-to-open rule.",
+    "finding": "The code uses prior RTH extrema, requires an overshoot strictly greater than two ticks, then substitutes the final 09:29 one-minute close for a causal reclaim/hold. No per-side bias event, initial freshness or later pullback outcome is stored. January 10’s prior field actually comes from January 8 in the retained session sequence, with an intervening coverage/calendar gap; its first observed 08:30 low sweep cannot certify that the prior level was globally unvisited.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.g08",
+      "clocks.py::CLOCKS"
+    ],
+    "fix": [
+      "Resolve the source’s previous-day calendar before faithful scoring. Preserve the current prior-RTH variant with its exact source date and actual completed session bounds; keep full-session and previous-week references separate. Do not assume “previous day” means the previous row in a filtered eligible-date list.",
+      "Apply the user’s first-revisit requirement independently to BOTH reference highs and lows. Preserve ID, side, formation interval and known_at; scan all subsequent trading before any later decision window; stop the active line at first_revisit_at. Consumed references cannot be fresh targets or new first-sweep setups. A confirmation may follow the consuming visit within that same episode, but leaving and returning does not rearm the reference. Missing intervening coverage makes freshness unknown; only a newly formed reference ID resets it.",
+      "For a named two-tick/five-minute variant, high sweep >=H+2 ticks or low sweep <=L−2 ticks, followed by a complete strict close back through the swept level at its actual end time. Keep both directional episodes and initial state; do not substitute the final overnight close for their history.",
+      "If retaining hold-to-09:30, mark it as a research convention and test every required completed close after reclaim. Store bias confirmed_at, valid_until and invalidation. The first-visit sweep may establish a continuing bias after its reference line retires, but a later visit cannot rearm the same high/low as fresh.",
+      "Link later NYAM impulse/pocket and rejection only to bias active at their decision time. Source hold duration, HTF definition or missing coverage remains unknown. Report prior-sweep observations, confirmed/held bias and subsequent conditional outcomes under separate denominators.",
+      "Keep original entries, stop revisions and changed targets distinct in the August 11–12 gallery: a later 09–10 box was unavailable at the prior-evening entry, and revised target 29896 is not original target 29852.25 or PDH near 29887."
+    ],
+    "acceptance": [
+      "January 10, 2025 prior-RTH fields refer to January 8: H 21431.75 / L 21166.25. Record the intervening missing/calendar interval and do not label the 08:30 low sweep a verified first-ever revisit without resolving that coverage.",
+      "July 10, 2026 overnight stays within prior RTH [29614.50,29993.50]; no prior-extreme sweep exists, so a reclaim/bias flag must remain absent.",
+      "A final one-minute close above PDL after an earlier failed five-minute hold cannot repair that history retroactively. A two-tick overshoot must meet an inclusive two-tick named variant, while an exact touch consumes freshness without becoming a deeper sweep.",
+      "Changing 09:31 data cannot alter the frozen overnight event. A previous-week-low reclaim must retain a previous-week ID and cannot be routed into a PDL fixture.",
+      "Preserve both high and low freshness independently, including visits between prior RTH close and 18:00; the later overnight scan cannot make an already visited level fresh again."
+    ],
+    "leakage": "final close substituted for bias / prior coverage and freshness unknown",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Source previous-day/session calendar and exact hold/bias rule remain unpublished. January 8-to-10 retained-date coverage must be resolved before claiming freshness.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Qualitative overnight reclaim/bias is described, but source PDH/PDL session boundaries and quantified hold remain unresolved. A prior-week example or a forming-Asia long cannot resolve those missing definitions."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_levels uses prior RTH as an unverified source calendar, strict >2-tick depth, whole-window extrema and final close. It lacks a chronological completed reclaim, bias validity and first-visit state."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "244/647 is an either-side overnight-extreme/final-close flag. It is not held directional bias followed by an AM pullback/rejection or conditional path outcome."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "The January 10 chart shows a sweep of the retained prior low and later recovery, but not a certified fresh-reference history or stored hold; July 10 has neither prior-extreme sweep. The source’s distinct previous-week/day/session lines cannot be collapsed into this single prior-RTH geometry."
+        }
+      },
+      "source_refs": [
+        "GB:313",
+        "GB:443",
+        "GB:543",
+        "GBRAW:26",
+        "GBRAW:30",
+        "GBRAW:31",
+        "GBRAW:32",
+        "GBRAW:40",
+        "GBRAW:52",
+        "GBRAW:53",
+        "GBRAW:54"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2025-01-10",
+          "plot": "plots/R-G08-A-2025-01-10.png",
+          "sha256": "b6aeeb9f1092ab3799c36bf5e1ccab7980197c34ad7717a4cc1c75e3cdaaaedd"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-G08-B-2026-07-10.png",
+          "sha256": "33af31db65b22959a59070a909bbdf0e7d7bb1e00f1151c0124584b8d215e1c2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G09",
+    "title": "Stacked high sweep, bearish shift, NWOG target",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:156",
+      "GB:615",
+      "GBRAW:13",
+      "GBRAW:16",
+      "GBRAW:19",
+      "GBRAW:36",
+      "GBRAW:37",
+      "GBRAW:45",
+      "GBRAW:56"
+    ],
+    "source": "The compiler’s July 27 reconstruction describes PDH, Asia high and London high sweeps, failure, bearish structure shift and NWOG destination. Raw NWOG posts support the destination sequence, and actual April 23/August 27 charts show London 02–05 with local UTC-4. They do not independently publish the full numerical stacked model, source PDH calendar, 0.05W proximity threshold or swing/MSS rule. Those gaps must not be filled from the compiler’s chart-reading assumptions.",
+    "finding": "The single retained conditional positive, May 20, 2024, is not the source short sequence: the code gap is tagged before the AM upward stack break, and there is no ensuing bearish shift-to-gap outcome. More decisively, the configured PDH had already been revisited Sunday 23:17, and both configured Asia and London highs at 07:00, so they are not fresh at 09:00 under the user’s rule. The producer uses Jumbo London 00–03 and only proximity + Monday + overlap; an empty-stack fallback can also change the denominator to all sessions.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.g09",
+      "recipe_score.py::_stats",
+      "family_fail.py::build_fail_table"
+    ],
+    "fix": [
+      "Keep the full faithful composition unresolved until the missing source calendar/MSS definitions are supplied. Use the source high-side example as its own model; a low-side mirror may be a clearly named variant, while BOTH sides always receive independent freshness tracking.",
+      "Replace the Jumbo London 00–03 field with the separately identified GB 02–05 reference for the named clock variant. Store every PD/Asia/London high or low’s formation scope and completion time. Do not infer the source’s prior-day calendar from a generic RTH field.",
+      "Apply the user’s first-revisit requirement independently to BOTH reference highs and lows. Preserve ID, side, formation interval and known_at; scan all subsequent trading before any later decision window; stop the active line at first_revisit_at. Consumed references cannot be fresh targets or new first-sweep setups. A confirmation may follow the consuming visit within that same episode, but leaving and returning does not rearm the reference. Missing intervening coverage makes freshness unknown; only a newly formed reference ID resets it.",
+      "Only then evaluate the named proximity condition max(levels)−min(levels)<=0.05W69 when W69 is known. Keep each original reference ID, first-visit history and relative location. Proximity is a prerequisite; it is not a sweep or a new source-defined cluster.",
+      "Require an ordered first-visit sweep of the declared fresh references, complete fail-back under an explicit boundary convention, and a causal bearish structure shift from the resolved swing rule. Distinguish below the highest edge from below all stacked edges; do not silently treat them as equal when prices differ.",
+      "At confirmation require a live NWOG in the trade direction, using repaired G06 state, and count only its later tag. Keep eligible stacks, first sweeps, confirmations and outcomes as separate populations. Empty eligible populations remain n=0; remove the all-session fallback. An earlier gap tag or consumed stack must fail eligibility."
+    ],
+    "acceptance": [
+      "May 20, 2024 code levels PDH 18677 / Asia H 18679.25 / London H 18678.75 are already consumed by 09:00: observed first PDH revisit Sunday 23:17, Asia and code London highs 07:00. The later AM event is not a fresh stacked sweep.",
+      "That date’s AM gap tag near 09:30 occurs before the upward break around 09:33–09:35; it cannot satisfy a later bearish failure→MSS→gap target sequence.",
+      "July 10, 2026 is Friday and its code highs are unstacked; retain it as an ineligible diagnostic, not an eligible failure in the one-row conditional denominator.",
+      "Changing 00–03 prices while holding 02–05 fixed cannot change the GB London reference. A close below only the highest member must not satisfy a variant explicitly requiring a close below every member.",
+      "No qualifying stack yields n=0 and unavailable rate. Rearranging target time before confirmation or restoring a consumed high/low must never create a valid setup."
+    ],
+    "leakage": "consumed references / wrong London field / reversed outcome order",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "The full numerical stacked/MSS model and source PD calendar are not supplied in the raw posts; preserve the compiler reconstruction as secondary evidence rather than an executable author formula.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The broad sequence is reconstructed by the pack, but full numerical source thresholds, structure selection and PDH calendar remain unverified. Direct source clock figures improve the London evidence without proving the entire composed model."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The stack takes the wrong London field, ignores first visits, does not identify a sweep/failure/MSS chain, and uses an AM gap overlap that can precede entry."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "1/1 is a proximity-conditioned Monday overlap, not a completed stacked-sweep short or post-entry NWOG reach. The fallback to all sessions when no stacks exist is an additional population error."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "May 20 visibly reaches the gap before rallying through the stack. Its individual highs were also consumed before the plotted 09:00 line origins. July 10 is an ineligible Friday diagnostic; neither chart certifies a faithful positive."
+        }
+      },
+      "source_refs": [
+        "GB:156",
+        "GB:615",
+        "GBRAW:13",
+        "GBRAW:16",
+        "GBRAW:19",
+        "GBRAW:36",
+        "GBRAW:37",
+        "GBRAW:45",
+        "GBRAW:56"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2024-05-20",
+          "plot": "plots/R-G09-A-2024-05-20.png",
+          "sha256": "963ed3bc4c561b9a4a32af86b11c50a4a739994e63629f7392ad29ce634d2d7c"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-G09-B-2026-07-10.png",
+          "sha256": "5791efb06c567c3d38b0f5d88833d796caba9147557134658f8d530762db5f5f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G10",
+    "title": "Repeated fades on the pressure side",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:669",
+      "GBRAW:36",
+      "GBRAW:37",
+      "GBRAW:38",
+      "GBRAW:57"
+    ],
+    "source": "Raw August 20 explicitly says shorts only on a choppy day. Its 2-minute screenshot contains red entries and blue covers before 09:30 and inside still-forming 09–10/10–11 boxes, plus a later gray-high failure. Therefore FORMULAS’ universal two-completed-box sweep/failure recipe cannot explain all those scalps. August 27 separately claims two trade attempts; these are not automatically two fresh levels or two independent setups. Numerical pressure/bias and entry rules remain unpublished.",
+    "finding": "fade_count is only int(any-side NYAM failure)+int(any-side 10–11 failure), capped at two. July 10’s positive combines a LOW failure and a HIGH failure; that is not repeated short-side fading. The August 20 source-dated replay broadly matches both hour boxes and later gray-high reversal, but a positive two-boolean count cannot reproduce the earlier source executions, side or actual trade count. Reusing a visited box as fresh would also violate the user’s clarified lifecycle.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "grid.py::failback_wick_c5",
+      "recipe_score.py::_preds.g10"
+    ],
+    "fix": [
+      "Stop faithful certification at the source/FORMULAS trigger mismatch. Preserve the existing two-box-any-side count under a descriptive name; do not repair it by inventing a pressure classifier or retrospectively assigning all source arrows to completed boxes.",
+      "Separate reference events from trade attempts. Store the actual selected range/level ID, side, first visit, sweep/failure confirmation and any executions linked to that episode. Red entries and blue covers on a shorts-only chart are different actions, not alternating long/short signals.",
+      "Apply the user’s first-revisit requirement independently to BOTH reference highs and lows. Preserve ID, side, formation interval and known_at; scan all subsequent trading before any later decision window; stop the active line at first_revisit_at. Consumed references cannot be fresh targets or new first-sweep setups. A confirmation may follow the consuming visit within that same episode, but leaving and returning does not rearm the reference. Missing intervening coverage makes freshness unknown; only a newly formed reference ID resets it.",
+      "For a named repeated same-side failure experiment, count only eligible first-visit failures on the chosen side across independently formed references, with a pressure/bias rule known before each event. Repeated executions within one consumed episode may be counted as attempts, but never as newly fresh reference setups.",
+      "Retain 09–10 and 10–11 boxes with separate known_at, and include other resolved source levels only with their own provenance. No pre-completion scalp may use a finished future box. Unknown scalp trigger, initial stop or cover chronology remains unavailable.",
+      "Report reference-episode count, execution-attempt count, sessions with at least two same-side eligible events, and post-confirmation outcomes separately. Keep long-side experiments separately named where the source example is shorts only; both sides must obey the same freshness bookkeeping."
+    ],
+    "acceptance": [
+      "July 10, 2026: NYAM LOW failure at 10:32 plus 10–11 HIGH failure near 11:25 must not pass repeated shorts. The latter inside close is known 11:40; any earlier timestamp must not be used as a completed close.",
+      "October 8, 2025: NYAM high and later 10–11 high 25231 break and hold, without the required two short-side failures.",
+      "August 20, 2026 replay boxes are approximately [29308.75,29470.25] and [29305,29433.50], consistent with the source’s two ranges. Earlier source scalps predate their completion; later gray-high failure cannot retrospectively certify those entries.",
+      "A first visit ends the relevant active high/low line. Leaving and returning to the same reference does not reset freshness; another completed hour creates a distinct reference ID. Multiple broker attempts within one episode are not independent fresh setups.",
+      "Counting three bars in one outside excursion or interpreting a blue short cover as a long entry must fail. No final day-type label may supply the earlier pressure side."
+    ],
+    "leakage": "missing causal side / future completed-box attribution / reused reference",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "definition_decision": "Source pressure/bias classification and exact pre-completion scalp triggers remain unpublished. Do not infer them from final day shape or colored execution glyphs.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Raw August 20 shows earlier scalps before the relevant boxes finish, so the FORMULAS completed-two-box engine is not a source-faithful definition of every repeated fade. The pressure classifier and exact scalp triggers are not published."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The producer counts at most two any-side box flags, loses sides and distinct attempts, inherits fail-back timing issues and has no reference freshness or causal pressure state."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "294/647 is both box flags being true. It is not two same-side fades, two trades, a chop-regime strategy outcome or a source execution count."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "July 10 visibly combines opposing failure sides. August 20 boxes align approximately with the source, but the source’s red/blue execution glyphs and earlier forming-box scalps are not generated by the code."
+        }
+      },
+      "source_refs": [
+        "GB:669",
+        "GBRAW:36",
+        "GBRAW:37",
+        "GBRAW:38",
+        "GBRAW:57"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G10-A-2026-07-10.png",
+          "sha256": "22451f6412d1173b21e2c24be521ea698699341416e66141fb73e1feb5222ab9"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-G10-B-2025-10-08.png",
+          "sha256": "af232b357c9af51bfc41a32e9a237c138aa4b9b19f60f06e7eb64031e3531e6a"
+        },
+        {
+          "case": "source-date",
+          "date": "2026-08-20",
+          "plot": "plots/R-G10-source-date-2026-08-20.png",
+          "sha256": "a89a5866fb50ef997f5d24839635db2a8127f4c844099be44f4884839c9cc242"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-G11",
+    "title": "A+ grade belongs to the traded setup",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GB:93",
+      "GB:147",
+      "GB:242",
+      "GBRAW:6",
+      "GBRAW:18",
+      "GBRAW:20",
+      "GBRAW:22",
+      "GBRAW:40",
+      "GBRAW:57"
+    ],
+    "source": "The pack’s grading table says a relevant range sweep plus failure, while its quoted no-sweep statement establishes a necessary condition. Raw primary posts explicitly distinguish a sweep from a failure and show full setup context; they do not publish a complete mechanical A+/B+ equivalence or numerical grading weights. September 10 explicitly says nothing screaming A+, despite longs and pullbacks, and its chart contains trades that are not all failures of the 09–10 low. Treat the compiler’s grading table as reconstruction, not proof that any day containing one failure is A+.",
+    "finding": "aplus_failback correctly pairs sweep and failure by the same dictionary key, but then ORs Asia, NYAM and the 10–11 stand-in for previous hour across the whole day. It does not grade the actual traded reference or entry time, enforce freshness, or cover all previous hours. One fixture simply sets pass=True; the reporting definition can say sweep observed even though the helper requires failure too.",
+    "targets": [
+      "formulas.py::aplus_failback",
+      "family_fail.py::build_fail_table",
+      "family_fail.py::fail_fixtures",
+      "family_fail.py::report_fail",
+      "recipe_score.py::_preds.g11"
+    ],
+    "fix": [
+      "Preserve the incomplete source grading definition. Store necessary source conditions and any author-assigned grade separately; do not claim a mechanical iff classifier or assign B+ merely because one input is absent or unknown.",
+      "Grade a specific setup/trade record carrying traded_reference_id, side, entry_time and source variant. Require that same reference’s qualifying first-visit sweep and complete failure before entry. An unrelated overnight event or later failure cannot upgrade the entry.",
+      "Apply the user’s first-revisit requirement independently to BOTH reference highs and lows. Preserve ID, side, formation interval and known_at; scan all subsequent trading before any later decision window; stop the active line at first_revisit_at. Consumed references cannot be fresh targets or new first-sweep setups. A confirmation may follow the consuming visit within that same episode, but leaving and returning does not rearm the reference. Missing intervening coverage makes freshness unknown; only a newly formed reference ID resets it.",
+      "Consume repaired G01/G02/G03 event records, with all individually eligible completed hours. Keep sweep-only, confirmed-failure, author grade and a clearly named mechanical research grade distinct. A day-level OR may be retained only as has_qualifying_setup.",
+      "Replace pass=True grading fixtures with actual event assertions and correct the report’s sweep-only description. Test wrong-reference, wrong-side, after-entry, consumed-reference and missing-coverage cases explicitly.",
+      "Only report outcomes conditional on concrete event grades and valid post-entry horizons. Multiple copied accounts or partial fills cannot become independent A+ signals; unknown original risk or fill history remains unknown."
+    ],
+    "acceptance": [
+      "July 10, 2026 contains separate Asia-low, NYAM-low and 10–11-high failure observations. An entry unrelated to them, or entered before its own confirmation, must not inherit a grade from the day-level OR.",
+      "August 25, 2026 Asia high 29190 breaks/holds and NYAM low 29279.25 breaks after 10:00 without timely failure; the retained three-box label is false. Do not infer a universal author B+ grade from that limited scan.",
+      "An Asia sweep and NYAM failure cannot be combined into a single setup; same-key pairing remains required. A consumed level cannot become fresh after a reset or later visit.",
+      "September 10’s explicit no-A+ commentary must not be overridden by inferring a range-low failure from glyphs actually above that low or from the forming 10–11 box.",
+      "Fixture pass values must be computed from the grader’s returned record. Two sides and all eligible previous-hour references must retain separate IDs and known_at timestamps."
+    ],
+    "leakage": "whole-day OR grades unrelated/earlier entries / missing reference freshness",
+    "proxy": "yes",
+    "ask_user": false,
+    "question": "",
+    "fixture": "aplus_is_sweep_plus_failback fixture hard-codes pass=True; same-key helper logic is real but insufficient",
+    "definition_decision": "Full source A+/B+ sufficiency and grading weights are unpublished. Necessary sweep/failure evidence may be stored without inventing the complete author classifier.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "All implementation plots use America/New_York. Raw desktop August 20/27/28 and April 23 snapshots explicitly show local UTC-4; their displayed box boundaries support those specific dated comparisons. Compiler ET annotations, post times and mobile phone clocks do not establish every source axis. The August 3 author phrase uses “6PM EST”; preserve that literal wording separately from a configured Sunday 18:00 New York exchange-session variant. Source PDH/PDL calendar and exact Friday closing endpoint remain independently unresolved.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The sweep/failure distinction is supported, but the source does not publish sufficient criteria for a complete mechanical A+/B+ classifier. FORMULAS’ iff wording overstates what the pack/primary evidence can certify."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Correct same-key pairing is only a prerequisite improvement. The producer loses the actual trade ID, side, entry time and reference lifetime, and treats only 10–11 as previous hour."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "613/647 is any qualifying flag among three range classes on a day. It is not the grade of an individual entry or a performance rate conditional on that grade."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "July 10 shows separate Asia/NYAM/10–11 episodes, not proof that every entry is A+. August 25 lacks the retained three-box failure, but that cannot prove the author would label every possible trade B+."
+        }
+      },
+      "source_refs": [
+        "GB:93",
+        "GB:147",
+        "GB:242",
+        "GBRAW:6",
+        "GBRAW:18",
+        "GBRAW:20",
+        "GBRAW:22",
+        "GBRAW:40",
+        "GBRAW:57"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-G11-A-2026-07-10.png",
+          "sha256": "36e1906c56b09f1e6b33db7489ccb2a18959ea44f85716e48e002758e443b264"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-25",
+          "plot": "plots/R-G11-B-2026-08-25.png",
+          "sha256": "303f2e4bb5d58eb55d00ef0ae41332f2be67960829704175e219909650964921"
+        }
+      ]
+    }
+  }
+]

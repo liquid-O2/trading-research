@@ -1,0 +1,178 @@
+{
+  "case": {
+    "id": "R-P06",
+    "case": "A",
+    "date": "2024-01-03",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 518,
+    "negative_count": 129
+  },
+  "production_session": {
+    "date": "2024-01-03",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 7300,
+    "expected_1s": 10800,
+    "missing_1s": 3500,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16665.75,
+    "L": 16598.0,
+    "open": 16657.75,
+    "close": 16617.0,
+    "EQ": 16631.875,
+    "Q25": 16614.9375,
+    "Q75": 16648.8125,
+    "W69": 67.75,
+    "volume": 43160.0,
+    "close_0859": 16617.0,
+    "open_0930": 16610.0,
+    "w_pct_0859close": 0.4077149906722032,
+    "w_pct_0930open": 0.4078868151715834,
+    "WpriorRTH": 251.0,
+    "w_rel_prior_rth": 0.2699203187250996,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 16873.5,
+    "prior_rth_low": 16622.5,
+    "asia_high": 16721.0,
+    "asia_low": 16693.25,
+    "london_high": 16716.75,
+    "london_low": 16689.0,
+    "path_class": "low-only",
+    "break_order": "low",
+    "first_high_break_ms": null,
+    "first_low_break_ms": 1704292320000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1704290400000000000,
+    "outcome_start_ns": 1704292200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1704295020000,
+    "m05_side": "low",
+    "reversal_bin": "bin.1000-1030",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "gb.asia formation",
+      "low": 16693.25,
+      "high": 16721.0,
+      "start": -4.0,
+      "end": 0.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "gb.asia H",
+      "price": 16721.0,
+      "start": 0.0,
+      "end": 6.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.asia L",
+      "price": 16693.25,
+      "start": 0.0,
+      "end": 6.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.asia EQ",
+      "price": 16707.125,
+      "start": 0.0,
+      "end": 6.0,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "box",
+      "label": "london.00-03 formation",
+      "low": 16689.0,
+      "high": 16716.75,
+      "start": 0.0,
+      "end": 3.0,
+      "color": "#be4b33"
+    },
+    {
+      "kind": "line",
+      "label": "london.00-03 H",
+      "price": 16716.75,
+      "start": 3.0,
+      "end": 6.0,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "london.00-03 L",
+      "price": 16689.0,
+      "start": 3.0,
+      "end": 6.0,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "london.00-03 EQ",
+      "price": 16702.875,
+      "start": 3.0,
+      "end": 6.0,
+      "color": "#5e7c22",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.gb.asia": {
+      "n": 240,
+      "missing": 0,
+      "open": 16716.75,
+      "high": 16721.0,
+      "low": 16693.25,
+      "close": 16694.75
+    },
+    "range.london.00-03": {
+      "n": 180,
+      "missing": 0,
+      "open": 16695.0,
+      "high": 16716.75,
+      "low": 16689.0,
+      "close": 16709.75
+    },
+    "p06_first_hit": {
+      "position": "below",
+      "london_first_hit": "asia_low",
+      "sequential": 0
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P06-A-2024-01-03.png",
+  "notes": [
+    "Actual clock substitutes: Asia20:00\u201300:00, London00:00\u201303:00; no source NY-vs-London table."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 760,
+    "code": "def p06(r):\n        return bool(r.get(\"p06_first_hit\"))"
+  },
+  "event": "London first-hit of Asia H/L",
+  "detail_window": [
+    -4,
+    -3.5
+  ]
+}

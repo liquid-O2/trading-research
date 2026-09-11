@@ -1,0 +1,178 @@
+{
+  "case": {
+    "id": "R-F17",
+    "case": "A",
+    "date": "2025-01-23",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 4,
+    "negative_count": 643
+  },
+  "production_session": {
+    "date": "2025-01-23",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5833,
+    "expected_1s": 10800,
+    "missing_1s": 4967,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 21919.5,
+    "L": 21872.5,
+    "open": 21880.0,
+    "close": 21896.25,
+    "EQ": 21896.0,
+    "Q25": 21884.25,
+    "Q75": 21907.75,
+    "W69": 47.0,
+    "volume": 29576.0,
+    "close_0859": 21896.25,
+    "open_0930": 21888.75,
+    "w_pct_0859close": 0.2146486270480105,
+    "w_pct_0930open": 0.21472217463308776,
+    "WpriorRTH": 191.0,
+    "w_rel_prior_rth": 0.24607329842931938,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 22093.5,
+    "prior_rth_low": 21902.5,
+    "asia_high": 21967.0,
+    "asia_low": 21926.0,
+    "london_high": 21969.0,
+    "london_low": 21913.75,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1737646440000,
+    "first_low_break_ms": 1737642600000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1737640800000000000,
+    "outcome_start_ns": 1737642600000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1737648120000,
+    "m05_side": "high",
+    "reversal_bin": "bin.1030-1200",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 21986.5,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 22056.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 22020.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 21888.75,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "box",
+      "label": "code >=100-lot refill cluster",
+      "low": 21928.25,
+      "high": 21928.75,
+      "start": 11.274486501404445,
+      "end": 12,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "code refill cluster low",
+      "price": 21928.25,
+      "start": 11.274486501404445,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code refill cluster high",
+      "price": 21928.75,
+      "start": 11.274486501404445,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2025-01-22",
+    "f17_actual": {
+      "result": true,
+      "lo": 21928.25,
+      "hi": 21928.75,
+      "cluster_start_ns": 1737648988151405137,
+      "leave_ns": 1737649385647523467,
+      "return_ns": 1737649387925040331,
+      "cluster_window": [
+        21928.75,
+        21928.5,
+        21928.25
+      ],
+      "first3_sides": [
+        1,
+        1,
+        1
+      ]
+    },
+    "tape_window": {
+      "date": "2025-01-23",
+      "from": 9.5,
+      "to": 12,
+      "trades": 126944,
+      "buy_volume": 93473.0,
+      "sell_volume": 92582.0,
+      "unknown_volume": 0.0
+    },
+    "prints_ge_30": 35,
+    "prints_ge_75": 20,
+    "prints_ge_100": 14
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2025-01-22_2025-01-28.parquet"
+  ],
+  "plot": "plots/R-F17-A-2025-01-23.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 715,
+    "code": "def f17(r):\n        return bool(r.get(\"f17_refill_zone\"))"
+  },
+  "event": "on-touch refill zone from MBP-1",
+  "detail_window": [
+    11.283333333333333,
+    11.783333333333333
+  ]
+}

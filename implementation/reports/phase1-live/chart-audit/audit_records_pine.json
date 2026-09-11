@@ -1,0 +1,1690 @@
+[
+  {
+    "id": "R-P01",
+    "title": "AM TBR daily-return sigma, first touch and return to 08:00 open",
+    "sources": [
+      "PINE AM TBR - NQ Stats.txt:135",
+      "PINE AM TBR - NQ Stats.txt:146",
+      "PINE AM TBR - NQ Stats.txt:336"
+    ],
+    "source": "The source uses sample standard deviation of 20 previous completed DAILY simple percentage returns, anchored to 08:00 open, with first ±0.25σ touch. Its lower-timeframe branch scans for return starting on the touch minute; its chart fallback skips that bar. FORMULAS simultaneously says after the touch bar and from the touch bar itself. Stop unqualified certification until those branch semantics are explicit. Hardcoded hourly claims and milestones are not measured local rates. The source daily f_sigma()[1] is distinct from chart-bar sample history; changing the multiplier does not recalibrate its fixed statistics. MAE is measured from the open over the whole touch chart bar through reversion, while far-side MFE is drawn only after reversion.",
+    "finding": "The producer takes 19 log returns from at most 20 closes, starts with only five closes, and can substitute an RTH close. Both-side touch chooses smaller overshoot instead of distance from the bar open. ext_max is only the touch-bar extension. July10 returns from upper29959.91 to 08:00 open29816.75; January10 lower21232.94 touch does not return to21320.75 by noon. These validate observations of the named implemented variant, not the printed sigma distribution.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p01_sigma_bands",
+      "formulas_flow.py::r_p01_touch_revert",
+      "recipe_score.py::_preds.p01",
+      "FORMULAS.md::R-P01"
+    ],
+    "fix": [
+      "Resolve the same-minute wording by documenting the two literal source execution branches. A causal research version must keep unresolved within-minute order ambiguous unless executions establish it; do not silently change the source branch and retain its published rates. Preserve both the source one-minute lookup and its deep-history/chart fallback, chart timeframe and available lower-timeframe coverage. The whole touch chart bar may contain pre-touch extrema, which must be labelled literal source behaviour rather than post-entry excursion.",
+      "Require 21 consecutive eligible completed session closes to form exactly20 simple returns r_i=100*(C_i/C_(i−1)−1). Use sample standard deviation with denominator19, all returns known before08:00. Identify the contract, daily-session convention and roll policy; missing session closes cannot fall back to RTH without a separately named variant.",
+      "At08:00 freeze O, σ_px=O*sd(r)/100 and all displayed O±kσ_px levels. Scan08:00–12:00 for the first upper/lower touch. On a both-side minute use distance from that minute open, upper on equality, for the literal source branch; record the tie and original OHLC.",
+      "Track return to O and the entire extension path until return/end, using the resolved same-minute policy. Measure touched-side excursion from O and opposite-side MFE only after reversion. Retain per-touch side/hour, known_at, first return, milestone times and conditional counts; do not pool incomplete/no-touch sessions as failures. Keep fixed hour/side tables, pooled milestone tables and local empirical counts separate. Mark the first visit of any independently selected high/low target as retirement of its active line; sigma and open reference bands retain their expressly defined statistical lifecycle and do not reset on every crossing."
+    ],
+    "acceptance": [
+      "A21-close input yields20 returns; 20 closes or a missing close is insufficient for the source lookback. A log-return fixture must differ when returns are large.",
+      "July10 upper touch around09:52 and return10:32 remain identifiable under the existing log variant; recompute source bands before comparing source outcomes. January10 has no return by12:00.",
+      "Changing only the touch-bar open must alter the both-side tie choice where appropriate. A later larger excursion before return must update ext_max."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "same-minute ordering unresolved; insufficient/mixed close history",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "These Pine source clocks explicitly use America/New_York; date-specific DST is therefore justified here, independently of PDF chart-axis zones. P01 is Monday–Friday 08:00–12:00 exclusive, P02 uses current/previous hourly series, P03 requires exact hour:00 chart bars and derives its endpoint from bar counts, P04 has 02/09/13 quarter-hour boxes with an inclusive bar-start cutoff, and P05 uses Asia 18–02/London 02–08/NY 08–17. One-minute OHLC closes are known at bar end; bar-count windows, missing bars, daily-session history and source chart timeframe must be retained explicitly.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Source 20 completed daily simple-return sample SD is explicit, while FORMULAS gives contradictory after-touch versus from-touch-minute wording. Literal lower-timeframe and chart fallback branches differ, so unqualified source certification stops."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Caller uses at most 20 closes for 19 log returns, allows five-close warmup and mixes daily/RTH fallbacks. Helper chooses both-side touch by overshoot rather than touch-minute open, and retains only touch-bar extension."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Daily revert Boolean omits first-touch side/hour cohorts, no-touch eligibility, extension/reversion stages and fixed-table provenance. The script’s pooled milestone percentages are not interchangeable with hour-specific reversion rates."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 has the plotted log-variant upper 29959.91 touch near 09:52 and 29816.75 open return 10:32; January 10 touches lower 21232.94 but never returns to 21320.75 by noon. These are observations of different sigma inputs from the source."
+        }
+      },
+      "source_refs": [
+        "PINE AM TBR - NQ Stats.txt:135",
+        "PINE AM TBR - NQ Stats.txt:146",
+        "PINE AM TBR - NQ Stats.txt:336"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P01-A-2026-07-10.png",
+          "sha256": "5806bc221faeef8dd751fd2be48e84835e36f9bb069eaf6b98cb55b944fc8240"
+        },
+        {
+          "case": "B",
+          "date": "2025-01-10",
+          "plot": "plots/R-P01-B-2025-01-10.png",
+          "sha256": "a398d21b8eef2db50fa5f42dcf7ece42ed7460f826406a2b192ea325ab613d2f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P02",
+    "title": "Hourly sweep, four return targets and 24-by-2 conditional tables",
+    "sources": [
+      "PINE NQ Hourly Retracements 12y Stats with Levels.txt:126",
+      "PINE NQ Hourly Retracements 12y Stats with Levels.txt:151",
+      "PINE NQ Hourly Retracements 12y Stats with Levels.txt:185"
+    ],
+    "source": "The source retains prior-hour H/L/open/mid, compares current open with prior open, and distinguishes high and low sweeps and returns to the swept edge, prior mid, CURRENT hour open and opposite edge. Its depth levels are percentages of prior-hour width. The24×2 arrays are quoted historical claims, not a new daily any-event probability. Only the sweeps are detected live; post-sweep retracement and depth statistics are hardcoded external tables with no cohort-rebuilding estimator in the supplied script. Exact external sampling methodology remains unpublished.",
+    "finding": "The current producer scans09:00–16:00 and ORs hour results. The helper only calculates high-side returns, so low_sweep and high_ret_50 does not implement a low return.637/647 is effectively any high-sweep edge return. July10 has a high-sweep return; June16 has clear low-sweep returns, including09:01→09:02, yet scores false.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p02_hourly_sweep",
+      "recipe_score.py::_preds.p02"
+    ],
+    "fix": [
+      "Emit one record for every complete current hour and complete prior hour across all24 hours. Freeze prior H/L/O/M and current O at the hour boundary, with isAbove=(currentO>priorO). Require positive prior width and document timezone/DST hour identity. The source’s last observed hourly candle may bridge missing hours; preserve that behaviour only in a literal port and require adjacent complete hours in a separately named causal audit. Repeated DST hours need distinct UTC identities.",
+      "Track independent strict high and low sweeps chronologically. For each side retain first sweep time and subsequent returns to its swept edge, prior midpoint, current-hour open and opposite edge within the same hour. Reverse inequalities for the low branch; never reuse high-return fields. Keep source strict sweep detection separate from the user’s first exact revisit lifecycle: each high/low line stops at that first visit, and a later independent sweep cannot rearm the same reference. The same first-contact episode may complete a later return after the active projection ends.",
+      "Preserve literal same-bar touch semantics as a source branch and keep causal within-minute ordering unresolved where necessary. Measure maximum extension beyond the swept edge through the defined hour horizon, divide by prior width, and draw H+q*W/100 or L−q*W/100 for the selected published depth percentile.",
+      "Compute counts and rates by hour×isAbove×side, conditional on an actual sweep for return rates. Keep sweep incidence, both/neither, depth quantiles and each target separate. A daily OR may be an explicitly named summary with its own denominator. Clearly label the proposed local return evaluator and its chosen horizon; the Pine source does not recalculate these hardcoded statistics. The source table values cannot certify either local sample size or return chronology."
+    ],
+    "acceptance": [
+      "July10 prior08-hour high29878.75 is swept09:31 and returns around09:39. June16 low30508.75 swept09:01 and returned09:02 must populate the low-return record.",
+      "A low sweep without a high sweep cannot depend on high_ret_50. Current and prior opens deliberately different must select the current open as return target.",
+      "A late-hour sweep followed only by a next-hour return is not an in-hour success; non-sweep hours do not enter return denominators."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "same-minute sweep/return order; daily OR discards conditional unit",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "These Pine source clocks explicitly use America/New_York; date-specific DST is therefore justified here, independently of PDF chart-axis zones. P01 is Monday–Friday 08:00–12:00 exclusive, P02 uses current/previous hourly series, P03 requires exact hour:00 chart bars and derives its endpoint from bar counts, P04 has 02/09/13 quarter-hour boxes with an inclusive bar-start cutoff, and P05 uses Asia 18–02/London 02–08/NY 08–17. One-minute OHLC closes are known at bar end; bar-count windows, missing bars, daily-session history and source chart timeframe must be retained explicitly.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Source defines frozen prior H/L/O/M, current open class, strict sweeps and four displayed return targets. It calculates live sweep flags but its return/depth tables are fixed quoted cohorts, not a live return estimator or G-default rejection model."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Python scans only 09–16 and ORs hours; helper computes only high-side returns, and low_sweep combined with high_ret_50 cannot implement a low return. Same-bar ordering and completeness remain unchecked."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "637/647 daily positives are an any-high-sweep-edge-return measure, not the source hour×open-class×side cohort or each conditional return target. Fixed percentage-of-prior-width tables cannot be presented as locally fitted rates."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both main charts and the August 31 negative-hour supplement were re-viewed. July 10 high sweep/return exists; June 16 09:01 low sweep/09:02 return is missed. August 31 11–12 has neither sweep despite a true daily headline from another hour."
+        }
+      },
+      "source_refs": [
+        "PINE NQ Hourly Retracements 12y Stats with Levels.txt:126",
+        "PINE NQ Hourly Retracements 12y Stats with Levels.txt:151",
+        "PINE NQ Hourly Retracements 12y Stats with Levels.txt:185"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P02-A-2026-07-10.png",
+          "sha256": "734aa20808b069d6410fd3f7a02c5c9ea34a334149aaad5ebc5a4a2383efc145"
+        },
+        {
+          "case": "B",
+          "date": "2026-06-16",
+          "plot": "plots/R-P02-B-2026-06-16.png",
+          "sha256": "5afe2de2ac2ac73eec881a3bef710f5b2abc3371fb7cc8e24febe2b3297bfe4b"
+        },
+        {
+          "case": "event-negative",
+          "date": "2026-08-31",
+          "plot": "plots/R-P02-event-negative-2026-08-31.png",
+          "sha256": "10e4e1bb7166e8cef2addb46ef3a5436c894430aab96330cd3e9fb7c986a438d"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P03",
+    "title": "Seven magic-hour boxes, first break, invalidation and midpoint target",
+    "sources": [
+      "PINE magic_hours:55",
+      "PINE magic_hours:145",
+      "PINE magic_hours:465",
+      "PINE magic_hours:527"
+    ],
+    "source": "The source builds hours23/00/01/02/06/07/08, then seeks the midpoint after a strict first break and before a stop at75% or100% of width. Actual outcome logic ends three hours after box completion; the displayed hard-stop countdown is one hour later. The supplied file ends in malformed text_ and cannot compile as supplied. FORMULAS does not preserve the source execution distinctions, so faithful certification stops.",
+    "finding": "The producer invents break time hour+4minutes and target time hour+20minutes, both before the hour box completes, chooses direction using future extremes and otherwise assumes a low break even when none occurred. The helper ignores invalidation.647/647 midpoint wins is not the source event. January28 hour01 has no break; July10 hour06 has an actual07:00 high break followed07:30 midpoint return.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p03_magic_hour",
+      "formulas_flow.py::ext_to_zone",
+      "recipe_score.py::_preds.p03",
+      "FORMULAS.md::R-P03"
+    ],
+    "fix": [
+      "Resolve the incomplete source file and distinguish literal three-hour outcome window from its erroneous countdown before faithful use. Keep printed probabilities as source claims. Do not invent the missing final source text or infer trade entries from the Z labels. Record selected-hour versus Auto mode and every reset/display deletion. The source clears drawings at the next selected setup despite its history setting; do not infer a stored independent ledger of every simultaneous box. Exact minute:00 starts and chart-bar-count endpoints must be tested with missing bars and other chart timeframes.",
+      "For each of the seven full hour boxes freeze H/L/M/W only at completion. Search the following three hours for the first strict edge break, recording side/time and any both-side minute. Never select direction by the final maximum and never substitute low when no break exists. Literal dual-boundary chart bars choose the high side, while the lower-timeframe scan finds only the first either-boundary timestamp; side and timestamp can disagree. Record that source discrepancy instead of silently claiming tick chronology. Both active high/low references expire independently at their first exact revisit; a later separate strict break after a consumed level is not a new fresh opportunity.",
+      "Advance bar by bar after the break: source invalidation has priority before midpoint target in each later chart bar and the break bar itself is skipped. Use inv=1W for00/01/06/07 and0.75W for02/08/23. A causal variant needs actual execution order when stop and target share a minute. Stop evaluating after invalidation, target or deadline.",
+      "At each evaluation derive ep=100*distance beyond broken edge/W and Z1<25,Z2<50,Z3<invPct,Z4<150,Z5<300,Z6 otherwise. Draw implemented bounds on each hour’s own chart; source display levels include0,.25,.5,inv,1.5,3,4W and source runners use the broken edge, not midpoint. Report per-hour eligibility, first-break wins, invalidations and target times; no session OR under a per-hour headline. v_cur_zone uses the current bar’s extension, not the maximum extension since the break. Preserve that live classification separately from maximum excursion and runner outcomes. Existing main charts show only produced box/midpoint geometry because the source projection/stop state is absent from production."
+    ],
+    "acceptance": [
+      "January28 hour01 H26349/L26246 never breaks in its evaluation window and cannot win. July10 hour06 high29862.25 breaks07:00 and midpoint29833.875 returns07:30 before invalidation.",
+      "A midpoint touch03:03 preceding July10 hour02 break03:53 is not the target; the later05:19 return is. Target timestamps cannot precede box known_at.",
+      "Stop before target is a failure even if midpoint is eventually reached. A no-break hour and a75%-stop hour must exercise different branches."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "fabricated pre-completion times; retrospective side; stop ignored",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "These Pine source clocks explicitly use America/New_York; date-specific DST is therefore justified here, independently of PDF chart-axis zones. P01 is Monday–Friday 08:00–12:00 exclusive, P02 uses current/previous hourly series, P03 requires exact hour:00 chart bars and derives its endpoint from bar counts, P04 has 02/09/13 quarter-hour boxes with an inclusive bar-start cutoff, and P05 uses Asia 18–02/London 02–08/NY 08–17. One-minute OHLC closes are known at bar end; bar-count windows, missing bars, daily-session history and source chart timeframe must be retained explicitly.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS omits source execution distinctions; supplied magic_hours ends in incomplete text_ and cannot compile as supplied. Three-hour bar-index outcome horizon and one-hour-later displayed countdown are different, and fixed probabilities are not empirical local results."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Caller invents break at hour+4 and target at hour+20 before the box completes, chooses side from future high and otherwise defaults low even without a break, then ignores invalidation and checks only one following hour."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "647/647 fabricated midpoint wins do not measure first strict break, stop-before-target or per-hour eligibility. An earlier midpoint visit cannot count as a later break’s outcome."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 hour 06 actually breaks high 07:00 and reaches midpoint 07:30; hour 02’s early midpoint precedes its 03:53 low break/05:19 later return. January 28 hour 01 has no strict break in the independently checked source horizon."
+        }
+      },
+      "source_refs": [
+        "PINE magic_hours:55",
+        "PINE magic_hours:145",
+        "PINE magic_hours:465",
+        "PINE magic_hours:527"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P03-A-2026-07-10.png",
+          "sha256": "35975b5cd0947ffec7db147a6f83a493fa1fbe91b8cf1cd452095442fd0b57de"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-P03-B-2026-01-28.png",
+          "sha256": "5adf937c0aafab4ec2fdbadedd65d2bc6cb5d15126330fdd400472451c4a21ca"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P04",
+    "title": "Three 15-minute raid boxes, confirmed return and frozen raid depth",
+    "sources": [
+      "PINE Session Raid Stats.txt:27",
+      "PINE Session Raid Stats.txt:395"
+    ],
+    "source": "Source boxes are02:00–02:15,09:00–09:15 and13:00–13:15 NY, with strict5-point raid and close back within120minutes. Same raid-bar close-back is allowed. Literal source buckets disagree with their labels: bucket0 covers depths below30, while overflow starts80 despite >70 text. At deadline the source saves statistics before that bar’s confirmation update. FORMULAS’s labelled buckets are not the literal implementation. Source return only means back across the raided boundary, not necessarily inside the opposite boundary. Denominator is all expired sessions; zero cutoff never expires/stores counts, hiding boxes disables geometry, and the point ladders are backdrawn over formation rather than extended through the raid window.",
+    "finding": "The current caller uses09:00–10:00, only high raids, and scores raid OR confirmation. The helper uses maximum depth to the cutoff even after the first confirmation. July10 raid of the wrong box around11:25 cannot demonstrate the source09:15 box event, whose deadline is11:15. January28 high-side non-raid ignores a large low-side move.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p04_raid",
+      "recipe_score.py::_preds.p04",
+      "FORMULAS.md::R-P04"
+    ],
+    "fix": [
+      "Stop certification of published bucket rates until literal versus intended bucket semantics and cutoff update order are labelled. Preserve original source defects in a literal replication; correct labels/logic only in a separately named version.",
+      "Build complete15-minute H/L boxes at02/09/13 and freeze at:15. For each side evaluate strict H_bar>boxH+5 or L_bar<boxL−5 through box_end+120minutes, using actual timestamps. Five points is20NQ ticks, not5ticks. Do not require return inside the opposite bound. Preserve the inclusive bar-start cutoff in the literal version while storing the later close-availability time separately. Keep zero-cutoff non-expiry, source display-toggle dependencies and absent exact :15 bars explicit.",
+      "After the first raid accumulate the running extreme only until the FIRST qualifying close-back, including the raid bar under the source rule. Freeze depth then. Track high and low independently; preserve raid without confirmation as its own event. The user’s active high/low lifecycle consumes each edge on the first exact revisit, which may occur before the strict >5-point excursion. Continue that same first-contact episode if it extends into a raid; do not authorize a later independent raid by rearming an already consumed line.",
+      "Draw the actual three source box geometries and both point ladders 20/30/40/50/60/70 in a future literal replication, keeping their source formation-only drawing scope separate from event windows. Current audit charts retain only what production builds. Reproduce confirmed-depth counts divided by ALL expired sessions and FIRST-500 cap as literal source outputs; any raid-conditioned rate needs its own explicit denominator. Store source display status separately from statistics already saved before the expiry-bar confirmation update."
+    ],
+    "acceptance": [
+      "A high exactlyH+5 is not a raid; H+5.25 with same-bar closeH qualifies the literal confirmation. A low-side equivalent must also work.",
+      "A confirmed11-point raid followed by a later40-point excursion retains11-point first-return depth. Test depths19,20,29,30,70,79,80 against both literal and corrected bucket labels.",
+      "July10 wrong-box11:25 event cannot enter the09:15 source box’s11:15 deadline. At the cutoff distinguish bar start from completed close."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "post-confirmation depth; wrong clock and pooled raid/presence",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "These Pine source clocks explicitly use America/New_York; date-specific DST is therefore justified here, independently of PDF chart-axis zones. P01 is Monday–Friday 08:00–12:00 exclusive, P02 uses current/previous hourly series, P03 requires exact hour:00 chart bars and derives its endpoint from bar counts, P04 has 02/09/13 quarter-hour boxes with an inclusive bar-start cutoff, and P05 uses Asia 18–02/London 02–08/NY 08–17. One-minute OHLC closes are known at bar end; bar-count windows, missing bars, daily-session history and source chart timeframe must be retained explicitly.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Literal source bucket thresholds, all-expired-session denominator and expiry update order differ from labelled/proposed formulas. Confirmed raids greater than 5 but less than 30 share bucket zero, and overflow begins at 80 despite the >70 label."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current caller uses the 09–10 box, only high raids, accepts raid without confirmation and accumulates maximum depth after first confirmation. Correct audit subtitle now states strict >5 points; the retained score description had >=5."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Raid-presence OR close-back is not a confirmed raid statistic. Source counters use all expired sessions, cap the first 500, and freeze amplitude at the first return; Python pooling and post-return maxima measure different events."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both corrected implementation charts were re-viewed. July 10’s wrong-box high raid near 11:25 is after the source 09:15 box’s 11:15 cutoff; January 28 has no code high raid but a substantial low-side move. These display the implemented gap, not source 15-minute geometry."
+        }
+      },
+      "source_refs": [
+        "PINE Session Raid Stats.txt:27",
+        "PINE Session Raid Stats.txt:395"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P04-A-2026-07-10.png",
+          "sha256": "2d7862f1e907e91002084b0ac12550a92f6b8ea302b56c08101be62bf452d51f"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-P04-B-2026-01-28.png",
+          "sha256": "05290e583940ce60cb14ed33f24060c2009eeca8c8366eb2076a2d4d30c044a2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P05",
+    "title": "London body-quarter level and the whole-NY-session close-back",
+    "sources": [
+      "PINE Session Range Candles + 25% Level.txt:814",
+      "PINE Session Range Candles + 25% Level.txt:930"
+    ],
+    "source": "The source uses Asia18:00–02:00, London02:00–08:00 and NY08:00–17:00. The level is25% into the London BODY from its close side. Success/fail/stay compares the entire NY candle’s wick and final close, not a local rejection candle. Source doji drawing uses >= while the statistical direction uses >; regime branches overlap and their precedence matters. The source joins snapshots at the next Asia open, retains the last 252 joined sessions and does not itself validate completeness. London H/L taken counters are inclusive and “sequential H+L” is unordered both-side occurrence.",
+    "finding": "The implementation instead uses London00:00–03:00 and NY09:30–12:00, and ORs the bullish failure into the positive scorer while the bearish helper omits symmetric failure/stay outputs. January28 source London is bearish with level26286.1875 and a valid NY wick/close-back; the code is a bullish failure at26292.0625. The equal true flags represent different events and geometry.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p05_london_25",
+      "recipe_score.py::_preds.p05"
+    ],
+    "fix": [
+      "Create separate complete source session candles on the exact clocks, including the prior-evening Asia start. At08:00 freeze London O/C/H/L, bodyTop=max(O,C), bodyBot=min(O,C), B=bodyTop−bodyBot and level=bull?bodyTop−.25B:bodyBot+.25B. Record doji classification separately and preserve source drawing/statistical branch differences. Distinguish each session’s own end from the source snapshot taken at the next session start, especially with user-customized overlapping/gapped clocks. Retain incomplete source joins only as literal behaviour, not certified complete sessions.",
+      "At17:00 classify whole NY candle: bullish London success if NYL<level and NYC>level, failure if NYL<level and NYC<=level, stay if NYL>=level; bearish mirrors use NYH>level and close below/at-or-above. Add the source London H/L wick-return counters separately.",
+      "Freeze Asia/London containment regime and NY-open-versus-London-mid at08:00 with documented branch precedence. Keep the source252-history retention and incomplete-session treatment explicit; do not recompute a London sign using NY price. The source “sequential” H+L label is only unordered both-side taking; do not convert it to an ordered sequence. For the user’s active references, end each London/Asia high and low at its first exact revisit since completion, including visits before the NY window; keep full-session historical candle counters separate from fresh-level eligibility.",
+      "Score success only as success. Return failure, stay and no-body cases with their own labels and per-direction/regime counts. Draw source and named legacy level with distinct clocks when comparing; outcome known_at is17:00, not the intraday wick time."
+    ],
+    "acceptance": [
+      "January28 source London O26301.75/C26281 gives bearish level26286.1875; NYH26306 and NYC26268.25 is success. Legacy bullish-failure true cannot be presented as the same event.",
+      "July10 source bearish level29823.8125 with NYC30068.5 is not a bearish close-back success.",
+      "Bull failure, bear failure, stay, doji and exact equality each retain distinct output fields; a midday return followed by a failed17:00 close is not source success."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "wrong session clocks; future NY close is outcome, not entry feature",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "These Pine source clocks explicitly use America/New_York; date-specific DST is therefore justified here, independently of PDF chart-axis zones. P01 is Monday–Friday 08:00–12:00 exclusive, P02 uses current/previous hourly series, P03 requires exact hour:00 chart bars and derives its endpoint from bar counts, P04 has 02/09/13 quarter-hour boxes with an inclusive bar-start cutoff, and P05 uses Asia 18–02/London 02–08/NY 08–17. One-minute OHLC closes are known at bar end; bar-count windows, missing bars, daily-session history and source chart timeframe must be retained explicitly.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Source body-quarter formula and full-NY wick/final-close classification are supported. The source level is .25O+.75C, not a quarter of high–low range; doji drawing and statistical direction branches differ."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Producer substitutes London 00–03 and NY 09:30–12, includes bullish failure in the positive flag and omits symmetric bearish failure/stay fields. It cannot reproduce the source whole-session classification."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "An OR of success and one failure class is not a success rate. Source uses all sessions in the selected regime/color, rolling last 252 joined sessions, with final outcome known at 17:00."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 28 code bullish failure is true while source-clock bearish 26286.1875 succeeds with NY close 26268.25; July 10 source bearish 29823.8125 fails with NY close 30068.5. Equal flags do not establish equal geometry or events."
+        }
+      },
+      "source_refs": [
+        "PINE Session Range Candles + 25% Level.txt:814",
+        "PINE Session Range Candles + 25% Level.txt:930"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-P05-A-2026-01-28.png",
+          "sha256": "d06561bb380c1dff73c3f07cf0242a5be35102136903e172a1c1737c79f6ba23"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P05-B-2026-07-10.png",
+          "sha256": "6dcac75cceb9ee88e722910f38c8900850774aa3b8456ab278751af83527dba9"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P06",
+    "title": "Mapper first-side and opposite-side hits on the source clocks",
+    "sources": [
+      "PINE NQ Statistical Mapper.txt:199",
+      "PINE NQ Statistical Mapper.txt:283",
+      "PINE NQ Hourly Retracement Levels.txt:128"
+    ],
+    "source": "The source Asia20:00–02:00, London02:00–08:00 and NY08:00–16:00 tables condition on session open versus the previous session midpoint. First-hit ties choose HIGH, and the opposite sequential flag can be set in the same chart bar. Asia-in-NY uses crossover/crossunder rather than any span. FORMULAS’s later opposite hit and generic hit description do not fully describe these source branches. Source session-display toggles gate underlying range construction. Its one-sided hit checks can flag a session already beyond the boundary at open, whereas the hourly-level sibling removes levels on inclusive bar spans only during 08–16.",
+    "finding": "The caller substitutes Asia20:00–00:00 and London00:00–03:00, returns only whether any London first hit exists, and omits the NY and conditioned tables. The helper chooses both-side ties by overshoot and delays sequential detection to a later bar. July10 source Asia low is first reached02:21; August28 source low is reached03:44, outside the legacy London window, so the retained false is not a source negative.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p06_first_hit",
+      "recipe_score.py::_preds.p06",
+      "FORMULAS.md::R-P06"
+    ],
+    "fix": [
+      "Document literal source tie, same-bar sequential and Asia-NY crossover semantics before certification. A chronology-correct execution variant may differ but must retain its own name. Use20–02/02–08/08–16NY and validate all source bars.",
+      "Freeze completed prior-session H/L/M at each new session. Position is current open>M, with equality below. Track first high/low hit and opposite flag, storing timestamps and both-side-bar ambiguity; implement the literal high-first tie only for that source branch. Independently retire each high and low on its first exact revisit since completion, not merely the first event within a later selected window. A consumed Asia edge cannot regain freshness at NY open; preserve the source already-hit-London cohort only as historical classification. Record an open beyond a line separately from an observed crossing where intervening coverage is absent.",
+      "Build London-versus-Asia and NY-versus-London separately. For Asia levels during NY store the source crossover predicates using previous/current values as well as any named span alternative, conditional on whether the corresponding level was hit in London. The 07–08 midpoint, midnight open and 02–03 midpoint targets have separate source identities and are not inferred from the London first-hit sequence. Retain the hourly sibling’s 08:00 draw/reset and its explicit 08–16 removal logic as source behaviour; the user freshness gate still scans a selected high/low from its real known_at.",
+      "Use strict London engulf, inclusive Asia containment and specified partial-up/down branches. Report first-high, first-low, no-hit and conditional opposite-hit rates for each position/pattern cohort; hardcoded probabilities remain reference claims. Source session/display toggles must be part of a literal execution configuration; a research feature must not silently change when drawing is hidden. Do not substitute 75% display filters for empirical eligibility."
+    ],
+    "acceptance": [
+      "July10 source Asia H29963.5/L29804.25 has first low touch02:21. August28 H29707/L29594.25 has first low touch03:44 and cannot be labelled source no-hit by the00–03 proxy.",
+      "A bar reaching both bounds chooses HIGH in literal source and can mark sequential immediately; the named causal view reports unresolved order if executions are unavailable.",
+      "An Asia level already exceeded before NY and never recrossed distinguishes crossover from any-reach. Empty conditional populations have n=0.",
+      "August26,2026 is a real source-clock no-hit: Asia20–02 H29283.25/L29096, London02–08 H29278.75/L29185. The legacy code is positive from the shorter Asia high29275.25. Keep source no-hit and legacy positive distinct."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "wrong completed ranges; intrabar order conflated; conditional units lost",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "P06 Mapper explicitly defines Asia 20–02/London 02–08/NY 08–16 in America/New_York, and P07/P08 explicitly define NY 09:30 OR/IB windows. P09 and P10 time() session calls omit a timezone and use the chart symbol’s exchange timezone; an EST tooltip or NY-looking label does not override that. Current Python uses date-specific America/New_York, including prior 18–17 Globex for P10, which remains a named input convention. Bar-start versus close-availability, completed daily candles, missing constituent bars and each source security() branch are tracked separately.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS’ later-opposite-hit and generic span descriptions differ from literal source high-first dual-bar priority, same-bar sequential count and Asia-in-NY crossover branch. Source session geometry is 20–02/02–08/08–16 NY."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Caller uses 20–00 and 00–03 boxes, returns only any London first hit and omits NY/context cohorts. Helper chooses dual-bar side by overshoot and waits a later bar for the opposite hit."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Any-hit daily frequency loses first-side, open-vs-midpoint, range-pattern and later-opposite cohorts. Hardcoded tables and UI-gated source construction are not a new empirical return or entry rate."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both newly focused main charts and the August 26 source-clock negative supplement were re-viewed. July 10 Asia low first visit 02:21 and August 28 03:44 exist on source clocks; August 26 full Asia 29283.25/29096 is unhit in London despite the shorter-box code true."
+        }
+      },
+      "source_refs": [
+        "PINE NQ Statistical Mapper.txt:199",
+        "PINE NQ Statistical Mapper.txt:283",
+        "PINE NQ Hourly Retracement Levels.txt:128"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P06-A-2026-07-10.png",
+          "sha256": "73bfeff55d6ae64b574ea2aa6f9b08e1e37fc8021d3f27c5e40d53e9c5cfd307"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-28",
+          "plot": "plots/R-P06-B-2026-08-28.png",
+          "sha256": "5058856fc0e0abcc3ad2240348b46f5d589d884f44d74c508d29632f4cf6a1f5"
+        },
+        {
+          "case": "event-negative",
+          "date": "2026-08-26",
+          "plot": "plots/R-P06-event-negative-2026-08-26.png",
+          "sha256": "686b2eb736bacab9592faa080cd63639e9c7173ce843db8dd2cf02fc76f4d244"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P07",
+    "title": "OR5/OR15 midpoint returns and correctly conditioned source tables",
+    "sources": [
+      "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:141",
+      "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:476",
+      "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:899"
+    ],
+    "source": "The source first extreme is the first attainment of the FINAL OR high/low WITHIN the OR, not the first post-OR edge touch in FORMULAS. Doji is bullish (C>=O); the midpoint flag is not session-gated and source extension comparisons are strict. Its unconfirmed security values and SessionClose validation flag also require availability cautions. Stop the current cohort definition before using source probabilities. Its FORMULAS fixture also rounds an incorrect extension: 16608*1.00411=16676.25888, not 16674.6.",
+    "finding": "The helper computes an actual midpoint but calls onlyOR5 with an outcome ending at noon, uses C>O and post-OR first extreme, and the scorer retains only midpoint return. Both plotted dates formed the OR low09:30 before high09:33, while the helper calls high first from later action. July10 midpoint29866.875 returns09:39; October8 midpoint25104.5 never returns in RTH.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p07_or_mid",
+      "recipe_score.py::_preds.p07",
+      "FORMULAS.md::R-P07"
+    ],
+    "fix": [
+      "Correct the source description to distinguish within-OR extreme order, after-OR edge hits and IB path. Declare the literal unbounded midpoint flag versus a named RTH-bounded return. Do not interpret the source SessionClose boolean as checking direction; it only checks that the session ended. The unshifted higher-timeframe lookahead_on values can expose completed historical formation data early. Require all constituent minutes through OR completion for the causal version, and reject oversized chart bars that import intrabars outside the OR.",
+      "Build complete09:30–09:35 and09:30–09:45 candles. At their ends freeze final H/L/O/C/M and locate the earliest complete constituent minute attaining each final extreme, high on source tie. Set bullish=C>=O; no OR-derived feature exists before its completion.",
+      "After each completion evaluate midpoint span or close-cross using the resolved source horizon. Separately draw price-percentage extensions:5m H*1.00411/L*.99550;15m H*1.00380/L*.99585. Strict source extension reach and named inclusive touch need separate fields. Each OR high/low line ends on its first exact revisit after completion, independently. The first-contact episode may later confirm a breakout, while a subsequent separated retest cannot be a newly fresh boundary. Keep midpoint-return and extension statistics separate from this lifecycle.",
+      "Report midpoint rate by OR duration×colour×within-OR first extreme, extension reaches, later IB direction and source next-break prediction/outcome separately. Recompute all denominators from eligible sessions; do not treat copied probabilities or a reached opposite edge as proof of a first-post-OR race. Preserve source fixed lookup values separately. Its “next break” prediction can choose the opposite formation extreme even below 50% and its validation tests any later chosen-side break, not a first-boundary race. SessionClose marks validation on session end without comparing closing direction; final high-bit priority is not first side."
+    ],
+    "acceptance": [
+      "July10 andOctober8 both use within-OR low09:30 before high09:33. Their later high-first path must not alter the combo key.",
+      "July10 midpoint29866.875 touches09:39; October8 midpoint25104.5 is unhit in RTH despite reaching the upper extension. A PM-only midpoint return distinguishes noon from RTH horizon.",
+      "A doji is bullish in source; an exact extension-edge touch fails a strict reach. No5m box level may be used at09:32.",
+      "The FORMULAS OR-high16608 extension equals16676.25888 before tick rounding, not16674.6. Percentage-of-price and percentage-of-range fixtures must disagree on nonsymmetric inputs."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "cohort uses wrong chronology; source security future values",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "P06 Mapper explicitly defines Asia 20–02/London 02–08/NY 08–16 in America/New_York, and P07/P08 explicitly define NY 09:30 OR/IB windows. P09 and P10 time() session calls omit a timezone and use the chart symbol’s exchange timezone; an EST tooltip or NY-looking label does not override that. Current Python uses date-specific America/New_York, including prior 18–17 Globex for P10, which remains a named input convention. Bar-start versus close-availability, completed daily candles, missing constituent bars and each source security() branch are tracked separately.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Source first extreme is the earliest final H/L occurrence inside the completed OR, not the first later edge hit. Source bullish includes doji, midpoint detection runs outside RTH until reset, and SessionClose validation only checks session end."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Python uses OR5 only, ends midpoint outcomes at noon, uses C>O and post-OR extreme order. It omits OR15, source formation-security availability and separately defined prediction/outcome fields."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "A pooled OR5 midpoint-return flag is not the source duration×color×within-OR-order conditional statistic, strict extension exceed rate or first-break prediction. Source next-break validation can accept any later chosen-side break."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 and October 8 final OR lows form 09:30 before highs 09:33; helper labels later high-first instead. July 10 midpoint 29866.875 returns 09:39; October 8 midpoint 25104.5 stays unhit through RTH despite upper extension reach."
+        }
+      },
+      "source_refs": [
+        "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:141",
+        "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:476",
+        "PINE NY 5m and & 15m Orb Statistics & LTF Candle structure.txt:899"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P07-A-2026-07-10.png",
+          "sha256": "133a2c1b884a0941e1fec4f0cb0646f4d28ca347a6ee2e9de2e4d2ad21cac24a"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-P07-B-2025-10-08.png",
+          "sha256": "e8b41a6d3d85de0173f6dbf99af74b145bf9872b86c6d62289b3c54d4c5dc6c3"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P08",
+    "title": "IB eight-way class, source midpoint-band retest and extensions",
+    "sources": [
+      "PINE Initial Balance Statistical Mapping.txt:44",
+      "PINE Initial Balance Statistical Mapping.txt:55",
+      "PINE Initial Balance Statistical Mapping.txt:279"
+    ],
+    "source": "The source combo is IB colour, first attainment of FINAL IB high/low WITHIN the IB, and IB CLOSE versus midpoint. FORMULAS says open versus midpoint and post-10:30 first touch, changing the table key. The source0.1%-of-price return uses an endpoint-near test and can leave/return in the same bar; it also skips the first post-IB bar and processes16:00 before reset. These variants cannot share unqualified source claims. The source unknown-extreme label can still route to the LOW table, and later both-break flags prioritize HIGH regardless of the first side. Its range-rank sample includes the current completed IB, which is valid at completion but not earlier.",
+    "finding": "The current scorer is a reduced close-break path class after10:30, without the eight combo keys, midpoint leave/return, percentile extensions or source wick inequalities. January28 IB26301/26205 breaks only low on closes; July10 IB29968.5/29798 later breaks both. Correct box placement does not validate the missing source statistic.",
+    "targets": [
+      "recipe_score.py::_preds.p08",
+      "family_open.py::build_open_table",
+      "FORMULAS.md::R-P08"
+    ],
+    "fix": [
+      "Correct the source combo to C>=O, first final extreme within09:30–10:30, and C>mid (equality below). Preserve the source’s post-boundary update defects as a literal variant; a corrected causal variant must be labelled independently. Preserve missing constituent extremes as Unknown, not an implicit LOW class in a corrected version. Keep literal source fallback separately visible; do not count unavailable combinations as measured failures.",
+      "At10:30 freeze complete IB H/L/O/C/M and source combo. Scan later highs/lows for strict wick breaks. Keep close-break paths as a separate existing research row; do not let an eventual both-side path rewrite first-break side. End each active IB high/low at its first exact revisit, including equality before a strict break. Preserve the historical first-contact episode for later close confirmation; later independent breaks of consumed boundaries require a new reference and cannot rearm the same IB line.",
+      "For the literal midpoint retest set d=M*.001: first abs(C−M)>d, then endpoint abs(L−M)<=d or abs(H−M)<=d, allowing source same-bar behaviour. A general band overlap or a two-tick touch is a different event. Store leave/retest timestamps and ambiguity. Midpoint retest is independent of a preceding boundary break in the source. Do not add an unprinted break prerequisite. Later both-break bits select the HIGH display table literally, which must not replace the stored first-break timestamp.",
+      "Draw upper H*(1+p/100) for p=.140,.314,.601,.997 and lower L*(1−p/100) for p=.163,.380,.794,1.366. Report each reach, return time, first break and final RTH direction per eight-way cohort; do not reuse P08’s reduced single-path rate."
+    ],
+    "acceptance": [
+      "An IB whose open is below midpoint but close above must be ABOVE. A final high formed09:45 before low10:05 must be high-first regardless of later boundary contacts.",
+      "January28 low-only andJuly10 both-side close paths remain valid labelled reduced observations; neither supplies the missing source combo/retest outcomes.",
+      "A bar spanning the entire midpoint band with both endpoints far away is not a literal endpoint-near return. Test exact0.1% equality and first10:30/16:00 boundary handling."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "retrospective class confusion; source boundary-bar quirks",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "P06 Mapper explicitly defines Asia 20–02/London 02–08/NY 08–16 in America/New_York, and P07/P08 explicitly define NY 09:30 OR/IB windows. P09 and P10 time() session calls omit a timezone and use the chart symbol’s exchange timezone; an EST tooltip or NY-looking label does not override that. Current Python uses date-specific America/New_York, including prior 18–17 Globex for P10, which remains a named input convention. Bar-start versus close-availability, completed daily candles, missing constituent bars and each source security() branch are tracked separately.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS changes both source class inputs: source uses final IB extreme order inside the IB and IB close versus midpoint, not open position or post-IB first touch. Endpoint-near return and source boundary processing are also distinct."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Production builds IB bounds and close-based single/both/neither path but none of the eight source class keys, midpoint leave/return, strict wick branches or percentile extensions. The fallback ib_single remains the same narrow descriptive family."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "517/647 single-close-path days are not eight-way conditional rates or midpoint/extension performance. Missing class construction cannot be certified by correct IB H/L placement."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 28 IB 26301/26205 yields a later low-only close path; July 10 29968.5/29798 yields both. Those reduced observations do not establish source midpoint-band retest or its combo key."
+        }
+      },
+      "source_refs": [
+        "PINE Initial Balance Statistical Mapping.txt:44",
+        "PINE Initial Balance Statistical Mapping.txt:55",
+        "PINE Initial Balance Statistical Mapping.txt:279"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-P08-A-2026-01-28.png",
+          "sha256": "998d7da4a0909af3810a8be661192c7a6ca7345f24513a1df7ddf791dee87563"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P08-B-2026-07-10.png",
+          "sha256": "021bdd87d5c1594996d7bf6504a6dda74088110e234d82395bc01464bda905bd"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P09",
+    "title": "Open-location conditional no-break rates over the complete RTH",
+    "sources": [
+      "PINE NQ Stats RTH Breaks with stats.txt:27",
+      "PINE NQ Stats RTH Breaks with stats.txt:61",
+      "PINE NQ Stats RTH Breaks with stats.txt:148"
+    ],
+    "source": "The source prints conditional above/below far-side no-break and inside zero/one/both-side rates. Its time() calls omit timezone, so default Custom08:30–16:00 and the09:30–16:00 toggle use the chart exchange clock. FORMULAS labels them as NY without resolving that setting. The source displays fixed claims rather than dynamically computing those rates. Runtime processing is restricted to the most recent five calendar days relative to last_bar_time; the quoted rates are not recalculated from those visible sessions.",
+    "finding": "Unlike the stale CODE paragraph, the producer now uses full09:30–16:00 NY H/L and strict wick breaks correctly for that named window. It then ORs above/below far-side no-break with inside stay, losing the distinct conditional probabilities. January28 opens above priorH26114.25 and never breaks farL25917.25; July10 opens inside and later breaks only the upper edge.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p09_no_break",
+      "recipe_score.py::_preds.p09",
+      "FORMULAS.md::R-P09"
+    ],
+    "fix": [
+      "Resolve and record the source chart symbol, exchange timezone and session selector. Keep the current NY09:30–16:00 as an explicit named variant until the source setting is known; do not assume08:30 exchange time equals08:30NY. Record the five-calendar-day display/runtime gate separately from the external probability sample. A port over all local dates is a named research evaluation, not a reproduction of its unprovided historical estimator.",
+      "Require complete previous and current sessions on the selected clock. Freeze prior H/L before current open; classify Above if O>H, Below if O<L, otherwise Inside. Equal edge opens belong Inside.",
+      "Use strict wick H_today>priorH and L_today<priorL for the final session outcome. For Above return no_break_prev_low, for Below no_break_prev_high, and for Inside return exactly one of stay/one_side/both. Nonapplicable outputs remain null. Historical opening-location/no-break classification can continue to refer to prior boundaries after contact, but active reference lines obey the user’s first-revisit rule on both sides. On January 28 prior high 26114.25 is already consumed at January 27 16:45, so the late-morning retouch cannot be labelled fresh. The far low remains a separate independently tracked level.",
+      "Publish each conditional rate with its own cohort count and both above/below directions. If retaining a pooled OR summary, name it explicitly and keep it separate from84.11/81.82/14.30 claims. An unfinished session is censored until its close."
+    ],
+    "acceptance": [
+      "January28 namedNY Above cohort is far-side no-break true. July10 Inside is one-side true and stay false after the afternoon upper break.",
+      "A wick equal to a prior edge is not a strict break; an open on the edge is Inside.",
+      "CME exchange08:30 and NY08:30 must not accidentally index the same interval. The three Inside outcome counts must sum to the eligible Inside cohort."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "source clock unresolved; pooled conditional probabilities",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "P06 Mapper explicitly defines Asia 20–02/London 02–08/NY 08–16 in America/New_York, and P07/P08 explicitly define NY 09:30 OR/IB windows. P09 and P10 time() session calls omit a timezone and use the chart symbol’s exchange timezone; an EST tooltip or NY-looking label does not override that. Current Python uses date-specific America/New_York, including prior 18–17 Globex for P10, which remains a named input convention. Bar-start versus close-availability, completed daily candles, missing constituent bars and each source security() branch are tracked separately.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The source code omits an explicit timezone, while FORMULAS presents NY RTH. Its default custom 08:30–16 and optional 09:30–16 operate in exchange time, and its probabilities are fixed reference claims."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current Python correctly uses full 09:30–16 NY strict wick outcomes for that named window, correcting stale prose, but does not preserve source session selection or separate conditional outputs."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Above far-low no-break, Below far-high no-break and Inside stay are pooled into one Boolean. This cannot represent the distinct source 84.11/81.82/14.30 conditional claims or Inside zero/one/both partition."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 28 named-NY Above cohort has far-low no-break; July 10 Inside has upper-only break, so stay is false. Prior high 26114.25 was already revisited January 27 at 16:45; its later retouch is historical context, not a fresh reference."
+        }
+      },
+      "source_refs": [
+        "PINE NQ Stats RTH Breaks with stats.txt:27",
+        "PINE NQ Stats RTH Breaks with stats.txt:61",
+        "PINE NQ Stats RTH Breaks with stats.txt:148"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-P09-A-2026-01-28.png",
+          "sha256": "2517d147d692296b4a0707aa302031f23a9689efd4e2405c2719b7a57eefe0d8"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P09-B-2026-07-10.png",
+          "sha256": "fd0998482ea494c68852fb2fd1aec1bc1ecea22cdb3a833bb3722b1d469787af"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P10",
+    "title": "Floor-pivot geometry, opening zones and actual level contacts",
+    "sources": [
+      "PINE Daily Floor Pivots.txt:1"
+    ],
+    "source": "The source classical pivots share prior H/L/C algebra with the implemented P/R1–3/S1–3. It also has R4/R5/S4/S5 and golden zones, and printed opening-zone statistics whose state is reset every bar in source. Timezone is implicit and the headline probabilities are hardcoded. A one-sided high>=P test does not establish contact with P. Main top-down golden-zone bounds are stored unsorted in the source, making its IN_GZ condition impossible in that mode. “At PP” uses a ±0.1%-of-P threshold, and 2482-day fixed continuation/rejection percentages are overlapping outcomes rather than complementary wins/losses. FORMULAS also contains an arithmetic contradiction: its printed R3=17148.83 does not follow its own H16873.5/L16598/C16650 inputs; correct R3 is 17091.8333. Source certification therefore stops beyond the matching core algebra.",
+    "finding": "Current pivot lines are correctly placed for the named prior18:00–17:00 Globex inputs, but the producer scores only RTH high>=P, omits the lower price bound and supplies no opening-zone outcomes. July10 P29773.25 is actually contacted10:32; January10 P21313.33 is uncontacted during RTH despite the earlier08:30 move. Most fields described by the source remain unscored.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p10_pivots",
+      "recipe_score.py::_preds.p10"
+    ],
+    "fix": [
+      "Record the source session/timezone and prior completed H/L/C convention. Preserve source opening-state reset behaviour as a literal defect; a fixed opening-zone study must have its own name. Freeze the prior inputs before the new session.",
+      "Retain P=(H+L+C)/3, R1=2P−L, S1=2P−H, R2=P+(H−L), S2=P−(H−L), R3=H+2(P−L), S3=L−2(H−P). Port remaining R4/R5/S4/S5 and golden-zone formulas exactly from the reviewed source, retaining formula/line references and tick rounding for every bound. Explicit remaining levels are R4=R3+(H−L), R5=R4+(H−L), S4=S3−(H−L), S5=S4−(H−L). Main golden bounds are L+.5W/L+.618W in bottom-up mode and H−.5W/H−.618W in top-down mode; store raw source ordering and a separately named sorted geometry. For each ascending adjacent pivot pair a<b, source bottom-up band is [a+.5d,a+.618d] and top-down [b−.618d,b−.5d], d=b−a. For the descending S pairs the source reverses orientation: default [b−.618d,b−.5d], top mode [a+.5d,a+.618d]. Do not generalize the unsorted main-band bug to these explicitly ordered inter-pivot bands.",
+      "Detect actual per-bar overlap low<=level<=high, or a separately declared crossing/tolerance rule, rather than high>=level alone. Return first contact time for each level and zone; a price that stays wholly above P does not touch it. Store exact PP contact separately from source At-PP opening category |O−P|<=.001*P. Pivots and golden zones have a fixed daily formula/snapshot lifecycle; any separately selected prior high/low reference still stops on first revisit on each side.",
+      "Freeze the opening zone once at the session open and report each specified later target/contact conditional on that zone. Keep P contact, golden-zone entry, further pivot reach and quoted source claims as different outputs with complete-session denominators."
+    ],
+    "acceptance": [
+      "July10 P29773.25 contact10:32 is a positive actual contact; January10 RTH stays belowP21313.33, so it is negative regardless of pre-RTH touches.",
+      "For H120/L100/C110, P110,R1/S1=120/100,R2/S2=130/90,R3/S3=140/80. A session entirely above115 cannot touchP110.",
+      "Later price moving between opening zones must not rewrite the initial zone; verify every added source level algebra against a non-symmetric H/L/C fixture.",
+      "Use the actual asymmetric FORMULAS fixture H16873.5/L16598/C16650: P16707.1667 and R3=H+2(P−L)=17091.8333, not its printed17148.83; retain unrounded prices until the declared tick-display rule."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "one-sided reach as contact; source opening-state reset",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "P06 Mapper explicitly defines Asia 20–02/London 02–08/NY 08–16 in America/New_York, and P07/P08 explicitly define NY 09:30 OR/IB windows. P09 and P10 time() session calls omit a timezone and use the chart symbol’s exchange timezone; an EST tooltip or NY-looking label does not override that. Current Python uses date-specific America/New_York, including prior 18–17 Globex for P10, which remains a named input convention. Bar-start versus close-availability, completed daily candles, missing constituent bars and each source security() branch are tracked separately.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The pivot algebra matches, but FORMULAS defines touch by a one-sided inequality and labels source opening clocks without resolving exchange time. Its asymmetric fixture also miscomputes R3: H16873.5/L16598/C16650 gives R3=17091.8333, not 17148.83. Source geometry support does not certify that procedure."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Named prior-Globex pivot algebra is placed correctly, but scorer only checks current RTH high>=P without the lower bound. It omits source opening-zone categories, golden zones and additional pivot levels."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "534/647 high>=P flags are not actual contacts or source opening-zone-conditioned continuation/rejection. “At PP” in source means ±0.1% of P and differs from a one-tick or exact-contact test."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 P29773.25 is actually crossed 10:32; January 10 P21313.33 stays above RTH price despite a pre-RTH move. These cases check the named PP observation only, not absent source zones/statistics."
+        }
+      },
+      "source_refs": [
+        "PINE Daily Floor Pivots.txt:1"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P10-A-2026-07-10.png",
+          "sha256": "699995410fa173ed747b42dcd7943f3d37e963cf9c771a46271e9a2e32826083"
+        },
+        {
+          "case": "B",
+          "date": "2025-01-10",
+          "plot": "plots/R-P10-B-2025-01-10.png",
+          "sha256": "c29066259e04051f52d1517669a2f6217d73b63e142188e6ee740e3d3fa0f626"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P11",
+    "title": "First-presented 5m FVG by window, fill depth and hourly bias",
+    "sources": [
+      "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:8",
+      "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:148",
+      "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:170"
+    ],
+    "source": "Default source FVG timeframe is5m. Its W1 condition actually opens09:00 despite the09:30 comment; raw security lookahead_on and chart-shifted HTF timestamps can expose future data. The first15-minute bias reads a later selected-bar close. The source never defines the hardcoded effectiveness event, while FORMULAS chooses hourly direction. Stop faithful certification of that choice and of the W1 clock. Source boxes extend to16:15, not FORMULAS16:00. The first15-minute bias takes the close of the first requested candle whose OPEN is at/after the15-minute mark (default09:15–09:20), not the candle closing09:15. Source hourly open±average full range has total width twice that average and is not a standard-deviation band.",
+    "finding": "The current producer searches one-minute09:30–10:00 bars and scores whether a gap exists, passing no fill outcome.645/647 is presence, not fill/effectiveness. July10 first BISI29892.75–29893.5 forms on09:33 bar, known09:34, and later fills; August7,2024 has no qualifying1m gap in that window. Neither decides the missing source5m W1/W2 study.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p11_first_fvg",
+      "recipe_score.py::_preds.p11",
+      "FORMULAS.md::R-P11"
+    ],
+    "fix": [
+      "Resolve literal09:00 W1 versus intended09:30 and preserve effectiveness as undefined unless the source author supplies its outcome. Treat hourly direction and near/mid/far fills as explicitly named research outcomes. Correct the source availability account before using unshifted HTF values. Keep source drawing expiry16:15 separate from any explicitly named fill deadline; do not infer the unprovided effectiveness metric from that line endpoint.",
+      "Build complete5m bars and identify bull low_i>high_(i−2) AND close_i>high_(i−2), bear high_i<low_(i−2) AND close_i<low_(i−2). Carry native bar times; middle-bar membership uses the actual HTF middle candle. Freeze a new gap only at formation bar completion. request.security time shifted with mtfTime[1]/[2] shifts chart samples, not true requested-context prior candles; carry the actual requested C1/C2/C3 timestamps and full constituent coverage in a corrected causal variant.",
+      "Select first gap independently for resolved W1 and W2=10:00–11:00. Bounds are[high_(i−2),low_i] for bull or[high_i,low_(i−2)] for bear. Track fills only after formation, using later lows for bull and later HIGHS for bear; the helper’s single later_low argument cannot represent both.",
+      "Keep gap presence, first direction, first15-minute bias, final hourly direction and each fill depth/time separate. W1 output is available after its end and W1/W2 combo after11:00; fixed source effectiveness arrays are reference claims, not observed success labels. Preserve the literal first15-minute selected candle and its later close availability separately from a corrected exact-first15-minutes bias. If the hourly average-range display is added, plot O±mean(prior completed hourly H−L) as range units, with history/slot/warmup parameters and both sides; do not label it sigma or an effectiveness estimator."
+    ],
+    "acceptance": [
+      "July10 one-minute gap known09:34 must be labelled1m comparison, not default5m source evidence. August7,2024 absence of that1m gap cannot prove no5m event.",
+      "Bull gap[100,103] later low102 fills near but not mid101.5 or far100; bear mirror uses later high. Formation-bar wick cannot serve as a later fill.",
+      "A09:20 middle-bar gap distinguishes literal W1 from the comment. No five-minute high/low may enter a decision before its completion.",
+      "A09:15–09:20 default requested candle is unavailable at09:15. A source box drawn to16:15 does not by itself authorize a16:00 or16:15 effectiveness label."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "source lookahead; present gap mislabeled fill/effectiveness",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Source sessionTimezone governs the clock (default America/New_York); its literal W1 admits 09–10 despite the 09:30 label, W2 is 10–11 and drawn box expiry is 16:15. These are code parameters, not inferred PDF axes. Current Python uses 09:30–10 NY one-minute bars. Requested five-minute open timestamps and their closing availability must be distinct from chart-series shifts.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS selects hourly direction for an undefined source effectiveness claim, changes literal W1 09–10 to 09:30–10 and calls box expiry 16:00 where the source draws to 16:15. These choices cannot be certified as source outcomes."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Producer searches one-minute 09:30–10 bars and supplies no later fill path. Source default five-minute values also have historical lookahead and chart-shifted timestamp issues that require an explicit literal versus causal treatment."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "645/647 is gap presence. It does not measure fill depth, hourly bias, W1/W2 confluence or the source fixed effectiveness lookup; a drawn box end does not define a study horizon."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 one-minute bull gap 29892.75–29893.5 is known 09:34 and later revisited; August 7, 2024 has no matching one-minute gap. Neither certifies the source five-minute windows or unknown effectiveness event."
+        }
+      },
+      "source_refs": [
+        "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:8",
+        "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:148",
+        "PINE First presented FVG (with stats) with statistical hourly ranges & bias.txt:170"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P11-A-2026-07-10.png",
+          "sha256": "65535211119bb92de1cf523efc407668b04a16b43e691a13b1f82b05b724c918"
+        },
+        {
+          "case": "B",
+          "date": "2024-08-07",
+          "plot": "plots/R-P11-B-2024-08-07.png",
+          "sha256": "13b1a0275ab541b8d7e960765773ac3bfaf2359517df3194ac5deac8c553b97a"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P12",
+    "title": "Distinct HTF sweep, CISD and T-spot implementations",
+    "sources": [
+      "PINE HTF Sweep Model with CISD Table.txt:136",
+      "PINE HTF Sweep Model with CISD Table.txt:309",
+      "PINE HTF Sweep Model with CISD Table.txt:343",
+      "PINE HTF Sweeps & Liquidity Levels with CISD.txt:695",
+      "PINE Open Source Fractal - Customized.txt:1",
+      "PINE Sweep, CISD, MTF FVG & Key Levels.txt:1"
+    ],
+    "source": "The source Model default main HTF is60m, with an LTF opposing-run2..10 CISD confirmed using the previous chart close. Its C3 box is current open to C2 BODY midpoint. OSF uses C2 H/L midpoint and its own LTF run/projection rules; the distinct file Sweep, CISD, MTF FVG & Key Levels.txt has a selective log-wick midpoint; neither HTF Sweeps & Liquidity Levels with CISD.txt nor customized OSF has that filter. FORMULAS substitutes15m and an HTF-close CISD and mixes candle identities in its fixture. These are separate sources, not interchangeable definitions. Customized OSF consumes C2 [1] only at the next HTF boundary, so its C2 trigger uses the completed HTF candle despite an unshifted request elsewhere. Its dual-edge sweeps can both trigger; do not import the log-wick file’s exclusion.",
+    "finding": "Current code passes only09:30 and09:31 one-minute candles, tests high sweep/close-back, and never tests low sweep or CISD. Its unscored mid_box uses prior body mid and current O. January2,2026 has a high sweep of25728.75 and a close-back; July10 sweeps prior high29876 but closes above it.133/647 therefore measures this two-minute high-only test.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p12_sweep_cisd",
+      "recipe_score.py::_preds.p12",
+      "FORMULAS.md::R-P12"
+    ],
+    "fix": [
+      "Stop the combined faithful row. Name the exact file/version, HTF/LTF, sweep strictness and C1/C2/C3 identities before implementing. Preserve Model close-only screener, strict-inside closed box and body-inside live-line variants separately; OSF and the log-wick sibling need distinct records.",
+      "For each chosen version build completed HTF candles causally and process both sweeps. Carry wick/body/inside tests independently, including double-sweep cases and equality. No current unconfirmed security high/low may be backfilled as known at the HTF open. For OSF, recognize C2 at the next HTF boundary using the completed prior candle: bull L2<L1 and C2>L1; bear H2>H1 and C2<H1. Both may be true. Log-wick filtering and its inside/outside exclusions belong only to the explicitly selected1603-line log-wick file.",
+      "Port only that version’s opposing-run CISD search, run-open selection, age limit, crossing and bar-completion lag. Model uses LTF runs2..10 and prior chart-close confirmation; OSF has its own extreme/run fallback and projection span. A sweep close-back alone cannot be a CISD. OSF search is2..10 opposing chart bars with fallback/stale-level behaviour retained in a literal trace; levels do not reset automatically each HTF. Its strict close cross/early alert has no barstate.isconfirmed gate, so a causal closed-bar policy is a named change. Model prior chart-close confirmation and its<30-bar age limit must not be swapped with this.",
+      "Construct the selected box from the actual next candle open and specified prior midpoint, attach known_at, lifespan and source invalidation. After CISD/box creation measure retest and objective reaches chronologically. Source OSF creates projection labels without projection lines; do not certify lines as a literal source feature without labelling an added display. OSF C3 range is between C3 open and C2 (H+L)/2; C4 is between C4 open and C3 (H+L)/2. C2 wick invalidation can delete phase geometry before CISD; C4 close[1] invalidation is delayed and can read the prior C3 on the first C4 chart bar. OSF projection label price is CISD+direction*abs(CISD−C2 extreme)*k for k=1/2/2.5/4/4.5; Body mode searches up to50 bars for matching extreme and falls back to wick. Preserve labels-only versus absent lines explicitly.",
+      "The independent OSF liquidity references are5/5 confirmed pivots, at most two per side, frozen on first inclusive wick revisit. Store pivot_at and confirmation_at separately, scan intervening bars when determining freshness at recognition, and retire each high and low independently at its first revisit. Backdrawing a pivot must not make it tradable before confirmation or restore an already revisited level. This independent liquidity/SMT layer does not implicitly gate C2/CISD."
+    ],
+    "acceptance": [
+      "January2 high-sweep close-back at09:31 is a named one-minute positive only; July10 close above29876 is a negative for that test. Neither establishes HTF CISD.",
+      "For C2 O100/C110/H120/L90, body midpoint105 and H/L midpoint105 coincide; add an asymmetric candle O100/C104/H120/L90 to distinguish102 from105. C3 open must not be substituted for C2 open.",
+      "Test low mirror, both-edge sweep, body equality, run lengths1/2/10/11 and a cross known one bar later. Future C3 price cannot alter the established C2 sweep.",
+      "Alter only the future C3 path: completed C2 sweep status at its recognition must remain fixed. A dual-sweep candle can activate both customized-OSF directions but is excluded by the separate log-wick variant. A consumed pivot cannot resume extending after a later HTF boundary."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "wrong candle/timeframe and missing confirmation; distinguish unconfirmed source fields from OSF completed-C2 consumption",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Current charts show the first two one-minute bars after 09:30 America/New_York. The Model default requested HTF is 60m and its auto display timeframe can differ; customized OSF uses its selected HTF boundaries and the chart LTF. The liquidity sibling has explicit UTC session windows 13–22/06–13/23–06, a separate clock. A timestamp, backdrawn C2 label, chart bar completion and HTF recognition are separate fields; no absolute PDF clock is inferred.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS combines distinct 60m Model body-midpoint, customized OSF wick-midpoint and another file’s log-wick filtering with a 15m/HTF-close CISD. Its fixture also confuses C2/C3 identities."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current caller tests only the first two RTH one-minute candles for a high sweep and close-back. It omits the low mirror, chosen HTF sequence, opposing-run CISD and phase lifecycle. OSF C2 consumption at the next boundary is completed-candle data and must not receive a blanket forward-C2 accusation."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "133/647 is the high-only two-minute sweep/close-back count. A close-back alone establishes neither CISD, C3/C4 retest nor any objective/reversal performance."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 2 closes back below prior high 25728.75; July 10 closes above 29876 and fails this predicate. The displayed helper body-mid boxes are independent of CISD and cannot stand in for the separate source constructions."
+        }
+      },
+      "source_refs": [
+        "PINE HTF Sweep Model with CISD Table.txt:136",
+        "PINE HTF Sweep Model with CISD Table.txt:309",
+        "PINE HTF Sweep Model with CISD Table.txt:343",
+        "PINE HTF Sweeps & Liquidity Levels with CISD.txt:695",
+        "PINE Open Source Fractal - Customized.txt:1",
+        "PINE Sweep, CISD, MTF FVG & Key Levels.txt:1"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-02",
+          "plot": "plots/R-P12-A-2026-01-02.png",
+          "sha256": "10b809ea3e7a9d20e933d4449cb7d52b2eae5d1984fb8ad57103e8526dee16f4"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P12-B-2026-07-10.png",
+          "sha256": "bb37b37891ee5198d8290dd6d4bcd5c2ef799892da4857c673e4ed48049f3247"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P13",
+    "title": "Midnight-open touch in08:00–16:00, with ancillary table gaps",
+    "sources": [
+      "PINE NQ Hourly Retracement Levels.txt:128",
+      "PINE NQ Hourly Retracement Levels.txt:279",
+      "PINE NQ Statistical Mapper.txt:310"
+    ],
+    "source": "The source midnight level is the00:00NY open, with exact bar-span touch in08:00–16:00. The hourly source also shows00–01/02–03/07–08 midpoints and other hour opens, plus position/pattern-conditioned claims. The two sources quote73.67% and73.75%; they are distinct historical claims, not evidence that the implementation must reproduce either exact number.",
+    "finding": "The current tdo_hit helper and tdo_touch_ny scorer correctly implement the stated midnight-open touch, unlike the stale09:30–12:00 CODE paragraph.460/647 is the retained pooled exact-touch count. July10 level29933 is actually touched; August31 level29352.5 stays below every NY bar. The four yes verdicts certify this headline predicate and geometry; the ancillary midpoint/conditional table rows remain missing.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "formulas.py::tdo_hit",
+      "recipe_score.py::_preds.p13",
+      "FORMULAS.md::R-P13"
+    ],
+    "fix": [
+      "Preserve the correct00:00 open and08–16 exact per-bar span predicate; update FORMULAS’s stale current-code account. Record the first spanning minute and its completion/observation time, source claim version and full-window coverage. Midnight open is an open-price object with its own source reset/removal lifecycle. The user first-revisit rule for external highs/lows must not be silently generalized to make every formula/open band the same object; still store the first actual midnight contact and do not relabel later contacts as first.",
+      "Require the00:00 bar and a complete eligible08–16 observation window. Missing origin or outcome bars must be null/censored, not false. Do not widen to two ticks or replace span with whole-session high/low containment.",
+      "For the described ancillary family, retain each hour open and completed hour midpoint as a separate level with own known_at. Build00–01,02–03 and07–08 midpoints from their actual complete hours; no level may project before completion. Keep all16 source hourly references individually addressable. Store origin_at, known_at, first_contact_at and the exact source display/removal window for each of the16 references. Keep source reference removal in08–16 distinct from any separately selected high/low whose freshness scan starts immediately after its formation.",
+      "Add conditional counts by08:00 open versus completed London02–08 midpoint and by source Asia20–02/London pattern, using P06’s explicit source branches. Preserve the current pooled midnight rate separately and compare source hardcoded claims without forcing equality."
+    ],
+    "acceptance": [
+      "July10 TDO29933 spans in08–16; August31 TDO29352.5 does not. These remain source-event positive/negative examples.",
+      "Two bars entirely on opposite sides with a data gap between them do not imply an observed span touch; an actual high==level or low==level does.",
+      "An absent midnight bar is unknown. A07–08 midpoint cannot be made available at07:30, and conditional counts must sum to the eligible covered population."
+    ],
+    "oks": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+    ],
+    "leakage": "none demonstrated for the headline exact-touch predicate",
+    "proxy": "no",
+    "ask_user": false,
+    "fixture": "existing helper pass; dated positive and negative agree; ancillary tables untested",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Both cited source branches explicitly anchor midnight at 00:00 America/New_York and test the NY 08–16 window. Python uses the same date-specific IANA conversion and exact one-minute bar spans. Midnight open is available at that bar open, whereas any hourly midpoint needs the entire hour; DST dates use the applicable offset.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The scoped headline source is exact midnight-open contact in 08–16 NY. The 73.67% and 73.75% source lookup values are distinct historical claims; the row does not certify their missing ancillary conditional tables."
+        },
+        "code_ok": {
+          "verdict": "yes",
+          "reason": "Current family_levels producer uses the 00:00 NY open and per-bar 08–16 spans through tdo_hit, correcting the stale FORMULAS current-code description. This matches the scoped headline predicate on the supplied dated cases."
+        },
+        "score_event_ok": {
+          "verdict": "yes",
+          "reason": "The retained 460/647 tdo_touch_ny count measures the stated pooled exact-contact event, rather than an unrelated wide-band contact or entry result. Missing-origin/window quality and ancillary cohorts remain explicit repair requirements."
+        },
+        "chart_ok": {
+          "verdict": "yes",
+          "reason": "Both charts were re-viewed. July 10 TDO 29933 is spanned during 08–16; August 31 TDO 29352.5 stays below every bar in that window. Correct scope supports yes for the headline geometry and event only."
+        }
+      },
+      "source_refs": [
+        "PINE NQ Hourly Retracement Levels.txt:128",
+        "PINE NQ Hourly Retracement Levels.txt:279",
+        "PINE NQ Statistical Mapper.txt:310"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P13-A-2026-07-10.png",
+          "sha256": "afc7d093770acff0ed53d1f688ea70757519c2bae790cb6834dec87c21440456"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-31",
+          "plot": "plots/R-P13-B-2026-08-31.png",
+          "sha256": "82c5bfdde008ca39dd8034c529b75395873db75bf6a308ef26ad074ac3ac9dfb"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P14",
+    "title": "Causal four-hour elimination state and HOD/LOD-already-in outcomes",
+    "sources": [
+      "PINE 4H HOD LOD Checkpoint Analysis.txt:30",
+      "PINE 4H HOD LOD Checkpoint Analysis.txt:401",
+      "PINE 4H HOD LOD Checkpoint Analysis.txt:556"
+    ],
+    "source": "The source freezes state at22/02/06/10/14 after the prior candle completes and before processing the new bar. Every completed candle has its own eliminated flag; prev compares the just-completed candle with its immediate predecessor. FORMULAS instead refers to the new checkpoint candle, and its fixture undercounts eliminated older candles. Unsupported source lookup combinations return50 with sample0, not measured50% probability. At the18:00 reset the source skips the first bar’s normal update; between-window tracking and stale completion fallback are unguarded. These literal execution defects must be disclosed separately from the intended session model.",
+    "finding": "The actual producer never calls r_p14_hod_checkpoint. It compares09:30–10:00 high with final09:30–16:00 high within one tick, with no four-hour state, ETH day or LOD. The unused helper counts changes of the running maximum rather than all eliminated candles and ignores the actual checkpoint when testing hod_at. January28 RTH H26301 is in by10; July10 final H30077.75 prints about15:03.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p14_hod_checkpoint",
+      "recipe_score.py::_preds.p14",
+      "FORMULAS.md::R-P14"
+    ],
+    "fix": [
+      "Correct the checkpoint/prev definition and source fixture before certification. Use source18–22,22–02,02–06,06–10,10–14 and14–17 windows, allNY. Retain first-bar/reset source defects as a literal variant; a causal reconstruction must say which defects it corrects.",
+      "For each completed candle store H/L and two persistent eliminated flags. A later strictly higher high eliminates EVERY earlier completed candle below it, not just the last running maximum; lows mirror. Store each elimination time and use the source chronological flag indices to derive sequential/skip.",
+      "At each checkpoint snapshot only completed prior state before the new bar contributes. Compute prev from the just-completed candle versus the immediately preceding candle. Freeze this feature record; use the eventual18–17 session high/low only as later labels, with tie/first-attainment policy explicitly specified. At10:00 prev is06–10 versus02–06, never10–14 versus06–10. Source strict elimination is a historical statistical flag; active external high/low lines still end at their first exact revisit, even equality before a later strict sweep. Retire each side separately and keep consumed references only as historical feature identities.",
+      "Measure HOD/LOD already present at each checkpoint and table rates by checkpoint×elimination count×structure×prev. Keep the existing RTH-before10 label as a named comparison. Unsupported/empty states have n=0 and no estimated probability; never treat source fallback50 as a forecast with evidence."
+    ],
+    "acceptance": [
+      "High sequence16700,16690,16705,16698 eliminates both first candles by10:00, not just16700. Altering prices after10 must not alter the10:00 feature snapshot.",
+      "January28 RTH H26301 before10 andJuly10 H30077.75 after10 exercise only the named RTH outcome; source ETH state requires its separate event ledger.",
+      "Test low mirror, equality (not strict elimination), skip structure, missing completed candle and unsupported sample0. A final session HOD supplied as a feature must fail the availability check.",
+      "An equality visit consumes an active reference but does not set the source strict-elimination flag; a subsequent strict breach may update historical elimination state without restoring line freshness. Source18:00 reset/skip and between-window handling need literal-versus-corrected fixtures."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "source/formula checkpoint lookahead; unused helper; RTH label replaces ETH conditional state",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The checkpoint source explicitly uses America/New_York windows 18–22/22–02/02–06/06–10/10–14/14–17 and the futures session date. Current chart comparisons use a different named 09:30–16 NY RTH day. Features lock at the transition after the prior window completes; final ETH/RTH HOD/LOD timestamps are later outcomes, not feature times.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Source prev compares the just-completed four-hour candle to its immediate predecessor and counts all eliminated earlier completed candles. FORMULAS refers to the new candle and undercounts the example; sample-zero fallback 50 is a display constant."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Caller never invokes the four-hour helper: it compares the first 30 RTH minutes to final RTH high within one tick. The unused helper counts running-high changes, ignores the real checkpoint and omits the source ETH/low state."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "RTH high already in by 10 is a named outcome label, not checkpoint×count×structure×prev HOD/LOD conditional probability. Final session high cannot be supplied as a causal feature."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. January 28 RTH high 26301 forms 09:44; July 10 final high 30077.75 forms 15:03 after first-30m high 29968.5. Their reduced RTH outcome does not establish the absent source four-hour state."
+        }
+      },
+      "source_refs": [
+        "PINE 4H HOD LOD Checkpoint Analysis.txt:30",
+        "PINE 4H HOD LOD Checkpoint Analysis.txt:401",
+        "PINE 4H HOD LOD Checkpoint Analysis.txt:556"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-P14-A-2026-01-28.png",
+          "sha256": "838acfcbe369e0373412ae9abe0e6875c16937093d294926c568c390f814675d"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P14-B-2026-07-10.png",
+          "sha256": "a66df744121dad2843c8533dc9b6db10aa425739fd10a4ee91680aa0f07e88d2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P15",
+    "title": "Separate SSL, range-projection and OHLC-distribution envelopes",
+    "sources": [
+      "PINE Session Statistical Levels.txt:24",
+      "PINE Session Statistical Levels.txt:707",
+      "PINE Session Range Projections with stats.txt:372",
+      "PINE Statistical OHLC Projections HTF.txt:322",
+      "PINE NQ Stats Price Distributions.txt:302"
+    ],
+    "source": "SSL, SRP and OHLC are three distinct envelope constructions; NQ Stats Price Distributions is another source with its own estimator and anchors. SSL uses100-session nearest-rank histories and has a bearish-side drawing swap plus counters mixing frozen levels with newly appended current data. SRP uses three15-minute boxes, whole-candle body extrema and range1-only statistics; its independent both-side hits are not ordered reversals. OHLC projection distribution is M+D (full range), while FORMULAS draws D alone and says latest60 despite source choosing oldest60 and unshifted live HTF data. Stop the combined faithful row. SSL direction histories are separately limited to100 per direction, observation starts at n>=2 and drawing at n>=5. SRP Both mode uses body-based true SD; OHLC doji is bearish while SSL/Price Distributions include doji as bullish. NQ Price Distributions uses fixed grids plus a different developing-daily volatility scaler; freezing at anchor does not fix its input vintage.",
+    "finding": "The producer substitutes prior60 RTH median widths, assumes MFE=.6*width and MAE=.4*width, anchors09:30 and scores only the upper threshold over full RTH. No source session quantiles, SRP ladder or OHLC history is assembled. July10 upper30071.15 is reached around15:03, outside source08–12 NY Morning; January28 upper26423.425 is unhit while the ignored lower threshold26138.55 is crossed.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p15_ssl",
+      "formulas_flow.py::r_p15_srp",
+      "formulas_flow.py::r_p15_ohlc_md",
+      "recipe_score.py::_preds.p15",
+      "FORMULAS.md::R-P15"
+    ],
+    "fix": [
+      "Stop certification and register explicit file/version/variant identities for SSL, SRP and OHLC projections. Preserve source counter, selection and drawing defects in literal replication; any corrected causal version must be separately named. Remove invented0.6/0.4 excursion quantiles from source-labelled fields.",
+      "SSL: use19–02,02–08,08–12,12–17NY. For each completed same session retain range=H−L, up=H−O, down=O−L and close displacement. At next session start freeze last100 priors and nearest-rank q=10/25/50/75/90. Symmetric levels O±Qq(range) differ from O+Qq(up)/O−Qq(down). Preserve source bearish MFE/MAE swap only in its literal drawing branch. Retain last100 pooled observations and last100 of EACH direction independently; SSL uses C>=O for bullish/doji. Literal source tracking begins at n>=2 and drawing at n>=5. Do not silently make both thresholds identical or interpret pooled tables as direction-conditioned samples.",
+      "SSL events: compute each level touch and same-sideP90 reach followed by close back insideP75, using the SAME frozen thresholds in numerator and denominator. Store all-history source counters separately from rolling100 estimates; appending the current session must not redefine that session’s already evaluated levels.",
+      "SRP: construct02/09/13:00–:15 wick H/L or body max/min across ALL constituent candle O/C values. Draw H+kW and L−kW for k1..6 after completion. Range1 stats run02:30–08:00; store side incidence and both conditional on each side, without imposing a source-unprinted sequence. True SD of last100 widths including just-completed box is a distinct display, default O±kσ, not kW. Source denominators increment on formation before the prior day may finalize, and the last outcome is finalized only on a later day; expose that literal censoring. show-box/recalculate toggles gate source geometry. SD uses population convention and source Both mode body widths only; default drawing endpoints stop at formation end and do not prove an outcome horizon.",
+      "OHLC: choose exact HTF and session anchor (default8h, daily18:00 with midnight option). For completed bullish candle M=O−L,D=H−O; bearish M=H−O,D=O−L, retaining source doji branch. Use same-slot history. Literal oldest60/unshifted source must be flagged; causal last60 completed priors is an explicit corrected version. Distribution distance is mean(M)+mean(D), or median(M)+median(D), not just D; manipulation is M. Keep separate up/down percentiles and max-range definitions. OHLC uses C>O bullish and doji bearish. Store mean(M)+mean(D), median(M)+median(D), max-range=max(H−O,O−L), and separate type7 P25/P75 of up and down excursions. The source global warmup>61 is not a guarantee of60 samples in each slot. Its daily18:00 and midnight reset quirks, custom daily alerts using each chart-bar O while lines freeze, and TF2 alerts reusing TF1 O require separate literal traces, not one synthesized vintage.",
+      "For every subfamily plot the actual anchor and every implemented bound, record known_at/history membership, and report per-side touch/reversion outcomes over its own window. Source close-inside percentages from NQ Price Distributions use that file’s return-sigma method and cannot validate these envelopes. No missing geometry is added during this audit. For NQ Price Distributions specifically, preserve32 anchor-specific fixed q5..95 grids and source O*(1±SIG[a]*vol_multiplier*grid/100). The multiplier is clamped0.5..2.5 from daily close-to-close SD252/1.259, distinct from the study’s open-to-close RMS return sigma. The unshifted daily lookahead_off input may develop in real time; a corrected prior-completed daily scaler requires its own name and availability record. Store unconditional close-below, tagged-band conditional close-inside and the source gauge’s current-close-z lookup as different objects. Current close is not maximum band tagged. The claimed3804-session/15-year fit cannot be locally reproduced from the constants alone."
+    ],
+    "acceptance": [
+      "July10 afternoon hit30071.15 cannot establish source08–12 MFE success. January28 lower26138.55 reach must not disappear under a high-only statistic.",
+      "For completed bull O100/H150/L80/C140, M20,D50 and distribution distance70, not50. Median(M)+median(D) must not be assumed equal to median(M+D).",
+      "Changing current-session final H/L cannot move frozen SSL thresholds. SRP body mode on a multi-bar box must use max/min of all bodies, not only session O/C. Test nearest-rank versus interpolation and100 versus60 histories.",
+      "In SSL, a current session completion must not change its already scored prior threshold; in OHLC, changing a developing HTF candle must not alter a corrected prior-only snapshot. In Price Distributions, a later close retreating from2σ to0.5σ must not erase the stored maximum tag or turn current-close gauge lookup into a tagged-band study."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "invented quantiles; source current-data counters/lookahead and wrong history selection",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "SSL defines NY 19–02/02–08/08–12/12–17; SRP defines its three NY 02/09/13:00–:15 formations and Range1 statistics only 02:30–08. OHLC projection HTFs use their own exchange/session slots and daily 18:00/midnight options; the price-distribution source has 32 separately named anchors, including Asia 19–02. Current producer anchors at NY 09:30 and observes the full RTH. A session label, daily security candle and its real availability are not interchangeable.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Source SSL, SRP and OHLC envelopes and the separate NQ distribution source use different estimators and clocks. FORMULAS substitutes D for OHLC M+D and latest60 for literal oldest60; combined faithful certification is unsupported."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Caller fabricates excursions as 0.6/0.4 of prior60 RTH median widths, anchors 09:30 and tests only the upper bound over full RTH. None of the source histories, ladders, slots or sigma-vintage controls is assembled."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The upper-threshold pooled count is neither source session MFE/MAE quantile incidence, SRP both-side conditional frequency nor close-inside-given-tag. Source constant grids and mixed-vintage counters need separate provenance."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 upper 30071.15 is reached at 15:03 outside SSL 08–12; January 28 upper 26423.425 is unhit while lower 26138.55 is crossed 11:44 and ignored. The plots expose the asymmetric proxy, not the source envelopes."
+        }
+      },
+      "source_refs": [
+        "PINE Session Statistical Levels.txt:24",
+        "PINE Session Statistical Levels.txt:707",
+        "PINE Session Range Projections with stats.txt:372",
+        "PINE Statistical OHLC Projections HTF.txt:322",
+        "PINE NQ Stats Price Distributions.txt:302"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P15-A-2026-07-10.png",
+          "sha256": "af815db338f273fb8f215269a1e0745c734a2be2f4f2979e32d0d27897ab5e48"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-P15-B-2026-01-28.png",
+          "sha256": "13a6d4c2573e15c7e9ae7f91cda6e9df4f9470d4434de2a1b05ec1e9706d0170"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P16",
+    "title": "Eight logarithmic volatility bands with a declared substitute and outcome",
+    "sources": [
+      "PINE Expected Volatility .txt:11",
+      "PINE Expected Volatility .txt:30",
+      "PINE Expected Volatility .txt:58",
+      "PINE NQ Stats Price Distributions.txt:302"
+    ],
+    "source": "Expected Volatility uses prior chart DAILY close and prior NASDAQ:VOLI daily close with a=V/16/100 and b=V/√365/100. Its session uses fixedGMT−5, and lower rectangle bounds are supplied in reversed order. VIX is a declared substitute, not VOLI. The75.2% daily-close claim comes from a different return-distribution script, so it does not describe whole-path containment in these bands. FORMULAS does not preserve those differences. Source close[1] is evaluated in each requested DAILY context with lookahead_on, so it is a completed-prior-candle request rather than unshifted future daily data. Its rectangles start at the first session chart-bar close and extend24hours; that drawing interval is not a source outcome horizon.",
+    "finding": "Current code has improved: it uses prior-session VIX and prior18–17 last close with correct log-space a/b bounds. It scores whole18–16NY path inside the outer1.0 bands, not per-zone touch or final-close containment. Prior last print is not verified official settlement and missing Globex data may fall back to RTH.658 retained rows lack the four newest bound keys. July10 fits outer29636.39–30229.04; October8 rises above25326.17 late in RTH.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "formulas.py::ev_vix16_zones",
+      "recipe_score.py::_preds.p16",
+      "FORMULAS.md::R-P16"
+    ],
+    "fix": [
+      "Name instrument, volatility input, source clock and prior price field explicitly. Preserve current VIX/last-Globex-close as a named proxy; VOLI is unavailable. Resolve fixedGMT−5 versus NY DST and source DAILY-close versus official settlement before faithful comparison. Do not silently use RTH close when the required input is missing.",
+      "Retain correct geometry: for k=.25,.5,1,1.5 upper=[A*exp(kb),A*exp(ka)] and lower=[A*exp(−ka),A*exp(−kb)]. Keep numeric lower bounds sorted for research drawing while recording source’s reversed rectangle arguments as a literal display defect. Freeze all inputs before the session starts. Keep source left=time_close and right=time_close+24h as literal display metadata; a named causal research display may show frozen levels from actual input availability, but must not call that the original rectangle. The prior daily close request and each volatility series have separate available_at fields.",
+      "Store distinct events for every inner/outer edge touch, interval entry, whole-session outer1.0 containment and final-close containment. The existing p16_inside may remain as the explicitly named whole-path outcome; it cannot inherit75.2% from a different sigma construction. These are fixed daily formula zones with source daily lifecycle, not external Asia/London high/low lines. Any separately selected session extrema retain their own first-revisit gate; do not apply an invented universal retire-on-touch rule to the volatility bands.",
+      "Require all source-bound keys, input dates, clock and schema version on cache reuse. Rebuild missing bound records in a later implementation task and compare actual price-path outcomes separately from geometry. Missing VIX/VOLI/anchor is null with reason and an excluded denominator."
+    ],
+    "acceptance": [
+      "July10 lower inner1.0 edge29684.11 is exceeded by low29675 but lower outer29636.39 is intact; these are different outcomes. Full path remains inside outer bands.",
+      "October8 outer upper25326.17 is exceeded before16:00; whole-path containment is false. A path leaving and closing back inside must differ from final-close containment.",
+      "At A16600,V14.04 verify all16 bounds from the exact exponential formula. July fixedGMT−5 session18–16 is19–17NY; winter agrees. A cache missing any required bound is invalid.",
+      "At A16600,V14.04, b=0.0073488718731666005; upper1.0=[16722.440622274462,16746.30597867834], lower1.0=[16454.972239898598,16478.455879995847]. Check all multipliers with full-precision inputs before display rounding, and distinguish first-chart-bar close from session open."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "proxy anchor/vol symbol; source clock difference; distinct close versus path labels",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Expected Volatility explicitly uses fixed GMT−5 18–16. During July and October DST this is 19–17 America/New_York, different from current Python18–16 NY. Source boxes begin at first session chart-bar time_close and end24h later. Requested prior DAILY close has each symbol’s own exchange candle and availability; it is not proven official settlement. These code settings, not a PDF-post timestamp, establish clock evidence.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS treats prior DAILY close as verified settlement and imports a75.2% close-inside claim from a different sigma script. Source VOLI log bands use fixed GMT−5 and define no path-containment success rate."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current exponential a/b geometry and prior VIX vintage improve on stale FORMULAS prose, but VIX/last-Globex-close are substitutes, NY18–16 differs from the source fixed-offset window, and missing Globex may fall back to RTH. Retained cache lacks the four newest1.0 bound fields."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Current p16_inside is whole18–16 path within outer1.0 bounds, whereas FORMULAS asks per-zone edge outcomes and a distinct daily-close calibration. These probabilities are not interchangeable."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed with all eight bands. July10 low29675 breaches lower inner29684.11 but stays above outer29636.39; October8 exceeds upper outer25326.17 late. These validate named VIX path examples only; source VOLI/settlement geometry cannot be certified."
+        }
+      },
+      "source_refs": [
+        "PINE Expected Volatility .txt:11",
+        "PINE Expected Volatility .txt:30",
+        "PINE Expected Volatility .txt:58",
+        "PINE NQ Stats Price Distributions.txt:302"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P16-A-2026-07-10.png",
+          "sha256": "5a7f2670b25d2735ced63a3a83be33602d4dcbf3b274b89cade88e86defdc87a"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-P16-B-2025-10-08.png",
+          "sha256": "c8125eefed989f055e3383bd5a9ae34cc2a24abf2242c0f1edccfaa175775dea"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P17",
+    "title": "Literal OHLC-profile allocation and separately scoped daily/weekly opens",
+    "sources": [
+      "PINE Sessions & VP with prev session VP & daily weekly opens.txt:216",
+      "PINE Sessions & VP with prev session VP & daily weekly opens.txt:252",
+      "PINE Sessions & VP with prev session VP & daily weekly opens.txt:641"
+    ],
+    "source": "Source defaults are30 equal-height rows and70% volume. VA expands alternately DOWN thenUP by distance, not heavier-neighbour as FORMULAS also says. Literal source omits the threshold-crossing row and can null the POC at the final row. Source profile clocks (including fixedUTC NY/London and exchange-day Daily) differ from the named prior-RTH transplant. The18:00NY daily and Sunday weekly opens are separate from profile clocks. Stop the contradictory profile specification. Literal VA initializes to full session H/L and enters neighbour expansion even if the POC alone reaches70%; threshold break occurs before updating that boundary. Source daily-open mask is Mon–Fri, while FORMULAS says Sun–Thu. Live profile excludes the current bar; backdrawn completed profiles are not earlier available value.",
+    "finding": "The scored flag only checks whether full RTH high/low brackets the prior18:00 open; no source OHLC-profile VA outcome is built. family_open’s half-range/half-body weighting and heavier-neighbour VA are different. The standalone r_p17_bar_vol only demonstrates allocation arithmetic and is not wired to a complete profile. July10 actually touches29937.75 around09:50; October8 RTH stays above25059.75. Actual trade VP is plotted solely as available diagnostic.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "family_open.py::ohlc_vp",
+      "family_open.py::value_area",
+      "formulas_flow.py::r_p17_bar_vol",
+      "recipe_score.py::_preds.p17",
+      "FORMULAS.md::R-P17"
+    ],
+    "fix": [
+      "Stop the combined faithful profile row until literal source versus a corrected prior-RTH transplant is chosen explicitly. Record30 equal rows, source profile clock, prior/developing scope, and70% target. Do not relabel an available trade VP as the Pine OHLC profile or build a missing input in this audit. Preserve source default30 rows and exact exchange/UTC session branch. The optional OI signed-daily-delta/body-only mode is a separate input path, not traded volume. Empty lower_tf setting does not prove a one-minute feed; record the actual chart/sub-bar configuration.",
+      "For each candle compute body=|C−O|, top=H−max(O,C), bottom=min(O,C)−L, den=body+2top+2bottom. Assign V*body/den to body, V*2top/den to top wick and V*2bottom/den to bottom wick; integrate proportional overlap across each price row. Body goes to candle-colour side, each wick half/half. Handle zero-range bars explicitly and conserve total volume. A zero-range source bar has undefined density arithmetic; a conserving point-mass assignment is a separately named correction. Integrate geometric overlap lengths without double-counting shared row endpoints, rather than dividing by rounded counts of ticks.",
+      "POC is the max-volume row midpoint with source descending-price tie order. Port literal alternating down/up VA and record its threshold-row/last-row defects; a corrected alternating expansion including the crossing row and a heavier-neighbour variant need different names. Freeze the completed profile only at its end, with history and all row bounds retained. POC tie is the highest-price row because the source scans descending prices with strict improvement; last-row POC is NA. Literal VA starts at pH/pL, adds lower then upper rows by distance, and checks the target before setting the bound; include POC-only target reached and NA-POC cases in its trace. A corrected VA must explicitly initialize to the POC row bounds and include its threshold-crossing row. Freeze before reset and keep current/developing snapshots separate; source last-bar live output excludes the current bar.",
+      "Keep18:00NY daily open and Sunday18:00 weekly open as separate level objects. Record source weekday masks and instrument trading availability. Actual RTH touch must be a per-bar overlap, not just global H/L bracketing across a gap; weekly hold/rejection and VA outcomes need their own entry/confirmation times and scope. Literal source daily open is18:00–18:01 Mon–Fri and weekly open Sunday18:00–18:01, using chart-bar O and confirmed price-change draw logic; a Sun–Thu futures convention is a named correction. These open-price objects have their own lifecycle. Separately selected profile/session high/low references must stop at their first revisit, each side independently; a completed historical profile can still be displayed as context without implying fresh boundaries."
+    ],
+    "acceptance": [
+      "Bar O100/H101/L99/C100.5/V100 yields body14.285714, top28.571429, bottom57.142857; all row allocations sum100. The equal-row source and one-tick variant must not share a POC by assumption.",
+      "July10 open29937.75 is a valid daily-open touch; October8 open25059.75 is overnight-only and not RTH. Two separated bars bracketing it across a data gap do not prove touch.",
+      "Exercise a last-row POC, tied maximum, threshold reached on the first added row, a zero-range bar and a Sunday-only weekly open. No current/developing profile may appear as prior value."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "source profile clock/algorithm conflict; global range bracketing can imply unobserved contact",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Source Daily profile resets by exchange day-of-week, weekly by exchange week number; fixed GMT London07–16/NY13–22 do not follow NY/London DST. Its separate daily open is Mon–Fri18:00–18:01 NY and weekly open Sunday18:00–18:01 NY, capturing chart-bar O. Current plotted daily-open/RTH comparison is NY18:00 to09:30–16 next day, and a prior-RTH profile is a named transplant. Completion, backdrawing and live profile exclusion of the current bar must be explicit.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS simultaneously describes heavier-neighbour and alternating VA, treats row count as unspecified despite source default30, changes profile clock to prior RTH and changes Mon–Fri daily-open mask to Sun–Thu. These are source differences."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Scorer only brackets prior18:00 open with global RTH H/L. The separate family_open proxy uses half-range/half-body weighting and heavier-neighbour VA, while the source uses body1/wick2 density, thirty equal rows and alternating expansion. No full source profile is built."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "402/647 daily-open bracketing flags do not measure source VA touch/reject/hold or weekly-open behaviour. Global bracketing across unobserved prices can imply a contact that no bar records."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July10 actually spans29937.75 around09:50; October8 RTH remains above25059.75. Available actual-trade profile panels are correctly labelled diagnostics and cannot certify the absent Pine OHLC profile."
+        }
+      },
+      "source_refs": [
+        "PINE Sessions & VP with prev session VP & daily weekly opens.txt:216",
+        "PINE Sessions & VP with prev session VP & daily weekly opens.txt:252",
+        "PINE Sessions & VP with prev session VP & daily weekly opens.txt:641"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P17-A-2026-07-10.png",
+          "sha256": "e4aae969d188f388cc78a10b5524c038718910f1f53af870a1fb8145237ee244"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-P17-B-2025-10-08.png",
+          "sha256": "1ce0edbc036e07395896207fb8f1411be6f8c7649dc47d80b5735649f09bd026"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P18",
+    "title": "Keep distinct OHLC volume proxies blocked as trading triggers",
+    "sources": [
+      "PINE Confluence Suite.txt:107",
+      "PINE momentum-volume-flow-levels.txt:80"
+    ],
+    "source": "The simple MVFL sub-bar proxy assigns+V/−V/0 by close versus open. Confluence Suite instead assigns whole volume using close position, then candle direction, then prior close and persistent prior sign. Neither is executed aggressor delta. FORMULAS describes a named simple-sign series and explicitly blocks it as a trigger; that gate is appropriate.",
+    "finding": "The current recipe calls r_p18_ohlc_cvd for the simple-sign series and scans a grid-divergence proxy, but the scorer remains blocked. Another producer, family_flow._ohlc_cvd, allocates volume fractionally by close position and is neither the simple sign nor the literal Confluence method. Both plotted sessions show the actual simple-sign ETH cumulative series and reference prices; there is no permissible positive/negative trade trigger to certify.",
+    "targets": [
+      "formulas_flow.py::r_p18_ohlc_cvd",
+      "family_recipes.py::build_recipe_table",
+      "family_flow.py::_ohlc_cvd",
+      "recipe_score.py::_preds.p18",
+      "FORMULAS.md::R-P18"
+    ],
+    "fix": [
+      "Preserve blocked status in reports, joins and downstream signal selection. A computable price/volume series is not proof that the trade-CVD trust gate has passed; no automatic substitution with an available proxy is allowed.",
+      "Assign separate object/version names to simple sign(C−O)*V, fractional close-position allocation and the Confluence whole-volume tie/persistence algorithm. Keep their outputs, tests and labels separate. Do not describe any of them as buyer/seller aggressor volume. Literal Confluence priority is close nearer high versus low, then C versus O, then C versus prior C, then prior classified side; assign the entire current V to the chosen side, do not fractionally split or carry prior volume as cumulative size. Its dashboard raw-volume sentiment is not the signed-delta series.",
+      "For the simple variant retain zero on doji, reset at the stated18:00 session boundary and accumulate only complete observed bars. Store missing-bar coverage and known_at; a missing start or gap cannot silently yield a complete trusted session.",
+      "If a later authorized task studies proxy divergence, use chronological confirmed pivots and the explicit location/entry sequence, label the result as a price-volume proxy study, and maintain blocked source-trigger status until the required trust decision is recorded. Preserve the actual series plots as diagnostics. First qualify the external high/low at its first post-formation revisit. A line already reached before09:30 cannot be restored to fresh by starting an AM divergence scan; scan and retire high and low independently. Preserve confirmed pivot_at/known_at and prohibit future pivot completion from changing an earlier divergence feature."
+    ],
+    "acceptance": [
+      "100/100.5/V120 then100.5/100.25/V80 then100.25/100.25/V50 yields+40 in the simple-sign variant. A doji near its high can differ in the other variants.",
+      "July10 andJanuary28 curves remain unscored diagnostics even when their slope appears to agree with the price move.",
+      "A consumer requesting a faithful CVD trigger must receive blocked with reason, not false and not the fractional/simple proxy under a trade-delta name."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "blocked",
+      "blocked"
+    ],
+    "leakage": "distinct OHLC proxies; future pivot confirmation risks; trust gate correctly retained",
+    "proxy": "no: scorer remains blocked",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The named simple-sign cumulative study resets at prior18:00 America/New_York and current producer observes through noon. Source MVFL signed volume is accumulated per chart bar from selected sub-bars, whereas Confluence classifies its own chart bars. The18:00 cumulative reset is the declared study object, not an inferred reset shared by every indicator. Price reference formation, first revisit and pivot confirmation use their actual timestamps.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "FORMULAS appropriately names the simple sign(C−O)*V series and preserves blocked trigger status. The Confluence whole-volume tie/persistence and MVFL sub-bar rules are separate, and none is executed aggressor delta."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current recipe computes the simple series, but other production OHLC-CVD uses fractional close-position allocation, and the divergence scan lacks a verified causal pivot/reference sequence. Shared names cannot certify all variants as the source trigger."
+        },
+        "score_event_ok": {
+          "verdict": "blocked",
+          "reason": "The scorer correctly remains blocked with no trigger rate. A computable volume proxy cannot pass the trade-CVD trust gate by being available or visually plausible."
+        },
+        "chart_ok": {
+          "verdict": "blocked",
+          "reason": "Both dated actual simple-sign curves were re-viewed with price references. July10 AM swings and January28 decline below−15000 provide diagnostics; neither supplies a permissible source trigger positive or negative while the gate remains blocked."
+        }
+      },
+      "source_refs": [
+        "PINE Confluence Suite.txt:107",
+        "PINE momentum-volume-flow-levels.txt:80"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P18-A-2026-07-10.png",
+          "sha256": "9357e92d7c29a354a84af32a5547afdd0e09c25b934fa3f66c6940a58178ce8f"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-P18-B-2026-01-28.png",
+          "sha256": "4bf180afc31f032ee5cc5f1e5bd7164ae1db4c8f88865e3051299d2a09fb49d8"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P19",
+    "title": "Every adjacent body gap, later near-edge fill and80/20 confluence",
+    "sources": [
+      "PINE 8020 System.txt:50",
+      "PINE 8020 System.txt:120",
+      "PINE 8020 System.txt:251",
+      "PINE 8020 System.txt:309"
+    ],
+    "source": "The source detects adjacent BODY gaps at least4ticks wide, evaluates old gaps before creating new ones, and marks a later near-edge fill. It also defines price-ending20/80 references,8tick confluence and zero-wick repairs. This is distinct from three-candle wick FVG and from AMT’s80% value-area traverse. Gap/repair fills are processed before new objects are created on each confirmed bar. Source09:30–11/15–16 A+ shading is visual only, and fork markers backdrawn to the middle candle are known only at the third close. Filled means near-side entry, not full traversal.",
+    "finding": "The helper only examines array positions0 and1, and the producer supplies09:30–12:00 but never loops later pairs or passes fill data. Thus25/647 is the first09:30/31 body-gap presence rate. August6 down gap29327–29328.5 forms by09:32 and actually fills on09:34; July10 first pair has no gap, which says nothing about later pairs. Down-gap confluence is hardcoded false. Later-pair inspection of July10 finds an up gap29881.25–29882.25 formed09:32 (known09:33), so the retained daily false is a counterexample. September29,2025 has no qualifying gap in any of389 adjacent RTH pairs; the642-session scan found49 such all-RTH negative dates.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_p19_body_gap",
+      "recipe_score.py::_preds.p19"
+    ],
+    "fix": [
+      "Process every consecutive complete candle pair on the explicitly selected timeframe/window. Up gap if current body bottom−prior body top>=4ticks, bounds[priorTop,currentBottom]; down gap if priorBottom−currentTop>=4ticks, bounds[currentTop,priorBottom]. Require adjacency in time, not merely adjacent rows across missing bars.",
+      "Create each gap at current candle completion with direction and bounds. Evaluate previously created gaps before current creation, matching the source. Later low<=upper bound fills an up gap; later high>=lower bound fills a down gap. Store first near-edge fill, optional named mid/far fills and censoring at the selected horizon. This is the literal one-sided source fill predicate, not a guarantee of a recorded in-band trade across missing data; retain observed bar-span/coverage separately. The16:00 research censoring deadline must be explicitly named rather than claimed as a source expiry.",
+      "Generate the source grid100*k+20 and100*k+80 for integer k, and compute minimum distance from either gap edge to the grid on BOTH directions. Confluence is<=8ticks; do not substitute a40point band or confluence with an unrelated FVG.",
+      "Retain zero-wick repair markers as separate source objects with their producing candle/completion and later tap outcomes. Report per-gap presence, fill rate conditional on created gap, time-to-fill and confluence strata; the existing first-pair session count needs a distinct legacy name. Zero-wick markers default to0tick tolerance and, as high/low references, stop at the first later exact revisit; do not rearm after a subsequent strict break. Keep up/down mirrors and created_at/known_at/first_tap distinct. The separate source fork/XS markers may be inventoried without adding an unrequested SectionB rule; do not let A+ shading suppress otherwise valid body gaps."
+    ],
+    "acceptance": [
+      "August6 down gap29327–29328.5 is known09:32 and09:34 high fills its near edge29327. The creation candle cannot fill a newly made gap.",
+      "July10 first-pair absence is a valid pair-level negative; all later pairs must still be scanned. A gap at index20 must not disappear because the first pair overlaps.",
+      "A4tick gap qualifies, a3tick gap does not. An up/down edge exactly8ticks from a20/80 level has the same confluence result. Gaps across missing minute rows are unknown.",
+      "July10,2026 must discover the later09:31/09:32 up body gap29881.25–29882.25, known09:33, even though09:30/31 overlaps. September29,2025 is an all-RTH negative:389 adjacent complete pairs and no4tick gap."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "first-pair presence replaces per-gap later fill; missing adjacency/denominator",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The source operates on the selected chart timeframe; Python supplies NY09:30–12 one-minute bars but reads only the first pair. Source A+09:30–11/15–16 shading is not an event gate. The supplemental negative explicitly scans NY09:30–16. Each gap is known at the second candle completion; its earlier visual body boundary or marker age does not move known_at earlier.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The scoped source body-gap>=4ticks and later near-edge fill are correctly described, distinct from wick FVG and AMT80% rules. Fixed RTH horizon/timeframe are explicit study choices; source A+ shading does not gate detection."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Helper examines only positions0/1, caller never scans later pairs or passes fill data, and down-gap confluence is always false. July10 later qualifying gap proves the first-pair false cannot stand for a full-session negative."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "25/647 first09:30/31 pair presences omit created-gap denominator, later near-edge fill, time-to-fill and confluence. A valid gap-presence predicate does not validate the stated fill study."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both main charts and the September29 supplemental negative were re-viewed. August6 down gap29327–29328.5 fills09:34 after known09:32; July10 later up gap29881.25–29882.25 is absent from code geometry; September29 has no qualifying gap in389 complete RTH pairs."
+        }
+      },
+      "source_refs": [
+        "PINE 8020 System.txt:50",
+        "PINE 8020 System.txt:120",
+        "PINE 8020 System.txt:251",
+        "PINE 8020 System.txt:309"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-06",
+          "plot": "plots/R-P19-A-2026-08-06.png",
+          "sha256": "21438cf82bc8e96fb9a5a31f4d28099519dc3995a3f48ac931b1493ea9f2305a"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-P19-B-2026-07-10.png",
+          "sha256": "9af8347858756ad2b6c66946306137a0a6d6d4afb285ee1f078892a8353fb832"
+        },
+        {
+          "case": "event-negative",
+          "date": "2025-09-29",
+          "plot": "plots/R-P19-event-negative-2025-09-29.png",
+          "sha256": "cd0dc1aa04a008a6a09936642961bf53a176b625cc97f6c7b8cbe52aa8995b81"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-P20",
+    "title": "MVFL source delta clusters, anomaly zones and seven-vote state",
+    "sources": [
+      "PINE momentum-volume-flow-levels.txt:5",
+      "PINE momentum-volume-flow-levels.txt:79",
+      "PINE momentum-volume-flow-levels.txt:113",
+      "PINE momentum-volume-flow-levels.txt:171",
+      "PINE momentum-volume-flow-levels.txt:414"
+    ],
+    "source": "MVFL source is a seven-vote hysteresis indicator using OHLC-signed sub-bar volume. RULES explicitly asks for an aggressor-delta rebuild, while FORMULAS presents the literal OHLC version; that conflict stops faithful certification. FORMULAS also clusters at close, but source bullish events use body bottom and bearish body top, weighted by absolute delta. The historical assistant upgrade proposal is not source-author proof of equivalence. C7 tests the anomaly CENTRE, not either box edge. Weighted k-means centres assign membership, but final bounds centre at (member min+member max)/2, padded to minimum0.4ATR thickness. showDeltaAreas gates cluster recalculation and therefore C4 state; ordinary sigEvent, anomaly creation and alerts continue outside plotting sessions.",
+    "finding": "The actual scorer is AM max print>=100lots AND AM price range>=8ticks:425/647. It never calls r_p20_mvfl and builds none of the source zones or seven votes. July10 max245lots/range1266ticks passes; October8 max92/range748 fails. The unused helper doubles anomaly thickness (±0.2% instead of±0.1%), and its passing fixture expects that wrong width.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_p20_mvfl",
+      "recipe_score.py::_preds.p20",
+      "FORMULAS.md::R-P20",
+      "RULES.md::R-P20"
+    ],
+    "fix": [
+      "Stop the faithful MVFL row and preserve the unresolved source-versus-aggressor upgrade decision. Name the literal OHLC variant, any later trusted aggressor variant and the unrelated print/range filter separately. Do not implement missing clusters or claim the upgrade already exists in this audit.",
+      "For a later chosen literal port, declare primary chart timeframe separately from htf=5, mtf_conf=5 and ltf=1. Five-minute chart bars are the FORMULAS study configuration, not a universal source resampling. Chart-bar Δ=sum(sign(C−O)*V) over selected sub-bars, with source fallback to chart candle sign*V when the sub-bar array is empty; mark that fallback separately from complete data. Dynamic signal iff abs(Δ)>max(6*SMA50(absΔ),3000), current completed chart bar included; fixed-threshold mode is separate. Significant sign persists at all hours; only cluster INSERTIONS and plotting use default02–16 NY. Event pools persist across days, max3000 detections each side.",
+      "Use bullish event price=min(O,C), bearish=max(O,C), weight=absΔ. For each side separately set keff=min(4,n), seed sorted-price indices floor((j+0.5)/keff*n) capped n−1, run12 weighted nearest-centre iterations, ties to first index and retain an empty cluster’s prior centre. After membership assignment retain each cluster min/max, weight/count and earliest member time. Keep weight>=45% of strongest across both sides. Actual bounds are md±max((max−min)/2,0.4*ATR14/2), md=(min+max)/2; the weighted assignment centre is NOT the zone midpoint. Source updates only on a new event on the corresponding side and only when showDeltaAreas is true. Preserve this drawing-toggle dependency in literal mode and name any correction. Backdrawn earliest time is display origin, not availability.",
+      "For volume anomalies require volume>2.5*SMA20(volume), source includes current bar. Zone is close±0.001*close, full0.2% thickness. Merge centres within0.5% by retaining larger-volume event, maximum50. Keep centre, chosen event volume, created/updated times and every retired version. Merge distance is <=0.005*NEW close; scan existing centres in reverse, delete weaker neighbours and abort addition on a neighbour of greater/equal volume, retaining any earlier deletions from that loop in literal mode. New centres enter before C7 scoring, no automatic daily expiry. vaShowZones affects drawing, not this numeric centre pool.",
+      "Store each of seven votes: C1 requested HTF C versus SMA200; C2 persistent last significant delta sign; C3 SMA3 of rolling close median27 versus SMA50; C4 delta-cluster EDGE cross/rejection; C5 prior requested MTF six-vote local-majority regime (ties bullish); C6 SMA5 versus SMA200; C7 anomaly CENTRE cross/rejection. For every tested L: bullish iff (C>L and previousC<=L) or (C>L and low<=L and previousLow>L); bearish iff (C<L and previousC>=L) or (C<L and high>=L and previousHigh<L). Iterate in literal stored-level order, persisting the LAST matching vote; this is not intrabar event ordering. Current cluster/anomaly updates happen before tests and current L is used against prior price fields. Unshifted HTF C1/C3/C6 can develop in real time even with default lookahead_off; distinguish a closed-HTF causal policy.",
+      "Preserve initial bearish bias and flip only at least4of7 votes for the other side, otherwise persist. Store all votes and their input availability at each close. Evaluate any added hold/reject or next-bar direction outcome only afterward under its own label. Fix the anomaly fixture to source width and require a producer integration test; unused helper passes cannot certify the scored MVFL family. C5 uses prior-context regime[1] with lookahead_off and is not the final hysteresis state. Missing/zero votes are neutral; final regime starts bearish. Alerts and anomaly state are not suppressed merely because London/NY drawing is hidden. Cluster/anomaly zones have source update/merge lifecycles; external session high/low references remain separate first-revisit objects if used by a named later strategy."
+    ],
+    "acceptance": [
+      "At close16640 the source anomaly zone is[16623.36,16656.64], not[16606.72,16673.28]. Δ4100 with SMA550 passes3300; exact threshold equality does not.",
+      "July10’s245lot print andOctober8’s92lot maximum cannot by themselves imply any MVFL signal or no-signal. A cluster born after10:00 cannot become a causal09:00 feature because its box is drawn backward.",
+      "A bullish event with O100/C110 clusters at100, not110; bearish O110/C100 clusters at110. Three opposing votes preserve bias, four flip; a missing vote is not silently bullish/bearish.",
+      "With assigned member prices100 and120 and unequal weights, zone md remains110 even if weighted centroid is near100. At anomaly centre100 with box99.9–100.1, a strict C cross of100 can vote without crossing100.1. Out-of-session anomaly/sigEvent state can update; out-of-session delta-cluster insertions cannot in default mode. An equal-volume nearby anomaly is retained over the new one."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "unrelated tape filter; source backward drawing/loop-order; unresolved aggressor replacement",
+    "proxy": "yes",
+    "ask_user": false,
+    "fixture": "helper suite passes the wrong double-width anomaly; production never calls helper",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "MVFL uses explicit NY London02–08/NY08–16 for plotting and delta-cluster insertion by default; significant-delta state, anomaly creation and final alerts are not all session-gated. Input htf=5 applies to selected moving-average calculations, mtf_conf=5 to prior-regime confirmation, and ltf=1 to chart-bar sub-bars; those do not force every calculation to five-minute candles. Python tape filter is NY09:30–12. Separate chart/HTF/LTF completions and real-time developing inputs from backdrawn geometry.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "RULES requests an aggressor rebuild whereas FORMULAS describes literal OHLC-signed MVFL. FORMULAS also clusters at close instead of the side-specific body edge, treats anomaly votes as edge tests instead of centre tests, and overgeneralizes five-minute/session gating."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Scorer is only AM maximum print>=100lots and range>=8ticks and never calls MVFL helper. The unused helper has double-width anomaly geometry, with a fixture that accepts the error; source clusters and seven votes are missing."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "425/647 is the unrelated print/range frequency. MVFL defines persistent seven-vote hysteresis and supplies no stop/target performance denominator; the score proves neither its signal nor a trusted aggressor upgrade."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July10 max245lots/range1266ticks passes and October8 max92lots/range748ticks fails. Actual tape dots show the available filter inputs, but no delta-cluster edges, anomaly zones or seven-vote state exists to compare as a source implementation."
+        }
+      },
+      "source_refs": [
+        "PINE momentum-volume-flow-levels.txt:5",
+        "PINE momentum-volume-flow-levels.txt:79",
+        "PINE momentum-volume-flow-levels.txt:113",
+        "PINE momentum-volume-flow-levels.txt:171",
+        "PINE momentum-volume-flow-levels.txt:414"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-P20-A-2026-07-10.png",
+          "sha256": "156af1c76d68821620e844e26acd2d14fcd5872d66b79eab3c1b1f6c746546b6"
+        },
+        {
+          "case": "B",
+          "date": "2025-10-08",
+          "plot": "plots/R-P20-B-2025-10-08.png",
+          "sha256": "c32f9e10a410c0bcccfefa268b52afd5c92382da8adf0878947f2ac8bfb39e02"
+        }
+      ]
+    }
+  }
+]

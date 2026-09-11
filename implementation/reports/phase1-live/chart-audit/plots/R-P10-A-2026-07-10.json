@@ -1,0 +1,156 @@
+{
+  "case": {
+    "id": "R-P10",
+    "case": "A",
+    "date": "2026-07-10",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 534,
+    "negative_count": 113
+  },
+  "production_session": {
+    "date": "2026-07-10",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5353,
+    "expected_1s": 10800,
+    "missing_1s": 5447,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29887.75,
+    "L": 29771.25,
+    "open": 29820.75,
+    "close": 29800.0,
+    "EQ": 29829.5,
+    "Q25": 29800.375,
+    "Q75": 29858.625,
+    "W69": 116.5,
+    "volume": 24095.0,
+    "close_0859": 29800.0,
+    "open_0930": 29834.75,
+    "w_pct_0859close": 0.39093959731543626,
+    "w_pct_0930open": 0.3904842507478695,
+    "WpriorRTH": 379.0,
+    "w_rel_prior_rth": 0.3073878627968338,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 29993.5,
+    "prior_rth_low": 29614.5,
+    "asia_high": 29963.5,
+    "asia_low": 29804.25,
+    "london_high": 29948.75,
+    "london_low": 29775.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1783690320000,
+    "first_low_break_ms": 1783693920000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1783688400000000000,
+    "outcome_start_ns": 1783690200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1783691340000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "P",
+      "price": 29773.25,
+      "start": 9.5,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "R1",
+      "price": 30151.5,
+      "start": 9.5,
+      "end": 16,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "S1",
+      "price": 29553.0,
+      "start": 9.5,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "R2",
+      "price": 30371.75,
+      "start": 9.5,
+      "end": 16,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "S2",
+      "price": 29174.75,
+      "start": 9.5,
+      "end": 16,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "R3",
+      "price": 30750.0,
+      "start": 9.5,
+      "end": 16,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "S3",
+      "price": 28954.5,
+      "start": 9.5,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "daily_floor_pivots": {
+      "P": 29773.25,
+      "R1": 30151.5,
+      "S1": 29553.0,
+      "R2": 30371.75,
+      "S2": 29174.75,
+      "R3": 30750.0,
+      "S3": 28954.5,
+      "context": "WITHIN",
+      "pp_touch": true
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P10-A-2026-07-10.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 772,
+    "code": "def p10(r):\n        return bool(r.get(\"p10_pp_touch\"))"
+  },
+  "event": "daily floor pivot PP touched in RTH",
+  "detail_window": [
+    10.433333333333334,
+    10.933333333333334
+  ]
+}

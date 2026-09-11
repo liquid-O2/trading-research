@@ -1,0 +1,138 @@
+{
+  "case": {
+    "id": "R-G09",
+    "case": "B",
+    "date": "2024-05-20",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 1,
+    "negative_count": 646
+  },
+  "production_session": {
+    "date": "2024-05-20",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 4861,
+    "expected_1s": 10800,
+    "missing_1s": 5939,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 18689.5,
+    "L": 18643.25,
+    "open": 18670.75,
+    "close": 18648.75,
+    "EQ": 18666.375,
+    "Q25": 18654.8125,
+    "Q75": 18677.9375,
+    "W69": 46.25,
+    "volume": 22098.0,
+    "close_0859": 18648.75,
+    "open_0930": 18643.5,
+    "w_pct_0859close": 0.24800589851866747,
+    "w_pct_0930open": 0.24807573685198595,
+    "WpriorRTH": 132.0,
+    "w_rel_prior_rth": 0.3503787878787879,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 18677.0,
+    "prior_rth_low": 18545.0,
+    "asia_high": 18679.25,
+    "asia_low": 18658.5,
+    "london_high": 18678.75,
+    "london_low": 18662.0,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1716212100000,
+    "first_low_break_ms": 1716211800000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1716210000000000000,
+    "outcome_start_ns": 1716211800000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1716212700000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "code NWOG: Friday 15:59 C \u2192 Sunday 18:00 O",
+      "low": 18633.5,
+      "high": 18638.5,
+      "start": -6,
+      "end": 12,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "Friday 15:59 close",
+      "price": 18638.5,
+      "start": -6,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "Sunday 18:00 open",
+      "price": 18633.5,
+      "start": -6,
+      "end": 12,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior_rth_high",
+      "price": 18677.0,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "asia_high",
+      "price": 18679.25,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "london_high",
+      "price": 18678.75,
+      "start": 9,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    }
+  ],
+  "helpers": {},
+  "sources": [],
+  "plot": "plots/R-G09-B-2024-05-20.png",
+  "notes": [
+    "Compared with GB raw posts and figures. Axis is the implementation's New York clock; source snapshot offsets are audited separately. Extended lines show retained geometry, not proof that a previously visited high/low remains active."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 595,
+    "code": "def g09(r):\n        return bool(r.get(\"stacked_asia_london_pdh\") and r.get(\"monday\") and r.get(\"nwog_fill\"))"
+  },
+  "event": "PDH + Asia high + London high stacked within 0.05 R, Monday NWOG fill",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

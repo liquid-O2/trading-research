@@ -1,0 +1,168 @@
+{
+  "case": {
+    "id": "R-F14",
+    "case": "A",
+    "date": "2026-03-09",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 9,
+    "negative_count": 638
+  },
+  "production_session": {
+    "date": "2026-03-09",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 8299,
+    "expected_1s": 10800,
+    "missing_1s": 2501,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 24459.25,
+    "L": 24340.0,
+    "open": 24420.25,
+    "close": 24379.75,
+    "EQ": 24399.625,
+    "Q25": 24369.8125,
+    "Q75": 24429.4375,
+    "W69": 119.25,
+    "volume": 43353.0,
+    "close_0859": 24379.75,
+    "open_0930": 24432.25,
+    "w_pct_0859close": 0.4891354505275895,
+    "w_pct_0930open": 0.4880843966478732,
+    "WpriorRTH": 325.25,
+    "w_rel_prior_rth": 0.36664104534973097,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 24926.25,
+    "prior_rth_low": 24601.0,
+    "asia_high": 24238.75,
+    "asia_low": 24000.0,
+    "london_high": 24315.75,
+    "london_low": 24086.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1773063000000,
+    "first_low_break_ms": 1773064380000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1773061200000000000,
+    "outcome_start_ns": 1773063000000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1773063060000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 24711.75,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 24901.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 24800.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 24432.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "line",
+      "label": "code final RTH POC (16:00)",
+      "price": 24614.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#c00040",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "independent Jumbo BigTrades EQ",
+      "price": 24399.625,
+      "start": 9,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "independent Jumbo BigTrades m05 high",
+      "price": 24518.875,
+      "start": 9,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "independent Jumbo BigTrades m05 low",
+      "price": 24280.375,
+      "start": 9,
+      "end": 12,
+      "color": "#be4b33",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-03-06",
+    "tape_window": {
+      "date": "2026-03-09",
+      "from": 9.5,
+      "to": 16,
+      "trades": 325776,
+      "buy_volume": 214100.0,
+      "sell_volume": 220048.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-03-08_2026-03-14.parquet"
+  ],
+  "plot": "plots/R-F14-A-2026-03-09.png",
+  "notes": [
+    "350% uses full-RTH same-price volumes; BigTrades is an independent Jumbo-level flag, not matched to that imbalance."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 706,
+    "code": "def f14(r):\n        return bool(r.get(\"f14_imb350\"))"
+  },
+  "event": "350% imbalance tick plus a BigTrades print at a TBR level",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

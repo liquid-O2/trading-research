@@ -1,0 +1,769 @@
+[
+  {
+    "id": "R-S01",
+    "title": "Refill at the same defended dealing-range band",
+    "sources": [
+      "NYAM:4",
+      "NYAM:5",
+      "K18:10",
+      "K18:11"
+    ],
+    "source": "The source shows absorption and refill at a defined dealing-range band, a close away, and an objective such as the prior RTH extreme. Both long and short examples are printed. Prior VA edges, two-minute aggregation, q90 and one-minute closes are named choices; the source uses 40-tick range bars. The source’s 13-point stop and 47-point working target are one ticket; the claimed $755 close is prose, not a linked fill. The cover’s $6050.55 across six copied accounts is not a single-pattern or single-account return.",
+    "finding": "The caller reuses one either-side absorption Boolean for long-at-VAL and short-at-VAH, attaches the final AM print as entry, and supplies whole-AM extrema as local print extremes and outcomes. August21 is true after an opening VAH scan even though the accepted long uses VAL. A source band, same-level refill, sequence and prior-extreme objective are absent.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "mbp1_objects.py::absorption_a",
+      "formulas_flow.py::r_s01_refill_long",
+      "formulas_flow.py::r_s01_refill_short",
+      "recipe_score.py::_preds.s01"
+    ],
+    "fix": [
+      "Represent the source band with bounds, scope, direction and establishment time. For an explicitly named VA-edge version use [edge−2ticks,edge+2ticks], keeping it distinct from the original dealing-range print span. Record whether this is a recurring defended print zone or an external high/low. End each external/structural reference line on its first revisit, independently for highs and lows; keep a developing defense episode separate from unvisited-reference eligibility.",
+      "Return absorption events carrying level ID, side, start/end, local executed volume and extreme. For a long, test arriving aggressive sells against the lower band; for a short, aggressive buys against the upper band. Do not reuse an event at the other edge or infer resting refill from the same aggregate. Distinguish observed executed selling absorbed by resting buys from new aggressive buying and from quote-size replenishment. Match the actual band, local advance and known_at rather than accepting a bare Boolean.",
+      "After the matching defence/refill, enter on the first complete close above the upper band bound for long or below the lower bound for short. Invalidate at the local defended print minimum−2ticks or maximum+2ticks. Reject nonpositive risk distances; store entry at completion, not final AM close.",
+      "Freeze the prior RTH H/L or actual owed objective known at entry. Measure target, MFE and MAE from entry forward, recording stop-versus-target order. Report eligible band contacts, defended refills, confirmed entries and objective outcomes separately; keep missing depth as blocked. An external high/low objective must still be unvisited at entry, scanning from its known_at through overnight activity. Keep actual fills, working orders, illustrative brackets and reported prose results separate; no source trade P&L may be copied as an implementation outcome."
+    ],
+    "acceptance": [
+      "August21 cannot reuse the VAH29402 opening event to certify a VAL29288.75 long. July10 no absorption remains no confirmed refill despite the final close above VAL.",
+      "A lower-band sell-absorption event followed by an upper-band close is a possible long; the same event must never certify an upper-band short.",
+      "A target reached before entry is not an objective win and cannot supply post-entry MFE."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "either-side event reused; full-AM entry/extrema",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific DST and one-minute bar-start timestamps. NYAM source identifies July 14, 2026 NQ 40-range, and K18 identifies July 31 NQ September 2026 40-range; range bars do not share fixed one-minute completion times. K2345’s calendar shows August 3/4 while its cropped trade chart lacks a printed date; July 10 was relabelled as a comparison date, not a matched source session. Exact source-axis zone and contract/session mapping remain separate from captions and export timestamps. Complete-window volume and close events are available only at their own completion.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source supports defended dealing-range bands, refill away and structural objectives on both sides. Prior VA, two-minute/q90 and one-minute closes are named substitutes; the 29757.25 entry/29744.25 stop/29804.25 working target and later prose result are different evidence."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The caller reuses one either-side absorption flag for both edges, chooses the final AM print as entry and whole-AM extrema as local prints/outcomes. A VAH defense can therefore certify an unrelated VAL long."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The daily flag omits matched level/side, actual refill confirmation, causal stop and post-entry objective sequence. It is not a source refill or outcome frequency."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. August 21 true joins an opening VAH 29402 scan to a later VAL 29288.75 long condition; July 10 false lacks the production absorption flag despite VAL crossings and a final close above it."
+        }
+      },
+      "source_refs": [
+        "NYAM:4",
+        "NYAM:5",
+        "K18:10",
+        "K18:11"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-21",
+          "plot": "plots/R-S01-A-2026-08-21.png",
+          "sha256": "57272056d3e00f1d859cffc2475392746f6600f70bc338f650d3f418bb6b726b"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-S01-B-2026-07-10.png",
+          "sha256": "22bf4c3b395eba157aa2be534d088ce7979ed0cf02f856e4d878ecad5eebb4b8"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S02",
+    "title": "Third support test with absent defence and continuation entry",
+    "sources": [
+      "NYAM:6",
+      "NYAM:7",
+      "K18:11"
+    ],
+    "source": "The source depicts sellers testing support from above three times and a short through it, with a caption claiming a later loss when it holds. The two-line support band and the ticket stop inside that band are separate observations. Absence of aggressive buying does not establish absence of passive buyers defending against aggressive sellers; FORMULAS conflates those readings. The native p7 frame instead shows an open short with −100 floating and a working 29621.25 stop labelled −235. The actual realized stop-out cannot be established from that frame.",
+    "finding": "The OHLC caller supplies zero defence volumes. The helper counts extrema within a doubly widened band, may re-arm from the same bar’s opposite extreme, and returns n>=3 without requiring a third-test close-through entry. August21 has six counted VAL tests; the unmeasured defence condition is automatically true. The resistance-long branch exists but carries the misleading third_test_short key.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_s02_third_retest",
+      "recipe_score.py::_preds.s02",
+      "FORMULAS.md::R-S02"
+    ],
+    "fix": [
+      "Correct the participant-side description first: distinguish aggressive sellers from resting buyers at support, and aggressive buyers from resting sellers at resistance. A prints-only failure-to-advance measure is a named defence proxy, while actual resting refill remains unavailable. Missing defence cannot become zero. Preserve the caption and native ticket contradiction; do not calibrate loss size from floating P&L or count an unfilled stop as execution.",
+      "Use an explicit band and one tolerance policy. A touch is path overlap from the required approach side; a wick through the band is not missed merely because its final extreme lies beyond tolerance. Count a new test only after a subsequent known leave of the named0.25R, never by assuming same-bar low/high order. Repeated interactions can belong to the source support/resistance zone. Any separately selected external high/low expires at its first exact revisit and cannot count as three newly fresh levels; preserve later zone tests as history under the same episode.",
+      "Freeze the first two failed defences, then evaluate defence at the third distinct retest. Require the first completed close through support for short or resistance for long. Return side-specific entry records; do not accept n>=3 alone.",
+      "Define invalidation from the defended band and preserve the source ticket’s inside-band stop as that case’s annotation. Measure continuation/hold and the loss-return condition over the next15minutes from entry, with exact order, risk distance, MFE/MAE and eligible-test denominator. Keep invalidation-price and actual stop-fill evidence separate, and define the loss return relative to entry as FORMULAS states rather than the helper’s band edge."
+    ],
+    "acceptance": [
+      "August21 six counted touches cannot establish absent passive defence; July10 wick-through overlap must not be silently discarded by an extreme-equality test.",
+      "One long visit cannot become three tests; a same-minute leave and retest with unknown ordering is ambiguous.",
+      "Three weak tests without a later close through the band produce no entry. A valid entry can later lose, but the native open −100 frame alone cannot certify realized −100."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "zero substituted defence; unordered same-bar leave/retest",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific DST and one-minute bar-start timestamps. NYAM source identifies July 14, 2026 NQ 40-range, and K18 identifies July 31 NQ September 2026 40-range; range bars do not share fixed one-minute completion times. K2345’s calendar shows August 3/4 while its cropped trade chart lacks a printed date; July 10 was relabelled as a comparison date, not a matched source session. Exact source-axis zone and contract/session mapping remain separate from captions and export timestamps. Complete-window volume and close events are available only at their own completion.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS conflates absent aggressive buyers with absent passive support defense. NYAM p7’s visible −100 is floating on an open short with a working −235 stop, not the caption’s proven realized −100 stop-out; the support band and inside-band stop remain distinct."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The OHLC producer supplies zero defense volumes, double-widens the band, can rearm using the same bar’s high/low and scores n>=3 without the required later close through. The mirrored branch retains a misleading short key."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "A counted-touch flag with missing defense forced to zero does not measure an undefended third test, continuation or loss. The source losing-caption narrative does not resolve exact fill timing."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. August 21 has six current VAL tests but no observed defense qualification; July 10’s wick-through overlaps can be discarded by the extreme-within-band condition. Neither supplies a source-qualified third-test entry."
+        }
+      },
+      "source_refs": [
+        "NYAM:6",
+        "NYAM:7",
+        "K18:11"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-21",
+          "plot": "plots/R-S02-A-2026-08-21.png",
+          "sha256": "0c1ec1a2c0a9f6450079759ea76999f0575d65abfb203072453c6892b1e2ce0e"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-S02-B-2026-07-10.png",
+          "sha256": "a65afd191700bd113774fdaa648b19d2767b1d5973e0a60808e68867e6874b75"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S03",
+    "title": "Second OFM defence with print-side refresh consistency",
+    "sources": [
+      "K18:4",
+      "K18:7",
+      "K18:11"
+    ],
+    "source": "The source requires an established OFM area, another break/retest and sustained participation/refresh. The0.8 ratio, q75 and one-minute representation are named quantitative choices. Aggressor print consistency and actual replacement of resting orders are different evidence; the latter stays blocked. The p7 prose explicitly describes sellers previously absorbed; the source-refresh visual note inferred earlier buying at the circled area without an independently visible side legend. Treat original catalyst-side attribution as unresolved rather than promoting either interpretation to a fixed recipe. Working stops/targets on p8/p9 and the $18k prior payout do not prove the current entry outcome.",
+    "finding": "The current code calls r_s03_second_defence, contrary to the stale FORMULAS description of an F09 alias. It uses a last-print-derived catalyst, the minimum close and maximum high of all AM, total AM sells against a per-print q75, and the last eight AM sell sizes. It is short-only, has no first/second defence identity and scores zero of647.",
+    "targets": [
+      "family_tape.py::_ofm_and_trap",
+      "formulas_flow.py::r_s03_second_defence",
+      "recipe_score.py::_preds.s03",
+      "FORMULAS.md::R-S03"
+    ],
+    "fix": [
+      "Keep faithful certification unavailable while the R-F15 catalyst definition is unresolved. Once a valid catalyst exists, retain its band, first defence and side as a persistent object; do not choose it from the last AM prints. Resolve that original-catalyst-side discrepancy before source certification. Keep the source first absorbed aggression line separate from the later defending side and from protected stop lines.",
+      "After a complete close through the appropriate boundary, find a later retest from the opposite side and identify it as the second distinct defence. Collect only correctly signed executions at that band in the named retest window. Compare window volume with a historical distribution of equivalent window volumes, not a quantile of individual prints.",
+      "For the named steady-size test require at least four comparable same-side prints; the last three must each be at least0.8 times the first. Store the sizes, times and thinner/steady result. Implement the source long reading by reversing side/geometry, rather than returning a short flag for all cases. Reject empty or fewer-than-four print arrays; the current helper can compare a print against itself and pass, while steady and thinning can also both be true. Store both descriptive tests or define a declared mutually exclusive precedence, not an implicit conflict.",
+      "Confirm entry only after participation and level defence are known, then measure0.25R reversal and MFE/MAE over15minutes. Do not equate print-side evidence with BBO reload. Preserve coverage, first/second-defence eligibility and outcomes as separate fields. External high/low references still expire on first revisit, including source protected highs used later as stops; preserve later close-break and historical zone defense as separate states. The user’s freshness rule does not turn repeated OFM-zone memory into newly unvisited highs."
+    ],
+    "acceptance": [
+      "July10 andJanuary28 missing catalyst/defence sequencing cannot turn into validated source negatives solely because the retained flag is false.",
+      "Prints45,42,40,44 pass the named steady test;45,40,30,20 fail. Prints from another price or hours later cannot qualify the retest.",
+      "A first touch, retest before the break, or absent resting-size feed must not be labelled a verified second reload."
+    ],
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "whole-AM extrema and sell distribution; last-print catalyst",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Inspect the K18 p7 OFM line and original bubble-side legend: which aggression formed the original catalyst, and which side is defending at the later retest? The prose and earlier visual interpretation differ, and the still does not show actual queue replenishment.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific DST and one-minute bar-start timestamps. NYAM source identifies July 14, 2026 NQ 40-range, and K18 identifies July 31 NQ September 2026 40-range; range bars do not share fixed one-minute completion times. K2345’s calendar shows August 3/4 while its cropped trade chart lacks a printed date; July 10 was relabelled as a comparison date, not a matched source session. Exact source-axis zone and contract/session mapping remain separate from captions and export timestamps. Complete-window volume and close events are available only at their own completion.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "A second defended OFM retest with participation is supported, but the original catalyst side is not independently resolved: p7 prose says sellers were absorbed while the earlier visual note inferred buying without a visible side legend. Preserve that uncertainty and distinguish active prints from actual resting reload."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The currently wired helper uses a last-print catalyst, whole-AM minimum close/maximum high, total sells versus per-print q75 and final sell sizes. It is short-only and has no first/second defense identity or minimum print-count guard."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The all-false daily sample does not measure retest-conditioned steady/thinning classes or their subsequent reversal. Source refresh consistency cannot be certified by unrelated AM print medians."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 and January 28 have no frozen source-qualified first defense and later band-specific retest; their visible large prints do not establish sustained replacement of resting orders."
+        }
+      },
+      "source_refs": [
+        "K18:4",
+        "K18:7",
+        "K18:11"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-S03-A-2026-07-10.png",
+          "sha256": "d16de648150e0f7f9921318fcc514c41e05bdffe727ae48ce1134ee7cc4953d4"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-S03-B-2026-01-28.png",
+          "sha256": "1b1b8e945e56ec130eda1ef53f565e23d48a5e64c96d5e53e13266354cab666d"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S04",
+    "title": "ATH pullback, weekly aggression box and microbalance entry",
+    "sources": [
+      "K2345:4",
+      "K2345:5",
+      "K2345:7"
+    ],
+    "source": "The source shows heavy buying in the weekly delta profile behind the upward move, a small green350% box, failed reclaims and a long above a microbalance. FORMULAS instead selects dp.min near the weekly high and a downward departure. The figure does not establish that equivalence. The fixture also says distance|120−118.5|=1.5 is within tR1.0; it is not. The short example on p.9 belongs to S05. Native p5’s green box is visible but the exact 350% numerator/denominator is not. K2345 p6 discusses another session, so its cropped example cannot complete the current sequence. The source calendar shows August 3/4; July 10 is retained only as a comparison case.",
+    "finding": "Retained weekly references exist, but are prior-five-session18:00–16:00 aggregates, not a verified source weekly profile. Unknown aggressor side is treated as sell. The caller counts every AM high above the prior high as a touch, uses whole-AM no-close/minimum, one-price pooled buy/sell ratios and the final microbalance/close. July10 dp_min30250 is untraded in AM; January28 counts148 supposed failures. Zero scores do not validate this construction.",
+    "targets": [
+      "family_tape.py::_delta_pack",
+      "family_tape.py::build_weekly_delta_table",
+      "family_tape.py::_dp_min_near_high",
+      "family_tape.py::_s04_from_am",
+      "formulas_flow.py::r_s04_ath_ofm",
+      "FORMULAS.md::R-S04",
+      "recipe_score.py::_preds.s04"
+    ],
+    "fix": [
+      "Stop faithful certification and resolve the source profile scope, sign and trapped-seller interpretation from the weekly delta/green-box chart. Preserve the present min-delta/downward-departure construction only as a named alternative; do not silently replace it with a positive-delta recipe. Correct the fixture1.5>1 arithmetic.",
+      "After that decision, specify exact session/week boundaries, contract, eligible executions, sign mapping and profile known_at. Deduplicate overlapping input chunks, retain unknown-side volume separately and verify all constituent sessions. Do not build a missing weekly input in this audit.",
+      "Track distinct prior-range attempts with approach, actual overlap, leave and close-back timestamps. Attach the resolved local imbalance box to its producing candle/rows and completion time, not one price aggregated across all AM. Resolve350% ratio semantics/settings without assuming the unrelated FP8 diagonal rule. A filled weekly high is no longer an active fresh reference; likewise retire each prior range high/low at its first revisit. Keep repeated historical profile-area failures as context, not renewed freshness. Distinct zones/boxes need their own stable identities and creation timestamps.",
+      "Only after the weekly context, failed attempts and green box are known may the first later microbalance break trigger the long. Freeze the next HTF level above entry and trail protected lows sequentially. Measure continuation to16:00 and stop/order-aware outcomes; preserve every failed stage and coverage denominator. The source ATH thesis begins neutral about its objective; choose an objective only from structure actually available when that decision is made, and allow target unavailable. A later protective stop above long entry is profit protection, not the initial stop placement."
+    ],
+    "acceptance": [
+      "The printed fixture dp_min118.5 versus weekly high120 and tR1 fails pairing.",
+      "July10 untraded30250 cannot print a new AM buy-imbalance box; January28 values entirely above a reference cannot count148 distinct retests.",
+      "A box, close or target occurring before its prerequisite is not a completed source sequence."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "pooled/future AM events; weekly scope/sign unverified",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Inspect K2345 pp.4–5: which weekly profile interval and signed delta location produced the green box, and does it represent positive buying behind the rally or a negative-delta trap near the weekly high?",
+    "fixture": "existing suite passes; FORMULAS1.5<=1 pairing is arithmetically false",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific DST and one-minute bar-start timestamps. NYAM source identifies July 14, 2026 NQ 40-range, and K18 identifies July 31 NQ September 2026 40-range; range bars do not share fixed one-minute completion times. K2345’s calendar shows August 3/4 while its cropped trade chart lacks a printed date; July 10 was relabelled as a comparison date, not a matched source session. Exact source-axis zone and contract/session mapping remain separate from captions and export timestamps. Complete-window volume and close events are available only at their own completion.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS’ minimum-delta-near-weekly-high/downward-departure recipe does not follow the source heavy buying behind the rise. The 350% box lacks published ratio/aggregation settings and the native p5 frame does not itself print that number; fixture 1.5<=1 is false."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Existing weekly references are five previous 18:00–16:00 session aggregates with unknown side treated as sell. The caller counts bars above prior high as repeated failures, pools imbalance across AM and selects the final microbalance/close, without the source ordered green-box sequence."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Zero aggregate flags do not validate the source weekly context or continuation. The source calendar’s +2345/5 trades and narrative subset are not recipe outcomes or the plotted July 10 date."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both main charts and the relabelled comparison supplement were re-viewed. July 10’s delta reference 30250 is untraded in AM; January 28’s 148 above-level bars are not distinct failures. K2345 native prices around 29290–29382 do not match July 10, so its former source-date label was withdrawn."
+        }
+      },
+      "source_refs": [
+        "K2345:4",
+        "K2345:5",
+        "K2345:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-S04-A-2026-07-10.png",
+          "sha256": "fef9cd79d54cc47887846bf801ba3699800da2544917f347211bbede14461d1b"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-S04-B-2026-01-28.png",
+          "sha256": "718d01ba716b811bc02ce3ae9d32e6b247c7d2633fddf0afc78c5e0ee4b34d24"
+        },
+        {
+          "case": "comparison-date",
+          "date": "2026-07-10",
+          "plot": "plots/R-S04-comparison-date-2026-07-10.png",
+          "sha256": "a5dc8a21aa815f91aa4d2ff3760b81aea63ad37ac783087a7d9d93fe574c5557"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S05",
+    "title": "Price-defined microbalance with first breakout and structural stop",
+    "sources": [
+      "K2345:7",
+      "K2345:9"
+    ],
+    "source": "The source prints a small grey price-defined balance, long and short breaks, a stop beyond the box and an HTF objective. Five close-constrained bars,0.1R and one-minute bars are named definitions; the author screenshot uses40-tick range bars. The approximately 7-point box is visible; 5.59 planned R:R is prose commentary rather than a legible p7 ticket field.",
+    "finding": "The current producer does use a price-defined close-run, unlike the stale FORMULAS clock-box claim. It scans all09:40–12:00 runs and keeps the last qualifying box, comparing only the final AM close. July10 has a real named breakout at noon from29914–29941.5; January28 ends inside its final box. Earlier events are overwritten, and HTF reach/stop/trail are not the scored event.",
+    "targets": [
+      "formulas_flow.py::r_s05_microbalance",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.s05",
+      "FORMULAS.md::R-S05"
+    ],
+    "fix": [
+      "Document the named detector independently of the author’s discretionary box. Use fixed-clock complete bars, a known dealing-range R and min_run=5 with max(close)−min(close)<=0.1R. Bounds are the full high/low span of that same run; known_at is its final bar completion. Require contiguous expected timestamps for the five bars; five surviving rows across a data gap are not five consecutive minutes. Keep the current 06–09 scaling width explicitly named, rather than silently treating it as a dealing range.",
+      "Process chronologically: establish a box as soon as the run qualifies, freeze its identity for the first subsequent breakout, and apply a declared extension/overlap policy. Never overwrite completed earlier events with the final qualifying run or draw a late box as available at09:40.",
+      "Enter on the first later complete close above the high or below the low. Set stop at low−2ticks for long or high+2ticks for short. Choose a genuinely prior-known HTF objective in the breakout direction, not the opening ten-minute high for both directions. Each high and low becomes a reference at box completion and stops projecting as active on first exact revisit. Preserve the first-visit breakout episode until its close confirmation; a later retouch cannot rearm that same boundary. Structural stop management and historical box shading are separate states.",
+      "Record all box/entry events and post-entry reach, MFE/MAE and sequential protected-extreme trail to16:00. State whether each rate is per box, per first breakout or per session; update FORMULAS to describe the actual current code before comparing results. A noon confirmation requires outcome data strictly afterward; the whole morning’s extrema cannot supply its MFE. Preserve the current real price-defined implementation and report the stale FORMULAS clock-box description as documentation drift."
+    ],
+    "acceptance": [
+      "July10 box29914–29941.5 completes at11:59 and its11:59 bar closes above at noon; no earlier known_at is permitted.",
+      "January28 final box26100.75–26130.25 is not broken by final AM close26116.75. An earlier confirmed box event must remain in the ledger.",
+      "Two paths with identical final close but different earlier breaks can have different event counts and outcomes."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "last-run retrospective selection; pre-entry extrema",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific DST and one-minute bar-start timestamps. NYAM source identifies July 14, 2026 NQ 40-range, and K18 identifies July 31 NQ September 2026 40-range; range bars do not share fixed one-minute completion times. K2345’s calendar shows August 3/4 while its cropped trade chart lacks a printed date; July 10 was relabelled as a comparison date, not a matched source session. Exact source-axis zone and contract/session mapping remain separate from captions and export timestamps. Complete-window volume and close events are available only at their own completion.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source supports price-defined microbalances, both breakout sides and structural stops. Five close-constrained one-minute bars and 0.1R are named definitions; 5.59 is prose commentary, not visibly printed on the native p7 ticket."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The current producer genuinely calls a price-run detector, contrary to stale FORMULAS, but retains the last qualifying box and tests only the final AM close. It uses 06–09 width rather than an established source dealing range and overwrites earlier events."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The score omits first-break chronology, target reach and protected-structure trail. A final-close comparison with a retrospectively chosen box is not the complete source breakout outcome."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10’s 29914–29941.5 box is complete at 11:59 and the next bar closes above at noon; January 28’s final 26100.75–26130.25 box contains the last close. These support the named final-box observations only, not the broad backdrawn availability or full-source outcome."
+        }
+      },
+      "source_refs": [
+        "K2345:7",
+        "K2345:9"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-S05-A-2026-07-10.png",
+          "sha256": "6adbbb0ed4d49b13f361341226a9abe5d4153e899e0bbef11cbcbd70a1b65194"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-S05-B-2026-01-28.png",
+          "sha256": "2a6bbb1cacfd8e79bff3a3ac07ef51fb83425f1ce7e8dc4b728c8e0551b611f5"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S06",
+    "title": "Two independent reasons at a reaction band",
+    "sources": [
+      "K10:6",
+      "K10:7",
+      "K10:8",
+      "K10:12"
+    ],
+    "source": "The source ES two-minute chart uses a marked prior rejection area plus a nearby minor HVN, with a long mirror and absorption. Prose says planned 1.5R, but native p7 short ticket is 1.00R ($500/20 ticks each side). Native p8 long graphic instead shows 9.60R ($4800/192 ticks versus $500/20 ticks), describing subsequent expansion rather than a proven preplanned target. The earlier audit statement that both tickets were 1.00R is withdrawn. Faithful target certification remains unresolved; transfer to NQ is a separate named study.",
+    "finding": "The current recipe has both directions, despite the stale short-only description. It uses a single prior RTH extreme, prior high/low-to-last-close as rejection, the first price-sorted occupied-bin OHLC HVN and whole-AM close/extrema. Neither branch requires price to touch the chosen level. June12 fires a long near28599 while AM stays above29200; July10 also never touches its lower candidates.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_jumbo.py::profile_nodes",
+      "formulas_flow.py::r_s06_two_reason",
+      "recipe_score.py::_preds.s06",
+      "FORMULAS.md::R-S06"
+    ],
+    "fix": [
+      "Resolve the 1.5R prose versus 1.00R short-ticket discrepancy before assigning a source target. Keep those as separately labelled interpretations, and distinguish the long 9.60R expansion graphic from initial target and actual execution. Preserve ES tick/multiplier/contract values; NQ comparison coordinates never replace the ES source.",
+      "Derive the reaction band from a completed prior local rejection, with observed endpoints and causal confirmation. A prior-day high-to-final-close scalar is not that event. Identify the independent source minor node in its documented profile on a complete price grid with explicit tie/selection rules; do not relabel the dominant POC as a minor HVN or impose a universal POC-exclusion rule on other profile methods.",
+      "Compute distance from the node to the band, not only a single swing high. Require an actual later band contact from the correct side, then the named G-default close/reversal chronology. For the source long, require matching sell-aggression absorption at the touch; an AM close far above the level is insufficient. If an external high/low is selected as the reaction reference or objective, scan since its known_at and stop its active line at the first revisit, independently on both sides. A historical reaction band may retain memory under its own documented lifecycle; it is not a newly fresh high/low after every touch.",
+      "Set invalidation just beyond the observed rejection extreme, with positive risk. Apply only the resolved target multiple or the separately named alternatives to post-entry prices. Compare one-reason versus two-reason eligible contacts, side, product, rejection and target outcomes."
+    ],
+    "acceptance": [
+      "June12 has no contact with HVN28599/prior low28577.5 and must not produce a long rejection. July10 candidates29635.75/29614.5 are also uncontacted.",
+      "An HVN beside the band and a later confirmed rejection can qualify; an unrelated node selected merely because it is first in sorted order cannot.",
+      "The p7 ES 20-tick risk and 20-tick planned target are 1.00R. The p8 192/20-tick graphic is 9.60R expansion, not another 1.00 ticket, not proof of an initial 192-tick objective, and neither resolves the prose 1.5R instruction."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "no touch gate; whole-AM final close/extrema",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "For K10 p7, should the target follow the plotted 1.00R ticket or the prose 1.5R instruction? The p8 long 9.60R expansion does not settle that conflict. Identify the original rejection-band endpoints for exact replication.",
+    "fixture": "helper suite passes; no integration check for an untouched level",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation charts use date-specific America/New_York and bar-start timestamps; closes become available at the bar end. K10 uses ES two-minute source charts while this is a separately named NQ comparison. ANAT’s native time markings and CONT’s August 19 NQ R16 tick chart do not establish a universal source-axis IANA zone. AVG’s around-10:00 observation is a strategy time; source timezone, exchange calendar, contract and A-period boundaries need independently recorded mapping. Profile completion and later causal decisions cannot be backdated to a profile start or chart caption.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The reaction-area plus independent minor-node concept is supported, but the universal 1.5R target conflicts with the short p7 ticket at 1.00R. Corrected reading: p8 long graphic is 9.60R expansion, not a second 1.00 ticket and not proof of a planned 192-tick target."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current code has both directions, unlike stale prose, but uses prior RTH high/low-to-final-close and first sorted OHLC HVN. Neither branch checks actual level contact, the source prior local rejection, or touch-specific absorption before full-AM close/extrema."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The two-reason/reject Boolean can fire hundreds of points away from the proposed band; it does not measure the source confluence-conditioned reaction or target success."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. June 12 true is a no-touch counterexample at HVN 28599/prior low 28577.5 with AM above 29200; July 10 candidates 29635.75/29614.5 are below the 29675 morning low."
+        }
+      },
+      "source_refs": [
+        "K10:6",
+        "K10:7",
+        "K10:8",
+        "K10:12"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-06-12",
+          "plot": "plots/R-S06-A-2026-06-12.png",
+          "sha256": "ebd9b0df0cb86b5e816ec69788fa5d169205f865761e9ae7d464df09960b822b"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-S06-B-2026-07-10.png",
+          "sha256": "cd4d6d768af13ae32e7a1d9ede5a083baf946b135c03c48b8332e32e910f025a"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S07",
+    "title": "Reaction-area entries, structural risk and intraband re-entry",
+    "sources": [
+      "ANAT:4",
+      "ANAT:6",
+      "ANAT:7",
+      "ANAT:8",
+      "ANAT:9",
+      "ANAT:10"
+    ],
+    "source": "The source uses held-buyer/seller areas, conditional objectives and stops beyond the specific controlling structure. The green area around 28700–28706 is distinct from an earlier OFM near 28697. The 35/188 long, 115/248 short and 15/211 short ticket pairs are examples; the last stop sits inside the broader rejection area rather than beyond its highest wick. A stopped attempt can be followed by re-entry inside the same still-valid band. Source trading-chart third trade positive at 10:17 and −480 trough at 10:15 also contradict blanket four-initial-losses/half-of-$500 statements. These are case geometries, not a verified fill ledger.",
+    "finding": "The recipe uses the final AM close as an always-long entry, combines a prior-VA edge touch anywhere in AM, and measures MAE from the whole RTH minimum including pre-entry prices. Only survived_15 is scored, with no absorption, held-area geometry, objective or re-entry. July10’s morning plunge is charged against its noon entry even though afternoon price rises.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_s07_areas",
+      "recipe_score.py::_preds.s07",
+      "FORMULAS.md::R-S07"
+    ],
+    "fix": [
+      "Separate source structural risk from the three printed example ticket rows. Each entry needs its own area bounds, defended side, establishment/trigger times and known objective; keep missing composite nodes or held-print spans explicitly unavailable.",
+      "Trigger only at a matching band defence with the correctly signed arriving aggression. Choose long at a defended lower area or short at an upper area at that moment; do not impose a direction from noon’s close.",
+      "Choose invalidation beyond the specific local defending structure, recording its observed bounds and named tick buffer; do not automatically place every stop beyond the widest enclosing zone or highest wick. Distinguish an attempt’s stop-out from invalidation of the broader area. Re-entry must return inside the same still-valid source band after the prior exit, with renewed matching evidence. An invalidated area needs a new confirmed defense. Each external high/low reference still expires on its first revisit on its own side; later zone memory cannot rearm it as fresh.",
+      "Measure signed MFE/MAE from the actual entry forward to stop/objective/end. For long use max(later_price−entry) and max(entry−later_price); reverse for short. Report structural-stop outcomes, objective success, attempt count and any clearly named ticket-distance sensitivity rows separately; never score15-tick survival as the complete source recipe."
+    ],
+    "acceptance": [
+      "July10 pre-noon low29675 cannot affect a noon29944.25 entry’s MAE. January28 no prior-VA edge contact is not a trigger.",
+      "Inside [99.75,100.25] can qualify for re-entry into that still-valid area; 101.5 cannot. A stopped local attempt does not alone prove the whole area failed. An actually invalidated area requires new evidence and identity before reuse.",
+      "Keep 35/188 long, 115/248 short and 15/211 short as separate example risk/objective pairs. A short must use downward MFE/upward MAE, and a working bracket alone does not establish filled returns."
+    ],
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "pre-entry RTH MAE; arbitrary final-close long entry",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation charts use date-specific America/New_York and bar-start timestamps; closes become available at the bar end. K10 uses ES two-minute source charts while this is a separately named NQ comparison. ANAT’s native time markings and CONT’s August 19 NQ R16 tick chart do not establish a universal source-axis IANA zone. AVG’s around-10:00 observation is a strategy time; source timezone, exchange calendar, contract and A-period boundaries need independently recorded mapping. Profile completion and later causal decisions cannot be backdated to a profile start or chart caption.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "Structural risk and same-area re-entry are supported, but example 35/188 long, 115/248 short and 15/211 short tickets are not fixed thresholds. The 15-tick stop is inside the broader rejection area; a stopped attempt need not invalidate that whole area."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The producer is always long at final AM close, gates on any prior VA edge touch and charges full-RTH extrema including pre-entry prices. It builds no matching defended area, objective, invalidation or re-entry state."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only 15-tick survival is scored. No-source-trigger days, pre-entry MAE and fixed example risk cannot measure structural trade quality or the sequence of attempts."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10’s 29675 morning low is before the noon 29944.25 entry and cannot be its MAE; January 28 stays above the retained prior VAH touch band and has no source entry."
+        }
+      },
+      "source_refs": [
+        "ANAT:4",
+        "ANAT:6",
+        "ANAT:7",
+        "ANAT:8",
+        "ANAT:9",
+        "ANAT:10"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-S07-A-2026-07-10.png",
+          "sha256": "bc7d8f618e6638fb01eba4a900e689992ad6531e97b712c8ba6bdd6d22380c29"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-S07-B-2026-01-28.png",
+          "sha256": "d89bb42eff2c6fd69e09ded202def5de10040aed3b9a5168c69f682ed8d63921"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S08",
+    "title": "Minor-node continuation, control and buying-pressure flip",
+    "sources": [
+      "CONT:4",
+      "CONT:5",
+      "CONT:7",
+      "CONT:8",
+      "CONT:10",
+      "CONT:9"
+    ],
+    "source": "The source shows a minor-node band at the top of an established5-minute balance, repeated resistance and negative executed delta; extreme buying above it changes the read to a retest long toward VWAP. The approximately20-point balance band,5-point refill zone and9-point/55-point ticket are distinct. SD+1/+2 labels are coincident VWAP references, not the node definition. Source p9 explicitly checks the range-leg POC after the entry. The August 19 R16 chart’s 9-point stop/55-point target (6.11R) is a working example, and an earlier failed attempt remains distinct from the successful re-entry.",
+    "finding": "The overriding recipe now calls r_s08_minor_node, not the stale two-HVN presence rule. It substitutes prior RTH high for balance top, a single first sorted OHLC HVN for the band, current-AM high counts for prior rejections, and final three five-minute close−open values for executed delta. No actual touch, same-side control, flip, target or composite behaviour is scored. Both plotted nodes lie below the AM path.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_flow.py::r_s08_minor_node",
+      "formulas_jumbo.py::profile_nodes",
+      "recipe_score.py::_preds.s08",
+      "FORMULAS.md::R-S08"
+    ],
+    "fix": [
+      "Establish a causal balance interval and its own volume profile. The minor node is a contiguous qualified band near its top, distinct from the POC; record prior independent contacts/rejections completed before the new setup. Preserve the node/span threshold as a named rule. The completed higher-timeframe context and lower-timeframe refill band need separate identities and timestamps. A primary POC cannot silently become a minor node, but do not generalize that distinction into excluding every POC from all source setups.",
+      "Build executed buy-minus-sell delta in the actual preceding complete five-minute bars approaching the band. Require the named three negatives only in that context. Unknown aggressor side is neither sell nor signed volume; OHLC close−open is a separate price-change proxy and cannot satisfy this source condition.",
+      "On a later band contact, evaluate the short rejection and post-entry POC/last-seller-failure target, then count renewed same-side control at later valid re-entries. Freeze current POC/VWAP at their stated decision times or store their developing updates explicitly. Record the range-leg POC inspected after entry as post-entry context unless a reconstruction proves its value was available earlier; it cannot retroactively validate entry. Separate first failed attempt, exit, renewed control and later re-entry. External high/low context or targets expire on their first revisit independently, with no implicit reset when a control band is retested.",
+      "Implement the stated alternative only when a complete close above the band has local extreme buying, followed by a later held retest from above; target the session VWAP. Keep ordinary short and flip-long denominators separate. Do not manufacture yearly-composite LVNs; a separately named available proxy can have its own stall/slice outcomes once authorized."
+    ],
+    "acceptance": [
+      "July10 HVN29635.75 versus top29993.5 andJanuary28 HVN25924.5 versus26114.25 do not define a top-of-balance contact.",
+      "Negative price-change bars with positive executed delta cannot qualify the source sell stack.",
+      "A buy-pressure break without the later retest is not a flip entry; SD+1 coinciding with a refill zone does not replace the volume-node band."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "last-AM price changes as delta; current touches labelled prior",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation charts use date-specific America/New_York and bar-start timestamps; closes become available at the bar end. K10 uses ES two-minute source charts while this is a separately named NQ comparison. ANAT’s native time markings and CONT’s August 19 NQ R16 tick chart do not establish a universal source-axis IANA zone. AVG’s around-10:00 observation is a strategy time; source timezone, exchange calendar, contract and A-period boundaries need independently recorded mapping. Profile completion and later causal decisions cannot be backdated to a profile start or chart caption.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "Source supports controlled minor-node continuation and a buying-pressure flip. Higher-timeframe 29750–29761 context, 29689 refill area and VWAP deviations are separate objects; p9 range-leg POC confluence is checked after entry, not a demonstrated pre-entry gate."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The overriding producer uses prior RTH high, first sorted OHLC HVN, AM high counts and final three five-minute close-minus-open changes. It omits ordered contact, executed delta, side-specific control and the later long flip."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Zero daily flags do not measure eligible node contacts, controlled re-entries, short continuation or break-and-retest longs. A node-presence substitute cannot certify the source target behaviour."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 node 29635.75 and January 28 node 25924.5 are uncontacted below AM; final price changes +36.25/+17.75/+13.5 and +5.5/−18.75/+6.75 are not a three-bar executed-delta stack."
+        }
+      },
+      "source_refs": [
+        "CONT:4",
+        "CONT:5",
+        "CONT:7",
+        "CONT:8",
+        "CONT:10",
+        "CONT:9"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-S08-A-2026-07-10.png",
+          "sha256": "58106780fe5dd3b89c41600dc9ce2e0bbc9b4fbeb5d456fd344cd944bcd6d807"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-S08-B-2026-01-28.png",
+          "sha256": "184eb5c236202d542043e9fe1c473647de588c05eebf10cac5a8157887188958"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-S09",
+    "title": "Entire A-period above prior value, developing-VA break and defended retest",
+    "sources": [
+      "AVG:21",
+      "AVG:22"
+    ],
+    "source": "The source requires the entire A-period above prior VAH, observation around10:00, a break of current developing VAH with aggressive buying and a later defence of those imbalance prices. The source sketch is long-only; a developing-VAL short is a named mirror.70% VA, one-minute proxy and G-default hold are declared choices. The source describes data collection and expressly claims no entry edge. Dashboard 102 wins/49 losses, 67.55%, PF1.27 and $64.82 expectancy are separate aggregate case evidence, not conditional results for this rule.",
+    "finding": "The producer instead compares09:30 open with the future09:30–10:00 OHLC-VP VAH, freezes that line, and requires an unordered post10 close above plus any low below. August11 is true even though A-low29631.75 is far below prior VAH29819.75. July10 fails its open gate; later PM rally is not an above-value opening setup.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "family_open.py::ohlc_vp",
+      "formulas_flow.py::r_s09_open_above_value",
+      "recipe_score.py::_preds.s09"
+    ],
+    "fix": [
+      "At10:00, require complete A-period low>prior completed-profile VAH. Store both profile scopes and dates. The open price alone or a comparison to today’s future profile cannot establish this condition.",
+      "Update the current RTH profile chronologically from available executions, or a clearly named OHLC proxy. For each complete break candle after10:00 use the profile snapshot available before that break, retaining VAH/VAL and the snapshot cutoff. Developing profile boundaries keep explicit update/snapshot lifetimes; do not treat them as fixed session-extreme lines or silently reset a historical snapshot on each touch.",
+      "Require the source buying imbalance in that same breaking candle and freeze its actual row-span band. Do not assume the unresolved F04 illustration establishes a4× rule; state the chosen settings as named or keep exact construction unavailable. Only a later approach from above and confirmed defence of those prices constitutes the retest entry.",
+      "Apply the named G-default body/invalidation/reversal sequence using the frozen developing VA height, then measure post-entry HTF reach by16:00. Report opening eligibility, break-with-buying, retest-hold and target success separately with10–11/11–12/PM splits. Keep the unprinted short mirror separately labelled. For any selected external or structural high/low objective, verify that no earlier revisit occurred since its known_at, including overnight activity, and end its active projection on first visit. Keep that lifecycle separate from the developing profile and defending imbalance band. Do not copy the source dashboard’s aggregate statistics into this recipe’s denominator."
+    ],
+    "acceptance": [
+      "August11 A-low29631.75<prior VAH29819.75 must fail opening eligibility despite the higher09:30 open. July10 A-low29798<29986.25 also fails.",
+      "A touch before the break cannot count as its retest; a break without buying participation or a later failed band defence is not retest-hold.",
+      "Adding future prints must not change the stored developing VAH or eligible state used by an earlier break."
+    ],
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "leakage": "future10:00 VA for open; unordered break/touch",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation charts use date-specific America/New_York and bar-start timestamps; closes become available at the bar end. K10 uses ES two-minute source charts while this is a separately named NQ comparison. ANAT’s native time markings and CONT’s August 19 NQ R16 tick chart do not establish a universal source-axis IANA zone. AVG’s around-10:00 observation is a strategy time; source timezone, exchange calendar, contract and A-period boundaries need independently recorded mapping. Profile completion and later causal decisions cannot be backdated to a profile start or chart caption.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source requires the entire A-period above prior value, then aggressive break of developing VAH and later defense of the actual imbalance prices. Its case-study explicitly disclaims an entry edge; dashboard results are not this recipe’s performance."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current caller tests the open against future 10:00 OHLC profile VAH and joins unordered later closes/touches. It omits entire A-period versus prior VAH and replaces the defended row-span band with a developing-VA line."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The opening comparison plus any later close/touch count is not the source ordered setup, participation, retest or post-entry objective event."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. August 11 true has A-low 29631.75 below prior VAH 29819.75; July 10 A-low 29798 is below prior VAH 29986.25. Later moves cannot repair either missing opening premise."
+        }
+      },
+      "source_refs": [
+        "AVG:21",
+        "AVG:22"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-11",
+          "plot": "plots/R-S09-A-2026-08-11.png",
+          "sha256": "f1916079632d35c3e7516271045dc3a950f0e290a9e81caa23d21be2dc492d26"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-S09-B-2026-07-10.png",
+          "sha256": "81ac2333203f1fe135d421211306716da9aeb6085edc740fd71bd220862221f7"
+        }
+      ]
+    }
+  }
+]

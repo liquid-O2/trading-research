@@ -1,0 +1,492 @@
+{
+  "purpose": "Independent arithmetic examples for the specification; future implementation must pass its own behavioral tests. No market backtest is implied.",
+  "absolute_tolerance": 1e-09,
+  "cases": [
+    {
+      "id": "range_ladder",
+      "engine": "E01",
+      "operation": "range",
+      "input": {
+        "H": 120,
+        "L": 100,
+        "k": 0.5
+      },
+      "expected": {
+        "W": 20,
+        "EQ": 110,
+        "upper": 130,
+        "lower": 90
+      }
+    },
+    {
+      "id": "outer_band",
+      "engine": "E01",
+      "operation": "outer_band",
+      "input": {
+        "H": 120,
+        "L": 100,
+        "near": 1.33,
+        "far": 1.66
+      },
+      "expected": {
+        "upper": [
+          146.6,
+          153.2
+        ],
+        "lower": [
+          66.8,
+          73.4
+        ]
+      }
+    },
+    {
+      "id": "round_outward",
+      "engine": "E00",
+      "operation": "round",
+      "input": {
+        "upper": 101.13,
+        "lower": 98.87,
+        "tick": 0.25
+      },
+      "expected": {
+        "upper": 101.25,
+        "lower": 98.75
+      }
+    },
+    {
+      "id": "upward_golden_pocket",
+      "engine": "E08",
+      "operation": "pocket",
+      "input": {
+        "A": 100,
+        "B": 120
+      },
+      "expected": [
+        107.64,
+        110
+      ]
+    },
+    {
+      "id": "downward_golden_pocket",
+      "engine": "E08",
+      "operation": "pocket",
+      "input": {
+        "A": 120,
+        "B": 100
+      },
+      "expected": [
+        110,
+        112.36
+      ]
+    },
+    {
+      "id": "directional_EV",
+      "engine": "E04",
+      "operation": "EV",
+      "input": {
+        "O": 100,
+        "u": 0.02,
+        "d": 0.01,
+        "k": 0.5
+      },
+      "expected": {
+        "U": 102,
+        "L": 99,
+        "W": 3,
+        "upper_extension": 103.5
+      }
+    },
+    {
+      "id": "lower_P_zone",
+      "engine": "E04",
+      "operation": "P_zone",
+      "input": {
+        "O": 100,
+        "q_near": 0.02,
+        "q_far": 0.03
+      },
+      "expected": [
+        97,
+        98
+      ]
+    },
+    {
+      "id": "smaller_excursion",
+      "engine": "E04",
+      "operation": "smaller_excursion",
+      "input": {
+        "u": [
+          2,
+          8
+        ],
+        "d": [
+          8,
+          2
+        ]
+      },
+      "expected": {
+        "mean_min": 2,
+        "min_means": 5
+      }
+    },
+    {
+      "id": "type7_quantile",
+      "engine": "E04",
+      "operation": "quantile",
+      "input": {
+        "x": [
+          0,
+          10,
+          20,
+          30
+        ],
+        "q": 0.25
+      },
+      "expected": 7.5
+    },
+    {
+      "id": "trade_VWAP",
+      "engine": "E05",
+      "operation": "VWAP",
+      "input": {
+        "prices": [
+          100,
+          102
+        ],
+        "sizes": [
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "VWAP": 101,
+        "sigma": 1
+      }
+    },
+    {
+      "id": "CVD_unknown_volume",
+      "engine": "E06",
+      "operation": "CVD",
+      "input": {
+        "buy": 100,
+        "sell": 70,
+        "unknown": 20
+      },
+      "expected": {
+        "delta": 30,
+        "coverage": 0.8947368421052632,
+        "quality": false
+      }
+    },
+    {
+      "id": "same_price_ratio",
+      "engine": "E05",
+      "operation": "ratio",
+      "input": {
+        "own": 35,
+        "opposite": 10,
+        "threshold": 3.5
+      },
+      "expected": true
+    },
+    {
+      "id": "empty_ratio",
+      "engine": "E05",
+      "operation": "ratio",
+      "input": {
+        "own": 0,
+        "opposite": 0,
+        "threshold": 3.5
+      },
+      "expected": false
+    },
+    {
+      "id": "steady_prints",
+      "engine": "E07",
+      "operation": "steady",
+      "input": {
+        "sizes": [
+          100,
+          80,
+          90,
+          85
+        ],
+        "fraction": 0.8,
+        "minimum": 4
+      },
+      "expected": true
+    },
+    {
+      "id": "thinning_prints",
+      "engine": "E07",
+      "operation": "steady",
+      "input": {
+        "sizes": [
+          100,
+          79,
+          90,
+          85
+        ],
+        "fraction": 0.8,
+        "minimum": 4
+      },
+      "expected": false
+    },
+    {
+      "id": "insufficient_prints",
+      "engine": "E07",
+      "operation": "steady",
+      "input": {
+        "sizes": [
+          100,
+          100,
+          100
+        ],
+        "fraction": 0.8,
+        "minimum": 4
+      },
+      "expected": null
+    },
+    {
+      "id": "speed_elapsed_time",
+      "engine": "E06",
+      "operation": "speed",
+      "input": {
+        "point_change": 3.9,
+        "tick": 0.25,
+        "elapsed_minutes": 4
+      },
+      "expected": 3.9
+    },
+    {
+      "id": "second_transition_median",
+      "engine": "E03",
+      "operation": "median_run",
+      "input": {
+        "volumes": [
+          150,
+          160,
+          40,
+          30,
+          140,
+          155
+        ]
+      },
+      "expected": {
+        "median": 145,
+        "last_two_accepted": [
+          false,
+          true
+        ]
+      }
+    },
+    {
+      "id": "risk_multiple",
+      "engine": "E11",
+      "operation": "R",
+      "input": {
+        "risk_ticks": 20,
+        "reward_ticks": 30
+      },
+      "expected": 1.5
+    },
+    {
+      "id": "long_net_PnL",
+      "engine": "E11",
+      "operation": "PnL",
+      "input": {
+        "entry": 100,
+        "exit": 103,
+        "direction": 1,
+        "multiplier": 20,
+        "fee": 5,
+        "R0": 2
+      },
+      "expected": {
+        "net_dollars": 55,
+        "net_R0": 1.375
+      }
+    },
+    {
+      "id": "short_net_PnL",
+      "engine": "E11",
+      "operation": "PnL",
+      "input": {
+        "entry": 100,
+        "exit": 102,
+        "direction": -1,
+        "multiplier": 20,
+        "fee": 5,
+        "R0": 2
+      },
+      "expected": {
+        "net_dollars": -45,
+        "net_R0": -1.125
+      }
+    },
+    {
+      "id": "parity_forward",
+      "engine": "E10",
+      "operation": "parity",
+      "input": {
+        "K": 100,
+        "C": 5,
+        "P": 4,
+        "r": 0,
+        "T": 1
+      },
+      "expected": 101
+    },
+    {
+      "id": "Black_forward_gamma",
+      "engine": "E10",
+      "operation": "gamma",
+      "input": {
+        "F": 100,
+        "K": 100,
+        "sigma": 0.2,
+        "T": 1,
+        "r": 0
+      },
+      "expected": 0.01984762737385059
+    },
+    {
+      "id": "gamma_dollars",
+      "engine": "E10",
+      "operation": "gamma_dollars",
+      "input": {
+        "gamma": 0.02,
+        "OI": 100,
+        "multiplier": 100,
+        "X": 100,
+        "sign": -1
+      },
+      "expected": -20000
+    },
+    {
+      "id": "VP_tie_expansion",
+      "engine": "E03",
+      "operation": "VP",
+      "input": {
+        "prices": [
+          100,
+          101,
+          102
+        ],
+        "volumes": [
+          10,
+          20,
+          10
+        ],
+        "fraction": 0.7
+      },
+      "expected": {
+        "POC": 101,
+        "VAL": 100,
+        "VAH": 102,
+        "achieved_fraction": 1.0
+      }
+    },
+    {
+      "id": "VP_POC_tie",
+      "engine": "E03",
+      "operation": "VP",
+      "input": {
+        "prices": [
+          100,
+          101,
+          102,
+          103
+        ],
+        "volumes": [
+          2,
+          10,
+          10,
+          2
+        ],
+        "fraction": 0.7
+      },
+      "expected": {
+        "POC": 101,
+        "VAL": 101,
+        "VAH": 102,
+        "achieved_fraction": 0.8333333333333334
+      }
+    },
+    {
+      "id": "winter_clock",
+      "engine": "E00",
+      "operation": "clock",
+      "input": {
+        "local": "2026-01-28T09:30:00",
+        "zone": "America/New_York"
+      },
+      "expected": "2026-01-28T14:30:00+00:00"
+    },
+    {
+      "id": "summer_clock",
+      "engine": "E00",
+      "operation": "clock",
+      "input": {
+        "local": "2026-07-10T09:30:00",
+        "zone": "America/New_York"
+      },
+      "expected": "2026-07-10T13:30:00+00:00"
+    },
+    {
+      "id": "first_visit_independent",
+      "engine": "E01",
+      "operation": "visits",
+      "input": {
+        "H": 120,
+        "L": 100,
+        "prices": [
+          110,
+          120,
+          119,
+          101
+        ]
+      },
+      "expected": {
+        "high_first_index": 1,
+        "low_first_index": null
+      }
+    },
+    {
+      "id": "NWOG_forming_edge",
+      "engine": "E09",
+      "operation": "gap",
+      "input": {
+        "Friday": 100,
+        "Sunday": 110,
+        "later": [
+          110,
+          111,
+          110
+        ]
+      },
+      "expected": {
+        "first_return_index": 2,
+        "full_fill_index": null
+      }
+    },
+    {
+      "id": "NWOG_immediate_penetration",
+      "engine": "E09",
+      "operation": "gap",
+      "input": {
+        "Friday": 100,
+        "Sunday": 110,
+        "later": [
+          110,
+          109,
+          100
+        ]
+      },
+      "expected": {
+        "first_return_index": 1,
+        "full_fill_index": 2
+      }
+    }
+  ]
+}

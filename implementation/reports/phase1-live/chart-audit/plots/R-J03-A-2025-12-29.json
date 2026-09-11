@@ -1,0 +1,153 @@
+{
+  "case": {
+    "id": "R-J03",
+    "case": "A",
+    "date": "2025-12-29",
+    "code_result": false,
+    "selection": "available-data diagnostic",
+    "positive_count": 0,
+    "negative_count": 647
+  },
+  "production_session": {
+    "date": "2025-12-29",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 4129,
+    "expected_1s": 10800,
+    "missing_1s": 6671,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 25776.75,
+    "L": 25660.75,
+    "open": 25747.0,
+    "close": 25693.0,
+    "EQ": 25718.75,
+    "Q25": 25689.75,
+    "Q75": 25747.75,
+    "W69": 116.0,
+    "volume": 19149.0,
+    "close_0859": 25693.0,
+    "open_0930": 25706.75,
+    "w_pct_0859close": 0.4514848402288561,
+    "w_pct_0930open": 0.4512433504818773,
+    "WpriorRTH": 101.0,
+    "w_rel_prior_rth": 1.1485148514851484,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.8-1.2",
+    "prior_rth_high": 25935.25,
+    "prior_rth_low": 25834.25,
+    "asia_high": 25892.5,
+    "asia_low": 25821.0,
+    "london_high": 25856.0,
+    "london_low": 25785.25,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1767018960000,
+    "first_low_break_ms": null,
+    "judas": true,
+    "judas_m05": false,
+    "extended": true,
+    "compressed": false,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1767016800000000000,
+    "outcome_start_ns": 1767018600000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "6-9.published formation",
+      "low": 25660.75,
+      "high": 25776.75,
+      "start": 6.0,
+      "end": 9.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published H",
+      "price": 25776.75,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published L",
+      "price": 25660.75,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "EQ",
+      "price": 25718.75,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "Q25",
+      "price": 25689.75,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "Q75",
+      "price": 25747.75,
+      "start": 9,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "06:00 open",
+      "price": 25747.0,
+      "start": 9,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 180,
+      "missing": 0,
+      "open": 25747.0,
+      "high": 25776.75,
+      "low": 25660.75,
+      "close": 25693.0
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J03-A-2025-12-29.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 502,
+    "code": "def j03(r):\n        return bool(r.get(\"extended\") and r.get(\"path_class\") in (\"high-only\", \"low-only\") and r.get(\"midretrace_hold_1000\"))"
+  },
+  "event": "single-break on extended overnight, EQ retrace with h=15 by 10:00",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

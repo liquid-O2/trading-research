@@ -1,0 +1,285 @@
+{
+  "case": {
+    "id": "R-A07",
+    "date": "2026-01-30",
+    "case": "sequence-positive",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 10,
+    "negative_count": 637,
+    "audit_sequence": {
+      "date": "2026-01-30",
+      "kind": "named-IB-held-break-later-retest",
+      "side": -1,
+      "IBH": 25940.0,
+      "IBL": 25790.75,
+      "events": [
+        {
+          "date": "2026-01-30",
+          "kind": "break",
+          "bar_index": 85,
+          "clock": 11.916666666666666,
+          "known_clock": 11.933333333333334,
+          "level": 25790.75,
+          "marker_price": 25790.25
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "30-minute hold",
+          "bar_index": 115,
+          "clock": 12.416666666666666,
+          "known_clock": 12.433333333333334,
+          "level": 25790.75,
+          "marker_price": 25763.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "later retest",
+          "bar_index": 120,
+          "clock": 12.5,
+          "known_clock": 12.516666666666667,
+          "level": 25790.75,
+          "marker_price": 25790.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "half-width rejection",
+          "bar_index": 125,
+          "clock": 12.583333333333334,
+          "known_clock": 12.600000000000001,
+          "level": 25790.75,
+          "marker_price": 25715.25
+        }
+      ]
+    }
+  },
+  "production_session": {
+    "date": "2026-01-30",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6813,
+    "expected_1s": 10800,
+    "missing_1s": 3987,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 25905.25,
+    "L": 25752.5,
+    "open": 25765.25,
+    "close": 25826.25,
+    "EQ": 25828.875,
+    "Q25": 25790.6875,
+    "Q75": 25867.0625,
+    "W69": 152.75,
+    "volume": 35820.0,
+    "close_0859": 25826.25,
+    "open_0930": 25834.25,
+    "w_pct_0859close": 0.5914524950389622,
+    "w_pct_0930open": 0.5912693420556044,
+    "WpriorRTH": 639.0,
+    "w_rel_prior_rth": 0.2390453834115806,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 26175.0,
+    "prior_rth_low": 25536.0,
+    "asia_high": 25933.75,
+    "asia_low": 25736.0,
+    "london_high": 25887.0,
+    "london_low": 25700.0,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1769783940000,
+    "first_low_break_ms": null,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1769781600000000000,
+    "outcome_start_ns": 1769783400000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 25584.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 25901.5,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 25800.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 25834.25,
+      "start": 9.25,
+      "end": 16,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "box",
+      "label": "ib formation",
+      "low": 25790.75,
+      "high": 25940.0,
+      "start": 9.5,
+      "end": 10.5,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "ib H",
+      "price": 25940.0,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "ib L",
+      "price": 25790.75,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "ib EQ",
+      "price": 25865.375,
+      "start": 10.5,
+      "end": 16.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "audit continuation of known IB low",
+      "price": 25790.75,
+      "start": 10.5,
+      "end": 16,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "audit continuation of known IB high",
+      "price": 25940.0,
+      "start": 10.5,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-01-29",
+    "range.ib": {
+      "n": 60,
+      "missing": 0,
+      "open": 25834.25,
+      "high": 25940.0,
+      "low": 25790.75,
+      "close": 25794.0
+    },
+    "audit_sequence": {
+      "date": "2026-01-30",
+      "kind": "named-IB-held-break-later-retest",
+      "side": -1,
+      "IBH": 25940.0,
+      "IBL": 25790.75,
+      "events": [
+        {
+          "date": "2026-01-30",
+          "kind": "break",
+          "bar_index": 85,
+          "clock": 11.916666666666666,
+          "known_clock": 11.933333333333334,
+          "level": 25790.75,
+          "marker_price": 25790.25
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "30-minute hold",
+          "bar_index": 115,
+          "clock": 12.416666666666666,
+          "known_clock": 12.433333333333334,
+          "level": 25790.75,
+          "marker_price": 25763.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "later retest",
+          "bar_index": 120,
+          "clock": 12.5,
+          "known_clock": 12.516666666666667,
+          "level": 25790.75,
+          "marker_price": 25790.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "half-width rejection",
+          "bar_index": 125,
+          "clock": 12.583333333333334,
+          "known_clock": 12.600000000000001,
+          "level": 25790.75,
+          "marker_price": 25715.25
+        }
+      ]
+    },
+    "tape_window": {
+      "date": "2026-01-29",
+      "from": 9.5,
+      "to": 16,
+      "trades": 370613,
+      "buy_volume": 277079.0,
+      "sell_volume": 277759.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-01-29_2026-01-31.parquet"
+  ],
+  "plot": "plots/R-A07-sequence-positive-2026-01-30.png",
+  "notes": [
+    "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+    "Numbered stages: 1 break known 11:56, 2 30-minute hold known 12:26, 3 later retest known 12:31, 4 half-width rejection known 12:36. Close stages use actual closes; retest/target marks use the touched edge."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 631,
+    "code": "def a07(r):\n        return bool(r.get(\"a07_ib_retest\"))"
+  },
+  "event": "IB break, retest, hold",
+  "detail_window": [
+    12.4,
+    12.9
+  ]
+}

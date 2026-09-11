@@ -1,0 +1,147 @@
+{
+  "case": {
+    "id": "R-A16",
+    "case": "A",
+    "date": "2024-04-09",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 18,
+    "negative_count": 629
+  },
+  "production_session": {
+    "date": "2024-04-09",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 7100,
+    "expected_1s": 10800,
+    "missing_1s": 3700,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 18371.5,
+    "L": 18253.5,
+    "open": 18318.25,
+    "close": 18362.0,
+    "EQ": 18312.5,
+    "Q25": 18283.0,
+    "Q75": 18342.0,
+    "W69": 118.0,
+    "volume": 42413.0,
+    "close_0859": 18362.0,
+    "open_0930": 18391.25,
+    "w_pct_0859close": 0.6426315216207384,
+    "w_pct_0930open": 0.6416094610208659,
+    "WpriorRTH": 138.5,
+    "w_rel_prior_rth": 0.851985559566787,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.8-1.2",
+    "prior_rth_high": 18376.0,
+    "prior_rth_low": 18237.5,
+    "asia_high": 18306.75,
+    "asia_low": 18285.0,
+    "london_high": 18325.0,
+    "london_low": 18301.75,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1712669400000,
+    "first_low_break_ms": 1712673000000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1712667600000000000,
+    "outcome_start_ns": 1712669400000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1712673720000,
+    "m05_side": "low",
+    "reversal_bin": "bin.1030-1200",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 18280.5,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 18323.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 18298.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 18391.25,
+      "start": 9.25,
+      "end": 16,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "line",
+      "label": "code AM VWAP (known 12:00)",
+      "price": 18278.6990990991,
+      "start": 9.5,
+      "end": 16,
+      "color": "#c00040",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2024-04-08",
+    "a16_inputs": {
+      "ledge": 18280.5,
+      "vwap": 18278.6990990991,
+      "vah": 18323.0
+    },
+    "tape_window": {
+      "date": "2024-04-08",
+      "from": 9.5,
+      "to": 16,
+      "trades": 253271,
+      "buy_volume": 198808.0,
+      "sell_volume": 196064.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-04-08_2024-04-14.parquet"
+  ],
+  "plot": "plots/R-A16-A-2024-04-09.png",
+  "notes": [
+    "Prior VAL is the code ledge; full-AM VWAP is known at noon. No source shelf is implemented."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 616,
+    "code": "def a16(r):\n        return bool(r.get(\"a16_stacked\"))"
+  },
+  "event": "ledge stacked with AM VWAP or prior VAH within tR",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

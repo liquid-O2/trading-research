@@ -1,0 +1,119 @@
+{
+  "case": {
+    "id": "R-P19",
+    "case": "A",
+    "date": "2026-08-06",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 25,
+    "negative_count": 622
+  },
+  "production_session": {
+    "date": "2026-08-06",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6365,
+    "expected_1s": 10800,
+    "missing_1s": 4435,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29533.75,
+    "L": 29364.75,
+    "open": 29526.75,
+    "close": 29399.5,
+    "EQ": 29449.25,
+    "Q25": 29407.0,
+    "Q75": 29491.5,
+    "W69": 169.0,
+    "volume": 34130.0,
+    "close_0859": 29399.5,
+    "open_0930": 29335.0,
+    "w_pct_0859close": 0.574839708158302,
+    "w_pct_0930open": 0.5761036304755411,
+    "WpriorRTH": 481.25,
+    "w_rel_prior_rth": 0.3511688311688312,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 30074.0,
+    "prior_rth_low": 29592.75,
+    "asia_high": 29621.0,
+    "asia_low": 29454.25,
+    "london_high": 29600.0,
+    "london_low": 29485.0,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1786024260000,
+    "first_low_break_ms": 1786023000000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1786021200000000000,
+    "outcome_start_ns": 1786023000000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1786023120000,
+    "m05_side": "low",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "first two bodies: code gap",
+      "low": 29327.0,
+      "high": 29328.5,
+      "start": 9.533333333333333,
+      "end": 10,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "code two-body gap low",
+      "price": 29327.0,
+      "start": 9.533333333333333,
+      "end": 10,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code two-body gap high",
+      "price": 29328.5,
+      "start": 9.533333333333333,
+      "end": 10,
+      "color": "#be4b33",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "body_gap": {
+      "gap": true,
+      "side": "down",
+      "zone": [
+        29327.0,
+        29328.5
+      ],
+      "filled": false,
+      "conf": false
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P19-A-2026-08-06.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 793,
+    "code": "def p19(r):\n        return bool(r.get(\"p19_body_gap4\"))"
+  },
+  "event": "adjacent body gap >= 4 ticks",
+  "detail_window": [
+    9.5,
+    10
+  ]
+}

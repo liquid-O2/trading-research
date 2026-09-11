@@ -1,0 +1,102 @@
+{
+  "case": {
+    "id": "R-G08",
+    "case": "B",
+    "date": "2025-11-19",
+    "code_result": false,
+    "selection": "author-dated session",
+    "author_dated": true,
+    "positive_count": 244,
+    "negative_count": 403
+  },
+  "production_session": {
+    "date": "2025-11-19",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6356,
+    "expected_1s": 10800,
+    "missing_1s": 4444,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 24733.25,
+    "L": 24640.75,
+    "open": 24699.5,
+    "close": 24664.75,
+    "EQ": 24687.0,
+    "Q25": 24663.875,
+    "Q75": 24710.125,
+    "W69": 92.5,
+    "volume": 30264.0,
+    "close_0859": 24664.75,
+    "open_0930": 24611.5,
+    "w_pct_0859close": 0.3750291407778307,
+    "w_pct_0930open": 0.3758405623387441,
+    "WpriorRTH": 455.75,
+    "w_rel_prior_rth": 0.2029621503017005,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 24832.0,
+    "prior_rth_low": 24376.25,
+    "asia_high": 24655.5,
+    "asia_low": 24492.25,
+    "london_high": 24626.25,
+    "london_low": 24445.0,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1763563440000,
+    "first_low_break_ms": 1763562600000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1763560800000000000,
+    "outcome_start_ns": 1763562600000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1763562600000,
+    "m05_side": "low",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior_rth_high",
+      "price": 24832.0,
+      "start": -6,
+      "end": 9.5,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior_rth_low",
+      "price": 24376.25,
+      "start": -6,
+      "end": 9.5,
+      "color": "#be4b33",
+      "style": "--"
+    }
+  ],
+  "helpers": {},
+  "sources": [],
+  "plot": "plots/R-G08-B-2025-11-19.png",
+  "notes": [
+    "Compared with GB raw posts and figures. Axis is the implementation's New York clock; source snapshot offsets are audited separately. Extended lines show retained geometry, not proof that a previously visited high/low remains active."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 592,
+    "code": "def g08(r):\n        return bool(r.get(\"prior_rth_overnight_reclaim\"))"
+  },
+  "event": "overnight sweep of PDH/PDL then close back through before 09:30",
+  "detail_window": [
+    -6,
+    -5.5
+  ]
+}

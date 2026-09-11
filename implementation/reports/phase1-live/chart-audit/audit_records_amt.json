@@ -1,0 +1,1546 @@
+[
+  {
+    "id": "R-A01",
+    "title": "Balance-edge fade to the fixed POC",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "AMT1:5",
+      "AMT1:9",
+      "MAMT:5",
+      "MAMT:9",
+      "ABS:7"
+    ],
+    "source": "The balance drawings show both edge bands and rotations toward POC. Fixed prior value is an explicit research construction; the source does not publish the G-default distances or band thickness. MAMT p.5 says most excursions return, while p.9 calls the general return about one in five: that statistical claim has an internal denominator/direction conflict.",
+    "finding": "The fresh producer calls both edge rejection helpers, but discards inside-balance eligibility and POC reach. The helper evaluates acceptance over the whole AM, and its POC search starts at the window beginning and measures 60 minutes from touch rather than confirmed rejection. July 10 is a valid named fade example; that does not validate the omitted conditions on other days. A fresh January2 check returns vah_reject=1 and inside=0, directly exposing the ignored eligibility. July10 rejection is known09:33 and a later POC touch exists in the09:33 bar.",
+    "targets": [
+      "formulas_jumbo.py::a01_fade",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a01",
+      "FORMULAS.md::R-A01"
+    ],
+    "fix": [
+      "Freeze the prior RTH trade profile at its actual session close: one-tick grid, volume POC, 70% VA with documented tie handling. Preserve the source balance-band object separately from the named VA-edge implementation. Validate the exact profile feed and bin vector against retained POC/VA/volume; the five checked Quantpad profiles reproduce the stored values. Do not infer a mismatch from a thin histogram bar hidden by rendering.",
+      "Scan each edge visit in time order. Before the touch, require price in balance and no already confirmed 30-minute acceptance outside. Do not let acceptance later in the day invalidate an earlier eligible fade. Apply the named two-tick touch and 0.5×VA-height close reversal within 15 minutes, with completion timestamps. Preserve the exact fractional rejection distance or round the required executable threshold outward so an at-least-half-width test cannot pass one tick too early. A whole-session day-type label may be used for retrospective strata only; it is not a morning eligibility input.",
+      "Starting at the confirmed rejection, find the first POC overlap in the following 60 minutes. Keep setup, rejection, POC target and later invalidation fields separate; an earlier POC touch cannot prevent a later valid one or count as the target.",
+      "Report edge-fade rejection and POC outcome conditional on eligible edge episodes. Keep the general excursion-return statistic separate and source-stopped until the p.5/p.9 conflict is resolved. Remove the unconditional reject-only pass label."
+    ],
+    "acceptance": [
+      "July10,2026 VAL29823 rejection is known09:33 and a subsequent POC29900 overlap occurs in09:33. January28 opens aboveVAH26100 and has no AM edge fade. January2’s current positive has inside=0 and cannot certify eligible balance fading.",
+      "A POC visit before rejection followed by no later visit is not a target success. A later valid visit must remain discoverable.",
+      "An outside acceptance at 14:00 cannot alter a fade known at 10:00."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "MAMT p.5 and p.9 disagree on the general failed-auction frequency. That statistical claim cannot be certified by inspecting an individual edge-fade chart.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Balance-edge rotation is supported, but the source does not publish the numerical band/confirmation rule. MAMT’s general excursion-return percentages conflict acrossp5/p9; that statistic remains unresolved rather than validating a fixed-VA approximation."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "a01_fade scans whole-window acceptance and only the first POC touch; family_recipes discards inside and POC reach. January2 can therefore pass despite inside=0. The confirmation price also uses nearest-tick rounding of half the VA width."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The scored OR of edge rejections omits the eligible-inside state and later POC target. A first POC touch earlier than rejection can wrongly prevent a later valid target from being found."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. July10 supplies a named VAL-to-POC example; January28 stays above prior VA. They do not reproduce the source’s drawn balance bands or certify the omitted event stages."
+        }
+      },
+      "source_refs": [
+        "AMT1:5",
+        "AMT1:9",
+        "MAMT:5",
+        "MAMT:9",
+        "ABS:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A01-A-2026-07-10.png",
+          "sha256": "eebb0b7e0fb8f1531e679f18eeab83947134f3dd84eaecf91fe7a762483c66c4"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-A01-B-2026-01-28.png",
+          "sha256": "2b10139272e35c03636e222d3b954b126351ec82874efd267fd047c29a284924"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A02",
+    "title": "Ledge break, retest and continuation",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "AMT1:9",
+      "VP2:4",
+      "VP2:5",
+      "MAMT:12"
+    ],
+    "source": "A ledge is the edge of a volume shelf. The figures show multiple fixed ledges around POC; they do not define a universal median-volume threshold. Prior VA boundaries alone are a different named level set.",
+    "finding": "The retained recipe cache lacks a02_ledge_hold on 638 dates, allowing the old tape print-near-VA flag to supply the score. Fresh assembly differs on 371 of 668 rows. Fresh code calls the break/retest helper on both VA edges, but passes the same entire AM as break and retest windows, allowing a touch before hold confirmation. No source shelf or next node is selected.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "family_tape.py::_score_one",
+      "formulas_jumbo.py::a02_shelves",
+      "formulas_jumbo.py::a02_ledge_retest_hold",
+      "recipe_score.py::_join"
+    ],
+    "fix": [
+      "Invalidate caches missing any required recipe key even if recipe_rev matches. Record producer identity per joined field, rebuild the affected table in a future implementation task and remove silent fallback to a differently defined tape flag.",
+      "Build the named shelf detector on a complete fixed prior price grid: maximal adjacent runs at or above the declared median, with first/last prices as ledges. Store shelf bounds, height and both ledges; call the VA fallback a distinct variant. The current profile_nodes walks sorted occupied keys without checking tick adjacency. Fill missing interior rows before runs; publish the median population and an explicit degenerate-zero-median policy rather than treating every empty row as a shelf.",
+      "For each ledge and side, require a close beyond it followed by the full 30-minute outside hold. Begin the retest search after hold completion; require approach from outside, then the named rejection in the break direction and no close back inside over the specified confirmation window.",
+      "Choose the next external node at setup time, using an explicit ordered candidate list. Score retest confirmation and post-confirmation reach by 16:00 separately, conditional on eligible held breaks. Any next target that is a session high/low must be unvisited at selection and retire on its first revisit, independently by side, under the user requirement. Shelf/POC retest lifecycles remain their own sourced objects."
+    ],
+    "acceptance": [
+      "July 10, 2026 retained true must be identified as old print proximity; both fresh break/retest flags are false.",
+      "January 28 holds above VAH but never retests it in AM; it must remain false.",
+      "A touch before the 30-minute hold ends cannot satisfy the retest. A median-derived shelf must retain zero-bin gaps rather than joining nonadjacent prices."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The figures establish fixed shelf ledges and a break/retest continuation. Median-bin volume and a prior-VA fallback are explicitly named research definitions, not author-published thresholds."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Fresh recipes call both prior-VA edges as ledges, with the same whole-AM window for break and retest. This omits actual shelves, ordered confirmation and the explicit post-retest no-close-back condition. Missing cache keys also let a different tape-proximity producer fill the field."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The retained positive may be a print near one VA edge; the fresh flag is a conjunction of unordered hold/reject observations. Neither is the source’s held break, later retest and continuation to the next node."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed: July10 is retained true but fresh false; January28 holds above VAH without an AM retest. The histogram has actual volume shelves, while the code draws only VA boundaries and no selected ledge."
+        }
+      },
+      "source_refs": [
+        "AMT1:9",
+        "VP2:4",
+        "VP2:5",
+        "MAMT:12"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A02-A-2026-07-10.png",
+          "sha256": "65be0cda97af73f017417bfa2f4a46b52a4b42ce24968ebd9a2f3d52d895e1a1"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-A02-B-2026-01-28.png",
+          "sha256": "fd8d750411aa45be72f50bc4d3de1c8326e53b8e32b77646718345602dac1d73"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A03",
+    "title": "Re-entry, inside hold and opposite-edge traverse",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "AMT1:7",
+      "LIVE:8",
+      "LIVE:9",
+      "ABS:12"
+    ],
+    "source": "The loose 80% statement conditions the traverse on re-entry and acceptance inside prior value. The 30-minute hold and 16:00 horizon are named defaults, distinct from the two-period strict rule. AMT1 also conditions the trade on order-flow confirmation; keep a price-only traverse statistic separate when tape cannot be trusted.",
+    "finding": "The current helper handles outside opens only. Its held-inside check enforces one boundary, so price can exit the far side immediately and still pass. Target timing is compared with re-entry, not hold completion, and only the first whole-window target touch is considered. The scorer divides by all eligible days instead of held re-entries.",
+    "targets": [
+      "formulas_jumbo.py::a03_reentry_traverse",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a03",
+      "recipe_score.py::_stats"
+    ],
+    "fix": [
+      "Create eligible excursions from either an outside open or a subsequently confirmed outside break. Store the same edge and side through re-entry; do not substitute the six-to-nine path class.",
+      "On a complete close back inside, require every confirming close to satisfy VAL < close < VAH for the entire named 30-minute hold. A break through either boundary cancels this acceptance candidate; restart only on a new valid episode. Measure the hold from the re-entry close’s completion and require uninterrupted market-open coverage; an endpoint observation alone cannot prove the intervening30 minutes.",
+      "After hold confirmation, scan for an opposite-edge two-tick overlap before 16:00, stopping on the defined invalidation. Earlier opposite-edge touches are path history, not a confirmed-setup outcome. Store both timestamps.",
+      "Report accepted re-entry count as the denominator and far-edge reach count as numerator; retain excluded, censored and ambiguous observations separately. Include both entry sides and both origin types."
+    ],
+    "acceptance": [
+      "January2,2026 first inside close is known10:13; VAL25537.50 is reached10:20 and a close below it is known10:22. The hypothetical30-minute confirmation10:43 never exists; traverse=true is not a valid held re-entry.",
+      "February12,2026 first inside close is known09:45, the complete both-boundary hold finishes10:15 and the first later VAL25141.75 overlap is10:38. Preserve those ordered timestamps as the named positive.",
+      "An inside open followed by a held breakout and genuine re-entry is eligible; the current open-only branch must not discard it."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source supports re-entry and acceptance before an opposite-edge traverse, with the30-minute rule/horizon disclosed as named defaults. It also requires relevant order-flow confirmation for the trading interpretation; the price-only statistic cannot imply that tape confirmation."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "a03_reentry_traverse requires an outside open, checks only the entry-side boundary during its hold, searches only the first whole-window target and compares target time with re-entry rather than completed hold."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The day-level traverse flag is divided by all eligible sessions instead of confirmed held re-entries. It can count a fast pass through the entire VA as acceptance, including January2."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "All three plots were re-viewed. January2 reaches the far edge10:20 before failing the inside hold at10:22; February12 holds both boundaries until10:15 and reaches VAL10:38. July10 opens inside and is outside the implemented outside-open branch."
+        }
+      },
+      "source_refs": [
+        "AMT1:7",
+        "LIVE:8",
+        "LIVE:9",
+        "ABS:12"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-02",
+          "plot": "plots/R-A03-A-2026-01-02.png",
+          "sha256": "0f34bd3215bcd90511da53fe16da0d205fe90bb42115007d55808c02fe747932"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A03-B-2026-07-10.png",
+          "sha256": "381103a050d959380c374673b18e564fb26de0f90f033603cbc63c5bce21d279"
+        },
+        {
+          "case": "documented-hold-positive",
+          "date": "2026-02-12",
+          "plot": "plots/R-A03-documented-hold-positive-2026-02-12.png",
+          "sha256": "e88038693b365152500c6ed04f7a31a9e68dd078b35a63ddb5fa821a883a5cc2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A04",
+    "title": "Strict two-period 80% rule",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MAMT:18"
+    ],
+    "source": "The source requires an outside open and two consecutive 30-minute periods back inside value before a complete traverse. It does not restrict those periods to A and B or specify whether closes or complete ranges must be inside.",
+    "finding": "amt_80pct currently tests outside open and the 09:59/10:29 one-minute closes. It never checks the target. July 22 is a direct false success interpretation: both closes are inside, but RTH high 29342.25 does not reach VAH 29361.75.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.a04",
+      "FORMULAS.md::R-A04"
+    ],
+    "fix": [
+      "Keep the source period-inside definition unresolved for faithful certification. Implement only separately named close-inside and full-range-inside readings after the choice is documented; do not silently treat A/B as the only eligible pair.",
+      "Resample on the 09:30 exchange clock into complete 30-minute periods. Search consecutive qualifying pairs after an outside open, with known_at at the second period end. The close-only variant accepts inclusive[VAL,VAH] period closes as currently declared; the full-range variant requires every traded price/range inside. Preserve that equality policy rather than silently borrowing A03’s strict interior rule.",
+      "Freeze the entry edge and opposite target. Starting after pair completion, measure two-tick overlap of the opposite VA edge by the actual RTH close. A target reached before the pair finishes is not a later traverse.",
+      "Rename the existing flag as a setup-eligibility observation. Publish traverse probability conditional on qualifying pairs, including n=0 if none exist, with one stated unit per day or per independent episode."
+    ],
+    "acceptance": [
+      "July 22, 2026 must show setup=true and traverse=false; July 10 opens inside and is ineligible.",
+      "A C/D pair can qualify when A/B do not. A missing minute prevents a complete period rather than shifting a row-index close.",
+      "Closes inside with wicks outside must differ between the two named readings."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "The two consecutive periods may mean their closes or their complete ranges; no numerical source chart resolves this definition.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The source says two consecutive30-minute periods back inside but does not choose close-only versus entire-range containment, or restrict the pair to A/B. Faithful period-inside certification remains unresolved."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_levels uses row29 and59 in09:30–10:30 as the two closes, without scanning later consecutive pairs or producing the target sequence. Completeness and exact clock alignment are not ensured by n>=60 alone."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "amt_80pct is setup eligibility only. The scorer counts it as the rule’s outcome without verifying a later traverse to the opposite edge."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. July22’s two selected closes are inside but its RTH high29342.25 missesVAH29361.75; July10 opens inside and is ineligible. The positive title is a precondition, not an80% traversal success."
+        }
+      },
+      "source_refs": [
+        "MAMT:18"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-22",
+          "plot": "plots/R-A04-A-2026-07-22.png",
+          "sha256": "b72f930abba73c5062407a8ad31b2aff404e047923c90fc90b2401afa4f06a76"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A04-B-2026-07-10.png",
+          "sha256": "b609779bea98ab835d5d9d679f106cf7c42d957e97d2478e151c4e34498442ca"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A05",
+    "title": "POC repeated failure versus through-and-retest",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "LIVE:9",
+      "RTVP:5"
+    ],
+    "source": "The POC tell is a sequence: repeated failed visits imply chop; an aggressive push through followed by a holding retest supports the far edge. POC is a fixed reference, and the source does not define the numeric visit reset or hold duration.",
+    "finding": "a05_poc_tell counts touching minutes rather than independent visits, infers direction from the first AM close, and accepts held-through OR retest-reject. Near/far targets use the entire window, including prices before the signal. Only the chop flag is scored.",
+    "targets": [
+      "formulas_jumbo.py::a05_poc_tell",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a05"
+    ],
+    "fix": [
+      "Start from a valid inside-open or A03 re-entry event. Fix the prior POC and entry side at that point. Define an explicit reset outside the touch band before a new visit may count; expose the reset as a named parameter. This source deliberately permits repeated POC tests; the user’s first-visit retirement of session highs/lows must not silently erase this distinct POC-tell object.",
+      "For chop, require at least two distinct failed visits with no confirmed through-and-hold by the second failure. For traverse, require close-through, a later retest from the new side, and rejection in that direction; keep held-through-only as a separate observation.",
+      "Set known_at to the second failure or retest confirmation. Search near and far targets only afterward through 16:00, preserving invalidation and same-bar ambiguity.",
+      "Report the two signal classes and their subsequent near/far outcomes separately. Add an aggression filter only with trustworthy tape and a published or clearly named definition."
+    ],
+    "acceptance": [
+      "July10 has27 touching minutes but only12 contiguous touch runs. Even12 is a diagnostic lower-level grouping, not12 author-defined failed attempts. A declared reset and failure confirmation are still necessary.",
+      "January 28 has zero POC 26090 visits and remains a negative.",
+      "Two adjacent touch bars in one visit count once; a far-edge touch before the second failure does not count as its outcome."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source supports repeated POC failures versus a push through followed by a holding retest. It leaves visit reset, numeric aggression and hold duration unspecified; these must remain named definitions."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "a05_poc_tell counts touching minutes, selects direction from the first AM close and accepts held-through OR retest rejection. It can use the through bar as the retest and searches targets from the beginning of AM."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only poc_case==chop is scored. The source’s distinct signal classes and subsequent near/far outcomes are not measured conditionally from a confirmation."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. July10 has27 touching minutes grouped into12 contiguous runs; those are not27 independent failures or even12 certified source attempts. January28 never visitsPOC26090 in AM."
+        }
+      },
+      "source_refs": [
+        "LIVE:9",
+        "RTVP:5"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A05-A-2026-07-10.png",
+          "sha256": "57df6e09a66fab0c57b900ce39ca4a0b06dec4e1f318b720d8f92ab53d10e017"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-A05-B-2026-01-28.png",
+          "sha256": "27f8b321de03b79e47807c1c9d1241a469f210ad6e0d2c86c720b0605ed94ef3"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A06",
+    "title": "Failed auction at an older external balance POC",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MAMT:9",
+      "MAMT:10",
+      "MAMT:11",
+      "MAMT:26",
+      "LIVE:10",
+      "VP2:6"
+    ],
+    "source": "MAMT p.9 explicitly targets established VAH after rejecting an older POC from above, and VAL in the mirror. The p.11 accepted example labels vah = target. FORMULAS repeats the far-boundary procedure but its fixture stops at near VAL; that fixture conflicts with the source. The older POC belongs to a distinct prior balance.",
+    "finding": "Retained a06_naked_poc comes from a tape check against today’s final RTH POC, tested for absence overnight; this is retrospective. Fresh assembly changes 311 of 668 rows, but fresh recipe code passes the established balance’s own POC as older_poc. The helper lacks ordered break/tag windows and targets the near boundary.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "family_recipes.py::build_recipe_table",
+      "formulas_jumbo.py::a06_failed_auction",
+      "recipe_score.py::_join",
+      "FORMULAS.md::R-A06 fixture"
+    ],
+    "fix": [
+      "Repair schema validation as in A02. Build a chronological ledger of completed older balance profiles and naked POCs, with their first subsequent trade-through retirement times. Never use the current day’s final RTH POC to define a morning setup. Naked-POC retirement is its own sourced trade-through rule, separate from the user’s exact first-visit session-high/low lifecycle. Store both the drawn line’s visibility and the originating first-tag episode so a confirmation after the tag is not discarded.",
+      "At the established-balance break, choose an eligible older POC outside that balance on the break side. Preserve its originating profile and age. A POC inside the same established VA cannot satisfy the older-external-balance leg.",
+      "Require break confirmation, then the older POC tag, then the named five-minute instant-rejection condition in order. Separate the deep-entry-but-eventually-rejected reading from the instant variant. Use only post-tag prices to determine the rejection.",
+      "Set the downside-break target to established VAH and the upside-break target to established VAL, with post-rejection reach by 16:00. Correct the formula fixture to reach the actual far target. Publish setup probability and conditional target success separately."
+    ],
+    "acceptance": [
+      "July 10, 2026 current helpers return false; the retained true is not an older-POC setup. January 28 is also not such a setup.",
+      "For VAL 100, VAH 120 and older POC 92, a post-rejection high of 100 is not the source target success; a later reach of 120 is.",
+      "Changing afternoon volume must not move an older POC or alter its overnight naked status."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "fixture": "fixture reaches near VAL despite far-VAH source target",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The dated code plots use America/New_York with date-specific daylight saving and one-minute bar-start timestamps. Close-based events become known at bar completion. Prior RTH09:30–16:00 is the declared research-profile scope, not a timezone inferred from a schematic. The AMT source figures do not establish a universal EST chart axis; preserve any shown source clock separately. Check the actual prior trading session and its exchange-calendar close before freezing a profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "MAMT’s downside failed auction targets the established balance’s VAH, with VAL for the mirror. The FORMULAS fixture pays only nearVAL and conflicts with that source target; the older POC must belong to a distinct external balance."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The retained tape flag uses today’s final RTH POC to test overnight nakedness. Fresh recipes instead pass the established balance’s own POC; the helper lacks ordered break/tag slices and targets the near edge."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Neither retrospective nakedness nor the fresh fa_setup boolean measures a valid older-external-POC rejection followed by the source’s far-edge outcome. Cache fallback also changes which event is scored."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. July10 and January28 display their own prior POC inside their respective VA; neither supplies the missing older external POC. Both fresh helpers returnfalse, while July10’s retained label remainstrue."
+        }
+      },
+      "source_refs": [
+        "MAMT:9",
+        "MAMT:10",
+        "MAMT:11",
+        "MAMT:26",
+        "LIVE:10",
+        "VP2:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A06-A-2026-07-10.png",
+          "sha256": "bc106d930c6197109081759b0b30c7e67796172f4d6c50eec96d76d1c0cc2a28"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-A06-B-2026-01-28.png",
+          "sha256": "4eba2cce8e81dabfbc716747a2c40acac8dc30ab16c903df3ed5b4af4235e0f4"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A07",
+    "title": "Confirmed boundary break and later holding retest",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "RTVP:6",
+      "RTVP:8",
+      "MAMT:12",
+      "WIC:5",
+      "WIC:8",
+      "TRAP:6"
+    ],
+    "source": "The source drawings show a break followed by a separate return and continuation. IB is one named boundary family; the illustrated balance and shelf edges remain distinct. The numerical 30-minute hold and G-default are research choices. WIC’s native example uses a29730–29740 balance band with renewed downside toward29580, plus a separate29830–29840 upper boundary. TRAP also requires an intraday break/retest and renewed selling; these are not arbitrary first-hour H/L lines. RTVP’s roughly68% value convention remains separate from the named70% prior-RTH variant.",
+    "finding": "The producer covers both IB edges but passes the entire post-IB window to both break and retest checks. It can count the initial boundary contact as a later retest. June 9 passes despite no return to IB low 29365 after the outside hold completes. Next value, HTF filter and other source boundaries are omitted. A separate January 30, 2026 sequence breaks IB low 25790.75 at 11:55, completes the named hold at 12:26, retests at 12:30 and confirms the half-width rejection at 12:36, beyond the producer’s noon endpoint. The user-required freshness check changes that additional example: IBL25790.75 first revisits at10:30, well before the11:55 candidate, so the later event is historical boundary reuse and is not a fresh-level positive. A read-only search of complete retained sessions found no candidate under the specifically tested first-visit break +30-minute outside hold +half-IB rejection +30-minute no-opposite-close combination; this is not a claim that every author variant has no positives.",
+    "targets": [
+      "formulas_jumbo.py::a07_break_retest",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a07"
+    ],
+    "fix": [
+      "Build separate fixed boundary sets for prior VA, actual source ledges and the completed 09:30–10:30 IB. Preserve clock, scope, band/line identity and known_at for every candidate. For IB/reference highs and lows, first exact revisit ends the active line independently on each side. Keep the episode initiated on that visit alive only through its stated confirmation/invalidation. After invalidation, a later touch of the same ID cannot become a new fresh setup. Profile boundaries remain a separately sourced object rather than inheriting high/low expiry by analogy.",
+      "Find close-break and complete the named 30-minute outside hold. Slice the retest window strictly after confirmation, require approach from outside, then apply the directional rejection and inside invalidation rule to that same episode. Enforce the stated no close back inside during the30-minute retest confirmation; absence of a30-minute held inside break is a weaker test and must not substitute. Record the initial first-visit timestamp before applying any larger sweep-depth threshold.",
+      "Freeze an external next-value target and the available prior-session direction filter at setup time. Do not use a prior VA edge behind the entry as an automatically reached continuation target. A candidate next target that is an external high/low must also be fresh at selection. Do not synthesize a next-value input merely because a current prior-VA edge exists.",
+      "Measure target reach after retest confirmation until 16:00 and report it conditional on confirmed setups. Print boundary family and side separately; keep the source’s unspecified HTF-bias interpretation visible."
+    ],
+    "acceptance": [
+      "June 9, 2026 must fail the after-hold retest because price does not return to 29365.",
+      "July 10, 2026 has no qualifying named IB retest hold on either side.",
+      "Moving an initial touch earlier without changing the later path cannot create a retest; a genuine later return can.",
+      "January30,2026 remains an illustrative later held-break/retest: break known11:56, hold12:26, retest12:30, rejection known12:36. However IBL25790.75 was consumed10:30 and the earlier episode returned inside, so the later event is ineligible as a new fresh-level setup. Keep both facts in the acceptance record."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source depicts a held boundary break, a later genuine retest and continuation, with numerical hold/depth defaults explicitly named. Source balance/shelf bands and higher-timeframe control are not automatically IB extrema."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Both IB sides are called, but the same post-IB window supplies break and retest. no_back checks absence of a held inside break, weaker than the declared no-close-back condition. Other boundaries, causal next-value selection, HTF filter and post-noon confirmation are missing."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The scorer keeps retest_hold without next-value reach, uses unordered windows and omits first-visit state. A source-permitted historical boundary retest cannot silently count as a new unvisited reference after the user’s freshness instruction."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Three charts were re-viewed. June9 lacks a retest after its hold; July10 has no qualifying hold/retest. January30’s later named sequence is visible, but IBL was already consumed10:30 and cannot support a new fresh-level setup at11:55."
+        }
+      },
+      "source_refs": [
+        "RTVP:6",
+        "RTVP:8",
+        "MAMT:12",
+        "WIC:5",
+        "WIC:8",
+        "TRAP:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-06-09",
+          "plot": "plots/R-A07-A-2026-06-09.png",
+          "sha256": "7b311afbb2124e6f03bc03bea27bb3f544db45b7001833e2ba528f78efb830e4"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A07-B-2026-07-10.png",
+          "sha256": "8249e3a23c237901c76cd778a07f42b091e1bc8bdcd61cc085f78112ba282a61"
+        },
+        {
+          "case": "sequence-positive",
+          "date": "2026-01-30",
+          "plot": "plots/R-A07-sequence-positive-2026-01-30.png",
+          "sha256": "5913f281bfabcf844c0d13d98e2921a72f52518aefd46a599585c00d4e20ee8b"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A08",
+    "title": "Re-acceptance flips the balance bias",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MAMT:12"
+    ],
+    "source": "The relevant event is acceptance outside a balance followed by acceptance back inside it, then a move toward the opposite side. This differs from merely opening outside or briefly poking an edge.",
+    "finding": "Fresh code now evaluates both break sides, contrary to the stale FORMULAS description. Its inside hold still checks only the re-entered edge, and target lookup is whole-window and compared with re-entry rather than confirmation. The scorer reports reacceptance presence without the subsequent opposite-edge outcome. August 19, 2026 supplies a later valid named reacceptance: outside hold known10:19, reentry known11:44, inside hold known12:14 and opposite-edge touch in the12:18 bar. An earlier inside episode is invalidated before target.",
+    "targets": [
+      "formulas_jumbo.py::a08_reaccept",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a08",
+      "FORMULAS.md::R-A08"
+    ],
+    "fix": [
+      "Use both sides for outside-break candidates and require an actual complete 30-minute held break, even when the session opens outside. Set outside_confirmation to its completion time.",
+      "Search only after outside_confirmation for a close back through the same edge. Require all subsequent confirming closes to remain strictly between VAL and VAH for the full inside hold. A far-side escape is a traversal, not an inside hold. Preserve later eligible episodes after an earlier re-entry is invalidated; the source’s balance re-acceptance rule permits this profile-context reuse. This is distinct from rearming an expired session high/low.",
+      "Set bias at inside_confirmation and measure a new opposite-edge touch afterward. Stop at the defined outside invalidation; do not accept a target earlier than confirmation.",
+      "Report accepted re-entries conditional on held outside breaks and target success conditional on accepted re-entries. Update FORMULAS to describe current two-sided calls, while preserving the remaining defects."
+    ],
+    "acceptance": [
+      "January 2, 2026 crosses the far VA boundary too early to satisfy inside acceptance.",
+      "July 10, 2026 short lower excursions do not establish the required held outside state.",
+      "A later genuine re-entry after a failed first attempt must not be hidden by a first-touch-only search.",
+      "August 19, 2026 VAL29563/VAH29662.5: outside break09:48, outside hold complete10:19; the later reentry11:43 completes inside acceptance12:14 and reaches VAH12:18. Reject the earlier attempt when its outside invalidation occurs before target; do not let it hide the later valid sequence."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "MAMT requires acceptance outside followed by re-acceptance inside, then bias toward the opposite boundary. Named30-minute holds measure that sequence; the statement does not equate it with merely opening outside."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Fresh recipes call both sides, correcting the old one-side description. The helper still tests only the entry edge during inside hold and uses a first whole-window target search, with no complete causal episode ledger."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "reaccept presence omits the post-confirmation opposite-edge outcome and the held-break denominator. The helper’s opposite_edge_reach can also ignore held_out and compare with re-entry rather than completed acceptance."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Three charts were re-viewed: January2 escapes below the far boundary during the purported hold, July10 lacks the prerequisite outside hold, and August19’s later episode confirms12:14 before the12:18 target touch after an earlier invalidated attempt."
+        }
+      },
+      "source_refs": [
+        "MAMT:12"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-02",
+          "plot": "plots/R-A08-A-2026-01-02.png",
+          "sha256": "88a8bef8ee3c3054580250b408580288c202be550c50966346e85df469b4629b"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A08-B-2026-07-10.png",
+          "sha256": "a4ba12709e3a06172b25157d65b2b12dcf5456ad070b4bec36b5f924f730e2e9"
+        },
+        {
+          "case": "sequence-positive",
+          "date": "2026-08-19",
+          "plot": "plots/R-A08-sequence-positive-2026-08-19.png",
+          "sha256": "8582cbb0f5f39750fffbcc75167f24116926898039954d1fdcb09bc4c1e7318f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A09",
+    "title": "Traverse without acceptance, then continuation retests",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MAMT:12"
+    ],
+    "source": "The source says a traverse without holding inside changes how later retests are traded. It does not impose a 30-minute maximum on the entire traverse.",
+    "finding": "The helper adds a total 30-minute traversal cap, scans only AM, and the scorer keeps traverse_nohold while ignoring retest_continuation. August 21 has the traversal prerequisite but its helper continuation result is false. August 26, 2026 demonstrates a valid named continuation after a41-minute traverse: first outside close known09:44, opposite outside close known10:25, retest10:25 and half-width rejection known10:28. No uninterrupted30-minute inside hold occurs.",
+    "targets": [
+      "formulas_jumbo.py::a09_traverse_nohold",
+      "family_recipes.py::build_recipe_table",
+      "recipe_score.py::_preds.a09"
+    ],
+    "fix": [
+      "Identify an ordered close-through of the first boundary and then the other. Between them, test only whether a complete 30-minute inside acceptance occurred; remove the additional total-traverse-time cap from the source-derived row. Search subsequent crossing pairs after failed or already accepted episodes; the first upper/lower close of the entire day must not permanently determine every later traverse.",
+      "After the second crossing, search every distinct retest of either boundary from the traverse side through 16:00. Require an explicit reset between visits and store the matched boundary and approach side. A touch at the first-tested edge that fails rejection cannot suppress a later qualifying touch at the other edge. Evaluate the candidates by timestamp, not fixed edge preference.",
+      "At each retest, measure the named directional rejection versus close-back invalidation, using only later prices. Keep quick traversal as a separately named speed bucket if desired.",
+      "Publish continuation share conditional on qualifying retests, along with prerequisite traversal count. Do not label traversal presence as continuation success."
+    ],
+    "acceptance": [
+      "August 21, 2026 prerequisite=true must coexist with the observed retest_continuation=false.",
+      "A 45-minute traverse with no uninterrupted 30-minute inside hold remains eligible; a 29-minute move followed by an actual 30-minute acceptance does not.",
+      "July 10 must be evaluated by the stated inside-hold condition, without using afternoon data to assign an AM signal.",
+      "August 26, 2026 VAL29208/VAH29288: the09:43 above-VAH close and10:24 below-VAL close are41minutes apart with no30-minute inside acceptance. The10:25 retest and10:27 rejection close qualify the named continuation; removing the unsupported total-time cap must recover this case."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source conditions later continuation retests on a traverse without acceptance inside. It does not publish a maximum total traverse time; the code’s extra30-minute cap is unsupported."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The helper examines only the first upper/lower closes in AM, caps their separation at30minutes and searches one edge’s first retest before an other-edge fallback. It does not enumerate independent retest episodes through16:00."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only traverse_nohold is scored, omitting retest_continuation and the retest denominator. Traversal presence and later confirmed continuation are different events."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "All three charts were re-viewed. August21 is prerequisite true with helper continuation false; July10 is negative under the current cap. August26’s41-minute traverse and10:25 retest/10:28 known rejection illustrate a missed named continuation."
+        }
+      },
+      "source_refs": [
+        "MAMT:12"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-21",
+          "plot": "plots/R-A09-A-2026-08-21.png",
+          "sha256": "1051bf86a3b491d57b5681923d922171e6f3597e86140d77df0348e1f1945585"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A09-B-2026-07-10.png",
+          "sha256": "686682309a1fcbca83f28e0295ce2f77a8d3cbafd0ba605f4cc2f10739a14c5d"
+        },
+        {
+          "case": "sequence-positive",
+          "date": "2026-08-26",
+          "plot": "plots/R-A09-sequence-positive-2026-08-26.png",
+          "sha256": "b3e8a0d2714641b9aecbcd81ba52efcf3be648af11a14d25f5ccb3509488245f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A10",
+    "title": "Opening auction type and completed day type",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "AMT1:10",
+      "AMT1:11",
+      "MAMT:18",
+      "MAMT:20"
+    ],
+    "source": "Open drive concerns movement away from the opening price; test-drive and rejection-reverse require ordered tests. AMT and MAMT publish different day-type descriptions. Their qualitative boundaries need named numerical choices.",
+    "finding": "The current drive detector uses the 09:30 open but excludes the opening one-minute bar. It does not establish all four opening types or the separate MAMT day-type table. Only drive presence is scored; a completed day label cannot be an opening feature. October 8 opening bar low 25074 is below open 25079.75, so the literal upward-drive condition is false despite the skip-first-minute flag.",
+    "targets": [
+      "formulas.py::amt_drive",
+      "family_gap.py::_amt_open_label",
+      "family_gap.py::_amt_day_label",
+      "recipe_score.py::_preds.a10"
+    ],
+    "fix": [
+      "Define the opening-print handling explicitly: equality at the opening trade is inevitable, but a later trade through the open is disqualifying. Inspect executions or finer bars within 09:30 when available; otherwise mark first-minute order ambiguity instead of discarding that minute silently. Require the complete declared opening window; two valid minutes cannot qualify a30-minute type. A recorded price strictly across the open is an observed disqualifying excursion, not merely an intraminute ordering ambiguity.",
+      "Build ordered first-30-minute records for drive, reference-test then drive, rejection through open, and rotation. Fix the reference set in advance and attach confirmation times; keep ambiguous or incomplete openings unclassified. Drive after a test must occur after that test. A day wholly aboveVAH must not become test-drive merely because high>=VAH−2ticks; require an actual overlap with an available reference. Any prior high/low used as a new test reference must pass the user’s first-visit ledger.",
+      "Construct completed RTH day labels at the actual close using separately named AMT and MAMT definitions. For MAMT, retain both-IB-break close-location branches, neither-break containment and the printed IB×2 trend concept without mixing taxonomies.",
+      "Print the opening-type × day-type transition table and separately defined continuation/fade outcomes. Set day-type known_at to session close and prohibit it from entering the earlier opening decision."
+    ],
+    "acceptance": [
+      "October 8, 2025 first-bar range spans both sides of open 25079.75 and must fail literal drive; July 10 also returns below the open.",
+      "An opening test that occurs after the drive cannot classify a test-drive.",
+      "Changing the final close may change the day label but never the already completed opening label.",
+      "May19,2026 provides a named positive with first30 low equal to the initial open28850.25 and all later minute lows strictly above it; include the09:30 bar. Equality at the initial print is allowed while an actual opposite-side excursion remains disqualifying. Retouches within the first minute require finer observations if that stricter variant is selected."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "The qualitative opening/day labels do not publish all numerical classification boundaries. The October8 first-minute excursion is an observed failure, independent of that definition gap.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Opening drive and ordered test/rejection patterns are source-supported, but complete numerical classification thresholds are unpublished. AMT and MAMT day taxonomies differ and must not be merged into one faithful label."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "amt_drive uses the actual opening price but discards the whole opening minute and accepts as few as two bars. Other opening labels use unordered extrema/close comparisons, and _amt_day_label substitutes the6–9 path class for the required IB/day structure."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "drive presence is the sole event. The full opening-type×day-type table and conditional trade outcomes are absent; a final day classification cannot be an opening input."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Three charts were re-viewed. October8’s opening minute trades5.75 points below the open despite the positive flag; July10 later trades below it. May19 includes the opening minute and has no opposite-side excursion in the first30minutes, supporting only that named drive observation."
+        }
+      },
+      "source_refs": [
+        "AMT1:10",
+        "AMT1:11",
+        "MAMT:18",
+        "MAMT:20"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2025-10-08",
+          "plot": "plots/R-A10-A-2025-10-08.png",
+          "sha256": "c630c003436d6f7eec5351ed2203f656c7d51ecea0f14f1967456bddc10647c4"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A10-B-2026-07-10.png",
+          "sha256": "528f829e27a40e320349888965c356fa54c399e8886083ed1e5c1e05e9d160f2"
+        },
+        {
+          "case": "sequence-positive",
+          "date": "2026-05-19",
+          "plot": "plots/R-A10-sequence-positive-2026-05-19.png",
+          "sha256": "775e73241aee39dc8d052a88d609ce5e96cdfe439bfaf28668d92ccdc016d9ce"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A11",
+    "title": "Author-specific profile-shape outcomes",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "AMT1:6",
+      "AMT1:13",
+      "RTVP:9",
+      "RTVP:10",
+      "RTVP:11",
+      "MAMT:7",
+      "MAMT:8"
+    ],
+    "source": "The drawings distinguish D, upper-heavy P, lower-heavy b/B and two-distribution B. MAMT’s B-day prose says upside resolution, but its actual p.7 B diagram breaks down. FORMULAS says that diagram points up, which is visually false. Stop the MAMT directional certification until resolved.",
+    "finding": "Fresh producer includes P+high-only and b+low-only, unlike the stale P-only description. It classifies sparse prior HLC3-volume prices rather than trade-volume VA thirds. February 3 is a b continuation case, not P. The single path flag pools a source-specific directional claim into one score.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas.py::vp_p_shape",
+      "formulas_jumbo.py::a11_vp_shape",
+      "recipe_score.py::_preds.a11",
+      "FORMULAS.md::R-A11"
+    ],
+    "fix": [
+      "Correct the p.7 figure description and preserve the unresolved B direction as a source stop. Store author, diagram label and literal geometry separately; B cannot mean double distribution in one row and lower-heavy b in another without an explicit mapping.",
+      "For a named quantitative shape variant, build the fixed prior trade profile on a complete one-tick grid and compute VA-third shares over its actual VA. Keep the existing HLC3 occupied-bin classifier explicitly named as a different object. Divide by price distance within the retained VA, not by the count of occupied keys across the full range. Keep the roughly68%,70% and40% source/profile conventions explicitly separate.",
+      "Implement the declared P/b/double/trending/D thresholds with deterministic precedence, ties and zero-bin behavior. Do not claim the author published those thresholds.",
+      "Report shape × next-session up/down/both/neither paths separately for AMT balance, RTVP continuation and resolved MAMT claims. Add edge reactions and no-trade trending share without pooling them as a generic pass."
+    ],
+    "acceptance": [
+      "February 3, 2026 must be labelled code b, and July 10 code D; do not relabel the former as P.",
+      "An interior empty price interval must remain a bridge and cannot disappear by dropping zero-volume bins.",
+      "No test may assert MAMT B→up as faithful until its text/diagram conflict is resolved."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Inspect MAMT p.7 B-day diagram versus its prose: the picture breaks down while the prose says higher. Confirm the intended direction before a faithful B outcome can be scored.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "FORMULAS describes MAMT’s p7 B diagram as resolving upward, but the figure resolves downward while the prose says the mirror direction. This source contradiction remains stopped. AMT’s uppercaseB double distribution is also distinct from lower-heavy b/B elsewhere."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Fresh recipes include P/high-only and b/low-only, but classify occupied HLC3-volume keys over the prior full price range. They do not calculate the declared trade-profile VA thirds or the complete named shape taxonomy."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The flag pools two continuation branches against final6–9 AM path class, without shape-conditional denominators or distinct AMT balance, RTVP continuation and source-stopped MAMT direction outcomes."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. February3 is a code b/low-only positive, not a P case; July10 is codeD. Sparse HLC3 spikes and omitted price rows do not reproduce the smooth source trade-distribution geometry."
+        }
+      },
+      "source_refs": [
+        "AMT1:6",
+        "AMT1:13",
+        "RTVP:9",
+        "RTVP:10",
+        "RTVP:11",
+        "MAMT:7",
+        "MAMT:8"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-02-03",
+          "plot": "plots/R-A11-A-2026-02-03.png",
+          "sha256": "88d32c99eed57f1ebd57510e1c8fb47628a1d43d8cd2afea6e320b7b4233c0d4"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A11-B-2026-07-10.png",
+          "sha256": "d5e43e4b420a8c88ae7210f49fed778215a209fb55fd3294754235d4833b7fe1"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A12",
+    "title": "Overnight inventory, LVN band and shelf reaction",
+    "oks": [
+      "no",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MAMT:14"
+    ],
+    "source": "The p.14 picture spans 18:00→09:30 overnight and the following RTH. It has two overnight bulges, an LVN band, a shelf band, and a red POC from an earlier left-hand balance aligned with the LVN. FORMULAS incorrectly makes that POC the developing RTH POC. The inventory prose does not supply an exact signed-volume estimator.",
+    "finding": "The retained flag is only the 09:30 opening price within two ticks of any detected overnight LVN price. No two-bulge validation, LVN/shelf band, old-POC alignment or post-open respect/disrespect sequence is scored. The available aggression trust gate remains binding.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_jumbo.py::profile_nodes",
+      "formulas_jumbo.py::a12_double_lvn",
+      "formulas_jumbo.py::a12_respected",
+      "formulas_jumbo.py::a12_inventory_sign",
+      "FORMULAS.md::R-A12"
+    ],
+    "fix": [
+      "Correct the POC scope to the older balance drawn left of overnight. Freeze the overnight profile at 09:30 from 18:00 executions and retain its exact session and contract; do not substitute prior RTH volume.",
+      "Define a named two-bulge detector on a complete grid, return the contiguous low-volume bridge as a band and the upper/lower shelf transition as a separate band. Keep minimum-price and VA-edge alternatives separately labelled.",
+      "After 09:30, bind each visit to the actual LVN or shelf band, then measure respect/rejection versus acceptance through it and subsequent overnight-extreme reach. The picture’s later pullback need not coincide with the opening price. At the confirmed reaction choose only still-unvisited ONH/ONL targets and end each active extreme on its first revisit. Keep the initial tag episode available for a later confirmation without rearming an already-consumed target.",
+      "Keep inventory sign unscored while its trusted input/definition is unavailable. If a price-change or signed-volume variant is later chosen, label it explicitly and compare continuation conditional on the ordered band reaction, with old-POC alignment as a separate filter."
+    ],
+    "acceptance": [
+      "August 25, 2026 opening proximity to 29297.50 is a location observation, not a complete respected-LVN success; July 10 opening proximity is false.",
+      "Two peaks without an intervening contiguous low-volume bridge cannot create an LVN band.",
+      "Afternoon RTH volume must not change the old POC or overnight profile."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "definition_decision": "The overnight inventory formula is unpublished. The p.14 older-POC alignment is visually clear and does not select a net-inventory estimator.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Code axes use America/New_York with date-specific daylight saving and bar-start timestamps. Close-based known_at is the bar completion, and a30-minute hold needs continuous complete observations. Prior RTH09:30–16:00 and IB09:30–10:30 are declared strategy scopes; source schematics do not establish a blanket EST display axis. Keep instrument, source display clock and exchange calendar separate, including actual prior-session and early-close boundaries. MAMT p14 explicitly names6pm through9:30am New York open, supporting that strategy window for this overnight profile; this does not assign every source display axis the same zone.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "no",
+          "reason": "The source p14 red POC belongs to the older left-hand balance and aligns with the overnight LVN band. FORMULAS instead assigns it to developing RTH, a scope error. The author does not publish the exact signed-inventory estimator."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "family_tape tests only opening-price proximity to any occupied-grid LVN minimum. Two-hump validation, bridge/shelf bands, older-POC alignment and post-open reactions are absent; the numerical helpers are not used by this producer."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The retained flag is a location precondition, not respected/disrespected LVN followed by an overnight-extreme outcome. Untrusted aggression cannot make inventory or real-aggression confirmation measured."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both plots were re-viewed. August25 open29297 is within two ticks ofLVN29297.50 but no band or ordered reaction is scored; July10 open29834.75 is far from its selected minima. The source’s band geometry and older-POC scope are missing."
+        }
+      },
+      "source_refs": [
+        "MAMT:14"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-08-25",
+          "plot": "plots/R-A12-A-2026-08-25.png",
+          "sha256": "50bebe68d6a4e90cb7603c0090b8e4fc65ff81090968be29b26f3241021263d5"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A12-B-2026-07-10.png",
+          "sha256": "d04909d4842d50017df8aa5fe8c0faae69879a5c092954ab7d27a38ee6706d5c"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A13",
+    "title": "Overnight reference touch statistics",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "yes",
+      "yes"
+    ],
+    "sources": [
+      "MAMT:15",
+      "MAMT:16",
+      "MAMT:21",
+      "MAMT:22",
+      "MAMT:23"
+    ],
+    "source": "The source distinguishes overnight high/low, VA edges, volume POC and geometric MPOC. The 94% figure is either extreme during RTH. For the 73% MPOC statement, the text says open inside balance while the pictured open appears below the drawn VAL; keep that condition unresolved. The tabulated half-gap pHOD cells also have an ambiguous denominator.",
+    "finding": "The current onh_or_onl event correctly uses 18:00–09:30 extremes and 09:30–16:00 touches. July 10 touches both; August 31 touches neither. The full ONVA/POC/MPOC and prior-reference conditional tables remain absent from this score. A different NQ rate does not itself contradict the cited ES study.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "family_tape.py::_score_one",
+      "recipe_score.py::_preds.a13",
+      "FORMULAS.md::R-A13"
+    ],
+    "fix": [
+      "Preserve the existing full-RTH either-extreme row and publish both, either, high-only, low-only and neither counts from the same eligible sessions. Verify actual overlaps or use one-sided reach only where opening location guarantees the approach side. Record first actual revisit timestamps separately for ONH and ONL from their 09:30 known_at; terminate each active line on that visit. Full-session both/either statistics may retain the historical object after retirement, but any later target selection must use the unvisited ledger.",
+      "Add separately scoped ONVAH/ONVAL/ONVPOC from the completed overnight trade profile. Define MPOC=(ONH+ONL)/2 and never alias it to volume POC.",
+      "Keep the 73% balance-versus-profile-range ambiguity source-stopped; expose both named open-location variants for comparison only after a specification choice. Compute targets after the opening eligibility observation.",
+      "Reproduce each p.21–23 row with its stated open-location denominator, instrument and horizon. Retain pHOD/pLOD-to-open half gaps separately from close-to-open gaps; do not infer a success rate from the ambiguous duplicate cells. Keep reported open-location shares separate from conditional touch rates; do not divide joint-cohort figures by 1,040 indiscriminately or force NQ rates to equal the source ES percentages. Actual prior-reference highs/lows must be fresh at a conditional trade decision, with gaps marked unknown."
+    ],
+    "acceptance": [
+      "July 10, 2026 ONH 29964.25 and ONL 29717.25 are reached; August 31 ONH 29546.25 and ONL 29273.50 remain untouched in RTH.",
+      "MPOC must differ from POC when the distribution is asymmetric.",
+      "An extreme first reached after noon remains a full-RTH success."
+    ],
+    "leakage": "no leakage found in fixed overnight-extreme row; unresolved added conditions",
+    "proxy": "no for either-extreme row; full family incomplete",
+    "ask_user": true,
+    "question": "For MAMT p.16, resolve balance versus the full ETH profile range at the opening point; also clarify the half-gap table denominator before certifying those additional claims.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage. MAMT p14 explicitly names 6pm to the 9:30am New York open for this overnight profile.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "The source supports either overnight extreme during full RTH and distinguishes geometric MPOC from volume POC. The additional 73% opening-balance condition conflicts with the illustrated opening location, and duplicated half-gap cells do not resolve their denominator."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The current overnight-extreme producer uses 18:00–09:30 formation and 09:30–16:00 outcomes correctly. The complete ONVA, ONPOC, MPOC and conditional prior-reference tables are absent; all-family fidelity therefore remains no."
+        },
+        "score_event_ok": {
+          "verdict": "yes",
+          "reason": "The existing onh_or_onl predicate measures the named either-extreme event. It is a descriptive first-reach statistic, not a fresh trade signal after an earlier visit; additional source tables require separate denominators."
+        },
+        "chart_ok": {
+          "verdict": "yes",
+          "reason": "Both charts were re-viewed: July 10 reaches both overnight extrema during RTH; August 31 reaches neither, including the late rally. A different NQ frequency does not contradict a historical ES sample."
+        }
+      },
+      "source_refs": [
+        "MAMT:15",
+        "MAMT:16",
+        "MAMT:21",
+        "MAMT:22",
+        "MAMT:23"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A13-A-2026-07-10.png",
+          "sha256": "f170afa0aab105e62275de1d0b6669db9f7d669f9dc8aa203e941a7d69076489"
+        },
+        {
+          "case": "B",
+          "date": "2026-08-31",
+          "plot": "plots/R-A13-B-2026-08-31.png",
+          "sha256": "8d000a73231378033c24a0c312061a2226a6f00639dc9284ac69428f52676c4a"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A14",
+    "title": "Prior TPO single prints, poor extremes and excess",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "TPO3:3",
+      "TPO3:5",
+      "TPO3:6",
+      "TPO3:7",
+      "TPO3:9",
+      "C3:6"
+    ],
+    "source": "The single-print picture marks an interior G-only strip between distributions; outer single-letter tails are excess. The poor-low figure has repeated QR at the extreme, conflicting with the prose phrase single TPO tail. The source provides 30-minute periods but no exact row size or tie algorithm.",
+    "finding": "The actual scorer is bool(tpo_poor), not the stale documented OR. family_gap builds today’s full RTH one-point occupancy and calls either one-period extreme poor. Both reviewed days show long one-period tails, and all 647 scores are true. This is neither prior-profile unfinished business nor a next-session fill/revisit/hold result.",
+    "targets": [
+      "family_gap.py::_tpo_poor",
+      "formulas_jumbo.py::a14_tpo",
+      "formulas_jumbo.py::a14_single_fill",
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.a14",
+      "FORMULAS.md::R-A14"
+    ],
+    "fix": [
+      "Source-stop the poor-extreme definition until its text/figure conflict is resolved; keep multi-period flat extremes and one-row tails as separate named candidates. Correct the audit-facing description of the actual scorer to bool(tpo_poor).",
+      "Build the prior completed RTH TPO on fixed 30-minute clock intervals and declared one-point rows, with a set of period identities at each row. Missing minutes cannot shift letters. Exclude open/close markers from the period count. Retain row_size and row_origin explicitly, and convert row indices to price for subsequent touches; a14_single_fill currently assumes index equals price.",
+      "Classify interior singles only when the entire same-period run is bounded above and below by accepted multi-period distributions. Classify excess as a same-period outer tail of at least two rows. Preserve each run’s bounds and identity; excluding only the outermost price row is insufficient. Do not merge adjoining one-period rows belonging to different letters. Source O/open markers must not become a trading period that destroys an otherwise valid A-only excess tail.",
+      "Maintain a later-session unfilled ledger. Measure single-run fill, poor-extreme revisit and excess rejection on first test as separate ordered outcomes, using the prior frozen object and post-touch prices. Remove the presence flag from the outcome numerator. Keep first contact distinct from full repair: a visited single-print run is no longer wholly untouched even if part of it remains unfilled. First-test excess high/low lines retire on first revisit independently; the rejection episode may confirm later, but a later new touch cannot be relabelled first test."
+    ],
+    "acceptance": [
+      "July 10 and January 28, 2026 one-period outer tails must not automatically become poor-extreme successes.",
+      "A five-row outer tail is excess, while a five-row interior G-only bridge can be a single-print run; the surrounding rows decide.",
+      "A gap through a run without observed overlap does not prove every row traded; preserve ambiguity or inspect executions.",
+      "Adjacent G-only and H-only interior rows remain distinct runs; a non-unit row size must produce correct price-unit targets."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Resolve TPO p.7’s QR poor-low figure versus its single-tail prose before choosing a faithful poor-extreme definition.",
+    "fixture": "a14_tpo helper tests do not validate current _tpo_poor producer or next-session outcomes",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "Native figures distinguish an interior G-only strip from outer same-letter excess; the QR poor-low figure conflicts with single-tail prose. The full faithful poor-extreme definition remains unresolved, with clipped p5 text not reconstructed."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The actual producer reshapes today’s minute rows into 30-row groups and labels a one-period outer extreme poor. The alternative helper excludes only the outermost rows and merges adjacent singles without preserving their letter identity; neither implements the prior-profile object and its later lifecycle."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Current a14 is bool(tpo_poor), not the stale documented OR. All 647 eligible days are true for current-profile presence; no next-session single fill, poor-extreme revisit or first-test excess rejection is scored."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed: July 10 and January 28 have multi-row one-period outer tails. These do not establish prior-profile unfinished-business outcomes, and the second all-true case is explicitly a diagnostic rather than an invented negative."
+        }
+      },
+      "source_refs": [
+        "TPO3:3",
+        "TPO3:5",
+        "TPO3:6",
+        "TPO3:7",
+        "TPO3:9",
+        "C3:6"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A14-A-2026-07-10.png",
+          "sha256": "55b0324006a03ae2f5565a530b30aa2be130b506a16fc0c118e3175e1c750e8b"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-A14-B-2026-01-28.png",
+          "sha256": "38f218686795d6ec8e5c6b6a7202f647de93e4802ef2ff56fca18e1fdddee83c"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A15",
+    "title": "Initial-balance extension and conditional continuation",
+    "oks": [
+      "yes",
+      "no",
+      "yes",
+      "yes"
+    ],
+    "sources": [
+      "TPO3:8",
+      "MAMT:19",
+      "MAMT:23",
+      "XF:8"
+    ],
+    "source": "The IB is the first hour. Source tables separate either, both, neither and one-side breaks; the continuation rows use the closing position conditional on the broken side. Close-based versus wick-based break remains an explicitly named interpretation.",
+    "finding": "The current single-side IB path row is a valid named close-break statistic. January 28 breaks only the low and closes below it; July 10 breaks both and is correctly negative for single-side. The continuation numerator and complete source table are missing. A direct check of all 647 eligible retained rows found no disagreement between ib_path single-side and ib_single; the fallback is also full RTH, so it is not an AM-window bug.",
+    "targets": [
+      "family_levels.py::build_level_table",
+      "family_clocks.py::build_clock_table",
+      "recipe_score.py::_preds.a15",
+      "FORMULAS.md::R-A15"
+    ],
+    "fix": [
+      "Freeze complete 09:30–10:30 IB H/L at 10:30. Preserve the source one-second construction and explicitly compare the current one-minute extrema where coverage allows.",
+      "After 10:30, compute up/down/both/neither using the named close-break rule, with first complete close timestamps. Keep wick extensions separately labelled rather than pooling them. Store first exact high/low revisits independently of subsequent complete close breaks. End each active line on first revisit and preserve the historical IB for descriptive path outcomes; no final high-only/low-only class may be used as an intraday predictor.",
+      "For high-only, continuation is the RTH close beyond IBH; for low-only it is the close below IBL. Report numerator and denominator by side. For neither, score a later POC rotation with a declared fixed POC scope.",
+      "Reproduce the prior-IB/open-location and IB-containment rows individually. Publish the six-to-nine path comparison as a comparison of distinct clocks; do not transfer the cited ES frequency as a required NQ result. Prior-IB levels used as active setup references require uninterrupted first-visit state since their own freeze, rather than freshness only within today’s IB window."
+    ],
+    "acceptance": [
+      "January 28, 2026 IB 26205–26301 has a low-only break and a close below IBL; July 10 IB 29798–29968.50 breaks both.",
+      "A high-only break followed by an inside close remains a single-break day but fails continuation.",
+      "A 10:29 bar cannot be an after-IB breakout."
+    ],
+    "leakage": "full-day path is an outcome, not an early feature",
+    "proxy": "no for single-side IB row; full family incomplete",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source defines first-hour IB and distinguishes either, both, neither and single-side extensions. Its continuation tables condition the final close on the broken side; close versus wick break is an explicitly named interpretation."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Both current ib_path and family_levels ib_single use 10:30–16:00; the suspected mixed AM/RTH fallback is not present. Continuation-by-side, neither/POC and further prior-IB tables remain unimplemented."
+        },
+        "score_event_ok": {
+          "verdict": "yes",
+          "reason": "The current OR agrees across all 647 eligible retained rows and validly measures the named single-side close-break path. It does not measure conditional continuation or authorize a new setup at a previously consumed high or low."
+        },
+        "chart_ok": {
+          "verdict": "yes",
+          "reason": "Both charts were re-viewed: January 28 is low-only and closes below IBL; July 10 breaks both sides and is correctly negative for single-side. Their final classifications must remain outcomes known only after the session."
+        }
+      },
+      "source_refs": [
+        "TPO3:8",
+        "MAMT:19",
+        "MAMT:23",
+        "XF:8"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-28",
+          "plot": "plots/R-A15-A-2026-01-28.png",
+          "sha256": "3869b8477b8513cca30ff4a125737b1aa3a346c6fc8ec9c2bbb958b8a7c83925"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A15-B-2026-07-10.png",
+          "sha256": "ad0b0ec2ff6930e272b62ffe7f9131ba953e3f21ddfdeebd0f144423246ab1d2"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A16",
+    "title": "Actual ledge confluence and rejection",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "VP2:6",
+      "VP2:7",
+      "VP2:8"
+    ],
+    "source": "The source stacks an actual shelf ledge with independent references such as VWAP, old POC or a value edge, and trades the reaction at the ledge. It supplies no universal confluence distance.",
+    "finding": "Current code sets ledge=prior VAL and compares it with full-AM scalar VWAP or the same profile’s VAH. It never selects a shelf, tests touch/rejection or computes stacked-versus-lone outcomes. The full-AM VWAP is unavailable before noon.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_jumbo.py::a16_stacked",
+      "formulas_jumbo.py::a16_stacked_reject",
+      "recipe_score.py::_preds.a16"
+    ],
+    "fix": [
+      "Use actual fixed ledges from the repaired A02 shelf objects, including both sides and separately named composite profiles. Keep the source band bounds and the ledge line distinct. Record the named five-session composite membership using actual completed sessions; no future portion of the current session enters the frozen shelf.",
+      "At each candidate touch, snapshot only available confluence partners: running RTH VWAP/declared bands, prior VA edges and unretired older POCs. Apply the named 0.05×prior-VA-height distance and store the matched partner. Exclude self-confluence. Preserve partner type, independent origin ID, snapshot timestamp and prior visits. An external high/low used as confluence must be unvisited at the decision; an old POC must satisfy its own naked/retirement definition. Unknown tape or lifecycle coverage remains unavailable.",
+      "Measure the ledge touch and directional rejection using shelf height as the declared scale. Add absorption only through its validated tape event; absence of trustworthy tape cannot become a false negative. Evaluate both sides and every eligible ledge episode by timestamp; a whole-AM price range cannot establish post-touch rejection.",
+      "Report rejection probability for stacked and lone eligible ledge visits with matched horizons. Replace the noon VWAP scalar in morning decisions with a causal running calculation."
+    ],
+    "acceptance": [
+      "January 2, 2026 retained true is only VAL/full-AM-VWAP proximity; it cannot certify a source ledge trade.",
+      "July 10 proximity is false despite later price rotations; later VWAP values must not change an earlier decision.",
+      "Listing a ledge itself as a partner must not make it stacked."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source requires a real fixed ledge aligned with an independent reference and a reaction there. Its shelf zone, ledge edge and dynamic value references are distinct; confluence tolerance and composite length are unpublished numerical choices."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Current code substitutes prior VAL for a ledge and supplies final-AM VWAP plus the same profile’s VAH as partners. It selects no shelf, no composite ledge and no available-at-touch running confluence snapshot."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "The scalar stacked flag is scored without ledge touch, rejection, validated absorption or stacked-versus-lone conditional outcomes. The unused rejection helper does not validate the connected producer."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed: January 2 is true only because VAL 25537.50 lies 3.30 points from noon VWAP 25534.20; July 10 is false with a 70.77-point separation. Neither chart demonstrates a selected source shelf trade."
+        }
+      },
+      "source_refs": [
+        "VP2:6",
+        "VP2:7",
+        "VP2:8"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-02",
+          "plot": "plots/R-A16-A-2026-01-02.png",
+          "sha256": "96294e104504a9d1af3facf74e6ddb35b980814898b944b67b9635c825c0a943"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A16-B-2026-07-10.png",
+          "sha256": "90e135e36635c2d6502e8d9fcce24e5582b9c353072357814436c3aef8a95aa9"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A17",
+    "title": "Second transition beyond a profile extreme",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "MATH:13",
+      "MATH:15"
+    ],
+    "source": "The source requires a return to balance beyond the low-volume region, rather than a taper ending at the profile edge. It distinguishes a gradual shelf transition from an abrupt ledge; numerical ratios are named research choices. The p13 native zigzag under a shelf box demonstrates structure, not quantitative volume-bin thresholds.",
+    "finding": "Current code takes today’s final RTH occupied-volume bins, chooses the deepest minimum, then looks for any median-sized bin on the lighter-volume side. Dropping zero bins changes adjacency, and an arbitrary lighter side is not the source balance orientation. No event-level rejection or ledge/shelf comparison is scored.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_jumbo.py::a17_second_transition",
+      "recipe_score.py::_preds.a17"
+    ],
+    "fix": [
+      "Freeze a prior RTH or explicitly named composite profile before the reaction window. Preserve zero-volume bins and every candidate minimum, with its price, neighbouring balance and orientation.",
+      "For each candidate, identify the current balance side and search beyond the candidate on the opposite side for the declared accepted-volume run. Do not substitute whichever side happens to contain less total volume; classify terminal monotone tapers separately. Publish the accepted run length. In the existing illustrative [150,160,40,30,140,155] fixture, 140 is below the stated median 145, so only 155 qualifies; do not call both final bins a two-bin accepted run.",
+      "Apply the named abrupt-step versus multi-bin-taper definitions to distinguish ledge and shelf, returning actual bounds. Make run length, volume ratios, ties and treatment of empty rows explicit. Specify the named 3× adjacent-volume cutoff and at-least-three-bin taper independently; source-provided ratios must not be claimed where only research defaults exist.",
+      "At later touches, measure directional rejection conditional on second-transition presence versus absence. Report shape presence separately from the event outcome, with known_at tied to the frozen profile."
+    ],
+    "acceptance": [
+      "January 2 and July 10, 2026 chart minima come from final RTH; neither may be used as a 09:30 feature.",
+      "Inserting a real empty price bin changes the geometry and must not be erased by occupied-bin compression.",
+      "A tail with no second balance remains a negative even if it is the lowest-volume point.",
+      "A candidate with neither a second transition nor a monotone terminal tail remains unclassified; do not force the categories to cover every sparse profile."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source requires a second return to balance beyond an LVN or structural edge and distinguishes gradual shelf taper from abrupt ledge. The native p13 diagram is schematic and supplies no numerical row classifier."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The producer selects the deepest minimum of today’s final RTH occupied bins, discarding empty price rows, and searches whichever side has less aggregate volume. A single median-sized bin is not the declared accepted-volume run oriented away from the current balance."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only current-profile second-transition presence is scored. Prior known geometry, later first contact, directional rejection and with-versus-without comparison are absent."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed: January 2 retrospectively selects 25616 and flags a second transition; July 10 selects 29675.50 near the spike low and flags neither second transition nor tail. These final profiles are unavailable as morning features."
+        }
+      },
+      "source_refs": [
+        "MATH:13",
+        "MATH:15"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-01-02",
+          "plot": "plots/R-A17-A-2026-01-02.png",
+          "sha256": "055a61628469a55c83737a6e4b3164caa86cd59f3abe21a11bfbbea4584c311c"
+        },
+        {
+          "case": "B",
+          "date": "2026-07-10",
+          "plot": "plots/R-A17-B-2026-07-10.png",
+          "sha256": "6d940c4c3a469eb0ae305d2c3e9b1ccbab48aa08a9133806d7936797480126cf"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-A18",
+    "title": "Balance-edge rejection or acceptance with unfinished targets",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "C3:6",
+      "C3:7"
+    ],
+    "source": "C3 separates interior levels from balance extremes and depicts directional bias toward unfilled destinations. It also supplies a 40% intraday value setting; the prior 70% RTH VA used here is a named balance choice.",
+    "finding": "Retained a18_single_reach falls back to AM-high≥prior-VAH. Fresh assembly differs on 386 of 668 rows. Fresh code fabricates a single above/below value, passes tick integers where the helper expects prices, and invokes the same bullish VAL rejection twice. It does not mirror the side, check a real unfilled ledger or score the target.",
+    "targets": [
+      "family_recipes.py::build_recipe_table",
+      "formulas_jumbo.py::a18_bias",
+      "family_tape.py::_score_one",
+      "recipe_score.py::_join",
+      "recipe_score.py::_preds.a18"
+    ],
+    "fix": [
+      "Repair schema/producer validation as in A02. Remove fabricated singles and use the chronological unfilled TPO/poor-extreme ledger from A14, with price units and origin/retirement times checked at the event. Validate real prior-session selection and coverage since origin; January 10’s retained January 8 profile cannot silently bypass missing January 9 history.",
+      "Define the balance profile and percentage explicitly. Exclude its interior from the trigger set. Implement four distinct side-aware branches: VAL rejection→long toward a real upper target; VAH rejection→short toward a real lower target; accepted break below→short; accepted break above→long.",
+      "Require the named touch/rejection or 30-minute acceptance before setting bias. Freeze the nearest valid external destination at that time and its price in price units, not tick indices. Supply proper side and mirrored arithmetic to the helper. A fallback prior high/low is usable only if still unvisited at bias confirmation. A target touched while confirmation was forming is already consumed and cannot be selected retrospectively. Keep nearest-row contact distinct from full-run repair.",
+      "Measure post-confirmation target reach by 16:00 with invalidation and censoring. Publish bias formation and target success separately; missing real targets are unavailable observations, never a synthetic positive. Assert the scorer uses the ordered target outcome, not merely the helper bullish field. A target reached before confirmation is not success, and missing outcomes remain censored."
+    ],
+    "acceptance": [
+      "July 10, 2026 retained true is not proof of a real single target. January 10, 2025 must use only singles actually known and unfilled then.",
+      "A tick integer around 120000 cannot be compared directly with an NQ price around 30000.",
+      "Mirroring all prices around a fixed center must swap long/short branches and target sides, rather than calling VAL-long twice."
+    ],
+    "leakage": "event chronology / feature availability",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Implementation plots use America/New_York with date-specific daylight saving and bar-start timestamps. Completed one-minute closes become available at the following minute. RTH 09:30–16:00, IB 09:30–10:30 and prior-session profiles are declared strategy clocks, not evidence that every source chart displays EST. Use the actual exchange session and early-close calendar when determining previous completed profiles and coverage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source separates balance interiors from edges/outside and describes rejection with a real unfilled destination or acceptance outside. Its 40% intraday value example is separate from the declared prior-RTH 70% balance variant; mirrors and numerical holds must stay named."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Retained tape fallback is AM-high reach of VAH. Fresh recipes instead pass fabricated tick indices as single-print prices and call the bullish VAL-rejection branch twice; they supply no real ledger, bearish branch or acceptance episode."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Fresh scoring takes bullish bias presence, not the helper’s target reach, while old retained flags use a different event. The 386/668 assembly disagreements prevent treating a retained headline as current recipe validation."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed: July 10 has a named VAL reaction but no real single target; January 10 remains below both prior value edges. Synthetic values 119949/119288 or 85518/85168 cannot be price-unit targets."
+        }
+      },
+      "source_refs": [
+        "C3:6",
+        "C3:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-A18-A-2026-07-10.png",
+          "sha256": "aef8e43647f2bc7048bd165d317ed7e5af2a3e91a1fd3ade84f15eb9920caf33"
+        },
+        {
+          "case": "B",
+          "date": "2025-01-10",
+          "plot": "plots/R-A18-B-2025-01-10.png",
+          "sha256": "a6bee767c49a1faa946c7dd70990e2ffbd6e42705afed40e7bae50c2e64aa881"
+        }
+      ]
+    }
+  }
+]

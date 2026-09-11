@@ -1,0 +1,261 @@
+{
+  "standard": "Literal visible labels are preserved. RTH and full ETH are separate references. Approximate prices read from axes are explicitly prefixed ~. An absent label is not supplied by inference. Prior review notes with generic 'prior value' are superseded where this ledger provides the literal label.",
+  "scope_dictionary": {
+    "pRTHVAH / pdRTHVAH": "Previous regular-trading-hours volume-profile value-area high. Different population from full-ETH pdVAH.",
+    "pRTHVAL / pdRTHVAL": "Previous regular-trading-hours volume-profile value-area low.",
+    "pdVAH / pdVAL": "Previous full ETH trading-session value-area high/low, per user's explicit clarification. Preserve full session_id/clock definition.",
+    "pRTHH / pRTHL": "Previous regular-session price high/low, not profile value edges.",
+    "PDH / PDL": "Literal previous-day high/low; confirm source session scope rather than automatically aliasing to pRTHH/L.",
+    "RTHop / RTH op": "Current regular-session opening print, known at instrument's regular open.",
+    "R-Hi / R-Lo / EQ": "Time-based range price high/low/midpoint in these SDRangePlus charts; distinguish range open and RTHop.",
+    "ORH / ORM / ORL": "Opening-range high/mid/low, with its own construction duration and known_at (5m/15m when specified).",
+    "POC": "An unprefixed fixed reference line has profile scope that must be resolved using indicator settings/caption. Do not assign previous-RTH or ETH scope solely by color.",
+    "VAH / VAL on right-side developing VP": "Current/developing profile edges at screenshot time, not previous-day values.",
+    "EVRange": "AM expected-volatility range boundary; publicly shown boundaries do not disclose full source calculation.",
+    "EVRange +50%": "Further EV projection; distinct from 6–9 +0.5W."
+  },
+  "figures": {
+    "xfcmg2-p018-i1": {
+      "index": 296,
+      "reviewed_four_crops_again": true,
+      "session_date": "2026-07-07",
+      "post": "https://x.com/JJumboFX/status/2074569053239226627",
+      "visible_labels": [
+        [
+          "MGILevels [DYN]",
+          "indicator header",
+          "reference-line view"
+        ],
+        [
+          "PDH",
+          "~30094",
+          "previous-day high; full scope not printed"
+        ],
+        [
+          "pdVAH",
+          "~30049",
+          "previous full ETH value high"
+        ],
+        [
+          "POC",
+          "~30027",
+          "fixed profile POC; scope not explicit in label"
+        ],
+        [
+          "pdVAL",
+          "~29872",
+          "previous full ETH value low"
+        ],
+        [
+          "PDL",
+          "~29685",
+          "previous-day price low"
+        ],
+        [
+          "RTH op",
+          "~29595",
+          "current 09:30NY open"
+        ],
+        [
+          "29551.75",
+          "exact last-price box",
+          "snapshot current price"
+        ]
+      ],
+      "annotations": "Two red arrows deliberately link pdVAL and RTH op. They emphasize a below-value, below-range opening relationship, not a bare line touch. Vertical chart14:30 aligns with RTH open; full chart timezone is absent, likely+5h relativeNY by event correspondence and must be confirmed.",
+      "price_sequence": "Premarket fluctuates around PDL and breaks below it before14:30; RTH opens below PDL and much further below pdVAL. Price then falls to~29225 by15:30, forms low distribution and another low around16:35, then recoups to~29555 by18:00–18:30 while still below opening price and PDL. The author's previous-week-low remark is a separate contextual reference not labelled in this panel.",
+      "profile_and_flow": "No developing volume-profile histogram or delta rows in this panel; those are in companion p17. Do not infer their values here.",
+      "audit_implication": "Correct earlier shorthand calling these prior-RTH levels: the actual labels are pdVAH/pdVAL. J15 requires separate full-ETH and previous-RTH references and the joint location of RTH open versus prior value/range and 6–9 range."
+    },
+    "xfcmg2-p012-i1": {
+      "index": 289,
+      "reviewed_four_crops_again": true,
+      "session_date": "2026-07-27",
+      "post": "https://x.com/JJumboFX/status/2081737561265893419",
+      "visible_labels": [
+        [
+          "MGILevels [DYN]",
+          "header",
+          "reference-line indicator"
+        ],
+        [
+          "pRTHH",
+          "~28632",
+          "prior regular-session high"
+        ],
+        [
+          "RTHop",
+          "~28592",
+          "current regular open"
+        ],
+        [
+          "pRTHVAH",
+          "~28578",
+          "prior regular-session value high"
+        ],
+        [
+          "POC",
+          "~28510",
+          "fixed POC; scope label unqualified"
+        ],
+        [
+          "28499.75",
+          "exact last-price",
+          "current price"
+        ]
+      ],
+      "price_sequence": "Premarket mostly above pRTHH, stepping lower after12:00 displaytime. pRTHH is crossed before RTH opens; RTHop lies below priorRTHhigh but above priorRTHVAH. First open swing drops through pRTHVAH/POC, recovers toward RTHop, then sells back throughPOC to~28500. Do not use pRTHH as pdVAH or pRTHVAH as fullETHVAH.",
+      "cross_panel": "Companionp12i2 supplies6–9H/EQ/L and executions. Caption says single-break behaviour through A period and entry at range mid. This panel alone does not show range midpoint, so joint gate must be joined by date/product.",
+      "known_at": "PriorRTHreferences are fixed before open; RTHop known at09:30; final session path is outcome. MGI profile scope for unprefixedPOC needs explicit source/settings."
+    },
+    "xfcmg2-p010-i1": {
+      "index": 286,
+      "reviewed_four_crops_again": true,
+      "session_date": "2026-07-28",
+      "post": "https://x.com/JJumboFX/status/2082104746077245851",
+      "visible_labels": [
+        [
+          "MGILevels [DYN]",
+          "header",
+          "reference indicator"
+        ],
+        [
+          "POC",
+          "~28078",
+          "prior fixed profile POC; label unqualified"
+        ],
+        [
+          "ORH",
+          "~27994",
+          "opening range high"
+        ],
+        [
+          "pRTHVAL",
+          "~27989",
+          "previous regular-session value low"
+        ],
+        [
+          "RTHop",
+          "~27951",
+          "current regular open"
+        ],
+        [
+          "pRTHL",
+          "~27940",
+          "previous regular-session price low"
+        ],
+        [
+          "ORM",
+          "~27933",
+          "opening-range midpoint"
+        ],
+        [
+          "ORL",
+          "~27872",
+          "opening-range low"
+        ],
+        [
+          "27694.75",
+          "exact last-price",
+          "snapshot price"
+        ]
+      ],
+      "ordering": "POC > ORH > pRTHVAL > RTHop > pRTHL > ORM > ORL. Opening below priorRTHvalue but still inside priorRTHprice-range is different from July7 opening below PDL. Above/below flags must preserve these distinct cases.",
+      "price_sequence": "Premarket recovers above pRTHVAL and balances belowPOC, then drops back belowvalue atopen. Early minutes cross pRTHL and opening-range low; later selling reaches27650s and repeated bounces fail below27770. No upward mean-reversion resolution shown.",
+      "known_at": "ORH/ORM/ORL are not all available at09:30. Their duration is not printed in thispanel; companion/source context must supply5m/15m. Do not use finishedOR to gate opening entry."
+    },
+    "xfcmg2-p016-i1": {
+      "index": 294,
+      "reviewed_four_crops_again": true,
+      "session_date": "2026-07-10",
+      "post": "https://x.com/JJumboFX/status/2075602926215561312",
+      "visible_labels": [
+        [
+          "SDRangePlus [DYN], MGILevels [DYN], Volume Profile [DYN]",
+          "header",
+          "no DeltaP indicator listed"
+        ],
+        [
+          "+1.66",
+          "~30082",
+          "6–9 extension"
+        ],
+        [
+          "+1.33",
+          "~30044",
+          "6–9 extension"
+        ],
+        [
+          "PDH",
+          "~29993",
+          "prior-day price high"
+        ],
+        [
+          "pRTHVAH",
+          "~29984",
+          "priorRTHvalue high"
+        ],
+        [
+          "POC",
+          "~29906",
+          "fixedreference POC, scope unqualified"
+        ],
+        [
+          "R-Hi",
+          "~29888",
+          "6–9 high"
+        ],
+        [
+          "EQ",
+          "~29830",
+          "6–9 mid"
+        ],
+        [
+          "pRTHVAL",
+          "~29792",
+          "priorRTHvalue low"
+        ],
+        [
+          "R-Lo",
+          "~29772",
+          "6–9 low"
+        ],
+        [
+          "VAH",
+          "~29946",
+          "right developing profile high"
+        ],
+        [
+          "VAL",
+          "~29846",
+          "right developing profile low"
+        ],
+        [
+          "3 Sell LMT",
+          "30041.25 exact",
+          "working profit-target order"
+        ],
+        [
+          "3 Sell STP",
+          "29877.75 exact",
+          "working/trailing protective stop"
+        ],
+        [
+          "3 position / $945.00",
+          "29809.00 exact",
+          "open long average and displayed unrealizedPnL"
+        ],
+        [
+          "29966.50",
+          "exact last-price",
+          "current price"
+        ]
+      ],
+      "unlabelled": "Cyan line~29716 ends atdisplay15:30. No literal EVRange label in this image; earlier notes called it EV too strongly. Describe as unlabelled lower reference until source/settings establish it. Cyan developingPOC-like histogram line~29874 is distinct from fixedPOC~29906.",
+      "price_sequence": "BeforeRTH, price approachespRTHVAL. Opening rally crosses6–9mid/high andfixedPOC, but peaks belowpRTHVAH/PDH; sharp reversals returninside.10:30NY/display15:30 plunge sweeps6–9low andnearunlabelledlowerreference, then rebounds; laterhigherlow nearpRTHVAL/display16:00 rises throughEQ/high. Snapshotlong29809 isafterentryandstoptrailedaboveposition. Targetat30041 remainsabovePDH andhasnotbeenhit.",
+      "profile": "DevelopingVP elongated with multiple shelves, currentVAH/VAL narrower/different frompreviousRTHvalue; POC near29874 versusfixed29906. Using currentVP as previousvalue would change open classification.",
+      "annotations": "Threegreenarrows: one towardrange-lowplunge, one towardunlabelledlowerline, one towardlaterpRTHVALtest. They emphasize distinct moments/references, not a single zone touch.",
+      "audit_implication": "Caption explicitly says RTH open inside previousday value/range and breakouts likelyfail. Need actualRTHopen fordate and declaredprofilepopulation; currentcode must not silentlymergepRTHVAH withpdVAH. Failed continuations and author10:30loss show that mean-reversion context doesnot guarantee everyentry wins."
+    }
+  }
+}

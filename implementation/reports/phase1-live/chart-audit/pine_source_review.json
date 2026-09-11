@@ -1,0 +1,514 @@
+[
+  {
+    "file": "6 to 9 Session and Levels.txt",
+    "archive": true,
+    "lines": 680,
+    "notes": "06:00–09:00 America/New_York; geometry frozen at first outside bar (09:00): W=H−L; q25/q50/q75=L+(.25/.5/.75)W. All deviations measured from H/L: H+kW and L−kW, k=.5,1,2,1.33,1.66; fills between1.33/1.66. 09:40–09:50 is TIME shading, no executable reversal predicate. Prior RTH 09:30–16:00. Range mean/stdev and O→H/O→L arrays append today's completed 6–9 at09:00 before statistics; optional high/low anchored extension stats default60 are not forward09–12 excursions. Source plots no entry/stop/reversion signal."
+  },
+  {
+    "file": "6 to 9 session & levels v2.txt",
+    "archive": true,
+    "lines": 680,
+    "duplicate_of": "6 to 9 Session and Levels.txt",
+    "notes": "Verified byte-identical SHA256320696b3218e7fc535d819837e25217a92357ff26225f7188d79d4cfc704d119; reviewed through identical source."
+  },
+  {
+    "file": "AM TBR - NQ Stats.txt",
+    "archive": true,
+    "lines": 700,
+    "notes": "08:00–12:00 NY weekdays, anchor08:00O; sample stdev(false,ddof1)20 previous completed DAILY percent-close returns via f_sigma()[1], multiplied by current anchor/100. First ±.25sigma reach; if both one-minute sides, nearest to1m open chooses, upper wins equality. LTF find_rev begins touch index INCLUDING SAME MINUTE, so within-minute order remains unproven. Chart fallback skips same chart bar; distinct source branches, not blanket post-touch-bar search. Outcome returns to08O by12; MAE measured FROM OPEN on touched side, MFE on opposite side ONLY after reversion. k ladder .5/.75/1/1.5/2. get_stats and milestones HARDCODED quoted claims, later buckets reuse earlier MFE; hour9 table69.7/69.3 but fallback milestone by12=74.0/74.6; not consistent same-conditioned denominator. No automatic parameters from these tables."
+  },
+  {
+    "file": "Expected Volatility .txt",
+    "archive": true,
+    "lines": 223,
+    "notes": "Default volatility symbol NASDAQ:VOLI (not inherently VIX) and fixedGMT−5 18:00–16:00. Prior DAILY closes chart/volatility. a=VolIndex/16/100, b=VolIndex/sqrt365/100; positive bands Cprev*exp(k*b)..Cprev*exp(k*a), negative bands Cprev*exp(−k*a)..Cprev*exp(−k*b), k.25/.5/1/1.5. Both divisors form INNER/OUTER edges on BOTH sides, not positive16 vs negative365. Source lower box.new top/bottom are reversed (uses DN_Sup lower for top, UP_Sup higher for bottom); preserve source bug; prior-settlement vs session-open anchors distinct. No signal/event predicate, only geometries."
+  },
+  {
+    "file": "Sessions & VP with prev session VP & daily weekly opens.txt",
+    "archive": true,
+    "lines": 686,
+    "notes": "Default30equal-heightrows /70% volume; actual up/down OHLC-body/wick allocation with denom=body+2*(upperwick+lowerwick), body directed by C>=O, each wick half each side. Not aggressor delta or uniform whole-bar allocation. POC highest-volume row midpoint, descendingprice first tie; POC becomesna if winning row finalindex, literal source defect. VA expansion alternates DOWN thenUP bydistance, never heavier-neighbor. Boundary variables initialize fullH/L and update ONLY when newly added row is still belowthreshold (threshold-crossing row omitted), another literal source defect; may leavefullrangeedge. Profiles and opens clocks separate: profile Daily = exchange dayofweek change, NY13–22UTC,London07–16UTC; explicit dailyopen18:00NYMon–Fri and weeklyopenSunday18:00. Previous completed snapshot then reset/update intrabars; value comparators must keep source algorithm version visible."
+  },
+  {
+    "file": "sources/documents/indicators/momentum-volume-flow-levels.txt",
+    "archive": false,
+    "lines": 488,
+    "notes": "MVFL source seven-vote hysteresis, NOT single print threshold+range. c1closevsHTFSMA200;c2last significant signed OHLCsubbar delta persists;c3median27smoothedSMA3vsSMA50;c4break/rejectdelta zoneedges;c5previous MTF localregime;c6SMA5vsSMA200;c7volume anomalycenterbreak/reject. Delta = sign(C−O)*V subbars1m, fallbackchart. Threshold strictabs(delta)>max(6*SMA50abs(delta),3000), SMA includescurrentbar. Detection only02–16NY default, pool neverdailyreset,3000detections eachside. Bullcluster pricesbodybottommin(O,C),bearbodytopmax(O,C); absdeltaweighted1Dkmeans4/s12;hide<45%strongestbothsides; edgescenter±max(span/2,.4ATR14/2), earliest cluster timestamp backwarddrawn. c4 tests each currentedge vs prevclose and previouswick; looporder last eligibleedgewins, not proven temporal last. Anomalyvolume>2.5*SMA20V, centeredclose thickness.2%,merge.5%keepinglargervolume,max50. Regimeinitialbear; flip≥4/7votes with hysteresis. Source OHLCdelta explicitly conflicts RULES demand realaggressorbeforefaithfulscore; no invented replacement approved."
+  },
+  {
+    "file": "sources/documents/indicators/Open Source Fractal - Customized.txt",
+    "archive": false,
+    "lines": 1521,
+    "notes": "OSF C2 completedHTFcandle sweeps priorH/L and closesback, C3Tspot=between nextopen and C2mid, C4=between subsequentopen and C3mid, notfullC2range. HTFlookahead_on current[0] exists but primary C2 triggered periodChanged & c2[1]; need prohibit rawcurrentvalues fromcausalfeatures and gate actual completion. CISD specific LTF opposite-run opens near freshHTFsweep: search2..10, take highestbearopenforbull/lowestbullopenforbear, special fallbackcurrenthigh/low; not previousswing fractal. closecross confirms, earlybeforeC2option distinct. Projections rangeCISDleveltosweepextreme(orbodyoptional), defaultmultipliers−1,−2,−2.5,−4,−4.5; methodcreateslabels but no actual projectionlines (lns empty). C2 breachstrictwickkillsboxes; C4invalid=priorLTFcloseoutsideTspot, notcurrentHTFclose. SMT defaultoff; symmetrical3bar confirmedpivots; matchpairnearest within1bar, lookback200, oppositebreakflagsXOR; choosegreatestmax(chartmove,pairmove)/CHARTmintick,>=2ticks, overlap2tickfilter,mergewithin12barskeepstronger. Not source rule for10barDeltadivergence; neitherprices nor asymmetricsyntheticcuts substitute. HTFvalidclockauto and userbiasfilters; one source implementation withquirks, notauthorproof for another family."
+  },
+  {
+    "file": "magic_hours",
+    "archive": true,
+    "lines": 950,
+    "notes": "Actual hour boxes0,1,2,6,7,8,23NY; start exactminute0, freezesnext hour. Strict firstH/Lbreak; chart-high has precedence ifboth, LTFfinds timeonlyfirstanybreak notside. Subsequentchartbar targetMID beforedeadline3hafterboxclose, invalidationfirst ifextension>=W (hours0/1/6/7) or.75W(hours2/8/23); breakbar target/stop notchecked. Hardstopcountdown incorrectly uses close-time+(hardstopHour−startHour), onehourlater thanoutcome window; detectionusesbarcounts inclusiveendpoint, notcountdown. ExtensionzonesH/L+[0,.25,.5,invalid,1.5,3,4]W bothsides; runners afterMID H−(.75,1,1.25,1.5,2)W forupbreak / L+sameW fordownbreak, notfromMID. Winrates/zonerates/timepercentiles hardcoded. i_history unused; finalsource ends malformed 'text_' so notcompilableassupplied. P03 anymidtouch omitsentirebreak→target-beforeinvalidation event."
+  },
+  {
+    "file": "Session Raid Stats.txt",
+    "archive": true,
+    "lines": 701,
+    "notes": "02:00–02:15,09:00–09:15,13:00–13:15NY, NOT1hNYAM. Raid strictH>boxH+5points orL<boxL−5points, thenC<=H/C>=L; sameraidbarclosevalid; trackmax untilFIRSTreturnfixedraiddepth. Cutoff120min afterfirstoutsidebar inclusive time<=deadline; cumulative perfinishedboxsession, first500sessions cap (nottrailing);cutoff0neversavesstats. PhysicalextensionlevelsH+[20,30,40,50,60,70]pts / L−same. Sourcebucket0actuallydepth<30even5..20buttablelabels>=20;overflowindex6starts80buttable'>70'; do notsilentlycertifytablecounts. Hideboxalsohidesgeometrycollection. Endcutoff code recordsBEFOREsamebarnewconf, causing displayedconfirmed notincluded. These quirksare sourcestatusnotes; FORMULAS must stopidifclaim1h/2tickequivalence."
+  },
+  {
+    "file": "NQ Hourly Retracement Levels.txt",
+    "archive": true,
+    "lines": 947,
+    "notes": "NY08–16NY,London02–08,Asia20–02. Hour00–07 opens and completedmidpoints projectedat08. Source draws onlyhardcodedconditionalhitrate>=75default; rates andMAE.25–.50% tables quotedclaims notmeasuredlocalorpretrainedparams. LondonH>AsiaH &L<AsiaL strictengulf,AsiaH>=LondonH&L<=LondonL inclusive;partialupH>AH L>=AL / partialdownH<=AH L<AL. TracksH/Lspan-touchperlevel08–16, open08barincluded, no2tickorbreakrequired. O/M are16levels; displayedtabletop11cutsat02mid, ratesstored forall16. Live distanceusesabs(C−level)/C notNYO; removeslineonspan butkeepshitbool. Missinghoursleavepriorvalues, sourcecoverageproblem; recomputeexcludeincomplete."
+  },
+  {
+    "file": "hourly_stats_levels",
+    "archive": true,
+    "lines": 579,
+    "notes": "First579lines exactly equal NQ Hourly Retracement Levels.txt; verifiedlinecomparison. File cutsduring hit tracking atbareifconditionline579, so this archive member is incomplete; no independent alternative recipe. Sharedlinesreviewedthroughfullversion."
+  },
+  {
+    "file": "NQ Statistical Mapper.txt",
+    "archive": true,
+    "lines": 950,
+    "notes": "Asia20–02,London02–08,NY08–16NY. London02O comparedto completedAsiaMID; NY08O comparedcompletedLondonMID; equality classifiedbelow. Source firsthit is one-sidedhigh>=rangeH beforelow<=rangeL, HIGHwinsbarsboth; opposite-sequentialhitcanoccur SAMEbar. Patternfourcases strictLondonengulf vsinclusiveAsiacontainment. AsiaNYhitdifferentpredicate ta.crossover(H,AH)/crossunder(L,AL), NOT spanoranyreach; sourcecomment'fromeitherdirection'isincorrect. Midpoints07–08/02–03 and00O use actualspan duringNY. Allrateshardcodedincl 73.84%/76.68% firsthighforaboveMID; oppositehitconditionalabout25–49% isnotall-sessiontouch; bucket-specificdenominators supplied1775/1357etc. Projectlevels onlyafteroriginwindowcomplete; partial livepattern notknown earlier."
+  },
+  {
+    "file": "nq_stats_mapper",
+    "archive": true,
+    "lines": 950,
+    "duplicate_of": "NQ Statistical Mapper.txt",
+    "notes": "Verified splitlines exactly identical to NQ Statistical Mapper.txt; bytes differ only finalnewline. Sharedsource reviewed through fullversion; no independent recipe."
+  },
+  {
+    "file": "Initial Balance Statistical Mapping.txt",
+    "archive": true,
+    "lines": 679,
+    "notes": "09:30–10:30IB, RTH09:30–16NY. Combo BULL meansIBclose>=IBopen; ABOVEmeansIBclose>IBMID; HIGH/LOW meansfirst1mattainment of FINALIBH/L WITHINIB (tieshigh), notfirstbreakafterIB!8arraysdata151/55/1281/141/225/1127/45/105; highfirstunknowndefaultsfalseinselector. Midpoint retest .1%-of-price threshold=M*.001: firstabs(C−M)>threshold thenendpointabs(L−M)<=threshold ORabs(H−M)<=threshold, SAMEbarallowed; not2ticksandnotrangeoverlap acrosswholeband. This retestbeginsafterIBbutnotgatedonbreak; post-break retesthardcodedseparatestats switchbyhighbrokenflagcanoverwritepriorlowfirst. Sourceprocessingorder skips10:30barbreakbecauseresetoccursaftertracking;16:00outsidebarprocessedbeforereset. Percentileextensions percentage of edgeprice,H*(1+.00140/.00314/.00601/.00997),L*(1−.00163/.00380/.00794/.01366), NOTfractionsIBwidth. Hardcodedstatsstayoutoflocalcalibration; 50rangepercentileincludescurrentcompletedIB."
+  },
+  {
+    "file": "NQ Stats ALN profiler.txt",
+    "archive": true,
+    "lines": 255,
+    "notes": "20–02Asia/02–08London/08–16NY timezoneNY. Fourrangecontainmentpatterns sameasNQmapper. FirstLondonextreme strictH>LH/L<LL, hifbothties, resetexchange dayofmonth. Texttableprobabilities95–98%NYtakeeitherLondonH/L distinctfrom39–43%engulfovernight (bothsides). Noexecutablenewforecastmodel; sourcefirstsessionbarvolume/averagerangeexcludedbecausecountersset0thenaccumonlynextbar; separateunrelatedmetadata."
+  },
+  {
+    "file": "IB ORB Statistical Mapper hardcoded.txt",
+    "archive": true,
+    "lines": 409,
+    "notes": "ORB5/15closehalfpredict which FINALIBextremeformedFIRST within09:30–10:30, laterIBextreme+closehalf mapsExtensionLong(lowfirst+upper),ExtensionShort(highfirst+lower),FadeLong(highfirst+upper),FadeShort(lowfirst+lower), predicting firstIBboundaryhitafter10:30. Sourceboundary'break'is>=H/<=L, first1msubbar highwinsifboth; distinctfromstrictIBMapping. BUG: f_orb5_close/f_orb15_close/f_ib_close assigned unshifted close ON FIRST OUTSIDE BAR, despiteheadersknown09:35/09:45/10:30; must recordavailability atthatbarclose, can'tusefalseheadlineknown_at. Sourceupper>=mid vsIBMapping's >mid. Typedratesn1294/1185,1306/1173,857/736/437/449,1293/1094/365/234 areclaimsnotlocalcomputation; sourcedcomments explicitlyinvalidatewhenclockschange."
+  },
+  {
+    "file": "NQ Stats Initial Balance.txt",
+    "archive": true,
+    "lines": 131,
+    "notes": "Defaultsession08:30–09:30 usesEXCHANGEtimezone (time()noTZ), soCMEChicago corresponds09:30–10:30NY; don'tdeclareonehourclockbugwithoutsymboltz. Boxcomputedprevious n insidebars, midpoint(H+L)/2. Directiontable incorrectlyusesfirstOUTSIDEbarcloseforabove/belowM, notcompletedIBclose; hardcoded81%/74% comparisons. Nobreaksequenceoutcomecomputed,noextensiongeometry."
+  },
+  {
+    "file": "NY 5m and & 15m Orb Statistics & LTF Candle structure.txt",
+    "archive": true,
+    "lines": 1189,
+    "notes": "5m09:30–09:35 and15m09:30–09:45 NewYork; FULL developing security values lookahead_on, but capture flag after range end; frozen1m arrays determine FINAL H/L chronology within OR (first>=H else<=L ties high). C>=O bullish incldoji. Med extensions PERCENT PRICE H*(1+.00411)/L*(1-.0045),15m .0038/.00415. Mid retest any span or close cross after capture, NOT needs break first and no NYsession gate around mid flag. Break flags strict >/< during NY; ext strict >/<, notinclusive touches. Exact quoted retest combos5m bullish/high88.4, bull/low81.8,bear/high82.7,bear/low85.6;15m80.8,71.4,72.8,83.8. IB09:30–10:30 freezes previous inside close correctly,>=O bull. Source Next Break chooses opposite of intraOR first extreme, then ANY reach of that side; no firstpostOR race. SessionClose validates solely sessionended, never checksclose direction! Cannot inherit Validated as outcome proof. Fixed stats are claims, not dynamically computed rates. All1189lines read inclrepetitive drawing/table."
+  },
+  {
+    "file": "First presented FVG (with stats) with statistical hourly ranges & bias.txt",
+    "archive": true,
+    "lines": 629,
+    "notes": "Default5m resolution, allowed1/3/5/15; raw securitylookahead_on high/low/close gives future HTFcandle intrabar; middleHour=hour(mtfTime[1]) uses CHART shift of security timestamp, not security native index. Bull low>high2 &&close>high2; bear high<low2&&close<low2. firsthour; spans true gap high2→low, high→low2; source left time mtfTime[2], right hourend or16:15RTH. W1 condition `(hour==9 and minute>=30) or hour==9 and not closed` opens09:00contrary comment09:30; reset09:00; W2 full10:00hour. Nohour9:30reset in practice. first15close usesselectedltf at time>=hourStart+15m (5mbar15..20 close), not15minuteclose. W1-only published10:00, combo11:00 with nine BISI/SIBI/None combos. avg hourly band O±FULL tabulated rangePct*O (nothalf); mean/median toggle. Effectiveness hardcodedarrays undefinedevent; do notdeclare returns/touch/continuation equivalent. All629linesread, truncgapsrecovered."
+  },
+  {
+    "file": "4H HOD LOD Checkpoint Analysis.txt",
+    "archive": true,
+    "lines": 956,
+    "notes": "NY windows18–22,22–02,02–06,06–10,10–14,14–17(last3h). Each aggregate hi/lo/op+clpreviousinside on exit. checkpointLOCK starts22/02/06/10/14, after completing priorwindow; countcompletedprior candles with cumulative strict eliminated flag. State is frozen before current firstbar elimination update! No future fullcurrentwindow in locked prediction. sequential/skip uses flags indexedchronologically+count guards; prev status compares just-completed H/L to immediately previous. Lookup probabilities of HOD/LODALREADY IN separate high/low, default50/sample0 ifunsupported combo (mustnot empirical50%). Current HOD lines developing, not frozen. Source skipsveryfirst18bar in dayHOD/LOD tracking and has stale startbar hazards on no-data; need causal construction rather thanlabel-only. All956linesinclall probabilitycellsread."
+  },
+  {
+    "file": "Statistical OHLC Projections HTF.txt",
+    "archive": true,
+    "lines": 974,
+    "notes": "DEFAULT8h TF1,NYmidnightFALSE,lookback60,Bothmeanmedian; TF2hourdisabled. Daily may18NY(default)vs00NYtoggle, but source daily boundarycondition triggersboth18crossand00cross and date calculations+86400000notDSTsafe. Intraday match hour/4/8/12hslot. Array pushatnewTime usescurrent unshiftedsecurity OHLClookahead_on; filters oldest→newest and stops60 => oldest60nottrailing, futurecurrentHTF included early. CurrentOpen often livechartopen; TF2nonmidnight usesopen1wrongtf. M=O−L bull elseH−O; D=H−O bull elseO−L; distribution levels O±(meanD+meanM)=meanfullrange, NOT justD, medianD+medianM separate, maxrange O±mean(max(H−O,O−L)). Percentiles linearinterpolation[(n−1)p] of upward/downward range separate, p25/75. Premiumzone between+M,+Dsum and discount−Dsum,−M. Alertsgateclosecrossovernotwicktouch. Noautobacktest. Mustdescribebugs and stop source/formulaconflict, cannot pretendunshiftedhistory faithfulcausal. All974linesread incltruncationgaps."
+  },
+  {
+    "file": "Confluence Suite.txt",
+    "archive": true,
+    "lines": 936,
+    "notes": "Full936lines. P18OHLCsignproxy explicit: assignwholevol by C−L vs H−C, then C−O, thenprevC then previoussignedstate. NOT actualaggressor. Dashboard volumetotal>=50→+2V,else−2V capped100 is SIZE threshold, not bullish fraction! NN uses(uV−absdV)/total so signpredicate differentfromdashboard. Main adaptiveSupertrend signals kmeansBestfactor1..5step.5,ATR10,EMApnl10,last2500bars,3quartilecentroids,max250iterations; filters independent. Smarttrail hybridHMA+doubleWMA24 smooth9 ±.618σ/1σ, notVX. TrendstrengthactualVWMA14distance/ATRclamp±2*50 notADX asstalecomment. Reversalzones rationalquadratic24barH8R2 baseline±1.5/2.5hybrid(ATR+meanabsdev)/2. Signals nominalNN6handweightedinputs nolearnedmodel; scoremaxsigmoid1.2=.7685 => A+>=.8 impossible! Presets Short-Term/Mid-Term strings mismatchcondition Short Term/Mid Term. All934?actual936read."
+  },
+  {
+    "file": "confluence_suite",
+    "archive": true,
+    "lines": 578,
+    "notes": "Verified exact first578splitlines of936line Confluence Suite.txt (unified diff only deletes579..936); truncatedvariantendsaftertrendbias tablecell. No adaptiveSupertrend/signal/NN tail. OHLCsideassignmentf_calcV same. Mustnotdescribe truncatedfileashavingsignals."
+  },
+  {
+    "file": "Statistcal Daily Profile & Ranges.txt",
+    "archive": true,
+    "lines": 483,
+    "notes": "All483linesread. DIFFERENTscript fromStatisticalOHLC. ADR10 arraysinitializedzeros, reset session.islastbar_regular[1], tracksH/L thenO±fullADR; medianlineisOPEN notmedianhistoricalrange. Asia20–02,London02–08,NY08–09,IB09:30–10:30. session50lookbackstoreszeroentryatstart->updatesrangeonlyatend; intrasesstableincludeszero; DOWexchangeatstart notNYtradesession. StrictLondonengulfsboth/Asiaengulfs/partialbothhigherlower; fixed quotedNY outcome probabilities noscoredsignal. SideupwardH−O, downwardL−O SIGNEDhere. Labelget_dow_high_lowunused; boxdisplayoptional labelstillreadsbox. Warmupzerosnotfullyobservedsamples."
+  },
+  {
+    "file": "Session Based Statmap with closing stats.txt",
+    "archive": true,
+    "lines": 554,
+    "notes": "All554linesread. Auto uses timenow var rather thanbarhistoricalclock,00–17conditionFIRST makesLondonNYbranchesunreachable; elseAsia19–02but00–02caughtfirst. ExplicitRTH09:30–16,Futures08–17,London02–08,Asia19–02,00–17/custom. Historical60NONDOJIcompleted sessions ONLY; M=O−L bull,H−O bear; D=H−O bull,O−L bear. Frozen projectionsatnextstart O±meanM/medianM, O±meanD/medianD (NOTM+D asStatisticalOHLC), asymmetricExpO+mean(H−O),O−mean(O−L). Filledshadingmean↔median;noEVsigma. Closecounterscompareafterincludingcurrent observation thenexpireoldconditionusingnewaverage =>counterdrift; clamp0..100hidesbug,notoutofsample. Crossalertsallcrossover includinglowerthresholdnotcrossunder, wicktouchdifferent. PhaseP16shouldnamevariantexplicitly."
+  },
+  {
+    "file": "session_statmap",
+    "archive": true,
+    "lines": 579,
+    "notes": "Readall579through exact-matchranges certificate and25addedlines. SameasSessionBased554plusRangeMid O+(meanupwardExpansion−meandownwardExpansion)/2, drawlabel/line/extend andcrossoveralert. Source RangeMid displacedfromO ifasymmetry, not(±M)/2 oralwaysO. Restliteralexact."
+  },
+  {
+    "file": "Daily Floor Pivots.txt",
+    "archive": true,
+    "lines": 1200,
+    "notes": "All1200linesread includingEVERYhardcodedtablecell. PP=(priorD H+L+C)/3;R1=2PP−L,S1=2PP−H;R2/S2=PP±W;R3=H+2(PP−L),S3=L−2(H−PP);R4/R5=R3+W/+2W andmirrordown. Priorsecurity[1]lookahead_on iscausal exceptinitialextra[1]warmup. MainGZ defaultfromBOTTOML+(.5,.618)W,topmodeH−(.5,.618)W reversebounds drawingnotnormalized. InterzonesNEARlevel→FARleveldir×.5/.618, includingPP→S1,S1→S2; topmode flipsorientation. RTHtime'0930-1600'NOtimezone;ta.change(time(timeframe.period,session))!=0 triggersEVERYINSIDEBAR notonceRTHstart -> rth_open andopening_zone continuallyreset! Stats are hardcoded2482days incltouch,close,continue/reject,first-touch/multitouch. Continue/rejectnotcomplements e.gPP88.1/61.7 undefineddistance+horizon; source noexecutableleveltouchoutcomes. MainGZinzone100%isitself expected; broadORnotreplacement. Source firsttouchclaimedR35.1 etcidenticalhighestreachsubsetssuspicious; donotcalibrate."
+  },
+  {
+    "file": "Daily statistical range and levels.txt",
+    "archive": true,
+    "lines": 1007,
+    "notes": "All1007linesread,truncgap180–260recovered. Source defaultsLEVEL23:00–21:00 UTC,STATS09:30–16:00UTC (sameuserTZ) notNY; notmidnightDaily. CompleteNONDOJIlevelsessionarraysallhistoryno60cap, mean/median/std M,D. Mcontraopenwick,Dbiasopenextreme. Drawn O_level±meanM,D,±(meanM+σM),±(meanD+σD),±(meanD+2σD). Labelsupper−Manip lower+Manip, medianlabelsoppositesignstylistic. HitstatsANCHORSTATSOPEN notlevelsessionopen =>plotted andcountedlevelsDIFFERENT. FirsthitflagsresetATSTATSend; sessionsdenominatorincrementend sointradayhitscanoutruncount. WeekresetMondayconditiontypicallyfailswhenprevbaralreadyMonday,notreliableweekly. importedSetSessionTimes/1 forRTHrefs returnsTZbutignoredtimecall; recent5daydrawingwindowrelativefinalchart. PriorcompletedRTH/overnightOHLCunrelatedtobandhitstats."
+  },
+  {
+    "file": "HTF Candle Stats by Time of Day.txt",
+    "archive": true,
+    "lines": 316,
+    "notes": "All316linesinclcommenteddebugread. Default4h30calendarDaysUTC−4(nowclock), arbitraryNasdaq10:30–17:00labelsourceclocknot09:30NY. htfrawOHLClookahead_on collectedONNEWHTF(unshiftedfuturehighlowclosevolume), chartATR14notHTFATR. Statsarrays oldest-firstwithinNOWrollingcalendardate thenlookback30entriesperNYtimeslot. OutputhourlabelusesconfiguredTZbutfilterhardcodedAmerica/New_York, DSTmismatch.4hslotsfloorhour/4 evenlisted18,22,02,06,10,14,8h0/8/16,12h0/12. O−LstoredL−O SIGNED; bull/bear denominatornon-doji whileCountincludesdoji; Pips=points*100sourcearbitrary,notproducttick. Tableonly noentryevent."
+  },
+  {
+    "file": "README.md",
+    "archive": true,
+    "lines": 1,
+    "notes": "One-line archive title only; no additional link or source."
+  },
+  {
+    "file": "ATR Breakout.txt",
+    "archive": true,
+    "lines": 43,
+    "notes": "43linesread. ATR14 percentile rank100 cross50 is alert. Midline color comparesC−O[6] vs4*ATR14, loopsi7→0 resetsgrayoneachfail sofinali0dominates notany-lookbackcondition. NoTBR/sessionlocation."
+  },
+  {
+    "file": "MTF Bollinger Bands Trend Stop.txt",
+    "archive": true,
+    "lines": 86,
+    "notes": "86linesread. SourceMTFdefaultchart,BB20±2σ, persistenttrend onclosepastpreviousband; ratchetband+MoneyRisk1 buffer. Actualplottedstopstate useshighcrossupper/lowcrosslower notsameclose state; HTFseries shifts chartbars. Noentryoutcomes."
+  },
+  {
+    "file": "Inside and Outside bar stats.txt",
+    "archive": true,
+    "lines": 109,
+    "notes": "109linesread. Inside H<=prevH,L>=prevL inclusive;outside strictH>prevH,L<prevL; C>Oup/C<Odowndoijexcluded. Taken onlyimmediatenextbarstrictbreak direction. Fourcumulativecountsdenomsincludeunresolvedlastpattern andunguardedzero. NoAMTIB(initialbalance)relation despiteIBshortname."
+  },
+  {
+    "file": "TTM Squeeze Divergence.txt",
+    "archive": true,
+    "lines": 127,
+    "notes": "127linesread. BB20±2stdev insideKC20±1.5SMAtrueRange; linregmomentum(close−avg(HLmid,SMA20),20). Oscillatorpivots5left5right, divergencelowpriceLLoscHL etc,5..60barspivotspacing. Labelsbackshift−5; knownonly5barslater;closeconfirmationdefaultfalse. NotsignedCVD."
+  },
+  {
+    "file": "Pivot Order Blocks.txt",
+    "archive": true,
+    "lines": 125,
+    "notes": "125linesread. BodydefaultpivotsC25left/25right;Wicksoptional. ZonegeometryusesleftLen indexing notright (unequalsettingsmisalign). BodyfullO/C,wickupperH→bodytop/lowerbodybottom→L. Backdrawfrompivotindex; extendsONLYwhenrightend==current, first30bar fixedspan detectionsmayalreadytouchbeforeextension yetnotcount. NofractalsweepCISD."
+  },
+  {
+    "file": "Adaptive Volatility Adjusted Momentum Score.txt",
+    "archive": true,
+    "lines": 140,
+    "notes": "140linesread. N=clip(round(14*meanATR14/stdATR14),1,100);scoreROC(C,N)/stdPriceN*500*min(V/SMAvolN,3), unitprice-dependent. Zeroσfallback. volThreshold1.5unused. Oscpivots5left/right knownlaternegativeoffsetdrawing;divdisplaydefaultallfalse soalertsrequiringdisplaygateoff. Noaggressordelta."
+  },
+  {
+    "file": "Hourly Time Levels.txt",
+    "archive": true,
+    "lines": 155,
+    "notes": "155linesread. ManualGMT−7 recreates timestampfromexchangey/m/d/h/m thenhourwithoutTZ usesexchangeagain, notrobustNY. Selected00,02,04,04:30,07,08,09,09:30,10,14,16:00 linepairsBAROPENandBARCLOSE extended24h; labels callOpenevensecondclose needsbarcompletion. max10pairs. NoFVG/targetrule."
+  },
+  {
+    "file": "Historical High and Lows Statistical Analysis 30min bins.txt",
+    "archive": true,
+    "lines": 140,
+    "notes": "140linesread. Complete-dayHOD/LOD countsby30minBARCLOSEtime nottradingeventtime; strictnewextremefirsttie retained. Default22hstart18:30butORcross18maydouble-reset18and18:30; break16:30..17 and18..18:30 excludesnot17hourdefault, clockEXCHANGE notNY. Histcountsfinalizeatnextstart, currentunfinishedexcluded. <=30multipliersmisreadsecondsTF. Noentrysignal."
+  },
+  {
+    "file": "NQ Stats RTH Breaks with stats.txt",
+    "archive": true,
+    "lines": 157,
+    "notes": "157linesread. Defaultcustom08:30–16:00 WITHOUTTZ usesexchange; defaulttoggleRTH09:30–16 alsoexchange, tooltipsaysESTnotauthoritative. Onlylast5calendardaysrelativefinalbar processed. PriorcompletedRTHH/L, openabove/below/insideinclusive. Fixedoppositebreakquotesabove15.89%,below18.18%,insideone72.66,both13.04,stays14.30; norealtimebreakdetection/statestimation."
+  },
+  {
+    "file": "Session First Bar Range.txt",
+    "archive": true,
+    "lines": 237,
+    "notes": "237linesread. First15mofevery4h default; securityunshiftedH/L/Mlookahead_on capturedatSTART4h sofuturefirst15m leaked beforeclose. range_arraypushcurrentH−L thenstatsavgσ60; upperH+avgW+σ/2σ,lowerL−(avgW+σ/2σ),notO±σ. FibedgeH+kW/L−kW k1,1.618,2.618,3.618 drawn,4.618/5.618calculatednotdrawn. Label100%=oneWoutside,NOTfrombottom200%. Histmax20drawings independentlookback60. Noentryevent."
+  },
+  {
+    "file": "VP History Widget.txt",
+    "archive": true,
+    "lines": 309,
+    "notes": "309linesread. DefaultDaily50bins70%VA5priorprofiles (max10), notRTHnorcurrent. Week/monthotheroptions; DailyexchangeDOWchange,monthlydaynotnextdate heuristic firesafterweekend evenwithinmonth. OHLCbody/wickallocate:denom body+2upper+2lower,bodyvolallcandlecolorwicks50/50; notaggressor. POCargmaxscanupperdown tiehighest,lowest-rowPOCreturnsna. VAalternatesdown/up;thresholdcrossingrownotincludedboundaryupdatedONLYbeforethreshold; defaultH/Lremainifearlyexit. IdenticalVAbugasSessionsVP. Profilesnapshotbeforeclearing/appendingcurrentLTF (causalcompleted); wProfH/Lpreviouslookbackspan. OptionalOI signedchanges notvolume. Widthintquantizationcanhide<onebarbins. Noauthorweeklydelta/OFMrecipe substitute."
+  },
+  {
+    "file": "Time based level retracement - stats.txt",
+    "archive": true,
+    "lines": 297,
+    "notes": "297linesread. 5levelsdefault00,01,03,04,andliteral07:00–05:01(! overnighttypo; notone-minute7am)NewYork; outcomeall08–16. Atoutcomestarttarget=O_ret + pct*(O_anchor−O_ret),pct50default. SpaninclusiveH>=T,L<=T countsfirstbar too; nopriorleave/rejectionrequirement. Sessionscountatanchor,nomissing/censorchecking; arraysallhistory. Targetline/dayprojected24h. MustnotmistakeforTBRboxmid;thisisOPEN-to-OPEN midpoint."
+  },
+  {
+    "file": "Time based retracement by DOW - stats.txt",
+    "archive": true,
+    "lines": 319,
+    "notes": "319linesread viaexactmatchdiff(+allnovellines). Twofamiliesonly00anchor→08–16and08anchor→09:30–16, both50%O-ret toO-anchor. Above/belowconditiontargetcomparedEARLIERanchor open, notoutcomeopen (sooppositesemantic);equalitycountsbelow. Dayindexexchange notNYtime, dateinallhistoriclabelsusesNOW. Perweekdayconditiondenom incrementsretstart, numeratorfirstspanhit; totalsdenomanchorcount includesunfinished. Nomintradeentry/reject;fateistouch target."
+  },
+  {
+    "file": "4h Candle Curves.txt",
+    "archive": true,
+    "lines": 604,
+    "notes": "All lines read. Six NY windows 18–22,22–02,02–06,06–10,10–14,14–17. Q1/Q2 defined bar-count elapsed minutes from first available bar (gaps shift quarters); Q2 strict breaks Q1 H/L. Curve in Q3/Q4 means opposite Q1 extreme break; continuation means same Q2 extreme break; separate events may both occur, table takes high-curve/high-cont/low-curve/low-cont precedence. 14–17 has no Q4 and no supplied hardcoded curve probabilities. Corrected rates are fixed quoted numbers, no empirical estimator; 6am high-break curve60.6 continuation38.5, low64.4/35.0."
+  },
+  {
+    "file": "8020 System.txt",
+    "archive": true,
+    "lines": 489,
+    "notes": "All lines read. Distinct price-ending80/20 system: levels100k+20/+80 and40point bands100k±20. Repairs zero-wick bullishLow/bearishHigh; confirmed threebar fork center extreme ≥4ticks beyond outer extrema similar≤3ticks, outer body≤.5range and outer opposite directional closes. Cross-section two same-direction bodies≥.6range and40ticks, junction≤2ticks; target mean(prevClose,currentOpen), follow close exceeds prior extreme. TwoBODY gap≥4ticks, fill near edge on later bar. Markers filled before creation=>no creation-bar fills; fork plotted at center but known after third close. Confluence distance≤8ticks; A+ windows09:30–11,15–16NY. These are not probability-based AMT80% VA traverse rules."
+  },
+  {
+    "file": "IB ORB Live Stats.txt",
+    "archive": true,
+    "lines": 464,
+    "notes": "All lines including exact reused helper20 read. ExplicitNY IB09:30–10:30/ORBdefault15/RTH16. Separate formed_first FINAL extremes inside box and broke_first postbox inclusive H/L touch; same1m ties high. Saved close correctly lastinside. SizeZ/strictless percentrank before adding today; no rolling cap. Composite bull=lowformedfirst and close>=mid,bear=highfirst and close<mid. Cont% sameformed-side FIRST postboxbreak / all eligible sizecategorydays (neither stays denominator), not directionalclose probability. Historical tally only RTHclose; display min30 only dims. Different definitions from hardcoded sibling, cannot mix."
+  },
+  {
+    "file": "Initial Balance & levels with stats.txt",
+    "archive": true,
+    "lines": 738,
+    "notes": "All lines read. Default08:30–09:30 IB and09:30–16 break EXCHANGEtimezone, no explicitNY. Saved H/L priorinside get_levels; fib L+(.214,.236,.786,.800)W. Global maxextensions from IBend through NEXT IBstart, whereas break extension percentile25/75 sampled only strictbroken sides during breaktracking session. Mean/median and μ+kσ levels H+historyhighextent/L−historylowextent,k1..4, not±W. IBZincludes current range before meanσ; extensionZincludes current outcome; unbounded arrays. BreakoutProbability empirical completedbreakcount / rangehistory (includes new incomplete outcome day) multiplied by1+.1abs(Z) when Z<0, uncalibrated and can exceed100%. Source allnight extension mean and RTHconditional percentiles distinct."
+  },
+  {
+    "file": "Initial Balance & Extensions with Stats by DOW.txt",
+    "archive": true,
+    "lines": 837,
+    "notes": "All unique lines plus proved unchanged blocks read. Sameexchange08:30–09:30, globalextents untilnextIB. DIFFERENT SD GEOMETRY: H+k*stdev(IBranges),L−k*stdev(IBranges), k1..4; NOmean add (sibling uses extensionμ+σ). CurrentIBincludedσ. Mean/medianextlevels remain allDOW aggregate despiteDOWtable. Hit ORbothsides atanypostIBbaruntilnextIB; displaytoggles suppressstats. RecordedDOW=time[1] at NEXTIBSTART=>nextcalendarDOWon24hcharts, misattributes priorIBextent. Break stats atIBEND loop high[i]/low[i]historicalbars but tests bar_index+i asfuture: wrongly scans history/firstoutsidebar rather than postIBday. Do not use these source rates as faithful postIBbreak probabilities."
+  },
+  {
+    "file": "Daily High Low probability zones.txt",
+    "archive": true,
+    "lines": 309,
+    "notes": "All lines read. NativeDaily lookback250; lastbaronly, priorcompletedD[i]high/low normalized to D[i+1]range.12 quarter-width segments from−100% to200% of priorrange, lowerinclusive upperexclusive exceptlastinclusive; OOBretaineddenominator. Highestfrequencybin tie lowindex; minimum5validranges. DrawtodayPDL+p*priorW (p−1...2). This is a histogram of FINALdailyextreme location, not probability anytouch, not Jumbo proprietaryPZones. Requestlookahead_off excludes index0; contextstart+86400000 drawing not explicitNY session."
+  },
+  {
+    "file": "ADR Levels with Stats.txt",
+    "archive": true,
+    "lines": 556,
+    "notes": "All lines read inclreusedcalc reread55–113. Drawbaseline O_at_afterlastRTHbar±mean(last10rangesbetweenRTHends), roundedtick, zero-initializedhistory warmup; Fib±.3/.5/.7ADR. Source labelsStd.5/1/2 actually additional multiplesofADR from±ADR =>±1.5/2/3ADR, noσ. STATSdifferentnativeDreset, fullpriorranges warmup10; baselineO±ADR*std_x/2 vsdraw±ADR, andstdstats±(.5std_x+k)*ADR notdraw(1+k)ADR. Strict>reachandclose>, independentDOWcounts. Internalgeometry/score conflict mustremainexplicit,notcalibrateasmatch."
+  },
+  {
+    "file": "Daily close stats.txt",
+    "archive": true,
+    "lines": 459,
+    "notes": "All lines read. PriorD/W[1]causal; NY13–22London07–12:45Asia00–07UTCdefaults, opens00/08 EXCHANGEtimezone notsessionTZ. WeeklyIBfilter choices no switchbinding. Dailycloseevent atnewDay uses CURRENTfirstbarclose vsCURRENTopen (orold08open), neverprevdayfinalC−O, despiteheaderdailyclose. Boolsresetafteronebar=>countone/daybutwrongcandle. DefaultfilterAsiaH>LondonH atdayboundary; source onlylabelnotfaithfuldailyrecipe."
+  },
+  {
+    "file": "Deviation based reversion with Stats.txt",
+    "archive": true,
+    "lines": 366,
+    "notes": "All lines read. DespiteReversion name momentum signals: C>linreg20, normalizeddeviation>2.7,vol/SMA14>1.7,T3up forbull; C<same20linreg,deviation8<−2,vol>1.5,EMA8down forbear. Rollingmedianabs residuals from evolvingmedian (notcurrentfixedwindowMAD). Cooldownstrict>10. Signalcloseentry but MAE/MFEincludespreentrysignalbar. Success20pts atEXACT7bull/5bearbarclose; time-to-success anyearlierclose usesdifferentdenominator. Overlap onchangedinputs overwritesunmaturedsignal; denominatorsallincludingunmatured. Filtersusecurrentincludedvolume,MA,T3notmeanreversionrecipe."
+  },
+  {
+    "file": "CISD with fib or range extensions and stats.txt",
+    "archive": true,
+    "lines": 430,
+    "notes": "All lines read. Pullbackpreviousoppositebody>=.2previousrange withopen relativeclose[2]; optionalvolume/ATR usescurrentbaseline. Structurebreak seedsdynamicopposingopen lines, changedonpullback. CISDRange=abs(latestbullLine−latestbearLine); Fibup=bullLine+kR/down=bearLine−kR, range-modeup=bearLine+kR/down=bullLine−kR. DefaultNone. Hittoleranceabs(close−level)<=.5ATR,currentcreationbarcounts; replacespreviousset onnewset; ratearrayonlyrefreshonhit so staleaftermisses. keepLevels true alertindex0oldestwhileextensionlatest. Alerttogglesfalse suppresscompletion/state updates; bullishAlertsactuallybearishcross andviceversa. NotOSF opposingrun orHTFC2rule."
+  },
+  {
+    "file": "Leptokurtic Directional Bias.txt",
+    "archive": true,
+    "lines": 296,
+    "notes": "All lines read. DefaultsourceATR14, rolling14 kurt=SMA((x−rollingSMAx)^4)/SMA((x−rollingSMAx)^2)^2; residual centersvaryacrosswindow,notcentralmomentsaboutonefixedmean. Threshold>3; meanreversionRSI14>70bear/<30bull, momentumEMA20and3barreturn;volonlyjustkurt. IBsessioninputs unused. BBsourceunshiftedHTFcanrepaint. Noempiricalsuccessdenominator."
+  },
+  {
+    "file": "HMM Enhanced Regime Probability.txt",
+    "archive": true,
+    "lines": 382,
+    "notes": "All lines read. HLC3 WMA20/40meanbasis, double-smoothedTR20bands,mult1,ratchetdefaultfalse. Threefeatures zscore50:distanceATR14fromtrail,slope20/ATR14,ADX14. Gaussianindependentemissions sharedσeachstate,temperature2; priorsstaybull/bear.8,chop.6,bull↔bearout20%,remainingchop80%. Forwardfilteronly (notfutureViterbi); adaptationafterposterior>.5:meansEW.05,σEWmeanabsoluteerror aftermeanupdate floor.3 (notstdMLE). maxposterior confidence notobservedwinrate; dominanttieschop. Needswarmupbutmayuse0featuresbeforebaseline."
+  },
+  {
+    "file": "MTF OHLC retracement stats.txt",
+    "archive": true,
+    "lines": 347,
+    "notes": "All lines read. Default60offset1 meanssecurity(open/high/...offset−1)=unshiftedHTF,lookahead_off; plottedoldlevel uses chart[1] in somebranches vsop inhistoricalnewSession. OHLCnotlocked firstbar; realtimeunconfirmedHTFmaymove and isAbove=currSessionOpen>unshiftedop reevaluated. Hit=ta.cross(high,level[1]) ORta.cross(low,level[1]), notbarspanandmovingthresholdcantrigger. Extentbreakflagcalledsweep onanyapproachdirection, samebar subsequentMID/currentOpen cross allowed. DenominatorsALLabove/belowopencases, notconditionalbreakcohort; Belowincludes equality. Needsliteralvsintendeddistinction."
+  },
+  {
+    "file": "MTF OHLC Lines with Breakout & Retracement Labels.txt",
+    "archive": true,
+    "lines": 358,
+    "notes": "Alllinesread. AggregatesactualLTFclosedintervalthenfreezes;1hourdefault detectionminute%60=0 requirespriorminute!=0 (same/hourlyTFneverdetect), otherminutesanalog; customusesnativeTFchange. CurrentOHLCdrawdevelops. StrictpriorH/Lbreak, breakoutfractionPRIORPRICE notW; returncurrentOpen one-sidedtrigger afterintervalfirstbar but CANsamebreakbar. Fibsretrodrawpriorintervalafterknown: H−.236W/H−.618W; extensions L+(1.274,1.618,2,2.618)W andH−samekW, distinctfromH+kW. Displaybreaktoggle gatesretracementstate. Noempiricalscorer."
+  },
+  {
+    "file": "MTF Swing Highs and Lows.txt",
+    "archive": true,
+    "lines": 418,
+    "notes": "Alllinesread. Fivebarfractals centered2barsago; defaultfilterBWfalse selectsBWinequalities (outerstrict,innerallowties); true selectsmonotonicregularhigh4<high3<high2>high1>high0. NativeD/4h/1h/30/15/5securitydefaultoff currentconfirmationTFcanchangebeforerealTFclose. Swingpairs independentlylatestH/L (cannegativeW,noorder constraint),fib L+(.3,.5,.7,1,1.5)W onlyupperside. 4h/30m/15msharefibLinesarraythuslaterenableddeletesearlier;1hseparate. FindTbarspacingassumesnogaps, chartnativeorigin onlynotknown_at. Nooutcomescorer."
+  },
+  {
+    "file": "Key levels, MTF swing highs, lows & 4h candle boxes.txt",
+    "archive": true,
+    "lines": 830,
+    "notes": "AlllinesreadincludingexactsharedCheckpointandMTFblocks. Variable3/5/7/9fractals default5BW; nativeD/4h/15/5 unconfirmedconfirmationbar, priorD/W[1]correct. NY18/22/02/06/10/14boxes, last14–17actualbuttime_range label2–6pmwrong. Dividerselapsedbars so gaps shift. HODLOD excludesnew18firstbar. Asia18–02/London02–08differentfrommapperAsia20–02; livecurrentH/Lplotsavailableduringbuilding. Opensexact18/08/09:30 currentchartO; nofallbackifmissing. Only50%swinglevel, notJumboMRladder."
+  },
+  {
+    "file": "Weekly Initial Balance.txt",
+    "archive": true,
+    "lines": 366,
+    "notes": "Alllinesread. Session22–21UTC withselectedMon/Tue daymask; SessionHigh/Low RESETatEACHinside-sessionstart =>doesnotcombineMondayandTuesdayintooneweeklyIB. PlotNAinside, thenlastindividualselectedsessionH/L/EQ. FibsH−.3/.7W despiteplotlabels21.4/29.3. Eachbarspan incrementscounterwithoutdebounce; DOW% = barhits_thisDOW / allbarhits, NOTsessiontouchprobability. All7arrayspush0eachcalendar/exchangeday; totalweeks=daysobserved/7. Unrelatedtoweeklyvolume/deltaprofile missinginputs."
+  },
+  {
+    "file": "Reversal Breakout System Outside Inside Bar with Stats.txt",
+    "archive": true,
+    "lines": 289,
+    "notes": "Alllinesread. ConfirmedHTF15insideH<priorH,L>priorL usingsecurity[1]/[2] atnextperiod; ICdirection close>open labelsMotherCandlesbull/bear incorrectly basedINSIDEbar. MomrangeextH+W/L−W,insidefib.3/.5/.7. ScoredfirstfutureCHARTclosestrictoutside mother H/L, unlimitedwait untilbreak, pendingcases indenominator. Historical breakoutboolonlyresetbarstatefirst/realtime=>alertsremainlatchedhistory. Nooutsidebarrequirementdespitename."
+  },
+  {
+    "file": "Range Projections Statistical Levels.txt",
+    "archive": true,
+    "lines": 352,
+    "notes": "Alllinesread. HardcodedDOW percentofOPEN move distributions for1h18–19/02–03/08–09/09:30–10:30NY. O*(1+p/100)up/O*(1−p/100)down,quantiles25,50,75,85,95andmean. NotboxH+kW,notsigma. DOWusesexchangecalendar. Positiveuppergatesbothsides; defaultallshow gradientbandsadjacentlevelsandopeningcenter. Noestimator oroutcome; quotedtablevaluesonly, noauthorJumboPZoneformula."
+  },
+  {
+    "file": "NQ Stats Noon Curve.txt",
+    "archive": true,
+    "lines": 414,
+    "notes": "Alllinesread. NY08–16,AM08–12,Q108–10,Q210–12 strictQ2breaksQ1 extrema; tablelikelyPMhigh ifQ2highbroken/lowiflowbroken, nooutcomeorprobability measured. FixedprojectedAMO*.995/1.005,PMO*.9875/1.01 drawnfrom08; notσ/Wscaled. AMH/Ldevelopuntilnoonthenfreeze. SharedlikelyIDsdoublepushwhenbothAM/PM enabled causescleanupmisalignmentpotential;noevidenceforJumbolunchscorer."
+  },
+  {
+    "file": "Time based Range Retracement with Stats.txt",
+    "archive": true,
+    "lines": 521,
+    "notes": "Alllinesread. FiveNYbox/extentcheck/rettime triples02–02:30/02:30–08/08–15;09–09:30/09:30–13/13–15;00–00:30/00:30–02/02–08;11–11:30/11:30–12/12–15;14–14:30/14:30–15/15–16. TargetL+.5W default,rangefrozenend; conditionalflagsinclusiveH/LduringseparateHLwindow; retspanonlyinlaterrettimewithconditionaldenomsbroken/notbroken, overallallsessions. ResetnativeDafterprocessingcanwipefirst00baronmidnightalignedsymbols; ret_price notcleared so missingboxdaycanstalehit. Differentfromtwo-openlevelretracement."
+  },
+  {
+    "file": "Time based ranges with stats.txt",
+    "archive": true,
+    "lines": 552,
+    "notes": "Alllinesread.12irregularNYwindows18–19:01,19:01–23:04,23:04–03,03–03:44,03:44–05:20,05:20–06:39,06:39–09:30,09:55–10:20,10:20–11:10,11:10–11:49,12:35–14:09,14:09–16. Current0historyentryincludedinDOWmeanO→H/L (get_dow_high_low exactsharedStatDaily), whereasAvgRangeusuallyskipsindex0; fallbackaggregateincludes0. LikelyboxfromOtoO+meanUp/Down. HithighrequirescurrentHIGHbetweenOandexpectedH, nottouchfarH;lowanalog=>wideboxpresencecaninflate. Openhitonlyafterfirstbar span. Currentunfinishedentryalreadydenominatorand0range table; active_sessionnotresetgaps."
+  },
+  {
+    "file": "Session Opening Bar Range.txt",
+    "archive": true,
+    "lines": 513,
+    "notes": "Alllinesread. DefaultNY09:30first5m H/L/EQ&C taken immediately09:30 viaunshiftedHTFlookahead_on=>futureopeningrangeanddirection. OptionalextH+iW/L−iW; statsH+μW+kσW/L−same,last60includingcurrentfutureOR; defaultrotationsfixed65pointsfromedges i1..5 (ES15mentionedtooltip). SourceCLchoice stringmismatch leavesemptydefaultsession. Noempiricalsuccessrate. Needfirstbarcompletionknown_at09:35inseparaterepairedvariant."
+  },
+  {
+    "file": "Oscillator Suite.txt",
+    "archive": true,
+    "lines": 550,
+    "notes": "Alllinesread. NPPO=EMA3(linreg7(100*(C−mean(highestH7,lowestL7,SMAhl2_7))/(HH−LL)));signallineMAinputbutlengthHARDCODED2. MFI=SMA6(MFIhl2_35−50),adaptivepositive/negativehistorythresholds; bearishthresholdpushbranchmistakenlycomparescf.blTavg.7votes includeoscvsSignal,MFsign/strength,oscsign,extrememeanreversion,vol>1.5SMA7,convergence; scoresround10*k/7; tiesbear inscorebutnotdashboardcondition. Divergencecomparesbodyextremes betweenoscillatorcrosses±20,sharedonesideanchorcanmix directions. Majorrevvol>1.4SMA7andosc>|4|withMFIstrong; minorvol>.4SMA7andnotmajor,osc>|20|,RSIvolume>|20|. Noaggressordelta noroutcomerate."
+  },
+  {
+    "file": "NQ Hourly Retracements 12y Stats with Levels.txt",
+    "archive": true,
+    "lines": 619,
+    "notes": "All 619 lines read. Previous completed hourly H/L/O and W captured at new hour; current open compared strictly to previous open, equality classified below. Fixed 24-hour x two open-condition lookup tables for sweep and subsequent retracement percentages, no estimator or raw calibration data. Reversal levels Hprev + Wprev*q/100 and Lprev - Wprev*q/100 using side-specific 25/50/75 percentiles, not O-based percentages or standard deviations. Sweep markers strict >/<. Current open is the retracement target, separate from previous open. Security unshifted default lookahead_off plus chart [1] is historically prior completed at boundary; real-time HTF consistency needs replay validation."
+  },
+  {
+    "file": "NQ Stats all in one.txt",
+    "archive": true,
+    "lines": 784,
+    "notes": "All 784 lines read, including exact shared blocks. Default sessions UTC NY13-22 London07-12:45 Asia00-07, distinct from NY-clock mapper; default RTH actually exchange08-16 despite custom09:30-16. RTH accumulated only last five calendar days. Array session pairing by index without date join; filtered matrix historical rth_open deliberately replaced by NY HIGH, yesterday range proxied next array item, time opens/previous D/W filter values current rather than per historical day. Persistent counters not reset when last-bar matrix rebuilt, live double counting. Prior-week and session mids var initialized once. Source matrix is descriptive range topology (full/partial/inside), not correlation coefficients or faithful entry odds."
+  },
+  {
+    "file": "NQ Stats Price Distributions.txt",
+    "archive": true,
+    "lines": 1234,
+    "notes": "All 1234 lines read; initial truncated 175-450 recovered. NQ-only constants claim 2010-2025, calibration pipeline not shipped here. 32 anchors: hourly, Asia19-02, London02-08, AM08-12, PM12-17, Day18-17, Week, RTH09:30-16, full08-16. Sigma of NET return versus asymmetric O-to-H/L excursion quantile grids explicitly different; O*(1+sigma*volMultiplier*quantile/100), downside analogous. Optional half-range vs full-range symmetric envelope must remain separate. Scalar daily252 close-to-close SD/1.259 clipped .5-2.5 freezes at anchor open; unshifted live daily security may differ from historical at intraday anchor and needs causal repaired variant. Bull/bear medians use final sign including flat as bull, explicitly descriptive. Fixed S_ONE unconditional close vs S_FADE conditional tagged-then-close-inside rates, no empirical estimator in script; f_probTxt uses CURRENT z not recorded touched level or remaining time. Gauge normalized coordinates generally not actual prices; only own-open with height1.0 aligns (default height.3). Exchange override updates stored day/week OHLC AFTER chart lines drawn, can disagree. Half-day calendar heuristic not authoritative; short flag frozen week start misses later-week half day. Constant guard only table/gauge, chart lines still drawn for wrong symbol. Fullsample constants cannot be called out-of-sample calibration."
+  },
+  {
+    "file": "NY vs Asia Statistical Levels.txt",
+    "archive": true,
+    "lines": 791,
+    "notes": "All 791 lines read. Asia19-02 NY08-16, four NY-open buckets against Asia H/L/EQ. Completed historical NY stats last100 EACH bucket, nearest-rank min4; HAsia+q(max(0,HNY-HAsia)/WAsia)*WAsia and downside symmetric. First NY bar excluded from extension max but included range. Reversal history uses FULL NY range when extension exists, no chronology; levels anchored median extension minus/plus quantile of raw point range. Reversal hit flags can fire before extension, including open. Grid O_NY±k*WAsia, but printed odds are total NY full range>=k*WAsia, not either directional excursion. Hit-rate estimates in-sample self-quantile shares, not prospective validation. Alert tests after hit flags updated mean new-hit alerts suppressed. Do not substitute this grid for GB or Jumbo projection recipes."
+  },
+  {
+    "file": "Statmap HTF no like for like lookback.txt",
+    "archive": true,
+    "lines": 1004,
+    "notes": "All 1004 lines read. Default4H native boundaries, latest60 completed non-doji candles pooled across clock slots. Bull M=O-L,D=H-O; bear M=H-O,D=O-L; signed final candle required only for completed historical classification, doji omitted even average high/low samples. New O ± mean/median M and O ± mean/median D, NOT D+M. Separate O+mean(H-O), O-mean(O-L). TF1 quantiles upper75/lower25 asymmetric, rank round(q*(n-1)); upper M quantile line never initialized though label is. Only TF1 quantiles implemented. Historical sums causal from chart aggregation previous values. Lines extend only new period and one bar after, not continuously. No score event or hit percentages."
+  },
+  {
+    "file": "Session standard deviations with stats.txt",
+    "archive": true,
+    "lines": 786,
+    "notes": "All 786 lines read. Default NY00-16,20 historical sessions. Sigma is population SD of ALL chart-bar (close minus its own session open) point deviations pooled over prior20 sessions, hence bar-count weighted, NOT daily closing returns, high-low range SD or O-to-extreme SD. Frozen at new session after prior data appended. Draw O±k*sigma k=.5,1,2,3,4. Session touch table inclusive high>=upper/low<=lower, denominator starts even warmup. Reversal matrix uses only first9 of11 levels (-4,-3,-2,-1,-.5,0,.5,1,2), so +3/+4 absent; same-bar flags established before all destinations tested, diagonal and nested-side entries tautological, does not require directional retracement or price span. Targets above zero use high>= and below zero low<= irrespective origin; return event cannot be inferred from this matrix. Date grouping day-of-month only. Clarify literal Pine vs corrected chronological variant; stop conflicting FORMULAS id."
+  },
+  {
+    "file": "Statistical VWAP study Session and RTH VWAP.txt",
+    "archive": true,
+    "lines": 666,
+    "notes": "All 666 lines read. Session06-09 fixed GMT-4 default, VWAP reanchors on each new SESSION HIGH (highArr.hlReset), then accumulates beyond09 until exchange day change; not session-open VWAP. Live value can stay stale on anchor reset until first post-anchor sample. RTH NY09:30-16 hlc3 volume VWAP. Retest confirmed previous-bar same close-side as preceding close, wick STRICTLY through moving VWAP, events lag one bar and last inside bar omitted. End win compares final VWAP ordering to FIRST OUTSIDE bar close vs RTH open, descriptive same-period relation. stat_total<100 freezes first100 days, not rolling latest; hourly buckets continue all history, timing last1000 events, inconsistent denominators. Bands A=(two live VWAPs)/2, x_t=hlc3_t-A_t; sigma actually weighted RMS sqrt(sum(V*x²)/sumV), not centered variance; separate positive/negative RMS, MAD=median(abs x) about zero not sample median; unweighted quantiles of x, current A plus past moving-anchor residuals. Default all bands off. No aggressive-volume inference."
+  },
+  {
+    "file": "Session highs lows and opens.txt",
+    "archive": true,
+    "lines": 846,
+    "notes": "All 846 lines read. NY sessions Asia18-02, London02-08, NY08-17, PM13-17; current developing H/L drawn backward to session start, thus final historical line not causal before extreme. Midnight and08opens use exchange timezone (time without NY argument), inconsistent with NY session levels. Prior1H/4H/D/W/M arrays requested lookahead_off, index1 then chart values lag a native period historically until close vs live; must validate same known_at. Draw only last bar for prior levels. History false suppresses drawing rather than selecting current-only, and enabled labels gate some lines. Unused PearlDynamics import and unused lower rendering helpers; no imported function called. No probabilities or source recipe event."
+  },
+  {
+    "file": "Range Prob.txt",
+    "archive": true,
+    "lines": 616,
+    "notes": "All 616 lines read including packed lookup strings. Fixed LUT by 15/30/60/120/240 minute NY18-anchored slot and previous-range open decile; below/at-above buckets explicit. Only cells with preselected >=70 conditional probability present; no match is not zero probability. Resolved means OWN final close strictly beyond previous H/L; close inside incl equality is unresolved. Direction rates condition on resolved only; unconditional up=pUpCond*pResolve, down complement*pResolve, inside1-pResolve. Causal range aggregation with adjacent previous slot check; missing bars within slots not screened. Rolling live last100 calls excludes unresolved from direction denominator and tracks resolution separately. Labels use train%, test% separately. Data study calibration not shipped; no geometry touch entry and no strict NQ symbol guard. Incompatible as event definition for simple range touch."
+  },
+  {
+    "file": "Session Range Candles + 25% Level.txt",
+    "archive": true,
+    "lines": 1196,
+    "notes": "All 1196 lines read. NY-clock Asia18-02 London02-08 NY08-17, snapshots freeze at next-session start (custom overlapping sessions may violate completion assumption). The 25% line is BODY retracement from close: .75*C+.25*O, not quarter of H-L; doji stats level O but drawing omits. H/L mid is separate. Completed history appended next Asia start, latest252 selected, regime London vs Asia full/partial containment. Sequential H+L is simply NYhigh>=LondonH AND NYlow<=LondonL, no first-side/order. Bull-London counts NYlow<25 and NYclose>25, denominator ALL bull-London in regime, not only touches; bear analog, doji classed bear for stats. Wick means whole NY session extremum, not a specific rejection candle. Draw live developing body backwards only on final/realtime snapshot, do not reuse final geometry as past known level. NY25 display tied Asia toggle and disabled while NY active."
+  },
+  {
+    "file": "Session Range Projections with stats.txt",
+    "archive": true,
+    "lines": 1243,
+    "notes": "Fully reviewed all 1243 lines, including recovered 129–135. New York boxes 02:00–02:15, 09:00–09:15, 13:00–13:15. Range 1 statistics 02:30–08:00. Body mode uses max/min of all chart candle open/close values during box, not session open/close. Range extensions H+kW and L−kW for k1..6. True SD is population SD of last 100 box widths including just completed box; defaults O±kσ, optional edge±kσ. When Both selected True SD chooses body range. Display gates influence calculations; drawings begin before final geometry known. First side hit counts independent, opposite hit means both divided by side touched with no event order. Both hit stored next box start. Only range1 has stats. Table updates at box end before outcome window and denominator includes current outcome not yet observed. Source rates are not directional reversal probabilities."
+  },
+  {
+    "file": "DTT Time Based Ranges.txt",
+    "archive": true,
+    "lines": 1363,
+    "notes": "Fully reviewed all 1363 lines; recovered table lines1254–1267. Disney-named NY irregular time ranges (13) and 16 one-minute anchor opens, unrelated to Jumbo 06–09 statistical ladder. Cinderella23:04–03:00 and Moana09:55–10:20 etc explicit. Interior intervals are time dividers not price quartiles. First 1m anchor open via security lookahead_on, open known at anchor but lower-TF sampling chart dependent. Box running high/low via f_get_period with240bar lookback; on first session bar scans past previous occurrence, can initialize incorrect prior-span range. Projection end based prior occurrence bar count, includes gap risk. Duplicated calls draw Cinderella two or three times and whole set twice, same arrays. Stats all-history mean widths by END weekday, no standard deviation despite unused show_tsd toggle. Updates depend display toggle and table refresh native daily before range pushes. Imported utilities used for deletion/day/pips display only. No outcome, entry, rejection, sigma or reversal recipe."
+  },
+  {
+    "file": "HTF Sweep Model with CISD Table.txt",
+    "archive": true,
+    "lines": 859,
+    "notes": "Fully reviewed859lines. Default60min, auto false; HTF candle draws aggregated chart OHLC default with optional unsafe current security lookahead_on. Sweep-box C3 OPEN to C2 BODY midpoint (O2+C2)/2, despite separate previous-mid LINE using (H2+L2)/2. Box Price Range input unused, near-zero box expanded2ticks each side. C2 sweeps strict beyond C1 and close strictly inside C1; line sweeps require WHOLE BODY inside edge while screener only close vs edge and current unshiftedHTF lookahead_on. CISD uses own input htf not auto curr_tf: opposing run2..10 lookback with special open/high/low adjustments, prior chart close cross confirmed1bar later, swing age<30bars, swept state and one signal per renewed extreme. Duplicate reset sets armed false then true. CISD tables current signals not probability; sweeps current future HTF values. Do not combine body midpoint box with OSF HL midpoint version or approximate CISD as fractal break."
+  },
+  {
+    "file": "HTF Sweeps & Liquidity Levels with CISD.txt",
+    "archive": true,
+    "lines": 1260,
+    "notes": "Fully reviewed1260lines, exact shared blocks verified. Default60min and D two panels. No sweep midpoint BOX unlike ModelWithTable; prior HL midpoint line. Auto two-level toggle branches identical. MainCISD uses curr_tf corrected, strict WHOLE BODY beyond-inside prior swept edge (max(O,C)<Hprev / min(O,C)>Lprev), no opposite bound requirement; chart aggregated timing, priorclose crossover1bar delayed,2..10opposingrun<30age. Current panel sweep lines still unsafe unshiftedHTF lookahead_on. Prior native D/W/M/Q/Y arrays lookahead_off then index1 create historical lag/realtime mismatch, only lastbar drawings. ExplicitUTC0 Asia23–06 London06–13 NY13–22 different from GB and Jumbo. Session completed extrema drawn back to start; display toggles gate state. No scored probability, noC2/C3box or standardized event outcome."
+  },
+  {
+    "file": "MTF HTF market analysis toolkit.txt",
+    "archive": true,
+    "lines": 1012,
+    "notes": "Fully reviewed1012lines. Default60min chart aggregated candle. Every new candle box Open to PREVIOUS BODY midpoint, no sweep prerequisite; alternate HighToLow CURRENT developing H/L. Previous native O/C index1 lookahead_on is causal. A true fresh box must contain current O at its edge; open-above/below categories impossible, yet stats have var candle=candles.get(maxIndex) initialized once and retained/deleted reference plus sticky getBoxLevels vars, so stale box can create spurious categories. Counts include new unfinished candle, rates before processing nextclose, allhistory. avg_down_move_points_total accidentally sums UP points for above. Range MID across all4displayed candles, different from box endpoint. Trend is ZLEMA70 with1.2maxATR70over210 band crossing persistentstate (0labelsbear), not futureprobability. CISD separate dynamic pullback model requires prior opposite body>=20%range and open relative close2, not OSF2..10 logic; keepLevels switch asymmetrically disables bear processing. Do not confuse these variants with HTF sweep model."
+  },
+  {
+    "file": "Pre-market session levels and stats.txt",
+    "archive": true,
+    "lines": 1548,
+    "notes": "Fully reviewed1548lines. NY06–09levels09–12stats. All-history range widths and O→H/O→L samples INCLUDING current completed06–09, no60cap in this variant. Open std bands O±(meanW+k*populationSD(W)), k1,2; edge mode H+kσ,L−kσ omits mean. Fibonacci L+pW default p.236/.382/.618, open alternate; extensionsH+.5/1W,L−.5/1W. Mean/median high extension O+mean(H−O), low O−mean(O−L), edge alternate. Hit one-sided reach09–12, median minutes since09. Return exact CLOSE equals06open within.0001, same touchbar allowed, onlyσ returns counted but not actually displayed in exported table. Endstats increments denominator after intraday numerator; can>100during session. Weekly reset predicate same nativeD/previousMonday flaw. No entry/reversaltime/bin or band1.33/1.66 authorJumbo logic. Separate source from6to9 optional60history and fromSessionBasedStatmapM/D."
+  },
+  {
+    "file": "Session Statistical Levels.txt",
+    "archive": true,
+    "lines": 1623,
+    "notes": "Fully reviewed1623lines. NY Asia19–02 London02–08 NYAM08–12 NYPM12–17. Distinct symmetric O±Pq(H−L) bands (FULL width each side, not half) and directional O+Pq(H−O)/O−Pq(O−L),nearest-rank q10/25/50/75/90, last100 prior completed arrays, known atsessionstart. Bull/bear split labels bug: bear_mfe stores H−O but drawn BELOW O; bear_mae stores O−L drawn ABOVE. Doji bull. Retrace flags P90→C belowP75 etc initialized prior history atstart, same touchbar close valid. But record_session APPENDS current before recomputing reach/nextlevel thresholds, so denominator uses different thresholds from frozen intraday retrace; requires n5vsflag n2. Counters ALLHISTORY despite footer100; arraylookback100 perregime not recent100combined. Same-side retrace, NOT oppositeMAE25 nor finalcloseIQR comments stale. Completedthresholdquantiles change for justclosed display. All display toggles affect plots only notrecording, customclockoverlap lowprioritydisplay. No Jumbo proprietary PZone formula nor statistical sigma."
+  },
+  {
+    "file": "Sweep, CISD, MTF FVG & Key Levels.txt",
+    "archive": true,
+    "lines": 1603,
+    "notes": "Fully reviewed1603lines. Autochart1→15,3→30,5→60,15→240,30/60→D,4/8H→W,D→M. Tspot/WickLick box spans completed swept candle CLOSE to selective LOG midpoint: if largerlogwick>logbody midpoint of larger wick, else sqrt(H*L); NOT OtoHLmid or bodymid. Strict sweep-and-closeback excludes bothsides sweeping inside; C3 newbarafterC2close, expansiveC4 and protrendMID variants separate. CISD here looks BACK up to20consecutive opposing candles from C2extreme, body-range default, then searches forward CLOSE beyond runbound; projections from runbound+k*RUNwidth k.5/1/1.5/2, not OSF CISDtoextreme with−labels. findLevelBarIndex100priceequality mayselectwrong occurrence and sticky found. Touch detection BEFORE Monitor update=>priorbox onebar on creation, strict wick/OCreturn past CLOSEedge; confirm5barpivot formedbeforetouch and O/Ccross beyond later, flags repeated. Mainexecution onlylast1000chartbars and display enabled, needsHTFlines enabled otherwise arraygetempty. GetHTFBiasbothsidewickbranchmostlyunreachable after highsideclosebackpriority. MTF FVG5/60 uses previousOHLC lookahead_off lag, detectsbar by OHLCchange (identical candles skipped),3recordedbars nonadjacentpossible, lefttime[2] chartbarsnotHTF, duplicate ORonebound, deleteonlystrictfullfill; max30unused. Keylevelsprior4H/D/W/M index1lookahead_oncausal, Asia18–02London02–08NY,18dayresetincludesfirstbarcorrect. Volumeimbalance means BODYgapwithwickoverlap,noactualvolume. Do not merge with OSF primary."
+  }
+]

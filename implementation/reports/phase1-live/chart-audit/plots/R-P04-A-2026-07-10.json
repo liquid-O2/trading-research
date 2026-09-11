@@ -1,0 +1,144 @@
+{
+  "case": {
+    "id": "R-P04",
+    "case": "A",
+    "date": "2026-07-10",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 382,
+    "negative_count": 265
+  },
+  "production_session": {
+    "date": "2026-07-10",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5353,
+    "expected_1s": 10800,
+    "missing_1s": 5447,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29887.75,
+    "L": 29771.25,
+    "open": 29820.75,
+    "close": 29800.0,
+    "EQ": 29829.5,
+    "Q25": 29800.375,
+    "Q75": 29858.625,
+    "W69": 116.5,
+    "volume": 24095.0,
+    "close_0859": 29800.0,
+    "open_0930": 29834.75,
+    "w_pct_0859close": 0.39093959731543626,
+    "w_pct_0930open": 0.3904842507478695,
+    "WpriorRTH": 379.0,
+    "w_rel_prior_rth": 0.3073878627968338,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 29993.5,
+    "prior_rth_low": 29614.5,
+    "asia_high": 29963.5,
+    "asia_low": 29804.25,
+    "london_high": 29948.75,
+    "london_low": 29775.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1783690320000,
+    "first_low_break_ms": 1783693920000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1783688400000000000,
+    "outcome_start_ns": 1783690200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1783691340000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "gb.nyam formation",
+      "low": 29790.5,
+      "high": 29968.5,
+      "start": 9.0,
+      "end": 10.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam H",
+      "price": 29968.5,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam L",
+      "price": 29790.5,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam EQ",
+      "price": 29879.5,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code high-raid threshold H+5pt",
+      "price": 29973.5,
+      "start": 10.0,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.gb.nyam": {
+      "n": 60,
+      "missing": 0,
+      "open": 29800.5,
+      "high": 29968.5,
+      "low": 29790.5,
+      "close": 29923.0
+    },
+    "p04_raid": {
+      "raid_hi": true,
+      "raid_hi_conf": true,
+      "raid_pts": 23.0,
+      "bucket": "20"
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P04-A-2026-07-10.png",
+  "notes": [
+    "Code substitutes a 60-minute NYAM box for the Pine raid windows; upper raid alone is scored even without confirmation."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 754,
+    "code": "def p04(r):\n        return bool(r.get(\"p04_raid\"))"
+  },
+  "event": "NYAM raid >=5 pts then close back inside within 120 min",
+  "display_event": "Implemented NYAM high raid >5 points; scorer accepts raid even without a close back",
+  "detail_window": [
+    11.333333333333334,
+    11.833333333333334
+  ]
+}

@@ -1,0 +1,6133 @@
+{
+  "fixtures.run_ticket01_fixtures": {
+    "ticket": "01",
+    "pass": true,
+    "n_cases": 22,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "box_geometry",
+        "pass": true,
+        "cases": [
+          {
+            "id": "geom.W",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "geom.EQ",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "geom.Q25",
+            "pass": true,
+            "got": 95.0,
+            "expected": 95.0
+          },
+          {
+            "id": "geom.Q75",
+            "pass": true,
+            "got": 105.0,
+            "expected": 105.0
+          },
+          {
+            "id": "geom.m05_low",
+            "pass": true,
+            "got": 80.0,
+            "expected": 80.0
+          },
+          {
+            "id": "geom.m05_high",
+            "pass": true,
+            "got": 120.0,
+            "expected": 120.0
+          },
+          {
+            "id": "geom.ext133_high",
+            "pass": true,
+            "got": 136.6,
+            "expected": 136.6
+          },
+          {
+            "id": "geom.ext166_low",
+            "pass": true,
+            "got": 56.800000000000004,
+            "expected": 56.8
+          },
+          {
+            "id": "width.w_pct_0859close",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "width.bin_pct",
+            "pass": true,
+            "got": "1.2+",
+            "expected": "1.2+"
+          },
+          {
+            "id": "width.bin_rel_not_pct",
+            "pass": true,
+            "got": "0.3-0.5",
+            "expected": "0.3-0.5"
+          }
+        ]
+      },
+      {
+        "name": "path_high_only",
+        "pass": true,
+        "cases": [
+          {
+            "id": "path.high-only",
+            "pass": true,
+            "got": {
+              "path_class": "high-only",
+              "break_order": "high",
+              "first_high_break_ms": 1800000,
+              "first_low_break_ms": null
+            },
+            "expected": "high-only/high"
+          }
+        ]
+      },
+      {
+        "name": "path_both_order",
+        "pass": true,
+        "cases": [
+          {
+            "id": "path.both.high-then-low",
+            "pass": true,
+            "got": {
+              "path_class": "both",
+              "break_order": "high-then-low",
+              "first_high_break_ms": 600000,
+              "first_low_break_ms": 2400000
+            },
+            "expected": "both/high-then-low"
+          }
+        ]
+      },
+      {
+        "name": "session_synthetic",
+        "pass": true,
+        "cases": [
+          {
+            "id": "session.W69",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "session.EQ",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "session.path",
+            "pass": true,
+            "got": "high-only",
+            "expected": "high-only"
+          },
+          {
+            "id": "session.WpriorRTH",
+            "pass": true,
+            "got": 40.0,
+            "expected": 40.0
+          },
+          {
+            "id": "session.w_rel",
+            "pass": true,
+            "got": 0.5,
+            "expected": 0.5
+          },
+          {
+            "id": "session.leakage",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "session.known_at_before_outcome",
+            "pass": true,
+            "got": [
+              1704290400000000000,
+              1704292200000000000
+            ],
+            "expected": "known_at <= outcome_start"
+          }
+        ]
+      },
+      {
+        "name": "spike_hl",
+        "pass": true,
+        "cases": [
+          {
+            "id": "spike.one_tick_isolated",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "spike.confirmed_high_clean",
+            "pass": true,
+            "got": false,
+            "expected": false
+          }
+        ]
+      }
+    ]
+  },
+  "formulas.formula_fixtures": {
+    "ticket": "formulas",
+    "pass": true,
+    "n_cases": 301,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "formulas",
+        "pass": true,
+        "cases": [
+          {
+            "id": "P3-13.rv20_excludes_self",
+            "pass": true,
+            "got": 0.030000000000000006,
+            "expected": 0.03
+          },
+          {
+            "id": "P3-13.rv20_includes_self_is_wrong",
+            "pass": true,
+            "got": 0.030000000000000006,
+            "expected": 0.03
+          },
+          {
+            "id": "R-A02.kz_prior_va",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-A02.kz_not_same_session_va",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J14.trailing_at_eq",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J14.not_centred",
+            "pass": true,
+            "got": 1100.0,
+            "expected": 1100.0
+          },
+          {
+            "id": "R-J14.centred_differs",
+            "pass": true,
+            "got": [
+              764.2857142857142,
+              1100.0
+            ],
+            "expected": "trailing uses only past bars"
+          },
+          {
+            "id": "R-G07.pocket",
+            "pass": true,
+            "got": [
+              105.0,
+              106.18
+            ],
+            "expected": [
+              105.0,
+              106.18
+            ]
+          },
+          {
+            "id": "R-G07.reject",
+            "pass": true,
+            "got": [
+              true,
+              true
+            ],
+            "expected": [
+              true,
+              true
+            ]
+          },
+          {
+            "id": "R-G03.one_clock_hour",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-G03.not_5min_steps",
+            "pass": true,
+            "got": [
+              [
+                10,
+                11
+              ],
+              [
+                12,
+                13
+              ]
+            ],
+            "expected": [
+              [
+                10,
+                11
+              ],
+              [
+                12,
+                13
+              ]
+            ]
+          },
+          {
+            "id": "R-G04.reclaim_5m",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-G11.aplus_traded_not_69",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-G11.sweep_only_not_aplus",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-G11.sweep_plus_failback",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-A13.halfgap_phod",
+            "pass": true,
+            "got": {
+              "side": "high",
+              "level": 105.0
+            },
+            "expected": {
+              "side": "high",
+              "level": 105.0
+            }
+          },
+          {
+            "id": "R-A13.halfgap_plod",
+            "pass": true,
+            "got": {
+              "side": "low",
+              "level": 75.0
+            },
+            "expected": {
+              "side": "low",
+              "level": 75.0
+            }
+          },
+          {
+            "id": "R-G11.no_sweep_not_aplus",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J04.purged_all_overnight",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J03.hold_by_1000",
+            "pass": true,
+            "got": false,
+            "expected": "bool"
+          },
+          {
+            "id": "R-J12.overlap_low_gt_op",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J12.low_not_gt_op",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-A10.drive_through_open",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-A10.not_drive_if_trades_open",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P16.upper_1",
+            "pass": true,
+            "got": [
+              16722.440622274466,
+              16746.305978678352
+            ],
+            "expected": [
+              16722.4,
+              16746.3
+            ]
+          },
+          {
+            "id": "R-P16.lower_1",
+            "pass": true,
+            "got": [
+              16454.972239898612,
+              16478.45587999587
+            ],
+            "expected": [
+              16455.0,
+              16478.5
+            ]
+          },
+          {
+            "id": "R-P16.upper_025",
+            "pass": true,
+            "got": [
+              16630.52585100832,
+              16636.456223299363
+            ],
+            "expected": [
+              16630.5,
+              16636.4
+            ]
+          },
+          {
+            "id": "R-P13.tdo_hit",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P13.am_miss",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_not_constant",
+            "pass": true,
+            "got": [
+              false,
+              true
+            ],
+            "expected": [
+              false,
+              true
+            ]
+          },
+          {
+            "id": "R-R04.smt_s1_not_constant",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J10.nearest_london",
+            "pass": true,
+            "got": [
+              "london_h",
+              16716.75
+            ],
+            "expected": [
+              "london_h",
+              16716.75
+            ]
+          },
+          {
+            "id": "R-J17.node_under_eq",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J17.hvn_not_node",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J18.ob_bull",
+            "pass": true,
+            "got": {
+              "ob_bull": true,
+              "block": [
+                79.5,
+                81.75
+              ],
+              "mid": 80.625,
+              "stop": 79.5
+            },
+            "expected": {
+              "ob_bull": true,
+              "mid": 80.625,
+              "stop": 79.5
+            }
+          },
+          {
+            "id": "R-J16.two_sided",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J16.taper",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P10.pivot",
+            "pass": true,
+            "got": {
+              "P": 100.0,
+              "R1": 110.0,
+              "S1": 90.0,
+              "R2": 120.0,
+              "S2": 80.0,
+              "R3": 130.0,
+              "S3": 70.0
+            },
+            "expected": {
+              "P": 100.0,
+              "R1": 110.0,
+              "S1": 90.0
+            }
+          },
+          {
+            "id": "R-P19.body_gap_4ticks",
+            "pass": true,
+            "got": {
+              "gap": true,
+              "fill": true,
+              "ticks": 7.200000000000003,
+              "side": "up"
+            },
+            "expected": {
+              "gap": true
+            }
+          },
+          {
+            "id": "R-P11.first_fvg",
+            "pass": true,
+            "got": {
+              "fvg": true,
+              "side": "up",
+              "gap": [
+                10.0,
+                11.6
+              ],
+              "fill": false
+            },
+            "expected": {
+              "fvg": true,
+              "side": "up"
+            }
+          },
+          {
+            "id": "R-P04.raid5",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P01.sigma025",
+            "pass": true,
+            "got": [
+              90.0,
+              110.0
+            ],
+            "expected": [
+              90.0,
+              110.0
+            ]
+          },
+          {
+            "id": "R-R02.prior_close",
+            "pass": true,
+            "got": 13.2,
+            "expected": 13.2
+          },
+          {
+            "id": "R-R02.not_same_day",
+            "pass": true,
+            "got": 13.2,
+            "expected": 13.2
+          },
+          {
+            "id": "R-J15.at_level",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J21.nfp_extended",
+            "pass": true,
+            "got": "extended",
+            "expected": "extended"
+          },
+          {
+            "id": "R-J22.three_strike",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J24.mfe_mae_0950",
+            "pass": true,
+            "got": {
+              "mfe": 8.0,
+              "mae": 1.0
+            },
+            "expected": {
+              "mfe": 8.0,
+              "mae": 1.0
+            }
+          },
+          {
+            "id": "R-J25.swing_mid",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-A11.p_shape",
+            "pass": true,
+            "got": "P",
+            "expected": "P"
+          },
+          {
+            "id": "P3-10.nearest_above",
+            "pass": true,
+            "got": [
+              "naked_poc",
+              16700.0
+            ],
+            "expected": [
+              "naked_poc",
+              16700.0
+            ]
+          },
+          {
+            "id": "R-F08.reward_3tick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P07.or_mid",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P05.london_25",
+            "pass": true,
+            "got": 102.0,
+            "expected": 102.0
+          },
+          {
+            "id": "R-P03.z1",
+            "pass": true,
+            "got": [
+              100.0,
+              103.33333333333333
+            ],
+            "expected": [
+              100.0,
+              103.333
+            ]
+          },
+          {
+            "id": "R-P02.sweep_retrace",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P17.open_1800",
+            "pass": true,
+            "got": 16600.0,
+            "expected": 16600.0
+          },
+          {
+            "id": "R-A05.poc_chop",
+            "pass": true,
+            "got": "chop",
+            "expected": "chop"
+          },
+          {
+            "id": "R-A17.second_transition",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-A16.stacked",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-A09.traverse_nohold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J19.pdl_draw",
+            "pass": true,
+            "got": [
+              "pdl",
+              16622.5
+            ],
+            "expected": [
+              "pdl",
+              16622.5
+            ]
+          },
+          {
+            "id": "R-A01.outside_not_balance",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F03.convergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.disagree_bull",
+            "pass": true,
+            "got": "disagree_bull",
+            "expected": "disagree_bull"
+          },
+          {
+            "id": "R-P09.no_break",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P14.hod_before_1000",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.dealing_range",
+            "pass": true,
+            "got": {
+              "H": 110.0,
+              "L": 90.0,
+              "EQ": 100.0,
+              "W": 20.0
+            },
+            "expected": {
+              "H": 110.0,
+              "L": 90.0,
+              "EQ": 100.0
+            }
+          },
+          {
+            "id": "R-S02.third_retest",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-S06.two_reason",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P06.first_hit",
+            "pass": true,
+            "got": "asia",
+            "expected": "asia"
+          },
+          {
+            "id": "R-P20.sigEvent",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.microbalance",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J10.nearest_london",
+            "pass": true,
+            "got": 16716.75,
+            "expected": 16716.75
+          },
+          {
+            "id": "R-J15.bigtrade_at_level",
+            "pass": true,
+            "got": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            },
+            "expected": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            }
+          },
+          {
+            "id": "R-J16.two_sided",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J16.taper",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.node_under_eq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.hvn_not_node",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-J18.ob_bull",
+            "pass": true,
+            "got": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            },
+            "expected": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            }
+          },
+          {
+            "id": "R-J19.pdh_touch",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J21.class_extended",
+            "pass": true,
+            "got": "extended",
+            "expected": "extended"
+          },
+          {
+            "id": "R-J21.targets",
+            "pass": true,
+            "got": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            },
+            "expected": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            }
+          },
+          {
+            "id": "R-J22.three_strike",
+            "pass": true,
+            "got": {
+              "strikes": 3,
+              "three_strike": 1
+            },
+            "expected": {
+              "strikes": 3,
+              "three_strike": 1
+            }
+          },
+          {
+            "id": "R-J22.extended_body",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J24.mfe_mae",
+            "pass": true,
+            "got": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            },
+            "expected": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            }
+          },
+          {
+            "id": "R-J25.mid",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-J25.mid_retrace_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A01.eligible_0103",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A01.val_reject",
+            "pass": true,
+            "got": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            },
+            "expected": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            }
+          },
+          {
+            "id": "R-A02.shelf",
+            "pass": true,
+            "got": [
+              [
+                100.0,
+                100.5
+              ]
+            ],
+            "expected": [
+              [
+                100.0,
+                100.5
+              ]
+            ]
+          },
+          {
+            "id": "R-A02.ledge_retest_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A03.dated_reentry",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A03.reentry_hold",
+            "pass": true,
+            "got": {
+              "reentry_hold": 1,
+              "traverse": 1
+            },
+            "expected": {
+              "reentry_hold": 1,
+              "traverse": 1
+            }
+          },
+          {
+            "id": "R-A05.chop",
+            "pass": true,
+            "got": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            },
+            "expected": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            }
+          },
+          {
+            "id": "R-A06.fa_setup",
+            "pass": true,
+            "got": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            },
+            "expected": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            }
+          },
+          {
+            "id": "R-A07.retest_hold",
+            "pass": true,
+            "got": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            },
+            "expected": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.reaccept",
+            "pass": true,
+            "got": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            },
+            "expected": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.dated_high_only",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A09.traverse",
+            "pass": true,
+            "got": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            },
+            "expected": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            }
+          },
+          {
+            "id": "R-A11.shape_P",
+            "pass": true,
+            "got": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            },
+            "expected": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            }
+          },
+          {
+            "id": "R-A12.double",
+            "pass": true,
+            "got": {
+              "double": 1,
+              "lvn": 105.0
+            },
+            "expected": {
+              "double": 1,
+              "lvn": 105.0
+            }
+          },
+          {
+            "id": "R-A12.respected",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A12.inventory_unscored",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-A14.single_run",
+            "pass": true,
+            "got": [
+              109,
+              111
+            ],
+            "expected": [
+              109,
+              111
+            ]
+          },
+          {
+            "id": "R-A14.poor_high",
+            "pass": true,
+            "got": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            },
+            "expected": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            }
+          },
+          {
+            "id": "R-A14.single_fill",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A16.stacked_reject",
+            "pass": true,
+            "got": {
+              "stacked": 1,
+              "stacked_reject": 1
+            },
+            "expected": {
+              "stacked": 1,
+              "stacked_reject": 1
+            }
+          },
+          {
+            "id": "R-A17.second_transition",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A17.tail",
+            "pass": true,
+            "got": {
+              "tail": 1,
+              "second_transition": 0
+            },
+            "expected": {
+              "tail": 1,
+              "second_transition": 0
+            }
+          },
+          {
+            "id": "R-A18.bullish",
+            "pass": true,
+            "got": {
+              "bullish": 1,
+              "single_reach": 1
+            },
+            "expected": {
+              "bullish": 1,
+              "single_reach": 1
+            }
+          },
+          {
+            "id": "P3-10.above",
+            "pass": true,
+            "got": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            },
+            "expected": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            }
+          },
+          {
+            "id": "P3-10.below",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-J01.m05_low",
+            "pass": true,
+            "got": 18128.5,
+            "expected": 18128.5
+          },
+          {
+            "id": "R-J01.m05_high",
+            "pass": true,
+            "got": 18274.5,
+            "expected": 18274.5
+          },
+          {
+            "id": "R-J01.mr01_low",
+            "pass": true,
+            "got": 18157.7,
+            "expected": 18157.7
+          },
+          {
+            "id": "R-J01.overshoot_d",
+            "pass": true,
+            "got": 7.300000000000001,
+            "expected": 7.3
+          },
+          {
+            "id": "R-J01.overshoot_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J01.synth_low_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J01.synth_high_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J08.band_high_near",
+            "pass": true,
+            "got": 136.6,
+            "expected": 136.6
+          },
+          {
+            "id": "R-J08.band_high_far",
+            "pass": true,
+            "got": 143.2,
+            "expected": 143.2
+          },
+          {
+            "id": "R-J08.band_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J08.overshoot_166",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.delayed",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.not_0830",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J20.wrong_bin",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F01.running_vwap",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F01.band",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-F01.absorption_A_at_band",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.median_reach_60",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.vol_cut",
+            "pass": true,
+            "got": 3700.0,
+            "expected": 3700.0
+          },
+          {
+            "id": "R-F03.convergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F03.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F04.stack3_k4",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_k3",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_second",
+            "pass": true,
+            "got": [
+              100.0,
+              100.5
+            ],
+            "expected": [
+              100.0,
+              100.5
+            ]
+          },
+          {
+            "id": "R-F04.revisit_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.disagree_bull",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.poc_flip",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_0",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.shrinking",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.reward_3tick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.second_aggression",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.fail_share",
+            "pass": true,
+            "got": 0.27,
+            "expected": 0.27
+          },
+          {
+            "id": "R-F08.cvd_median_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.stage2_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage3",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.liftoff",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.entry",
+            "pass": true,
+            "got": [
+              100.75,
+              101.25
+            ],
+            "expected": [
+              100.75,
+              101.25
+            ]
+          },
+          {
+            "id": "R-F10.protected_low",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F10.broken",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F10.mfe",
+            "pass": true,
+            "got": 4.5,
+            "expected": 4.5
+          },
+          {
+            "id": "R-F11.paired",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.wick_reaction",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.reaction",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F11.repeat_count",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-F12.arrival",
+            "pass": true,
+            "got": "aggressive",
+            "expected": "aggressive"
+          },
+          {
+            "id": "R-F12.broken",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F13.two_failures",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F13.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F14.zone",
+            "pass": true,
+            "got": 100.5,
+            "expected": 100.5
+          },
+          {
+            "id": "R-F14.retest_reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.catalyst",
+            "pass": true,
+            "got": [
+              109.75,
+              110.0
+            ],
+            "expected": [
+              109.75,
+              110.0
+            ]
+          },
+          {
+            "id": "R-F15.ofm_entry",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.R",
+            "pass": true,
+            "got": 1.25,
+            "expected": 1.25
+          },
+          {
+            "id": "R-F15.reach",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F15.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F16.fade_trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.target_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F17.zone",
+            "pass": true,
+            "got": [
+              100.0,
+              100.25
+            ],
+            "expected": [
+              100.0,
+              100.25
+            ]
+          },
+          {
+            "id": "R-F17.hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F17.penetration",
+            "pass": true,
+            "got": 2.0,
+            "expected": 2.0
+          },
+          {
+            "id": "R-F18.no_failure",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.tape_cut_source",
+            "pass": true,
+            "got": "unspecified",
+            "expected": "unspecified"
+          },
+          {
+            "id": "R-F18.tape_window_30s",
+            "pass": true,
+            "got": 13.966666666666667,
+            "expected": 14.0
+          },
+          {
+            "id": "R-R03.label",
+            "pass": true,
+            "got": "short",
+            "expected": "short"
+          },
+          {
+            "id": "R-R03.edge",
+            "pass": true,
+            "got": 16685.0,
+            "expected": 16685.0
+          },
+          {
+            "id": "R-R03.end",
+            "pass": true,
+            "got": 960,
+            "expected": ">= 12:00"
+          },
+          {
+            "id": "R-R03.alive",
+            "pass": true,
+            "got": 390,
+            "expected": ">= 150"
+          },
+          {
+            "id": "R-S01.refill_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.inval_dist",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S01.objective_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.mfe",
+            "pass": true,
+            "got": 7.25,
+            "expected": 7.25
+          },
+          {
+            "id": "R-S01.mae",
+            "pass": true,
+            "got": 0.5,
+            "expected": 0.5
+          },
+          {
+            "id": "R-S02.third",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.loss",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.mae",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S03.steady",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.second_defence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reload_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-S04.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.failures",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-S04.ofm_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.box",
+            "pass": true,
+            "got": [
+              104.5,
+              106.0
+            ],
+            "expected": [
+              104.5,
+              106.0
+            ]
+          },
+          {
+            "id": "R-S05.breakout",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.inval",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-S05.htf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.two_reason",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.r15",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S07.mfe_ticks",
+            "pass": true,
+            "got": 46.0,
+            "expected": 46.0
+          },
+          {
+            "id": "R-S07.mae_ticks",
+            "pass": true,
+            "got": 6.0,
+            "expected": 6.0
+          },
+          {
+            "id": "R-S07.win_35_188",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-S08.setup",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.slice",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.open_above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.developing_va",
+            "pass": true,
+            "got": 100.25,
+            "expected": 100.25
+          },
+          {
+            "id": "R-P01.sample_stdev",
+            "pass": true,
+            "got": 1.1999999999999997,
+            "expected": 1.2
+          },
+          {
+            "id": "R-P01.sigma_px",
+            "pass": true,
+            "got": 199.2,
+            "expected": 199.2
+          },
+          {
+            "id": "R-P01.upper",
+            "pass": true,
+            "got": 16649.8,
+            "expected": 16649.8
+          },
+          {
+            "id": "R-P01.reverted",
+            "pass": true,
+            "got": "by10",
+            "expected": "by10"
+          },
+          {
+            "id": "R-P01.ext",
+            "pass": true,
+            "got": 0.25,
+            "expected": 0.25
+          },
+          {
+            "id": "R-P02.isAbove",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P02.ret_swept",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_50",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_open",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_opp",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P03.zone",
+            "pass": true,
+            "got": "Z2",
+            "expected": "Z2"
+          },
+          {
+            "id": "R-P03.win",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P03.ttt",
+            "pass": true,
+            "got": 18,
+            "expected": 18
+          },
+          {
+            "id": "R-P04.conf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P04.pts",
+            "pass": true,
+            "got": 11.0,
+            "expected": 11.0
+          },
+          {
+            "id": "R-P04.bucket",
+            "pass": true,
+            "got": "<20",
+            "expected": "<20"
+          },
+          {
+            "id": "R-P05.level",
+            "pass": true,
+            "got": 16630.0,
+            "expected": 16630.0
+          },
+          {
+            "id": "R-P05.wick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P05.above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P06.first",
+            "pass": true,
+            "got": "asia_high",
+            "expected": "asia_high"
+          },
+          {
+            "id": "R-P06.seq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P07.mid",
+            "pass": true,
+            "got": 16603.0,
+            "expected": 16603.0
+          },
+          {
+            "id": "R-P07.extreme",
+            "pass": true,
+            "got": "low",
+            "expected": "low"
+          },
+          {
+            "id": "R-P07.retest",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P07.ext",
+            "pass": true,
+            "got": 16676.25888,
+            "expected": 16676.25888
+          },
+          {
+            "id": "R-P09.status",
+            "pass": true,
+            "got": "Below",
+            "expected": "Below"
+          },
+          {
+            "id": "R-P09.no_break",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P10.P",
+            "pass": true,
+            "got": 16707.17,
+            "expected": 16707.17
+          },
+          {
+            "id": "R-P10.R1",
+            "pass": true,
+            "got": 16816.33,
+            "expected": 16816.33
+          },
+          {
+            "id": "R-P10.S1",
+            "pass": true,
+            "got": 16540.83,
+            "expected": 16540.83
+          },
+          {
+            "id": "R-P10.R2",
+            "pass": true,
+            "got": 16982.67,
+            "expected": 16982.67
+          },
+          {
+            "id": "R-P10.S2",
+            "pass": true,
+            "got": 16431.67,
+            "expected": 16431.67
+          },
+          {
+            "id": "R-P10.R3",
+            "pass": true,
+            "got": 17091.83,
+            "expected": 17091.83
+          },
+          {
+            "id": "R-P10.S3",
+            "pass": true,
+            "got": 16265.33,
+            "expected": 16265.33
+          },
+          {
+            "id": "R-P10.context",
+            "pass": true,
+            "got": "WITHIN",
+            "expected": "WITHIN"
+          },
+          {
+            "id": "R-P11.w1",
+            "pass": true,
+            "got": "BISI",
+            "expected": "BISI"
+          },
+          {
+            "id": "R-P11.box",
+            "pass": true,
+            "got": [
+              16612.0,
+              16615.0
+            ],
+            "expected": [
+              16612.0,
+              16615.0
+            ]
+          },
+          {
+            "id": "R-P11.dir",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P11.fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_close",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_body",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_inside",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.mid_box",
+            "pass": true,
+            "got": [
+              16650.0,
+              16652.0
+            ],
+            "expected": [
+              16650.0,
+              16652.0
+            ]
+          },
+          {
+            "id": "R-P14.elims",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P14.structure",
+            "pass": true,
+            "got": "sequential",
+            "expected": "sequential"
+          },
+          {
+            "id": "R-P14.hod_in",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.nearest_rank_p50",
+            "pass": true,
+            "got": 85.0,
+            "expected": 85.0
+          },
+          {
+            "id": "R-P15.mfe_hit",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.rng_hit",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P15.RE+1",
+            "pass": true,
+            "got": 16680.0,
+            "expected": 16680.0
+          },
+          {
+            "id": "R-P15.RE-2",
+            "pass": true,
+            "got": 16600.0,
+            "expected": 16600.0
+          },
+          {
+            "id": "R-P15.manip",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "R-P15.dist",
+            "pass": true,
+            "got": 50.0,
+            "expected": 50.0
+          },
+          {
+            "id": "R-P17.denom",
+            "pass": true,
+            "got": 3.5,
+            "expected": 3.5
+          },
+          {
+            "id": "R-P17.bodyvol",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P17.topw",
+            "pass": true,
+            "got": 28.57,
+            "expected": 28.57
+          },
+          {
+            "id": "R-P17.botw",
+            "pass": true,
+            "got": 57.14,
+            "expected": 57.14
+          },
+          {
+            "id": "R-P17.body_row",
+            "pass": true,
+            "got": 7.14,
+            "expected": 7.14
+          },
+          {
+            "id": "R-P17.bot_row",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P19.gap",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.zone",
+            "pass": true,
+            "got": [
+              100.5,
+              101.75
+            ],
+            "expected": [
+              100.5,
+              101.75
+            ]
+          },
+          {
+            "id": "R-P19.filled",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.conf",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P20.sig",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P20.delta",
+            "pass": true,
+            "got": 4100.0,
+            "expected": 4100.0
+          },
+          {
+            "id": "R-P20.zone",
+            "pass": true,
+            "got": [
+              16606.72,
+              16673.28
+            ],
+            "expected": [
+              16606.7,
+              16673.3
+            ]
+          },
+          {
+            "id": "R-P20.c4dir",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "P3-14.fvg_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.body_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.sweep_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.tpo_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.divergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.fakeout_grade",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.series",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.grid_window",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P18.cvd_ohlc",
+            "pass": true,
+            "got": 40.0,
+            "expected": 40.0
+          },
+          {
+            "id": "R-R04.smt_pdh",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-R04.both_take_is_not_smt",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-R01.call_gex",
+            "pass": true,
+            "got": 200000000.0,
+            "expected": 200000000.0
+          },
+          {
+            "id": "R-R01.put_gex",
+            "pass": true,
+            "got": -210000000.00000003,
+            "expected": -210000000.0
+          },
+          {
+            "id": "R-R01.short_gamma",
+            "pass": true,
+            "got": true,
+            "expected": true
+          }
+        ]
+      },
+      {
+        "name": "jumbo",
+        "pass": true,
+        "cases": [
+          {
+            "id": "R-J10.nearest_london",
+            "pass": true,
+            "got": 16716.75,
+            "expected": 16716.75
+          },
+          {
+            "id": "R-J15.bigtrade_at_level",
+            "pass": true,
+            "got": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            },
+            "expected": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            }
+          },
+          {
+            "id": "R-J16.two_sided",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J16.taper",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.node_under_eq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.hvn_not_node",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-J18.ob_bull",
+            "pass": true,
+            "got": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            },
+            "expected": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            }
+          },
+          {
+            "id": "R-J19.pdh_touch",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J21.class_extended",
+            "pass": true,
+            "got": "extended",
+            "expected": "extended"
+          },
+          {
+            "id": "R-J21.targets",
+            "pass": true,
+            "got": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            },
+            "expected": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            }
+          },
+          {
+            "id": "R-J22.three_strike",
+            "pass": true,
+            "got": {
+              "strikes": 3,
+              "three_strike": 1
+            },
+            "expected": {
+              "strikes": 3,
+              "three_strike": 1
+            }
+          },
+          {
+            "id": "R-J22.extended_body",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J24.mfe_mae",
+            "pass": true,
+            "got": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            },
+            "expected": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            }
+          },
+          {
+            "id": "R-J25.mid",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-J25.mid_retrace_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A01.eligible_0103",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A01.val_reject",
+            "pass": true,
+            "got": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            },
+            "expected": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            }
+          },
+          {
+            "id": "R-A02.shelf",
+            "pass": true,
+            "got": [
+              [
+                100.0,
+                100.5
+              ]
+            ],
+            "expected": [
+              [
+                100.0,
+                100.5
+              ]
+            ]
+          },
+          {
+            "id": "R-A02.ledge_retest_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A03.dated_reentry",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A03.reentry_hold",
+            "pass": true,
+            "got": {
+              "reentry_hold": 1,
+              "traverse": 1
+            },
+            "expected": {
+              "reentry_hold": 1,
+              "traverse": 1
+            }
+          },
+          {
+            "id": "R-A05.chop",
+            "pass": true,
+            "got": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            },
+            "expected": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            }
+          },
+          {
+            "id": "R-A06.fa_setup",
+            "pass": true,
+            "got": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            },
+            "expected": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            }
+          },
+          {
+            "id": "R-A07.retest_hold",
+            "pass": true,
+            "got": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            },
+            "expected": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.reaccept",
+            "pass": true,
+            "got": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            },
+            "expected": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.dated_high_only",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A09.traverse",
+            "pass": true,
+            "got": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            },
+            "expected": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            }
+          },
+          {
+            "id": "R-A11.shape_P",
+            "pass": true,
+            "got": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            },
+            "expected": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            }
+          },
+          {
+            "id": "R-A12.double",
+            "pass": true,
+            "got": {
+              "double": 1,
+              "lvn": 105.0
+            },
+            "expected": {
+              "double": 1,
+              "lvn": 105.0
+            }
+          },
+          {
+            "id": "R-A12.respected",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A12.inventory_unscored",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-A14.single_run",
+            "pass": true,
+            "got": [
+              109,
+              111
+            ],
+            "expected": [
+              109,
+              111
+            ]
+          },
+          {
+            "id": "R-A14.poor_high",
+            "pass": true,
+            "got": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            },
+            "expected": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            }
+          },
+          {
+            "id": "R-A14.single_fill",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A16.stacked_reject",
+            "pass": true,
+            "got": {
+              "stacked": 1,
+              "stacked_reject": 1
+            },
+            "expected": {
+              "stacked": 1,
+              "stacked_reject": 1
+            }
+          },
+          {
+            "id": "R-A17.second_transition",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A17.tail",
+            "pass": true,
+            "got": {
+              "tail": 1,
+              "second_transition": 0
+            },
+            "expected": {
+              "tail": 1,
+              "second_transition": 0
+            }
+          },
+          {
+            "id": "R-A18.bullish",
+            "pass": true,
+            "got": {
+              "bullish": 1,
+              "single_reach": 1
+            },
+            "expected": {
+              "bullish": 1,
+              "single_reach": 1
+            }
+          },
+          {
+            "id": "P3-10.above",
+            "pass": true,
+            "got": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            },
+            "expected": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            }
+          },
+          {
+            "id": "P3-10.below",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-J01.m05_low",
+            "pass": true,
+            "got": 18128.5,
+            "expected": 18128.5
+          },
+          {
+            "id": "R-J01.m05_high",
+            "pass": true,
+            "got": 18274.5,
+            "expected": 18274.5
+          },
+          {
+            "id": "R-J01.mr01_low",
+            "pass": true,
+            "got": 18157.7,
+            "expected": 18157.7
+          },
+          {
+            "id": "R-J01.overshoot_d",
+            "pass": true,
+            "got": 7.300000000000001,
+            "expected": 7.3
+          },
+          {
+            "id": "R-J01.overshoot_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J01.synth_low_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J01.synth_high_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J08.band_high_near",
+            "pass": true,
+            "got": 136.6,
+            "expected": 136.6
+          },
+          {
+            "id": "R-J08.band_high_far",
+            "pass": true,
+            "got": 143.2,
+            "expected": 143.2
+          },
+          {
+            "id": "R-J08.band_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J08.overshoot_166",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.delayed",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.not_0830",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J20.wrong_bin",
+            "pass": true,
+            "got": false,
+            "expected": false
+          }
+        ]
+      },
+      {
+        "name": "formulas_flow",
+        "pass": true,
+        "cases": [
+          {
+            "id": "R-F01.running_vwap",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F01.band",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-F01.absorption_A_at_band",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.median_reach_60",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.vol_cut",
+            "pass": true,
+            "got": 3700.0,
+            "expected": 3700.0
+          },
+          {
+            "id": "R-F03.convergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F03.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F04.stack3_k4",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_k3",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_second",
+            "pass": true,
+            "got": [
+              100.0,
+              100.5
+            ],
+            "expected": [
+              100.0,
+              100.5
+            ]
+          },
+          {
+            "id": "R-F04.revisit_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.disagree_bull",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.poc_flip",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_0",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.shrinking",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.reward_3tick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.second_aggression",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.fail_share",
+            "pass": true,
+            "got": 0.27,
+            "expected": 0.27
+          },
+          {
+            "id": "R-F08.cvd_median_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.stage2_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage3",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.liftoff",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.entry",
+            "pass": true,
+            "got": [
+              100.75,
+              101.25
+            ],
+            "expected": [
+              100.75,
+              101.25
+            ]
+          },
+          {
+            "id": "R-F10.protected_low",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F10.broken",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F10.mfe",
+            "pass": true,
+            "got": 4.5,
+            "expected": 4.5
+          },
+          {
+            "id": "R-F11.paired",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.wick_reaction",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.reaction",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F11.repeat_count",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-F12.arrival",
+            "pass": true,
+            "got": "aggressive",
+            "expected": "aggressive"
+          },
+          {
+            "id": "R-F12.broken",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F13.two_failures",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F13.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F14.zone",
+            "pass": true,
+            "got": 100.5,
+            "expected": 100.5
+          },
+          {
+            "id": "R-F14.retest_reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.catalyst",
+            "pass": true,
+            "got": [
+              109.75,
+              110.0
+            ],
+            "expected": [
+              109.75,
+              110.0
+            ]
+          },
+          {
+            "id": "R-F15.ofm_entry",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.R",
+            "pass": true,
+            "got": 1.25,
+            "expected": 1.25
+          },
+          {
+            "id": "R-F15.reach",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F15.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F16.fade_trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.target_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F17.zone",
+            "pass": true,
+            "got": [
+              100.0,
+              100.25
+            ],
+            "expected": [
+              100.0,
+              100.25
+            ]
+          },
+          {
+            "id": "R-F17.hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F17.penetration",
+            "pass": true,
+            "got": 2.0,
+            "expected": 2.0
+          },
+          {
+            "id": "R-F18.no_failure",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.tape_cut_source",
+            "pass": true,
+            "got": "unspecified",
+            "expected": "unspecified"
+          },
+          {
+            "id": "R-F18.tape_window_30s",
+            "pass": true,
+            "got": 13.966666666666667,
+            "expected": 14.0
+          },
+          {
+            "id": "R-R03.label",
+            "pass": true,
+            "got": "short",
+            "expected": "short"
+          },
+          {
+            "id": "R-R03.edge",
+            "pass": true,
+            "got": 16685.0,
+            "expected": 16685.0
+          },
+          {
+            "id": "R-R03.end",
+            "pass": true,
+            "got": 960,
+            "expected": ">= 12:00"
+          },
+          {
+            "id": "R-R03.alive",
+            "pass": true,
+            "got": 390,
+            "expected": ">= 150"
+          },
+          {
+            "id": "R-S01.refill_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.inval_dist",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S01.objective_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.mfe",
+            "pass": true,
+            "got": 7.25,
+            "expected": 7.25
+          },
+          {
+            "id": "R-S01.mae",
+            "pass": true,
+            "got": 0.5,
+            "expected": 0.5
+          },
+          {
+            "id": "R-S02.third",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.loss",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.mae",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S03.steady",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.second_defence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reload_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-S04.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.failures",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-S04.ofm_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.box",
+            "pass": true,
+            "got": [
+              104.5,
+              106.0
+            ],
+            "expected": [
+              104.5,
+              106.0
+            ]
+          },
+          {
+            "id": "R-S05.breakout",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.inval",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-S05.htf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.two_reason",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.r15",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S07.mfe_ticks",
+            "pass": true,
+            "got": 46.0,
+            "expected": 46.0
+          },
+          {
+            "id": "R-S07.mae_ticks",
+            "pass": true,
+            "got": 6.0,
+            "expected": 6.0
+          },
+          {
+            "id": "R-S07.win_35_188",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-S08.setup",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.slice",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.open_above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.developing_va",
+            "pass": true,
+            "got": 100.25,
+            "expected": 100.25
+          },
+          {
+            "id": "R-P01.sample_stdev",
+            "pass": true,
+            "got": 1.1999999999999997,
+            "expected": 1.2
+          },
+          {
+            "id": "R-P01.sigma_px",
+            "pass": true,
+            "got": 199.2,
+            "expected": 199.2
+          },
+          {
+            "id": "R-P01.upper",
+            "pass": true,
+            "got": 16649.8,
+            "expected": 16649.8
+          },
+          {
+            "id": "R-P01.reverted",
+            "pass": true,
+            "got": "by10",
+            "expected": "by10"
+          },
+          {
+            "id": "R-P01.ext",
+            "pass": true,
+            "got": 0.25,
+            "expected": 0.25
+          },
+          {
+            "id": "R-P02.isAbove",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P02.ret_swept",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_50",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_open",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_opp",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P03.zone",
+            "pass": true,
+            "got": "Z2",
+            "expected": "Z2"
+          },
+          {
+            "id": "R-P03.win",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P03.ttt",
+            "pass": true,
+            "got": 18,
+            "expected": 18
+          },
+          {
+            "id": "R-P04.conf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P04.pts",
+            "pass": true,
+            "got": 11.0,
+            "expected": 11.0
+          },
+          {
+            "id": "R-P04.bucket",
+            "pass": true,
+            "got": "<20",
+            "expected": "<20"
+          },
+          {
+            "id": "R-P05.level",
+            "pass": true,
+            "got": 16630.0,
+            "expected": 16630.0
+          },
+          {
+            "id": "R-P05.wick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P05.above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P06.first",
+            "pass": true,
+            "got": "asia_high",
+            "expected": "asia_high"
+          },
+          {
+            "id": "R-P06.seq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P07.mid",
+            "pass": true,
+            "got": 16603.0,
+            "expected": 16603.0
+          },
+          {
+            "id": "R-P07.extreme",
+            "pass": true,
+            "got": "low",
+            "expected": "low"
+          },
+          {
+            "id": "R-P07.retest",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P07.ext",
+            "pass": true,
+            "got": 16676.25888,
+            "expected": 16676.25888
+          },
+          {
+            "id": "R-P09.status",
+            "pass": true,
+            "got": "Below",
+            "expected": "Below"
+          },
+          {
+            "id": "R-P09.no_break",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P10.P",
+            "pass": true,
+            "got": 16707.17,
+            "expected": 16707.17
+          },
+          {
+            "id": "R-P10.R1",
+            "pass": true,
+            "got": 16816.33,
+            "expected": 16816.33
+          },
+          {
+            "id": "R-P10.S1",
+            "pass": true,
+            "got": 16540.83,
+            "expected": 16540.83
+          },
+          {
+            "id": "R-P10.R2",
+            "pass": true,
+            "got": 16982.67,
+            "expected": 16982.67
+          },
+          {
+            "id": "R-P10.S2",
+            "pass": true,
+            "got": 16431.67,
+            "expected": 16431.67
+          },
+          {
+            "id": "R-P10.R3",
+            "pass": true,
+            "got": 17091.83,
+            "expected": 17091.83
+          },
+          {
+            "id": "R-P10.S3",
+            "pass": true,
+            "got": 16265.33,
+            "expected": 16265.33
+          },
+          {
+            "id": "R-P10.context",
+            "pass": true,
+            "got": "WITHIN",
+            "expected": "WITHIN"
+          },
+          {
+            "id": "R-P11.w1",
+            "pass": true,
+            "got": "BISI",
+            "expected": "BISI"
+          },
+          {
+            "id": "R-P11.box",
+            "pass": true,
+            "got": [
+              16612.0,
+              16615.0
+            ],
+            "expected": [
+              16612.0,
+              16615.0
+            ]
+          },
+          {
+            "id": "R-P11.dir",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P11.fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_close",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_body",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_inside",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.mid_box",
+            "pass": true,
+            "got": [
+              16650.0,
+              16652.0
+            ],
+            "expected": [
+              16650.0,
+              16652.0
+            ]
+          },
+          {
+            "id": "R-P14.elims",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P14.structure",
+            "pass": true,
+            "got": "sequential",
+            "expected": "sequential"
+          },
+          {
+            "id": "R-P14.hod_in",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.nearest_rank_p50",
+            "pass": true,
+            "got": 85.0,
+            "expected": 85.0
+          },
+          {
+            "id": "R-P15.mfe_hit",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.rng_hit",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P15.RE+1",
+            "pass": true,
+            "got": 16680.0,
+            "expected": 16680.0
+          },
+          {
+            "id": "R-P15.RE-2",
+            "pass": true,
+            "got": 16600.0,
+            "expected": 16600.0
+          },
+          {
+            "id": "R-P15.manip",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "R-P15.dist",
+            "pass": true,
+            "got": 50.0,
+            "expected": 50.0
+          },
+          {
+            "id": "R-P17.denom",
+            "pass": true,
+            "got": 3.5,
+            "expected": 3.5
+          },
+          {
+            "id": "R-P17.bodyvol",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P17.topw",
+            "pass": true,
+            "got": 28.57,
+            "expected": 28.57
+          },
+          {
+            "id": "R-P17.botw",
+            "pass": true,
+            "got": 57.14,
+            "expected": 57.14
+          },
+          {
+            "id": "R-P17.body_row",
+            "pass": true,
+            "got": 7.14,
+            "expected": 7.14
+          },
+          {
+            "id": "R-P17.bot_row",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P19.gap",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.zone",
+            "pass": true,
+            "got": [
+              100.5,
+              101.75
+            ],
+            "expected": [
+              100.5,
+              101.75
+            ]
+          },
+          {
+            "id": "R-P19.filled",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.conf",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P20.sig",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P20.delta",
+            "pass": true,
+            "got": 4100.0,
+            "expected": 4100.0
+          },
+          {
+            "id": "R-P20.zone",
+            "pass": true,
+            "got": [
+              16606.72,
+              16673.28
+            ],
+            "expected": [
+              16606.7,
+              16673.3
+            ]
+          },
+          {
+            "id": "R-P20.c4dir",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "P3-14.fvg_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.body_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.sweep_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.tpo_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.divergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.fakeout_grade",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.series",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.grid_window",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P18.cvd_ohlc",
+            "pass": true,
+            "got": 40.0,
+            "expected": 40.0
+          },
+          {
+            "id": "R-R04.smt_pdh",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-R04.both_take_is_not_smt",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-R01.call_gex",
+            "pass": true,
+            "got": 200000000.0,
+            "expected": 200000000.0
+          },
+          {
+            "id": "R-R01.put_gex",
+            "pass": true,
+            "got": -210000000.00000003,
+            "expected": -210000000.0
+          },
+          {
+            "id": "R-R01.short_gamma",
+            "pass": true,
+            "got": true,
+            "expected": true
+          }
+        ]
+      }
+    ]
+  },
+  "formulas_jumbo.jumbo_fixtures": {
+    "ticket": "formulas_jumbo",
+    "pass": true,
+    "n_cases": 54,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "jumbo",
+        "pass": true,
+        "cases": [
+          {
+            "id": "R-J10.nearest_london",
+            "pass": true,
+            "got": 16716.75,
+            "expected": 16716.75
+          },
+          {
+            "id": "R-J15.bigtrade_at_level",
+            "pass": true,
+            "got": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            },
+            "expected": {
+              "bigtrade_at_level": 1,
+              "n": 1,
+              "size0": 120.0
+            }
+          },
+          {
+            "id": "R-J16.two_sided",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J16.taper",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.node_under_eq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J17.hvn_not_node",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-J18.ob_bull",
+            "pass": true,
+            "got": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            },
+            "expected": {
+              "ob_bull": 1,
+              "mid": 80.625,
+              "stop": 79.5,
+              "block": [
+                79.5,
+                81.75
+              ]
+            }
+          },
+          {
+            "id": "R-J19.pdh_touch",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J21.class_extended",
+            "pass": true,
+            "got": "extended",
+            "expected": "extended"
+          },
+          {
+            "id": "R-J21.targets",
+            "pass": true,
+            "got": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            },
+            "expected": {
+              "targets": [
+                16334.25,
+                16426.75
+              ],
+              "projections": false,
+              "until": "12:00"
+            }
+          },
+          {
+            "id": "R-J22.three_strike",
+            "pass": true,
+            "got": {
+              "strikes": 3,
+              "three_strike": 1
+            },
+            "expected": {
+              "strikes": 3,
+              "three_strike": 1
+            }
+          },
+          {
+            "id": "R-J22.extended_body",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-J24.mfe_mae",
+            "pass": true,
+            "got": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            },
+            "expected": {
+              "MFE_0950": 8.0,
+              "MAE_0950": 1.0,
+              "MFE_0950_R": 0.4,
+              "EQ_reach": 1,
+              "done_by_0950": 0
+            }
+          },
+          {
+            "id": "R-J25.mid",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-J25.mid_retrace_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A01.eligible_0103",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A01.val_reject",
+            "pass": true,
+            "got": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            },
+            "expected": {
+              "val_reject": 1,
+              "poc_reach_60": 1
+            }
+          },
+          {
+            "id": "R-A02.shelf",
+            "pass": true,
+            "got": [
+              [
+                100.0,
+                100.5
+              ]
+            ],
+            "expected": [
+              [
+                100.0,
+                100.5
+              ]
+            ]
+          },
+          {
+            "id": "R-A02.ledge_retest_hold",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A03.dated_reentry",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A03.reentry_hold",
+            "pass": true,
+            "got": {
+              "reentry_hold": 1,
+              "traverse": 1
+            },
+            "expected": {
+              "reentry_hold": 1,
+              "traverse": 1
+            }
+          },
+          {
+            "id": "R-A05.chop",
+            "pass": true,
+            "got": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            },
+            "expected": {
+              "poc_case": "chop",
+              "near_edge_reach": 1,
+              "far_edge_reach": 0
+            }
+          },
+          {
+            "id": "R-A06.fa_setup",
+            "pass": true,
+            "got": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            },
+            "expected": {
+              "fa_setup": 1,
+              "target_val_reach": 1
+            }
+          },
+          {
+            "id": "R-A07.retest_hold",
+            "pass": true,
+            "got": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            },
+            "expected": {
+              "retest_hold": 1,
+              "next_value_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.reaccept",
+            "pass": true,
+            "got": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            },
+            "expected": {
+              "reaccept": 1,
+              "opposite_edge_reach": 1
+            }
+          },
+          {
+            "id": "R-A08.dated_high_only",
+            "pass": true,
+            "got": 0,
+            "expected": 0
+          },
+          {
+            "id": "R-A09.traverse",
+            "pass": true,
+            "got": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            },
+            "expected": {
+              "traverse_nohold": 1,
+              "retest_continuation": 1
+            }
+          },
+          {
+            "id": "R-A11.shape_P",
+            "pass": true,
+            "got": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            },
+            "expected": {
+              "shape": "P",
+              "s_t": 0.656,
+              "s_b": 0.128
+            }
+          },
+          {
+            "id": "R-A12.double",
+            "pass": true,
+            "got": {
+              "double": 1,
+              "lvn": 105.0
+            },
+            "expected": {
+              "double": 1,
+              "lvn": 105.0
+            }
+          },
+          {
+            "id": "R-A12.respected",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A12.inventory_unscored",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-A14.single_run",
+            "pass": true,
+            "got": [
+              109,
+              111
+            ],
+            "expected": [
+              109,
+              111
+            ]
+          },
+          {
+            "id": "R-A14.poor_high",
+            "pass": true,
+            "got": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            },
+            "expected": {
+              "poor_high": 1,
+              "excess_high": 0,
+              "tail_high": 1
+            }
+          },
+          {
+            "id": "R-A14.single_fill",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A16.stacked_reject",
+            "pass": true,
+            "got": {
+              "stacked": 1,
+              "stacked_reject": 1
+            },
+            "expected": {
+              "stacked": 1,
+              "stacked_reject": 1
+            }
+          },
+          {
+            "id": "R-A17.second_transition",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-A17.tail",
+            "pass": true,
+            "got": {
+              "tail": 1,
+              "second_transition": 0
+            },
+            "expected": {
+              "tail": 1,
+              "second_transition": 0
+            }
+          },
+          {
+            "id": "R-A18.bullish",
+            "pass": true,
+            "got": {
+              "bullish": 1,
+              "single_reach": 1
+            },
+            "expected": {
+              "bullish": 1,
+              "single_reach": 1
+            }
+          },
+          {
+            "id": "P3-10.above",
+            "pass": true,
+            "got": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            },
+            "expected": {
+              "level": 16700.0,
+              "type": "naked_poc",
+              "dist": 90.0,
+              "w69": 1.33
+            }
+          },
+          {
+            "id": "P3-10.below",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-J01.m05_low",
+            "pass": true,
+            "got": 18128.5,
+            "expected": 18128.5
+          },
+          {
+            "id": "R-J01.m05_high",
+            "pass": true,
+            "got": 18274.5,
+            "expected": 18274.5
+          },
+          {
+            "id": "R-J01.mr01_low",
+            "pass": true,
+            "got": 18157.7,
+            "expected": 18157.7
+          },
+          {
+            "id": "R-J01.overshoot_d",
+            "pass": true,
+            "got": 7.300000000000001,
+            "expected": 7.3
+          },
+          {
+            "id": "R-J01.overshoot_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J01.synth_low_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J01.synth_high_reject",
+            "pass": true,
+            "got": {
+              "touch": true,
+              "reject": true
+            },
+            "expected": {
+              "touch": true,
+              "reject": true
+            }
+          },
+          {
+            "id": "R-J08.band_high_near",
+            "pass": true,
+            "got": 136.6,
+            "expected": 136.6
+          },
+          {
+            "id": "R-J08.band_high_far",
+            "pass": true,
+            "got": 143.2,
+            "expected": 143.2
+          },
+          {
+            "id": "R-J08.band_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J08.overshoot_166",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.delayed",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-J20.not_0830",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-J20.wrong_bin",
+            "pass": true,
+            "got": false,
+            "expected": false
+          }
+        ]
+      }
+    ]
+  },
+  "formulas_flow.flow_fixtures": {
+    "ticket": "formulas_flow",
+    "pass": true,
+    "n_cases": 174,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "formulas_flow",
+        "pass": true,
+        "cases": [
+          {
+            "id": "R-F01.running_vwap",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F01.band",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-F01.absorption_A_at_band",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.median_reach_60",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F01.vol_cut",
+            "pass": true,
+            "got": 3700.0,
+            "expected": 3700.0
+          },
+          {
+            "id": "R-F03.convergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F03.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F04.stack3_k4",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_k3",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F04.stack3_second",
+            "pass": true,
+            "got": [
+              100.0,
+              100.5
+            ],
+            "expected": [
+              100.0,
+              100.5
+            ]
+          },
+          {
+            "id": "R-F04.revisit_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.disagree_bull",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.poc_flip",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F05.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_0",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F06.absorption_A_pdl_1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.shrinking",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F06.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.reward_3tick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.second_aggression",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F08.fail_share",
+            "pass": true,
+            "got": 0.27,
+            "expected": 0.27
+          },
+          {
+            "id": "R-F08.cvd_median_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage1",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.stage2_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F09.stage3",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.liftoff",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F09.entry",
+            "pass": true,
+            "got": [
+              100.75,
+              101.25
+            ],
+            "expected": [
+              100.75,
+              101.25
+            ]
+          },
+          {
+            "id": "R-F10.protected_low",
+            "pass": true,
+            "got": 100.0,
+            "expected": 100.0
+          },
+          {
+            "id": "R-F10.broken",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F10.mfe",
+            "pass": true,
+            "got": 4.5,
+            "expected": 4.5
+          },
+          {
+            "id": "R-F11.paired",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.wick_reaction",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F11.reaction",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-F11.repeat_count",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-F12.arrival",
+            "pass": true,
+            "got": "aggressive",
+            "expected": "aggressive"
+          },
+          {
+            "id": "R-F12.broken",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F13.two_failures",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F13.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F14.zone",
+            "pass": true,
+            "got": 100.5,
+            "expected": 100.5
+          },
+          {
+            "id": "R-F14.retest_reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.catalyst",
+            "pass": true,
+            "got": [
+              109.75,
+              110.0
+            ],
+            "expected": [
+              109.75,
+              110.0
+            ]
+          },
+          {
+            "id": "R-F15.ofm_entry",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F15.R",
+            "pass": true,
+            "got": 1.25,
+            "expected": 1.25
+          },
+          {
+            "id": "R-F15.reach",
+            "pass": true,
+            "got": [
+              true,
+              false
+            ],
+            "expected": [
+              true,
+              false
+            ]
+          },
+          {
+            "id": "R-F15.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F16.fade_trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.target_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F16.gamma",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-F17.zone",
+            "pass": true,
+            "got": [
+              100.0,
+              100.25
+            ],
+            "expected": [
+              100.0,
+              100.25
+            ]
+          },
+          {
+            "id": "R-F17.hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F17.penetration",
+            "pass": true,
+            "got": 2.0,
+            "expected": 2.0
+          },
+          {
+            "id": "R-F18.no_failure",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.trigger",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F18.tape_cut_source",
+            "pass": true,
+            "got": "unspecified",
+            "expected": "unspecified"
+          },
+          {
+            "id": "R-F18.tape_window_30s",
+            "pass": true,
+            "got": 13.966666666666667,
+            "expected": 14.0
+          },
+          {
+            "id": "R-R03.label",
+            "pass": true,
+            "got": "short",
+            "expected": "short"
+          },
+          {
+            "id": "R-R03.edge",
+            "pass": true,
+            "got": 16685.0,
+            "expected": 16685.0
+          },
+          {
+            "id": "R-R03.end",
+            "pass": true,
+            "got": 960,
+            "expected": ">= 12:00"
+          },
+          {
+            "id": "R-R03.alive",
+            "pass": true,
+            "got": 390,
+            "expected": ">= 150"
+          },
+          {
+            "id": "R-S01.refill_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.inval_dist",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S01.objective_reach",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S01.mfe",
+            "pass": true,
+            "got": 7.25,
+            "expected": 7.25
+          },
+          {
+            "id": "R-S01.mae",
+            "pass": true,
+            "got": 0.5,
+            "expected": 0.5
+          },
+          {
+            "id": "R-S02.third",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.loss",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S02.mae",
+            "pass": true,
+            "got": 1.5,
+            "expected": 1.5
+          },
+          {
+            "id": "R-S03.steady",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.second_defence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reversal",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S03.reload_blocked",
+            "pass": true,
+            "got": null,
+            "expected": null
+          },
+          {
+            "id": "R-S04.trapped",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.failures",
+            "pass": true,
+            "got": 2,
+            "expected": 2
+          },
+          {
+            "id": "R-S04.ofm_long",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S04.continuation",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.box",
+            "pass": true,
+            "got": [
+              104.5,
+              106.0
+            ],
+            "expected": [
+              104.5,
+              106.0
+            ]
+          },
+          {
+            "id": "R-S05.breakout",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S05.inval",
+            "pass": true,
+            "got": 104.0,
+            "expected": 104.0
+          },
+          {
+            "id": "R-S05.htf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.two_reason",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S06.r15",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S07.mfe_ticks",
+            "pass": true,
+            "got": 46.0,
+            "expected": 46.0
+          },
+          {
+            "id": "R-S07.mae_ticks",
+            "pass": true,
+            "got": 6.0,
+            "expected": 6.0
+          },
+          {
+            "id": "R-S07.win_35_188",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-S08.setup",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.reject",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S08.slice",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.open_above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.retest_hold",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-S09.developing_va",
+            "pass": true,
+            "got": 100.25,
+            "expected": 100.25
+          },
+          {
+            "id": "R-P01.sample_stdev",
+            "pass": true,
+            "got": 1.1999999999999997,
+            "expected": 1.2
+          },
+          {
+            "id": "R-P01.sigma_px",
+            "pass": true,
+            "got": 199.2,
+            "expected": 199.2
+          },
+          {
+            "id": "R-P01.upper",
+            "pass": true,
+            "got": 16649.8,
+            "expected": 16649.8
+          },
+          {
+            "id": "R-P01.reverted",
+            "pass": true,
+            "got": "by10",
+            "expected": "by10"
+          },
+          {
+            "id": "R-P01.ext",
+            "pass": true,
+            "got": 0.25,
+            "expected": 0.25
+          },
+          {
+            "id": "R-P02.isAbove",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P02.ret_swept",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_50",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_open",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P02.ret_opp",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P03.zone",
+            "pass": true,
+            "got": "Z2",
+            "expected": "Z2"
+          },
+          {
+            "id": "R-P03.win",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P03.ttt",
+            "pass": true,
+            "got": 18,
+            "expected": 18
+          },
+          {
+            "id": "R-P04.conf",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P04.pts",
+            "pass": true,
+            "got": 11.0,
+            "expected": 11.0
+          },
+          {
+            "id": "R-P04.bucket",
+            "pass": true,
+            "got": "<20",
+            "expected": "<20"
+          },
+          {
+            "id": "R-P05.level",
+            "pass": true,
+            "got": 16630.0,
+            "expected": 16630.0
+          },
+          {
+            "id": "R-P05.wick",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P05.above",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P06.first",
+            "pass": true,
+            "got": "asia_high",
+            "expected": "asia_high"
+          },
+          {
+            "id": "R-P06.seq",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P07.mid",
+            "pass": true,
+            "got": 16603.0,
+            "expected": 16603.0
+          },
+          {
+            "id": "R-P07.extreme",
+            "pass": true,
+            "got": "low",
+            "expected": "low"
+          },
+          {
+            "id": "R-P07.retest",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P07.ext",
+            "pass": true,
+            "got": 16676.25888,
+            "expected": 16676.25888
+          },
+          {
+            "id": "R-P09.status",
+            "pass": true,
+            "got": "Below",
+            "expected": "Below"
+          },
+          {
+            "id": "R-P09.no_break",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P10.P",
+            "pass": true,
+            "got": 16707.17,
+            "expected": 16707.17
+          },
+          {
+            "id": "R-P10.R1",
+            "pass": true,
+            "got": 16816.33,
+            "expected": 16816.33
+          },
+          {
+            "id": "R-P10.S1",
+            "pass": true,
+            "got": 16540.83,
+            "expected": 16540.83
+          },
+          {
+            "id": "R-P10.R2",
+            "pass": true,
+            "got": 16982.67,
+            "expected": 16982.67
+          },
+          {
+            "id": "R-P10.S2",
+            "pass": true,
+            "got": 16431.67,
+            "expected": 16431.67
+          },
+          {
+            "id": "R-P10.R3",
+            "pass": true,
+            "got": 17091.83,
+            "expected": 17091.83
+          },
+          {
+            "id": "R-P10.S3",
+            "pass": true,
+            "got": 16265.33,
+            "expected": 16265.33
+          },
+          {
+            "id": "R-P10.context",
+            "pass": true,
+            "got": "WITHIN",
+            "expected": "WITHIN"
+          },
+          {
+            "id": "R-P11.w1",
+            "pass": true,
+            "got": "BISI",
+            "expected": "BISI"
+          },
+          {
+            "id": "R-P11.box",
+            "pass": true,
+            "got": [
+              16612.0,
+              16615.0
+            ],
+            "expected": [
+              16612.0,
+              16615.0
+            ]
+          },
+          {
+            "id": "R-P11.dir",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P11.fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_close",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_body",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.sweep_inside",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P12.mid_box",
+            "pass": true,
+            "got": [
+              16650.0,
+              16652.0
+            ],
+            "expected": [
+              16650.0,
+              16652.0
+            ]
+          },
+          {
+            "id": "R-P14.elims",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P14.structure",
+            "pass": true,
+            "got": "sequential",
+            "expected": "sequential"
+          },
+          {
+            "id": "R-P14.hod_in",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.nearest_rank_p50",
+            "pass": true,
+            "got": 85.0,
+            "expected": 85.0
+          },
+          {
+            "id": "R-P15.mfe_hit",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P15.rng_hit",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P15.RE+1",
+            "pass": true,
+            "got": 16680.0,
+            "expected": 16680.0
+          },
+          {
+            "id": "R-P15.RE-2",
+            "pass": true,
+            "got": 16600.0,
+            "expected": 16600.0
+          },
+          {
+            "id": "R-P15.manip",
+            "pass": true,
+            "got": 20.0,
+            "expected": 20.0
+          },
+          {
+            "id": "R-P15.dist",
+            "pass": true,
+            "got": 50.0,
+            "expected": 50.0
+          },
+          {
+            "id": "R-P17.denom",
+            "pass": true,
+            "got": 3.5,
+            "expected": 3.5
+          },
+          {
+            "id": "R-P17.bodyvol",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P17.topw",
+            "pass": true,
+            "got": 28.57,
+            "expected": 28.57
+          },
+          {
+            "id": "R-P17.botw",
+            "pass": true,
+            "got": 57.14,
+            "expected": 57.14
+          },
+          {
+            "id": "R-P17.body_row",
+            "pass": true,
+            "got": 7.14,
+            "expected": 7.14
+          },
+          {
+            "id": "R-P17.bot_row",
+            "pass": true,
+            "got": 14.29,
+            "expected": 14.29
+          },
+          {
+            "id": "R-P19.gap",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.zone",
+            "pass": true,
+            "got": [
+              100.5,
+              101.75
+            ],
+            "expected": [
+              100.5,
+              101.75
+            ]
+          },
+          {
+            "id": "R-P19.filled",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P19.conf",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-P20.sig",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "R-P20.delta",
+            "pass": true,
+            "got": 4100.0,
+            "expected": 4100.0
+          },
+          {
+            "id": "R-P20.zone",
+            "pass": true,
+            "got": [
+              16606.72,
+              16673.28
+            ],
+            "expected": [
+              16606.7,
+              16673.3
+            ]
+          },
+          {
+            "id": "R-P20.c4dir",
+            "pass": true,
+            "got": 1,
+            "expected": 1
+          },
+          {
+            "id": "P3-14.fvg_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.body_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.sweep_at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "P3-14.tpo_fill",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.divergence",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.fakeout_grade",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.series",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.at_level",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-F02.grid_window",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-P18.cvd_ohlc",
+            "pass": true,
+            "got": 40.0,
+            "expected": 40.0
+          },
+          {
+            "id": "R-R04.smt_pdh",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "R-R04.both_take_is_not_smt",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "R-R01.call_gex",
+            "pass": true,
+            "got": 200000000.0,
+            "expected": 200000000.0
+          },
+          {
+            "id": "R-R01.put_gex",
+            "pass": true,
+            "got": -210000000.00000003,
+            "expected": -210000000.0
+          },
+          {
+            "id": "R-R01.short_gamma",
+            "pass": true,
+            "got": true,
+            "expected": true
+          }
+        ]
+      }
+    ]
+  },
+  "family_levels.level_fixtures": {
+    "ticket": "levels",
+    "pass": true,
+    "n_cases": 4,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "levels",
+        "pass": true,
+        "cases": [
+          {
+            "id": "m05_from_edge",
+            "pass": true,
+            "got": 120.0,
+            "expected": 120
+          },
+          {
+            "id": "reject_resistance",
+            "pass": true,
+            "got": [
+              true,
+              true
+            ],
+            "expected": [
+              true,
+              true
+            ]
+          },
+          {
+            "id": "gp_band",
+            "pass": true,
+            "got": [
+              105.0,
+              106.18
+            ],
+            "expected": [
+              105.0,
+              106.18
+            ]
+          },
+          {
+            "id": "fred_1000_calendar",
+            "pass": true,
+            "got": 225,
+            "expected": "FRED 10:00 dates"
+          }
+        ]
+      }
+    ]
+  },
+  "family_clocks.clock_fixture": {
+    "ticket": "02",
+    "pass": true,
+    "n_cases": 4,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "clocks",
+        "pass": true,
+        "cases": [
+          {
+            "id": "gb.nyam.outcome_start_1000",
+            "pass": true,
+            "got": 1704294000000000000,
+            "expected": 1704294000000000000
+          },
+          {
+            "id": "london.ids_differ",
+            "pass": true,
+            "got": [
+              "range.london.00-03",
+              "range.gb.london"
+            ],
+            "expected": "distinct ids"
+          },
+          {
+            "id": "london.windows_differ",
+            "pass": true,
+            "got": [
+              1704258000000000000,
+              1704265200000000000
+            ],
+            "expected": "distinct windows"
+          },
+          {
+            "id": "bin.ids_differ",
+            "pass": true,
+            "got": true,
+            "expected": true
+          }
+        ]
+      }
+    ]
+  },
+  "family_open.open_fixtures": {
+    "ticket": "03",
+    "pass": true,
+    "n_cases": 6,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "open",
+        "pass": true,
+        "cases": [
+          {
+            "id": "cells_27",
+            "pass": true,
+            "got": 27,
+            "expected": 27
+          },
+          {
+            "id": "loc_below",
+            "pass": true,
+            "got": "below",
+            "expected": "below"
+          },
+          {
+            "id": "loc_in",
+            "pass": true,
+            "got": "in",
+            "expected": "in"
+          },
+          {
+            "id": "loc_above",
+            "pass": true,
+            "got": "above",
+            "expected": "above"
+          },
+          {
+            "id": "two_denominators_not_pooled",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "va_70pct",
+            "pass": true,
+            "got": [
+              0.5,
+              0.5,
+              0.5
+            ],
+            "expected": "poc at tick 2"
+          }
+        ]
+      }
+    ]
+  },
+  "family_env.env_fixtures": {
+    "ticket": "04",
+    "pass": true,
+    "n_cases": 6,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "env",
+        "pass": true,
+        "cases": [
+          {
+            "id": "ev_mid_ne_eq",
+            "pass": true,
+            "got": [
+              100,
+              95
+            ],
+            "expected": "open != EQ"
+          },
+          {
+            "id": "ext_from_edge",
+            "pass": true,
+            "got": 136.6,
+            "expected": 136.6
+          },
+          {
+            "id": "ss_onesided",
+            "pass": true,
+            "got": [
+              112,
+              92
+            ],
+            "expected": [
+              112,
+              92
+            ]
+          },
+          {
+            "id": "pz_t1_p50",
+            "pass": true,
+            "got": 110,
+            "expected": 110
+          },
+          {
+            "id": "ids_distinct",
+            "pass": true,
+            "got": 4,
+            "expected": 4
+          },
+          {
+            "id": "pz_is_approx",
+            "pass": true,
+            "got": "pz.approx.A",
+            "expected": "approximation not Jumbo formula"
+          }
+        ]
+      }
+    ]
+  },
+  "family_fail.fail_fixtures": {
+    "ticket": "07",
+    "pass": true,
+    "n_cases": 5,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "fail",
+        "pass": true,
+        "cases": [
+          {
+            "id": "nyam_outcome_1000",
+            "pass": true,
+            "got": 10,
+            "expected": 10
+          },
+          {
+            "id": "aplus_is_sweep_plus_failback",
+            "pass": true,
+            "got": "sweep plus fail-back",
+            "expected": "not sweep-only"
+          },
+          {
+            "id": "tdo_is_level",
+            "pass": true,
+            "got": "lvl.tdo",
+            "expected": "destination"
+          },
+          {
+            "id": "london_ids",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "nwog_not_tdo",
+            "pass": true,
+            "got": "nwog_fill",
+            "expected": "not tdo_touch"
+          }
+        ]
+      }
+    ]
+  },
+  "family_value.value_fixtures": {
+    "ticket": "06",
+    "pass": true,
+    "n_cases": 4,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "value",
+        "pass": true,
+        "cases": [
+          {
+            "id": "vwap_am_window",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "delta_flag_ne_vp",
+            "pass": true,
+            "got": "delta_ne_poc",
+            "expected": "not vp_touch"
+          },
+          {
+            "id": "vp_rth_scoped",
+            "pass": true,
+            "got": "09:30-16:00",
+            "expected": "RTH"
+          },
+          {
+            "id": "no_options_ids",
+            "pass": true,
+            "got": [],
+            "expected": []
+          }
+        ]
+      }
+    ]
+  },
+  "family_flow.flow_fixtures": {
+    "ticket": "05",
+    "pass": true,
+    "n_cases": 5,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "cvd-smt",
+        "pass": true,
+        "cases": [
+          {
+            "id": "five_cvd_names",
+            "pass": true,
+            "got": [
+              "trade",
+              "ohlc",
+              "part.trade",
+              "part.ohlc",
+              "gamma"
+            ],
+            "expected": 5
+          },
+          {
+            "id": "cvd_reset_1800",
+            "pass": true,
+            "got": "18:00",
+            "expected": "18:00"
+          },
+          {
+            "id": "part_ohlc_ne_ohlc",
+            "pass": true,
+            "got": "volume tercile",
+            "expected": "not ohlc sign"
+          },
+          {
+            "id": "smt_not_snapshot",
+            "pass": true,
+            "got": "multiscale lags 1/5/15",
+            "expected": "continuous"
+          },
+          {
+            "id": "es_trade_nm",
+            "pass": true,
+            "got": "flow.smt.trade.es",
+            "expected": "not-measurable"
+          }
+        ]
+      }
+    ]
+  },
+  "family_options.options_fixtures": {
+    "ticket": "09",
+    "pass": true,
+    "n_cases": 7,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "options",
+        "pass": true,
+        "cases": [
+          {
+            "id": "top3_above_by_oi",
+            "pass": true,
+            "got": [
+              200.0,
+              105.0,
+              110.0
+            ],
+            "expected": [
+              200.0,
+              105.0,
+              110.0
+            ]
+          },
+          {
+            "id": "distance_points",
+            "pass": true,
+            "got": 150.0,
+            "expected": 150.0
+          },
+          {
+            "id": "distance_atr",
+            "pass": true,
+            "got": 1.0,
+            "expected": 1.0
+          },
+          {
+            "id": "near025",
+            "pass": true,
+            "got": "near.025",
+            "expected": "near.025"
+          },
+          {
+            "id": "qqq_not_ndx_spot",
+            "pass": true,
+            "got": "QQQ 1m",
+            "expected": "not NDX spot"
+          },
+          {
+            "id": "no_cash_minutes",
+            "pass": true,
+            "got": false,
+            "expected": false
+          },
+          {
+            "id": "dte14_excludes_20",
+            "pass": true,
+            "got": false,
+            "expected": false
+          }
+        ]
+      }
+    ]
+  },
+  "mbp1_objects.mbp1_fixtures": {
+    "ticket": "05-06-mbp1",
+    "pass": true,
+    "n_cases": 6,
+    "n_failed": 0,
+    "groups": [
+      {
+        "name": "mbp1",
+        "pass": true,
+        "cases": [
+          {
+            "id": "absB_twice",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "part_sign_ne_total",
+            "pass": true,
+            "got": [
+              1,
+              -1,
+              50.0,
+              -100.0
+            ],
+            "expected": "different signs"
+          },
+          {
+            "id": "footprint_4x",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "cvd_buy_minus_sell",
+            "pass": true,
+            "got": 50.0,
+            "expected": 50
+          },
+          {
+            "id": "iceberg_touch",
+            "pass": true,
+            "got": true,
+            "expected": true
+          },
+          {
+            "id": "cash_ndx_spx_1m_absent",
+            "pass": true,
+            "got": "daily only",
+            "expected": "no synthesized minutes"
+          }
+        ]
+      }
+    ]
+  }
+}

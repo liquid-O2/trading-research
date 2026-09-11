@@ -1,0 +1,138 @@
+{
+  "case": {
+    "id": "R-J22",
+    "case": "B",
+    "date": "2024-01-05",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 80,
+    "negative_count": 567
+  },
+  "production_session": {
+    "date": "2024-01-05",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6676,
+    "expected_1s": 10800,
+    "missing_1s": 4124,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16426.75,
+    "L": 16334.25,
+    "open": 16385.75,
+    "close": 16399.75,
+    "EQ": 16380.5,
+    "Q25": 16357.375,
+    "Q75": 16403.625,
+    "W69": 92.5,
+    "volume": 73051.0,
+    "close_0859": 16399.75,
+    "open_0930": 16449.25,
+    "w_pct_0859close": 0.5640329883077486,
+    "w_pct_0930open": 0.5623356687994894,
+    "WpriorRTH": 147.75,
+    "w_rel_prior_rth": 0.626057529610829,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.5-0.8",
+    "prior_rth_high": 16583.75,
+    "prior_rth_low": 16436.0,
+    "asia_high": 16469.0,
+    "asia_low": 16441.0,
+    "london_high": 16444.5,
+    "london_low": 16399.5,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1704465000000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1704463200000000000,
+    "outcome_start_ns": 1704465000000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1704465120000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "6-9.published formation",
+      "low": 16334.25,
+      "high": 16426.75,
+      "start": 6.0,
+      "end": 9.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published H",
+      "price": 16426.75,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published L",
+      "price": 16334.25,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_low",
+      "price": 16288.0,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_high",
+      "price": 16473.0,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 180,
+      "missing": 0,
+      "open": 16385.75,
+      "high": 16426.75,
+      "low": 16334.25,
+      "close": 16399.75
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J22-B-2024-01-05.png",
+  "notes": [
+    "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 559,
+    "code": "def j22(r):\n        return bool(r.get(\"j22_three_strike\"))"
+  },
+  "event": "three-strike failure protocol at -0.5",
+  "detail_window": [
+    9.433333333333334,
+    9.933333333333334
+  ]
+}

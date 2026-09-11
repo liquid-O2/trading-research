@@ -1,0 +1,125 @@
+{
+  "case": {
+    "id": "R-P01",
+    "case": "A",
+    "date": "2024-01-09",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 397,
+    "negative_count": 250
+  },
+  "production_session": {
+    "date": "2024-01-09",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 7230,
+    "expected_1s": 10800,
+    "missing_1s": 3570,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16736.5,
+    "L": 16657.75,
+    "open": 16730.25,
+    "close": 16665.5,
+    "EQ": 16697.125,
+    "Q25": 16677.4375,
+    "Q75": 16716.8125,
+    "W69": 78.75,
+    "volume": 45656.0,
+    "close_0859": 16665.5,
+    "open_0930": 16669.25,
+    "w_pct_0859close": 0.47253307731541205,
+    "w_pct_0930open": 0.4724267738500532,
+    "WpriorRTH": 305.75,
+    "w_rel_prior_rth": 0.25756336876533115,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 16811.25,
+    "prior_rth_low": 16505.5,
+    "asia_high": 16796.0,
+    "asia_low": 16777.0,
+    "london_high": 16788.0,
+    "london_low": 16765.25,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1704813300000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1704808800000000000,
+    "outcome_start_ns": 1704810600000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1704816960000,
+    "m05_side": "high",
+    "reversal_bin": "bin.1030-1200",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "08:00 open",
+      "price": 16723.0,
+      "start": 8,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code +0.25\u03c3",
+      "price": 16778.886032771137,
+      "start": 8,
+      "end": 12,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code \u22120.25\u03c3",
+      "price": 16667.113967228863,
+      "start": 8,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "code_sigma": {
+      "sigma_px": 223.54413108454293,
+      "upper": 16778.886032771137,
+      "lower": 16667.113967228863
+    },
+    "p01_touch_revert": {
+      "touch": true,
+      "side": "lower",
+      "hour": 8,
+      "reverted": true,
+      "milestone": "by11",
+      "ext_max": 0.25386486205060566
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P01-A-2024-01-09.png",
+  "notes": [
+    "Code SD uses 4 log changes of prior selected-session closes."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 745,
+    "code": "def p01(r):\n        return bool(r.get(\"p01_revert\"))"
+  },
+  "event": "08:00 TBR 0.25-sigma touch then reversion to the open by 12:00",
+  "detail_window": [
+    8.6,
+    9.1
+  ]
+}

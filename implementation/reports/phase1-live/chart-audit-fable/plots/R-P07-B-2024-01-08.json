@@ -1,0 +1,155 @@
+{
+  "case": {
+    "id": "R-P07",
+    "case": "B",
+    "date": "2024-01-08",
+    "code_result": false,
+    "selection": "code-negative",
+    "author_dated": false,
+    "positive_count": 551,
+    "negative_count": 96
+  },
+  "production_session": {
+    "date": "2024-01-08",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6522,
+    "expected_1s": 10800,
+    "missing_1s": 4278,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16497.75,
+    "L": 16410.0,
+    "open": 16424.5,
+    "close": 16477.5,
+    "EQ": 16453.875,
+    "Q25": 16431.9375,
+    "Q75": 16475.8125,
+    "W69": 87.75,
+    "volume": 34399.0,
+    "close_0859": 16477.5,
+    "open_0930": 16512.0,
+    "w_pct_0859close": 0.5325443786982249,
+    "w_pct_0930open": 0.5314316860465116,
+    "WpriorRTH": 173.5,
+    "w_rel_prior_rth": 0.5057636887608069,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.5-0.8",
+    "prior_rth_high": 16577.25,
+    "prior_rth_low": 16403.75,
+    "asia_high": 16500.25,
+    "asia_low": 16438.0,
+    "london_high": 16462.0,
+    "london_low": 16432.0,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1704724200000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1704722400000000000,
+    "outcome_start_ns": 1704724200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1704724320000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "or.5m formation",
+      "low": 16505.5,
+      "high": 16548.25,
+      "start": 9.5,
+      "end": 9.583333333333334,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "or.5m H",
+      "price": 16548.25,
+      "start": 9.583333333333334,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "or.5m L",
+      "price": 16505.5,
+      "start": 9.583333333333334,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "or.5m EQ",
+      "price": 16526.875,
+      "start": 9.583333333333334,
+      "end": 12.0,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "helper 0.411% upper (unscored)",
+      "price": 16616.2633075,
+      "start": 9.583333333333334,
+      "end": 16,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "helper 0.450% lower (unscored)",
+      "price": 16431.22525,
+      "start": 9.583333333333334,
+      "end": 16,
+      "color": "#ad7400",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.or.5m": {
+      "n": 5,
+      "missing": 0,
+      "open": 16512.0,
+      "high": 16548.25,
+      "low": 16505.5,
+      "close": 16545.5
+    },
+    "p07_or_mid": {
+      "mid": 16526.875,
+      "is_bull": true,
+      "extreme_first": "high",
+      "mid_retest": false,
+      "ext_up": 16616.2633075,
+      "ext_dn": 16431.22525
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P07-B-2024-01-08.png",
+  "notes": [
+    "Midpoint score scans only to12:00. Helper extreme_first is after OR; source final-extreme order is within OR. Extension helpers are unscored."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 763,
+    "code": "def p07(r):\n        return bool(r.get(\"p07_or_mid\"))"
+  },
+  "event": "5m OR midpoint retest after 09:35",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

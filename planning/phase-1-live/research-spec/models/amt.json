@@ -1,0 +1,1907 @@
+[
+  {
+    "id": "R-A01",
+    "role": "signal",
+    "research_decision": "Use a frozen algorithmic balance, causal edge rejection and a fixed POC target that is still ahead when the signal forms.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "trigger": "first eligible VAL/VAH area contact from inside balance",
+      "side": "VAL long, VAH short",
+      "target": "same frozen profile POC",
+      "stop": "interaction adverse extreme+2 ticks",
+      "outside_acceptance": "30 subsequent complete 1m closes beyond edge disables fades of that accepted side"
+    },
+    "parameters": {
+      "composite_sessions": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "sessions",
+        "meaning": "1 removes multi-session balance-overlap gate;2/3 require all adjacent profile pairs satisfy E03 balance test"
+      },
+      "response_fraction": {
+        "default": 0.1,
+        "grid": [
+          0.05,
+          0.1,
+          0.2
+        ],
+        "units": "VA width",
+        "meaning": "response=max(4 ticks, ceil(fraction*VA width/tick)ticks)"
+      },
+      "confirm_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "E02 reaction deadline"
+      }
+    },
+    "algorithm": [
+      "Build selected complete same-contract composite; require positive VA width and balance gate. Fix VAL, VAH, POC before 09:30.",
+      "A candidate needs the last complete 1m close inside [VAL, VAH] before edge contact and no already-confirmed outside acceptance. Later acceptance cannot rewrite eligibility.",
+      "Apply E02 inward reaction with selected response distance; stop from touch-through-confirmation prefix. Reject at decision if confirmation has already passed POCso target is no longer ahead.",
+      "Execute E11 to fixed POC. Distinct reusable-area episodes require E02 separation; report rejection probability and post-fill POC reach separately."
+    ],
+    "outputs": {
+      "profile_id": "string",
+      "edge": "enum",
+      "rejection_at": "UTC ns?",
+      "POC_target": "points",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "prior 1 profile vs multi-session balance",
+      "price-only fixed 4 tick reaction vs width-scaled response"
+    ],
+    "acceptance_cases": [
+      "VAL100, VAH120, POC111,10% response=2 points; lower touch then close102 can confirm long with target111 ahead.",
+      "POC111 already below expected long entry112 makes no_target, not immediate success.",
+      "Outside acceptance completed 11:00 cannot erase a 10:00 fade."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Balance-edge fade to the fixed POC",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "149ec18434727c004998a64edfb090f23b50eb77bcbb1c06bf367e2f72d6757f",
+    "source_references": [
+      "AMT1:5",
+      "AMT1:9",
+      "MAMT:5",
+      "MAMT:9",
+      "ABS:7"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A02",
+    "role": "signal",
+    "research_decision": "Use actual dense-profile shelf ledges, a completed outside hold, later retest and pre selected external node.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "object": "E03 shelf outer ledges, no VA fallback",
+      "direction": "outward through selected ledge",
+      "target": "nearest distinct HVN band centre ahead from prior 5 complete RTH profiles; current selected shelf excluded",
+      "stop": "retest extreme+2 ticks"
+    },
+    "parameters": {
+      "smooth_ticks": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          9
+        ],
+        "units": "ticks",
+        "meaning": "E03 shelf smoothing"
+      },
+      "hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "outside hold after 2 tick completed close break"
+      },
+      "retest_minutes": {
+        "default": 60,
+        "grid": [
+          30,
+          60,
+          120
+        ],
+        "units": "minutes",
+        "meaning": "search after hold"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "directional reaction"
+      }
+    },
+    "algorithm": [
+      "Build complete dense profile and all E03 shelf bands; shelf width is its actual price span, not occupied-key distance.",
+      "For each ledge run E02 BREAK_RETEST with selected hold and time out, ordered by event time. No retest can precede hold completion.",
+      "At retest confirmation select a target from already frozen prior 5-session HVN objects. Require target ahead and outside the triggering shelf; ties E09. A naked historical node target is retired at its first post-formation touch, as specified for this target catalog.",
+      "Submit E11 with target centre and structural stop. If no node survives, no_target; do not switch silently to VAH/VAL or today final profile."
+    ],
+    "outputs": {
+      "shelf_id": "string",
+      "ledge_band": "points[2]",
+      "hold_at": "UTC ns?",
+      "target_node_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "same shelf break without hold",
+      "VA-edge alternative separately reported, never silent fallback"
+    ],
+    "acceptance_cases": [
+      "Ticks100 and 102 with missing101 are not adjacent occupied rows; dense101=0 must remain.",
+      "Break 10:00 and 30 minute hold requires subsequent closes through 10:30 before retest search.",
+      "A target node visited overnight is excluded from the named naked-node target catalog."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Ledge break, retest and continuation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "2b0716025712264eb48dce236096ab03413571cb89ec216c1110ee1c6005324a",
+    "source_references": [
+      "AMT1:9",
+      "VP2:4",
+      "VP2:5",
+      "MAMT:12"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-A03",
+    "role": "signal",
+    "research_decision": "Trade accepted re-entry from either an outside open or later outside excursion after a complete inside hold.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "origin": "outside 09:30 open or completed close2 ticks outside selected VA edge",
+      "inside": "strict VAL<close<VAH for every holding close",
+      "side": "re-enter from below -> long; from above -> short",
+      "target": "opposite VA edge as reusable balance objective",
+      "stop": "re-entry episode adverse extreme+2 ticks"
+    },
+    "parameters": {
+      "inside_hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "subsequent complete 1m closes after re-entry close"
+      },
+      "origin_type": {
+        "default": "both",
+        "grid": [
+          "both",
+          "outside_open",
+          "intraday_excursion"
+        ],
+        "units": "enum",
+        "meaning": "separate eligible populations"
+      },
+      "reentry_buffer_ticks": {
+        "default": 1,
+        "grid": [
+          0,
+          1,
+          2
+        ],
+        "units": "ticks",
+        "meaning": "required distance inside edge on initiating close; later hold still strictly interior"
+      }
+    },
+    "algorithm": [
+      "Track outside episodes in both directions, preserving originating edge. For later excursions require an actual completed close beyond by2 ticks.",
+      "The first subsequent completed close inside by reentry_buffer starts hold. Every required later close must remain strictly inside; far-edge escape cancels this candidate.",
+      "At hold completion freeze direction, stop and opposite edge target. A earlier far-edge touch is history only; the target must be ahead at this new decision.",
+      "Execute E11, expire on declared session close; subsequent new profile-area episodes may qualify after failed holds with E02 separation."
+    ],
+    "outputs": {
+      "origin_type": "enum",
+      "reentry_at": "UTC ns?",
+      "inside_hold_at": "UTC ns?",
+      "far_edge_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "re-entry without hold",
+      "outside-open vs later-excursion cohorts"
+    ],
+    "acceptance_cases": [
+      "Inside close 10:00 then30 subsequent valid minute closes confirms 10:30.",
+      "A close equal VAL during strict inside hold fails.",
+      "Far-edge touch 10:10 cannot count as outcome for 10:30 entry."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Re-entry, inside hold and opposite-edge traverse",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "5462d375ba2aaf6c6b67d8e9b8a57138c59c2b28c7ab28d1534d208eef81b882",
+    "source_references": [
+      "AMT1:7",
+      "LIVE:8",
+      "LIVE:9",
+      "ABS:12"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A04",
+    "role": "signal",
+    "research_decision": "Define two complete consecutive periods inside prior value, then test the opposite-edge traverse; do not bake80% into the expected result.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "prior_rth VP70 frozen",
+      "opening_gate": "09:30 open strictly outside prior VA",
+      "period_clock": "30 minutes aligned 09:30",
+      "entry_window": "10:30–14:30",
+      "direction": "toward opposite VA edge from original outside side",
+      "stop": "near VA edge minus/plus2 ticks outward",
+      "target": "far VA edge",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "inside_rule": {
+        "default": "close",
+        "grid": [
+          "close",
+          "full_range"
+        ],
+        "units": "enum",
+        "meaning": "inclusive period close inVA vs all traded prices within VA"
+      },
+      "period_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "two complete consecutive periods, preserve clock alignment"
+      },
+      "required_periods": {
+        "default": 2,
+        "grid": [
+          2,
+          3
+        ],
+        "units": "periods",
+        "meaning": "consecutive inside periods after outside open"
+      }
+    },
+    "algorithm": [
+      "Require real outside open and freeze original entry side; search all consecutive qualifying period runs after 09:30, not just A/B.",
+      "Use selected inside predicate and complete period coverage; full-range requires min/max inside inclusive.",
+      "Earliest required-run completion in entry window confirms. If expected entry is outside VA or beyond the far target, no valid entry; do not declare traverse already won.",
+      "Execute E11 to fixed far VA edge with near-edge structural stop. Report eligible patterns and conditional target/PnL outcomes; source80% is comparison metadata."
+    ],
+    "outputs": {
+      "period_ids": "string[]",
+      "pair_known_at": "UTC ns?",
+      "inside_rule": "enum",
+      "traverse_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "one-period re-entry diagnostic",
+      "close vs full-range inside"
+    ],
+    "acceptance_cases": [
+      "Two closes inside with a wick outside qualifies close-only but not full-range.",
+      "A target reached before second period ends is not post entry success.",
+      "Open exactly VAH is inside and fails strict outside open gate."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Strict two-period 80% rule",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "16813b89e08f31fb48b8a41d5bd0b5a69f041ee3289f76e9110ae7c2a037e2b7",
+    "source_references": [
+      "MAMT:18"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-A05",
+    "role": "signal",
+    "research_decision": "Turn POC behavior into two ordered branches: distinct repeated failures toward the near edge, or through–hold–retest toward the far edge.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [
+      "R-A03"
+    ],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "initial_state": "inside 09:30 open, or an A03 accepted re-entry",
+      "POC": "fixed selected balance POC",
+      "near_edge": "VAH when initial price>POC, VAL when below",
+      "far_edge": "opposite near edge",
+      "stop": "latest reaction/retest adverse extreme+2 ticks",
+      "target": "two_failures: original near VA edge; through_retest: original far VA edge; selected edge must be ahead at decision"
+    },
+    "parameters": {
+      "branch": {
+        "default": "through_retest",
+        "grid": [
+          "through_retest",
+          "two_failures"
+        ],
+        "units": "enum",
+        "meaning": "continuation vs rotation branches"
+      },
+      "failed_visits": {
+        "default": 2,
+        "grid": [
+          2,
+          3
+        ],
+        "units": "episodes",
+        "meaning": "used bytwo_failures"
+      },
+      "hold_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "POC completed close-through hold"
+      },
+      "leave_ticks": {
+        "default": 4,
+        "grid": [
+          4,
+          8,
+          12
+        ],
+        "units": "ticks",
+        "meaning": "E02 distinct visit separation"
+      }
+    },
+    "algorithm": [
+      "Fix initial POCside from first eligible inside state; if equal POC wait for a complete close outside2 tick band before establishing side.",
+      "For two_failures count distinct POC touches each followed within 5 minutes by a4 tick close back to initial side, with no successful through-hold before threshold. Repeated in-band bars count one visit.",
+      "For through_retest require completed close2 ticks through POC to opposite side, selected HOLD, then later retouch and 4 tick REACTION in that direction. This branch supersedes the still-pending two-failures branch when it confirms first.",
+      "At confirmation target near edge for failures or far edge for traverse; enter E11 with actual episode stop. Emit branch/known_at so later POC behavior cannot relabel an earlier trade."
+    ],
+    "outputs": {
+      "initial_POC_side": "enum",
+      "visit_ids": "string[]",
+      "branch": "enum",
+      "confirmed_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "POC touch-only control",
+      "two failures vs through/retest"
+    ],
+    "acceptance_cases": [
+      "12 contiguous near POC minutes are one visit, not12failures.",
+      "Initial price above POC gives near VAH and far VAL.",
+      "A later through break cannot erase an earlier completed two-failure trade."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "POC repeated failure versus through-and-retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "a804b54726792dd2f02665acb1aa23865fec893dbf953378a792f94b2b796b24",
+    "source_references": [
+      "LIVE:9",
+      "RTVP:5"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A06",
+    "role": "signal",
+    "research_decision": "Select an older untouched POC outside the current balance, then trade its first rejection after a balance breakout.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "older_catalog": "individual prior RTH POCs age2..10 sessions, excluding all current composite members",
+      "POC_lifecycle": "naked target retires at first exact touch or crossing after its profile close; original first-tag episode may confirm later",
+      "sequence": "balance close break2 ticks -> older external POC tag -> inward reaction",
+      "target": "opposite edge of current balance",
+      "stop": "old POC tag episode adverse extreme+2 ticks"
+    },
+    "parameters": {
+      "max_age_sessions": {
+        "default": 10,
+        "grid": [
+          5,
+          10,
+          20
+        ],
+        "units": "sessions",
+        "meaning": "old POC catalog; same raw contract"
+      },
+      "reject_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "after first tag"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "close away from old POC back toward balance"
+      }
+    },
+    "algorithm": [
+      "Build older POC ledger from completed profiles; retire first touch over all ETH/RTH. A current final RTH POC is forbidden.",
+      "At current balance breakout select nearest eligible old POC beyond the broken VA edge in break direction. It must lie outside current VA and be untouched then.",
+      "Wait for first tag within 60 minutes after break. On that same episode require E02 reaction against break direction; tag consumes naked POC but pending reaction remains valid.",
+      "Enter E11 toward far balance edge after rejection, saving target and actual stop. An un tagged old POC or same balance inside POC cannot satisfy setup."
+    ],
+    "outputs": {
+      "older_profile_id": "string",
+      "older_POC": "points",
+      "age_sessions": "int",
+      "tag_at": "UTC ns?",
+      "reject_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "balance break/re-entry without old POC",
+      "5/10/20 session naked POC catalog"
+    ],
+    "acceptance_cases": [
+      "Current VA[100,120], older POC130 can qualify upper break; older POC110 cannot.",
+      "Old POC touched overnight is not naked at 09:30.",
+      "Upper break/old POC rejection short targets VAL100, not VAH120."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Failed auction at an older external balance POC",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "4e9f01997f1cae32e86050298913d40a47cc34cb5d5061f926c31efe520fb9b1",
+    "source_references": [
+      "MAMT:9",
+      "MAMT:10",
+      "MAMT:11",
+      "MAMT:26",
+      "LIVE:10",
+      "VP2:6"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A07",
+    "role": "signal",
+    "research_decision": "Make the boundary break, complete hold, later retest and post-retest hold one explicit episode; IB freshness cannot be rearmed.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "boundary_types": "prior VA baseline; IB H/L or actual shelf ledge alternatives",
+      "firstvisit_rule": "IB first exact visit begins only pending episode; completed break must occur within 5 minutes; failing/expired episode never rearms same IB side",
+      "target": "nearest untouched prior 5 session HVN band centre beyond entry; no fallback",
+      "stop": "retest adverse extreme+2 ticks"
+    },
+    "parameters": {
+      "boundary_type": {
+        "default": "prior_VA",
+        "grid": [
+          "prior_VA",
+          "IB",
+          "shelf_ledge"
+        ],
+        "units": "enum",
+        "meaning": "own formation and lifecycle"
+      },
+      "outside_hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "after first close break"
+      },
+      "retest_hold_minutes": {
+        "default": 30,
+        "grid": [
+          3,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "after retouch require every completed close remain on outside break side"
+      },
+      "retest_timeout_minutes": {
+        "default": 60,
+        "grid": [
+          30,
+          60,
+          120
+        ],
+        "units": "minutes",
+        "meaning": "after outside hold"
+      }
+    },
+    "algorithm": [
+      "Build selected boundary before use. Profile bands follow E02 reuse; IB high/low follow E01 first visit and the five-minute pending break deadline.",
+      "Require a complete 1m close2 ticks outside, then outside_hold_minutes subsequent closes outside. Any close inside fails candidate.",
+      "Find first later retest from outside, require4 tick reaction within 5 minutes and retest_hold_minutes complete closes outside from touch; confirmation is later of reaction/hold completion. Any close inside fails strict variant.",
+      "Select ahead untouched historical HVN target with known snapshot and E11 execute. No complete conjunction means no event, not a relaxed hold-only success."
+    ],
+    "outputs": {
+      "boundary_id": "string",
+      "break_at": "UTC ns?",
+      "outside_hold_at": "UTC ns?",
+      "retest_at": "UTC ns?",
+      "confirmed_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "5/15/30 minute holds",
+      "profile boundary vs IB reference"
+    ],
+    "acceptance_cases": [
+      "IBL first visit 10:30 then failed pending episode cannot rearm for 11:55 break.",
+      "A retest during outside hold cannot count as a later retouch.",
+      "No inside close for30 minutes is stronger than merely no30 minute inside hold; implement the former."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Confirmed boundary break and later holding retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "95a71e6e382d627265343787ef84af33fe94c4c5fb63c2aa4a3e0c2229845b61",
+    "source_references": [
+      "RTVP:6",
+      "RTVP:8",
+      "MAMT:12",
+      "WIC:5",
+      "WIC:8",
+      "TRAP:6"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-A08",
+    "role": "signal",
+    "research_decision": "Flip bias only after a real held outside break and a later complete inside re-acceptance.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "initial_requirement": "completed outside break and full hold even for outside open",
+      "inside": "strict VAL<close<VAH",
+      "direction": "opposite original outside break",
+      "target": "opposite VA edge from reentry",
+      "stop": "reentry adverse extreme+2 ticks"
+    },
+    "parameters": {
+      "outside_hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "subsequent complete closes outside"
+      },
+      "inside_hold_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "subsequent complete closes strict inside"
+      },
+      "break_ticks": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "completed close break distance"
+      }
+    },
+    "algorithm": [
+      "Build current balance and find both direction outside break episodes; outside open still needs first complete outside close and hold.",
+      "Only after outside hold confirmation search for close back through same edge, then strict inside hold. Far-side escape cancels inside acceptance.",
+      "At inside confirmation set reversed bias with timestamp and freezes top/target. A failed profile area candidate may restart only after E02 distinct episode separation.",
+      "Enter E11 if target ahead; later outside accepted break invalidates bias without rewriting its past interval."
+    ],
+    "outputs": {
+      "outside_confirm_at": "UTC ns?",
+      "inside_confirm_at": "UTC ns?",
+      "bias": "enum",
+      "far_edge_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "A03reentry without prior outside hold",
+      "shorter vs strict 30 minute acceptance"
+    ],
+    "acceptance_cases": [
+      "Outside open alone is not a30 minute held break.",
+      "A far-side escape during inside hold fails, even if price is not back outside the original edge.",
+      "Target before inside confirmation is not success."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Re-acceptance flips the balance bias",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "885fda9f52ea63a9f00f5c63afc9109fa61281033906612cf340475072b6426d",
+    "source_references": [
+      "MAMT:12"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A09",
+    "role": "signal",
+    "research_decision": "Define a full value traverse without any intervening accepted inside hold, then independently evaluate each later continuation retest.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "traverse": "completed close beyond one VA edge then later close beyond the other in traversal direction",
+      "acceptance_exclusion": "no consecutive 30 minute strict inside close hold between crossings",
+      "target": "fixed 1.5R0 after retest confirmation",
+      "stop": "retest adverse extreme+2 ticks"
+    },
+    "parameters": {
+      "inside_accept_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "acceptance threshold; not a maximum traversal duration"
+      },
+      "retest_reference": {
+        "default": "both_edges",
+        "grid": [
+          "both_edges",
+          "exit_edge_only"
+        ],
+        "units": "enum",
+        "meaning": "candidates ordered by actual touch time"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "directional E02 reaction"
+      }
+    },
+    "algorithm": [
+      "Enumerate ordered crossing pairs after 09:30. Upward traverse starts below VAL and ends above VAH; downward mirror.",
+      "Reject only if a full inside hold occurred between crossings. A45 minute traverse that never holds inside30 minutes can qualify.",
+      "After exit crossing search distinct later retests of selected edges from traverse side through 15:00. Evaluate all candidates chronologically; a failed first edge does not suppress later other edge.",
+      "Confirm E02 continuation, freeze actual stop and fixed 1.5R target, enter E11. Save prerequisite traverse and later retest outcomes separately."
+    ],
+    "outputs": {
+      "crossing_pair": "UTC ns[2]",
+      "inside_max_run": "minutes",
+      "retest_edge": "enum",
+      "confirmed_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "quick traverse<=30 minute as descriptive bucket only",
+      "exit-edge-only vs both-edge retests"
+    ],
+    "acceptance_cases": [
+      "Traverse45 minutes with longest inside hold20 passes default.",
+      "A30 minute inside hold invalidates even if total traverse31 minutes.",
+      "A failed VAH retest cannot suppress a later eligible VAL retouch in the same down traverse."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Traverse without acceptance, then continuation retests",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "94cfcd28f338949bee46761ace4287e6a9477d6676c6f9e5a2fc9ca9f33871f1",
+    "source_references": [
+      "MAMT:12"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-A10",
+    "role": "context",
+    "research_decision": "Create deterministic opening-type and final-day taxonomies, with final labels unavailable until the close.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E03",
+      "E05"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-G03",
+      "R-J25"
+    ],
+    "bindings": {
+      "opening_window": "09:30–10:00",
+      "opening_references": "prior VA edges, fresh prior RTH H/L, ONH/L and 09:30 open, all identity qualified",
+      "day_clock": "IB09:30–10:30 then RTH close",
+      "consumer": "G03/J25 only after 10:00 opening type known"
+    },
+    "parameters": {
+      "drive_close_fraction": {
+        "default": 0.8,
+        "grid": [
+          0.7,
+          0.8,
+          0.9
+        ],
+        "units": "opening range fraction",
+        "meaning": "long close position>threshold, short<1-threshold"
+      },
+      "test_window_minutes": {
+        "default": 15,
+        "grid": [
+          5,
+          10,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "actual reference interaction before subsequent drive"
+      },
+      "trend_range_multiple": {
+        "default": 2.0,
+        "grid": [
+          1.5,
+          2.0,
+          2.5
+        ],
+        "units": "IB widths",
+        "meaning": "full RTH range threshold for trend label"
+      }
+    },
+    "algorithm": [
+      "From executions retain first open and ordered crossings. After the forming open, a price strictly on the opposite side disqualifies a pure open-drive; equality alone does not.",
+      "At 10:00 classify with precedence test_drive, rejection_reverse, drive, rotation: test_drive requires actual available external reference touch in test_window_minutes, later close back through open, final net direction and close position meeting drive threshold; rejection_reverse requires an initial>=4 tick move one side and later>=4 tick close other side with final position threshold; drive requires no opposite open trade and final position threshold; remaining complete cases rotation. Zero width opening range is degenerate.",
+      "At RTH close classify trend if full range>=multiple*IBW, only one IB close break side and close in outer20% of daily range; else neutral_extreme if both IB sides broken and close outside IB; neutral if both and close inside; normal_variation if exactly one; normal if neither. Completeness and zero IBW guard apply.",
+      "Report opening type x day type conditional forecasts and forward consumer performance. No end of day label can enter morning features."
+    ],
+    "outputs": {
+      "opening_type": "enum",
+      "opening_known_at": "UTC ns",
+      "day_type": "enum",
+      "day_known_at": "UTC ns",
+      "transition_probabilities": "map<float>"
+    },
+    "controls": [
+      "unconditional day type",
+      "opening return/width numeric features without taxonomy"
+    ],
+    "acceptance_cases": [
+      "A strict excursion across open 09:30:20 disqualifies pure drive; ignoring first minute would be wrong.",
+      "Being entirely above VAH is not an actual VAH test.",
+      "Final day type is known only at calendar close."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Opening auction type and completed day type",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "3e988c2106c9298dd47ef26dbcb11663fb750b315f272840d22adc9168e08d28",
+    "source_references": [
+      "AMT1:10",
+      "AMT1:11",
+      "MAMT:18",
+      "MAMT:20"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A11",
+    "role": "context",
+    "research_decision": "Replace ambiguous visual shape names with E03 quantitative B/P/b/D/other classes and test next-session distributions.",
+    "inputs": [
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A01",
+      "R-A03"
+    ],
+    "bindings": {
+      "profile": "prior_rth VP70",
+      "classification": "E03 precedence B, P, b, D, other",
+      "outcome": "next RTH high-only/low-only/both/neither relative to prior VA, and opening-to-close signed return",
+      "consumer": "A01/A03 after profile close; research names do not resolve author B diagram"
+    },
+    "parameters": {
+      "profile_scope": {
+        "default": "prior_rth",
+        "grid": [
+          "prior_rth",
+          "balance_composite_2"
+        ],
+        "units": "enum",
+        "meaning": "same algorithm different scope"
+      },
+      "smooth_ticks": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          9
+        ],
+        "units": "ticks",
+        "meaning": "node/shape smoothing"
+      },
+      "tail_mass_cutoff": {
+        "default": 0.35,
+        "grid": [
+          0.25,
+          0.35,
+          0.45
+        ],
+        "units": "volume fraction",
+        "meaning": "P lower half/b upper half maximum; all other E03 shape thresholds fixed"
+      }
+    },
+    "algorithm": [
+      "Build complete dense V and fixed VA; use price-distance coordinates, not occupied-key indices.",
+      "Compute E03 shape features and apply deterministic precedence with selected tail mass cutoff. Export underlying continuous features too.",
+      "At next session fit and score conditional path probabilities using prior training only; preserve N per label and no-trade other/degenerate cases.",
+      "Test shape increment in A01/A03 against unconditional balance features; never impose a published direction as a computed truth."
+    ],
+    "outputs": {
+      "shape": "enum(B,P,b,D,other,degenerate)",
+      "POC_location": "fraction",
+      "skewness": "float?",
+      "tail_mass": "fraction",
+      "forecast": "probability[4]"
+    },
+    "controls": [
+      "continuous shape variables without categorical bins",
+      "unconditional prior profile outcomes"
+    ],
+    "acceptance_cases": [
+      "POC location0.8 and lower half volume0.30 yields P unless higher precedence B qualifies.",
+      "Adding internal zero volume rows must notre normalize price coordinates by occupied count.",
+      "A finished profile shape cannot be moved before its close."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Author-specific profile-shape outcomes",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "f64155287e017bad2b6272ded1e49dc976133b104fe65f817d82efa184d36433",
+    "source_references": [
+      "AMT1:6",
+      "AMT1:13",
+      "RTVP:9",
+      "RTVP:10",
+      "RTVP:11",
+      "MAMT:7",
+      "MAMT:8"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-A12",
+    "role": "signal",
+    "research_decision": "Build overnight two-bulge/LVN structure from executions and test its first reaction with an explicitly defined inventory feature.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03",
+      "E06",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "ON18:00–09:30 frozen 09:30",
+      "two_bulges": "two E03 HVNs separated>=0.20ON width with an LVN between; choose pair maximizing smaller peak prominence, ties nearest ON midpoint",
+      "inventory": "net signed ON volume/total ON volume; abs<0.10 balanced; unknown side quality required only when gated",
+      "old_POC": "mostrecentcompletedbalance_composite_2 ending before ON start; alignment feature separate",
+      "entry_window": "09:30–11:30",
+      "target": "fresh ONH for long/ONL for short",
+      "stop": "band episode extreme+2 ticks",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "feature_band": {
+        "default": "LVN_bridge",
+        "grid": [
+          "LVN_bridge",
+          "upper_shelf",
+          "lower_shelf"
+        ],
+        "units": "enum",
+        "meaning": "E03 feature from selected pair; bridge=contiguous LVN band between peaks"
+      },
+      "inventory_gate": {
+        "default": "none",
+        "grid": [
+          "none",
+          "same_direction",
+          "opposite_direction"
+        ],
+        "units": "enum",
+        "meaning": "compare trade d with sign of net inventory; balanced does not qualify gated variants"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "E02 reaction"
+      }
+    },
+    "algorithm": [
+      "Build complete ON profile and selected two peak structure; no qualifying pair meansno_structure, not arbitrary minimum.",
+      "Select band before touch. Determine approach side from last complete 1m close: above band->long reaction, below->short; inside has no direction until departure.",
+      "At reaction confirmation apply optional inventory gate and check chosen ON extreme freshness from 09:30. Old POC alignment within 2 ticks is recorded but not mandatory baseline.",
+      "Execute E11 to fresh ON target; no target or missing required signed flow has explicit state."
+    ],
+    "outputs": {
+      "ON_profile_id": "string",
+      "bulge_ids": "string[2]?",
+      "band": "points[2]?",
+      "inventory_ratio": "float?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "reaction without inventory",
+      "signed inventory same vs opposite direction",
+      "old POC alignment ablation"
+    ],
+    "acceptance_cases": [
+      "Net buy100, total1000 gives inventory+0.10, long aligned.",
+      "A prior RTH profile cannot stand in for ON profile.",
+      "ONH consumed before band confirmation is not fresh long target."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Overnight inventory, LVN band and shelf reaction",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "18e34ecd37063e9ad0ccda752bdd5ac20ad285ea3cad31e58b9aba9f52a49c49",
+    "source_references": [
+      "MAMT:14"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A13",
+    "role": "context",
+    "research_decision": "Retain correctly scoped overnight-touch statistics and add independent price-midpoint and volume-value references.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E03",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-G01",
+      "R-J19"
+    ],
+    "bindings": {
+      "formation": "ON18:00–09:30",
+      "observation": "09:30–RTH close",
+      "references": "ONH, ONL, ON mid=(H+L)/2, ON VAH, ON VAL, ON VPOC",
+      "opening_cells": "below/inside/above ON price x below/inside/above ON value, equality inside",
+      "consumer": "G01/J19 target context only"
+    },
+    "parameters": {
+      "touch_rule": {
+        "default": "exact",
+        "grid": [
+          "exact",
+          "within_2ticks"
+        ],
+        "units": "enum",
+        "meaning": "statistical interaction tolerance only; active external H/L retirement stays exact"
+      },
+      "outcome_end": {
+        "default": "RTH_close",
+        "grid": [
+          "12:00",
+          "RTH_close"
+        ],
+        "units": "clock",
+        "meaning": "separate horizons"
+      }
+    },
+    "algorithm": [
+      "FreezeONpriceandtradeprofilewithownknown_at; distinguish arithmetic mid from VPOC.",
+      "Track first actual H/L visits independently from 09:30 and all reference contacts by selected horizon.",
+      "Publish high-only, low-only, both, neither, either with same eligible N and conditional opening-cell tables.",
+      "Score training conditional forecasts without transferring ES source percentages to NQ. Target consumers must check live freshness despite historical statistics persisting."
+    ],
+    "outputs": {
+      "first_touch_times": "map<UTC ns?>",
+      "ON_path": "4-wayenum",
+      "either": "bool?",
+      "opening_cell": "enum",
+      "forecast": "map<float>"
+    },
+    "controls": [
+      "unconditional ON touches",
+      "price-midpoint vs volume POC"
+    ],
+    "acceptance_cases": [
+      "H120, L100 gives ON mid110 even if VPOC116.",
+      "both+high only+low only+neither=N; either excludes neither.",
+      "Missing outcome coverage is not neither."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Overnight reference touch statistics",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "bc78d4d15d8314ac27873bcb4590383c28ccd279e80f44f8dbe762ef224d5fb0",
+    "source_references": [
+      "MAMT:15",
+      "MAMT:16",
+      "MAMT:21",
+      "MAMT:22",
+      "MAMT:23"
+    ],
+    "grid_screen_config_count": 3
+  },
+  {
+    "id": "R-A14",
+    "role": "component",
+    "research_decision": "Build a chronological ledger of actual prior TPO single runs, poor extremes and excess with explicit repair states.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E03"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A18"
+    ],
+    "bindings": {
+      "profile": "previous complete RTH TPO",
+      "period_minutes": 30,
+      "singles": "E03 interior same-letter runs, exclude entire edge-connected tails",
+      "poor": "outer row has>=2 periods",
+      "excess": "same-letter tail>=2 rows",
+      "lifetime": "up to5 sessions or full repair; H/L first visit independent",
+      "consumer": "A18 external target catalog"
+    },
+    "parameters": {
+      "row_ticks": {
+        "default": 4,
+        "grid": [
+          1,
+          4,
+          8
+        ],
+        "units": "ticks per TPO row",
+        "meaning": "row origin0integer ticks; price bounds converted explicitly"
+      },
+      "minimum_single_rows": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "rows",
+        "meaning": "interior same letter run length"
+      },
+      "excess_rows": {
+        "default": 2,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "rows",
+        "meaning": "same-letter edge tail length"
+      }
+    },
+    "algorithm": [
+      "Build period-identity sets at fixed price rows using trades, excluding decorative open markers. Save actual price bounds for each row.",
+      "Classify single runs, poor extremes and excess with chosen lengths; adjacent A-only andB-only rows are separate runs.",
+      "From profile close track first contact and each row visited. Single full repair requires all its rows visited; nearest row contact is not full repair. External poor/excess high low uses E01 first visit, with same first-tag episode response allowed later.",
+      "Export unfilled catalog at any as-of cutoff and separate repair/rejection outcomes. Presence of a poor extreme is not a trading win."
+    ],
+    "outputs": {
+      "TPO_object_id": "string",
+      "period_sets": "map<set>",
+      "run_price_bounds": "points[2]",
+      "first_contact_at": "UTC ns?",
+      "full_repair_at": "UTC ns?"
+    },
+    "controls": [
+      "row-size sensitivity",
+      "poor/excess presence vs actual first test outcome"
+    ],
+    "acceptance_cases": [
+      "Row index100 withrow_ticks4, tick0.25 corresponds price100, but with tick0.5corresponds200; never assume index equals price.",
+      "Three A-only edge rows are all tail and none interior singles.",
+      "Visiting one of three interior single rows leaves partial repair."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Prior TPO single prints, poor extremes and excess",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "9dd1a5103ec2f6221d6204f6d6da83effabcf5a60b3bfd61cf416a6965a5172e",
+    "source_references": [
+      "TPO3:3",
+      "TPO3:5",
+      "TPO3:6",
+      "TPO3:7",
+      "TPO3:9",
+      "C3:6"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A15",
+    "role": "context",
+    "research_decision": "Measure completed IB extension and continuation with side-specific denominators and independent first-visit state.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E03",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A07",
+      "R-J25"
+    ],
+    "bindings": {
+      "formation": "IB09:30–10:30",
+      "horizon": "10:30–RTH close",
+      "primary": "close-break four way path",
+      "continuation": "among high-only final RTH close>IBH; low-only close<IBL",
+      "rotation": "neither-path sessions, post 10:30 touch fixed prior RTH POC",
+      "consumer": "A07/J25 context available increment ally; final path only outcome"
+    },
+    "parameters": {
+      "break_rule": {
+        "default": "close",
+        "grid": [
+          "close",
+          "wick"
+        ],
+        "units": "enum",
+        "meaning": "completed 1m strict close vs inclusive execution visit"
+      },
+      "break_ticks": {
+        "default": 1,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "for close break distance; wick alternative uses exact visit regardless parameter"
+      }
+    },
+    "algorithm": [
+      "Freeze complete IB and record contributing1m/1s execution rebuild comparison.",
+      "Track exact first visits and separate close break timestamps independently; first visit ends active line.",
+      "At RTH close classify path and compute continuation with side-specific conditional counts; neither rotation uses real post 10:30 POC contact.",
+      "Fit causal forecasts using only currently observed first break/width/open location; never use final high-only as already-known trend filter."
+    ],
+    "outputs": {
+      "IB_width": "points",
+      "first_visits": "UTC ns?[2]",
+      "first_close_breaks": "UTC ns?[2]",
+      "final_path": "enum",
+      "continuation": "bool?"
+    },
+    "controls": [
+      "wick vs close paths",
+      "unconditional IB continuation"
+    ],
+    "acceptance_cases": [
+      "Final close exact IBH fails strict up continuation.",
+      "A wick below IBL with inside closes alters wick path but not close path.",
+      "A10:30 first touch cannot be reset at the first later close break."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Initial-balance extension and conditional continuation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "ed7a3d8e703e5146d715afd54b5c0c7b94faf66c998bb10a1d1904b79bd5d843",
+    "source_references": [
+      "TPO3:8",
+      "MAMT:19",
+      "MAMT:23",
+      "XF:8"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-A16",
+    "role": "signal",
+    "research_decision": "Trade measured ledge reactions and test confluence from independently identified objects available at contact.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E05",
+      "E06",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "prior 5 complete RTH composite, same contract",
+      "ledge": "E03 dense profile ledge",
+      "partners": "as-of RTH VWAP and±1sigma, prior RTH VA edges, untouched older POCs; excludes objects derived from same origin profile",
+      "entry_window": "09:30–15:00",
+      "side": "reaction back toward higher-volume ledge side",
+      "stop": "episode extreme+2 ticks",
+      "target": "nearest same-profile HVN centre ahead; else no_target",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "confluence_required": {
+        "default": true,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "at least one independent origin partner within selected distance"
+      },
+      "distance_fraction": {
+        "default": 0.05,
+        "grid": [
+          0.025,
+          0.05,
+          0.1
+        ],
+        "units": "prior VA width",
+        "meaning": "max band distance"
+      },
+      "absorption_gate": {
+        "default": false,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "E06 opposite aggression absorption available before entry; gated decision delay matched"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "E02 reaction"
+      }
+    },
+    "algorithm": [
+      "Freeze composite and detect actual ledge orientation. Profiles with contract changes are unavailable.",
+      "At first touch snapshot already available partners and their origin IDs. Exclude self-confluence and consumed external high low/naked POC targets.",
+      "Require E02 reaction toward higher-volume side. If absorption gate, wait for E06 completion and confirm defender direction before entry, retaining delayed control.",
+      "Select real HVN target ahead and E11 execute; compare stacked versus lone ledge visits on same parent universe."
+    ],
+    "outputs": {
+      "ledge_id": "string",
+      "partner_ids": "string[]",
+      "distance": "points",
+      "absorption": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "lone ledge",
+      "confluence with outflow",
+      "same-delay price-only reaction"
+    ],
+    "acceptance_cases": [
+      "No on VWAP cannot be used at 09:45.",
+      "The same profile VAH and its ledge cannot claim independent-origin confluence.",
+      "A historical POC already visited cannot be used as naked partner."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Actual ledge confluence and rejection",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "2c6a701fcc3b76574182ff148169d0d9715d1736effc9d0f17f6919e21c77136",
+    "source_references": [
+      "VP2:6",
+      "VP2:7",
+      "VP2:8"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-A17",
+    "role": "component",
+    "research_decision": "Identify a second accepted-volume region beyond a real profile transition; terminal taper and genuine bridge are distinct.",
+    "inputs": [
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A16",
+      "R-A18"
+    ],
+    "bindings": {
+      "profile": "prior RTH baseline",
+      "candidate": "E03 LVN outside VAL/VAH but inside profile full support",
+      "direction": "from current value through candidate outward",
+      "second_region": "beyond LVN band at least N consecutive dense price cells >=profile median positive volume; zeros remain below threshold",
+      "consumer": "A16/A18 location feature"
+    },
+    "parameters": {
+      "accepted_run_ticks": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          5
+        ],
+        "units": "ticks",
+        "meaning": "consecutive accepted volume cells"
+      },
+      "step_ratio": {
+        "default": 3.0,
+        "grid": [
+          2.0,
+          3.0,
+          4.0
+        ],
+        "units": "ratio",
+        "meaning": "high/low adjacent smoothed volume, low must>0"
+      },
+      "taper_ticks": {
+        "default": 3,
+        "grid": [
+          3,
+          5,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "consecutive strictly decreasing outward volume to classify taper"
+      },
+      "profile_scope": {
+        "default": "prior_rth",
+        "grid": [
+          "prior_rth",
+          "balance_composite_2"
+        ],
+        "units": "enum",
+        "meaning": "completed fixed scope"
+      }
+    },
+    "algorithm": [
+      "Build dense profile and candidate LVNs with orientation from the frozen VA, never choose whichever side total is smaller.",
+      "Compute acceptance cutoff as median of positive unsmoothed support volumes; if no positive volume unavailable. Search beyond candidate in outward direction for the first qualifying contiguous run.",
+      "Classify abrupt step when adjacent ratio>=step_ratio with nonzero denominator; taper when minimum selected strictly decreasing sequence exists; export both flags if both geometry parts occur, plus the second_region boolean.",
+      "Freeze geometry before later reactive consumer; measure first test response with/without second region, not shape-presence as win."
+    ],
+    "outputs": {
+      "candidate_band": "points[2]?",
+      "second_region_band": "points[2]?",
+      "second_region": "bool?",
+      "transition_type": "enum",
+      "acceptance_cutoff": "contracts"
+    },
+    "controls": [
+      "terminal taper without second region",
+      "accepted run length sensitivity"
+    ],
+    "acceptance_cases": [
+      "Volumes[150,160,40,30,140,155] have positive median145;140fails,155alone is not2 tick accepted run.",
+      "Zero-volume gaps break accepted runs.",
+      "A node outside full profile support is invalid."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Second transition beyond a profile extreme",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "acec384b0cfefa3d24fdc2de983ce05b9f1d87866dfeba8cd6cd40ce6c80e40b",
+    "source_references": [
+      "MATH:13",
+      "MATH:15"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-A18",
+    "role": "signal",
+    "research_decision": "Implement all four balance-edge rejection/acceptance branches with real unfinished TPO or fresh-extreme targets.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [
+      "R-A14"
+    ],
+    "consumers": [],
+    "bindings": {
+      "profile": "E03 balance_composite_2 VP70, fixed before current RTH",
+      "entry_window": "09:30–15:00",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "E02 reusable profile area until accepted break or session expiry; external H/L targets use E01",
+      "branches": "VAL reject->long, VAH reject->short, accepted above VAH->long, accepted below VAL->short",
+      "targets": "A14unfilled single-run near row or fresh poor/excess/prior RTH high low; nearest eligible ahead",
+      "stop": "rejection episode extreme+2 ticks; acceptance break episode extreme+2 ticks",
+      "inside_trigger": "excluded; must actual edge interaction"
+    },
+    "parameters": {
+      "branch_mode": {
+        "default": "both",
+        "grid": [
+          "both",
+          "rejection_only",
+          "acceptance_only"
+        ],
+        "units": "enum",
+        "meaning": "four branches explicit"
+      },
+      "accept_minutes": {
+        "default": 30,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "outside HOLD after 2 tick close break"
+      },
+      "target_kind": {
+        "default": "all",
+        "grid": [
+          "all",
+          "single_runs",
+          "fresh_extremes"
+        ],
+        "units": "enum",
+        "meaning": "no fabricated targets"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "rejection E02 confirmation"
+      }
+    },
+    "algorithm": [
+      "Build real balance and A14as-of unfinished catalog, preserving row price units and prior-session coverage.",
+      "At edge first interaction run rejection and acceptance candidates in parallel; earliest completed confirmation wins for episode, exact tie chooses acceptance and records tie.",
+      "At confirmation choose ahead target that remains eligible then. Single-run target is nearest untouched row edge, with first contact and full repair reported separately. High/low target must be unvisited from own birth.",
+      "Freeze initial stop and target and execute E11. Missing target means no_target, never constant synthetic price or automatic positive bullish flag."
+    ],
+    "outputs": {
+      "branch": "enum",
+      "bias_known_at": "UTC ns?",
+      "target_origin_id": "string?",
+      "target_price": "points?",
+      "target_reached_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "rejection vs acceptance branches",
+      "unfinished TPO vs fresh-extreme targets"
+    ],
+    "acceptance_cases": [
+      "VAL rejection long cannot use a lower target.",
+      "A target consumed while30 minute acceptance forms is ineligible at confirmation.",
+      "A target tick index must be converted with row origin/tick size before order comparison."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "amt",
+    "title": "Balance-edge rejection or acceptance with unfinished targets",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_amt.json",
+    "audit_record_sha256": "fc25c548d6f063429d4cb356170fa02159b45943f73cde14af109b612d39e487",
+    "source_references": [
+      "C3:6",
+      "C3:7"
+    ],
+    "grid_screen_config_count": 9
+  }
+]

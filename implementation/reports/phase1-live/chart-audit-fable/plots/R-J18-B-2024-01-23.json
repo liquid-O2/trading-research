@@ -1,0 +1,186 @@
+{
+  "case": {
+    "id": "R-J18",
+    "case": "B",
+    "date": "2024-01-23",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 17,
+    "negative_count": 630
+  },
+  "production_session": {
+    "date": "2024-01-23",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6370,
+    "expected_1s": 10800,
+    "missing_1s": 4430,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 17525.5,
+    "L": 17448.5,
+    "open": 17448.5,
+    "close": 17500.0,
+    "EQ": 17487.0,
+    "Q25": 17467.75,
+    "Q75": 17506.25,
+    "W69": 77.0,
+    "volume": 34470.0,
+    "close_0859": 17500.0,
+    "open_0930": 17487.5,
+    "w_pct_0859close": 0.44,
+    "w_pct_0930open": 0.4403145103645461,
+    "WpriorRTH": 151.0,
+    "w_rel_prior_rth": 0.5099337748344371,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.5-0.8",
+    "prior_rth_high": 17585.0,
+    "prior_rth_low": 17434.0,
+    "asia_high": 17487.75,
+    "asia_low": 17454.25,
+    "london_high": 17487.25,
+    "london_low": 17467.5,
+    "path_class": "low-only",
+    "break_order": "low",
+    "first_high_break_ms": null,
+    "first_low_break_ms": 1706020320000,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1706018400000000000,
+    "outcome_start_ns": 1706020200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1706020500000,
+    "m05_side": "low",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "6-9.published formation",
+      "low": 17448.5,
+      "high": 17525.5,
+      "start": 6.0,
+      "end": 9.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published H",
+      "price": 17525.5,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published L",
+      "price": 17448.5,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_low",
+      "price": 17410.0,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_high",
+      "price": 17564.0,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "box",
+      "label": "first code OB; C2 H/L",
+      "low": 17409.5,
+      "high": 17444.25,
+      "start": 9.65,
+      "end": 12,
+      "color": "#bf921e"
+    },
+    {
+      "kind": "line",
+      "label": "C2 high",
+      "price": 17444.25,
+      "start": 9.65,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "C2 low",
+      "price": 17409.5,
+      "start": 9.65,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 180,
+      "missing": 0,
+      "open": 17448.5,
+      "high": 17525.5,
+      "low": 17448.5,
+      "close": 17500.0
+    },
+    "first_OB": {
+      "known_clock": 9.65,
+      "bull": {
+        "ob_bull": 1,
+        "block": [
+          17409.5,
+          17444.25
+        ],
+        "mid": 17426.875,
+        "stop": 17409.5
+      },
+      "bear": {
+        "ob_bear": 0,
+        "block": [
+          17409.5,
+          17444.25
+        ],
+        "mid": 17426.875,
+        "stop": 17444.25
+      }
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J18-B-2024-01-23.png",
+  "notes": [
+    "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 550,
+    "code": "def j18(r):\n        return bool(r.get(\"j18_ob\"))"
+  },
+  "event": "3-candle OB at -0.5 on 3m AM bars",
+  "detail_window": [
+    9.433333333333334,
+    9.933333333333334
+  ]
+}

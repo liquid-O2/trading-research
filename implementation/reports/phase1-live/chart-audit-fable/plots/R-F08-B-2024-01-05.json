@@ -1,0 +1,160 @@
+{
+  "case": {
+    "id": "R-F08",
+    "case": "B",
+    "date": "2024-01-05",
+    "code_result": false,
+    "selection": "code-negative",
+    "author_dated": false,
+    "positive_count": 323,
+    "negative_count": 324
+  },
+  "production_session": {
+    "date": "2024-01-05",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6676,
+    "expected_1s": 10800,
+    "missing_1s": 4124,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16426.75,
+    "L": 16334.25,
+    "open": 16385.75,
+    "close": 16399.75,
+    "EQ": 16380.5,
+    "Q25": 16357.375,
+    "Q75": 16403.625,
+    "W69": 92.5,
+    "volume": 73051.0,
+    "close_0859": 16399.75,
+    "open_0930": 16449.25,
+    "w_pct_0859close": 0.5640329883077486,
+    "w_pct_0930open": 0.5623356687994894,
+    "WpriorRTH": 147.75,
+    "w_rel_prior_rth": 0.626057529610829,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.5-0.8",
+    "prior_rth_high": 16583.75,
+    "prior_rth_low": 16436.0,
+    "asia_high": 16469.0,
+    "asia_low": 16441.0,
+    "london_high": 16444.5,
+    "london_low": 16399.5,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1704465000000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1704463200000000000,
+    "outcome_start_ns": 1704465000000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1704465120000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 16467.5,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 16529.5,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 16510.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 16449.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "line",
+      "label": "code reward origin = first AM trade",
+      "price": 16449.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2024-01-04",
+    "am_aggregates": {
+      "first": 16449.25,
+      "last": 16516.5,
+      "delta": 2207.0,
+      "first5_size_median": 1.0,
+      "last5_size_median": 1.0,
+      "first20_size_median": 1.0,
+      "last20_size_median": 1.0
+    },
+    "f08_exact": {
+      "reward_3tick": false,
+      "adverse_ticks": 274.0,
+      "favor_ticks": -264.0,
+      "direction": -1,
+      "last80_start_ns": 1704473990584579951,
+      "last_ns": 1704473999816159869
+    },
+    "tape_window": {
+      "date": "2024-01-05",
+      "from": 9.5,
+      "to": 12,
+      "trades": 137011,
+      "buy_volume": 114879.0,
+      "sell_volume": 112672.0,
+      "unknown_volume": 0.0
+    },
+    "prints_ge_30": 42,
+    "prints_ge_75": 11,
+    "prints_ge_100": 7
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-01-01_2024-01-07.parquet"
+  ],
+  "plot": "plots/R-F08-B-2024-01-05.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 688,
+    "code": "def f08(r):\n        return bool(r.get(\"f08_reward_3tick\"))"
+  },
+  "event": "3-tick reward after AM absorption; CVD-median stays blocked",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

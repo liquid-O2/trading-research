@@ -1,0 +1,327 @@
+[
+  {
+    "id": "R-J02",
+    "date": "2026-01-28",
+    "case": "stated-positive",
+    "code_result": true,
+    "selection": "Additional dated source-event diagnostic",
+    "positive_count": 457,
+    "negative_count": 190,
+    "plot": "plots/R-J02-stated-positive-2026-01-28.png",
+    "trace": "plots/R-J02-stated-positive-2026-01-28.json",
+    "notes": [
+      "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+    ]
+  },
+  {
+    "id": "R-J08",
+    "date": "2025-01-28",
+    "case": "source-date",
+    "code_result": false,
+    "selection": "Additional dated source-event diagnostic",
+    "positive_count": 14,
+    "negative_count": 633,
+    "plot": "plots/R-J08-source-date-2025-01-28.png",
+    "trace": "plots/R-J08-source-date-2025-01-28.json",
+    "notes": [
+      "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+    ]
+  },
+  {
+    "id": "R-A03",
+    "case": "documented-hold-positive",
+    "date": "2026-02-12",
+    "code_result": true,
+    "selection": "independent both-boundary hold followed by target scan",
+    "positive_count": 41,
+    "negative_count": 606,
+    "plot": "plots/R-A03-documented-hold-positive-2026-02-12.png",
+    "trace": "plots/R-A03-documented-hold-positive-2026-02-12.json",
+    "notes": []
+  },
+  {
+    "id": "R-A07",
+    "date": "2026-01-30",
+    "case": "sequence-positive",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 10,
+    "negative_count": 637,
+    "audit_sequence": {
+      "date": "2026-01-30",
+      "kind": "named-IB-held-break-later-retest",
+      "side": -1,
+      "IBH": 25940.0,
+      "IBL": 25790.75,
+      "events": [
+        {
+          "date": "2026-01-30",
+          "kind": "break",
+          "bar_index": 85,
+          "clock": 11.916666666666666,
+          "known_clock": 11.933333333333334,
+          "level": 25790.75,
+          "marker_price": 25790.25
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "30-minute hold",
+          "bar_index": 115,
+          "clock": 12.416666666666666,
+          "known_clock": 12.433333333333334,
+          "level": 25790.75,
+          "marker_price": 25763.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "later retest",
+          "bar_index": 120,
+          "clock": 12.5,
+          "known_clock": 12.516666666666667,
+          "level": 25790.75,
+          "marker_price": 25790.75
+        },
+        {
+          "date": "2026-01-30",
+          "kind": "half-width rejection",
+          "bar_index": 125,
+          "clock": 12.583333333333334,
+          "known_clock": 12.600000000000001,
+          "level": 25790.75,
+          "marker_price": 25715.25
+        }
+      ]
+    },
+    "plot": "plots/R-A07-sequence-positive-2026-01-30.png",
+    "trace": "plots/R-A07-sequence-positive-2026-01-30.json",
+    "notes": [
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Numbered stages: 1 break known 11:56, 2 30-minute hold known 12:26, 3 later retest known 12:31, 4 half-width rejection known 12:36. Close stages use actual closes; retest/target marks use the touched edge."
+    ]
+  },
+  {
+    "id": "R-A08",
+    "date": "2026-08-19",
+    "case": "sequence-positive",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 26,
+    "negative_count": 621,
+    "audit_sequence": {
+      "date": "2026-08-19",
+      "kind": "named-held-reaccept",
+      "side": -1,
+      "VAL": 29563.0,
+      "VAH": 29662.5,
+      "events": [
+        {
+          "date": "2026-08-19",
+          "kind": "outside break",
+          "bar_index": 18,
+          "clock": 9.8,
+          "known_clock": 9.816666666666668,
+          "level": 29563.0,
+          "marker_price": 29517.25
+        },
+        {
+          "date": "2026-08-19",
+          "kind": "outside hold complete",
+          "bar_index": 48,
+          "clock": 10.3,
+          "known_clock": 10.316666666666668,
+          "level": 29563.0,
+          "marker_price": 29448.75
+        },
+        {
+          "date": "2026-08-19",
+          "kind": "reentry",
+          "bar_index": 133,
+          "clock": 11.716666666666667,
+          "known_clock": 11.733333333333334,
+          "level": 29563.0,
+          "marker_price": 29575.0
+        },
+        {
+          "date": "2026-08-19",
+          "kind": "inside hold complete",
+          "bar_index": 163,
+          "clock": 12.216666666666667,
+          "known_clock": 12.233333333333334,
+          "level": 29563.0,
+          "marker_price": 29642.25
+        },
+        {
+          "date": "2026-08-19",
+          "kind": "later opposite edge",
+          "bar_index": 168,
+          "clock": 12.3,
+          "known_clock": 12.316666666666668,
+          "level": 29662.5,
+          "marker_price": 29662.5
+        }
+      ]
+    },
+    "plot": "plots/R-A08-sequence-positive-2026-08-19.png",
+    "trace": "plots/R-A08-sequence-positive-2026-08-19.json",
+    "notes": [
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Numbered stages: 1 outside break known 09:49, 2 outside hold complete known 10:19, 3 reentry known 11:44, 4 inside hold complete known 12:14, 5 later opposite edge known 12:19. Close stages use actual closes; retest/target marks use the touched edge."
+    ]
+  },
+  {
+    "id": "R-A09",
+    "date": "2026-08-26",
+    "case": "sequence-positive",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 28,
+    "negative_count": 619,
+    "audit_sequence": {
+      "date": "2026-08-26",
+      "kind": "named-traverse-retest",
+      "side": -1,
+      "VAL": 29208.0,
+      "VAH": 29288.0,
+      "events": [
+        {
+          "date": "2026-08-26",
+          "kind": "first outside close",
+          "bar_index": 13,
+          "clock": 9.716666666666667,
+          "known_clock": 9.733333333333334,
+          "level": null,
+          "marker_price": 29288.5
+        },
+        {
+          "date": "2026-08-26",
+          "kind": "opposite outside close",
+          "bar_index": 54,
+          "clock": 10.4,
+          "known_clock": 10.416666666666668,
+          "level": null,
+          "marker_price": 29202.75
+        },
+        {
+          "date": "2026-08-26",
+          "kind": "retest",
+          "bar_index": 55,
+          "clock": 10.416666666666666,
+          "known_clock": 10.433333333333334,
+          "level": 29208.0,
+          "marker_price": 29208.0
+        },
+        {
+          "date": "2026-08-26",
+          "kind": "half-width rejection",
+          "bar_index": 57,
+          "clock": 10.45,
+          "known_clock": 10.466666666666667,
+          "level": 29208.0,
+          "marker_price": 29164.0
+        }
+      ]
+    },
+    "plot": "plots/R-A09-sequence-positive-2026-08-26.png",
+    "trace": "plots/R-A09-sequence-positive-2026-08-26.json",
+    "notes": [
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Numbered stages: 1 first outside close known 09:44, 2 opposite outside close known 10:25, 3 retest known 10:26, 4 half-width rejection known 10:28. Close stages use actual closes; retest/target marks use the touched edge."
+    ]
+  },
+  {
+    "id": "R-P02",
+    "date": "2026-08-31",
+    "case": "event-negative",
+    "code_result": true,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 637,
+    "negative_count": 10,
+    "audit_sequence": {
+      "date": "2026-08-31",
+      "kind": "hour-neither-sweep",
+      "hour": 11,
+      "prior_high": 29447.75,
+      "prior_low": 29355.0
+    },
+    "plot": "plots/R-P02-event-negative-2026-08-31.png",
+    "trace": "plots/R-P02-event-negative-2026-08-31.json",
+    "notes": [
+      "Only high-sweep return is effectively scored; the same bar may supply sweep and return. Prior-hour low return is missing.",
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Selected 11:00 hour has neither high nor low sweep; daily OR scorer may still be true from another hour."
+    ]
+  },
+  {
+    "id": "R-P19",
+    "date": "2025-09-29",
+    "case": "event-negative",
+    "code_result": false,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 25,
+    "negative_count": 622,
+    "audit_sequence": {
+      "date": "2025-09-29",
+      "kind": "all-RTH-pairs-no-gap"
+    },
+    "plot": "plots/R-P19-event-negative-2025-09-29.png",
+    "trace": "plots/R-P19-event-negative-2025-09-29.json",
+    "notes": [
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Read-only scan of every adjacent complete RTH pair finds zero gaps of 4 ticks or more on this date."
+    ]
+  },
+  {
+    "id": "R-A10",
+    "date": "2026-05-19",
+    "case": "sequence-positive",
+    "code_result": true,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 141,
+    "negative_count": 506,
+    "audit_sequence": {
+      "date": "2026-05-19",
+      "kind": "named-no-through-open-first30",
+      "side": 1,
+      "open": 28850.25,
+      "first30_high": 29068.0,
+      "first30_low": 28850.25,
+      "known_clock": 10,
+      "first_bar_ohlc": [
+        28850.25,
+        28943.5,
+        28850.25,
+        28911.25
+      ]
+    },
+    "plot": "plots/R-A10-sequence-positive-2026-05-19.png",
+    "trace": "plots/R-A10-sequence-positive-2026-05-19.json",
+    "notes": [
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Named first-30-minute no-through-open positive, including the first bar. Equality at the initial opening print is allowed; minute bars do not resolve an intraminute retouch. This observation does not certify all qualitative opening/day labels."
+    ]
+  },
+  {
+    "id": "R-P06",
+    "date": "2026-08-26",
+    "case": "event-negative",
+    "code_result": true,
+    "selection": "independent chronological named-event audit",
+    "positive_count": 518,
+    "negative_count": 129,
+    "audit_sequence": {
+      "date": "2026-08-26",
+      "kind": "source-clock-London-no-Asia-hit",
+      "asia_high": 29283.25,
+      "asia_low": 29096.0,
+      "london_high": 29278.75,
+      "london_low": 29185.0
+    },
+    "plot": "plots/R-P06-event-negative-2026-08-26.png",
+    "trace": "plots/R-P06-event-negative-2026-08-26.json",
+    "notes": [
+      "Actual clock substitutes: Asia20:00\u201300:00, London00:00\u201303:00; no source NY-vs-London table.",
+      "Additional chronological audit of existing bars/levels; marks show a named sequence, while the header retains the original session scorer.",
+      "Source-clock comparison uses the existing complete bars: London02:00-08:00 reaches neither completed Asia bound. Legacy code boxes remain drawn separately."
+    ]
+  }
+]

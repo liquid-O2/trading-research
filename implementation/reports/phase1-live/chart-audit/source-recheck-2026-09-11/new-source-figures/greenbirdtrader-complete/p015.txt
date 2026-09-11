@@ -1,0 +1,86 @@
+@greenbirdtrader  | union: framework + raw + charts
+
+
+PART B — Raw retrieved posts and replies
+
+@greenbirdtrader — raw post archive (agent / LLM readable)
+
+
+account: @greenbirdtrader
+user_id: 1909320583420297218
+account_created_approx_utc: 2025-04-07
+handle_display: Green Bird | NQ Futures
+archive_built: 2026-09-11
+companion_synthesis: /home/workdir/artifacts/greenbirdtrader-trading-framework.md
+media_dir: /home/workdir/artifacts/greenbirdtrader-media/
+
+How an agent should read this file
+
+• Each record is a fenced RECORD block with stable fields.
+
+• type is original or reply.
+
+• url is always https://x.com/greenbirdtrader/status/{id}.
+
+• conversation_id groups a parent tweet with his replies under it.
+
+• media lists remote pbs.twimg.com URLs. If a file was downloaded, local is set.
+
+• Quoted tweets are nested under quoted.
+
+• His own answers to commenters are separate reply records with the same conversation_id.
+
+• Do not treat P&L dollar figures as rules. They are fleet totals.
+
+
+Coverage (read this before claiming completeness)
+
+X search returns a cap per query (here: 10). Thread fetch returns a sample of replies, not every comment.
+
+This file is not a guaranteed 100% dump of every post since April 2025. It is the raw text + media URLs retrieved across
+date-window paging from 2025-04 (account birth) through 2026-09-10, plus full author-reply chains on the
+model-defining conversations.
+
+What is in this file:
+
+• Model-defining originals (NYAM, Asia, golden pocket, NWOG, TDO, risk).
+
+• His replies that define terms (TDO = midnight, golden pocket = 50–61.8, 5-minute close, etc.).
+
+• Earlier vocabulary (2025): sweep → reclaim → opposing liquidity, PWH, MSS+FVG, Opening Range.
+
+• Ops / psychology originals that constrain how he trades (no payout-pending accounts, DLL, no Friday preference,
+overtrading).
+
+What is out / incomplete:
+
+• Amen replies (“Beautiful”, “My pleasure”).
+
+• Most other people’s comments (only kept when needed to understand his answer).
+
+• Deleted posts.
+
+• Quiet low-view replies the search index did not return.
+
+To extend: page from:greenbirdtrader since:YYYY-MM-DD until:YYYY-MM-DD in ~7-day windows, both with and without
+-filter:replies, then conversation_id:{id} from:greenbirdtrader on any original with replies > 5.
+
+
+
+RECORD format
+
+RECORD
+id:
+conversation_id:
+created_at_utc:
+type: original | reply
+url:
+text: |
+media:
+quoted:
+author_notes:
+
+
+
+
+Public posts. Not financial advice. One file.                                                                                     p. 15

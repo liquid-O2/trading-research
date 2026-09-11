@@ -1,0 +1,120 @@
+{
+  "case": {
+    "id": "R-R01",
+    "case": "B",
+    "date": "2024-01-10",
+    "code_result": false,
+    "selection": "code-negative",
+    "author_dated": false,
+    "positive_count": 262,
+    "negative_count": 385
+  },
+  "production_session": {
+    "date": "2024-01-10",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6628,
+    "expected_1s": 10800,
+    "missing_1s": 4172,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16884.25,
+    "L": 16814.75,
+    "open": 16875.0,
+    "close": 16816.5,
+    "EQ": 16849.5,
+    "Q25": 16832.125,
+    "Q75": 16866.875,
+    "W69": 69.5,
+    "volume": 32708.0,
+    "close_0859": 16816.5,
+    "open_0930": 16840.0,
+    "w_pct_0859close": 0.4132845717004133,
+    "w_pct_0930open": 0.41270783847980996,
+    "WpriorRTH": 208.0,
+    "w_rel_prior_rth": 0.33413461538461536,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 16868.5,
+    "prior_rth_low": 16660.5,
+    "asia_high": 16841.5,
+    "asia_low": 16822.25,
+    "london_high": 16848.25,
+    "london_low": 16806.25,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1704901380000,
+    "first_low_break_ms": 1704898920000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1704895200000000000,
+    "outcome_start_ns": 1704897000000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "QQQ flip",
+      "price": 365.0,
+      "start": 9.5,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "QQQ call_wall",
+      "price": 410.0,
+      "start": 9.5,
+      "end": 16,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "QQQ put_wall",
+      "price": 402.0,
+      "start": 9.5,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "QQQ spot",
+      "price": 406.62,
+      "start": 9.5,
+      "end": 16,
+      "color": "#8453a4",
+      "style": "--"
+    }
+  ],
+  "helpers": {},
+  "sources": [],
+  "plot": "plots/R-R01-B-2024-01-10.png",
+  "notes": [
+    "Native QQQ coordinates. Code flip is cumulative across strike, not a repriced spot root."
+  ],
+  "root": "/workspace/data/quantpad/nasdaq__qqq-etf__ohlcv-1m",
+  "predicate": {
+    "line": 658,
+    "code": "def r01(r):\n        return bool(r.get(\"short_gamma\"))"
+  },
+  "event": "QQQ short-gamma from inverted quote IV, OI, and BS gamma (09:30-09:35)",
+  "detail_window": [
+    9.5,
+    10.0
+  ]
+}

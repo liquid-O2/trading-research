@@ -1,0 +1,128 @@
+{
+  "case": {
+    "id": "R-G01",
+    "case": "B",
+    "date": "2025-10-08",
+    "code_result": false,
+    "selection": "code-negative",
+    "positive_count": 468,
+    "negative_count": 179
+  },
+  "production_session": {
+    "date": "2025-10-08",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 4832,
+    "expected_1s": 10800,
+    "missing_1s": 5968,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 25104.5,
+    "L": 25042.5,
+    "open": 25087.75,
+    "close": 25062.5,
+    "EQ": 25073.5,
+    "Q25": 25058.0,
+    "Q75": 25089.0,
+    "W69": 62.0,
+    "volume": 20676.0,
+    "close_0859": 25062.5,
+    "open_0930": 25079.75,
+    "w_pct_0859close": 0.24738154613466334,
+    "w_pct_0930open": 0.24721139564788325,
+    "WpriorRTH": 280.0,
+    "w_rel_prior_rth": 0.22142857142857142,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 25264.75,
+    "prior_rth_low": 24984.75,
+    "asia_high": 25092.25,
+    "asia_low": 25027.5,
+    "london_high": 25094.0,
+    "london_low": 25026.25,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1759930260000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1759928400000000000,
+    "outcome_start_ns": 1759930200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1759930380000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "gb.nyam formation",
+      "low": 25054.75,
+      "high": 25183.75,
+      "start": 9.0,
+      "end": 10.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam H",
+      "price": 25183.75,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam L",
+      "price": 25054.75,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "gb.nyam EQ",
+      "price": 25119.25,
+      "start": 10.0,
+      "end": 12.0,
+      "color": "#007d73",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.gb.nyam": {
+      "n": 60,
+      "missing": 0,
+      "open": 25063.25,
+      "high": 25183.75,
+      "low": 25054.75,
+      "close": 25174.25
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-G01-B-2025-10-08.png",
+  "notes": [
+    "Compared with GB raw posts and figures. Axis is the implementation's New York clock; source snapshot offsets are audited separately. Extended lines show retained geometry, not proof that a previously visited high/low remains active."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 571,
+    "code": "def g01(r):\n        return bool(r.get(\"fail_range.gb.nyam\"))"
+  },
+  "event": "NYAM 09:00-10:00 wick then 5m close-back after 10:00",
+  "detail_window": [
+    9.85,
+    10.35
+  ]
+}

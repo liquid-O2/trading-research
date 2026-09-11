@@ -1,0 +1,177 @@
+{
+  "case": {
+    "id": "R-F03",
+    "case": "A",
+    "date": "2024-04-08",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 2,
+    "negative_count": 645
+  },
+  "production_session": {
+    "date": "2024-04-08",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6424,
+    "expected_1s": 10800,
+    "missing_1s": 4376,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 18367.5,
+    "L": 18279.0,
+    "open": 18306.0,
+    "close": 18357.75,
+    "EQ": 18323.25,
+    "Q25": 18301.125,
+    "Q75": 18345.375,
+    "W69": 88.5,
+    "volume": 33850.0,
+    "close_0859": 18357.75,
+    "open_0930": 18330.25,
+    "w_pct_0859close": 0.4820852228622789,
+    "w_pct_0930open": 0.48280847233398344,
+    "WpriorRTH": 305.75,
+    "w_rel_prior_rth": 0.28945216680294356,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 18408.25,
+    "prior_rth_low": 18102.5,
+    "asia_high": 18334.0,
+    "asia_low": 18270.25,
+    "london_high": 18313.75,
+    "london_low": 18279.25,
+    "path_class": "both",
+    "break_order": "low-then-high",
+    "first_high_break_ms": 1712587800000,
+    "first_low_break_ms": 1712583300000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": true,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1712581200000000000,
+    "outcome_start_ns": 1712583000000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 18247.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 18386.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 18305.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 18330.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "line",
+      "label": "code final AM VWAP (noon)",
+      "price": 18313.404312417155,
+      "start": 9.5,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code overnight VWAP",
+      "price": 18311.835095693372,
+      "start": 9.5,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "code prior VA midpoint",
+      "price": 18316.625,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2024-04-05",
+    "am_aggregates": {
+      "first": 18330.25,
+      "last": 18301.25,
+      "delta": -285.0,
+      "first5_size_median": 1.0,
+      "last5_size_median": 1.0,
+      "first20_size_median": 1.0,
+      "last20_size_median": 1.0
+    },
+    "f03_scalars": {
+      "am_vwap": 18313.404312417155,
+      "on_vwap": 18311.835095693372,
+      "va_mid": 18316.625
+    },
+    "tape_window": {
+      "date": "2024-04-08",
+      "from": 9.5,
+      "to": 12,
+      "trades": 144838,
+      "buy_volume": 111135.0,
+      "sell_volume": 111420.0,
+      "unknown_volume": 0.0
+    },
+    "prints_ge_30": 10,
+    "prints_ge_75": 0,
+    "prints_ge_100": 0
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-04-08_2024-04-14.parquet"
+  ],
+  "plot": "plots/R-F03-A-2024-04-08.png",
+  "notes": [
+    "Curves are an unscored ETH helper comparison. F03 uses final-AM / overnight trade VWAP and prior VA midpoint."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 676,
+    "code": "def f03(r):\n        return bool(r.get(\"f03_vwap_conv\"))"
+  },
+  "event": "AM VWAP, overnight VWAP, and prior VA mid within tR",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "case": {
+    "id": "R-J24",
+    "case": "B",
+    "date": "2025-12-03",
+    "code_result": false,
+    "selection": "code-negative",
+    "positive_count": 645,
+    "negative_count": 2
+  },
+  "production_session": {
+    "date": "2025-12-03",
+    "year": "2025",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 4788,
+    "expected_1s": 10800,
+    "missing_1s": 6012,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 25677.75,
+    "L": 25610.25,
+    "open": 25624.75,
+    "close": 25648.5,
+    "EQ": 25644.0,
+    "Q25": 25627.125,
+    "Q75": 25660.875,
+    "W69": 67.5,
+    "volume": 18161.0,
+    "close_0859": 25648.5,
+    "open_0930": 25495.25,
+    "w_pct_0859close": 0.26317328498742615,
+    "w_pct_0930open": 0.2647551994979457,
+    "WpriorRTH": 255.5,
+    "w_rel_prior_rth": 0.26418786692759294,
+    "width_bin_pct": "0-0.3",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 25670.0,
+    "prior_rth_low": 25414.5,
+    "asia_high": 25677.0,
+    "asia_low": 25625.25,
+    "london_high": 25678.25,
+    "london_low": 25637.5,
+    "path_class": "low-only",
+    "break_order": "low",
+    "first_high_break_ms": null,
+    "first_low_break_ms": 1764772200000,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": true,
+    "day_type": "single-purged",
+    "midretrace": false,
+    "known_at_ns": 1764770400000000000,
+    "outcome_start_ns": 1764772200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1764775980000,
+    "m05_side": "low",
+    "reversal_bin": "bin.1030-1200",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "6-9.published formation",
+      "low": 25610.25,
+      "high": 25677.75,
+      "start": 6.0,
+      "end": 9.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published H",
+      "price": 25677.75,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published L",
+      "price": 25610.25,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_low",
+      "price": 25576.5,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_high",
+      "price": 25711.5,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "box",
+      "label": "09:40\u201309:50 clock gate",
+      "low": 25610.25,
+      "high": 25677.75,
+      "start": 9.666666666666666,
+      "end": 9.833333333333334,
+      "color": "#bf921e"
+    }
+  ],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 180,
+      "missing": 0,
+      "open": 25624.75,
+      "high": 25677.75,
+      "low": 25610.25,
+      "close": 25648.5
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J24-B-2025-12-03.png",
+  "notes": [
+    "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 562,
+    "code": "def j24(r):\n        return bool(r.get(\"j24_mfe_pos\"))"
+  },
+  "event": "MFE after -0.5 entry by 09:50 is positive",
+  "detail_window": [
+    10.450000000000001,
+    10.950000000000001
+  ]
+}

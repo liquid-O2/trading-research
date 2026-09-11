@@ -1,0 +1,1104 @@
+{
+  "checked_at": "2026-09-11T13:31:55.748173+00:00",
+  "method": "Read archive manifest, Parquet metadata and one record per selected dataset; no full market-data rebuild or completeness certification.",
+  "catalog_sha256": "fae56a271437f4e0db4179c82c8e975d7e452ecbdb062b0949c180be2271564e",
+  "catalog_dataset_count": 111,
+  "selected_datasets": [
+    {
+      "dataset_id": "derived/continuous-futures__instrument-and-roll-maps",
+      "scope": "full bar/definition coverage for NQ, ES, and YM",
+      "observed_time_min": "2010-09-06T15:20:00+00:00",
+      "observed_time_max": "2026-06-19T00:00:00+00:00",
+      "status": "complete",
+      "known_gaps": [
+        "RTY roll maps intentionally omitted because RTY definitions are incomplete."
+      ],
+      "timestamp_semantics": {
+        "conversion": "Epoch values are retained and paired with explicit Arrow timestamp columns normalized to UTC.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "milliseconds for bar-derived fields; nanoseconds for definition-derived fields",
+        "fields": {
+          "activation": "contract activation in Unix epoch nanoseconds",
+          "expiration": "contract expiration in Unix epoch nanoseconds",
+          "first_bar_ms": "first observed continuous-contract bar timestamp in Unix epoch milliseconds",
+          "first_definition_ns": "first definition event in Unix epoch nanoseconds",
+          "last_bar_ms": "last observed continuous-contract bar timestamp in Unix epoch milliseconds",
+          "last_definition_ns": "last definition event in Unix epoch nanoseconds",
+          "segment_end_exclusive_ms": "next roll-segment start in Unix epoch milliseconds",
+          "segment_start_ms": "roll-segment start in Unix epoch milliseconds"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC in explicit Arrow timestamp companion fields",
+        "stored_type": "mixed int64 Unix epochs plus Arrow timestamps",
+        "stored_unit": "milliseconds for bar/segment epoch fields; nanoseconds for definition epoch fields"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/derived/continuous-futures__instrument-and-roll-maps/ym-rolls.parquet",
+      "schema": [
+        {
+          "name": "root",
+          "type": "large_string"
+        },
+        {
+          "name": "continuous_symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "segment_start_ms",
+          "type": "int64"
+        },
+        {
+          "name": "segment_start_ts_utc",
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "segment_end_exclusive_ms",
+          "type": "int64"
+        },
+        {
+          "name": "segment_end_exclusive_ts_utc",
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int64"
+        },
+        {
+          "name": "raw_symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "expiration_ts_utc",
+          "type": "timestamp[ns, tz=UTC]"
+        }
+      ],
+      "file_rows": 65,
+      "file_bytes": 6475,
+      "sample_rows": [
+        {
+          "root": "YM",
+          "continuous_symbol": "YM.c.0",
+          "segment_start_ms": 1283786460000,
+          "segment_start_ts_utc": "2010-09-06 15:21:00+00:00",
+          "segment_end_exclusive_ms": 1284933600000,
+          "segment_end_exclusive_ts_utc": "2010-09-19 22:00:00+00:00",
+          "instrument_id": 363566,
+          "raw_symbol": "YMU0",
+          "expiration_ts_utc": "2010-09-17 13:30:00+00:00"
+        }
+      ]
+    },
+    {
+      "dataset_id": "free-sources/context__event-calendar__normalized",
+      "scope": "FOMC, economic releases, earnings, and market sessions",
+      "observed_time_min": null,
+      "observed_time_max": null,
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "Raw source responses and normalized companions are separated by dataset.",
+        "dst_handling": "source-specific",
+        "effective_precision": "source-specific",
+        "fields": {},
+        "source_timezone": "source-specific; see schema and dataset notes",
+        "stored_timezone": "UTC for explicit normalized timestamps; otherwise date-only",
+        "stored_type": "mixed Parquet, CSV, JSON, and HTML",
+        "stored_unit": "source-specific"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/free-sources/context__event-calendar__normalized/mega-cap-earnings.parquet",
+      "schema": [
+        {
+          "name": "event_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "event_ts_utc",
+          "type": "timestamp[us, tz=UTC]"
+        },
+        {
+          "name": "event_time_et",
+          "type": "large_string"
+        },
+        {
+          "name": "event_type",
+          "type": "large_string"
+        },
+        {
+          "name": "event_name",
+          "type": "large_string"
+        },
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "status",
+          "type": "large_string"
+        },
+        {
+          "name": "time_basis",
+          "type": "large_string"
+        },
+        {
+          "name": "source",
+          "type": "large_string"
+        },
+        {
+          "name": "source_url",
+          "type": "large_string"
+        },
+        {
+          "name": "details_json",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 1346,
+      "file_bytes": 29596,
+      "sample_rows": [
+        {
+          "event_date": "2010-01-15",
+          "event_ts_utc": "2010-01-15 11:00:00+00:00",
+          "event_time_et": "06:00:00",
+          "event_type": "mega_cap_earnings",
+          "event_name": "JPM earnings",
+          "symbol": "JPM",
+          "status": "scheduled_or_observed",
+          "time_basis": "source_timestamp",
+          "source": "Yahoo Finance via yfinance",
+          "source_url": "https://finance.yahoo.com/quote/JPM/",
+          "details_json": "{\"eps_estimate\": 0.61, \"reported_eps\": 0.74, \"surprise_pct\": 21.81}"
+        }
+      ]
+    },
+    {
+      "dataset_id": "free-sources/context__volatility__normalized",
+      "scope": "normalized free-source volatility context",
+      "observed_time_min": "1990-01-02",
+      "observed_time_max": "2026-09-02",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "No intraday timestamp is implied by a date-only field.",
+        "dst_handling": "not applicable",
+        "effective_precision": "one day",
+        "fields": {
+          "date": "observation or session date"
+        },
+        "source_timezone": "calendar date",
+        "stored_timezone": null,
+        "stored_type": "Arrow date32 or source text date",
+        "stored_unit": "days"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/free-sources/context__volatility__normalized/fred-volatility.parquet",
+      "schema": [
+        {
+          "name": "date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "series_id",
+          "type": "large_string"
+        },
+        {
+          "name": "value",
+          "type": "double"
+        },
+        {
+          "name": "realtime_start",
+          "type": "date32[day]"
+        },
+        {
+          "name": "realtime_end",
+          "type": "date32[day]"
+        },
+        {
+          "name": "source",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 21134,
+      "file_bytes": 106207,
+      "sample_rows": [
+        {
+          "date": "1990-01-02",
+          "symbol": "VIX",
+          "series_id": "VIXCLS",
+          "value": 17.24,
+          "realtime_start": "2026-09-03",
+          "realtime_end": "2026-09-03",
+          "source": "FRED"
+        }
+      ]
+    },
+    {
+      "dataset_id": "free-sources/yahoo__cash-daily__normalized",
+      "scope": "normalized companion to the raw Yahoo files",
+      "observed_time_min": "2010-01-04",
+      "observed_time_max": "2026-09-04",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "No intraday timestamp is implied by a date-only field.",
+        "dst_handling": "not applicable",
+        "effective_precision": "one day",
+        "fields": {
+          "date": "observation or session date"
+        },
+        "source_timezone": "calendar date",
+        "stored_timezone": null,
+        "stored_type": "Arrow date32 or source text date",
+        "stored_unit": "days"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/free-sources/yahoo__cash-daily__normalized/SPY.parquet",
+      "schema": [
+        {
+          "name": "date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "source_symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "open",
+          "type": "double"
+        },
+        {
+          "name": "high",
+          "type": "double"
+        },
+        {
+          "name": "low",
+          "type": "double"
+        },
+        {
+          "name": "close",
+          "type": "double"
+        },
+        {
+          "name": "adjusted_close",
+          "type": "double"
+        },
+        {
+          "name": "volume",
+          "type": "int64"
+        },
+        {
+          "name": "source",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 4194,
+      "file_bytes": 96771,
+      "sample_rows": [
+        {
+          "date": "2010-01-04",
+          "symbol": "SPY",
+          "source_symbol": "SPY",
+          "open": 112.37000274658203,
+          "high": 113.38999938964844,
+          "low": 111.51000213623047,
+          "close": 113.33000183105469,
+          "adjusted_close": 84.57847595214844,
+          "volume": 118944600,
+          "source": "Yahoo Finance"
+        }
+      ]
+    },
+    {
+      "dataset_id": "quantpad/cme__es-continuous-futures__mbp-1",
+      "scope": "2020 onward, continuous front contract",
+      "observed_time_min": "2020-01-01T23:00:00+00:00",
+      "observed_time_max": "2024-08-30T21:00:00.064048+00:00",
+      "status": "partial-paused",
+      "known_gaps": [
+        "The six-year ES MBP-1 pull was intentionally paused; see computed missing_months."
+      ],
+      "timestamp_semantics": {
+        "conversion": "QuantPad Arrow output retained without timestamp rewriting.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "nanoseconds",
+        "fields": {
+          "activation": "contract activation when present",
+          "expiration": "contract expiration when present",
+          "t": "event timestamp",
+          "ts_recv": "receive timestamp when present",
+          "ts_ref": "reference timestamp when present"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC (integer epoch fields are timezone-naive by type)",
+        "stored_type": "int64 Unix epoch",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/quantpad/cme__es-continuous-futures__mbp-1/2024-08.parquet",
+      "schema": [
+        {
+          "name": "t",
+          "type": "int64"
+        },
+        {
+          "name": "action",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "side",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "type": "int32"
+        },
+        {
+          "name": "bid_px",
+          "type": "double"
+        },
+        {
+          "name": "ask_px",
+          "type": "double"
+        },
+        {
+          "name": "bid_sz",
+          "type": "int32"
+        },
+        {
+          "name": "ask_sz",
+          "type": "int32"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "type": "int16"
+        }
+      ],
+      "file_rows": 172336420,
+      "file_bytes": 1142391898,
+      "sample_rows": [
+        {
+          "t": 1722470400002795421,
+          "action": "A",
+          "side": "B",
+          "price": 5587.5,
+          "size": 1,
+          "bid_px": 5587.5,
+          "ask_px": 5587.75,
+          "bid_sz": 16,
+          "ask_sz": 10,
+          "instrument_id": 118,
+          "flags": 128
+        }
+      ]
+    },
+    {
+      "dataset_id": "quantpad/cme__es-continuous-futures__trades",
+      "scope": "2020 onward, continuous front contract",
+      "observed_time_min": "2020-01-01T23:00:00+00:00",
+      "observed_time_max": "2026-09-03T06:09:59.555968+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "QuantPad Arrow output retained without timestamp rewriting.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "nanoseconds",
+        "fields": {
+          "activation": "contract activation when present",
+          "expiration": "contract expiration when present",
+          "t": "event timestamp",
+          "ts_recv": "receive timestamp when present",
+          "ts_ref": "reference timestamp when present"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC (integer epoch fields are timezone-naive by type)",
+        "stored_type": "int64 Unix epoch",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/quantpad/cme__es-continuous-futures__trades/2026.parquet",
+      "schema": [
+        {
+          "name": "t",
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "type": "int32"
+        },
+        {
+          "name": "side",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "type": "int16"
+        }
+      ],
+      "file_rows": 80951552,
+      "file_bytes": 523027706,
+      "sample_rows": [
+        {
+          "t": 1767308400000000000,
+          "price": 6902.0,
+          "size": 90,
+          "side": "N",
+          "instrument_id": 42140878,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "dataset_id": "quantpad/cme__nq-continuous-futures__mbp-1",
+      "scope": "2020 onward, continuous front contract",
+      "observed_time_min": "2020-01-01T23:00:00+00:00",
+      "observed_time_max": "2026-09-03T06:09:59.901114+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "QuantPad Arrow output retained without timestamp rewriting.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "nanoseconds",
+        "fields": {
+          "activation": "contract activation when present",
+          "expiration": "contract expiration when present",
+          "t": "event timestamp",
+          "ts_recv": "receive timestamp when present",
+          "ts_ref": "reference timestamp when present"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC (integer epoch fields are timezone-naive by type)",
+        "stored_type": "int64 Unix epoch",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/quantpad/cme__nq-continuous-futures__mbp-1/2026-09.parquet",
+      "schema": [
+        {
+          "name": "t",
+          "type": "int64"
+        },
+        {
+          "name": "action",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "side",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "type": "int32"
+        },
+        {
+          "name": "bid_px",
+          "type": "double"
+        },
+        {
+          "name": "ask_px",
+          "type": "double"
+        },
+        {
+          "name": "bid_sz",
+          "type": "int32"
+        },
+        {
+          "name": "ask_sz",
+          "type": "int32"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "type": "int16"
+        }
+      ],
+      "file_rows": 21350284,
+      "file_bytes": 152433406,
+      "sample_rows": [
+        {
+          "t": 1788220800002108041,
+          "action": "A",
+          "side": "B",
+          "price": 29500.5,
+          "size": 1,
+          "bid_px": 29500.5,
+          "ask_px": 29501.5,
+          "bid_sz": 1,
+          "ask_sz": 2,
+          "instrument_id": 42004177,
+          "flags": 128
+        }
+      ]
+    },
+    {
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "scope": "full available continuous-contract history",
+      "observed_time_min": "2010-09-06T15:20:00+00:00",
+      "observed_time_max": "2026-09-02T15:19:00+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "QuantPad Arrow output retained without timestamp rewriting.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "milliseconds",
+        "fields": {
+          "t": "bar interval start timestamp"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC (integer epoch field is timezone-naive by type)",
+        "stored_type": "int64 Unix epoch",
+        "stored_unit": "milliseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+      "schema": [
+        {
+          "name": "t",
+          "type": "int64"
+        },
+        {
+          "name": "o",
+          "type": "double"
+        },
+        {
+          "name": "h",
+          "type": "double"
+        },
+        {
+          "name": "l",
+          "type": "double"
+        },
+        {
+          "name": "c",
+          "type": "double"
+        },
+        {
+          "name": "v",
+          "type": "double"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int32"
+        }
+      ],
+      "file_rows": 224364,
+      "file_bytes": 3584842,
+      "sample_rows": [
+        {
+          "t": 1767308400000,
+          "o": 25478.5,
+          "h": 25484.0,
+          "l": 25467.25,
+          "c": 25476.75,
+          "v": 349.0,
+          "instrument_id": 42002475
+        }
+      ]
+    },
+    {
+      "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+      "scope": "2020 onward, continuous front contract",
+      "observed_time_min": "2021-09-01T18:00:00.030617+00:00",
+      "observed_time_max": "2026-09-02T17:59:59.376719+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "QuantPad Arrow output retained without timestamp rewriting.",
+        "dst_handling": "not applicable after UTC normalization",
+        "effective_precision": "nanoseconds",
+        "fields": {
+          "activation": "contract activation when present",
+          "expiration": "contract expiration when present",
+          "t": "event timestamp",
+          "ts_recv": "receive timestamp when present",
+          "ts_ref": "reference timestamp when present"
+        },
+        "source_timezone": "UTC",
+        "stored_timezone": "UTC (integer epoch fields are timezone-naive by type)",
+        "stored_type": "int64 Unix epoch",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/quantpad/cme__nq-continuous-futures__trades/2026-08-31.parquet",
+      "schema": [
+        {
+          "name": "t",
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        },
+        {
+          "name": "size",
+          "type": "int32"
+        },
+        {
+          "name": "side",
+          "type": "dictionary<values=string, indices=int8, ordered=0>"
+        },
+        {
+          "name": "instrument_id",
+          "type": "int32"
+        },
+        {
+          "name": "flags",
+          "type": "int16"
+        }
+      ],
+      "file_rows": 952705,
+      "file_bytes": 7398904,
+      "sample_rows": [
+        {
+          "t": 1788134400041591193,
+          "price": 29291.0,
+          "size": 1,
+          "side": "B",
+          "instrument_id": 42004177,
+          "flags": 0
+        }
+      ]
+    },
+    {
+      "dataset_id": "thetadata-opra/opra__ndxp-options__contracts",
+      "scope": "full option chain: all listed expiries and strikes",
+      "observed_time_min": "2018-01-04",
+      "observed_time_max": "2026-09-02",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "ThetaData terminal strings with millisecond precision were converted during ingestion; no additional conversion is performed by this archive builder.",
+        "dst_handling": "Source wall times were localized with the IANA America/New_York zone, ambiguous fall-back times choose the earliest occurrence, nonexistent spring-forward times become null, then values were converted to UTC.",
+        "effective_precision": "milliseconds (the source terminal supplies milliseconds)",
+        "fields": {
+          "request_date": "exchange-session date used for the request",
+          "ts_created": "ThetaData record creation timestamp when present",
+          "ts_event": "option quote/trade/open-interest event time when present",
+          "ts_last_trade": "last-trade timestamp when present",
+          "ts_quote": "NBBO timestamp paired with a trade when present"
+        },
+        "source_timezone": "America/New_York",
+        "stored_timezone": "UTC",
+        "stored_type": "Arrow timestamp[ns, tz=UTC]",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/thetadata-opra/opra__ndxp-options__contracts/2026-09-02.parquet",
+      "schema": [
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "type": "large_string"
+        },
+        {
+          "name": "request_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "osi_symbol",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 10508,
+      "file_bytes": 60122,
+      "sample_rows": [
+        {
+          "symbol": "NDXP",
+          "expiration": "2027-03-31",
+          "strike": 33000.0,
+          "right": "CALL",
+          "request_date": "2026-09-02",
+          "osi_symbol": "NDXP  270331C33000000"
+        }
+      ]
+    },
+    {
+      "dataset_id": "thetadata-opra/opra__ndxp-options__open-interest",
+      "scope": "full option chain: all listed expiries and strikes",
+      "observed_time_min": "2018-01-05T10:30:00+00:00",
+      "observed_time_max": "2026-09-02T10:30:41+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "ThetaData terminal strings with millisecond precision were converted during ingestion; no additional conversion is performed by this archive builder.",
+        "dst_handling": "Source wall times were localized with the IANA America/New_York zone, ambiguous fall-back times choose the earliest occurrence, nonexistent spring-forward times become null, then values were converted to UTC.",
+        "effective_precision": "milliseconds (the source terminal supplies milliseconds)",
+        "fields": {
+          "request_date": "exchange-session date used for the request",
+          "ts_created": "ThetaData record creation timestamp when present",
+          "ts_event": "option quote/trade/open-interest event time when present",
+          "ts_last_trade": "last-trade timestamp when present",
+          "ts_quote": "NBBO timestamp paired with a trade when present"
+        },
+        "source_timezone": "America/New_York",
+        "stored_timezone": "UTC",
+        "stored_type": "Arrow timestamp[ns, tz=UTC]",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/thetadata-opra/opra__ndxp-options__open-interest/2026-09-02.parquet",
+      "schema": [
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "type": "large_string"
+        },
+        {
+          "name": "open_interest",
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "osi_symbol",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 9558,
+      "file_bytes": 60513,
+      "sample_rows": [
+        {
+          "symbol": "NDXP",
+          "expiration": "2026-09-08",
+          "strike": 29400.0,
+          "right": "PUT",
+          "open_interest": 25,
+          "request_date": "2026-09-02",
+          "ts_event": "2026-09-02 10:30:23.075000+00:00",
+          "osi_symbol": "NDXP  260908P29400000"
+        }
+      ]
+    },
+    {
+      "dataset_id": "thetadata-opra/opra__ndxp-options__quote-1m__dte14__strike-range70",
+      "scope": "DTE <= 14; strike_range=70 around spot",
+      "observed_time_min": "2020-01-02T14:30:00+00:00",
+      "observed_time_max": "2026-09-03T20:00:00+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "ThetaData terminal strings with millisecond precision were converted during ingestion; no additional conversion is performed by this archive builder.",
+        "dst_handling": "Source wall times were localized with the IANA America/New_York zone, ambiguous fall-back times choose the earliest occurrence, nonexistent spring-forward times become null, then values were converted to UTC.",
+        "effective_precision": "milliseconds (the source terminal supplies milliseconds)",
+        "fields": {
+          "request_date": "exchange-session date used for the request",
+          "ts_created": "ThetaData record creation timestamp when present",
+          "ts_event": "option quote/trade/open-interest event time when present",
+          "ts_last_trade": "last-trade timestamp when present",
+          "ts_quote": "NBBO timestamp paired with a trade when present"
+        },
+        "source_timezone": "America/New_York",
+        "stored_timezone": "UTC",
+        "stored_type": "Arrow timestamp[ns, tz=UTC]",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/thetadata-opra/opra__ndxp-options__quote-1m__dte14__strike-range70/2026-09-03.parquet",
+      "schema": [
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "type": "large_string"
+        },
+        {
+          "name": "bid_size",
+          "type": "int64"
+        },
+        {
+          "name": "bid_exchange",
+          "type": "int64"
+        },
+        {
+          "name": "bid",
+          "type": "double"
+        },
+        {
+          "name": "bid_condition",
+          "type": "int64"
+        },
+        {
+          "name": "ask_size",
+          "type": "int64"
+        },
+        {
+          "name": "ask_exchange",
+          "type": "int64"
+        },
+        {
+          "name": "ask",
+          "type": "double"
+        },
+        {
+          "name": "ask_condition",
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "osi_symbol",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 1094800,
+      "file_bytes": 5575231,
+      "sample_rows": [
+        {
+          "symbol": "NDXP",
+          "expiration": "2026-09-08",
+          "strike": 29400.0,
+          "right": "PUT",
+          "bid_size": 0,
+          "bid_exchange": 0,
+          "bid": 0.0,
+          "bid_condition": 0,
+          "ask_size": 0,
+          "ask_exchange": 0,
+          "ask": 0.0,
+          "ask_condition": 0,
+          "request_date": "2026-09-03",
+          "ts_event": "2026-09-03 13:30:00+00:00",
+          "osi_symbol": "NDXP  260908P29400000"
+        }
+      ]
+    },
+    {
+      "dataset_id": "thetadata-opra/opra__qqq-options__trade-quote__dte7__strike-range42",
+      "scope": "DTE <= 7; strike_range=42 around spot",
+      "observed_time_min": "2020-01-02T14:30:00.338000+00:00",
+      "observed_time_max": "2026-09-03T19:59:59.917000+00:00",
+      "status": "complete",
+      "known_gaps": [],
+      "timestamp_semantics": {
+        "conversion": "ThetaData terminal strings with millisecond precision were converted during ingestion; no additional conversion is performed by this archive builder.",
+        "dst_handling": "Source wall times were localized with the IANA America/New_York zone, ambiguous fall-back times choose the earliest occurrence, nonexistent spring-forward times become null, then values were converted to UTC.",
+        "effective_precision": "milliseconds (the source terminal supplies milliseconds)",
+        "fields": {
+          "request_date": "exchange-session date used for the request",
+          "ts_created": "ThetaData record creation timestamp when present",
+          "ts_event": "option quote/trade/open-interest event time when present",
+          "ts_last_trade": "last-trade timestamp when present",
+          "ts_quote": "NBBO timestamp paired with a trade when present"
+        },
+        "source_timezone": "America/New_York",
+        "stored_timezone": "UTC",
+        "stored_type": "Arrow timestamp[ns, tz=UTC]",
+        "stored_unit": "nanoseconds"
+      },
+      "directory_exists": true,
+      "inspected_file": "data/thetadata-opra/opra__qqq-options__trade-quote__dte7__strike-range42/2026-09-03.parquet",
+      "schema": [
+        {
+          "name": "symbol",
+          "type": "large_string"
+        },
+        {
+          "name": "expiration",
+          "type": "date32[day]"
+        },
+        {
+          "name": "strike",
+          "type": "double"
+        },
+        {
+          "name": "right",
+          "type": "large_string"
+        },
+        {
+          "name": "sequence",
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition1",
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition2",
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition3",
+          "type": "int64"
+        },
+        {
+          "name": "ext_condition4",
+          "type": "int64"
+        },
+        {
+          "name": "condition",
+          "type": "int64"
+        },
+        {
+          "name": "size",
+          "type": "int64"
+        },
+        {
+          "name": "exchange",
+          "type": "int64"
+        },
+        {
+          "name": "price",
+          "type": "double"
+        },
+        {
+          "name": "bid_size",
+          "type": "int64"
+        },
+        {
+          "name": "bid_exchange",
+          "type": "int64"
+        },
+        {
+          "name": "bid",
+          "type": "double"
+        },
+        {
+          "name": "bid_condition",
+          "type": "int64"
+        },
+        {
+          "name": "ask_size",
+          "type": "int64"
+        },
+        {
+          "name": "ask_exchange",
+          "type": "int64"
+        },
+        {
+          "name": "ask",
+          "type": "double"
+        },
+        {
+          "name": "ask_condition",
+          "type": "int64"
+        },
+        {
+          "name": "request_date",
+          "type": "date32[day]"
+        },
+        {
+          "name": "ts_event",
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "ts_quote",
+          "type": "timestamp[ns, tz=UTC]"
+        },
+        {
+          "name": "valid_for_volume",
+          "type": "bool"
+        },
+        {
+          "name": "osi_symbol",
+          "type": "large_string"
+        }
+      ],
+      "file_rows": 950544,
+      "file_bytes": 18531244,
+      "sample_rows": [
+        {
+          "symbol": "QQQ",
+          "expiration": "2026-09-03",
+          "strike": 737.0,
+          "right": "CALL",
+          "sequence": 1348999047,
+          "ext_condition1": 255,
+          "ext_condition2": 255,
+          "ext_condition3": 255,
+          "ext_condition4": 255,
+          "condition": 130,
+          "size": 50,
+          "exchange": 6,
+          "price": 0.01,
+          "bid_size": 0,
+          "bid_exchange": 1,
+          "bid": 0.0,
+          "bid_condition": 50,
+          "ask_size": 1568,
+          "ask_exchange": 6,
+          "ask": 0.01,
+          "ask_condition": 50,
+          "request_date": "2026-09-03",
+          "ts_event": "2026-09-03 15:31:50.431000+00:00",
+          "ts_quote": "2026-09-03 15:31:50.334000+00:00",
+          "valid_for_volume": true,
+          "osi_symbol": "QQQ   260903C00737000"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "case": {
+    "id": "R-J11",
+    "date": "2026-07-06",
+    "case": "source-date",
+    "code_result": null,
+    "selection": "source figure calendar date; contract/session caveats retained",
+    "positive_count": 485,
+    "negative_count": 162,
+    "plot": "plots/R-J11-source-date-2026-07-06.png",
+    "trace": "plots/R-J11-source-date-2026-07-06.json",
+    "notes": [
+      "Retained envelope approximation. Unpublished author algorithm remains unverified."
+    ]
+  },
+  "production_session": {
+    "date": "2026-07-06",
+    "year": "2026",
+    "eligible": false,
+    "drop_coverage": true,
+    "failure": false,
+    "n_1s": 4783,
+    "expected_1s": 10800,
+    "missing_1s": 6017,
+    "n_1m_box": 0,
+    "n_1m_outcome": 0,
+    "H": 29936.0,
+    "L": 29841.75,
+    "open": 29878.0,
+    "close": 29934.0,
+    "EQ": 29888.875,
+    "Q25": 29865.3125,
+    "Q75": 29912.4375,
+    "W69": 94.25,
+    "volume": 18198.0,
+    "close_0859": 29934.0,
+    "open_0930": null,
+    "w_pct_0859close": 0.31485935725262243,
+    "w_pct_0930open": null,
+    "WpriorRTH": 965.0,
+    "w_rel_prior_rth": 0.09766839378238341,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 30293.5,
+    "prior_rth_low": 29328.5,
+    "asia_high": 30004.75,
+    "asia_low": 29683.0,
+    "london_high": 29858.25,
+    "london_low": 29703.0,
+    "path_class": null,
+    "break_order": null,
+    "first_high_break_ms": null,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1783342800000000000,
+    "outcome_start_ns": 1783344600000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 0,
+      "missing": 180,
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J11-source-date-2026-07-06.png",
+  "notes": [
+    "Retained envelope approximation. Unpublished author algorithm remains unverified."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 523,
+    "code": "def j11(r):\n        return bool(r.get(\"ss_reach\"))"
+  },
+  "event": "SessionStat avgHL60 reach (median and min-average are named variants)",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

@@ -1,0 +1,458 @@
+[
+  {
+    "id": "R-R01",
+    "title": "Native options, gamma scenario and level-conditioned regime",
+    "oks": [
+      "cannot-tell",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "GEX:6",
+      "GEX:7",
+      "GEX:13",
+      "GEX:14",
+      "GEX:15",
+      "GEX:19",
+      "REFIMG:1"
+    ],
+    "source": "The source shows0DTE, net-GEX sign, a gamma flip, three ranked walls, max pain and location-dependent price responses. It does not publish the dealer-position sign model, flip algorithm, Vol Trigger or hedge-pressure formula. The p.13 drawing includes a ranked call wall below spot despite the text saying calls above. Aggregate spot-repricing root, cumulative-strike crossing and per-strike sign change are different objects; none can be silently selected as the author formula. The source panel at QQQ 735.13 has flip 725.16/call 740/put and max pain 715, while the earlier 731.98 panel has flip 726.17 and call ranks 730/732/740; preserve each snapshot separately. Zerano shows SPX 7661.53, QQQ 708.33 and SPY 764.35 in native units; its manually drawn blue rectangles are distinct from colored strike orbs and no proprietary construction is published.",
+    "finding": "The QQQ producer pools0–14DTE, mismatches09:30 spot with later first-five-minute quotes and uses an assumed call-positive/put-negative sign. Its flip loop calls the initial0→first-nonzero cumulative value a crossing, producing635 onJuly10 and594 onJanuary28, both first populated strikes. Walls are extrema of net signed strike exposure, not separately aggregated call/put gamma. Only short_gamma prevalence is scored;3 of647 eligible sessions have no GEX and enter as false. Native OI supplements preserve each product, including missingJanuary28 NDX/SPX nodes and unparsed NQ option statistics.",
+    "targets": [
+      "family_gex.py::_gex_day",
+      "family_gex.py::_iv",
+      "family_gex.py::_qqq_spot",
+      "formulas_flow.py::r_r01_gex_k",
+      "family_options.py::_top3_around",
+      "family_options.py::_node_rows",
+      "family_options.py::build_options_table",
+      "recipe_score.py::_preds.r01"
+    ],
+    "fix": [
+      "Keep author-exact gamma/flip fields unresolved until the source definition is available. Name the current dealer-sign assumption explicitly. Preserve each product/expiry/underlying contract and multiplier; NDX,NDXP,SPX,SPXW,QQQ,SPY and NQ options never inherit one another’s prices or event counts. Treat raw OI, traded-volume exposure, inferred dealer inventory and a signed scenario as separate objects. Neither a buy/sell print nor OI alone identifies dealer ownership or open/close position change; do not certify a volume-revised inventory from those inputs without an explicit model.",
+      "Validate OI publication/request vintage and quote coverage per contract. Select a sorted, simultaneous snapshot and matching spot; known_at is the latest required observation, no earlier than09:35 for a first-five-minute QQQ snapshot. Reject crossed, stale, nonfinite or invalid-bound quotes rather than clipping negative bids into plausible mids. Use actual expiry timestamp and declared rates/dividends/model, with IV convergence/error checks. The present spot is a one-minute close, known at 09:31, and its ten-minute fallback can be known only at 09:40; take the maximum of all actual availability times instead of hard-coding 09:35. Sort quotes by event time before last-per-contract selection and enforce maximum age. Use a model appropriate to the named instrument; retain the current fixed-rate/no-dividend BS scenario as a stated approximation.",
+      "For the explicit scenario calculate each exposure as sign×Gamma×OI×contract_multiplier×S²×0.01. Store calls and puts separately before forming net exposure. Make0DTE the source-described expiry cohort, with0–14DTE pooled separately named. n_contracts and n_distinct_strikes must be different counts. The inventory contains full daily chain inputs but scoped intraday DTE/strike slices; a full daily chain does not make the intraday gamma snapshot complete. Keep observed universe coverage, missing strikes and contract identifiers with the snapshot.",
+      "For a named cumulative-strike variant, detect changes between established nonzero cumulative signs; starting from zero is not a crossing, and no crossing returns null rather than argmin(abs(cumsum)). Keep a named repriced aggregate root G(S)=0 and per-strike net sign crossings distinct, including multiple roots/crossings; do not add either as a purported faithful author fix without a source decision.",
+      "Construct call and put wall candidates from their own gamma totals with the documented side/rank policy. Keep text-above/below and the figure’s all-side ranked wall set distinguishable. If max pain is included, minimize intrinsic OI payout over candidate settlement prices and preserve ties/flat intervals. Unpublished Vol Trigger and pressure gauges remain unavailable.",
+      "For OI-only nodes, retain the summed-rights/expiry population honestly: a single first-row right or DTE cannot describe a pooled strike. Use genuine OI vintage and price known_at. Daily native cash candles can measure daily span only; they cannot supply intraday first-touch/hold chronology. Correct INDEX_UNION aggregation rather than copying NDX, and keep unparsed NQ options as gap, not measured zero. The 09:25 ETF minute close is not available at 09:25. Move its known_at to completion (or use a truly earlier observation), and store same-day tagged_high_low as an outcome with its own cutoff rather than under a pre-open feature timestamp. A first-row request_date is not a proof of every OI row’s publication time.",
+      "With a valid snapshot, classify sign and spot-vs-flip separately. Freeze levels before price outcomes; record approach from below/above, already-at-level state, actual overlap, hold/break and pin-distance outcomes in that product. Score outcome distributions conditional on regime and eligible contacts rather than sign prevalence as trading efficacy. Assign a new version only when the snapshot actually changes. Give option walls their own sourced refresh/expiry lifecycle; do not blindly impose a session-extreme rule on a dynamic exposure field. Any separately selected Asia/London/prior high or low must nonetheless be fresh since known_at and end at its first revisit on each side.",
+      "Exclude unknown GEX from both positive and negative denominators, report coverage separately, and invalidate caches on producer, schema, snapshot, contract universe and parameter changes. Retain native product plots, vector inputs and source-definition limitations with each report."
+    ],
+    "acceptance": [
+      "July10 QQQ net scenario is negative whileJanuary28 is positive, but both reported flips are the first populated strikes; those are not valid zero-crossing examples.",
+      "A vector with all negative values has no cumulative crossing. A negative then positive vector can cross only after an established negative cumulative value, and extending the universe with a tiny remote strike must not force that strike to be the flip.",
+      "Eligible sign denominator is644 rather than647 for the current available inputs; the3 missing sessions remain unknown.",
+      "January28 NDX/SPX missing nodes stay gaps while NDXP/SPXW are evaluated independently. QQQ/SPY remain in ETF coordinates; NQ option DBN remains unparsed in this audit.",
+      "Changing only a file date or reloading identical OI cannot create a newly known snapshot. A 09:40 fallback spot cannot qualify a 09:35 or 09:30 event.",
+      "Manual rectangles, OI strikes, source VOL-GEX orbs and computed gamma walls remain separate even when drawn at a similar price."
+    ],
+    "leakage": "snapshot alignment; OI vintage/known_at; missing-as-false",
+    "proxy": "yes",
+    "ask_user": true,
+    "question": "Inspect GEX p.7 and p.13 against the terminal: which flip construction and ranked-wall selection produced those annotations? Their exact algorithms are not recoverable from the drawings alone.",
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Native ETF axes use America/New_York with date-specific DST; cash NDX/SPX inputs here are daily only. QQQ spot is the completed 09:30 one-minute close (known at 09:31) or the 09:30–09:40 fallback; quotes use the 09:30–09:35 slice. All inputs must align at a supported snapshot cutoff and their latest availability; the configured 09:25 OI-node label does not prove publication or price availability. GEX source snapshots and Zerano filename/export time do not by themselves establish chart-axis time or OI vintage.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "cannot-tell",
+          "reason": "GEX provides distinct 0DTE OI-GEX and VOL-GEX panels, flip and ranked walls, but no dealer-ownership sign estimator or complete flip/wall/Vol Trigger algorithms. Different snapshots and the separate Zerano native-product display cannot be merged into one author formula."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The code pools 0–14 DTE under a call-positive/put-negative assumption, uses unsynchronized quote/spot observations and treats initial cumulative zero→nonzero as a flip. Walls come from net-strike sign rather than separate call/put gamma totals; OI vintage and actual expiry/quote validity are not enforced."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "Only short-gamma scenario prevalence is scored, with three missing GEX sessions entering as false. It omits source location-conditioned hold/break/pin behavior and cannot establish dealer positioning or trading efficacy."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both QQQ main charts and all 16 native supplements were re-viewed. July 10 negative and January 28 positive scenarios retain invalid first-strike flips 635/594; native OI contacts, daily-only index spans and NQ-option gaps remain separate from gamma-wall events."
+        }
+      },
+      "source_refs": [
+        "GEX:6",
+        "GEX:7",
+        "GEX:13",
+        "GEX:14",
+        "GEX:15",
+        "GEX:19",
+        "REFIMG:1"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-A-2026-07-10.png",
+          "sha256": "30f08ee415c8198e855cee47951d9b065a93d01b4a89eae403898fcd4663f7bf"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-B-2026-01-28.png",
+          "sha256": "46e384b76d4b2bbd13cf086ec90442aa25648b665186ce856015d51b9497d72d"
+        }
+      ],
+      "native_charts": [
+        {
+          "product": "ndx",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-ndx-2026-07-10.png",
+          "sha256": "4b1020f78342d60ef521230dc528ad73838824e4f8ff06afed954443b631d2f9"
+        },
+        {
+          "product": "ndxp",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-ndxp-2026-07-10.png",
+          "sha256": "c7b36fe108a89fcb5ab4b25c5fce2c5add281e61f11b88e84724f8802c01fede"
+        },
+        {
+          "product": "spx",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-spx-2026-07-10.png",
+          "sha256": "c2b310598161fc2f70018f20c2574c73835e2b1541a9e1f5213cf4bd46e1fb35"
+        },
+        {
+          "product": "spxw",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-spxw-2026-07-10.png",
+          "sha256": "cb4dc0ea548ca1eed778d5d42e6bb05a43f70f92eb30bcc5363fcefd41569229"
+        },
+        {
+          "product": "qqq",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-qqq-2026-07-10.png",
+          "sha256": "3ddfd522266814d99203d665d9971041a6d841af341b9690d8a2e0368794c4af"
+        },
+        {
+          "product": "spy",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-spy-2026-07-10.png",
+          "sha256": "f807c82ffd5c0d6c6e6ba05c32a44c3f8f82e654bd0b37f7df9c08b2a26f2a7d"
+        },
+        {
+          "product": "QQQ",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-QQQ-gex-vector-2026-07-10.png",
+          "sha256": "4f57f9d014bb01aaa7ad951f14afbc9a3d02b4a501883df6304e0e1ef3046174"
+        },
+        {
+          "product": "NQOPT",
+          "date": "2026-07-10",
+          "plot": "plots/R-R01-native-NQOPT-gap-2026-07-10.png",
+          "sha256": "d6b91e81667d03c288d03008f3d591a688b344834a9e22e60c2e7b9281201c8e"
+        },
+        {
+          "product": "ndx",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-ndx-2026-01-28.png",
+          "sha256": "bf36cf842d073d8fe0d7a8ca4b2569d33fa360da0096ad1a0991a27df1a2bbde"
+        },
+        {
+          "product": "ndxp",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-ndxp-2026-01-28.png",
+          "sha256": "355da46d4f9453eda6cdf4dd81b852a2400b5efa1f32d398790ddee10cf01c76"
+        },
+        {
+          "product": "spx",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-spx-2026-01-28.png",
+          "sha256": "49d7039c327d20f7df456605cfcb62899d199c5708b067f863eba608ed47e8a1"
+        },
+        {
+          "product": "spxw",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-spxw-2026-01-28.png",
+          "sha256": "4caab7a54c68989a430f26bc48a9f543af78c8ecc437ef77af7c282667ebaaad"
+        },
+        {
+          "product": "qqq",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-qqq-2026-01-28.png",
+          "sha256": "52454f880ce64656322a59f086f823c7231d9081c6f1154c379fdbae968a4907"
+        },
+        {
+          "product": "spy",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-spy-2026-01-28.png",
+          "sha256": "73b066a1b98c70d863388924c4faa781dd90aff0d92f6cc164ec11fcff2191c7"
+        },
+        {
+          "product": "QQQ",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-QQQ-gex-vector-2026-01-28.png",
+          "sha256": "6e5363d04861866d260ab576653b9d97d53574ab17594031b8d7165b0298c96b"
+        },
+        {
+          "product": "NQOPT",
+          "date": "2026-01-28",
+          "plot": "plots/R-R01-native-NQOPT-gap-2026-01-28.png",
+          "sha256": "51e50ee37a6fb18ed9bfd99427330ea69d6fe5577ba76dbc8c6b925475f2d37c"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-R02",
+    "title": "Prior-close VIX band and source regime comparisons",
+    "oks": [
+      "yes",
+      "no",
+      "yes",
+      "yes"
+    ],
+    "sources": [
+      "VIX4:3",
+      "VIX4:4",
+      "VIX4:5",
+      "VIX4:6",
+      "VIX4:7",
+      "VIX4:8",
+      "VIX4:9"
+    ],
+    "source": "The source names13,14,15–18 and20 cuts, expected daily percentage VIX/sqrt252, range completion and intraday VIX direction. Its30/50/95-point examples are ES illustrations, not fixed NQ ranges. Prior VIX close is a declared pre-open input choice; S&P-based VIX applied to NQ is a named cross-product context. The visible equation yields a percentage daily move. The narrative’s word range does not settle whether that becomes full width, a one-sided displacement or a two-sided band; those conversions require declared conventions.",
+    "finding": "The retained15–18 gate correctly uses the prior session’s VIX close: July10=15.84 is true andJanuary2=14.95 is false. That literal score event is valid. The full binning omits14, and implied/realized range, level response, intraday VIX direction and curve/context comparisons are not implemented by this ID.",
+    "targets": [
+      "formulas.py::vix_preopen",
+      "formulas.py::vix_band",
+      "family_levels.py::build_level_table",
+      "recipe_score.py::_preds.r02",
+      "FORMULAS.md::R-R02"
+    ],
+    "fix": [
+      "Preserve the prior-close lookup and vintage. Use the last available completed VIX observation before the session, retaining its date and publication availability through weekends/holidays. Do not introduce today’s close as a pre-open feature.",
+      "Add the missing14 boundary and explicitly choose nonoverlapping endpoint conventions: <13,[13,14),[14,15),[15,18),[18,20),>=20 is one named convention. Preserve14–15/18–20 as filler bins rather than source trading rules, and disclose the20 endpoint choice.",
+      "For the named daily estimate use prior-known price×VIX/(100×sqrt252); keep VIX/16, VXN and literal ES point examples distinct. Measure realized high−low and completion ratio as outcomes, by native product and chosen session. Store the percentage and point estimate first; name the anchor and one-sided versus full-width convention before drawing any band. Do not silently call the full high-low range a one-standard-deviation return prediction or use twice the estimate without naming it.",
+      "Report the existing15–18 membership rate under its literal label, plus separately eligible range/VA-response comparisons if later implemented. Daily VIX direction is known only after that close; leave the four intraday combinations unavailable without intraday VIX. Do not manufacture VX-curve/VVIX joins in the audit. A source risk-size example or claimed regime behavior does not become a passing event merely from membership. If level responses are added, both reference highs and lows must follow first-visit expiry independently; VIX itself has a daily publication/update lifecycle."
+    ],
+    "acceptance": [
+      "July10 true andJanuary2 false remain unchanged under the existing15–18 definition.",
+      "VIX13.2 belongs in13–14, and14.95 belongs in14–15; neither belongs in15–18.",
+      "A same-day afternoon VIX revision or NQ price outcome cannot change the pre-open bin. An unavailable VIX input is unknown, not a low-volatility classification."
+    ],
+    "leakage": "prior-close gate causal; added outcomes need explicit cutoffs",
+    "proxy": "partial: narrow membership is honest; full family incomplete",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The displayed price axis is America/New_York. VIX context is the preceding completed daily observation, whose trading date and publication vintage are separate from the NQ session date. Intraday VIX direction is unavailable from daily closes; fixed EST is not a year-round New York clock.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "The source explicitly includes the 15–18 band and other 13/14/20 cuts. Prior VIX close is a declared pre-open variant, and its VIX/sqrt252 daily percentage does not uniquely define an anchored high-low-width prediction."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The narrow lagged band lookup is causal for the shown dates, but the full source family omits the 14 boundary, expected-move convention, completion, intraday VIX direction and outcome comparisons. Lookup is the preceding retained date rather than a general last-available vintage search."
+        },
+        "score_event_ok": {
+          "verdict": "yes",
+          "reason": "The scored event is exactly prior-close membership in [15,18), and is valid under that explicit label. It is not a regime-conditioned profit or rejection statistic."
+        },
+        "chart_ok": {
+          "verdict": "yes",
+          "reason": "Both charts were re-viewed: July 10’s lagged 15.84 lies inside the displayed band; January 2’s 14.95 lies below it. Subsequent NQ movement cannot change that pre-open membership."
+        }
+      },
+      "source_refs": [
+        "VIX4:3",
+        "VIX4:4",
+        "VIX4:5",
+        "VIX4:6",
+        "VIX4:7",
+        "VIX4:8",
+        "VIX4:9"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-R02-A-2026-07-10.png",
+          "sha256": "dcfcd24ef7bb89ba58a187c6a364557a1ae8d6e1adebc293b453912349b64ad4"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-02",
+          "plot": "plots/R-R02-B-2026-01-02.png",
+          "sha256": "8d8ea6cd9a8b543685e5764611a34a90c96b8406a8e12bbbdb35ca9f6a62399e"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-R03",
+    "title": "Thesis lifetime and first invalidation cause",
+    "oks": [
+      "yes",
+      "no",
+      "no",
+      "no"
+    ],
+    "sources": [
+      "C1:3",
+      "C1:4",
+      "C1:6",
+      "C3:7"
+    ],
+    "source": "The source requires a labelled validity band with start/end and three possible death causes: structure, value shift or new information. Open-versus-prior-VA labels,30-minute holds and non-overlap of developing value are named research definitions rather than author-exact automatic thesis construction.",
+    "finding": "The caller hard-codes any_close_beyond=false, news=false and default developing_overlap=true. Directional death is therefore a wick across the prior VA edge; neutral theses survive automatically. The helper assigns death at the evaluation time or survival to16:00 instead of the first observed cause. July10 is neutral/true; January2 long/false after a fall throughVAH25634.",
+    "targets": [
+      "family_tape.py::_score_one",
+      "formulas_flow.py::r_r03_thesis",
+      "recipe_score.py::_preds.r03"
+    ],
+    "fix": [
+      "Create a thesis record at its actual start with long/short/neutral label, exact band, source/scope and chosen invalidation side. Keep a prior-VA open-label variant distinct from a directional premarket-level thesis; no later band redrawing may change the original record. Keep source user-entered thesis and automatic prior-VA variant separate. If the thesis targets an external high/low, test freshness from that reference’s known_at and end its active line at first revisit, on both sides independently; this may complete a thesis objective without itself being structural thesis death.",
+      "For the named structural death, find a complete close beyond the appropriate boundary and a full30-minute hold, timestamped at confirmation. Neutral bands can invalidate on either side. Wick-only crossings remain separate observations.",
+      "Track the developing profile only from executions/bars available at each update, testing the declared value-overlap rule. Join only verified news timestamps, preserving missing calendar coverage as unknown. End at the earliest actual qualified cause, with simultaneous-cause ties retained. Distinguish the time the invalidation begins from the later time its complete confirmation is known. Do not backdate a 30-minute hold to its first crossing. A missing news feed is unknown, not an assertion that no new information occurred.",
+      "Compute alive_minutes=end−start from those timestamps; survival at noon cannot imply survival to16:00. Permit a later new thesis only with a new ID/band/version. Report lifetimes and causes rather than a whole-AM extreme Boolean."
+    ],
+    "acceptance": [
+      "July10 neutral status must not hard-code indefinite survival; actual structure, value and news prerequisites must be evaluated or marked unknown.",
+      "January2 downward crossing ofVAH25634 can end the named long thesis only when the chosen held-close rule confirms, not at the first wick or automatically at noon.",
+      "An11:00 confirmed death produces90minutes from09:30, and a news event at10:00 must beat a later structural event.",
+      "A fulfilled unvisited target, a structure death and a value shift remain different causes; neither an extended plotted VA boundary nor an already consumed prior high automatically supplies thesis validity."
+    ],
+    "leakage": "future survival assigned; actual cause/time omitted",
+    "proxy": "yes",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "The named implementation starts at 09:30 America/New_York and evaluates at noon, using one-minute bars timestamped at their starts. A completed-close plus 30-minute hold is known after its actual confirmation interval, and news uses a verified release timestamp. The source’s thesis start is discretionary and need not always be 09:30.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "C1 requires a labelled thesis band, start/end and invalidation by structure, value or information. Open-versus-prior-VA classification and held-close/value-overlap rules are named variants rather than a published automatic thesis algorithm."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "The caller hard-codes no close break, no news and developing overlap, leaving directional wick extrema as death and neutral automatic survival. The helper assigns noon death or future 16:00 survival without the actual earliest cause timestamp."
+        },
+        "score_event_ok": {
+          "verdict": "no",
+          "reason": "An AM extreme Boolean is not a thesis lifetime or first-death-cause measurement; survival at noon cannot establish another four hours of survival."
+        },
+        "chart_ok": {
+          "verdict": "no",
+          "reason": "Both charts were re-viewed. July 10 opens inside prior VA and stays mechanically neutral/alive despite excursions; January 2 starts above VAH 25634 and later falls below it, but the code does not time the named held-close invalidation."
+        }
+      },
+      "source_refs": [
+        "C1:3",
+        "C1:4",
+        "C1:6",
+        "C3:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-R03-A-2026-07-10.png",
+          "sha256": "182b24b7dcbd79f705d6fcdd8a4fd1e35232ad06cd8856df7fea8ec5a703aaae"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-02",
+          "plot": "plots/R-R03-B-2026-01-02.png",
+          "sha256": "72a2a8789d18ad532ef2fc928df685a470395ff49a10cda072515b985d5e9ad3"
+        }
+      ]
+    }
+  },
+  {
+    "id": "R-R04",
+    "title": "Native triad level-taking, SMT and first-fill reaction",
+    "oks": [
+      "yes",
+      "no",
+      "blocked",
+      "blocked"
+    ],
+    "sources": [
+      "C1:5",
+      "C1:7"
+    ],
+    "source": "The source compares each market’s own AMT objective and which sister uses it first. The user’s SMT definition is prior high/low taken on one index and not another, across timeframes. A3/3 fractal detector and relative-return divergence are different objects.",
+    "finding": "The recipe remains blocked by the FINDINGS trust gate. Existing upstream defects include absolute ES/YM/RTY pivot prices compared with NQ prices, whole-AM rather than same-time extremes, and missing sister data capable of returning true. Own-profile VA/single-print first-fill states are not assembled. The dated normalized-return panels are diagnostics, not IOD/RFZ detections.",
+    "targets": [
+      "family_flow.py::_fractal_33_smt",
+      "family_flow.py::build_smt_ohlc",
+      "mbp1_objects.py::smt_trade_nq",
+      "recipe_score.py::catalog",
+      "FINDINGS.md"
+    ],
+    "fix": [
+      "Retain blocked scoring until a new explicit trust decision. In a future repair, build each index’s own prior-session high/low with identical declared clock semantics and complete coverage. Compare each price with its own level, never a sister’s absolute price or a ratio-mapped NQ level. Give each instrument’s high and low independent stable IDs, known_at and first_revisit_at. A prior take before the current comparison window is already consumed; only the first take starts that reference event. Later returning below/above it does not reset its taken state.",
+      "At the first wick take, inspect all sister states using only contemporaneously available bars/trades. Missing data is unknown. Retain lead/lag timestamps and later agreement separately; use complete1/5/15-minute bars for their respective variants without looking to the end of AM. Preserve the transient mismatch at that first take and subsequent sister agreement as later state. An already consumed high cannot be rearmed, and a low remains independent. Common session names require actual exchange-calendar and data-coverage alignment, not a calendar-day subtraction.",
+      "Keep prior-H/L SMT distinct from the3/3 pivot variant. IOD requires the corresponding actual AMT object on each instrument; RFZ requires a causal ledger of each market’s unfilled single print and which fills first. Do not create absent sister profiles/ledgers during this audit.",
+      "After a verified sister event, measure the named sister rejection and NQ0.25R response in order over15minutes, with each R in its own market’s units. A sister first fill may retire a target only under the stated source rule; report eligible matched objects, coverage, lag and outcomes separately. Source RFZ sister completion is an additional target-invalidity reason, not a license to extend an own high/low after its first visit. Keep the supplied trust gate intact while documenting these future repairs."
+    ],
+    "acceptance": [
+      "July10 andJanuary28 return divergence remains unscored; it cannot replace level-taking evidence.",
+      "ES5500.5 beyond its5500 high while NQ109.5 remains below its110 high is a possible mismatch regardless of the large absolute price difference.",
+      "An absent ES bar or a Sunday substituted for prior trading day must yield unknown, not SMT=true; later sister agreement cannot rewrite the earlier event."
+    ],
+    "leakage": "absolute cross-product comparison; later/missing sister data",
+    "proxy": "no scored substitute: blocked gate retained",
+    "ask_user": false,
+    "source_refresh": {
+      "source_set_sha256": "1b95b3a1892f1ddf907e2dd65d5cdaf629b7291a5fa20475359088a13ea75bf7",
+      "close_pass_sha256": "22896050e7a8f038480c68fe15203f3f4acf447d52d32347ef669481af9c2acb",
+      "clock_basis": "Each NQ/ES/YM/RTY observation retains its own contract and native price with a synchronized America/New_York decision time. The plotted 09:30 own-open returns are diagnostics. A first take must use only sister data available then, with completed-bar clocks and pivot right-confirmation separate from the original pivot time.",
+      "rechecked": true,
+      "repair_specification_rechecked": true,
+      "checks": {
+        "source_ok": {
+          "verdict": "yes",
+          "reason": "C1 distinguishes one market’s AMT-object rejection before its sisters and correlated single-print first fill. The user’s native prior-high/low SMT observation is a distinct event, not an absolute cross-price or relative-return comparison."
+        },
+        "code_ok": {
+          "verdict": "no",
+          "reason": "Upstream code compares sister pivot prices directly with NQ prices, uses whole-AM extrema and can count missing sister information as divergence. Native own-profile objects and first-fill chronology are not assembled."
+        },
+        "score_event_ok": {
+          "verdict": "blocked",
+          "reason": "The explicit FINDINGS trust gate remains blocked and supplies no passing sample. Diagnostic returns or an upstream SMT Boolean cannot replace the blocked IOD/RFZ event."
+        },
+        "chart_ok": {
+          "verdict": "blocked",
+          "reason": "Both normalized-return charts were re-viewed and remain blocked diagnostics. July 10 and January 28 relative paths establish neither own-level take timing nor single-print first fill and rejection."
+        }
+      },
+      "source_refs": [
+        "C1:5",
+        "C1:7"
+      ],
+      "code_basis": "Production, plan and retained-table hashes checked unchanged against audit_input_manifest.json and protected_inputs.json. Relevant producer/scorer logic re-evaluated with refreshed sources.",
+      "rechecked_charts": [
+        {
+          "case": "A",
+          "date": "2026-07-10",
+          "plot": "plots/R-R04-A-2026-07-10.png",
+          "sha256": "7e68303494e01adb0468ada55ff8ae0c5b5e3b213873c1a269304ddc49b83ab1"
+        },
+        {
+          "case": "B",
+          "date": "2026-01-28",
+          "plot": "plots/R-R04-B-2026-01-28.png",
+          "sha256": "6e8f524082f3c6143c775280fb400d1c9d54e1bed1f4f23eee92def0d97b57d5"
+        }
+      ]
+    }
+  }
+]

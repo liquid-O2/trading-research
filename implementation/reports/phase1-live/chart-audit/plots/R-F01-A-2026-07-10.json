@@ -1,0 +1,168 @@
+{
+  "case": {
+    "id": "R-F01",
+    "case": "A",
+    "date": "2026-07-10",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 511,
+    "negative_count": 136
+  },
+  "production_session": {
+    "date": "2026-07-10",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5353,
+    "expected_1s": 10800,
+    "missing_1s": 5447,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 29887.75,
+    "L": 29771.25,
+    "open": 29820.75,
+    "close": 29800.0,
+    "EQ": 29829.5,
+    "Q25": 29800.375,
+    "Q75": 29858.625,
+    "W69": 116.5,
+    "volume": 24095.0,
+    "close_0859": 29800.0,
+    "open_0930": 29834.75,
+    "w_pct_0859close": 0.39093959731543626,
+    "w_pct_0930open": 0.3904842507478695,
+    "WpriorRTH": 379.0,
+    "w_rel_prior_rth": 0.3073878627968338,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 29993.5,
+    "prior_rth_low": 29614.5,
+    "asia_high": 29963.5,
+    "asia_low": 29804.25,
+    "london_high": 29948.75,
+    "london_low": 29775.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1783690320000,
+    "first_low_break_ms": 1783693920000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1783688400000000000,
+    "outcome_start_ns": 1783690200000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1783691340000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 29823.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 29986.25,
+      "start": 9.5,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 29900.0,
+      "start": 9.5,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 29834.75,
+      "start": 9.5,
+      "end": 12,
+      "color": "#656565",
+      "style": ":"
+    },
+    {
+      "kind": "line",
+      "label": "CODE final-AM trade VWAP -2\u03c3",
+      "price": 29793.00849878046,
+      "start": 9.5,
+      "end": 12,
+      "color": "#c00040",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "CODE final-AM trade VWAP +0\u03c3",
+      "price": 29893.773770262793,
+      "start": 9.5,
+      "end": 12,
+      "color": "#c00040",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "CODE final-AM trade VWAP +2\u03c3",
+      "price": 29994.539041745127,
+      "start": 9.5,
+      "end": 12,
+      "color": "#c00040",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-07-09",
+    "f01_final_am": {
+      "vwap": 29893.773770262793,
+      "sigma": 50.38263574116677,
+      "lower": 29793.00849878046,
+      "upper": 29994.539041745127
+    },
+    "tape_window": {
+      "date": "2026-07-10",
+      "from": 9.5,
+      "to": 12,
+      "trades": 141292,
+      "buy_volume": 90971.0,
+      "sell_volume": 91414.0,
+      "unknown_volume": 154.0
+    },
+    "prints_ge_30": 27,
+    "prints_ge_75": 5,
+    "prints_ge_100": 2
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-07-08_2026-07-14.parquet"
+  ],
+  "plot": "plots/R-F01-A-2026-07-10.png",
+  "notes": [
+    "F01 scorer ORs ETH running-band touch with final-AM trade-band absorption; neither branch requires the full source sequence."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 670,
+    "code": "def f01(r):\n        return bool(r.get(\"f01_eth_touch\") or r.get(\"f01_vwap_fade\"))"
+  },
+  "event": "18:00 session VWAP \u00b12 running bands, both sides (\u00b11 is the named at-least row)",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

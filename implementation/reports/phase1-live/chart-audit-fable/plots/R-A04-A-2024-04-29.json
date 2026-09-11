@@ -1,0 +1,131 @@
+{
+  "case": {
+    "id": "R-A04",
+    "case": "A",
+    "date": "2024-04-29",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 38,
+    "negative_count": 609
+  },
+  "production_session": {
+    "date": "2024-04-29",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6121,
+    "expected_1s": 10800,
+    "missing_1s": 4679,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 17929.0,
+    "L": 17865.0,
+    "open": 17868.0,
+    "close": 17922.25,
+    "EQ": 17897.0,
+    "Q25": 17881.0,
+    "Q75": 17913.0,
+    "W69": 64.0,
+    "volume": 27535.0,
+    "close_0859": 17922.25,
+    "open_0930": 17921.5,
+    "w_pct_0859close": 0.35709802061683105,
+    "w_pct_0930open": 0.357112964874592,
+    "WpriorRTH": 233.25,
+    "w_rel_prior_rth": 0.27438370846730975,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 17901.5,
+    "prior_rth_low": 17668.25,
+    "asia_high": 17913.0,
+    "asia_low": 17874.5,
+    "london_high": 17922.75,
+    "london_low": 17888.75,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1714397460000,
+    "first_low_break_ms": 1714398060000,
+    "judas": true,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1714395600000000000,
+    "outcome_start_ns": 1714397400000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1714398180000,
+    "m05_side": "low",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 17813.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 17894.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 17848.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 17921.5,
+      "start": 9.25,
+      "end": 16,
+      "color": "#656565",
+      "style": ":"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2024-04-26",
+    "tape_window": {
+      "date": "2024-04-26",
+      "from": 9.5,
+      "to": 16,
+      "trades": 299116,
+      "buy_volume": 229463.0,
+      "sell_volume": 230647.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-04-22_2024-04-28.parquet"
+  ],
+  "plot": "plots/R-A04-A-2024-04-29.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 640,
+    "code": "def a04(r):\n        return bool(r.get(\"amt_80pct\"))"
+  },
+  "event": "open outside prior VA then two 30m periods inside (09:30-10:30)",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

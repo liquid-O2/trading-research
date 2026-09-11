@@ -1,0 +1,194 @@
+{
+  "case": {
+    "id": "R-J15",
+    "case": "A",
+    "date": "2026-03-09",
+    "code_result": true,
+    "selection": "code-positive",
+    "positive_count": 9,
+    "negative_count": 638,
+    "plot": "plots/R-J15-A-2026-03-09.png",
+    "trace": "plots/R-J15-A-2026-03-09.json",
+    "notes": [
+      "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+    ]
+  },
+  "production_session": {
+    "date": "2026-03-09",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 8299,
+    "expected_1s": 10800,
+    "missing_1s": 2501,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 24459.25,
+    "L": 24340.0,
+    "open": 24420.25,
+    "close": 24379.75,
+    "EQ": 24399.625,
+    "Q25": 24369.8125,
+    "Q75": 24429.4375,
+    "W69": 119.25,
+    "volume": 43353.0,
+    "close_0859": 24379.75,
+    "open_0930": 24432.25,
+    "w_pct_0859close": 0.4891354505275895,
+    "w_pct_0930open": 0.4880843966478732,
+    "WpriorRTH": 325.25,
+    "w_rel_prior_rth": 0.36664104534973097,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0.3-0.5",
+    "prior_rth_high": 24926.25,
+    "prior_rth_low": 24601.0,
+    "asia_high": 24238.75,
+    "asia_low": 24000.0,
+    "london_high": 24315.75,
+    "london_low": 24086.25,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1773063000000,
+    "first_low_break_ms": 1773064380000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1773061200000000000,
+    "outcome_start_ns": 1773063000000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1773063060000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "box",
+      "label": "6-9.published formation",
+      "low": 24340.0,
+      "high": 24459.25,
+      "start": 6.0,
+      "end": 9.0,
+      "color": "#285fa8"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published H",
+      "price": 24459.25,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "6-9.published L",
+      "price": 24340.0,
+      "start": 9.0,
+      "end": 12.0,
+      "color": "#be4b33",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "EQ",
+      "price": 24399.625,
+      "start": 9,
+      "end": 12,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "Q25",
+      "price": 24369.8125,
+      "start": 9,
+      "end": 12,
+      "color": "#8453a4",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "Q75",
+      "price": 24429.4375,
+      "start": 9,
+      "end": 12,
+      "color": "#ad7400",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "06:00 open",
+      "price": 24420.25,
+      "start": 9,
+      "end": 12,
+      "color": "#5e7c22",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_low",
+      "price": 24280.375,
+      "start": 9,
+      "end": 12,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "m05_high",
+      "price": 24518.875,
+      "start": 9,
+      "end": 12,
+      "color": "#be4b33",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "range.6-9.published": {
+      "n": 180,
+      "missing": 0,
+      "open": 24420.25,
+      "high": 24459.25,
+      "low": 24340.0,
+      "close": 24379.75
+    },
+    "London \u226575": {
+      "print_count": 2,
+      "threshold": 75,
+      "hours": [
+        2,
+        5
+      ]
+    },
+    "AM \u2265100": {
+      "print_count": 4,
+      "threshold": 100,
+      "hours": [
+        9.5,
+        12
+      ]
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-J15-A-2026-03-09.png",
+  "notes": [
+    "Projection labels are the production dictionary keys; no missing \u00b12 levels added."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 541,
+    "code": "def j15(r):\n        return bool(r.get(\"j15_bigtrade_level\"))"
+  },
+  "event": "BigTrades >=100 at -0.5/EQ in NY AM, or >=75 in London",
+  "detail_window": [
+    9.4,
+    9.9
+  ]
+}

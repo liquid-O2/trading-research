@@ -1,0 +1,130 @@
+{
+  "case": {
+    "id": "R-A03",
+    "case": "documented-hold-positive",
+    "date": "2026-02-12",
+    "code_result": true,
+    "selection": "independent both-boundary hold followed by target scan",
+    "positive_count": 41,
+    "negative_count": 606
+  },
+  "production_session": {
+    "date": "2026-02-12",
+    "year": "2026",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5092,
+    "expected_1s": 10800,
+    "missing_1s": 5708,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 25419.75,
+    "L": 25320.25,
+    "open": 25349.75,
+    "close": 25395.75,
+    "EQ": 25370.0,
+    "Q25": 25345.125,
+    "Q75": 25394.875,
+    "W69": 99.5,
+    "volume": 21956.0,
+    "close_0859": 25395.75,
+    "open_0930": 25346.25,
+    "w_pct_0859close": 0.3917978401897955,
+    "w_pct_0930open": 0.392563002416531,
+    "WpriorRTH": 407.0,
+    "w_rel_prior_rth": 0.24447174447174447,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 25465.25,
+    "prior_rth_low": 25058.25,
+    "asia_high": 25339.5,
+    "asia_low": 25242.5,
+    "london_high": 25359.25,
+    "london_low": 25292.0,
+    "path_class": "low-only",
+    "break_order": "low",
+    "first_high_break_ms": null,
+    "first_low_break_ms": 1770907440000,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1770904800000000000,
+    "outcome_start_ns": 1770906600000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1770907560000,
+    "m05_side": "low",
+    "reversal_bin": "bin.0940-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "prior trade VAL",
+      "price": 25141.75,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade VAH",
+      "price": 25328.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "prior trade POC",
+      "price": 25280.0,
+      "start": 9.25,
+      "end": 16,
+      "color": "#007d73",
+      "style": "--"
+    },
+    {
+      "kind": "line",
+      "label": "09:30 open",
+      "price": 25346.25,
+      "start": 9.25,
+      "end": 16,
+      "color": "#656565",
+      "style": ":"
+    }
+  ],
+  "helpers": {
+    "prior_profile_date": "2026-02-11",
+    "tape_window": {
+      "date": "2026-02-11",
+      "from": 9.5,
+      "to": 16,
+      "trades": 282471,
+      "buy_volume": 205720.0,
+      "sell_volume": 201996.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2026-02-08_2026-02-14.parquet"
+  ],
+  "plot": "plots/R-A03-documented-hold-positive-2026-02-12.png",
+  "notes": [],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 625,
+    "code": "def a03(r):\n        return bool(r.get(\"a03_traverse\"))"
+  },
+  "event": "failed-auction re-entry then traverse to the opposite VA edge",
+  "detail_window": [
+    9.633333333333333,
+    10.133333333333333
+  ]
+}

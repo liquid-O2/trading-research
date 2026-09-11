@@ -1,0 +1,2775 @@
+[
+  {
+    "id": "R-J01",
+    "role": "signal",
+    "research_decision": "Use a causal overshoot-and-return reversal at a frozen projection. Select the first qualified episode in time, never the eventual deepest AM extreme. Test strict rejection as an explicit alternative.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "J69",
+      "entry_window": "09:40–09:50 New York; confirmation must be inside",
+      "observation_start": "09:00",
+      "sides": "both independently",
+      "level_set": "outer H+kW and L-kW",
+      "stop": "episode adverse extreme + stop_buffer_ticks outward",
+      "target": "EQ69; if it is behind expected entry, no_target",
+      "exit_horizon": "12:00",
+      "episode_policy": "first visit per projection ID; later deeper projection is a different ID; max one fill at a time"
+    },
+    "parameters": {
+      "depth_set": {
+        "default": "manual",
+        "grid": [
+          "manual",
+          "thirds"
+        ],
+        "units": "named set",
+        "meaning": "manual={0.1,0.2,0.3,0.5}; thirds={0.33,0.66,1.0}; enumerate every level, not final depth"
+      },
+      "confirm_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "REACTION deadline from each projection first touch"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "complete close back toward range beyond near edge"
+      },
+      "rejection": {
+        "default": "overshoot_return",
+        "grid": [
+          "overshoot_return",
+          "strict_close"
+        ],
+        "units": "enum",
+        "meaning": "strict_close fails on any completed close beyond the projection before confirmation; overshoot_return uses E02 far-edge invalidation"
+      },
+      "stop_buffer_ticks": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "outward from observed episode extreme"
+      }
+    },
+    "algorithm": [
+      "Freeze J69 geometry and start a separate E02 episode for each projection side at its first post-09:00 contact; use d=-1 for upper and +1 for lower.",
+      "For overshoot_return treat the level as a zero-width band, allow up to 8 ticks adverse completed-close penetration before failure, and require response_ticks completed-close retreat within confirm_minutes. Strict_close fails at the first beyond-level completed close. The 8-tick ceiling is fixed for this baseline, not the historical strict-G rule.",
+      "An episode may touch before 09:40 but can trade only if its actual confirmation is in [09:40,09:50); reject stale expired episodes. Order simultaneous confirmations by confirmation timestamp, first-touch timestamp, smaller k, then low-side before high-side, recording that deterministic tie.",
+      "At confirmation freeze stop from that episode prefix and EQ69 target. Submit E11 market entry. A new deeper touch does not rewrite a prior entry or label; measure side/depth-specific touch, confirmation and post-entry target outcomes separately.",
+      "Keep wick reach and complete-close reaction separate. Export all non filled and failed episodes so selecting a later successful projection cannot hide earlier failed trades."
+    ],
+    "outputs": {
+      "depth": "decimal",
+      "touch_at": "UTC ns",
+      "confirm_at": "UTC ns?",
+      "adverse_excursion": "ticks",
+      "reversal_state": "enum",
+      "EQ_reach_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "strict_close vs overshoot_return",
+      "same-window outer-edge-only reversal using identical E02/E11",
+      "delay-matched no-flow baseline; J14/J15/J16 are optional later ablations"
+    ],
+    "acceptance_cases": [
+      "H=120, L=100, W=20 gives upper0.5=130, lower0.5=90. An upper touch at 09:42 then close129 with response4 ticks on tick0.25 confirms short; EQ110 is the target.",
+      "An upper0.1 touch at 09:35 and upper0.5 at 09:49 are distinct; the later one cannot assign depth0.5 to the earlier episode.",
+      "A confirming close exactly 09:50 cannot enter the baseline. After-entry lows before fill never contribute to MFE."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Judas reversal at the projection ladder",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "4c0d978318930c43d83b733562577d052d934c646f4dd2d36b6f9de3765fa6a2",
+    "source_references": [
+      "TBR:9",
+      "TBR:10",
+      "TBR:30",
+      "XF:47",
+      "FIND:10",
+      "JRAW:20",
+      "JRAW:42",
+      "JRAW:18",
+      "JRAW:8",
+      "JRAW:9",
+      "JRAW:10",
+      "JRAW:11",
+      "JRAW:70",
+      "JRAW:71"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J02",
+    "role": "context",
+    "research_decision": "Measure each opening-leg projection reach and a causal first-edge directional forecast; do not call an either-side reach a trade win.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01"
+    ],
+    "bindings": {
+      "clock": "J69",
+      "window": "09:30–09:40",
+      "depths": [
+        0.1,
+        0.2,
+        0.3,
+        0.5
+      ],
+      "primary_output": "0.5 reach per side",
+      "direction": "first fresh J69 edge visited after 09:30; already consumed pre 09:30 -> no fresh directional forecast",
+      "consumer": "J01 opening context only; no direct order"
+    },
+    "parameters": {
+      "reach_rule": {
+        "default": "wick",
+        "grid": [
+          "wick",
+          "close"
+        ],
+        "units": "enum",
+        "meaning": "tick crossing/visit vs complete 1m close beyond rounded target"
+      },
+      "opening_window_minutes": {
+        "default": 10,
+        "grid": [
+          5,
+          10,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "distinct research horizons from 09:30"
+      }
+    },
+    "algorithm": [
+      "Freeze all levels at 09:00; record exact 09:30 open and freshness state of both edges.",
+      "For every depth and side store first target visit in the selected half-open window. A0.1 visit cannot satisfy0.5.",
+      "For the directional forecast use only the first fresh edge encounter; equal-timestamp opposite encounters are ambiguous. Continue reporting unconditional either-side descriptive reaches on all complete sessions.",
+      "Fit conditional reach probabilities only on earlier training sessions. Export per-side, either-side and first-edge-direction denominators separately; no risk/return is inferred from open-to-target distance."
+    ],
+    "outputs": {
+      "reach_by_depth_side": "map<bool?>",
+      "first_edge": "enum(high,low,none,ambiguous,consumed)",
+      "first_reach_at": "UTC ns?",
+      "open_to_target": "points"
+    },
+    "controls": [
+      "unconditional same-clock reach distribution",
+      "first-edge directional vs either-side descriptive rate"
+    ],
+    "acceptance_cases": [
+      "H120, L100, upper0.5=130: high125 before 09:40 is not0.5 reach.",
+      "A130 print at 09:40 is excluded from10-minute window.",
+      "An edge consumed 09:15 is not a fresh 09:30 directional trigger; its geometry remains valid for descriptive reach."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "09:30 opening leg into projections",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "a7bf823f97f31f59f141c80724e84b195d72078b2876c190caa2ad1982ff95cf",
+    "source_references": [
+      "TBR:8",
+      "TBR:9",
+      "TBR:10",
+      "JRAW:13",
+      "JRAW:18",
+      "JRAW:9",
+      "JRAW:10",
+      "JRAW:11"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-J03",
+    "role": "signal",
+    "research_decision": "Define extended range numerically and test a break–hold–inner-retrace sequence with a real decision deadline; later single-side path is an outcome.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "J69",
+      "extended": "W69/prior_RTH_width >= width_ratio",
+      "entry_window": "09:30–10:00",
+      "level": "EQ69 baseline; Q25/Q75 directional alternatives",
+      "direction": "first completed 1m close beyond J69 edge by2 ticks after 09:30",
+      "hold": "outside break edge until inner retrace begins; no future final-path gate",
+      "target": "broken J69 edge as historical episode objective, not a fresh external draw",
+      "stop": "retrace adverse extreme +2 ticks",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "width_ratio": {
+        "default": 1.0,
+        "grid": [
+          0.75,
+          1.0,
+          1.25
+        ],
+        "units": "ratio",
+        "meaning": "current range width / previous complete same-contract RTH width"
+      },
+      "inner_level": {
+        "default": "EQ",
+        "grid": [
+          "EQ",
+          "directional_quadrant"
+        ],
+        "units": "enum",
+        "meaning": "up->Q75, down->Q25"
+      },
+      "hold_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "completed outside closes after break"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "retrace E02 confirmation"
+      }
+    },
+    "algorithm": [
+      "Calculate extended flag before 09:30 with a positive complete prior RTH width. News is a separate output, not a shortcut for extended.",
+      "Start the first directional break episode and complete its HOLD; require opposite edge unvisited as of confirmation, never through noon.",
+      "After hold, wait for first selected inner-level touch, then E02 REACTION in breakout direction. Entry confirmation must be before 10:00; earlier touches with later confirmations do not enter.",
+      "Freeze actual retrace stop and target broken edge. Edge is an objective within the original breakout episode despite consumed high/low status, explicitly not a new fresh-target event. E11 handles fills and exit.",
+      "Record final both/single path and lunch range only as outcome labels."
+    ],
+    "outputs": {
+      "width_ratio": "float",
+      "break_at": "UTC ns?",
+      "hold_at": "UTC ns?",
+      "retrace_at": "UTC ns?",
+      "final_path": "enum",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "same sequence without extended gate",
+      "EQ vs directional quadrant"
+    ],
+    "acceptance_cases": [
+      "W69=120, prior width100 qualifies threshold1.0; prior width0 is unavailable.",
+      "Break 09:45, hold ends 09:49, retrace 09:56 and confirmation 10:01 yields no entry.",
+      "Opposite break 11:00 cannot erase a valid 09:55 signal; it changes later outcome only."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Extended range, single break and inner-level retrace",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "8ba0473cef2794925bf00bc0ceacd489210bc6cd381f5f84c5f0d8939760910b",
+    "source_references": [
+      "TBR:12",
+      "TBR:13",
+      "TBR:24",
+      "JRAW:3",
+      "JRAW:48",
+      "JRAW:65",
+      "JRAW:54",
+      "JRAW:9",
+      "JRAW:11"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-J04",
+    "role": "signal",
+    "research_decision": "Use actual first-visit purge timestamps and an internal expansion trigger; the final range envelope is irrelevant to purge.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "reference_set": "ASIA and GB_LONDON H/L, each from its own completion",
+      "purge_cutoff": "09:30",
+      "clock": "J69",
+      "entry_window": "09:30–11:00",
+      "direction": "first confirmed internal-reference expansion",
+      "target": "own-side outer projection1.0",
+      "stop": "internal trigger episode adverse extreme+2 ticks",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "purge_rule": {
+        "default": "all_four_visited",
+        "grid": [
+          "all_four_visited",
+          "both_opposite_side_visited"
+        ],
+        "units": "enum",
+        "meaning": "all4 before 09:30; alternative for up requires Asia/London lows visited, down requires highs"
+      },
+      "inner_reference": {
+        "default": "EQ",
+        "grid": [
+          "EQ",
+          "directional_quadrant"
+        ],
+        "units": "enum",
+        "meaning": "Q75 up,Q25 down"
+      },
+      "hold_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "close-through then subsequent closes on expansion side"
+      }
+    },
+    "algorithm": [
+      "Build each overnight reference independently. Evaluate exact first visits from own known_at through 09:30. For all-four require all consumed; for directional alternative evaluate the two adverse-side references independently for each candidate direction.",
+      "After 09:30 detect first 1m close two ticks through the selected internal reference and HOLD on that side. No outer-edge break is required.",
+      "At hold completion require the other internal-direction episode has not confirmed earlier; earliest valid side wins. Snapshot level, stop and projected target.",
+      "Execute E11; report purge facts, internal confirmation and later projection outcome separately. Missing London/Asia coverage makes the gate unavailable."
+    ],
+    "outputs": {
+      "purge_mask": "4 booleans?",
+      "purge_times": "4 UTC ns?",
+      "internal_break_at": "UTC ns?",
+      "projection_reach_after_fill": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "same internal expansion without purge gate",
+      "all4 vs adverse-side-only purge"
+    ],
+    "acceptance_cases": [
+      "A reference formed 05:00 cannot be purged by 04:30 price.",
+      "An equality print consumes its reference even if strict sweep depth is0.",
+      "2026-07-10 Asia/London highs first visited 09:52/09:49 cannot satisfy all-four at 09:30."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Purged overnight extremes and single-break continuation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "b93f9292e8c19dfaea1c645e906fa23be5e6bfbc160edd76a6bb87f65f1422ce",
+    "source_references": [
+      "TBR:13",
+      "TBR:14",
+      "TBR:15",
+      "JRAW:17",
+      "JRAW:43"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-J05",
+    "role": "signal",
+    "research_decision": "Make range-finish open, EQ and completed OR midpoint separate inner-entry branches; test break-first versus internal-first instead of assuming one chronology.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "J69",
+      "entry_window": "09:00–10:00",
+      "reference_snapshot": "immutable at own available_at",
+      "stop": "interaction extreme+2 ticks",
+      "target": "directional J69 edge within same episode; target must be ahead",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "reference": {
+        "default": "finish_open",
+        "grid": [
+          "finish_open",
+          "EQ",
+          "OR5_mid",
+          "OR15_mid"
+        ],
+        "units": "object",
+        "meaning": "09:00 first-minute open; ORs known 09:35/09:45"
+      },
+      "sequence": {
+        "default": "internal_first",
+        "grid": [
+          "internal_first",
+          "outer_break_first"
+        ],
+        "units": "enum",
+        "meaning": "internal: approach from above and react back above -> long; approach from below and react back below -> short. Break-first uses a previously confirmed outer-break direction."
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "close retreat from selected line"
+      },
+      "hold_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "required outer break hold only"
+      }
+    },
+    "algorithm": [
+      "Create four independent inner objects. Do not alias 06:00 build_open to 09:00 finish_open.",
+      "For internal_first determine approach side from the last completed 1m close before touch; below->short reaction back below, above->long back above. Thus d is the side occupied before retrace. Equal prior close gives no directional signal. For outer_break_first require a prior J69 E02 break and HOLD and then retrace in that direction.",
+      "Apply E02 REACTION at the selected line in the direction established by the previous step. Both sides may form observations; earliest valid confirmation enters.",
+      "Target the directional range edge only when ahead at decision; stop from prefix episode extreme. E11 records fill and outcomes. Snapshot availability disallows p reformation OR entries."
+    ],
+    "outputs": {
+      "reference_id": "string",
+      "reference_price": "points",
+      "sequence": "enum",
+      "approach_side": "enum",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "reference branches compared with identical timing/fees",
+      "break-first vs internal pullback"
+    ],
+    "acceptance_cases": [
+      "09:00 open105 and 06:00 open100 remain distinct.",
+      "An OR15 midpoint touched 09:40 cannot exist yet.",
+      "Prior close above EQ, retrace EQ and close4 ticks above produces long; a close through below is failure, not a forced short."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Single-break retraces to EQ, range open and OR midpoint",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "54c3f7bb8a3b60e755ecec38236c0c7cfda7896aec55c95f34ebf84dae837794",
+    "source_references": [
+      "XF:12",
+      "XF:15",
+      "XF:23",
+      "XF:25",
+      "JRAW:38",
+      "JRAW:54",
+      "JRAW:65",
+      "JRAW:9",
+      "JRAW:11"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J06",
+    "role": "context",
+    "research_decision": "Build point-in-time opening cells and completed five-minute RVOL, then estimate their conditional path distributions.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E03",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J04"
+    ],
+    "bindings": {
+      "clock": "J69",
+      "opening_price": "09:30 open",
+      "profile": "prior_rth VP70",
+      "outcomes": [
+        "09:30–10:30",
+        "09:30–12:00"
+      ],
+      "cells": "below/inside/above prior VA x below/inside/above prior RTH price x below/inside/above J69; equality inside",
+      "RVOL_known_at": "09:35",
+      "consumer": "J01/J04; RVOL gate can only act 09:35 or later"
+    },
+    "parameters": {
+      "history_sessions": {
+        "default": 60,
+        "grid": [
+          60,
+          120,
+          252
+        ],
+        "units": "complete sessions",
+        "meaning": "prior same5m 09:30–09:35 volume median"
+      },
+      "rvol_cutoff": {
+        "default": 1.5,
+        "grid": [
+          1.0,
+          1.5,
+          2.0
+        ],
+        "units": "ratio",
+        "meaning": "V_current5m / historical median"
+      },
+      "prior_profile_scope": {
+        "default": "prior_rth",
+        "grid": [
+          "prior_rth",
+          "prior_eth"
+        ],
+        "units": "enum",
+        "meaning": "ETH previous scheduled 18:00–17:00 same contract; no silent scope alias"
+      }
+    },
+    "algorithm": [
+      "Build selected prior profile and price bounds from D02 and calendar, preserving profile parameters. Missing full profile is unavailable.",
+      "Freeze27 opening cells at 09:30. At 09:35 calculate RVOL from five complete minutes and strictly prior history; median0 is unavailable.",
+      "For each outcome horizon calculate four mutually exclusive wick path classes relative to J69, as well as close-path labels, with one eligible session per cell.",
+      "Estimate conditional probabilities with the protocol shrinkage, keeping unconditional cells and RVOL-conditioned cells separate. Test incremental information in registered consumers after features are available."
+    ],
+    "outputs": {
+      "opening_cell": "3x3x3 enum",
+      "RVOL": "float?",
+      "path_probabilities": "4 probabilities",
+      "n_cell": "int",
+      "log_loss": "float"
+    },
+    "controls": [
+      "unconditional path distribution",
+      "opening cells without RVOL",
+      "prior RTH vs ETH scope"
+    ],
+    "acceptance_cases": [
+      "Current5m volume3000 and prior median2000 gives RVOL1.5 at 09:35 only.",
+      "Below VA but inside prior price range is a valid cell, not discarded.",
+      "59 prior sessions cannot satisfy60-session baseline."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Opening-location context and RVOL",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "7e6653c1882fa671ba5a007a0035d0695b5be2fd07de3834b2aee70c138f878c",
+    "source_references": [
+      "XF:7",
+      "XF:8",
+      "XF:10",
+      "XF:16",
+      "XF:18",
+      "JRAW:22",
+      "JRAW:34",
+      "JRAW:36",
+      "JRAW:42",
+      "JRAW:37",
+      "JRAW:9",
+      "JRAW:10",
+      "JRAW:11"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-J07",
+    "role": "context",
+    "research_decision": "Replace the daily boolean with a proper four-way width-conditioned distribution and a calibrated forecast.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J03"
+    ],
+    "bindings": {
+      "clock": "J69",
+      "primary_horizon": "09:00–12:00",
+      "width_pct": "100*W69/last_complete08:59_close",
+      "width_bins_pct": [
+        0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1.0,
+        1.2,
+        "inf"
+      ],
+      "boundary": "lower inclusive upper exclusive",
+      "consumer": "J01/J03; class known 09:00"
+    },
+    "parameters": {
+      "break_rule": {
+        "default": "wick",
+        "grid": [
+          "wick",
+          "close"
+        ],
+        "units": "enum",
+        "meaning": "first inclusive crossing vs completed 1m strict beyond"
+      },
+      "horizon_start": {
+        "default": "09:00",
+        "grid": [
+          "09:00",
+          "09:30"
+        ],
+        "units": "NY wall",
+        "meaning": "separate output population"
+      },
+      "normalizer": {
+        "default": "08:59_close",
+        "grid": [
+          "08:59_close",
+          "build_open"
+        ],
+        "units": "price",
+        "meaning": "08:59 complete close or 06:00 build open; both known at 09:00"
+      }
+    },
+    "algorithm": [
+      "Require complete positive W and normalizer. Assign exactly one width bin at 09:00. Both listed normalizers are available by that time.",
+      "Track high and low path flags over the selected horizon; derive high_only,low_only, both, neither, with incomplete outcomes censored.",
+      "Fit smoothed four-class distributions from training only. Keep source study percentages as reference metadata, never priors.",
+      "Score conditional log loss/Brier versus unconditional clock distribution and expose uncertainty/counts in each cell."
+    ],
+    "outputs": {
+      "width_pct": "percent",
+      "width_bin": "enum",
+      "path_class": "4-way enum",
+      "forecast": "probability[4]"
+    },
+    "controls": [
+      "unconditional clock distribution",
+      "price-normalized width vs raw width quantile classes"
+    ],
+    "acceptance_cases": [
+      "width0.4% belongs[0.4,0.6), not both neighboring bins.",
+      "Each complete session contributes exactly one class and class counts sum toN.",
+      "A09:15 sweep changes 09:00 horizon but not 09:30 horizon."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Width-conditioned range-break distribution",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "4e3fd652b09fe43c2b39a070b0e70c68f0d256f84f361eebaf3a2c041035b5ef",
+    "source_references": [
+      "XF:23",
+      "XF:24",
+      "TBR:30",
+      "JRAW:49",
+      "JRAW:22",
+      "JRAW:37",
+      "JRAW:9",
+      "JRAW:11"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-J08",
+    "role": "signal",
+    "research_decision": "Trade a completed reaction from the whole PM extension area; distinguish it from exact1.33 line rejection.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clock": "J69",
+      "entry_window": "13:00–15:30",
+      "bands": "upper[H+1.33W, H+1.66W], lower[L-1.66W, L-1.33W]",
+      "side": "fade toward range",
+      "stop": "observed interaction extreme+2 ticks",
+      "target": "corresponding J69 edge as geometric retracement objective",
+      "exit_horizon": "16:00",
+      "area_lifecycle": "one first PM episode per side; record earlier contacts, untouched gate parameter"
+    },
+    "parameters": {
+      "area_mode": {
+        "default": "band",
+        "grid": [
+          "band",
+          "line_1.33"
+        ],
+        "units": "enum",
+        "meaning": "whole area vs near line"
+      },
+      "fresh_pm": {
+        "default": true,
+        "grid": [
+          true,
+          false
+        ],
+        "units": "bool",
+        "meaning": "true excludes same area touched from 09:00 through 13:00; not external-H/L lifetime override"
+      },
+      "confirm_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "E02 reaction deadline"
+      },
+      "response_ticks": {
+        "default": 8,
+        "grid": [
+          4,
+          8,
+          16
+        ],
+        "units": "ticks",
+        "meaning": "retreat beyond near area edge"
+      }
+    },
+    "algorithm": [
+      "Freeze outer-price bands 09:00 and track all contacts; apply fresh_pm at 13:00.",
+      "First in-window band contact starts E02 fade reaction, d=-1 upper/+1 lower. Far-edge completed close beyond2 ticks invalidates. Confirmation must retreat response_ticks beyond near edge.",
+      "Stop uses the observed episode extreme, including penetration inside/beyond band before confirmation; no final PM extreme is used.",
+      "Execute E11 to the corresponding range edge and close by 16:00. Record band touch, reversal confirmation and outcome separately; no one-sided either-band OR."
+    ],
+    "outputs": {
+      "band_side": "enum",
+      "pre_PM_contact": "bool",
+      "contact_at": "UTC ns?",
+      "confirmed": "bool?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "exact1.33 line",
+      "PM reaction without untouched gate"
+    ],
+    "acceptance_cases": [
+      "H120, L100 gives upper[146.6,153.2], lower[66.8,73.4] before directional tick rounding.",
+      "12:54 contact is pre-PM; baseline fresh_pm excludes later retouch.",
+      "Source execution that exits before later band contact is not an entry for this model."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "PM reversal in the1.33–1.66 extension area",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "0076ef9587efa64c1a17b6413d717b4064b08ff50bb9c6a909599aee84bab4a2",
+    "source_references": [
+      "TBR:21",
+      "XF:19",
+      "XF:47",
+      "JRAW:23",
+      "JRAW:25",
+      "JRAW:26",
+      "JRAW:44",
+      "JRAW:8",
+      "JRAW:9",
+      "JRAW:10",
+      "JRAW:11",
+      "JRAW:62",
+      "JRAW:71"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-J09",
+    "role": "signal",
+    "research_decision": "Choose explicit New York London research clocks preserving a one-hour freeze-to-action lead, and compare them without waiting for the source display timezone.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "default_clock": "J_LONDON_A",
+      "ladder": "outer0.1,0.2,0.3,0.5",
+      "entry": "own action window",
+      "side": "fade projection; separate inner pullback branch",
+      "stop": "episode extreme+2 ticks",
+      "target": "projection_fade: own EQ; EQ_pullback: directional box edge, which must be ahead",
+      "exit_horizon": "own clock outcome end"
+    },
+    "parameters": {
+      "clock": {
+        "default": "J_LONDON_A",
+        "grid": [
+          "J_LONDON_A",
+          "J_LONDON_B",
+          "J_LONDON_C"
+        ],
+        "units": "clock enum",
+        "meaning": "E01 jointly specifies build/action intervals; no independent timezone fit"
+      },
+      "setup": {
+        "default": "projection_fade",
+        "grid": [
+          "projection_fade",
+          "EQ_pullback"
+        ],
+        "units": "enum",
+        "meaning": "fade first 0.3 projection reaction; EQ pullback uses approach-side rule from J05"
+      },
+      "confirm_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "E02 reaction deadline"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "completed-close response"
+      }
+    },
+    "algorithm": [
+      "Build selected clock, freeze own W and projections; retain the explicit one-hour action lead.",
+      "For projection_fade observe first 0.3 level touch after action start and use E02 fade. For EQ_pullback use prior completed 1m close side, touch EQ, then reaction back to that side. No outer sweep is required for the inner branch.",
+      "Use own clock levels only; J69 cannot be an input before 09:00. EQ_pullback target is directional box edge; projection_fade target isEQ.",
+      "Execute E11, expire at selected clock end and report each clock independently. Do not optimize wall timezone or move a source chart to align one result."
+    ],
+    "outputs": {
+      "clock_id": "enum",
+      "setup": "enum",
+      "touch_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "three fixed clock alternatives",
+      "inner pullback vs projection fade"
+    ],
+    "acceptance_cases": [
+      "J_LONDON_A freezes 02:00 and acts 03:00, exactly 1h later.",
+      "A03:30 decision cannot use 08:00 bars.",
+      "An EQ pullback without either edge sweep can qualify its own branch."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "London reversal model",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "93558745353b3ae7168c684079a647ab6d20db3a57d7bb8acb0fe268fe197b90",
+    "source_references": [
+      "XF:40",
+      "XF:41",
+      "FIND:4",
+      "FIND:5",
+      "JRAW:63",
+      "JRAW:64"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-J10",
+    "role": "management",
+    "research_decision": "Choose remaining genuinely unvisited draws at the parent confirmation; compare target selection on identical entries.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [
+      "R-J01",
+      "R-J04"
+    ],
+    "consumers": [],
+    "bindings": {
+      "parents": "J01 and J04 filled-entry ledgers, reported separately",
+      "reference_universe": "ASIA,GB_LONDON,PRIOR_RTH H/L",
+      "selection": "nearest fresh target ahead at parent decision",
+      "no_target": "retain parent baseline target in control only; selected-draw branch records no eligible target and no target-policy trade comparison",
+      "stop": "identical parent initial stop",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "target_universe": {
+        "default": "all",
+        "grid": [
+          "all",
+          "overnight_only",
+          "prior_rth_only"
+        ],
+        "units": "enum",
+        "meaning": "all=three specified source clocks; no current final extremes"
+      },
+      "selection": {
+        "default": "nearest",
+        "grid": [
+          "nearest",
+          "farthest"
+        ],
+        "units": "enum",
+        "meaning": "available unvisited targets ahead; ties E09"
+      }
+    },
+    "algorithm": [
+      "Ingest actual parent confirmations and orders/fills; rebuild every candidate first-visit status from its own known_at including ETH.",
+      "At decision freeze the complete candidate set and selected target; do not choose at fill or after observing price movement.",
+      "Replay target exits on identical parent entries and stops. Compare only paired entries with a qualifying target, and separately report their fraction of all parent opportunities; do not pretend no-target entries won/lost.",
+      "Track target consumption after decision; a target visited before delayed entry may make the order path immediately marketable or passed, which E11 handles without deleting the fill."
+    ],
+    "outputs": {
+      "candidate_ids": "list<string>",
+      "selected_target_id": "string?",
+      "fresh_at_decision": "bool?",
+      "paired_delta_net_R0": "float?"
+    },
+    "controls": [
+      "parent fixed target on identical entries",
+      "nearest vs farthest target"
+    ],
+    "acceptance_cases": [
+      "2026-01-28 prior RTH high consumed2026-01-27 16:45 cannot be selected 09:30.",
+      "An Asia high consumed 02:00 does not consume the Asia low.",
+      "Future target visits cannot change the candidate set saved at decision."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Remaining overnight/prior-session draws after reversal",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "ad54f6fbca050cc5ab4879476342e0599bd125b69a7eea661f74dc080eb4905d",
+    "source_references": [
+      "TBR:16",
+      "TBR:17",
+      "XF:3",
+      "XF:26",
+      "TBR:33",
+      "TBR:34",
+      "TBR:35",
+      "JRAW:24",
+      "JRAW:26",
+      "JRAW:28",
+      "JRAW:32",
+      "JRAW:42"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-J11",
+    "role": "component",
+    "research_decision": "Build explicit directional excursion distributions and per-session smaller-excursion statistics; keep mean, median and widths separate.",
+    "inputs": [
+      "D01",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01"
+    ],
+    "bindings": {
+      "sample_clock": "09:00–12:00",
+      "anchor": "09:00 finish-open",
+      "outputs": "upper/lower means and medians, min-excursion means/medians, shaded mean–median side bands",
+      "consumer": "J01 location feature with boundaries available 09:00"
+    },
+    "parameters": {
+      "history_sessions": {
+        "default": 60,
+        "grid": [
+          60,
+          120,
+          252
+        ],
+        "units": "sessions",
+        "meaning": "complete prior same-clock samples"
+      },
+      "normalization": {
+        "default": "return",
+        "grid": [
+          "return",
+          "points"
+        ],
+        "units": "enum",
+        "meaning": "historical excursion/O_i scaled by current O, or raw points"
+      },
+      "weighting": {
+        "default": "equal",
+        "grid": [
+          "equal",
+          "exp_half_life_30"
+        ],
+        "units": "enum",
+        "meaning": "weighted mean uses2^(-age/30); weighted quantile first cumulative normalized weight>=q; age0 newest prior"
+      }
+    },
+    "algorithm": [
+      "For each prior complete session store O, H, L, u=H-O, d=O-L and min(u, d). Keep sample date and raw contract.",
+      "Compute mean and median separately for each side; exponential option weights means and quantiles with the declared rule, never today.",
+      "Anchor at current 09:00 observed open, directional-round derived prices, and freeze; produce mean–median shaded bands and min-excursion symmetric boundaries.",
+      "Measure coverage and pinball loss of median boundaries and downstream J01 confluence benefit; a boundary draw extending past noon does not extend outcome horizon."
+    ],
+    "outputs": {
+      "upper_mean": "points",
+      "lower_mean": "points",
+      "upper_median": "points",
+      "lower_median": "points",
+      "mean_min_excursion": "points",
+      "sample_dates": "date[]"
+    },
+    "controls": [
+      "raw points vs return scaling",
+      "mean vs median; min-of-means as named diagnostic only"
+    ],
+    "acceptance_cases": [
+      "u=[2,8], d=[8,2] gives mean(min)=2 while min(mean(u), mean(d))=5; they must differ.",
+      "Exactly59 prior sessions cannot create a60-session boundary.",
+      "Today 15:00 burst cannot change 09:00 levels."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "SessionStat mean/median/minimum-average boundaries",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "032d4ef163fcaceb61ca37f40df39a4fb43309b6b4472b12f7de4d2486854463",
+    "source_references": [
+      "SS:4",
+      "SS:6",
+      "SS:9",
+      "SS:10",
+      "XF:19",
+      "XF:45",
+      "SS:8",
+      "SS:11",
+      "JRAW:26",
+      "JRAW:69",
+      "JRAW:44"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-J12",
+    "role": "signal",
+    "research_decision": "Replace unpublished P-zones with frozen conditional excursion-quantile bands, optionally scaled by known pre-open volatility; test low-to-finish-open as an ordered path.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E04",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "anchor": "J69 finish-open 09:00",
+      "historical_outcome": "09:00–12:00",
+      "zone_pairs": "E04 T1..T4",
+      "entry_window": "09:00–11:30",
+      "side": "fade selected zone",
+      "stop": "far zone edge or episode extreme, whichever more adverse, plus2 ticks",
+      "target": "09:00 finish-open; must be ahead",
+      "exit_horizon": "12:00",
+      "lifecycle": "freeze baseline; E04 two-close far-edge invalidation"
+    },
+    "parameters": {
+      "history_sessions": {
+        "default": 252,
+        "grid": [
+          120,
+          252,
+          500
+        ],
+        "units": "sessions",
+        "meaning": "full prior history"
+      },
+      "zone_tier": {
+        "default": "T1",
+        "grid": [
+          "T1",
+          "T2",
+          "T3",
+          "T4"
+        ],
+        "units": "enum",
+        "meaning": "complete fixed quantile pairs from E04"
+      },
+      "volatility_scale": {
+        "default": "none",
+        "grid": [
+          "none",
+          "preopen_RV"
+        ],
+        "units": "enum",
+        "meaning": "E04 clipped ratio using06–09 RV"
+      },
+      "confirm_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "E02 reaction"
+      }
+    },
+    "algorithm": [
+      "Build side-specific normalized excursion histories and quantile bands using chosen N. Never infer bounds from the eventual current excursion.",
+      "At 09:00 anchor and freeze upper/lower zones independently. Do not force bands outside J69 H/L.",
+      "For each first eligible zone contact use E02 fade confirmation, keeping zone identity and side. For a low-to-open study separately require a fresh J69 low visit before the lower-zone confirmation; this is a conditional output, not price inequality.",
+      "Execute E11 to finish-open after confirmation. A target behind expected entry is no_target. Export lower and upper cohorts separately and compare pinball/calibration of zone edges."
+    ],
+    "outputs": {
+      "zone_id": "string",
+      "quantile_edges": "float[2]",
+      "low_then_zone_then_open": "bool?",
+      "zone_response": "enum",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "unscaled vs known-RV scaling",
+      "outer fixed projection fade with same reaction rule",
+      "T1 throughT4 registered tiers"
+    ],
+    "acceptance_cases": [
+      "O100, lower excursion q50=.02,q65=.03 gives lower zone[97,98]; it may lie inside a price range[95,105].",
+      "Low100 and open101 can support low-to-open traversal; no low>open test exists.",
+      "Later volatility cannot change a touched frozen zone."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "P-zone confluence and the low-to-open path",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "7270f20bbddcbad9d1b0af2e9491fb471ffc0aa5b970e9b2709ca8ff2fe33d01",
+    "source_references": [
+      "XF:29",
+      "XF:30",
+      "XF:39",
+      "JRAW:53",
+      "JRAW:54",
+      "JRAW:18",
+      "JRAW:58",
+      "JRAW:62"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J13",
+    "role": "component",
+    "research_decision": "Specify an expected-range model using prior directional returns and optional pre-open RV scaling; test boundary-to-EQ traversal separately.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J05"
+    ],
+    "bindings": {
+      "anchor": "09:30 open",
+      "history_clock": "09:30–12:00",
+      "geometry": "directional mean/median return distances; EV width=U-L",
+      "extension": "U+0.5*(U-L), L-0.5*(U-L)",
+      "consumer": "J01/J05 only after 09:30"
+    },
+    "parameters": {
+      "history_sessions": {
+        "default": 120,
+        "grid": [
+          60,
+          120,
+          252
+        ],
+        "units": "sessions",
+        "meaning": "prior complete samples"
+      },
+      "estimator": {
+        "default": "median",
+        "grid": [
+          "mean",
+          "median"
+        ],
+        "units": "enum",
+        "meaning": "both always exported; selected estimator supplies consumer"
+      },
+      "volatility_scale": {
+        "default": "none",
+        "grid": [
+          "none",
+          "preopen_RV"
+        ],
+        "units": "enum",
+        "meaning": "E04 scaling"
+      }
+    },
+    "algorithm": [
+      "Create prior up/down return samples and fit specified estimators. Snapshot includes all dates and full N.",
+      "At 09:30 calculate EV levels and width, independent ofEQ69 and source inner-value POC.",
+      "For each boundary first interaction record later EQ69 touch in the same side episode through noon; an earlier EQ touch cannot count.",
+      "Evaluate quantile/coverage calibration and the optional consumer gate; do not turn any EV-to-EQ pair from unrelated sides into a success."
+    ],
+    "outputs": {
+      "EV_upper": "points",
+      "EV_lower": "points",
+      "EV_width": "points",
+      "boundary_then_EQ": "bool?",
+      "boundary_at": "UTC ns?"
+    },
+    "controls": [
+      "constant-return median vs mean",
+      "preopen-scaled vs unscaled"
+    ],
+    "acceptance_cases": [
+      "O100, median u_return.02,d_return.01 gives U102, L99, width3 and upper+50%=103.5.",
+      "EV at 09:30 cannot gate 09:20 entry.",
+      "EQ touch 09:40 before EV boundary 09:45 does not satisfy subsequent traversal."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Expected-volatility range",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "67e8a051a230ffc6fc1f7a29bfc225df5412a3e99e6c1a0f6c06c9018214f8de",
+    "source_references": [
+      "XF:3",
+      "XF:7",
+      "XF:19",
+      "JRAW:3",
+      "JRAW:30"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-J14",
+    "role": "component",
+    "research_decision": "Use a complete-bar small-body/large-volume observation with prior-bar warm up, then measure whether it adds information at a parent level.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E05"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J08"
+    ],
+    "bindings": {
+      "scope": "continuous bars across session boundary",
+      "location": "parent level/area available at candle close, with actual candle span overlap",
+      "consumer": "J01/J08; confirmation waits for bar close",
+      "direction": "observation has no automatic trade side"
+    },
+    "parameters": {
+      "bar_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fixed clock-aligned candles"
+      },
+      "body_max": {
+        "default": 0.6,
+        "grid": [
+          0.3,
+          0.6,
+          0.8
+        ],
+        "units": "ratio",
+        "meaning": "abs(C-O)/(H-L) <=threshold"
+      },
+      "volume_multiple": {
+        "default": 1.5,
+        "grid": [
+          1.5,
+          2.0,
+          2.5
+        ],
+        "units": "multiple",
+        "meaning": "current volume / mean of prior n bars"
+      },
+      "baseline_bars": {
+        "default": 14,
+        "grid": [
+          14,
+          30,
+          60
+        ],
+        "units": "bars",
+        "meaning": "exclude current; no AM reset"
+      }
+    },
+    "algorithm": [
+      "Build complete E05 bars and prior-only volume baseline.",
+      "Evaluate inclusive body/volume thresholds; zero-range or missing warm up is unavailable.",
+      "Join the observation to an actual contemporaneous parent level interaction, retaining bar and snapshot ID.",
+      "Compare parent responses with/without observation and delay-matched price-only control; continuation and reversal are separate outcomes."
+    ],
+    "outputs": {
+      "body_ratio": "float",
+      "volume_ratio": "float",
+      "observation": "bool?",
+      "available_at": "UTC ns",
+      "level_id": "string?"
+    },
+    "controls": [
+      "body only",
+      "volume only",
+      "combined vs delay-matched price control"
+    ],
+    "acceptance_cases": [
+      "Body0.45, volume2x passes default0.6/1.5, fails0.3/2.5.",
+      "A09:03 candle may warm up using pre 09:00 bars.",
+      "A marker followed by continuation is not relabelled absorption reversal."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Small-body/high-volume candle confirmation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "9b0dad4d16f965361d35645d0e0f066cab7e2cb2470434ae66692e1885e762cd",
+    "source_references": [
+      "TBR:31",
+      "TBR:35",
+      "XF:27",
+      "XF:44",
+      "XF:45",
+      "JRAW:51",
+      "JRAW:52",
+      "JRAW:14",
+      "JRAW:67"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J15",
+    "role": "component",
+    "research_decision": "Retain actual large executions, side and level identity; compare fixed thresholds with a prior-only adaptive size threshold.",
+    "inputs": [
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E06"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J09"
+    ],
+    "bindings": {
+      "NY_window": "09:30–16:00",
+      "London_window": "selected J09 action window",
+      "fixed_thresholds": "NY>=100 NQ contracts, London>=75 NQ contracts",
+      "location": "nearest available parent level within tolerance; tie E09",
+      "response_horizon": "15 minutes from print",
+      "consumer": "J01/J09"
+    },
+    "parameters": {
+      "threshold_mode": {
+        "default": "fixed",
+        "grid": [
+          "fixed",
+          "prior_q99"
+        ],
+        "units": "enum",
+        "meaning": "E06 adaptive floor20; no execution aggregation"
+      },
+      "tol_ticks": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "print-to-level distance"
+      },
+      "response_minutes": {
+        "default": 15,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "post-print outcome only"
+      }
+    },
+    "algorithm": [
+      "Load one canonical execution stream, normalize buy/sell/unknown and preserve single execution identity.",
+      "Select threshold by clock; London can run when NY data is absent. Future J69 levels cannot be used in London.",
+      "Join each qualifying execution to known level(s), preserving signed side and exact distance. Unknown-side large prints can be descriptive but cannot satisfy a directional flow gate.",
+      "Measure both aggressor reward and defender reaction after the print; compare with all same-parent touches without a large print using matching clock and delay."
+    ],
+    "outputs": {
+      "print_id": "string",
+      "size": "contracts",
+      "aggressor": "enum",
+      "level_distance": "ticks",
+      "rewarded": "bool?",
+      "defender_reaction": "bool?"
+    },
+    "controls": [
+      "fixed vs q99 threshold",
+      "same parent touches without large executions"
+    ],
+    "acceptance_cases": [
+      "Exactly100 contracts qualifies NY baseline.",
+      "A75-contract London print cannot use 09:00 geometry at 02:30.",
+      "A302 print15 points from EQ fails two-tick confluence regardless caption."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Large executions at a framework level",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "389d436629fa8dcc51b183cc1b0c7c630f27b9b3e822cce9953a9ee23338a558",
+    "source_references": [
+      "XF:23",
+      "XF:24",
+      "XF:27",
+      "XF:44",
+      "FIND:8",
+      "FIND:9",
+      "JRAW:8",
+      "JRAW:10",
+      "JRAW:48",
+      "JRAW:49",
+      "JRAW:50",
+      "JRAW:36"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-J16",
+    "role": "component",
+    "research_decision": "Use full developing RTH signed profiles plus a separately computed highlight mask and local absorption response; highlighting never changes totals.",
+    "inputs": [
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03",
+      "E06"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J05"
+    ],
+    "bindings": {
+      "profile": "rth_developing at each complete minute",
+      "highlight": "top35% execution sizes in prior 60 same-slot size distribution, threshold q65",
+      "confirmation": "E06 ABSORB at parent area, then separate defender reward",
+      "consumer": "J01/J05"
+    },
+    "parameters": {
+      "highlight_quantile": {
+        "default": 0.65,
+        "grid": [
+          0.65,
+          0.8,
+          0.95
+        ],
+        "units": "quantile",
+        "meaning": "prior-history display mask only"
+      },
+      "flow_seconds": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "seconds",
+        "meaning": "matched-duration baselines rebuilt"
+      },
+      "aggression_quantile": {
+        "default": 0.85,
+        "grid": [
+          0.7,
+          0.85,
+          0.95
+        ],
+        "units": "quantile",
+        "meaning": "E06 local aggressor volume gate"
+      },
+      "max_excursion_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "observed all-price excursion"
+      }
+    },
+    "algorithm": [
+      "Build all signed/unknown bins from current RTH prefix, keeping negative local cells even inside a net-positive candle.",
+      "Apply the historical size quantile only to a second display/feature view; retain aggregate volume/delta unchanged.",
+      "At a parent interaction freeze profile snapshot and run E06 side-specific absorption with real excursion; no literal excursion constant or full-RTH baseline.",
+      "Evaluate local profile shape, highlight presence, absorption and later reward as separate columns and ablations; full day changes cannot affect earlier features."
+    ],
+    "outputs": {
+      "snapshot_id": "string",
+      "local_buy_sell_unknown": "contracts[3]",
+      "highlight_volume": "contracts",
+      "absorption": "bool?",
+      "actual_excursion": "ticks"
+    },
+    "controls": [
+      "aggregate profile only",
+      "highlight mask only",
+      "absorption vs same delay without flow"
+    ],
+    "acceptance_cases": [
+      "Late 15:00 prints do not alter 09:45 bins.",
+      "Empty signed volume cannot pass even if a quantile threshold is0.",
+      "Net-positive candle with negative lower cells retains those negative cells."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Developing RTH VP and delta-profile confirmation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "3b6a683c3f7b2ab36e971d6632964418161b436b8b5d1c438ca204067a3c938f",
+    "source_references": [
+      "XF:23",
+      "XF:24",
+      "FIND:8",
+      "FIND:9",
+      "JRAW:8",
+      "JRAW:36",
+      "JRAW:40",
+      "JRAW:41",
+      "JRAW:48",
+      "JRAW:49",
+      "JRAW:50",
+      "JRAW:67"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J17",
+    "role": "component",
+    "research_decision": "Define nodes, shelves and ledges algorithmic ally and compare explicit profile scopes; confluence means measured overlap rather than an ambiguous “under”.",
+    "inputs": [
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J05",
+      "R-J12"
+    ],
+    "bindings": {
+      "primary_scope": "rth_developing",
+      "location": "parent EQ/zone at first interaction",
+      "selector": "nearest eligible node/band then prominence then lower price",
+      "consumer": "J01/J05/J12"
+    },
+    "parameters": {
+      "profile_scope": {
+        "default": "rth_developing",
+        "grid": [
+          "rth_developing",
+          "j69_frozen",
+          "prior_rth"
+        ],
+        "units": "enum",
+        "meaning": "distinct profile ownership"
+      },
+      "feature": {
+        "default": "LVN",
+        "grid": [
+          "LVN",
+          "shelf",
+          "ledge"
+        ],
+        "units": "enum",
+        "meaning": "E03 exact detector"
+      },
+      "smooth_ticks": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          9
+        ],
+        "units": "odd ticks",
+        "meaning": "triangular kernel"
+      },
+      "tol_ticks": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "closed-band overlap padding"
+      }
+    },
+    "algorithm": [
+      "Build selected profile at available snapshot; retain dense zero ticks and proper scope.",
+      "Detect E03 feature with specified smoothing and fixed prominence/shoulder rules.",
+      "Freeze the feature nearest to a given parent reference at first interaction, checking actual band overlap. No signed below inequality in baseline.",
+      "Test later parent response with and without confluence. Export distance and orientation so a signed-below variant can be registered later without rewriting history."
+    ],
+    "outputs": {
+      "profile_scope": "enum",
+      "feature_band": "points[2]?",
+      "distance": "ticks",
+      "overlap": "bool?",
+      "snapshot_at": "UTC ns"
+    },
+    "controls": [
+      "each scope with same node algorithm",
+      "no-node parent control"
+    ],
+    "acceptance_cases": [
+      "No node may lie outside profile support.",
+      "Zero-volume internal ticks must remain available to LVN detection.",
+      "A shelf created after the interaction cannot qualify that earlier episode."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Profile shelf/LVN confluence under range references",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "50cb377ed0ad4622d9310ad692b01c8568197dc581617e4b9cdfed73e5f33fcc",
+    "source_references": [
+      "XF:23",
+      "XF:24",
+      "FIND:8",
+      "JRAW:9",
+      "JRAW:10",
+      "JRAW:11",
+      "JRAW:40",
+      "JRAW:41",
+      "JRAW:48",
+      "JRAW:49",
+      "JRAW:50",
+      "JRAW:67"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-J18",
+    "role": "signal",
+    "research_decision": "Implement full three-candle block and wick-only rejection-block branches with explicit structural-stop alternatives and actual later fills.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E08",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "window": "09:00–11:30",
+      "location": "within 2 ticks of J69 edge or0.5 projection, geometry available",
+      "side": "block formation direction",
+      "entry": "market at C3 confirmation baseline; midpoint limit alternative",
+      "target": "1.5R0 from expected entry, direction ally rounded",
+      "exit_horizon": "12:00",
+      "stop": "stop_mode=full_C2: C2 adverse extreme plus2 ticks outward; local_control: E07 CONTROL_STOP at formation/entry decision"
+    },
+    "parameters": {
+      "bar_minutes": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fixed clock aligned complete C1/C2/C3"
+      },
+      "block_type": {
+        "default": "full_OB",
+        "grid": [
+          "full_OB",
+          "wick_RB"
+        ],
+        "units": "enum",
+        "meaning": "E08 formation; wick RB also requires close beyond full C2"
+      },
+      "entry_mode": {
+        "default": "market",
+        "grid": [
+          "market",
+          "midpoint_limit"
+        ],
+        "units": "enum",
+        "meaning": "midpoint from frozen full block or wick; E11 trade-through"
+      },
+      "stop_mode": {
+        "default": "full_C2",
+        "grid": [
+          "full_C2",
+          "local_control"
+        ],
+        "units": "enum",
+        "meaning": "full adverse C2+2 ticks or E07 CONTROL_STOP, computed before entry"
+      }
+    },
+    "algorithm": [
+      "Construct complete bars and detect E08 bullish/bearish geometry; C2 must overlap a permitted available framework location.",
+      "Freeze geometry only at C3 close; both sides are implemented with exact mirrors.",
+      "For market branch submit at confirmation. For limit branch place at selected block midpoint after confirmation, cancel after 5 minutes or 11:30; no later retest means no fill.",
+      "Use explicit stop branch and 1.5R target under E11. Preserve full block, wick, midpoint and original stop separately; do not infer stop from later protective orders."
+    ],
+    "outputs": {
+      "C1_C2_C3": "bar IDs[3]",
+      "block_band": "points[2]",
+      "formed_at": "UTC ns",
+      "fill_status": "enum",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "full OB vs wick RB",
+      "market vs limit, same formation set"
+    ],
+    "acceptance_cases": [
+      "C2[90,100], C1low92, C3close101 yields bullish full block[90,100] known C3 close.",
+      "A missing minute in a3m candle invalidates formation instead of shifting rows.",
+      "A C3 confirmation with no later midpoint trade-through is no_fill."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Three-candle order block and rejection block",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "d8ce5e4c76759456e8694f158275f741128298de91d627eb7178971b46be4ebc",
+    "source_references": [
+      "TBR:27",
+      "TBR:28",
+      "TBR:29",
+      "JRAW:40",
+      "JRAW:51",
+      "JRAW:52",
+      "JRAW:67"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-J19",
+    "role": "management",
+    "research_decision": "Use fresh prior-session extremes and causally formed HTF gaps as distinct target policies on fixed parent entries.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E08",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [
+      "R-J01",
+      "R-J05"
+    ],
+    "consumers": [],
+    "bindings": {
+      "parents": "J01 and J05 entries separately",
+      "high_low": "PRIOR_RTH both sides, first-visit lifecycle",
+      "gap_scope": "previous5 trading sessions, same raw contract",
+      "selection": "nearest eligible objective ahead",
+      "exit_horizons": [
+        "12:00",
+        "calendar RTH close"
+      ],
+      "stop": "unchanged parent stop"
+    },
+    "parameters": {
+      "target_type": {
+        "default": "prior_extreme",
+        "grid": [
+          "prior_extreme",
+          "HTF_FVG_near",
+          "HTF_FVG_mid",
+          "HTF_FVG_far"
+        ],
+        "units": "enum",
+        "meaning": "gap must be un contacted at decision in baseline"
+      },
+      "gap_minutes": {
+        "default": 15,
+        "grid": [
+          15,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "complete fixed-clock RTH candles"
+      }
+    },
+    "algorithm": [
+      "Build prior RTH reference and scan every ETH/RTH revisit, with actual preceding trading date and early-close calendar.",
+      "Build prior-only HTF FVGs atC3 close; assign independent fill/expiry states.",
+      "For each parent decision choose nearest eligible target of selected type; external extreme must be fresh, gap must be untouched. No candidate yields no-target subset, not arbitrary final extreme.",
+      "Replay both horizons on identical entries/stops and report the qualified subset and whole-parent coverage; preserve target-type ownership."
+    ],
+    "outputs": {
+      "target_id": "string?",
+      "target_type": "enum",
+      "available_at": "UTC ns",
+      "paired_outcome": "float?"
+    },
+    "controls": [
+      "parent default target",
+      "prior extreme vs gap near/mid/far"
+    ],
+    "acceptance_cases": [
+      "A previous RTH high revisited during ETH is inactive next morning.",
+      "15mFVG cannot exist before C3end.",
+      "Target behind expected entry is rejected even if a later inequality is true."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Prior RTH extremes and higher-timeframe imbalance draws",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "d28d5c1379ebd445f4c04c3dcea39450c0f0200a6cd66c253a1c8986dcd5d7bf",
+    "source_references": [
+      "TBR:33",
+      "TBR:34",
+      "TBR:35",
+      "JRAW:24",
+      "JRAW:26",
+      "JRAW:32",
+      "JRAW:52",
+      "JRAW:67"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-J20",
+    "role": "context",
+    "research_decision": "Measure the timing of fully specified reversals around actual scheduled 10:00 releases; no unpublished reversal definition remains.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04",
+      "D09"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02"
+    ],
+    "dependencies": [
+      "R-J01"
+    ],
+    "consumers": [
+      "R-J01"
+    ],
+    "bindings": {
+      "reversal_detector": "J01 default overshoot_return event detector, observation 09:00–11:00 without its entry-window gate; no trade implied",
+      "calendar": "official named releases at 10:00 New York",
+      "bins": "before 09:40,09:40–09:50,09:50–10:00,10:00–10:10,10:10–10:30,10:30–11:00,no_reversal; lower inclusive",
+      "consumer": "J01 window comparison, preregistered broader news branch"
+    },
+    "parameters": {
+      "release_group": {
+        "default": "all_verified_1000",
+        "grid": [
+          "all_verified_1000",
+          "survey_only",
+          "hard_data_only"
+        ],
+        "units": "enum",
+        "meaning": "survey=ISM, Michigan, Conference Board; hard=Census/BLS/BEA10:00 publications; calendar stores actual agency/time"
+      },
+      "event_time": {
+        "default": "confirmation",
+        "grid": [
+          "confirmation",
+          "first_touch"
+        ],
+        "units": "enum",
+        "meaning": "first_touch remains diagnostic, never called completed reversal"
+      }
+    },
+    "algorithm": [
+      "Build verified release membership independently of price moves and preserve calendar availability/vintage.",
+      "Run the shared J01 detector with a fixed 09:00–11:00 observation horizon; use the first confirmed reversal, preserving earlier failed episodes and side.",
+      "Cross-tab timing bins and no-reversal against calendar classes and non release controls; censored sessions are separate.",
+      "Compare conditional time forecasts and a preregistered J01 news-window extension; do not use release-day realized movement to identify news."
+    ],
+    "outputs": {
+      "release_ids": "string[]",
+      "touch_time_bin": "enum",
+      "reversal_time_bin": "enum",
+      "no_reversal": "bool?",
+      "conditional_probabilities": "float[]"
+    },
+    "controls": [
+      "non release same-weekday sessions",
+      "touch-time vs completed-confirmation histogram"
+    ],
+    "acceptance_cases": [
+      "A10:05 touch and 10:12 confirmation belongs 10:10–10:30 reversal bin.",
+      "08:30 CPI is not 10:00 calendar membership.",
+      "Unknown-time FRED update cannot enter all_verified_1000."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Delayed cycle2 on10:00 release days",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "ea6834434717609ad26e642b674bba9d5eec736a8702493cffaa18d3e580786c",
+    "source_references": [
+      "TBR:18",
+      "FIND:11"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-J21",
+    "role": "context",
+    "research_decision": "Define explicit preopen range/news classes and target-distribution forecasts; every unmatched case is other, not expansive by default.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04",
+      "D09"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E04"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J01",
+      "R-J04"
+    ],
+    "bindings": {
+      "classification_at": "09:30; post break state is separately timestamped",
+      "classes": "extended, pre_news, ordinary; precedence extended then pre_news then ordinary",
+      "news": "verified CPI, NFP, FOMC,08:30/10:00 releases, separately named flags",
+      "targets": "EQ, edge,0.5,1.0,1.33 by noon, each conditional on actual parent direction",
+      "consumer": "J01/J04 risk/target comparison only"
+    },
+    "parameters": {
+      "extended_ratio": {
+        "default": 1.0,
+        "grid": [
+          0.75,
+          1.0,
+          1.25
+        ],
+        "units": "ratio",
+        "meaning": "W69/prior RTH width"
+      },
+      "pre_news_days": {
+        "default": 1,
+        "grid": [
+          0,
+          1,
+          2
+        ],
+        "units": "trading days",
+        "meaning": "next verified scheduled major release within this many future trading dates, schedule already known"
+      }
+    },
+    "algorithm": [
+      "At 09:30 compute width ratio and independently known calendar flags including whether a scheduled major release is later that week.",
+      "Classify extended when ratio meets threshold; otherwise pre_news if verified future release qualifies; otherwise ordinary. Missing width/calendar fields remain explicit and cannot be auto expansive.",
+      "For parent signals use class frozen before entry to forecast target-distance distributions, fitted on training only.",
+      "Compare any class-specific target policy against fixed parent targets on identical entries; source qualitative risk labels do not prescribe account sizing."
+    ],
+    "outputs": {
+      "class": "enum",
+      "calendar_flags": "map<bool?>",
+      "width_ratio": "float?",
+      "target_probabilities": "map<float>"
+    },
+    "controls": [
+      "width only",
+      "calendar only",
+      "unconditional parent target distribution"
+    ],
+    "acceptance_cases": [
+      "No width/news condition yields ordinary, not an assumed expansive state.",
+      "Future realized AM trend cannot rewrite 09:30 class.",
+      "A later schedule revision cannot be treated as known before its publication."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "News, range condition and target expectations",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "e14a88e1f4afd20afb5aae781b796a57c3340c999d7df78b69119322ae6ac955",
+    "source_references": [
+      "TBR:22",
+      "TBR:23",
+      "TBR:24",
+      "JRAW:36",
+      "JRAW:37",
+      "JRAW:49"
+    ],
+    "grid_screen_config_count": 5
+  },
+  {
+    "id": "R-J22",
+    "role": "management",
+    "research_decision": "Count distinct failed reaction attempts within a parent projection area and stop or switch only after the actual failure sequence is known.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [
+      "R-J01"
+    ],
+    "consumers": [],
+    "bindings": {
+      "parent": "J01 projection episodes",
+      "reusable_object": "projection area only; consumed external high/low never rearms",
+      "failure": "no response before deadline or adverse accepted close",
+      "management": "after N consecutive failed distinct episodes disable that projection side for remaining AM; optional continuation entry is separate",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "failures": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "episodes",
+        "meaning": "consecutive failures; confirmed reaction resets count"
+      },
+      "leave_ticks": {
+        "default": 4,
+        "grid": [
+          4,
+          8,
+          12
+        ],
+        "units": "ticks",
+        "meaning": "minimum departure from padded area to start distinct episode"
+      },
+      "leave_seconds": {
+        "default": 60,
+        "grid": [
+          30,
+          60,
+          120
+        ],
+        "units": "seconds",
+        "meaning": "continuous outside separation"
+      }
+    },
+    "algorithm": [
+      "Start from each projection area and chronological touch episode; save touch, separation, failure/confirmation and terminal time.",
+      "A completed response resets consecutive failures; expired or invalidated episodes increment. Censored episodes do neither.",
+      "After failures reaches threshold emit disable_side_at; apply it only to subsequent parent opportunities. Baseline does not retroactively close a previously filled trade or manufacture a continuation trade.",
+      "Replay J01 with and without this prospective disable policy on the full parent ledger, preserving missed trades and identical pre-disable entries."
+    ],
+    "outputs": {
+      "attempt_ids": "string[]",
+      "consecutive_failures": "int",
+      "disabled_at": "UTC ns?",
+      "management_delta": "float?"
+    },
+    "controls": [
+      "no disable policy",
+      "2/3/4 distinct-failure thresholds"
+    ],
+    "acceptance_cases": [
+      "Three adjacent near-level one-minute bars without departure count one episode.",
+      "An unfinished final episode is censored and does not increment.",
+      "A successful response between failures resets consecutive count to0."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Failure signatures and three failed attempts",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "c79373f41de1aca3e0ea972919e36227b32673c486e8839684d3fea4fe645ac5",
+    "source_references": [
+      "TBR:37",
+      "JRAW:8",
+      "JRAW:36",
+      "JRAW:40",
+      "JRAW:53",
+      "JRAW:56"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-J23",
+    "role": "context",
+    "research_decision": "Provide a complete own-width framework for every published alternate clock, including geometry, first visits and conditional responses.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "clocks": [
+        "TBR_ASIA",
+        "TBR_MIDNIGHT",
+        "TBR_LONDON",
+        "TBR_RTH_A",
+        "TBR_RTH_B",
+        "TBR_LUNCH",
+        "TBR_MOC"
+      ],
+      "geometry": "H, L, W, EQ,Q25,Q75,build_open,finish_open; projections0.1,0.2,0.3,0.5,1,1.33,1.66,2",
+      "primary_metric": "4-way own-horizon path distribution",
+      "consumer": "clock-specific J01-style research response detector, no cross-clock pooling"
+    },
+    "parameters": {
+      "break_rule": {
+        "default": "wick",
+        "grid": [
+          "wick",
+          "close"
+        ],
+        "units": "enum",
+        "meaning": "exact first visit vs complete-close directional path"
+      },
+      "reaction_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "E02 response for separately reported contact cohorts"
+      }
+    },
+    "algorithm": [
+      "For every clock/date require complete formation and own outcome coverage; build every geometry field from that clock.",
+      "Track independent H/L active lifetimes and projection first-contact episodes from its freeze.",
+      "Produce four path classes and side/depth reaction outcomes at that clock own horizon. Statistics keep all seven clocks separate.",
+      "Compare training-smoothed forecasts across dates, never call midnight high/low rate a6–9 rate or reuse 09:40 entry gate."
+    ],
+    "outputs": {
+      "clock_id": "enum",
+      "geometry": "object",
+      "first_visits": "map<UTC ns?>",
+      "path_class": "enum",
+      "responses": "map<state>"
+    },
+    "controls": [
+      "unconditional distribution per clock",
+      "wick vs close paths"
+    ],
+    "acceptance_cases": [
+      "MOC wick below L with all closes inside is wick-low but close-neither.",
+      "A clock with W10 uses its own0.5 distance5 even when W69=100.",
+      "Empty outcome coverage is unavailable, not neither."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Other published time-based range clocks",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "83e7b9d1d5d6c154a73e5fcdc11f2283fd15da99f4c3ab11ccec139c66328432",
+    "source_references": [
+      "TBR:6",
+      "TBR:7",
+      "TBR:13",
+      "JRAW:13",
+      "JRAW:40",
+      "JRAW:41",
+      "JRAW:47",
+      "JRAW:60",
+      "JRAW:62",
+      "JRAW:63",
+      "JRAW:64"
+    ],
+    "grid_screen_config_count": 4
+  },
+  {
+    "id": "R-J24",
+    "role": "management",
+    "research_decision": "Measure post-fill excursions correctly and compare explicit fixed-stop, break-even and confirmed-pivot management on identical entries.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E08",
+      "E11"
+    ],
+    "dependencies": [
+      "R-J01",
+      "R-J08",
+      "R-G01",
+      "R-S05"
+    ],
+    "consumers": [],
+    "bindings": {
+      "parents": "J01, J08, G01, S05, reported separately",
+      "entry_ledger": "identical fills for every management candidate",
+      "horizons": [
+        "09:50",
+        "10:00",
+        "12:00",
+        "parent_expiry"
+      ],
+      "baseline": "parent fixed target and structural stop",
+      "one_contract": "no fractional partial exits"
+    },
+    "parameters": {
+      "management": {
+        "default": "fixed",
+        "grid": [
+          "fixed",
+          "break_even_at_1R",
+          "confirmed_pivot_trail"
+        ],
+        "units": "enum",
+        "meaning": "E11 stop cannot widen"
+      },
+      "trail_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "strict 1left/1right pivot for trail, known only after right bar close; unused fixed/BE"
+      },
+      "BE_trigger_R": {
+        "default": 1.0,
+        "grid": [
+          0.75,
+          1.0,
+          1.5
+        ],
+        "units": "R0",
+        "meaning": "executable favorable excursion before stop moves; unused other modes"
+      }
+    },
+    "algorithm": [
+      "Load actual parent fills/stops/targets; reject drawing-only positions as non entries.",
+      "Calculate executable-side MFE/MAE only after fill; horizons earlier than fill areNA, not losses.",
+      "Apply selected management causally: BE at trigger moves stop to fee-adjusted break even on next eligible quote; pivot trail uses new confirmed adverse pivots only and never widens.",
+      "Replay identical orders except exits and record paired PnL, drawdown, duration, missed targets and stop changes; no new entry selection."
+    ],
+    "outputs": {
+      "MFE_R0": "float?",
+      "MAE_R0": "float?",
+      "horizon_applicable": "bool",
+      "exit_policy": "enum",
+      "paired_net_R0": "float?"
+    },
+    "controls": [
+      "fixed parent exits",
+      "BE vs pivot trail on same entries"
+    ],
+    "acceptance_cases": [
+      "Fill 10:34 makes 09:50/10:00 horizons NA.",
+      "Low before fill cannot enter MAE.",
+      "A stop raised above entry is management, not initial risk."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Post-entry excursions and management observations",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "b18b8753073c918e9375518ab36bb1b1ee0e85160b2215c548c7070b74dedb48",
+    "source_references": [
+      "TBR:8",
+      "TBR:16",
+      "XF:15",
+      "XF:21",
+      "XF:26",
+      "JRAW:4",
+      "JRAW:7",
+      "JRAW:11",
+      "JRAW:36",
+      "JRAW:41",
+      "JRAW:44",
+      "JRAW:47",
+      "JRAW:50",
+      "JRAW:51",
+      "JRAW:52",
+      "JRAW:55",
+      "JRAW:58",
+      "JRAW:69"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-J25",
+    "role": "signal",
+    "research_decision": "Use confirmed alternating swings and a causal trend-so-far filter for midpoint retraces; never select pivots from the final day.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E08",
+      "E02",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "entry_window": "10:00–15:00",
+      "trend_so_far": "last 15 complete 1m closes >=80% on same side EQ69 and opposite J69 edge not visited since 09:00; both directions tested",
+      "swing": "most recent confirmed alternating directional leg",
+      "entry": "first post-confirmation midpoint retrace + E02 reaction in trend direction",
+      "stop": "adverse swing endpoint+2 ticks",
+      "target": "1.5R0 fixed target, not a previously visited swing extreme",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "bar_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "pivot bars fixed clock"
+      },
+      "pivot_sides": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "bars",
+        "meaning": "strict l=r confirmation"
+      },
+      "trend_share": {
+        "default": 0.8,
+        "grid": [
+          0.7,
+          0.8,
+          0.9
+        ],
+        "units": "fraction",
+        "meaning": "last 15completed1m closes same EQ side"
+      },
+      "response_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "midpoint REACTION"
+      }
+    },
+    "algorithm": [
+      "Build confirmed pivots and alternating swings using E08 repeated-side replacement. Keep recognition and pivot times separately.",
+      "At each confirmed swing end evaluate trend-so-far using only last 15 complete closes and active/opposite edge history.",
+      "Freeze midpoint and wait for its first subsequent retrace; if price already revisited that level before swing became known, record consumed-before-eligibility and do not create a fresh midpoint entry. Confirm E02 in trend direction.",
+      "Execute E11 with endpoints top and fixed 1.5R target. Final trend day/single break remains outcome only."
+    ],
+    "outputs": {
+      "swing_ids": "string[2]",
+      "swing_known_at": "UTC ns",
+      "midpoint": "points",
+      "trend_share": "float",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "midpoint retraces without trend filter",
+      "1/2/3 bar pivot confirmation"
+    ],
+    "acceptance_cases": [
+      "Pivot at 10:00 with 2right5m bars is unknown until 10:15 bar close when bars are indexed by start.",
+      "Mid100 and desired0.5*width20 reward requires110;105 is insufficient.",
+      "A later opposite edge visit cannot erase an earlier causal trend eligible signal."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "jumbo",
+    "title": "Trend-day retraces to confirmed swing midpoints",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_jumbo.json",
+    "audit_record_sha256": "6ce8363466d057bf683e46322b130265019a325a983457d543cbefb1a145eb76",
+    "source_references": [
+      "XF:26"
+    ],
+    "grid_screen_config_count": 9
+  }
+]

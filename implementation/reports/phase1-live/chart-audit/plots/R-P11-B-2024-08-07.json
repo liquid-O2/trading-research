@@ -1,0 +1,89 @@
+{
+  "case": {
+    "id": "R-P11",
+    "case": "B",
+    "date": "2024-08-07",
+    "code_result": false,
+    "selection": "code-negative",
+    "positive_count": 645,
+    "negative_count": 2
+  },
+  "production_session": {
+    "date": "2024-08-07",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 5871,
+    "expected_1s": 10800,
+    "missing_1s": 4929,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 18461.75,
+    "L": 18378.0,
+    "open": 18411.75,
+    "close": 18432.0,
+    "EQ": 18419.875,
+    "Q25": 18398.9375,
+    "Q75": 18440.8125,
+    "W69": 83.75,
+    "volume": 29416.0,
+    "close_0859": 18432.0,
+    "open_0930": 18453.25,
+    "w_pct_0859close": 0.4543728298611111,
+    "w_pct_0930open": 0.4538495928901413,
+    "WpriorRTH": 517.25,
+    "w_rel_prior_rth": 0.16191396810053166,
+    "width_bin_pct": "0.3-0.5",
+    "width_bin_rel": "0-0.3",
+    "prior_rth_high": 18483.25,
+    "prior_rth_low": 17966.0,
+    "asia_high": 18415.0,
+    "asia_low": 18048.0,
+    "london_high": 18438.75,
+    "london_low": 18252.0,
+    "path_class": "both",
+    "break_order": "high-then-low",
+    "first_high_break_ms": 1723037400000,
+    "first_low_break_ms": 1723045500000,
+    "judas": true,
+    "judas_m05": true,
+    "extended": false,
+    "compressed": true,
+    "purged": false,
+    "day_type": "judas",
+    "midretrace": true,
+    "known_at_ns": 1723035600000000000,
+    "outcome_start_ns": 1723037400000000000,
+    "leakage": 0,
+    "m05_touch_ms": 1723037460000,
+    "m05_side": "high",
+    "reversal_bin": "bin.0930-0950",
+    "non_touch_m05": false,
+    "source_bar_ms": 1000
+  },
+  "geometry": [],
+  "helpers": {
+    "first_fvg": {
+      "w1_fvg": null,
+      "box": null,
+      "direction_ok": null,
+      "near_edge_fill": false
+    }
+  },
+  "sources": [],
+  "plot": "plots/R-P11-B-2024-08-07.png",
+  "notes": [
+    "Caller uses1m09:30\u201310:00 and scores FVG existence; no fill prices or direction outcome supplied."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 775,
+    "code": "def p11(r):\n        return bool(r.get(\"p11_fvg_fill\"))"
+  },
+  "event": "first-presented FVG on the 09:30 hour, fill or presence",
+  "detail_window": [
+    9.5,
+    10
+  ]
+}

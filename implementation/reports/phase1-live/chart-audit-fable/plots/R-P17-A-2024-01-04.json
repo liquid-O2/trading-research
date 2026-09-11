@@ -1,0 +1,105 @@
+{
+  "case": {
+    "id": "R-P17",
+    "case": "A",
+    "date": "2024-01-04",
+    "code_result": true,
+    "selection": "code-positive",
+    "author_dated": false,
+    "positive_count": 402,
+    "negative_count": 245
+  },
+  "production_session": {
+    "date": "2024-01-04",
+    "year": "2024",
+    "eligible": true,
+    "drop_coverage": false,
+    "failure": false,
+    "n_1s": 6956,
+    "expected_1s": 10800,
+    "missing_1s": 3844,
+    "n_1m_box": 180,
+    "n_1m_outcome": 150,
+    "H": 16573.0,
+    "L": 16451.25,
+    "open": 16563.75,
+    "close": 16459.5,
+    "EQ": 16512.125,
+    "Q25": 16481.6875,
+    "Q75": 16542.5625,
+    "W69": 121.75,
+    "volume": 49947.0,
+    "close_0859": 16459.5,
+    "open_0930": 16453.25,
+    "w_pct_0859close": 0.7396944014095204,
+    "w_pct_0930open": 0.7399753848023947,
+    "WpriorRTH": 131.5,
+    "w_rel_prior_rth": 0.9258555133079848,
+    "width_bin_pct": "0.5-0.8",
+    "width_bin_rel": "0.8-1.2",
+    "prior_rth_high": 16653.5,
+    "prior_rth_low": 16522.0,
+    "asia_high": 16562.75,
+    "asia_low": 16542.75,
+    "london_high": 16587.25,
+    "london_low": 16539.5,
+    "path_class": "high-only",
+    "break_order": "high",
+    "first_high_break_ms": 1704384960000,
+    "first_low_break_ms": null,
+    "judas": false,
+    "judas_m05": false,
+    "extended": false,
+    "compressed": false,
+    "purged": false,
+    "day_type": "unmatched",
+    "midretrace": false,
+    "known_at_ns": 1704376800000000000,
+    "outcome_start_ns": 1704378600000000000,
+    "leakage": 0,
+    "m05_touch_ms": null,
+    "m05_side": null,
+    "reversal_bin": null,
+    "non_touch_m05": true,
+    "source_bar_ms": 1000
+  },
+  "geometry": [
+    {
+      "kind": "line",
+      "label": "18:00 open",
+      "price": 16545.25,
+      "start": -6,
+      "end": 16,
+      "color": "#285fa8",
+      "style": "--"
+    }
+  ],
+  "helpers": {
+    "tape_window": {
+      "date": "2024-01-04",
+      "from": 9.5,
+      "to": 16,
+      "trades": 256259,
+      "buy_volume": 214626.0,
+      "sell_volume": 212908.0,
+      "unknown_volume": 0.0
+    }
+  },
+  "sources": [
+    "/workspace/implementation/reports/phase1-live/_tables/mbp1/2024-01-01_2024-01-07.parquet"
+  ],
+  "plot": "plots/R-P17-A-2024-01-04.png",
+  "notes": [
+    "Pine OHLC profile is not implemented by this scored flag; trade VP shown as available diagnostic."
+  ],
+  "root": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m",
+  "predicate": {
+    "line": 787,
+    "code": "def p17(r):\n        return bool(r.get(\"p17_1800_touch\"))"
+  },
+  "event": "18:00 open touched in RTH",
+  "detail_window": [
+    11.05,
+    11.55
+  ]
+}

@@ -1,0 +1,2060 @@
+[
+  {
+    "id": "R-F01",
+    "role": "signal",
+    "research_decision": "Use execution-weighted VWAP dispersion, an actual band contact and local opposing aggression that stalls; test the later fade to a frozen VWAP.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E05",
+      "E06",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "anchor": "scheduled Globex open, normally 18:00",
+      "entry_window": "09:30–15:00",
+      "band_snapshot": "previous completed minute; freeze version at first touch",
+      "side": "upper short, lower long",
+      "absorption": "E06 with aggressor toward outer band",
+      "target": "VWAP frozen at confirmation",
+      "stop": "touch-through-confirmation adverse extreme+2 ticks",
+      "exit_horizon": "min(fill+60 minutes, RTH close)"
+    },
+    "parameters": {
+      "VWAP_anchor": {
+        "default": "ETH",
+        "grid": [
+          "ETH",
+          "RTH"
+        ],
+        "units": "enum",
+        "meaning": "scheduled Globex open vs 09:30"
+      },
+      "sigma_multiple": {
+        "default": 2.0,
+        "grid": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "units": "standard deviations",
+        "meaning": "execution-price weighted population sigma"
+      },
+      "flow_seconds": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "seconds",
+        "meaning": "local absorption observation with matched history"
+      },
+      "exclude_outstanding_draw": {
+        "default": false,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "if true no fresh ASIA/GB_LONDON/PRIOR_RTH extreme within one frozen sigma beyond band"
+      }
+    },
+    "algorithm": [
+      "Build E05 VWAP moments from the chosen anchor; require complete anchor history and positive sigma.",
+      "At the first actual band interaction freeze its prior-minute geometry and direction. Repeated minute updates cannot restart an already pending episode.",
+      "Run E06 ABSORB of approaching aggression, then E02 defender REACTION by four ticks beyond the near band edge within five minutes. If the optional draw exclusion is enabled, evaluate all reference lifetimes at confirmation.",
+      "Freeze VWAP target at confirmation and submit E11 only if ahead. Measure absorption, reaction and later target reach separately, with same-delay price-only controls."
+    ],
+    "outputs": {
+      "VWAP_snapshot_id": "string",
+      "sigma": "points",
+      "band_touch_at": "UTC ns?",
+      "absorption_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "band reaction without absorption",
+      "ETH vs RTH anchor",
+      "outstanding-draw exclusion ablation"
+    ],
+    "acceptance_cases": [
+      "Two trades at 100 and 102 with equal size give VWAP101 and sigma1.",
+      "A candle wholly above an upper band is not a new interval-overlap touch.",
+      "The noon VWAP cannot replace a 09:45 target snapshot."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "VWAP deviation fade with absorption",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "244fbb60ce824f6533b2ab3189aebf1b3f7a21e3f6cc98ca354739abf87956ac",
+    "source_references": [
+      "VWAP:3",
+      "VWAP:4",
+      "VWAP:7",
+      "VWAP:8"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-F02",
+    "role": "component",
+    "research_decision": "Rebuild and validate signed CVD, then expose causal divergence, CVD breakout and absorption as separate features.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E06",
+      "E08"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-F15",
+      "R-G09"
+    ],
+    "bindings": {
+      "anchor": "scheduled Globex open",
+      "trust": "D02 arithmetic, coverage, sign and overlapping-feed checks; no discretionary source clarification required",
+      "pivot": "confirmed price pivots with CVD sampled at their actual pivot timestamps",
+      "consumer": "F15 BIG branch and G09 divergence ablation"
+    },
+    "parameters": {
+      "pivot_minutes": {
+        "default": 1,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fixed-time pivot bars"
+      },
+      "pivot_sides": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "bars",
+        "meaning": "strict left/right confirmation"
+      },
+      "CVD_threshold_quantile": {
+        "default": 0.5,
+        "grid": [
+          0.25,
+          0.5,
+          0.75
+        ],
+        "units": "quantile",
+        "meaning": "prior 60 same-slot absolute five-minute CVD change"
+      },
+      "anchor": {
+        "default": "ETH",
+        "grid": [
+          "ETH",
+          "RTH"
+        ],
+        "units": "enum",
+        "meaning": "separate reset scopes"
+      }
+    },
+    "algorithm": [
+      "Normalize executed side and build CVD from one canonical stream. Unknown volume never receives a guessed sign. Fail quality as a typed unavailable result.",
+      "Attach CVD at each confirmed price pivot; compare ordered same-side pivot pairs using E06 divergence and the selected threshold.",
+      "Independently detect breaks of the prior complete 15-minute CVD range and local E06 absorption; neither is substituted for the other.",
+      "Expose feature availability at pivot confirmation or actual flow completion. Compare each feature in fixed consumers against price-only and same-delay controls; do not infer trust from how often CVD crosses zero."
+    ],
+    "outputs": {
+      "CVD": "contracts",
+      "divergence": "enum(bull,bear,none,unavailable)",
+      "CVD_break": "enum",
+      "feature_known_at": "UTC ns",
+      "signed_coverage": "fraction"
+    },
+    "controls": [
+      "price pivots without CVD",
+      "divergence vs CVD breakout vs absorption features"
+    ],
+    "acceptance_cases": [
+      "Buy100, sell70, unknown20 gives CVD30 and signed coverage170/190; this fails0.95 quality.",
+      "CVD at a price high is not the maximum CVD anywhere in that interval.",
+      "Appending afternoon trades cannot change a morning CVD/pivot observation."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "CVD divergence, breakout grade and absorption",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "6c8c11144124b805868c82879ff0a2ccca3716460ff83e1b9f5cbd7908cb20e8",
+    "source_references": [
+      "VWAP:6",
+      "FP9:6"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F03",
+    "role": "signal",
+    "research_decision": "Create real session, weekly and third-anchor VWAP convergence, then test its first subsequent reaction.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E05",
+      "E06",
+      "E08",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "anchors": "RTH session, scheduled week open, and selected third anchor",
+      "third_default": "first scheduled exchange session whose trading date is in current month",
+      "entry_window": "09:30–15:00",
+      "convergence_band": "min/max of three available VWAPs",
+      "side": "approach-side reaction back toward origin side",
+      "stop": "interaction extreme+2 ticks",
+      "target": "1.5R0 fixed",
+      "exit_horizon": "min(fill+60 minutes, RTH close)"
+    },
+    "parameters": {
+      "third_anchor": {
+        "default": "month",
+        "grid": [
+          "month",
+          "last_confirmed_5m_pivot",
+          "latest_verified_release"
+        ],
+        "units": "enum",
+        "meaning": "release within previous24hours with actual timestamp; absent anchor makes only that variant unavailable"
+      },
+      "spread_fraction": {
+        "default": 0.05,
+        "grid": [
+          0.025,
+          0.05,
+          0.1
+        ],
+        "units": "prior VA width",
+        "meaning": "max VWAP-min VWAP threshold"
+      },
+      "absorption_gate": {
+        "default": false,
+        "grid": [
+          false,
+          true
+        ],
+        "units": "bool",
+        "meaning": "E06 local opposing aggression, with delayed control"
+      }
+    },
+    "algorithm": [
+      "Maintain independent E05 execution-weighted accumulators. Month starts at the scheduled open of the first trading-date session in that month; do not reset at arbitrary midnight.",
+      "At each minute end form convergence when its total spread is within the chosen fraction of prior RTH VA width. Freeze all three anchor IDs and the band at the first observable convergence.",
+      "Wait for a later actual touch; previous close above band defines long reaction, below defines short. Use E02 four-tick response and optional E06 absorption. An already-in-band close requires departure before a new approach.",
+      "Execute E11 with fixed 1.5R target. Compare with lone-session VWAP interactions in the same clock and delay; never replace missing weekly data with a price midpoint."
+    ],
+    "outputs": {
+      "anchor_ids": "string[3]",
+      "convergence_band": "points[2]",
+      "known_at": "UTC ns",
+      "touch_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "session VWAP only",
+      "third-anchor alternatives",
+      "absorption gate ablation"
+    ],
+    "acceptance_cases": [
+      "VWAPs100,101,102 converge at fraction0.05 only if prior VA width>=40.",
+      "A pivot anchor may replay earlier trades but cannot signal before pivot recognition.",
+      "Missing event time prevents event-anchor variant, not the default month model."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Session, weekly and anchored VWAP convergence",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "6af11b87289ae4cf44dadf722b2a454a31afa31c2fd896348c24eda72147dd36",
+    "source_references": [
+      "VWAP:7"
+    ],
+    "grid_screen_config_count": 6,
+    "conditional_inputs": {
+      "third_anchor=latest_verified_release": [
+        "D09"
+      ]
+    }
+  },
+  {
+    "id": "R-F04",
+    "role": "signal",
+    "research_decision": "Use fully specified diagonal stacks within a candle, then a distinct departure and first retest in the stack direction.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E05",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "formation": "complete one-minute footprint baseline",
+      "direction": "buy stack long, sell stack short",
+      "zone": "all consecutive same-direction qualifying tick rows, not only longest",
+      "departure": ">=4 ticks in stack direction after formation",
+      "entry_window": "09:30–15:00",
+      "retest_expiry": "30 minutes after formation",
+      "stop": "far zone edge or retest extreme, whichever more adverse, plus2 ticks",
+      "target": "1.5R0",
+      "exit_horizon": "min(fill+30 minutes, RTH close)"
+    },
+    "parameters": {
+      "bar_minutes": {
+        "default": 1,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "fixed-time complete candles"
+      },
+      "ratio": {
+        "default": 3.0,
+        "grid": [
+          3.0,
+          4.0,
+          5.0
+        ],
+        "units": "ratio",
+        "meaning": "E05 diagonal numerator/opposition"
+      },
+      "stack_rows": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "adjacent ticks",
+        "meaning": "same side in same candle"
+      },
+      "zero_opposition": {
+        "default": "exclude",
+        "grid": [
+          "exclude",
+          "positive_min_cell"
+        ],
+        "units": "enum",
+        "meaning": "alternative qualifies zero opposition only when own size>=min_cell10; both zero never qualifies"
+      }
+    },
+    "algorithm": [
+      "Build E05 footprints from qualified signed trades. Enumerate every contiguous buy and sell stack with exact cell-pair evidence.",
+      "Freeze each zone at candle close; a zone cannot be retested before it exists. If two zones overlap, retain both identities and choose earliest subsequent confirmation for orders.",
+      "After directional departure wait for first later band return. Confirm E02 reaction in stack direction; a completed close beyond adverse zone edge by2 ticks invalidates.",
+      "Execute E11 and preserve stack-presence, return, confirmation and PnL denominators separately. New candle zones cannot rewrite previously frozen bounds."
+    ],
+    "outputs": {
+      "zone_id": "string",
+      "cell_pairs": "list<object>",
+      "formed_at": "UTC ns",
+      "returned_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "ratio3 vs4 vs5",
+      "zero-opposition exclusionsensitivity",
+      "formed stack without retest as descriptive control"
+    ],
+    "acceptance_cases": [
+      "Buy atp compares with sell atp-tick, not same-price sell.",
+      "Three qualifying rows split across two candles are not one stack.",
+      "Zero buy and zero sell cannot pass any mode."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Per-candle diagonal stack and later revisit",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "1ccd61ece3d5c9bc53ab6c67ccaa523925653e2bfef985e62012da15a36c6ef6",
+    "source_references": [
+      "FP8:4",
+      "FP8:5",
+      "FP8:6",
+      "FP8:7"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F05",
+    "role": "component",
+    "research_decision": "Detect price/delta disagreement and an actual intrabar POC move using prefix snapshots and fixed comparison geometry.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E03",
+      "E05"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-F08",
+      "R-S03"
+    ],
+    "bindings": {
+      "candle": "complete fixed five-minute container, streaming one-second prefix snapshots",
+      "location": "available prior VA edge, J69 edge/projection or E03 ledge with actual contact",
+      "direction": "price up with local negative delta -> bullish candidate; price down with local positive delta -> bearish candidate",
+      "POC_reference_geometry": "prefix H/L frozen when disagreement first appears",
+      "consumer": "F08 and S03 confirmation alternatives"
+    },
+    "parameters": {
+      "bar_minutes": {
+        "default": 5,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "candle duration"
+      },
+      "position_partition": {
+        "default": "halves",
+        "grid": [
+          "halves",
+          "thirds"
+        ],
+        "units": "enum",
+        "meaning": "bull old POC in lower half/third then new POC in upper half/third; bearish mirror"
+      },
+      "persistence_seconds": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "complete snapshots",
+        "meaning": "new POCside must persist"
+      },
+      "minimum_delta_contracts": {
+        "default": 10,
+        "grid": [
+          5,
+          10,
+          20
+        ],
+        "units": "contracts",
+        "meaning": "absolute local disagreement delta"
+      }
+    },
+    "algorithm": [
+      "Process each candle in available-time order, maintaining prefix OHLC, dense total-volume profile and local signed delta in the contacted band.",
+      "At the first nonzero price change from candle open whose sign opposes local delta, freeze prefix H/L and old POC; require chosen delta magnitude and quality.",
+      "Within the same candle require POC price itself to move at least one tick in price direction and from the selected lower/upper partition to the opposite partition of the frozen range. Changing candle bounds alone cannot flip classification.",
+      "Emit only after persistence snapshots complete and before or at candle end. Preserve before/after profile IDs and compare later consumer responses against disagreement-only observations."
+    ],
+    "outputs": {
+      "candle_id": "string",
+      "disagreement_at": "UTC ns?",
+      "old_POC": "points?",
+      "new_POC": "points?",
+      "flip_known_at": "UTC ns?"
+    },
+    "controls": [
+      "disagreement only",
+      "actual intrabar flip vs adjacent completed-candle POC change"
+    ],
+    "acceptance_cases": [
+      "Frozen range100–110, old POC102, new POC108 is a bullish half flip; unchanged POC102 with expanded high120 is not.",
+      "Price up and negative local delta must remain distinct from total candle delta.",
+      "A flip requiring two seconds beyond candle end does not qualify that candle."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "At-level delta disagreement and intrabar POC flip",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "1f079c7a00ee487aff7d0dff6d5646a0cd173dd301e22f2e04b8f265ad985d25",
+    "source_references": [
+      "FP9:4",
+      "FP9:5",
+      "FP9:7"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F06",
+    "role": "component",
+    "research_decision": "Quantify local side-specific aggression, actual stall and later defender response at a frozen level.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E06"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A16",
+      "R-F01",
+      "R-F08",
+      "R-S01",
+      "R-S07"
+    ],
+    "bindings": {
+      "locations": "parent prior VA, ledge, range edge or external high/low; each keeps its scope",
+      "aggressor": "actual approach direction, not a hard coded side by level name",
+      "observation": "E06 ABSORB; local delta and all-price excursion both explicitly labelled",
+      "consumer": "A16/F01/F08/S01/S07"
+    },
+    "parameters": {
+      "flow_seconds": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "seconds",
+        "meaning": "matched historical duration"
+      },
+      "aggression_quantile": {
+        "default": 0.85,
+        "grid": [
+          0.7,
+          0.85,
+          0.95
+        ],
+        "units": "quantile",
+        "meaning": "prior same-slot same-side full-market volume"
+      },
+      "max_excursion_ticks": {
+        "default": 4,
+        "grid": [
+          2,
+          4,
+          8
+        ],
+        "units": "ticks",
+        "meaning": "actual outward travel over complete observation"
+      },
+      "response_fraction": {
+        "default": 0.1,
+        "grid": [
+          0.05,
+          0.1,
+          0.25
+        ],
+        "units": "parent range width",
+        "meaning": "later defender response, separate outcome from absorption feature"
+      }
+    },
+    "algorithm": [
+      "Freeze parent area, approach direction and its own width before interaction. Missing parent width makes normalized response unavailable, not borrowed from J69.",
+      "Aggregate approaching-side volume inside padded area, signed coverage and true excursion across all observation prices; preserve their different scopes.",
+      "At observation end emit absorption feature if E06 conditions pass. Then measure defender response of max(4 ticks,selected_fraction*parent_width) within 15 minutes, with first passage and prior adverse invalidation.",
+      "Use only the feature available at the consumer decision; later response is an outcome unless the consumer explicitly waits for it. Track first-visit lifetime for external high/low origins."
+    ],
+    "outputs": {
+      "local_volume": "contracts[3]",
+      "aggression_quantile_value": "contracts",
+      "actual_advance": "ticks",
+      "absorption_known_at": "UTC ns?",
+      "later_response": "bool?"
+    },
+    "controls": [
+      "same location without aggression gate",
+      "volume only vs volume-plus-stall"
+    ],
+    "acceptance_cases": [
+      "A20 point advance cannot pass4 ticks onNQ.",
+      "17.5 points is less than0.25*251 but greater than0.25*67.75; use actual parent width.",
+      "Absorption at a remote opposite edge cannot qualify this contact."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Side-specific aggression absorbed at a marked level",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "3c49d6ae6ee1b733c1d291255d65834be697e85475a3cbac718b9d02ab3785fd",
+    "source_references": [
+      "DOM6:3",
+      "DOM6:4",
+      "DOM6:6",
+      "DOM6:7",
+      "DOM5:6"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-F07",
+    "role": "component",
+    "research_decision": "Build auditable displayed-reload inference from the available BBO stream; reserve identified iceberg claims for stronger data.",
+    "inputs": [
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E07"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-F17",
+      "R-S01",
+      "R-S03"
+    ],
+    "bindings": {
+      "scope": "same raw NQ contract, exact best price and resting side",
+      "cycle": "strictly later depletion and rebuild timestamps; nonoverlapping cycles",
+      "quality": "no stale/crossed/reset/ambiguous book sequence",
+      "consumer": "F17/S01/S03 as an optional observable feature"
+    },
+    "parameters": {
+      "minimum_cycles": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "cycles",
+        "meaning": "within 30 second episode"
+      },
+      "rebuild_seconds": {
+        "default": 1.0,
+        "grid": [
+          0.5,
+          1.0,
+          2.0
+        ],
+        "units": "seconds",
+        "meaning": "maximum time from qualifying depletion to rebuilt queue"
+      },
+      "executed_display_multiple": {
+        "default": 2.0,
+        "grid": [
+          1.5,
+          2.0,
+          3.0
+        ],
+        "units": "ratio",
+        "meaning": "cumulative executed volume / maximum observed displayed size"
+      },
+      "rebuild_fraction": {
+        "default": 0.8,
+        "grid": [
+          0.5,
+          0.8,
+          1.0
+        ],
+        "units": "fraction",
+        "meaning": "relative to pre depletion displayed size"
+      }
+    },
+    "algorithm": [
+      "Use the last valid book state strictly before execution and exact executed price; trade-row book fields are not assumed pretrade.",
+      "Run E07 sequential cycle states. One rebuild update closes at most one cycle; do not start the next cycle before the previous terminates.",
+      "Require the selected cycle count, cumulative execution/display ratio and uninterrupted same-price best quote. An action cancellation without execution is not a depletion cycle.",
+      "Emit inference with raw evidence IDs and ambiguity/coverage rates. Validate cycle arithmetic and price-hold fixtures; do not label it hidden order identity or off-touch depth."
+    ],
+    "outputs": {
+      "reload_episode_id": "string",
+      "resting_side": "enum",
+      "cycle_evidence": "list<object>",
+      "reload_known_at": "UTC ns?",
+      "inference_quality": "enum"
+    },
+    "controls": [
+      "high execution/display ratio without cycles",
+      "cycle thresholds and rebuild latency sensitivity"
+    ],
+    "acceptance_cases": [
+      "q_before10,q_after4,q_rebuilt8 within 1 second qualifies one cycle, not three.",
+      "One quote update cannot confirm three overlapping executions as three reloads.",
+      "No pretrade quote or zero displayed size yields unavailable, not infinite ratio."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "At-touch reload inference and iceberg limitation",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "34d4ec4a650b623f47879682dab8f0e2c023fca61705a867d11ae1628d8559c4",
+    "source_references": [
+      "DOM7:3",
+      "DOM7:4",
+      "DOM7:5"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-F08",
+    "role": "signal",
+    "research_decision": "Test a defended absorption area, a chronological three-tick defender reward and a distinct rewarded-area retest.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E06",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "locations": "prior VA edges and J69 projections with actual first eligible contact",
+      "initial_direction": "defender direction opposite observed absorbed aggression",
+      "reward": "E06 first favorable passage before adverse passage",
+      "retest_band": "original absorption area, not reward endpoint or CVD value",
+      "entry_window": "09:30–15:00",
+      "stop": "retest extreme+2 ticks",
+      "target": "1.5R0",
+      "exit_horizon": "min(fill+30 minutes, RTH close)"
+    },
+    "parameters": {
+      "reward_ticks": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "defender reward threshold"
+      },
+      "adverse_ticks": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "before reward, adverse first passage fails"
+      },
+      "POC_exclusion_fraction": {
+        "default": 0.0,
+        "grid": [
+          0.0,
+          0.025,
+          0.05
+        ],
+        "units": "prior VA width",
+        "meaning": "0 no exclusion; otherwise area must not overlap POC±fraction*width"
+      },
+      "retest_minutes": {
+        "default": 15,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "after reward, E02 separation required"
+      }
+    },
+    "algorithm": [
+      "Build E06 absorption at a qualified area; apply the explicitly optional POC exclusion, never a global POC ban.",
+      "After absorption availability measure defender reward with selected first-passage thresholds and 60 second expiry. Later adversity does not erase a reward that occurred first, but remains subsequent outcome.",
+      "After reward require directional departure and a distinct return to the original area. Confirm E02 defender reaction; a distant favorable extreme without return cannot qualify.",
+      "Execute E11 and report each stage denominator separately. CVD remains a separate same-unit feature; never compare market price numerically with CVD."
+    ],
+    "outputs": {
+      "absorption_id": "string",
+      "reward_at": "UTC ns?",
+      "adverse_first": "bool?",
+      "retest_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "absorption reaction without reward/retest stages",
+      "POC exclusion variants"
+    ],
+    "acceptance_cases": [
+      "Reward+3 ticks before adverse3 succeeds even if later price reverses; adverse first fails.",
+      "Original area100–101 and reward endpoint102 are distinct objects.",
+      "A POC-excluded variant must not silently alter the no-exclusion baseline."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Absorption location, three-tick reward and reward retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "a35ca691d746e2adb3d7f89ef62c4c732483acb6a04511ace6460914b7c7b8af",
+    "source_references": [
+      "ABS:3",
+      "ABS:4",
+      "ABS:6",
+      "ABS:7",
+      "ABS:9",
+      "ABS:11"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-F09",
+    "role": "signal",
+    "research_decision": "Require ordered defense, same-side exhaustion and an actual directional lift-off run, with declared print units.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E06",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "defense": "E06 ABSORB at prior VA/J69 area",
+      "exhaustion": "successive nonoverlapping20-print windows of the previously absorbed aggressor side; both after defense, maximum 5 minutes",
+      "lift_direction": "defender direction",
+      "entry_window": "09:30–15:00",
+      "stop": "defense/formation adverse extreme+2 ticks",
+      "target": "1.5R0",
+      "exit_horizon": "min(fill+30 minutes, RTH close)"
+    },
+    "parameters": {
+      "large_median_contracts": {
+        "default": 10,
+        "grid": [
+          5,
+          10,
+          20
+        ],
+        "units": "contracts per execution",
+        "meaning": "first 20-print median>=threshold, next 20-print median<threshold"
+      },
+      "run_ticks": {
+        "default": 3,
+        "grid": [
+          2,
+          3,
+          4
+        ],
+        "units": "net ticks",
+        "meaning": "monotone trade-price run in defender direction"
+      },
+      "exhaustion_prints": {
+        "default": 20,
+        "grid": [
+          10,
+          20,
+          40
+        ],
+        "units": "same-side prints",
+        "meaning": "each of two consecutive windows"
+      }
+    },
+    "algorithm": [
+      "Start one thesis episode from E06 defense and freeze absorbed/defender roles.",
+      "Collect first and second selected-count windows of that same aggressor side after defense; ignore opposite trades for window membership but keep them in price/coverage. Require high-then-low median and a subsequently completed one-minute delta sign in defender direction.",
+      "After exhaustion confirmation track the earliest monotone price run in defender direction. Unchanged prices do not reset; an opposite price change resets start; a multi-tick jump contributes its actual distance but one price-change count. Emit at the first run reaching selected tick distance.",
+      "Freeze stop from the already observed defense-to-lift-off path, enter E11 and measure later outcomes. Return actual run index/time, never the final AM print."
+    ],
+    "outputs": {
+      "defense_at": "UTC ns?",
+      "window_medians": "contracts[2]?",
+      "exhaustion_at": "UTC ns?",
+      "lift_at": "UTC ns?",
+      "run_change_count": "int",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "defense only",
+      "defense plus exhaustion without monotone-run gate"
+    ],
+    "acceptance_cases": [
+      "Three unchanged prices are not three up ticks.",
+      "A two-tick jump counts2 ticks but1price change.",
+      "A favorable run before exhaustion cannot satisfy later lift-off."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Ordered STOP defense, exhaustion and lift-off",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "c8191c04df800dcf63725a8010e5d8cd48990238e4e4f947cbd2fa155d283cda",
+    "source_references": [
+      "STOP:6",
+      "STOP:7",
+      "STOP:9",
+      "STOP:10",
+      "STOP:11",
+      "STOP:12",
+      "STOP:14"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-F10",
+    "role": "component",
+    "research_decision": "Create protected swing state only after pivot confirmation, escape and a complete quiet interval; separate first revisit from later close-break invalidation.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E06",
+      "E08"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-J24",
+      "R-S07"
+    ],
+    "bindings": {
+      "pivot": "one-minute strict 2-left/2-right baseline; pivot_sides overrides both counts",
+      "local_delta": "E06 extreme_band_delta_1m: signed volume within two ticks of pivot during the candidate pivot candle only; defender direction d=-1 at a high and d=+1 at a low; d*delta>0 and >= the registered prior-60-session same-slot band-delta quantile",
+      "escape": "first complete one-minute close two ticks beyond the latest opposite pivot that was already confirmed at candidate recognition; escape must be later than candidate recognition",
+      "quiet": "no price within two ticks of candidate pivot during every required subsequent complete one-minute bar after escape",
+      "consumer": "J24/S07 optional structural stop reference"
+    },
+    "parameters": {
+      "pivot_sides": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          3
+        ],
+        "units": "bars",
+        "meaning": "strict symmetric pivot confirmation"
+      },
+      "quiet_bars": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "complete one-minute bars",
+        "meaning": "after escape"
+      },
+      "local_delta_quantile": {
+        "default": 0.75,
+        "grid": [
+          0.5,
+          0.75,
+          0.9
+        ],
+        "units": "quantile",
+        "meaning": "type-7 quantile of E06 extreme_band_delta_1m samples with identical side, one-minute duration and five-tick band"
+      }
+    },
+    "algorithm": [
+      "Build strict confirmed pivots; freeze local signed delta using only executions in the candidate pivot candle and its closed five-tick band. Compare with the E06 matched historical band distribution, requiring positive defender delta and D02 side coverage. Save pivot formation, recognition, candidate candle and historical sample times.",
+      "At candidate recognition select the latest already confirmed opposite pivot, save its ID, and require a later directional escape close beyond that frozen price. An opposite pivot confirmed after candidate recognition cannot replace it.",
+      "After escape require every quiet bar with complete coverage and no candidate-level proximity. Protection becomes known only at the final quiet-bar close.",
+      "Track active first-visit lifetime from actual pivot formation, including the recognition/quiet interval. If already revisited, report protected-pattern history but no fresh active high/low. Separately track future complete-close break as a historical invalidation field."
+    ],
+    "outputs": {
+      "pivot_at": "UTC ns",
+      "pivot_known_at": "UTC ns",
+      "escape_at": "UTC ns?",
+      "protected_known_at": "UTC ns?",
+      "active_fresh": "bool?",
+      "close_break_at": "UTC ns?",
+      "local_delta_contracts": "signed contracts from candidate pivot candle only",
+      "defender_delta_threshold_contracts": "prior-only matched E06 quantile in contracts",
+      "historical_sample_ids": "ordered immutable candle IDs for the selected 60 prior sessions"
+    },
+    "controls": [
+      "confirmed pivot only",
+      "escape without quiet hold"
+    ],
+    "acceptance_cases": [
+      "Escape bar 17 followed by five complete quiet bars becomes protected at bar 22 close.",
+      "An escape before pivot recognition fails ordering.",
+      "First exact revisit ends active line even if no later close break occurs.",
+      "Large opposing prints during recognition candles do not change candidate-candle delta; the historical threshold uses five-tick bands, not per-price cells or full-market volume."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Protected swing after local delta and escape",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "83e8c76d051e702941500d75a56c8dba46d04f02c72dd2b6056f06a518950667",
+    "source_references": [
+      "RD:4",
+      "RD:5",
+      "K18:8"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-F11",
+    "role": "signal",
+    "research_decision": "Pair signed delta extremes with real same-profile LVNs, then test side-aware repeated profile-zone reactions.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E06",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "profile": "prior RTH VP/delta from identical executions",
+      "pairing": "positive delta maximum near upper-side LVN -> short rejection; negative minimum near lower-side LVN -> long rejection",
+      "zone_lifecycle": "reusable profile memory with E02 separation; any external H/L identity separately retires",
+      "entry_window": "09:30–15:00",
+      "stop": "reaction extreme+2 ticks",
+      "target": "fixed same-profile POC if ahead; otherwise no_target",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "pair_distance_fraction": {
+        "default": 0.05,
+        "grid": [
+          0.025,
+          0.05,
+          0.1
+        ],
+        "units": "profile full width",
+        "meaning": "absolute price distance; candidate must be in corresponding outer quart ile"
+      },
+      "sweep_ticks": {
+        "default": 2,
+        "grid": [
+          1,
+          2,
+          4
+        ],
+        "units": "ticks",
+        "meaning": "wick/execution beyond paired line before close back"
+      },
+      "response_fraction": {
+        "default": 0.1,
+        "grid": [
+          0.05,
+          0.1,
+          0.25
+        ],
+        "units": "profile full width",
+        "meaning": "follow-through distance after close back; minimum 4 ticks"
+      },
+      "profile_scope": {
+        "default": "prior_rth",
+        "grid": [
+          "prior_rth",
+          "j69_frozen"
+        ],
+        "units": "enum",
+        "meaning": "completed snapshot only"
+      }
+    },
+    "algorithm": [
+      "Build dense total and signed profiles over the identical scope. dp.max is maximum positive delta price, dp.min most negative; ties choose nearest corresponding outer edge then lower price.",
+      "Detect E03 LVNs and require same-snapshot pairing within selected distance and outer quart ile. No correctly signed extreme or LVN means no_pair.",
+      "At each distinct paired-zone visit require selected outward sweep and a complete 1m close back, then selected inward response within 5 minutes. Freeze zone and response width before touch.",
+      "Execute E11 only after full response, provided POC remains ahead. Report wick reaction and stronger follow-through separately; do not claim every repeated area test is a fresh external-high/low event."
+    ],
+    "outputs": {
+      "delta_extreme_price": "points?",
+      "delta_extreme_value": "contracts?",
+      "LVN_id": "string?",
+      "pair_distance": "points",
+      "confirmed_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "LVN only",
+      "delta extreme only",
+      "paired feature and response threshold variants"
+    ],
+    "acceptance_cases": [
+      "Maximum traded price is not maximum delta price.",
+      "A lower wick/close back must produce long mirror, never upper-only logic.",
+      "Unpaired zones cannot score a favorable reaction."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Delta-print pairing with an LVN at a balance extreme",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "979b734de8ca04521cb75eba42ae06f267adbea2c279c22decb6f57cabe4a261",
+    "source_references": [
+      "RD:7",
+      "RD:9",
+      "RD:10"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F12",
+    "role": "context",
+    "research_decision": "Measure approach speed and aggressive-volume slope before contact, then estimate both defense and acceptance outcomes without assuming their relationship.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E03",
+      "E06"
+    ],
+    "dependencies": [],
+    "consumers": [
+      "R-A01",
+      "R-A07",
+      "R-F16"
+    ],
+    "bindings": {
+      "band": "frozen prior VA/dealing-range area supplied by parent",
+      "feature_end": "last completed minute end <= first touch",
+      "feature_window": "five full minutes, six endpoint closes",
+      "toward_direction": "+1 from below band, -1 from above",
+      "labels": "E02 inward reaction vs30 minute accepted outward break, neither/censored distinct",
+      "consumer": "A01/A07/F16"
+    },
+    "parameters": {
+      "speed_window_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "use N+1 endpoint closes spanning N actual minutes"
+      },
+      "fast_quantile": {
+        "default": 0.75,
+        "grid": [
+          0.65,
+          0.75,
+          0.85
+        ],
+        "units": "quantile",
+        "meaning": "prior 60 same-slot toward-displacement rate"
+      },
+      "slow_quantile": {
+        "default": 0.25,
+        "grid": [
+          0.15,
+          0.25,
+          0.35
+        ],
+        "units": "quantile",
+        "meaning": "same historical population"
+      }
+    },
+    "algorithm": [
+      "Freeze band and first-touch time; evaluate only preceding complete minute intervals, with approach direction established from price outside band.",
+      "Compute toward_rate=d_approach*(C_last-C_first)/(tick*elapsed_minutes), and OLS slope of same-aggressor volume over those N minute bins using x=0..N-1.",
+      "Fast requires rate>=fast quantile and volume slope>=0; drift if rate<=slow quantile or slope<0; otherwise mixed. Missing matched history or signed coverage yields unavailable.",
+      "After touch measure fixed 5 minute four-tick defender reaction and separately complete 30 minute outside acceptance. Fit class-conditional probabilities and test fixed consumers; do not infer source defending side from fast/slow names."
+    ],
+    "outputs": {
+      "toward_rate": "ticks/minute",
+      "volume_slope": "contracts/minute-bin",
+      "approach_class": "enum",
+      "defense_outcome": "bool?",
+      "acceptance_outcome": "bool?"
+    },
+    "controls": [
+      "speed alone",
+      "volume slope alone",
+      "unconditional same-band response"
+    ],
+    "acceptance_cases": [
+      "Five closes one minute apart span4 minutes;3.9 points on0.25 tick then equals3.9 ticks/minute.",
+      "A downward approach uses signed toward distance, not a reversed inequality bug.",
+      "Post-touch high/low cannot enter the pre-touch speed feature."
+    ],
+    "execution_contract": "consumer_or_component_only",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Aggressive or drifting approach to a balance band",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "59795c64c561de3a81e6c67294b8ec1b56a7e576a98c6ea57038371d122476ce",
+    "source_references": [
+      "WIC:4",
+      "WIC:5",
+      "WIC:9"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-F13",
+    "role": "signal",
+    "research_decision": "Use two prior known-zone failures, signed delta pairing and a newly frozen current microbalance break/retest with actual body aggression.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E05",
+      "E06",
+      "E08",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "historical_profile": "completed RTH two sessions before current trading date; known before prior AM/PM",
+      "historical_zone": "upper positive-delta extreme or lower negative-delta extreme paired to E03 LVN within 0.05profile width",
+      "historical_tests": "prior actual RTH AM09:30–12:00 and PM13:00–16:00, one distinct failed outward test each",
+      "current_range": "first E08 microbalance after 09:30",
+      "entry_window": "09:30–11:30",
+      "target": "1.5R0 fixed",
+      "stop": "retest extreme+2 ticks",
+      "exit_horizon": "12:00"
+    },
+    "parameters": {
+      "pair_distance_fraction": {
+        "default": 0.05,
+        "grid": [
+          0.025,
+          0.05,
+          0.1
+        ],
+        "units": "historical profile width",
+        "meaning": "delta/LVN pairing"
+      },
+      "body_trade_contracts": {
+        "default": 30,
+        "grid": [
+          20,
+          30,
+          60
+        ],
+        "units": "single execution contracts",
+        "meaning": "actual same-side print inside completed retest candle body"
+      },
+      "break_hold_minutes": {
+        "default": 3,
+        "grid": [
+          1,
+          3,
+          5
+        ],
+        "units": "minutes",
+        "meaning": "current range outside hold before retest"
+      }
+    },
+    "algorithm": [
+      "Freeze the historical profile before the prior day. Pair correct signed delta extreme and node; do not select a final current AM price extreme.",
+      "In each prior AM and PM require actual zone touch, outward attempt>=2 ticks and complete 1m close back within 5 minutes, with no30 minute accepted outward break afterward through that prior RTH close. These are historical profile-area episodes, not rearmed external highs/lows.",
+      "Build first current microbalance and freeze. For historically trapped buyers choose downward break/retest; trapped sellers upward. Require E02 break/selected hold then distinct retouch.",
+      "The complete 1m retest candle must contain an actual trade of selected size in trade direction inside its own body and close4 ticks back in breakout direction. Confirm at bar close, freeze stop/target and execute E11."
+    ],
+    "outputs": {
+      "historical_zone_id": "string",
+      "prior_AM_test": "UTC ns?",
+      "prior_PM_test": "UTC ns?",
+      "current_box_id": "string",
+      "body_print_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "current microbalance break/retest without historical pattern",
+      "historical pair without body-print gate"
+    ],
+    "acceptance_cases": [
+      "The same current AM observations cannot fill both prior AM and prior PM fields.",
+      "A min(close)<min(low) predicate is impossible and must not appear.",
+      "A red candle without an actual signed seller execution is not the body-trade gate."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Prior-session trapped aggression and later break/retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "3fbc95469bc3b852e93129d1a82b474a0e74f8a48554ef5a67033b57609a4fea",
+    "source_references": [
+      "TRAP:3",
+      "TRAP:4",
+      "TRAP:5",
+      "TRAP:6",
+      "TRAP:8",
+      "TRAP:9"
+    ],
+    "grid_screen_config_count": 7
+  },
+  {
+    "id": "R-F14",
+    "role": "signal",
+    "research_decision": "Match individual large prints to same-price imbalance in their own candle, then test a real later retest of the frozen print area.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E05",
+      "E06",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "bar_default": "fixed 1 minute",
+      "range_bar_alternative": "40 tick total high-low range; close on first execution reaching/exceeding40 ticks, retain overshoot; next execution starts next bar, no synthetic intermediate bars",
+      "print_class": "body if price lies inclusively between own candle O/C; otherwise wick",
+      "entry_window": "09:30–15:00",
+      "side": "rewarded body -> aggressor direction; absorbed wick -> opposite direction",
+      "stop": "retest extreme+2 ticks",
+      "target": "1.5R0",
+      "exit_horizon": "min(fill+30 minutes, RTH close)"
+    },
+    "parameters": {
+      "bar_type": {
+        "default": "minute1",
+        "grid": [
+          "minute1",
+          "minute3",
+          "range40ticks"
+        ],
+        "units": "enum",
+        "meaning": "explicit alternative construction"
+      },
+      "print_size_mode": {
+        "default": "30_to_60",
+        "grid": [
+          "30_to_60",
+          "at_least_30",
+          "prior_q99"
+        ],
+        "units": "enum",
+        "meaning": "inclusive30..60; >=30; or E06 adaptive"
+      },
+      "same_price_ratio": {
+        "default": 3.5,
+        "grid": [
+          3.0,
+          3.5,
+          4.5
+        ],
+        "units": "ratio",
+        "meaning": "same-price directional/opposite volume; denominator must be positive"
+      },
+      "setup_type": {
+        "default": "rewarded_body",
+        "grid": [
+          "rewarded_body",
+          "absorbed_wick"
+        ],
+        "units": "enum",
+        "meaning": "later directional reward vs E06 opposing defense"
+      }
+    },
+    "algorithm": [
+      "Build complete chosen candles and all individual matched prints, preserving aggressor, price, size and availability.",
+      "At each print price require same-side total volume>=ratio*opposite volume with nonzero denominator and known side. Classify body/wick only at candle close.",
+      "For rewarded body require E06 aggressor reward after candle close; for absorbed wick require a local E06 absorption observation and defender reward after its availability. Then require departure>=4 ticks and a distinct first return to print band±1 tick within 30 minutes.",
+      "Confirm E02 in selected direction, freeze retest stop and E11 trade. Every matched print remains recorded; simultaneous entries use earliest confirmation then earliest print, not last match overwrite."
+    ],
+    "outputs": {
+      "print_id": "string",
+      "candle_id": "string",
+      "body_or_wick": "enum",
+      "same_price_ratio": "float",
+      "retest_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "size modes",
+      "3.5ratio vs literal4.5interpretation",
+      "one-minute vs explicit range40 tick bars"
+    ],
+    "acceptance_cases": [
+      "Zero/zero volume does not satisfy3.5ratio.",
+      "A large print elsewhere in the candle cannot satisfy imbalance at another price.",
+      "An intrabar retouch before body classification isnot a later known-area retest."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Colocated BigTrades imbalance, body/wick and retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "c9b8253cc56f3794e2f3db0f124f100fe6585a0818c2562e471c87a92d48d42e",
+    "source_references": [
+      "BIG:3",
+      "BIG:4",
+      "BIG:5",
+      "BIG:6"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F15",
+    "role": "signal",
+    "research_decision": "Separate passive memory retests from ordered aggressive failure/refill/re-squeeze; only the BIG branch requires negative gamma and CVD.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E06",
+      "E07",
+      "E08",
+      "E10",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "seed_locations": "prior VA edges or newly confirmed microbalance edges, available at first contact",
+      "entry_window": "09:30–15:00",
+      "catalyst_age_limit": "120 minutes",
+      "direction": "explicit catalyst defender/aggressor direction by branch",
+      "stop": "E07 CONTROL_STOP at final retest, never whole-AM extreme",
+      "target": "1.5R0 fixed",
+      "exit_horizon": "min(fill+60 minutes, RTH close)"
+    },
+    "parameters": {
+      "branch": {
+        "default": "aggressive_resqueeze",
+        "grid": [
+          "passive_memory",
+          "aggressive_resqueeze",
+          "BIG_resqueeze"
+        ],
+        "units": "enum",
+        "meaning": "BIG adds selected R01 NDXP call-plus/put-minus negative gamma and E06 same-direction CVD range break before entry"
+      },
+      "flow_seconds": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "seconds",
+        "meaning": "catalyst/absorption matched baselines"
+      },
+      "failure_deadline_minutes": {
+        "default": 5,
+        "grid": [
+          3,
+          5,
+          10
+        ],
+        "units": "minutes",
+        "meaning": "after aggressive release"
+      },
+      "refill_formation_seconds": {
+        "default": 120,
+        "grid": [
+          30,
+          60,
+          120
+        ],
+        "units": "seconds",
+        "meaning": "fixed E07 formation window"
+      }
+    },
+    "algorithm": [
+      "At an eligible seed area build E07 catalyst with line, full band, side and available_at separately. A current final range or last AM prints cannot define it retroactively.",
+      "Passive_memory uses an ABSORB+defender REWARD catalyst: after departure wait for first distinct return to that original band, another local same-defender ABSORB or RELOAD, and E02 reaction. It does not require fast tape, failed squeeze, gamma or CVD.",
+      "Aggressive_resqueeze requires catalyst -> FAST release in direction d -> FAILED_SQUEEZE -> later REFILL_ZONE formation and return -> RESQUEEZE. Every transition must be later than the preceding available_at and within 120 minutes of catalyst; accepted adverse close through seed zone invalidates.",
+      "BIG_resqueeze uses the same sequence and additionally requires R01 selected NDXP scenario net negative and E06 CVD range break in d available at final confirmation. Unknown option/CVD data makes only BIG unavailable. Freeze local control stop/target and execute E11."
+    ],
+    "outputs": {
+      "branch": "enum",
+      "catalyst_line": "points",
+      "catalyst_band": "points[2]",
+      "transition_times": "map<UTC ns>",
+      "gamma_scenario_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "passive vs aggressive as separate populations",
+      "aggressive with/without gamma/CVD",
+      "failure/refill stage ablations"
+    ],
+    "acceptance_cases": [
+      "Release before catalyst availability fails.",
+      "Passive first return can qualify with slow tape and no option data.",
+      "A favorable move without prior failed squeeze belongs F18, not aggressive F15."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "conditional_inputs": {
+      "branch=BIG_resqueeze": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D10"
+      ]
+    },
+    "conditional_dependencies": {
+      "branch=BIG_resqueeze": [
+        "R-R01",
+        "R-F02"
+      ]
+    },
+    "family": "flow",
+    "title": "Ordered catalyst, failed squeeze, refill and re-squeeze",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "079f13a8e5473bad26353921f5218dd442313e0430c18cb49506579a89c364e6",
+    "source_references": [
+      "OFM:2",
+      "OFM:4",
+      "OFM:5",
+      "OFM:6",
+      "OFM:7",
+      "OFM:8",
+      "OFM:9",
+      "OFM:10",
+      "OFM:14",
+      "BIG:7",
+      "BIG:8",
+      "BIG:14",
+      "BIG:18",
+      "CONT:10"
+    ],
+    "grid_screen_config_count": 9
+  },
+  {
+    "id": "R-F16",
+    "role": "signal",
+    "research_decision": "Test failed edge aggression, an inward departure and a locally defended retest targeting a previously rewarded opposite print.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E03",
+      "E05",
+      "E06",
+      "E07",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "balance": "E03 balance_composite_2",
+      "entry_window": "09:30–15:00",
+      "aggression": "outward at VAH for upper/VAL for lower",
+      "target": "latest earlier rewarded opposite-side body print inside balance, price frozen; profile-memory target may have been visited earlier, external H/L may not",
+      "stop": "E07 CONTROL_STOP",
+      "exit_horizon": "16:00"
+    },
+    "parameters": {
+      "failure_observation_minutes": {
+        "default": 15,
+        "grid": [
+          5,
+          15,
+          30
+        ],
+        "units": "minutes",
+        "meaning": "no complete outward close beyond edge+2 ticks after aggression"
+      },
+      "departure_fraction": {
+        "default": 0.25,
+        "grid": [
+          0.1,
+          0.25,
+          0.5
+        ],
+        "units": "VA width",
+        "meaning": "movement toward interior from tested edge"
+      },
+      "gamma_gate": {
+        "default": "none",
+        "grid": [
+          "none",
+          "positive_NDXP_scenario"
+        ],
+        "units": "enum",
+        "meaning": "only gated variant needs R01; no final day type substitute"
+      }
+    },
+    "algorithm": [
+      "Record a local E06 outward aggression/absorption observation at the actual edge, then complete failure_observation_minutes with no outward accepted close.",
+      "Before that failed edge episode, find latest opposite-side body print >=30 contracts whose E06 reward was already known, located inside balance. Freeze its price as target; no eligible print meansno_target.",
+      "After failure confirmation require selected inward departure, then a distinct retouch of saved area and local E06 absorption of renewed outward aggression. Confirm E02 fade; do not require new own-side squeeze/reward.",
+      "Ifgamma_gate is enabled check selected positive R01scenario at confirmation. Execute E11 with local control stop and known opposite print target ahead, separately reporting repeat-memory targets vs external fresh levels."
+    ],
+    "outputs": {
+      "failed_aggression_id": "string",
+      "failure_known_at": "UTC ns?",
+      "retest_at": "UTC ns?",
+      "target_print_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "edge fade without failed aggression stages",
+      "gamma gate ablation",
+      "actual print target vs fixed 1.5R diagnostic"
+    ],
+    "acceptance_cases": [
+      "Departure is measured from tested edge only, not opposite box edge.",
+      "Absorption at another level cannot confirm this retest.",
+      "An opposite rewarded print known after the failure cannot be selected as an earlier target."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "conditional_inputs": {
+      "gamma_gate=positive_NDXP_scenario": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D10"
+      ]
+    },
+    "conditional_dependencies": {
+      "gamma_gate=positive_NDXP_scenario": [
+        "R-R01"
+      ]
+    },
+    "family": "flow",
+    "title": "Failed aggression at a balance edge, then fade retest",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "5b818906c694836e5ab8b791af4407a15cbe06cdbe95f46b3ff9e872d6c0e3f2",
+    "source_references": [
+      "BIG:15",
+      "BIG:16",
+      "BIG:18"
+    ],
+    "grid_screen_config_count": 6
+  },
+  {
+    "id": "R-F17",
+    "role": "signal",
+    "research_decision": "Freeze a refill band from explicit same-direction prints, require actual departure and return, then measure local held response.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E02",
+      "E06",
+      "E07",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "parent": "E07 rewarded aggressive catalyst/release",
+      "formation_start": "first qualifying print after release",
+      "direction": "same as qualifying aggressive prints; defender at return is opposite approaching aggression",
+      "entry_window": "09:30–15:00",
+      "stop": "return extreme+2 ticks",
+      "target": "1.5R0",
+      "exit_horizon": "min(fill+30 minutes, RTH close)"
+    },
+    "parameters": {
+      "formation_seconds": {
+        "default": 120,
+        "grid": [
+          30,
+          60,
+          120
+        ],
+        "units": "seconds",
+        "meaning": "fixed window from first print"
+      },
+      "formation_mode": {
+        "default": "fixed_window",
+        "grid": [
+          "fixed_window",
+          "third_print"
+        ],
+        "units": "enum",
+        "meaning": "full window end vs actual third qualifying print timestamp"
+      },
+      "minimum_print_contracts": {
+        "default": 100,
+        "grid": [
+          60,
+          80,
+          100
+        ],
+        "units": "contracts",
+        "meaning": "single execution threshold NQ research units"
+      },
+      "departure_ticks": {
+        "default": 4,
+        "grid": [
+          4,
+          8,
+          12
+        ],
+        "units": "ticks",
+        "meaning": "at least this distance in print direction before later return"
+      }
+    },
+    "algorithm": [
+      "Build explicit qualifying print list from same side, size and time after causal release. Unknown/opposite prints never widen the band.",
+      "Fixed window freezes only at window end and requires>=3 prints; third_print freezes at third print. Bounds are min/max qualifying prices padded one tick and cannot widen afterward.",
+      "Require later directional departure then actual return within 30 minutes. At return require E06 defender absorption or E07 reload, then E02 reaction in print direction.",
+      "Execute E11 and report formation, return, held response and filled trade cohorts. A source32 tick bracket isnot silently substituted forthe1.5R research target."
+    ],
+    "outputs": {
+      "formation_mode": "enum",
+      "print_ids": "string[]",
+      "band": "points[2]",
+      "known_at": "UTC ns",
+      "return_at": "UTC ns?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "fixed window vs stream threshold",
+      "60/80/100execution thresholds",
+      "return with/without local defense"
+    ],
+    "acceptance_cases": [
+      "First three buy prints and later opposite sell cannot expand buy zone.",
+      "A120 second window is unknown at its last print10 seconds after start.",
+      "A later favorable extreme without an intervening return isnot a held retest."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Refill-zone formation, return and held response",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "350c932bc4adb8d5a40e9b7c950602b33e0b3f01579907b4c3b65075e1b93683",
+    "source_references": [
+      "REF:5",
+      "REF:7",
+      "REF:8",
+      "REF:10",
+      "REF:12",
+      "REF:17",
+      "REF:18",
+      "REF:23"
+    ],
+    "grid_screen_config_count": 8
+  },
+  {
+    "id": "R-F18",
+    "role": "signal",
+    "research_decision": "Route a fast catalyst release into an explicitly timed no-failure branch, then trade a later locally defended pullback.",
+    "inputs": [
+      "D01",
+      "D02",
+      "D03",
+      "D04"
+    ],
+    "engines": [
+      "E00",
+      "E01",
+      "E02",
+      "E06",
+      "E07",
+      "E09",
+      "E11"
+    ],
+    "dependencies": [],
+    "consumers": [],
+    "bindings": {
+      "catalyst": "E07 aggressive catalyst with explicit direction",
+      "entry_window": "09:30–15:00",
+      "release": "complete 1m close beyond catalyst far edge+2 ticks and E07 FAST_APPROACH in d",
+      "pullback": "first distinct return after no failure confirmation; earlier pullbacks are diagnostic and never backdated entries",
+      "stop": "pullback adverse extreme+2 ticks",
+      "target": "nearest fresh ASIA/GB_LONDON/PRIOR_RTH high/low ahead baseline",
+      "exit_horizon": "min(fill+60 minutes, RTH close)"
+    },
+    "parameters": {
+      "no_failure_minutes": {
+        "default": 15,
+        "grid": [
+          5,
+          10,
+          15
+        ],
+        "units": "minutes",
+        "meaning": "complete subsequent closes cannot cross catalyst adverse edge"
+      },
+      "fast_quantile": {
+        "default": 0.8,
+        "grid": [
+          0.7,
+          0.8,
+          0.9
+        ],
+        "units": "quantile",
+        "meaning": "matched prior 30 second displacement rate"
+      },
+      "target_mode": {
+        "default": "fresh_reference",
+        "grid": [
+          "fresh_reference",
+          "fixed_1.5R"
+        ],
+        "units": "enum",
+        "meaning": "separate model, no automatic fallback"
+      },
+      "pullback_deadline_minutes": {
+        "default": 30,
+        "grid": [
+          15,
+          30,
+          60
+        ],
+        "units": "minutes",
+        "meaning": "after no failure confirmation"
+      }
+    },
+    "algorithm": [
+      "Build causal catalyst and fast directional release, retaining line and band identity.",
+      "Observe full no_failure_minutes after release. Any complete close through adverse catalyst edge fails this branch and may start F15only if its own sequence qualifies.",
+      "After confirmation wait for first eligible pullback to original catalyst/refill band, require local E06 opposing aggression absorption and E02 reaction in d. No unrelated morning VA flag can qualify.",
+      "Freeze target from fresh ledger at final confirmation or use explicit fixed target variant, stop from actual pullback and execute E11. Missing draw producesno_target."
+    ],
+    "outputs": {
+      "release_at": "UTC ns?",
+      "no_failure_known_at": "UTC ns?",
+      "pullback_at": "UTC ns?",
+      "target_id": "string?",
+      "net_R0": "float?"
+    },
+    "controls": [
+      "release without 15 minute hold",
+      "fresh draw vs fixed target",
+      "local defense gate ablation"
+    ],
+    "acceptance_cases": [
+      "A15 minute no failure state cannot be known at release.",
+      "A pullback before hold ends cannot become an entry backdated to that touch.",
+      "A consumed Asia high cannot be the next fresh long draw."
+    ],
+    "execution_contract": "E11",
+    "unavailable_policy": "E00 typed states; any required unavailable input prevents a signal; complete eligible windows with no event emit no_event; interrupted outcomes are censored",
+    "shared_acceptance": [
+      "Prefix replay through available_at exactly reproduces all features and selected IDs.",
+      "Future price, volume, profile and calendar revisions cannot change an earlier decision.",
+      "Both external high and low obey independent first-visit retirement; areas retain their separate lifecycle.",
+      "Every filled trade is linked to a real signal, submitted order and later observable fill; no full-session extrema before entry."
+    ],
+    "family": "flow",
+    "title": "Fast squeeze without the prior failure",
+    "status": "specified_not_implemented",
+    "basis": "explicit_research_assumption_with_audited_source_context",
+    "audit_record_file": "implementation/reports/phase1-live/chart-audit/audit_records_flow.json",
+    "audit_record_sha256": "653d1559cefb096e8fd944f1c87e30ab39d786e9f65e67672d278a165573ec48",
+    "source_references": [
+      "CONT:11",
+      "OFM:5",
+      "OFM:14"
+    ],
+    "grid_screen_config_count": 8
+  }
+]

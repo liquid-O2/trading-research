@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Main model research specification",
+  "type": "object",
+  "required": [
+    "spec_version",
+    "status",
+    "models",
+    "grid_protocol",
+    "source_files"
+  ],
+  "properties": {
+    "spec_version": {
+      "const": "research-v1.0"
+    },
+    "status": {
+      "const": "specified_not_implemented"
+    },
+    "models": {
+      "type": "array",
+      "minItems": 85,
+      "maxItems": 85,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "family",
+          "title",
+          "status",
+          "role",
+          "research_decision",
+          "inputs",
+          "engines",
+          "dependencies",
+          "consumers",
+          "bindings",
+          "parameters",
+          "algorithm",
+          "outputs",
+          "controls",
+          "acceptance_cases",
+          "unavailable_policy",
+          "audit_record_sha256"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^R-[JGAFRS][0-9]{2}$"
+          },
+          "status": {
+            "const": "specified_not_implemented"
+          },
+          "role": {
+            "enum": [
+              "signal",
+              "context",
+              "component",
+              "management"
+            ]
+          },
+          "inputs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^D[0-9]{2}$"
+            }
+          },
+          "engines": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^E[0-9]{2}$"
+            }
+          },
+          "parameters": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "default",
+                "grid",
+                "units",
+                "meaning"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "default": {},
+                "grid": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "units": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "meaning": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "algorithm": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "string",
+              "minLength": 20
+            }
+          },
+          "acceptance_cases": {
+            "type": "array",
+            "minItems": 3,
+            "items": {
+              "type": "string",
+              "minLength": 15
+            }
+          },
+          "controls": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string",
+              "minLength": 5
+            }
+          },
+          "bindings": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "outputs": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "audit_record_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Default membership, model ID completeness, references, conditional dependencies, source hashes and grid budgets are additionally checked by research_spec_validate.py."
+}
