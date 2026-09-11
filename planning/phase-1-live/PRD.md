@@ -1,45 +1,75 @@
-# PRD — Phase 1: measure and compare the objects
+# Phase 1 implementer pack — product requirements
 
-## Problem
-The sources describe range, envelope, value, flow and session-fail objects with published or hardcoded statistics of unknown provenance. Nothing has been recomputed on our data with one shared definition of touch, reject, hold and break. Without that, later phases would train on labels nobody has checked.
+Version: `method-pack-v1`, 2026-09-11.
 
-## Goal (one outcome)
-Every object family in `wiki/index.md` is computed on frozen slice F (NY trade dates 2024-01-02 → 2026-08-31) with a faithful source object and named upgrades, and one pass command prints, per family and variant:
+## Problem Statement
 
-`family | variant | n | faithful disagreements | experiment status | report path`
+The wiki defines operating methods, but the existing implementation mostly scores isolated objects and daily flags. Those scores cannot establish that a method had its context, reference, confirmation, risk and objective in the right order. Some callers use future information or a different construction; several required source definitions and data surfaces are missing. An implementer must not resolve those gaps by inventing a trading rule.
 
-"Better" means descriptive statistics on F, never P&L. Null or worse is a valid result.
+## Solution
 
-## Non-goals
-- No trading, no execution, no account or risk work. The $2,000 average daily net target, $1,000 daily loss cap, one account and one NQ mini are locked facts, not Phase 1 deliverables.
-- No predictor training, no learned selector of ranges, no learned reversal / P-zone model (Phase 2–3).
-- No MBP-10, no MBO, no paid data expansion `[JJX L16]`.
-- No edits to `sources/`, raw data, `archive/`, `planning/phase-1-from-scratch/`, or `planning/phase-1-fable/`.
-- No Skylit Heatseeker / Flowseeker / Atlas work.
+Deliver one checkable outcome: **for each of the 12 operating methods mapped by the wiki, a single method pass produces a reproducible report of its cited sequence or process, with every verdict traceable to timed evidence or an explicit hole.** The unit is the operating method. Branches and objects remain inside their parent method.
 
-## Users
-The researcher running the pass command and reading `wiki/` before deciding Phase 2 scope.
+Completion means all 12 commands can execute their declared fixture and report contract; all 166 object procedures and all 373 predicate operands are covered; negative/unknown cases are correctly distinguished; every requested headline has a valid report artifact; and incorrectly admitted leakage/proxy-as-faithful counts are zero. A correct source_hole or data_hole report is valid completion of the audit implementation. It is not a claim that the source method is fully discoverable or profitable.
 
-## Locked decisions
-Execute NQ, ES is information. No overnight hold across the day boundary (nothing measured across 17:00 → 18:00). Range high and low are rails, not reversal zones. Width tables use 6–9 H−L **and** prior RTH H−L; those tables are not the same. Extensions 1.33 / 1.66 come from the 6–9 (or London) range, are not P-zones, and are not called ATL. P-zone formula unavailable → disclosed approximation as benchmark (500-session percentile bands). One shared touch / reject / hold / break grid. Fixed clock grid, no free-form box. MBP-1 only. Options nodes are native on **NDX, NDXP, SPX, SPXW**; QQQ, SPY, NQ.OPT are named variants. Cash NDX/SPX minutes are not assumed. A+ = a sweep happened. Hidden book and unpublished node engines print not-measurable.
+The inventory is fixed: `JJ-TBR`, `GB-FAIL`, `GB-VWAP`, `GB-SCALP`, `SIRES`, `SAINT-AMT`, `MEMBER-TWO-REASONS`, `KEANI-OPEN-ABOVE-VALUE`, `REFILL-STUDY`, `JETBUNDLE-STATES`, `STOIC-DATA`, `STOIC-RISK`.
 
-## Stories (each checkable by the pass command or by a file existing)
+## User Stories
 
-1. **Tracer bullet.** Pass command `--family range` prints `range.6-9.published` with `n` equal to F sessions that survive the coverage rule, `faithful disagreements = 0`, status `measured`, report at the printed path containing the path-class table, both width tables, and the −0.5 reversal rate. (ticket 01)
-2. **Published tables recomputed.** Range and path reports contain the XF p.24 range-size table and the TBR p.30 reversal statistic recomputed on F and on L, each quoted cell beside the recomputed cell. (ticket 01)
-3. **Clock grid.** Every row in `wiki/clock-grid-and-bars.md` prints a line; indistinguishable coverage tables are merged and listed. Jumbo London is a separate row from GB-London. (ticket 02)
-4. **Day class and open location.** Each F session carries `path_class`, `break_order`, `day_type`, `open_cell` (27 cells), `balance`, `edge_clean`. XF p.11 rows recomputed. In-value vs in-range vs outside-both double-break printed. 76% claim printed on **two** denominators (A-period 09:30–10:00, and frozen OR-edge return). (ticket 03)
-5. **AM envelope grid.** Every EV, SessionStat, extension and P-zone row prints reach, overshoot, reject, time-to-touch, in/out-of-value, calibration with Wilson 95%. P-zone `pz.approx.A` uses the 500-session disclosed bands. (ticket 04)
-6. **CVD and SMT.** Five CVD variants and SMT (OHLC-4, trade NQ, Pine 3/3 matcher) print event counts and pairwise agreement. (ticket 05)
-7. **Value, absorption, flow prints.** VP, delta, key zones, absorption A/B, BigTrades 100/75, footprint diagonal, on-touch refill, VWAP ±2SD print grid outcomes. No options ids. (ticket 06)
-8. **Session-fail boxes.** Every box in `wiki/session-fail-boxes.md` prints fail-back counts and an agreement matrix against Jumbo labels; GB-NYAM outcomes start at 10:00; A+ is sweep-only. (ticket 07)
-9. **FVG / CISD / TPO.** First-presented FVG, TBR/Pine CISD-blocks, and TPO/AMT labels print on F. Not attached to GB pages. IB remains the ticket-02 comparison row. (ticket 08)
-10. **Options nodes.** Ticket 09 is options-only: native nodes on NDX, NDXP, SPX, SPXW; QQQ, SPY, NQ.OPT as named variants; each row has product, native, mapped_nq, map_known_at, OI_vintage; missing quotes are a coverage hole, not a dropped product. (ticket 09)
-11. **One command, whole phase.** `PHASE.md` pass command with no family argument prints every family's lines and exits 0 only when every family has at least one `measured` row and no row lacks a report path.
-12. **Provenance.** Every printed variant id is defined on exactly one wiki page; every quoted number carries a citation.
+1. As an implementer, I want one stable inventory of the 12 source operating methods, so that an indicator or recap title cannot become an extra product.
+2. As a reviewer, I want one source-sequence or source-process verdict per identified observation, so that a later favorable move cannot repair missing prerequisites.
+3. As an implementer, I want a complete procedure for every one of the 166 mapped objects, so that I can implement each operation without reopening the PDFs.
+4. As an implementer, I want exact native field, unit, ET clock, bar, reset and known_at contracts, so that data adapters cannot silently change the source observation.
+5. As a reviewer, I want every Boolean linked to an object procedure and evidence, so that a caller cannot bypass missing source definitions with true.
+6. As an implementer, I want correct signed-execution decoding and overlap ownership, so that flow totals do not reverse or double-count the acquired tape.
+7. As a reviewer, I want frozen source bands, impulses, profiles and native contract identities, so that a later reference cannot qualify an earlier decision.
+8. As an implementer, I want unknown values and named holes for undisclosed source engines, so that I do not invent a substitute gamma, CVD, profile, grade or macro model.
+9. As a reviewer, I want separate pass, fail and unknown counts, so that missing definitions and missing data cannot become negative market evidence.
+10. As a reviewer, I want separate candidate, touch, order and fill denominators, so that selection and execution assumptions remain visible.
+11. As a reviewer, I want all source branches and incomplete cases retained, so that the report cannot certify only the easiest branch while hiding the rest.
+12. As an implementer, I want one method command that checks fixtures, processes supported evidence and writes the report, so that finishing helpers alone cannot count as finishing a method.
+13. As a reviewer, I want source-specific positive, negative and hole fixtures, so that I can distinguish correct rejection from an implementation defect.
+14. As a reviewer, I want late-input, wrong-identity and missing-input mutations, so that timing and identity requirements are checked at the public command.
+15. As a reviewer, I want method, predicate, n, rate, interval, year split, status and report path in every headline, so that I can compare the requested observations with their exact scope.
+16. As a reviewer, I want the rate denominator and exact missingness interval stated explicitly, so that I cannot mistake compliance for win rate or the interval for a confidence claim.
+17. As a reviewer, I want immutable input ownership, source/formula versions and output hashes, so that the same method pass can be reproduced.
+18. As a reviewer, I want the acquired data coverage and source holes exposed by branch/year, so that a partial file or missing depth cannot be mistaken for complete evidence.
+19. As an implementer, I want freedom to replace conflicting legacy functions and invalidate their caches, so that old behavior cannot override the wiki or source figure.
+20. As a reviewer, I want management and fresh re-entry attached to original thesis/position identities, so that a stop-out cannot erase losses or reuse old confirmation.
+21. As a reviewer, I want research, auction-state and risk-rule methods audited in their own units, so that they do not turn into invented intraday entry systems.
+22. As a reviewer, I want the Refill causal correction and Stoic activation conflict preserved, so that earlier attractive examples do not erase later limitations.
+23. As an implementer, I want a method slice that finishes with its report even when status is source_hole, so that correct refusal to invent has an explicit, checkable completion state.
+24. As a workspace owner, I want only the four authorized planning documents rewritten in this task, so that the wiki, raw sources, audits and implementation remain intact.
 
-## Acceptance for Phase 1 as a whole
-All stories pass on F. Reports live under `implementation/reports/phase1-live/` as canonical JSON plus a Markdown twin. No file under the must-not-change list has a changed hash.
+## Implementation Decisions
 
-## Out of scope but recorded
-`QUESTIONS_RESOLVED.md` lists closed variant grids and not-measurable rows. Nothing there blocks Phase 1.
+- Use typed native events, bars, objects, assertions, candidates and hole records, with exact units and immutable identities. Source clocks use date-aware ET; completed bars are known at close.
+- Build method-specific input views from named object producers. Evaluate the wiki predicates with three-valued logic and the shared causal/coverage wrapper. An unbound field stays unknown.
+- Preserve source-defined versus supplied-contemporaneous versus retrospective-illustration versus synthetic evidence. Synthetic fixtures never enter historical counts. Missing automatic candidate selectors produce an unavailable cohort, not fabricated daily trades.
+- Preserve distinct authors, branch permissions, profile settings and event order. Shared primitives do not transfer another author's trigger.
+- Implement disclosed algebra and literal state transitions. Ingest a proprietary source value only when supplied with provenance; do not recreate an unpublished engine.
+- Reuse or replace adapters, objects and reporting behind the existing runner entry point. Add one method-pass mode that owns the whole vertical operation. A legacy helper or cache that contradicts the contract must be replaced or invalidated.
+- Default reporting scope inventories all acquired data relevant to the selected method, then attempts only source-complete discovery or explicitly supplied episodes. Coverage is interval/instrument/branch-specific; no blanket “all data exists” flag.
+- Report decidable compliance n=p+f and rate=p/n, plus unknown count u, total N and exact missingness bounds [p/N,(p+u)/N]. Do not label these as trade win rate or sampling confidence. Split by the method observation's ET year.
+- Preserve supplied research summaries, cost assumptions and risk arithmetic only as provenance/rule checks. Do not derive a new strategy return series, train a model or run a Monte Carlo study.
+
+## Testing Decisions
+
+Test the public method-pass command and its observable artifacts. Each method is an end-to-end slice: inputs, object values, ordered predicate, fixtures, holes, counts and report. The first slice establishes the runner/report seam; later slices reuse it without reducing the unit to a helper.
+
+Required checks are the printed numeric object fixtures; each method's positive, negative and hole cases; late-dependency and wrong-identity mutations; missing-input propagation; exact source branch selection; and report arithmetic, year reconciliation and artifact existence. Verify the raw signed-flow fixture, clock/DST boundaries, overlapping-file ownership and zero-denominator behavior at the adapter seam. A test passes when a deliberate invalid candidate is rejected with the expected reason.
+
+Existing fixture/quality-report patterns provide prior art for command-level verification, not the expected source truth. Do not preserve a stale test expectation that contradicts the wiki/figure. Do not add tests that merely duplicate implementation branches. This planning task executes no Python or method runner.
+
+## Out of Scope
+
+- Phase 2, strategy optimization, training, new performance/P&L backtests, profitability certification or live/paper order routing.
+- Unpublished EV/P-zone/Session Stat minimum-average, gamma/KG1/CVD-reference, range-bar, grade, C-score, cycle or other custom engines. Undefined fields remain explicit holes.
+- New operating methods, unmapped legacy wiki pages, unattributed author-rule transfers, new universal thresholds or statistical confidence levels.
+- Editing the wiki, raw sources, RULES, chart audits or implementation during this planning task.
+
+## Further Notes
+
+The source of truth is [the wiki index](/workspace/planning/phase-1-live/wiki/index.md) and every method/object page it maps. The implementer consumes [FORMULAS.md](/workspace/planning/phase-1-live/FORMULAS.md) plus [PHASE.md](/workspace/planning/phase-1-live/PHASE.md); [SPEC.md](/workspace/planning/phase-1-live/SPEC.md) preserves one section per method and its complete mapped-object inventory. The four previous documents were replaced, not used as requirements.
+
+This PRD follows the requested [to-prd structure](https://www.skills.sh/mattpocock/skills/to-prd). Implementation slices follow [to-tickets](https://github.com/mattpocock/skills/blob/main/docs/engineering/to-tickets.md); the writing follows [writing-for-agents](https://github.com/mattpocock/skills/blob/main/docs/productivity/writing-for-agents.md). The local [wiki method pack](/workspace/sources/method/agent-method-matt-wiki.md) governs source/wiki handling only; it is not the PRD template. Existing braindumps supply context; no interview or tracker publication is required.
