@@ -102,3 +102,190 @@ Read: every PDF the non-Jumbo rows cite, text and rendered page (`archive/2026-0
 - cvd-variants: the "CVD median" is a plotted line whose construction no source states `[ABS p.5]` `[BIG p.12]` `[STOP p.8]`; named variant when CVD is rebuilt.
 
 Verified against the figures, not the text alone: the mirrors the case studies print (Sires), the session-anchored VWAP settings, the buy-side delta spikes at both value extremes, the overnight scope of the MAMT 94% / 73% stats, the far-boundary failed-auction target, the ranked GEX walls on either side of spot, the VIX / √252 formula and the 13 / 14 / 15–18 / 20 cut points. Not verified and left named: the VWAP chart's time zone (the 18:00 reset is inferred from TradingView's "Session" anchor), the refill paper's per-print unit on NQ vs MNQ, the shelf / band thicknesses, the Speed-of-Tape unit, the CVD median construction, the R-R02 fixture for 2025-09-15 (needs VIXCLS of 2025-09-12). Statuses: every `../FORMULAS.md` block header and the Part 4 status column now carry the committed `RULES_SCORES.md` status (99 pass / 2 gap / 4 blocked at 40017dd); blocks not re-audited say so in their Code bullet.
+
+## 2026-09-11 — operating methods and their objects
+
+Read first: [agent-method-matt-wiki.md](/workspace/sources/method/agent-method-matt-wiki.md). Compiled the reviewed raw posts, diagrams and PDFs through the source hierarchy; read OPERATORS, both chart audits, FORMULAS and RULES as existing compilations. Earlier log entries describe their historical passes; the present source-cited pages supersede their stale assertions. No raw or sibling planning file was changed; no implementation, runner or lint pass was performed. One line per page touched:
+
+- 2026-09-11 · [method-jumbo-tbr.md](method-jumbo-tbr.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-green-bird-failure.md](method-green-bird-failure.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-green-bird-vwap-continuation.md](method-green-bird-vwap-continuation.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-green-bird-directional-scalps.md](method-green-bird-directional-scalps.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-sires-thesis-flow.md](method-sires-thesis-flow.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-saint-amt.md](method-saint-amt.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-member-two-reasons.md](method-member-two-reasons.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-keani-open-above-value.md](method-keani-open-above-value.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-refill-effect.md](method-refill-effect.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-jetbundle-auction-states.md](method-jetbundle-auction-states.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-stoic-data-engine.md](method-stoic-data-engine.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [method-stoic-asymmetric-compounding.md](method-stoic-asymmetric-compounding.md) · Compiled the attributed operating loop, source-specific branches, Phase 1 check and object links.
+- 2026-09-11 · [data-coverage.md](data-coverage.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [touch-reject-hold-break-grid.md](touch-reject-hold-break-grid.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [clock-grid-and-bars.md](clock-grid-and-bars.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [execution-bars.md](execution-bars.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [tbr-6-9-range.md](tbr-6-9-range.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [tbr-remaining-clocks.md](tbr-remaining-clocks.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [range-internals.md](range-internals.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [range-open-close.md](range-open-close.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [range-width-context.md](range-width-context.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [range-path-class.md](range-path-class.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [overnight-range.md](overnight-range.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [overnight-purge.md](overnight-purge.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [open-location-switch.md](open-location-switch.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [range-exhaustion-area.md](range-exhaustion-area.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [extensions-1-33-1-66.md](extensions-1-33-1-66.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [nested-range-geometry.md](nested-range-geometry.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [sessionstat-9-12-envelope.md](sessionstat-9-12-envelope.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [ev-range-expected-move.md](ev-range-expected-move.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [p-zones-benchmark.md](p-zones-benchmark.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [pd-rth-range-plus.md](pd-rth-range-plus.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [reversal-time-window.md](reversal-time-window.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [clean-session-label.md](clean-session-label.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [amd-phase-labels.md](amd-phase-labels.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [jumbo-failure-attempts.md](jumbo-failure-attempts.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [news-event-context.md](news-event-context.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [source-sequence-fidelity.md](source-sequence-fidelity.md) · Compiled the shared pass / fail / unknown and causal observation contract.
+- 2026-09-11 · [source-catalog.md](source-catalog.md) · Compiled the 41-PDF source map, author attribution and matched-media rules.
+- 2026-09-11 · [index.md](index.md) · Rebuilt the map of every compiled method and all objects they use.
+- 2026-09-11 · [log.md](log.md) · Recorded one ingest line per page touched in this compile.
+- 2026-09-11 · [session-fail-boxes.md](session-fail-boxes.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [sweep-reclaim.md](sweep-reclaim.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [prior-day-week-month-levels.md](prior-day-week-month-levels.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [true-day-open.md](true-day-open.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [cash-open-reference.md](cash-open-reference.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [new-week-opening-gap.md](new-week-opening-gap.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [golden-pocket.md](golden-pocket.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [premium-discount-50.md](premium-discount-50.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [market-structure-shift.md](market-structure-shift.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [fvg-body-gaps.md](fvg-body-gaps.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [sweep-cisd-blocks.md](sweep-cisd-blocks.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [rejection-block.md](rejection-block.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [absorption-candle-jumbo.md](absorption-candle-jumbo.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [quality-grade.md](quality-grade.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [auction-balance.md](auction-balance.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [value-and-profiles.md](value-and-profiles.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [value-area.md](value-area.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [developing-profile.md](developing-profile.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [profile-poc.md](profile-poc.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [naked-poc.md](naked-poc.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [hvn.md](hvn.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [lvn.md](lvn.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [profile-shelf.md](profile-shelf.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [profile-ledge.md](profile-ledge.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [composite-profiles.md](composite-profiles.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [dealing-range.md](dealing-range.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [prior-reaction-area.md](prior-reaction-area.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [overnight-profile.md](overnight-profile.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [overnight-inventory.md](overnight-inventory.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [prior-eth-profile.md](prior-eth-profile.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [mpoc.md](mpoc.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [weekly-delta-profile.md](weekly-delta-profile.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [tpo-ib-auction.md](tpo-ib-auction.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [single-prints.md](single-prints.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [excess.md](excess.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [poor-extremes.md](poor-extremes.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [initial-balance.md](initial-balance.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [open-type.md](open-type.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [day-type.md](day-type.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [profile-shape.md](profile-shape.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [prior-session-reference-levels.md](prior-session-reference-levels.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [unfinished-business.md](unfinished-business.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [reference-statistics.md](reference-statistics.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [balance-rotation.md](balance-rotation.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [break-retest.md](break-retest.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [value-reacceptance.md](value-reacceptance.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [failed-auction-sires.md](failed-auction-sires.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [failed-auction-saint.md](failed-auction-saint.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [poc-traversal.md](poc-traversal.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [balance-traversal.md](balance-traversal.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [htf-ltf-alignment.md](htf-ltf-alignment.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [aggressor-trades.md](aggressor-trades.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [big-trades.md](big-trades.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [dom.md](dom.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [absorption-and-big-trades.md](absorption-and-big-trades.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [passive-replenishment.md](passive-replenishment.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [iceberg-evidence.md](iceberg-evidence.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [reward-system-3tick.md](reward-system-3tick.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [cvd-variants.md](cvd-variants.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [candle-delta-disagreement.md](candle-delta-disagreement.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [delta-spike.md](delta-spike.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [candle-poc-flip.md](candle-poc-flip.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [footprint-imbalance-zones.md](footprint-imbalance-zones.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [same-price-imbalance.md](same-price-imbalance.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [tape-speed.md](tape-speed.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [spread-width.md](spread-width.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [approach-speed.md](approach-speed.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [digit-thinning.md](digit-thinning.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [lift-off.md](lift-off.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [refill-zone.md](refill-zone.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [zone-touch-memory.md](zone-touch-memory.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [ofm-catalyst.md](ofm-catalyst.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [trapped-buyers.md](trapped-buyers.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [dom-rejection-branch.md](dom-rejection-branch.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [absorption-reward-retest.md](absorption-reward-retest.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [stop-four-stage.md](stop-four-stage.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [footprint-confirmed-reaction.md](footprint-confirmed-reaction.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vwap-deviation-fade.md](vwap-deviation-fade.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [ofm-aggressive-branch.md](ofm-aggressive-branch.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [ofm-passive-branch.md](ofm-passive-branch.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [clean-squeeze.md](clean-squeeze.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [balance-failure-fade.md](balance-failure-fade.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [defended-band-continuation.md](defended-band-continuation.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [microbalance.md](microbalance.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [kg1-retest.md](kg1-retest.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [early-attempts.md](early-attempts.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [third-retest-attempt.md](third-retest-attempt.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [late-resistance-fade.md](late-resistance-fade.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vwap-session.md](vwap-session.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vwap-anchored.md](vwap-anchored.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vwap-deviations.md](vwap-deviations.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [gex-regime.md](gex-regime.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [options-nodes.md](options-nodes.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [gex-flip.md](gex-flip.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [gex-walls-and-max-pain.md](gex-walls-and-max-pain.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [max-pain.md](max-pain.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [volatility-trigger.md](volatility-trigger.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vol-gex.md](vol-gex.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [hedging-pressure.md](hedging-pressure.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [kg1-level.md](kg1-level.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vix-context.md](vix-context.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [expected-daily-move.md](expected-daily-move.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [volatility-curve.md](volatility-curve.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [vvix-context.md](vvix-context.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [opening-range-midpoint.md](opening-range-midpoint.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [confirmed-swing-midpoint.md](confirmed-swing-midpoint.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [relative-volume.md](relative-volume.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [equal-high-low-objectives.md](equal-high-low-objectives.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [footprint.md](footprint.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [asia-range-risk-context.md](asia-range-risk-context.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [directional-bias.md](directional-bias.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [model-definition.md](model-definition.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [thesis-lifecycle.md](thesis-lifecycle.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [structural-risk.md](structural-risk.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [position-sizing.md](position-sizing.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [trade-objective.md](trade-objective.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [position-management.md](position-management.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [protected-high-low.md](protected-high-low.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [reentry.md](reentry.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [daily-loss-limit.md](daily-loss-limit.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [process-journal.md](process-journal.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [correlated-object-first-use.md](correlated-object-first-use.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [research-cohort.md](research-cohort.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [touch-grader.md](touch-grader.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [order-lifecycle.md](order-lifecycle.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [fill-model.md](fill-model.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [cost-model.md](cost-model.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [outcome-metrics.md](outcome-metrics.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [loss-streak-validation.md](loss-streak-validation.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [asymmetric-risk-state.md](asymmetric-risk-state.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [evaluation-risk-scenarios.md](evaluation-risk-scenarios.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [macro-indicators.md](macro-indicators.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [macro-cycle.md](macro-cycle.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [c-score.md](c-score.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [standardized-deviation.md](standardized-deviation.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [trend-strength.md](trend-strength.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [economic-release-vintage.md](economic-release-vintage.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [order-participation-events.md](order-participation-events.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [response-efficiency.md](response-efficiency.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [auction-state.md](auction-state.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+- 2026-09-11 · [auction-state-transition.md](auction-state-transition.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.

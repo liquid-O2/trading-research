@@ -1,19 +1,21 @@
-# Protected high / low
+# Confirmed protected high or low
 
-## Definition
-A swing the market has already defended once `[ANAT p.3]`. Ethos forms it from delta: buying aggression clearly outweighs selling at the recent low, price forms a small balance and escapes it, and once that low is confirmed and price stops coming back to test it, it is a protected low; partials go below the sellers who defended it, the stop trails behind each new protected level `[RD p.4–5]`. The mirror on the short side: once price takes out the first swing low with enough aggression to close below it, that high becomes a protected high `[K18 p.8]`, a level defended by real covering `[K18 p.12]`. Ids `lvl.protected.high`, `lvl.protected.low`.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Protected low, partial below the defenders, only confirmed lows `[RD p.4]` (drawn as a small band around the sellers' delta cluster at the swing low with the stop just below it; the delta print on p.7 is a red box, an area); trailing protected low after protected low; a break of the highest-delta protected low = traversing `[RD p.5]`; protected highs and trailing convexity `[K18 p.8–9, p.14]`; covering vs dealer hedging `[K18 p.12]`; glossary and checklist `[ANAT p.3, p.10]`; stop trailed to the most recent protected low `[K2345 p.7]`.
+Protected structure follows demonstrated control. In the K18 short, the prior low must break and close with real aggression before the intervening high is treated as protected for trailing. The low-side lesson similarly links protection to defended control and reward. [K18] pp.8–14; [RD] pp.4–7.
 
-## Faithful object
-`lvl.protected.low`: a confirmed 5-bar fractal low on 1-minute NQ bars whose per-price delta at the swing (`value.delta.rth.trade` bins within 2 ticks) is ≥ q75 of the session's positive per-price delta (q75, the 5-bar fractal and the 5-bar quiet window are named; the source prints no numbers), followed by a 1-minute close above the prior swing high (escape) with no `t2` touch of the low in the next 5 bars; `known_at` = the escape close; protection ends at `b.c1` through the low. `lvl.protected.high` is the mirror. `[unmeasured]` (delta condition); the bar-only version (fractal + escape, no delta) is a named row.
+**Not a standalone trade.** An unconfirmed wick or final-AM extreme is not a protected stop reference. The high-side mirror must be bound to actual source evidence.
 
-## Upgrades
-- Fractal 3 / 7; delta quantile q50 / q90; escape by `b.c5`; delta-free row.
+**Record before use.** Control band, pivot/extreme price time, confirming break/close and aggression time, protected_known_at, side and later stop action.
 
-## Outcomes
-- Break rate and time-to-break; MFE from formation to break (points); count of protected levels per trend leg; share of breaks that traverse the full range (RD's "traversing to the stop").
+**Phase 1 observation.** The stop action must follow confirmation, not merely the earlier pivot bar. Keep structure formation, confirmation and management timestamps separate.
 
-## Links
-[value-and-profiles](value-and-profiles.md) · [dealing-range](dealing-range.md) · [delta-spike](delta-spike.md) · [sweep-cisd-blocks](sweep-cisd-blocks.md)
+**Existing attachments.** [formulas_flow.r_f10_protected_low](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F10 and R-S01/S05/S07. High-side symmetry and event-time confirmation are incomplete. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Signed volume-by-price profile](weekly-delta-profile.md) · [Entry-side structural invalidation](structural-risk.md) · [Source-selected position management](position-management.md) · [Price-defined microbalance continuation](microbalance.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[RD]: </workspace/sources/documents/discretionary/reading-delta.pdf>
+[K18]: </workspace/sources/documents/discretionary/18k-payout-session.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

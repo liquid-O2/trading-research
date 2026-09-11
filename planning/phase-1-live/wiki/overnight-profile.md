@@ -1,23 +1,21 @@
-# Overnight profile and inventory
+# Overnight volume structure
 
-## Definition
-The volume profile of 18:00–09:30 ET (`value.vp.on`): its shape (one distribution vs double distribution), the low-volume node between the two humps, the overnight shelf, and ONVAH / ONVAL / ONVPOC; plus the net overnight inventory, whether aggressive buying or selling dominated the window `[MAMT p.14]`. Ethos reads the LVN or shelf as the decision point at the open: respected if the open continues the overnight direction, disrespected if not; a shelf held keeps price inside the overnight range, a shelf broken with real aggression sends price to the overnight extreme `[MAMT p.14]`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Overnight inventory 6 pm–9:30, net long / short carries into the open; single vs double distribution; LVN respected / disrespected; shelf hold vs break `[MAMT p.14]`; checklist rows `[MAMT p.26]`.
-- ES touch rows ONVAH 74–79%, ONVAL 69–75%, ONVPOC 86–90% `[MAMT p.21]`.
-- Overnight VP shape as a balance metric for the 6–9 box already sits on [range-path-class](range-path-class.md); this page is the full 18:00–09:30 profile.
+The overnight profile describes accepted volume, bridge LVNs, shelves and POC before the cash open. Sires then reads whether the opening auction holds or aggressively breaks the relevant shelf. [MAMT] pp.14–16; [TBR] pp.16–24.
 
-## Faithful object
-`value.vp.on`: trade-level profile 18:00–09:29:59, 1-tick bins, POC, VA 70% expanded from POC; double distribution = two local maxima each ≥ 1.5× the median bin separated by a bin ≤ 0.5× the median, else single (named approximation using the [value-and-profiles](value-and-profiles.md) thresholds); the ON LVN is the band of bridge bins ≤ 0.5× the median (the p.14 drawing boxes the whole low-volume stretch between the humps; the minimum-volume price is the line variant); the ON shelf = the ledge band at the edge of the hump nearest the open (the p.14 box at the upper hump's edge; the VA edge is a named alternative); `poc_alignment` = the developing RTH POC inside the LVN band (drawn on p.14, not defined); inventory sign = sign of Σ(aggressive buy − aggressive sell) over the window (`[unmeasured]` tape object; bar proxy `flow.cvd.ohlc` named). `known_at` 09:30.
+**Not a standalone trade.** A final-RTH POC cannot be part of the preopen overnight read. An overnight shelf is not a fixed buy/sell level without current confirmation.
 
-## Upgrades
-- OHLC-1m profile; VA 68 / 40; 4-tick bins; window 20:00–09:30.
-- Respected = 1-minute closes stay on the inventory side of the LVN for `h=30` after 09:30; disrespected = `b.c1` through it.
+**Record before use.** Overnight window/source identity, H/L/POC/VA, bridge and shelf bands, signed inventory evidence, complete profile known_at and opening location.
 
-## Outcomes
-- Shape shares; ONVAH / ONVAL / ONVPOC touch rates (MAMT p.21 recompute); LVN respected rate; open direction and path class conditional on inventory sign.
-- Faithful disagreements: sessions whose shape label differs between trade-level and OHLC profiles.
+**Phase 1 observation.** Preserve the profile shown by the source. Do not change an older POC aligned with an overnight LVN into a developing RTH POC chosen after the fact.
 
-## Links
-[overnight-range](overnight-range.md) · [value-and-profiles](value-and-profiles.md) · [range-path-class](range-path-class.md) · [cvd-variants](cvd-variants.md)
+**Existing attachments.** [family_open.value_area](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); family_value; [FORMULAS] R-A12/A13, R-J06 and P3-04. Exact source band selection and some POC-alignment joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Overnight directional inventory](overnight-inventory.md) · [Overnight high, low and width](overnight-range.md) · [ETH profile identity](prior-eth-profile.md) · [MPOC: the profile midpoint](mpoc.md) · [Opening location and participation](open-location-switch.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[MAMT]: </workspace/sources/documents/discretionary/mastering-amt-vp.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

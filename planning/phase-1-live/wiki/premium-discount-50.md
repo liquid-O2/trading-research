@@ -1,19 +1,22 @@
-# Premium / discount 50% split
+# Premium / discount within a selected range
 
-## Definition
-In an up-move, above 50% of the range is premium and below is discount; Green Bird wants shorts from premium and longs from discount when bias agrees, with the golden pocket sitting on the 50–61.8 band `[GB L144, L292–296]`; "mark off the 50% and there is your discount zone" `[GB L74]`. Jumbo's PD RTH Range+ added a dynamic premium and discount box in 2025 `[XF p.44]`, which the 2026 record downgrades to optional paint: location vs prior-day value is the part that keeps showing up `[FIND p.5, p.11]` `[PACK L90]`. Id `loc.pd50`, a location flag only, the 50% sibling of `loc.gp` on [session-fail-boxes](session-fail-boxes.md).
+Object in [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) · [Green Bird — directional scalps](method-green-bird-directional-scalps.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Premium / discount definition and use `[GB L144, L292–296]`; 50% as the discount zone `[GB L74–76]`; PD RTH Range+ dynamic premium & discount box `[XF p.44]`; downgrade of the painted box as a standalone signal `[FIND p.11]` `[PACK L90]`.
+Premium and discount describe position within a declared price range or value context. Green Bird's smaller directional longs buy pullbacks into discount; Sires's sources also discuss auction/value location. These references require the particular source's range identity. [GB] pp.35, 40; [TPO] pp.4, 9; [VWAP] pp.3–6.
 
-## Faithful object
-`loc.pd50`: the 50% level of the last completed impulse (same impulse rule as `loc.gp`: from the last fail-event extreme to the subsequent extreme), with NYAM-height and 6–9-height as named impulse sources; side flag premium / discount for any event price; `known_at` = impulse completion. The prior-RTH 50% is `lvl.prior-rth.q50` on [prior-rth-quadrants](prior-rth-quadrants.md), cross-referenced, not duplicated.
+**Not a standalone trade.** Being below a midpoint is not a buy rule, and VWAP-relative discount is not necessarily the same object as a 50% high-low split.
 
-## Upgrades
-- Impulse source; dynamic box refreshed on each new swing (the PD RTH Range+ reading).
+**Record before use.** Parent impulse/range/profile, low/high or source value reference, midpoint when applicable, direction, known_at and current location.
 
-## Outcomes
-- Share of fail events (`fail.<box>.gb.c5`) whose extreme sits in premium vs discount relative to the stated bias; reject at the 50% line under the grid.
+**Phase 1 observation.** For a literal price-range split, midpoint=(H+L)/2. Retain the source's alternative value/VWAP meaning explicitly; never use a completed-day range to qualify an earlier pullback.
 
-## Links
-[session-fail-boxes](session-fail-boxes.md) · [prior-rth-quadrants](prior-rth-quadrants.md) · [tbr-6-9-range](tbr-6-9-range.md)
+**Existing attachments.** formulas and sessions supply midpoint geometry; [FORMULAS] R-G10, R-A01/A16 and R-F01/F03. The directional-scalp impulse and complete trigger are unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Measured 50–61.8% retracement](golden-pocket.md) · [Source-selected dealing range](dealing-range.md) · [Profile value area](value-area.md) · [Session VWAP](vwap-session.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
+[TPO]: </workspace/sources/documents/discretionary/tpo-lesson-3.pdf>
+[VWAP]: </workspace/sources/documents/discretionary/vwap-lesson-10.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

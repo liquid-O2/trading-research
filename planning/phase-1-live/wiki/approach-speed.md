@@ -1,19 +1,23 @@
-# Approach speed (how price arrives at the extreme)
+# How price arrives at the area
 
-## Definition
-The first read at an extreme is how price got there: an aggressive move, buyers pushing in hard and fast, signals that side wants higher prices and is likely to defend the balance; a slow, grinding move into the same extreme signals no real interest, which hands the opposition an opening `[WIC p.4]`. The refill research lists approach speed and delta into the touch among the flow features `[REF p.8]`; a move losing aggression candle by candle into resistance is the tell for a fade `[NYAM p.10]`. Id `flow.approach.speed`.
+Object in [Saint — AMT on live markets](method-saint-amt.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Sires × TeamVOT — The Refill Effect](method-refill-effect.md).
 
-## Citations
-- Aggressive vs slow arrival `[WIC p.4, p.11]`; flow-and-state features `[REF p.8]`; losing steam into resistance `[NYAM p.10]`; entering at the touch is early `[STOP p.7]`.
+Saint reads aggressive arrival versus drift and whether that effort produces acceptance or rejection at the HTF extreme. Sires also interprets pace at the planned reaction band. [WIC] pp.4–6; [AMTL] pp.5–10; [DOM5] pp.3–7. The Refill study separately lists approach speed among pre-touch flow/state features. [REF] p.8.
 
-## Faithful object
-`flow.approach.speed`: over the 5 minutes before first touch of a level: net displacement toward the level in ticks per minute (bars) and aggressive volume toward the level per minute (MBP-1) with its slope over the five 1-minute bins; class = aggressive if displacement ≥ q75 of the session's approach speeds so far and the volume slope ≥ 0, drift if ≤ q25 or the slope < 0 (the 5-minute window and q75 / q25 are named; the source prints no numbers). The bar-only row (displacement only) is named. `[unmeasured]` for the volume term.
+**Not a standalone trade.** Arrival style is context/control evidence, not an automatic direction or a complete entry.
 
-## Upgrades
-- Window 3 / 10 min; normalization by `vol.rv20` tercile; quantiles fixed on F.
+**Record before use.** Premarked area, approach start/end, elapsed price path, executed participation/pace, side, source qualitative class and known_at.
 
-## Outcomes
-- Reject rate at the extreme by class (the WIC claim); break rate by class; interaction with `flow.absorption.A` at the touch.
+**Phase 1 observation.** Keep approach observations before the test and interpret them with the subsequent local response. A qualitative source annotation may be retained; an exact automatic class remains unknown without a declared detector.
 
-## Links
-[dealing-range](dealing-range.md) · [refill-zone](refill-zone.md) · [tape-speed](tape-speed.md) · [touch-reject-hold-break-grid](touch-reject-hold-break-grid.md)
+**Existing attachments.** [formulas_flow.r_f12_arrival](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F12. Current session-median trade size or maximum price is not local arrival speed; exact class thresholds are unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Speed of tape](tape-speed.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Aggressive effort versus price-response efficiency](response-efficiency.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[DOM5]: </workspace/sources/documents/discretionary/dom-lesson-5.pdf>
+[REF]: </workspace/sources/documents/discretionary/refill-effect.pdf>
+[AMTL]: </workspace/sources/documents/discretionary/amt-on-live-markets.pdf>
+[WIC]: </workspace/sources/documents/discretionary/whos-in-control.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

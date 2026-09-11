@@ -1,19 +1,20 @@
-# AMD phase labels (accumulation, manipulation, distribution)
+# Accumulation, manipulation and distribution phases
 
-## Definition
-A per-session relabel of the path objects, no new geometry. Jumbo describes the range as order accumulation, the false breakout or Judas swing as the move that hits trapped stops, and the distribution to post-breakout targets `[TBR p.6]`, and frames 09:00–12:00 as a 3-hour "PO3" candle `[TBR p.16, p.19]`; Green Bird's 9:30 manipulation is the sweep below the open before the reclaim `[GB L30, L90]`; "walking the dog" is the manipulation of the box, then the real move `[FIND p.11]` `[XF p.31]`. No source draws an AMD price box; the excursion envelope is on [manipulation-distribution-envelope](manipulation-distribution-envelope.md). Ids `phase.amd.acc`, `phase.amd.manip`, `phase.amd.dist`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md).
 
-## Citations
-- Accumulation / false breakout / distribution language `[TBR p.6]`; PO3 framing of the 3-hour window `[TBR p.16, p.19]`; 9:30 manipulation `[GB L30, L90]`; walking the dog `[FIND p.11]` `[XF p.31]`; manipulation and distribution as excursions from the open `[PINE Statistical OHLC Projections HTF.txt:322–326]`.
+The range narrative can describe formation/balance, a sweep or misleading opening move, and subsequent directional distribution. Its role is to explain the observed path within the TBR cases. [TBR] pp.6–15.
 
-## Faithful object
-Per session on `range.6-9.published`: `phase.amd.acc` = the build window 06:00–09:00; `phase.amd.manip` = the first excursion beyond an edge after 09:30 that is followed by a 1-minute close back through EQ (identical to `judas.depth.any` on [range-path-class](range-path-class.md)), with its end time and depth in R; `phase.amd.dist` = the subsequent leg to the projection or the opposite edge. Single-break sessions: `manip` = the adverse excursion from the 09:30 open before the break leg (the Pine manipulation measure), `dist` = the break leg. Sessions with no manipulation leg stay unlabelled.
+**Not a standalone trade.** A retrospective phase name is not another system and does not determine direction before the actual failure or continuation evidence.
 
-## Upgrades
-- Window 09:00–12:00 (PO3) vs 09:30–12:00; London analog on `range.london.00-03` with the 03:00 open.
+**Record before use.** Parent range, branch, phase description, observed transition keys and whether the label was contemporaneous or retrospective.
 
-## Outcomes
-- Manipulation end-time histogram (5-minute bins, 09:40–09:50 share); depth distribution; share of sessions with no manipulation leg; agreement with `label.amt.open.30m` rejection-reverse on [tpo-ib-auction](tpo-ib-auction.md).
+**Phase 1 observation.** Keep descriptive phase labels separate from the ordered entry predicate. A label inferred from the finished morning cannot become opening context.
 
-## Links
-[range-path-class](range-path-class.md) · [manipulation-distribution-envelope](manipulation-distribution-envelope.md) · [tbr-6-9-range](tbr-6-9-range.md) · [session-fail-boxes](session-fail-boxes.md)
+**Existing attachments.** family_path and [FORMULAS] R-J01–J05 hold related range/path ingredients. A uniquely disclosed universal phase detector is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Retrospective range path](range-path-class.md) · [Jumbo reversal and action windows](reversal-time-window.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

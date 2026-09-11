@@ -1,19 +1,22 @@
 # Speed of tape
 
-## Definition
-How fast prints are hitting: a tape that rips at a level is urgency arriving, a tape that freezes is hesitation or a big passive order soaking everything up; fast tape into a level that still holds is absorption worth trading, and if it breaks the speed carries the continuation `[DOM5 p.6]`. It spikes when a squeeze releases and dies when one fails passively `[OFM p.2, p.5, p.14]`; a jump in speed at a level says the level is being contested `[ANAT p.3]`. Ethos reads only CVD and speed of tape as indicators `[NYAM p.3]` `[K18 p.3]`. Id `flow.tape.speed`.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Sires × TeamVOT — The Refill Effect](method-refill-effect.md) · [jetbundle — participation and auction states](method-jetbundle-auction-states.md).
 
-## Citations
-- Speed of tape and the spread `[DOM5 p.6]`; squeeze release / passive failure `[OFM p.2, p.5, p.14]`; contested level `[ANAT p.3]`; the read stack `[NYAM p.3]` `[K18 p.3, p.8]`.
+Pace distinguishes urgent initiative, slowing aggression and a dying tape. The passive OFM variant specifically describes failure without aggressive orders as tape speed dies. Charts label a panel Speed of Tape (10), but its unit/reset is not published. [DOM5] pp.3–7; [OFM] pp.7, 14; [BIG] pp.3–5.
 
-## Faithful object
-`flow.tape.speed`: NQ trade events per second and lots per second from MBP-1, rolling 5-second and 30-second windows; spike = window rate ≥ q90 of the session so far, death = ≤ q10 (the windows and q90 / q10 are named; the source prints no numbers — every DeepCharts screenshot labels the panel "Speed of Tape (10)" `[BIG p.3]` `[OFM p.7]` and the unit of the 10 is not stated, so a 10-unit window is a named variant); sampled at first touch of a level and over the 60 seconds after a `b.c1` break. `[unmeasured]` tape object.
+**Not a standalone trade.** Fast or slow tape is not an independent entry. Ten is not automatically ten seconds.
 
-## Upgrades
-- Windows 1 / 10 / 60 s; per-side rate; normalized by the time-of-day median across the prior 20 sessions.
+**Record before use.** Executed event times/ordinals, instrument, source panel/settings, pace definition/window, level association and known_at.
 
-## Outcomes
-- Hold vs break at a level given a fast arrival vs a slow one; release detection agreement with the OFM stages on [ofm-catalyst](ofm-catalyst.md); speed after breaks that hold vs fail back.
+**Phase 1 observation.** A prints-per-second variant may be measured as named, but cannot impersonate the source panel. Use local pre-decision pace, not the day's later maximum.
 
-## Links
-[spread-width](spread-width.md) · [approach-speed](approach-speed.md) · [ofm-catalyst](ofm-catalyst.md) · [absorption-and-big-trades](absorption-and-big-trades.md)
+**Existing attachments.** [formulas_flow.tape_speed_pps](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) and flow ingredients; [FORMULAS] R-F12/F15/F18/P3-08. The source panel's exact construction is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [How price arrives at the area](approach-speed.md) · [Aggressor print-size thinning](digit-thinning.md) · [Passive Origin-of-the-Move variant](ofm-passive-branch.md) · [Clean squeeze continuation](clean-squeeze.md) · [Conditioned next-state transition](auction-state-transition.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[DOM5]: </workspace/sources/documents/discretionary/dom-lesson-5.pdf>
+[BIG]: </workspace/sources/documents/discretionary/only-trade-big-trades.pdf>
+[OFM]: </workspace/sources/documents/discretionary/origin-of-the-move.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

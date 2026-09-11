@@ -1,21 +1,21 @@
-# Reward system (3-tick confirmation after absorption)
+# Price reward near the absorption origin
 
-## Definition
-The confirmation Ethos requires after an absorption print before it counts: price moves in your direction within three ticks of the absorption, with the time and sales or speed of tape showing the opposing side not being refreshed; without it roughly 27% of absorptions fail `[ABS p.3–4]` `[AVG p.24]`. Enter on the test of the reward system, not on the wall itself `[ABS p.9]`. The STOP version: effort is what the losing side shows, reward is what the winning side gets; two upticks minimum, two to four, and an entry six to eight ticks late means probably no reward system `[STOP p.7, p.12–13]`. Id `flow.reward.3tick`.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- 27% failure without a reward system; the three-tick rule read on time and sales, speed of tape or CVD `[ABS p.3–5, p.13]`; the retest of the reward system as the entry `[ABS p.9]`; reward vs result, 18-tick median dip `[STOP p.7]`; upticks 2–4, entry within a tick or two `[STOP p.12, p.14]`; delayed reward `[STOP p.13]`; 3-tick aggression toward the absorbed side or fails 27% `[AVG p.24, p.28–29]`.
-- The 27% figure is the presenter's own record, not an audited statistic `[ABS p.14]` `[STOP p.16]`.
-- Drawn: the passive wall is a horizontal band and the reward-system retest returns into that band; the CVD median is a straight line on the CVD panel `[ABS p.4, p.9]` (figures); the two entry clips that define the digit read are ES (MotiveWave EPZ25) `[STOP p.11–13]`, the walkthrough is NQ 40-range `[STOP p.8]`.
+The strict absorption reversal asks for the new controlling side to gain actual price reward near the original defense before a defended retest. The source discusses a three-tick neighborhood; the later four-stage clip illustrates 2–4 ticks of lift-off and entry within 1–2 ticks of confirmation. [ABS] pp.8–13; [STOP] pp.10–14.
 
-## Faithful object
-`flow.reward.3tick`: after a `flow.absorption.A` event at price P with absorbed side A, reward = the first ≥ 3-tick displacement against A that starts within 3 ticks of P, within 5 minutes (named), while A's aggressive prints in that span are smaller than in the absorption window (no refresh; see [digit-thinning](digit-thinning.md)); late reward = a qualifying displacement that starts 6–8 ticks from P, counted as none. `[unmeasured]` tape object.
+**Not a standalone trade.** Failed opposing effort without reward does not pass the strict reversal branch. That does not add a reward requirement to the separate long-gamma balance-fade branch.
 
-## Upgrades
-- 2 / 4 ticks; window 2 / 10 min; uptick count 2–4 (STOP) instead of tick distance; CVD-median side as a named add once CVD is rebuilt ([cvd-variants](cvd-variants.md)).
+**Record before use.** Actual defense origin/band, rewarded side, reward price/displacement, source distance convention, event times, subsequent retest and entry distance.
 
-## Outcomes
-- Share of absorption events with a reward (recompute of the 27% claim as its complement); reversal ≥ 0.25·R given reward vs none; late-reward outcome row.
+**Phase 1 observation.** Keep tick distance distinct from number of events or elapsed time. Do not convert three-tick replenishment into a three-event horizon, and do not borrow one clip's digits across instruments.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [digit-thinning](digit-thinning.md) · [delta-spike](delta-spike.md) · [tape-speed](tape-speed.md)
+**Existing attachments.** [formulas_flow.reward_3tick/r_f08_abs_four_check/liftoff_upticks](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F08/F09. The first AM trade is not the source origin; exact reward window/reference remains partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Four-check absorption reversal](absorption-reward-retest.md) · [Defense, replenishment, exhaustion and lift-off](stop-four-stage.md) · [Absorber becomes aggressive and price lifts off](lift-off.md) · [Aggressor print-size thinning](digit-thinning.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[ABS]: </workspace/sources/documents/discretionary/your-mistakes-with-absorption.pdf>
+[STOP]: </workspace/sources/documents/discretionary/stop-re-entering.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

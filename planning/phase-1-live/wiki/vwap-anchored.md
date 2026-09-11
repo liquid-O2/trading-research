@@ -1,20 +1,20 @@
 # Anchored VWAP
 
-## Definition
-A VWAP started at a moment that mattered rather than at the session start: from a major swing high or low (the average price of everyone who traded since the turn), from an event (CPI, FOMC, an earnings gap, the session open), or from weekly and monthly anchors; when session, weekly and an anchored VWAP converge, that is a heavyweight level `[VWAP p.7]`. The session VWAP and its bands stay on [value-and-profiles](value-and-profiles.md) (`env.vwap.rth.sd*`). Ids `env.vwap.anchored.{swing,event,session,weekly,monthly}`.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Anchor to the swing, anchor to the event, multiple timeframes, convergence `[VWAP p.7]`; VWAP median as the POC of the session so far; bands as premium / discount extremes `[VWAP p.3–4]`; a bulk of balance with VWAP's median through it as context `[BIG p.10]`; longs back toward the session's VWAP after a close above the balance `[CONT p.5]`.
-- Event timestamps from the normalized event and release calendars `[INV L552–555, L580, L601–604]`.
+The lesson anchors VWAP to a relevant swing, event or weekly/monthly context and uses it as confluence with the current auction read. The anchor must be meaningful before the trade. [VWAP] pp.7–8.
 
-## Faithful object
-`env.vwap.anchored.swing`: trade-price VWAP from the last confirmed 5-bar fractal swing high (for a falling anchor) or low on 5-minute NQ bars, `known_at` = confirmation bar; `.event` from the timestamp of the last scheduled CPI / FOMC / NFP release; `.session` = the exchange session from 18:00 ET (the lesson's "Session" anchor, `env.vwap.eth`; the 09:30 cash open is the `.event` session-open anchor and `env.vwap.rth` the named RTH row); `.weekly` from Sunday 18:00; `.monthly` from the first session's 18:00. Convergence flag = ≥ 2 anchored VWAPs within `tR`.
+**Not a standalone trade.** An anchor selected after seeing the best reaction is not contemporaneous evidence. Anchored VWAP is not another complete system.
 
-## Upgrades
-- HLC3 × bar-volume proxy; ±1 / 2 SD bands on each anchor; anchor at the 6–9 open or the 03:00 London analog.
+**Record before use.** Anchor event/swing ID, price/time and confirmation known_at, instrument, weighting/reset convention, as_of value and source reason.
 
-## Outcomes
-- Grid at each anchored VWAP; reject rate at convergences vs single anchors; coincidence with `value.kz` ledges and prior VA edges.
+**Phase 1 observation.** Distinguish the swing's price time from when that swing became confirmed. Do not backdate a future-confirmed anchor or treat every weekly/monthly reset as the same object.
 
-## Links
-[value-and-profiles](value-and-profiles.md) · [dealing-range](dealing-range.md) · [absorption-and-big-trades](absorption-and-big-trades.md)
+**Existing attachments.** [formulas_flow.running_vwap](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) provides cumulative ingredients; [FORMULAS] R-F03/P3-02. Source event/swing anchors and confirmation-time joins are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Session VWAP](vwap-session.md) · [VWAP deviation bands](vwap-deviations.md) · [Thesis, validity band and death condition](thesis-lifecycle.md) · [Prior defended reaction area](prior-reaction-area.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[VWAP]: </workspace/sources/documents/discretionary/vwap-lesson-10.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

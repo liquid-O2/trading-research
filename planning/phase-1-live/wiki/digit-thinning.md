@@ -1,19 +1,21 @@
-# Digit thinning (print-size read)
+# Aggressor print-size thinning
 
-## Definition
-The tape-level read of exhaustion: sellers refreshing from two- and three-digit sizes down to singles are thinning, weakness; buyers stepping from two and three digits to four and five are building effort `[AVG p.26]`; triple digits is conviction, a single digit where doubles were is weakness `[STOP p.3]`; doubles and triples where your side acts, singles where the losers used to be `[STOP p.9, p.12]`. The refresh version: a level backed by real size refreshes at a steady size, one that thins with each refresh precedes the level giving way `[K18 p.11]`. Id `flow.digits.thinning`.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Digit read `[STOP p.3]`; thicken and thin `[STOP p.9]`; stage 3 exhaustion, aggressor prints shrinking `[STOP p.10, p.14]`; the correct entry's print sequence `[STOP p.12]`; location → pacing → digits `[AVG p.25–26]`; refresh consistency `[K18 p.11]`.
+The execution clips read the opposing side's prints shrinking while the absorbing side begins to act. Literal digit classes differ across the ES clip and the coaching example; they are not global NQ size thresholds. [STOP] pp.10–14; [AVG] pp.25–26.
 
-## Faithful object
-`flow.digits.thinning`: at a level touch, for each aggressor side, the share of prints ≥ 10 lots (2-digit) and ≥ 100 lots (3-digit; Jumbo's NY threshold) over the last 20 prints, compared with the same shares over the 20 prints before the touch; thinning of side A = its ≥ 2-digit share falls by ≥ 0.25 while side B's rises by ≥ 0.25 (named thresholds). The digit classes are literal on the ES tape of the STOP clips (MotiveWave EPZ25, `[STOP p.11–13]`); on NQ, where the MBP-1 print-size q99 is 7 lots, session-quantile classes (q50 / q90 / q99 of print size) are the named NQ reading beside the literal 10 / 100. Refresh-consistency row: successive at-touch BBO replacement sizes (MBP-1) with a declining trend over ≥ 3 hits. `[unmeasured]` tape object.
+**Not a standalone trade.** Smaller prints alone do not confirm lift-off or a safe re-entry. The level, actual result and delta checks still apply.
 
-## Upgrades
-- Print window 10 / 50; class cutoffs 5 / 50; per-second rather than per-print windows.
+**Record before use.** Instrument, aggressor side, local sequence of sizes, source digit grouping, thinning start/end, opposite participation and known_at.
 
-## Outcomes
-- Reversal ≥ 0.25·R given thinning of the aggressor vs none; agreement with the four absorption stages on [reward-system-3tick](reward-system-3tick.md); refresh-thinning before breaks.
+**Phase 1 observation.** Require the relevant opposing sequence at the same band. Do not infer universal 10/100-lot NQ cutoffs or substitute a whole-session percentile for the illustrated clip.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [reward-system-3tick](reward-system-3tick.md) · [tape-speed](tape-speed.md)
+**Existing attachments.** [formulas_flow.digits_thinning](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F09/P3-08. Source-local grouping, side alignment and full stage sequence are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Defense, replenishment, exhaustion and lift-off](stop-four-stage.md) · [Absorber becomes aggressive and price lifts off](lift-off.md) · [Speed of tape](tape-speed.md) · [Executed aggressor-side trades](aggressor-trades.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[STOP]: </workspace/sources/documents/discretionary/stop-re-entering.pdf>
+[AVG]: </workspace/sources/documents/discretionary/average-unprofitable-trader.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

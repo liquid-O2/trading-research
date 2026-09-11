@@ -1,20 +1,21 @@
-# Absorption candle (Jumbo Absorption Zone+)
+# Jumbo Absorption Zone+ candle
 
-## Definition
-Jumbo's bar-level absorption object: a small-body candle with high volume at a key level, read as large players absorbing opposing pressure before a move `[TBR p.31]`; the indicator flags candles whose volume exceeds a "Volume Multiplier" times a 14-period volume average `[TBR p.35]`, colours them bullish / bearish, isolates them, and marks imbalances inside the absorption candle `[XF p.44]`, which he has used as the entry signal `[XF p.45]`. Id `flow.absorption.candle.jumbo`. It is a bar object, distinct from `flow.absorption.A` / `B` on [absorption-and-big-trades](absorption-and-big-trades.md) and from BigTrades bubbles `[XF p.25]`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md).
 
-## Citations
-- Concept and the small-body / high-volume signature `[TBR p.31]`; multiplier against a 14-period average, first-presented FVG display in the same settings `[TBR p.35]`; update: bull / bear colouring, isolation, absorption imbalances, MTF imbalance selection `[XF p.44]`; "used the imbalance in the absorption candle" `[XF p.45]`; absorption at the key levels of the 6–9 `[XF p.27]`; absorption zone at the reversal `[XF p.46]`; stack description `[FIND p.9, p.12]`.
-- The multiplier value, the body ratio and the chart timeframe are not printed by any Jumbo source; they are source-unspecified. No Pine constant is borrowed for this Jumbo object (the MVFL 2.5 × SMA20 rule belongs to a different, tier-2 indicator and is not his).
+The source settings display body threshold 0.6, volume multiplier 1.5 and a 14-period volume average. The small-body/high-volume candle is one confirmation aid at a framework location. [TBR] pp.31, 35; [JR] pp.14, 67–69.
 
-## Faithful object
-`flow.absorption.candle.jumbo`: on 3-minute NQ bars (the entry-model timeframes 2 / 3 / 5 m `[TBR p.27]` are named for the candle; the indicator's own timeframe is not printed), body / range ≤ 0.3 (named) and volume ≥ k × trailing SMA14(volume) `[TBR p.35]`, k ∈ {1.5, 2.0, 2.5} as named rows (k is not printed); located within `tR` of a 6–9 level; bullish / bearish by close vs open; isolation = no other flagged candle within 5 bars (named). Imbalance-inside-candle = a diagonal footprint imbalance (`flow.footprint.diag.4x`) inside that candle, a tape add.
+**Not a standalone trade.** This is a candle feature, not proof of passive replenishment or an independent reversal system. The same word absorption does not make it the DOM four-check sequence.
 
-## Upgrades
-- Timeframe; body ratio; k; isolation window; at any level from the clock grid or `value.kz`.
+**Record before use.** Bar identity/timeframe, body/range ratio, volume, trailing reference average and its reset, source settings/version, known_at and location.
 
-## Outcomes
-- Reject rate at a level given a flagged candle vs none; overlap with `flow.absorption.A` events (must not be identical); count per session.
+**Phase 1 observation.** Check the displayed source constants and completed bar before use. Keep exact inequality, warm-up and reset conventions explicit where unpublished; never use a centered future-volume average.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [tbr-6-9-range](tbr-6-9-range.md) · [fvg-body-gaps](fvg-body-gaps.md) · [footprint-imbalance-zones](footprint-imbalance-zones.md)
+**Existing attachments.** family_gap/family_levels; [FORMULAS] R-J14. Retained 0.3/2.5 constants do not match the printed settings; a reset that only starts at 09:30 can also delay availability. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Source execution bars](execution-bars.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Jumbo failure signatures and three attempts](jumbo-failure-attempts.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

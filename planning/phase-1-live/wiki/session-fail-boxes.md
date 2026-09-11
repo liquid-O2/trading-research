@@ -1,28 +1,20 @@
-# Session-fail boxes (sweep + fail-back labeler)
+# Green Bird's finished session references
 
-## Definition
-A session-fail event: price trades beyond a named box edge (sweep), then fails back inside under a named confirmation. It is the Green Bird primary play — failed breakout → short, failed breakdown → long `[GB L86–88, L109–117]` — and it is the same shape as Jumbo's Judas sweep at a range edge `[TBR p.8]`. Phase 1 uses it as a **labeler** placed beside Judas / single-break labels, on a fixed list of boxes, with the shared confirmation grid. Boxes are rails, not reversal zones `[BRIEF]`.
+Object in [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) · [Green Bird — VWAP continuation](method-green-bird-vwap-continuation.md) · [Green Bird — directional scalps](method-green-bird-directional-scalps.md).
 
-## Citations
-- GB objects (HIS WORDS / HIS CHART / INFERRED kept): NYAM 09:00–10:00, outcomes only after 10:00 `[GB L28–30, L178]`; previous completed hour `[GB L32–33]`; Asia ≈ 20:00–00:00 `[GB L35–38, L46]`; London ≈ 02:00–05:00, his levels, ICT clock `[GB L48, L53–54]`; TDO = first print at 00:00 ET, 5-minute close back through it as confirmation `[GB L24–26]`; NWOG = Friday close vs Sunday 18:00 open, destination / magnet not entry `[GB L59–60, L68–69]`; 9:30 cash-open manipulation, reclaim, longs `[GB L56–57, L90]`; golden pocket 50–61.8% of the completed impulse, location only `[GB L73–76]`; A+ = a sweep happened `[GB L93]`; sweep alone is not a signal `[GB L85]`; PDH / PDL confluence `[GB L64]`.
-- Not added: fleet / copy ops, 25-point partials `[GB L95]`, DLL psychology, SMT as a GB edge, ICT 7:30 true open `[GB L50]`, "above TDO = short" `[GB L51]`, wickless bottom as a model `[GB L158]`, CPI boxes as a family `[GB L177]` `[BRIEF]`.
-- Jumbo labels this shape as Judas / false breakout into projections with reversal 09:40–09:50 `[TBR p.6 L88, p.8 L124–142]`; "9:40 judas into the exhaustion range level" `[XF p.48 L648]`; "textbook longs after 9:40 to London/Asia highs" `[XF p.30 L395]`; leftover Asia / London highs as targets `[FIND p.5 L99–101]`.
-- Pine tier-2 sweep tables to recompute: hourly sweep of prior-hour H/L by NY hour, conditioned on open vs prior open (e.g. hour 9, open above: high sweep 81.9%, low sweep 56.8%, both 41.2%, n=1552; retrace-to-swept-level ≈ 90–95%) `[PINE NQ Hourly Retracements 12y Stats with Levels.txt:185–313]`; magic-hour break → mid target win rates `[PINE magic_hours:55–103]`; raids ≥ 5 pts with 120-min close-back `[PINE Session Raid Stats.txt]`; London 25%-body level wick-and-close-back counters `[PINE Session Range Candles + 25% Level.txt:930–953]`; HTF candle sweep + close-back definitions `[PINE HTF Sweep Model with CISD Table.txt:136–142; Sweep, CISD, MTF FVG & Key Levels.txt:1106,1148]`.
+NYAM is the completed 09:00–10:00 box; the previous-hour trade uses the completed hour. Asia is drawn approximately 20:00–00:00, while exact London bounds are not published. Those session highs/lows also frame the separately stated VWAP continuation. [GB] pp.23, 27, 30–35, 38–40.
 
-## Faithful object
-Box list (all NQ, ET): `box.6-9` (Jumbo), `box.gb.nyam` (09:00–10:00, outcomes from 10:00), `box.gb.10-11`, `box.gb.hour` (last completed hour), `box.gb.asia` (20:00–00:00), `box.gb.london` (02:00–05:00), `box.jumbo.london` (00:00–03:00, separate row), `box.prior-rth` (PDH / PDL), `lvl.tdo` (00:00 print), `lvl.nwog` (Friday close — the session's last 1-minute close before 17:00 — vs the Sunday 18:00 open, two lines `[GB L60, L69]`; the 15:59 RTH close and the 17:00 settlement are named endpoint variants, not the source's words), `lvl.0930open`.
-Event `fail.<box>.<grid>`: `b.wick` beyond an edge, then fail-back inside under `grid.gb.c5` (faithful GB) or `b.c1` (comparison), within `k=30`. `lvl.tdo` uses the GB 5-minute close-back only. Golden pocket `loc.gp` = the 50–61.8% band of the last completed impulse (swing from last fail event extreme to the subsequent extreme); emitted as a location flag on events, never as an event. `label.aplus` = a sweep of the traded box plus the failure back inside under `grid.gb.c5` was observed ("A+ | Sweep of the relevant range plus failure back inside" `[GB L242]`; `true` / `false` / `unknown` if coverage is insufficient); `label.aplus.sweep-only` = the sweep alone, the necessary condition he states ("No sweep = not A+" `[GB L93, L147]`), a named weaker variant. Depth `d` is a separate upgrade, not the A+ definition `[GB L93]`.
+**Not a standalone trade.** A box is a reference, not the failed-breakout system. A sweep while the box is still forming does not qualify as a sweep of its finished boundary.
 
-## Upgrades
-- Sweep depth `d` (2 ticks / 5 pts / 0.1·R); confirmation `b.c1` vs `b.c5` vs 15-minute hold inside; time cap `k`.
-- Invalidation read on bodies, not wicks: a 1m / 5m close beyond the sweep extreme instead of a tick through it ("The bodies tell the story. The wicks do the damage" `[GB L92, L622]`); the ticket stops the pack reads off his screenshots (~17 pts Asia, ~32–35 pts NYAM, ~49.75 pts above PDL, 19.25 pts on the hour short) are illustrative, "not a formula — structure" `[GB L356–358, L606, L687]`.
-- Side: every box is scored on both edges ("Exact mirror" `[GB L216–227]`); the 9:30 manipulation (`lvl.0930open`) and the stacked-sweep-to-NWOG case are stated on one side only (below the open, long; highs, short) and their mirrors are named side variants `[GB L30, L90, L156, L617–620]`.
-- Box source from the clock grid; trade-level vs 1-second bars.
+**Record before use.** Source session and clock confidence, formation start/end, H/L, known_at, traded boundary, opposing boundary and contextual direction.
 
-## Outcomes
-- Event counts per box per session; agreement matrix vs Jumbo labels (Judas / single-extended / single-purged / neither) = the "fail-back vs Jumbo labels" table; faithful disagreements = sessions where `fail.6-9.gb.c5` and `judas.depth.any` disagree.
-- Post-event: reject / hold / break of the swept edge (grid); reach of the opposite edge; reach of magnets `lvl.tdo`, `lvl.nwog`, PDH / PDL (the 27 Aug hour-box short sells back through TDO toward PDH `[GB L687]`); time-to-target; whether the event extreme sits inside `loc.gp`.
-- NWOG: fill rate by 12:00 and by 16:00 on Mondays; TDO: touch rate in 09:30–12:00 (tier-2 comparison: midnight-open hit 73.75% overall `[PINE nq_stats_mapper:311–313]`).
+**Phase 1 observation.** Check formation before sweep or breakout. Preserve each hour as an episode; data coverage cannot be replaced by a hard-coded number of hours. The scalp posts do not acquire a trigger just because boxes are present.
 
-## Links
-[touch-reject-hold-break-grid](touch-reject-hold-break-grid.md) · [range-path-class](range-path-class.md) · [clock-grid-and-bars](clock-grid-and-bars.md) · [tbr-6-9-range](tbr-6-9-range.md) · [sweep-cisd-blocks](sweep-cisd-blocks.md) (candle CISD, not this page)
+**Existing attachments.** [family_fail.build_fail_table](/workspace/implementation/src/trading_research/research/phase1_live/family_fail.py); [formulas.clock_hour_boxes](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); family_levels; [FORMULAS] R-G01/G02/G03/G09. Inferred London bounds cannot be labeled author-exact. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [Prior day, week and month extremes](prior-day-week-month-levels.md) · [Green Bird's midnight true-day open](true-day-open.md) · [Session VWAP](vwap-session.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

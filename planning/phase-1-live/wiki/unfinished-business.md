@@ -1,19 +1,24 @@
-# Unfinished business (nearest owed level)
+# Remaining auction objectives
 
-## Definition
-The nearest untested objective above and below price, drawn from a fixed candidate set: naked prior POCs `[VP2 p.6]`, fresh single prints and poor highs / lows `[TPO p.5, p.7, p.9]`, leftover Asia / London / prior RTH highs and lows `[FIND p.5, p.9]` `[TBR p.11]`, and single prints and balances as the destinations price trades between `[C3 p.6]`. Ethos names the objective before the session as the higher-timeframe level that is actually owed something `[ANAT p.10]` `[K10 p.12]`; Jumbo treats unfinished business as a target, not an entry `[FIND p.9]`. Excess marks finished business `[TPO p.6, p.9]`. Id `lvl.owed.nearest`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Unnamed member — reaction area plus minor HVN](method-member-two-reasons.md) · [Keani — open above value](method-keani-open-above-value.md).
 
-## Citations
-- Naked POC target list `[VP2 p.6]`; single prints and poor extremes as magnets, excess holds `[TPO p.5–7, p.9]`; objectives = single prints and balances `[C3 p.6]`; objective named, failure named `[ANAT p.10]`; yearly POC / HVN objective `[K10 p.12]`; leftover London / Asia highs as the draw, lines deleted once purged `[FIND p.5, p.9]` `[TBR p.11]` `[XF p.30, p.33]`; MPOC and landmarks as targeting areas `[MAMT p.15]`.
+An untouched or still-relevant prior/session extreme, POC, poor extreme, single-print area or other source reference can remain a destination. The source method determines when that objective is consumed. [TBR] pp.11–15, 32–35; [JR] pp.23–26, 33–39; [AMT1] pp.12–13; [TPO] pp.5–9; [GB] pp.30–39.
 
-## Faithful object
-`lvl.owed.nearest`: at each 5-minute step, the candidate set = {naked prior-session POCs (`value.kz`), unfilled single prints and unrepaired poor extremes (`value.tpo.rth.30m`), untested session extremes (Asia, London, prior RTH, overnight)}; each candidate carries its formation `known_at` and is retired at its first `t2` touch; the object = the nearest surviving candidate above and below, with type and distance in ticks and in units of the 6–9 range.
+**Not a standalone trade.** The nearest level is not automatically the remaining draw. A later hit cannot choose the pre-entry target, and all methods do not share one purge rule.
 
-## Upgrades
-- Candidate set with / without composite HVNs and `lvl.mpoc.eth`; distance normalized by `env.ev.mean60`.
+**Record before use.** Objective_id, type/bounds, original known_at, source scope, qualifying visit/consumption rule, active state at decision and preselected priority.
 
-## Outcomes
-- Reach rate of the nearest owed level by 12:00 and 16:00, by type; distance distribution; used as the target definition wherever a recipe in `../RULES.md` names "the owed objective".
+**Phase 1 observation.** Freeze identity and priority before entry. In Jumbo's RTH-only application preserve ETH hits without retiring the RTH objective; in the purged-overnight branch retain actual earlier sweeps.
 
-## Links
-[tpo-ib-auction](tpo-ib-auction.md) · [value-and-profiles](value-and-profiles.md) · [composite-profiles](composite-profiles.md) · [session-fail-boxes](session-fail-boxes.md)
+**Existing attachments.** family_levels; [formulas_jumbo.j10_draw/j19_draw](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J10/J19, R-A18 and R-G01–G09. A persistent source-scoped objective ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Chronological liquidity purges](overnight-purge.md) · [PD RTH Range+ destinations](pd-rth-range-plus.md) · [Untested prior POC](naked-poc.md) · [TPO single-print structure](single-prints.md) · [TPO poor high and poor low](poor-extremes.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[AMT1]: </workspace/sources/documents/discretionary/amt-lesson-1.pdf>
+[TPO]: </workspace/sources/documents/discretionary/tpo-lesson-3.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

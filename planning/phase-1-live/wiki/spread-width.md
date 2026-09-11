@@ -1,20 +1,21 @@
-# Spread width
+# Bid-ask spread
 
-## Definition
-The gap between best bid and best ask: one tick when liquidity is deep and healthy, widening the instant liquidity thins, which is the earliest warning that a level is about to break or a fast move is coming; when the spread widens, liquidity is pulling, do not lean on the level and do not chase into the gap `[DOM5 p.6]`. Id `flow.spread.width`. Depth beyond the touch is not measurable with MBP-1 ([data-coverage](data-coverage.md)); the spread and the sizes at the touch are.
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [jetbundle — participation and auction states](method-jetbundle-auction-states.md).
 
-## Citations
-- Speed of tape and the spread; spread widens = liquidity pulling `[DOM5 p.6]`; the four ladder reads (depth, delta, speed, spread) `[DOM5 p.6]`.
-- At-touch features (absorbed, reload, pull at the touch) as the MBP-1 substitute for depth reads `[JJX L334–340]` (assistant, tier 4).
+The spread is part of the liquidity and execution context read with DOM and pace. Changes in displayed liquidity can alter the meaning and cost of the same aggressive print. [DOM5] pp.3–7; [MATH] pp.4–8.
 
-## Faithful object
-`flow.spread.width`: best ask − best bid in ticks from every MBP-1 BBO update; widening event = spread > 1 tick for ≥ 250 ms (named) inside the touch window of a level; companion: time-weighted mean spread over the 60 seconds before first touch and BBO displayed sizes at the touch. `[unmeasured]` tape object.
+**Not a standalone trade.** A narrow or wide spread is not a trade signal, and no universal source spread threshold admits every method.
 
-## Upgrades
-- Duration 100 / 500 ms; threshold 2 ticks; BBO size drop (displayed size at the touch falling by ≥ 50% without prints) as a named pull-at-touch row.
+**Record before use.** Bid/ask prices, instrument tick unit, spread_ticks, timestamp/ordinal, quote quality and local event window.
 
-## Outcomes
-- Break rate given a widening at the touch vs none; widening before fast moves (≥ 0.25·R in 5 min) vs not; false-widening share.
+**Phase 1 observation.** Compute from contemporaneous quotes and preserve invalid/crossed/missing quotes. Do not use a session summary as the spread faced at entry.
 
-## Links
-[tape-speed](tape-speed.md) · [absorption-and-big-trades](absorption-and-big-trades.md) · [data-coverage](data-coverage.md)
+**Existing attachments.** mbp1_extract and quote fields; [FORMULAS] P3-08. Source-specific quantitative spread filters and order-linked costs are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [DOM at a planned location](dom.md) · [Provide, withdraw and consume events](order-participation-events.md) · [Refill-study fill assumption](fill-model.md) · [Trading and account costs](cost-model.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[DOM5]: </workspace/sources/documents/discretionary/dom-lesson-5.pdf>
+[MATH]: </workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

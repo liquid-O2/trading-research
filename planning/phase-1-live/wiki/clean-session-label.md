@@ -1,19 +1,21 @@
-# Clean-session label (which clock is clean this cycle)
+# Source session-cleanliness assessment
 
-## Definition
-Jumbo treats which session is clean this week as a real input: London-clean weeks trade 03:00–06:00 as A+ and use NY as management or as the draw, NY-clean weeks ignore the urge to invent a London home run `[FIND p.9]`; "which session is the clean one this week? Build that TBR, not every TBR" `[FIND p.11]`; "we are in a cycle where London gives cleaner moves in relation to NY AM" `[XF p.40]`. Id `label.clean.session.rollingN`, a rolling label computed from the two clocks' own outcomes, known before the session.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md).
 
-## Citations
-- Session rotation and clean weeks `[FIND p.9]`; pre-open checklist `[FIND p.11]`; London range cycle `[XF p.40]`; London 3 on 3 after a lunch give-back `[XF p.21]`.
+The raw record sometimes favors London as the cleaner session in that market cycle. The manual relates AM expansion/consolidation to later-session behavior. This is an observed session-selection context. [TBR] p.36; [JR] pp.46, 50–51, 63–66.
 
-## Faithful object
-`label.clean.session.rolling10`: for each clock c ∈ {`range.6-9.published` with the 09:30–12:00 window, `range.london.00-03` with the 03:00–06:00 window}, the share of the last 10 completed sessions in which the clock printed a `G-default` reject at its ±0.5 projection (either side, the swept one) with no `b.c1` continuation beyond it; label = the clock with the higher share, `both` within ±0.1, `neither` when both shares < 0.3 (named thresholds); `known_at` = prior session close.
+**Not a standalone trade.** Cleaner is not a disclosed rolling-ten-day selector or a separate London entry rule.
 
-## Upgrades
-- N = 5 / 20; score = single-break rate, or realized range / `env.ev.mean60` reach; add `range.gb.asia` as a third clock.
+**Record before use.** Author/date, session configuration, observed reason for preference, known_at and the branch subsequently used.
 
-## Outcomes
-- Next-session reject rate per clock conditional on the label (persistence); run lengths of the label; share of sessions labelled `neither`.
+**Phase 1 observation.** Retain the source's qualitative judgment or name an explicit research variant. Do not use that day's eventual clean reversal to select its session retrospectively.
 
-## Links
-[clock-grid-and-bars](clock-grid-and-bars.md) · [tbr-6-9-range](tbr-6-9-range.md) · [range-path-class](range-path-class.md)
+**Existing attachments.** family_clocks and [FORMULAS] R-J09/J23 provide measurements. A source-defined quantitative cleanliness selector is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Other time-based range formations](tbr-remaining-clocks.md) · [Retrospective range path](range-path-class.md) · [Accumulation, manipulation and distribution phases](amd-phase-labels.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

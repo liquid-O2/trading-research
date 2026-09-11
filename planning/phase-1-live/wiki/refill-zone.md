@@ -1,20 +1,22 @@
-# Refill zone (level built by large aggressive prints)
+# Zone formed by aggressive prints
 
-## Definition
-A price area where a burst of large aggressive market orders traded, sixty, eighty, a hundred contracts hitting in seconds; somebody with size chose to fight there. When price returns, the only question is whether the defenders are still there `[REF p.5]`. Everything that defines the zone is known before the next touch: print sizes, width, location in the session's structure, whether it held an earlier touch `[REF p.6]`. The contract unit is unstated: the paper's data is "NQ & MNQ" `[REF p.23]` and its only sized chart is MNQ with prints ≥ 40 shown (122–251 contracts) `[REF p.5]`; the zone is drawn as a band with thickness `[REF p.5, p.7]`. Id `flow.refill.zone` (the location). The touch event `flow.refill.ontouch` stays on [absorption-and-big-trades](absorption-and-big-trades.md).
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Sires × TeamVOT — The Refill Effect](method-refill-effect.md).
 
-## Citations
-- Zone definition and the two outcomes of a touch `[REF p.5]`; measurable before the fact `[REF p.6]`; level built early and tested twice `[REF p.7]`; feature families memory / construction / location / flow, 42% of touches hold `[REF p.8]`; memory and location carry the signal, flow alone AUC 0.54 `[REF p.9]`; median winner dips 18 ticks past the touch `[REF p.10]`; deployed configuration 12 ticks inside, stop 32, target 96, cancel 30 min `[REF p.12]`; stat sheet `[REF p.23]`.
-- Refill area where sellers previously failed `[BIG p.8]`; refill zone = the same side winning the argument more than once `[CONT p.8]`; refill clock `[OFM p.2, p.5]`.
+The Refill study first constructs an area from clustered large aggressive orders, then observes departure and a later return. Sires uses such areas as remembered control/refill locations within a thesis. This zone construction is distinct from proving passive order-book replenishment at a later test. [REF] pp.5–9; [OFM] pp.3–13; [CONT] pp.4–10.
 
-## Faithful object
-`flow.refill.zone`: two printed readings — per print, a cluster of ≥ 3 aggressive prints on the same side, each ≥ 60 lots (80 and 100 named; 100 = Jumbo's NY BigTrades threshold), or per burst, same-side prints totalling ≥ 60 lots — within 30 seconds (named; the paper says "hitting in seconds" and prints no window); the unit is named (NQ lots vs MNQ contracts; on the NQ MBP-1 tape the print-size q99 is 7 lots, so the per-print reading is expected to be near-empty); bounds = min / max trade price of the cluster; `known_at` = last print. Per later touch, frozen features: memory (held earlier this session, defended on the prior day), construction (print count, total size, width), location (distance to prior VA edges, session extremes, the open), flow (delta into the touch, [approach-speed](approach-speed.md)). `[unmeasured]` tape object.
+**Not a standalone trade.** A burst or the zone's existence is not an automatic entry. Its later hold cannot be included in the features used to grade that same touch.
 
-## Upgrades
-- Size 80 / 100, per print or per burst; cluster window 10 / 60 s; merge zones overlapping by ≥ 50%; prior-day memory on / off; penetration tolerance from the paper's own grid — stops 25–65 ticks, targets 20–100 ticks, entry depth 12 ticks deployed `[REF p.12, p.17–18]`.
+**Record before use.** Zone_id, instrument and side, source per-print/burst threshold, formation events and band, known_at, departure and each distinct later touch.
 
-## Outcomes
-- Hold rate per touch (42% base), by memory decile; penetration depth distribution (18-tick median claim); time in zone; no execution or P&L rows (the PF 1.80 vs 0.81 claim is an execution effect, recorded as depth outcomes only).
+**Phase 1 observation.** Require formation < departure < current return, with frozen bounds. Keep touches separate and link fresh local defense before any claimed confirmed entry.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [ofm-catalyst](ofm-catalyst.md) · [approach-speed](approach-speed.md) · [dealing-range](dealing-range.md)
+**Existing attachments.** [mbp1_objects.on_touch_refill](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_flow.r_f17_refill_zone](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F17/P3-08. Source clustering, NQ/MNQ normalization and full order lifecycle are missing; ≥100/2-minute/2-tick is a variant. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Memory of earlier zone tests](zone-touch-memory.md) · [Executed passive replenishment](passive-replenishment.md) · [Origin-of-the-Move catalyst](ofm-catalyst.md) · [Fresh defense of a continuation band](defended-band-continuation.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[OFM]: </workspace/sources/documents/discretionary/origin-of-the-move.pdf>
+[REF]: </workspace/sources/documents/discretionary/refill-effect.pdf>
+[CONT]: </workspace/sources/documents/discretionary/a-clean-continuation-short.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

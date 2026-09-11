@@ -1,21 +1,22 @@
-# OFM catalyst (squeeze catalyst)
+# Origin-of-the-Move catalyst
 
-## Definition
-The cluster of absorbed aggression that sets a squeeze up, drawn as the OFM line at the lowest (or highest) first aggression with the cluster boxed behind it `[OFM p.2, p.5]` (the line on `[BIG p.7]`, `[CONT p.10]` and `[OFM p.14]`, the boxes on `[OFM p.5–10]`), in both directions: buyers hit the market repeatedly and get absorbed at the same area; every failed order is still there waiting to reload (the refill clock) `[OFM p.5]`. The origin of the move is the trade on the other side of the first squeeze's failure: release, failure back through the catalyst, refill, then the re-squeeze entered on the retest `[OFM p.6]`. Id `flow.ofm.catalyst` (the location); the stage sequence `flow.ofm.sequence` stays on [absorption-and-big-trades](absorption-and-big-trades.md).
+Object in [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- Language: catalyst, refill clock, squeeze, OFM `[OFM p.2]`; aggression on the wick = absorbed, in the body = paid `[OFM p.4]` `[BIG p.6]`; squeeze and refill clock `[OFM p.5]`; full sequence, entries and the stop below the aggression `[OFM p.6]`; examples with the catalyst drawn at the lowest aggression `[OFM p.7–10]`; no short until price reclaims above the catalyst and fails again `[OFM p.11]`; passive variant `[OFM p.14]`.
-- The failure of the squeeze is not the entry; the drive is `[BIG p.7–8]`; OFM retaken after a failed squeeze; a squeeze with no failure is a different case `[CONT p.10–11]`.
-- Drawn: shorts on `[OFM p.7, p.8, p.10]`, longs on `[OFM p.9, p.14]`; the replay's stop-limit rests below the wick and the stop sits above the intermediate wick `[OFM p.12]`; the example brackets 27 / 40, 7 / 40, 97 / 127 and 57 / 145 ticks are drawn trades, not constants `[OFM p.7–9, p.14]`.
+Repeated aggressive effort failing to achieve movement creates the squeeze catalyst/origin. The source draws a line at the relevant absorbed aggression with its surrounding cluster; later releases, failures and retests refer back to that identified origin. [OFM] pp.3–13; [BIG] pp.5–14; [CONT] p.10.
 
-## Faithful object
-`flow.ofm.catalyst`: ≥ 2 same-side aggressive prints ≥ 30 lots (Ethos 30–60 on NQ; 100 named) whose fill price sits in the wick of their 1-minute bar (absorbed), within 5 minutes and within 0.1·R of a swing extreme (the 5-minute window and 0.1·R are named; the 30-lot minimum is printed `[OFM p.4]`); faithful location = the OFM line at the first absorbed print (lowest for a long, highest for a short); box = from the first absorbed print to the extreme as the named area; long and short mirrored; `known_at` = close of the bar after the last print. Stage flags: release (1-minute close beyond the extreme with a `flow.tape.speed` spike), failure (`b.c1` back through the catalyst), refill (return into the box), re-squeeze (retest of the failure area then `b.c1` in the squeeze direction). `[unmeasured]` tape object.
+**Not a standalone trade.** The catalyst, a failed squeeze or a bubble is not the completed OFM entry. Aggressive and passive branches have different later requirements.
 
-## Upgrades
-- Print threshold 60 / 100; wick vs body classification by fill price vs bar body; window 3 / 10 min; passive variant (release with tape speed at or below the session median).
+**Record before use.** Catalyst_id, source price/cluster band, initial effort and response, side binding, known_at, and linked release/failure/refill/drive/retest events.
 
-## Outcomes
-- Stage-transition counts; share of catalysts whose failure is followed by a retest; continuation after the re-squeeze; overlap with `flow.refill.zone`.
+**Phase 1 observation.** Do not choose the final morning extreme as the origin or enter merely because the first squeeze failed. Preserve the source figure's actual sequence and direction.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [refill-zone](refill-zone.md) · [tape-speed](tape-speed.md) · [footprint-imbalance-zones](footprint-imbalance-zones.md)
+**Existing attachments.** [formulas_flow.r_f15_ofm/r_f18_squeeze](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F15/F18 and R-S03/S04. Current triggers can ignore their supplied stage flags. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Aggressive Origin of the Move](ofm-aggressive-branch.md) · [Passive Origin-of-the-Move variant](ofm-passive-branch.md) · [Clean squeeze continuation](clean-squeeze.md) · [Zone formed by aggressive prints](refill-zone.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[BIG]: </workspace/sources/documents/discretionary/only-trade-big-trades.pdf>
+[OFM]: </workspace/sources/documents/discretionary/origin-of-the-move.pdf>
+[CONT]: </workspace/sources/documents/discretionary/a-clean-continuation-short.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

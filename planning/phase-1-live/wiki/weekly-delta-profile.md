@@ -1,20 +1,23 @@
-# Weekly delta profile
+# Signed volume-by-price profile
 
-## Definition
-The per-price delta profile over the trailing week, used before the open to see who got trapped and who is covering: a weekly delta footprint showing sellers trapped at the lows and exhausted on the way back up `[K18 p.4]`, or heavy buying aggression behind a grind higher with sellers trapped on the way up `[K2345 p.4–5]`. Id `value.delta.weekly`. The daily version is `value.delta.rth.trade` on [value-and-profiles](value-and-profiles.md).
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Saint — AMT on live markets](method-saint-amt.md).
 
-## Citations
-- Weekly delta print checked for who got trapped and who is covering `[K18 p.4, p.14]`; weekly delta profile showing heavy buying aggression; sellers previously trapped visible in the delta profile `[K2345 p.4–5]`.
-- Heavy one-sided delta at an extreme read as trapped positioning, not strength `[TRAP p.4]`; an aggressive push that fades on delta = trapped side `[WIC p.6]`.
+Executed delta by price adds who traded aggressively to where volume was accepted. Weekly/daily delta is used in the larger thesis; current local delta at a range location is a separate snapshot. [K18] p.4; [K2345] pp.4–6; [RD] pp.3–9; [JR] pp.14, 48.
 
-## Faithful object
-`value.delta.weekly`: per-price (aggressive buy − aggressive sell) from NQ trades over the trailing 5 completed sessions (18:00–16:00 each), 1-tick bins (trailing 5, the bin size, q90 and 0.5·R are named; the sources say "weekly delta profile / print" and print no numbers); `dp.max` / `dp.min` prices; trapped-print flag = |delta| ≥ q90 of the profile at a price within `tR` of the weekly high or low that price has since left by ≥ 0.5·R (R = the weekly range). `known_at` = prior close. `[unmeasured]` tape object.
+**Not a standalone trade.** A positive/negative weekly total is not a local entry, and a light profile side is not automatically a structural LVN.
 
-## Upgrades
-- Calendar week (Sunday 18:00) vs trailing 5; 4-tick bins; bar-level proxy from `flow.cvd.ohlc`.
+**Record before use.** Instrument and aggressor convention, price bins, profile window/as_of, buy/sell volume, signed delta, source node pairing and known_at.
 
-## Outcomes
-- Grid at `dp.max` / `dp.min` prices; retest outcome of trapped-print prices (reject vs slice); agreement of the weekly trapped side with the next session's path class (label only).
+**Phase 1 observation.** Keep price-unit and delta-unit references distinct. A full-current-week or final-RTH delta profile cannot confirm an earlier trade; preserve the source's price/effort response.
 
-## Links
-[value-and-profiles](value-and-profiles.md) · [delta-spike](delta-spike.md) · [cvd-variants](cvd-variants.md)
+**Existing attachments.** [family_tape.build_weekly_delta_table](/workspace/implementation/src/trading_research/research/phase1_live/family_tape.py); [family_value.scan_rth_delta](/workspace/implementation/src/trading_research/research/phase1_live/family_value.py); [formulas_flow.r_f11_delta_lvn](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F10/F11, R-J16 and P3-08. Causal profile selection is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Cumulative volume delta and its source reference](cvd-variants.md) · [Low-volume node](lvn.md) · [Confirmed protected high or low](protected-high-low.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[RD]: </workspace/sources/documents/discretionary/reading-delta.pdf>
+[K18]: </workspace/sources/documents/discretionary/18k-payout-session.pdf>
+[K2345]: </workspace/sources/documents/discretionary/2345-funded-session.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

@@ -1,23 +1,22 @@
-# Overnight range (ONH / ONL)
+# Overnight high, low and width
 
-## Definition
-The high and low of the full overnight session 18:00–09:30 ET (`range.on.1800-0930`), the reference behind the Ethos statistic that one of the two is touched in RTH about 94% of the time, "either, not both" `[MAMT p.15]`. It is a rail and a timing filter: a long level a few points above the overnight low is not wrong, its timing is `[MAMT p.15]`. Distinct from the Asia and London sub-boxes on [clock-grid-and-bars](clock-grid-and-bars.md) and from the GB Asia box.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
 
-## Citations
-- 94% chance of touching either the overnight high or the overnight low during the current session `[MAMT p.15]`; ES table: ONH and ONL both touched 20–24%, ONH or ONL 92–95%, ONH 60–65%, ONL 52–57% (ES, four contracts, 1,040 days 2021–2024, PST sessions) `[MAMT p.20–21]`.
-- Overnight inventory from 6 pm to 9:30 as the window `[MAMT p.14]`.
-- Pre-open checklist: locate the overnight vs yesterday's value `[AMT1 p.12]`.
+Overnight price extremes frame remaining liquidity and opening context. Sires's AMT discussion uses the 18:00–09:30 overnight auction; Jumbo also draws named Asia/London references whose configured windows differ. [MAMT] pp.14–16; [TBR] pp.12–15; [JR] pp.16–18.
 
-## Faithful object
-`range.on.1800-0930`: H / L of 18:00:00–09:29:59 ET on NQ 1-second bars, `known_at` 09:30; outcomes in 09:30–16:00 with the shared grid (touch `t2`).
+**Not a standalone trade.** An overnight extreme or the claim that either side is often reached supplies no entry direction and no proof that both sides will trade.
 
-## Upgrades
-- Window start 20:00 (GB Asia clock) as a named variant; trade-level H / L.
-- Touch by 12:00 vs by 16:00; either / both / neither as three rows.
+**Record before use.** Window and source configuration, instrument, ONH/ONL, width, formation end, known_at and any separately named Asia/London extremes.
 
-## Outcomes
-- Recompute of the MAMT p.21 overnight rows on NQ F (quoted cell beside recomputed cell); time-to-first-touch; which extreme first.
-- Distance from the first-touched extreme to the nearest RTH level in the recipe under test (the "level above ONL" timing claim, descriptive only).
+**Phase 1 observation.** Keep the whole overnight range separate from 6–9 and from the prior RTH range. Evaluate touches and purges after each reference becomes known.
 
-## Links
-[overnight-profile](overnight-profile.md) · [clock-grid-and-bars](clock-grid-and-bars.md) · [session-fail-boxes](session-fail-boxes.md) · `../RULES.md` A1.1
+**Existing attachments.** clocks; sessions; [family_levels.build_level_table](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py); [FORMULAS] R-J04/J10, R-A12 and P3-06. Exact configured window identity is required. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Overnight volume structure](overnight-profile.md) · [Overnight directional inventory](overnight-inventory.md) · [Chronological liquidity purges](overnight-purge.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Source-conditioned reference statistics](reference-statistics.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[MAMT]: </workspace/sources/documents/discretionary/mastering-amt-vp.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

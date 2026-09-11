@@ -1,19 +1,22 @@
-# Delta spike at a value edge
+# Local delta concentration at an extreme
 
-## Definition
-A single outsized delta print at an extreme, read as the moment control changed hands: at value area high a high delta spike of buyers marks the opposition losing control and being absorbed passively; at value area low the lesson's example is again a buy spike, this time regaining control with the sellers absorbed at the bottom (the p.11 figure labels both spikes with the VAH text, the body text gives the VAL reading), so the spike's sign does not identify the absorbed side; it is visible before the price reaction that follows `[ABS p.10–11]`. Related reads: the exhaustion print (a huge delta bar at the extreme with no extension) `[FP9 p.6]`, outsized delta prints at the highs as trapped buyers with the trigger below the print zone `[STOP p.9]`, and the highest delta print as the rewarded side `[RD p.6–7]`. Id `flow.delta.spike`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Saint — AMT on live markets](method-saint-amt.md).
 
-## Citations
-- Delta spike at VAH and VAL, same tell opposite direction `[ABS p.10–11, p.13]`; exhaustion print `[FP9 p.6]`; delta as a filter, print zones at the highs `[STOP p.9]`; delta print = highest point of the delta profile `[RD p.6–7]`.
+A concentration of aggressive delta at a fixed auction extreme must be interpreted with price response and the controlling side. One source figure repeats contradictory directional annotations at its two extremes, so the lower annotation does not settle an exact signed rule. [ABS] pp.10–13; [RD] pp.3–8; [TRAP] pp.4–5.
 
-## Faithful object
-`flow.delta.spike`: per-price delta from trades aggregated per 1-minute bar; spike = |delta| ≥ q95 of that session's per-bar |delta| so far (q95, `tR`, the 2-tick advance and the 3-bar window are named; the source prints no numbers, only "a high Delta spike" `[ABS p.11]`), located within `tR` of a VAH / VAL (prior-day fixed by default) or of any level under test, with price advance beyond the level ≤ 2 ticks in the next 3 bars; side = sign, recorded as spike sign × extreme × outcome direction and never read as the absorbed side by construction. `[unmeasured]` tape object.
+**Not a standalone trade.** A spike is effort, not proof of absorption, reward or reversal. An unrelated later maximum cannot define the earlier event.
 
-## Upgrades
-- q90 / q99; per-price instead of per-bar; current-day VAH / VAL (lagging) as a named row; combined with the reward system on [reward-system-3tick](reward-system-3tick.md).
+**Record before use.** Fixed location and side, local executed delta/volume, concentration interval, price response, source annotation and known_at.
 
-## Outcomes
-- Reversal ≥ 0.25·R within 15 min after a spike at VAH / VAL vs at POC (the location claim); continuation after `b.c1` through the print zone (STOP); overlap with `flow.absorption.A` events.
+**Phase 1 observation.** Preserve actual aggressor sign, location and observed outcome separately. Do not settle the source caption conflict by inventing a universal buy/sell rule.
 
-## Links
-[absorption-and-big-trades](absorption-and-big-trades.md) · [value-and-profiles](value-and-profiles.md) · [weekly-delta-profile](weekly-delta-profile.md) · [reward-system-3tick](reward-system-3tick.md)
+**Existing attachments.** [family_value.scan_rth_delta](/workspace/implementation/src/trading_research/research/phase1_live/family_value.py); formulas_flow helpers; [FORMULAS] R-F05/F08/F13 and R-J16. Exact source spike thresholds and reliable local joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Signed volume-by-price profile](weekly-delta-profile.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[ABS]: </workspace/sources/documents/discretionary/your-mistakes-with-absorption.pdf>
+[RD]: </workspace/sources/documents/discretionary/reading-delta.pdf>
+[TRAP]: </workspace/sources/documents/discretionary/trapped-buyers-one-retest.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

@@ -1,31 +1,22 @@
-# Touch / reject / hold / break grid (shared)
+# Touch, reject, hold and break measurements
 
-## Definition
-One named grid of event definitions used by every family, so rows are comparable and so a variant that only differs by tolerance is visible as such. Inputs: a level `L` (or box edge), a reference range `R` (default the object's own H−L; for single levels the 6–9 H−L), a window `W`, and NQ 1-second bars (`bars.time-1s`) or trades for tick precision.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) · [Green Bird — VWAP continuation](method-green-bird-vwap-continuation.md) · [Green Bird — directional scalps](method-green-bird-directional-scalps.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Saint — AMT on live markets](method-saint-amt.md) · [Unnamed member — reaction area plus minor HVN](method-member-two-reasons.md) · [Keani — open above value](method-keani-open-above-value.md) · [Sires × TeamVOT — The Refill Effect](method-refill-effect.md) · [jetbundle — participation and auction states](method-jetbundle-auction-states.md) · [Stoic — data engine / quantifying fundamentals](method-stoic-data-engine.md) · [Stoic — asymmetric compounding](method-stoic-asymmetric-compounding.md).
 
-- **touch**: price within `tol` of `L` inside `W`. `tol ∈ {t0: 0 ticks (trade prints at L), t2: 2 ticks, tR: 0.05·R}`.
-- **break**: `b.wick`: excursion beyond `L` ≥ `d`, `d ∈ {2 ticks, 5 pts, 0.1·R}`; `b.c1`: 1-minute close beyond `L`; `b.c5`: 5-minute close beyond `L`.
-- **reject**: after a touch (or a wick break), price returns ≥ `r·R` on the original side within `k` minutes without a `b.c1` break. `r ∈ {0.25, 0.5}`, `k ∈ {5, 15, 30}`.
-- **hold**: after a `b.c1` break, all 1-minute closes stay beyond `L` for `h` minutes, `h ∈ {15, 30}`.
-- **fail-back** (session-fail-boxes): a `b.wick` break followed by `b.c1` or `b.c5` close back inside within `k`.
-- **time-to-touch**: minutes from window start to first touch; censored at window end.
-- **reach / overshoot** (envelopes): reach = touch of either band; overshoot = max excursion beyond the band in band units.
+The authors distinguish arrival, failure, acceptance and defended retest; their observation durations and confirmations differ. The common repository grid is a measurement convention for comparing those events, not a universal author rule. [TBR] pp.8–15, 27–29; [GB] pp.25, 27; [AMT1] pp.7–9.
 
-Default set `G-default` = touch `t2`, break `b.c1`, reject `r=0.5, k=15`, hold `h=30`, fail-back `b.c5, k=30`. Sensitivity rows report the full grid.
+**Not a standalone trade.** A touch or grid rejection cannot replace the method's context and complete confirmation. A profitability label cannot repair an absent prerequisite.
 
-## Citations
-- Confirmation variants come from the sources, not invented: 5-minute close back through the level `[GB L89]`; reclaim = back through and hold `[GB L88]`; raid = ≥ 5 points beyond then close back inside within 120 minutes `[PINE Session Raid Stats.txt]`; HTF-candle sweep = wick beyond prior candle H/L and close back inside `[PINE HTF Sweep Model with CISD Table.txt:136–142]`; body-based close-back `[PINE HTF Sweeps & Liquidity Levels with CISD.txt:695–696]`; 3-strike failure at a level `[TBR p.37 L585]`; wick vs body rejection blocks `[TBR p.29 L443]`; "bodies tell the story, wicks do the damage" `[GB L158]` (label vocabulary only).
-- User: touch/reject/hold/break = one shared named variant grid across families `[BRIEF]`.
+**Record before use.** Level/band identity, own range width, tolerance and units, source clock, ordered touch/break/close/retest times, measurement window and side.
 
-## Faithful object
-Each source's own confirmation is a named row: `grid.gb.c5` (5-minute close back), `grid.jumbo.projection-reject` (reject at the projection ladder on the swept side — mean-reversal 0.1 / 0.2 / 0.3, ±0.5, the 1.33–1.66 area, overshoot δ allowed — with `r=0.5`; both sides, [tbr-6-9-range](tbr-6-9-range.md)), `grid.pine.raid5-120` (5 pts, 120 min).
+**Phase 1 observation.** Freeze the level before use. A completed bar is known at its close; a same-bar sequence unresolved by OHLC stays unknown. Record target-first, invalidation-first and no-hit/censored outcomes after the decision, with full coverage.
 
-## Upgrades
-None beyond the enumerated grid. Adding a cell requires a source citation or a QUESTIONS.md entry.
+**Existing attachments.** [FORMULAS] §0.2 / P3-03; [grid.touch_level](/workspace/implementation/src/trading_research/research/phase1_live/grid.py), [grid.reject_after_touch](/workspace/implementation/src/trading_research/research/phase1_live/grid.py), [grid.hold_after_break](/workspace/implementation/src/trading_research/research/phase1_live/grid.py) and [grid.failback_wick_c5](/workspace/implementation/src/trading_research/research/phase1_live/grid.py). The default two ticks, half-range rejection in 15 minutes, 30-minute hold and 30-minute fail-back cap are named research settings. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
 
-## Outcomes
-- For every level row: touch rate, break rate (by variant), reject rate given touch, hold rate given break, fail-back rate given wick break, time-to-touch distribution (p25 / p50 / p75).
-- Grid sensitivity: for each family, the count of sessions whose `G-default` label flips under any other cell = a report column.
+**Related objects.** [Evidence and data coverage](data-coverage.md) · [Source clocks and availability](clock-grid-and-bars.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [Accepted break and defended boundary retest](break-retest.md)
 
-## Links
-[session-fail-boxes](session-fail-boxes.md) · [tbr-6-9-range](tbr-6-9-range.md) · [ev-range-expected-move](ev-range-expected-move.md) · `../SPEC.md`
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
+[TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
+[AMT1]: </workspace/sources/documents/discretionary/amt-lesson-1.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>

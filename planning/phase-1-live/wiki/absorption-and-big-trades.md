@@ -1,36 +1,24 @@
-# Absorption and BigTrades
+# Absorption: effort without price reward
 
-## Definition
-**Absorption**: aggressive effort into a level is soaked up by passive orders, price gets no reward, and the opposite-side aggression then confirms `[ABS p.8 L124–134, p.9 L141–143]`. Properly defined it needs three things including passive size that holds **and refills** as it is consumed `[MATH p.8 L124–128]`; large traded size alone is not absorption `[MATH p.4 L70, p.8 L124]`. Stages: failed vs confirmed absorption `[STOP p.2 L13]`. **BigTrades**: an indicator that highlights large executed trades at bid / ask; "those are not absorption bubbles" `[XF p.25 L326–327]`; his thresholds are 100 contracts on NQ during NY and 75 during London, below 100 is noise `[XF p.25 L322–323]`; footprint filtered to the top 35% of transactions `[XF p.23 L293]`.
+Object in [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) · [Saint — AMT on live markets](method-saint-amt.md) · [Unnamed member — reaction area plus minor HVN](method-member-two-reasons.md) · [jetbundle — participation and auction states](method-jetbundle-auction-states.md).
 
-## Citations
-- Ethos BigTrades: aggression marker, 30–60 contracts on a 40-range NQ chart, instrument-specific `[BIG p.3 L46–52]`; effort vs reward, body vs wick prints `[BIG p.4 L63–77, p.6 L112–114]`. Drawn: the level where a print and a 350% line coincide is a small box around that candle with the line running off it `[BIG p.3, p.5]` (figures); the balance-day fade area is a box from the first absorbed print to the retest, bracket 9 points stop / 33 points target drawn, not filled `[BIG p.15]`; the OFM level is a horizontal line at the first absorbed aggression `[BIG p.7]` `[CONT p.10]`.
-- Refill: zone built by clustered large aggressive prints; refill = defenders reload; raw aggression features barely beat a coin flip (AUC 0.54), level memory carries the edge `[REF p.5 L101–113, p.9 L207, p.10 L224]`; three-tick replenishment reward window `[ABS p.3 L40, p.4 L59]`; refill schematic `[RD p.8 L109–119]`.
-- Who's in control: how price arrives at the extreme (aggressive vs drift) `[WIC p.4 L47–54]`; retest logic `[WIC p.5 L62–69]`.
-- Jumbo: "easy spot absorption at midpoint of the range and taper at lows" `[XF p.23 L292]`; absorption at 6–9 key levels `[XF p.27 L361]`; Absorption Zone+ features (colour coding, isolation, imbalances) `[XF p.44 L563–568]`, "absorption zone at the reversal" `[XF p.46 L607]`.
-- Footprint diagonal 3–4× and stacked runs `[sources/documents/discretionary/fp-lesson-8.pdf p.3–7]`; same-price 350% `[only-trade-big-trades.pdf p.5]`.
-- OFM stages `[origin-of-the-move.pdf p.2–14]`; control arrival `[whos-in-control.pdf p.4–9]`.
-- Data limits: MBP-1 gives every BBO update and trade with aggressor side, size and order count at the touch; not depth beyond the touch `[JJX L159]`; MBP-1 only, no MBP-10 / MBO `[JJX L16, L146–157]` `[BRIEF]`; replenishment proxy = BBO reload after consumption (assistant idea, tier 4, to measure) `[CEX L35]` `[CRAW L378]`.
+Absorption requires aggressive effort making little progress against liquidity that actually holds/replenishes. The ensuing action depends on the branch: Sires's strict reversal additionally needs own-side reward and a defended reward retest, while his long-gamma balance fade does not require that reward sequence. [ABS] pp.5–13; [BIG] pp.14–15; [MATH] pp.6–8. Jumbo also describes absorption in his footprint/range read, without publishing the complete detector used there. [JR] pp.48–50. The member case records buyers absorbing and holding on the planned return; it does not publish the same four-check entry gate. [K10] pp.7–8.
 
-## Faithful object
-- `flow.bigtrade.100ny` / `flow.bigtrade.75ldn`: single trade prints ≥ threshold, tagged by aggressor side and price; Ethos comparison `flow.bigtrade.30-60` `[BIG p.3]`.
-- `flow.absorption.A` (effort / no-reward): at level `L` within 2 minutes, aggressive volume toward `L` ≥ the 90th percentile of 2-minute aggressive volume that session, price advance beyond `L` ≤ 2 ticks, then reversal ≥ 0.25·R within 15 minutes.
-- `flow.absorption.B` (BBO replenishment proxy): size consumed at the touch ≥ q90 of touch sizes, reload of displayed size at the same price ≥ 50% within 500 ms, repeated ≥ 2 times; the "refill" measurable from MBP-1 only at the touch.
-- Hidden book / off-touch refill / iceberg detection: **not measurable** with MBP-1; printed as such.
-- `flow.footprint.diag.4x`: ask volume at price p vs bid volume at p−tick ≥ 4× (3× named), stacked run ≥ 3 rows (2 named) `[FP8 p.3–7]`. Same-price “350% more” is a **different** row `[BIG p.5]`. This is not absorption and not BigTrades.
-- `flow.refill.ontouch`: cluster of same-side large prints, departure, later return to the cluster bounds; prior-touch count frozen at arrival `[REF p.5–10]`. Off-touch remains not-measurable.
-- `flow.ofm.sequence`: timestamped stages catalyst → release → return through catalyst → refill (origin-of-the-move); failed-start vs immediate-squeeze vs balance-fade as named variants `[OFM p.2–14]` `[WIC p.4–9]`. Thin sequence record, not a 20-page family.
+**Not a standalone trade.** Large volume alone is not absorption; absorption alone is not every method's entry. Jumbo's small-body candle is a separate candle proxy.
 
-## Upgrades
-- Thresholds as named rows (100 / 75 / 50 / q99 of print size); window 1 / 2 / 5 minutes; reversal `r` from the grid; location conditioning (at key zone vs at POC vs at 6–9 edge / mid).
-- Absorption at mid vs taper at lows (Jumbo's two shapes) as separate rows.
+**Record before use.** Band/price, aggressor side and volume, price-response interval, opposing passive evidence, replenishment, known times and selected branch.
 
-## Outcomes
-- Event counts per session and per location class; reward / no-reward rate; grid outcomes at the event price; reject rate at extreme vs at POC.
-- BigTrades vs absorption event overlap (share of BigTrades prints inside an absorption event) — the "bubbles are not absorption" check.
-- Footprint-zone retest vs absorption-event overlap (must not be identical).
-- On-touch refill hold rate; OFM stage-transition counts. No learned grader.
-- Faithful disagreements: sessions where `flow.absorption.A` and `flow.absorption.B` disagree on the presence of an event at the AM extreme.
+**Phase 1 observation.** Evaluate effort and response locally, before the decision. Preserve missing passive evidence; do not use the future reversal itself as proof of the earlier entry prerequisite.
 
-## Links
-[value-and-profiles](value-and-profiles.md) · [cvd-variants](cvd-variants.md) · [data-coverage](data-coverage.md) · [touch-reject-hold-break-grid](touch-reject-hold-break-grid.md)
+**Existing attachments.** [mbp1_objects.absorption_a/absorption_b](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_flow.r_f06_dom_absorption/r_f08_abs_four_check](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F06–F09/F16. Thresholds and BBO-only reload remain partial proxies. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+
+**Related objects.** [Executed passive replenishment](passive-replenishment.md) · [Aggressive effort versus price-response efficiency](response-efficiency.md) · [Four-check absorption reversal](absorption-reward-retest.md) · [Failure of aggression in long-gamma balance](balance-failure-fade.md) · [Jumbo Absorption Zone+ candle](absorption-candle-jumbo.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
+[ABS]: </workspace/sources/documents/discretionary/your-mistakes-with-absorption.pdf>
+[BIG]: </workspace/sources/documents/discretionary/only-trade-big-trades.pdf>
+[K10]: </workspace/sources/documents/discretionary/10k-first-month.pdf>
+[MATH]: </workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
