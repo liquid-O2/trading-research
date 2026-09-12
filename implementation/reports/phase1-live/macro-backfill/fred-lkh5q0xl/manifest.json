@@ -1,0 +1,241 @@
+{
+  "all_series_succeeded": true,
+  "clock_candidates": {
+    "bytes": 292,
+    "path": "clock-candidates.json",
+    "sha256": "b268581a0a68067310e21cfc8dd3b7d27a2cac06e75b6517a59af5bb6293b76e"
+  },
+  "completed_at": "2026-09-12T08:38:16.059291+00:00",
+  "credentials_retained": false,
+  "http_requests": 8,
+  "observation_end": "2019-12-31",
+  "observation_start": "2019-12-01",
+  "output_dir": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-lkh5q0xl",
+  "realtime_end": "2026-09-12",
+  "realtime_start": "2020-01-01",
+  "schema": "fred-vintage-backfill-v1",
+  "scope": "18 existing FRED series plus CPIAUCSL and PAYEMS identified by banked release calendars; acquisition does not select author model inputs",
+  "series": [
+    {
+      "artifacts": [
+        {
+          "bytes": 3287,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:38:08.979893+00:00",
+          "path": "metadata.json",
+          "sha256": "0d11228eb790d51df81fb07a1b4a01ff90130795bf43447e51f235a36d12c523"
+        },
+        {
+          "bytes": 1171,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:38:09.968774+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2019-12-31",
+            "observation_start": "2019-12-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 6,
+          "sha256": "ed6c2b7f17cd5c9674024a33b73095da90e6ac5557f6c2b72901b205aca06342"
+        },
+        {
+          "bytes": 471,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:38:11.186876+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2019-12-31",
+            "observation_start": "2019-12-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1,
+          "sha256": "d149e2437f0b27dd5e13843fb587c8f9c3940955423948a62b341ba0078a0526"
+        },
+        {
+          "bytes": 1724,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:38:12.216948+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 85,
+          "sha256": "ac2b242658203500415bed7948912e3e6954a4884179e87a13f33083f83b1bea"
+        }
+      ],
+      "first_observation": "2019-12-01",
+      "initial_rows": 1,
+      "last_observation": "2019-12-01",
+      "metadata": {
+        "frequency": "Monthly",
+        "frequency_short": "M",
+        "id": "CPIAUCSL",
+        "last_updated": "2026-09-11 08:37:49-05",
+        "notes": "The Consumer Price Index for All Urban Consumers: All Items (CPIAUCSL) is a price index of a basket of goods and services paid by urban consumers. Percent changes in the price index measure the inflation rate between any two time periods. The most common inflation metric is the percent change from one year ago. It can also represent the buying habits of urban consumers. This particular index includes roughly 88 percent of the total population, accounting for wage earners, clerical workers, technical workers, self-employed, short-term workers, unemployed, retirees, and those not in the labor force.\r\n\r\nThe CPIs are based on prices for food, clothing, shelter, and fuels; transportation fares; service fees (e.g., water and sewer service); and sales taxes. Prices are collected monthly from about 4,000 housing units and approximately 26,000 retail establishments across 87 urban areas. To calculate the index, price changes are averaged with weights representing their importance in the spending of the particular group. The index measures price changes (as a percent change) from a predetermined reference date. In addition to the original unadjusted index distributed, the Bureau of Labor Statistics also releases a seasonally adjusted index. The unadjusted series reflects all factors that may influence a change in prices. However, it can be very useful to look at the seasonally adjusted CPI, which removes the effects of seasonal changes, such as weather, school year, production cycles, and holidays.\r\n\r\nThe CPI can be used to recognize periods of inflation and deflation. Significant increases in the CPI within a short time frame might indicate a period of inflation, and significant decreases in CPI within a short time frame might indicate a period of deflation. However, because the CPI includes volatile food and oil prices, it might not be a reliable measure of inflationary and deflationary periods. For a more accurate detection, the core CPI (CPILFESL (https://fred.stlouisfed.org/series/CPILFESL)) is often used. When using the CPI, please note that it is not applicable to all consumers and should not be used to determine relative living costs. Additionally, the CPI is a statistical measure vulnerable to sampling error since it is based on a sample of prices and not the complete average.\r\n\r\nFor more information on the CPI, see the Handbook of Methods (https://www.bls.gov/opub/hom/cpi/), the release notes and announcements (https://www.bls.gov/cpi/), and the Frequently Asked Questions (https://www.bls.gov/cpi/questions-and-answers.htm) (FAQs).",
+        "observation_end": "2026-08-01",
+        "observation_start": "1947-01-01",
+        "popularity": 97,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Seasonally Adjusted",
+        "seasonal_adjustment_short": "SA",
+        "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average",
+        "units": "Index 1982-1984=100",
+        "units_short": "Index 1982-1984=100"
+      },
+      "nonmissing_vintage_rows": 6,
+      "observation_periods": 1,
+      "revised_periods": 1,
+      "series_id": "CPIAUCSL",
+      "status": "ok",
+      "vintage_dates": 85,
+      "vintage_rows": 6
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 2326,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:38:13.157452+00:00",
+          "path": "metadata.json",
+          "sha256": "aa745eb0c8c334afb9d239cfe7817e108dad840cc54ce2f1d713e300db6663ad"
+        },
+        {
+          "bytes": 1582,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:38:14.099319+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2019-12-31",
+            "observation_start": "2019-12-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 9,
+          "sha256": "4d34588514efe7a8a56d2bac5a9c9372afd53b454151c87af246e82b6a8d61e9"
+        },
+        {
+          "bytes": 470,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:38:15.037948+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2019-12-31",
+            "observation_start": "2019-12-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1,
+          "sha256": "e19169f6c3465641ef07f099cf502448532e79770a27c5dba1ad88b305a540a9"
+        },
+        {
+          "bytes": 1652,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:38:16.027254+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 81,
+          "sha256": "eae81bffe79e960775b1d79a5129946e3957d2bdce500c58d70f81935ef87d38"
+        }
+      ],
+      "first_observation": "2019-12-01",
+      "initial_rows": 1,
+      "last_observation": "2019-12-01",
+      "metadata": {
+        "frequency": "Monthly",
+        "frequency_short": "M",
+        "id": "PAYEMS",
+        "last_updated": "2026-09-04 08:27:34-05",
+        "notes": "All Employees: Total Nonfarm, commonly known as Total Nonfarm Payroll, is a measure of the number of U.S. workers in the economy that excludes proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed. This measure accounts for approximately 80 percent of the workers who contribute to Gross Domestic Product (GDP).\n\nThis measure provides useful insights into the current economic situation because it can represent the number of jobs added or lost in an economy. Increases in employment might indicate that businesses are hiring which might also suggest that businesses are growing. Additionally, those who are newly employed have increased their personal incomes, which means (all else constant) their disposable incomes have also increased, thus fostering further economic expansion.\n\nGenerally, the U.S. labor force and levels of employment and unemployment are subject to fluctuations due to seasonal changes in weather, major holidays, and the opening and closing of schools. The Bureau of Labor Statistics (BLS) adjusts the data to offset the seasonal effects to show non-seasonal changes: for example, women's participation in the labor force; or a general decline in the number of employees, a possible indication of a downturn in the economy. To closely examine seasonal and non-seasonal changes, the BLS releases two monthly statistical measures: the seasonally adjusted All Employees: Total Nonfarm (PAYEMS) and All Employees: Total Nonfarm (PAYNSA), which is not seasonally adjusted.\n\nThe series comes from the 'Current Employment Statistics (Establishment Survey).'\n\nThe source code is: CES0000000001",
+        "observation_end": "2026-08-01",
+        "observation_start": "1939-01-01",
+        "popularity": 85,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Seasonally Adjusted",
+        "seasonal_adjustment_short": "SA",
+        "title": "All Employees, Total Nonfarm",
+        "units": "Thousands of Persons",
+        "units_short": "Thous. of Persons"
+      },
+      "nonmissing_vintage_rows": 9,
+      "observation_periods": 1,
+      "revised_periods": 1,
+      "series_id": "PAYEMS",
+      "status": "ok",
+      "vintage_dates": 81,
+      "vintage_rows": 9
+    }
+  ],
+  "source_references": {
+    "CPIAUCSL": [
+      {
+        "bytes": 61188,
+        "mtime_ns": 1788443569000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/release-10.json",
+        "sha256": "072eba162beaedcbebdff1e6242adb8f26de1a4bd72acabb49bd21ebfc0cd04a"
+      }
+    ],
+    "PAYEMS": [
+      {
+        "bytes": 55684,
+        "mtime_ns": 1788443570000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/release-50.json",
+        "sha256": "d49648edc468e3880bdcc901eda66dc3682d101806b56dc107e7ebac3e6af190"
+      }
+    ]
+  },
+  "source_references_unchanged": true,
+  "started_at": "2026-09-12T08:38:07.835328+00:00",
+  "vintage_precision": "civil date; inclusive real-time intervals; no midnight timestamp inference"
+}

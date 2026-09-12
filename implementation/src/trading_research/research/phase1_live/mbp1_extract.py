@@ -22,7 +22,8 @@ from trading_research.research.phase1_live.compute import TABLE_ROOT
 from trading_research.research.phase1_live.slice import load_calendar, slice_dates
 
 MBP1 = Path("/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1")
-OUT = TABLE_ROOT / "mbp1"
+SIGNED_FLOW_VERSION = "databento-b-buy-a-sell-v1"
+OUT = TABLE_ROOT / "mbp1" / SIGNED_FLOW_VERSION
 COLS = ["t", "action", "side", "price", "size", "bid_px", "ask_px", "bid_sz", "ask_sz"]
 CPU_SOFT = 900
 WALL_SOFT = 900
@@ -86,18 +87,19 @@ def _is_trade(col) -> np.ndarray:
 
 
 def _side_code(col) -> np.ndarray:
+    # Databento Trade side: B is buyer aggression (+), A is seller aggression (-).
     chunk = col.combine_chunks()
     if pa.types.is_dictionary(chunk.type):
         names = np.asarray(chunk.dictionary.to_numpy(zero_copy_only=False)).astype(str)
         idx = np.asarray(chunk.indices.to_numpy())
         table = np.zeros(names.shape[0], dtype=np.int8)
-        table[np.isin(names, ("A", "a"))] = 1
-        table[np.isin(names, ("B", "b"))] = -1
+        table[np.isin(names, ("B", "b"))] = 1
+        table[np.isin(names, ("A", "a"))] = -1
         return table[idx]
     names = np.asarray(chunk.to_numpy(zero_copy_only=False)).astype(str)
     out = np.zeros(names.shape[0], dtype=np.int8)
-    out[np.isin(names, ("A", "a"))] = 1
-    out[np.isin(names, ("B", "b"))] = -1
+    out[np.isin(names, ("B", "b"))] = 1
+    out[np.isin(names, ("A", "a"))] = -1
     return out
 
 

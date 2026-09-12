@@ -48,6 +48,16 @@ archive/host-dupes-*/
 *.sqlite3
 *.restore-tmp
 
+# Large read-only market views are regenerated from their retained manifests.
+/implementation/reports/phase1-live/derived-views/**/trades.jsonl
+/implementation/reports/phase1-live/derived-views/**/bbo.jsonl
+
+# Full method coverage/trace dumps remain on disk; publish summaries and hashes.
+/implementation/reports/phase1-live/methods/*/
+/implementation/reports/phase1-live/methods/*.json
+!/implementation/reports/phase1-live/methods/command-results.json
+!/implementation/reports/phase1-live/methods/pass-summary.json
+
 # Original oversized files restored locally from the export.
 /trading-research/reports/cross-market-runs/e19257df9a42e38318d38aa6fe58e52f0ab93a7ec00da5330c27fa56dc94faec/outputs/statistics.json
 /trading-research/reports/cross-market-runs/6b852ece3fb7a07f1668b3daef6477b54712d6fd60f05e35325d25d1db275a38/outputs/statistics.json

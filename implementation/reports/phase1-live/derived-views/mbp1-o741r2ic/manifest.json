@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "bbo": {
+      "path": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-o741r2ic/bbo.jsonl",
+      "rows": 107067,
+      "sha256": "b774a3295cda235e14cf33abf765853bd3f36f0258d0b3e67909b9f2e0114782"
+    },
+    "ohlcv-1m": {
+      "path": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-o741r2ic/ohlcv-1m.jsonl",
+      "rows": 5,
+      "sha256": "8d0ef88694f548c644c25dbeb91f6d6d3503b3a78d1b133afb938904f89e6099"
+    },
+    "ohlcv-1s": {
+      "path": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-o741r2ic/ohlcv-1s.jsonl",
+      "rows": 300,
+      "sha256": "bba514704f0b9ec368a4ae70b3328ab0943ac05eb64890c81702e2f56bfe7d6a"
+    },
+    "trades": {
+      "path": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-o741r2ic/trades.jsonl",
+      "rows": 9537,
+      "sha256": "633f538b7571f2088ad50f82d696c2812c51d2ce6dd6d3cc5e67b2f951bc9fd7"
+    }
+  },
+  "conventions": {
+    "bar_timestamp_basis": "stored exchange event time; vendor receive-time aggregates can differ",
+    "bars": "half-open clock buckets, one native instrument per row; empty buckets omitted",
+    "bbo": "source depth-one fields retained with action/side; no additional depth or order identities reconstructed",
+    "coverage": "computed observed values retained; completeness requires separate coverage evidence",
+    "executions": "T only; B buy, A sell, N unknown; no event-value deduplication",
+    "ordering": "equal timestamps remain unresolved unless source exchange sequence proves order",
+    "prices": "native price units, exact decimal text in JSON"
+  },
+  "instrument_filter": null,
+  "output_dir": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-o741r2ic",
+  "plan": {
+    "coverage_basis": "canonical file ownership and observed bounds",
+    "coverage_note": "An unowned interval may be a market closure or missing data; bounds alone do not decide this.",
+    "data_root": "/workspace/data",
+    "dataset_id": "quantpad/cme__nq-continuous-futures__mbp-1",
+    "end_ns": 1577975700000000000,
+    "holes": [],
+    "market_coverage_complete": null,
+    "owned_spans": [
+      {
+        "dataset": "nq-mbp-1",
+        "end_ns": 1577975700000000000,
+        "kind": "monthly",
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2020-01.parquet",
+        "reason": null,
+        "source_end_ns": 1580508000068043684,
+        "source_start_ns": 1577919600000000000,
+        "start_ns": 1577975400000000000,
+        "status": "owned",
+        "timestamp_unit": "ns"
+      }
+    ],
+    "ownership_sha256": "106a118143e70a45af95584888fe96a9b55c514477b4c68efb590eae51712f3d",
+    "sources": [
+      {
+        "mtime_ns": 1788423340000000000,
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2020-01.parquet",
+        "size_bytes": 466838874
+      }
+    ],
+    "start_ns": 1577975400000000000,
+    "unowned_intervals": []
+  },
+  "raw_source_signatures_unchanged": true,
+  "status": "complete",
+  "view_version": "canonical-mbp1-v1"
+}

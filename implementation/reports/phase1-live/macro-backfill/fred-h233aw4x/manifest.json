@@ -1,0 +1,2538 @@
+{
+  "all_series_succeeded": true,
+  "clock_candidates": {
+    "bytes": 22834,
+    "path": "clock-candidates.json",
+    "sha256": "389196024916b8d8a429eab9d7bc4d1d2f9270b6fced03e16902dedb186088be"
+  },
+  "completed_at": "2026-09-12T08:29:36.190726+00:00",
+  "credentials_retained": false,
+  "http_requests": 96,
+  "observation_end": "2026-09-12",
+  "observation_start": "2020-01-01",
+  "output_dir": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-h233aw4x",
+  "realtime_end": "2026-09-12",
+  "realtime_start": "2020-01-01",
+  "schema": "fred-vintage-backfill-v1",
+  "scope": "18 existing FRED series plus CPIAUCSL and PAYEMS identified by banked release calendars; acquisition does not select author model inputs",
+  "series": [
+    {
+      "artifacts": [
+        {
+          "bytes": 3287,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:27:43.638484+00:00",
+          "path": "metadata.json",
+          "sha256": "0d11228eb790d51df81fb07a1b4a01ff90130795bf43447e51f235a36d12c523"
+        },
+        {
+          "bytes": 44987,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:44.639779+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 319,
+          "sha256": "2039494aaceee4dd05de5df3293e4ea71af7c5d1ac20ead9cee362fde1a05a53"
+        },
+        {
+          "bytes": 11526,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:45.580469+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 80,
+          "sha256": "d22a14ff55579347843af9e313d428e1cd102fa654dd7057c99514473e95d11d"
+        },
+        {
+          "bytes": 1724,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:27:46.561440+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "CPIAUCSL",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 85,
+          "sha256": "ac2b242658203500415bed7948912e3e6954a4884179e87a13f33083f83b1bea"
+        }
+      ],
+      "first_observation": "2020-01-01",
+      "initial_rows": 79,
+      "last_observation": "2026-08-01",
+      "metadata": {
+        "frequency": "Monthly",
+        "frequency_short": "M",
+        "id": "CPIAUCSL",
+        "last_updated": "2026-09-11 08:37:49-05",
+        "notes": "The Consumer Price Index for All Urban Consumers: All Items (CPIAUCSL) is a price index of a basket of goods and services paid by urban consumers. Percent changes in the price index measure the inflation rate between any two time periods. The most common inflation metric is the percent change from one year ago. It can also represent the buying habits of urban consumers. This particular index includes roughly 88 percent of the total population, accounting for wage earners, clerical workers, technical workers, self-employed, short-term workers, unemployed, retirees, and those not in the labor force.\r\n\r\nThe CPIs are based on prices for food, clothing, shelter, and fuels; transportation fares; service fees (e.g., water and sewer service); and sales taxes. Prices are collected monthly from about 4,000 housing units and approximately 26,000 retail establishments across 87 urban areas. To calculate the index, price changes are averaged with weights representing their importance in the spending of the particular group. The index measures price changes (as a percent change) from a predetermined reference date. In addition to the original unadjusted index distributed, the Bureau of Labor Statistics also releases a seasonally adjusted index. The unadjusted series reflects all factors that may influence a change in prices. However, it can be very useful to look at the seasonally adjusted CPI, which removes the effects of seasonal changes, such as weather, school year, production cycles, and holidays.\r\n\r\nThe CPI can be used to recognize periods of inflation and deflation. Significant increases in the CPI within a short time frame might indicate a period of inflation, and significant decreases in CPI within a short time frame might indicate a period of deflation. However, because the CPI includes volatile food and oil prices, it might not be a reliable measure of inflationary and deflationary periods. For a more accurate detection, the core CPI (CPILFESL (https://fred.stlouisfed.org/series/CPILFESL)) is often used. When using the CPI, please note that it is not applicable to all consumers and should not be used to determine relative living costs. Additionally, the CPI is a statistical measure vulnerable to sampling error since it is based on a sample of prices and not the complete average.\r\n\r\nFor more information on the CPI, see the Handbook of Methods (https://www.bls.gov/opub/hom/cpi/), the release notes and announcements (https://www.bls.gov/cpi/), and the Frequently Asked Questions (https://www.bls.gov/cpi/questions-and-answers.htm) (FAQs).",
+        "observation_end": "2026-08-01",
+        "observation_start": "1947-01-01",
+        "popularity": 97,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Seasonally Adjusted",
+        "seasonal_adjustment_short": "SA",
+        "title": "Consumer Price Index for All Urban Consumers: All Items in U.S. City Average",
+        "units": "Index 1982-1984=100",
+        "units_short": "Index 1982-1984=100"
+      },
+      "nonmissing_vintage_rows": 318,
+      "observation_periods": 79,
+      "revised_periods": 71,
+      "series_id": "CPIAUCSL",
+      "status": "ok",
+      "vintage_dates": 85,
+      "vintage_rows": 319
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 2326,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:27:47.582410+00:00",
+          "path": "metadata.json",
+          "sha256": "aa745eb0c8c334afb9d239cfe7817e108dad840cc54ce2f1d713e300db6663ad"
+        },
+        {
+          "bytes": 65524,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:48.575356+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 469,
+          "sha256": "bb98030248e189a07c7e5ec12cddaa5557fa2f6988bf30dcd47a334abe873525"
+        },
+        {
+          "bytes": 11452,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:49.545201+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 80,
+          "sha256": "71d2e06162441d1c5b209cf0fdb865cd6f9cd05499e9cc97dca596424e69c778"
+        },
+        {
+          "bytes": 1652,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:27:50.540377+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "PAYEMS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 81,
+          "sha256": "eae81bffe79e960775b1d79a5129946e3957d2bdce500c58d70f81935ef87d38"
+        }
+      ],
+      "first_observation": "2020-01-01",
+      "initial_rows": 80,
+      "last_observation": "2026-08-01",
+      "metadata": {
+        "frequency": "Monthly",
+        "frequency_short": "M",
+        "id": "PAYEMS",
+        "last_updated": "2026-09-04 08:27:34-05",
+        "notes": "All Employees: Total Nonfarm, commonly known as Total Nonfarm Payroll, is a measure of the number of U.S. workers in the economy that excludes proprietors, private household employees, unpaid volunteers, farm employees, and the unincorporated self-employed. This measure accounts for approximately 80 percent of the workers who contribute to Gross Domestic Product (GDP).\n\nThis measure provides useful insights into the current economic situation because it can represent the number of jobs added or lost in an economy. Increases in employment might indicate that businesses are hiring which might also suggest that businesses are growing. Additionally, those who are newly employed have increased their personal incomes, which means (all else constant) their disposable incomes have also increased, thus fostering further economic expansion.\n\nGenerally, the U.S. labor force and levels of employment and unemployment are subject to fluctuations due to seasonal changes in weather, major holidays, and the opening and closing of schools. The Bureau of Labor Statistics (BLS) adjusts the data to offset the seasonal effects to show non-seasonal changes: for example, women's participation in the labor force; or a general decline in the number of employees, a possible indication of a downturn in the economy. To closely examine seasonal and non-seasonal changes, the BLS releases two monthly statistical measures: the seasonally adjusted All Employees: Total Nonfarm (PAYEMS) and All Employees: Total Nonfarm (PAYNSA), which is not seasonally adjusted.\n\nThe series comes from the 'Current Employment Statistics (Establishment Survey).'\n\nThe source code is: CES0000000001",
+        "observation_end": "2026-08-01",
+        "observation_start": "1939-01-01",
+        "popularity": 85,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Seasonally Adjusted",
+        "seasonal_adjustment_short": "SA",
+        "title": "All Employees, Total Nonfarm",
+        "units": "Thousands of Persons",
+        "units_short": "Thous. of Persons"
+      },
+      "nonmissing_vintage_rows": 469,
+      "observation_periods": 80,
+      "revised_periods": 79,
+      "series_id": "PAYEMS",
+      "status": "ok",
+      "vintage_dates": 81,
+      "vintage_rows": 469
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 892,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:27:51.466436+00:00",
+          "path": "metadata.json",
+          "sha256": "0f82265f3cc1e3084b4ded49c7345905c4d89afb49d322dec76881a14aee7d6d"
+        },
+        {
+          "bytes": 242794,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:52.510134+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DEXJPUS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "25aaa78ce8f8e73049976500d2d56386a3b8a314c2aabf619fd8b75876a8e2b9"
+        },
+        {
+          "bytes": 242105,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:53.728482+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DEXJPUS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1743,
+          "sha256": "ceb631351119a6c37d12bf1c31cf1c77e7c3b60f52c30cfdf9c6f3253102e291"
+        },
+        {
+          "bytes": 6477,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:27:54.747980+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DEXJPUS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 349,
+          "sha256": "5afc3df604bdaa5c82db96dfa16d151d3f6002fa342ea59e6a81e39d71124778"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1669,
+      "last_observation": "2026-09-04",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DEXJPUS",
+        "last_updated": "2026-09-08 15:16:38-05",
+        "notes": "data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h10/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-04",
+        "observation_start": "1971-01-04",
+        "popularity": 76,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Japanese Yen to U.S. Dollar Spot Exchange Rate",
+        "units": "Japanese Yen to One U.S. Dollar",
+        "units_short": "Japanese Yen to  1 U.S. $"
+      },
+      "nonmissing_vintage_rows": 1673,
+      "observation_periods": 1670,
+      "revised_periods": 3,
+      "series_id": "DEXJPUS",
+      "status": "ok",
+      "vintage_dates": 349,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 4549,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:27:55.718839+00:00",
+          "path": "metadata.json",
+          "sha256": "32d95e7ee124628a2472f878948132a641fbb71d552102839dbbb7830f53f40a"
+        },
+        {
+          "bytes": 335291,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:56.893087+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DFF",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 2445,
+          "sha256": "60d53a9521ac2179c411bbae8a4c3ead8906fde4cc8cc4ed6d3c3a78beb48a66"
+        },
+        {
+          "bytes": 335291,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:27:58.318936+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DFF",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 2445,
+          "sha256": "1465455ae3866373dcf266ac45a3aea4d419eefffae37844feb9dfa55c674793"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:27:59.242918+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DFF",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "f18e128fc3ba2cd1d4377041c5f2923af56e5bf0b9c55da546c8d25bad3996e3"
+        },
+        {
+          "bytes": 12241,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:00.471917+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DFF",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 669,
+          "sha256": "731bef041ff5baf59db1c1b50fbfb132ece88b1b4a4f88dc5e47dab766d5e3f2"
+        }
+      ],
+      "first_observation": "2020-01-01",
+      "initial_rows": 2445,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, 7-Day",
+        "frequency_short": "D",
+        "id": "DFF",
+        "last_updated": "2026-09-11 15:16:29-05",
+        "notes": " Daily Federal Funds Rate from 1928-1954 (https://fred.stlouisfed.org/categories/33951).\n\nThe federal funds rate is the interest rate at which depository institutions trade federal funds (balances held at Federal Reserve Banks) with each other overnight. When a depository institution has surplus balances in its reserve account, it lends to other banks in need of larger balances. In simpler terms, a bank with excess cash, which is often referred to as liquidity, will lend to another bank that needs to quickly raise liquidity. (1) The rate that the borrowing institution pays to the lending institution is determined between the two banks; the weighted average rate for all of these types of negotiations is called the effective federal funds rate.(2) The effective federal funds rate is essentially determined by the market but is influenced by the Federal Reserve as it uses the Interest on Reserve Balances rate to steer the federal funds rate toward the target range.(2)\n\nThe Federal Open Market Committee (FOMC) meets eight times a year to determine the federal funds target range. The Fed's primary tool for influencing the federal funds rate is the interest the Fed pays on the funds that banks hold as reserve balances at their Federal Reserve Bank, which is the Interest on Reserves Balances (IORB) rate. Because banks are unlikely to lend funds in the federal funds market for less than they get paid in their reserve balance account at the Federal Reserve, the Interest on Reserve Balances (IORB) is an effective tool for guiding the federal funds rate. (3) Whether the Federal Reserve raises or lowers the target range for the federal funds rate depends on the state of the economy. If the FOMC believes the economy is growing too fast and inflation pressures are inconsistent with the dual mandate of the Federal Reserve, the Committee may temper economic activity by raising the target range for federal funds rate, and increasing the IORB rate to steer the federal funds rate into the target range. In the opposing scenario, the FOMC may spur greater economic activity by lowering the target range for federal funds rate, and decreasing the IORB rate to steer the federal funds rate into the target range. (3) Therefore, the FOMC must observe the current state of the economy to determine the best course of monetary policy that will maximize economic growth while adhering to the dual mandate set forth by Congress. In making its monetary policy decisions, the FOMC considers a wealth of economic data, such as: trends in prices and wages, employment, consumer spending and income, business investments, and foreign exchange markets.\n\nThe federal funds rate is the central interest rate in the U.S. financial market. It influences other interest rates such as the prime rate, which is the rate banks charge their customers with higher credit ratings. Additionally, the federal funds rate indirectly influences longer- term interest rates such as mortgages, loans, and savings, all of which are very important to consumer wealth and confidence.(2)\n\nReferences\n(1) Federal Reserve Bank of New York. \"Federal funds.\" Fedpoints, August 2007.\n(2) Monetary Policy (https://www.federalreserve.gov/monetarypolicy.htm), Board of Governors of the Federal Reserve System.\n(3) The Fed Explained (https://www.federalreserve.gov/aboutthefed/files/the-fed-explained.pdf), Board of Governors of the Federal Reserve System\n\nFor further information, see The Fed's New Monetary Policy Tools (https://www.stlouisfed.org/publications/page-one-economics/2020/08/03/the-feds-new-monetary-policy-tools), Page One Economics, Federal Reserve Bank of St. Louis. \n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1954-07-01",
+        "popularity": 86,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Federal Funds Effective Rate",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 2445,
+      "observation_periods": 2445,
+      "revised_periods": 0,
+      "series_id": "DFF",
+      "status": "ok",
+      "vintage_dates": 1669,
+      "vintage_rows": 2445
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1199,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:02.281531+00:00",
+          "path": "metadata.json",
+          "sha256": "b1731747dd337ccaec631280e42dea36218ee3964d4dc7ee4007da947f442f8f"
+        },
+        {
+          "bytes": 239503,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:04.609113+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "52d7a92b25c164b32b459b6ef161f9523ee5f93cfdec08388456f6602665f839"
+        },
+        {
+          "bytes": 239366,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:05.867824+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "53489b55f053a7b1fe39ef24e307e28a13768e549e87ff84e0a3d34f4a8dce81"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:06.822068+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:07.799265+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DGS1",
+        "last_updated": "2026-09-11 15:16:28-05",
+        "notes": "H.15 Statistical Release notes (https://www.federalreserve.gov/releases/h15/default.htm) and the Treasury Yield Curve Methodology (https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology).\n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1962-01-02",
+        "popularity": 83,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Market Yield on U.S. Treasury Securities at 1-Year Constant Maturity, Quoted on an Investment Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "revised_periods": 0,
+      "series_id": "DGS1",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1202,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:08.743583+00:00",
+          "path": "metadata.json",
+          "sha256": "867b617f8ac3606742a98d49b04da24b26471b3e13c0ed139c0b7fa24450a6f1"
+        },
+        {
+          "bytes": 239517,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:09.854215+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "9c68160dec3364dd844b37080643577ce5bed077802891222b18907c0266f57b"
+        },
+        {
+          "bytes": 239380,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:12.116331+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "98d9d2c0a59634a449e40ea711ad2ee1ed23a726ecd06196458ffe1087172d2d"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:13.061929+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:14.492113+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS1MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DGS1MO",
+        "last_updated": "2026-09-11 15:16:32-05",
+        "notes": "H.15 Statistical Release notes (https://www.federalreserve.gov/releases/h15/default.htm) and the Treasury Yield Curve Methodology (https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology).\n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "2001-07-31",
+        "popularity": 75,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Market Yield on U.S. Treasury Securities at 1-Month Constant Maturity, Quoted on an Investment Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "revised_periods": 0,
+      "series_id": "DGS1MO",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1202,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:15.487919+00:00",
+          "path": "metadata.json",
+          "sha256": "9e0581101e32d3ea117f15ceaded26ce118dfdb0c1bb080bf9e99b4bbb1a3688"
+        },
+        {
+          "bytes": 239533,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:17.227197+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS3MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "20f343f32a774230e509759a3214205ad07202afaaf7749becf72e4af83e28be"
+        },
+        {
+          "bytes": 239396,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:18.686418+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS3MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "69b88c93c1305ca6daf2d9b18369093625f74a5e26a4308a6446af3af0361e6d"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:19.634185+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS3MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:20.591930+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS3MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DGS3MO",
+        "last_updated": "2026-09-11 15:16:34-05",
+        "notes": "H.15 Statistical Release notes (https://www.federalreserve.gov/releases/h15/default.htm) and the Treasury Yield Curve Methodology (https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology).\n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1981-09-01",
+        "popularity": 79,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Market Yield on U.S. Treasury Securities at 3-Month Constant Maturity, Quoted on an Investment Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "revised_periods": 0,
+      "series_id": "DGS3MO",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1202,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:21.632193+00:00",
+          "path": "metadata.json",
+          "sha256": "c132967e0e74294ff2cc04c82da4af140a7ddd0782f051b68b9d622db96e7a61"
+        },
+        {
+          "bytes": 239508,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:22.716367+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS6MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "f57e09b9bbd8f5fb3eb46e175bdfdb26bb35cb618aadeb2a5becb438ece95c7c"
+        },
+        {
+          "bytes": 239371,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:23.969797+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS6MO",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "3857f74abf3739e4b4460cd62bf47781eb19b8e36f82bab498cc9df4110dd96f"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:25.068228+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS6MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:26.198916+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS6MO",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DGS6MO",
+        "last_updated": "2026-09-11 15:16:36-05",
+        "notes": "H.15 Statistical Release notes (https://www.federalreserve.gov/releases/h15/default.htm) and the Treasury Yield Curve Methodology (https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology).\n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1981-09-01",
+        "popularity": 68,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Market Yield on U.S. Treasury Securities at 6-Month Constant Maturity, Quoted on an Investment Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "revised_periods": 0,
+      "series_id": "DGS6MO",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1175,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:27.214082+00:00",
+          "path": "metadata.json",
+          "sha256": "02e0772326e80f572e4843ccc13d4b3559e4741e4dcc1de2e574e116e673e4ee"
+        },
+        {
+          "bytes": 239797,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:28.311122+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS10",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1750,
+          "sha256": "a9199ee40cd40d8378b3369d9cbe6b22efe479914caad1f9667e7775cda03d20"
+        },
+        {
+          "bytes": 239386,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:29.558855+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS10",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "7dbc8b49e66011c3a15e8140b359d46d954dd8d8f387262e27e8c4ad88eca09a"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:30.772954+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS10",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:31.723036+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DGS10",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DGS10",
+        "last_updated": "2026-09-11 15:16:33-05",
+        "notes": "H.15 Statistical Release (https://www.federalreserve.gov/releases/h15/current/h15.pdf) notes and Treasury Yield Curve Methodology (https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/yieldmethod.aspx).\n\nFor questions on the data, please contact the data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1962-01-02",
+        "popularity": 99,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, Quoted on an Investment Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1676,
+      "observation_periods": 1674,
+      "revised_periods": 2,
+      "series_id": "DGS10",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1750
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 854,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:32.690171+00:00",
+          "path": "metadata.json",
+          "sha256": "ab022cd73ebb7f983088e40fa64c0351508395fba7c21dede14bb40a1d5a68d4"
+        },
+        {
+          "bytes": 239495,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:33.942885+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTB3",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "e049a7973378ef307ba6d76e78a9c8c6e00ecf22cac40d1415a14afa89b19d4e"
+        },
+        {
+          "bytes": 239358,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:35.194051+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTB3",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "abf5c3523b1ca8be255e179ccb7d626431644abbb14cc989c2d1743c0a85334c"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:36.246439+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTB3",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "c2a5fe21910ee7b597851b6da3f9fff5256e921c4b39fc127edad38bf363558e"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:37.267623+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTB3",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "1dc82952f282a1e5a27555b531f378cdee9b2566c209c4963843142145b0685a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DTB3",
+        "last_updated": "2026-09-11 15:16:37-05",
+        "notes": "data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h15/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-10",
+        "observation_start": "1954-01-04",
+        "popularity": 77,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "3-Month Treasury Bill Secondary Market Rate, Discount Basis",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "revised_periods": 0,
+      "series_id": "DTB3",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1748
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 881,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:38.210058+00:00",
+          "path": "metadata.json",
+          "sha256": "92676cde5212b6c302ffc5094ab1906d8158c90e7798a035dbc800227ae1ce4f"
+        },
+        {
+          "bytes": 813364,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:39.412728+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTWEXAFEGS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 5774,
+          "sha256": "eb02a0348bc57210db193159706047670c0af454b1485c82e91c8fee36bf3c9b"
+        },
+        {
+          "bytes": 245394,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:41.343232+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTWEXAFEGS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1743,
+          "sha256": "3f48fe5f68f53005802ebd3320b9da2a19d9cf1754f0cae9489e6bf698bbf1f2"
+        },
+        {
+          "bytes": 6477,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:42.331301+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "DTWEXAFEGS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 349,
+          "sha256": "5afc3df604bdaa5c82db96dfa16d151d3f6002fa342ea59e6a81e39d71124778"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1670,
+      "last_observation": "2026-09-04",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "DTWEXAFEGS",
+        "last_updated": "2026-09-08 15:16:51-05",
+        "notes": "data source (https://www.federalreserve.gov/apps/ContactUs/feedback.aspx?refurl=/releases/h10/%). For questions on FRED functionality, please contact us here (https://fred.stlouisfed.org/contactus/).</p>",
+        "observation_end": "2026-09-04",
+        "observation_start": "2006-01-02",
+        "popularity": 58,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Nominal Advanced Foreign Economies U.S. Dollar Index",
+        "units": "Index Jan 2006=100",
+        "units_short": "Index Jan 2006=100"
+      },
+      "nonmissing_vintage_rows": 5701,
+      "observation_periods": 1670,
+      "revised_periods": 1515,
+      "series_id": "DTWEXAFEGS",
+      "status": "ok",
+      "vintage_dates": 349,
+      "vintage_rows": 5774
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1305,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:43.367555+00:00",
+          "path": "metadata.json",
+          "sha256": "14cf1030c3a040ebfade2d292e07f872e995a6bb6ec26aed19a552a6c23eb992"
+        },
+        {
+          "bytes": 239402,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:44.443761+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "EFFR",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "dec605815d518b1d799841f999f29b918461dcdc2a56858a79662b9de9d4a3b3"
+        },
+        {
+          "bytes": 239402,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:46.297095+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "EFFR",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "e408c7cab60af0b93f28b2631f83b4ff31a09c9c76e96e7fd21922b79031bfd3"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:47.298455+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "EFFR",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "676efef30442655a4c5f71fbd72ce192a044ec305e1d40c3fed6634dfab9970c"
+        },
+        {
+          "bytes": 12421,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:48.256550+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "EFFR",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 679,
+          "sha256": "99aaaecc1f6563e7458b9fa6fea717d704e33911f00043301f9a7c7132a64077"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1681,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "EFFR",
+        "last_updated": "2026-09-11 08:02:35-05",
+        "notes": "For additional historical federal funds rate data, please see  Daily Federal Funds Rate from 1928-1954 (https://fred.stlouisfed.org/categories/33951).\r\n\r\nThe federal funds market consists of domestic unsecured borrowings in U.S. dollars by depository institutions from other depository institutions and certain other entities, primarily government-sponsored enterprises.\r\n\r\nThe effective federal funds rate (EFFR) is calculated as a volume-weighted median of overnight federal funds transactions reported in the FR 2420 Report of Selected Money Market Rates.\r\n\r\nFor more information, visit the Federal Reserve Bank of New York (https://www.newyorkfed.org/markets/obfrinfo).",
+        "observation_end": "2026-09-10",
+        "observation_start": "2000-07-03",
+        "popularity": 80,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Effective Federal Funds Rate",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "revised_periods": 0,
+      "series_id": "EFFR",
+      "status": "ok",
+      "vintage_dates": 1679,
+      "vintage_rows": 1747
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 873,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:49.222692+00:00",
+          "path": "metadata.json",
+          "sha256": "84cc21732f2a552a8e5558a7b49b3eeb2382474039582ccac90308e20a1fea74"
+        },
+        {
+          "bytes": 241402,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:50.743018+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "GVZCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1750,
+          "sha256": "d5b08c3ce314d1720cecb23a97c9a6c475b5132b37fea7837644b8e1dada1855"
+        },
+        {
+          "bytes": 240988,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:52.173517+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "GVZCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "82517ba2f5b6ee5a319de2a40157cf840258fff3d500c72006fb3309d5be82e5"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:53.133448+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "GVZCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "e72dc710b0ce77cd619e6278ad6c1646e5fb22b512f102363471dcf9ff12df38"
+        },
+        {
+          "bytes": 12295,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:54.061999+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "GVZCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 672,
+          "sha256": "ed88258455dca5e434ea6286ba7e032b692d31438196384e1338e9d18bd2e3fd"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1680,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "GVZCLS",
+        "last_updated": "2026-09-11 08:37:48-05",
+        "notes": "Exchange Traded Funds (ETFs) are shares of trusts that hold portfolios of stocks designed to closely track the price performance and yield of specific indices. Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "2008-06-03",
+        "popularity": 70,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE Gold ETF Volatility Index",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1683,
+      "observation_periods": 1683,
+      "revised_periods": 0,
+      "series_id": "GVZCLS",
+      "status": "ok",
+      "vintage_dates": 1672,
+      "vintage_rows": 1750
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 717,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:28:55.092754+00:00",
+          "path": "metadata.json",
+          "sha256": "3f0e223f99981c99809e6fe2f9710c1c88c23f7c08256dd2e12b6af0bf9e7350"
+        },
+        {
+          "bytes": 241266,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:56.342987+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "RVXCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1749,
+          "sha256": "647699cee0efd059d256cdac566cd5e06cb519c8ed9a41f08eed0a6721d80e4a"
+        },
+        {
+          "bytes": 240990,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:28:57.961347+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "RVXCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "c1d2a4ee76c6aa6842f06c33cf7f41344b49e3ba27a0b55b5a4fac4690a1dac3"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:28:59.069052+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "RVXCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "e72dc710b0ce77cd619e6278ad6c1646e5fb22b512f102363471dcf9ff12df38"
+        },
+        {
+          "bytes": 12295,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:00.113333+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "RVXCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 672,
+          "sha256": "ed88258455dca5e434ea6286ba7e032b692d31438196384e1338e9d18bd2e3fd"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1679,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "RVXCLS",
+        "last_updated": "2026-09-11 08:37:49-05",
+        "notes": "Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "2004-01-02",
+        "popularity": 46,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE Russell 2000 Volatility Index",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "revised_periods": 0,
+      "series_id": "RVXCLS",
+      "status": "ok",
+      "vintage_dates": 1672,
+      "vintage_rows": 1749
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 605,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:01.752371+00:00",
+          "path": "metadata.json",
+          "sha256": "627a4dd51c3b74a896ec8c44027ad217c30212ca3537503d643b60a5fea3831a"
+        },
+        {
+          "bytes": 239241,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:02.844454+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "SOFR",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "6d1bbc209f7f5dc6a5e138ade51422263011cb9bfe67dc1ca3376287f1648f87"
+        },
+        {
+          "bytes": 239241,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:05.085605+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "SOFR",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "85573f3fca0ea8e9c56a53d144fb4a2874d3506ac8df40e7782885c808216f44"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:06.042057+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "SOFR",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "f5094b8908fd9f7d0b94e47cb0baa92de9b9c4b5c71823eb26b37b223e00b36e"
+        },
+        {
+          "bytes": 12277,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:07.052056+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "SOFR",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 671,
+          "sha256": "ea34411171392eae609e914f610dc1df28555bbf66a9529428cc75bfb3ca827a"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1671,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "SOFR",
+        "last_updated": "2026-09-11 07:02:32-05",
+        "observation_end": "2026-09-10",
+        "observation_start": "2018-04-03",
+        "popularity": 91,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "Secured Overnight Financing Rate",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1671,
+      "observation_periods": 1671,
+      "revised_periods": 0,
+      "series_id": "SOFR",
+      "status": "ok",
+      "vintage_dates": 1671,
+      "vintage_rows": 1747
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 1310,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:08.354666+00:00",
+          "path": "metadata.json",
+          "sha256": "11f130757cc2843439788e6067841fd148aad7702d2aa74c3e8144c4a7a61bfc"
+        },
+        {
+          "bytes": 239720,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:09.471352+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "T10YIE",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1750,
+          "sha256": "dd6b07970981aca1a2310462193615d1ab1392a56ea0e55b0f0b5b560ad658e8"
+        },
+        {
+          "bytes": 239447,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:10.816363+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "T10YIE",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "87c8f0e1509e050e0819ba095f224204116ad4588c21fb520a66454466e82dfe"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:11.749545+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "T10YIE",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "2f5f447972adfdd1d1919ed210380394af891da22c63eafdb1f329419d24ad59"
+        },
+        {
+          "bytes": 12115,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:12.837977+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "T10YIE",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 662,
+          "sha256": "34365fc6959374549cc01f91db985406d4a4b8373efe2412a1f7767a09a6b871"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1675,
+      "last_observation": "2026-09-11",
+      "metadata": {
+        "frequency": "Daily",
+        "frequency_short": "D",
+        "id": "T10YIE",
+        "last_updated": "2026-09-11 16:03:35-05",
+        "notes": "The breakeven inflation rate represents a measure of expected inflation derived from 10-Year Treasury Constant Maturity Securities (DGS10 (https://fred.stlouisfed.org/series/DGS10)) and 10-Year Treasury Inflation-Indexed Constant Maturity Securities (DFII10 (https://fred.stlouisfed.org/series/DFII10)). The latest value implies what market participants expect inflation to be in the next 10 years, on average.\r\nStarting with the update on June 21, 2019, the Treasury bond data used in calculating interest rate spreads is obtained directly from the U.S. Treasury Department (https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Pages/TextView.aspx?data=yield).",
+        "observation_end": "2026-09-11",
+        "observation_start": "2003-01-02",
+        "popularity": 91,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "10-Year Breakeven Inflation Rate",
+        "units": "Percent",
+        "units_short": "%"
+      },
+      "nonmissing_vintage_rows": 1677,
+      "observation_periods": 1675,
+      "revised_periods": 2,
+      "series_id": "T10YIE",
+      "status": "ok",
+      "vintage_dates": 1662,
+      "vintage_rows": 1750
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 804,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:13.778358+00:00",
+          "path": "metadata.json",
+          "sha256": "b14f25cabeac89593a19ccbb5ba6b09e685226881f317753e4eb5a39edb9ce33"
+        },
+        {
+          "bytes": 241377,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:14.872142+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VIXCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1749,
+          "sha256": "081355e0e9dbb86733c0af4066d2d9539835a8081b42914666d35a2ddecacafb"
+        },
+        {
+          "bytes": 241101,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:16.353529+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VIXCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "bf1a57f9683790487337e37cde54c0606e0116cab6b6f3345f95ac972b7c29c3"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:17.271369+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VIXCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "b8dae89f1ba378e8580071c8289e52d7d1197af6c433bb5236e204bd4ba92d6b"
+        },
+        {
+          "bytes": 12313,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:18.436450+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VIXCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 673,
+          "sha256": "c94a34c6486301cb64fa14e1ba94e5491ad6af6286472f8bec64834ae6753f40"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1712,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "VIXCLS",
+        "last_updated": "2026-09-11 08:37:48-05",
+        "notes": "VIX measures market expectation of near term volatility conveyed by stock index option prices. Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "1990-01-02",
+        "popularity": 86,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE Volatility Index: VIX",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1714,
+      "observation_periods": 1714,
+      "revised_periods": 0,
+      "series_id": "VIXCLS",
+      "status": "ok",
+      "vintage_dates": 1673,
+      "vintage_rows": 1749
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 709,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:19.393045+00:00",
+          "path": "metadata.json",
+          "sha256": "69e58c9ee7fdfa4dbe26315f5fc761d9469a788898ace25cca75dee24222b733"
+        },
+        {
+          "bytes": 241516,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:20.919342+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXDCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1751,
+          "sha256": "e00ff5874e96a7a02313adc991e79ba1bb3d49938c890b72a2e225730cb44be0"
+        },
+        {
+          "bytes": 241102,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:22.186606+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXDCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1748,
+          "sha256": "75ef4e703bc2a00a67afb70d314cf1e171f0a85cc3457e95dce2f8731e8de7b1"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:23.180077+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXDCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "e72dc710b0ce77cd619e6278ad6c1646e5fb22b512f102363471dcf9ff12df38"
+        },
+        {
+          "bytes": 12295,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:24.123883+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXDCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 672,
+          "sha256": "ed88258455dca5e434ea6286ba7e032b692d31438196384e1338e9d18bd2e3fd"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1681,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "VXDCLS",
+        "last_updated": "2026-09-11 08:37:47-05",
+        "notes": "Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "1997-10-07",
+        "popularity": 26,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE DJIA Volatility Index",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1684,
+      "observation_periods": 1684,
+      "revised_periods": 0,
+      "series_id": "VXDCLS",
+      "status": "ok",
+      "vintage_dates": 1672,
+      "vintage_rows": 1751
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 715,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:25.066239+00:00",
+          "path": "metadata.json",
+          "sha256": "bd4eda73c31d1afe5100f5d33f62ba69ad934487c7373025e84c4785bb7de794"
+        },
+        {
+          "bytes": 241545,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:26.293323+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXNCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1751,
+          "sha256": "2e52ca7755acf270a47059d7ac7fe62d4e9ac9abd39728f9e40bae8a7fa094cf"
+        },
+        {
+          "bytes": 240993,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:27.944083+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXNCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "76df8e35eb8ecbc53a59166fb78515afd047273c9512df9ac853ecb8876a7b40"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:29.054075+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXNCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "e72dc710b0ce77cd619e6278ad6c1646e5fb22b512f102363471dcf9ff12df38"
+        },
+        {
+          "bytes": 12295,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:30.462457+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXNCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 672,
+          "sha256": "ed88258455dca5e434ea6286ba7e032b692d31438196384e1338e9d18bd2e3fd"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1680,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "VXNCLS",
+        "last_updated": "2026-09-11 08:37:46-05",
+        "notes": "Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "2001-02-02",
+        "popularity": 59,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE NASDAQ 100 Volatility Index",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1684,
+      "observation_periods": 1683,
+      "revised_periods": 1,
+      "series_id": "VXNCLS",
+      "status": "ok",
+      "vintage_dates": 1672,
+      "vintage_rows": 1751
+    },
+    {
+      "artifacts": [
+        {
+          "bytes": 720,
+          "endpoint": "https://api.stlouisfed.org/fred/series",
+          "fetched_at": "2026-09-12T08:29:31.415679+00:00",
+          "path": "metadata.json",
+          "sha256": "5c893e8edbf67a52e7d23f2cd9b14c6c554f256ff33773b6796fbdfc9f5a99fd"
+        },
+        {
+          "bytes": 241266,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:32.758786+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 1,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXVCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "vintages-000.json",
+          "row_key": "observations",
+          "rows": 1749,
+          "sha256": "35cd8cc0c4c31c7f17d8786e24851fb470e0b618775b89c83128e22f79f57347"
+        },
+        {
+          "bytes": 240990,
+          "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+          "fetched_at": "2026-09-12T08:29:33.981399+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 100000,
+            "observation_end": "2026-09-12",
+            "observation_start": "2020-01-01",
+            "offset": 0,
+            "output_type": 4,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXVCLS",
+            "sort_order": "asc",
+            "units": "lin"
+          },
+          "path": "initial-000.json",
+          "row_key": "observations",
+          "rows": 1747,
+          "sha256": "48479fe95f6a98b5c0b73326eecbf6397048330af5a952d2c873761fd0452b8d"
+        },
+        {
+          "bytes": 18196,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:34.918111+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 0,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXVCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-000.json",
+          "row_key": "vintage_dates",
+          "rows": 1000,
+          "sha256": "e72dc710b0ce77cd619e6278ad6c1646e5fb22b512f102363471dcf9ff12df38"
+        },
+        {
+          "bytes": 12295,
+          "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+          "fetched_at": "2026-09-12T08:29:35.882925+00:00",
+          "parameters": {
+            "file_type": "json",
+            "limit": 1000,
+            "offset": 1000,
+            "realtime_end": "2026-09-12",
+            "realtime_start": "2020-01-01",
+            "series_id": "VXVCLS",
+            "sort_order": "asc"
+          },
+          "path": "vintage-dates-001.json",
+          "row_key": "vintage_dates",
+          "rows": 672,
+          "sha256": "ed88258455dca5e434ea6286ba7e032b692d31438196384e1338e9d18bd2e3fd"
+        }
+      ],
+      "first_observation": "2020-01-02",
+      "initial_rows": 1679,
+      "last_observation": "2026-09-10",
+      "metadata": {
+        "frequency": "Daily, Close",
+        "frequency_short": "D",
+        "id": "VXVCLS",
+        "last_updated": "2026-09-11 08:37:54-05",
+        "notes": "Copyright, 2016, Chicago Board Options Exchange, Inc. Reprinted with permission.",
+        "observation_end": "2026-09-10",
+        "observation_start": "2007-12-04",
+        "popularity": 60,
+        "realtime_end": "2026-09-12",
+        "realtime_start": "2026-09-12",
+        "seasonal_adjustment": "Not Seasonally Adjusted",
+        "seasonal_adjustment_short": "NSA",
+        "title": "CBOE S&P 500 3-Month Volatility Index",
+        "units": "Index",
+        "units_short": "Index"
+      },
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "revised_periods": 0,
+      "series_id": "VXVCLS",
+      "status": "ok",
+      "vintage_dates": 1672,
+      "vintage_rows": 1749
+    }
+  ],
+  "source_references": {
+    "CPIAUCSL": [
+      {
+        "bytes": 61188,
+        "mtime_ns": 1788443569000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/release-10.json",
+        "sha256": "072eba162beaedcbebdff1e6242adb8f26de1a4bd72acabb49bd21ebfc0cd04a"
+      }
+    ],
+    "DEXJPUS": [
+      {
+        "bytes": 256187,
+        "mtime_ns": 1786622087000000000,
+        "path": "/workspace/data/free-sources/fred__macro-context__legacy-refresh/FRED_DEXJPUS.csv",
+        "sha256": "e93eba754c8937a8e7fb0a40f8f0c0c0de8ed04d5bccec1436634fd9a929e87d"
+      }
+    ],
+    "DFF": [
+      {
+        "bytes": 423259,
+        "mtime_ns": 1786524825000000000,
+        "path": "/workspace/data/free-sources/cross-asset__rates/FRED_DFF.csv",
+        "sha256": "dd0949ac7091b450177b262206e1c47d57ac82a4e689d9a422c50246f6a8f1d9"
+      },
+      {
+        "bytes": 139064,
+        "mtime_ns": 1785928939000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/DFF.json",
+        "sha256": "c6a486ca02a31d6d0204a9b823894aa181df8381f0b880e99cab7fe62a235b32"
+      },
+      {
+        "bytes": 912245,
+        "mtime_ns": 1788536067000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DFF.json",
+        "sha256": "6b807386e77dae0ff114d53e014b7b5f085d8932cd4731a321b0ed1f1c367ba3"
+      }
+    ],
+    "DGS1": [
+      {
+        "bytes": 99170,
+        "mtime_ns": 1785928938000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/DGS1.json",
+        "sha256": "6562a7614f4e411c11f61b428f9403687f35f2e1168dfa22acab38544e0a5b1e"
+      },
+      {
+        "bytes": 649021,
+        "mtime_ns": 1788536072000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DGS1.json",
+        "sha256": "ec0b787fe1a8674b37646c54b6e2c301722863cd68ae8f5c1a2f5c8f45a0141d"
+      }
+    ],
+    "DGS10": [
+      {
+        "bytes": 268331,
+        "mtime_ns": 1786622086000000000,
+        "path": "/workspace/data/free-sources/fred__macro-context__legacy-refresh/FRED_DGS10.csv",
+        "sha256": "b2200504de8ee7954103c695fa1bd524c1ac4b0693f1b4f5bd956e7684678377"
+      }
+    ],
+    "DGS1MO": [
+      {
+        "bytes": 103416,
+        "mtime_ns": 1786524824000000000,
+        "path": "/workspace/data/free-sources/cross-asset__rates/FRED_DGS1MO.csv",
+        "sha256": "ed74ec846cefa9d4d3bd13543ed1721da07d4f1a4bd4e739193cee5982a67ba3"
+      },
+      {
+        "bytes": 99174,
+        "mtime_ns": 1785928936000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/DGS1MO.json",
+        "sha256": "1fa3e370c4ad012366ff7e4d1a602996b7982a67168bebf36deecf13866b455d"
+      },
+      {
+        "bytes": 649038,
+        "mtime_ns": 1788536068000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DGS1MO.json",
+        "sha256": "d521fa4ef42d88f56da90a5408a7c25df304dc16e57d7a6893930637ae52f182"
+      }
+    ],
+    "DGS3MO": [
+      {
+        "bytes": 186039,
+        "mtime_ns": 1786524823000000000,
+        "path": "/workspace/data/free-sources/cross-asset__rates/FRED_DGS3MO.csv",
+        "sha256": "fc310262b97c5a7115329ca9e6a13e88c7e08c116834d754c2b0afd5a5a52da6"
+      },
+      {
+        "bytes": 99194,
+        "mtime_ns": 1785928936000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/DGS3MO.json",
+        "sha256": "3560d1637899dda78a459aef3829033cdaaaa01d1f312a9bd5c2b15ce3279784"
+      },
+      {
+        "bytes": 649057,
+        "mtime_ns": 1788536070000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DGS3MO.json",
+        "sha256": "b3c68bbf3d560a3543bef823e4696ab195f93968e3f2ff26286bffae94922bba"
+      }
+    ],
+    "DGS6MO": [
+      {
+        "bytes": 99177,
+        "mtime_ns": 1785928937000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/DGS6MO.json",
+        "sha256": "4d19c1f914618c1f3818ef5da337347e7c4feda1cfc4ab6245cc7732aa69a6da"
+      },
+      {
+        "bytes": 649032,
+        "mtime_ns": 1788536071000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DGS6MO.json",
+        "sha256": "265e05594a2b5a89692bbf4d2b2108f020415a0702113155b07bd308d6917604"
+      }
+    ],
+    "DTB3": [
+      {
+        "bytes": 648675,
+        "mtime_ns": 1788536069000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/DTB3.json",
+        "sha256": "59348e82e290103740901ae948fae1c6e9ed061670ba7db136f2f139fca11b46"
+      }
+    ],
+    "DTWEXAFEGS": [
+      {
+        "bytes": 103670,
+        "mtime_ns": 1786622086000000000,
+        "path": "/workspace/data/free-sources/fred__macro-context__legacy-refresh/FRED_DTWEXAFEGS.csv",
+        "sha256": "90321de3ccdbaf5a0b06661c6ea19fec202e2ed50156d3f572be58f8bab22692"
+      }
+    ],
+    "EFFR": [
+      {
+        "bytes": 107970,
+        "mtime_ns": 1786524824000000000,
+        "path": "/workspace/data/free-sources/cross-asset__rates/FRED_EFFR.csv",
+        "sha256": "4eaecb09c4dcfc0c9964d67aeeb660a186f8c6e9293cbe090ae5ee13ed74b9bd"
+      }
+    ],
+    "GVZCLS": [
+      {
+        "bytes": 79806,
+        "mtime_ns": 1786622087000000000,
+        "path": "/workspace/data/free-sources/fred__macro-context__legacy-refresh/FRED_GVZCLS.csv",
+        "sha256": "8da2d9d9dd54192697f66e5890b2c233262fda8fabce9b10e4581e1f810206a2"
+      }
+    ],
+    "PAYEMS": [
+      {
+        "bytes": 55684,
+        "mtime_ns": 1788443570000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/release-50.json",
+        "sha256": "d49648edc468e3880bdcc901eda66dc3682d101806b56dc107e7ebac3e6af190"
+      }
+    ],
+    "RVXCLS": [
+      {
+        "bytes": 99225,
+        "mtime_ns": 1786558763000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-indices__legacy/FRED_RVXCLS.csv",
+        "sha256": "718c00e5cc0ac26933353a86f0e8adcb1a92cd9f115d3829f0fd10395680344d"
+      }
+    ],
+    "SOFR": [
+      {
+        "bytes": 34526,
+        "mtime_ns": 1786524824000000000,
+        "path": "/workspace/data/free-sources/cross-asset__rates/FRED_SOFR.csv",
+        "sha256": "6ee1fdef7f64f67292b696a3fd45e341df3f6fa143e29b922f8acee0897f4881"
+      },
+      {
+        "bytes": 99074,
+        "mtime_ns": 1785928938000000000,
+        "path": "/workspace/data/free-sources/fred__rates__legacy-raw/SOFR.json",
+        "sha256": "f94630d4341d18cf81d7d1538defa983f1b63e9a187e42254aeca2b38ca12a59"
+      },
+      {
+        "bytes": 327996,
+        "mtime_ns": 1788536067000000000,
+        "path": "/workspace/data/free-sources/fred__usd-rates__raw/SOFR.json",
+        "sha256": "c81dfaaf7ba58f3a5a6b4b6aa1c1bd18b9a498e15cffc6340a0c6b2d393a7c74"
+      }
+    ],
+    "T10YIE": [
+      {
+        "bytes": 97572,
+        "mtime_ns": 1786622085000000000,
+        "path": "/workspace/data/free-sources/fred__macro-context__legacy-refresh/FRED_T10YIE.csv",
+        "sha256": "157a6d856fe42c04da540c6b64031bffa570b796574acda80e5e056e57d3d64e"
+      }
+    ],
+    "VIXCLS": [
+      {
+        "bytes": 1434779,
+        "mtime_ns": 1788443566000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/VIXCLS.json",
+        "sha256": "3ec38f9dfc14ac6324b9533c5a1b5d4c1ba162658f2083d76837d2f8180fdb32"
+      },
+      {
+        "bytes": 160813,
+        "mtime_ns": 1786558758000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-indices__legacy/FRED_VIXCLS.csv",
+        "sha256": "7afbdc1389414c1c04784b051e25f59debce4e4ee8f71685e805f4f1ec363412"
+      }
+    ],
+    "VXDCLS": [
+      {
+        "bytes": 126562,
+        "mtime_ns": 1786558770000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-indices__legacy/FRED_VXDCLS.csv",
+        "sha256": "1b543bded518ee98bdb89c88050d6e08b4833723f6b07497fbf0edb55677fb69"
+      }
+    ],
+    "VXNCLS": [
+      {
+        "bytes": 1001268,
+        "mtime_ns": 1788443567000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/VXNCLS.json",
+        "sha256": "8c17604f3d08c46df61f50cec70c78319c3a6797e6cb137363c8be624e12a4b8"
+      }
+    ],
+    "VXVCLS": [
+      {
+        "bytes": 734040,
+        "mtime_ns": 1788443568000000000,
+        "path": "/workspace/data/free-sources/fred__volatility-and-releases__raw/VXVCLS.json",
+        "sha256": "dc33e75c59ed7d441e5f19b135840ae22f2fb94e77d8e7a881e0b1107421a6c2"
+      }
+    ]
+  },
+  "source_references_unchanged": true,
+  "started_at": "2026-09-12T08:27:42.658076+00:00",
+  "vintage_precision": "civil date; inclusive real-time intervals; no midnight timestamp inference"
+}

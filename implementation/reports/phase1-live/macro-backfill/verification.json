@@ -1,0 +1,374 @@
+{
+  "all_normalized_rows_reproduced_with_current_code": true,
+  "all_source_hashes_and_counts_verified": true,
+  "archive_source_files_unchanged": 31,
+  "bundles": [
+    {
+      "acquisition_manifest": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-h233aw4x/manifest.json",
+      "acquisition_manifest_sha256": "24a683ad77aec23f036160877d4fbf9144f3c14ef7d52aa216fa9e1449137f88",
+      "normalized_manifest": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-h233aw4x/normalized-p0wb8u84/manifest.json",
+      "normalized_manifest_sha256": "a8725ea39388a46e79333709c85c91f40ff07754ceb67775b71a918bba86446a"
+    },
+    {
+      "acquisition_manifest": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-lkh5q0xl/manifest.json",
+      "acquisition_manifest_sha256": "607fb67993348ddd5487c8f2f3063b44a5e9b3625a607a2cfdf580d496bc0d20",
+      "normalized_manifest": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-lkh5q0xl/normalized-nvnc16ew/manifest.json",
+      "normalized_manifest_sha256": "fff3116d2fc8c3a205e543d724e12bcb02b9f7538710fabbbe13c6f97fd628e8"
+    }
+  ],
+  "causal_checks": {
+    "date_snapshot_revision_boundary": true,
+    "later_unknown_revision_blocks_latest_view": true,
+    "pre_release_hidden": true,
+    "publication_requires_explicit_availability_assumption": true,
+    "release_after_nq_archive_endpoint_excluded": true
+  },
+  "date_only_rows": 36842,
+  "focused_backfill_tests": 13,
+  "http_requests": 104,
+  "implementation_at_verification": [
+    {
+      "path": "/workspace/implementation/src/trading_research/research/method_pack/macro_backfill.py",
+      "sha256": "1ebe66fe6ab529b1db96d0ac6cc492af03fec60b30818807e55c4d4bf4357a12"
+    },
+    {
+      "path": "/workspace/implementation/tools/backfill_macro_vintages.py",
+      "sha256": "64afa40fe8083a78d6032b98ea3aebc2fd4e6e57c8b4c058e258204e52c54d8e"
+    },
+    {
+      "path": "/workspace/implementation/tools/normalize_macro_vintages.py",
+      "sha256": "c117a37b14f30f8c00ccafe86734b84361b14b1f85849dff7e17c87d9e0af2b3"
+    },
+    {
+      "path": "/workspace/implementation/tests/test_method_pack_macro_backfill.py",
+      "sha256": "867bcf3309bd2675922e00dbe132730d99e7aef4532850e29541993b91dc143f"
+    }
+  ],
+  "initial_release_rows": 31121,
+  "missing_value_rows": 1180,
+  "nonmissing_vintage_rows": 35823,
+  "normalized_artifacts_verified": 24,
+  "observed_feed_availability_rows": 0,
+  "overlapping_or_duplicate_vintages": 0,
+  "periods_without_confirmed_initial_value": [
+    {
+      "reference_period": "2021-02-24",
+      "series_id": "DEXJPUS"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DGS1"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DGS1MO"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DGS3MO"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DGS6MO"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DGS10"
+    },
+    {
+      "reference_period": "2020-08-19",
+      "series_id": "DTB3"
+    },
+    {
+      "reference_period": "2021-04-02",
+      "series_id": "GVZCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "GVZCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "GVZCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "RVXCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "RVXCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "VIXCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "VIXCLS"
+    },
+    {
+      "reference_period": "2021-04-02",
+      "series_id": "VXDCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "VXDCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "VXDCLS"
+    },
+    {
+      "reference_period": "2021-04-02",
+      "series_id": "VXNCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "VXNCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "VXNCLS"
+    },
+    {
+      "reference_period": "2021-04-16",
+      "series_id": "VXVCLS"
+    },
+    {
+      "reference_period": "2023-02-24",
+      "series_id": "VXVCLS"
+    }
+  ],
+  "publication_clock_rows": 161,
+  "pytest_passed": 214,
+  "pytest_subtests_passed": 2,
+  "raw_response_artifacts_verified": 104,
+  "series": [
+    {
+      "first_observation": "2019-12-01",
+      "initial_rows": 80,
+      "last_observation": "2026-08-01",
+      "nonmissing_vintage_rows": 324,
+      "observation_periods": 80,
+      "publication_clock_rows": 80,
+      "revised_periods": 72,
+      "series_id": "CPIAUCSL",
+      "vintage_rows": 325
+    },
+    {
+      "first_observation": "2019-12-01",
+      "initial_rows": 81,
+      "last_observation": "2026-08-01",
+      "nonmissing_vintage_rows": 478,
+      "observation_periods": 81,
+      "publication_clock_rows": 81,
+      "revised_periods": 80,
+      "series_id": "PAYEMS",
+      "vintage_rows": 478
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1669,
+      "last_observation": "2026-09-04",
+      "nonmissing_vintage_rows": 1673,
+      "observation_periods": 1670,
+      "publication_clock_rows": 0,
+      "revised_periods": 3,
+      "series_id": "DEXJPUS",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-01",
+      "initial_rows": 2445,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 2445,
+      "observation_periods": 2445,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DFF",
+      "vintage_rows": 2445
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DGS1",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DGS1MO",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DGS3MO",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DGS6MO",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1676,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 2,
+      "series_id": "DGS10",
+      "vintage_rows": 1750
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1673,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1674,
+      "observation_periods": 1674,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "DTB3",
+      "vintage_rows": 1748
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1670,
+      "last_observation": "2026-09-04",
+      "nonmissing_vintage_rows": 5701,
+      "observation_periods": 1670,
+      "publication_clock_rows": 0,
+      "revised_periods": 1515,
+      "series_id": "DTWEXAFEGS",
+      "vintage_rows": 5774
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1681,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "EFFR",
+      "vintage_rows": 1747
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1680,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1683,
+      "observation_periods": 1683,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "GVZCLS",
+      "vintage_rows": 1750
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1679,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "RVXCLS",
+      "vintage_rows": 1749
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1671,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1671,
+      "observation_periods": 1671,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "SOFR",
+      "vintage_rows": 1747
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1675,
+      "last_observation": "2026-09-11",
+      "nonmissing_vintage_rows": 1677,
+      "observation_periods": 1675,
+      "publication_clock_rows": 0,
+      "revised_periods": 2,
+      "series_id": "T10YIE",
+      "vintage_rows": 1750
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1712,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1714,
+      "observation_periods": 1714,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "VIXCLS",
+      "vintage_rows": 1749
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1681,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1684,
+      "observation_periods": 1684,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "VXDCLS",
+      "vintage_rows": 1751
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1680,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1684,
+      "observation_periods": 1683,
+      "publication_clock_rows": 0,
+      "revised_periods": 1,
+      "series_id": "VXNCLS",
+      "vintage_rows": 1751
+    },
+    {
+      "first_observation": "2020-01-02",
+      "initial_rows": 1679,
+      "last_observation": "2026-09-10",
+      "nonmissing_vintage_rows": 1681,
+      "observation_periods": 1681,
+      "publication_clock_rows": 0,
+      "revised_periods": 0,
+      "series_id": "VXVCLS",
+      "vintage_rows": 1749
+    }
+  ],
+  "series_count": 20,
+  "status": "pass",
+  "verified_at": "2026-09-12T08:46:02.211336+00:00",
+  "verified_publication_dates": 160,
+  "vintage_rows": 37003
+}

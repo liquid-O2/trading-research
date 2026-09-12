@@ -1,0 +1,1242 @@
+{
+  "objects": {
+    "O001": {
+      "name": "Evidence and data coverage",
+      "mode": "compute + audit.",
+      "f1": "Synthetic: a branch requires 10:00\u201310:05 OHLC and signed trades. Five complete minute bars exist but trade side is absent for volume 12: price coverage=true, side coverage=null, coverage_ok=null; missing_fields contains aggressor. Supplying all five correctly timed signed intervals makes coverage_ok=true. Four minute bars alone cannot pass."
+    },
+    "O002": {
+      "name": "Touch, reject, hold and break measurements",
+      "mode": "literal measurements; source confirmation can remain a hole.",
+      "f1": "Synthetic q=0.25, band [100, 101], bar L=100.50/H=102: overlap=true, upper price excursion=1 point=4 ticks. C=101 does not satisfy C<101; C=100.75 does. No source hold duration was supplied: source_hold=null despite ten bars inside."
+    },
+    "O003": {
+      "name": "Source clocks and availability",
+      "mode": "compute.",
+      "f1": "C02-F1 is the numerical fixture. Additionally a completed 03:00\u201303:30 ET source range is not available to an event at 03:15: clock check=false; its 03:30 value can be used at 03:31."
+    },
+    "O004": {
+      "name": "Source execution bars",
+      "mode": "compute time bars; native-range construction hole.",
+      "f1": "Synthetic two complete one-minute bars (O, H, L, C, V)=(100, 102, 99, 101, 10) and (101, 103, 100, 102, 20) inside 10:00\u201310:02 produce (100, 103, 99, 102, 30), known_at=10:02. The same inputs cannot produce a source-compatible NQ 40-range bar: compatibility=null."
+    },
+    "O005": {
+      "name": "Jumbo's 06:00\u201309:00 range",
+      "mode": "compute frozen geometry.",
+      "f1": "Synthetic formation has L=100/H=120: W=20, known_at=09:00. A 09:10 high=130 leaves H=120. A 08:50 decision using H=120 as the completed range fails even if the number later happens to be correct."
+    },
+    "O006": {
+      "name": "Other time-based range formations",
+      "mode": "compute verified manual clocks; later source configuration hole.",
+      "f1": "Synthetic manual London [03:00, 03:30) L=200/H=208 gives W=8 known 03:30. A 03:35 action can use it. Selecting 00:00\u201303:00 instead with H=220 fails source_clock_verified for this manual fixture."
+    },
+    "O007": {
+      "name": "Range EQ and quadrants",
+      "mode": "compute.",
+      "f1": "Synthetic L=100/H=120/W=20 => Q25=105, EQ=110, Q75=115. A price of 110 is at EQ; it is neither strictly above nor strictly below. For L=100/H=100.25, EQ=100.125 remains unrounded."
+    },
+    "O008": {
+      "name": "Source range-open and range-close references",
+      "mode": "supplied source identity; literal price computation only when anchor is explicit.",
+      "f1": "Synthetic source line marked range open=112 known 09:00, range low=100. A 10:00 test at 100 then 10:10 trade 112 completes low\u2192open; numeric 100>112 is false and is not the path predicate. An unrelated 06:00 open 108 must not replace 112."
+    },
+    "O009": {
+      "name": "Range width and expectations",
+      "mode": "compute widths/ratios; qualitative classification hole.",
+      "f1": "Synthetic W=20, P=20000, prior_W=80 => price_percent=0.10%, width_ratio=0.25, width_ticks=80 if q=.25. These numbers do not establish extended_context: without a source class rule it is null."
+    },
+    "O010": {
+      "name": "Retrospective range path",
+      "mode": "compute retrospective event geometry.",
+      "f1": "Synthetic H=120/L=100. At 09:35 price 121, at 10:10 price 99: the 09:30\u201310:30 path is both, first_side=high. Through 10:00 the prefix is high-only-so-far, not a final single-break classification. A single bar H121/L99 gives both but first_side=unknown."
+    },
+    "O011": {
+      "name": "Overnight high, low and width",
+      "mode": "compute source-scoped range.",
+      "f1": "Synthetic Sires overnight H=150/L=130 ends 09:30: width 20. Separate 6\u20139H145/L135 has width 10 and cannot replace it. At 09:20 full ONH=150 is not yet a final overnight object."
+    },
+    "O012": {
+      "name": "Chronological liquidity purges",
+      "mode": "state ledger over source-defined sweep events.",
+      "f1": "Synthetic prior high 110 known 18:00, verified qualifying sweep 111 at 02:10, decision 09:45 => purged_at02:10 and purge-before-decision=true. Move sweep to 10:00 =>false. Under RTH-only scope the 02:10 hit leaves active=true for 09:45; the same event can be a true overnight purge in its distinct ledger."
+    },
+    "O013": {
+      "name": "Opening location and participation",
+      "mode": "compute location cells; source context interpretation hole.",
+      "f1": "Synthetic prior value [100, 110], prior range [95, 115], open 112 => above value, inside range. It does not fail merely for being inside range. RVOL from 09:30\u201309:35 cannot be a 09:31 context input."
+    },
+    "O014": {
+      "name": "Range exhaustion and mean-reversal area",
+      "mode": "compute identified ladder; source location selection hole.",
+      "f1": "Synthetic L100/H120/W20 gives upper 0.1=122, 0.2=124, 0.3=126, 0.5=130. A price 121 has depth 0.05W, not 0.5W. A source-selected shallow-sweep fixture is not rejected merely because 130 never trades."
+    },
+    "O015": {
+      "name": "The 1.33\u20131.66 extension area",
+      "mode": "compute identified beyond-edge geometry.",
+      "f1": "Synthetic L100/H120/W20 => upper [146.60, 153.20], lower [66.80, 73.40]. An independently supplied inner L106/H114/W8 gives upper [124.64, 127.28]. Using the outer width for the inner projection is a fixture failure."
+    },
+    "O016": {
+      "name": "Nested source range geometry",
+      "mode": "supplied span + literal geometry; construction hole.",
+      "f1": "Synthetic outer [100, 120], inner [106, 114] => widths 20 and 8. The two EQ values happen to equal 110; that equality does not merge IDs or prove EV. Remove inner bounds: inner width and its projections are null, not 20."
+    },
+    "O017": {
+      "name": "Session Stat+ envelopes",
+      "mode": "supplied source bands only; engine hole.",
+      "f1": "Synthetic supplied average [100, 120], median [102, 118], no min-average value: average midpoint 110; median endpoints remain 102/118; min-average=null. The min of the two widths, 16, is not a permissible min-average band."
+    },
+    "O018": {
+      "name": "Jumbo EVRange",
+      "mode": "supplied source reference only.",
+      "f1": "Synthetic source EV mid 111 and 6\u20139EQ110 remain different. A price 110 touches EQ but not exact EV mid 111. Remove EV snapshot: ev_reference_known=null even if a generic envelope returns 111."
+    },
+    "O019": {
+      "name": "Time-anchored P-zones",
+      "mode": "supplied source zone/state only.",
+      "f1": "Synthetic zone [100, 102], anchor 09:00, verified snapshot 09:02, touch 09:45, decision 09:47: known-before-touch=true; entry_at09:00 is not implied. With only anchor and no availability evidence, source_zone_known=null."
+    },
+    "O020": {
+      "name": "PD RTH Range+ destinations",
+      "mode": "compute specified prior range; source direction/imbalance selection can be holes.",
+      "f1": "Synthetic prior RTH H120/L100; ETH price 121 at 02:00 does not consume upper RTH objective 120. Current RTH source long declared 09:40 and target 120, reached 10:05, preserves the correct ordering; choosing long only because the 12:00 close rose fails."
+    },
+    "O021": {
+      "name": "Jumbo reversal and action windows",
+      "mode": "check source-selected times.",
+      "f1": "Synthetic manual reversal confirmation 09:45 is inside 09:40\u201309:50; 09:55 is outside. A timed P-zone case confirmed 10:07 is not rejected by the manual window unless that case actually requires it. An exact 09:50 boundary remains unresolved if source inclusivity is absent."
+    },
+    "O022": {
+      "name": "Source session-cleanliness assessment",
+      "mode": "supplied qualitative context only.",
+      "f1": "Synthetic London preference recorded 02:00 for a 03:30 action can be a supplied context. A 12:00 note that London was clean cannot establish a 02:00 preference. Ten profitable London days alone do not generate a faithful selector."
+    },
+    "O023": {
+      "name": "Accumulation, manipulation and distribution phases",
+      "mode": "source description/state audit only.",
+      "f1": "Synthetic accumulation 06:00\u201309:00, sweep 09:35, distribution observed 10:15: the 10:15 distribution label is unavailable at 09:30. The sequence timestamps are recordable; automatic distribution-before-open is null/causal fail if asserted true."
+    },
+    "O024": {
+      "name": "Jumbo failure signatures and three attempts",
+      "mode": "attempt ledger and literal allocation audit.",
+      "f1": "Synthetic attempts A1/A2/A3 end 09:41/09:44/09:48 as failures: count at 09:45=2, at 09:49=3. Prior allocation 4 units permits at most 2 units if continuing. Three 09:40 touch rows under A1 still count one attempt."
+    },
+    "O025": {
+      "name": "Opening-range midpoint reference",
+      "mode": "compute only for a verified source OR.",
+      "f1": "Synthetic verified ORH108/L100 produces mid 104 known at its stated end.6\u20139EQ110 remains different. Remove the OR end: midpoint can be retained as supplied geometry but automatic OR construction/availability is null."
+    },
+    "O026": {
+      "name": "Confirmed swing midpoint retrace",
+      "mode": "compute supplied confirmed swing; automatic pivot hole.",
+      "f1": "Synthetic low 100 priced 09:35 confirmed 09:40 and high 120 priced 09:50 confirmed 09:55 produce midpoint 110 known 09:55. A 09:52 touch 110 cannot count as post-confirmation retrace; 10:00 touch can."
+    },
+    "O027": {
+      "name": "Relative-volume context at the open",
+      "mode": "compute explicit ratio; source baseline/class hole.",
+      "f1": "Synthetic supplied prior window volumes 100/200/300 with explicitly supplied arithmetic mean 200; current 09:30\u201309:35 volume 300 =>rvol 1.5 known 09:35. At 09:31 unavailable. Without the baseline or high threshold, source_high_rvol=null."
+    },
+    "O028": {
+      "name": "Equal-high or equal-low liquidity objective",
+      "mode": "supplied reference + explicit equality measurement.",
+      "f1": "Synthetic confirmed highs 120.00 and 120.00 have exact equality; 120.00 and 120.25 do not. A source-defined band [120, 120.25] may contain both, but without that sourced band a near-equal classification is null."
+    },
+    "O029": {
+      "name": "Scheduled news and changing information",
+      "mode": "timestamped schedule/release ledger; response selection hole.",
+      "f1": "Synthetic scheduled release 08:30 known the prior day, actual value received 08:30:02: at 08:30:01 schedule_known=true and release_known=false. A thesis revision recorded 08:31 is unavailable at 08:30:30. A date-only event gives release_known=null at either intraday decision."
+    },
+    "O030": {
+      "name": "Session VWAP",
+      "mode": "exact trade-weighted arithmetic for verified reset; author reset/basis hole where absent.",
+      "f1": "Synthetic verified reset: trade 100\u00d72 then 104\u00d71 gives sum_v=3, sum_pv=304, VWAP=304/3=101.333333\u2026. A later 110\u00d73 changes the later snapshot to 634/6=105.666667, but cannot change the earlier contact value. Missing reset => faithful VWAP null."
+    },
+    "O031": {
+      "name": "Anchored VWAP",
+      "mode": "verified source anchor plus session-VWAP accumulator.",
+      "f1": "Synthetic swing priced at 09:40, confirmed/selected at 09:50; included trades 100\u00d71 and 102\u00d73 give AVWAP=101.5. This value is usable no earlier than 09:50; a 09:45 touch is not a confirmed-anchor test."
+    },
+    "O032": {
+      "name": "VWAP deviation bands",
+      "mode": "band algebra from verified deviation; variance/reset construction hole.",
+      "f1": "Synthetic supplied \u03bc=100, \u03c3=2: k=2 produces [96, 104], k=2.5 [95, 105], k=3 [94, 106]. Contact 104 touches the k=2 upper band; it does not prove a fade. Remove \u03c3 convention/value: faithful calculated band null."
+    },
+    "O033": {
+      "name": "Source gamma regime",
+      "mode": "source snapshot and branch-permission audit; engine hole.",
+      "f1": "Synthetic supplied source regime long_gamma, observed at 09:20 and used at 09:30, gives BIG aggressive-OFM regime permission=false and BIG balance-fade regime permission=true. The latter still needs its other gates. With an uncertain source regime both permissions are null; later direction cannot select them."
+    },
+    "O034": {
+      "name": "Native options-chain identity",
+      "mode": "native contract identity and temporal cohort filter.",
+      "f1": "Synthetic QQQ call strike 500 expiring 2026-09-11 observed on ET 2026-09-11 is 0DTE; otherwise identical 2026-09-14 expiry is not. QQQ strike 500 cannot become NQ 25000 without a supplied mapping; mapped_price=null."
+    },
+    "O035": {
+      "name": "Gamma-flip reference",
+      "mode": "supplied native reference; construction hole.",
+      "f1": "Synthetic native spot 502 and supplied flip 500 gives difference +2 and above. A source interpretation marked uncertain remains uncertain; +2 does not manufacture a regime. No flip snapshot => relation null."
+    },
+    "O036": {
+      "name": "Gamma call and put walls",
+      "mode": "supplied ranked native references; engine hole.",
+      "f1": "Synthetic source call-wall ranks 1=510 and 2=505 with spot 506: spot is below rank 1 and above rank 2. Both records survive. Put wall 490 and max pain 490 retain two IDs."
+    },
+    "O037": {
+      "name": "Source max-pain reference",
+      "mode": "supplied source reference only.",
+      "f1": "Synthetic supplied max pain 500 and put wall 495 give difference 5. Updating a separate put-wall record to 500 changes equality, not object identity or a predicted terminal price. Missing source max pain => null."
+    },
+    "O038": {
+      "name": "Source Vol Trigger readout",
+      "mode": "supplied readout only; engine hole.",
+      "f1": "Synthetic supplied Vol Trigger 500 in native ETF price units at 09:20 is usable as that reference at 09:30. A computed volatility value 20 cannot replace 500; without the panel source_value=null."
+    },
+    "O039": {
+      "name": "Source VOL-GEX readout",
+      "mode": "supplied readout only; engine hole.",
+      "f1": "Synthetic panel value 12 with source unit U is retained as 12 U. A separately computed 10 U remains a comparison, not source value. Missing source panel => faithful value null."
+    },
+    "O040": {
+      "name": "Source hedging-pressure gauge",
+      "mode": "supplied gauge only; engine hole.",
+      "f1": "Synthetic explicitly supplied gauge 7 on stated scale 0\u201310 is recorded as 7, not 70% unless the source defines that conversion. A missing scale leaves interpretation null; no entry predicate follows from 7."
+    },
+    "O041": {
+      "name": "Source KG1 level",
+      "mode": "supplied level/band only; engine hole.",
+      "f1": "Synthetic source KG1 band [100, 101], independently supplied HVN [99.5, 100.5] and reaction band [100, 100.75] preserve three IDs. Removing the HVN does not pass the member's two-reason condition merely because KG1 exists."
+    },
+    "O042": {
+      "name": "VIX and volatility context",
+      "mode": "available source observation and scoped interpretation.",
+      "f1": "Synthetic prior available VIX 20 and later same-day close 25: a 09:30 decision can use 20 only if its publication is verified; 25 is unavailable. Missing publication time prevents a faithful preopen selection."
+    },
+    "O043": {
+      "name": "Volatility-implied daily-move estimate",
+      "mode": "source-printed algebra.",
+      "f1": "Synthetic VIX 20 gives 20/sqrt(252)=1.2598815767%. With an explicitly selected P=5000, point estimate=62.994078835. It is not 6299.4078835 points and does not assert that price must travel 62.994 points."
+    },
+    "O044": {
+      "name": "Volatility term structure and event change",
+      "mode": "aligned source observations and literal changes; interpretation hole.",
+      "f1": "Synthetic selected near/far values 20 and 22 give difference +2 and, if explicitly requested, far/near=1.1. A post-release near value 16 yields change -4 only after its release. It is unavailable before the event."
+    },
+    "O045": {
+      "name": "VVIX context",
+      "mode": "available observation with supplied context.",
+      "f1": "Synthetic VVIX 100 available 09:00 may be recorded at 09:30; value 110 first available 10:00 may not. The number 100 alone leaves entry_permission=null."
+    },
+    "O046": {
+      "name": "Green Bird's finished session references",
+      "mode": "completed source range geometry; unresolved session clocks are holes.",
+      "f1": "Synthetic NYAM H=110/L=100 forms at 10:00. Price 111 at 09:45 cannot sweep its finished boundary; a 10:05 price 111 can. Its opposing low remains 100. A missing 09:32 row prevents automatic complete-box status."
+    },
+    "O047": {
+      "name": "Sweep, failure and reclaim",
+      "mode": "ordered literal failure; source confirmation mode required.",
+      "f1": "Synthetic high R110, trade 111 at 10:01 then complete [10:00, 10:05) close 109 at 10:05, decision 10:06 gives high-failure sequence true when finer evidence supplies the sweep time. Close 111 gives false; close 110 does not satisfy strict below. A 10:04 decision using that close fails causality."
+    },
+    "O048": {
+      "name": "Prior day, week and month extremes",
+      "mode": "extrema for verified prior-period convention; unspecified scope hole.",
+      "f1": "Synthetic verified previous week H120/L90 and prior day H110/L100 give four separate references. A115 trade sweeps daily high but not weekly high. Missing weekly endpoint convention makes the automatic weekly reference unknown."
+    },
+    "O049": {
+      "name": "Green Bird's midnight true-day open",
+      "mode": "literal midnight opening reference.",
+      "f1": "Synthetic midnight TDO 100, cash open 105, evening open 98 remain distinct. A selected Asia-high-failure short with required five-minute close 99 satisfies close below TDO; close 101 fails that selected gate. Another source case with no TDO requirement remains not_required."
+    },
+    "O050": {
+      "name": "09:30 cash-open price",
+      "mode": "literal opening event and ordered source opening case.",
+      "f1": "Synthetic cash open 100 at 09:30, price 99 at 09:32, return 101 at 09:34: below-then-above order is observed. Full source confirmation remains null without its disclosed/supplied rule. A 09:33 long cannot use 09:34 reclaim."
+    },
+    "O051": {
+      "name": "New-week opening gap",
+      "mode": "literal supplied endpoints; endpoint convention hole.",
+      "f1": "Synthetic F100/S104 gives gap [100, 104], width 4. Later trade 102 enters the gap but does not fill it; 100 completes the downward fill. Without the Friday-close convention, faithful automatic gap is null."
+    },
+    "O052": {
+      "name": "Measured 50\u201361.8% retracement",
+      "mode": "source-measured impulse retracement algebra.",
+      "f1": "Synthetic down impulse H120/L100 gives band [110, 112.36]. A declared up impulse with the same extrema gives [107.64, 110]. A touch 111 fits the down retracement only; no failure confirmation follows from it."
+    },
+    "O053": {
+      "name": "Premium / discount within a selected range",
+      "mode": "literal range-position algebra; source value meaning preserved.",
+      "f1": "Synthetic range [100, 120], P108 gives midpoint 110, position 0.4, discount. Supplied VWAP 107 puts the same P above VWAP. The two relations can differ without either being rewritten."
+    },
+    "O054": {
+      "name": "Market-structure shift after failure",
+      "mode": "supplied source-confirmed structure sequence; automatic detector hole.",
+      "f1": "Synthetic failure 10:05, source swing boundary 108 confirmed 10:06, break 107 at 10:07 and entry 10:08 preserve order for a supplied bearish refinement. A 10:04 entry fails causality; absent swing detector leaves automatic MSS null."
+    },
+    "O055": {
+      "name": "Fair-value gaps and higher-timeframe imbalances",
+      "mode": "supplied source gap; unresolved construction/fill holes.",
+      "f1": "Synthetic supplied bullish gap [100, 102] confirmed 10:15: it is unavailable 10:14. A later descent to 101 is partial contact, to 100 reaches the far edge. Without a source active-state policy, a later entry's active_gap remains null."
+    },
+    "O056": {
+      "name": "Jumbo orderblocks",
+      "mode": "source three-candle OB geometry and confirmed entry choice.",
+      "f1": "Synthetic bullish C1L101; C2O102/H104/L100/C103; C3 close 105. Sweep 100<101 and close 105>104 give confirmed OB [100, 104], mid 102. Rejection wick [100, 102] is a different object. C3 close 103 fails this confirmation; decision before C3 close fails causality."
+    },
+    "O057": {
+      "name": "Jumbo rejection blocks",
+      "mode": "literal source rejection wick and selected execution policy.",
+      "f1": "Synthetic O102/C103/H104/L100 gives lower rejection band [100, 102], width 2, upper [103, 104], width 1. Full candle OB [100, 104] is neither wick. A zero lower wick L102 would eliminate that lower-wick area."
+    },
+    "O058": {
+      "name": "Jumbo Absorption Zone+ candle",
+      "mode": "printed feature arithmetic; undisclosed comparison/reset conventions remain holes.",
+      "f1": "Synthetic O100/C102/H110/L100, V200 and explicitly supplied 14 prior volumes 100 each: body_ratio0.2, average 100, volume_ratio2. These are strictly inside the displayed small-body/high-volume conditions. At body_ratio0.6 or volume_ratio1.5 exact equality handling is null unless supplied. Omitting average inclusion/reset prevents an automatic faithful zone flag."
+    },
+    "O059": {
+      "name": "Source setup quality and exposure",
+      "mode": "source grade and necessary-condition audit; no universal grading engine.",
+      "f1": "Synthetic GB candidate at a preselected high of 110 has a fully evidenced required-sweep flag=false and a supplied A+ label: the necessary grade condition fails. With a sweep above 110 but no other grade evidence, automatic A+ remains null. A Sires B+ early entry remains an early entry, not a confirmed-refill pass."
+    },
+    "O060": {
+      "name": "Auction balance",
+      "mode": "source-selected accepted band; automatic selector hole.",
+      "f1": "Synthetic source balance [100, 110] declared 09:20 has width 10. Price 108 at 09:40 is inside that band; this does not prove an edge fade. A replacement [105, 115] drawn 10:30 cannot qualify the 09:40 arrival."
+    },
+    "O061": {
+      "name": "Volume profile",
+      "mode": "exact executed volume histogram; source auction/bin selection required.",
+      "f1": "Synthetic trades 100\u00d72, 100.25\u00d73, 100\u00d71 give native bins 100:3 and 100.25:3, total 6. Under explicitly supplied [100, 100.5) bin both aggregate to 6. A quote update size 50 contributes 0 volume. Unspecified source binning leaves source-compatible binned profile unknown, while native totals remain exact."
+    },
+    "O062": {
+      "name": "Profile value area",
+      "mode": "source-specific VA geometry/coverage; undisclosed construction hole.",
+      "f1": "Synthetic total volume 100 and supplied Saint VA bins summing 68 gives achieved_fraction0.68. It meets the literal 68% coverage check but not a 70% requirement. Two different bands can each contain 68; that fact does not resolve the missing selection algorithm."
+    },
+    "O063": {
+      "name": "Developing profile snapshot",
+      "mode": "immutable causal profile snapshots.",
+      "f1": "Synthetic at 10:00 bins 100:10/101:5 gives unique POC 100; at 10:30 added 101:10 gives unique POC 101. A 10:05 action still sees first snapshot POC 100. The later value cannot revise its evidence."
+    },
+    "O064": {
+      "name": "Profile point of control",
+      "mode": "maximum-volume row with explicit tie handling.",
+      "f1": "Synthetic bins 100:4, 101:10, 102:6 give POC 101 and max 10. Change 102 to 10 => tied candidates [101, 102], faithful POC null absent tie rule. Profile midpoint(100+102)/2=101 in first case is coincidental, not the POC formula."
+    },
+    "O065": {
+      "name": "Untested prior POC",
+      "mode": "as-of untouched-reference ledger.",
+      "f1": "Synthetic older POC 105 known yesterday 16:00; no visits through 09:40 under complete coverage =>untested true. First visit 105 at 09:45 changes status false afterward, not at 09:40. Missing overnight coverage makes earlier untouched status null if overnight visits count."
+    },
+    "O066": {
+      "name": "High-volume node",
+      "mode": "source-selected node band with literal profile measurements; selector hole.",
+      "f1": "Synthetic supplied node [100, 102] with volumes 4/10/6 has volume 20 and peak 101. Independently supplied reaction [100.5, 101.5] overlaps [100.5, 101.5]. That overlap is geometry only; absent independent HVN evidence the two-reason gate is null."
+    },
+    "O067": {
+      "name": "Low-volume node",
+      "mode": "source-selected bridge between accepted areas; detector hole.",
+      "f1": "Synthetic accepted bins 100:10 and 104:12, supplied bridge 101:2/102:1/103:2 gives bridge volume 5, trough 102. Remove the 104 accepted area: two-sided bridge validity is null/false if the complete profile proves it absent, even though 102 remains the minimum."
+    },
+    "O068": {
+      "name": "Profile shelf",
+      "mode": "source shelf body/transition geometry; detector hole.",
+      "f1": "Synthetic supplied shelf [100, 102] with volumes 8/8/7 totals 23; transition [103, 104] with 3/1 totals 4. The shelf body remains [100, 102]; neither volume ratio 23/4 nor VAH automatically defines its ledge algorithm."
+    },
+    "O069": {
+      "name": "Profile ledge",
+      "mode": "source-selected structural edge and same-edge join.",
+      "f1": "Synthetic ledge 102 known 09:50 breaks 10:00 and retests 102 at 10:05: same ID true. Developing VAH has moved 103 by 10:05; touching 103 is not a retest of ledge 102 without an explicit source relationship."
+    },
+    "O070": {
+      "name": "Composite auction profiles",
+      "mode": "sum source-selected constituent auctions; selector hole.",
+      "f1": "Synthetic disjoint profiles A{100:3, 101:2}, B{100:4, 101:1} give composite{100:7, 101:3}, total 10. If B includes the same 2-contract event already in A, na\u00efve 10 is wrong; ownership must remove that duplicated contribution or return overlap hole."
+    },
+    "O071": {
+      "name": "Source-selected dealing range",
+      "mode": "source-selected thesis band and controlling structure.",
+      "f1": "Synthetic long dealing band [100, 105], controlling low 100 selected 09:40 remains the reference after a 09:50 stop-out. A 10:00 return 104 is inside it; replacing bounds with [103, 108] because later price rose is invalid."
+    },
+    "O072": {
+      "name": "Prior defended reaction area",
+      "mode": "same-band historical defense record.",
+      "f1": "Synthetic band [100, 101] defended 09:30, known 09:32, contacted again 10:00: prior_defense_knowntrue. A fresh defense 10:02 is unavailable at 10:01. A separate band [102, 103] cannot inherit that memory."
+    },
+    "O073": {
+      "name": "Overnight volume structure",
+      "mode": "source overnight profile and landmarks; exact window/selection required.",
+      "f1": "Synthetic supplied overnight LVN [100, 101] and older POC 100.5 align geometrically. Today's final RTH POC 103 does not change this. A 09:31 opening hold is unavailable to a 09:30 decision."
+    },
+    "O074": {
+      "name": "Overnight directional inventory",
+      "mode": "source inventory interpretation with causal measurements; classifier hole.",
+      "f1": "Synthetic supplied net_long inventory known 09:20 and shelf 100; opening break below 99 at 09:35 is a later observed response. It does not retroactively change net_long to net_short. Missing inventory definition/record =>label null."
+    },
+    "O075": {
+      "name": "ETH profile identity",
+      "mode": "source ETH identity binding; unresolved scope conflict preserved.",
+      "f1": "Synthetic prior ETH price balance [100, 120], VA [105, 115], open 103 gives inside balance=true and inside VA=false. If the source's intended condition is unresolved, 73% cohort eligibility is null; do not select either to improve results."
+    },
+    "O076": {
+      "name": "MPOC: the profile midpoint",
+      "mode": "source-printed profile midpoint.",
+      "f1": "Synthetic ETH H120/L100 gives MPOC 110. A volume POC at 114 stays 114. A later price 110 touches MPOC even if 114 is untouched; these are two distinct outcome predicates."
+    },
+    "O077": {
+      "name": "Signed volume-by-price profile",
+      "mode": "exact signed execution histogram for selected source window.",
+      "f1": "Synthetic price 100 has B7/A4 =>delta+3, total 11. Price 101 has B2/A5 =>delta-3, total 7; windowknown_delta0, total 18. Add unknown size 2 at 101: true window delta is unknown with interval [-2,+2], not exactly 0."
+    },
+    "O078": {
+      "name": "Time-price-opportunity profile",
+      "mode": "letter-aware time profile; exact source price visitation convention required.",
+      "f1": "Synthetic selected trade-visited price 100 sees A twice and B once =>members{A, B}, count 2; price 101 sees A once=>{A}, count 1. A price 99 first seen 09:59 changes A-low to 99 at 10:00; it cannot be excluded from whole A test."
+    },
+    "O079": {
+      "name": "TPO single-print structure",
+      "mode": "interior letter structure with supplied accepted distributions; selection holes preserved.",
+      "f1": "Synthetic rows 100:{A, B}, 101:{C}, 102:{C}, 103:{C, D} with supplied accepted areas at 100/103 yield interior one-letter rows 101\u2013102, both letter C. Row 104:{D} beyond the upper accepted area is outer tail, not part of that interior band. Later D at 101 changes count to 2 only after its arrival."
+    },
+    "O080": {
+      "name": "TPO excess at auction extremes",
+      "mode": "source extreme-tail letter geometry.",
+      "f1": "Synthetic upper rows 104:{D}, 103:{D}, 102:{B, D} givetail_length2, same letter true, excess under selected criterion true. If 103:{C}, two one-letter rows do not satisfy same letter tail. A matching low-sidecheck is independent."
+    },
+    "O081": {
+      "name": "TPO poor high and poor low",
+      "mode": "source instrument-specific incomplete extreme; definition hole where unresolved.",
+      "f1": "Synthetic verified NQ upper outer tail has one D row at 104, next row 103:{B, D}: tail_length1 is the selected source poor-high case. Low tail with 2 same A rows is excess under its criterion, not automatically poor low. With ES and no exact criterion, poor_high=null even for same geometry."
+    },
+    "O082": {
+      "name": "Initial balance",
+      "mode": "completed first-hour range and later descriptive extensions.",
+      "f1": "Synthetic A H110/L100, B H108/L99 =>IBH 110, IBL 99, W11 known 10:30. Later H112/L98 yields upper extension 2, lower 1, both broken=true. A 10:15 decision cannot use IBL 99 if its defining trade occurs 10:20."
+    },
+    "O083": {
+      "name": "Developing auction open type",
+      "mode": "developing source opening-path description; classifier holes.",
+      "f1": "Synthetic open 100, 09:30:20 price 99, 09:32 price 102: a bullish no-through-open claim over that interval is false because 99 crossed below. Dropping the first minute would incorrectly pass. Ata 09:31 as-of, later 09:40 behavior is unavailable."
+    },
+    "O084": {
+      "name": "Developing auction day structure",
+      "mode": "source-taxonomy state observation; no universal early classifier.",
+      "f1": "Synthetic provisional balance at 10:00 and final trend label at 16:00 are two observations. The 16:00 label cannot pass a 10:15 trend context gate. A complete IB extension of 2 points is recordable without inventing a Trend Day label."
+    },
+    "O085": {
+      "name": "Profile shape and trade permission",
+      "mode": "source shape and author-specific permission; detector/direction holes.",
+      "f1": "Synthetic Saint source P shape with balance [100, 105] is context only; no break/retest means no entry pass. A Sires P caption and drawing with opposite directions yields direction=null, not an optimized choice."
+    },
+    "O086": {
+      "name": "Prior-session auction landmarks",
+      "mode": "typed prior landmark registry and literal geometry.",
+      "f1": "Synthetic prior session high = 110, prior close = 105, current open = 114 gives half-session-gap = (114 + 110)/2 = 112 and half-close-gap = (114 + 105)/2 = 109.5. A price of 112 touches the first reference; it does not establish a fill to the prior close at 105."
+    },
+    "O087": {
+      "name": "Remaining auction objectives",
+      "mode": "persistent source-scoped objective state machine.",
+      "f1": "Synthetic RTH-only objective 120 known yesterday 16:00, ETH hit 02:00, RTH entry 09:40: active=true if no qualifying RTH visit. RTH hit 10:00 consumes after entry. Another method whose policy counts ETH would have active=false at 09:40; do not share the flags."
+    },
+    "O088": {
+      "name": "Source-conditioned reference statistics",
+      "mode": "source-claim registry plus separately scoped nonfinancial reference observations.",
+      "f1": "Synthetic 10 identified sessions with ONH hit 6, ONL hit 5, both 3 give either=6+5-3=8, either rate 0.8, both rate 0.3. They are not 0.94 and not interchangeable. A supplied ETH H120/L100 gives MPOC 110, never volume POC 114; unresolved open condition prevents 73% replication."
+    },
+    "O089": {
+      "name": "Saint's Asia-range target context",
+      "mode": "Saint source target-ambition record; range/target selector hole.",
+      "f1": "Synthetic short entry 110, stop 112, target 105 gives stop distance 2, target distance 5. A supplied Asia range reference 8 points is retained, but 5/8=0.625 does not become a universal 62.5% target rule; ambition classification needs its source rationale."
+    },
+    "O090": {
+      "name": "Rotation within accepted balance",
+      "mode": "ordered source route; acceptance and local confirmation definitions required.",
+      "f1": "Synthetic balance [100, 110], POC 106 known 09:20; low-edge contact 100 at 09:40, supplied source confirmation 09:42, decision 09:43 and later POC 106 at 10:00 preserve the route. Far edge 110 reached 10:20 is a separate outcome; it cannot replace the missing 09:42 confirmation."
+    },
+    "O091": {
+      "name": "Accepted break and defended boundary retest",
+      "mode": "same-reference break, acceptance, return and defense sequence.",
+      "f1": "Synthetic ledge 110 known 09:30, break 111 at 09:40, departure 112 at 09:41, retest 110 at 09:45, source defense 09:46 and entry 09:47 pass the literal order when acceptance and branch gates are supplied. Entry 09:44 lacks the required later retest and fails. Retest 109 on another band cannot be joined to ledge 110 by date alone."
+    },
+    "O092": {
+      "name": "Re-acceptance into value",
+      "mode": "original-area re-entry plus source-specific acceptance.",
+      "f1": "Synthetic original VA [100, 110], prior price 112, return 108: literal location is inside. A later price 111 is outside despite 111\u2265VAL. Under an explicitly supplied whole-period-inside test, periods with ranges [102, 109] and [101, 108] satisfy both bounds after the second closes; replacing the second high with 111 fails that supplied test. Without that exact source inside convention, automatic acceptance remains null."
+    },
+    "O093": {
+      "name": "Sires's narrower Failed Auction setup",
+      "mode": "two-balance, older-POC tag and rejection route.",
+      "f1": "Synthetic established balance VA [100, 110], distinct older POC 115, both known 09:20; breakout 09:40, actual tag 115 at 09:45, supplied rejection-from-above 09:46, decision 09:47 binds target 110. No tag while price only reaches 114 makes this route false with complete evidence. Replacing older profile ID with established ID fails distinctness."
+    },
+    "O094": {
+      "name": "Saint's failed auction and return to value",
+      "mode": "exploration failure, original-value reacceptance and renewed control.",
+      "f1": "Synthetic original balance [100, 110], tested lower value [90, 98]; exploration 95 at 09:40, source failure 09:50, return 102 at 10:00, reacceptance 10:05, renewed long control 10:07 and decision 10:08 preserve the source route. The long cannot pass at 09:55 before return/control, even if price eventually 110."
+    },
+    "O095": {
+      "name": "POC failure versus efficient passage",
+      "mode": "source POC test/passage state and target progression.",
+      "f1": "Synthetic POC 105 tested at 09:40 and 09:45 with two supplied failed-cross records gives failed_test_count2. Later source passage 09:50 and held retest 09:52 are new evidence; a 09:51 continuation requiring that retest cannot use it. Far edge 110 remains a separate outcome."
+    },
+    "O096": {
+      "name": "Whole-balance traversal with one side in control",
+      "mode": "whole-area path then source no-hold/control and later retest.",
+      "f1": "Synthetic balance [100, 110], lower-bound event 10:00 and upper-bound event 10:40 give whole upward traversal and duration 40 minutes. It is not rejected merely for exceeding 30 minutes. No source hold definition =>no_hold=null; later retest 10:45/control 10:46 cannot authorize 10:42 entry."
+    },
+    "O097": {
+      "name": "Higher- and lower-timeframe control alignment",
+      "mode": "source thesis and current local control alignment.",
+      "f1": "Synthetic live HTF long thesis known 09:20, current LTF short control 09:40 =>directional alignment false for long. Fresh source long control 09:45 can align a 09:46 decision; it is unavailable to 09:42. If the thesis died 09:44, that later local long alone cannot pass."
+    },
+    "O098": {
+      "name": "Executed aggressor-side trades",
+      "mode": "exact native executed-event adapter.",
+      "f1": "Raw C03-F1 has buy 7, sell 4, total 11, delta+3. Synthetic extra unknown trade size 2 increases total to 13 while exact signed delta becomes unresolved in [+1,+5]. An ask-side quote update size 100 adds zero executed volume."
+    },
+    "O099": {
+      "name": "Big Trades aggression markers",
+      "mode": "source-configured executed-size display; aggregation semantics required.",
+      "f1": "Synthetic explicitly configured per-print threshold 100 with inclusive comparison: trades 60 and 60 create 0 markers, trade 100 creates 1. Under a separately supplied aggregate-cluster rule, 60+60 may total 120, but it is not the same display. Remove the comparator/aggregation setting: faithful marker classification at the boundary is null."
+    },
+    "O100": {
+      "name": "DOM at a planned location",
+      "mode": "local quote/execution observation; depth and source interpretation holes explicit.",
+      "f1": "Synthetic band 100, bid 100 size 10 before touch, later bid 100 size 15: observed display change+5. With no executed sell event, this is not consumed-and-replenished defense. A sell execution size 4 at 100 supplies execution evidence, but missing lifecycle/depth still prevents a verified hidden-reserve claim."
+    },
+    "O101": {
+      "name": "Absorption: effort without price reward",
+      "mode": "source local effort/result and passive defense; exact detector hole.",
+      "f1": "Synthetic at supplied resistance 110, buy 100 contracts produces only 0.25 point upward progress before the observation ends. These are exact measurements; without source passive evidence/interpretation, absorption=null. A later 2 point decline cannot retrospectively set absorption=true at the earlier decision."
+    },
+    "O102": {
+      "name": "Executed passive replenishment",
+      "mode": "executed-consumption and refresh sequence; BBO inference separately labeled.",
+      "f1": "Synthetic verified lifecycle: bid 100 displays 10, sells consume 6, displayed remainder 4, then add 8 at 100 gives display 12. Consumption 6 and refresh 8 are observed. With only first 10 and last 12 snapshots, net+2 cannot prove the intervening 6/8 sequence. Missing lifecycle yields verified_replenishment=null."
+    },
+    "O103": {
+      "name": "Iceberg evidence and added participation",
+      "mode": "evidence grading for hidden-liquidity hypothesis; verification requires missing data.",
+      "f1": "Synthetic q 0.25 gives a two-tick area width 0.50. Observed executions totaling 30 against repeatedly displayed 10 can support a labeled replenishment hypothesis; they do not uniquely prove hidden reserve 30 or identify 3 participants. verified_hidden_reserve remains null without the required evidence."
+    },
+    "O104": {
+      "name": "Price reward near the absorption origin",
+      "mode": "price displacement relative to actual defense origin and scoped source reward.",
+      "f1": "Synthetic long origin 100, q 0.25, later 100.75 gives reward 0.75 point=3 ticks. A retest 100.50 occurs later and needs its own defense. A move of 3 events with prices 100, 100, 100 gives 0 ticks, not 3. With origin band [100, 100.5] and no selected edge, exact source reward distance is null."
+    },
+    "O105": {
+      "name": "Cumulative volume delta and its source reference",
+      "mode": "exact signed accumulation with source reset/reference holes.",
+      "f1": "Synthetic reset sequence B10, A4, B2 gives CVD 8 contracts. A supplied same-unit reference 5 gives difference+3. Comparing CVD 8 contracts with price 100 is invalid. Adding N3 gives CVD bounds [5, 11], exact CVD null; no fixed sign/reference conclusion is assumed where those bounds cross the relevant threshold."
+    },
+    "O106": {
+      "name": "Candle direction versus executed delta",
+      "mode": "same-candle price and executed-delta signs.",
+      "f1": "Synthetic candle O100/C101, executed B4/A10 gives price change+1, delta-6, opposed_signstrue. O=C100 gives false even with delta-6. Adjacent-candle delta cannot be substituted for this candle's-6."
+    },
+    "O107": {
+      "name": "Local delta concentration at an extreme",
+      "mode": "local executed concentration measurements; source classifier/caption hole.",
+      "f1": "Synthetic upper band 110, local B80/A20 gives delta+60, total 100, fraction 0.6. If price fails to advance, record that response separately. The number 0.6 does not define a universal spike or short entry; source_spike=null without its criterion."
+    },
+    "O108": {
+      "name": "POC relocation within a candle",
+      "mode": "same-native-candle event-time POC relocation.",
+      "f1": "Synthetic candle K at 10:01 has bins 100:10/101:5, POC 100; same K at 10:02 has 100:10/101:15, POC 101, change+1 known 10:02. A 10:01:30 entry cannot use it. Replacing the second snapshot's ID with K+1 fails same-candle identity."
+    },
+    "O109": {
+      "name": "Diagonal footprint imbalance stacks",
+      "mode": "explicit diagonal ratios and consecutive source rows; ambiguous source settings are holes.",
+      "f1": "Synthetic q 0.25, Ask 100=40/Bid 99.75=10; Ask 100.25=60/Bid 100=10; Ask 100.5=80/Bid 100.25=20 gives buy ratios 4, 6, 4. Under explicitly supplied inclusive 4\u00d7, 3 row setting, stack band [100, 100.5]qualifies. Remove row 100.25 and 100/100.5 are not consecutive. Source-printed 56/5=11.2."
+    },
+    "O110": {
+      "name": "Same-price 350% imbalance display",
+      "mode": "same-price ratio measurements; literal 350% convention unresolved.",
+      "f1": "Synthetic B35, S10 gives buy_multiple3.5, percent_of350%, percent_more250%. It meets an explicitly supplied 350%-of rule but fails 350%-more. With source wording alone, source_350_flag=null; do not choose whichever interpretation passes."
+    },
+    "O111": {
+      "name": "Speed of tape",
+      "mode": "source pace observation; optional named descriptive arithmetic.",
+      "f1": "Synthetic explicitly selected 2 second interval contains 6 executions totaling 15 contracts:3 prints/second and 7.5 contracts/second. These numbers do not reproduce Speed of Tape(10) without its definition, so source_panel_value remains null."
+    },
+    "O112": {
+      "name": "Bid-ask spread",
+      "mode": "exact contemporaneous quote geometry.",
+      "f1": "Synthetic bid 100, ask 100.50, q 0.25 gives spread 0.50 point=2 ticks. Ask 99.75 with bid 100 is crossed and invalid for normal spread evidence. Missing ask returns null, not 0."
+    },
+    "O113": {
+      "name": "How price arrives at the area",
+      "mode": "pre-touch arrival measurements and source interpretation.",
+      "f1": "Synthetic preselected approach from 100 at 09:59:50 to 102 at 10:00:00 has duration 10 seconds, net distance 2 points, net speed 0.2 point/second. This does not automatically classify aggressive arrival. A 10:00:05 rejection is outside these pre-touch features."
+    },
+    "O114": {
+      "name": "Aggressor print-size thinning",
+      "mode": "source-local print-size sequence; cross-instrument threshold hole.",
+      "f1": "Synthetic same-side sizes 120, 85, 9 have digit counts 3, 2, 1 in that observed order. Sizes 9, 85, 120 give 1, 2, 3 and do not show that decline. The first sequence remains a source-classification hole if the qualifying grouping/window is not supplied."
+    },
+    "O115": {
+      "name": "Absorber becomes aggressive and price lifts off",
+      "mode": "absorber-to-aggressor transition with real price reward.",
+      "f1": "Synthetic long origin 100, q 0.25; defense 09:40, refresh 09:41, exhaustion 09:42, new buying and reward 100.75 at 09:43, entry 101 at 09:43:01 gives 3 tick reward and 1 tick distance from confirmation. Entry 102 has 5 tick distance from 100.75 and does not fit that illustrated 1\u20132 tick entry geometry."
+    },
+    "O116": {
+      "name": "Zone formed by aggressive prints",
+      "mode": "source aggressive-print zone plus later touch lifecycle; construction holes.",
+      "f1": "Synthetic supplied zone [100, 101] formed 09:40, departure 102 at 09:45, return 100.75 at 10:00 gives one later touch. Prices 100.5/100.75/101 while remaining inside that touch do not create 3 touches. Missing formation rule leaves automatic zone discovery null."
+    },
+    "O117": {
+      "name": "Memory of earlier zone tests",
+      "mode": "strictly pre-touch persistent history.",
+      "f1": "Synthetic prior touch A ended 09:40 and defense resolved 09:42; touch B began 09:50 but outcome resolves 10:05; current touch C 10:00 with feature cutoff 09:59 can include A's defense only. Prior touch count can record A/B, but resolved defense count=1; C's later success cannot increase its own count."
+    },
+    "O118": {
+      "name": "Origin-of-the-Move catalyst",
+      "mode": "source repeated effort/failure origin and linked stages.",
+      "f1": "Synthetic source catalyst band [100, 100.5] known 09:40 after two supplied failed aggressive pushes; release 09:45 and failure 09:47 remain linked stages. Entering 09:47 solely on that failure cannot pass a branch that still requires refill, drive and hold. A later morning high 110 cannot replace the origin."
+    },
+    "O119": {
+      "name": "Trapped aggression at an auction extreme",
+      "mode": "Saint's source upper-extreme trapped-buying sequence; current confirmation required.",
+      "f1": "Synthetic earlier failures A yesterday 10:00 and B yesterday 14:00 are 2 distinct records. Current upper area 110 fails at 09:40, breaks down 09:45, retests 09:50, source body-selling/DOM confirms 09:52, entry 09:53 preserves order. Using A twice yields 1 distinct failure; entering 09:48 skips current retest."
+    },
+    "O120": {
+      "name": "Native candle footprint",
+      "mode": "native candle executed-volume rows with body/wick and source display filters.",
+      "f1": "Synthetic completed candle O100/C101, H102/L99, q 1 has literal body prices 100 and 101; 99 and 102 are wick rows. If body rows contain B3/A8, body delta=-5 with complete sides. At an earlier as-of C100, price 101 was not yet in that as-of body. Missing top 35% selection convention leaves the faithful filtered display null."
+    },
+    "O121": {
+      "name": "At-level DOM rejection",
+      "mode": "Sires at-level execution route.",
+      "f1": "Synthetic band 110 known 09:30; aggressive arrival 09:40, source rejection 09:41, required added participation 09:42, decision 09:43 preserve local order. A 09:41:30 decision requiring the 09:42 evidence fails causality. Missing depth makes that evidence unknown, not automatically true."
+    },
+    "O122": {
+      "name": "Four-check absorption reversal",
+      "mode": "strict four-check Sires reversal at a fixed real extreme.",
+      "f1": "Synthetic fixed support 100, q 0.25; absorption 09:40, own reward 100.75 at 09:41, return 100.50 at 09:42, source renewed defense/CVD 09:43, decision 09:44 gives the ordered sequence. Remove the return: strict_reversal_sequence=false with complete attempt evidence. If CVD reference is missing, the otherwise valid sequence is unknown."
+    },
+    "O123": {
+      "name": "Defense, replenishment, exhaustion and lift-off",
+      "mode": "source four-stage stop/re-entry execution variant.",
+      "f1": "Synthetic q 0.25, origin 100, lift confirmation 100.75, entry 101 and daily R=-3 produce reward 3 ticks, distance 1 tick, daily_stop_ok=true. At daily R=-4 it is false. Entry 101.50 is 3 ticks from confirmation and fails the at-most 2 tick condition even if size is halved."
+    },
+    "O124": {
+      "name": "Footprint-confirmed reaction",
+      "mode": "same-candle footprint reaction route.",
+      "f1": "Synthetic level 100 known 09:30, candle K disagreement/absorption 09:40, same K POC 100\u2192101 observed 09:41, source flow confirmation 09:42, entry 09:43 preserve the route. Changing the second POC snapshot to candle L fails same-candle identity. Missing intrabar tape gives unknown, not an inferred flip."
+    },
+    "O125": {
+      "name": "Confirmed VWAP deviation fade",
+      "mode": "confirmed source VWAP-band rotation.",
+      "f1": "Synthetic supplied VWAP 100,\u03c32, k 2 gives upper band 104. Touch 104 at 09:40, local rejection 09:41 and source CVD/ladder 09:42 can qualify an otherwise complete 09:43 short toward preselected VWAP 100. A touch 104 alone leaves confirmation missing; a later VWAP 101 cannot rewrite the target selected as 100."
+    },
+    "O126": {
+      "name": "Aggressive Origin of the Move",
+      "mode": "full aggressive OFM ordered execution branch.",
+      "f1": "Synthetic stages 09:40 catalyst, 09:41 release, 09:42 failure, 09:43 refill, 09:45 drive, 09:47 defended retest, 09:48 entry with all supplied side/control gates and short gamma preserve the sequence. Move entry to 09:44: it fails required drive/retest. Missing source CVD reference makes the otherwise ordered candidate unknown."
+    },
+    "O127": {
+      "name": "Passive Origin-of-the-Move variant",
+      "mode": "source passive long case; incomplete quantitative selector.",
+      "f1": "Synthetic buyers' area [100, 101], aggression loweredge 100, long entry 101.25, source stop 99.75 gives initial risk 1.5 points. A selected 2R reference is 104.25, within the illustrated 1\u20133R range. This arithmetic does not fill the unpublished dying-tape selector; case qualification remains unknown if that evidence is absent."
+    },
+    "O128": {
+      "name": "Clean squeeze continuation",
+      "mode": "first-pullback clean release continuation.",
+      "f1": "Synthetic catalyst 09:40, release 09:41, first pullback 09:43, source absorption/confirmation 09:44 and entry 09:45 preserve order with complete history. A later failure 10:00 cannot invalidate the earlier no-prior-failure fact; choosing a second pullback 09:50 instead fails the first-pullback branch."
+    },
+    "O129": {
+      "name": "Failure of aggression in long-gamma balance",
+      "mode": "long-gamma balance failure-and-return fade.",
+      "f1": "Synthetic long-gamma balance [100, 110]: failed buying at price 110 at 09:40, departure to 108 at 09:42, retest of 110 at 09:45 with source evidence of buying still unpaid, short entry at 09:46, and a preselected opposite-control target of 103 preserve the route. The target is 103; it is not automatically the balance low of 100. This branch does not require a lift in the intended trade direction."
+    },
+    "O130": {
+      "name": "Fresh defense of a continuation band",
+      "mode": "fresh same-side defense within a live directional thesis.",
+      "f1": "Synthetic short band [109, 110] previously defended 09:30; return 09:45 and fresh seller defense 09:47 permit an otherwise complete 09:48 candidate. If buyers instead take and defend above 110 at 09:46, current short control is false; the old 09:30 defense cannot keep it true."
+    },
+    "O131": {
+      "name": "Price-defined microbalance continuation",
+      "mode": "source small price-balance breakout within larger thesis.",
+      "f1": "Synthetic live long thesis has target 120 known at 09:20. A microbalance [100, 102] completes at 09:40, followed by a source-confirmed strong break to 103 at 09:42. Entry 103 and supplied stop 99.75 put the stop below the opposite edge of 100 and retain the pre-existing target 120. A microbalance drawn only at 10:00 cannot qualify the 09:42 decision."
+    },
+    "O132": {
+      "name": "KG1 retest and subsequent trailing",
+      "mode": "source KG1 retest case plus separate management arithmetic.",
+      "f1": "Synthetic long entry 100, initial stop 90, target 106.9 gives 6.9/10=0.69. Later stop 95, target 109.15 gives 9.15/5=1.83. Both reward distance and stop distance changed; original risk stays 10 points. This arithmetic does not reproduce an unpublished trailing engine."
+    },
+    "O133": {
+      "name": "Deliberate pre-confirmation attempts",
+      "mode": "source case-description only; repeatable full selector hole.",
+      "f1": "Synthetic source early entry at 09:40, risk of 1 point declared at 09:39, and full confirmation first available at 09:45: the deliberate-early case can match its disclosed description. The confirmed-entry branch fails for this 09:40 attempt because its required confirmation is observed to arrive later. A loss at 09:42 does not by itself kill a thesis whose structural death level remains untouched."
+    },
+    "O134": {
+      "name": "Third support test without new buyer defense",
+      "mode": "NYAM source-case description; no universal third-touch trade.",
+      "f1": "Synthetic tests A 09:30, B 09:45, C 10:00 with intervening departures give current ordinal 3. Three inside-band rows at 10:00 under C remain one test. Source short entry 100, stop 100.5 and later stop-out retain a losing case; that outcome does not erase it from the supplied cohort."
+    },
+    "O135": {
+      "name": "Late small resistance-fade case",
+      "mode": "late NYAM source-case description; automatic exhaustion selector hole.",
+      "f1": "Synthetic resistance 110 marked 12:00, upward approach 109\u2192110 after 14:00, source declining aggression observations 14:03/14:04, small short 14:05 and session end 14:20 preserve a supplied case. A resistance only drawn 14:30 cannot qualify that 14:05 entry. Automatic full trigger remains null."
+    },
+    "O136": {
+      "name": "Green Bird's directional read",
+      "mode": "Green Bird source direction and causal revision ledger.",
+      "f1": "Synthetic PDL 100 reclaimed by a completed 09:15 source confirmation; long bias known 09:15 can support a 09:40 aligned pullback. A 10:05 NYAM sweep is not required to explain that earlier bias and cannot establish it retroactively. A 09:10 entry cannot use 09:15 confirmation."
+    },
+    "O137": {
+      "name": "Declared model and review version",
+      "mode": "immutable declared process/version contract.",
+      "f1": "Synthetic v 1 frozen 09:00 allows features A/B; v 2 next day changes only threshold T from a supplied 1 to supplied 2. changed_fields=[T], count 1. If feature C and T both change, count 2 fails the one-variable review claim. The numbers 1/2 are fixture inputs, not new trading thresholds."
+    },
+    "O138": {
+      "name": "Thesis, validity band and death condition",
+      "mode": "source conditional thesis and first-death state machine.",
+      "f1": "Synthetic long thesis with explicitly supplied death rule complete 5 minute close<100: a 10:00 close 99 makes first_death10:00. Recovery 102 at 10:10 does not revive it. An entry stopped at 101 at 09:50 does not alone kill that thesis. Missing required news coverage makes overall alive status unknown before price death, unless an independent observed death already makes it false."
+    },
+    "O139": {
+      "name": "Entry-side structural invalidation",
+      "mode": "source entry-side invalidation geometry and timing.",
+      "f1": "Synthetic long E105, S100, q 0.25 gives risk 5 points=20 ticks; short E105, S110 also 5 points=20 ticks. Long S106 gives negative distance and invalid initial adverse stop. A five-minute-close-below 100 policy is not breached merely by an intrabar 99.75 trade if the completed close is 100.25."
+    },
+    "O140": {
+      "name": "Exposure fitted to source risk constraints",
+      "mode": "literal source exposure arithmetic and constraint audit; no universal sizing policy.",
+      "f1": "Synthetic explicitly supplied D2 points, M10 currency/point, quantity 3 gives unit risk 20 and position risk 60. With a supplied cap 50, cap_ok=false; under an explicitly supplied integer-max allocator, floor(50/20)=2 contracts. If M is null, money risk and derived quantity are null, even though D2 is known."
+    },
+    "O141": {
+      "name": "Objective selected before entry",
+      "mode": "pre-entry source destination and post-decision outcome binding.",
+      "f1": "Synthetic long E100, target 104 selected 09:40 before entry 09:41 gives distance 4 points. A104 print 09:39 is not a post-entry hit; 10:00 print 104 is. Replacing target with later high 110 after seeing it violates selection timing."
+    },
+    "O142": {
+      "name": "Source-selected position management",
+      "mode": "source action ledger and supported policy audit.",
+      "f1": "Synthetic position 3 contracts entered 09:40; observed partial fill 1 at 09:50 leaves 2. A requested partial 1 with no fill leaves 3. Protected high confirmed 10:00 cannot support a 09:55 stop trail; a 10:01 action may use it under the selected policy. Initial risk 5 points remains 5 after the stop moves."
+    },
+    "O143": {
+      "name": "Confirmed protected high or low",
+      "mode": "source confirmed control structure for later management.",
+      "f1": "Synthetic short: intervening high 110 priced 09:40; prior low 105 breaks and source candle closes 104 with verified selling at 09:50. Protected high 110 becomes known 09:50, not 09:40. A 09:45 trail using it fails causality; 09:51 can use it if the selected policy permits."
+    },
+    "O144": {
+      "name": "Freshly qualified re-entry",
+      "mode": "new attempt with persistent thesis/band and full fresh qualification.",
+      "f1": "Synthetic first exit 09:45, new return 09:50, fresh confirmation 09:52, new entry 09:53 satisfies the temporal re-entry condition. Reusing confirmation 09:40 fails freshness. Under STOP daily R=-4, the new entry is blocked even if every fresh local stage is present."
+    },
+    "O145": {
+      "name": "Source account and session stop",
+      "mode": "source account/session permission from pre-action ledger.",
+      "f1": "Synthetic supplied day results-1R,-1R,-2R sum-4R before next attempt; STOPentry_permission=false. At-3.5R it is true for this limit alone. A missing prior result prevents assuming 0R; a separate source dollar cap cannot be compared directly with-4R."
+    },
+    "O146": {
+      "name": "Thesis and execution journal",
+      "mode": "complete versioned observation and review ledger.",
+      "f1": "Synthetic frozen eligible IDs[A, B, C] with journal Awin, Cwin and B missing gives accounted 2 of 3, missing[B]; completeness false. Adding B's loss makes 3 of 3 without changing A/C. A reason recorded 10:00 for 09:40 entry is later explanation unless independent pre-entry evidence exists."
+    },
+    "O147": {
+      "name": "Triad AMT-object first use: I\u00d8D and RFZ",
+      "mode": "source-corresponding native AMT-object timing and thesis revision.",
+      "f1": "Synthetic ES balance edge 5000, NQ edge 20000, YM edge 40000 are three native objects. Verified YM test 09:40 then ES decision 09:42 can inform the source I\u00d8D reread; numerical edge inequality is irrelevant. A peer RFZ fill 09:45 cannot revise an ES decision 09:42."
+    },
+    "O148": {
+      "name": "Frozen observation cohort",
+      "mode": "frozen eligible-observation and selection identity audit.",
+      "f1": "Synthetic eligible touches 10, selected signals 6, orders 6, filled orders 4 yields counts 10/6/6/4 and 4 unselected touches. A4-fill execution sample cannot be paired row-for-row with 6 market-entry results without explicit common candidate IDs. Missing 2 selected orders from the lifecycle is a completeness failure."
+    },
+    "O149": {
+      "name": "Supplied refill-touch grade",
+      "mode": "supplied frozen grade and feature-availability audit only.",
+      "f1": "Synthetic supplied score 0.8, threshold 0.7, inclusive comparator, model known yesterday and all features known 09:59 for 10:00 order gives literal selection true. One feature known 10:01 makes feature_causal=false regardless of score. Remove supplied threshold: selection null, not threshold 0.5."
+    },
+    "O150": {
+      "name": "Observed order lifecycle",
+      "mode": "observed/supplied instruction-to-exit lifecycle audit; no orders placed.",
+      "f1": "Synthetic supplied Refill long limit 100, q 0.25, placed 10:00 gives stop 92, target 124 and cancel age 30 minutes at 10:30 under an explicitly supplied placement anchor. Quantity 3 with fills 1 then 1 has filled 2/remaining 1; cancel remaining 1 leaves a 2 contract position, not 0. A reference level alone does not determine the 12 tick inside price without its edge convention."
+    },
+    "O151": {
+      "name": "Refill-study fill assumption",
+      "mode": "audit the declared Refill touch/trade-through assumption on supplied orders.",
+      "f1": "Synthetic buy limit 100 active 10:00; trade 100.25 at 10:01 does not qualify, trade 100 at 10:02 gives modeled fill 10:02. Actual fill remains unknown without a fill report. If cancellation effective 10:01:30, the 10:02 trade cannot fill that active order under this assumption."
+    },
+    "O152": {
+      "name": "Trading and account costs",
+      "mode": "source cost-unit and supplied ticket arithmetic audit.",
+      "f1": "Source-configuration arithmetic: supplied target outcome gives 95/32=2.96875R; supplied stop outcome gives-34/32=-1.0625R. These are bracket unit checks only. With supplied tick value 2 currency and quantity 3, 1 tick round trip cost=6 currency; missing tick value yields currency cost null."
+    },
+    "O153": {
+      "name": "Outcome distribution of a declared process",
+      "mode": "supplied process-summary provenance/arithmetic audit only.",
+      "f1": "Synthetic supplied summary with 5 wins/5 losses, mean win+2R, mean loss-1R and no other outcomes implies win rate 0.5, arithmetic EV 0.5R and profit factor 10/5=2. A reported EV 1R would fail this literal consistency check. This fixture does not authorize deriving returns from market prices."
+    },
+    "O154": {
+      "name": "Prior loss-streak validation for Stoic's overlay",
+      "mode": "pre-overlay supplied validation gate.",
+      "f1": "Synthetic prior n 100, known win rate 0.55, known average RR 2 and supplied MC max loss streak 8 all available yesterday satisfy this gate for today's risk decision. n 99 fails minimum. With n 100 but MC result missing, overlay_validation=null and overlay cannot be admitted."
+    },
+    "O155": {
+      "name": "Stoic's printed asymmetric risk ladder",
+      "mode": "printed two-step risk arithmetic; activation/rebase conflict preserved.",
+      "f1": "Synthetic fixed E0=10000, B=100: first win+300; second risk 400, target profit 1200. Second loss leaves net-100; second win leaves net+1500 and printed next risk 100. Using 4% of 10300=412 is not the printed fixed baseline 400. General activation and second-loss next state remain null."
+    },
+    "O156": {
+      "name": "Refill-study evaluation-risk scenarios",
+      "mode": "source scenario record and arithmetic/provenance audit only.",
+      "f1": "Synthetic source-scenario arithmetic at 80 currency/R:3000 target=37.5R, 2000 drawdown=25R,-4R daily stop=-320 currency. A supplied 3680 passes/4000 paths equals 0.92, but the count cannot be reconstructed from a rounded 92% claim unless the source supplies it."
+    },
+    "O157": {
+      "name": "Stoic's macro indicator set",
+      "mode": "Stoic's declared macro evidence set and provenance ledger.",
+      "f1": "Synthetic declared evidence set has 4 required series. Three have verified pre-decision vintages; the fourth has no supplied observation or availability proof. available_series_count = 3 of 4; required_series_present = null with a missing-series hole, and automatic_verdict = null. A later revised leverage value of 2.0 cannot replace the actually available 1.5 at the historical decision."
+    },
+    "O158": {
+      "name": "Stoic's macro-cycle classification",
+      "mode": "supplied historical source classification; engine hole.",
+      "f1": "Synthetic supplied contraction label at 09:00 supported by 3 available indicators can be retained as a supplied source observation. The count 3 does not imply a majority-vote algorithm. Without the source label/rules, automatic_cycle=null."
+    },
+    "O159": {
+      "name": "Stoic's custom C-score",
+      "mode": "supplied custom score only; formula hole.",
+      "f1": "Synthetic supplied C-score 2.4 and separately computed named z-score 1.2 remain distinct values. Removing the supplied C-score leaves automatic_c_score=null, not 1.2."
+    },
+    "O160": {
+      "name": "Historical-average and standardized-deviation comparison",
+      "mode": "explicitly named conventional arithmetic with source-definition holes.",
+      "f1": "Synthetic explicitly selected population baseline [1, 3] has mean 2, SD 1; current x 4 gives raw deviation 2 andz 2. Under explicitly selected sample SD=sqrt 2, z=sqrt 2\u22481.414214. Missing convention makes author-exact z unknown; a constant baseline [2, 2] has SD 0 and standardized value null."
+    },
+    "O161": {
+      "name": "Stoic's trend-strength measure",
+      "mode": "supplied Stoic context measure; engine hole.",
+      "f1": "Synthetic supplied strength 7 on a stated 0\u201310 source scale is recorded as 7. A separate regression slope 0.5 is not an equivalent score. Without the source reading/engine, automatic_strength=null."
+    },
+    "O162": {
+      "name": "Economic observation and release vintage",
+      "mode": "point-in-time economic observation adapter.",
+      "f1": "Synthetic March 2026 observation is first released on 2026-04-01 at 08:30 ET with value 2.0, then revised on 2026-05-01 at 08:30 ET to 1.5. A 2026-04-15 10:00 ET decision sees 2.0. A 2026-05-02 10:00 ET decision may see 1.5 under the explicitly selected latest-available-vintage policy. The March 31 observation-period date does not make 2.0 available in March."
+    },
+    "O163": {
+      "name": "Provide, withdraw and consume events",
+      "mode": "native provide/withdraw/consume lifecycle evidence; source depth hole.",
+      "f1": "Synthetic verified event log adds 10 at bid 100, cancels 3, executes 4 against it: provided 10, withdrawn 3, consumed 4, remaining 3 under that complete lifecycle. Snapshots 10 then 3 alone cannot distinguish 7 canceled from 3 canceled+4 executed; all three event types are unknown without the log."
+    },
+    "O164": {
+      "name": "Aggressive effort versus price-response efficiency",
+      "mode": "same-interval effort/response measurements and supplied state interpretation.",
+      "f1": "Synthetic selected interval buy volume 100, response+1 point yields named response/volume 0.01 point/contract. Another interval buy volume 100, response 0 with unknown opposing depth does not prove absorption. Source efficiency class remains null without the required interpretation/evidence."
+    },
+    "O165": {
+      "name": "B\u2013A\u2013D\u2013E\u2013W auction-state alphabet",
+      "mode": "supplied heuristic B/A/D/E/W state audit; automatic classifier hole.",
+      "f1": "Synthetic supplied state A at 10:00 cites buy volume 100, little 0.25 point response and verified persistent opposite refill, all known 10:00. Re moving refill evidence makes that source A observation incomplete. A later liquidity failure 10:01 may support an E observation at 10:01; it cannot be used at 10:00."
+    },
+    "O166": {
+      "name": "Conditioned next-state transition",
+      "mode": "ordered supplied next-state and conditioning audit; no classifier/matrix training.",
+      "f1": "Synthetic supplied transition row from current state D has next-state counts D:84, A:12, B:4, E:0, W:0, total 100. Thus P(D\u2192D) = 84/100 = 0.84, P(D\u2192A) = 12/100 = 0.12, and the complete row sum is 1. These synthetic counts illustrate arithmetic; they are not recovered source counts. A conditioning feature known at 10:01 for a current state observed at 10:00 fails causality even if the next state arrives at 10:02."
+    }
+  },
+  "methods": {
+    "M01": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O005",
+      "O006",
+      "O007",
+      "O008",
+      "O009",
+      "O010",
+      "O011",
+      "O012",
+      "O013",
+      "O014",
+      "O015",
+      "O016",
+      "O017",
+      "O018",
+      "O019",
+      "O020",
+      "O021",
+      "O022",
+      "O023",
+      "O024",
+      "O025",
+      "O026",
+      "O027",
+      "O028",
+      "O029",
+      "O047",
+      "O048",
+      "O050",
+      "O055",
+      "O056",
+      "O057",
+      "O058",
+      "O061",
+      "O062",
+      "O063",
+      "O064",
+      "O066",
+      "O067",
+      "O068",
+      "O069",
+      "O073",
+      "O075",
+      "O077",
+      "O086",
+      "O087",
+      "O088",
+      "O098",
+      "O099",
+      "O101",
+      "O107",
+      "O120",
+      "O139",
+      "O140",
+      "O141",
+      "O142",
+      "O145",
+      "O150",
+      "O162"
+    ],
+    "M02": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O029",
+      "O046",
+      "O047",
+      "O048",
+      "O049",
+      "O050",
+      "O051",
+      "O052",
+      "O053",
+      "O054",
+      "O055",
+      "O059",
+      "O086",
+      "O087",
+      "O136",
+      "O139",
+      "O140",
+      "O141",
+      "O142",
+      "O145",
+      "O150"
+    ],
+    "M03": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O030",
+      "O046",
+      "O136",
+      "O139",
+      "O141",
+      "O142",
+      "O150"
+    ],
+    "M04": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O029",
+      "O046",
+      "O053",
+      "O059",
+      "O136",
+      "O139",
+      "O140",
+      "O141",
+      "O142",
+      "O145",
+      "O150"
+    ],
+    "M05": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O011",
+      "O013",
+      "O029",
+      "O030",
+      "O031",
+      "O032",
+      "O033",
+      "O034",
+      "O035",
+      "O036",
+      "O037",
+      "O038",
+      "O039",
+      "O040",
+      "O041",
+      "O042",
+      "O043",
+      "O044",
+      "O045",
+      "O050",
+      "O053",
+      "O059",
+      "O060",
+      "O061",
+      "O062",
+      "O063",
+      "O064",
+      "O065",
+      "O066",
+      "O067",
+      "O068",
+      "O069",
+      "O070",
+      "O071",
+      "O072",
+      "O073",
+      "O074",
+      "O075",
+      "O076",
+      "O077",
+      "O078",
+      "O079",
+      "O080",
+      "O081",
+      "O082",
+      "O083",
+      "O084",
+      "O085",
+      "O086",
+      "O087",
+      "O088",
+      "O090",
+      "O091",
+      "O092",
+      "O093",
+      "O095",
+      "O096",
+      "O097",
+      "O098",
+      "O099",
+      "O100",
+      "O101",
+      "O102",
+      "O103",
+      "O104",
+      "O105",
+      "O106",
+      "O107",
+      "O108",
+      "O109",
+      "O110",
+      "O111",
+      "O112",
+      "O113",
+      "O114",
+      "O115",
+      "O116",
+      "O117",
+      "O118",
+      "O119",
+      "O120",
+      "O121",
+      "O122",
+      "O123",
+      "O124",
+      "O125",
+      "O126",
+      "O127",
+      "O128",
+      "O129",
+      "O130",
+      "O131",
+      "O132",
+      "O133",
+      "O134",
+      "O135",
+      "O137",
+      "O138",
+      "O139",
+      "O140",
+      "O141",
+      "O142",
+      "O143",
+      "O144",
+      "O145",
+      "O146",
+      "O147",
+      "O148",
+      "O150",
+      "O152",
+      "O153",
+      "O162",
+      "O164"
+    ],
+    "M06": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O060",
+      "O061",
+      "O062",
+      "O063",
+      "O064",
+      "O066",
+      "O067",
+      "O068",
+      "O071",
+      "O077",
+      "O084",
+      "O085",
+      "O089",
+      "O090",
+      "O091",
+      "O092",
+      "O094",
+      "O095",
+      "O097",
+      "O098",
+      "O100",
+      "O101",
+      "O102",
+      "O107",
+      "O113",
+      "O119",
+      "O120",
+      "O139",
+      "O141",
+      "O142",
+      "O150",
+      "O164"
+    ],
+    "M07": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O041",
+      "O060",
+      "O061",
+      "O062",
+      "O064",
+      "O066",
+      "O070",
+      "O071",
+      "O072",
+      "O086",
+      "O087",
+      "O097",
+      "O098",
+      "O101",
+      "O138",
+      "O139",
+      "O140",
+      "O141",
+      "O142",
+      "O146",
+      "O148",
+      "O150",
+      "O152",
+      "O153"
+    ],
+    "M08": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O013",
+      "O050",
+      "O060",
+      "O061",
+      "O062",
+      "O063",
+      "O064",
+      "O078",
+      "O086",
+      "O087",
+      "O091",
+      "O097",
+      "O098",
+      "O100",
+      "O109",
+      "O120",
+      "O139",
+      "O141",
+      "O142",
+      "O150"
+    ],
+    "M09": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O060",
+      "O061",
+      "O062",
+      "O064",
+      "O072",
+      "O098",
+      "O099",
+      "O100",
+      "O111",
+      "O113",
+      "O116",
+      "O117",
+      "O138",
+      "O140",
+      "O141",
+      "O142",
+      "O148",
+      "O149",
+      "O150",
+      "O151",
+      "O152",
+      "O153",
+      "O156"
+    ],
+    "M10": [
+      "O001",
+      "O002",
+      "O003",
+      "O004",
+      "O098",
+      "O100",
+      "O101",
+      "O102",
+      "O103",
+      "O111",
+      "O112",
+      "O163",
+      "O164",
+      "O165",
+      "O166"
+    ],
+    "M11": [
+      "O001",
+      "O002",
+      "O003",
+      "O029",
+      "O137",
+      "O146",
+      "O148",
+      "O153",
+      "O157",
+      "O158",
+      "O159",
+      "O160",
+      "O161",
+      "O162"
+    ],
+    "M12": [
+      "O001",
+      "O002",
+      "O003",
+      "O140",
+      "O148",
+      "O153",
+      "O154",
+      "O155"
+    ]
+  }
+}

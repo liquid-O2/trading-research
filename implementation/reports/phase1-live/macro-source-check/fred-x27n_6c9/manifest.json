@@ -1,0 +1,168 @@
+{
+  "all_queries_succeeded": true,
+  "availability_precision": "FRED realtime_start/realtime_end and vintage dates are civil dates, not exact intraday release timestamps",
+  "checked_at": "2026-09-12T08:09:53.529890+00:00",
+  "comparisons": [
+    {
+      "changed_observation_count": 12,
+      "examples": [
+        {
+          "initial_value": "258.820",
+          "initial_vintage_date": "2020-02-13",
+          "observation_period": "2020-01-01",
+          "value_asof_2021_12_31": "258.687"
+        },
+        {
+          "initial_value": "259.050",
+          "initial_vintage_date": "2020-03-11",
+          "observation_period": "2020-02-01",
+          "value_asof_2021_12_31": "258.824"
+        },
+        {
+          "initial_value": "257.953",
+          "initial_vintage_date": "2020-04-10",
+          "observation_period": "2020-03-01",
+          "value_asof_2021_12_31": "257.989"
+        }
+      ],
+      "series_id": "CPIAUCSL"
+    },
+    {
+      "changed_observation_count": 12,
+      "examples": [
+        {
+          "initial_value": "152186",
+          "initial_vintage_date": "2020-02-07",
+          "observation_period": "2020-01-01",
+          "value_asof_2021_12_31": "152234"
+        },
+        {
+          "initial_value": "152544",
+          "initial_vintage_date": "2020-03-06",
+          "observation_period": "2020-02-01",
+          "value_asof_2021_12_31": "152523"
+        },
+        {
+          "initial_value": "151786",
+          "initial_vintage_date": "2020-04-03",
+          "observation_period": "2020-03-01",
+          "value_asof_2021_12_31": "150840"
+        }
+      ],
+      "series_id": "PAYEMS"
+    }
+  ],
+  "credential_retained": false,
+  "output_dir": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9",
+  "purpose": "Bounded FRED/ALFRED capability check; examples are not selected method inputs",
+  "results": [
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+      "parameters": {
+        "file_type": "json",
+        "limit": 100000,
+        "observation_end": "2020-12-31",
+        "observation_start": "2020-01-01",
+        "output_type": 4,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2020-01-01",
+        "series_id": "CPIAUCSL"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/CPIAUCSL-initial-releases.json",
+      "query": "initial-releases",
+      "rows": 12,
+      "series_id": "CPIAUCSL",
+      "sha256": "8e80e6514b6d60f0c2ace408ee9574c456f743ae0770aea711323da3f6293187",
+      "status": "ok"
+    },
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+      "parameters": {
+        "file_type": "json",
+        "limit": 100000,
+        "observation_end": "2020-12-31",
+        "observation_start": "2020-01-01",
+        "output_type": 1,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2021-12-31",
+        "series_id": "CPIAUCSL"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/CPIAUCSL-asof-2021-12-31.json",
+      "query": "asof-2021-12-31",
+      "rows": 12,
+      "series_id": "CPIAUCSL",
+      "sha256": "f5065e19864e43f3bc6717facd5e74ccb4233be229b33790b3590437b3f49cdf",
+      "status": "ok"
+    },
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+      "parameters": {
+        "file_type": "json",
+        "limit": 10000,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2020-01-01",
+        "series_id": "CPIAUCSL"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/CPIAUCSL-vintage-dates.json",
+      "query": "vintage-dates",
+      "rows": 26,
+      "series_id": "CPIAUCSL",
+      "sha256": "c2f2434897bce42e2f6f6f9bda0bb5a1fcadbe74e40b97ad89e00bcedf780153",
+      "status": "ok"
+    },
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+      "parameters": {
+        "file_type": "json",
+        "limit": 100000,
+        "observation_end": "2020-12-31",
+        "observation_start": "2020-01-01",
+        "output_type": 4,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2020-01-01",
+        "series_id": "PAYEMS"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/PAYEMS-initial-releases.json",
+      "query": "initial-releases",
+      "rows": 12,
+      "series_id": "PAYEMS",
+      "sha256": "738395eb63058dc3140f57651128747cd21d20ad81ba61baff0a9bddf6a61799",
+      "status": "ok"
+    },
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/observations",
+      "parameters": {
+        "file_type": "json",
+        "limit": 100000,
+        "observation_end": "2020-12-31",
+        "observation_start": "2020-01-01",
+        "output_type": 1,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2021-12-31",
+        "series_id": "PAYEMS"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/PAYEMS-asof-2021-12-31.json",
+      "query": "asof-2021-12-31",
+      "rows": 12,
+      "series_id": "PAYEMS",
+      "sha256": "6f846bb5f39df1b8ab057b80ac9727f1ddd400e9f250b9cec5de8b56c1b8b57d",
+      "status": "ok"
+    },
+    {
+      "endpoint": "https://api.stlouisfed.org/fred/series/vintagedates",
+      "parameters": {
+        "file_type": "json",
+        "limit": 10000,
+        "realtime_end": "2021-12-31",
+        "realtime_start": "2020-01-01",
+        "series_id": "PAYEMS"
+      },
+      "path": "/workspace/implementation/reports/phase1-live/macro-source-check/fred-x27n_6c9/PAYEMS-vintage-dates.json",
+      "query": "vintage-dates",
+      "rows": 25,
+      "series_id": "PAYEMS",
+      "sha256": "a3f32733b8ab04de295b2b89d535bfc133e599021ac89f60a4993ad0ac2c62f0",
+      "status": "ok"
+    }
+  ]
+}

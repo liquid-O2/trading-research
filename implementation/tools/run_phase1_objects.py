@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 1 live object runner. Modes: check, run, report."""
+"""Phase 1 object and method-pack runner."""
 
 from pathlib import Path
 import sys

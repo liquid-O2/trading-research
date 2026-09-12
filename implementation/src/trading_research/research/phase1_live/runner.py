@@ -124,6 +124,13 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--month", help="YYYY-MM MBP-1 extract")
     rep = sub.add_parser("report")
     rep.add_argument("--family", action="append")
+    mp = sub.add_parser("method-pass")
+    mp.add_argument("--method", required=True)
+    mp.add_argument("--scope", required=True, choices=("acquired",))
+    mp.add_argument("--data-root", default="/workspace/data")
+    mp.add_argument("--report-root", default="/workspace/implementation/reports/phase1-live/methods")
+    mp.add_argument("--episodes", default=None)
+    mp.add_argument("--formula-version", default=None)
     return p
 
 
@@ -135,4 +142,7 @@ def main(argv=None) -> int:
         return cmd_run(args)
     if args.cmd == "report":
         return cmd_report(args)
+    if args.cmd == "method-pass":
+        from trading_research.research.method_pack.pass_runner import cmd_method_pass
+        return cmd_method_pass(args)
     return 2

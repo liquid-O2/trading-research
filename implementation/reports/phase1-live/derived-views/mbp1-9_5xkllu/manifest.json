@@ -1,0 +1,56 @@
+{
+  "artifacts": {
+    "ohlcv-1m": {
+      "path": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-9_5xkllu/ohlcv-1m.jsonl",
+      "rows": 829,
+      "sha256": "69153a50fd0a2bc0829a60bf7d7ce3fce28048f76db286da65dc9eb9a758f6cd"
+    }
+  },
+  "conventions": {
+    "bar_timestamp_basis": "stored exchange event time; vendor receive-time aggregates can differ",
+    "bars": "half-open clock buckets, one native instrument per row; empty buckets omitted",
+    "bbo": "source depth-one fields retained with action/side; no additional depth or order identities reconstructed",
+    "coverage": "computed observed values retained; completeness requires separate coverage evidence",
+    "executions": "T only; B buy, A sell, N unknown; no event-value deduplication",
+    "ordering": "equal timestamps remain unresolved unless source exchange sequence proves order",
+    "prices": "native price units, exact decimal text in JSON"
+  },
+  "instrument_filter": null,
+  "output_dir": "/workspace/implementation/reports/phase1-live/derived-views/mbp1-9_5xkllu",
+  "plan": {
+    "coverage_basis": "canonical file ownership and observed bounds",
+    "coverage_note": "An unowned interval may be a market closure or missing data; bounds alone do not decide this.",
+    "data_root": "/workspace/data",
+    "dataset_id": "quantpad/cme__nq-continuous-futures__mbp-1",
+    "end_ns": 1788415740000000000,
+    "holes": [],
+    "market_coverage_complete": null,
+    "owned_spans": [
+      {
+        "dataset": "nq-mbp-1",
+        "end_ns": 1788415740000000000,
+        "kind": "monthly",
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2026-09.parquet",
+        "reason": null,
+        "source_end_ns": 1788415799901114378,
+        "source_start_ns": 1788220800002108041,
+        "start_ns": 1788362400000000000,
+        "status": "owned",
+        "timestamp_unit": "ns"
+      }
+    ],
+    "ownership_sha256": "e85673c9cec3f721a5de6156b006372a135fb6dab9876ec73582201237d1f328",
+    "sources": [
+      {
+        "mtime_ns": 1788516679000000000,
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__mbp-1/2026-09.parquet",
+        "size_bytes": 152433406
+      }
+    ],
+    "start_ns": 1788362400000000000,
+    "unowned_intervals": []
+  },
+  "raw_source_signatures_unchanged": true,
+  "status": "complete",
+  "view_version": "canonical-mbp1-v1"
+}
