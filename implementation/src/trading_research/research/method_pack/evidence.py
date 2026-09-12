@@ -16,7 +16,7 @@ from .logic import kleene_and, kleene_cmp, verdict
 from .protocol import RECIPES, jsonable, run_recipe
 from .stages import stage_at, audit_candidate
 
-MODES = {'raw_derived', 'supplied_contemporaneous', 'source_illustration', 'synthetic_fixture', 'native_control'}
+MODES = {'raw_derived', 'supplied_contemporaneous', 'source_illustration', 'synthetic_fixture', 'native_control', 'research_comparison'}
 CASE_BRANCHES = {'pre_file_early', 'third_retest_case', 'late_resistance_fade_case', 'ofm_early_refill_case'}
 IDENTITY = ('method_id', 'instrument_id', 'side')
 
@@ -384,6 +384,20 @@ def parse_manifest(document, method_id, *, resolver=None):
             case=next((r for r in catalog['cases'] if r['case_id']==candidate.get('source_case_id')),None)
             if candidate.get('variant')!='comparison' or case is None or case['method_id']!=method_id:
                 raise SchemaError('native control requires comparison variant and exact catalog source case')
+        if candidate['evidence_mode'] == 'research_comparison':
+            from .empirical_registry import validate_comparison_candidate
+            try:
+                validate_comparison_candidate(candidate)
+            except ValueError as exc:
+                raise SchemaError(str(exc)) from exc
+            if candidate['assertion_ids']:
+                raise SchemaError('historical comparison cannot import supplied source assertions')
+            for oid in candidate['object_ids']:
+                obj = objects.get(oid)
+                if obj is None or obj.get('state') == 'supplied' or 'inputs' not in obj:
+                    raise SchemaError('historical comparison requires actual native/derived producer objects')
+                if any(evidence[eid]['evidence_mode'] != 'raw_derived' for eid in obj['evidence_ids']):
+                    raise SchemaError('source illustration or fixture cannot enter historical comparison')
 
         for key in ('band_ids', 'object_ids', 'assertion_ids'):
             _ids(candidate[key], f'candidate.{key}')
@@ -681,6 +695,12 @@ def score_episode(candidate, objects, assertions, evidence):
               'year': datetime.fromtimestamp(candidate['decision_at'] // 1_000_000_000, timezone.utc).astimezone(ZoneInfo('America/New_York')).year}
     if candidate.get('evidence_mode')=='native_control':
         result.update(variant='comparison',faithful_eligible=False,historical_eligible=False)
+    if candidate.get('evidence_mode') == 'research_comparison':
+        # The source expression may still contain missing private/source
+        # prerequisites. Its verdict is separate from the frozen observable
+        # comparison endpoint scored by the empirical replay runner.
+        result.update(variant='comparison', faithful_eligible=False,
+                      historical_eligible=False, historical_comparison_eligible=True)
     return result
 
 

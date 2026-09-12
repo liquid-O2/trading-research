@@ -46,3 +46,14 @@ python implementation/tools/recover_nq_minutes.py --data-root /workspace/data --
 ```
 
 Recovery preserves the native bar timestamp convention. Existing native minute keys take priority, and only absent `(minute, instrument_id)` pairs enter the fallback output. The manifest records recovered and unresolved counts, input file signatures and the derived artifact hash. Missing seconds are not turned into zero-volume observations. Keep the derived fallback separate from the acquired source archive.
+
+## Separately scoped empirical extension
+
+`implementation/tools/run_phase1_empirical.py` implements `calibrate`, `freeze`,
+`validate`, `run` and `report` for the source-calibration/discovery handoff.
+Commands and evidence live in
+`implementation/reports/phase1-live/empirical/COMMANDS.md`. The versioned
+comparison registry, coverage-selected split, causal opportunity/replay
+records and empirical acceptance are separate from the original source
+method acceptance. `research_comparison` candidates remain non-faithful and
+cannot manufacture private source selections, orders or fills.

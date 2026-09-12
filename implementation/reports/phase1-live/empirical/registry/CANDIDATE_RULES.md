@@ -1,0 +1,78 @@
+# Candidate rules v1.0.0
+
+Status: FROZEN before evaluation outcomes. Registry SHA-256: `7ce33ad43587e44168f2b5cbb910386c33f90cc5f8a1a5c6f2d90709791df381`. Run manifest SHA-256: `bbeb2776b90ac4fc0e35b7f654b2b3f44b5129e9bf8e1de2dd6e33e5d7a3ff07`. Frozen 2026-09-12T19:37:34.345133+00:00.
+
+All supported rules are non-faithful research comparisons. Source method prerequisites remain unknown; observations are not trades.
+
+| Method | Branch | Status | Rule |
+|---|---|---|---|
+| JJ-TBR | judas_outbound | unavailable_definition | Actual source directional context and cash-open selection are absent; later path cannot select opening side or infer an entry. |
+| JJ-TBR | judas_reversal | supported_comparison | First native-minute strict range-edge sweep during 09:40–09:50; score only the NEXT strictly later aligned complete 3-minute close through swept edge by 09:50; no search for a later favorable close. |
+| JJ-TBR | single_extended | unavailable_definition | Unpublished extended-context classification and reduced-expectation source policy absent; midpoint path comparison is represented separately under internal_rotation. |
+| JJ-TBR | single_purged | unavailable_definition | Required independently known purges, compressed-context selection and expansion policy absent; containment cannot substitute. |
+| JJ-TBR | internal_rotation | supported_comparison | First 09:30–16:00 contact with frozen 06:00–09:00 midpoint; freeze path side long if contact-bar close >= midpoint else short; first later high/low range-edge contact passes on chosen side and fails on opposite side; same-bar double edge is unknown; no trade claim. |
+| JJ-TBR | extension_reaction | supported_comparison | First contact after 09:00 with frozen outer-range beyond-edge band H+[1.33,1.66]W or L-[1.66,1.33]W; score only the NEXT strictly later complete aligned 3-minute close inward through near edge by 16:00; no search for a later favorable close. |
+| JJ-TBR | other_session | unavailable_definition | Actual source other-session formation/action clocks and source cleanliness selection absent. |
+| JJ-TBR | timed_pzone_reversal | unavailable_definition | Source P-zone bounds/version/active policy and ordered source-to-destination path absent; engine is proprietary. |
+| GB-FAIL | nyam_box | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | previous_hour | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | asia_tdo_case | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. Require reclaimed Asia edge and direction-consistent close across TDO; TDO is comparison minute-open, not observed source fill/tick. |
+| GB-FAIL | prior_day_level | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | prior_week_level | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | prior_month_level | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | cash_open_reclaim_case | supported_comparison | First strict native 1-minute cross per side/reference/session; score only the NEXT strictly later aligned complete 5-minute close back across reference before expiry; no later favorable close search. |
+| GB-FAIL | mss_fvg_refinement | supported_comparison | Each confirmed NYAM reclaim completion instant is a child opportunity carrying parent opportunity/completion IDs. Within 30 minutes, require three consecutive complete 2-minute candles all starting at/after parent completion (ceil to next aligned 2-minute boundary): third-candle wick gap beyond first and close beyond preceding two-bar high/low. First appearance passes; complete horizon without appearance fails; missing/gap unknown. This is not an entry; earlier November 20 sweep is not retimed. |
+| GB-VWAP | source_long | supported_comparison | First complete native 1-minute close above both finished Asia/London highs; first strictly later 1-minute bar straddling its pre-bar VWAP by 16:00. No extra defended-close requirement. |
+| GB-SCALP | bearish_small_scalp | source_case_only | Case descriptions lack repeatable source-complete trigger, impulse, admission and invalidation; do not replace them with failure/VWAP trades. |
+| GB-SCALP | bullish_discount_pullback | source_case_only | Case descriptions lack repeatable source-complete trigger, impulse, admission and invalidation; do not replace them with failure/VWAP trades. |
+| SIRES | dom_rejection | unavailable_definition | Selected planned level and actual source DOM queue/rejection observations absent; trades alone do not recover standing depth. |
+| SIRES | absorption_reward_retest | unavailable_definition | Source real-extreme selection, local absorption, own price reward and reward-retest qualification are absent; generic band touch is insufficient. |
+| SIRES | stop_four_stage | unavailable_definition | Actual linked four-stage defense/replenishment/exhaustion/lift-off observations and source risk stage are absent. |
+| SIRES | footprint_confirmed_reaction | unavailable_definition | Selected source candle/POC snapshot, local reaction and exact source footprint confirmation conventions are absent. |
+| SIRES | vwap_deviation_fade | supported_comparison | First 5-minute action-bar touch per side of pre-bar VWAP +/- one population weighted SD, from native 1-minute HLC3 since previous 18:00; freeze touched band. Score FIRST strictly later 5-minute close inward, within 15 minutes. Retain both side opportunities when both bands touched together and mark ambiguous. |
+| SIRES | ofm_aggressive | unavailable_definition | Source selected origin, catalyst/release, failure/refill and drive/retest episodes are absent; no generic impulse substitute. |
+| SIRES | ofm_passive | unavailable_definition | Source selected origin and passive pullback/refill confirmation are absent; executed-only tape cannot reconstruct private passive order selection. |
+| SIRES | clean_squeeze | unavailable_definition | Source clean-state and squeeze qualification, thesis and current flow criteria are unpublished. |
+| SIRES | balance_failure_fade | unavailable_definition | Source gamma regime, selected balance and source aggression-failure confirmation are absent. |
+| SIRES | defended_band_continuation | unavailable_definition | Actual selected continuation band and fresh same-band defense/current source confirmation are absent. |
+| SIRES | microbalance_break | unavailable_definition | Actual selected small balance and larger thesis/strength are absent; source explicitly disallows universal fixed-clock box/run-detector substitution. |
+| SIRES | kg1_retest | unavailable_definition | Proprietary source KG1/version and aggressive retest confirmation are absent; scenario gamma wall is not KG1. |
+| SAINT-AMT | continuation_retest | supported_comparison | First complete 5-minute close beyond prior complete same-contract RTH high/low; score only the FIRST later same-boundary touch within 60 minutes by whether its close is beyond that boundary; no search for a later favorable retest. |
+| SAINT-AMT | trapped_buyers_retest | supported_comparison | First 5-minute bar trades above prior RTH high with positive executed delta and closes below; score only the FIRST later high retest within 60 minutes by whether its close is below with negative delta; no later favorable retest search. Short only; does not reconstruct source two prior failures. |
+| SAINT-AMT | failed_auction_return | supported_comparison | First two consecutive complete 5-minute closes beyond prior RTH high/low; later close inside followed by prior trade-volume POC contact by 16:00. Older-value exploration and full source auction sequence remain unknown. |
+| SAINT-AMT | poc_traversal | supported_comparison | First complete 5-minute close crosses prior RTH trade-volume POC from previous-bar side while inside prior range. Pass at two consecutive destination-side closes before two origin-side closes; fail for origin first; ties reset streaks; no resolved streak by expiry is unknown. Source reacceptance antecedent remains unknown. |
+| MEMBER-TWO-REASONS | resistance_short | unavailable_definition | Missing independent prior-reaction and minor-HVN selection, profile window, confluence tolerance and current confirmation; arbitrary first HVN/prior extreme is not the source model. |
+| MEMBER-TWO-REASONS | planned_return_long | unavailable_definition | Missing independent prior-reaction and minor-HVN selection, profile window, confluence tolerance and current confirmation; arbitrary first HVN/prior extreme is not the source model. |
+| KEANI-OPEN-ABOVE-VALUE | source_long | supported_comparison | Every eligible session opening creates an observation; at 10:00 classify complete A-period low strictly above frozen previous complete RTH trade-volume VAH. Profile uses 70% contiguous POC-outward higher-adjacent-volume expansion, both rows on ties. No developing-value, imbalance, DOM or entry inference. |
+| REFILL-STUDY | touch_record | supported_comparison | Two same-aggressor executions each >=100 contracts within 120 seconds and two native ticks form immutable zone at second event; require four-tick directional departure before each return. Fifteen-minute response: formation-side four-tick displacement before four-tick trade-through of opposite edge; ambiguous ordering unknown. New four-tick departure rearms; no private order or replenishment claim. Pair nonoverlapping chronological executions per side: hold one pending qualifying event; next strictly later qualifying event within 120 seconds and <=2 ticks forms a zone and consumes both, otherwise replace pending. For a complete timestamp batch with >1 qualifying same-side execution, skip all that side events and log ambiguous formation counts; opposite-side singleton batches independently seed pending. Zones persist to16:00. Rearm requires new four-tick directional departure strictly after prior touch timestamp batch. Outcomes start strictly after touch batch; simultaneous opposing endpoints are unknown. |
+| REFILL-STUDY | supplied_selected_order | supplied_only | Missing actual private model/grade, selected-order identity and order/fill ledger; public executions do not manufacture selection. |
+| JETBUNDLE-STATES | B | supplied_only | Actual supplied state labels, classifier cadence/thresholds/priority and transition adjacency absent; no classifier training authorized. |
+| JETBUNDLE-STATES | A | supplied_only | Actual supplied state labels, classifier cadence/thresholds/priority and transition adjacency absent; no classifier training authorized. |
+| JETBUNDLE-STATES | D | supplied_only | Actual supplied state labels, classifier cadence/thresholds/priority and transition adjacency absent; no classifier training authorized. |
+| JETBUNDLE-STATES | E | supplied_only | Actual supplied state labels, classifier cadence/thresholds/priority and transition adjacency absent; no classifier training authorized. |
+| JETBUNDLE-STATES | W | supplied_only | Actual supplied state labels, classifier cadence/thresholds/priority and transition adjacency absent; no classifier training authorized. |
+| STOIC-DATA | process_review | non_entry | Process journal and declared process versions required; macro application additionally lacks custom series/vintages/C-score/cycle rules. |
+| STOIC-DATA | macro_application | non_entry | Process journal and declared process versions required; macro application additionally lacks custom series/vintages/C-score/cycle rules. |
+| STOIC-RISK | first | supplied_only | Actual validated process, Monte Carlo inputs and risk-stage/position ledger absent; printed arithmetic is separately auditable. |
+| STOIC-RISK | second | supplied_only | Actual validated process, Monte Carlo inputs and risk-stage/position ledger absent; printed arithmetic is separately auditable. |
+| STOIC-RISK | reset_after_second_win | supplied_only | Actual validated process, Monte Carlo inputs and risk-stage/position ledger absent; printed arithmetic is separately auditable. |
+
+## Separate observation units
+
+- JJ-TBR:management:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- GB-SCALP:automatic_admission:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- SIRES:case_description:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- SIRES:management:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- SIRES:reentry:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- REFILL-STUDY:selected_order_configuration:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- JETBUNDLE-STATES:transition_observation:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+- STOIC-DATA:macro_application:observation-v1: supplied_only. Actual linked source process/position/decision/state records are indispensable; preserve separately from market opportunities and never infer from later prices.
+
+Registry canonical body SHA-256: `576037153a15375396fa37a24dfa491e0a9d9388aed99aa9b52a2a9c0f26eec6`.
+
+Every rule includes exact parameters, source/assumption references, clocks, lifecycle, exclusions, unknown handling and denominator definitions in CANDIDATE_REGISTRY.json. Changes after outcome exposure require a new version and explicit exposure record.
+
+
+Current replay run: **1.0.1**, manifest SHA-256 `e4a7250026e9fef46b6c729aace161bf69148a4082420770b8de9b7f8cf7a371`. The original registry and split freeze above is unchanged. This implementation repair follows documented evaluation exposure; see `../EVALUATION_EXPOSURE.json` and `../revisions/run-v1/`.
+
+The second recorded reporting integration repair uses run v1.0.2, manifest `d80935d548abe3cafcd695ec842dc69b1d3391646c2da8fe0db9e935a6c37247`. The original registry, assumptions and cohort selection remain frozen; evaluation exposure and both earlier artifact versions are preserved.

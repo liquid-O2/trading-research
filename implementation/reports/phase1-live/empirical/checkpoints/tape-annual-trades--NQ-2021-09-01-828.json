@@ -1,0 +1,287 @@
+{
+  "artifact_path": "/workspace/implementation/reports/phase1-live/empirical/artifacts/d80935d548abe3ca/tape-annual-trades--NQ-2021-09-01-828/records.json",
+  "artifact_sha256": "58847f0ce6412ce92a54d3e244fee07175372a221768f0fbd1c85fdd91d5b0f6",
+  "cohort": "tape-annual-trades",
+  "implementation_sha256": "8c3097892f5851d84c9c0d5decb09d3026755840ac1acec9d56b3ed89be8556f",
+  "instrument_id": "828",
+  "job_id": "tape-annual-trades--NQ-2021-09-01-828",
+  "job_sha256": "7fb7ca3e9ea7a9f406785cf73632185a8b557b2b8abbf1b48323b25293cde179",
+  "partition_id": "NQ-2021-09-01-828",
+  "registry_sha256": "7ce33ad43587e44168f2b5cbb910386c33f90cc5f8a1a5c6f2d90709791df381",
+  "rules": [
+    {
+      "branch": "trapped_buyers_retest",
+      "method_id": "SAINT-AMT",
+      "observation_unit": "positive_delta_upper_failure",
+      "population_holes": [
+        "initial_delta_coverage_unknown"
+      ],
+      "references": [
+        {
+          "calendar_policy": "All prior calendar weekdays required; no unsupported holiday-closure or roll stitching.",
+          "complete": true,
+          "constituent_reference_ids": [
+            "SAINT-AMT:trapped_buyers_retest:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "expected_weekdays": [
+            "2021-08-31"
+          ],
+          "formation_end": 1630440000000000000,
+          "formation_start": 1630416600000000000,
+          "high": "15609.25",
+          "instrument_id": "828",
+          "known_at": 1630440000000000000,
+          "low": "15517.75",
+          "missing_reference_dates": [],
+          "object_ids": [
+            "SAINT-AMT:trapped_buyers_retest:O046:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "reference_id": "SAINT-AMT:trapped_buyers_retest:comparison-v1:828:prior-day:2021-08-31:2021-08-31"
+        }
+      ],
+      "rule_id": "SAINT-AMT:trapped_buyers_retest:comparison-v1",
+      "search_executed": true,
+      "status": "missing_data",
+      "summary": {
+        "N": 0,
+        "actual_fills": null,
+        "actual_selections": null,
+        "ambiguous": 0,
+        "attempts": null,
+        "candidates": 0,
+        "censored": 0,
+        "denominator": "All observed initial opportunities, before later sequence confirmation; no actual-trade denominator.",
+        "f": 0,
+        "faithful_disagreements": null,
+        "interval": null,
+        "interval_exact": null,
+        "n": 0,
+        "opportunities": 0,
+        "orders": null,
+        "p": 0,
+        "proxy_as_faithful": 0,
+        "rate": null,
+        "rate_exact": null,
+        "selected_signals": 0,
+        "timing_violations": 0,
+        "u": 0
+      }
+    },
+    {
+      "branch": "failed_auction_return",
+      "method_id": "SAINT-AMT",
+      "observation_unit": "two_close_boundary_excursion",
+      "population_holes": [
+        "prior_RTH_trade_profile_unverified"
+      ],
+      "references": [
+        {
+          "calendar_policy": "All prior calendar weekdays required; no unsupported holiday-closure or roll stitching.",
+          "complete": true,
+          "constituent_reference_ids": [
+            "SAINT-AMT:failed_auction_return:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "expected_weekdays": [
+            "2021-08-31"
+          ],
+          "formation_end": 1630440000000000000,
+          "formation_start": 1630416600000000000,
+          "high": "15609.25",
+          "instrument_id": "828",
+          "known_at": 1630440000000000000,
+          "low": "15517.75",
+          "missing_reference_dates": [],
+          "object_ids": [
+            "SAINT-AMT:failed_auction_return:O046:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "reference_id": "SAINT-AMT:failed_auction_return:comparison-v1:828:prior-day:2021-08-31:2021-08-31"
+        }
+      ],
+      "rule_id": "SAINT-AMT:failed_auction_return:comparison-v1",
+      "search_executed": true,
+      "status": "missing_data",
+      "summary": {
+        "N": 0,
+        "actual_fills": null,
+        "actual_selections": null,
+        "ambiguous": 0,
+        "attempts": null,
+        "candidates": 0,
+        "censored": 0,
+        "denominator": "All observed initial opportunities, before later sequence confirmation; no actual-trade denominator.",
+        "f": 0,
+        "faithful_disagreements": null,
+        "interval": null,
+        "interval_exact": null,
+        "n": 0,
+        "opportunities": 0,
+        "orders": null,
+        "p": 0,
+        "proxy_as_faithful": 0,
+        "rate": null,
+        "rate_exact": null,
+        "selected_signals": 0,
+        "timing_violations": 0,
+        "u": 0
+      }
+    },
+    {
+      "branch": "poc_traversal",
+      "method_id": "SAINT-AMT",
+      "observation_unit": "poc_crossing",
+      "population_holes": [
+        "prior_RTH_trade_profile_unverified"
+      ],
+      "references": [
+        {
+          "calendar_policy": "All prior calendar weekdays required; no unsupported holiday-closure or roll stitching.",
+          "complete": true,
+          "constituent_reference_ids": [
+            "SAINT-AMT:poc_traversal:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "expected_weekdays": [
+            "2021-08-31"
+          ],
+          "formation_end": 1630440000000000000,
+          "formation_start": 1630416600000000000,
+          "high": "15609.25",
+          "instrument_id": "828",
+          "known_at": 1630440000000000000,
+          "low": "15517.75",
+          "missing_reference_dates": [],
+          "object_ids": [
+            "SAINT-AMT:poc_traversal:O046:prior_day:828:1630416600000000000:1630440000000000000"
+          ],
+          "reference_id": "SAINT-AMT:poc_traversal:comparison-v1:828:prior-day:2021-08-31:2021-08-31"
+        }
+      ],
+      "rule_id": "SAINT-AMT:poc_traversal:comparison-v1",
+      "search_executed": true,
+      "status": "missing_data",
+      "summary": {
+        "N": 0,
+        "actual_fills": null,
+        "actual_selections": null,
+        "ambiguous": 0,
+        "attempts": null,
+        "candidates": 0,
+        "censored": 0,
+        "denominator": "All observed initial opportunities, before later sequence confirmation; no actual-trade denominator.",
+        "f": 0,
+        "faithful_disagreements": null,
+        "interval": null,
+        "interval_exact": null,
+        "n": 0,
+        "opportunities": 0,
+        "orders": null,
+        "p": 0,
+        "proxy_as_faithful": 0,
+        "rate": null,
+        "rate_exact": null,
+        "selected_signals": 0,
+        "timing_violations": 0,
+        "u": 0
+      }
+    },
+    {
+      "branch": "source_long",
+      "method_id": "KEANI-OPEN-ABOVE-VALUE",
+      "observation_unit": "opening_state",
+      "population_holes": [],
+      "references": [
+        {
+          "complete": true,
+          "high": null,
+          "instrument_id": "828",
+          "known_at": 1630503000000000000,
+          "low": null,
+          "object_ids": [],
+          "prior_value_known_at": null,
+          "prior_value_verified": false,
+          "profile_id": null,
+          "reference_definition": "Clock-based opening population; unverified prior values are not incorporated.",
+          "reference_id": "KEANI-OPEN-ABOVE-VALUE:source_long:comparison-v1:828:2021-09-01:opening-clock"
+        }
+      ],
+      "rule_id": "KEANI-OPEN-ABOVE-VALUE:source_long:comparison-v1",
+      "search_executed": true,
+      "status": "completed",
+      "summary": {
+        "N": 1,
+        "actual_fills": null,
+        "actual_selections": null,
+        "ambiguous": 0,
+        "attempts": null,
+        "candidates": 1,
+        "censored": 1,
+        "denominator": "All observed initial opportunities, before later sequence confirmation; no actual-trade denominator.",
+        "f": 0,
+        "faithful_disagreements": null,
+        "interval": [
+          0.0,
+          1.0
+        ],
+        "interval_exact": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "n": 0,
+        "opportunities": 1,
+        "orders": null,
+        "p": 0,
+        "proxy_as_faithful": 0,
+        "rate": null,
+        "rate_exact": null,
+        "selected_signals": 0,
+        "timing_violations": 0,
+        "u": 1
+      }
+    },
+    {
+      "branch": "touch_record",
+      "method_id": "REFILL-STUDY",
+      "observation_unit": "zone_return",
+      "population_holes": [
+        "native_tape_coverage_unverified"
+      ],
+      "references": [],
+      "rule_id": "REFILL-STUDY:touch_record:comparison-v1",
+      "search_executed": true,
+      "status": "missing_data",
+      "summary": {
+        "N": 0,
+        "actual_fills": null,
+        "actual_selections": null,
+        "ambiguous": 0,
+        "attempts": null,
+        "candidates": 0,
+        "censored": 0,
+        "denominator": "All observed initial opportunities, before later sequence confirmation; no actual-trade denominator.",
+        "f": 0,
+        "faithful_disagreements": null,
+        "interval": null,
+        "interval_exact": null,
+        "n": 0,
+        "opportunities": 0,
+        "orders": null,
+        "p": 0,
+        "proxy_as_faithful": 0,
+        "rate": null,
+        "rate_exact": null,
+        "selected_signals": 0,
+        "timing_violations": 0,
+        "u": 0
+      }
+    }
+  ],
+  "run_manifest_sha256": "d80935d548abe3cafcd695ec842dc69b1d3391646c2da8fe0db9e935a6c37247",
+  "schema": "phase1-empirical-checkpoint-v1",
+  "search_completed": true,
+  "session_date": "2021-09-01"
+}

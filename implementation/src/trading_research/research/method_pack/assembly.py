@@ -174,6 +174,12 @@ def _role_definition(role, obj, candidate):
             raise SchemaError('semantic role identity differs from object/candidate')
     if role.get('author') != obj['author']:
         raise SchemaError("semantic role cannot transfer another author's reference")
+    if candidate.get('evidence_mode') == 'research_comparison':
+        from .empirical_binding import validate_role
+        try:
+            return validate_role(role, obj, candidate)
+        except ValueError as exc:
+            raise SchemaError(str(exc)) from exc
     definition = SourceSetting.parse(role.get('source_definition', {}))
     control=candidate.get('evidence_mode')=='native_control' and candidate.get('variant')=='comparison'
     if definition.status != 'fact' and not (control and definition.status=='inference'):
