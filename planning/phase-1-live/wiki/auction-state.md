@@ -6,9 +6,9 @@ The guest framework names B balance, A absorption, D discovery, E exhaustion and
 
 **Not a standalone trade.** These are heuristic current states, not AMT day types or automatic trade signals. Sires's following application remains separately attributed.
 
-**Record before use.** State_id/time, source qualitative criteria, participation/response/depth evidence, threshold definition or unknown status, and input max known_at.
+**Record before use.** State_id/time, native instrument, source qualitative criteria, participation/response/depth evidence, required_depth_levels, threshold definition or unknown status, and input max known_at.
 
-**Phase 1 observation.** Classify only from evidence available at state_at. Missing cancellation/depth data or unpublished thresholds make faithful automatic state assignment unknown; an annotated source state remains identifiable evidence.
+**Phase 1 observation.** Classify only from evidence available at state_at. NQ is eligible; AAPL's ten levels are illustrative rather than mandatory. Missing cancellation/required-depth data or unpublished thresholds make faithful automatic state assignment unknown; an annotated state remains identifiable evidence.
 
 **Existing attachments.** The source five-state classifier is missing from [FORMULAS] and current implementation. Generic day or absorption flags are not the complete state model. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
 

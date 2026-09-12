@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:44:08Z`
+created_at: `2026-09-12T10:47:31Z`
 
 ## Headline
 
@@ -54,7 +54,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 56, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -63,11 +63,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/holes.jsonl sha256=2fb73f50f827bf5d1b70c8897d5aa9dfa0968be09753d603797d63c6ddc71df6
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/fixtures.json sha256=f34b64b7d5c9eee8c5dd60366a03b8c364d80ccf5d06ccbf6b6790af0b8a53a3
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/cohort.json sha256=54e0ac4a6fcd6073e3b679c2b76898dad89b3cb6126c9ea4016ed55f8b9d066a
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-ddmxq8wp/coverage.json sha256=f56d7dc9a2fa094f047f5f00b9bc0641512270b3cc0bf8011437b13ac05aa955
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/holes.jsonl sha256=6b8beac4fbca08cd75552ed24212a5870390e23cc689d048f632548ac429a40b
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/fixtures.json sha256=1591432e2322ce290da90fcd6ec53867d231af39ea60a4a2db3b1e5b5042fe85
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/cohort.json sha256=a77637226149f6e55c022768b2b284330e7842dba213d5ba739a56645702dfa9
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/member-two-reasons/run-qxpffvcw/coverage.json sha256=f56d7dc9a2fa094f047f5f00b9bc0641512270b3cc0bf8011437b13ac05aa955

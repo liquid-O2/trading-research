@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:43:11Z`
+created_at: `2026-09-12T10:46:29Z`
 
 ## Headline
 
@@ -52,7 +52,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 28, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -61,11 +61,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/holes.jsonl sha256=ac6688dc0214be55fa571912a0bc222b29c002d5387ee8417204bcd29937808f
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/fixtures.json sha256=8498fa47bb3353534411fb08db5190fafa1ca2ddbf08801f23cb73a45010aeda
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/cohort.json sha256=0bb8ef62efdac6e1013861ab7a6497fd864e7c3aea9dd413559b123fc2314a4b
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-ueprj5wu/coverage.json sha256=a222358da6ce85bbe1fec17038f64660b9a702583c8857005e64d474ee311025
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/holes.jsonl sha256=e639fa84d8f744d63945a29e4e144b05c62186c024b0aba5e3b45c45cba2a8e1
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/fixtures.json sha256=8498fa47bb3353534411fb08db5190fafa1ca2ddbf08801f23cb73a45010aeda
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/cohort.json sha256=6481fd3ee64196231eb60acecb6be93c66e4e38934a272cdda6195e48229bddb
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-vwap/run-wn0v8sou/coverage.json sha256=a222358da6ce85bbe1fec17038f64660b9a702583c8857005e64d474ee311025

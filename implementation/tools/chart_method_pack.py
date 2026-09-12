@@ -50,7 +50,7 @@ PLANS = [
  {'id':'M07','method':'MEMBER-TWO-REASONS','date':COMMON_DATE,'view':['09:30','11:00'], 'geometry':['O061'], 'references':[(DISC+'10k-first-month.pdf',7),(DISC+'10k-first-month.pdf',8)], 'selection':'Common source-dated diagnostic. Native volume map only. The source ticket is ES; no ES reaction area, minor HVN or ticket is transferred to NQ.'},
  {'id':'M08','method':'KEANI-OPEN-ABOVE-VALUE','date':COMMON_DATE,'view':['09:30','11:00'], 'geometry':['O078','O050'], 'references':[(DISC+'average-unprofitable-trader.pdf',22)], 'selection':'Common source-dated diagnostic. Complete A low and opening price; no guessed prior/developing VAH or imbalance band.'},
  {'id':'M09','method':'REFILL-STUDY','date':COMMON_DATE,'view':['09:30','09:40'], 'geometry':['O098','O099'], 'references':[(DISC+'refill-effect.pdf',7),(DISC+'refill-effect.pdf',12),(DISC+'origin-of-the-move.pdf',18)], 'selection':'Common source-dated diagnostic, fixed first ten minutes. All native executions displayed without size threshold or cluster/zone selector.'},
- {'id':'M10','method':'JETBUNDLE-STATES','date':COMMON_DATE,'view':['09:30','10:00'], 'geometry':['O098','O164'], 'references':[(DISC+'the-math-behind-auction-market-theory.pdf',10)], 'selection':'Native NQ input diagnostic only. Missing AAPL ten-level sample and state classifier prevent source-state geometry/transition reproduction.'},
+ {'id':'M10','method':'JETBUNDLE-STATES','date':COMMON_DATE,'view':['09:30','10:00'], 'geometry':['O098','O164'], 'references':[(DISC+'the-math-behind-auction-market-theory.pdf',10)], 'selection':'Native NQ is eligible: AAPL is the source illustration, and p.3 explicitly transfers the ideas to NQ. Undisclosed state thresholds and native participation evidence still limit this view to inputs.'},
  {'id':'M11','method':'STOIC-DATA','date':COMMON_DATE,'geometry':['O162'], 'references':[(DISC+'data-engine.pdf',5)], 'selection':'Civil-date CPI vintage illustration as of the common date, not a session decision or disclosed Stoic series/score model.'},
  {'id':'M12','method':'STOIC-RISK','date':None,'geometry':['O155'], 'references':[(DISC+'data-engine.pdf',7),(DISC+'data-engine.pdf',8)], 'selection':'Printed baseline arithmetic only. No acquired process journal or risk decisions exist, so no dated historical session can be charted.'},
 ]
@@ -433,15 +433,15 @@ def chart_m10(plan):
     totals=t.groupby(['minute','side'])['size'].sum().unstack(fill_value=0).reindex(columns=['A','B','N'],fill_value=0)
     totals['signed_delta']=totals.B-totals.A
     frame=totals.reset_index(); frame['known_at_ns']=(frame.minute+60000)*1_000_000
-    fig,(ax,sub)=setup(plan,f"{day} | {ident['symbol']} input diagnostic | source requires AAPL ten-level book; state reconstruction blocked",2)
+    fig,(ax,sub)=setup(plan,f"{day} | {ident['symbol']} input diagnostic | NQ eligible; state thresholds and participation evidence remain undefined",2)
     candles(ax,bars)
     x=pd.to_datetime(frame.minute+30000,unit='ms',utc=True)
     sub.bar(x,frame.B,width=.7/1440,color=BLUE,label='Buy executed volume')
     sub.bar(x,-frame.A,width=.7/1440,color=ORANGE,label='Sell executed volume (shown below zero)')
     sub.axhline(0,color=GRAY,lw=.6); sub.set_ylabel('Contracts / minute'); sub.legend(loc='upper left',fontsize=8)
     for a in [ax,sub]: clock_axis(a,day,*plan['view'])
-    hole(plan,['AAPL_ten_level_events','state_windows_thresholds','provide_cancel_consume_identity'],'Native NQ executed effort and price are plotted only as inputs. AAPL source states, efficiency classifications and transitions remain unavailable.','source_and_data')
-    finish(plan,fig,'Signed execution totals preserve B=buy and A=sell; OHLC direction does not assign aggression.\nNo B/A/D/E/W labels, cancellation counts, refill inference, response threshold or transition matrix is generated.',{'executed_volume':int(trades['size'].sum()),'buy_volume':int(totals.B.sum()),'sell_volume':int(totals.A.sum()),'unknown_volume':int(totals.N.sum()),'source_state':None,'native_source_instrument_match':False,'display_bucket_minutes':1,'source_state_bucket_minutes':None},[record_input(plan,'minutes',bars),record_input(plan,'execution-volumes',frame),{'native_trade_window':trades.attrs,'rows':len(trades)}],ident)
+    hole(plan,['declared_depth_and_event_coverage','state_windows_thresholds','provide_cancel_consume_identity'],'NQ can instantiate the source framework. This execution tape does not supply the native provision/withdrawal process or the unpublished state thresholds.','source_and_data')
+    finish(plan,fig,'AAPL is illustrative; the source explicitly discusses applying the ideas to NQ (p.3).\nB=buy and A=sell preserve native aggression. No state labels, cancellations or transition matrix are inferred.',{'executed_volume':int(trades['size'].sum()),'buy_volume':int(totals.B.sum()),'sell_volume':int(totals.A.sum()),'unknown_volume':int(totals.N.sum()),'source_state':None,'study_instrument_eligible':True,'source_illustration_symbol':'AAPL','borrowed_illustration_counts':False,'display_bucket_minutes':1,'source_state_bucket_minutes':None},[record_input(plan,'minutes',bars),record_input(plan,'execution-volumes',frame),{'native_trade_window':trades.attrs,'rows':len(trades)}],ident)
 
 
 def chart_m11(plan):
@@ -477,11 +477,22 @@ def chart_m12(plan):
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    spec={'version':'method-geometry-2026-09-12','purpose':'Geometry diagnostics excluded from historical method sample','selection_frozen_before_chart_calculation':True,'plans':PLANS}
+    spec={'version':'method-geometry-2026-09-12-source-recheck','purpose':'Geometry diagnostics excluded from historical method sample','selection_frozen_before_chart_calculation':True,'plans':PLANS}
     spec_path=OUT/'chart-spec.json'
     serialized=json.dumps(spec,sort_keys=True,default=serial)
     if spec_path.exists():
-        assert json.dumps(json.loads(spec_path.read_text()),sort_keys=True)==serialized, 'Frozen chart selection changed'
+        previous=json.loads(spec_path.read_text())
+        if previous['version']=='method-geometry-2026-09-12':
+            # Correct source interpretation, preserving every preselected date,
+            # instrument, window, geometry and reference. Keep the prior spec.
+            assert len(previous['plans'])==len(PLANS)
+            for old,new in zip(previous['plans'],PLANS):
+                assert {k:v for k,v in old.items() if k!='selection'}==json.loads(json.dumps({k:v for k,v in new.items() if k!='selection'}))
+                if new['id']!='M10': assert old['selection']==new['selection']
+            save_json(OUT/'chart-spec-initial.json',previous)
+            save_json(spec_path,spec)
+        else:
+            assert json.dumps(previous,sort_keys=True)==serialized, 'Frozen chart selection changed'
     else: save_json(spec_path,spec)
     # Render source references from immutable PDFs. Only the primary source page
     # is copied to the chart bundle; all supporting pages remain linked by path.

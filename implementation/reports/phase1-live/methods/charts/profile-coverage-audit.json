@@ -1,0 +1,276 @@
+{
+  "method_pack_delta_output": {
+    "known_delta": "0",
+    "delta_interval": [
+      "0",
+      "0"
+    ],
+    "total": "18"
+  },
+  "method_pack_snapshot_output": {
+    "poc": "100",
+    "snapshot_known_at": 10,
+    "mutated": false
+  },
+  "legacy_va_tie_comparison": {
+    "family_open": [
+      100.25,
+      100.25,
+      100.5
+    ],
+    "mbp1": {
+      "poc": 100.25,
+      "VAL": 100.0,
+      "VAH": 100.25,
+      "n": 3,
+      "dp_max": 100.25,
+      "dp_min": 100.5
+    },
+    "same_synthetic_histogram": true,
+    "historical_observations": 0,
+    "prices": [
+      100,
+      100.25,
+      100.5
+    ],
+    "volumes": [
+      4,
+      10,
+      4
+    ],
+    "fraction": 0.7,
+    "execution_note": "Exact function definitions loaded from their modules via AST to avoid unrelated optional imports; globals TICK=0.25 and numpy supplied."
+  },
+  "native_delta_check": {
+    "date": "2026-06-12",
+    "window_et": [
+      "09:30",
+      "16:00"
+    ],
+    "instrument_id": 42004058,
+    "trades": 224400,
+    "buy": 148593,
+    "sell": 146402,
+    "unknown": 46,
+    "retained_scalar_cache": [
+      {
+        "date": "2026-06-12",
+        "dp_max": 29673.0,
+        "dp_min": 29689.0,
+        "delta_ne_poc": true
+      }
+    ],
+    "scope": "read-only data diagnostic, not strategy performance",
+    "known_side_delta_max_price": 29689.0,
+    "known_side_delta_min_price": 29673.0,
+    "known_side_window_delta": 2191,
+    "full_window_delta_interval": [
+      2145,
+      2237
+    ],
+    "full_delta_is_exact": false,
+    "raw_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-06-08.parquet",
+    "calculation": "Filter native t to [2026-06-12 09:30, 16:00) America/New_York; assert one instrument, A/B/N sides, flags=0; sum size by price and side. Known-side delta is B minus A; N is separately bounded.",
+    "legacy_cache": "/workspace/implementation/reports/phase1-live/_tables/value_delta_rth_F.parquet"
+  },
+  "method_pack_delta_input": {
+    "levels": [
+      {
+        "price": "100",
+        "B": 7,
+        "A": 4
+      },
+      {
+        "price": "101",
+        "B": 2,
+        "A": 5
+      }
+    ],
+    "known_at": 10
+  },
+  "method_pack_snapshot_input": {
+    "snapshots": [
+      {
+        "known_at": 10,
+        "poc": "100",
+        "bins": {
+          "100": 10
+        },
+        "val": "99",
+        "vah": "101",
+        "snapshot_id": "a"
+      }
+    ],
+    "as_of": 11
+  },
+  "prior_rth_cache": {
+    "path": "/workspace/implementation/reports/phase1-live/_tables/prior_rth_trade_vp_F.parquet",
+    "rows": 668,
+    "first_date": "2024-01-02",
+    "last_date": "2026-08-31",
+    "columns": [
+      "date",
+      "poc",
+      "VAL",
+      "VAH",
+      "n_ticks",
+      "volume"
+    ],
+    "contains_histograms": false,
+    "contains_instrument_ids": false,
+    "contains_availability_timestamps": false
+  },
+  "scope": {
+    "kind": "source_documentation_to_implementation_audit",
+    "historical_method_performance_measured": false,
+    "new_historical_cohort_runs": 0,
+    "new_strategy_parameter_experiments": 0,
+    "synthetic_examples_are_historical_data": false,
+    "code_or_cache_repairs_performed": false
+  },
+  "interpretation_amendments": [
+    {
+      "id": "sires_overnight_clock",
+      "source": "sources/documents/discretionary/mastering-amt-vp.pdf",
+      "page": 14,
+      "window": "[18:00 previous calendar day, 09:30 current date) America/New_York",
+      "scope": "Sires illustrated overnight profile; not a universal ETH definition",
+      "finding": "Printed clock is already in FORMULAS O011. O073 and its wiki page lack an explicit binding to that source-specific clock; this is a cross-reference/profile-binding gap, not a fact absent from the whole documentation."
+    },
+    {
+      "id": "gb_2025_11_20_entry",
+      "source": "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+      "page": 43,
+      "source_instrument": "MNQZ2025",
+      "source_chart_minutes": 2,
+      "displayed_short_position_price": 25301.75,
+      "entry_interpretation": "At the high sweep, as corrected by the user and supported by the displayed position line. Later MSS/FVG risk annotations are not a prerequisite for that displayed position.",
+      "exact_execution_timestamp": null,
+      "native_nq_fill_inferred": false,
+      "supersedes": "source-fit-v1 as an entry explanation; retains its numeric diagnostics as a rejected delayed-entry hypothesis"
+    },
+    {
+      "id": "stoic_workflow",
+      "finding": "Research workflow, not a standalone entry strategy; catalog presence must not be counted as a separate trade setup."
+    }
+  ],
+  "deferred_research": {
+    "HL2": "(H+L)/2",
+    "HLC3": "(H+L+C)/3",
+    "OHLC4": "(O+H+L+C)/4",
+    "searches": [
+      "price basis",
+      "all timeframes",
+      "entry timing"
+    ],
+    "phase": "later research phase, following user direction; no further search in this audit"
+  },
+  "inputs_and_source_images": [
+    {
+      "path": "/workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf",
+      "sha256": "bb37d2012176551ef2edeeca88d70d360df294f97f1838320e8ee0cddd2ef822"
+    },
+    {
+      "path": "/workspace/sources/documents/discretionary/mastering-amt-vp.pdf",
+      "sha256": "f5b6744abf8dca9ec09681c6b7b96e9e2f77b23cc0e320b5baa1916c45abaf72"
+    },
+    {
+      "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+      "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+    },
+    {
+      "path": "/workspace/sources/documents/discretionary/code-3-orderflow.pdf",
+      "sha256": "a180f5b29b772a1b441ec8a29b3a262636a8542201e7ed53c2c8d28c710843fc"
+    },
+    {
+      "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+      "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/FORMULAS.md",
+      "sha256": "a57f0d0b121c5a0371e014e4c3e99437d3a1cc3ffa2b0b7e9b8520d73e431f57"
+    },
+    {
+      "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "sha256": "a3c47e24b39047ffb74fc1dd0921d0cd834a3fd9cc5fb4bc1edd6197a7e18391"
+    },
+    {
+      "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "sha256": "1f83e2e11eafb3c0bc90086fc3f9ee8a83216111ed2bb3d0aaa23c8067c9d67a"
+    },
+    {
+      "path": "/workspace/implementation/src/trading_research/research/phase1_live/family_open.py",
+      "sha256": "59ade58017dd8be57d6b1f9041ce1341a6c7c19fdd24fec08bb075fdd369c52e"
+    },
+    {
+      "path": "/workspace/implementation/src/trading_research/research/phase1_live/family_value.py",
+      "sha256": "c42260d3aa5b15a54640af78f1b20f5c6f48dd02d57c720b30ea9c0fb7786f73"
+    },
+    {
+      "path": "/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py",
+      "sha256": "0f3c24cfbeb35275a824115b21e3a5d519e394f2cbd6d07fb67622701a1e1926"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/prior_rth_trade_vp_F.parquet",
+      "sha256": "d4a049e7520741d62abdda5021f09fbda6eb3c7966c18fe2f86167535f53dcdb"
+    },
+    {
+      "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-06-08.parquet",
+      "sha256": "6439c2248d7d2a49b61e4764befd715036c6d2de06b0b6cd33b2fe042d9a9ee3"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/value_delta_rth_F.parquet",
+      "sha256": "f1c984f7f2b114c6724ca972a068097a5623745ea66665c475b1ed8c3238d9ca"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/charts/profile-audit-jumbo-multiple.png",
+      "sha256": "04c8a6384af65418fdecde91dcfaf93a6d2e954218789d405537f9f278191b64"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/charts/profile-audit-sires-overnight.png",
+      "sha256": "3226307ec4dd7a3d27d858c295b1e553b3e08683610d6f69e07b38e13f86d2a8"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/value-and-profiles.md",
+      "sha256": "6fda1f42a754d1d080f2fe68c7399735cecbb14fe3f45a8bd0c9ee11073015f0"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/value-area.md",
+      "sha256": "af2ca67520eb6316681ef7a209e7955180f12f732e84f81e9841545d4e143c68"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/profile-poc.md",
+      "sha256": "dd7c1fdad897761806b1d87a8146867a5e66128625da7b4085222e2a0252d05f"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/overnight-profile.md",
+      "sha256": "f591809c618a226d8558497483b1383ce3292e332da2a61ebb0a84c5d0c5536b"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/prior-eth-profile.md",
+      "sha256": "fedc3d2d7a46e8c6c2b4a4ee4d99cb715265629f7f13b866d5e989ce88911c4f"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/developing-profile.md",
+      "sha256": "0db3e928f7ab2da76c07b194ba815dd5ce46c8210272239986e95c22b850bb6c"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/weekly-delta-profile.md",
+      "sha256": "f745bade51636413b73f02bce83e2ced2cf3663365026eef9377afaa3d28778d"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/composite-profiles.md",
+      "sha256": "214e974e251de662c7ff9ccfc6a48074e9dc8604935616071a4f0a96801d1560"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/prior-session-reference-levels.md",
+      "sha256": "ad5426a06b544cd527af075f18d43dec5e6ba3e731d46470a6e085aa069e6474"
+    },
+    {
+      "path": "/workspace/planning/phase-1-live/wiki/mpoc.md",
+      "sha256": "84f2e485ef3b7a9779077897c1bc1364bf1424bb57485853d3210592132f9684"
+    }
+  ],
+  "verified_at": "2026-09-12T11:12:52+00:00",
+  "reverified_at": "2026-09-12T11:49:01.155227+00:00"
+}

@@ -1,8 +1,8 @@
 {
-  "reviewed_at": "2026-09-12T09:44:12.487264+00:00",
+  "reviewed_at": "2026-09-12T10:47:29Z",
   "reviewer": "Primary assistant; all chart/source comparisons performed directly, without subagents",
   "method_performance_claim": false,
-  "rendering": "All latest PNGs visually inspected after the date-axis/wick-clipping repair; no clipping or overlapping text found.",
+  "rendering": "Primary assistant visually inspected the revised M10 image and both source-fit figures. The other eleven baseline PNGs have the same hashes as their previously inspected versions.",
   "charts": [
     {
       "id": "M01",
@@ -24,7 +24,7 @@
       "id": "M02",
       "chart_sha256": "8f02a6cf5fc7968619d2a203f1a16e938f2db492719dd8f8cf1f73eba39a99ff",
       "verdict": "partial_geometry_only",
-      "findings": "NYAM [25146.00, 25291.50] is fixed at 10:00. The first native NQ upper sweep is 10:00:02.006785967, followed by a complete 10:05 close at 25279.00 inside the box. The source figure highlights a later upper test with MSS/FVG around 10:40-10:50. Thus first literal failure is not automatically the source-selected attempt. The figure is MNQZ5; acquired prices are NQZ5. No identical-instrument or pixel-perfect price claim is made. Its 3-minute display does not replace FORMULAS five-minute confirmation rule.",
+      "findings": "NYAM [25146.00, 25291.50] is fixed at 10:00. The first native NQ upper sweep is 10:00:02.006785967, followed by a complete 10:05 close at 25279.00 inside the box. The source figure highlights a later upper test with MSS/FVG around 10:40-10:50. Thus first literal failure is not automatically the source-selected attempt. The figure is MNQZ5; acquired prices are NQZ5. No identical-instrument or pixel-perfect price claim is made. The source toolbar and instrument header identify a 2-minute display; the earlier 3-minute description was wrong. The separate source-fit reconstruction reproduces the intended later test and three bearish FVGs. Later PDL cases give five-minute confirmation; that does not replace this figure\u2019s timeframe.",
       "source_references": [
         [
           "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
@@ -34,19 +34,21 @@
           "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
           25
         ]
-      ]
+      ],
+      "source_fit_followup": "/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-FAIL-2025-11-20.json"
     },
     {
       "id": "M03",
       "chart_sha256": "dda660e21e771f794fef716de49f053a0e4412a9dd9b862774194b7ce1e53c2e",
       "verdict": "source_geometry_blocked_comparisons_only",
-      "findings": "The dated price path shows the same opening selloff, recovery and later pullback/continuation shape as p.33. At 10:00 the exact trade-weighted comparison VWAP is 24837.3038465 for the previous-18:00 reset and 24842.0895305 for the 09:30 reset. Neither reset/basis is established as the source VWAP. No London/Asia bounds or source breakout bar are invented; source VWAP remains null.",
+      "findings": "The original diagnostic retains exact trade-weighted alternatives: at 10:00, previous-18:00 VWAP is 24837.3038465 and 09:30-reset VWAP is 24842.0895305. The added source-fit study tests four resets and four bases against 13 source-figure points: previous-18:00 HLC3 gives RMSE 1.4846 points; nearby bases are indistinguishable at the image resolution. This supports a working reset hypothesis, without identifying the author\u2019s exact settings or creating an actual entry fill.",
       "source_references": [
         [
           "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
           33
         ]
-      ]
+      ],
+      "source_fit_followup": "/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-VWAP-2026-02-24.json"
     },
     {
       "id": "M04",
@@ -134,13 +136,21 @@
     },
     {
       "id": "M10",
-      "chart_sha256": "41249314b79d538f58214d1236d7b8cb5feafab883623e95e8c2a2ad3a698fbd",
-      "verdict": "native_source_reconstruction_blocked",
-      "findings": "The dated NQ input view contains 45432 buy and 46048 sell contracts, 91480 total, with zero unknown-side volume. The source p.10 displays heuristic states on AAPL ten-level order-book events. These are different instruments and data structures. No B/A/D/E/W labels, cancellations, efficiency classifier or transition matrix can be compared faithfully; the NQ chart is only an input diagnostic.",
+      "chart_sha256": "40ab19fa848d5cf562b951ae3b6027f607254f683882e911e29aae7a71d9993a",
+      "verdict": "NQ_eligible_state_classifier_undefined",
+      "findings": "The NQ view contains 45432 buy and 46048 sell contracts, 91480 total, with zero unknown-side volume. Source p.3 explicitly discusses applying the ideas to NQ, and p.16 calls AAPL illustrative. The prior AAPL/ten-level universal gate was incorrect and has been removed. The view remains an input diagnostic because state windows/thresholds and complete native provision/withdrawal evidence are not supplied. No printed AAPL probabilities are assigned to NQ.",
       "source_references": [
         [
           "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+          3
+        ],
+        [
+          "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
           10
+        ],
+        [
+          "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+          16
         ]
       ]
     },
@@ -148,7 +158,7 @@
       "id": "M11",
       "chart_sha256": "5fc86f7dd23c633232230d1d5623a24be27b53dbf2320a202518bb87c662e0ab",
       "verdict": "process_geometry_unavailable_vintage_supplement",
-      "findings": "There is no disclosed Stoic score/cycle/trend geometry or process-review journal to replay on a trading session. The supplement shows 12 nonmissing CPI index values across 13 reference months in the civil-date vintage view on 2026-02-24, retaining the October 2025 gap. CPI is an acquired illustrative input, not a claimed Stoic series choice. No z-score substitute, intraday availability assumption or macro decision is introduced.",
+      "findings": "The source p.3 provides the research workflow: define repeatable steps, collect every trade uniformly, compare winners and losers, and refine. Our own tested trades supply its process records. The custom score/cycle/trend formulas on p.5 remain unspecified; macro work is now deprioritized. The retained earlier supplement shows 12 nonmissing CPI values across 13 reference months, with the October gap. It is an illustrative civil-date input, not a Stoic score or intraday trading decision.",
       "source_references": [
         [
           "sources/documents/discretionary/data-engine.pdf",
@@ -172,5 +182,6 @@
         ]
       ]
     }
-  ]
+  ],
+  "source_recheck": "Original guide PDFs and raw posts re-read; two explicit source-fit cases added after user authorization. Macro work deprioritized."
 }

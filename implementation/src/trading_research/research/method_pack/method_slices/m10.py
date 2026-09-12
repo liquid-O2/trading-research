@@ -71,6 +71,7 @@ def _state(state: str) -> dict:
         "source_event_log_id": "AAPL-10-level-events-1000",
         "native_event_types": ["add", "cancel", "execute"],
         "depth_levels": 10,
+        "required_depth_levels": 10,
         "local_interval_id": "AAPL-local-1000",
         "response_points": "0.25",
         "criteria_evidence_ids": {
@@ -145,8 +146,8 @@ def audit_candidate(candidate, operands, objects, assertions, evidence) -> list[
             issue("state", "source state observation identity must be an opaque string",
                   recipe="O165")
 
-    # The native AAPL ten-level process is a source boundary.  A compact NQ
-    # BBO or a display imbalance cannot establish participation completeness.
+    # The source's AAPL sample is illustrative. Any native instrument can
+    # support the framework when the declared event/depth scope is complete.
     if operands.get("participation_record_complete") is True:
         native = payload.get("native_event_types") or []
         missing = []
@@ -155,14 +156,14 @@ def audit_candidate(candidate, operands, objects, assertions, evidence) -> list[
         if not {"add", "cancel", "execute"} <= set(native):
             missing.append("native_event_types")
         depth = payload.get("depth_levels")
-        if type(depth) is not int or depth < 10:
+        required_depth = payload.get("required_depth_levels")
+        if type(required_depth) is not int or required_depth < 1:
+            missing.append("required_depth_levels")
+        if (type(depth) is not int or depth < 1
+                or (type(required_depth) is int and depth < required_depth)):
             missing.append("depth_levels")
-        if source_symbol is None:
+        if not isinstance(source_symbol, str) or not source_symbol.strip():
             missing.append("source_symbol")
-        elif source_symbol != "AAPL":
-            issue("participation_record_complete",
-                  "NQ/BBO participation is not the source AAPL ten-level event process",
-                  recipe="O163")
         if missing:
             issue("participation_record_complete",
                   "native participation process is missing: " + ", ".join(missing),
@@ -196,9 +197,14 @@ def audit_candidate(candidate, operands, objects, assertions, evidence) -> list[
             issue("conditioning_known_at", "transition lacks its current-state conditioning observation",
                   kind="supplied_record_missing", unknown=True, recipe="O166")
         counts = payload.get("reported_counts")
-        if counts is not None and source_symbol != "AAPL":
-            issue("next_state_at", "AAPL transition counts cannot be transferred to an NQ cohort",
-                  recipe="O166")
+        if counts is not None:
+            counts_symbol = payload.get("source_counts_symbol")
+            if not isinstance(counts_symbol, str) or not counts_symbol.strip():
+                issue("next_state_at", "transition counts lack their native instrument provenance",
+                      kind="supplied_record_missing", unknown=True, recipe="O166")
+            elif counts_symbol != source_symbol:
+                issue("next_state_at", "transition counts belong to a different instrument",
+                      recipe="O166")
         cond = operands.get("conditioning_known_at")
         current = operands.get("state_at")
         if cond is not None and current is not None and cond > current:
@@ -443,6 +449,8 @@ def _transition_document(fid: str, op: dict) -> dict:
             "instrument_id": op.get("instrument_id", state["instrument_id"]),
             "band_id": op.get("band_id", state["band_id"]),
             "source_symbol": op.get("source_symbol", state["source_symbol"]),
+            "depth_levels": op.get("depth_levels", state["depth_levels"]),
+            "required_depth_levels": op.get("required_depth_levels", state["required_depth_levels"]),
             "state_at": at,
             "participation_known_at": at,
             "response_known_at": at,
@@ -570,6 +578,7 @@ def method_fixtures() -> list[dict]:
     nq_counts.update({
         "instrument_id": "NQ-fixture",
         "source_symbol": "NQ",
+        "source_counts_symbol": "AAPL",
         "reported_counts": {"D": 84, "A": 12, "B": 4, "E": 0, "W": 0},
     })
     rows.append(method_case(METHOD, "transition_observation", "M10-F2-nq-counts",

@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:45:49Z`
+created_at: `2026-09-12T10:49:00Z`
 
 ## Headline
 
@@ -56,7 +56,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 34, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -65,11 +65,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/holes.jsonl sha256=2ec2fff58dcc10e0c47f4a54ec00506c76b57d192627d65828af5328914d8680
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/fixtures.json sha256=bd58309899f47d0314cb5df456d5678ae4c65fadb2712b1454c5297a70e03176
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/cohort.json sha256=c008bdd2c7e200303d7e114b9a4c5ea11227215c38b043aff448b1e282f058df
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-4zd4_rj3/coverage.json sha256=f62aac397e6bd8917b3fb904261ebd02b02bddbdc0be8c0fc06376caad765d77
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/holes.jsonl sha256=dee2a952129dca7b2f2ad71ede86561bed94d1caef8fef48b429d83cb6ed7412
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/fixtures.json sha256=bd58309899f47d0314cb5df456d5678ae4c65fadb2712b1454c5297a70e03176
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/cohort.json sha256=47e2a398bab815c58c86a7d8c4511299cb64e062287cbbd74c63e5ffb3cabe1f
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/stoic-data/run-o3s4x3e1/coverage.json sha256=f62aac397e6bd8917b3fb904261ebd02b02bddbdc0be8c0fc06376caad765d77

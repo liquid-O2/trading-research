@@ -1,14 +1,14 @@
-# Method chart and candidate-selector check
+# Method chart, source reread and candidate-selector check
 
-All 12 method reports and FORMULAS C05/M01-M12 were read. None supplies a complete automatic selector for the full source-defined method unit. All 50 confirmed branches retain explicit source-input holes; Sires also has four separately excluded incomplete cases. Historical p=f=u=n=N=0, rate=null and interval=null. This means no defined historical cohort was constructed, not a 0% success rate. Synthetic fixtures and chart measurements do not enter these totals.
+The original 12-method baseline has now been updated with a source reread and two dated research reconstructions. [SOURCE_RECHECK.md](/workspace/implementation/reports/phase1-live/methods/SOURCE_RECHECK.md) records recovered intent/settings and corrects the overly broad “source hole” description. [The new source-fit figures](/workspace/implementation/reports/phase1-live/methods/reconstructions/README.md) compare the intended GB examples with acquired data. Macro work is deprioritized.
 
-FORMULAS.md was not changed. No research selector, classifier, Phase 2 work or new entry strategy was added. The selector review records the exact consumed formula hashes and now stops for a fresh review if those contracts change, instead of silently carrying an old empty-cohort decision forward.
+The original source-faithful contract still lacks a complete automatic selector for each of its 50 branches: historical p=f=u=n=N=0, rate=null and interval=null. Sires also retains four separately excluded incomplete cases. The two retrospectively annotated source-fit examples are not admitted as actual trades or as an automatic historical cohort.
 
-## What was charted
+FORMULAS changed only for the source-supported M10/O163/O165/O166 correction: AAPL and ten levels are illustrative, while NQ is eligible under a declared native observation scope. The exact changed contract hashes were re-audited. The new VWAP/MSS/FVG hypotheses live in reconstruction artifacts, not the source-faithful formulas. Phase 2 was not started.
 
-The primary assistant personally inspected the reference pages and every final chart. M01-M09 have dated NQ geometry or prerequisite views. M10 has a dated NQ input diagnostic because the source-native AAPL state geometry is unavailable. M11 has a civil-date macro-input supplement; M12 has the printed arithmetic only. These last two do not have acquired dated process journals, so they are not presented as dated method replays.
+## Baseline chart comparisons
 
-2026-02-24 is the common diagnostic date because it appears in Green Bird p.33; it was not selected for an eventual outcome. M02 uses the date visible in its source figure, 2025-11-20. M04 uses the source scalp date, 2026-09-02, restricted to the covered 09:00-11:00 window. The diagnostic specification freezes the dates and windows before chart calculation. It is not a historical candidate-inclusion manifest.
+The primary assistant personally inspected the source pages and plots without subagents. The M10 plot was updated and re-inspected; the other eleven PNGs are byte-identical to their previously inspected versions. Their preselected dates, windows and geometry are unchanged. M11 is a retained earlier macro supplement; M12 is undated printed arithmetic.
 
 | Method | Date / native data | Chart | Reference | Comparison result |
 |---|---|---|---|---|
@@ -21,100 +21,82 @@ The primary assistant personally inspected the reference pages and every final c
 | M07 MEMBER-TWO-REASONS | 2026-02-24 / NQH6 | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M07-member-two-reasons.png) | [p.7](/workspace/implementation/reports/phase1-live/methods/charts/M07-source-p07.png) | native profile only |
 | M08 KEANI-OPEN-ABOVE-VALUE | 2026-02-24 / NQH6 | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M08-keani-open-above-value.png) | [p.22](/workspace/implementation/reports/phase1-live/methods/charts/M08-source-p22.png) | A period geometry checked |
 | M09 REFILL-STUDY | 2026-02-24 / NQH6 | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M09-refill-study.png) | [p.7](/workspace/implementation/reports/phase1-live/methods/charts/M09-source-p07.png) | native print geometry only |
-| M10 JETBUNDLE-STATES | 2026-02-24 / NQH6 | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M10-jetbundle-states.png) | [p.10](/workspace/implementation/reports/phase1-live/methods/charts/M10-source-p10.png) | native source reconstruction blocked |
+| M10 JETBUNDLE-STATES | 2026-02-24 / NQH6 | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M10-jetbundle-states.png) | [p.10](/workspace/implementation/reports/phase1-live/methods/charts/M10-source-p10.png) | NQ eligible state classifier undefined |
 | M11 STOIC-DATA | 2026-02-24 / FRED civil-date view | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M11-stoic-data.png) | [p.5](/workspace/implementation/reports/phase1-live/methods/charts/M11-source-p05.png) | process geometry unavailable vintage supplement |
-| M12 STOIC-RISK | undated printed illustration | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M12-stoic-risk.png) | [p.7](/workspace/implementation/reports/phase1-live/methods/charts/M12-source-p07.png) | dated replay unavailable printed arithmetic checked |
+| M12 STOIC-RISK | undated / printed illustration | [Chart](/workspace/implementation/reports/phase1-live/methods/charts/M12-stoic-risk.png) | [p.7](/workspace/implementation/reports/phase1-live/methods/charts/M12-source-p07.png) | dated replay unavailable printed arithmetic checked |
 
 ## Direct comparisons
 
-### M01 - JJ-TBR
+### M01 — JJ-TBR
 
 Range [24795.25, 24902.25], W=107 points (428 native ticks), EQ=24848.75. The 25/75% lines and beyond-edge 1.33/1.66 projections follow the manual figure. Upper band [25044.56, 25079.87]; lower [24617.63, 24652.94]. Off-tick endpoints retained. Frozen levels start at 09:00. This is a diagnostic date, not a Jumbo source-selected attempt.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M01-jj-tbr.png)
+### M02 — GB-FAIL
 
-### M02 - GB-FAIL
+NYAM [25146.00, 25291.50] is fixed at 10:00. The first native NQ upper sweep is 10:00:02.006785967, followed by a complete 10:05 close at 25279.00 inside the box. The source figure highlights a later upper test with MSS/FVG around 10:40-10:50. Thus first literal failure is not automatically the source-selected attempt. The figure is MNQZ5; acquired prices are NQZ5. No identical-instrument or pixel-perfect price claim is made. The source toolbar and instrument header identify a 2-minute display; the earlier 3-minute description was wrong. The separate source-fit reconstruction reproduces the intended later test and three bearish FVGs. Later PDL cases give five-minute confirmation; that does not replace this figure’s timeframe.
 
-NYAM [25146.00, 25291.50] is fixed at 10:00. The first native NQ upper sweep is 10:00:02.006785967, followed by a complete 10:05 close at 25279.00 inside the box. The source figure highlights a later upper test with MSS/FVG around 10:40-10:50. Thus first literal failure is not automatically the source-selected attempt. The figure is MNQZ5; acquired prices are NQZ5. No identical-instrument or pixel-perfect price claim is made. Its 3-minute display does not replace FORMULAS five-minute confirmation rule.
+[New source-fit comparison](/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-FAIL-2025-11-20.json)
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M02-gb-fail.png)
+### M03 — GB-VWAP
 
-### M03 - GB-VWAP
+The original diagnostic retains exact trade-weighted alternatives: at 10:00, previous-18:00 VWAP is 24837.3038465 and 09:30-reset VWAP is 24842.0895305. The added source-fit study tests four resets and four bases against 13 source-figure points: previous-18:00 HLC3 gives RMSE 1.4846 points; nearby bases are indistinguishable at the image resolution. This supports a working reset hypothesis, without identifying the author’s exact settings or creating an actual entry fill.
 
-The dated price path shows the same opening selloff, recovery and later pullback/continuation shape as p.33. At 10:00 the exact trade-weighted comparison VWAP is 24837.3038465 for the previous-18:00 reset and 24842.0895305 for the 09:30 reset. Neither reset/basis is established as the source VWAP. No London/Asia bounds or source breakout bar are invented; source VWAP remains null.
+[New source-fit comparison](/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-VWAP-2026-02-24.json)
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M03-gb-vwap.png)
-
-### M04 - GB-SCALP
+### M04 — GB-SCALP
 
 On the source September 2 scalp date, the completed comparison NYAM range is [29017.25, 29119.00], midpoint 29068.125. The normalized location is plotted only after the parent closes. The source gives bearish small-scalp commentary, not dated entries or a complete impulse selector. This chosen comparison parent cannot be passed off as that missing impulse. The September 10 bullish case lies beyond the acquired minute endpoint.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M04-gb-scalp.png)
-
-### M05 - SIRES
+### M05 — SIRES
 
 A is 09:30-10:00 with L=24694.50 and H=24964.25. B is 10:00-10:30 with L=24819.50 and H=25014.50. IB is their union, [24694.50, 25014.50], W=320.00, available at 10:30. These agree with the source letter clocks. No trade-visited/range-filled TPO grid, value area, auction route or execution confirmation is inferred.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M05-sires.png)
-
-### M06 - SAINT-AMT
+### M06 — SAINT-AMT
 
 The chosen 09:30-10:00 diagnostic histogram contains 91480 executed contracts across 1080 exact native price rows. Its unique maximum is 24930.00 with 380 contracts; the geometric midpoint is 24829.375. The source figure distinguishes POC from VAH/VAL and describes 68% value. The source auction/bin/VA algorithm is missing, so the native-row maximum is not certified as the source POC and VAH/VAL remain null.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M06-saint-amt.png)
-
-### M07 - MEMBER-TWO-REASONS
+### M07 — MEMBER-TWO-REASONS
 
 The native NQ volume map is visible, but the source figures show ES tickets requiring an independently known reaction area and minor HVN. Neither pre-use source band nor their confluence tolerance is reconstructable. No histogram peak, POC or prior extreme is renamed as both reasons; no ES price, stop or target is transferred to NQ. The source prose/ticket target conflict remains open.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M07-member-two-reasons.png)
-
-### M08 - KEANI-OPEN-ABOVE-VALUE
+### M08 — KEANI-OPEN-ABOVE-VALUE
 
 All 30 A minutes are retained. The 09:30 bar opens at 24805.00; the whole-A low is 24694.50, 110.50 points lower. The final A low appears at its 10:00 availability, with the unfinished running low shown separately. The source drawing uses prior VAH for the opening condition and a different developing VAH for the later break/retest. Both VAH values remain null without their source construction; opening price cannot replace A low.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M08-keani-open-above-value.png)
-
-### M09 - REFILL-STUDY
+### M09 — REFILL-STUDY
 
 All 27142 native executions in the fixed 09:30-09:40 window are shown without a size threshold or downsampling: 18556 buy-aggressor and 19336 sell-aggressor contracts. Source p.7 contains clustered zones and distinct returns. Those rectangles/episodes cannot be generated from the missing cluster/normalization rule. No source grade, selected order or positive entry edge is claimed; the later causal correction in OFM p.18 remains applicable.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M09-refill-study.png)
+### M10 — JETBUNDLE-STATES
 
-### M10 - JETBUNDLE-STATES
+The NQ view contains 45432 buy and 46048 sell contracts, 91480 total, with zero unknown-side volume. Source p.3 explicitly discusses applying the ideas to NQ, and p.16 calls AAPL illustrative. The prior AAPL/ten-level universal gate was incorrect and has been removed. The view remains an input diagnostic because state windows/thresholds and complete native provision/withdrawal evidence are not supplied. No printed AAPL probabilities are assigned to NQ.
 
-The dated NQ input view contains 45432 buy and 46048 sell contracts, 91480 total, with zero unknown-side volume. The source p.10 displays heuristic states on AAPL ten-level order-book events. These are different instruments and data structures. No B/A/D/E/W labels, cancellations, efficiency classifier or transition matrix can be compared faithfully; the NQ chart is only an input diagnostic.
+### M11 — STOIC-DATA
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M10-jetbundle-states.png)
+The source p.3 provides the research workflow: define repeatable steps, collect every trade uniformly, compare winners and losers, and refine. Our own tested trades supply its process records. The custom score/cycle/trend formulas on p.5 remain unspecified; macro work is now deprioritized. The retained earlier supplement shows 12 nonmissing CPI values across 13 reference months, with the October gap. It is an illustrative civil-date input, not a Stoic score or intraday trading decision.
 
-### M11 - STOIC-DATA
-
-There is no disclosed Stoic score/cycle/trend geometry or process-review journal to replay on a trading session. The supplement shows 12 nonmissing CPI index values across 13 reference months in the civil-date vintage view on 2026-02-24, retaining the October 2025 gap. CPI is an acquired illustrative input, not a claimed Stoic series choice. No z-score substitute, intraday availability assumption or macro decision is introduced.
-
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M11-stoic-data.png)
-
-### M12 - STOIC-RISK
+### M12 — STOIC-RISK
 
 The printed ladder uses original baseline risk units 1, 4, 1. Its two closed winning results are +3 and +12 baseline units, cumulative +15; a second loss from +3 leaves -1. The source heading says activation after two wins while its ladder increases risk after the first. This conflict remains. With no underlying dated process/risk journal or prior Monte Carlo validation, the chart is explicitly undated printed arithmetic, not a fabricated historical session.
 
-[Dated chart / illustration](/workspace/implementation/reports/phase1-live/methods/charts/M12-stoic-risk.png)
+
+## Dated source-fit additions
+
+- GB-VWAP, February 24: previous-day 18:00 HLC3 VWAP fits 13 digitized points with 1.485-point RMSE; all 16 reset/basis combinations are retained. The tested London windows lead to the same 09:45-known breakout and 10:01-known VWAP-touch evidence. Settings remain research hypotheses.
+- GB-FAIL, November 20: the source is a two-minute MNQ figure, not three-minute. Native NQ closely reproduces the later high sweep, failure and all three FVGs; maximum boundary difference is about 1.46 points. A limit at the first completed gap after the comparison MSS would receive no touch by 11:02. No winning fill is inferred.
+- Both source cases were used for calibration; neither is held out. Each keeps post-publication source annotations separate from end-known market geometry. Native NQ/MNQ identity differences remain explicit.
 
 ## Data and availability checks
 
-- Native contracts are NQH6 (instrument 42002475), NQZ5 (158704) and NQU6 (42004177). All use q=0.25 from retained instrument definitions. No cross-contract sums or price-derived tick guesses are used.
-- Every required minute key is present within the selected chart windows. One- and five-minute bars retain their close availability; 06:00-09:00 and 09:00-10:00 levels start at formation end. Profile and whole-A observations are available at 10:00; IB at 10:30.
-- Profiles sum native executions at each price, retain unknown aggression in total volume, and reconcile their total to the included tape. No OHLC allocation, invented VA expansion, source node detector or source reset is used.
-- For the VWAP input interval, acquired trade highs/lows reconcile to the minute bars. At 10:34, trade volume is 1953 versus bar volume 1952; at 10:35 it is 1917 versus 1918. The +1/-1 discrepancy is retained in the chart hole ledger. The VWAP calculation uses the native tape without shifting an event between minutes.
-- Ten public-command contract tests passed as software verification. The source-audit check verifies all 50 branches and rejects a changed source hash. These checks and the earlier 214 tests are not historical method results.
+- Native NQ contracts are NQH6 (42002475), NQZ5 (158704) and NQU6 (42004177), with q=0.25 from retained definitions. No cross-contract sums or price-derived tick guesses are used.
+- Required minute keys are complete. Bars, ranges, profiles, pivots and three-candle gaps retain their completion times. The source-fit VWAP touch uses the previous completed VWAP rather than a value depending on the touch minute’s future close.
+- Original profiles retain native volume without an invented value-area algorithm. The original trade/minute reconciliation preserves a +1/−1 volume discrepancy at 10:34/10:35; it does not reassign an execution across the boundary. The new VWAP fit ends at 10:30.
+- Focused M10 tests cover NQ eligibility, declared depth, foreign-instrument counts and causal state inputs. Public-command checks verify source hashes and cohort accounting. These are software checks, not historical method outcomes.
 
 ## Reproduction and evidence
 
-[Frozen chart specification](/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json) · [Measurements, raw-input locators, hashes and runtime versions](/workspace/implementation/reports/phase1-live/methods/charts/measurements.json) · [Manual visual judgments](/workspace/implementation/reports/phase1-live/methods/charts/visual-review.json) · [Chart holes](/workspace/implementation/reports/phase1-live/methods/charts/holes.jsonl)
+[Chart specification](/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json) · [Initial specification retained](/workspace/implementation/reports/phase1-live/methods/charts/chart-spec-initial.json) · [Measurements](/workspace/implementation/reports/phase1-live/methods/charts/measurements.json) · [Manual judgments](/workspace/implementation/reports/phase1-live/methods/charts/visual-review.json) · [Chart holes](/workspace/implementation/reports/phase1-live/methods/charts/holes.jsonl)
 
-[Source-selector review](/workspace/implementation/src/trading_research/research/method_pack/discovery_audit.json) · [Chart builder](/workspace/implementation/tools/chart_method_pack.py)
+[Source-fit provenance and runtime](/workspace/implementation/reports/phase1-live/methods/reconstructions/manifest.json) · [Source-fit visual review](/workspace/implementation/reports/phase1-live/methods/reconstructions/visual-review.json) · [Source case ledger](/workspace/implementation/reports/phase1-live/methods/reconstructions/source-case-ledger.jsonl)
 
-Run `python implementation/tools/chart_method_pack.py` from `/workspace` with the recorded Python dependencies. It reads the retained Parquet/vintage files and immutable source PDFs, writes charts/measurements, and creates zero candidate IDs. The generated manifest deliberately does not certify visual review; the human-readable judgments above and their PNG hashes are separate.
-
-Each refreshed method report links its own run-specific `holes.jsonl`, `cohort.json` and empty `candidates.jsonl`. The report arithmetic and artifact-hash verification are recorded in [pass-summary.json](/workspace/implementation/reports/phase1-live/methods/pass-summary.json).
-
-All 12 refreshed commands exited 0; the 50 branch-hole records, empty historical arithmetic, run artifacts, chart inputs, final PNGs and source-page hashes passed verification. See the [PHASE and audit tables](/workspace/implementation/reports/phase1-live/methods/index.md) and [final artifact verification](/workspace/implementation/reports/phase1-live/methods/charts/final-verification.json).
+From `/workspace`, run `python implementation/tools/chart_method_pack.py` and `python implementation/tools/reconstruct_source_cases.py` with the recorded dependencies. Both read retained data and immutable source PDFs. Neither writes historical candidate IDs. The [PHASE/audit tables](/workspace/implementation/reports/phase1-live/methods/index.md) and [final verification](/workspace/implementation/reports/phase1-live/methods/charts/final-verification.json) accompany the refreshed method reports.

@@ -102,6 +102,7 @@ class MethodPackM10Tests(unittest.TestCase):
         ]
         good = o163({"events": events, "instrument_id": "AAPL-fixture",
                      "source_symbol": "AAPL", "depth_coverage": 10,
+                     "required_depth_levels": 10,
                      "depth_complete": True, "known_at": _t(10),
                      "use_at": _t(10, 1)})
         self.assertEqual(good.state, "computed")
@@ -109,6 +110,7 @@ class MethodPackM10Tests(unittest.TestCase):
         bad = o163({"events": [{**events[0], "depth_level": None}],
                     "instrument_id": "AAPL-fixture", "source_symbol": "AAPL",
                     "depth_coverage": 10, "depth_complete": True,
+                    "required_depth_levels": 10,
                     "known_at": _t(10), "use_at": _t(10, 1)})
         self.assertEqual(bad.state, "hole")
         self.assertIn("HOLE:O163:depth_level", bad.hole_ids)
@@ -116,6 +118,7 @@ class MethodPackM10Tests(unittest.TestCase):
         state = o165({"state_label": "A", "state_at": _t(10),
                       "known_at": _t(10), "source_symbol": "AAPL",
                       "depth_levels": 10, "source_observation_id": "state-A",
+                      "required_depth_levels": 10,
                       "high_aggression": True, "low_response_efficiency": True,
                       "opposite_liquidity_holds_and_refills": True})
         self.assertEqual(state.state, "supplied")
@@ -123,6 +126,7 @@ class MethodPackM10Tests(unittest.TestCase):
         missing_w = o165({"state_label": "W", "state_at": _t(10),
                           "known_at": _t(10), "source_symbol": "AAPL",
                           "depth_levels": 10, "source_observation_id": "state-W",
+                          "required_depth_levels": 10,
                           "display_imbalance": True,
                           "cancellations_dominate": None})
         self.assertEqual(missing_w.state, "hole")
@@ -133,6 +137,7 @@ class MethodPackM10Tests(unittest.TestCase):
                     "next_state_at": _t(10, 1),
                     "conditioning_known_at": _t(9, 59),
                     "cohort_id": "AAPL-20000", "source_symbol": "AAPL",
+                    "source_counts_symbol": "AAPL",
                     "row_count": 100, "known_at": _t(10, 1), "use_at": _t(10, 2)})
         self.assertEqual(row.value["p_dd"], Decimal("0.84"))
         self.assertEqual(row.value["p_da"], Decimal("0.12"))
@@ -148,8 +153,62 @@ class MethodPackM10Tests(unittest.TestCase):
                    "next_state_at": _t(10, 1),
                    "conditioning_known_at": _t(9, 59), "cohort_id": "NQ-row",
                    "source_symbol": "NQ", "row_count": 100})
-        self.assertEqual(nq.state, "invalid")
-        self.assertIn("HOLE:O166:cohort_identity", nq.hole_ids)
+        self.assertEqual(nq.state, "hole")
+        self.assertIn("HOLE:O166:counts_source_instrument", nq.hole_ids)
+
+    def test_nq_native_observation_uses_declared_depth_not_aapl_example(self):
+        op = _state("A")
+        op.update({"instrument_id": "NQH6", "source_symbol": "NQ",
+                   "band_id": "NQ-local-level", "source_event_log_id": "NQ-native-log",
+                   "local_interval_id": "NQ-local-interval", "depth_levels": 1,
+                   "required_depth_levels": 1})
+        document = fixture_document(METHOD, "state_observation", "NQ-observation", op)
+        parsed = parse_manifest(document, METHOD)
+        self.assertEqual(score_episode(parsed[0]["NQ-observation"], *parsed[1:])["verdict"], "pass")
+
+        # A complete one-level record cannot support a requested second level.
+        op["required_depth_levels"] = 2
+        parsed = parse_manifest(fixture_document(METHOD, "state_observation", "NQ-depth-gap", op), METHOD)
+        result = score_episode(parsed[0]["NQ-depth-gap"], *parsed[1:])
+        self.assertEqual(result["verdict"], "unknown")
+        self.assertTrue(any("depth_levels" in h["reason"] for h in result["holes"]))
+
+        events = [
+            {"event_id": "nq-add", "order_id": "nq-order", "exchange_seq": 1,
+             "instrument_id": "NQH6", "event_ns": _t(9, 59), "action": "add",
+             "side": "buy", "price": "24800.25", "size": 10, "depth_level": 1},
+            {"event_id": "nq-cancel", "order_id": "nq-order", "exchange_seq": 2,
+             "instrument_id": "NQH6", "event_ns": _t(10), "action": "cancel",
+             "side": "buy", "price": "24800.25", "size": 3, "depth_level": 1},
+        ]
+        config = {"events": events, "instrument_id": "NQH6", "source_symbol": "NQ",
+                  "required_depth_levels": 1, "depth_coverage": 1,
+                  "depth_complete": True, "known_at": _t(10)}
+        observed = o163(config)
+        self.assertEqual(observed.state, "computed")
+        self.assertEqual(observed.value["remaining"], Decimal(7))
+        self.assertEqual(o163({**config, "required_depth_levels": 2}).state, "hole")
+        foreign = [{**events[0], "instrument_id": "ESH6"}, events[1]]
+        self.assertEqual(o163({**config, "events": foreign}).state, "invalid")
+
+        supplied = o165({"state_label": "A", "state_at": _t(10), "known_at": _t(10),
+                         "source_symbol": "NQ", "depth_levels": 1, "required_depth_levels": 1,
+                         "source_observation_id": "nq-observed-A", "high_aggression": True,
+                         "low_response_efficiency": True, "opposite_liquidity_holds_and_refills": True})
+        self.assertEqual(supplied.state, "supplied")
+        self.assertIsNone(supplied.value["automatic_state"])
+
+    def test_nq_transition_counts_require_provenance_not_different_numbers(self):
+        row = {"counts": {"D": 84, "A": 12, "B": 4, "E": 0, "W": 0},
+               "from_state": "D", "to_state": "D", "state_at": _t(10),
+               "next_state_at": _t(10, 1), "conditioning_known_at": _t(9, 59),
+               "cohort_id": "NQ-declared-cohort", "source_symbol": "NQ",
+               "source_counts_symbol": "NQ", "row_count": 100, "known_at": _t(10, 1)}
+        # Equal frequencies can occur independently; instrument provenance is decisive.
+        self.assertEqual(o166(row).state, "computed")
+        transferred = o166({**row, "source_counts_symbol": "AAPL"})
+        self.assertEqual(transferred.state, "invalid")
+        self.assertIn("HOLE:O166:cohort_identity", transferred.hole_ids)
 
     def test_every_m10_object_has_f1_and_real_c08_rows(self):
         rows = run_object_fixtures(objects_for(METHOD))

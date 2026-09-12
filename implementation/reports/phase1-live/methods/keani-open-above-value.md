@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:44:27Z`
+created_at: `2026-09-12T10:47:52Z`
 
 ## Headline
 
@@ -52,7 +52,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 49, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -61,11 +61,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/holes.jsonl sha256=a35e3660824ef7364f709e1288025ccf980c225874509d407c4425bf9a774b59
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/fixtures.json sha256=f4057cfb6ce9ab720dc37f095c48db2f8cbe5a9bbf2c25bf00c5a4d42b77d419
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/cohort.json sha256=09e12edb99f4b8714db6ee4958c8bf217c165bf66a4dcae2ef1f524da32085f2
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-wv57juyr/coverage.json sha256=42c3a3eadb0501d9b5d2d11f986f14375630a8991983ffb5faf73af43df21870
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/holes.jsonl sha256=ce010218fdfe5d07dea3ae893f1b6f6b242d7deac5da5ba1ae681aad032b37ac
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/fixtures.json sha256=94718bb89718557f354518a84ea9d3bcd0a440c015532e9ef613bca3174c7a11
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/cohort.json sha256=3a7fb01a55405a9a4526a72e71b5a4001179892c15212a6d4c0ce04e200d879c
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/keani-open-above-value/run-cuba4uaf/coverage.json sha256=42c3a3eadb0501d9b5d2d11f986f14375630a8991983ffb5faf73af43df21870

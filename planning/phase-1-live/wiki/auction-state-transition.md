@@ -6,9 +6,9 @@ The framework considers the next auction state conditional on current liquidity 
 
 **Not a standalone trade.** A matrix cell or persistent absorption state is not an entry, and absorption must be reconsidered when replenishment fails.
 
-**Record before use.** Current/next state IDs and times, native instrument/depth, conditioning variables available at the current state, cohort and transition count/denominator.
+**Record before use.** Current/next state IDs and times, native instrument/depth, conditioning variables available at the current state, cohort and transition count/denominator, including source_counts_symbol provenance.
 
-**Phase 1 observation.** Require state_at < next_state_at and conditioning known_at ≤ state_at. Keep source sample/depth and heuristic definitions attached; no new classifier, matrix or trading signal is trained here.
+**Phase 1 observation.** Require state_at < next_state_at and conditioning known_at ≤ state_at. NQ observations are permitted. Counts must belong to that native instrument; equal frequencies by coincidence are not an identity failure. Keep sample/depth and heuristic definitions attached; no new classifier, matrix or trading signal is trained by this source-audit procedure.
 
 **Existing attachments.** No source-compatible state-transition/cohort implementation exists in [FORMULAS]. Generic rate tables do not reconstruct the state definitions. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
 

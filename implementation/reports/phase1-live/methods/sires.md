@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:48:25Z`
+created_at: `2026-09-12T10:52:01Z`
 
 ## Headline
 
@@ -84,7 +84,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 233, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -93,11 +93,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/holes.jsonl sha256=eaef6b10a36d56d020f478f1967277dced3827856b5c4a3071874ba6a4684b02
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/fixtures.json sha256=651a0f9d94bc4777ec1b4859ed471f88c4291db60c1d25166250b990a6d9571c
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/cohort.json sha256=c8b72f45165bd70d3b961b810f3e876b14470162bc06bbfe7093f174f671bbfc
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/sires/run-xbklzdqi/coverage.json sha256=13c78ad870917093dee6f259530a09e2e082e6c903bf8ffd7d1a184fcd777162
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/holes.jsonl sha256=f6d20c35a2565dbd772c7ec5f739beed1262b36a04a8fafa26852c61e982af28
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/fixtures.json sha256=4af43d48b688e5e67802f19b509bf8712b56b7d5a34a7b0ea82bcd08bab4670e
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/cohort.json sha256=deeaf8aa1fac9567346b2f91d9419d66a648aacebb21fa9214d163ecbdc4e325
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/sires/run-5e8cwzbl/coverage.json sha256=13c78ad870917093dee6f259530a09e2e082e6c903bf8ffd7d1a184fcd777162

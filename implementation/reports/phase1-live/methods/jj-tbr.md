@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:42:36Z`
+created_at: `2026-09-12T10:45:49Z`
 
 ## Headline
 
@@ -68,7 +68,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 107, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -77,11 +77,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/holes.jsonl sha256=f62aaf1f26796d35aa4060f48aa6032be10718de3124de01c1dfc8ea682da61f
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/fixtures.json sha256=896b886f7f9a136306fda02fe1ca54d879ac95b2de5fc642f0c44fa0796d1a46
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/cohort.json sha256=24507f784a2666f67a63aac1a69b0968a791379aad47a679762ef7570ed9e574
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-w7uzobxd/coverage.json sha256=7a26a28b9f662d8234efacf2216c96ab1190e44a3b20c987e2fd9855aeea90b8
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/holes.jsonl sha256=239c2bbbe9dad42c0c8ea4418f608a0cac3dd61d6ccb6fa831d5b5eb2bba40b0
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/fixtures.json sha256=531214d7b2c6f09747abc3b22d2ab0daba44a5f9a28f3c11f4411982b87b78e2
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/cohort.json sha256=0daba508e0e7e8aeab82966eecc6c5d45682fc986baf4362b7e155284c8530a6
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/jj-tbr/run-d4o3s_93/coverage.json sha256=7a26a28b9f662d8234efacf2216c96ab1190e44a3b20c987e2fd9855aeea90b8

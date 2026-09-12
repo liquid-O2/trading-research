@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:45:05Z`
+created_at: `2026-09-12T10:48:33Z`
 
 ## Headline
 
@@ -32,7 +32,7 @@ D | no | participation_record_complete, response_record_complete, state
 E | no | participation_record_complete, response_record_complete, state
 W | no | participation_record_complete, response_record_complete, state
 
-The native AAPL ten-level participation sample and complete state windows/thresholds are absent. NQ BBO and raw aggression cannot select source B/A/D/E/W states.
+NQ is eligible; AAPL and ten levels are illustrative. Automatic state windows, qualitative thresholds and priority rules remain unspecified. Native evidence must cover the declared local event/depth scope; missing action/lifecycle data is a separate input limitation.
 
 Each branch has a candidate-selector record in the `holes.jsonl` artifact, including its producer rules.
 
@@ -62,20 +62,20 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 32, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
-- **Source-complete candidate discovery:** AAPL 10-level event sample and complete classifier/window/threshold definitions are absent. NQ BBO cannot reproduce this full source process; no new state classifier or matrix is trained.
+- **Source-complete candidate discovery:** The framework applies to native NQ or another declared instrument. AAPL's ten-level sample is an illustration, not an instrument or universal depth requirement ([MATH] pp.3, 10, 16; user clarification 2026-09-12). Complete automatic classifier/window/threshold definitions remain absent. Native event and depth coverage must support the selected observation scope; missing cancellations or off-touch depth cannot be invented. No automatic classifier is claimed by this source-faithful contract.
 - **M10-F3 — source/data hole.** Missing source depth/cancel data or heuristic thresholds → automatic state unknown. There is no entry-admission predicate beyond this observation method.
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/holes.jsonl sha256=4d1f564add5175a43bdbe3d5b2ebb9d660d9d2b0ac5e9190bd9b5eb2cb4d78cf
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/fixtures.json sha256=7dd56cda5cc3984dc6bea618a186c64a0b148ddc9b05732e92148b9ec3a77f29
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/cohort.json sha256=317275a7a5db54b1da7ed6adaa148c22e72236186ef8b93b85621ffd4d06e66d
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-g82mdprh/coverage.json sha256=019f9611687675abe41ad79356550ff49ec5c433371c890a96fa36a6226a270e
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/holes.jsonl sha256=3ee68f1f46c350d1690b6db0fd16eb01fafa7fb190647abde0b5f3e15e25065b
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/fixtures.json sha256=11b33542de539b8c99a60d9199f1587a248e2c88338517f50ed4ee24b26c5e56
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/cohort.json sha256=abc2508426950134e106d8b6e62f7c0b713f2bcb5d2b840ea49b37d6384a9beb
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/jetbundle-states/run-5w7pmsv2/coverage.json sha256=019f9611687675abe41ad79356550ff49ec5c433371c890a96fa36a6226a270e

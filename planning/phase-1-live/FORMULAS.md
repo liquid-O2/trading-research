@@ -1048,7 +1048,7 @@ Run C08's late-dependency, missing-input and identity mutations as well. Count f
 
 **Required end-to-end behavior:** Native provide/withdraw/consume events → same-interval response/liquidity evidence → source heuristic state → later next state with conditioning known at current state.
 
-**Source-complete candidate discovery:** AAPL 10-level event sample and complete classifier/window/threshold definitions are absent. NQ BBO cannot reproduce this full source process; no new state classifier or matrix is trained.
+**Source-complete candidate discovery:** The framework applies to native NQ or another declared instrument. AAPL's ten-level sample is an illustration, not an instrument or universal depth requirement ([MATH] pp.3, 10, 16; user clarification 2026-09-12). Complete automatic classifier/window/threshold definitions remain absent. Native event and depth coverage must support the selected observation scope; missing cancellations or off-touch depth cannot be invented. No automatic classifier is claimed by this source-faithful contract.
 
 **Branch inventory:** `B`, `A`, `D`, `E`, `W`. Branch identifiers used only for transport do not create additional operating methods.
 
@@ -1064,7 +1064,7 @@ Run C08's late-dependency, missing-input and identity mutations as well. Count f
 
 | Predicate fields and exact types | Producer recipes | Required derivation / hole behavior |
 |---|---|---|
-| `participation_record_complete:boolean?`<br>`participation_known_at:event_key?` | [O163 — Provide, withdraw and consume events](#o163) | Actual source-native provide/cancel/consume events with required ordering and 10-level AAPL depth coverage. Retained NQ BBO is not equivalent; missing full record yields data hole, not a reconstructed process. |
+| `participation_record_complete:boolean?`<br>`participation_known_at:event_key?` | [O163 — Provide, withdraw and consume events](#o163) | Actual provide/cancel/consume events for the declared native instrument and local scope, with required ordering. Record `required_depth_levels` before the observation and require actual `depth_levels` to cover it. NQ is permitted; neither ten levels nor AAPL is a universal gate. Incomplete native action/lifecycle evidence or an off-touch level still yields its specific data hole. |
 | `response_record_complete:boolean?`<br>`response_known_at:event_key?` | [O164 — Aggressive effort versus price-response efficiency](#o164) | Same-local-interval price/mid response and opposite liquidity evidence, all available by current state. Completeness does not invent an exact efficiency classifier. |
 | `state:enum`<br>`state_at:event_key?` | [O165 — B–A–D–E–W auction-state alphabet](#o165) | Supplied source heuristic label and actual observation key. Unknown automatic threshold/window/priority rules mean raw automatic label NULL. A supplied illustration is explicitly labeled and never promoted to an unbiased NQ cohort. |
 | `two_sided_executions:boolean?`<br>`recent_revisits:boolean?`<br>`low_aggression_both_sides:boolean?` | [O165 — B–A–D–E–W auction-state alphabet](#o165)<br>[O163 — Provide, withdraw and consume events](#o163) | B state requires all source qualitative facts:two-sided executions, frequent recent revisits and low aggression on both sides. No published visit window/low threshold; source evidence or hole for each. |
@@ -7294,7 +7294,7 @@ jetbundle begins with submissions that provide liquidity, cancellations that wit
 | Inputs / native fields | Native order/event ID, exchange ordering, instrument, time, action, side, price, size, depth/order identity and lifecycle coverage. |
 | Outputs / units | provide_events, withdraw_events, consume_events, per_side_volumes, depth_coverage, source_process_complete?. |
 | ET clock / interval | Native event order and source observation interval; indistinguishable ties cannot be arbitrarily ordered. |
-| Bars / event membership | Full source AAPL 10-level LOBSTER example; retained futures BBO is a different, limited dataset. |
+| Bars / event membership | The declared native instrument, event interval and required depth scope. AAPL ten-level LOBSTER is the printed illustration; NQ is permitted. |
 | Reset / persistence | Source book/session initialization and explicit gaps/resets; no snapshot-to-event invention. |
 | known_at | Each native action when observed with valid book state. |
 
@@ -7302,9 +7302,9 @@ jetbundle begins with submissions that provide liquidity, cancellations that wit
 
 1. Decode actual submissions/adds as providing, actual cancellations/removals as withdrawing, actual executions as consuming under that dataset's schema. A modification's meaning depends on its native lifecycle; do not automatically call every net change an add/cancel.
 2. Track only levels/orders covered by the data. Static snapshots alone cannot reconstruct unobserved cancellations or all interim replenishment.
-3. Preserve the source AAPL instrument and 10-level depth requirement. Missing acquired source data leaves full process unknown; NQ BBO observations may be separately named measurements, never source-equivalent.
+3. Preserve the selected instrument and declare `required_depth_levels` before the observation. Require positive native depth coverage at least that large, and reject any event outside the declared coverage. AAPL/ten levels describes the illustration, not a universal restriction. NQ is eligible when its actual data supports the declared scope; missing native lifecycle/order evidence remains a specific hole.
 
-**Printed constants and limits:** Source illustration AAPL, 10 levels; no universal action-rate thresholds.
+**Printed constants and limits:** Source illustration AAPL, 10 levels; no universal instrument, depth count or action-rate thresholds. [MATH] p.3 explicitly discusses an NQ application and p.16 calls AAPL illustrative.
 
 **Invalid / unavailable behavior:** BBO as 10 levels; disappearing wall as cancel without action; quote updates as executions; order identities invented. Apply C04; emit `HOLE:O163:<missing_field>` with the actual missing field and affected method/branch. Unknown construction/coverage is not false market evidence. A witnessed wrong-side, late or identity-mismatched prerequisite can be false.
 
@@ -7364,7 +7364,7 @@ The guest framework names B balance, A absorption, D discovery, E exhaustion and
 
 | Contract item | Exact requirement |
 |---|---|
-| Inputs / native fields | Source state ID/time/label, local participation/response/depth evidence, explicit qualitative criteria and inputmaxknown_at. |
+| Inputs / native fields | Source state ID/time/label, native instrument, local participation/response/depth evidence, predeclared required_depth_levels, explicit qualitative criteria and inputmaxknown_at. |
 | Outputs / units | state_label:B/A/D/E/W/null, state_evidence_complete?, automatic_state=null, missing_criteria[]. |
 | ET clock / interval | All state inputs known by state_at; next state events excluded. |
 | Bars / event membership | Source native order/depth process; not AMT day types or generic absorption flags. |
@@ -7375,7 +7375,7 @@ The guest framework names B balance, A absorption, D discovery, E exhaustion and
 
 1. Preserve literal source meanings:B=two-sided quiet/revisiting balance; A=higher effort, little displacement, opposite liquidity holds/refills; D=effort with efficient displacement; E=prior effort then liquidity/replenishment fails; W=cancellations dominate.
 2. The labels are heuristic observations and the source supplies no complete threshold/window/tie/priority classifier. Audit supplied labeled examples and emit automatic_state=null for raw discovery.
-3. Missing cancellation/depth data prevents claiming W or full A/E evidence; do not use a BBO proxy as the source 10-level process.
+3. Missing cancellation or required local depth evidence prevents claiming the affected W/A/E observations. Any native instrument, including NQ, is eligible; assess coverage against the declared required depth scope rather than imposing the illustration's ten levels.
 4. These states do not generate entries or a fixed win rate claim.
 
 **Printed constants and limits:** Five labels B/A/D/E/W; source illustration 20000AAPL order book events, not universal training data.
@@ -7401,10 +7401,10 @@ The framework considers the next auction state conditional on current liquidity 
 
 | Contract item | Exact requirement |
 |---|---|
-| Inputs / native fields | Supplied source current/next state IDs/labels/times, exact next-observation definition, current liquidity/pace conditions, native instrument/depth cohort and supplied transition counts/matrix. |
+| Inputs / native fields | Supplied source current/next state IDs/labels/times, exact next-observation definition, current liquidity/pace conditions, native instrument/depth cohort and supplied transition counts/matrix with source_counts_symbol provenance. |
 | Outputs / units | from_state, to_state, state_at, next_state_at, conditioning_causal, transition_valid?, supplied_row_count, reported_probability?. |
 | ET clock / interval | state_at<next_state_at; allconditioningknown_at≤state_at. Next-state cadence must be identified. |
-| Bars / event membership | Source state observation sequence/AAPL depth context, not a new NQ trained matrix. |
+| Bars / event membership | The declared native state sequence, instrument and depth context. NQ observations are permitted; printed AAPL counts retain their original provenance. |
 | Reset / persistence | Each declared cohort/conditioning state version; do not join across gaps/resets as adjacent states. |
 | known_at | Conditioning at current state; transition outcome only at next state. |
 
@@ -7412,7 +7412,7 @@ The framework considers the next auction state conditional on current liquidity 
 
 1. Match actual adjacent observations under the supplied source cadence and stable instrument/cohort. Missing next-state definition is a hole.
 2. Audit current conditioning using only current available liquidity/pace, then observe next state later. Preserve persistence on diagonal versus changes off diagonal.
-3. For supplied counts only, row-normalized P(i→j)=count(i→j)/sum_jcount(i→j) when row total>0; empty row probabilities null. This is literal count arithmetic, not training a new matrix or claiming universal probabilities.
+3. For supplied counts only, row-normalized P(i→j)=count(i→j)/sum_jcount(i→j) when row total>0; empty row probabilities null. Require the counts' declared native instrument (`source_counts_symbol`) to match the observation cohort. Matching the printed numbers by coincidence is not an identity error; borrowing another instrument's records is. This is literal count arithmetic, not training a new matrix or claiming universal probabilities.
 4. Retain source AAPL20000 event illustration and printed D→D84%, D→A12% as that case; never transfer to NQ or call them trade odds.
 
 **Printed constants and limits:** Source 20000AAPL events; printed 84% D persistence/12% D→A are case claims, not universal parameters.

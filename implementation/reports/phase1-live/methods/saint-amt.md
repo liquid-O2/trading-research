@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:43:48Z`
+created_at: `2026-09-12T10:47:11Z`
 
 ## Headline
 
@@ -58,7 +58,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 70, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -67,11 +67,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/holes.jsonl sha256=c865a068868dd8bc98a438a660e4a10d220d0008cd84758c7ee76dca364545a7
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/fixtures.json sha256=496f47b42dd723631f71c2bee17c3e99282b3e10cc3ca5df32e4c89e75096513
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/cohort.json sha256=d1e4567d4e6f87821073a8b12497fad92fa7b036be9cebb4d0594004bc7a795c
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-9mwx8372/coverage.json sha256=4f6bfdd2616f205d17eb67a58c19d688ffe2716d7e731ae3693b9e0bcd0d00a1
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/holes.jsonl sha256=72bf788a1204c7b3eaf25c9711cd68c1006d3a3046f07f861e0499e8fd6ab288
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/fixtures.json sha256=207e49129b367376f8a7dcfd8f46d5a852dd00ff56f5c28f8c1692d559890861
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/cohort.json sha256=c46db044b3883e729f93077a9f435b19f307aec6f0d36ac3e50e550f9019d348
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/saint-amt/run-v1ozcvz2/coverage.json sha256=4f6bfdd2616f205d17eb67a58c19d688ffe2716d7e731ae3693b9e0bcd0d00a1

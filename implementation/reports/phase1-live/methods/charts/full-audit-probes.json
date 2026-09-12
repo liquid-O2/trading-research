@@ -1,0 +1,1427 @@
+{
+  "schema": "phase1-full-audit-probes-v1",
+  "probes": [
+    {
+      "id": "P01",
+      "object_id": "O001",
+      "finding": "Untimed bars accepted as complete interval coverage",
+      "contract_expectation": "Exact requested intervals and native identity must be checked.",
+      "input": {
+        "bars": [
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          }
+        ],
+        "trades": [
+          {
+            "side": "B",
+            "size": 1
+          }
+        ],
+        "required_minutes": 5
+      },
+      "actual": {
+        "recipe_id": "O001",
+        "state": "computed",
+        "value": {
+          "price_coverage": true,
+          "side_coverage": true,
+          "coverage_ok": true,
+          "missing_fields": []
+        },
+        "hole_ids": [],
+        "known_at": null,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 26,
+      "contract_line": 1410,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P02",
+      "object_id": "O004",
+      "finding": "Empty bar marked complete",
+      "contract_expectation": "No OHLC members cannot form a complete time bar.",
+      "input": {
+        "members": [],
+        "end_ns": 1768489320000000000,
+        "known_at": 1768489320000000000,
+        "use_at": 1768489380000000000
+      },
+      "actual": {
+        "recipe_id": "O004",
+        "state": "computed",
+        "value": {
+          "O": null,
+          "H": null,
+          "L": null,
+          "C": null,
+          "V": "0",
+          "complete": true,
+          "native_source_compatible": true,
+          "known_at": 1768489320000000000
+        },
+        "hole_ids": [],
+        "known_at": 1768489320000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 97,
+      "contract_line": 1519,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P03",
+      "object_id": "O006",
+      "finding": "Unverified clock promoted to verified",
+      "contract_expectation": "An absent source clock verification is unknown.",
+      "input": {
+        "start_ns": 1768464000000000000,
+        "end_ns": 1768465800000000000,
+        "L": 200,
+        "H": 208,
+        "clock_id": "03:00-03:30",
+        "known_at": 1768465800000000000,
+        "use_at": 1768466100000000000
+      },
+      "actual": {
+        "recipe_id": "O006",
+        "state": "computed",
+        "value": {
+          "L": "200",
+          "H": "208",
+          "W": "8",
+          "source_clock_verified": true,
+          "known_at": 1768465800000000000
+        },
+        "hole_ids": [],
+        "known_at": 1768465800000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 132,
+      "contract_line": 1591,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P04",
+      "object_id": "O015",
+      "finding": "Different parent width substituted",
+      "contract_expectation": "Band geometry must use its own parent width.",
+      "input": {
+        "L": 100,
+        "H": 120,
+        "parent_id": "inner",
+        "known_at": 1768485600000000000,
+        "use_at": 1768489200000000000,
+        "use_outer_w": true,
+        "outer_W": 40
+      },
+      "actual": {
+        "recipe_id": "O015",
+        "state": "computed",
+        "value": {
+          "upper_band": [
+            "173.20",
+            "186.40"
+          ],
+          "lower_band": [
+            "33.60",
+            "46.80"
+          ],
+          "W": "40",
+          "parent_id": "inner"
+        },
+        "hole_ids": [],
+        "known_at": 1768485600000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [
+          "inner"
+        ],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 360,
+      "contract_line": 1916,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P05",
+      "object_id": "O031",
+      "finding": "VWAP result backdated to anchor confirmation",
+      "contract_expectation": "Updated AVWAP availability must include the observed trades.",
+      "input": {
+        "trades": [
+          {
+            "price": 100,
+            "size": 1,
+            "t": 10
+          },
+          {
+            "price": 110,
+            "size": 1,
+            "t": 20
+          }
+        ],
+        "anchor_price_at": 10,
+        "anchor_known_at": 10,
+        "as_of": 20,
+        "known_at": 10,
+        "use_at": 15
+      },
+      "actual": {
+        "recipe_id": "O031",
+        "state": "computed",
+        "value": {
+          "avwap": "105",
+          "sum_v": "2",
+          "sum_pv": "210",
+          "usable_at": 10,
+          "usable": true,
+          "anchor_id": null,
+          "anchor_known_at": 10
+        },
+        "hole_ids": [],
+        "known_at": 10,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 64,
+      "contract_line": 2492,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P06",
+      "object_id": "O047",
+      "finding": "Confirmation before sweep accepted",
+      "contract_expectation": "Sweep must precede confirmation.",
+      "input": {
+        "reference_px": 110,
+        "side": "short",
+        "sweep_px": 111,
+        "sweep_at": 30,
+        "confirm_close": 109,
+        "confirm_at": 20,
+        "decision_at": 40,
+        "reference_known_at": 10,
+        "known_at": 20,
+        "use_at": 40
+      },
+      "actual": {
+        "recipe_id": "O047",
+        "state": "computed",
+        "value": {
+          "sweep_at": 30,
+          "confirm_at": 20,
+          "failure_confirmed": true,
+          "swept": true,
+          "strict_close": true,
+          "reference_known_before_sweep": true
+        },
+        "hole_ids": [],
+        "known_at": 20,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 619,
+      "contract_line": 3060,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P07",
+      "object_id": "O050",
+      "finding": "Future events influence an opening observation",
+      "contract_expectation": "Observation must exclude events after use and advance its own known_at.",
+      "input": {
+        "open_px": 100,
+        "open_at": 10,
+        "events": [
+          {
+            "t": 20,
+            "price": 99
+          },
+          {
+            "t": 30,
+            "price": 101
+          }
+        ],
+        "known_at": 10,
+        "use_at": 15
+      },
+      "actual": {
+        "recipe_id": "O050",
+        "state": "computed",
+        "value": {
+          "cash_open": "100",
+          "below_then_above": true,
+          "source_confirmation": null
+        },
+        "hole_ids": [],
+        "known_at": 10,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 667,
+      "contract_line": 3169,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P08",
+      "object_id": "O056",
+      "finding": "Documented bearish orderblock has no mirrored evaluation",
+      "contract_expectation": "Supplied bearish mirror must use the swept high and close below candle two.",
+      "input": {
+        "c1_l": 99,
+        "c2": {
+          "O": 102,
+          "H": 104,
+          "L": 100,
+          "C": 101
+        },
+        "c3_close": 99,
+        "c3_known_at": 1768488180000000000,
+        "decision_at": 1768488240000000000,
+        "known_at": 1768488180000000000,
+        "use_at": 1768488240000000000,
+        "side": "short",
+        "c1_h": 103
+      },
+      "actual": {
+        "recipe_id": "O056",
+        "state": "computed",
+        "value": {
+          "ob": [
+            "100",
+            "104"
+          ],
+          "mid": "102",
+          "confirmed": false,
+          "rejection_wick": [
+            "100",
+            "101"
+          ],
+          "wick_is_not_ob": true
+        },
+        "hole_ids": [],
+        "known_at": 1768488180000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 714,
+      "contract_line": 3385,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P09",
+      "object_id": "O058",
+      "finding": "One-volume history accepted for 14-period average",
+      "contract_expectation": "Fourteen completed prior candles are needed for the stated average.",
+      "input": {
+        "O": 100,
+        "C": 102,
+        "H": 110,
+        "L": 100,
+        "V": 200,
+        "prior_volumes": [
+          100
+        ],
+        "known_at": 1768488180000000000,
+        "use_at": 1768488240000000000
+      },
+      "actual": {
+        "recipe_id": "O058",
+        "state": "computed",
+        "value": {
+          "body_ratio": "0.2",
+          "volume_average": "100",
+          "volume_ratio": "2",
+          "displayed_small_body_high_volume": true,
+          "comparison_convention": "strict"
+        },
+        "hole_ids": [],
+        "known_at": 1768488180000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 750,
+      "contract_line": 3457,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P10",
+      "object_id": "O065",
+      "finding": "Absent visit coverage certifies untested POC",
+      "contract_expectation": "Missing full visit history is unknown.",
+      "input": {
+        "poc": 105,
+        "as_of": 1768488000000000000,
+        "known_at": 1768424400000000000,
+        "use_at": 1768488000000000000
+      },
+      "actual": {
+        "recipe_id": "O065",
+        "state": "computed",
+        "value": {
+          "untested": true,
+          "poc": "105"
+        },
+        "hole_ids": [],
+        "known_at": 1768424400000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 375,
+      "contract_line": 3712,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P11",
+      "object_id": "O081",
+      "finding": "Lower poor-tail branch hard-coded false",
+      "contract_expectation": "Evaluate the explicitly supplied one-letter outer criterion on the lower side.",
+      "input": {
+        "rows": {
+          "100": [
+            "D"
+          ],
+          "101": [
+            "B",
+            "D"
+          ]
+        },
+        "instrument": "NQ",
+        "side": "lower",
+        "poor_criterion": "one_letter_outer",
+        "known_at": 1768491000000000000,
+        "use_at": 1768491060000000000
+      },
+      "actual": {
+        "recipe_id": "O081",
+        "state": "computed",
+        "value": {
+          "tail_length": 1,
+          "next_row_multi": true,
+          "poor_high": false,
+          "poor_low": false,
+          "excess_not_poor_low": false
+        },
+        "hole_ids": [],
+        "known_at": 1768491000000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 556,
+      "contract_line": 4289,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P12",
+      "object_id": "O085",
+      "finding": "Reversed break/retest chronology accepted",
+      "contract_expectation": "Retest must follow the break before entry permission.",
+      "input": {
+        "shape": "P",
+        "author": "saint",
+        "balance": [
+          100,
+          105
+        ],
+        "known_at": 1768489200000000000,
+        "use_at": 1768489500000000000,
+        "break_at": 30,
+        "retest_at": 20
+      },
+      "actual": {
+        "recipe_id": "O085",
+        "state": "supplied",
+        "value": {
+          "shape": "P",
+          "entry_pass": true,
+          "direction": null,
+          "automatic_detector": null,
+          "context_only": false
+        },
+        "hole_ids": [
+          "HOLE:O085:detector"
+        ],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 644,
+      "contract_line": 4433,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P13",
+      "object_id": "O093",
+      "finding": "Missing rejection accepted as route confirmation",
+      "contract_expectation": "Required breakout/tag/rejection/decision sequence cannot pass with absent rejection.",
+      "input": {
+        "va_lo": 100,
+        "va_hi": 110,
+        "older_poc": 115,
+        "older_id": "old",
+        "established_id": "est",
+        "breakout_at": 1768488000000000000,
+        "tag_at": 1768488300000000000,
+        "tag_px": 115,
+        "rejection_from": "above",
+        "decision_at": 1768488420000000000,
+        "side": "short",
+        "target": 110,
+        "known_at": 1768486800000000000,
+        "use_at": 1768488420000000000
+      },
+      "actual": {
+        "recipe_id": "O093",
+        "state": "supplied",
+        "value": {
+          "tagged": true,
+          "distinct": true,
+          "route_ok": true,
+          "target": "110"
+        },
+        "hole_ids": [],
+        "known_at": 1768488420000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 722,
+      "contract_line": 4726,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P14",
+      "object_id": "O102",
+      "finding": "Zero consumption and refresh called replenishment",
+      "contract_expectation": "A nonempty mapping is not executed replenishment.",
+      "input": {
+        "lifecycle": {
+          "consumed": 0,
+          "refresh": 0,
+          "final_display": 12
+        },
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000
+      },
+      "actual": {
+        "recipe_id": "O102",
+        "state": "computed",
+        "value": {
+          "consumption": "0",
+          "refresh": "0",
+          "final_display": "12",
+          "verified_replenishment": true
+        },
+        "hole_ids": [],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 861,
+      "contract_line": 5056,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P15",
+      "object_id": "O107",
+      "finding": "Unknown-side volume omitted from concentration denominator",
+      "contract_expectation": "Unknown-side volume must be retained in total and uncertainty.",
+      "input": {
+        "B": 80,
+        "A": 20,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000,
+        "N": 100
+      },
+      "actual": {
+        "recipe_id": "O107",
+        "state": "computed",
+        "value": {
+          "delta": "60",
+          "total": "100",
+          "fraction": "0.6",
+          "source_spike": null
+        },
+        "hole_ids": [
+          "HOLE:O107:classifier"
+        ],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1115,
+      "contract_line": 5238,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P16",
+      "object_id": "O115",
+      "finding": "Missing defense stages yield order_ok",
+      "contract_expectation": "All required stages need evidence and causal ordering.",
+      "input": {
+        "origin": 100,
+        "q": "0.25",
+        "reward_px": "100.75",
+        "entry_at": 1768488181000000000,
+        "entry": 101,
+        "confirm_px": "100.75",
+        "known_at": 1768488180000000000,
+        "use_at": 1768488181000000000
+      },
+      "actual": {
+        "recipe_id": "O115",
+        "state": "supplied",
+        "value": {
+          "reward_ticks": "3",
+          "entry_distance_ticks": "1",
+          "geometry_ok": true,
+          "order_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 1768488181000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 1138,
+      "contract_line": 5528,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P17",
+      "object_id": "O123",
+      "finding": "Zero lift-off reward passes geometry",
+      "contract_expectation": "The documented two-to-four-tick reward must be checked separately from entry distance.",
+      "input": {
+        "origin": 100,
+        "confirm_px": 100,
+        "entry": 100,
+        "q": "0.25",
+        "daily_r": -3,
+        "daily_cap": -4,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000
+      },
+      "actual": {
+        "recipe_id": "O123",
+        "state": "computed",
+        "value": {
+          "reward_ticks": "0E+2",
+          "distance_ticks": "0E+2",
+          "daily_stop_ok": true,
+          "geometry_ok": true,
+          "size_halved_repairs": false
+        },
+        "hole_ids": [],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 1350,
+      "contract_line": 5821,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P18",
+      "object_id": "O127",
+      "finding": "False tape qualification promoted to true",
+      "contract_expectation": "Explicit failure of the supplied tape criterion must not qualify.",
+      "input": {
+        "entry": "101.25",
+        "stop": "99.75",
+        "side": "long",
+        "r_multiple": 2,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000,
+        "dying_tape": false
+      },
+      "actual": {
+        "recipe_id": "O127",
+        "state": "computed",
+        "value": {
+          "initial_risk": "1.50",
+          "r2": "104.25",
+          "r_in_1_to_3": true,
+          "qualification": true,
+          "automatic_selector": null
+        },
+        "hole_ids": [],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 1456,
+      "contract_line": 5968,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P19",
+      "object_id": "O128",
+      "finding": "Prior-failure condition unconditionally true",
+      "contract_expectation": "No-prior-failure needs eligible observations; absence is unknown.",
+      "input": {
+        "catalyst_at": 1768488000000000000,
+        "release_at": 1768488060000000000,
+        "first_pullback_at": 1768488180000000000,
+        "confirm_at": 1768488240000000000,
+        "entry_at": 1768488300000000000,
+        "later_failure_at": 1768489200000000000,
+        "known_at": 1768488300000000000,
+        "use_at": 1768488300000000000
+      },
+      "actual": {
+        "recipe_id": "O128",
+        "state": "supplied",
+        "value": {
+          "first_pullback": true,
+          "no_prior_failure": true,
+          "later_failure_invalidates": false,
+          "later_failure_at": 1768489200000000000,
+          "order_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 1768488300000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 1477,
+      "contract_line": 6004,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P20",
+      "object_id": "O131",
+      "finding": "Undated target called pre-existing",
+      "contract_expectation": "A target with unknown availability cannot be certified pre-existing.",
+      "input": {
+        "micro_lo": 100,
+        "micro_hi": 102,
+        "complete_at": 1768488000000000000,
+        "entry": 103,
+        "stop": "99.75",
+        "target": 120,
+        "side": "long",
+        "known_at": 1768486800000000000,
+        "use_at": 1768488120000000000
+      },
+      "actual": {
+        "recipe_id": "O131",
+        "state": "supplied",
+        "value": {
+          "width": "2",
+          "stop_below_opposite": true,
+          "target": "120",
+          "preexisting_target": true,
+          "qualifies": null,
+          "automatic_selector": null
+        },
+        "hole_ids": [
+          "HOLE:O131:strength"
+        ],
+        "known_at": 1768488000000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py",
+      "code_line": 1546,
+      "contract_line": 6114,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P21",
+      "object_id": "O150",
+      "finding": "Cancellation retains working remainder",
+      "contract_expectation": "Cancellation ends remaining working quantity and preserves the filled position separately.",
+      "input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 20,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "canceled",
+        "value": {
+          "stop": null,
+          "target": null,
+          "cancel_at": 20,
+          "filled": "1",
+          "filled_quantity": "1",
+          "remaining": "2",
+          "remaining_quantity": "2",
+          "position_open": true,
+          "order_state": "canceled",
+          "order_state_timeline": [
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1,
+              "state_before": "resting",
+              "state_after": "partially_filled"
+            },
+            {
+              "kind": "canceled",
+              "at": 20,
+              "state_before": "partially_filled",
+              "state_after": "canceled"
+            }
+          ],
+          "bracket_versions": [],
+          "lifecycle_valid": true,
+          "source_policy_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 30,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1540,
+      "contract_line": 6811,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P22",
+      "object_id": "O150",
+      "finding": "Exit after cancellation rejected",
+      "contract_expectation": "A prior fill remains eligible for a later position exit after the working order is canceled.",
+      "input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 20,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          },
+          {
+            "kind": "exit",
+            "at": 25,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "invalid",
+        "value": {
+          "stop": null,
+          "target": null,
+          "cancel_at": 20,
+          "filled": "1",
+          "filled_quantity": "1",
+          "remaining": "2",
+          "remaining_quantity": "2",
+          "position_open": false,
+          "order_state": "invalid",
+          "order_state_timeline": [
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1,
+              "state_before": "resting",
+              "state_after": "partially_filled"
+            },
+            {
+              "kind": "canceled",
+              "at": 20,
+              "state_before": "partially_filled",
+              "state_after": "canceled"
+            },
+            {
+              "kind": "exit",
+              "at": 25,
+              "qty": 1,
+              "state_before": "canceled",
+              "state_after": "exited"
+            }
+          ],
+          "bracket_versions": [],
+          "lifecycle_valid": false,
+          "source_policy_ok": true
+        },
+        "hole_ids": [
+          "HOLE:O150:ordering"
+        ],
+        "known_at": 30,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "event after cancellation"
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1540,
+      "contract_line": 6811,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P23",
+      "object_id": "O150",
+      "finding": "Fill after expiry accepted",
+      "contract_expectation": "Expired working quantity cannot fill without an explicit new/reopened order.",
+      "input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "expired",
+            "at": 14
+          },
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "canceled",
+        "value": {
+          "stop": null,
+          "target": null,
+          "cancel_at": 100,
+          "filled": "1",
+          "filled_quantity": "1",
+          "remaining": "2",
+          "remaining_quantity": "2",
+          "position_open": true,
+          "order_state": "canceled",
+          "order_state_timeline": [
+            {
+              "kind": "expired",
+              "at": 14,
+              "state_before": "resting",
+              "state_after": "expired"
+            },
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1,
+              "state_before": "expired",
+              "state_after": "partially_filled"
+            },
+            {
+              "kind": "canceled",
+              "at": 100,
+              "state_before": "partially_filled",
+              "state_after": "canceled"
+            }
+          ],
+          "bracket_versions": [],
+          "lifecycle_valid": true,
+          "source_policy_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 30,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1540,
+      "contract_line": 6811,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P24",
+      "object_id": "O150",
+      "finding": "Amended order remainder uses original quantity",
+      "contract_expectation": "Final working remainder must reconcile actual amended quantity less fills.",
+      "input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "amend",
+            "at": 12,
+            "new_quantity": 5
+          },
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "canceled",
+        "value": {
+          "stop": null,
+          "target": null,
+          "cancel_at": 100,
+          "filled": "1",
+          "filled_quantity": "1",
+          "remaining": "2",
+          "remaining_quantity": "2",
+          "position_open": true,
+          "order_state": "canceled",
+          "order_state_timeline": [
+            {
+              "kind": "amend",
+              "at": 12,
+              "new_quantity": 5,
+              "state_before": "resting",
+              "state_after": "resting"
+            },
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1,
+              "state_before": "resting",
+              "state_after": "partially_filled"
+            },
+            {
+              "kind": "canceled",
+              "at": 100,
+              "state_before": "partially_filled",
+              "state_after": "canceled"
+            }
+          ],
+          "bracket_versions": [],
+          "lifecycle_valid": true,
+          "source_policy_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 30,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1540,
+      "contract_line": 6811,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P25",
+      "object_id": "O150",
+      "finding": "Fill known_at can predate its event",
+      "contract_expectation": "Lifecycle result availability must include latest incorporated event.",
+      "input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 10,
+        "use_at": 12,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "canceled",
+        "value": {
+          "stop": null,
+          "target": null,
+          "cancel_at": 100,
+          "filled": "1",
+          "filled_quantity": "1",
+          "remaining": "2",
+          "remaining_quantity": "2",
+          "position_open": true,
+          "order_state": "canceled",
+          "order_state_timeline": [
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1,
+              "state_before": "resting",
+              "state_after": "partially_filled"
+            },
+            {
+              "kind": "canceled",
+              "at": 100,
+              "state_before": "partially_filled",
+              "state_after": "canceled"
+            }
+          ],
+          "bracket_versions": [],
+          "lifecycle_valid": true,
+          "source_policy_ok": true
+        },
+        "hole_ids": [],
+        "known_at": 10,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py",
+      "code_line": 1540,
+      "contract_line": 6811,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P26",
+      "object_id": "O154",
+      "finding": "Unproven validation availability still enables overlay",
+      "contract_expectation": "Prior validation and matching process provenance must be established before risk use.",
+      "input": {
+        "n": 100,
+        "min_n": 100,
+        "win_rate": "0.55",
+        "avg_rr": 2,
+        "mc_max_streak": 8
+      },
+      "actual": {
+        "recipe_id": "O154",
+        "state": "supplied",
+        "value": {
+          "overlay_validation": true,
+          "sample_n": 100,
+          "sample_at_least100": true,
+          "winrate_known": true,
+          "average_rr_known": true,
+          "mc_result_known": true,
+          "validation_before_risk": false,
+          "win_rate": "0.55",
+          "average_rr": "2",
+          "mc_max_loss_streak": 8,
+          "simulation_run": false
+        },
+        "hole_ids": [],
+        "known_at": null,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m12_recipes.py",
+      "code_line": 13,
+      "contract_line": 6958,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    },
+    {
+      "id": "P27",
+      "object_id": "O166",
+      "finding": "Absent current/next observations called causally conditioned",
+      "contract_expectation": "Current/next identities, ordered times, conditioning availability and cadence are required.",
+      "input": {
+        "counts": {
+          "D": 84,
+          "A": 12,
+          "B": 4,
+          "E": 0,
+          "W": 0
+        },
+        "cohort_id": "AAPL-20000",
+        "source_symbol": "AAPL",
+        "source_counts_symbol": "AAPL",
+        "row_count": 100,
+        "known_at": 1768489260000000000,
+        "use_at": 1768489320000000000
+      },
+      "actual": {
+        "recipe_id": "O166",
+        "state": "computed",
+        "value": {
+          "from_state": null,
+          "to_state": null,
+          "p_dd": "0.84",
+          "p_da": "0.12",
+          "probabilities": {
+            "B": "0.04",
+            "A": "0.12",
+            "D": "0.84",
+            "E": "0",
+            "W": "0"
+          },
+          "row_sum": "1.00",
+          "total": 100,
+          "conditioning_causal": true,
+          "cohort_id": "AAPL-20000",
+          "source_symbol": "AAPL",
+          "trained_matrix": false,
+          "automatic_transition": null,
+          "reported_probability": null
+        },
+        "hole_ids": [],
+        "known_at": 1768489260000000000,
+        "base_ok": true,
+        "coverage_ok": true,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null
+      },
+      "gap_observed": true,
+      "code_path": "/workspace/implementation/src/trading_research/research/method_pack/objects/m10_recipes.py",
+      "code_line": 378,
+      "contract_line": 7394,
+      "scope": "Object-boundary diagnostic; not a historical method pass."
+    }
+  ],
+  "manifest_locator_probe": {
+    "accepted": true,
+    "object": {
+      "object_id": "audit-object",
+      "recipe_id": "O004",
+      "method_id": "JJ-TBR",
+      "branch_scope": "all",
+      "author": "audit",
+      "instrument_id": "audit-instrument",
+      "parent_ids": [],
+      "source_ref": "audit-only",
+      "source_version": "audit-only",
+      "value": {
+        "O": null,
+        "H": null,
+        "L": null,
+        "C": null,
+        "V": "0",
+        "complete": true,
+        "native_source_compatible": true,
+        "known_at": 20
+      },
+      "units": {},
+      "formation_start": 10,
+      "formation_end": 20,
+      "as_of": 20,
+      "known_at": 20,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "inputs": {
+        "members": [],
+        "end_ns": 20
+      },
+      "raw_member_locators": [
+        "NONEXISTENT_AUDIT_LOCATOR"
+      ],
+      "recipe_base_ok": true
+    }
+  },
+  "source_code_hashes": {
+    "/workspace/implementation/src/trading_research/research/method_pack/objects/m01_recipes.py": "a3c47e24b39047ffb74fc1dd0921d0cd834a3fd9cc5fb4bc1edd6197a7e18391",
+    "/workspace/implementation/src/trading_research/research/method_pack/objects/m10_recipes.py": "be4a2fbf28e1581969655a28eafc6332e79880f4705a3402d53c9cca992aaa19",
+    "/workspace/implementation/src/trading_research/research/method_pack/objects/m12_recipes.py": "f975c55730738e7cd814bd1fb195783c1d968bf9dc9296894b020589e5134439",
+    "/workspace/implementation/src/trading_research/research/method_pack/objects/rest_recipes.py": "1f83e2e11eafb3c0bc90086fc3f9ee8a83216111ed2bb3d0aaa23c8067c9d67a"
+  },
+  "reproduction": {
+    "python_imports": [
+      "trading_research.research.method_pack.objects",
+      "trading_research.research.method_pack.protocol.run_recipe"
+    ],
+    "recipe_call": "run_recipe(row[object_id], row[input]); compare with row[actual]",
+    "scope": "Synthetic diagnostic inputs; no native orders, historical candidates or performance test.",
+    "temporary_diagnostic_script_sha256": "8fc85af8b4e65a498535ce1920fd12c7f72d41077b2189b16bf54f406eadf91c"
+  }
+}

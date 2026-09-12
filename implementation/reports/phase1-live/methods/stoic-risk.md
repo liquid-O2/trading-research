@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:45:15Z`
+created_at: `2026-09-12T10:48:44Z`
 
 ## Headline
 
@@ -56,7 +56,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 22, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -65,11 +65,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/holes.jsonl sha256=43e3982bc1cc21afe5057e8c4846d75533a2cd296a592e76c5ff03f015c1c52c
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/fixtures.json sha256=30a71e4c87645baee95599131c8165532250d2cbd333b45f9d2575e235527d6c
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/cohort.json sha256=0ad0d510c418226480d711c8ba48b8a1042a1f3e4b73a3d6754a9c8c4c4bad8a
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-k1z2_bvb/coverage.json sha256=4c411c652222c975f6c00ad7e550ce8aa706697ca8f676b5bd478100b22fdb97
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/holes.jsonl sha256=43b8e44c9d46c3a4507e34bdac2c44d7fad052363676037096f9e22cab73827c
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/fixtures.json sha256=5f89149d7df30f053fe64860fbc260e7b3aefc99ea8ca7146cfc1f7bee4ed57c
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/cohort.json sha256=76dff4527782fdc00b723f166c30b4ff48a3bd44793759ce3cd31ab2f9ccb420
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/stoic-risk/run-np5yptz5/coverage.json sha256=4c411c652222c975f6c00ad7e550ce8aa706697ca8f676b5bd478100b22fdb97

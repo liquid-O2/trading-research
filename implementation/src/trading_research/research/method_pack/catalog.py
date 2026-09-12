@@ -114,7 +114,7 @@ DISCOVERY_REASON = {
     "MEMBER-TWO-REASONS": "automatic reaction/node selection unpublished",
     "KEANI-OPEN-ABOVE-VALUE": "value/imbalance settings and near-10:00 timing unpublished",
     "REFILL-STUDY": "cluster/normalization, hold label, grade model unpublished",
-    "JETBUNDLE-STATES": "AAPL 10-level sample and classifier thresholds absent",
+    "JETBUNDLE-STATES": "Native event coverage and heuristic classifier rules incomplete; AAPL is illustrative",
     "STOIC-DATA": "full trading recipe and custom macro engines unpublished",
     "STOIC-RISK": "only printed-stage arithmetic reconstructable; Monte Carlo unpublished",
 }

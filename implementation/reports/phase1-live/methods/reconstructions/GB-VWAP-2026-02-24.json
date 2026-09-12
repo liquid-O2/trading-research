@@ -1,0 +1,197 @@
+{
+  "adopted_hypothesis": {
+    "bar_minutes": 1,
+    "basis": "HLC3",
+    "basis_reason": "Sires VWAP lesson p.8 shows HLC3; this is an explicit borrowed platform-style hypothesis, not GB verification.",
+    "price_basis_identified_by_fit": false,
+    "reset": "previous day 18:00 America/New_York",
+    "selected_using_this_example": true
+  },
+  "artifacts": [
+    {
+      "bytes": 1522,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/vwap-source-points.csv",
+      "rows": 13,
+      "sha256": "535b06a04ca636bda76ab157b4afeeeb6ff4873b8309fcac56853d106689abd0"
+    },
+    {
+      "bytes": 2367,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/vwap-fit-grid.csv",
+      "rows": 16,
+      "sha256": "382b024cde9dd8ee95598e6ef838857b7ee31d2cebe97faff8e26240e7aba3ba"
+    },
+    {
+      "bytes": 209871,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/vwap-curves.csv",
+      "rows": 990,
+      "sha256": "db3a2d49792733db065c7001c89de1e5ad661bcfc655b8a38b18026c97da2355"
+    },
+    {
+      "bytes": 61789,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/vwap-source-day-minutes.csv",
+      "rows": 990,
+      "sha256": "c1b4257d71ddeeea2e5f570ec6da3a86f691c1dc5f5f2a8316a37a970f13506d"
+    }
+  ],
+  "case_id": "GB-VWAP-2026-02-24",
+  "digitization": {
+    "clock_uncertainty_bars": 1,
+    "excluded_columns": [
+      {
+        "bar_open_et": "09:20",
+        "reason": "curve occluded / no gray-curve pixel in fixed mask",
+        "x": 385
+      },
+      {
+        "bar_open_et": "09:40",
+        "reason": "curve occluded / no gray-curve pixel in fixed mask",
+        "x": 510
+      },
+      {
+        "bar_open_et": "09:55",
+        "reason": "curve occluded / no gray-curve pixel in fixed mask",
+        "x": 604
+      },
+      {
+        "bar_open_et": "10:00",
+        "reason": "curve occluded / no gray-curve pixel in fixed mask",
+        "x": 635
+      }
+    ],
+    "mask": "x columns fixed; y 233..281; r>25, 5<=g-r<=45, 0<=b-g<=20, b<190; brightest valid pixel; excludes horizontal order line",
+    "minimum_pixel_uncertainty_points": 0.7619047619047619,
+    "price_anchors": [
+      [
+        33,
+        25000
+      ],
+      [
+        243,
+        24840
+      ],
+      [
+        453,
+        24680
+      ]
+    ],
+    "x_axis": "source clock grid"
+  },
+  "fidelity": "research_reconstruction",
+  "figure": {
+    "bytes": 511041,
+    "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-VWAP-2026-02-24.png",
+    "sha256": "5c36192f2a0bc32457e2551fdd82a7fc46de40a06a10fb82e5ba7c60c207651e"
+  },
+  "historical_method_N": 0,
+  "native_identity": {
+    "definition_map": {
+      "bytes": 16406,
+      "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+      "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+    },
+    "instrument_id": 42002475,
+    "q": "0.25",
+    "source_instrument_match": null,
+    "symbol": "NQH6"
+  },
+  "raw_inputs": [
+    {
+      "end_ns": 1771947000000000000,
+      "rows": 990,
+      "source": {
+        "bytes": 3584842,
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+        "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+      },
+      "start_ns": 1771887600000000000
+    },
+    {
+      "end_ns": 1771947000000000000,
+      "rows": 175720,
+      "source": {
+        "bytes": 14663077,
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+        "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+      },
+      "start_ns": 1771887600000000000
+    }
+  ],
+  "selected_fit": {
+    "basis": "HLC3",
+    "full_coverage": true,
+    "mae_points": 1.2657182689561943,
+    "max_abs_error_points": 3.0046721357321076,
+    "n_points": 13,
+    "reset": "previous-18:00",
+    "rmse_points": 1.4846384621993398,
+    "total_source_points": 13,
+    "validation": "within-example fit; no holdout; no performance claim"
+  },
+  "session_clock_hypotheses": [
+    {
+      "asia_high": 24884.25,
+      "asia_window_et": "previous 20:00\u201300:00",
+      "breakout_known_at_ns": 1771944300000000000,
+      "entry_fill": null,
+      "first_close_above_both_bar_open_et": "09:44",
+      "first_prior_vwap_touch_bar_open_et": "10:00",
+      "london_high": 24868.5,
+      "london_window_et": "02:00\u201305:00",
+      "prior_completed_vwap": 24837.614180478824,
+      "source_clock_settings_verified": false,
+      "touch_known_at_ns": 1771945260000000000
+    },
+    {
+      "asia_high": 24884.25,
+      "asia_window_et": "previous 20:00\u201300:00",
+      "breakout_known_at_ns": 1771944300000000000,
+      "entry_fill": null,
+      "first_close_above_both_bar_open_et": "09:44",
+      "first_prior_vwap_touch_bar_open_et": "10:00",
+      "london_high": 24848.0,
+      "london_window_et": "03:00\u201305:00",
+      "prior_completed_vwap": 24837.614180478824,
+      "source_clock_settings_verified": false,
+      "touch_known_at_ns": 1771945260000000000
+    },
+    {
+      "asia_high": 24884.25,
+      "asia_window_et": "previous 20:00\u201300:00",
+      "breakout_known_at_ns": 1771944300000000000,
+      "entry_fill": null,
+      "first_close_above_both_bar_open_et": "09:44",
+      "first_prior_vwap_touch_bar_open_et": "10:00",
+      "london_high": 24902.25,
+      "london_window_et": "02:00\u201308:00",
+      "prior_completed_vwap": 24837.614180478824,
+      "source_clock_settings_verified": false,
+      "touch_known_at_ns": 1771945260000000000
+    }
+  ],
+  "source": {
+    "actual_entry_timestamp": null,
+    "image_xref": 54,
+    "known_intent": [
+      "close above London and Asia highs",
+      "retrace to VWAP",
+      "long",
+      "30-point stop"
+    ],
+    "page": 33,
+    "pdf": {
+      "bytes": 9061751,
+      "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+      "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+    },
+    "post_id": "2026329904690712970",
+    "price_basis": null,
+    "published_at_utc": "2026-02-24T16:14:31Z",
+    "reported_outcome": "Original post says 150 points; reply on p.34 says 100 points. Neither defines a planned target.",
+    "session_clock_settings": null
+  },
+  "unresolved": [
+    "GB session bounds and exact price basis remain inferred",
+    "entry order/fill and target not reconstructed",
+    "single-example fit does not establish generalization"
+  ]
+}

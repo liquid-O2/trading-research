@@ -110,7 +110,7 @@ def o163(inp: dict) -> RecipeResult:
         price = _decimal(event["price"])
         depth = event["depth_level"]
         if (type(seq) is not int or seq < 0 or type(depth) is not int
-                or depth < 1 or depth > 10 or size is None or size <= 0
+                or depth < 1 or size is None or size <= 0
                 or price is None or price <= 0):
             errors.append(f"event_{index}_typed_value")
         if not _nonempty_text(event["event_id"]):
@@ -202,14 +202,23 @@ def o163(inp: dict) -> RecipeResult:
 
     source_symbol = inp.get("source_symbol", inp.get("symbol"))
     depth_coverage = inp.get("depth_coverage", inp.get("depth_levels"))
+    required_depth = inp.get("required_depth_levels")
     depth_complete = inp.get("depth_complete", inp.get("depth_ok"))
-    if type(depth_coverage) is not int or depth_coverage < 10:
+    # AAPL's ten levels describe the printed example, not a restriction on
+    # the framework. Completeness is relative to the declared native scope.
+    if type(required_depth) is not int or required_depth < 1:
+        holes.append("HOLE:O163:required_depth_levels")
+    if (type(depth_coverage) is not int or depth_coverage < 1
+            or (type(required_depth) is int and depth_coverage < required_depth)):
         holes.append("HOLE:O163:depth_coverage")
+    elif any(event["depth_level"] > depth_coverage for event in events):
+        return _r("O163", "invalid", {"source_process_complete": False},
+                  hole_ids=["HOLE:O163:depth_identity"], known_at=inp.get("known_at"),
+                  base_ok=False, coverage_ok=True,
+                  reason="native event lies outside the declared depth coverage")
     if depth_complete is not True:
         holes.append("HOLE:O163:depth")
-    if source_symbol is None:
-        holes.append("HOLE:O163:source_instrument")
-    elif source_symbol != "AAPL":
+    if not _nonempty_text(source_symbol):
         holes.append("HOLE:O163:source_instrument")
     if inp.get("coverage_complete") is False:
         holes.append("HOLE:O163:coverage")
@@ -227,6 +236,8 @@ def o163(inp: dict) -> RecipeResult:
         "consume_events": action_counts["execute"],
         "per_side_volumes": per_side,
         "depth_coverage": depth_coverage,
+        "required_depth_levels": required_depth,
+        "source_symbol": source_symbol,
         "native_event_count": len(events),
         "native_event_ids": [event["event_id"] for event in events],
         "source_process_complete": not holes,
@@ -315,13 +326,13 @@ def o165(inp: dict) -> RecipeResult:
 
     source_symbol = inp.get("source_symbol", inp.get("symbol"))
     depth_levels = inp.get("depth_levels", inp.get("depth_coverage"))
-    if source_symbol is None:
+    required_depth = inp.get("required_depth_levels")
+    if not _nonempty_text(source_symbol):
         missing.append("source_instrument")
-    elif source_symbol != "AAPL":
-        missing.append("source_instrument")
-    if depth_levels is None:
-        missing.append("depth_coverage")
-    elif type(depth_levels) is not int or depth_levels < 10:
+    if type(required_depth) is not int or required_depth < 1:
+        missing.append("required_depth_levels")
+    if (type(depth_levels) is not int or depth_levels < 1
+            or (type(required_depth) is int and depth_levels < required_depth)):
         missing.append("depth_coverage")
     if inp.get("source_observation_id") is None and inp.get("observation_id") is None:
         missing.append("source_observation")
@@ -352,7 +363,9 @@ def o165(inp: dict) -> RecipeResult:
         "automatic_state": None,
         "missing_criteria": [],
         "failed_criteria": failed,
-        "source_illustration": inp.get("source_symbol", inp.get("symbol")) == "AAPL",
+        "source_illustration": inp.get("evidence_mode") == "source_illustration",
+        "source_symbol": source_symbol,
+        "required_depth_levels": required_depth,
         "unbiased_nq_cohort": False,
     }, known_at=known_at,
         base_ok=True, coverage_ok=True)
@@ -430,16 +443,13 @@ def o166(inp: dict) -> RecipeResult:
         holes.append("HOLE:O166:cohort")
     elif not _nonempty_text(cohort_id):
         errors.append("cohort_type")
-    if source_symbol is None:
+    if not _nonempty_text(source_symbol):
         holes.append("HOLE:O166:source_instrument")
-    elif source_symbol != "AAPL":
-        # The printed 84/12 row belongs to the AAPL source illustration and
-        # is not allowed to become an NQ probability claim.
-        printed = exact_counts == {"B": 4, "A": 12, "D": 84, "E": 0, "W": 0}
-        if printed or inp.get("source_counts_symbol") == "AAPL":
-            errors.append("cohort_identity")
     source_counts_symbol = inp.get("source_counts_symbol")
-    if source_counts_symbol is not None and source_counts_symbol != source_symbol:
+    if not _nonempty_text(source_counts_symbol):
+        holes.append("HOLE:O166:counts_source_instrument")
+    elif source_counts_symbol != source_symbol:
+        errors.append("cohort_identity")
         errors.append("cohort_symbol_mismatch")
     if inp.get("cohort_fixed") is False:
         holes.append("HOLE:O166:cohort")
@@ -504,6 +514,7 @@ add_fixture({
     "id": "O163-F1", "recipe": "O163",
     "inputs": {"events": _EVENTS, "instrument_id": "AAPL-fixture",
                 "source_symbol": "AAPL", "depth_coverage": 10,
+                "required_depth_levels": 10,
                 "depth_complete": True, "known_at": _t(10, 0),
                 "use_at": _t(10, 1)},
     "expected": {"provided": Decimal("10"), "withdrawn": Decimal("3"),
@@ -516,6 +527,7 @@ add_fixture({
     "inputs": {"state_label": "A", "state_at": _t(10, 0),
                 "known_at": _t(10, 0), "source_symbol": "AAPL",
                 "depth_levels": 10, "source_observation_id": "state-A-1000",
+                "required_depth_levels": 10,
                 "high_aggression": True, "low_response_efficiency": True,
                 "opposite_liquidity_holds_and_refills": True,
                 "criteria_known_at": {"high_aggression": _t(10, 0),
@@ -530,6 +542,7 @@ add_fixture({
     "inputs": {"state_label": "A", "state_at": _t(10, 0),
                 "known_at": _t(10, 0), "source_symbol": "AAPL",
                 "depth_levels": 10, "source_observation_id": "state-A-1000",
+                "required_depth_levels": 10,
                 "high_aggression": True, "low_response_efficiency": True,
                 "opposite_liquidity_holds_and_refills": False},
     "expected": {"state_evidence_complete": False, "automatic_state": None},
@@ -541,7 +554,7 @@ add_fixture({
                 "from_state": "D", "to_state": "D", "state_at": _t(10, 0),
                 "next_state_at": _t(10, 1),
                 "conditioning_known_at": _t(9, 59), "cohort_id": "AAPL-20000",
-                "source_symbol": "AAPL", "row_count": 100,
+                "source_symbol": "AAPL", "source_counts_symbol": "AAPL", "row_count": 100,
                 "known_at": _t(10, 1), "use_at": _t(10, 2)},
     "expected": {"p_dd": Decimal("0.84"), "p_da": Decimal("0.12"),
                  "row_sum": Decimal("1"), "trained_matrix": False},
@@ -553,7 +566,7 @@ add_fixture({
                 "from_state": "D", "to_state": "D", "state_at": _t(10, 0),
                 "next_state_at": _t(10, 2),
                 "conditioning_known_at": _t(10, 1), "cohort_id": "AAPL-20000",
-                "source_symbol": "AAPL", "row_count": 100,
+                "source_symbol": "AAPL", "source_counts_symbol": "AAPL", "row_count": 100,
                 "known_at": _t(10, 2), "use_at": _t(10, 2)},
     "expected": {"conditioning_causal": False, "base_ok": False},
 })

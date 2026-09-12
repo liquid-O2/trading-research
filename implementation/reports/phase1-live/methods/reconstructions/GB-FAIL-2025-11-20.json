@@ -1,0 +1,160 @@
+{
+  "artifacts": [
+    {
+      "bytes": 7564,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/fail-source-day-minutes.csv",
+      "rows": 122,
+      "sha256": "e593c87f81bb6da702cd6b076adf60805364492e8551cafa31afb433b158fbf7"
+    },
+    {
+      "bytes": 6218,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/fail-two-minute-geometry.csv",
+      "rows": 61,
+      "sha256": "a5f76f4e1eb0c04f4304a7f1c0dea2ac90255d0cbc4a1c0bbe3bef9ca52ca0b0"
+    },
+    {
+      "bytes": 617,
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/fail-gap-comparisons.csv",
+      "rows": 3,
+      "sha256": "99c27c544ec090ddd18c033f599637de6a65df8af96c3f47661c4b302bc9bf26"
+    }
+  ],
+  "case_id": "GB-FAIL-2025-11-20",
+  "entry_hypothesis_check": {
+    "conclusion": "No touch even before tick rounding; cannot explain the source entry with this delayed limit rule.",
+    "kind": "limit at first gap midpoint after completed MSS and gap",
+    "limit_price": 25278.625,
+    "post_decision_bar_touch_count": 0,
+    "tick_rounded_order_submitted": false,
+    "window_end_et": "11:02"
+  },
+  "fidelity": "research_reconstruction",
+  "figure": {
+    "bytes": 415709,
+    "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/GB-FAIL-2025-11-20.png",
+    "sha256": "4e6a12bd6496a453122961238efe6c268f14a29c5b108f82600340061b7c352c"
+  },
+  "gap_comparisons": [
+    {
+      "bar_open_et": "10:48",
+      "high_error_points": 1.4578313253005035,
+      "known_at_ns": 1763653800000000000,
+      "later_bar_touches_gap_before_11:02": false,
+      "low_error_points": 0.37048192771180766,
+      "mnq_source_high_approx": 25285.5421686747,
+      "mnq_source_low_approx": 25269.87951807229,
+      "nq_gap_high": 25287.0,
+      "nq_gap_low": 25270.25,
+      "source_order_fill": null,
+      "source_pixel_bottom": 143,
+      "source_pixel_top": 117
+    },
+    {
+      "bar_open_et": "10:50",
+      "high_error_points": 0.30421686746922205,
+      "known_at_ns": 1763653920000000000,
+      "later_bar_touches_gap_before_11:02": false,
+      "low_error_points": 1.1506024096379406,
+      "mnq_source_high_approx": 25261.44578313253,
+      "mnq_source_low_approx": 25237.349397590362,
+      "nq_gap_high": 25261.75,
+      "nq_gap_low": 25238.5,
+      "source_order_fill": null,
+      "source_pixel_bottom": 197,
+      "source_pixel_top": 157
+    },
+    {
+      "bar_open_et": "10:52",
+      "high_error_points": 1.0391566265061556,
+      "known_at_ns": 1763654040000000000,
+      "later_bar_touches_gap_before_11:02": false,
+      "low_error_points": 0.6987951807241188,
+      "mnq_source_high_approx": 25227.710843373494,
+      "mnq_source_low_approx": 25225.301204819276,
+      "nq_gap_high": 25228.75,
+      "nq_gap_low": 25226.0,
+      "source_order_fill": null,
+      "source_pixel_bottom": 217,
+      "source_pixel_top": 213
+    }
+  ],
+  "geometry": {
+    "comparison_pivot_low": 25267.0,
+    "failure_bar_open_et": "10:40",
+    "failure_known_at_ns": 1763653320000000000,
+    "fvg_definition": "bearish three-candle wick gap: high[i] < low[i-2]; known at close of i",
+    "later_peak": 25310.0,
+    "mss_definition": "first 2-minute close below a 1-left/1-right confirmed local low after the annotated upper test",
+    "mss_known_at_ns": 1763653800000000000,
+    "nyam_high": 25291.5,
+    "nyam_known_at_ns": 1763650800000000000,
+    "nyam_low": 25146.0,
+    "opposing_low_touch_bar_open_et": "11:00",
+    "opposing_low_touch_known_at_ns": 1763654520000000000,
+    "peak_bar_open_et": "10:38",
+    "peak_known_at_ns": 1763653200000000000,
+    "pivot_bar_open_et": "10:40",
+    "pivot_known_at_ns": 1763653440000000000
+  },
+  "historical_method_N": 0,
+  "native_identity": {
+    "definition_map": {
+      "bytes": 16406,
+      "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+      "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+    },
+    "instrument_id": 158704,
+    "q": "0.25",
+    "source_instrument_match": null,
+    "symbol": "NQZ5"
+  },
+  "native_instrument_equals_source": false,
+  "raw_inputs": [
+    {
+      "end_ns": 1763654520000000000,
+      "rows": 122,
+      "source": {
+        "bytes": 5450142,
+        "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+        "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+      },
+      "start_ns": 1763647200000000000
+    }
+  ],
+  "retrospective_source_annotation": {
+    "automatic_candidate_selector": false,
+    "upper_test_window_et": [
+      "10:36",
+      "10:40"
+    ]
+  },
+  "source": {
+    "actual_entry_timestamp": null,
+    "bar_minutes": 2,
+    "figure_page": 43,
+    "image_mask_xref": 72,
+    "image_xref": 71,
+    "instrument": "MNQZ2025",
+    "known_intent": [
+      "later sweep of 09\u201310 highs",
+      "failed breakout",
+      "MSS + FVG entry",
+      "opposing 09\u201310 lows"
+    ],
+    "pdf": {
+      "bytes": 9061751,
+      "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+      "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+    },
+    "post_id": "1991589280142315537",
+    "published_at_utc": "2025-11-20T19:27:40Z",
+    "reported_points": ">250, reported result; not a prescribed target",
+    "text_page": 31
+  },
+  "source_pixel_uncertainty_points": 0.6024096385542169,
+  "unresolved": [
+    "exact MSS/entry order and source fill unknown",
+    "NQ price comparison does not substitute MNQ volume or PnL",
+    "source last bar is partial at 11:03:14; excluded from full-bar comparison"
+  ]
+}

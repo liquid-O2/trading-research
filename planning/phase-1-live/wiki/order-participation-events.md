@@ -6,9 +6,9 @@ jetbundle begins with submissions that provide liquidity, cancellations that wit
 
 **Not a standalone trade.** A static book snapshot does not reconstruct the event process, and displayed imbalance alone is not an entry.
 
-**Record before use.** Native event/sequence_id, instrument, timestamp, action, side, price, size, depth/order identity and coverage of submissions/cancels/executions.
+**Record before use.** Native event/sequence_id, instrument, timestamp, action, side, price, size, depth/order identity, required_depth_levels and actual coverage of submissions/cancels/executions.
 
-**Phase 1 observation.** Preserve event ordering and available depth. Do not label a BBO-only dataset as the illustrated full participation record or infer cancellations from absent later snapshots.
+**Phase 1 observation.** Preserve event ordering and the declared native depth scope. AAPL and ten levels describe the illustration, not universal requirements; NQ is permitted ([MATH] pp.3, 16). Actual depth must cover required_depth_levels, and missing lifecycle evidence remains unknown. Do not infer cancellations from absent later snapshots.
 
 **Existing attachments.** mbp1_extract and mbp1_objects have limited trade/BBO ingredients. Full source order/depth reconstruction is missing; [FORMULAS] R-F06/F07 are only related partial observations. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
 

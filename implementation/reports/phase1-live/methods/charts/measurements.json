@@ -1,13 +1,13 @@
 {
   "builder": {
-    "bytes": 40219,
+    "bytes": 41073,
     "path": "/workspace/implementation/tools/chart_method_pack.py",
-    "sha256": "6ed0ee6ca02a7321da958bc4d8fcc6652ce8f4c5dd881aa9587faf6aecfd42ae"
+    "sha256": "cd21393255d6b3465c440876c00231cb277b4eab5c73e722ff5b37d322c4393b"
   },
   "chart_spec": {
-    "bytes": 6555,
+    "bytes": 6629,
     "path": "/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json",
-    "sha256": "62a49c3db096c420654fa1a33f3f05b23111213c9cd05b25ef08a8ceade5f289"
+    "sha256": "daa2b7f465d662a2a0f7f0b5e582fa46437958a63916838f64e37f226d24c2f0"
   },
   "charts": [
     {
@@ -873,7 +873,7 @@
     },
     {
       "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M10-jetbundle-states.png",
-      "chart_sha256": "41249314b79d538f58214d1236d7b8cb5feafab883623e95e8c2a2ad3a698fbd",
+      "chart_sha256": "40ab19fa848d5cf562b951ae3b6027f607254f683882e911e29aae7a71d9993a",
       "date": "2026-02-24",
       "geometry": [
         "O098",
@@ -881,7 +881,7 @@
       ],
       "historical_N": 0,
       "hole_ids": [
-        "CHART:M10:AAPL_ten_level_events:state_windows_thresholds:provide_cancel_consume_identity"
+        "CHART:M10:declared_depth_and_event_coverage:state_windows_thresholds:provide_cancel_consume_identity"
       ],
       "id": "M10",
       "inputs": [
@@ -920,13 +920,15 @@
         }
       ],
       "measurements": {
+        "borrowed_illustration_counts": false,
         "buy_volume": 45432,
         "display_bucket_minutes": 1,
         "executed_volume": 91480,
-        "native_source_instrument_match": false,
         "sell_volume": 46048,
+        "source_illustration_symbol": "AAPL",
         "source_state": null,
         "source_state_bucket_minutes": null,
+        "study_instrument_eligible": true,
         "unknown_volume": 0
       },
       "method": "JETBUNDLE-STATES",
@@ -949,7 +951,7 @@
           10
         ]
       ],
-      "selection": "Native NQ input diagnostic only. Missing AAPL ten-level sample and state classifier prevent source-state geometry/transition reproduction.",
+      "selection": "Native NQ is eligible: AAPL is the source illustration, and p.3 explicitly transfers the ideas to NQ. Undisclosed state thresholds and native participation evidence still limit this view to inputs.",
       "view": [
         "09:30",
         "10:00"
@@ -1054,9 +1056,9 @@
     }
   ],
   "formulas": {
-    "bytes": 719106,
+    "bytes": 720454,
     "path": "/workspace/planning/phase-1-live/FORMULAS.md",
-    "sha256": "76dc1593df6a08e2822be0bc3a6f5dd7aa1ec835eb5da304e56ac5db999d04da"
+    "sha256": "a57f0d0b121c5a0371e014e4c3e99437d3a1cc3ffa2b0b7e9b8520d73e431f57"
   },
   "historical_candidates_created": 0,
   "runtime": {
@@ -1282,21 +1284,21 @@
       "sha256": "cb10285c2cbda5c2abe5c7dbdcc109957280da3d9d34d2a74b0be9d76dbc9213"
     },
     {
-      "bytes": 6555,
+      "bytes": 6629,
       "path": "/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json",
-      "sha256": "62a49c3db096c420654fa1a33f3f05b23111213c9cd05b25ef08a8ceade5f289"
+      "sha256": "daa2b7f465d662a2a0f7f0b5e582fa46437958a63916838f64e37f226d24c2f0"
     },
     {
-      "bytes": 40219,
+      "bytes": 41073,
       "path": "/workspace/implementation/tools/chart_method_pack.py",
-      "sha256": "6ed0ee6ca02a7321da958bc4d8fcc6652ce8f4c5dd881aa9587faf6aecfd42ae"
+      "sha256": "cd21393255d6b3465c440876c00231cb277b4eab5c73e722ff5b37d322c4393b"
     },
     {
-      "bytes": 719106,
+      "bytes": 720454,
       "path": "/workspace/planning/phase-1-live/FORMULAS.md",
-      "sha256": "76dc1593df6a08e2822be0bc3a6f5dd7aa1ec835eb5da304e56ac5db999d04da"
+      "sha256": "a57f0d0b121c5a0371e014e4c3e99437d3a1cc3ffa2b0b7e9b8520d73e431f57"
     }
   ],
-  "version": "method-geometry-2026-09-12",
+  "version": "method-geometry-2026-09-12-source-recheck",
   "visual_review": "Manual review recorded separately in CHART_CHECK.md"
 }

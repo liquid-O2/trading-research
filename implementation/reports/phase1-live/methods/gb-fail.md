@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:42:54Z`
+created_at: `2026-09-12T10:46:10Z`
 
 ## Headline
 
@@ -66,7 +66,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 50, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -75,11 +75,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/holes.jsonl sha256=383bc14aa7965f94350406ea26094a1d13d86a7635d7358de9efb5fc7dc0c534
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/fixtures.json sha256=4c47a5854f5c0ba0434dfa797c7652294da5e78caa747425f6fbfbecbb40b4b2
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/cohort.json sha256=28f1caca6e74392c693d22f52d34e1c5e0fb38dccb643eaf768cd5c76a2381fb
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-ye4ih4xz/coverage.json sha256=81cf564cc0f92fed5181b6566869e03674a41cb448a8136a2bbf028a1642c7c1
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/holes.jsonl sha256=4f89a30fe4d4ba8e95c3089e995da4ec00d886a71d835494c71c0ac8dc016a1e
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/fixtures.json sha256=8aef05540b2bd85afcf40462bbf429d77bc9d1bbe72d0bdd03b257af910ab848
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/cohort.json sha256=86cb8dc413c217f37cf4e717d8d7158c9201b41c3d911277be3c498f60dabb5b
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-fail/run-0mczn7h9/coverage.json sha256=81cf564cc0f92fed5181b6566869e03674a41cb448a8136a2bbf028a1642c7c1

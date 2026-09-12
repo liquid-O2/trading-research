@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:43:29Z`
+created_at: `2026-09-12T10:46:50Z`
 
 ## Headline
 
@@ -56,7 +56,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 30, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -65,11 +65,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/holes.jsonl sha256=27c2a5ebd80ee6edeeda7767b9532e2a6020006cde8756799d0a2554d81de02b
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/fixtures.json sha256=09ad4f415c85a5cc3ea1b0457ae48e1ee57d788e263139bd467873503c86a2c0
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/cohort.json sha256=c36cd988263db785e067297f3ffa046fd50a2dd9ea2b40bc009015a29119d2a4
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-weokq9us/coverage.json sha256=2e2056726bfbb6137dddeef4cc5f7b5e62aaabdc7c1998e97338d4178fd33533
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/holes.jsonl sha256=bee09610f006d9fe7e54483939f1006a3c73f8d9c4cff92e89452de60a797e59
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/fixtures.json sha256=09ad4f415c85a5cc3ea1b0457ae48e1ee57d788e263139bd467873503c86a2c0
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/cohort.json sha256=ee41aebb10ac133b2538edf601e3c37e6fe2ba23c278cc58a5fa5171d221f5a5
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/gb-scalp/run-8urznj6v/coverage.json sha256=2e2056726bfbb6137dddeef4cc5f7b5e62aaabdc7c1998e97338d4178fd33533

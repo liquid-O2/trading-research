@@ -1,10 +1,14 @@
-# Phase 1 method cohort and chart audit
+# Phase 1 source review, reconstructions and historical cohorts
 
-All 12 acquired-scope reports were refreshed after reading their FORMULAS candidate selectors. None of the 50 confirmed branches has a complete source-defined selector. Each has an explicit run-specific `holes.jsonl` record naming the missing inputs and producer rules. Sires also retains four separately excluded incomplete cases.
+[Full implementation audit](/workspace/implementation/reports/phase1-live/methods/FULL_AUDIT.md) · [All 166 object reviews](/workspace/implementation/reports/phase1-live/methods/OBJECT_AUDIT.md) · [Proposed implementation plan](/workspace/implementation/reports/phase1-live/methods/IMPLEMENTATION_PLAN.md). The latest audit finds substantial documented behavior missing or incorrect, 27 reproduced object-level gaps, and omitted source settings/process details. The earlier passing fixtures and `source_hole` statuses below are retained run results, not certification of full implementation. No implementation was changed by this audit.
 
-**Every historical cohort has p=f=u=n=N=0, rate=null and interval=null.** No historical method success rate has been measured. Synthetic fixtures, chart diagnostics and archive inventory rows are excluded from the sample.
+[Latest profile coverage check](/workspace/implementation/reports/phase1-live/methods/PROFILE_COVERAGE_CHECK.md): the wiki and formulas already cover the requested profile types, while full profile rows, dated identities and developing snapshots remain partly implemented. The check also corrects the GB sweep-entry interpretation and records the deferred parameter searches. The tables below retain the previous run's cohort results; this coverage check did not run a new cohort.
 
-[Direct chart/figure comparisons](/workspace/implementation/reports/phase1-live/methods/CHART_CHECK.md) cover all 12 methods, including dated computable geometry, explicitly limited input comparisons, and unavailable process replays. The primary assistant performed every visual comparison without subagents. FORMULAS was unchanged and Phase 2 was not started.
+The source reread corrected the AAPL-only interpretation, recovered Stoic’s usable process and source-specific GB intent, and added two dated reconstructions. [Source findings](/workspace/implementation/reports/phase1-live/methods/SOURCE_RECHECK.md) · [Source-fit figures and results](/workspace/implementation/reports/phase1-live/methods/reconstructions/README.md). Macro work is deprioritized.
+
+All 12 source-faithful acquired-scope reports were refreshed. Each of the 50 branches still lacks a complete automatic source selector and has an explicit run-specific hole. Sires also retains four separately excluded incomplete cases. **Historical p=f=u=n=N=0, rate=null and interval=null.** The new reconstruction examples are calibration cases; they do not supply actual executions or a historical win rate.
+
+[Direct chart/figure comparisons](/workspace/implementation/reports/phase1-live/methods/CHART_CHECK.md) cover all 12 methods, including dated computable geometry, explicitly limited input comparisons, and unavailable process replays. The primary assistant performed every visual comparison without subagents. FORMULAS changed only for the source-supported NQ eligibility, depth-scope and count-provenance correction; its affected hashes were re-audited. The research reconstructions have separate assumptions. Phase 2 was not started.
 
 All 12 commands exited 0. Cohort arithmetic, 50 branch-hole records, report artifacts and hashes were verified. Fixture entries below are software checks only. With N=0, faithful disagreements are not estimable; zero leakage/proxy emissions describe empty historical output and do not demonstrate method performance.
 
@@ -38,11 +42,11 @@ All 12 commands exited 0. Cohort arithmetic, 50 branch-hole records, report arti
 | MEMBER-TWO-REASONS | M07 | source_hole | 233 software checks; 0 failures | 0 emitted | 0 emitted | 2 selector holes; native_profile_only |
 | KEANI-OPEN-ABOVE-VALUE | M08 | source_hole | 205 software checks; 0 failures | 0 emitted | 0 emitted | 1 selector holes; A_period_geometry_checked |
 | REFILL-STUDY | M09 | source_hole | 220 software checks; 0 failures | 0 emitted | 0 emitted | 2 selector holes; native_print_geometry_only |
-| JETBUNDLE-STATES | M10 | source_hole | 141 software checks; 0 failures | 0 emitted | 0 emitted | 5 selector holes; native_source_reconstruction_blocked |
+| JETBUNDLE-STATES | M10 | source_hole | 141 software checks; 0 failures | 0 emitted | 0 emitted | 5 selector holes; NQ_eligible_state_classifier_undefined |
 | STOIC-DATA | M11 | source_hole | 138 software checks; 0 failures | 0 emitted | 0 emitted | 2 selector holes; process_geometry_unavailable_vintage_supplement |
 | STOIC-RISK | M12 | source_hole | 97 software checks; 0 failures | 0 emitted | 0 emitted | 3 selector holes; dated_replay_unavailable_printed_arithmetic_checked |
 
-Implementation content hash: `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`. Source-selector audit hash: `2e41d96c71e0e3a714624b532ed3b4ba499e28e116539803084dd8259d26951c`.
+Implementation content hash: `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`. Source-selector audit hash: `6119ab2fab40d794ad4fc39d360236d1978b8f4744f58f77b2293f77a55a9006`.
 
 [Machine cohort verification](/workspace/implementation/reports/phase1-live/methods/pass-summary.json) · [Commands and output](/workspace/implementation/reports/phase1-live/methods/command-results.json) · [Chart and report verification](/workspace/implementation/reports/phase1-live/methods/charts/final-verification.json)
 

@@ -2,7 +2,7 @@
 
 formula_version: `method-pack-v1`
 status: `source_hole`
-created_at: `2026-09-12T09:44:46Z`
+created_at: `2026-09-12T10:48:13Z`
 
 ## Headline
 
@@ -56,7 +56,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"detected_causal_violations": 54, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb39481bd9ca8e2da5c2d0cc97749a5c61b92f3ab769d7131ddc0989eab88d8`.
+Implementation: `f7850418c2fffdcbb9b67d52fdea9609e9cbd460`; content hash `30e8f63115b6ecb6d5ab6c62aa8e67675a82cfcfc159f2737d963484f6a9bbf9`.
 
 ## Holes
 
@@ -66,11 +66,11 @@ Implementation: `43fa8e55f5108ca765dd1a520caea1f74d91faf1`; content hash `abb394
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/holes.jsonl sha256=bbbaeefb4b8095f007579e579414b4e979c06fb143ad8e6ff0bc0fc70dfc1b31
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/fixtures.json sha256=4860ec58a6c4e7354747d1f4c89669ba9af71f29abb4c0d79474a334086ee128
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/cohort.json sha256=7c677ae8fba595a9ac45197577a61d927e2d4404af7b3962b18976347f99e5ee
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-sk5w_azv/coverage.json sha256=4da1247f21783ec9aefe1279c244a7c4a1fdc8a6ea27f95b7e22be20fc64d2ea
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/holes.jsonl sha256=acb1fcb91c2651459aec83d87dce7eee4cb2b494ca367dd9b54d2a51826f87bf
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/fixtures.json sha256=112c65e9a54af6e598ce47c8607b5488dd523e42bba55d859a8bd2b7d7a2c669
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/cohort.json sha256=b76d552097f0b42303932e2d9a3438e84ed10e321ef37200e1e1bfe07e4c85c0
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/refill-study/run-1gfh04p9/coverage.json sha256=4da1247f21783ec9aefe1279c244a7c4a1fdc8a6ea27f95b7e22be20fc64d2ea
