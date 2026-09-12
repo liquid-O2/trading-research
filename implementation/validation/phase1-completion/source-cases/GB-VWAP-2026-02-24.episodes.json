@@ -1,0 +1,424 @@
+{
+  "formula_version": "method-pack-v1",
+  "candidates": [
+    {
+      "candidate_id": "GB-VWAP-2026-02-24:native-control",
+      "method_id": "GB-VWAP",
+      "branch": "source_long",
+      "side": "long",
+      "instrument_id": 42002475,
+      "session_date_et": "2026-02-24",
+      "decision_at": 1771945260000000000,
+      "band_ids": [
+        "GB-VWAP-2026-02-24:selected-reference"
+      ],
+      "object_ids": [
+        "GB-VWAP-2026-02-24:asia:O046",
+        "GB-VWAP-2026-02-24:london:O046",
+        "GB-VWAP-2026-02-24:breakout_candle:O004",
+        "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "GB-VWAP-2026-02-24:retest_candle:O002"
+      ],
+      "assertion_ids": [],
+      "cohort_id": "fixed_source_comparisons_v2",
+      "evidence_mode": "native_control",
+      "variant": "comparison",
+      "source_case_id": "GB-VWAP-2026-02-24",
+      "operands": {
+        "asia_high": {
+          "object_id": "GB-VWAP-2026-02-24:asia:O046"
+        },
+        "asia_known_at": {
+          "object_id": "GB-VWAP-2026-02-24:asia:O046"
+        },
+        "london_high": {
+          "object_id": "GB-VWAP-2026-02-24:london:O046"
+        },
+        "london_known_at": {
+          "object_id": "GB-VWAP-2026-02-24:london:O046"
+        },
+        "breakout_at": {
+          "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004"
+        },
+        "breakout_close": {
+          "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004"
+        },
+        "vwap_at_retest": {
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+        },
+        "vwap_known_at": {
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+        },
+        "vwap_reset_verified": {
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+        },
+        "retest_at": {
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        },
+        "retest_low": {
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        },
+        "retest_high": {
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        }
+      },
+      "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+      "predicate": "sequence"
+    }
+  ],
+  "objects": [
+    {
+      "object_id": "GB-VWAP-2026-02-24:asia:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771894800000000000,
+      "formation_end": 1771909200000000000,
+      "as_of": 1771909200000000000,
+      "known_at": 1771909200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50697,
+          "row_end": 50937
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-VWAP-2026-02-24:asia",
+        "source_clock_verified": false,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:london:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771916400000000000,
+      "formation_end": 1771927200000000000,
+      "as_of": 1771927200000000000,
+      "known_at": 1771927200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51057,
+          "row_end": 51237
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-VWAP-2026-02-24:london",
+        "source_clock_verified": false,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+      "recipe_id": "O004",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771944240000000000,
+      "formation_end": 1771944300000000000,
+      "as_of": 1771944300000000000,
+      "known_at": 1771944300000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51521,
+          "row_end": 51522
+        }
+      ],
+      "inputs": {
+        "kind": "time",
+        "size_minutes": 1,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+      "recipe_id": "O030",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771887600000000000,
+      "formation_end": 1771945200000000000,
+      "as_of": 1771945200000000000,
+      "known_at": 1771945200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50577,
+          "row_end": 51537
+        }
+      ],
+      "inputs": {
+        "reset_id": "comparison-prior-1800",
+        "reset_at": 1771887600000000000,
+        "as_of": 1771945200000000000,
+        "reset_verified": true,
+        "basis": "HLC3",
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+      "recipe_id": "O002",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [
+        "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+      ],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771945200000000000,
+      "formation_end": 1771945260000000000,
+      "as_of": 1771945260000000000,
+      "known_at": 1771945260000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51537,
+          "row_end": 51538
+        }
+      ],
+      "inputs": {
+        "reference_parent_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      }
+    }
+  ],
+  "assertions": [],
+  "evidence": [],
+  "assembly": {
+    "schema": "phase1-method-assembly-v1",
+    "roles": [
+      {
+        "object_id": "GB-VWAP-2026-02-24:asia:O046",
+        "role": "asia",
+        "method_id": "GB-VWAP",
+        "author": "Green Bird",
+        "instrument_id": 42002475,
+        "source_configuration_id": "gb-vwap-continuation",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-VWAP-2026-02-24:asia",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "asia",
+            "formation_start": 1771894800000000000,
+            "formation_end": 1771909200000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      },
+      {
+        "object_id": "GB-VWAP-2026-02-24:london:O046",
+        "role": "london",
+        "method_id": "GB-VWAP",
+        "author": "Green Bird",
+        "instrument_id": 42002475,
+        "source_configuration_id": "gb-vwap-continuation",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-VWAP-2026-02-24:london",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "london",
+            "formation_start": 1771916400000000000,
+            "formation_end": 1771927200000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      },
+      {
+        "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+        "role": "breakout_candle",
+        "method_id": "GB-VWAP",
+        "author": "Green Bird",
+        "instrument_id": 42002475,
+        "source_configuration_id": "gb-vwap-continuation",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-VWAP-2026-02-24:breakout_candle",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "breakout_candle",
+            "formation_start": 1771944240000000000,
+            "formation_end": 1771944300000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      },
+      {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "role": "vwap_at_retest",
+        "method_id": "GB-VWAP",
+        "author": "Green Bird",
+        "instrument_id": 42002475,
+        "source_configuration_id": "gb-vwap-continuation",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-VWAP-2026-02-24:vwap_at_retest",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "vwap_at_retest",
+            "formation_start": 1771887600000000000,
+            "formation_end": 1771945200000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      },
+      {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+        "role": "retest_candle",
+        "method_id": "GB-VWAP",
+        "author": "Green Bird",
+        "instrument_id": 42002475,
+        "source_configuration_id": "gb-vwap-continuation",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-VWAP-2026-02-24:retest_candle",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "retest_candle",
+            "formation_start": 1771945200000000000,
+            "formation_end": 1771945260000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      }
+    ],
+    "limitations": [
+      {
+        "field": "reference_frozen",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "continuation_context",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "side",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      }
+    ]
+  }
+}

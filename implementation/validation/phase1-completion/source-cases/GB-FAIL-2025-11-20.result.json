@@ -1,0 +1,2250 @@
+{
+  "case_id": "GB-FAIL-2025-11-20",
+  "source_case": {
+    "case_id": "GB-FAIL-2025-11-20",
+    "method_id": "GB-FAIL",
+    "source_refs": [
+      "GB:31",
+      "GB:43"
+    ],
+    "configuration_ids": [
+      "gb-nov20-sweep"
+    ],
+    "evidence_mode": "source_illustration",
+    "historical_candidate": false,
+    "date": {
+      "value": "2025-11-20",
+      "status": "fact",
+      "source_refs": [
+        "GB:31",
+        "GB:43"
+      ],
+      "reason": "Date printed in the source."
+    },
+    "instrument": {
+      "value": "MNQZ2025",
+      "status": "fact",
+      "source_refs": [
+        "GB:31",
+        "GB:43"
+      ],
+      "reason": "Source display identity; never silently transferred to NQ."
+    },
+    "timeframe": {
+      "value": {
+        "kind": "time",
+        "minutes": 2
+      },
+      "status": "fact",
+      "source_refs": [
+        "GB:31",
+        "GB:43"
+      ],
+      "reason": "Case-specific visible/published chart configuration."
+    },
+    "observation_interval": {
+      "value": {
+        "start_et": "08:00",
+        "end_et": "11:02",
+        "timezone": "America/New_York"
+      },
+      "status": "fact",
+      "source_refs": [
+        "GB:31",
+        "GB:43"
+      ],
+      "reason": "Visible observation window; fill timestamp is separately unknown."
+    },
+    "observed_decision": {
+      "value": {
+        "kind": "displayed_short_position",
+        "price": "25301.75",
+        "sequence": "entry_at_high_sweep",
+        "fill_time": null
+      },
+      "status": "fact",
+      "source_refs": [
+        "GB:31",
+        "GB:43"
+      ],
+      "reason": "Source illustration or printed process decision; no invented execution record."
+    },
+    "profiles": [],
+    "later_annotations": [
+      {
+        "kind": "later_MSS_FVG",
+        "entry_prerequisite": false
+      },
+      {
+        "kind": "opposing_09_10_low_objective",
+        "planned_before_entry": null
+      }
+    ],
+    "missing_fields": [
+      "actual_fill_time",
+      "actual_fill_ledger",
+      "native_MNQ_data"
+    ],
+    "source_images": [
+      {
+        "image_id": "GB:31:page",
+        "source_key": "GB",
+        "page": 31,
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+        "region": "full original page; figure and caption preserved together"
+      },
+      {
+        "image_id": "GB:43:page",
+        "source_key": "GB",
+        "page": 43,
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+        "region": "full original page; figure and caption preserved together"
+      }
+    ],
+    "recorded_at": "2026-09-12",
+    "contemporaneous_process_record": false,
+    "source_sweep_region": {
+      "value": {
+        "start_et": "10:30",
+        "end_et": "10:44"
+      },
+      "status": "inference",
+      "source_refs": [
+        "GB:43"
+      ],
+      "reason": "Broad region around the eye/position at the later high sweep. This is a retrospective visual locator, not a fill timestamp."
+    },
+    "native_control_windows": [
+      {
+        "control_window_id": "GB-FAIL-2025-11-20:failure_reference",
+        "version": "2.0.0",
+        "role": "failure_reference",
+        "start_et": "2025-11-20T09:00",
+        "end_et": "2025-11-20T10:00",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:31",
+          "GB:43"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      },
+      {
+        "control_window_id": "GB-FAIL-2025-11-20:failure_confirmation",
+        "version": "2.0.0",
+        "role": "failure_confirmation",
+        "start_et": "2025-11-20T10:38",
+        "end_et": "2025-11-20T10:40",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:31",
+          "GB:43"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      }
+    ]
+  },
+  "measurement_result": {
+    "candidate_id": "GB-FAIL-2025-11-20:native-control",
+    "method_id": "GB-FAIL",
+    "branch": "nyam_box",
+    "side": "short",
+    "instrument_id": 158704,
+    "session_date_et": "2025-11-20",
+    "decision_at": 1763653200000000000,
+    "band_ids": [
+      "GB-FAIL-2025-11-20:selected-reference"
+    ],
+    "object_ids": [
+      "GB-FAIL-2025-11-20:failure_reference:O046",
+      "GB-FAIL-2025-11-20:failure_confirmation:O004",
+      "GB-FAIL-2025-11-20:failure_confirmation:O047"
+    ],
+    "assertion_ids": [],
+    "cohort_id": "fixed_source_comparisons_v2",
+    "evidence_mode": "native_control",
+    "variant": "comparison",
+    "source_case_id": "GB-FAIL-2025-11-20",
+    "operands": {
+      "reference_px": {
+        "object_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+        "recipe_id": "O046",
+        "type": "decimal_price?",
+        "value": "25291.5",
+        "known_at": 1763650800000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "reference_known_at": {
+        "object_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+        "recipe_id": "O046",
+        "type": "event_key?",
+        "value": 1763650800000000000,
+        "known_at": 1763650800000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "touch_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O052",
+        "applicability": "required"
+      },
+      "decision_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "touch_in_measured_pocket": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O052",
+        "applicability": "required"
+      },
+      "impulse_known_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O052",
+        "applicability": "required"
+      },
+      "source_session_allowed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O046",
+        "applicability": "required"
+      },
+      "tdo_required": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O049",
+        "applicability": "required"
+      },
+      "retracement_entry": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "pocket_required": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O052",
+        "applicability": "required"
+      },
+      "sweep_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "confirm_close": {
+        "value": null,
+        "type": "decimal_price?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "objective_fixed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "retest_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "confirm_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "box_return_ok": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O046",
+        "applicability": "required"
+      },
+      "context_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O136",
+        "applicability": "required"
+      },
+      "source_tdo_close_confirmed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O049",
+        "applicability": "required"
+      },
+      "sweep_high": {
+        "value": null,
+        "type": "decimal_price?",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "confirmation_mode": {
+        "value": null,
+        "type": "enum",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "reference_frozen": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O046",
+        "applicability": "required"
+      },
+      "side": {
+        "value": null,
+        "type": "enum",
+        "recipe_id": "O047",
+        "applicability": "required"
+      },
+      "risk_defined": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "bias_recorded": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O136",
+        "applicability": "required"
+      },
+      "sweep_low": {
+        "value": null,
+        "type": "decimal_price?",
+        "recipe_id": "O047",
+        "applicability": "not_required"
+      },
+      "complete_clock_five_minute_bar": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O047",
+        "applicability": "not_required"
+      },
+      "source_hold_confirmed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O047",
+        "applicability": "not_required"
+      }
+    },
+    "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+    "predicate": "sequence",
+    "base_ok": true,
+    "coverage_ok": null,
+    "sequence_ok": null,
+    "verdict": "unknown",
+    "failed_prerequisites": [],
+    "hole_ids": [
+      "HOLE:O046:box_return_ok",
+      "HOLE:O046:reference_frozen",
+      "HOLE:O046:source_session_allowed",
+      "HOLE:O047:confirm_at",
+      "HOLE:O047:confirm_close",
+      "HOLE:O047:confirmation_mode",
+      "HOLE:O047:retest_at",
+      "HOLE:O047:retracement_entry",
+      "HOLE:O047:side",
+      "HOLE:O047:sweep_at",
+      "HOLE:O047:sweep_high",
+      "HOLE:O049:source_tdo_close_confirmed",
+      "HOLE:O049:tdo_required",
+      "HOLE:O052:impulse_known_at",
+      "HOLE:O052:pocket_required",
+      "HOLE:O052:touch_at",
+      "HOLE:O052:touch_in_measured_pocket",
+      "HOLE:O136:bias_recorded",
+      "HOLE:O136:context_at",
+      "HOLE:O139:decision_at",
+      "HOLE:O139:objective_fixed",
+      "HOLE:O139:risk_defined"
+    ],
+    "holes": [
+      {
+        "hole_id": "HOLE:O052:touch_at",
+        "recipe_id": "O052",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "touch_at"
+        ],
+        "source_ref": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:decision_at",
+        "recipe_id": "O139",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "decision_at"
+        ],
+        "source_ref": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O052:touch_in_measured_pocket",
+        "recipe_id": "O052",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "touch_in_measured_pocket"
+        ],
+        "source_ref": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O052:impulse_known_at",
+        "recipe_id": "O052",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "impulse_known_at"
+        ],
+        "source_ref": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O046:source_session_allowed",
+        "recipe_id": "O046",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "source_session_allowed"
+        ],
+        "source_ref": "The chosen reference and action interval belong to the cited source case. Incomplete/approximate Asia or unpublished London bounds are not silently author-exact; no hard-coded available-hour count.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O049:tdo_required",
+        "recipe_id": "O049",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "tdo_required"
+        ],
+        "source_ref": "tdo_required is fixed from the selected source variant. If required, its actual completed source close must cross the correct side of midnight TDO; if not required, no TDO observation is invented. Unknown applicability stays unknown.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:retracement_entry",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "retracement_entry"
+        ],
+        "source_ref": "The source entry choice declares whether a later retest is required. Require actual retest after confirmation and before decision, with source MSS/FVG refinement when selected; unspecified construction stays a hole.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O052:pocket_required",
+        "recipe_id": "O052",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "pocket_required"
+        ],
+        "source_ref": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:sweep_at",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "sweep_at"
+        ],
+        "source_ref": "Use the actual same-reference sweep episode and its observed extreme through the required confirmation, never the later morning extreme. For a short only sweep_high is required; for a long only sweep_low. Preserve irrelevant counterpart as not_required.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:confirm_close",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "confirm_close"
+        ],
+        "source_ref": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:objective_fixed",
+        "recipe_id": "O139",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "objective_fixed"
+        ],
+        "source_ref": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:retest_at",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "retest_at"
+        ],
+        "source_ref": "The source entry choice declares whether a later retest is required. Require actual retest after confirmation and before decision, with source MSS/FVG refinement when selected; unspecified construction stays a hole.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:confirm_at",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "confirm_at"
+        ],
+        "source_ref": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O046:box_return_ok",
+        "recipe_id": "O046",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "box_return_ok"
+        ],
+        "source_ref": "For a selected box require the same confirmation back inside both frozen bounds under its source boundary convention. For a single line, return-inside-box is not_required and the composite gate is the logical identity true; retain that applicability instead of claiming a box observation.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O136:context_at",
+        "recipe_id": "O136",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "context_at"
+        ],
+        "source_ref": "Validate the candidate's source directional/context record and actual availability before sweep. A later prior-level or NYAM reclaim cannot supply earlier bias.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O049:source_tdo_close_confirmed",
+        "recipe_id": "O049",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "source_tdo_close_confirmed"
+        ],
+        "source_ref": "tdo_required is fixed from the selected source variant. If required, its actual completed source close must cross the correct side of midnight TDO; if not required, no TDO observation is invented. Unknown applicability stays unknown.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:sweep_high",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "sweep_high"
+        ],
+        "source_ref": "Use the actual same-reference sweep episode and its observed extreme through the required confirmation, never the later morning extreme. For a short only sweep_high is required; for a long only sweep_low. Preserve irrelevant counterpart as not_required.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:confirmation_mode",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "confirmation_mode"
+        ],
+        "source_ref": "Choose the source's disclosed confirmation mode, not whichever passes. The cash-open partial example does not acquire a universal 5 minute rule.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O046:reference_frozen",
+        "recipe_id": "O046",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "reference_frozen"
+        ],
+        "source_ref": "Select the source box edge or single reference with completed formation, exact session/period identity and known_at. reference_px is the actual swept boundary, not the opposing edge or a later final box.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O047:side",
+        "recipe_id": "O047",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "side"
+        ],
+        "source_ref": "Actual source attempt side. It chooses high-failure short versus low-reclaim long; unsupported source-specific mirrors remain holes.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:risk_defined",
+        "recipe_id": "O139",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "risk_defined"
+        ],
+        "source_ref": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O136:bias_recorded",
+        "recipe_id": "O136",
+        "method_id": "GB-FAIL",
+        "candidate_id": "GB-FAIL-2025-11-20:native-control",
+        "branch": "nyam_box",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "bias_recorded"
+        ],
+        "source_ref": "Validate the candidate's source directional/context record and actual availability before sweep. A later prior-level or NYAM reclaim cannot supply earlier bias.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      }
+    ],
+    "detected_causal_violations": 0,
+    "rejected_proxy_attempts": 0,
+    "used_object_ids": [
+      "GB-FAIL-2025-11-20:failure_reference:O046"
+    ],
+    "used_assertion_ids": [],
+    "used_evidence_ids": [],
+    "source_versions": [
+      "source-cases-v2.0.0"
+    ],
+    "year": 2025,
+    "faithful_eligible": false,
+    "historical_eligible": false,
+    "assembly_holes": [
+      {
+        "field": "bias_recorded",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "box_return_ok",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirm_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirm_close",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirmation_mode",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "context_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "impulse_known_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "objective_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "pocket_required",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "reference_frozen",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "retest_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "retracement_entry",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "side",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "source_session_allowed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "source_tdo_close_confirmed",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "sweep_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "sweep_high",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "tdo_required",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "touch_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "touch_in_measured_pocket",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      }
+    ],
+    "source_role_comparison": true,
+    "software_complete": true,
+    "observation_unit": "sequence"
+  },
+  "bindings": [
+    {
+      "method_id": "GB-FAIL",
+      "field": "side",
+      "type": "enum",
+      "units": "enum",
+      "producers": [
+        "O047"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Actual source attempt side. It chooses high-failure short versus low-reclaim long; unsupported source-specific mirrors remain holes.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": "short"
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "reference_frozen",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O046",
+        "O048",
+        "O049",
+        "O050"
+      ],
+      "semantic_role": "failure_reference",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Select the source box edge or single reference with completed formation, exact session/period identity and known_at. reference_px is the actual swept boundary, not the opposing edge or a later final box.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "reference_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O046",
+        "O048",
+        "O049",
+        "O050"
+      ],
+      "semantic_role": "failure_reference",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Select the source box edge or single reference with completed formation, exact session/period identity and known_at. reference_px is the actual swept boundary, not the opposing edge or a later final box.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+      },
+      "applicability": "selected",
+      "value": 1763650800000000000
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "reference_px",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O046",
+        "O048",
+        "O049",
+        "O050"
+      ],
+      "semantic_role": "failure_reference",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Select the source box edge or single reference with completed formation, exact session/period identity and known_at. reference_px is the actual swept boundary, not the opposing edge or a later final box.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+      },
+      "applicability": "selected",
+      "value": "25291.5"
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "bias_recorded",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O136"
+      ],
+      "semantic_role": "pre_entry_bias",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Validate the candidate's source directional/context record and actual availability before sweep. A later prior-level or NYAM reclaim cannot supply earlier bias.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "context_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O136"
+      ],
+      "semantic_role": "pre_entry_bias",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Validate the candidate's source directional/context record and actual availability before sweep. A later prior-level or NYAM reclaim cannot supply earlier bias.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "source_session_allowed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O046",
+        "O003"
+      ],
+      "semantic_role": "source_session",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "The chosen reference and action interval belong to the cited source case. Incomplete/approximate Asia or unpublished London bounds are not silently author-exact; no hard-coded available-hour count.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "sweep_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O047"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use the actual same-reference sweep episode and its observed extreme through the required confirmation, never the later morning extreme. For a short only sweep_high is required; for a long only sweep_low. Preserve irrelevant counterpart as not_required.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "sweep_high",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O047"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use the actual same-reference sweep episode and its observed extreme through the required confirmation, never the later morning extreme. For a short only sweep_high is required; for a long only sweep_low. Preserve irrelevant counterpart as not_required.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "sweep_low",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O047"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use the actual same-reference sweep episode and its observed extreme through the required confirmation, never the later morning extreme. For a short only sweep_high is required; for a long only sweep_low. Preserve irrelevant counterpart as not_required.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "confirmation_mode",
+      "type": "enum",
+      "units": "enum",
+      "producers": [
+        "O047"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Choose the source's disclosed confirmation mode, not whichever passes. The cash-open partial example does not acquire a universal 5 minute rule.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "complete_clock_five_minute_bar",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O047",
+        "O003"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "confirm_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O047",
+        "O003"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "confirm_close",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O047",
+        "O003"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "source_hold_confirmed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O047",
+        "O003"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Five-minute mode uses full aligned interval and close at interval end, with actual sweep before confirmation. Hold mode requires the source-observed reclaim/hold and its actual completion value/key; undisclosed automatic hold duration gives unknown. Do not group five available rows or stamp bar start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "box_return_ok",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O046",
+        "O047"
+      ],
+      "semantic_role": "failure_confirmation",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "For a selected box require the same confirmation back inside both frozen bounds under its source boundary convention. For a single line, return-inside-box is not_required and the composite gate is the logical identity true; retain that applicability instead of claiming a box observation.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "tdo_required",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O049",
+        "O047"
+      ],
+      "semantic_role": "tdo_refinement",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "tdo_required is fixed from the selected source variant. If required, its actual completed source close must cross the correct side of midnight TDO; if not required, no TDO observation is invented. Unknown applicability stays unknown.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "source_tdo_close_confirmed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O049",
+        "O047"
+      ],
+      "semantic_role": "tdo_refinement",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "tdo_required is fixed from the selected source variant. If required, its actual completed source close must cross the correct side of midnight TDO; if not required, no TDO observation is invented. Unknown applicability stays unknown.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "pocket_required",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O052"
+      ],
+      "semantic_role": "measured_impulse_pocket",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "impulse_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O052"
+      ],
+      "semantic_role": "measured_impulse_pocket",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "touch_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O052"
+      ],
+      "semantic_role": "measured_impulse_pocket",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "touch_in_measured_pocket",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O052"
+      ],
+      "semantic_role": "measured_impulse_pocket",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Required only in the selected measured-impulse case. Use the exact completed source impulse and subsequent band contact; down-impulse pocket is[L+0.5W, L+0.618W]. touch_at is this pocket contact when required, otherwise the source location contact. No 9\u201310 net-candle substitution.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "retracement_entry",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O047",
+        "O054",
+        "O055"
+      ],
+      "semantic_role": "retracement_entry",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "The source entry choice declares whether a later retest is required. Require actual retest after confirmation and before decision, with source MSS/FVG refinement when selected; unspecified construction stays a hole.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "retest_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O047",
+        "O054",
+        "O055"
+      ],
+      "semantic_role": "retracement_entry",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "The source entry choice declares whether a later retest is required. Require actual retest after confirmation and before decision, with source MSS/FVG refinement when selected; unspecified construction stays a hole.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "risk_defined",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O139",
+        "O141",
+        "O150"
+      ],
+      "semantic_role": "structural_risk",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "objective_fixed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O139",
+        "O141",
+        "O150"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-FAIL",
+      "field": "decision_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O139",
+        "O141",
+        "O150"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "nyam_box",
+        "previous_hour",
+        "asia_tdo_case",
+        "prior_day_level",
+        "prior_week_level",
+        "prior_month_level",
+        "cash_open_reclaim_case",
+        "mss_fvg_refinement"
+      ],
+      "rule": "Use actual predeclared source stop and opposing/session/prior-level objective, then actual entry/decision. No universal stop beyond every sweep extreme; target outcome is measured separately after this decision.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": 1763653200000000000
+    }
+  ],
+  "assembly_holes": [
+    {
+      "field": "bias_recorded",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "box_return_ok",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "confirm_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "confirm_close",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "confirmation_mode",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "context_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "decision_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "impulse_known_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "objective_fixed",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "pocket_required",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "reference_frozen",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "retest_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "retracement_entry",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "risk_defined",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "side",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "source_session_allowed",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "source_tdo_close_confirmed",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "sweep_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "sweep_high",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "tdo_required",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "touch_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    },
+    {
+      "field": "touch_in_measured_pocket",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:31; GB:43"
+    }
+  ],
+  "resolved_objects": [
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "known_at": 1763650800000000000,
+        "source_clock_verified": null,
+        "coverage_ok": true,
+        "box_high": "25291.5",
+        "box_low": "25146.0",
+        "box_width": "145.5",
+        "box_id": "GB-FAIL-2025-11-20:09-10",
+        "formation_start": 1763647200000000000,
+        "formation_end": 1763650800000000000,
+        "boundary_ids": {
+          "high": "GB-FAIL-2025-11-20:09-10:high",
+          "low": "GB-FAIL-2025-11-20:09-10:low"
+        },
+        "reference_px": "25291.5",
+        "reference_known_at": 1763650800000000000
+      },
+      "units": {
+        "reference_px": "decimal_price?",
+        "reference_known_at": "event_key?"
+      },
+      "formation_start": 1763647200000000000,
+      "formation_end": 1763650800000000000,
+      "as_of": 1763650800000000000,
+      "known_at": 1763650800000000000,
+      "state": "hole",
+      "hole_ids": [
+        "HOLE:O046:source_clock"
+      ],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309759,
+          "row_end": 309819
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-FAIL-2025-11-20:09-10",
+        "clock_variant": "nyam",
+        "source_clock_verified": true,
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "reference_px",
+          "source_quantity": "box_high",
+          "operation": "side_reference",
+          "role": "failure_reference",
+          "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+        },
+        {
+          "field": "reference_known_at",
+          "source_quantity": "@known_at",
+          "operation": "exact",
+          "role": "failure_reference",
+          "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+        }
+      ]
+    },
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_confirmation:O004",
+      "recipe_id": "O004",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "bar_id": "158704:1763653080000000000:1763653200000000000",
+        "instrument_id": 158704,
+        "kind": "time",
+        "size": "2m",
+        "start": 1763653080000000000,
+        "end": 1763653200000000000,
+        "complete": true,
+        "known_at": 1763653200000000000,
+        "native_source_compatible": true,
+        "coverage_state": "complete",
+        "member_event_ids": [
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309857:158704",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309858:158704"
+        ],
+        "missing_intervals": [],
+        "O": "25307.25",
+        "H": "25310.0",
+        "L": "25278.75",
+        "C": "25291.75",
+        "V": "3046.0"
+      },
+      "units": {},
+      "formation_start": 1763653080000000000,
+      "formation_end": 1763653200000000000,
+      "as_of": 1763653200000000000,
+      "known_at": 1763653200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309857,
+          "row_end": 309859
+        }
+      ],
+      "inputs": {
+        "kind": "time",
+        "size_minutes": 2,
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native"
+    },
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_confirmation:O047",
+      "recipe_id": "O047",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [
+        "GB-FAIL-2025-11-20:failure_reference:O046",
+        "GB-FAIL-2025-11-20:failure_confirmation:O004"
+      ],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "sweep_at": 1763653080001832123,
+        "sweep_extreme": "25310.0",
+        "confirm_at": 1763653200000000000,
+        "failure_confirmed": null,
+        "reference_known_before_sweep": true,
+        "confirmation_type": null,
+        "sweep_high": "25310.0",
+        "sweep_low": null,
+        "confirm_close": "25291.75",
+        "complete_clock_five_minute_bar": false,
+        "box_return_ok": false,
+        "retest_at": null
+      },
+      "units": {},
+      "formation_start": 1763653080000000000,
+      "formation_end": 1763653200000000000,
+      "as_of": 1763653200000000000,
+      "known_at": 1763653200000000000,
+      "state": "hole",
+      "hole_ids": [
+        "HOLE:O047:confirmation_type",
+        "HOLE:O047:source_confirmation",
+        "HOLE:O046:source_clock",
+        "HOLE:O047:native_coverage"
+      ],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+          "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e",
+          "row_start": 1860698,
+          "row_end": 1862818
+        }
+      ],
+      "inputs": {
+        "reference_parent_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+        "measurement_side": "high",
+        "confirmation_bar_parent_id": "GB-FAIL-2025-11-20:failure_confirmation:O004",
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": null,
+      "evidence_class": "resolved_native"
+    }
+  ],
+  "native_window_audits": [
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 158704,
+      "start_ns": 1763647200000000000,
+      "end_ns": 1763650800000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309759,
+          "row_end": 309819
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309759,
+          "row_end": 309819
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 60,
+      "native_minute_count": 60,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 158704,
+      "start_ns": 1763653080000000000,
+      "end_ns": 1763653200000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309857,
+          "row_end": 309859
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309857,
+          "row_end": 309859
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 2,
+      "native_minute_count": 2,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+      "instrument_id": 158704,
+      "start_ns": 1763653080000000000,
+      "end_ns": 1763653200000000000,
+      "required": "trades",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 2,
+        "mismatch_count": 0,
+        "native_executed_volume": "3046",
+        "reference_ohlcv_volume": "3046.0",
+        "net_volume_difference": "0.0",
+        "window_volume_matches": true,
+        "all_minute_allocations_match": true,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+          "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e",
+          "row_start": 1860698,
+          "row_end": 1862818
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+          "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309857,
+          "row_end": 309859
+        }
+      ],
+      "minute_reconciliation": [
+        {
+          "minute_start": 1763653080000000000,
+          "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309857:158704",
+          "executed_volume": "1729",
+          "ohlcv_volume": "1729.0",
+          "trade_count": 1226,
+          "endpoint_order": "unique_timestamp",
+          "matched": true
+        },
+        {
+          "minute_start": 1763653140000000000,
+          "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309858:158704",
+          "executed_volume": "1317",
+          "ohlcv_volume": "1317.0",
+          "trade_count": 894,
+          "endpoint_order": "unique_timestamp",
+          "matched": true
+        }
+      ],
+      "native_row_count": 2120,
+      "native_minute_count": 2,
+      "excluded_unowned_rows": 0,
+      "method": "all_native_rows_plus_independent_minute_volume_ohlc_reconciliation"
+    }
+  ],
+  "source_case_agreement": "Literal native computations and declared sequence are reviewable; no author fill or complete source-method pass is inferred.",
+  "faithful_disagreements": null,
+  "historical_candidates": null,
+  "comparison_only_fields": [
+    "sweep_at",
+    "sweep_high",
+    "sweep_low",
+    "confirm_close"
+  ],
+  "source_predicate_exclusion_reason": "The selected NQ 10:38\u201310:40 measurements are not observed MNQ source sweep/fill or confirmation records. They remain in resolved_objects; actual source entry is the earlier sweep, with later MSS/FVG retained only as annotations."
+}

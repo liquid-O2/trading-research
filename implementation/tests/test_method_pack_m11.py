@@ -132,7 +132,8 @@ def test_m11_owned_primitives_keep_custom_engines_as_holes():
     assert comparison.value["standardized"] == 2
     empty = RECIPES["O160"]({"baseline": [], "x": 4, "convention": "population",
                               "known_at": m11._at(m11.JAN1), "use_at": m11._at(m11.JAN2)})
-    assert empty.state == "invalid" and empty.base_ok is False
+    assert empty.state == "hole" and empty.value['standardized_deviation'] is None
+    assert 'HOLE:O160:baseline_values' in empty.hole_ids
     strength = RECIPES["O161"]({"regression_slope": "0.5",
                                  "known_at": m11._at(m11.JAN1), "use_at": m11._at(m11.JAN2)})
     assert strength.state == "hole" and strength.value["automatic_strength"] is None

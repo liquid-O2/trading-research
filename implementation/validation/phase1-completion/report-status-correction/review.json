@@ -1,0 +1,55 @@
+{
+  "schema": "phase1-report-status-correction-v1",
+  "reviewer": "parent",
+  "reviewed_at": "2026-09-12T16:43:13.565764+00:00",
+  "problem": "The top-level method report used source_hole for every run with passing implementation checks, obscuring the successful implementation dimension.",
+  "change": "The headline and audit verdict now report checks_passed or implementation_fail, explicitly scoped to implementation checks. PHASE rows separately retain historical_unavailable or evidence_incomplete. Unavailable historical counts display as unavailable throughout Markdown.",
+  "preserved_domain_evidence": "Domain producers, source configurations, semantic admission, native calculations, source-case decisions and chart builders are byte-identical to the previously accepted implementation.",
+  "changed_tested_inputs": {
+    "implementation/src/trading_research/research/method_pack/pass_runner.py": {
+      "previous_sha256": "3eb205194e9b08e8ee945f2cea1e81f58e1073e3216b658ba3b0074dbfd956b4",
+      "current_sha256": "5b1c42784a1cc8012ff559dd91f3d96cca1a2be4348522f543da9b22fbab6501"
+    },
+    "implementation/src/trading_research/research/method_pack/report.py": {
+      "previous_sha256": "5e79fc5964ccf04d3790afa7658709a092889f7acefc425da7024a772bc385d4",
+      "current_sha256": "7e879941c2d74de07ebf483d5d6611ab73d36ea42e732b8dce2d80f00b181b98"
+    },
+    "implementation/tests/test_method_pack_command.py": {
+      "previous_sha256": "22e073160cf66459f86879fa10402aa491f63c5e82c59bca22ce684ab7336e14",
+      "current_sha256": "3b27d608da291e9a1fd8372705a9eb2b2960f240496782eb854a4d1dd7a3e07d"
+    },
+    "implementation/tests/test_method_pack_m02.py": {
+      "previous_sha256": "302fc0b053922f1fe3eeefdd67979307229d112bf1738b792e16fa8587e1066b",
+      "current_sha256": "f6c983d4f85a01b76a4f2ce79bb6764be3e7276f879e25f24a4f5b6c5d623e1a"
+    },
+    "implementation/tests/test_method_pack_m03.py": {
+      "previous_sha256": "2b4828a405889c4dfa27440ba7e884118a346c9ef9312b0737e71c8ef25fb3da",
+      "current_sha256": "0de3fadb346e12f09bc0c5dabc4a7193c5e8f2388b1e6c03aa4b62949ad483d3"
+    },
+    "implementation/tests/test_method_pack_m04.py": {
+      "previous_sha256": "42c6f4362517d24a6299cfdaaea51e3d220820e50a176e6c611fe9f9f1f1f037",
+      "current_sha256": "d46acf0d17bae944429ef94268022bf20fe016a1507f89ced35d9afbd2cd19d2"
+    },
+    "implementation/tests/test_method_pack_m10.py": {
+      "previous_sha256": "a6760faa2519f98a0247af9d9cfb11dd8f8c6c17fa63115675cd50164ef184af",
+      "current_sha256": "44a4634bea963cdf933f6a05d327f61088399eb389468480f6670eadd2a9200c"
+    },
+    "implementation/tools/verify_phase1_completion.py": {
+      "previous_sha256": "a7770f016c60e3e3fbeba74f64b5e9551474caef3c001376ff114954539559eb",
+      "current_sha256": "86ed271d136329ef99ed9adfb4c7b1577c4a467180e66790d7e97c3ded3c4bc1"
+    }
+  },
+  "unchanged_tested_input_count": 375,
+  "previous_test_record": {
+    "path": "/workspace/implementation/validation/phase1-completion/report-status-correction/previous/test-run.json",
+    "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+  },
+  "current_test_record": {
+    "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+    "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+  },
+  "validation": "Full suite passed. Command regressions verify passing implementation with unavailable discovery, preserved pass/fail/unknown episode counts, and a forced failed fixture that must remain implementation_fail with exit code 1.",
+  "current_implementation_dirty_hash": "e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed",
+  "unknowns_preserved": true,
+  "domain_review_statuses_changed": false
+}

@@ -17,11 +17,49 @@ from trading_research.research.method_pack import FORMULA_VERSION, HEADLINE, SOU
 STATUSES = frozenset({
     "not_run",
     "implementation_fail",
+    "checks_passed",
     "source_hole",
     "data_hole",
     "measured",
     "no_candidates",
 })
+PHASE_TABLE = 'family | variant | n | faithful_disagreements | status | report path'
+AUDIT_TABLE = 'family | id | verdict | fixture | leakage | proxy-as-faithful | notes'
+
+
+def summary_status(summary: dict, implementation_status: str) -> str:
+    """Name the check result and the distinct observation/discovery result."""
+    if implementation_status != 'checks_passed':
+        return implementation_status
+    if summary.get('search_status') == 'unavailable':
+        evidence_status = 'historical_unavailable'
+    elif summary['u']:
+        evidence_status = 'evidence_incomplete'
+    elif summary['N']:
+        evidence_status = 'observations_scored'
+    else:
+        evidence_status = 'no_observations'
+    return f'{implementation_status}; {evidence_status}'
+
+
+def family_tables(doc: dict, report_path: str) -> tuple[list[str], list[str]]:
+    """Required family tables retain unavailable denominators explicitly."""
+    method = doc['identity']['method_id']
+    phase = [PHASE_TABLE]
+    for summary in doc['summaries']:
+        unavailable = summary.get('search_status') == 'unavailable'
+        variant = f"{summary['predicate']} / {summary['cohort']}"
+        n = '—' if unavailable else summary['n']
+        # A rule verdict is not a matched source-versus-reconstruction audit.
+        # No faithful disagreement count exists without that paired evidence.
+        phase.append(f"{method} | {variant} | {n} | — | {summary_status(summary, doc['status'])} | {report_path}")
+    from .catalog import METHOD_BY_ID
+    q = doc['quality']
+    historical = doc.get('dimensions', {}).get('historical_discovery', {}).get('status', 'unreported')
+    notes = f"implementation checks; historical discovery {historical}; source agreement separate; schema failures={q.get('output_schema_failures', 0)}; missing bindings={q.get('missing_operand_implementations', 0)}"
+    audit = [AUDIT_TABLE,
+        f"{method} | {METHOD_BY_ID[method]} | {doc['status']} | {q['fixture_failures']} failures | {q['leakage_count']} | {q['proxy_as_faithful_count']} | {notes}"]
+    return phase, audit
 
 
 def counts(verdicts: list[str]) -> dict:
@@ -95,10 +133,13 @@ def format_year_split(years: dict | None) -> str:
 
 
 def headline_row(method_id: str, predicate: str, summary: dict, status: str, report_path: str) -> str:
+    unavailable = summary.get('search_status') == 'unavailable'
+    n = '—' if unavailable else summary['n']
+    years = '—' if unavailable else format_year_split(summary.get('years'))
     return (
-        f"{method_id} | {predicate} | {summary['n']} | "
+        f"{method_id} | {predicate} | {n} | "
         f"{format_rate(summary.get('rate'))} | {format_interval(summary.get('interval'))} | "
-        f"{format_year_split(summary.get('years'))} | {status} | {report_path}"
+        f"{years} | {status} | {report_path}"
     )
 
 
@@ -183,8 +224,13 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
         f"# {identity['method_id']} method pass",
         "",
         f"formula_version: `{identity['formula_version']}`",
-        f"status: `{doc['status']}`",
+        f"implementation_checks: `{doc['status']}`",
+        f"historical_discovery: `{doc.get('dimensions', {}).get('historical_discovery', {}).get('status', 'unreported')}`",
         f"created_at: `{identity['created_at']}`",
+        "",
+        "Implementation checks, source reconstruction and historical discovery are separate results. "
+        "A passing check verifies the report's implementation evidence; it does not establish "
+        "every private source setting or a historical sample.",
         "",
         "## Headline",
         "",
@@ -195,7 +241,8 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
         "## Summary",
         "",
         f"- predicate: {summary.get('predicate')}",
-        f"- p={summary.get('p')} f={summary.get('f')} u={summary.get('u')} n={summary.get('n')} N={summary.get('N')}",
+        '- Historical counts: unavailable (search not completed).' if summary.get('search_status') == 'unavailable'
+        else f"- p={summary.get('p')} f={summary.get('f')} u={summary.get('u')} n={summary.get('n')} N={summary.get('N')}",
         f"- rate: {format_rate(summary.get('rate'))}",
         f"- interval: {format_interval(summary.get('interval'))}",
         f"- candidate_discovery: {doc.get('scope', {}).get('candidate_discovery')}",
@@ -207,17 +254,20 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
     review = doc.get('discovery_audit') or {}
     if review:
         lines.extend([f"Audit: `{review['audit_version']}`; source contracts checked against their recorded hashes.",
-                      '', 'branch | complete selector | missing source inputs', '--- | --- | ---'])
+                      '', 'branch | complete selector | unavailable inputs', '--- | --- | ---'])
         for branch, row in review['branches'].items():
             lines.append(f"{branch} | no | {', '.join(row['missing_fields'])}")
         lines.extend(['', next(iter(review['branches'].values()))['reason'],
                       '', 'Each branch has a candidate-selector record in the `holes.jsonl` artifact, including its producer rules.'])
     lines.extend(['', '## Branches', ''])
     for branch, row in [*(doc.get("branches") or {}).items(), *(doc.get("case_branches") or {}).items()]:
-        lines.append(
-            f"- `{branch}` ({row.get('cohort')}) p={row.get('p')} f={row.get('f')} u={row.get('u')} "
-            f"n={row.get('n')} N={row.get('N')} status={row.get('status')}"
-        )
+        if row.get('search_status') == 'unavailable':
+            lines.append(f"- `{branch}` ({row.get('cohort')}): historical discovery unavailable; denominator unestablished.")
+        else:
+            lines.append(
+                f"- `{branch}` ({row.get('cohort')}) p={row.get('p')} f={row.get('f')} u={row.get('u')} "
+                f"n={row.get('n')} N={row.get('N')} status={row.get('status')}"
+            )
         for cohort in row.get('cohorts', []):
             lines.append(f"- `{branch}` / {cohort['predicate']} / {cohort['cohort']} / {cohort['evidence_mode']}: "
                          f"p={cohort['p']} f={cohort['f']} u={cohort['u']} n={cohort['n']} N={cohort['N']}")
@@ -225,7 +275,10 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
                   'predicate | cohort | mode | instrument | source versions | p | f | u | n | N | ET years',
                   '--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---'])
     for row in doc['summaries']:
-        lines.append(f"{row['predicate']} | {row['cohort']} | {row['evidence_mode']} | {row.get('instrument_id')} | {','.join(row.get('source_versions', []))} | {row['p']} | {row['f']} | {row['u']} | {row['n']} | {row['N']} | {format_year_split(row['years'])}")
+        unavailable = row.get('search_status') == 'unavailable'
+        displayed_counts = ' | '.join('—' if unavailable else str(row[key]) for key in ('p', 'f', 'u', 'n', 'N'))
+        years = '—' if unavailable else format_year_split(row['years'])
+        lines.append(f"{row['predicate']} | {row['cohort']} | {row['evidence_mode']} | {row.get('instrument_id')} | {','.join(row.get('source_versions', []))} | {displayed_counts} | {years}")
     lines.extend(['', '## Coverage', '',
                   f"Historical study scope: `{doc['scope'].get('historical_study')}`.",
                   f"Archive requested span (inventory, not the method sample): `{doc['scope'].get('requested_date_span')}`.",
@@ -235,6 +288,16 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
                   '', '## Validation', '',
                   f"Quality: `{json.dumps(doc['quality'], sort_keys=True)}`.",
                   f"Implementation: `{identity['implementation_version']}`; content hash `{identity['implementation_dirty_hash']}`."])
+    lines.extend(['', '## Separate acceptance dimensions', ''])
+    for name, detail in doc.get('dimensions', {}).items():
+        lines.append(f"- {name}: `{json.dumps(detail, sort_keys=True)}`")
+    lines.extend(['', 'Historical discovery is unavailable. Its denominator is unestablished; zero ledger rows do not report a completed search with zero candidates.'])
+    phase, audit = family_tables(doc, str(Path(doc['artifacts']['cohort.json']['path']).parents[2] / f"{SLUGS[identity['method_id']]}.md"))
+    lines.extend(['', '## Required family tables', '',
+                  'Status reports implementation checks first, followed by the separately scoped evidence result. '
+                  'The audit verdict covers implementation checks; unknown historical denominators remain unavailable.',
+                  '', phase[0], '--- | --- | --- | --- | --- | ---', *phase[1:],
+                  '', audit[0], '--- | --- | --- | --- | --- | --- | ---', *audit[1:]])
     lines.extend(["", "## Holes", ""])
     holes = doc.get("source_limitations") or []
     if not holes:

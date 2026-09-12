@@ -16,7 +16,7 @@ from .logic import kleene_and, kleene_cmp, verdict
 from .protocol import RECIPES, jsonable, run_recipe
 from .stages import stage_at, audit_candidate
 
-MODES = {'raw_derived', 'supplied_contemporaneous', 'source_illustration', 'synthetic_fixture'}
+MODES = {'raw_derived', 'supplied_contemporaneous', 'source_illustration', 'synthetic_fixture', 'native_control'}
 CASE_BRANCHES = {'pre_file_early', 'third_retest_case', 'late_resistance_fade_case', 'ofm_early_refill_case'}
 IDENTITY = ('method_id', 'instrument_id', 'side')
 
@@ -66,6 +66,63 @@ def _ids(value, label):
         raise SchemaError(f'{label} contains duplicate IDs')
 
 
+# In-process admission identity cannot be forged by a JSON manifest. Parsing
+# removes claimed audit markers; only verified source audit may set this token.
+class _AdmissionToken:
+    def __deepcopy__(self, memo):
+        return self
+
+
+_SOURCE_ADMISSION = _AdmissionToken()
+
+
+def mark_source_admitted(record, field):
+    record.setdefault('_source_admission', {})[field] = _SOURCE_ADMISSION
+
+
+def source_admitted(record, field):
+    return record.get('_source_admission', {}).get(field) is _SOURCE_ADMISSION
+
+
+def audit_source_domain_object(record, evidence):
+    """Recompute a supplied dependency/action from its complete cited inputs.
+
+    No caller-written output dictionary is admitted as a native dependency.
+    Actual source-record inputs and the full domain schema are both required.
+    """
+    from .contracts import validate_output
+    from .protocol import run_recipe, jsonable
+    from .semantic_views import source_citation, AUTHORS
+    if record.get('author',record['method_id']) not in AUTHORS[record['method_id']]:
+        raise SchemaError('supplied dependency/action has foreign source author')
+    matches=[]
+    for eid in record.get('evidence_ids',[]):
+        ev=evidence[eid];payload=ev.get('payload',{});inputs=payload.get('recipe_inputs')
+        if payload.get('recipe_id')!=record['recipe_id'] or not isinstance(inputs,dict) or not _has_observation(inputs):continue
+        for key in ('instrument_id','method_id','author'):
+            if key in inputs and str(inputs[key])!=str(record.get(key,inputs[key])):
+                raise SchemaError('supplied dependency/action input identity differs from record')
+        try:source_citation(payload.get('source_citation'),record['method_id'])
+        except ValueError as exc:raise SchemaError(str(exc)) from exc
+        result=validate_output(run_recipe(record['recipe_id'],deepcopy(inputs)))
+        if result.state=='invalid' or result.base_ok is False:raise SchemaError('invalid supplied dependency/action source record')
+        if result.known_at is None or record.get('known_at') is None or result.known_at>record['known_at']:
+            raise SchemaError('supplied dependency/action backdates actual source inputs')
+        if any(key not in result.value or jsonable(value)!=jsonable(result.value[key]) for key,value in record['value'].items()):
+            raise SchemaError('supplied dependency/action differs from full source recipe rerun')
+        matches.append((eid,result))
+    if not matches:raise SchemaError('supplied dependency/action requires actual cited recipe_inputs and full output schema')
+    eid,result=matches[0]
+    record['value']=result.value
+    record['recipe_base_ok']=result.base_ok
+    record['recipe_coverage_ok']=result.coverage_ok
+    record['evidence_class']='supplied_source_audit'
+    for field,value in result.value.items():
+        mark_source_admitted(record,field)
+        evidence[eid]['payload'][field]=value
+    return result
+
+
 def _observed_value(payload, field):
     if field in payload:
         return True, payload[field]
@@ -77,6 +134,10 @@ def _observed_value(payload, field):
 
 
 def _has_observation(payload):
+    interpreted = payload.get('source_interpretation')
+    if isinstance(interpreted, dict) and isinstance(interpreted.get('citation'), dict) and interpreted.get('observations'):
+        # Full file/hash/role/type verification happens in method assembly.
+        return True
     # A source interpretation must also carry the cited observation. Identity,
     # a Boolean flag, or its timestamp alone is not an observation payload.
     for key in ('observation', 'source_observation', 'events', 'bars', 'trades', 'prices', 'levels'):
@@ -114,7 +175,7 @@ def typed(value, kind, field):
     return value
 
 
-def parse_manifest(document, method_id):
+def parse_manifest(document, method_id, *, resolver=None):
     _required(document, ['formula_version', 'candidates', 'objects', 'assertions', 'evidence'], 'manifest')
     if document['formula_version'] != FORMULA_VERSION:
         raise SchemaError('episode formula_version mismatch')
@@ -124,6 +185,9 @@ def parse_manifest(document, method_id):
     evidence = _index(document['evidence'], 'evidence_id')
     allowed = set(objects_for(method_id))
     for obj in objects.values():
+        obj.pop('_source_admission', None)
+        obj.pop('source_audits', None)
+        if obj.get('state') != 'computed': obj.pop('evidence_class', None)
         _required(obj, ['recipe_id', 'method_id', 'branch_scope', 'author', 'instrument_id',
                         'parent_ids', 'source_ref', 'source_version', 'value', 'units',
                         'formation_start', 'formation_end', 'as_of', 'known_at', 'state',
@@ -147,15 +211,9 @@ def parse_manifest(document, method_id):
             if eid not in evidence:
                 raise SchemaError(f'unknown evidence {eid}')
         if obj['state'] == 'computed':
-            _required(obj, ['inputs', 'raw_member_locators'], 'computed object')
-            if not obj['raw_member_locators']:
-                raise SchemaError('computed object needs immutable raw member locators')
-            result = run_recipe(obj['recipe_id'], obj['inputs'])
-            obj['value'] = result.value
-            obj['state'] = result.state
-            obj['hole_ids'] = result.hole_ids
-            obj['known_at'] = result.known_at if result.known_at is not None else obj['known_at']
-            obj['recipe_base_ok'] = result.base_ok
+            _required(obj, ['inputs'], 'computed object')
+            if not obj.get('raw_member_locators') and not obj['parent_ids']:
+                raise SchemaError('computed object needs immutable raw members or actual parent provenance')
     for ev in evidence.values():
         _required(ev, ['method_id', 'branch', 'instrument_id', 'band_id', 'side',
                        'source_ref', 'source_version', 'description', 'payload',
@@ -170,7 +228,47 @@ def parse_manifest(document, method_id):
             raise SchemaError('unknown evidence mode')
         for key in ('observation_start', 'observation_end', 'known_at'):
             _ns(ev[key], f'evidence.{key}')
+    # Resolve actual parent objects first; JSON list order is not availability.
+    # The manifest cannot replace a parent with a same-price scalar dependency.
+    resolving, resolved_objects = set(), set()
+    def resolve_object(oid):
+        if oid in resolving:
+            raise SchemaError('cyclic object parent identity')
+        if oid in resolved_objects:
+            return
+        resolving.add(oid)
+        obj = objects[oid]
+        for parent in obj['parent_ids']:
+            resolve_object(parent)
+        if obj['state'] == 'computed':
+            from .native_resolution import NativeResolver, NativeEvidenceError
+            from .objects.native_boundary import run_native_object
+            parents = [objects[parent] for parent in obj['parent_ids']]
+            for parent in parents:
+                if parent['state'] == 'supplied':
+                    audit_source_domain_object(parent,evidence)
+            try:
+                result = run_native_object(obj, native_resolver, parents=parents)
+            except NativeEvidenceError as exc:
+                raise SchemaError(str(exc)) from exc
+            obj['value'] = result.value
+            obj['state'] = result.state
+            obj['hole_ids'] = result.hole_ids
+            obj['known_at'] = result.known_at
+            obj['recipe_base_ok'] = result.base_ok
+            obj['recipe_coverage_ok'] = result.coverage_ok
+            obj['evidence_class'] = result.evidence_class
+            obj['units'] = result.units or obj['units']
+        resolving.remove(oid)
+        resolved_objects.add(oid)
+    from .native_resolution import NativeResolver
+    native_resolver = resolver or NativeResolver()
+    for oid in objects:
+        resolve_object(oid)
     for assertion in assertions.values():
+        assertion.pop('_source_admission', None)
+        assertion.pop('source_audits', None)
+        assertion.pop('evidence_class', None)
         _required(assertion, ['field', 'value', 'recipe_id', 'method_id', 'branch', 'candidate_id',
                               'instrument_id', 'band_id', 'side', 'evidence_ids',
                               'observation_start', 'observation_end', 'known_at',
@@ -260,6 +358,13 @@ def parse_manifest(document, method_id):
             raise SchemaError('invalid candidate side')
         if candidate['evidence_mode'] not in MODES:
             raise SchemaError('unknown candidate evidence_mode')
+        if candidate['evidence_mode']=='native_control':
+            from .source_config import load_catalog
+            catalog=load_catalog()
+            case=next((r for r in catalog['cases'] if r['case_id']==candidate.get('source_case_id')),None)
+            if candidate.get('variant')!='comparison' or case is None or case['method_id']!=method_id:
+                raise SchemaError('native control requires comparison variant and exact catalog source case')
+
         for key in ('band_ids', 'object_ids', 'assertion_ids'):
             _ids(candidate[key], f'candidate.{key}')
         _ns(candidate['decision_at'], 'candidate.decision_at', nullable=False)
@@ -304,11 +409,11 @@ def parse_manifest(document, method_id):
     return candidates, objects, assertions, evidence
 
 
-def read_manifest(path, method_id):
+def read_manifest(path, method_id, *, resolver=None):
     try:
         raw = Path(path).read_bytes()
         doc = json.loads(raw, parse_float=Decimal)
-        parsed = parse_manifest(doc, method_id)
+        parsed = parse_manifest(doc, method_id, resolver=resolver)
     except (OSError, json.JSONDecodeError) as exc:
         raise SchemaError(str(exc)) from exc
     return doc, parsed, hashlib.sha256(raw).hexdigest()
@@ -318,6 +423,9 @@ def score_episode(candidate, objects, assertions, evidence):
     method_id = candidate['method_id']
     if method_id == 'JJ-TBR' and candidate['predicate'] == 'management':
         from .secondary import management_record
+        action=objects[candidate['action_object_id']]
+        if candidate.get('evidence_mode')!='synthetic_fixture' and action.get('state')=='supplied' and not source_admitted(action,'action_policy_ok'):
+            raise SchemaError('management action has not passed actual source assembly audit')
         return management_record(candidate, objects, evidence)
     contracts = fields_for(method_id)
     operands, bindings, issues = {}, {}, []
@@ -360,6 +468,9 @@ def score_episode(candidate, objects, assertions, evidence):
             used_objects.add(oid)
             if record['state'] == 'invalid':
                 value = None
+        source_record = ('assertion_id' in binding) or ('object_id' in binding and record.get('state') == 'supplied')
+        if candidate.get('evidence_mode') != 'synthetic_fixture' and source_record and value is not None and not source_admitted(record, field):
+            raise SchemaError(f'{field}: source operand has not passed actual source assembly audit')
         operands[field] = typed(value, contract.type, field)
         if 'object_id' in binding and record['units'].get(key) != contract.type:
             raise SchemaError(f'{field}: object units do not match {contract.type}')
@@ -410,6 +521,12 @@ def score_episode(candidate, objects, assertions, evidence):
             causal_count += 1
             issue(field, 'ordering', 'availability operand predates its actual producer', record['recipe_id'])
         for rec in records:
+            if 'recipe_coverage_ok' in rec:
+                coverage = kleene_and(coverage, rec['recipe_coverage_ok'])
+                if rec['recipe_coverage_ok'] is not True:
+                    issue(field, 'data_coverage', 'producer coverage is incomplete or unknown', record['recipe_id'])
+            if 'recipe_base_ok' in rec:
+                base = kleene_and(base, rec['recipe_base_ok'])
             if rec.get('recipe_base_ok') is False or rec.get('state') == 'invalid':
                 base = False
                 issue(field, 'identity', 'producer object is invalid', record['recipe_id'])
@@ -463,7 +580,7 @@ def score_episode(candidate, objects, assertions, evidence):
                 base = False
                 proxy_count += 1
                 issue(field, 'supplied_record_missing', 'supplied interpretation cannot be counted as raw-derived evidence', record['recipe_id'])
-            if candidate['evidence_mode'] in {'raw_derived', 'supplied_contemporaneous'} and mode in {'source_illustration', 'synthetic_fixture'}:
+            if candidate['evidence_mode'] in {'raw_derived', 'supplied_contemporaneous'} and mode in {'source_illustration', 'synthetic_fixture', 'native_control'}:
                 base = False
                 proxy_count += 1
                 issue(field, 'supplied_record_missing', 'retrospective or synthetic evidence cannot establish historical admission', record['recipe_id'])
@@ -542,6 +659,8 @@ def score_episode(candidate, objects, assertions, evidence):
               'source_versions': sorted({rec['source_version'] for rec in
                                           [*(objects[oid] for oid in used_objects), *(assertions[aid] for aid in used_assertions), *(evidence[eid] for eid in used_evidence)]}),
               'year': datetime.fromtimestamp(candidate['decision_at'] // 1_000_000_000, timezone.utc).astimezone(ZoneInfo('America/New_York')).year}
+    if candidate.get('evidence_mode')=='native_control':
+        result.update(variant='comparison',faithful_eligible=False,historical_eligible=False)
     return result
 
 

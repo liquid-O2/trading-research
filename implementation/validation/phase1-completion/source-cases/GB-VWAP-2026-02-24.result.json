@@ -1,0 +1,2797 @@
+{
+  "case_id": "GB-VWAP-2026-02-24",
+  "source_case": {
+    "case_id": "GB-VWAP-2026-02-24",
+    "method_id": "GB-VWAP",
+    "source_refs": [
+      "GB:33",
+      "GB:34"
+    ],
+    "configuration_ids": [
+      "gb-vwap-continuation"
+    ],
+    "evidence_mode": "source_illustration",
+    "historical_candidate": false,
+    "date": {
+      "value": "2026-02-24",
+      "status": "fact",
+      "source_refs": [
+        "GB:33",
+        "GB:34"
+      ],
+      "reason": "Date printed in the source."
+    },
+    "instrument": {
+      "value": null,
+      "status": "unknown",
+      "source_refs": [
+        "GB:33",
+        "GB:34"
+      ],
+      "reason": "Native instrument/contract not established."
+    },
+    "timeframe": {
+      "value": {
+        "kind": "time",
+        "minutes": 1
+      },
+      "status": "inference",
+      "source_refs": [
+        "GB:33",
+        "GB:34"
+      ],
+      "reason": "Bar spacing resembles one minute; retained source has no readable explicit timeframe label. Frozen prior comparison uses one minute."
+    },
+    "observation_interval": {
+      "value": {
+        "start_et": "08:30",
+        "end_et": "10:25",
+        "timezone": "America/New_York"
+      },
+      "status": "fact",
+      "source_refs": [
+        "GB:33",
+        "GB:34"
+      ],
+      "reason": "Visible observation window; fill timestamp is separately unknown."
+    },
+    "observed_decision": {
+      "value": {
+        "side": "long",
+        "sequence": [
+          "close_above_Asia_and_London",
+          "VWAP_retrace",
+          "entry"
+        ],
+        "stop_points": "30"
+      },
+      "status": "fact",
+      "source_refs": [
+        "GB:33",
+        "GB:34"
+      ],
+      "reason": "Source illustration or printed process decision; no invented execution record."
+    },
+    "profiles": [],
+    "later_annotations": [
+      {
+        "reported_points": [
+          "150",
+          "100"
+        ],
+        "status": "source_conflict",
+        "planned_target": false
+      }
+    ],
+    "missing_fields": [
+      "display_native_contract",
+      "VWAP_reset",
+      "VWAP_basis",
+      "session_clocks",
+      "actual_fill_time"
+    ],
+    "source_images": [
+      {
+        "image_id": "GB:33:page",
+        "source_key": "GB",
+        "page": 33,
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+        "region": "full original page; figure and caption preserved together"
+      },
+      {
+        "image_id": "GB:34:page",
+        "source_key": "GB",
+        "page": 34,
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+        "region": "full original page; figure and caption preserved together"
+      }
+    ],
+    "recorded_at": "2026-09-12",
+    "contemporaneous_process_record": false,
+    "native_control_windows": [
+      {
+        "control_window_id": "GB-VWAP-2026-02-24:asia",
+        "version": "2.0.0",
+        "role": "asia",
+        "start_et": "2026-02-23T20:00",
+        "end_et": "2026-02-24T00:00",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      },
+      {
+        "control_window_id": "GB-VWAP-2026-02-24:london",
+        "version": "2.0.0",
+        "role": "london",
+        "start_et": "2026-02-24T02:00",
+        "end_et": "2026-02-24T05:00",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      },
+      {
+        "control_window_id": "GB-VWAP-2026-02-24:vwap_at_retest",
+        "version": "2.0.0",
+        "role": "vwap_at_retest",
+        "start_et": "2026-02-23T18:00",
+        "end_et": "2026-02-24T10:00",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      },
+      {
+        "control_window_id": "GB-VWAP-2026-02-24:breakout_candle",
+        "version": "2.0.0",
+        "role": "breakout_candle",
+        "start_et": "2026-02-24T09:44",
+        "end_et": "2026-02-24T09:45",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      },
+      {
+        "control_window_id": "GB-VWAP-2026-02-24:retest_candle",
+        "version": "2.0.0",
+        "role": "retest_candle",
+        "start_et": "2026-02-24T10:00",
+        "end_et": "2026-02-24T10:01",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      }
+    ]
+  },
+  "measurement_result": {
+    "candidate_id": "GB-VWAP-2026-02-24:native-control",
+    "method_id": "GB-VWAP",
+    "branch": "source_long",
+    "side": "long",
+    "instrument_id": 42002475,
+    "session_date_et": "2026-02-24",
+    "decision_at": 1771945260000000000,
+    "band_ids": [
+      "GB-VWAP-2026-02-24:selected-reference"
+    ],
+    "object_ids": [
+      "GB-VWAP-2026-02-24:asia:O046",
+      "GB-VWAP-2026-02-24:london:O046",
+      "GB-VWAP-2026-02-24:breakout_candle:O004",
+      "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+      "GB-VWAP-2026-02-24:retest_candle:O002"
+    ],
+    "assertion_ids": [],
+    "cohort_id": "fixed_source_comparisons_v2",
+    "evidence_mode": "native_control",
+    "variant": "comparison",
+    "source_case_id": "GB-VWAP-2026-02-24",
+    "operands": {
+      "asia_high": {
+        "object_id": "GB-VWAP-2026-02-24:asia:O046",
+        "recipe_id": "O046",
+        "type": "decimal_price?",
+        "value": "24884.25",
+        "known_at": 1771909200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "asia_known_at": {
+        "object_id": "GB-VWAP-2026-02-24:asia:O046",
+        "recipe_id": "O046",
+        "type": "event_key?",
+        "value": 1771909200000000000,
+        "known_at": 1771909200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "london_high": {
+        "object_id": "GB-VWAP-2026-02-24:london:O046",
+        "recipe_id": "O046",
+        "type": "decimal_price?",
+        "value": "24868.5",
+        "known_at": 1771927200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "london_known_at": {
+        "object_id": "GB-VWAP-2026-02-24:london:O046",
+        "recipe_id": "O046",
+        "type": "event_key?",
+        "value": 1771927200000000000,
+        "known_at": 1771927200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "breakout_at": {
+        "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+        "recipe_id": "O004",
+        "type": "event_key?",
+        "value": 1771944300000000000,
+        "known_at": 1771944300000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "breakout_close": {
+        "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+        "recipe_id": "O004",
+        "type": "decimal_price?",
+        "value": "24910.75",
+        "known_at": 1771944300000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "vwap_at_retest": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "recipe_id": "O030",
+        "type": "decimal_price?",
+        "value": "24837.61418047882136279926332",
+        "known_at": 1771945200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "vwap_known_at": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "recipe_id": "O030",
+        "type": "event_key?",
+        "value": 1771945200000000000,
+        "known_at": 1771945200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "vwap_reset_verified": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "recipe_id": "O030",
+        "type": "boolean?",
+        "value": true,
+        "known_at": 1771945200000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "retest_at": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+        "recipe_id": "O002",
+        "type": "event_key?",
+        "value": 1771945260000000000,
+        "known_at": 1771945260000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "retest_low": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+        "recipe_id": "O002",
+        "type": "decimal_price?",
+        "value": "24819.5",
+        "known_at": 1771945260000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "retest_high": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+        "recipe_id": "O002",
+        "type": "decimal_price?",
+        "value": "24880.0",
+        "known_at": 1771945260000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "decision_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "continuation_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O136",
+        "applicability": "required"
+      },
+      "reference_frozen": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O046",
+        "applicability": "required"
+      },
+      "side": {
+        "value": null,
+        "type": "enum",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "risk_defined": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      }
+    },
+    "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+    "predicate": "sequence",
+    "base_ok": true,
+    "coverage_ok": null,
+    "sequence_ok": null,
+    "verdict": "unknown",
+    "failed_prerequisites": [],
+    "hole_ids": [
+      "HOLE:O002:retest_low",
+      "HOLE:O030:vwap_reset_verified",
+      "HOLE:O046:reference_frozen",
+      "HOLE:O136:continuation_context",
+      "HOLE:O139:decision_at",
+      "HOLE:O139:risk_defined",
+      "HOLE:O139:side",
+      "HOLE:O141:general_target_policy"
+    ],
+    "holes": [
+      {
+        "hole_id": "HOLE:O139:decision_at",
+        "recipe_id": "O139",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "decision_at"
+        ],
+        "source_ref": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O136:continuation_context",
+        "recipe_id": "O136",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "continuation_context"
+        ],
+        "source_ref": "Validate the source long continuation context after the above-both-highs break. Do not require an opposite-direction failure or Sires fade/tape gate.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O046:reference_frozen",
+        "recipe_id": "O046",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "reference_frozen"
+        ],
+        "source_ref": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:side",
+        "recipe_id": "O139",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "side"
+        ],
+        "source_ref": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:risk_defined",
+        "recipe_id": "O139",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "risk_defined"
+        ],
+        "source_ref": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O030:vwap_reset_verified",
+        "recipe_id": "O030",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "vwap_reset_verified"
+        ],
+        "source_ref": "Source reset/basis must be verified. Freeze the corresponding pre-retest VWAP snapshot from only available volume; named comparison resets cannot set verification true.",
+        "affected_output": "sequence",
+        "reason": "Verified VWAP is missing its source reset/basis/tape evidence: canonical_tape_id"
+      },
+      {
+        "hole_id": "HOLE:O002:retest_low",
+        "recipe_id": "O002",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "data_coverage",
+        "missing_fields": [
+          "retest_low"
+        ],
+        "source_ref": "Actual later source retest observation/bar with L\u2264VWAP\u2264H. Require complete membership/availability and breakout before retest. No invented defended-retake condition is added beyond the source sequence.",
+        "affected_output": "sequence",
+        "reason": "Completed source candle membership is unavailable"
+      },
+      {
+        "hole_id": "HOLE:O141:general_target_policy",
+        "recipe_id": "O141",
+        "method_id": "GB-VWAP",
+        "candidate_id": "GB-VWAP-2026-02-24:native-control",
+        "branch": "source_long",
+        "kind": "source_definition",
+        "missing_fields": [
+          "general_target_policy"
+        ],
+        "source_ref": "C01/C04",
+        "affected_output": "target_policy",
+        "reason": "A general target policy is unpublished; a later reported 150-point gain is not an entry gate or target",
+        "affects_admission": false
+      }
+    ],
+    "detected_causal_violations": 0,
+    "rejected_proxy_attempts": 0,
+    "used_object_ids": [
+      "GB-VWAP-2026-02-24:asia:O046",
+      "GB-VWAP-2026-02-24:breakout_candle:O004",
+      "GB-VWAP-2026-02-24:london:O046",
+      "GB-VWAP-2026-02-24:retest_candle:O002",
+      "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+    ],
+    "used_assertion_ids": [],
+    "used_evidence_ids": [],
+    "source_versions": [
+      "source-cases-v2.0.0"
+    ],
+    "year": 2026,
+    "faithful_eligible": false,
+    "historical_eligible": false,
+    "assembly_holes": [
+      {
+        "field": "continuation_context",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "reference_frozen",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:33; GB:34"
+      },
+      {
+        "field": "side",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:33; GB:34"
+      }
+    ],
+    "source_role_comparison": true,
+    "software_complete": true,
+    "observation_unit": "sequence"
+  },
+  "bindings": [
+    {
+      "method_id": "GB-VWAP",
+      "field": "reference_frozen",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O046"
+      ],
+      "semantic_role": "session_references",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "london_high",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O046"
+      ],
+      "semantic_role": "london",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:london:O046"
+      },
+      "applicability": "selected",
+      "value": "24868.5"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "london_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O046"
+      ],
+      "semantic_role": "london",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:london:O046"
+      },
+      "applicability": "selected",
+      "value": 1771927200000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "asia_high",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O046"
+      ],
+      "semantic_role": "asia",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:asia:O046"
+      },
+      "applicability": "selected",
+      "value": "24884.25"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "asia_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O046"
+      ],
+      "semantic_role": "asia",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Both source sessions must be finished and independently identified before breakout. Unpublished exact London or approximate Asia settings require supplied source bounds/clock evidence; no invented default.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:asia:O046"
+      },
+      "applicability": "selected",
+      "value": 1771909200000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "continuation_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O136",
+        "O046"
+      ],
+      "semantic_role": "continuation_context",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Validate the source long continuation context after the above-both-highs break. Do not require an opposite-direction failure or Sires fade/tape gate.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "breakout_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O004",
+        "O046"
+      ],
+      "semantic_role": "breakout_candle",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual completed source breakout candle and its close. Source timeframe/inclusion must be supplied; not any intrabar high. Close must exceed both highs in the printed expression.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004"
+      },
+      "applicability": "selected",
+      "value": 1771944300000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "breakout_close",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O004",
+        "O046"
+      ],
+      "semantic_role": "breakout_candle",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual completed source breakout candle and its close. Source timeframe/inclusion must be supplied; not any intrabar high. Close must exceed both highs in the printed expression.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004"
+      },
+      "applicability": "selected",
+      "value": "24910.75"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "vwap_reset_verified",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O030"
+      ],
+      "semantic_role": "vwap_at_retest",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Source reset/basis must be verified. Freeze the corresponding pre-retest VWAP snapshot from only available volume; named comparison resets cannot set verification true.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+      },
+      "applicability": "selected",
+      "value": true
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "vwap_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O030"
+      ],
+      "semantic_role": "vwap_at_retest",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Source reset/basis must be verified. Freeze the corresponding pre-retest VWAP snapshot from only available volume; named comparison resets cannot set verification true.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+      },
+      "applicability": "selected",
+      "value": 1771945200000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "vwap_at_retest",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O030"
+      ],
+      "semantic_role": "vwap_at_retest",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Source reset/basis must be verified. Freeze the corresponding pre-retest VWAP snapshot from only available volume; named comparison resets cannot set verification true.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+      },
+      "applicability": "selected",
+      "value": "24837.61418047882136279926332"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "retest_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O002",
+        "O030"
+      ],
+      "semantic_role": "retest_candle",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual later source retest observation/bar with L\u2264VWAP\u2264H. Require complete membership/availability and breakout before retest. No invented defended-retake condition is added beyond the source sequence.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+      },
+      "applicability": "selected",
+      "value": 1771945260000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "retest_low",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O002",
+        "O030"
+      ],
+      "semantic_role": "retest_candle",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual later source retest observation/bar with L\u2264VWAP\u2264H. Require complete membership/availability and breakout before retest. No invented defended-retake condition is added beyond the source sequence.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+      },
+      "applicability": "selected",
+      "value": "24819.5"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "retest_high",
+      "type": "decimal_price?",
+      "units": "decimal_price?",
+      "producers": [
+        "O002",
+        "O030"
+      ],
+      "semantic_role": "retest_candle",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual later source retest observation/bar with L\u2264VWAP\u2264H. Require complete membership/availability and breakout before retest. No invented defended-retake condition is added beyond the source sequence.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+      },
+      "applicability": "selected",
+      "value": "24880.0"
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "risk_defined",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O139",
+        "O150"
+      ],
+      "semantic_role": "structural_risk",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "decision_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O139",
+        "O150"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": 1771945260000000000
+    },
+    {
+      "method_id": "GB-VWAP",
+      "field": "side",
+      "type": "enum",
+      "units": "enum",
+      "producers": [
+        "O139",
+        "O150"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "source_long"
+      ],
+      "rule": "Actual source pre-entry risk and long decision. General target is unpublished and is not added as an entry operand; reported 150 points is not a target recipe.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": "long"
+    }
+  ],
+  "assembly_holes": [
+    {
+      "field": "continuation_context",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:33; GB:34"
+    },
+    {
+      "field": "decision_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:33; GB:34"
+    },
+    {
+      "field": "reference_frozen",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:33; GB:34"
+    },
+    {
+      "field": "risk_defined",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "GB:33; GB:34"
+    },
+    {
+      "field": "side",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "GB:33; GB:34"
+    }
+  ],
+  "resolved_objects": [
+    {
+      "object_id": "GB-VWAP-2026-02-24:asia:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "known_at": 1771909200000000000,
+        "source_clock_verified": null,
+        "coverage_ok": true,
+        "box_high": "24884.25",
+        "box_low": "24795.0",
+        "box_width": "89.25",
+        "box_id": "GB-VWAP-2026-02-24:asia",
+        "formation_start": 1771894800000000000,
+        "formation_end": 1771909200000000000,
+        "boundary_ids": {
+          "high": "GB-VWAP-2026-02-24:asia:high",
+          "low": "GB-VWAP-2026-02-24:asia:low"
+        },
+        "asia_high": "24884.25",
+        "source_session_id": "GB-VWAP-2026-02-24:asia:O046",
+        "asia_known_at": 1771909200000000000
+      },
+      "units": {
+        "asia_high": "decimal_price?",
+        "asia_known_at": "event_key?"
+      },
+      "formation_start": 1771894800000000000,
+      "formation_end": 1771909200000000000,
+      "as_of": 1771909200000000000,
+      "known_at": 1771909200000000000,
+      "state": "hole",
+      "hole_ids": [
+        "HOLE:O046:source_clock"
+      ],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50697,
+          "row_end": 50937
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-VWAP-2026-02-24:asia",
+        "source_clock_verified": false,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "asia_high",
+          "source_quantity": "box_high",
+          "role": "asia",
+          "object_id": "GB-VWAP-2026-02-24:asia:O046",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "asia",
+              "formation_start": 1771894800000000000,
+              "formation_end": 1771909200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        },
+        {
+          "field": "asia_known_at",
+          "source_quantity": "@known_at",
+          "role": "asia",
+          "object_id": "GB-VWAP-2026-02-24:asia:O046",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "asia",
+              "formation_start": 1771894800000000000,
+              "formation_end": 1771909200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        }
+      ]
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:london:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "known_at": 1771927200000000000,
+        "source_clock_verified": null,
+        "coverage_ok": true,
+        "box_high": "24868.5",
+        "box_low": "24761.0",
+        "box_width": "107.5",
+        "box_id": "GB-VWAP-2026-02-24:london",
+        "formation_start": 1771916400000000000,
+        "formation_end": 1771927200000000000,
+        "boundary_ids": {
+          "high": "GB-VWAP-2026-02-24:london:high",
+          "low": "GB-VWAP-2026-02-24:london:low"
+        },
+        "london_high": "24868.5",
+        "source_session_id": "GB-VWAP-2026-02-24:london:O046",
+        "london_known_at": 1771927200000000000
+      },
+      "units": {
+        "london_high": "decimal_price?",
+        "london_known_at": "event_key?"
+      },
+      "formation_start": 1771916400000000000,
+      "formation_end": 1771927200000000000,
+      "as_of": 1771927200000000000,
+      "known_at": 1771927200000000000,
+      "state": "hole",
+      "hole_ids": [
+        "HOLE:O046:source_clock"
+      ],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51057,
+          "row_end": 51237
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-VWAP-2026-02-24:london",
+        "source_clock_verified": false,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "london_high",
+          "source_quantity": "box_high",
+          "role": "london",
+          "object_id": "GB-VWAP-2026-02-24:london:O046",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "london",
+              "formation_start": 1771916400000000000,
+              "formation_end": 1771927200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        },
+        {
+          "field": "london_known_at",
+          "source_quantity": "@known_at",
+          "role": "london",
+          "object_id": "GB-VWAP-2026-02-24:london:O046",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "london",
+              "formation_start": 1771916400000000000,
+              "formation_end": 1771927200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        }
+      ]
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+      "recipe_id": "O004",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "bar_id": "42002475:1771944240000000000:1771944300000000000",
+        "instrument_id": 42002475,
+        "kind": "time",
+        "size": "1m",
+        "start": 1771944240000000000,
+        "end": 1771944300000000000,
+        "complete": true,
+        "known_at": 1771944300000000000,
+        "native_source_compatible": true,
+        "coverage_state": "complete",
+        "member_event_ids": [
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51521:42002475"
+        ],
+        "missing_intervals": [],
+        "O": "24866.75",
+        "H": "24913.0",
+        "L": "24866.75",
+        "C": "24910.75",
+        "V": "3198.0",
+        "breakout_at": 1771944300000000000,
+        "breakout_bar_id": "42002475:1771944240000000000:1771944300000000000",
+        "breakout_bar_complete": true,
+        "breakout_close": "24910.75"
+      },
+      "units": {
+        "breakout_at": "event_key?",
+        "breakout_close": "decimal_price?"
+      },
+      "formation_start": 1771944240000000000,
+      "formation_end": 1771944300000000000,
+      "as_of": 1771944300000000000,
+      "known_at": 1771944300000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51521,
+          "row_end": 51522
+        }
+      ],
+      "inputs": {
+        "kind": "time",
+        "size_minutes": 1,
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "breakout_at",
+          "source_quantity": "@known_at",
+          "role": "breakout_candle",
+          "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "breakout_candle",
+              "formation_start": 1771944240000000000,
+              "formation_end": 1771944300000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        },
+        {
+          "field": "breakout_close",
+          "source_quantity": "C",
+          "role": "breakout_candle",
+          "object_id": "GB-VWAP-2026-02-24:breakout_candle:O004",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "breakout_candle",
+              "formation_start": 1771944240000000000,
+              "formation_end": 1771944300000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        }
+      ]
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+      "recipe_id": "O030",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "sum_v": "191498.0",
+        "sum_pv": "4756353440.333333333333333328",
+        "sum_p2v": "118137093423530.1944444444442",
+        "weighted_variance_population": "3246.8565612532847466106",
+        "vwap": "24837.61418047882136279926332",
+        "comparison_vwap": "24837.61418047882136279926332",
+        "reset_id": "comparison-prior-1800",
+        "reset_at": 1771887600000000000,
+        "basis": "HLC3",
+        "as_of": 1771945200000000000,
+        "known_at": 1771945200000000000,
+        "member_event_ids": [
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50577:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50578:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50579:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50580:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50581:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50582:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50583:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50584:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50585:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50586:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50587:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50588:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50589:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50590:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50591:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50592:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50593:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50594:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50595:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50596:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50597:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50598:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50599:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50600:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50601:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50602:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50603:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50604:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50605:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50606:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50607:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50608:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50609:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50610:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50611:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50612:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50613:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50614:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50615:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50616:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50617:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50618:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50619:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50620:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50621:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50622:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50623:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50624:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50625:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50626:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50627:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50628:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50629:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50630:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50631:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50632:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50633:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50634:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50635:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50636:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50637:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50638:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50639:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50640:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50641:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50642:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50643:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50644:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50645:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50646:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50647:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50648:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50649:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50650:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50651:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50652:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50653:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50654:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50655:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50656:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50657:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50658:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50659:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50660:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50661:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50662:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50663:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50664:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50665:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50666:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50667:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50668:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50669:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50670:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50671:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50672:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50673:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50674:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50675:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50676:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50677:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50678:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50679:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50680:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50681:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50682:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50683:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50684:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50685:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50686:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50687:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50688:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50689:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50690:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50691:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50692:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50693:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50694:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50695:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50696:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50697:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50698:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50699:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50700:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50701:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50702:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50703:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50704:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50705:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50706:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50707:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50708:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50709:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50710:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50711:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50712:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50713:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50714:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50715:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50716:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50717:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50718:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50719:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50720:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50721:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50722:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50723:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50724:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50725:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50726:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50727:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50728:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50729:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50730:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50731:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50732:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50733:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50734:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50735:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50736:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50737:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50738:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50739:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50740:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50741:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50742:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50743:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50744:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50745:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50746:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50747:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50748:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50749:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50750:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50751:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50752:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50753:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50754:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50755:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50756:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50757:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50758:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50759:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50760:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50761:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50762:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50763:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50764:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50765:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50766:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50767:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50768:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50769:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50770:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50771:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50772:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50773:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50774:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50775:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50776:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50777:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50778:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50779:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50780:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50781:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50782:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50783:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50784:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50785:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50786:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50787:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50788:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50789:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50790:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50791:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50792:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50793:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50794:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50795:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50796:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50797:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50798:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50799:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50800:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50801:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50802:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50803:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50804:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50805:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50806:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50807:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50808:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50809:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50810:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50811:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50812:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50813:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50814:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50815:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50816:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50817:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50818:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50819:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50820:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50821:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50822:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50823:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50824:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50825:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50826:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50827:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50828:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50829:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50830:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50831:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50832:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50833:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50834:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50835:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50836:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50837:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50838:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50839:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50840:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50841:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50842:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50843:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50844:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50845:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50846:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50847:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50848:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50849:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50850:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50851:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50852:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50853:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50854:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50855:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50856:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50857:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50858:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50859:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50860:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50861:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50862:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50863:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50864:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50865:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50866:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50867:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50868:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50869:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50870:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50871:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50872:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50873:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50874:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50875:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50876:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50877:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50878:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50879:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50880:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50881:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50882:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50883:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50884:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50885:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50886:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50887:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50888:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50889:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50890:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50891:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50892:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50893:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50894:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50895:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50896:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50897:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50898:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50899:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50900:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50901:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50902:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50903:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50904:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50905:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50906:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50907:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50908:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50909:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50910:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50911:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50912:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50913:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50914:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50915:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50916:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50917:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50918:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50919:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50920:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50921:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50922:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50923:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50924:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50925:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50926:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50927:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50928:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50929:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50930:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50931:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50932:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50933:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50934:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50935:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50936:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50937:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50938:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50939:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50940:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50941:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50942:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50943:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50944:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50945:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50946:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50947:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50948:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50949:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50950:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50951:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50952:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50953:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50954:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50955:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50956:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50957:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50958:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50959:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50960:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50961:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50962:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50963:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50964:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50965:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50966:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50967:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50968:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50969:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50970:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50971:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50972:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50973:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50974:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50975:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50976:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50977:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50978:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50979:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50980:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50981:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50982:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50983:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50984:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50985:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50986:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50987:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50988:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50989:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50990:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50991:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50992:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50993:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50994:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50995:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50996:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50997:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50998:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:50999:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51000:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51001:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51002:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51003:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51004:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51005:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51006:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51007:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51008:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51009:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51010:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51011:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51012:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51013:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51014:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51015:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51016:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51017:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51018:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51019:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51020:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51021:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51022:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51023:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51024:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51025:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51026:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51027:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51028:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51029:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51030:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51031:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51032:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51033:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51034:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51035:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51036:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51037:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51038:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51039:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51040:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51041:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51042:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51043:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51044:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51045:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51046:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51047:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51048:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51049:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51050:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51051:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51052:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51053:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51054:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51055:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51056:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51057:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51058:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51059:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51060:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51061:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51062:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51063:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51064:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51065:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51066:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51067:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51068:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51069:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51070:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51071:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51072:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51073:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51074:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51075:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51076:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51077:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51078:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51079:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51080:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51081:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51082:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51083:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51084:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51085:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51086:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51087:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51088:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51089:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51090:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51091:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51092:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51093:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51094:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51095:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51096:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51097:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51098:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51099:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51100:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51101:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51102:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51103:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51104:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51105:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51106:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51107:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51108:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51109:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51110:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51111:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51112:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51113:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51114:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51115:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51116:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51117:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51118:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51119:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51120:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51121:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51122:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51123:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51124:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51125:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51126:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51127:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51128:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51129:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51130:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51131:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51132:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51133:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51134:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51135:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51136:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51137:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51138:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51139:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51140:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51141:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51142:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51143:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51144:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51145:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51146:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51147:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51148:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51149:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51150:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51151:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51152:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51153:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51154:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51155:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51156:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51157:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51158:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51159:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51160:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51161:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51162:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51163:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51164:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51165:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51166:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51167:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51168:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51169:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51170:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51171:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51172:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51173:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51174:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51175:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51176:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51177:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51178:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51179:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51180:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51181:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51182:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51183:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51184:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51185:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51186:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51187:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51188:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51189:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51190:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51191:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51192:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51193:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51194:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51195:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51196:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51197:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51198:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51199:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51200:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51201:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51202:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51203:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51204:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51205:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51206:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51207:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51208:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51209:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51210:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51211:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51212:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51213:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51214:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51215:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51216:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51217:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51218:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51219:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51220:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51221:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51222:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51223:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51224:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51225:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51226:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51227:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51228:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51229:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51230:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51231:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51232:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51233:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51234:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51235:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51236:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51237:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51238:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51239:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51240:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51241:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51242:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51243:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51244:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51245:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51246:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51247:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51248:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51249:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51250:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51251:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51252:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51253:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51254:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51255:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51256:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51257:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51258:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51259:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51260:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51261:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51262:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51263:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51264:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51265:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51266:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51267:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51268:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51269:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51270:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51271:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51272:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51273:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51274:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51275:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51276:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51277:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51278:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51279:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51280:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51281:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51282:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51283:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51284:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51285:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51286:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51287:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51288:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51289:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51290:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51291:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51292:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51293:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51294:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51295:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51296:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51297:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51298:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51299:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51300:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51301:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51302:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51303:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51304:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51305:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51306:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51307:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51308:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51309:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51310:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51311:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51312:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51313:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51314:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51315:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51316:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51317:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51318:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51319:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51320:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51321:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51322:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51323:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51324:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51325:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51326:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51327:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51328:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51329:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51330:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51331:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51332:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51333:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51334:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51335:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51336:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51337:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51338:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51339:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51340:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51341:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51342:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51343:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51344:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51345:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51346:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51347:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51348:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51349:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51350:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51351:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51352:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51353:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51354:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51355:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51356:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51357:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51358:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51359:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51360:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51361:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51362:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51363:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51364:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51365:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51366:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51367:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51368:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51369:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51370:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51371:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51372:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51373:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51374:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51375:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51376:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51377:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51378:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51379:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51380:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51381:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51382:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51383:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51384:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51385:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51386:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51387:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51388:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51389:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51390:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51391:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51392:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51393:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51394:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51395:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51396:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51397:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51398:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51399:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51400:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51401:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51402:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51403:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51404:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51405:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51406:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51407:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51408:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51409:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51410:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51411:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51412:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51413:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51414:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51415:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51416:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51417:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51418:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51419:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51420:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51421:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51422:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51423:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51424:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51425:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51426:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51427:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51428:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51429:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51430:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51431:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51432:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51433:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51434:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51435:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51436:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51437:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51438:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51439:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51440:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51441:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51442:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51443:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51444:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51445:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51446:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51447:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51448:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51449:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51450:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51451:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51452:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51453:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51454:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51455:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51456:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51457:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51458:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51459:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51460:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51461:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51462:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51463:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51464:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51465:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51466:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51467:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51468:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51469:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51470:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51471:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51472:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51473:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51474:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51475:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51476:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51477:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51478:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51479:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51480:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51481:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51482:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51483:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51484:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51485:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51486:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51487:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51488:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51489:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51490:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51491:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51492:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51493:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51494:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51495:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51496:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51497:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51498:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51499:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51500:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51501:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51502:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51503:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51504:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51505:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51506:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51507:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51508:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51509:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51510:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51511:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51512:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51513:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51514:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51515:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51516:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51517:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51518:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51519:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51520:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51521:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51522:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51523:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51524:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51525:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51526:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51527:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51528:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51529:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51530:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51531:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51532:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51533:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51534:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51535:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51536:42002475"
+        ],
+        "faithful": null,
+        "variant": "comparison",
+        "vwap_at_retest": "24837.61418047882136279926332",
+        "vwap_known_at": 1771945200000000000,
+        "vwap_reset_verified": true,
+        "source_vwap_known": null,
+        "automatic_reset": null
+      },
+      "units": {
+        "vwap_at_retest": "decimal_price?",
+        "vwap_known_at": "event_key?",
+        "vwap_reset_verified": "boolean?"
+      },
+      "formation_start": 1771887600000000000,
+      "formation_end": 1771945200000000000,
+      "as_of": 1771945200000000000,
+      "known_at": 1771945200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50577,
+          "row_end": 51537
+        }
+      ],
+      "inputs": {
+        "reset_id": "comparison-prior-1800",
+        "reset_at": 1771887600000000000,
+        "as_of": 1771945200000000000,
+        "reset_verified": true,
+        "basis": "HLC3",
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "vwap_at_retest",
+          "source_quantity": "vwap",
+          "role": "vwap_at_retest",
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "vwap_at_retest",
+              "formation_start": 1771887600000000000,
+              "formation_end": 1771945200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        },
+        {
+          "field": "vwap_known_at",
+          "source_quantity": "@known_at",
+          "role": "vwap_at_retest",
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "vwap_at_retest",
+              "formation_start": 1771887600000000000,
+              "formation_end": 1771945200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        },
+        {
+          "field": "vwap_reset_verified",
+          "source_quantity": "vwap_reset_verified",
+          "role": "vwap_at_retest",
+          "object_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+          "parent_ids": [],
+          "source_definition": {
+            "status": "inference",
+            "value": {
+              "role": "vwap_at_retest",
+              "formation_start": 1771887600000000000,
+              "formation_end": 1771945200000000000,
+              "session_date_et": "2026-02-24"
+            },
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        }
+      ]
+    },
+    {
+      "object_id": "GB-VWAP-2026-02-24:retest_candle:O002",
+      "recipe_id": "O002",
+      "method_id": "GB-VWAP",
+      "branch_scope": [
+        "source_long"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 42002475,
+      "parent_ids": [
+        "GB-VWAP-2026-02-24:vwap_at_retest:O030"
+      ],
+      "source_ref": "GB:33; GB:34",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "contact_at": 1771945260000000000,
+        "price_overlap": true,
+        "strict_break_side": "both",
+        "sweep_depth": null,
+        "sweep_depth_ticks": null,
+        "literal_close_return": false,
+        "source_reject": null,
+        "source_hold": null,
+        "tolerance_ticks": null,
+        "observed_high": "24880.0",
+        "observed_low": "24819.5",
+        "reference_band": [
+          "24837.61418047882136279926332",
+          "24837.61418047882136279926332"
+        ],
+        "reference_lineage_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "retest_at": 1771945260000000000,
+        "retest_low": "24819.5",
+        "retest_high": "24880.0"
+      },
+      "units": {
+        "retest_at": "event_key?",
+        "retest_low": "decimal_price?",
+        "retest_high": "decimal_price?"
+      },
+      "formation_start": 1771945200000000000,
+      "formation_end": 1771945260000000000,
+      "as_of": 1771945260000000000,
+      "known_at": 1771945260000000000,
+      "state": "hole",
+      "hole_ids": [
+        "HOLE:O002:source_confirmation"
+      ],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51537,
+          "row_end": 51538
+        }
+      ],
+      "inputs": {
+        "reference_parent_id": "GB-VWAP-2026-02-24:vwap_at_retest:O030",
+        "use_at": 1771945260000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "retest_at",
+          "source_quantity": "contact_at",
+          "operation": "exact",
+          "role": "retest_candle",
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        },
+        {
+          "field": "retest_low",
+          "source_quantity": "observed_low",
+          "operation": "exact",
+          "role": "retest_candle",
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        },
+        {
+          "field": "retest_high",
+          "source_quantity": "observed_high",
+          "operation": "exact",
+          "role": "retest_candle",
+          "object_id": "GB-VWAP-2026-02-24:retest_candle:O002"
+        }
+      ]
+    }
+  ],
+  "native_window_audits": [
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771894800000000000,
+      "end_ns": 1771909200000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50697,
+          "row_end": 50937
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50697,
+          "row_end": 50937
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 240,
+      "native_minute_count": 240,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771916400000000000,
+      "end_ns": 1771927200000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51057,
+          "row_end": 51237
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51057,
+          "row_end": 51237
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 180,
+      "native_minute_count": 180,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771944240000000000,
+      "end_ns": 1771944300000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51521,
+          "row_end": 51522
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51521,
+          "row_end": 51522
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 1,
+      "native_minute_count": 1,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771887600000000000,
+      "end_ns": 1771945200000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50577,
+          "row_end": 51537
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 50577,
+          "row_end": 51537
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 960,
+      "native_minute_count": 960,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    },
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771945200000000000,
+      "end_ns": 1771945260000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51537,
+          "row_end": 51538
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51537,
+          "row_end": 51538
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 1,
+      "native_minute_count": 1,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    }
+  ],
+  "source_case_agreement": "Literal native computations and declared sequence are reviewable; no author fill or complete source-method pass is inferred.",
+  "faithful_disagreements": null,
+  "historical_candidates": null
+}

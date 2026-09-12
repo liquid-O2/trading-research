@@ -252,13 +252,17 @@ def test_all_m12_objects_have_passing_numeric_and_c08_fixtures():
 
 def test_m12_owned_recipes_enforce_gate_and_fixed_geometry():
     from trading_research.research.method_pack.objects import RECIPES
+    from trading_research.research.method_pack.objects.fixtures_completion_context import prior_validation_record
 
-    gate = RECIPES["O154"]({
+    summary_only = RECIPES["O154"]({
         "n": 100, "win_rate": "0.55", "avg_rr": "2", "mc_max_streak": 8,
         "same_process": True, "known_at": m12._t(16, 0, day=m12.YDAY),
         "use_at": m12._t(9, 30),
     })
+    assert summary_only.value['overlay_validation'] is None
+    gate = RECIPES['O154'](prior_validation_record(m12._t(16, 0, day=m12.YDAY), m12._t(9, 30)))
     assert gate.value["overlay_validation"] is True
+    assert len(gate.value['sample_ids']) == len(set(gate.value['sample_ids'])) == 100
     assert gate.value["simulation_run"] is False
     n99 = RECIPES["O154"]({
         "n": 99, "win_rate": "0.55", "avg_rr": "2", "mc_max_streak": 8,

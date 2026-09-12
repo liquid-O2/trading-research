@@ -1,0 +1,105 @@
+{
+  "schema": "phase1-native-delta-legacy-cache-review-v1",
+  "reviewed_at": "2026-09-12",
+  "scope": "Audit of the native B-buy/A-sell/N-unknown full-RTH delta reconstruction and cache ownership. This artifact records one real native-data comparison and identifies pre-rewrite report caches that are not valid inputs to scan_rth_delta.",
+  "canonical_scanner": {
+    "function": "trading_research.research.phase1_live.family_value.scan_rth_delta",
+    "signed_flow_version": "B-buy_A-sell_N-unknown_native-members-v2",
+    "cache_path": "/workspace/implementation/validation/phase1-completion/value_delta_rth_B-buy_A-sell_N-unknown_native-members-v2.parquet",
+    "cache_path_rel": "implementation/validation/phase1-completion/value_delta_rth_B-buy_A-sell_N-unknown_native-members-v2.parquet",
+    "ownership": "validation-only",
+    "source_policy": [
+      "Read immutable native trade members resolved by collect_window.",
+      "Use the native instrument definition for tick size and contract identity.",
+      "Map B to buy, A to sell, and N or an unrecognized side to unknown.",
+      "Retain unknown volume in total volume and signed-volume coverage; do not coerce it into a signed side.",
+      "Use cross-source OHLCV only as corroborating reconciliation evidence.",
+      "Do not read, merge, or overwrite any legacy report-table cache."
+    ],
+    "implementation_source": "/workspace/implementation/src/trading_research/research/phase1_live/family_value.py"
+  },
+  "real_sample": {
+    "date": "2026-06-12",
+    "window_et": "09:30-16:00 America/New_York",
+    "instrument_id": 42004058,
+    "tick_size": "0.25",
+    "native_trade_rows": 224400,
+    "native_minutes": 390,
+    "known_volume": 294995.0,
+    "unknown_volume": 46.0,
+    "total_volume": 295041.0,
+    "known_delta": 2191.0,
+    "signed_volume_coverage": 0.9998440894655319,
+    "coverage_ok": null,
+    "coverage_reason": "cross_source_reconciliation_mismatch",
+    "reconciliation": {
+      "checked_minute_count": 390,
+      "mismatch_count": 5,
+      "native_executed_volume": "295041",
+      "reference_ohlcv_volume": "295037.0",
+      "net_volume_difference": "4.0",
+      "window_volume_matches": false,
+      "all_minute_allocations_match": false
+    },
+    "unknown_price_candidates": [29412.0],
+    "known_delta_max_candidates": [29689.0],
+    "known_delta_min_candidates": [29673.0],
+    "poc_candidates": [29660.0],
+    "signed_extrema": {
+      "dp_max": null,
+      "dp_min": null,
+      "delta_ne_poc": null,
+      "reason": "Unknown executions and unresolved cross-source reconciliation prevent a faithful signed-extrema flag. Provisional known-side and all-volume candidates remain visible for review."
+    },
+    "source_hashes": {
+      "quantpad/cme__nq-continuous-futures__trades": ["6439c2248d7d2a49b61e4764befd715036c6d2de06b0b6cd33b2fe042d9a9ee3"],
+      "quantpad/cme__nq-continuous-futures__ohlcv-1m": ["8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"],
+      "instrument_definition": ["4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"]
+    },
+    "cache_row": {
+      "path": "/workspace/implementation/validation/phase1-completion/value_delta_rth_B-buy_A-sell_N-unknown_native-members-v2.parquet",
+      "signed_flow_version": "B-buy_A-sell_N-unknown_native-members-v2",
+      "evidence_mode": "retrospective_native_comparison"
+    }
+  },
+  "legacy_caches": [
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/value_delta_rth_F.parquet",
+      "path_rel": "implementation/reports/phase1-live/_tables/value_delta_rth_F.parquet",
+      "status": "obsolete",
+      "read_by_scanner": false,
+      "reason": "Pre-rewrite scalar full-RTH cache with the legacy A/B convention; it does not preserve native B-buy/A-sell/N-unknown semantics or the native evidence boundary."
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/cvd_trade_F.parquet",
+      "path_rel": "implementation/reports/phase1-live/_tables/cvd_trade_F.parquet",
+      "status": "obsolete",
+      "read_by_scanner": false,
+      "reason": "CVD report-table cache is a legacy derived summary, not an immutable native-member reconstruction and has no signed-flow-version guarantee."
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/flow_cvd_smt_F.parquet",
+      "path_rel": "implementation/reports/phase1-live/_tables/flow_cvd_smt_F.parquet",
+      "status": "obsolete",
+      "read_by_scanner": false,
+      "reason": "Legacy flow/CVD SMT report table is not a canonical native delta cache and cannot certify side, identity, coverage, or price-grid provenance."
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/_tables/mbp1_flow_F.parquet",
+      "path_rel": "implementation/reports/phase1-live/_tables/mbp1_flow_F.parquet",
+      "status": "obsolete",
+      "read_by_scanner": false,
+      "reason": "Legacy MBP1 flow table is a downstream report cache and is excluded from the native scanner input boundary."
+    }
+  ],
+  "regression_checks": {
+    "test_file": "/workspace/implementation/tests/test_phase1_native_delta_scan.py",
+    "checks": [
+      "B maps to positive signed volume, A maps to negative signed volume, and N remains unknown.",
+      "Unknown volume contributes to total volume and lowers signed-volume coverage.",
+      "Prices off the native tick grid are rejected instead of rounded.",
+      "Changing or monkeypatching load_rows cannot make scan_rth_delta read a legacy cache."
+    ]
+  },
+  "interpretation": "This is a retrospective native comparison artifact. The June 12 cross-source mismatches keep coverage unresolved, so it is not a verified historical source profile, entry reconstruction, or performance result."
+}

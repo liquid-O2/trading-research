@@ -334,6 +334,8 @@ Run C08's late-dependency, missing-input and identity mutations as well. Count f
 
 ## M02 — GB-FAIL
 
+**Source-case correction (2026-09-12):** Green Bird November 20, 2025, p.43 displays MNQZ2025 on two-minute bars and a short-position line at 25301.75 in the swept-high area. Preserve that source illustration as entry at the sweep; the later MSS/FVG annotations are subsequent context, not prerequisites for that displayed entry. Exact fill time is unknown. Native NQZ5 may supply an explicitly labeled price comparison only. This correction does not remove the confirmed-close requirement from separately documented branches or move another case to a two-minute chart.
+
 **Source of truth:** [Green Bird — failed breakout / failed breakdown](/workspace/planning/phase-1-live/wiki/method-green-bird-failure.md). **Unit:** One identified failed-breakout/failed-breakdown attempt at its actual completed source reference.
 
 **Required end-to-end behavior:** Frozen reference → relevant sweep → actual source failure/reclaim confirmation → optional case-specific confluence/retest → entry risk and preselected objective.
@@ -1987,6 +1989,8 @@ Later charts layer inner profile/range spans inside the outer 6–9 framework an
 
 ## O017 — Session Stat+ envelopes
 
+**Scoped source configuration (2026-09-12):** [SS] p.7 states that SessionStat uses bar_index/time conditions, can change levels below two minutes by design, and may show additional price/extension differences below five minutes. Retain source version/platform, chart timeframe, custom/non-custom interval and actual boundary-detection configuration in each supplied snapshot. The recommendation above 2–3 minutes has the source's one-hour/15-minute non-custom exception. It is not a universal timeframe requirement and does not disclose the engine.
+
 **Wiki:** [Session Stat+ envelopes](/workspace/planning/phase-1-live/wiki/sessionstat-9-12-envelope.md). **Implementation mode:** supplied source bands only; engine hole.
 
 Session Stat frames likely reach and exhaustion with average/median high-low boxes, a midpoint, extensions and minimum-average shading for the selected session/lookback. It also warns about choppy/low-volatility conditions. [SS] pp.3–12; [JR] pp.23–26.
@@ -2454,6 +2458,8 @@ News and range conditions change target ambition or thesis validity. Jumbo discu
 <a id="o030"></a>
 
 ## O030 — Session VWAP
+
+**Illustrated Sires configuration (2026-09-12):** [VWAP] p.8 shows Session anchor, offset 0, Chart timeframe and Wait for timeframe closes enabled. The price-source field is truncated to `(H + L + …)`; HLC3 is an inference, not a fully verified label. Retain the source-price uncertainty, platform session-clock uncertainty and the distinct visible/discussed band settings in a versioned record. A bar-price VWAP needs complete configured bars and their closing availability. Do not transfer Sires settings to Green Bird.
 
 **Wiki:** [Session VWAP](/workspace/planning/phase-1-live/wiki/vwap-session.md). **Implementation mode:** exact trade-weighted arithmetic for verified reset; author reset/basis hole where absent.
 
@@ -3998,6 +4004,8 @@ A previously observed clean reaction or defended band supplies a location for a 
 <a id="o073"></a>
 
 ## O073 — Overnight volume structure
+
+**Required O011 binding (2026-09-12):** For the [MAMT] p.14 illustrated Sires overnight profile, bind the same dated instrument/window as O011: previous-day 18:00 through current-day 09:30 America/New_York. Preserve this profile separately from prior ETH, prior RTH and developing current RTH. Its VA construction still requires source-specific price-grid and expansion/tie configuration; the clock does not fill those fields.
 
 **Wiki:** [Overnight volume structure](/workspace/planning/phase-1-live/wiki/overnight-profile.md). **Implementation mode:** source overnight profile and landmarks; exact window/selection required.
 
@@ -6404,6 +6412,8 @@ Sires forms a thesis, states where it dies, trades while it lives and recreates 
 
 ## O139 — Entry-side structural invalidation
 
+**Scoped excursion research record (2026-09-12):** [C2] p.4 recommends collecting 40–80 trades before inspecting MFE/MAE distributions. Keep original entry/exit or observation-end windows, price units, long/short direction, native coverage and censoring in O146/O153 research records. Collect all observed outcomes. Stop/target optimization remains deferred; this count is not a universal validation threshold.
+
 **Wiki:** [Entry-side structural invalidation](/workspace/planning/phase-1-live/wiki/structural-risk.md). **Implementation mode:** source entry-side invalidation geometry and timing.
 
 Where the source supplies it, controlling structure determines invalidation before size is chosen. Sires explicitly works from stop structure to account risk and real HTF objective; Jumbo and Green Bird keep case-specific block/swing stops. Some cases disclose only an example distance or an incomplete rule. [ANAT] pp.8–10; [TBR] pp.27–29; [GB] pp.25, 31–34, 40; [TRAP] pp.8–10; [K10] pp.7–9; [AVG] pp.21–22.
@@ -6663,6 +6673,8 @@ The sources limit further exposure after adverse results or when the planned ses
 
 ## O146 — Thesis and execution journal
 
+**Scoped codex record (2026-09-12):** [C1] p.6 supplies integer confidence 1–5 at session start, original reason/validity band, every attempt, revisions, execution breaches and missed rules, with a review example after 30 sessions. Keep the original record and later review as separate versions. [C2] p.4 adds the 40–80-trade MFE/MAE collection example, with explicit native excursion windows/censoring. These settings belong to the Sires process configuration and do not become global sample-sufficiency rules. Stoic's data-engine application is our own research process, not an entry strategy.
+
 **Wiki:** [Thesis and execution journal](/workspace/planning/phase-1-live/wiki/process-journal.md). **Implementation mode:** complete versioned observation and review ledger.
 
 Sires's codex records bias/validity times, reason and confidence, every trade, regime, changes and rule breaches; the coaching review pauses replay before entry and changes one variable over a block. The member's written thesis and Stoic's uniform aggregate collection are separately attributed applications. [C1] pp.6–7; [AVG] pp.27–30; [EMO] pp.6–8; [K10] pp.3–5, 10–15; [DATA] pp.3–4.
@@ -6919,6 +6931,8 @@ The coaching review compares aggregate outcomes with fees/payout economics; the 
 <a id="o153"></a>
 
 ## O153 — Outcome distribution of a declared process
+
+**Collection guidance (2026-09-12):** Carry the Sires [C1] p.6 original 1–5 session-start confidence and 30-session review example, and [C2] p.4 40–80-trade excursion collection guidance, only into their declared process cohort. Retain win/loss/flat/open/censored outcomes and missed/breached process records with separate denominators. These are collection/review settings, not permission for Phase 2 optimization or performance simulation.
 
 **Wiki:** [Outcome distribution of a declared process](/workspace/planning/phase-1-live/wiki/outcome-metrics.md). **Implementation mode:** supplied process-summary provenance/arithmetic audit only.
 

@@ -20,3 +20,8 @@ VWAP is the auction's volume-weighted average under the selected reset and price
 [VWAP]: </workspace/sources/documents/discretionary/vwap-lesson-10.pdf>
 [CONT]: </workspace/sources/documents/discretionary/a-clean-continuation-short.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+
+### September 12 source binding
+
+**Illustrated Sires configuration (2026-09-12):** [VWAP] p.8 shows Session anchor, offset 0, Chart timeframe and Wait for timeframe closes enabled. The price-source field is truncated to `(H + L + …)`; HLC3 is an inference, not a fully verified label. Retain the source-price uncertainty, platform session-clock uncertainty and the distinct visible/discussed band settings in a versioned record. A bar-price VWAP needs complete configured bars and their closing availability. Do not transfer Sires settings to Green Bird.

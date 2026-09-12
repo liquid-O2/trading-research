@@ -22,3 +22,8 @@ Sires's codex records bias/validity times, reason and confidence, every trade, r
 [AVG]: </workspace/sources/documents/discretionary/average-unprofitable-trader.pdf>
 [DATA]: </workspace/sources/documents/discretionary/data-engine.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+
+### September 12 source binding
+
+**Scoped codex record (2026-09-12):** [C1] p.6 supplies integer confidence 1–5 at session start, original reason/validity band, every attempt, revisions, execution breaches and missed rules, with a review example after 30 sessions. Keep the original record and later review as separate versions. [C2] p.4 adds the 40–80-trade MFE/MAE collection example, with explicit native excursion windows/censoring. These settings belong to the Sires process configuration and do not become global sample-sufficiency rules. Stoic's data-engine application is our own research process, not an entry strategy.

@@ -53,10 +53,32 @@ class MethodPackM02Tests(unittest.TestCase):
     def test_availability_caps_bind_to_actual_stage(self):
         self.assertEqual(STAGE_LIMITS["reference_frozen"], "reference_known_at")
         self.assertEqual(STAGE_LIMITS["bias_recorded"], "context_at")
-        self.assertEqual(STAGE_LIMITS["sweep_high"], "sweep_at")
+        self.assertEqual(STAGE_LIMITS["sweep_high"], "confirm_at")
+        self.assertEqual(STAGE_LIMITS["sweep_low"], "confirm_at")
         self.assertEqual(STAGE_LIMITS["confirm_close"], "confirm_at")
         self.assertEqual(STAGE_LIMITS["box_return_ok"], "confirm_at")
         self.assertEqual(STAGE_LIMITS["risk_defined"], "decision_at")
+
+    def test_sweep_extreme_can_be_observed_through_confirmation_but_not_after_it(self):
+        op = _positive_case()
+        doc = fixture_document("GB-FAIL", "sequence", "episode", op)
+        sweep = next(o for o in doc["objects"] if o["object_id"].endswith(":sweep_high"))
+        self.assertEqual(sweep["known_at"], op["confirm_at"])
+        parsed = parse_manifest(doc, "GB-FAIL")
+        result = score_episode(parsed[0]["episode"], *parsed[1:])
+        self.assertEqual(result["verdict"], "pass")
+        self.assertEqual(result["detected_causal_violations"], 0)
+        late_at = op["confirm_at"] + 1
+        sweep.update(known_at=late_at, as_of=late_at,
+                     formation_start=late_at, formation_end=late_at)
+        for evidence in doc["evidence"]:
+            if evidence["evidence_id"] in sweep["evidence_ids"]:
+                evidence.update(known_at=late_at, observation_start=late_at,
+                                observation_end=late_at)
+        parsed = parse_manifest(doc, "GB-FAIL")
+        result = score_episode(parsed[0]["episode"], *parsed[1:])
+        self.assertEqual(result["verdict"], "fail")
+        self.assertGreater(result["detected_causal_violations"], 0)
 
     def test_manifest_mutations_use_real_records(self):
         op = _positive_case()
@@ -126,7 +148,7 @@ class MethodPackM02Tests(unittest.TestCase):
             ], cwd=ROOT, text=True, capture_output=True)
             self.assertEqual(run.returncode, 0, run.stderr)
             report = json.loads((reports / "gb-fail.json").read_text())
-            self.assertEqual(report["status"], "source_hole")
+            self.assertEqual(report["status"], "checks_passed")
             self.assertEqual(report["summary"]["N"], 0)
             self.assertEqual(len(report["branches"]), 8)
             self.assertEqual(report["quality"]["fixture_failures"], 0)

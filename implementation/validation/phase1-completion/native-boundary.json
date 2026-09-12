@@ -1,0 +1,476 @@
+{
+  "schema": "phase1-native-boundary-validation-v1",
+  "scope": "Shared native evidence boundary and exact declared windows only; not full object/method completion or source fill agreement",
+  "command": "PYTHONPATH=implementation/src python -c \"from trading_research.research.method_pack.native_windows import collect_window; from trading_research.research.method_pack.objects.native_boundary import run_native_object; from trading_research.research.method_pack.native_resolution import NativeResolver; import json; d=json.load(open('implementation/validation/phase1-completion/native-boundary.json')); print(run_native_object(d['o004']['object'], NativeResolver()))\"",
+  "o004": {
+    "object": {
+      "recipe_id": "O004",
+      "instrument_id": 26715,
+      "formation_start": 1283786400000000000,
+      "formation_end": 1283786520000000000,
+      "known_at": 1283786520000000000,
+      "as_of": 1283786520000000000,
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2010.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "3ffff5188349e64f6475425c53f8c8598234b16e972b6f3966697e85ba09debb",
+          "row_start": 0,
+          "row_end": 2
+        }
+      ],
+      "inputs": {
+        "kind": "time",
+        "size_minutes": 2,
+        "use_at": 1283786520000000000
+      }
+    },
+    "result": {
+      "recipe_id": "O004",
+      "state": "computed",
+      "value": {
+        "bar_id": "26715:1283786400000000000:1283786520000000000",
+        "instrument_id": 26715,
+        "kind": "time",
+        "size": "2m",
+        "start": 1283786400000000000,
+        "end": 1283786520000000000,
+        "complete": true,
+        "known_at": 1283786520000000000,
+        "native_source_compatible": true,
+        "coverage_state": "complete",
+        "member_event_ids": [
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2010.parquet:0:26715",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2010.parquet:1:26715"
+        ],
+        "missing_intervals": [],
+        "O": "1872.0",
+        "H": "1872.75",
+        "L": "1872.0",
+        "C": "1872.75",
+        "V": "177.0"
+      },
+      "hole_ids": [],
+      "known_at": 1283786520000000000,
+      "base_ok": true,
+      "coverage_ok": true,
+      "parent_ids": [],
+      "evidence_ids": [],
+      "units": {},
+      "applicability": null,
+      "reason": null,
+      "evidence_class": "resolved_native"
+    }
+  },
+  "native_windows": [
+    {
+      "date": "2025-11-20",
+      "source_identity": "NQ native comparison, not an observed MNQ/source fill",
+      "coverage_evidence": {
+        "schema": "phase1-native-window-coverage-v1",
+        "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+        "instrument_id": 158704,
+        "start_ns": 1763649000000000000,
+        "end_ns": 1763649300000000000,
+        "required": "trades",
+        "coverage_ok": true,
+        "missing_intervals": [],
+        "mismatches": [],
+        "member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+            "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e",
+            "row_start": 1752983,
+            "row_end": 1767299
+          }
+        ],
+        "sources": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+            "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e"
+          }
+        ],
+        "corroborating_member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+            "row_start": 309789,
+            "row_end": 309794
+          }
+        ],
+        "minute_reconciliation": [
+          {
+            "minute_start": 1763649000000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309789:158704",
+            "executed_volume": "7596",
+            "ohlcv_volume": "7596.0",
+            "trade_count": 5397,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1763649060000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309790:158704",
+            "executed_volume": "3503",
+            "ohlcv_volume": "3503.0",
+            "trade_count": 2776,
+            "endpoint_order": "unknown_order",
+            "matched": true
+          },
+          {
+            "minute_start": 1763649120000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309791:158704",
+            "executed_volume": "3220",
+            "ohlcv_volume": "3220.0",
+            "trade_count": 2391,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1763649180000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309792:158704",
+            "executed_volume": "2425",
+            "ohlcv_volume": "2425.0",
+            "trade_count": 1886,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1763649240000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet:309793:158704",
+            "executed_volume": "2536",
+            "ohlcv_volume": "2536.0",
+            "trade_count": 1866,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          }
+        ],
+        "native_row_count": 14316,
+        "native_minute_count": 5,
+        "excluded_unowned_rows": 0,
+        "method": "all_native_rows_plus_independent_minute_volume_ohlc_reconciliation"
+      },
+      "instrument_definition": {
+        "definition_id": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet#61@4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "instrument_id": 158704,
+        "tick_size": "0.25",
+        "known_at": 1758453287136970773,
+        "source_file": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+        "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "source_row": 61,
+        "root": "NQ",
+        "raw_symbol": "NQZ5"
+      }
+    },
+    {
+      "date": "2026-02-24",
+      "source_identity": "NQ native comparison, not an observed MNQ/source fill",
+      "coverage_evidence": {
+        "schema": "phase1-native-window-coverage-v1",
+        "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+        "instrument_id": 42002475,
+        "start_ns": 1771943400000000000,
+        "end_ns": 1771943700000000000,
+        "required": "trades",
+        "coverage_ok": true,
+        "missing_intervals": [],
+        "mismatches": [],
+        "member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+            "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46",
+            "row_start": 459630,
+            "row_end": 474310
+          }
+        ],
+        "sources": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+            "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+          }
+        ],
+        "corroborating_member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+            "row_start": 51507,
+            "row_end": 51512
+          }
+        ],
+        "minute_reconciliation": [
+          {
+            "minute_start": 1771943400000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51507:42002475",
+            "executed_volume": "5312",
+            "ohlcv_volume": "5312.0",
+            "trade_count": 4081,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1771943460000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51508:42002475",
+            "executed_volume": "4662",
+            "ohlcv_volume": "4662.0",
+            "trade_count": 3293,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1771943520000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51509:42002475",
+            "executed_volume": "2994",
+            "ohlcv_volume": "2994.0",
+            "trade_count": 2274,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1771943580000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51510:42002475",
+            "executed_volume": "3537",
+            "ohlcv_volume": "3537.0",
+            "trade_count": 2459,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1771943640000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51511:42002475",
+            "executed_volume": "3610",
+            "ohlcv_volume": "3610.0",
+            "trade_count": 2573,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          }
+        ],
+        "native_row_count": 14680,
+        "native_minute_count": 5,
+        "excluded_unowned_rows": 0,
+        "method": "all_native_rows_plus_independent_minute_volume_ohlc_reconciliation"
+      },
+      "instrument_definition": {
+        "definition_id": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet#62@4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "instrument_id": 42002475,
+        "tick_size": "0.25",
+        "known_at": 1766322788458000000,
+        "source_file": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+        "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "source_row": 62,
+        "root": "NQ",
+        "raw_symbol": "NQH6"
+      }
+    },
+    {
+      "date": "2026-06-12",
+      "source_identity": "NQ native comparison, not an observed MNQ/source fill",
+      "coverage_evidence": {
+        "schema": "phase1-native-window-coverage-v1",
+        "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+        "instrument_id": 42004058,
+        "start_ns": 1781271000000000000,
+        "end_ns": 1781271300000000000,
+        "required": "trades",
+        "coverage_ok": true,
+        "missing_intervals": [],
+        "mismatches": [],
+        "member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-06-08.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+            "sha256": "6439c2248d7d2a49b61e4764befd715036c6d2de06b0b6cd33b2fe042d9a9ee3",
+            "row_start": 2505243,
+            "row_end": 2515340
+          }
+        ],
+        "sources": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-06-08.parquet",
+            "sha256": "6439c2248d7d2a49b61e4764befd715036c6d2de06b0b6cd33b2fe042d9a9ee3"
+          }
+        ],
+        "corroborating_member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+            "row_start": 152520,
+            "row_end": 152525
+          }
+        ],
+        "minute_reconciliation": [
+          {
+            "minute_start": 1781271000000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:152520:42004058",
+            "executed_volume": "4223",
+            "ohlcv_volume": "4223.0",
+            "trade_count": 3257,
+            "endpoint_order": "unknown_order",
+            "matched": true
+          },
+          {
+            "minute_start": 1781271060000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:152521:42004058",
+            "executed_volume": "2501",
+            "ohlcv_volume": "2501.0",
+            "trade_count": 1903,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1781271120000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:152522:42004058",
+            "executed_volume": "1505",
+            "ohlcv_volume": "1505.0",
+            "trade_count": 1160,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1781271180000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:152523:42004058",
+            "executed_volume": "2388",
+            "ohlcv_volume": "2388.0",
+            "trade_count": 1754,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1781271240000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:152524:42004058",
+            "executed_volume": "2721",
+            "ohlcv_volume": "2721.0",
+            "trade_count": 2023,
+            "endpoint_order": "unknown_order",
+            "matched": true
+          }
+        ],
+        "native_row_count": 10097,
+        "native_minute_count": 5,
+        "excluded_unowned_rows": 0,
+        "method": "all_native_rows_plus_independent_minute_volume_ohlc_reconciliation"
+      },
+      "instrument_definition": {
+        "definition_id": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet#63@4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "instrument_id": 42004058,
+        "tick_size": "0.25",
+        "known_at": 1774189482370000000,
+        "source_file": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+        "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "source_row": 63,
+        "root": "NQ",
+        "raw_symbol": "NQM6"
+      }
+    },
+    {
+      "date": "2026-07-23",
+      "source_identity": "NQ native comparison, not an observed MNQ/source fill",
+      "coverage_evidence": {
+        "schema": "phase1-native-window-coverage-v1",
+        "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+        "instrument_id": 42004177,
+        "start_ns": 1784813400000000000,
+        "end_ns": 1784813700000000000,
+        "required": "trades",
+        "coverage_ok": true,
+        "missing_intervals": [],
+        "mismatches": [],
+        "member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-07-20.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+            "sha256": "ee61ca6fb42357a7eaf396a3b471e74812cb0db0d8d2d83baedf60af14107338",
+            "row_start": 1109302,
+            "row_end": 1123291
+          }
+        ],
+        "sources": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-07-20.parquet",
+            "sha256": "ee61ca6fb42357a7eaf396a3b471e74812cb0db0d8d2d83baedf60af14107338"
+          }
+        ],
+        "corroborating_member_locators": [
+          {
+            "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+            "row_start": 186994,
+            "row_end": 186999
+          }
+        ],
+        "minute_reconciliation": [
+          {
+            "minute_start": 1784813400000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:186994:42004177",
+            "executed_volume": "5685",
+            "ohlcv_volume": "5685.0",
+            "trade_count": 4395,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1784813460000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:186995:42004177",
+            "executed_volume": "3682",
+            "ohlcv_volume": "3682.0",
+            "trade_count": 2890,
+            "endpoint_order": "unknown_order",
+            "matched": true
+          },
+          {
+            "minute_start": 1784813520000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:186996:42004177",
+            "executed_volume": "3128",
+            "ohlcv_volume": "3128.0",
+            "trade_count": 2329,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1784813580000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:186997:42004177",
+            "executed_volume": "3111",
+            "ohlcv_volume": "3111.0",
+            "trade_count": 2375,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          },
+          {
+            "minute_start": 1784813640000000000,
+            "bar_id": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:186998:42004177",
+            "executed_volume": "2718",
+            "ohlcv_volume": "2718.0",
+            "trade_count": 2000,
+            "endpoint_order": "unique_timestamp",
+            "matched": true
+          }
+        ],
+        "native_row_count": 13989,
+        "native_minute_count": 5,
+        "excluded_unowned_rows": 0,
+        "method": "all_native_rows_plus_independent_minute_volume_ohlc_reconciliation"
+      },
+      "instrument_definition": {
+        "definition_id": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet#64@4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "instrument_id": 42004177,
+        "tick_size": "0.25",
+        "known_at": 1781436879063000000,
+        "source_file": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+        "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a",
+        "source_row": 64,
+        "root": "NQ",
+        "raw_symbol": "NQU6"
+      }
+    }
+  ],
+  "implementation_hashes": {
+    "implementation/src/trading_research/research/method_pack/native_resolution.py": "d112ef8d1b9301b3b47db7fa14c3bb11f25957ab70d346ff84a3e48727b11352",
+    "implementation/src/trading_research/research/method_pack/native_windows.py": "c7405a92115f7ba09e0d92b3f220929d31335d0843ec00d0e019717a8fb1476b",
+    "implementation/src/trading_research/research/method_pack/objects/native_boundary.py": "c2b69b11e85881403c1defb018e312d60e84c572467188558ef9e21ef70eaa57"
+  }
+}

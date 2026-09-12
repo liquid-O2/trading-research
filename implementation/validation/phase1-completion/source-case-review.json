@@ -1,0 +1,3740 @@
+{
+  "schema": "phase1-source-case-review-v2",
+  "review_date": "2026-09-12",
+  "case_count": 22,
+  "source_catalog": {
+    "path": "/workspace/implementation/src/trading_research/research/method_pack/source_cases_v2.json",
+    "sha256": "b730c93d4b9e8b8e4cc07d82efaf2298dcf2fe49c146314c386b88a9b6a07602"
+  },
+  "cases": [
+    {
+      "case_id": "JJ-range-control-2026-02-24",
+      "method_id": "JJ-TBR",
+      "evidence_mode": "native_control",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "JJ-range-control-2026-02-24",
+        "method_id": "JJ-TBR",
+        "source_refs": [
+          "TBR:4",
+          "TBR:21"
+        ],
+        "configuration_ids": [
+          "jumbo-published-geometry"
+        ],
+        "evidence_mode": "native_control",
+        "historical_candidate": false,
+        "date": {
+          "value": "2026-02-24",
+          "status": "inference",
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "Frozen existing native geometry control date; not a date claimed by the Jumbo source figure."
+        },
+        "instrument": {
+          "value": "NQH6",
+          "status": "inference",
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "Acquired native control contract, not a displayed source fill."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 1
+          },
+          "status": "inference",
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "One-minute inputs for clock geometry control; not a source entry timeframe."
+        },
+        "observation_interval": {
+          "value": {
+            "start_et": "06:00",
+            "end_et": "09:00"
+          },
+          "status": "fact",
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "Visible observation window; fill timestamp is separately unknown."
+        },
+        "observed_decision": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "source_trade_decision"
+        ],
+        "source_images": [
+          {
+            "image_id": "TBR:4:page",
+            "source_key": "TBR",
+            "page": 4,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TBR:21:page",
+            "source_key": "TBR",
+            "page": 21,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": [
+          {
+            "control_window_id": "JJ-range-control-2026-02-24:source_range",
+            "version": "2.0.0",
+            "role": "source_range",
+            "start_et": "2026-02-24T06:00",
+            "end_et": "2026-02-24T09:00",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "TBR:4",
+              "TBR:21"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        ]
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/JJ-range-control-2026-02-24.png",
+          "sha256": "bc5e120ca7296547e44c3b544f6a1ed0160b4d86238dee188ab5436f4a6c112b"
+        },
+        "observations": "The 06:00\u201309:00 ET native range, its own width, quadrants and both projection branches reconcile. This dated control is not an observed author trade.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "source_trade_decision"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "native_control_verified",
+        "notes": "The 06:00\u201309:00 ET native range, its own width, quadrants and both projection branches reconcile. This dated control is not an observed author trade.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "assembled_measurement": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/JJ-range-control-2026-02-24.result.json",
+          "sha256": "d1a1eb358a5a84ac746680a2b15c7aeaa3854ad97c1da85b4d230b8332c78545"
+        },
+        "verdict": "unknown",
+        "software_complete": true,
+        "native_object_count": 1,
+        "missing_operands": [
+          {
+            "field": "branch",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "confirm_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "context_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "context_fixed",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "decision_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "entry_at_named_internal_or_ev_band",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "location_touched",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "objective_fixed",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "objective_is_named_rotation_target",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "risk_defined",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "rotation_context",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "source_confirmation",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "TBR:4; TBR:21"
+          },
+          {
+            "field": "touch_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "TBR:4; TBR:21"
+          }
+        ],
+        "detected_causal_violations": 0,
+        "rejected_proxy_attempts": 0
+      },
+      "data_coverage": {
+        "status": "per_native_window",
+        "windows": [
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771930800000000000,
+            "end_ns": 1771941600000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JJ-profiles-2026-06-12",
+      "method_id": "JJ-TBR",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "JJ-profiles-2026-06-12",
+        "method_id": "JJ-TBR",
+        "source_refs": [
+          "JR:4"
+        ],
+        "configuration_ids": [
+          "jumbo-published-geometry"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": "2026-06-12",
+          "status": "fact",
+          "source_refs": [
+            "JR:4"
+          ],
+          "reason": "Date printed in the source."
+        },
+        "instrument": {
+          "value": "NQ",
+          "status": "fact",
+          "source_refs": [
+            "JR:4"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "JR:4"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "JR:4"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "profile_context",
+            "post_id": "2065444190557761675"
+          },
+          "status": "fact",
+          "source_refs": [
+            "JR:4"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "separate_left_profile_1",
+          "separate_left_profile_2",
+          "separate_left_profile_3",
+          "developing_current"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "exact_profile_windows",
+          "native_contract",
+          "timeframe",
+          "decision_timestamp",
+          "VA_algorithm"
+        ],
+        "source_images": [
+          {
+            "image_id": "JR:4:page",
+            "source_key": "JR",
+            "page": 4,
+            "sha256": "bb37d2012176551ef2edeeca88d70d360df294f97f1838320e8ee0cddd2ef822",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/JJ-profiles-2026-06-12.png",
+          "sha256": "f81c317b65bee8e4f49bfb93bc613e29c01148b9c7508b6d9b016d9f0de70f0b"
+        },
+        "observations": "The original shows separate profile panels. Five distinct native prior-RTH, prior-ETH, overnight, developing-RTH and selected-range windows are plotted; unreadable author windows and VA expansion cannot be matched. The 40% control setting is attributed to Sires, not recovered for Jumbo.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "exact_profile_windows",
+          "native_contract",
+          "timeframe",
+          "decision_timestamp",
+          "VA_algorithm"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "structure_preserved_settings_unknown",
+        "notes": "The original shows separate profile panels. Five distinct native prior-RTH, prior-ETH, overnight, developing-RTH and selected-range windows are plotted; unreadable author windows and VA expansion cannot be matched. The 40% control setting is attributed to Sires, not recovered for Jumbo.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "native_measurement": {
+        "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/JJ-profiles-2026-06-12.json",
+        "sha256": "d2b5a0199dd2e95ae2085d886df85a9644189e3ac4291b6f13f377ba7dda0bf6"
+      },
+      "data_coverage": {
+        "status": "per_native_window",
+        "coverage_ok": null,
+        "profile_coverage": [
+          {
+            "profile_id": "2026-06-12-prior-rth",
+            "coverage_ok": null,
+            "payload": {
+              "path": "objects/2026-06-12-prior-rth.json.gz",
+              "sha256": "dd47652ea2854251b325c217d4ca150ce51dc284bd8ef11de314f85a69c071d5",
+              "encoding": "gzip JSON; Decimal fields stored as exact decimal strings"
+            }
+          },
+          {
+            "profile_id": "2026-06-12-prior-eth",
+            "coverage_ok": null,
+            "payload": {
+              "path": "objects/2026-06-12-prior-eth.json.gz",
+              "sha256": "1ca677dae142ca59153ee1f88663ea837f580902f713699cd880d1e214f86ce7",
+              "encoding": "gzip JSON; Decimal fields stored as exact decimal strings"
+            }
+          },
+          {
+            "profile_id": "2026-06-12-overnight",
+            "coverage_ok": null,
+            "payload": {
+              "path": "objects/2026-06-12-overnight.json.gz",
+              "sha256": "9578093bf0550bd447335d29ada0fef24257525a7e8e50ac180c201c79a0c656",
+              "encoding": "gzip JSON; Decimal fields stored as exact decimal strings"
+            }
+          },
+          {
+            "profile_id": "2026-06-12-developing-rth",
+            "coverage_ok": null,
+            "payload": {
+              "path": "objects/2026-06-12-developing-rth.json.gz",
+              "sha256": "a29925ca52ba7cc01a097672f361e51e02fd6422abb7fe8201508e1276d22c3c",
+              "encoding": "gzip JSON; Decimal fields stored as exact decimal strings"
+            }
+          },
+          {
+            "profile_id": "2026-06-12-selected-range",
+            "coverage_ok": true,
+            "payload": {
+              "path": "objects/2026-06-12-selected-range.json.gz",
+              "sha256": "a0ef5804b0ad98155ca75a67be7b732432becfe60bee9a47728f5515c0dfb2ed",
+              "encoding": "gzip JSON; Decimal fields stored as exact decimal strings"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "JJ-orderblock-long",
+      "method_id": "JJ-TBR",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "JJ-orderblock-long",
+        "method_id": "JJ-TBR",
+        "source_refs": [
+          "TBR:27",
+          "TBR:28"
+        ],
+        "configuration_ids": [
+          "jumbo-published-geometry"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 3
+          },
+          "status": "fact",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Case-specific visible/published chart configuration."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "orderblock_illustration",
+            "side": "long",
+            "bounds": "full C2 range"
+          },
+          "status": "fact",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "event_members"
+        ],
+        "source_images": [
+          {
+            "image_id": "TBR:27:page",
+            "source_key": "TBR",
+            "page": 27,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TBR:28:page",
+            "source_key": "TBR",
+            "page": 28,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/TBR-27-page.png",
+          "sha256": "8f4d0b4f621fc40b8b678c699ce8a9df17a99d964a53313072dc20a0bccf9906"
+        },
+        "observations": "TBR pages 27\u201328 show the long three-minute example. Complete-candle pattern tests preserve the swept low, full second-candle zone and later confirmation; the exact dated native execution is unavailable.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "event_members"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_sequence_retained",
+        "notes": "TBR pages 27\u201328 show the long three-minute example. Complete-candle pattern tests preserve the swept low, full second-candle zone and later confirmation; the exact dated native execution is unavailable.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "JJ-orderblock-short-mirror",
+      "method_id": "JJ-TBR",
+      "evidence_mode": "synthetic_fixture",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "JJ-orderblock-short-mirror",
+        "method_id": "JJ-TBR",
+        "source_refs": [
+          "TBR:27",
+          "TBR:28"
+        ],
+        "configuration_ids": [
+          "jumbo-published-geometry"
+        ],
+        "evidence_mode": "synthetic_fixture",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 3
+          },
+          "status": "inference",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Mirrored test uses the source long illustration clock."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "mirrored_implementation_control",
+            "side": "short",
+            "bounds": "full C2 range"
+          },
+          "status": "inference",
+          "source_refs": [
+            "TBR:27",
+            "TBR:28"
+          ],
+          "reason": "Mirrored geometry invariant. Retained pages illustrate longs, so this is not an observed source short."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "dated_short_source_case",
+          "date",
+          "native_contract",
+          "event_members"
+        ],
+        "source_images": [
+          {
+            "image_id": "TBR:27:page",
+            "source_key": "TBR",
+            "page": 27,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TBR:28:page",
+            "source_key": "TBR",
+            "page": 28,
+            "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/TBR-27-page.png",
+          "sha256": "8f4d0b4f621fc40b8b678c699ce8a9df17a99d964a53313072dc20a0bccf9906"
+        },
+        "observations": "The short branch is tested with three identified mirrored candles. Neither cited page is a short observed source trade, so this record remains a synthetic fixture.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "dated_short_source_case",
+          "date",
+          "native_contract",
+          "event_members"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "synthetic_mirror_only",
+        "notes": "The short branch is tested with three identified mirrored candles. Neither cited page is a short observed source trade, so this record remains a synthetic fixture.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "GB-FAIL-2025-11-20",
+      "method_id": "GB-FAIL",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "GB-FAIL-2025-11-20",
+        "method_id": "GB-FAIL",
+        "source_refs": [
+          "GB:31",
+          "GB:43"
+        ],
+        "configuration_ids": [
+          "gb-nov20-sweep"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": "2025-11-20",
+          "status": "fact",
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Date printed in the source."
+        },
+        "instrument": {
+          "value": "MNQZ2025",
+          "status": "fact",
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 2
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Case-specific visible/published chart configuration."
+        },
+        "observation_interval": {
+          "value": {
+            "start_et": "08:00",
+            "end_et": "11:02",
+            "timezone": "America/New_York"
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Visible observation window; fill timestamp is separately unknown."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "displayed_short_position",
+            "price": "25301.75",
+            "sequence": "entry_at_high_sweep",
+            "fill_time": null
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [
+          {
+            "kind": "later_MSS_FVG",
+            "entry_prerequisite": false
+          },
+          {
+            "kind": "opposing_09_10_low_objective",
+            "planned_before_entry": null
+          }
+        ],
+        "missing_fields": [
+          "actual_fill_time",
+          "actual_fill_ledger",
+          "native_MNQ_data"
+        ],
+        "source_images": [
+          {
+            "image_id": "GB:31:page",
+            "source_key": "GB",
+            "page": 31,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "GB:43:page",
+            "source_key": "GB",
+            "page": 43,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "source_sweep_region": {
+          "value": {
+            "start_et": "10:30",
+            "end_et": "10:44"
+          },
+          "status": "inference",
+          "source_refs": [
+            "GB:43"
+          ],
+          "reason": "Broad region around the eye/position at the later high sweep. This is a retrospective visual locator, not a fill timestamp."
+        },
+        "native_control_windows": [
+          {
+            "control_window_id": "GB-FAIL-2025-11-20:failure_reference",
+            "version": "2.0.0",
+            "role": "failure_reference",
+            "start_et": "2025-11-20T09:00",
+            "end_et": "2025-11-20T10:00",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:31",
+              "GB:43"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          },
+          {
+            "control_window_id": "GB-FAIL-2025-11-20:failure_confirmation",
+            "version": "2.0.0",
+            "role": "failure_confirmation",
+            "start_et": "2025-11-20T10:38",
+            "end_et": "2025-11-20T10:40",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:31",
+              "GB:43"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        ]
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-FAIL-2025-11-20.png",
+          "sha256": "5d75479ab54cada16015d2e0d9e54837e9b35ea6f475bb77d4e452ed13177c1b"
+        },
+        "observations": "The MNQ two-minute display shows 25301.75 and entry at the later high sweep, before MSS/FVG annotations. The NQ 10:38\u201310:40 comparison and its close remain measurements, excluded from source sweep/fill/confirmation bindings. No NQ fill or return is inferred.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "actual_fill_time",
+          "actual_fill_ledger",
+          "native_MNQ_data"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "sequence_correction_preserved",
+        "notes": "The MNQ two-minute display shows 25301.75 and entry at the later high sweep, before MSS/FVG annotations. The NQ 10:38\u201310:40 comparison and its close remain measurements, excluded from source sweep/fill/confirmation bindings. No NQ fill or return is inferred.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "assembled_measurement": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/GB-FAIL-2025-11-20.result.json",
+          "sha256": "9556655a35848ed38d34ec038d24c04a99f59f340995bd06f801841d36170f8d"
+        },
+        "verdict": "unknown",
+        "software_complete": true,
+        "native_object_count": 3,
+        "missing_operands": [
+          {
+            "field": "bias_recorded",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "box_return_ok",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "confirm_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "confirm_close",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "confirmation_mode",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "context_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "decision_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "impulse_known_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "objective_fixed",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "pocket_required",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "reference_frozen",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "retest_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "retracement_entry",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "risk_defined",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "side",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "source_session_allowed",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "source_tdo_close_confirmed",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "sweep_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "sweep_high",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "tdo_required",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "touch_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          },
+          {
+            "field": "touch_in_measured_pocket",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:31; GB:43"
+          }
+        ],
+        "detected_causal_violations": 0,
+        "rejected_proxy_attempts": 0
+      },
+      "data_coverage": {
+        "status": "per_native_window",
+        "windows": [
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1763647200000000000,
+            "end_ns": 1763650800000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1763653080000000000,
+            "end_ns": 1763653200000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+            "start_ns": 1763653080000000000,
+            "end_ns": 1763653200000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "GB-VWAP-2026-02-24",
+      "method_id": "GB-VWAP",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "GB-VWAP-2026-02-24",
+        "method_id": "GB-VWAP",
+        "source_refs": [
+          "GB:33",
+          "GB:34"
+        ],
+        "configuration_ids": [
+          "gb-vwap-continuation"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": "2026-02-24",
+          "status": "fact",
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Date printed in the source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 1
+          },
+          "status": "inference",
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Bar spacing resembles one minute; retained source has no readable explicit timeframe label. Frozen prior comparison uses one minute."
+        },
+        "observation_interval": {
+          "value": {
+            "start_et": "08:30",
+            "end_et": "10:25",
+            "timezone": "America/New_York"
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Visible observation window; fill timestamp is separately unknown."
+        },
+        "observed_decision": {
+          "value": {
+            "side": "long",
+            "sequence": [
+              "close_above_Asia_and_London",
+              "VWAP_retrace",
+              "entry"
+            ],
+            "stop_points": "30"
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:33",
+            "GB:34"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [
+          {
+            "reported_points": [
+              "150",
+              "100"
+            ],
+            "status": "source_conflict",
+            "planned_target": false
+          }
+        ],
+        "missing_fields": [
+          "display_native_contract",
+          "VWAP_reset",
+          "VWAP_basis",
+          "session_clocks",
+          "actual_fill_time"
+        ],
+        "source_images": [
+          {
+            "image_id": "GB:33:page",
+            "source_key": "GB",
+            "page": 33,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "GB:34:page",
+            "source_key": "GB",
+            "page": 34,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": [
+          {
+            "control_window_id": "GB-VWAP-2026-02-24:asia",
+            "version": "2.0.0",
+            "role": "asia",
+            "start_et": "2026-02-23T20:00",
+            "end_et": "2026-02-24T00:00",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          },
+          {
+            "control_window_id": "GB-VWAP-2026-02-24:london",
+            "version": "2.0.0",
+            "role": "london",
+            "start_et": "2026-02-24T02:00",
+            "end_et": "2026-02-24T05:00",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          },
+          {
+            "control_window_id": "GB-VWAP-2026-02-24:vwap_at_retest",
+            "version": "2.0.0",
+            "role": "vwap_at_retest",
+            "start_et": "2026-02-23T18:00",
+            "end_et": "2026-02-24T10:00",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          },
+          {
+            "control_window_id": "GB-VWAP-2026-02-24:breakout_candle",
+            "version": "2.0.0",
+            "role": "breakout_candle",
+            "start_et": "2026-02-24T09:44",
+            "end_et": "2026-02-24T09:45",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          },
+          {
+            "control_window_id": "GB-VWAP-2026-02-24:retest_candle",
+            "version": "2.0.0",
+            "role": "retest_candle",
+            "start_et": "2026-02-24T10:00",
+            "end_et": "2026-02-24T10:01",
+            "timezone": "America/New_York",
+            "status": "inference",
+            "source_refs": [
+              "GB:33",
+              "GB:34"
+            ],
+            "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+          }
+        ]
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-VWAP-2026-02-24.png",
+          "sha256": "bb99fcfca213e9eeef5afcb1c55a076664076cb985450c17049306fb14483be3"
+        },
+        "observations": "The opening reversal, later pullback and continuation are retained. The single previous-18:00/HLC3 comparison reproduces the prior curve; source reset, price basis and unreadable timeframe remain unverified. No new parameter grid was searched.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "display_native_contract",
+          "VWAP_reset",
+          "VWAP_basis",
+          "session_clocks",
+          "actual_fill_time"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "frozen_comparison_reproduced",
+        "notes": "The opening reversal, later pullback and continuation are retained. The single previous-18:00/HLC3 comparison reproduces the prior curve; source reset, price basis and unreadable timeframe remain unverified. No new parameter grid was searched.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "assembled_measurement": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/GB-VWAP-2026-02-24.result.json",
+          "sha256": "8dee3baac179e463fd511390fc2f257bf369c93e36a8dd625895ff6b6c542ab0"
+        },
+        "verdict": "unknown",
+        "software_complete": true,
+        "native_object_count": 5,
+        "missing_operands": [
+          {
+            "field": "continuation_context",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:33; GB:34"
+          },
+          {
+            "field": "decision_at",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:33; GB:34"
+          },
+          {
+            "field": "reference_frozen",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:33; GB:34"
+          },
+          {
+            "field": "risk_defined",
+            "kind": "supplied_record_missing",
+            "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+            "source_ref": "GB:33; GB:34"
+          },
+          {
+            "field": "side",
+            "kind": "supplied_record_missing",
+            "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+            "source_ref": "GB:33; GB:34"
+          }
+        ],
+        "detected_causal_violations": 0,
+        "rejected_proxy_attempts": 0
+      },
+      "data_coverage": {
+        "status": "per_native_window",
+        "windows": [
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771894800000000000,
+            "end_ns": 1771909200000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771916400000000000,
+            "end_ns": 1771927200000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771944240000000000,
+            "end_ns": 1771944300000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771887600000000000,
+            "end_ns": 1771945200000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          },
+          {
+            "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+            "start_ns": 1771945200000000000,
+            "end_ns": 1771945260000000000,
+            "coverage_ok": true,
+            "missing_intervals": [],
+            "mismatch_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "GB-SCALP-bearish",
+      "method_id": "GB-SCALP",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "GB-SCALP-bearish",
+        "method_id": "GB-SCALP",
+        "source_refs": [
+          "GB:40"
+        ],
+        "configuration_ids": [
+          "gb-discretionary-scalp"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "discretionary_scalp_description",
+            "side": "short",
+            "post_id": "2095257805242446135",
+            "description": {
+              "bias": "bearish",
+              "reported_points": [
+                20,
+                30
+              ],
+              "size": "no increase"
+            }
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "native_contract",
+          "exact_trading_date",
+          "entry_time",
+          "fill_ledger",
+          "size_quantity",
+          "repeatable_entry_and_exit_rules"
+        ],
+        "source_images": [
+          {
+            "image_id": "GB:40:page",
+            "source_key": "GB",
+            "page": 40,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "source_post_created_at": {
+          "value": "2026-09-02T21:09:23Z",
+          "status": "fact",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Publication time is not an entry, fill or native observation timestamp."
+        },
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/GB-40-page.png",
+          "sha256": "e856bc8117350bcfdc244a94a3dbfb8c5621b29c8b873fe76aaecfcfc87a89f1"
+        },
+        "observations": "The September 2 publication reports bearish bias, short scalps and 20\u201330 points with no size increase. Publication time is not entry time; quantity, fills, timeframe and a general entry/exit algorithm are absent. The source profit statement is not a reconstructed return.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "native_contract",
+          "exact_trading_date",
+          "entry_time",
+          "fill_ledger",
+          "size_quantity",
+          "repeatable_entry_and_exit_rules"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_description_retained",
+        "notes": "The September 2 publication reports bearish bias, short scalps and 20\u201330 points with no size increase. Publication time is not entry time; quantity, fills, timeframe and a general entry/exit algorithm are absent. The source profit statement is not a reconstructed return.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "GB-SCALP-bullish",
+      "method_id": "GB-SCALP",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "GB-SCALP-bullish",
+        "method_id": "GB-SCALP",
+        "source_refs": [
+          "GB:40"
+        ],
+        "configuration_ids": [
+          "gb-discretionary-scalp"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "discretionary_scalp_description",
+            "side": "long",
+            "post_id": "2098075540607410229",
+            "description": {
+              "direction": "NYAM",
+              "location": "discount pullbacks",
+              "size": "smaller"
+            }
+          },
+          "status": "fact",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "native_contract",
+          "exact_trading_date",
+          "entry_time",
+          "fill_ledger",
+          "size_quantity",
+          "repeatable_entry_and_exit_rules"
+        ],
+        "source_images": [
+          {
+            "image_id": "GB:40:page",
+            "source_key": "GB",
+            "page": 40,
+            "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "source_post_created_at": {
+          "value": "2026-09-10T15:46:03Z",
+          "status": "fact",
+          "source_refs": [
+            "GB:40"
+          ],
+          "reason": "Publication time is not an entry, fill or native observation timestamp."
+        },
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/GB-40-page.png",
+          "sha256": "e856bc8117350bcfdc244a94a3dbfb8c5621b29c8b873fe76aaecfcfc87a89f1"
+        },
+        "observations": "The September 10 publication describes longs with NYAM direction, discount pullbacks and smaller size. This is the separate bullish discretionary loop. No numerical size, dated fill or automatic trigger is invented from that description.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "native_contract",
+          "exact_trading_date",
+          "entry_time",
+          "fill_ledger",
+          "size_quantity",
+          "repeatable_entry_and_exit_rules"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_description_retained",
+        "notes": "The September 10 publication describes longs with NYAM direction, discount pullbacks and smaller size. This is the separate bullish discretionary loop. No numerical size, dated fill or automatic trigger is invented from that description.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "SIRES-overnight-profile",
+      "method_id": "SIRES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "SIRES-overnight-profile",
+        "method_id": "SIRES",
+        "source_refs": [
+          "MAMT:14",
+          "MAMT:15",
+          "MAMT:16"
+        ],
+        "configuration_ids": [
+          "sires-overnight",
+          "sires-va40"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MAMT:14",
+            "MAMT:15",
+            "MAMT:16"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MAMT:14",
+            "MAMT:15",
+            "MAMT:16"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MAMT:14",
+            "MAMT:15",
+            "MAMT:16"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": {
+            "start_et_previous_day": "18:00",
+            "end_et": "09:30",
+            "timezone": "America/New_York"
+          },
+          "status": "fact",
+          "source_refs": [
+            "MAMT:14",
+            "MAMT:15",
+            "MAMT:16"
+          ],
+          "reason": "Visible observation window; fill timestamp is separately unknown."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "overnight_LVN_and_shelf_hold",
+            "older_POC_alignment": "source interpretation"
+          },
+          "status": "fact",
+          "source_refs": [
+            "MAMT:14",
+            "MAMT:15",
+            "MAMT:16"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "overnight",
+          "older_POC_parent",
+          "previous_ETH",
+          "developing_RTH"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "VA_algorithm",
+          "exact_LVN_selection"
+        ],
+        "source_images": [
+          {
+            "image_id": "MAMT:14:page",
+            "source_key": "MAMT",
+            "page": 14,
+            "sha256": "f5b6744abf8dca9ec09681c6b7b96e9e2f77b23cc0e320b5baa1916c45abaf72",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "MAMT:15:page",
+            "source_key": "MAMT",
+            "page": 15,
+            "sha256": "f5b6744abf8dca9ec09681c6b7b96e9e2f77b23cc0e320b5baa1916c45abaf72",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "MAMT:16:page",
+            "source_key": "MAMT",
+            "page": 16,
+            "sha256": "f5b6744abf8dca9ec09681c6b7b96e9e2f77b23cc0e320b5baa1916c45abaf72",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-SIRES-overnight-2026-06-12.png",
+          "sha256": "bcc4a63b1d3df622078252fa4910b71acc0a3ceff43ec5a131ce996a4f24729f"
+        },
+        "observations": "The source specifies previous 18:00\u201309:30 ET. O073 uses the same actual O011 window and an immutable native overnight profile, retaining an older POC identity. June 12 is a declared control date; the source illustration is undated. LVN selection and VA expansion remain unknown.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "VA_algorithm",
+          "exact_LVN_selection"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_window_bound_native_control",
+        "notes": "The source specifies previous 18:00\u201309:30 ET. O073 uses the same actual O011 window and an immutable native overnight profile, retaining an older POC identity. June 12 is a declared control date; the source illustration is undated. LVN selection and VA expansion remain unknown.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      },
+      "additional_native_controls": [
+        {
+          "path": "/workspace/implementation/validation/phase1-completion/native-geometry.json",
+          "sha256": "a84388870eb9ef96cc399153be3c52dd781e3b3ff99977958a82b137b15c63ac"
+        }
+      ]
+    },
+    {
+      "case_id": "SIRES-same-candle-POC",
+      "method_id": "SIRES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "SIRES-same-candle-POC",
+        "method_id": "SIRES",
+        "source_refs": [
+          "FP9:5",
+          "FP9:7",
+          "FP8:6"
+        ],
+        "configuration_ids": [
+          "sires-va40"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "FP9:5",
+            "FP9:7",
+            "FP8:6"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "FP9:5",
+            "FP9:7",
+            "FP8:6"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "FP9:5",
+            "FP9:7",
+            "FP8:6"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "FP9:5",
+            "FP9:7",
+            "FP8:6"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "same_candle_POC_relocation"
+          },
+          "status": "fact",
+          "source_refs": [
+            "FP9:5",
+            "FP9:7",
+            "FP8:6"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "earlier_candle_snapshot",
+          "later_same_candle_snapshot"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_snapshot_times",
+          "source_POC_tie_rule"
+        ],
+        "source_images": [
+          {
+            "image_id": "FP9:5:page",
+            "source_key": "FP9",
+            "page": 5,
+            "sha256": "05ed53924b5b65fc14b0335eaca51f1105e4628424ffb37ff190f13d5aff3d4c",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "FP9:7:page",
+            "source_key": "FP9",
+            "page": 7,
+            "sha256": "05ed53924b5b65fc14b0335eaca51f1105e4628424ffb37ff190f13d5aff3d4c",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "FP8:6:page",
+            "source_key": "FP8",
+            "page": 6,
+            "sha256": "5871811d9a9c4f577ba2ae3887f09a3c1ca9caa849dc0f090894c13b4e27c179",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/FP9-5-page.png",
+          "sha256": "e100ee63d8504090ce61b25bc96efc498c078b481f98aae819c6b0cbf5ed3c98"
+        },
+        "observations": "FP9 page 5 is a same-candle POC schematic, not a dated native fill. Three dated native controls preserve distinct developing and close snapshots, full footprint rows and known/unknown delta. Their POC change is not claimed as the author\u2019s observed flip.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_snapshot_times",
+          "source_POC_tie_rule"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "schematic_and_native_control_separated",
+        "notes": "FP9 page 5 is a same-candle POC schematic, not a dated native fill. Three dated native controls preserve distinct developing and close snapshots, full footprint rows and known/unknown delta. Their POC change is not claimed as the author\u2019s observed flip.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      },
+      "additional_native_controls": [
+        {
+          "path": "/workspace/implementation/validation/phase1-completion/native-flow.json",
+          "sha256": "2f114ff04f0f300b2cbc3921cbfe6564a9256a1eb3a62ff8a69ccd352ac2f829"
+        }
+      ]
+    },
+    {
+      "case_id": "STOP-confirmed",
+      "method_id": "SIRES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "STOP-confirmed",
+        "method_id": "SIRES",
+        "source_refs": [
+          "STOP:11",
+          "STOP:12"
+        ],
+        "configuration_ids": [
+          "sires-stop-sequence"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "STOP:11",
+            "STOP:12"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "EPZ25",
+          "status": "fact",
+          "source_refs": [
+            "STOP:11",
+            "STOP:12"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 1
+          },
+          "status": "fact",
+          "source_refs": [
+            "STOP:11",
+            "STOP:12"
+          ],
+          "reason": "Case-specific visible/published chart configuration."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "STOP:11",
+            "STOP:12"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "confirmed_entry",
+            "side": "long",
+            "checks": [
+              "location",
+              "reward",
+              "renewed_defense",
+              "delta_confirmation"
+            ]
+          },
+          "status": "fact",
+          "source_refs": [
+            "STOP:11",
+            "STOP:12"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "prior_profile",
+          "developing_profile"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "exact_dated_event_interval",
+          "ES_full_depth",
+          "actual_execution_record"
+        ],
+        "source_images": [
+          {
+            "image_id": "STOP:11:page",
+            "source_key": "STOP",
+            "page": 11,
+            "sha256": "bae7593193a0d8596f1d2bfecb1c4632042536727e19a1f0a236f39de1eecf1a",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "STOP:12:page",
+            "source_key": "STOP",
+            "page": 12,
+            "sha256": "bae7593193a0d8596f1d2bfecb1c4632042536727e19a1f0a236f39de1eecf1a",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/STOP-11-page.png",
+          "sha256": "a6f3ce24a7aa18a5c19cc9023a478eda19966a106364d69f19ed1a11b5fa3655"
+        },
+        "observations": "The displayed example is ES/EPZ25 on one-minute candles. The separate NQ 40-range setting is not transferred here. Defense, replenishment, exhaustion and liftoff remain separate; exact dated executions and native passive-order evidence are absent.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "exact_dated_event_interval",
+          "ES_full_depth",
+          "actual_execution_record"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_stages_retained",
+        "notes": "The displayed example is ES/EPZ25 on one-minute candles. The separate NQ 40-range setting is not transferred here. Defense, replenishment, exhaustion and liftoff remain separate; exact dated executions and native passive-order evidence are absent.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "STOP-early",
+      "method_id": "SIRES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "STOP-early",
+        "method_id": "SIRES",
+        "source_refs": [
+          "STOP:13"
+        ],
+        "configuration_ids": [
+          "sires-stop-sequence"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "STOP:13"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "EPZ25",
+          "status": "fact",
+          "source_refs": [
+            "STOP:13"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": {
+            "kind": "time",
+            "minutes": 1
+          },
+          "status": "fact",
+          "source_refs": [
+            "STOP:13"
+          ],
+          "reason": "Case-specific visible/published chart configuration."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "STOP:13"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "wrong_entry",
+            "stage": "before_full_confirmation",
+            "outcome": "loss"
+          },
+          "status": "fact",
+          "source_refs": [
+            "STOP:13"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "exact_date_year",
+          "event_interval",
+          "actual_execution_record"
+        ],
+        "source_images": [
+          {
+            "image_id": "STOP:13:page",
+            "source_key": "STOP",
+            "page": 13,
+            "sha256": "bae7593193a0d8596f1d2bfecb1c4632042536727e19a1f0a236f39de1eecf1a",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/STOP-13-page.png",
+          "sha256": "09031933a95911a979625b1a9f370cd1eba1cd50ad09b7b4d9cffed10e56823b"
+        },
+        "observations": "The deliberate early attempt remains a separate case with its declared small-risk interpretation. It does not receive the later complete-confirmation branch result or an invented fill.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "exact_date_year",
+          "event_interval",
+          "actual_execution_record"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "early_attempt_retained",
+        "notes": "The deliberate early attempt remains a separate case with its declared small-risk interpretation. It does not receive the later complete-confirmation branch result or an invented fill.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "SIRES-losses-2026-07-23",
+      "method_id": "SIRES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "SIRES-losses-2026-07-23",
+        "method_id": "SIRES",
+        "source_refs": [
+          "ANAT:1",
+          "ANAT:6",
+          "ANAT:8",
+          "ANAT:9"
+        ],
+        "configuration_ids": [
+          "sires-process"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": "2026-07-23",
+          "status": "fact",
+          "source_refs": [
+            "ANAT:1",
+            "ANAT:6",
+            "ANAT:8",
+            "ANAT:9"
+          ],
+          "reason": "Date printed in the source."
+        },
+        "instrument": {
+          "value": "NQ",
+          "status": "fact",
+          "source_refs": [
+            "ANAT:1",
+            "ANAT:6",
+            "ANAT:8",
+            "ANAT:9"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "ANAT:1",
+            "ANAT:6",
+            "ANAT:8",
+            "ANAT:9"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": {
+            "start_display_clock": "10:14",
+            "end_display_clock": "10:32",
+            "timezone": null
+          },
+          "status": "fact",
+          "source_refs": [
+            "ANAT:1",
+            "ANAT:6",
+            "ANAT:8",
+            "ANAT:9"
+          ],
+          "reason": "Visible observation window; fill timestamp is separately unknown."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "session_attempts",
+            "attempts": [
+              {
+                "ordinal": 1,
+                "display_clock": "10:14",
+                "outcome": "loss"
+              },
+              {
+                "ordinal": 2,
+                "display_clock": "10:15",
+                "outcome": "loss"
+              },
+              {
+                "ordinal": 3,
+                "display_clock": "10:17",
+                "outcome": "win"
+              },
+              {
+                "ordinal": 4,
+                "display_clock": "10:24",
+                "outcome": "loss"
+              },
+              {
+                "ordinal": 5,
+                "display_clock": "10:25",
+                "outcome": "win"
+              },
+              {
+                "ordinal": 6,
+                "display_clock": "10:27",
+                "outcome": "win"
+              },
+              {
+                "ordinal": 7,
+                "display_clock": "10:30",
+                "outcome": "loss"
+              },
+              {
+                "ordinal": 8,
+                "display_clock": "10:31",
+                "outcome": "loss"
+              },
+              {
+                "ordinal": 9,
+                "display_clock": "10:32",
+                "outcome": "win"
+              }
+            ]
+          },
+          "status": "fact",
+          "source_refs": [
+            "ANAT:1",
+            "ANAT:6",
+            "ANAT:8",
+            "ANAT:9"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [
+          {
+            "reported_session_trade_count": 9
+          },
+          {
+            "caption_first_four": "hurt",
+            "third_plotted_outcome": "positive",
+            "status": "source_conflict"
+          }
+        ],
+        "missing_fields": [
+          "exact_order_fill_times",
+          "price_levels",
+          "chart_timezone",
+          "bar_size"
+        ],
+        "source_images": [
+          {
+            "image_id": "ANAT:1:page",
+            "source_key": "ANAT",
+            "page": 1,
+            "sha256": "b3fead1cb6734cb524000c58b4c70673e3be1982115b2e4e757f103042f446e7",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "ANAT:6:page",
+            "source_key": "ANAT",
+            "page": 6,
+            "sha256": "b3fead1cb6734cb524000c58b4c70673e3be1982115b2e4e757f103042f446e7",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "ANAT:8:page",
+            "source_key": "ANAT",
+            "page": 8,
+            "sha256": "b3fead1cb6734cb524000c58b4c70673e3be1982115b2e4e757f103042f446e7",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "ANAT:9:page",
+            "source_key": "ANAT",
+            "page": 9,
+            "sha256": "b3fead1cb6734cb524000c58b4c70673e3be1982115b2e4e757f103042f446e7",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/SIRES-losses-2026-07-23.png",
+          "sha256": "83d603ec4e030443dd610c7405b30ff30ca315ffb18f1064835f397f8453504f"
+        },
+        "observations": "The nine visible outcomes are loss, loss, win, loss, win, win, loss, loss, win. The caption about the first four conflicts with the positive third plotted attempt and is retained as a conflict. Native one-minute NQU6 context is not an alignment of undocumented source fill clocks.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "exact_order_fill_times",
+          "price_levels",
+          "chart_timezone",
+          "bar_size"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "losses_and_source_conflict_retained",
+        "notes": "The nine visible outcomes are loss, loss, win, loss, win, win, loss, loss, win. The caption about the first four conflicts with the positive third plotted attempt and is retained as a conflict. Native one-minute NQU6 context is not an alignment of undocumented source fill clocks.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "native_measurement": {
+        "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/SIRES-losses-2026-07-23.json",
+        "sha256": "b1e2399a522d5a7ade069b29f2cbc61f79947894b637cae833c4e6e4ba5c7658"
+      },
+      "data_coverage": {
+        "status": "per_native_window",
+        "coverage_ok": true,
+        "profile_coverage": []
+      }
+    },
+    {
+      "case_id": "SAINT-break-retest",
+      "method_id": "SAINT-AMT",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "SAINT-break-retest",
+        "method_id": "SAINT-AMT",
+        "source_refs": [
+          "TRAP:7",
+          "TRAP:3",
+          "TRAP:4",
+          "TRAP:5",
+          "TRAP:9"
+        ],
+        "configuration_ids": [
+          "saint-va68"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TRAP:7",
+            "TRAP:3",
+            "TRAP:4",
+            "TRAP:5",
+            "TRAP:9"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TRAP:7",
+            "TRAP:3",
+            "TRAP:4",
+            "TRAP:5",
+            "TRAP:9"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TRAP:7",
+            "TRAP:3",
+            "TRAP:4",
+            "TRAP:5",
+            "TRAP:9"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "TRAP:7",
+            "TRAP:3",
+            "TRAP:4",
+            "TRAP:5",
+            "TRAP:9"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "side": "short",
+            "kind": "trapped_buyers_retest",
+            "sequence": [
+              "upper_balance",
+              "AM_PM_failures",
+              "break",
+              "same_band_retest",
+              "short"
+            ]
+          },
+          "status": "fact",
+          "source_refs": [
+            "TRAP:7",
+            "TRAP:3",
+            "TRAP:4",
+            "TRAP:5",
+            "TRAP:9"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "daily_delta_profile",
+          "selected_balance"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_band",
+          "source_footprint_configuration"
+        ],
+        "source_images": [
+          {
+            "image_id": "TRAP:7:page",
+            "source_key": "TRAP",
+            "page": 7,
+            "sha256": "9dd2fa2ed741b6ce3bdc84cb7c1a29357c6b336826bfe0df6ae8a99b294e5887",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TRAP:3:page",
+            "source_key": "TRAP",
+            "page": 3,
+            "sha256": "9dd2fa2ed741b6ce3bdc84cb7c1a29357c6b336826bfe0df6ae8a99b294e5887",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TRAP:4:page",
+            "source_key": "TRAP",
+            "page": 4,
+            "sha256": "9dd2fa2ed741b6ce3bdc84cb7c1a29357c6b336826bfe0df6ae8a99b294e5887",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TRAP:5:page",
+            "source_key": "TRAP",
+            "page": 5,
+            "sha256": "9dd2fa2ed741b6ce3bdc84cb7c1a29357c6b336826bfe0df6ae8a99b294e5887",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "TRAP:9:page",
+            "source_key": "TRAP",
+            "page": 9,
+            "sha256": "9dd2fa2ed741b6ce3bdc84cb7c1a29357c6b336826bfe0df6ae8a99b294e5887",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/TRAP-7-page.png",
+          "sha256": "75301a4a7ff71b4ba0f52eeeeea5477a92c474a8748bd09ade770a56d601b235"
+        },
+        "observations": "The Saint continuation/trapped-buyer route keeps the marked balance, prior distinct failures, break and defended same-boundary retest. Exact date/timeframe and complete native flow observations are unavailable; no Sires confirmation is substituted.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_band",
+          "source_footprint_configuration"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_route_retained",
+        "notes": "The Saint continuation/trapped-buyer route keeps the marked balance, prior distinct failures, break and defended same-boundary retest. Exact date/timeframe and complete native flow observations are unavailable; no Sires confirmation is substituted.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "SAINT-failed-auction",
+      "method_id": "SAINT-AMT",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "SAINT-failed-auction",
+        "method_id": "SAINT-AMT",
+        "source_refs": [
+          "AMTL:10",
+          "AMTL:8",
+          "AMTL:9"
+        ],
+        "configuration_ids": [
+          "saint-va68"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AMTL:10",
+            "AMTL:8",
+            "AMTL:9"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AMTL:10",
+            "AMTL:8",
+            "AMTL:9"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AMTL:10",
+            "AMTL:8",
+            "AMTL:9"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AMTL:10",
+            "AMTL:8",
+            "AMTL:9"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "failed_auction_return_to_value"
+          },
+          "status": "fact",
+          "source_refs": [
+            "AMTL:10",
+            "AMTL:8",
+            "AMTL:9"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "selected_balance",
+          "established_value"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_interval",
+          "source_control_interpretation"
+        ],
+        "source_images": [
+          {
+            "image_id": "AMTL:10:page",
+            "source_key": "AMTL",
+            "page": 10,
+            "sha256": "c87c8471f3c4c182dccd14394675323a0198163753154a47f3095aff0d754894",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "AMTL:8:page",
+            "source_key": "AMTL",
+            "page": 8,
+            "sha256": "c87c8471f3c4c182dccd14394675323a0198163753154a47f3095aff0d754894",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "AMTL:9:page",
+            "source_key": "AMTL",
+            "page": 9,
+            "sha256": "c87c8471f3c4c182dccd14394675323a0198163753154a47f3095aff0d754894",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/AMTL-10-page.png",
+          "sha256": "d3b7266963b900af7f04919f6fe06047b8c613a4fc087c980c55d6c2f304f81d"
+        },
+        "observations": "Page 10 is explanatory source text; pages 8\u20139 support the failed-auction schematic. It is not labeled a dated embedded chart. Exploration, failure, original-balance return/reacceptance and local control are tested as a distinct Saint route.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "exact_interval",
+          "source_control_interpretation"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_route_retained",
+        "notes": "Page 10 is explanatory source text; pages 8\u20139 support the failed-auction schematic. It is not labeled a dated embedded chart. Exploration, failure, original-balance return/reacceptance and local control are tested as a distinct Saint route.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "MEMBER-resistance",
+      "method_id": "MEMBER-TWO-REASONS",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "MEMBER-resistance",
+        "method_id": "MEMBER-TWO-REASONS",
+        "source_refs": [
+          "K10:7"
+        ],
+        "configuration_ids": [
+          "member-two-reasons"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "K10:7"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "ES",
+          "status": "fact",
+          "source_refs": [
+            "K10:7"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": {
+            "execution_minutes": 2,
+            "context_minutes": 5
+          },
+          "status": "fact",
+          "source_refs": [
+            "K10:7"
+          ],
+          "reason": "Right ES execution chart is two minutes; separate left NQ context panel is five minutes."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "K10:7"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "side": "short",
+            "kind": "prior_reaction_plus_minor_HVN",
+            "target_R": "1.5"
+          },
+          "status": "fact",
+          "source_refs": [
+            "K10:7"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "selected_minor_HVN",
+          "separate_NQ_context_panel"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "band_coordinates",
+          "fill_times"
+        ],
+        "source_images": [
+          {
+            "image_id": "K10:7:page",
+            "source_key": "K10",
+            "page": 7,
+            "sha256": "37c0188817b624d3a58255f60b75c729ae0b8a434becaa89a343b16f0646f148",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/K10-7-page.png",
+          "sha256": "322533902e1d80a6b1d602ed9050d4fbae47c3128701be00e6db022f92730979"
+        },
+        "observations": "The right execution display is ES two-minute; the left context is NQ five-minute. The marked prior reaction and independent minor HVN remain two identified reasons, rather than two labels on one price. Exact native date and source fill are absent.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "band_coordinates",
+          "fill_times"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "independent_reasons_retained",
+        "notes": "The right execution display is ES two-minute; the left context is NQ five-minute. The marked prior reaction and independent minor HVN remain two identified reasons, rather than two labels on one price. Exact native date and source fill are absent.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "MEMBER-return",
+      "method_id": "MEMBER-TWO-REASONS",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "MEMBER-return",
+        "method_id": "MEMBER-TWO-REASONS",
+        "source_refs": [
+          "K10:8"
+        ],
+        "configuration_ids": [
+          "member-two-reasons"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "K10:8"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "ES",
+          "status": "fact",
+          "source_refs": [
+            "K10:8"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "K10:8"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "K10:8"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "side": "long",
+            "kind": "planned_return_absorption",
+            "target_R": "1.5"
+          },
+          "status": "fact",
+          "source_refs": [
+            "K10:8"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "selected_minor_HVN"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "band_coordinates",
+          "fill_times"
+        ],
+        "source_images": [
+          {
+            "image_id": "K10:8:page",
+            "source_key": "K10",
+            "page": 8,
+            "sha256": "37c0188817b624d3a58255f60b75c729ae0b8a434becaa89a343b16f0646f148",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/K10-8-page.png",
+          "sha256": "f9fad6649195ad4334b15f71debff12490e6e0b0ab0758d52916689a5a9b8b4e"
+        },
+        "observations": "The planned return to structure, fresh absorption/hold and adverse-side stop stay scoped to this long-return case. Missing source clocks or prior-defense records are not copied from the resistance case.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "band_coordinates",
+          "fill_times"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "source_return_plan_retained",
+        "notes": "The planned return to structure, fresh absorption/hold and adverse-side stop stay scoped to this long-return case. Missing source clocks or prior-defense records are not copied from the resistance case.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "KEANI-open-above",
+      "method_id": "KEANI-OPEN-ABOVE-VALUE",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "KEANI-open-above",
+        "method_id": "KEANI-OPEN-ABOVE-VALUE",
+        "source_refs": [
+          "AVG:22"
+        ],
+        "configuration_ids": [
+          "keani-open-above-blueprint"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AVG:22"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AVG:22"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AVG:22"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "AVG:22"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "side": "long",
+            "kind": "open_above_prior_value",
+            "sequence": [
+              "prior_value",
+              "complete_A_low",
+              "developing_value",
+              "aggressive_breakout",
+              "defended_retest"
+            ]
+          },
+          "status": "fact",
+          "source_refs": [
+            "AVG:22"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [
+          "prior_value",
+          "developing_current_value"
+        ],
+        "later_annotations": [],
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "VA_configuration",
+          "imbalance_configuration",
+          "exact_decision_time"
+        ],
+        "source_images": [
+          {
+            "image_id": "AVG:22:page",
+            "source_key": "AVG",
+            "page": 22,
+            "sha256": "cc7520af1a2d22ac6ea27b71e0c97fff2877d76b56d099ccfb4284c3dcf7d771",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "source_figure_kind": "schematic sketch; no dated market chart",
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/AVG-22-page.png",
+          "sha256": "532ec8a79512a811112f6e788df4e92d9161642b03b6522f57a716774bec3bbd"
+        },
+        "observations": "Page 22 is a schematic. Prior value, completed opening A, developing value before the break, buy imbalance and defended retest remain distinct dated dependencies in the implementation. No source date, fill or author VA engine is invented.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "date",
+          "native_contract",
+          "VA_configuration",
+          "imbalance_configuration",
+          "exact_decision_time"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "schematic_sequence_retained",
+        "notes": "Page 22 is a schematic. Prior value, completed opening A, developing value before the break, buy imbalance and defended retest remain distinct dated dependencies in the implementation. No source date, fill or author VA engine is invented.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "REFILL-selected-order",
+      "method_id": "REFILL-STUDY",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "REFILL-selected-order",
+        "method_id": "REFILL-STUDY",
+        "source_refs": [
+          "REF:7",
+          "REF:12",
+          "OFM:18"
+        ],
+        "configuration_ids": [
+          "refill-observation-study"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "REF:7",
+            "REF:12",
+            "OFM:18"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "NQ",
+          "status": "fact",
+          "source_refs": [
+            "REF:7",
+            "REF:12",
+            "OFM:18"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "REF:7",
+            "REF:12",
+            "OFM:18"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "REF:7",
+            "REF:12",
+            "OFM:18"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "selected_order_study",
+            "observation_unit": "touch_and_order",
+            "actual_live_fill": false
+          },
+          "status": "fact",
+          "source_refs": [
+            "REF:7",
+            "REF:12",
+            "OFM:18"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "source_model_and_zone_selector",
+          "individual_selected_order_ledger",
+          "date",
+          "native_contract"
+        ],
+        "source_images": [
+          {
+            "image_id": "REF:7:page",
+            "source_key": "REF",
+            "page": 7,
+            "sha256": "164a1d9dc26c8cd20d86a46d9fcb211a8e64607024825f819b497d7e3fcb8d64",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "REF:12:page",
+            "source_key": "REF",
+            "page": 12,
+            "sha256": "164a1d9dc26c8cd20d86a46d9fcb211a8e64607024825f819b497d7e3fcb8d64",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "OFM:18:page",
+            "source_key": "OFM",
+            "page": 18,
+            "sha256": "42222b20e75c8a92da0d793500ebe29ae5e1d2c8e0ddd369ce0a66ee5b0b8284",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/REF-7-page.png",
+          "sha256": "316eba231a41e8b073f4638301b21ca5748b8fe154f0e402de68cd0c63433bac"
+        },
+        "observations": "Source zone/threshold, causal prior-touch memory, selected order, cancellation, fills and costs remain separate records. Queue position and missing native order history remain unavailable. No return path or optimization was manufactured.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "source_model_and_zone_selector",
+          "individual_selected_order_ledger",
+          "date",
+          "native_contract"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "selected_order_record_retained",
+        "notes": "Source zone/threshold, causal prior-touch memory, selected order, cancellation, fills and costs remain separate records. Queue position and missing native order history remain unavailable. No return path or optimization was manufactured.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "JETBUNDLE-state-process",
+      "method_id": "JETBUNDLE-STATES",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "JETBUNDLE-state-process",
+        "method_id": "JETBUNDLE-STATES",
+        "source_refs": [
+          "MATH:3",
+          "MATH:10",
+          "MATH:11"
+        ],
+        "configuration_ids": [
+          "jetbundle-participation-process"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MATH:3",
+            "MATH:10",
+            "MATH:11"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": "AAPL",
+          "status": "fact",
+          "source_refs": [
+            "MATH:3",
+            "MATH:10",
+            "MATH:11"
+          ],
+          "reason": "Source display identity; never silently transferred to NQ."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MATH:3",
+            "MATH:10",
+            "MATH:11"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "MATH:3",
+            "MATH:10",
+            "MATH:11"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "state_transition_illustration",
+            "native_NQ_applicable": true
+          },
+          "status": "fact",
+          "source_refs": [
+            "MATH:3",
+            "MATH:10",
+            "MATH:11"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "exact_native_state_observations",
+          "unpublished_classifier",
+          "full_participation_events"
+        ],
+        "source_images": [
+          {
+            "image_id": "MATH:3:page",
+            "source_key": "MATH",
+            "page": 3,
+            "sha256": "36d3e210e5a860b6b035cef1c22d4ec285d491e066cfdb4f97b2034b1be04521",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "MATH:10:page",
+            "source_key": "MATH",
+            "page": 10,
+            "sha256": "36d3e210e5a860b6b035cef1c22d4ec285d491e066cfdb4f97b2034b1be04521",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "MATH:11:page",
+            "source_key": "MATH",
+            "page": 11,
+            "sha256": "36d3e210e5a860b6b035cef1c22d4ec285d491e066cfdb4f97b2034b1be04521",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/MATH-3-page.png",
+          "sha256": "67a0a9866467987325336a33aaca887734244aac0a38506fdb60ce2de92b46ea"
+        },
+        "observations": "The five-state process is kept as participation/response/state evidence. Actual adjacent state records and known conditioning are required for O166; supplied transition counts alone remain arithmetic, not evidence of a transition or a trained classifier.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "exact_native_state_observations",
+          "unpublished_classifier",
+          "full_participation_events"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "process_observation_retained",
+        "notes": "The five-state process is kept as participation/response/state evidence. Actual adjacent state records and known conditioning are required for O166; supplied transition counts alone remain arithmetic, not evidence of a transition or a trained classifier.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "STOIC-process",
+      "method_id": "STOIC-DATA",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "STOIC-process",
+        "method_id": "STOIC-DATA",
+        "source_refs": [
+          "DATA:3",
+          "DATA:4"
+        ],
+        "configuration_ids": [
+          "stoic-process-risk"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:3",
+            "DATA:4"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:3",
+            "DATA:4"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:3",
+            "DATA:4"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:3",
+            "DATA:4"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "research_process",
+            "sequence": [
+              "define",
+              "record_uniformly",
+              "compare",
+              "revise_version"
+            ],
+            "entry_strategy": false
+          },
+          "status": "fact",
+          "source_refs": [
+            "DATA:3",
+            "DATA:4"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "private_contemporaneous_research_records"
+        ],
+        "source_images": [
+          {
+            "image_id": "DATA:3:page",
+            "source_key": "DATA",
+            "page": 3,
+            "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "DATA:4:page",
+            "source_key": "DATA",
+            "page": 4,
+            "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/DATA-3-page.png",
+          "sha256": "3b62aaa227581a3c8923ce38211c701b981dcf821c89ac72057be3a661ccfce9"
+        },
+        "observations": "Frozen process, uniform journal, all outcome categories, original-R provenance and causal review remain research/process observations. Missing private records and deferred macro collection do not become an entry strategy.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "private_contemporaneous_research_records"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "research_process_retained",
+        "notes": "Frozen process, uniform journal, all outcome categories, original-R provenance and causal review remain research/process observations. Missing private records and deferred macro collection do not become an entry strategy.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    },
+    {
+      "case_id": "STOIC-risk",
+      "method_id": "STOIC-RISK",
+      "evidence_mode": "source_illustration",
+      "historical_candidate": false,
+      "source_case": {
+        "case_id": "STOIC-risk",
+        "method_id": "STOIC-RISK",
+        "source_refs": [
+          "DATA:7",
+          "DATA:8"
+        ],
+        "configuration_ids": [
+          "stoic-process-risk"
+        ],
+        "evidence_mode": "source_illustration",
+        "historical_candidate": false,
+        "date": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:7",
+            "DATA:8"
+          ],
+          "reason": "Exact trading date not readable in retained source."
+        },
+        "instrument": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:7",
+            "DATA:8"
+          ],
+          "reason": "Native instrument/contract not established."
+        },
+        "timeframe": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:7",
+            "DATA:8"
+          ],
+          "reason": "No verified case-specific bar size."
+        },
+        "observation_interval": {
+          "value": null,
+          "status": "unknown",
+          "source_refs": [
+            "DATA:7",
+            "DATA:8"
+          ],
+          "reason": "No exact dated observation interval."
+        },
+        "observed_decision": {
+          "value": {
+            "kind": "printed_risk_stages",
+            "entry_strategy": false,
+            "new_simulation": false
+          },
+          "status": "fact",
+          "source_refs": [
+            "DATA:7",
+            "DATA:8"
+          ],
+          "reason": "Source illustration or printed process decision; no invented execution record."
+        },
+        "profiles": [],
+        "later_annotations": [],
+        "missing_fields": [
+          "validation_trade_journal",
+          "source_Monte_Carlo_records"
+        ],
+        "source_images": [
+          {
+            "image_id": "DATA:7:page",
+            "source_key": "DATA",
+            "page": 7,
+            "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+            "region": "full original page; figure and caption preserved together"
+          },
+          {
+            "image_id": "DATA:8:page",
+            "source_key": "DATA",
+            "page": 8,
+            "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1",
+            "region": "full original page; figure and caption preserved together"
+          }
+        ],
+        "recorded_at": "2026-09-12",
+        "contemporaneous_process_record": false,
+        "native_control_windows": []
+      },
+      "visual_review": {
+        "status": "reviewed",
+        "reviewer": "parent",
+        "chart": {
+          "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/source-images/DATA-7-page.png",
+          "sha256": "aac04ccec2b68ff64d6379d27e6f8daf59383a3412678bb05d2839ba657cdb17"
+        },
+        "observations": "The fixed-baseline risk ladder remains conditional on a distinct prior closed sample and matched supplied validation. The source illustration is not an actual validated portfolio or evidence of profitability.",
+        "layout": "Labels, date/window distinctions, legends and captions inspected; original source interpretation retained separately."
+      },
+      "source_ambiguity": {
+        "status": "retained",
+        "missing_fields": [
+          "validation_trade_journal",
+          "source_Monte_Carlo_records"
+        ]
+      },
+      "source_case_agreement": {
+        "status": "risk_illustration_retained",
+        "notes": "The fixed-baseline risk ladder remains conditional on a distinct prior closed sample and matched supplied validation. The source illustration is not an actual validated portfolio or evidence of profitability.",
+        "faithful_disagreements": null
+      },
+      "historical_discovery": {
+        "status": "unavailable",
+        "n": null,
+        "reason": "Retrospective source illustration/control, not a contemporaneously selected historical cohort."
+      },
+      "software_completeness": {
+        "status": "see_final_acceptance",
+        "evidence_path": "/workspace/implementation/validation/phase1-completion/obligation-matrix.json"
+      },
+      "data_coverage": {
+        "status": "source_record_only",
+        "reason": "No exact dated native source execution can be identified from this source record."
+      }
+    }
+  ],
+  "charts": [
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-FAIL-2025-11-20.png",
+      "sha256": "5d75479ab54cada16015d2e0d9e54837e9b35ea6f475bb77d4e452ed13177c1b"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-VWAP-2026-02-24.png",
+      "sha256": "bb99fcfca213e9eeef5afcb1c55a076664076cb985450c17049306fb14483be3"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/JJ-profiles-2026-06-12.png",
+      "sha256": "f81c317b65bee8e4f49bfb93bc613e29c01148b9c7508b6d9b016d9f0de70f0b"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/JJ-range-control-2026-02-24.png",
+      "sha256": "bc5e120ca7296547e44c3b544f6a1ed0160b4d86238dee188ab5436f4a6c112b"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/SIRES-losses-2026-07-23.png",
+      "sha256": "83d603ec4e030443dd610c7405b30ff30ca315ffb18f1064835f397f8453504f"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-SIRES-overnight-2026-06-12.png",
+      "sha256": "bcc4a63b1d3df622078252fa4910b71acc0a3ceff43ec5a131ce996a4f24729f"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-TPO-IB-2026-06-12.png",
+      "sha256": "fea8413609ad7af084fb6356c9af020d54dbe1bf9192a7c3b130dd2bed04cc73"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-composite-2026-06-12.png",
+      "sha256": "efe74acd2156216833a2c1bbcd86bcd526c8200f74666ce330f330456bca5036"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-flow-2026-02-24.png",
+      "sha256": "6da5c25d1a693245c36ff5159901019d6ee4da42132d6d13ef5f7cb02e66f7b3"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-flow-2026-06-12.png",
+      "sha256": "25956a307d19dcb5bf7038394f3fefd9ca33ad08ca271bc14fa67b044fa9cf4c"
+    },
+    {
+      "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/native-flow-2026-07-23.png",
+      "sha256": "43a96c5cd859fb2c5ad86d3ef5df99c5365c235d8dbe8997c22f63e5a9272b89"
+    }
+  ],
+  "frozen_vwap_comparison": {
+    "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-VWAP-frozen-comparison.json",
+    "sha256": "1a1d40eaffdaa209b5afbf1d77705dc668fcd9ff0858213e28eb6693c767ba9a"
+  },
+  "separation": [
+    "software_completeness",
+    "source_ambiguity",
+    "data_coverage",
+    "source_case_agreement",
+    "historical_discovery"
+  ],
+  "stage8_research": "deferred: macro collection, parameters, timeframes, price bases, new classifiers and Phase 2 performance"
+}

@@ -1,6 +1,6 @@
 # Implementation plan following the full audit
 
-September 12, 2026. **Proposed work only; implementation has not started.** Based on the [full audit](FULL_AUDIT.md), [166-object inventory](OBJECT_AUDIT.md), [diagnostics](charts/full-audit-probes.json) and [source findings](charts/full-audit-sources.json).
+September 12, 2026. **Execution record:** stages 1–7 are implemented. Current acceptance, remaining evidence limits and the final runner results are recorded in [COMPLETION_REPORT.md](COMPLETION_REPORT.md), [COMPLETION_MATRIX.md](COMPLETION_MATRIX.md) and [CHART_VERIFICATION.md](CHART_VERIFICATION.md). Stage 8 remains deferred. The requirements below are retained from the plan, based on the [full audit](FULL_AUDIT.md), [166-object inventory](OBJECT_AUDIT.md), [diagnostics](charts/full-audit-probes.json) and [source findings](charts/full-audit-sources.json).
 
 The first objective is to reproduce the documented observations and actual source cases with correctly timed native objects. Complete that before expanding historical discovery or searching parameters. Preserve useful existing helpers; do not restart the whole codebase.
 

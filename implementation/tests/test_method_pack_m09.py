@@ -113,7 +113,8 @@ def test_m09_owned_recipes_preserve_holes_and_no_profit_reconstruction():
         "known_at": m09._t(10, 2), "use_at": m09._t(10, 2),
     })
     assert fill.value["modeled_fill_at"] == m09._t(10, 2)
-    assert fill.value["actual_unknown"] is True and fill.value["queue_verified"] is False
+    assert fill.value["actual_unknown"] is True and fill.value["queue_verified"] is None
+    assert "HOLE:O151:queue_evidence" in fill.hole_ids
     assert fill.state == "hole"
 
     scenario = RECIPES["O156"]({

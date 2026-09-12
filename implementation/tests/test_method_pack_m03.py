@@ -125,7 +125,7 @@ class MethodPackM03Tests(unittest.TestCase):
                     (object_id, mutation),
                 )
 
-    def test_empty_acquired_pass_reports_source_hole_and_branch(self):
+    def test_empty_acquired_pass_separates_implementation_checks_and_discovery(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             data = root / "data"
@@ -138,7 +138,7 @@ class MethodPackM03Tests(unittest.TestCase):
             ], cwd=ROOT, text=True, capture_output=True)
             self.assertEqual(run.returncode, 0, run.stderr)
             report = json.loads((reports / "gb-vwap.json").read_text())
-            self.assertEqual(report["status"], "source_hole")
+            self.assertEqual(report["status"], "checks_passed")
             self.assertEqual(report["summary"]["N"], 0)
             self.assertEqual(len(report["branches"]), 1)
             self.assertIn("source_long", report["branches"])

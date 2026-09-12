@@ -32,6 +32,9 @@ def discovery_audit(method_id: str) -> dict:
             raise ValueError(f'{method_id}/{branch}: complete selector requires an acquired-data cohort builder')
         if not row['missing_fields'] or not set(row['missing_fields']) <= set(fields):
             raise ValueError(f'{method_id}/{branch}: unbound discovery-hole inputs')
+        classified = row.get('unavailable_inputs', [])
+        if {r.get('field') for r in classified} != set(row['missing_fields']):
+            raise ValueError(f'{method_id}/{branch}: unclassified discovery prerequisite')
     return {**review, 'audit_version': doc['audit_version'], 'audit_basis': doc['audit_basis'],
             'audit_path': str(AUDIT_PATH), 'audit_sha256': hashlib.sha256(payload).hexdigest()}
 
@@ -42,14 +45,17 @@ def discovery_holes(method_id: str) -> list[dict]:
     return [{
         'hole_id': f'HOLE:{METHOD_BY_ID[method_id]}:{branch}:candidate_selector',
         'recipe_id': METHOD_BY_ID[method_id], 'method_id': method_id,
-        'branch': branch, 'candidate_id': None, 'kind': 'source_definition',
+        'branch': branch, 'candidate_id': None, 'kind': 'unavailable_selector_prerequisites',
         'missing_fields': ['candidate_selector', *row['missing_fields']],
         'source_ref': review['source_rule'], 'producer_recipes': row['producer_recipes'],
         'producer_rules': {key: fields[key].rule for key in row['missing_fields']},
         'affected_output': 'historical_discovery', 'reason': row['reason'],
         'complete_candidate_selector': False, 'audit_version': review['audit_version'],
+        'unavailable_inputs': row['unavailable_inputs'],
+        'implementation_review': row['implementation_review'],
+        'historical_search_status': 'unavailable', 'candidate_count': None,
         'audit_sha256': review['audit_sha256'],
-        'denominator_effect': 'No source-defined candidate IDs; p=f=u=n=N=0 and rate/interval=null. Fixtures and chart diagnostics are excluded.',
+        'denominator_effect': 'Historical search was not completed; its denominator and candidate count are unestablished (null). Empty trace files contain zero rows, not a measured zero-candidate search. Fixtures and chart diagnostics are excluded.',
     } for branch, row in review['branches'].items()]
 
 

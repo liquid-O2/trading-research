@@ -430,8 +430,18 @@ def time_bar_from_minutes(
     start_ns, end_ns = _ns(start_ns), _ns(end_ns)
     if end_ns <= start_ns:
         raise ValueError("bar interval must be positive")
+    if start_ns not in minute_starts(start_ns, start_ns + 1) or end_ns not in minute_starts(end_ns, end_ns + 1):
+        raise ValueError("minute aggregation endpoints must be clock aligned")
     expected = minute_starts(start_ns, end_ns)
     available = {_ns(key): value for key, value in minute_bars.items()}
+    for key, row in available.items():
+        if 'instrument_id' in row and str(row['instrument_id']) != str(instrument_id):
+            raise ValueError("mixed native instrument in minute aggregation")
+        member_start, member_end = _member_bounds(row)
+        if member_start is not None and member_start != key:
+            raise ValueError("minute key does not identify its actual member interval")
+        if member_end is not None and member_end != key + 60 * NS:
+            raise ValueError("member is not a complete one-minute interval")
     empty_keys = {_ns(key) for key in known_empty}
     missing = [key for key in expected if key not in available and key not in empty_keys]
     incomplete = [
@@ -494,7 +504,8 @@ def time_bar_from_minutes(
         volume=agg["V"],
         complete=True,
         coverage_state=state,
-        known_at=end_ns,
+        known_at=(None if any('known_at' in row and row['known_at'] is None for row in present)
+                  else max([end_ns] + [row['known_at'] for row in present if row.get('known_at') is not None])),
         native_source_compatible=True,
         member_count=len(present),
         ordering_basis=agg.get("ordering_basis", ""),

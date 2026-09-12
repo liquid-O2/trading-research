@@ -1,0 +1,335 @@
+{
+  "formula_version": "method-pack-v1",
+  "candidates": [
+    {
+      "candidate_id": "JJ-range-control-2026-02-24:native-control",
+      "method_id": "JJ-TBR",
+      "branch": "internal_rotation",
+      "side": "long",
+      "instrument_id": 42002475,
+      "session_date_et": "2026-02-24",
+      "decision_at": 1771941600000000000,
+      "band_ids": [
+        "JJ-range-control-2026-02-24:selected-reference"
+      ],
+      "object_ids": [
+        "JJ-range-control-2026-02-24:source_range:O005"
+      ],
+      "assertion_ids": [],
+      "cohort_id": "fixed_source_comparisons_v2",
+      "evidence_mode": "native_control",
+      "variant": "comparison",
+      "source_case_id": "JJ-range-control-2026-02-24",
+      "operands": {
+        "range_frozen": {
+          "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+        },
+        "range_known_at": {
+          "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+        }
+      },
+      "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+      "predicate": "sequence"
+    }
+  ],
+  "objects": [
+    {
+      "object_id": "JJ-range-control-2026-02-24:source_range:O005",
+      "recipe_id": "O005",
+      "method_id": "JJ-TBR",
+      "branch_scope": [
+        "internal_rotation"
+      ],
+      "author": "Jumbo",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "TBR:4; TBR:21",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1771930800000000000,
+      "formation_end": 1771941600000000000,
+      "as_of": 1771941600000000000,
+      "known_at": 1771941600000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51297,
+          "row_end": 51477
+        }
+      ],
+      "inputs": {
+        "range_id": "JJ-range-control-2026-02-24:06-09",
+        "use_at": 1771941600000000000,
+        "variant": "comparison"
+      }
+    }
+  ],
+  "assertions": [],
+  "evidence": [],
+  "assembly": {
+    "schema": "phase1-method-assembly-v1",
+    "roles": [
+      {
+        "object_id": "JJ-range-control-2026-02-24:source_range:O005",
+        "role": "source_range",
+        "method_id": "JJ-TBR",
+        "author": "Jumbo",
+        "instrument_id": 42002475,
+        "source_configuration_id": "jumbo-published-geometry",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "JJ-range-control-2026-02-24:source_range",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "source_range",
+            "formation_start": 1771930800000000000,
+            "formation_end": 1771941600000000000,
+            "session_date_et": "2026-02-24"
+          },
+          "source_refs": [
+            "TBR:4",
+            "TBR:21"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      }
+    ],
+    "limitations": [
+      {
+        "field": "branch",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "context_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "context_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "directional_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "reversal_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "extended_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "purged_compressed_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "rotation_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "reduced_expectations",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "expansion_policy",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "location_touched",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "touch_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_confirmation",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "confirm_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "reaction_side_confirmed",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_selected_exhaustion",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_opposing_draw",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_range_edge",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_named_rotation_target",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_remaining_draw",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "at_rth_open",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "exit_window_recorded",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_time_window",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "edge_swept",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "sweep_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "entry_at_eq_or_quadrant",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "entry_at_named_internal_or_ev_band",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "purge_known_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "prior_expansion",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "touch_in_source_extension_area",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_clock_verified",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_case_verified",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_zone_known",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "zone_known_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "directed_path_recorded",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      }
+    ]
+  }
+}

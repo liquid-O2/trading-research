@@ -4,12 +4,16 @@ from trading_research.research.method_pack.objects import RECIPES
 
 
 def test_zone_requires_actual_departure_and_strict_later_contact():
-    values = {'known_at': 1, 'formed_at': 1, 'zone': [100, 101], 'departure_at': 2,
-              'departure_price': 102, 'touches': [{'t': 2, 'price': 100}, {'t': 3, 'price': 100.5},
-                                               {'t': 4, 'price': 100.75}], 'use_at': 5}
+    values = {'known_at': 1, 'formed_at': 1, 'zone_id': 'zone-1', 'zone': [100, 101],
+              'source_setting_id': 'setting-1', 'formation_event_ids': ['formation-1'],
+              'departure_event_id': 'departure-1', 'departure_at': 2,
+              'departure_price': 102, 'touches': [
+                  {'touch_id': 'ignored-at-departure', 't': 2, 'price': 100},
+                  {'touch_id': 'touch-1', 't': 3, 'price': 100.5},
+                  {'touch_id': 'same-episode-row', 't': 4, 'price': 100.75}], 'use_at': 5}
     result = RECIPES['O116'](values)
     assert result.value['later_touches'] == 1
-    assert result.value['touch_ids'] == ['source-zone:touch:3']
+    assert result.value['touch_ids'] == ['touch-1']
     assert RECIPES['O116']({**values, 'departure_price': 100.5}).base_ok is False
 
 

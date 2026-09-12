@@ -23,3 +23,8 @@ Where the source supplies it, controlling structure determines invalidation befo
 [K10]: </workspace/sources/documents/discretionary/10k-first-month.pdf>
 [AVG]: </workspace/sources/documents/discretionary/average-unprofitable-trader.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+
+### September 12 source binding
+
+**Scoped excursion research record (2026-09-12):** [C2] p.4 recommends collecting 40–80 trades before inspecting MFE/MAE distributions. Keep original entry/exit or observation-end windows, price units, long/short direction, native coverage and censoring in O146/O153 research records. Collect all observed outcomes. Stop/target optimization remains deferred; this count is not a universal validation threshold.

@@ -251,7 +251,7 @@ class MethodPackM10Tests(unittest.TestCase):
             ], cwd=ROOT, text=True, capture_output=True)
             self.assertEqual(run.returncode, 0, run.stderr)
             report = json.loads((reports / "jetbundle-states.json").read_text())
-            self.assertEqual(report["status"], "source_hole")
+            self.assertEqual(report["status"], "checks_passed")
             self.assertEqual(report["summary"]["N"], 0)
             self.assertEqual(report["quality"]["fixture_failures"], 0)
 

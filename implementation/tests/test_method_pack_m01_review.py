@@ -58,12 +58,10 @@ def reversal_values(**updates):
     return values
 
 
-def contemporary_document(fid: str = "entry"):
+def synthetic_document(fid: str = "entry"):
     doc = fixture_document("JJ-TBR", "sequence", fid, reversal_values())
-    for collection in ("candidates", "assertions", "evidence"):
-        for record in doc[collection]:
-            record["evidence_mode"] = "supplied_contemporaneous"
-    doc["candidates"][0]["cohort_id"] = "review-supplied"
+    # These are hand-authored algebra fixtures, not historical source records.
+    doc['candidates'][0]['cohort_id'] = 'synthetic-test'
     return doc
 
 
@@ -158,13 +156,13 @@ def add_management(doc, *, bad_object_identity=False, explicit_parent=False):
 
 class ScoreEpisodeReviewTests(unittest.TestCase):
     def test_identity_collections_are_typed(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         doc["candidates"][0]["band_ids"] = "fixture-band"
         with self.assertRaises(SchemaError):
             parse_manifest(doc, "JJ-TBR")
 
     def test_false_required_observation_is_not_relabelled_as_a_hole(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         confirmation = next(a for a in doc["assertions"] if a["field"] == "source_confirmation")
         confirmation["value"] = False
         for eid in confirmation["evidence_ids"]:
@@ -187,7 +185,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertEqual(scored["operands"]["directional_context"]["applicability"], "not_required")
 
     def test_raw_derived_cohort_cannot_be_built_from_supplied_assertions(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         doc["candidates"][0]["evidence_mode"] = "raw_derived"
         try:
             scored = score_document(doc)
@@ -196,7 +194,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertNotEqual(scored["verdict"], "pass")
 
     def test_supplied_branch_object_needs_evidence_for_its_value(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         branch = next(o for o in doc["objects"] if "branch" in o["value"])
         for eid in branch["evidence_ids"]:
             record = next(e for e in doc["evidence"] if e["evidence_id"] == eid)
@@ -208,7 +206,8 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertNotEqual(scored["verdict"], "pass")
 
     def test_supplied_qualitative_assertion_is_not_a_wrapped_boolean(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
+        doc['candidates'][0]['evidence_mode']='supplied_contemporaneous'
         assertion = next(a for a in doc["assertions"] if a["field"] == "source_confirmation")
         for eid in assertion["evidence_ids"]:
             record = next(e for e in doc["evidence"] if e["evidence_id"] == eid)
@@ -220,7 +219,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertNotEqual(scored["verdict"], "pass")
 
     def test_width_comparison_cannot_become_qualitative_context(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         assertion = next(a for a in doc["assertions"] if a["field"] == "context_fixed")
         object_id = "entry:o:context_fixed"
         producer = next(o for o in doc["objects"] if o["object_id"] == object_id)
@@ -246,7 +245,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertIn(object_id, scored["used_object_ids"])
 
     def test_management_requires_an_explicit_entry_link(self):
-        doc = add_management(contemporary_document(), explicit_parent=False)
+        doc = add_management(synthetic_document(), explicit_parent=False)
         try:
             scored = score_document(doc, "action")
         except SchemaError:
@@ -254,7 +253,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertNotEqual(scored["verdict"], "pass")
 
     def test_management_checks_action_object_identity(self):
-        doc = add_management(contemporary_document(), bad_object_identity=True, explicit_parent=False)
+        doc = add_management(synthetic_document(), bad_object_identity=True, explicit_parent=False)
         try:
             scored = score_document(doc, "action")
         except SchemaError:
@@ -262,7 +261,7 @@ class ScoreEpisodeReviewTests(unittest.TestCase):
         self.assertNotEqual(scored["verdict"], "pass")
 
     def test_management_policy_is_not_an_unsubstantiated_object_boolean(self):
-        doc = add_management(contemporary_document(), explicit_parent=True)
+        doc = add_management(synthetic_document(), explicit_parent=True)
         action_evidence = next(e for e in doc["evidence"] if e["evidence_id"] == "action-evidence")
         action_evidence["payload"] = {"unrelated": "observation"}
         try:
@@ -295,7 +294,7 @@ class ReferenceOutcomeReviewTests(unittest.TestCase):
             "side": "long",
             "instrument_id": "NQ-test",
             "evidence_mode": "supplied_contemporaneous",
-            "cohort_id": "review-supplied",
+            "cohort_id": "synthetic-test",
             "decision_at": BASE,
             "band_ids": ["fixture-band"],
             "object_ids": ["target-1", "stop-1", "coverage-1"],
@@ -393,7 +392,7 @@ class ReferenceOutcomeReviewTests(unittest.TestCase):
 
 class PublicMethodPassReviewTests(unittest.TestCase):
     def test_report_preserves_outcome_year_missingness_and_artifact_identity(self):
-        doc = contemporary_document()
+        doc = synthetic_document()
         candidate = doc["candidates"][0]
         reference_at = at(40)
         reference_common = {
@@ -525,14 +524,14 @@ class PublicMethodPassReviewTests(unittest.TestCase):
             )
             self.assertEqual(run.returncode, 0, run.stderr)
             report = json.loads((report_root / "jj-tbr.json").read_text())
-            supplied = next(s for s in report["summaries"] if s["cohort"] == "review-supplied")
+            supplied = next(s for s in report["summaries"] if s["cohort"] == "synthetic-test")
             self.assertEqual([supplied[k] for k in ("p", "f", "u", "n", "N")], [1, 0, 0, 1, 1])
             self.assertEqual(supplied["rate_exact"], [1, 1])
             self.assertEqual(supplied["interval_exact"], [[1, 1], [1, 1]])
             self.assertEqual(sum(y["N"] for y in supplied["years"].values()), 1)
             branch_cohort = next(
                 c for c in report["branches"]["judas_reversal"]["cohorts"]
-                if c["cohort"] == "review-supplied"
+                if c["cohort"] == "synthetic-test"
             )
             self.assertEqual(branch_cohort["N"], 1)
             self.assertEqual(report["reference_outcomes"]["counts"]["target_first"], 1)

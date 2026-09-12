@@ -1,0 +1,2266 @@
+{
+  "case_id": "JJ-range-control-2026-02-24",
+  "source_case": {
+    "case_id": "JJ-range-control-2026-02-24",
+    "method_id": "JJ-TBR",
+    "source_refs": [
+      "TBR:4",
+      "TBR:21"
+    ],
+    "configuration_ids": [
+      "jumbo-published-geometry"
+    ],
+    "evidence_mode": "native_control",
+    "historical_candidate": false,
+    "date": {
+      "value": "2026-02-24",
+      "status": "inference",
+      "source_refs": [
+        "TBR:4",
+        "TBR:21"
+      ],
+      "reason": "Frozen existing native geometry control date; not a date claimed by the Jumbo source figure."
+    },
+    "instrument": {
+      "value": "NQH6",
+      "status": "inference",
+      "source_refs": [
+        "TBR:4",
+        "TBR:21"
+      ],
+      "reason": "Acquired native control contract, not a displayed source fill."
+    },
+    "timeframe": {
+      "value": {
+        "kind": "time",
+        "minutes": 1
+      },
+      "status": "inference",
+      "source_refs": [
+        "TBR:4",
+        "TBR:21"
+      ],
+      "reason": "One-minute inputs for clock geometry control; not a source entry timeframe."
+    },
+    "observation_interval": {
+      "value": {
+        "start_et": "06:00",
+        "end_et": "09:00"
+      },
+      "status": "fact",
+      "source_refs": [
+        "TBR:4",
+        "TBR:21"
+      ],
+      "reason": "Visible observation window; fill timestamp is separately unknown."
+    },
+    "observed_decision": {
+      "value": null,
+      "status": "unknown",
+      "source_refs": [
+        "TBR:4",
+        "TBR:21"
+      ],
+      "reason": "Source illustration or printed process decision; no invented execution record."
+    },
+    "profiles": [],
+    "later_annotations": [],
+    "missing_fields": [
+      "source_trade_decision"
+    ],
+    "source_images": [
+      {
+        "image_id": "TBR:4:page",
+        "source_key": "TBR",
+        "page": 4,
+        "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+        "region": "full original page; figure and caption preserved together"
+      },
+      {
+        "image_id": "TBR:21:page",
+        "source_key": "TBR",
+        "page": 21,
+        "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811",
+        "region": "full original page; figure and caption preserved together"
+      }
+    ],
+    "recorded_at": "2026-09-12",
+    "contemporaneous_process_record": false,
+    "native_control_windows": [
+      {
+        "control_window_id": "JJ-range-control-2026-02-24:source_range",
+        "version": "2.0.0",
+        "role": "source_range",
+        "start_et": "2026-02-24T06:00",
+        "end_et": "2026-02-24T09:00",
+        "timezone": "America/New_York",
+        "status": "inference",
+        "source_refs": [
+          "TBR:4",
+          "TBR:21"
+        ],
+        "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+      }
+    ]
+  },
+  "measurement_result": {
+    "candidate_id": "JJ-range-control-2026-02-24:native-control",
+    "method_id": "JJ-TBR",
+    "branch": "internal_rotation",
+    "side": "long",
+    "instrument_id": 42002475,
+    "session_date_et": "2026-02-24",
+    "decision_at": 1771941600000000000,
+    "band_ids": [
+      "JJ-range-control-2026-02-24:selected-reference"
+    ],
+    "object_ids": [
+      "JJ-range-control-2026-02-24:source_range:O005"
+    ],
+    "assertion_ids": [],
+    "cohort_id": "fixed_source_comparisons_v2",
+    "evidence_mode": "native_control",
+    "variant": "comparison",
+    "source_case_id": "JJ-range-control-2026-02-24",
+    "operands": {
+      "range_frozen": {
+        "object_id": "JJ-range-control-2026-02-24:source_range:O005",
+        "recipe_id": "O005",
+        "type": "boolean?",
+        "value": true,
+        "known_at": 1771941600000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "range_known_at": {
+        "object_id": "JJ-range-control-2026-02-24:source_range:O005",
+        "recipe_id": "O005",
+        "type": "event_key?",
+        "value": 1771941600000000000,
+        "known_at": 1771941600000000000,
+        "evidence_ids": [],
+        "applicability": "required"
+      },
+      "touch_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O002",
+        "applicability": "required"
+      },
+      "source_confirmation": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O056",
+        "applicability": "required"
+      },
+      "decision_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O150",
+        "applicability": "required"
+      },
+      "confirm_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O056",
+        "applicability": "required"
+      },
+      "risk_defined": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O139",
+        "applicability": "required"
+      },
+      "entry_at_named_internal_or_ev_band": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O007",
+        "applicability": "required"
+      },
+      "branch": {
+        "value": null,
+        "type": "enum",
+        "recipe_id": "O005",
+        "applicability": "required"
+      },
+      "context_fixed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "required"
+      },
+      "context_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O009",
+        "applicability": "required"
+      },
+      "objective_is_named_rotation_target": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "required"
+      },
+      "location_touched": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O002",
+        "applicability": "required"
+      },
+      "objective_fixed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "required"
+      },
+      "rotation_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "required"
+      },
+      "directional_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "reversal_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "extended_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "purged_compressed_context": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "reduced_expectations": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "expansion_policy": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O009",
+        "applicability": "not_required"
+      },
+      "reaction_side_confirmed": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O056",
+        "applicability": "not_required"
+      },
+      "objective_is_selected_exhaustion": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "not_required"
+      },
+      "objective_is_opposing_draw": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "not_required"
+      },
+      "objective_is_range_edge": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "not_required"
+      },
+      "objective_is_remaining_draw": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O141",
+        "applicability": "not_required"
+      },
+      "at_rth_open": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O050",
+        "applicability": "not_required"
+      },
+      "exit_window_recorded": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O050",
+        "applicability": "not_required"
+      },
+      "source_time_window": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O050",
+        "applicability": "not_required"
+      },
+      "edge_swept": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O047",
+        "applicability": "not_required"
+      },
+      "sweep_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O047",
+        "applicability": "not_required"
+      },
+      "entry_at_eq_or_quadrant": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O007",
+        "applicability": "not_required"
+      },
+      "purge_known_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O012",
+        "applicability": "not_required"
+      },
+      "prior_expansion": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O015",
+        "applicability": "not_required"
+      },
+      "touch_in_source_extension_area": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O015",
+        "applicability": "not_required"
+      },
+      "source_clock_verified": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O003",
+        "applicability": "not_required"
+      },
+      "source_case_verified": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O003",
+        "applicability": "not_required"
+      },
+      "source_zone_known": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O019",
+        "applicability": "not_required"
+      },
+      "zone_known_at": {
+        "value": null,
+        "type": "event_key?",
+        "recipe_id": "O019",
+        "applicability": "not_required"
+      },
+      "directed_path_recorded": {
+        "value": null,
+        "type": "boolean?",
+        "recipe_id": "O019",
+        "applicability": "not_required"
+      }
+    },
+    "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+    "predicate": "sequence",
+    "base_ok": true,
+    "coverage_ok": null,
+    "sequence_ok": null,
+    "verdict": "unknown",
+    "failed_prerequisites": [],
+    "hole_ids": [
+      "HOLE:O002:location_touched",
+      "HOLE:O002:touch_at",
+      "HOLE:O005:branch",
+      "HOLE:O007:entry_at_named_internal_or_ev_band",
+      "HOLE:O009:context_at",
+      "HOLE:O009:context_fixed",
+      "HOLE:O009:rotation_context",
+      "HOLE:O056:confirm_at",
+      "HOLE:O056:source_confirmation",
+      "HOLE:O139:risk_defined",
+      "HOLE:O141:objective_fixed",
+      "HOLE:O141:objective_is_named_rotation_target",
+      "HOLE:O150:decision_at"
+    ],
+    "holes": [
+      {
+        "hole_id": "HOLE:O002:touch_at",
+        "recipe_id": "O002",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "touch_at"
+        ],
+        "source_ref": "Actual contact with the preselected branch location, using its exact band/line and C02/C06 ordering. First qualifying event key is retained; reference and context must already exist.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O056:source_confirmation",
+        "recipe_id": "O056",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "source_confirmation"
+        ],
+        "source_ref": "Select the actual source confirmation mode before scoring: full-C2 OB, rejection wick, printed candle feature or the specifically supplied local flow/profile read. Run that exact recipe and required conjunction for the case; never OR unrelated easiest flags. For outbound entry, the source opening-entry choice remains its own supplied/undefined selector, not a forced later reversal OB. confirm_at is the final required observation close/key.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O150:decision_at",
+        "recipe_id": "O150",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "decision_at"
+        ],
+        "source_ref": "Actual source entry/decision, including the literal cash-open event for the outbound branch. A drawn anchor is not an entry.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O056:confirm_at",
+        "recipe_id": "O056",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "confirm_at"
+        ],
+        "source_ref": "Select the actual source confirmation mode before scoring: full-C2 OB, rejection wick, printed candle feature or the specifically supplied local flow/profile read. Run that exact recipe and required conjunction for the case; never OR unrelated easiest flags. For outbound entry, the source opening-entry choice remains its own supplied/undefined selector, not a forced later reversal OB. confirm_at is the final required observation close/key.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O139:risk_defined",
+        "recipe_id": "O139",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "risk_defined"
+        ],
+        "source_ref": "Actual source invalidation and applicable exposure policy are fixed before decision, correct side/units, and supported by source structure. Missing general stop/size policy is a hole; small size alone is not confirmation.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O007:entry_at_named_internal_or_ev_band",
+        "recipe_id": "O007",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "entry_at_named_internal_or_ev_band"
+        ],
+        "source_ref": "Compare actual selected entry/contact to its source internal line/band. Preserve EQ, quadrant, inner-span and EV identities. An EV engine hole cannot be filled by equal 6\u20139 midpoint geometry.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O005:branch",
+        "recipe_id": "O005",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "branch"
+        ],
+        "source_ref": "The preselected source branch is exactly one of M01's eight names; unsupported names give sequence unknown. A final path label never selects this enum.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O009:context_fixed",
+        "recipe_id": "O009",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "context_fixed"
+        ],
+        "source_ref": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O009:context_at",
+        "recipe_id": "O009",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "context_at"
+        ],
+        "source_ref": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O141:objective_is_named_rotation_target",
+        "recipe_id": "O141",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "objective_is_named_rotation_target"
+        ],
+        "source_ref": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O002:location_touched",
+        "recipe_id": "O002",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "location_touched"
+        ],
+        "source_ref": "Actual contact with the preselected branch location, using its exact band/line and C02/C06 ordering. First qualifying event key is retained; reference and context must already exist.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O141:objective_fixed",
+        "recipe_id": "O141",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "objective_fixed"
+        ],
+        "source_ref": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      },
+      {
+        "hole_id": "HOLE:O009:rotation_context",
+        "recipe_id": "O009",
+        "method_id": "JJ-TBR",
+        "candidate_id": "JJ-range-control-2026-02-24:native-control",
+        "branch": "internal_rotation",
+        "kind": "supplied_record_missing",
+        "missing_fields": [
+          "rotation_context"
+        ],
+        "source_ref": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+        "affected_output": "sequence",
+        "reason": "required operand has no supplied record"
+      }
+    ],
+    "detected_causal_violations": 0,
+    "rejected_proxy_attempts": 0,
+    "used_object_ids": [
+      "JJ-range-control-2026-02-24:source_range:O005"
+    ],
+    "used_assertion_ids": [],
+    "used_evidence_ids": [],
+    "source_versions": [
+      "source-cases-v2.0.0"
+    ],
+    "year": 2026,
+    "faithful_eligible": false,
+    "historical_eligible": false,
+    "assembly_holes": [
+      {
+        "field": "branch",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "confirm_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "context_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "context_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "entry_at_named_internal_or_ev_band",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "location_touched",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "objective_is_named_rotation_target",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "rotation_context",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "source_confirmation",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "TBR:4; TBR:21"
+      },
+      {
+        "field": "touch_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "TBR:4; TBR:21"
+      }
+    ],
+    "source_role_comparison": true,
+    "software_complete": true,
+    "observation_unit": "sequence"
+  },
+  "bindings": [
+    {
+      "method_id": "JJ-TBR",
+      "field": "branch",
+      "type": "enum",
+      "units": "enum",
+      "producers": [
+        "O005",
+        "O006"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "The preselected source branch is exactly one of M01's eight names; unsupported names give sequence unknown. A final path label never selects this enum.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": "internal_rotation"
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "decision_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O150"
+      ],
+      "semantic_role": "selected_attempt",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Actual source entry/decision, including the literal cash-open event for the outbound branch. A drawn anchor is not an entry.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": 1771941600000000000
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "range_frozen",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O005",
+        "O006",
+        "O007",
+        "O008"
+      ],
+      "semantic_role": "source_range",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Frozen means the selected source range interval, instrument, bounds and required geometry are complete and available. known_at is its real formation end/availability, never the start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+      },
+      "applicability": "selected",
+      "value": true
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "range_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O005",
+        "O006",
+        "O007",
+        "O008"
+      ],
+      "semantic_role": "source_range",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Frozen means the selected source range interval, instrument, bounds and required geometry are complete and available. known_at is its real formation end/availability, never the start.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": {
+        "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+      },
+      "applicability": "selected",
+      "value": 1771941600000000000
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "context_fixed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "context_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "directional_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "judas_outbound"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "reversal_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "judas_reversal"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "extended_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "single_extended"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "purged_compressed_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "single_purged"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "rotation_context",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "internal_rotation"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "reduced_expectations",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "single_extended"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "expansion_policy",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O009",
+        "O011",
+        "O012",
+        "O013",
+        "O029",
+        "O027"
+      ],
+      "semantic_role": "pre_entry_context",
+      "branches": [
+        "single_purged"
+      ],
+      "rule": "Validate a source-context record for this branch, with all reasons and selected risk/target policy already available before touch. Quantitative width/volume/open-cell measurements do not automatically generate qualitative extended/compressed/reversal/directional labels. Missing source selector/record yields the named field hole; final single/double-break outcome is prohibited as input.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "location_touched",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O002",
+        "O014",
+        "O007"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Actual contact with the preselected branch location, using its exact band/line and C02/C06 ordering. First qualifying event key is retained; reference and context must already exist.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "touch_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O002",
+        "O014",
+        "O007"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Actual contact with the preselected branch location, using its exact band/line and C02/C06 ordering. First qualifying event key is retained; reference and context must already exist.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "source_confirmation",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O056",
+        "O057",
+        "O058",
+        "O099",
+        "O120",
+        "O063"
+      ],
+      "semantic_role": "source_confirmation",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Select the actual source confirmation mode before scoring: full-C2 OB, rejection wick, printed candle feature or the specifically supplied local flow/profile read. Run that exact recipe and required conjunction for the case; never OR unrelated easiest flags. For outbound entry, the source opening-entry choice remains its own supplied/undefined selector, not a forced later reversal OB. confirm_at is the final required observation close/key.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "confirm_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O056",
+        "O057",
+        "O058",
+        "O099",
+        "O120",
+        "O063"
+      ],
+      "semantic_role": "source_confirmation",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Select the actual source confirmation mode before scoring: full-C2 OB, rejection wick, printed candle feature or the specifically supplied local flow/profile read. Run that exact recipe and required conjunction for the case; never OR unrelated easiest flags. For outbound entry, the source opening-entry choice remains its own supplied/undefined selector, not a forced later reversal OB. confirm_at is the final required observation close/key.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "reaction_side_confirmed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O056",
+        "O057",
+        "O058",
+        "O099",
+        "O120",
+        "O063"
+      ],
+      "semantic_role": "source_confirmation",
+      "branches": [
+        "extension_reaction"
+      ],
+      "rule": "Select the actual source confirmation mode before scoring: full-C2 OB, rejection wick, printed candle feature or the specifically supplied local flow/profile read. Run that exact recipe and required conjunction for the case; never OR unrelated easiest flags. For outbound entry, the source opening-entry choice remains its own supplied/undefined selector, not a forced later reversal OB. confirm_at is the final required observation close/key.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "risk_defined",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O139",
+        "O140"
+      ],
+      "semantic_role": "structural_risk",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Actual source invalidation and applicable exposure policy are fixed before decision, correct side/units, and supported by source structure. Missing general stop/size policy is a hole; small size alone is not confirmation.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_fixed",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "judas_outbound",
+        "judas_reversal",
+        "single_extended",
+        "single_purged",
+        "internal_rotation",
+        "extension_reaction",
+        "other_session",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_is_selected_exhaustion",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "judas_outbound"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_is_opposing_draw",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "judas_reversal"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_is_range_edge",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "single_extended"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_is_named_rotation_target",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "internal_rotation"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "objective_is_remaining_draw",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O141",
+        "O087",
+        "O020",
+        "O028"
+      ],
+      "semantic_role": "selected_objective",
+      "branches": [
+        "extension_reaction"
+      ],
+      "rule": "Require one preselected objective ID, source role/priority, original availability and active state. Compare its actual parent/type to the branch-required exhaustion/opposing/range-edge/rotation/remaining-draw role. Do not choose the nearest or later-hit target. RTH-only consumption remains source-scoped.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "at_rth_open",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O050",
+        "O021"
+      ],
+      "semantic_role": "source_clock",
+      "branches": [
+        "judas_outbound"
+      ],
+      "rule": "Check actual 09:30 cash-open entry for outbound, and its source-recorded 09:40\u201309:50 exit framing. Other branches use their own cited action window; later P-zone examples are not universally forced into that manual interval. Exact unresolved endpoints are holes.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "exit_window_recorded",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O050",
+        "O021"
+      ],
+      "semantic_role": "source_clock",
+      "branches": [
+        "judas_outbound"
+      ],
+      "rule": "Check actual 09:30 cash-open entry for outbound, and its source-recorded 09:40\u201309:50 exit framing. Other branches use their own cited action window; later P-zone examples are not universally forced into that manual interval. Exact unresolved endpoints are holes.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "source_time_window",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O050",
+        "O021"
+      ],
+      "semantic_role": "source_clock",
+      "branches": [
+        "judas_reversal",
+        "timed_pzone_reversal"
+      ],
+      "rule": "Check actual 09:30 cash-open entry for outbound, and its source-recorded 09:40\u201309:50 exit framing. Other branches use their own cited action window; later P-zone examples are not universally forced into that manual interval. Exact unresolved endpoints are holes.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "edge_swept",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O047",
+        "O014"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "judas_reversal"
+      ],
+      "rule": "Strict excursion beyond the selected frozen edge; retain actual first sweep time and depth. A touch is not a sweep and no universal exact 0.5W depth is required.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "sweep_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O047",
+        "O014"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "judas_reversal"
+      ],
+      "rule": "Strict excursion beyond the selected frozen edge; retain actual first sweep time and depth. A touch is not a sweep and no universal exact 0.5W depth is required.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "entry_at_eq_or_quadrant",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O007",
+        "O018",
+        "O016"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "single_extended",
+        "single_purged"
+      ],
+      "rule": "Compare actual selected entry/contact to its source internal line/band. Preserve EQ, quadrant, inner-span and EV identities. An EV engine hole cannot be filled by equal 6\u20139 midpoint geometry.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "entry_at_named_internal_or_ev_band",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O007",
+        "O018",
+        "O016"
+      ],
+      "semantic_role": "location_contact",
+      "branches": [
+        "internal_rotation"
+      ],
+      "rule": "Compare actual selected entry/contact to its source internal line/band. Preserve EQ, quadrant, inner-span and EV identities. An EV engine hole cannot be filled by equal 6\u20139 midpoint geometry.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "purge_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O012"
+      ],
+      "semantic_role": "purged_range",
+      "branches": [
+        "single_purged"
+      ],
+      "rule": "Maximum known_at of the actual required earlier liquidity purges, each tied to an independently known reference and chronological sweep; no box-containment substitute.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "prior_expansion",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O015",
+        "O010"
+      ],
+      "semantic_role": "source_extension",
+      "branches": [
+        "extension_reaction"
+      ],
+      "rule": "Prior expansion must have occurred before the source extension reaction; measure only the elapsed path. Contact uses the selected parent's exact 1.33/1.66 coordinate convention. Do not use final HOD/LOD to declare prior expansion or choose the parent.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "touch_in_source_extension_area",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O015",
+        "O010"
+      ],
+      "semantic_role": "source_extension",
+      "branches": [
+        "extension_reaction"
+      ],
+      "rule": "Prior expansion must have occurred before the source extension reaction; measure only the elapsed path. Contact uses the selected parent's exact 1.33/1.66 coordinate convention. Do not use final HOD/LOD to declare prior expansion or choose the parent.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "source_clock_verified",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O003",
+        "O006",
+        "O022"
+      ],
+      "semantic_role": "source_clock",
+      "branches": [
+        "other_session"
+      ],
+      "rule": "Verify the actual other-session source formation/action clock, version and case linkage. A modern London source clock or cleanliness judgment not supplied remains unknown; no generic 00:00\u201303:00 or rolling-ten-day fallback.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "source_case_verified",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O003",
+        "O006",
+        "O022"
+      ],
+      "semantic_role": "source_clock",
+      "branches": [
+        "other_session"
+      ],
+      "rule": "Verify the actual other-session source formation/action clock, version and case linkage. A modern London source clock or cleanliness judgment not supplied remains unknown; no generic 00:00\u201303:00 or rolling-ten-day fallback.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "source_zone_known",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O019"
+      ],
+      "semantic_role": "timed_pzone",
+      "branches": [
+        "timed_pzone_reversal"
+      ],
+      "rule": "Require supplied source zone bounds/settings/active policy and true availability. Preserve the ordered source\u2192destination path as linked IDs; the chart's arrow is not a price inequality and an anchor time is not a fill.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "zone_known_at",
+      "type": "event_key?",
+      "units": "event_key?",
+      "producers": [
+        "O019"
+      ],
+      "semantic_role": "timed_pzone",
+      "branches": [
+        "timed_pzone_reversal"
+      ],
+      "rule": "Require supplied source zone bounds/settings/active policy and true availability. Preserve the ordered source\u2192destination path as linked IDs; the chart's arrow is not a price inequality and an anchor time is not a fill.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    },
+    {
+      "method_id": "JJ-TBR",
+      "field": "directed_path_recorded",
+      "type": "boolean?",
+      "units": "boolean?",
+      "producers": [
+        "O019"
+      ],
+      "semantic_role": "timed_pzone",
+      "branches": [
+        "timed_pzone_reversal"
+      ],
+      "rule": "Require supplied source zone bounds/settings/active policy and true availability. Preserve the ordered source\u2192destination path as linked IDs; the chart's arrow is not a price inequality and an anchor time is not a fill.",
+      "identity_keys": [
+        "method_id",
+        "branch",
+        "instrument_id",
+        "band_id",
+        "side"
+      ],
+      "availability_rule": "all incorporated observations and parents known by the actual stage of use",
+      "binding": null,
+      "applicability": "not_selected",
+      "value": null
+    }
+  ],
+  "assembly_holes": [
+    {
+      "field": "branch",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "confirm_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "context_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "context_fixed",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "decision_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "entry_at_named_internal_or_ev_band",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "location_touched",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "objective_fixed",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "objective_is_named_rotation_target",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "risk_defined",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "rotation_context",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "source_confirmation",
+      "kind": "supplied_record_missing",
+      "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+      "source_ref": "TBR:4; TBR:21"
+    },
+    {
+      "field": "touch_at",
+      "kind": "supplied_record_missing",
+      "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+      "source_ref": "TBR:4; TBR:21"
+    }
+  ],
+  "resolved_objects": [
+    {
+      "object_id": "JJ-range-control-2026-02-24:source_range:O005",
+      "recipe_id": "O005",
+      "method_id": "JJ-TBR",
+      "branch_scope": [
+        "internal_rotation"
+      ],
+      "author": "Jumbo",
+      "instrument_id": 42002475,
+      "parent_ids": [],
+      "source_ref": "TBR:4; TBR:21",
+      "source_version": "source-cases-v2.0.0",
+      "value": {
+        "known_at": 1771941600000000000,
+        "range_known_at": 1771941600000000000,
+        "coverage_ok": true,
+        "parent_id": null,
+        "range_id": "JJ-range-control-2026-02-24:06-09",
+        "instrument_id": 42002475,
+        "source_clock_id": "JJ-TBR:06:00-09:00",
+        "L": "24795.25",
+        "H": "24902.25",
+        "W": "107.00",
+        "formation_start": 1771930800000000000,
+        "formation_end": 1771941600000000000,
+        "range_frozen": true,
+        "member_ids": [
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51297:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51298:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51299:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51300:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51301:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51302:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51303:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51304:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51305:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51306:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51307:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51308:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51309:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51310:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51311:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51312:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51313:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51314:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51315:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51316:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51317:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51318:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51319:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51320:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51321:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51322:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51323:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51324:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51325:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51326:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51327:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51328:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51329:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51330:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51331:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51332:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51333:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51334:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51335:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51336:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51337:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51338:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51339:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51340:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51341:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51342:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51343:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51344:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51345:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51346:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51347:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51348:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51349:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51350:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51351:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51352:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51353:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51354:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51355:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51356:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51357:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51358:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51359:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51360:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51361:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51362:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51363:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51364:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51365:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51366:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51367:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51368:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51369:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51370:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51371:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51372:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51373:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51374:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51375:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51376:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51377:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51378:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51379:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51380:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51381:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51382:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51383:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51384:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51385:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51386:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51387:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51388:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51389:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51390:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51391:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51392:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51393:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51394:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51395:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51396:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51397:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51398:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51399:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51400:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51401:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51402:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51403:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51404:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51405:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51406:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51407:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51408:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51409:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51410:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51411:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51412:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51413:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51414:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51415:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51416:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51417:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51418:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51419:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51420:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51421:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51422:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51423:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51424:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51425:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51426:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51427:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51428:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51429:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51430:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51431:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51432:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51433:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51434:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51435:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51436:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51437:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51438:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51439:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51440:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51441:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51442:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51443:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51444:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51445:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51446:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51447:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51448:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51449:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51450:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51451:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51452:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51453:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51454:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51455:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51456:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51457:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51458:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51459:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51460:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51461:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51462:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51463:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51464:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51465:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51466:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51467:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51468:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51469:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51470:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51471:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51472:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51473:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51474:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51475:42002475",
+          "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet:51476:42002475"
+        ]
+      },
+      "units": {
+        "range_frozen": "boolean?",
+        "range_known_at": "event_key?"
+      },
+      "formation_start": 1771930800000000000,
+      "formation_end": 1771941600000000000,
+      "as_of": 1771941600000000000,
+      "known_at": 1771941600000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51297,
+          "row_end": 51477
+        }
+      ],
+      "inputs": {
+        "range_id": "JJ-range-control-2026-02-24:06-09",
+        "use_at": 1771941600000000000,
+        "variant": "comparison"
+      },
+      "recipe_base_ok": true,
+      "recipe_coverage_ok": true,
+      "evidence_class": "resolved_native",
+      "source_role_comparison": true,
+      "semantic_derivations": [
+        {
+          "field": "range_frozen",
+          "source_quantity": "range_frozen",
+          "operation": "exact",
+          "role": "source_range",
+          "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+        },
+        {
+          "field": "range_known_at",
+          "source_quantity": "range_known_at",
+          "operation": "exact",
+          "role": "source_range",
+          "object_id": "JJ-range-control-2026-02-24:source_range:O005"
+        }
+      ]
+    }
+  ],
+  "native_window_audits": [
+    {
+      "schema": "phase1-native-window-coverage-v1",
+      "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+      "instrument_id": 42002475,
+      "start_ns": 1771930800000000000,
+      "end_ns": 1771941600000000000,
+      "required": "ohlcv",
+      "coverage_ok": true,
+      "coverage_reason": "verified",
+      "reconciliation_summary": {
+        "checked_minute_count": 0,
+        "mismatch_count": 0,
+        "native_executed_volume": "0",
+        "reference_ohlcv_volume": "0",
+        "net_volume_difference": "0",
+        "window_volume_matches": null,
+        "all_minute_allocations_match": null,
+        "interpretation": "Cross-source allocation discrepancies are observed mismatches; they do not by themselves establish missing tape or a verified bar clock."
+      },
+      "missing_intervals": [],
+      "mismatches": [],
+      "member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51297,
+          "row_end": 51477
+        }
+      ],
+      "sources": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+        }
+      ],
+      "corroborating_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171",
+          "row_start": 51297,
+          "row_end": 51477
+        }
+      ],
+      "minute_reconciliation": [],
+      "native_row_count": 180,
+      "native_minute_count": 180,
+      "excluded_unowned_rows": 0,
+      "method": "exact_native_minutes"
+    }
+  ],
+  "source_case_agreement": "Literal native computations and declared sequence are reviewable; no author fill or complete source-method pass is inferred.",
+  "faithful_disagreements": null,
+  "historical_candidates": null
+}

@@ -102,7 +102,7 @@ def test_m04_object_fixtures_cover_all_mapped_objects_and_c08_mutations():
         assert {"c08_late", "c08_missing", "c08_identity"} <= kinds
 
 
-def test_m04_empty_acquired_pass_writes_source_hole_report(tmp_path):
+def test_m04_empty_acquired_pass_separates_implementation_checks_and_discovery(tmp_path):
     data = tmp_path / "empty-data"
     reports = tmp_path / "reports"
     data.mkdir()
@@ -113,7 +113,7 @@ def test_m04_empty_acquired_pass_writes_source_hole_report(tmp_path):
     ], cwd=ROOT, capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
     report = json.loads((reports / "gb-scalp.json").read_text())
-    assert report["status"] == "source_hole"
+    assert report["status"] == "checks_passed"
     assert report["summary"]["N"] == 0
     assert len(report["branches"]) == 2
     assert report["quality"]["fixture_failures"] == 0

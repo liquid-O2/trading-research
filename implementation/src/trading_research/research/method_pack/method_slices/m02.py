@@ -30,8 +30,10 @@ STAGE_LIMITS = {
     "reference_px": "reference_known_at",
     "bias_recorded": "context_at",
     "source_session_allowed": "sweep_at",
-    "sweep_high": "sweep_at",
-    "sweep_low": "sweep_at",
+    # The extrema cover the same sweep episode through confirmation. They
+    # cannot be used at the first crossing before the rest of that window.
+    "sweep_high": "confirm_at",
+    "sweep_low": "confirm_at",
     "confirmation_mode": "sweep_at",
     "complete_clock_five_minute_bar": "confirm_at",
     "confirm_close": "confirm_at",

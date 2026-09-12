@@ -1,0 +1,124 @@
+{
+  "schema": "phase1-research-process-journal-v1",
+  "process_id": "phase1-live-implementation",
+  "process_version": "completion-v2",
+  "recorded_at_utc": "2026-09-12T14:59:18Z",
+  "record_type": "retrospective_implementation_review",
+  "original_objective": "Close stages 1\u20137 against all 166 objects, 9 shared contracts and 12 method contracts, then verify native/source evidence.",
+  "original_pre_work_confidence": null,
+  "original_recorded_at": null,
+  "original_record_limit": "No contemporaneous numeric confidence record was made at the beginning of this implementation; this retrospective entry cannot replace one.",
+  "source_guidance": {
+    "configuration_ids": [
+      "sires-process",
+      "stoic-process-risk"
+    ],
+    "confidence_scale": [
+      1,
+      5
+    ],
+    "confidence_time": "session_start",
+    "review_example_sessions": 30,
+    "MFE_MAE_collection_example_trades": [
+      40,
+      80
+    ],
+    "scope": "Trading-process source guidance, retained for future eligible observations; no invented confidence, trading attempts or excursion distribution for this software task."
+  },
+  "entries": [
+    {
+      "record_id": "native_identity",
+      "original_reason": "Require actual row locators, native instrument units and source-owned intervals.",
+      "observed_review": "Resolved-file and causal-boundary attacks; copied prices, invalid locators and backdated parent availability are rejected.",
+      "evidence": {
+        "path": "/workspace/implementation/tests/test_phase1_native_boundary_final.py",
+        "sha256": "6fa7448e7bc7956fb2bfd518084b7271ded2c114c9412d34b42cc5ed9958874a"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false
+    },
+    {
+      "record_id": "full_profile_windows",
+      "original_reason": "Preserve separate profile windows and known/unknown side rows.",
+      "observed_review": "Five independently dated native profiles and one explicit disjoint composite; cross-source minute discrepancies remain unknown coverage.",
+      "evidence": {
+        "path": "/workspace/implementation/validation/phase1-completion/native-clock-coverage.json",
+        "sha256": "93b817a2f3fb28830c4caf108ecb981252eaced72ccca1890edc31d42df01137"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false
+    },
+    {
+      "record_id": "strict_event_sequences",
+      "original_reason": "Require observed sequence stages and original identity instead of default true flags.",
+      "observed_review": "Removed implicit sequence certificates, preserved reverse/tie/absent-stage failures and actual transition observations.",
+      "evidence": {
+        "path": "/workspace/implementation/tests/test_phase1_flow_sequences.py",
+        "sha256": "1bd26494ebfa7ad9b349bf56e6c2d81d2c4e0ef98031d379aab606f592cc843d"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false
+    },
+    {
+      "record_id": "order_reconciliation",
+      "original_reason": "Replay actual instruction, fill, cancellation, expiry, amendment and exit records.",
+      "observed_review": "Working quantity and position quantity are separate; cancellation does not erase a fill or prevent a valid later exit.",
+      "evidence": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false,
+      "evidence_sha256_at_original_review": "3c17a942626e57b28af545d6e652a39da195b5ea0d8296956ba31a06aa20fbd8",
+      "evidence_verified_at_utc": "2026-09-12T15:40:19.768745+00:00",
+      "evidence_update_reason": "Additional regressions in the same scope were added after this retrospective entry; the current reference identifies the file exercised in final verification."
+    },
+    {
+      "record_id": "source_entry_correction",
+      "original_reason": "Preserve November 20 displayed MNQ entry at sweep before later annotations.",
+      "observed_review": "Source figure and separate NQ geometry comparison remain distinct; later MSS/FVG does not become an entry prerequisite.",
+      "evidence": {
+        "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-FAIL-2025-11-20.json",
+        "sha256": "c4135a62179c4f1f8cf83963529361c0950bb3ec56d81842a23de4bcf90374f8"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false
+    },
+    {
+      "record_id": "frozen_vwap_comparison",
+      "original_reason": "Recalculate the one previously selected comparison without a new parameter search.",
+      "observed_review": "Previous-18:00/HLC3 comparison reproduces the retained curve; author reset and basis remain unverified.",
+      "evidence": {
+        "path": "/workspace/implementation/reports/phase1-live/methods/reconstructions/v2/GB-VWAP-frozen-comparison.json",
+        "sha256": "1a1d40eaffdaa209b5afbf1d77705dc668fcd9ff0858213e28eb6693c767ba9a"
+      },
+      "known_at_utc": "2026-09-12T14:59:18Z",
+      "contemporaneous": false
+    }
+  ],
+  "outcome_accounting": {
+    "unit": "implementation review observations",
+    "trading_categories": [
+      "win",
+      "loss",
+      "flat",
+      "open",
+      "censored",
+      "missing_result",
+      "miss",
+      "breach"
+    ],
+    "category_counts": null,
+    "original_R_definition": null,
+    "eligible_trading_cohort": null,
+    "reason": "These are implementation checks, not trading attempts. No win/loss denominator, R return or Monte Carlo sample is created."
+  },
+  "future_work": [
+    "Macro collection",
+    "Parameter, timeframe and price-basis optimization",
+    "New classifiers",
+    "Phase 2 performance research"
+  ],
+  "historical_eligible": false,
+  "source_performance_estimate": false
+}

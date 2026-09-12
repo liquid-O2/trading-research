@@ -1,5 +1,7 @@
 # Dated source-fit reconstructions
 
+**Superseded for current verification:** use the [repaired v2 cases and native controls](v2/README.md) and [current visual review](../CHART_VERIFICATION.md). The earlier fit grid and delayed-entry hypothesis below are retained as historical research records. They were not rerun as a new parameter search for completion.
+
 **Later interpretation correction:** the [September 12 coverage audit](../PROFILE_COVERAGE_CHECK.md) records the November 20 short-position line in the high-sweep area. The delayed MSS/FVG entry below is a rejected reconstruction hypothesis, not the author's entry requirement. Further basis, timeframe and entry searches are deferred.
 
 These are our explicit reconstructions of two published examples using acquired NQ data. The source figures were used to choose and calibrate them. There is no held-out validation, automatic historical cohort or demonstrated trading edge here.

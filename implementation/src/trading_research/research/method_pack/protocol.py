@@ -24,6 +24,7 @@ class RecipeResult:
     units: dict = field(default_factory=dict)
     applicability: str | None = None
     reason: str | None = None
+    evidence_class: str = "research_helper"
 
 
 RecipeFn = Callable[[dict], RecipeResult]
@@ -59,6 +60,9 @@ def add_fixture(spec: dict) -> None:
 
 
 def guard(inp: dict, recipe_id: str, required: tuple[str, ...]) -> RecipeResult | None:
+    if not inp and not required:
+        return RecipeResult(recipe_id,"hole",{},base_ok=None,coverage_ok=None,
+                            hole_ids=[f"HOLE:{recipe_id}:observation"],reason="actual observation inputs absent")
     dependencies = inp.get("dependencies", [])
     use_at = inp.get("use_at")
     known = inp.get("known_at")
@@ -186,6 +190,9 @@ def c08_mutations(spec: dict) -> list[dict]:
         missing.pop(key, None)
         cases.append(("missing", missing, {"state": "hole", "base_ok": None,
                                           "hole_ids": [f"HOLE:{recipe_id}:{name}" for name in required if missing.get(name) is None]}))
+    else:
+        cases.append(("missing", {}, {"state":"hole","base_ok":None,
+                                      "hole_ids":[f"HOLE:{recipe_id}:observation"]}))
     late = deepcopy(inputs)
     late["dependencies"] = [{"object_id": "late-input", "known_at": use + 1}]
     cases.append(("late", late, {"base_ok": False}))
@@ -214,7 +221,7 @@ def jsonable(value: Any) -> Any:
     if isinstance(value, Decimal):
         return str(value)
     if isinstance(value, dict):
-        return {k: jsonable(v) for k, v in value.items()}
+        return {k: jsonable(v) for k, v in value.items() if k != '_source_admission'}
     if isinstance(value, list):
         return [jsonable(v) for v in value]
     return value

@@ -36,7 +36,13 @@ def loc_code(px, lo, hi) -> str:
     return "in"
 
 
-def value_area(tick_vol: dict, frac: float = 0.70):
+LEGACY_VA_POLICY = 'comparison_sparse_adjacent_upper_tie_lowest_poc_v1'
+
+
+def value_area(tick_vol: dict, frac: float = 0.70, *, tie_policy: str = 'upper'):
+    """Named legacy comparison; this is not an identified source VA engine."""
+    if tie_policy not in {'upper', 'lower'}:
+        raise ValueError('comparison VA needs an explicit upper/lower expansion tie policy')
     if not tick_vol:
         return None, None, None
     poc = max(tick_vol.items(), key=lambda kv: (kv[1], -kv[0]))[0]
@@ -58,7 +64,7 @@ def value_area(tick_vol: dict, frac: float = 0.70):
             i -= 1
             mass += tick_vol[ticks[i]]
             lo = ticks[i]
-        elif j < len(ticks) - 1:
+        elif tie_policy == 'upper' and j < len(ticks) - 1:
             j += 1
             mass += tick_vol[ticks[j]]
             hi = ticks[j]

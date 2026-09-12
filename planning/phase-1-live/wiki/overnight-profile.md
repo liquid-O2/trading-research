@@ -19,3 +19,8 @@ The overnight profile describes accepted volume, bridge LVNs, shelves and POC be
 [TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
 [MAMT]: </workspace/sources/documents/discretionary/mastering-amt-vp.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+
+### September 12 source binding
+
+**Required O011 binding (2026-09-12):** For the [MAMT] p.14 illustrated Sires overnight profile, bind the same dated instrument/window as O011: previous-day 18:00 through current-day 09:30 America/New_York. Preserve this profile separately from prior ETH, prior RTH and developing current RTH. Its VA construction still requires source-specific price-grid and expansion/tie configuration; the clock does not fill those fields.

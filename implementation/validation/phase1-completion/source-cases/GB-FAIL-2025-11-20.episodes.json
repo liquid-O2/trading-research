@@ -1,0 +1,364 @@
+{
+  "formula_version": "method-pack-v1",
+  "candidates": [
+    {
+      "candidate_id": "GB-FAIL-2025-11-20:native-control",
+      "method_id": "GB-FAIL",
+      "branch": "nyam_box",
+      "side": "short",
+      "instrument_id": 158704,
+      "session_date_et": "2025-11-20",
+      "decision_at": 1763653200000000000,
+      "band_ids": [
+        "GB-FAIL-2025-11-20:selected-reference"
+      ],
+      "object_ids": [
+        "GB-FAIL-2025-11-20:failure_reference:O046",
+        "GB-FAIL-2025-11-20:failure_confirmation:O004",
+        "GB-FAIL-2025-11-20:failure_confirmation:O047"
+      ],
+      "assertion_ids": [],
+      "cohort_id": "fixed_source_comparisons_v2",
+      "evidence_mode": "native_control",
+      "variant": "comparison",
+      "source_case_id": "GB-FAIL-2025-11-20",
+      "operands": {
+        "reference_px": {
+          "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+        },
+        "reference_known_at": {
+          "object_id": "GB-FAIL-2025-11-20:failure_reference:O046"
+        }
+      },
+      "cutoff_interpretation": "Declared measurement cutoff; actual author entry timestamp/fill is not inferred.",
+      "predicate": "sequence"
+    }
+  ],
+  "objects": [
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+      "recipe_id": "O046",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1763647200000000000,
+      "formation_end": 1763650800000000000,
+      "as_of": 1763650800000000000,
+      "known_at": 1763650800000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309759,
+          "row_end": 309819
+        }
+      ],
+      "inputs": {
+        "range_id": "GB-FAIL-2025-11-20:09-10",
+        "clock_variant": "nyam",
+        "source_clock_verified": true,
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_confirmation:O004",
+      "recipe_id": "O004",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1763653080000000000,
+      "formation_end": 1763653200000000000,
+      "as_of": 1763653200000000000,
+      "known_at": 1763653200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__ohlcv-1m",
+          "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991",
+          "row_start": 309857,
+          "row_end": 309859
+        }
+      ],
+      "inputs": {
+        "kind": "time",
+        "size_minutes": 2,
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      }
+    },
+    {
+      "object_id": "GB-FAIL-2025-11-20:failure_confirmation:O047",
+      "recipe_id": "O047",
+      "method_id": "GB-FAIL",
+      "branch_scope": [
+        "nyam_box"
+      ],
+      "author": "Green Bird",
+      "instrument_id": 158704,
+      "parent_ids": [
+        "GB-FAIL-2025-11-20:failure_reference:O046",
+        "GB-FAIL-2025-11-20:failure_confirmation:O004"
+      ],
+      "source_ref": "GB:31; GB:43",
+      "source_version": "source-cases-v2.0.0",
+      "value": {},
+      "units": {},
+      "formation_start": 1763653080000000000,
+      "formation_end": 1763653200000000000,
+      "as_of": 1763653200000000000,
+      "known_at": 1763653200000000000,
+      "state": "computed",
+      "hole_ids": [],
+      "evidence_ids": [],
+      "raw_member_locators": [
+        {
+          "source_file": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+          "dataset_id": "quantpad/cme__nq-continuous-futures__trades",
+          "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e",
+          "row_start": 1860698,
+          "row_end": 1862818
+        }
+      ],
+      "inputs": {
+        "reference_parent_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+        "measurement_side": "high",
+        "confirmation_bar_parent_id": "GB-FAIL-2025-11-20:failure_confirmation:O004",
+        "use_at": 1763653200000000000,
+        "variant": "comparison"
+      }
+    }
+  ],
+  "assertions": [],
+  "evidence": [],
+  "assembly": {
+    "schema": "phase1-method-assembly-v1",
+    "roles": [
+      {
+        "object_id": "GB-FAIL-2025-11-20:failure_reference:O046",
+        "role": "failure_reference",
+        "method_id": "GB-FAIL",
+        "author": "Green Bird",
+        "instrument_id": 158704,
+        "source_configuration_id": "gb-nov20-sweep",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-FAIL-2025-11-20:failure_reference",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "failure_reference",
+            "formation_start": 1763647200000000000,
+            "formation_end": 1763650800000000000,
+            "session_date_et": "2025-11-20"
+          },
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      },
+      {
+        "object_id": "GB-FAIL-2025-11-20:failure_confirmation:O047",
+        "role": "failure_confirmation",
+        "method_id": "GB-FAIL",
+        "author": "Green Bird",
+        "instrument_id": 158704,
+        "source_configuration_id": "gb-nov20-sweep",
+        "source_configuration_version": "2.0.0",
+        "control_window_id": "GB-FAIL-2025-11-20:failure_confirmation",
+        "control_window_version": "2.0.0",
+        "source_definition": {
+          "status": "inference",
+          "value": {
+            "role": "failure_confirmation",
+            "formation_start": 1763653080000000000,
+            "formation_end": 1763653200000000000,
+            "session_date_et": "2025-11-20"
+          },
+          "source_refs": [
+            "GB:31",
+            "GB:43"
+          ],
+          "reason": "Exact window of the frozen reconstructed comparison; not a source execution time or verified author setting."
+        }
+      }
+    ],
+    "limitations": [
+      {
+        "field": "side",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "reference_frozen",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "bias_recorded",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "context_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "source_session_allowed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "sweep_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "sweep_high",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "sweep_low",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirmation_mode",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "complete_clock_five_minute_bar",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirm_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "confirm_close",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "source_hold_confirmed",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "box_return_ok",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "tdo_required",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "source_tdo_close_confirmed",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "pocket_required",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "impulse_known_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "touch_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "touch_in_measured_pocket",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "retracement_entry",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "retest_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "risk_defined",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "objective_fixed",
+        "kind": "supplied_record_missing",
+        "reason": "Requires the actual dated source selection, decision, case or process record; implemented observations cannot invent it.",
+        "source_ref": "GB:31; GB:43"
+      },
+      {
+        "field": "decision_at",
+        "kind": "supplied_record_missing",
+        "reason": "This retrospective source comparison contains no actual selected source observation/process record for this operand.",
+        "source_ref": "GB:31; GB:43"
+      }
+    ]
+  }
+}

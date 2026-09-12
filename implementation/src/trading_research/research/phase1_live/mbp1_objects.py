@@ -425,6 +425,11 @@ def smt_trade_nq(ev, am0: int, am1: int, sisters: dict, day: date, row: dict | N
 
 
 def vp_rth(ev, am0: int, rth_end: int) -> dict:
+    """Legacy dense-grid comparison with explicit lower-side expansion ties.
+
+    Production source cases use method_pack.objects.profiles with a versioned
+    configuration, dated identity and the actual instrument definition.
+    """
     tr = ev["is_trade"]
     t = ev["t"][tr]
     rth = (t >= am0) & (t < rth_end)
@@ -459,8 +464,12 @@ def vp_rth(ev, am0: int, rth_end: int) -> dict:
         "VAL": (lo + a) * TICK,
         "VAH": (lo + b) * TICK,
         "n": int(px.size),
-        "dp_max": (lo + int(np.argmax(delta))) * TICK if delta.size else None,
-        "dp_min": (lo + int(np.argmin(delta))) * TICK if delta.size else None,
+        "dp_max": (lo + int(np.argmax(delta))) * TICK if delta.size and not np.any(side == 0) else None,
+        "dp_min": (lo + int(np.argmin(delta))) * TICK if delta.size and not np.any(side == 0) else None,
+        "unknown_volume": float(size[side == 0].sum()),
+        "known_delta": float(delta.sum()),
+        "va_policy": "comparison_dense_adjacent_lower_tie_lowest_poc_v1",
+        "evidence_mode": "legacy_comparison",
     }
 
 

@@ -1,0 +1,2379 @@
+{
+  "object_count": 26,
+  "objects": [
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "evidence": [
+            {
+              "path": "/workspace/implementation/validation/phase1-completion/source-cases/GB-VWAP-2026-02-24.result.json",
+              "sha256": "8dee3baac179e463fd511390fc2f257bf369c93e36a8dd625895ff6b6c542ab0"
+            }
+          ],
+          "reason": "Actual bounded native measurements have been reviewed. Coverage, side and source-interpretation holes remain exactly as reported; no exact author fill or full historical cohort is asserted.",
+          "resolved": true,
+          "status": "native_validation_with_gaps"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The Green Bird reset and price basis and the truncated Sires price basis are unpublished or unreadable. Frozen named comparisons compute literal values without certifying those author settings.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Compute price-volume and squared-price-volume sums from actual resolved trades or complete contiguous bars; clip snapshots, retain unknown-side execution volume, and require an exact reset-to-cutoff membership interval.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "as_of": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "automatic_reset": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "basis": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "comparison_vwap": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "faithful": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "known_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "member_event_ids": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "reset_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "reset_id": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "source_vwap_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "sum_p2v": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "sum_pv": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "sum_v": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "variant": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "vwap": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "vwap_at_retest": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "vwap_known_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "vwap_reset_verified": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "weighted_variance_population": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": true,
+      "object_id": "O030",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o030",
+      "producer_module": "context_observations",
+      "remaining_limitation": "The Green Bird reset and price basis and the truncated Sires price basis are unpublished or unreadable. Frozen named comparisons compute literal values without certifying those author settings.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The Green Bird reset and price basis and the truncated Sires price basis are unpublished or unreadable. Frozen named comparisons compute literal values without certifying those author settings.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_native_vwap_requires_exact_resolved_window_and_catalog_source_settings"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "Native/parent-derived behavior and causal admission are implemented and exercised by the linked domain fixtures. No dated source execution is asserted for this specific obligation; source selections and missing history remain explicit.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "A source anchor needs an identified selected parent; unavailable author selection remains a case record limitation.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Derive an anchored VWAP from the selected real anchor parent and every eligible execution/bar; anchor availability and snapshot cutoff both constrain use.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "anchor_id": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "anchor_known_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "anchor_price_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "anchor_reason": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "anchor_selected_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "as_of": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "automatic_reset": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "avwap": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "basis": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "comparison_vwap": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "faithful": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "known_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "member_event_ids": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "reset_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "reset_id": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "source_vwap_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "sum_p2v": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "sum_pv": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "sum_v": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "usable": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "usable_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "variant": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "vwap": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "vwap_at_retest": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "vwap_known_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "vwap_reset_verified": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "weighted_variance_population": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": true,
+      "object_id": "O031",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o031",
+      "producer_module": "context_observations",
+      "remaining_limitation": "A source anchor needs an identified selected parent; unavailable author selection remains a case record limitation.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "A source anchor needs an identified selected parent; unavailable author selection remains a case record limitation.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_anchored_vwap_availability_is_latest_incorporated_fact"
+      ]
+    },
+    {
+      "derived_producer": true,
+      "dimensions": {
+        "data": {
+          "reason": "Native/parent-derived behavior and causal admission are implemented and exercised by the linked domain fixtures. No dated source execution is asserted for this specific obligation; source selections and missing history remain explicit.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "An undisclosed platform variance rule stays unavailable; the explicitly named comparison rule is implemented.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Derive weighted population dispersion from the identical VWAP parent membership; preserve reset, snapshot and band identity and reject mixed or contact-inclusive snapshots.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "as_of": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "band_id": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "lower": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "upper": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "variance_convention": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O032",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o032",
+      "producer_module": "context_observations",
+      "remaining_limitation": "An undisclosed platform variance rule stays unavailable; the explicitly named comparison rule is implemented.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "An undisclosed platform variance rule stays unavailable; the explicitly named comparison rule is implemented.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_deviation_parent_reset_and_snapshot_cannot_be_mixed"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "No gamma exposure engine is published in the source and no native option-chain feed is supplied here.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve the observed source gamma regime, native 0DTE product identity, eligible rereads and source-scoped branch permission; later rereads contribute availability.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "branch_regime_ok": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "native_identity_ok": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "reread_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "source_regime": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O033",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o033",
+      "producer_module": "context_observations",
+      "remaining_limitation": "No gamma exposure engine is published in the source and no native option-chain feed is supplied here.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "No gamma exposure engine is published in the source and no native option-chain feed is supplied here.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_context_snapshot_ignores_future_vintage_and_retains_supporting_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "An absent contemporaneous index/option-to-futures mapping cannot be inferred from nearby price.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Build a full dated option identity from product, class, expiry, strike, right and OSI key; calculate 0DTE from observation date and retain only a contemporaneous explicit mapping.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "is_0dte": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "mapped_price": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "mapping_provenance": {
+          "nullable": true,
+          "types": [
+            "dict"
+          ]
+        },
+        "native_contract_key": {
+          "nullable": true,
+          "types": [
+            "list"
+          ]
+        },
+        "native_strike": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_product_ok": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O034",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o034",
+      "producer_module": "context_observations",
+      "remaining_limitation": "An absent contemporaneous index/option-to-futures mapping cannot be inferred from nearby price.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "An absent contemporaneous index/option-to-futures mapping cannot be inferred from nearby price.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_option_native_key_and_contemporaneous_explicit_mapping"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The dealer flip engine is unpublished; spot-minus-flip arithmetic does not infer a gamma regime.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain attributed flip level, units and regime interpretation and compute spot relation using both observation clocks.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "flip_value": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "relation": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "source_regime_interpretation": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "spot_minus_flip": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O035",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o035",
+      "producer_module": "context_observations",
+      "remaining_limitation": "The dealer flip engine is unpublished; spot-minus-flip arithmetic does not infer a gamma regime.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The dealer flip engine is unpublished; spot-minus-flip arithmetic does not infer a gamma regime.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_wall_flip_and_max_pain_identities_units_and_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Wall generation requires the unpublished source engine or actual attributed readouts.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve every wall identity, dated price/band, units and selected wall; compute same-unit spot relations and prevent max-pain identity aliasing.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_walls": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "selected_wall_id": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "spot_relation": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "walls": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O036",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o036",
+      "producer_module": "context_observations",
+      "remaining_limitation": "Wall generation requires the unpublished source engine or actual attributed readouts.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Wall generation requires the unpublished source engine or actual attributed readouts.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_wall_flip_and_max_pain_identities_units_and_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The payout engine and terminal prediction are not inferred from a supplied max-pain label.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain max-pain identity separately from same-price walls and calculate only the stated difference.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_max_pain": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "max_pain_value": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "relation_to_separate_walls": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "source_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O037",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o037",
+      "producer_module": "context_observations",
+      "remaining_limitation": "The payout engine and terminal prediction are not inferred from a supplied max-pain label.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The payout engine and terminal prediction are not inferred from a supplied max-pain label.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_wall_flip_and_max_pain_identities_units_and_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The source calculation is undisclosed; an actual source observation is the supported route.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain the attributed source readout, units, interpretation and availability without replacing it with a differently computed quantity.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_value": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "interpretation": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "source_value": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "unit": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O038",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o038",
+      "producer_module": "context_observations",
+      "remaining_limitation": "The source calculation is undisclosed; an actual source observation is the supported route.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The source calculation is undisclosed; an actual source observation is the supported route.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_readouts_preserve_missing_units_and_kg1_is_not_two_reasons"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The exact source Vol/GEX engine is unavailable.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Keep the source Vol/GEX value and its units distinct from the labeled arithmetic comparison.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_value": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "interpretation": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "source_vol_gex": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "unit": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O039",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o039",
+      "producer_module": "context_observations",
+      "remaining_limitation": "The exact source Vol/GEX engine is unavailable.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The exact source Vol/GEX engine is unavailable.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_readouts_preserve_missing_units_and_kg1_is_not_two_reasons"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Pressure interpretation remains an attributed source observation, not an automatic classifier.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve gauge scale and units; percentage conversion is available only for an actual percent scale, with no fabricated entry permission.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_pressure": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "gauge_value": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_interpretation": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O040",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o040",
+      "producer_module": "context_observations",
+      "remaining_limitation": "Pressure interpretation remains an attributed source observation, not an automatic classifier.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Pressure interpretation remains an attributed source observation, not an automatic classifier.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_wall_flip_and_max_pain_identities_units_and_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Unpublished KG1 generation and missing actual reason records remain explicit; source-domain admission audits every consumed field.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve the KG1 band and identity and require actual independent prior-reaction and minor-HVN records; same-price and KG1 labels do not count as two reasons.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_kg1": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "kg1_band": {
+          "nullable": true,
+          "types": [
+            "list"
+          ]
+        },
+        "role": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "source_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O041",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o041",
+      "producer_module": "context_observations",
+      "remaining_limitation": "Unpublished KG1 generation and missing actual reason records remain explicit; source-domain admission audits every consumed field.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Unpublished KG1 generation and missing actual reason records remain explicit; source-domain admission audits every consumed field.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_context_snapshot_ignores_future_vintage_and_retains_supporting_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "A missing or conflicting contemporaneous observation is a data gap.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Select the latest available VIX observation at decision time with unit and vintage tie checks; later observations cannot modify an earlier snapshot.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "ambition_adjustment": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "available_vix": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "observation_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "source_context": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O042",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o042",
+      "producer_module": "context_observations",
+      "remaining_limitation": "A missing or conflicting contemporaneous observation is a data gap.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "A missing or conflicting contemporaneous observation is a data gap.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_context_snapshot_ignores_future_vintage_and_retains_supporting_clocks"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "A points estimate needs a contemporaneous instrument price and is not a must-travel price target.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Calculate VIX daily percentage, fraction and optional points with the factor of 100 and explicit conversion instrument; propagate both input clocks.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "daily_fraction": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "daily_move_percent": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "point_estimate": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O043",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o043",
+      "producer_module": "context_observations",
+      "remaining_limitation": "A points estimate needs a contemporaneous instrument price and is not a must-travel price target.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "A points estimate needs a contemporaneous instrument price and is not a must-travel price target.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_daily_fraction_and_event_change_have_distinct_units_and_availability"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Curve shape and event interpretation require the source observation; no tenor substitution occurs.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain the exact selected tenor pair, comparable units and chosen difference/ratio; include an event change only after its actual publication.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "difference_or_ratio_when_selected": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "event_change": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_curve_label": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "tenor_values": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O044",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o044",
+      "producer_module": "context_observations",
+      "remaining_limitation": "Curve shape and event interpretation require the source observation; no tenor substitution occurs.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Curve shape and event interpretation require the source observation; no tenor substitution occurs.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_daily_fraction_and_event_change_have_distinct_units_and_availability"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Missing availability and conflicting release ties remain data limitations.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Select the actual available VVIX vintage and retain context and interpretation with no backward use of later releases.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_entry_rule": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "available_vvix": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_interpretation": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O045",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o045",
+      "producer_module": "context_observations",
+      "remaining_limitation": "Missing availability and conflicting release ties remain data limitations.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Missing availability and conflicting release ties remain data limitations.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py",
+        "sha256": "fdafea7454d5e439159c2b5eb532619641ee1e449255ee45083682208f3ff13b"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_latest_available_context_and_ambiguous_ties"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Actual source process results are required. No market-price return series is fabricated; summaries stay attributed summaries.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve all eight outcome categories, explicit closed denominator, process/version/cohort identity, original-R provenance and causal corrections; check literal supplied metric consistency.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "aggregate_winner_loser_comparison_recorded": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "causal_correction_retained": {
+          "nullable": false,
+          "types": [
+            "bool"
+          ]
+        },
+        "denominator_identity": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "initial_R_provenance": {
+          "nullable": true,
+          "types": [
+            "dict"
+          ]
+        },
+        "outcome_records": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "reported_metrics": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "summary_consistency": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "unavailable_metrics": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O153",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o153",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Actual source process results are required. No market-price return series is fabricated; summaries stay attributed summaries.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Actual source process results are required. No market-price return series is fabricated; summaries stay attributed summaries.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_all_process_categories_and_original_r_denominator_are_retained"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Missing prior process and Monte Carlo records are missing records, not a generated simulation or an entry strategy.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Validate an actual distinct same-process closed sample of at least 100, reconcile its win rate, and require a matched supplied MC design/result available strictly before the risk decision.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "average_rr_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "closed_denominator": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "mc_result_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "observed_sample_win_rate": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "overlay_validation": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "sample_at_least100": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "sample_n": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "sample_outcome_counts": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "validation_before_risk": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "validation_record": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "winrate_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O154",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o154",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Missing prior process and Monte Carlo records are missing records, not a generated simulation or an entry strategy.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Missing prior process and Monte Carlo records are missing records, not a generated simulation or an entry strategy.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_process_supporting_clocks_and_sample_statistics_cannot_be_copied"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Macro collection is deferred and required source series definitions must be supplied.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain explicitly selected leverage/credit/housing/valuation series and causal vintages; preserve a supplied historical verdict without making a current classifier.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_current_verdict": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "indicator_records": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "required_series_present": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "source_historical_verdict": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "vintage_causal": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O157",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o157",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Macro collection is deferred and required source series definitions must be supplied.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Macro collection is deferred and required source series definitions must be supplied.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_native_effort_endpoint_sequence_and_future_indicator_snapshot"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Source cycle classification is unpublished and no new classifier is invented.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Preserve the source cycle label, rationale and actual available input vintages instead of a majority-vote substitute.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_cycle": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "inputs_available": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "rationale": {
+          "nullable": true,
+          "types": [
+            "str",
+            "dict"
+          ]
+        },
+        "source_cycle_label": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O158",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o158",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Source cycle classification is unpublished and no new classifier is invented.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Source cycle classification is unpublished and no new classifier is invented.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_macro_source_tokens_do_not_invent_classifiers_or_fill_vintage_holes"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The custom score formula is undisclosed.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain an attributed custom C-score, source unit and context and reject substitution of a z-score.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_c_score": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "custom_score_formula": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "source_c_score": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_score_unit": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O159",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o159",
+      "producer_module": "process_observations",
+      "remaining_limitation": "The custom score formula is undisclosed.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The custom score formula is undisclosed.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_macro_source_tokens_do_not_invent_classifiers_or_fill_vintage_holes"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The source baseline and variance convention must be observed; no fitted baseline search is performed.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Compute selected prior-record mean, sample/population scale, raw deviation and standardized deviation with distinct series IDs, causal vintages and a zero-scale case.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "baseline_mean": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "baseline_sd": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "raw_deviation": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "source_transform_known": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "standardized_deviation": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O160",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o160",
+      "producer_module": "process_observations",
+      "remaining_limitation": "The source baseline and variance convention must be observed; no fitted baseline search is performed.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The source baseline and variance convention must be observed; no fitted baseline search is performed.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_prior_standardization_records_cannot_include_current_or_future_vintage"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "The strength formula is unpublished.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Retain source strength, horizon and scale separately from an explicitly labeled regression slope.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "automatic_strength": {
+          "nullable": true,
+          "types": [
+            "NoneType"
+          ]
+        },
+        "horizon": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "source_strength": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "unit": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O161",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o161",
+      "producer_module": "process_observations",
+      "remaining_limitation": "The strength formula is unpublished.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "The strength formula is unpublished.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_macro_source_tokens_do_not_invent_classifiers_or_fill_vintage_holes"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "reason": "The implemented supplied-record path requires actual source, option, process or account observations. The retained NQ tape cannot supply those private/external records.",
+          "resolved": true,
+          "status": "source_or_process_records_required"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Missing observed availability stays unknown; publication-as-availability remains an explicit assumption.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Resolve the chosen series/reference-period initial or latest available vintage at the cutoff; preserve release history and reject impossible release ordering or ambiguous ties.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "actual_value": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "available_at": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "latest_available_vintage_at_decision": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "reference_period": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "vintage_history": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        }
+      },
+      "native_producer": false,
+      "object_id": "O162",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o162",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Missing observed availability stays unknown; publication-as-availability remains an explicit assumption.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Missing observed availability stays unknown; publication-as-availability remains an explicit assumption.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_vintage_snapshots_and_release_ordering"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "evidence": [
+            {
+              "path": "/workspace/implementation/validation/phase1-completion/native-flow.json",
+              "sha256": "2f114ff04f0f300b2cbc3921cbfe6564a9256a1eb3a62ff8a69ccd352ac2f829"
+            }
+          ],
+          "reason": "Actual bounded native measurements have been reviewed. Coverage, side and source-interpretation holes remain exactly as reported; no exact author fill or full historical cohort is asserted.",
+          "resolved": true,
+          "status": "native_validation_with_gaps"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Trade/BBO data do not supply native order-ID and full-depth lifecycle logs; those unavailable data are not reconstructed from snapshots.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "evidence": [
+        "/workspace/implementation/validation/phase1-completion/native-flow.json"
+      ],
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Replay actual identified order actions for provided/withdrawn/consumed quantity and remaining-state reconciliation. A separate native executed-tape adapter retains B/A/N consumption and two-sided executions, with passive consumption opposite the known aggressor. Add/cancel/full-depth/hidden-order and remaining queue state remain unknown without native order lifecycle records.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "consume_events": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "depth_coverage": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "event_ledger": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "order_states": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "per_side_volumes": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "provide_events": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        },
+        "source_process_complete": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "two_sided_executions": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "withdraw_events": {
+          "nullable": true,
+          "types": [
+            "int"
+          ]
+        }
+      },
+      "native_producer": true,
+      "object_id": "O163",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o163",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Trade/BBO data do not supply native order-ID and full-depth lifecycle logs; those unavailable data are not reconstructed from snapshots.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Trade/BBO data do not supply native order-ID and full-depth lifecycle logs; those unavailable data are not reconstructed from snapshots.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_modify_preserves_native_order_identity_and_change_evidence",
+        "test_native_consumption_keeps_unknown_side_and_does_not_create_depth_events"
+      ]
+    },
+    {
+      "derived_producer": false,
+      "dimensions": {
+        "data": {
+          "evidence": [
+            {
+              "path": "/workspace/implementation/validation/phase1-completion/native-flow.json",
+              "sha256": "2f114ff04f0f300b2cbc3921cbfe6564a9256a1eb3a62ff8a69ccd352ac2f829"
+            }
+          ],
+          "reason": "Actual bounded native measurements have been reviewed. Coverage, side and source-interpretation holes remain exactly as reported; no exact author fill or full historical cohort is asserted.",
+          "resolved": true,
+          "status": "native_validation_with_gaps"
+        },
+        "source_agreement": {
+          "evidence": {
+            "path": "/workspace/implementation/validation/phase1-completion/source-case-review.json",
+            "sha256": "5c85a2183daaca29819cd129e8c2867c1e04060ad408bf072ea21022cd254652"
+          },
+          "reason": "The source-case review keeps figures, native comparisons, synthetic mirrored controls and conflicts separate; software closure does not assert every source trade was reconstructed.",
+          "resolved": true,
+          "status": "case_review_separate"
+        },
+        "source_ambiguity": {
+          "reason": "Effort/response arithmetic does not infer source efficiency class, hidden reserve or absorption; unsequenced different-price endpoint ties remain data ambiguity.",
+          "resolved": true,
+          "status": "reviewed_with_limitations"
+        }
+      },
+      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "implemented_obligation": "Compute directional effort and response from actual selected interval events and instrument-definition tick size; preserve unknown aggressor bounds and resolve endpoint ties only with actual sequence.",
+      "legacy_required_inputs": [],
+      "meaningful_schema": {
+        "aggressive_volume": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "effort_side": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "interval": {
+          "nullable": false,
+          "types": [
+            "dict"
+          ]
+        },
+        "member_event_ids": {
+          "nullable": false,
+          "types": [
+            "list"
+          ]
+        },
+        "mid_response": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "named_response_per_volume": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "price_response_points": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "price_response_ticks": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        },
+        "response_basis": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "response_record_complete": {
+          "nullable": true,
+          "types": [
+            "bool"
+          ]
+        },
+        "source_efficiency_class": {
+          "nullable": true,
+          "types": [
+            "str"
+          ]
+        },
+        "unknown_side_volume": {
+          "nullable": true,
+          "types": [
+            "Decimal"
+          ]
+        }
+      },
+      "native_producer": true,
+      "object_id": "O164",
+      "parent_review": "Reviewed producer and its supplied/native admission path against the object contract; tested arithmetic and causal invariants.",
+      "producer_function": "o164",
+      "producer_module": "process_observations",
+      "remaining_limitation": "Effort/response arithmetic does not infer source efficiency class, hidden reserve or absorption; unsequenced different-price endpoint ties remain data ambiguity.",
+      "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
+      "review_status": "resolved",
+      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_limitations": "Effort/response arithmetic does not infer source efficiency class, hidden reserve or absorption; unsequenced different-price endpoint ties remain data ambiguity.",
+      "reviewed_producer_file": {
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py",
+        "sha256": "1d1e8ce1ec050a63a40f273d551a491a0d5eef734f3108982cfdfde29156b625"
+      },
+      "reviewed_test_run": {
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "sha256": "dc6f958f811c659cb0e0d81ed63d7831ef299bd511c2a03862f7cc90f7adc197"
+      },
+      "reviewer": "parent",
+      "sensitive_regression_tests": [
+        "test_native_effort_endpoint_sequence_and_future_indicator_snapshot",
+        "test_native_response_does_not_borrow_a_workspace_tick_without_its_definition"
+      ]
+    }
+  ],
+  "schema": "phase1-manual-obligation-review-v1",
+  "scope": "Parent-owned O030-O045,O153-O154,O157-O164"
+}
