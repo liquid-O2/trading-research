@@ -124,6 +124,38 @@ def _event_at(row: dict[str, Any]) -> int | None:
     return None
 
 
+def _claimed_availability(row: dict[str, Any], occurrence_at: int | None) -> int | None:
+    """Return a record's availability without erasing an explicit unknown.
+
+    Older compact lifecycle records carry only an occurrence timestamp.  They
+    retain the documented immediate-availability interpretation.  Once a
+    record supplies ``available_at`` or ``known_at``, however, that claim is
+    authoritative: a null claim remains unknown and is never replaced by the
+    occurrence timestamp.
+    """
+    for key in ("available_at", "known_at"):
+        if key in row:
+            value = row[key]
+            return value if type(value) is int else None
+    return occurrence_at
+
+
+def _availability_claim_is_malformed(row: dict[str, Any]) -> bool:
+    for key in ("available_at", "known_at"):
+        if key in row:
+            return row[key] is not None and type(row[key]) is not int
+    return False
+
+
+def _aliases_conflict(row: dict[str, Any], keys: tuple[str, ...]) -> bool:
+    claims = [row[key] for key in keys if key in row]
+    return len(claims) > 1 and any(value != claims[0] for value in claims[1:])
+
+
+def _time_claim_is_malformed(row: dict[str, Any], keys: tuple[str, ...]) -> bool:
+    return any(key in row and row[key] is not None and type(row[key]) is not int for key in keys)
+
+
 def _kind(row: dict[str, Any]) -> str:
     raw = row.get("kind", row.get("action", row.get("type", "")))
     return str(raw).strip().lower().replace("-", "_").replace(" ", "_")
@@ -1163,9 +1195,16 @@ def _source_policy(inp: dict, rid: str) -> tuple[dict, list[str]]:
 @_override("O150")
 def o150(inp: dict) -> RecipeResult:
     order_id = inp.get("order_id"); candidate_id = inp.get("candidate_id"); position_id = inp.get("position_id")
+    instrument_id = inp.get("instrument_id")
     side = inp.get("side"); order_type = inp.get("order_type")
     price = dec(inp.get("limit", inp.get("price"))); quantity = dec(inp.get("quantity"))
-    placed = inp.get("placed_at", inp.get("placement_at")); as_of = inp.get("as_of", inp.get("use_at", inp.get("known_at")))
+    placed = inp.get("placed_at", inp.get("placement_at"))
+    requested_as_of = inp.get("as_of"); use_at = inp.get("use_at")
+    as_of = requested_as_of if type(requested_as_of) is int else (
+        use_at if type(use_at) is int else inp.get("known_at")
+    )
+    snapshot_after_use = (type(requested_as_of) is int and type(use_at) is int
+                          and requested_as_of > use_at)
     placement_available = inp.get("placement_known_at", inp.get("order_known_at", placed))
     policy, policy_holes = _source_policy(inp, "O150")
     q = dec(inp.get("q", inp.get("tick_size")))
@@ -1179,30 +1218,52 @@ def o150(inp: dict) -> RecipeResult:
     cancel_at = inp.get("cancel_at")
     if cancel_at is None and placed is not None and cancel_minutes is not None:
         cancel_at = placed + int(cancel_minutes * 60 * 1_000_000_000)
-    raw_events = [deepcopy(row) for row in inp.get("events", inp.get("order_events", [])) or [] if isinstance(row, dict)]
+    raw_events = []
+    for source_row in inp.get("events", inp.get("order_events", [])) or []:
+        if not isinstance(source_row, dict):
+            continue
+        row = deepcopy(source_row)
+        # This marker is output metadata for internally generated policy
+        # cancellations.  A supplied event cannot grant itself that trust.
+        row.pop("synthetic_from_policy", None)
+        row.pop("_o150_internal_policy_cancel", None)
+        raw_events.append(row)
     unclocked_fill_quantities = []
     for qty in inp.get("fill_qtys", []) or []:
         if not isinstance(qty, dict):
             unclocked_fill_quantities.append(dec(qty))
             continue
         row = deepcopy(qty)
+        row.pop("synthetic_from_policy", None)
+        row.pop("_o150_internal_policy_cancel", None)
         row.setdefault("kind", "fill")
         raw_events.append(row)
     for key, kind in (("triggered_at", "trigger"), ("expired_at", "expire"), ("exit_at", "exit_fill")):
-        if inp.get(key) is not None: raw_events.append({"kind": kind, "at": inp[key], "qty": inp.get("exit_quantity")})
-    if cancel_at is not None and not any(_kind(row) in {"cancel", "canceled"} and _event_at(row) == cancel_at for row in raw_events):
-        raw_events.append({"kind": "cancel", "at": cancel_at, "synthetic_from_policy": inp.get("cancel_at") is None})
+        if inp.get(key) is not None:
+            raw_events.append({"event_id": f"{order_id}:{kind}:{inp[key]}", "kind": kind,
+                               "at": inp[key], "qty": inp.get("exit_quantity"),
+                               "order_id": order_id, "position_id": position_id,
+                               "candidate_id": candidate_id, "instrument_id": instrument_id})
+    matching_explicit_cancel = any(
+        _kind(row) in {"cancel", "canceled"} and _event_at(row) == cancel_at
+        and row.get("order_id") == order_id and row.get("instrument_id") == instrument_id
+        and row.get("position_id") in {None, position_id}
+        and row.get("candidate_id") in {None, candidate_id}
+        and not _aliases_conflict(row, ("at", "t", "event_at", "time"))
+        and not _aliases_conflict(row, ("available_at", "known_at"))
+        and _claimed_availability(row, _event_at(row)) == cancel_at
+        for row in raw_events
+    )
+    if cancel_at is not None and not matching_explicit_cancel:
+        raw_events.append({"kind": "cancel", "at": cancel_at,
+                           "order_id": order_id, "position_id": position_id,
+                           "candidate_id": candidate_id, "instrument_id": instrument_id,
+                           "synthetic_from_policy": inp.get("cancel_at") is None,
+                           "_o150_internal_policy_cancel": True})
     unclocked_events = [row for row in raw_events if _event_at(row) is None]
     raw_events = [row for row in raw_events if _event_at(row) is not None]
     events, order_errors = _ordered(raw_events, "O150")
-    # Replay only facts available at the requested snapshot. Future supplied
-    # rows remain visible in pending_events and cannot leak into the result.
-    available, pending = [], []
-    for row in events:
-        available_at = _at(row)
-        if as_of is not None and available_at is not None and available_at > as_of: pending.append(row)
-        else: available.append(row)
-    state = "resting" if placed is not None and placement_available is not None and (
+    state = "resting" if placed is not None and type(placement_available) is int and (
         as_of is None or placement_available <= as_of
     ) else "unplaced"
     authorized = quantity; working = quantity if state == "resting" else Decimal(0)
@@ -1210,42 +1271,234 @@ def o150(inp: dict) -> RecipeResult:
     if stop is not None or target is not None:
         bracket_versions.append({"version": 0, "at": placed, "stop": stop, "target": target})
     errors = list(order_errors); missing = list(policy_holes)
+    if snapshot_after_use:
+        errors.append("claimed snapshot occurs after lifecycle use")
+    for name, value in (("as_of", requested_as_of), ("use_at", use_at)):
+        if value is not None and type(value) is not int:
+            errors.append(f"{name} must be an integer or null")
+    if _aliases_conflict(inp, ("instrument_id", "symbol", "source_symbol")):
+        errors.append("order instrument identity aliases conflict")
+    for aliases, label in (
+        (("order_id", "source_order_id"), "order"),
+        (("position_id", "source_position_id"), "position"),
+        (("candidate_id", "source_candidate_id"), "candidate"),
+    ):
+        if _aliases_conflict(inp, aliases):
+            errors.append(f"order {label} identity aliases conflict")
     if unclocked_fill_quantities: missing.append("fill_event_records")
     if unclocked_events: missing.append("event_at")
     if order_id is None: missing.append("order_id")
     if candidate_id is None: missing.append("candidate_id")
     if position_id is None: missing.append("position_id")
+    if instrument_id is None: missing.append("instrument_id")
     if price is None: missing.append("order_price")
     if quantity is None: missing.append("quantity")
     if placed is None: missing.append("placed_at")
     if order_type is None: missing.append("order_type")
     if side is None: missing.append("side")
     identified_events = [row for row in [*raw_events, *unclocked_events]
-                         if row.get("synthetic_from_policy") is not True]
+                         if row.get("_o150_internal_policy_cancel") is not True]
     event_ids = [row.get("event_id", row.get("id")) for row in identified_events]
     if raw_events and any(event_id is None for event_id in event_ids): missing.append("event_identity")
-    if len([event_id for event_id in event_ids if event_id is not None]) != len(set(event_id for event_id in event_ids if event_id is not None)):
+    duplicate_event_identity = (
+        len([event_id for event_id in event_ids if event_id is not None])
+        != len(set(event_id for event_id in event_ids if event_id is not None))
+    )
+    if duplicate_event_identity:
         errors.append("duplicate order event identity")
     if quantity is not None and quantity <= 0: errors.append("order quantity must be positive")
-    for row in available:
+    if placement_available is None:
+        missing.append("placement_availability")
+    elif type(placement_available) is not int:
+        errors.append("order placement availability must be an integer or null")
+    elif type(placed) is int and placement_available < placed:
+        errors.append("order placement availability precedes occurrence")
+
+    working_order_kinds = {"trigger", "triggered", "amend", "amend_quantity", "replace",
+                           "cancel", "canceled", "expire", "expired", "reopen", "new_order",
+                           "fill", "partial_fill"}
+    fill_kinds = {"fill", "partial_fill"}
+    position_kinds = {"exit", "exit_fill", "position_exit", "partial_exit_fill",
+                      "exit_request", "partial_exit_request", "requested_partial"}
+    declared_active_order_id = order_id
+    order_generations = {order_id} if order_id is not None else set()
+    admitted: list[tuple[dict[str, Any], int, int]] = []
+    pending: list[dict[str, Any]] = []
+    unapplied: list[dict[str, Any]] = []
+    ignored_policy_events: list[dict[str, Any]] = []
+    unknown_availability = False
+    for index, row in enumerate(events):
+        kind = _kind(row)
+        occurrence = _event_at(row)
+        available_at = _claimed_availability(row, occurrence)
+        relationship_complete = not duplicate_event_identity
+        clock_valid = not order_errors
+
+        if _aliases_conflict(row, ("at", "t", "event_at", "time")):
+            errors.append(f"event {index} occurrence aliases conflict")
+            clock_valid = False
+        elif _time_claim_is_malformed(row, ("at", "t", "event_at", "time")):
+            errors.append(f"event {index} occurrence must be an integer or null")
+            clock_valid = False
+        if _aliases_conflict(row, ("available_at", "known_at")):
+            errors.append(f"event {index} availability aliases conflict")
+            clock_valid = False
+        elif _availability_claim_is_malformed(row):
+            errors.append(f"event {index} availability must be an integer or null")
+            clock_valid = False
+        elif available_at is None:
+            missing.append(f"event_{index}_availability")
+            unknown_availability = True
+            clock_valid = False
+        elif occurrence is not None and available_at < occurrence:
+            errors.append(f"event {index} availability precedes occurrence")
+            clock_valid = False
+        if _aliases_conflict(row, ("sequence", "event_sequence", "seq")):
+            errors.append(f"event {index} sequence aliases conflict")
+            clock_valid = False
+        if placed is not None and occurrence is not None and occurrence < placed:
+            errors.append(f"event {index} precedes order placement")
+            clock_valid = False
+
+        synthetic = row.get("_o150_internal_policy_cancel") is True
+        required_links: tuple[str, ...] = ()
+        if not synthetic:
+            if kind in working_order_kinds:
+                required_links = ("order_id", "instrument_id")
+                if kind in fill_kinds:
+                    required_links += ("position_id",)
+            elif kind in position_kinds:
+                required_links = ("position_id", "instrument_id")
+        for key in required_links:
+            if row.get(key) is None:
+                missing.append(f"event_{index}_{key}")
+                relationship_complete = False
+
+        event_order_id = row.get("order_id")
+        event_position_id = row.get("position_id")
+        event_instrument_id = row.get("instrument_id")
+        event_candidate_id = row.get("candidate_id")
+        for aliases, label in (
+            (("event_id", "id"), "event"),
+            (("order_id", "source_order_id"), "order"),
+            (("position_id", "source_position_id"), "position"),
+            (("candidate_id", "source_candidate_id"), "candidate"),
+            (("instrument_id", "symbol", "source_symbol"), "instrument"),
+        ):
+            if _aliases_conflict(row, aliases):
+                errors.append(f"event {index} {label} identity aliases conflict")
+                relationship_complete = False
+        if "candidate_id" in row:
+            if event_candidate_id is None:
+                missing.append(f"event_{index}_candidate_id")
+                relationship_complete = False
+            elif candidate_id is None or event_candidate_id != candidate_id:
+                errors.append(f"event {index} candidate identity mismatch")
+                relationship_complete = False
+        if "position_id" in row and event_position_id is None:
+            missing.append(f"event_{index}_position_id")
+            relationship_complete = False
+        elif event_position_id is not None and (position_id is None or event_position_id != position_id):
+            errors.append(f"event {index} position identity mismatch")
+            relationship_complete = False
+        if "instrument_id" in row and event_instrument_id is None:
+            missing.append(f"event_{index}_instrument_id")
+            relationship_complete = False
+        elif event_instrument_id is not None and (instrument_id is None or event_instrument_id != instrument_id):
+            errors.append(f"event {index} instrument identity mismatch")
+            relationship_complete = False
+
+        if kind in {"reopen", "new_order"}:
+            prior_order_id = row.get("prior_order_id", row.get("replaces_order_id", row.get("parent_order_id")))
+            new_order_id = row.get("new_order_id", row.get("replacement_order_id"))
+            if prior_order_id is None:
+                prior_order_id = event_order_id
+            elif event_order_id not in {prior_order_id, new_order_id}:
+                errors.append(f"event {index} reopen order identity is not linked to its generation")
+                relationship_complete = False
+            if prior_order_id is None:
+                missing.append(f"event_{index}_prior_order_id")
+                relationship_complete = False
+            elif declared_active_order_id is None or prior_order_id != declared_active_order_id:
+                errors.append(f"event {index} prior order identity mismatch")
+                relationship_complete = False
+            if new_order_id is not None:
+                if not isinstance(new_order_id, str) or not new_order_id or new_order_id in order_generations:
+                    errors.append(f"event {index} replacement order identity is invalid or reused")
+                    relationship_complete = False
+                elif relationship_complete:
+                    declared_active_order_id = new_order_id
+                    order_generations.add(new_order_id)
+        elif kind in working_order_kinds and synthetic:
+            if event_order_id is None or event_instrument_id is None:
+                missing.append(f"event_{index}_policy_identity")
+                relationship_complete = False
+        elif kind in working_order_kinds:
+            if event_order_id is not None and (declared_active_order_id is None or event_order_id != declared_active_order_id):
+                errors.append(f"event {index} order identity mismatch")
+                relationship_complete = False
+        elif event_order_id is not None and event_order_id not in order_generations:
+            errors.append(f"event {index} order identity mismatch")
+            relationship_complete = False
+
+        if not relationship_complete or not clock_valid:
+            unapplied.append(row)
+        elif as_of is not None and available_at > as_of:
+            pending.append(row)
+        else:
+            admitted.append((row, occurrence, available_at))
+
+    # Replay only events both linked to this lifecycle and available at the
+    # requested snapshot.  A pending or unverifiable row never changes state.
+    active_order_id = order_id
+    for row, at, available_at in admitted:
         kind, at, before = _kind(row), _event_at(row), state
         event_qty = _qty(row)
-        if placed is not None and at is not None and at < placed: errors.append("event precedes order placement")
+        event_order_id = row.get("order_id")
+        internal_policy_cancel = row.get("_o150_internal_policy_cancel") is True
+        placement_ready = type(placement_available) is int and (
+            as_of is None or placement_available <= as_of
+        )
+        if not placement_ready:
+            missing.append("event_placement_availability")
+            unapplied.append(row)
+            continue
+        if internal_policy_cancel and (
+            event_order_id != active_order_id or state not in {"resting", "triggered", "partially_filled"}
+        ):
+            ignored_policy_events.append(row)
+            continue
+        if kind in {"reopen", "new_order"}:
+            prior_order_id = row.get("prior_order_id", row.get("replaces_order_id", row.get("parent_order_id")))
+            if prior_order_id is None:
+                prior_order_id = event_order_id
+            if prior_order_id != active_order_id:
+                missing.append("event_generation_availability")
+                unapplied.append(row)
+                continue
+        elif kind in working_order_kinds and event_order_id != active_order_id:
+            # The full supplied lineage may be consistent while the reopen
+            # authorizing this generation is not yet available at this snapshot.
+            missing.append("event_generation_availability")
+            unapplied.append(row)
+            continue
         if kind in {"trigger", "triggered"}:
             if state not in {"resting", "partially_filled"}: errors.append("trigger on nonworking order")
             else: state = "triggered"
         elif kind in {"amend", "amend_quantity", "replace"}:
-            if state not in {"resting", "triggered", "partially_filled"}: errors.append("amend on nonworking order")
-            new_quantity = dec(row.get("new_quantity", row.get("quantity")))
-            new_price = dec(row.get("new_price", row.get("price")))
-            if new_quantity is not None:
-                if new_quantity < generation_filled: errors.append("amended quantity below cumulative fills")
-                elif new_quantity <= 0: errors.append("amended quantity must be positive")
-                else: authorized = new_quantity; working = new_quantity - generation_filled
-            if new_price is not None: price = new_price
-            if row.get("new_stop") is not None or row.get("new_target") is not None:
-                stop = dec(row.get("new_stop", stop)); target = dec(row.get("new_target", target))
-                bracket_versions.append({"version": len(bracket_versions), "at": at, "stop": stop, "target": target})
+            if state not in {"resting", "triggered", "partially_filled"}:
+                errors.append("amend on nonworking order")
+            else:
+                new_quantity = dec(row.get("new_quantity", row.get("quantity")))
+                new_price = dec(row.get("new_price", row.get("price")))
+                if new_quantity is not None:
+                    if new_quantity < generation_filled: errors.append("amended quantity below cumulative fills")
+                    elif new_quantity <= 0: errors.append("amended quantity must be positive")
+                    else: authorized = new_quantity; working = new_quantity - generation_filled
+                if new_price is not None: price = new_price
+                if row.get("new_stop") is not None or row.get("new_target") is not None:
+                    stop = dec(row.get("new_stop", stop)); target = dec(row.get("new_target", target))
+                    bracket_versions.append({"version": len(bracket_versions), "at": at, "stop": stop, "target": target})
         elif kind in {"cancel", "canceled"}:
             if state in {"resting", "triggered", "partially_filled"}: state = "canceled"; working = Decimal(0)
             elif state not in {"canceled", "filled"}: errors.append("cancel on nonworking order")
@@ -1261,6 +1514,9 @@ def o150(inp: dict) -> RecipeResult:
                 # in the position but are not charged against its quantity.
                 authorized = new_quantity; generation_filled = Decimal(0); working = new_quantity; state = "resting"
                 if row.get("new_price") is not None: price = dec(row["new_price"])
+                new_order_id = row.get("new_order_id", row.get("replacement_order_id"))
+                if new_order_id is not None:
+                    active_order_id = new_order_id
         elif kind in {"fill", "partial_fill"}:
             if state not in {"resting", "triggered", "partially_filled"}: errors.append("fill without valid working order")
             elif event_qty is None or event_qty <= 0: errors.append("fill quantity missing or non-positive")
@@ -1278,8 +1534,9 @@ def o150(inp: dict) -> RecipeResult:
             pass
         else:
             missing.append("event_kind")
+            unapplied.append(row)
         timeline.append({"event_id": row.get("event_id", row.get("id")), "at": at,
-                         "available_at": _at(row), "kind": kind, "state_before": before,
+                         "available_at": available_at, "kind": kind, "state_before": before,
                          "state_after": state, "authorized_quantity": authorized,
                          "working_quantity_after": working, "position_quantity_after": position,
                          **({"quantity": event_qty} if event_qty is not None else {})})
@@ -1291,19 +1548,29 @@ def o150(inp: dict) -> RecipeResult:
     if one_position is True:
         if open_positions is None: missing.append("other_open_positions"); source_policy_ok = None
         elif int(open_positions) > 0 and position > 0: errors.append("source one-position cap violated"); source_policy_ok = False
-    latest = _max_time(placement_available, *[_at(row) for row in available])
-    ambiguous_fills = bool(unclocked_events or unclocked_fill_quantities)
-    value = {"order_state_timeline": timeline, "remaining_quantity": None if ambiguous_fills else working,
-             "filled_quantity": None if ambiguous_fills else filled,
-             "position_open": None if ambiguous_fills else position > 0,
+    admitted_availability = [available_at for _, _, available_at in admitted]
+    latest = None if unknown_availability or unclocked_events else _max_time(
+        placement_available if type(placement_available) is int and (as_of is None or placement_available <= as_of) else None,
+        *admitted_availability,
+    )
+    uncertain_lifecycle = bool(unclocked_events or unclocked_fill_quantities or unapplied)
+    for rows in (pending, unapplied, ignored_policy_events):
+        for row in rows:
+            row.pop("_o150_internal_policy_cancel", None)
+    value = {"order_state_timeline": timeline, "remaining_quantity": None if uncertain_lifecycle else working,
+             "filled_quantity": None if uncertain_lifecycle else filled,
+             "position_open": None if uncertain_lifecycle else position > 0,
              "bracket_versions": bracket_versions,
-             "lifecycle_valid": False if errors else None if ambiguous_fills or any(
+             "lifecycle_valid": False if errors else None if uncertain_lifecycle or any(
                  name in missing for name in ("event_identity", "event_at", "order_id", "candidate_id",
-                                              "position_id", "order_price", "quantity", "placed_at",
-                                              "order_type", "side")) else True,
-             "source_policy_ok": source_policy_ok, "order_state": state,
-             "position_quantity": None if ambiguous_fills else position, "authorized_quantity": authorized,
+                                              "position_id", "instrument_id", "order_price", "quantity", "placed_at",
+                                              "order_type", "side", "placement_availability"))
+                 or any(name.startswith("event_") for name in missing) else True,
+             "source_policy_ok": source_policy_ok, "order_state": None if uncertain_lifecycle else state,
+             "position_quantity": None if uncertain_lifecycle else position,
+             "authorized_quantity": None if uncertain_lifecycle else authorized,
              "order_id": order_id, "candidate_id": candidate_id, "position_id": position_id,
+             "instrument_id": instrument_id, "active_order_id": active_order_id,
              "order_price": price, "stop": stop, "target": target,
              "decision_at": placed, "side": side, "order_at": placed,
              "stop_ticks": stop_ticks, "target_ticks": target_ticks,
@@ -1311,10 +1578,15 @@ def o150(inp: dict) -> RecipeResult:
              "one_position_policy": one_position,
              "order_inside_ticks": dec(inp.get("order_inside_ticks", policy.get("order_inside_ticks"))),
              "pending_events": pending, "snapshot_at": as_of,
+             "requested_as_of": requested_as_of, "use_at": use_at,
+             "unapplied_events": unapplied,
+             "ignored_policy_events": ignored_policy_events,
              "unclocked_events": unclocked_events,
-             "unclocked_fill_quantities": unclocked_fill_quantities}
-    value.update({"remaining": None if ambiguous_fills else working,
-                  "filled": None if ambiguous_fills else filled, "cancel_at": cancel_at})
+             "unclocked_fill_quantities": unclocked_fill_quantities,
+             "known_prefix_order_state": state, "known_prefix_remaining_quantity": working,
+             "known_prefix_filled_quantity": filled, "known_prefix_position_quantity": position}
+    value.update({"remaining": None if uncertain_lifecycle else working,
+                  "filled": None if uncertain_lifecycle else filled, "cancel_at": cancel_at})
     if errors:
         return _result("O150", "invalid", value, base_ok=False, coverage_ok=None,
                        hole_ids=_holes("O150", ["lifecycle"]), known_at=latest, reason="; ".join(dict.fromkeys(errors)))
@@ -1329,15 +1601,35 @@ def o151(inp: dict) -> RecipeResult:
     order_id = inp.get("order_id"); side = inp.get("side"); limit = dec(inp.get("limit", inp.get("price")))
     active = inp.get("active_at", inp.get("placed_at")); cancel = inp.get("cancel_at"); expiry = inp.get("expiry_at")
     convention = inp.get("fill_convention", inp.get("modeled_fill_rule"))
-    as_of = inp.get("as_of", inp.get("use_at", inp.get("known_at")))
+    requested_as_of = inp.get("as_of"); use_at = inp.get("use_at")
+    as_of = requested_as_of if type(requested_as_of) is int else (
+        use_at if type(use_at) is int else inp.get("known_at")
+    )
     trades = [row for row in inp.get("trades", []) or [] if isinstance(row, dict)]
     qualifying = []
     ambiguous = False
+    errors = []
+    if type(requested_as_of) is int and type(use_at) is int and requested_as_of > use_at:
+        errors.append("claimed snapshot occurs after fill use")
     missing_trade_identity = any(row.get("event_id", row.get("trade_id")) is None for row in trades)
-    missing_trade_availability = any(_event_at(row) is None or _at(row) is None for row in trades)
+    missing_trade_availability = any(
+        _event_at(row) is None or _claimed_availability(row, _event_at(row)) is None for row in trades
+    )
     for trade in trades:
-        at = _event_at(trade); available = _at(trade)
+        at = _event_at(trade); available = _claimed_availability(trade, at)
+        if _aliases_conflict(trade, ("at", "t", "event_at", "time")):
+            errors.append("trade occurrence aliases conflict")
+            continue
+        if _aliases_conflict(trade, ("available_at", "known_at")):
+            errors.append("trade availability aliases conflict")
+            continue
+        if _availability_claim_is_malformed(trade):
+            errors.append("trade availability must be an integer or null")
+            continue
         if at is None or available is None: continue
+        if available < at:
+            errors.append("trade availability precedes occurrence")
+            continue
         if as_of is not None and available > as_of: continue
         if active is None or at < active: continue
         if at == active: ambiguous = True; continue
@@ -1347,10 +1639,19 @@ def o151(inp: dict) -> RecipeResult:
         if price is not None and ((side == "buy" and price <= limit) or (side == "sell" and price >= limit)):
             qualifying.append(trade)
     first = min(qualifying, key=lambda row: _event_at(row)) if qualifying else None
-    actual_reports = [row for row in inp.get("fill_reports", []) or [] if row.get("order_id") == order_id]
+    supplied_reports = [row for row in inp.get("fill_reports", []) or [] if isinstance(row, dict)]
+    actual_reports = [row for row in supplied_reports if row.get("order_id") == order_id]
     if inp.get("fill_report") is not None:
-        actual_reports.append(inp["fill_report"] if isinstance(inp["fill_report"], dict) else {"at": inp.get("actual_fill_at")})
-    actual_at = min((_at(row) for row in actual_reports if _at(row) is not None), default=None)
+        singular = inp["fill_report"]
+        if not isinstance(singular, dict):
+            errors.append("fill_report must be a record")
+        elif singular.get("order_id") != order_id:
+            errors.append("fill report order identity mismatch")
+        else:
+            actual_reports.append(singular)
+    actual_occurrences = [_event_at(row) for row in actual_reports]
+    actual_availability = [_claimed_availability(row, _event_at(row)) for row in actual_reports]
+    actual_at = min((at for at in actual_occurrences if at is not None), default=None)
     actual_quantity = sum((_qty(row, filled_only=True) or Decimal(0) for row in actual_reports), Decimal(0)) if actual_reports else None
     queue_flags = ([inp.get("queue_evidence")] if type(inp.get("queue_evidence")) is bool else []) + [
         row.get("queue_verified") for row in actual_reports if type(row.get("queue_verified")) is bool
@@ -1372,23 +1673,59 @@ def o151(inp: dict) -> RecipeResult:
     if queue is None: missing.append("queue_evidence")
     report_ids = [row.get("fill_id", row.get("event_id", row.get("id"))) for row in actual_reports]
     if actual_reports and any(value is None for value in report_ids): missing.append("fill_report_identity")
-    errors = []
+    if actual_reports and any(at is None for at in actual_occurrences): missing.append("fill_report_occurrence")
+    if actual_reports and any(at is None for at in actual_availability): missing.append("fill_report_availability")
+    for index, (row, occurrence, availability) in enumerate(zip(actual_reports, actual_occurrences, actual_availability)):
+        if _aliases_conflict(row, ("at", "t", "event_at", "time")):
+            errors.append(f"fill report {index} occurrence aliases conflict")
+        if _aliases_conflict(row, ("available_at", "known_at")):
+            errors.append(f"fill report {index} availability aliases conflict")
+        elif _availability_claim_is_malformed(row):
+            errors.append(f"fill report {index} availability must be an integer or null")
+        elif occurrence is not None and availability is not None and availability < occurrence:
+            errors.append(f"fill report {index} availability precedes occurrence")
+        for aliases, label in (
+            (("fill_id", "event_id", "id"), "event"),
+            (("order_id", "source_order_id"), "order"),
+            (("position_id", "source_position_id"), "position"),
+            (("instrument_id", "symbol", "source_symbol"), "instrument"),
+        ):
+            if _aliases_conflict(row, aliases):
+                errors.append(f"fill report {index} {label} identity aliases conflict")
     if side not in {None, "buy", "sell"}: errors.append("invalid passive side")
     if actual_at is not None and ((cancel is not None and actual_at >= cancel) or (expiry is not None and actual_at >= expiry)):
         errors.append("actual fill report occurs after cancellation or expiry")
+    def consistent_report_link(name: str) -> Any:
+        values = {row.get(name) for row in actual_reports if row.get(name) is not None}
+        if len(values) > 1:
+            errors.append(f"fill reports cross {name} boundary")
+            return None
+        return next(iter(values), None)
+
+    report_position_id = consistent_report_link("position_id")
+    report_candidate_id = consistent_report_link("candidate_id")
+    report_instrument_id = consistent_report_link("instrument_id")
     value = {"first_modeled_fill_at": _event_at(first) if first else None,
              "modeled_fill_rule": convention, "actual_fill_at": actual_at,
              "actual_fill_quantity": actual_quantity,
              "queue_verified": queue, "fill_eligibility": eligibility,
-             "actual_fill_unknown": not actual_reports, "order_id": order_id}
+             "actual_fill_unknown": not actual_reports, "order_id": order_id,
+             "position_id": report_position_id, "candidate_id": report_candidate_id,
+             "instrument_id": report_instrument_id,
+             "fill_reports": deepcopy(actual_reports),
+             "actual_fill_available_at": None if any(at is None for at in actual_availability) else _max_time(*actual_availability)}
     value.update({"modeled_fill_at": value["first_modeled_fill_at"],
                   "actual_unknown": value["actual_fill_unknown"]})
     if errors:
         return _result("O151", "invalid", value, base_ok=False, coverage_ok=None,
-                       known_at=_max_time(_at(first) if first else None, actual_at), reason="; ".join(errors))
+                       known_at=None if any(at is None for at in actual_availability) else _max_time(
+                           _claimed_availability(first, _event_at(first)) if first else None, *actual_availability),
+                       reason="; ".join(errors))
     return _result("O151", "computed" if not missing else "hole", value,
                    base_ok=True if not missing else None, coverage_ok=True if not missing else None,
-                   hole_ids=_holes("O151", missing), known_at=_max_time(_at(first) if first else None, actual_at))
+                   hole_ids=_holes("O151", missing),
+                   known_at=None if any(at is None for at in actual_availability) else _max_time(
+                       _claimed_availability(first, _event_at(first)) if first else None, *actual_availability))
 
 
 @_override("O152")
@@ -1629,33 +1966,118 @@ def o166(inp: dict) -> RecipeResult:
     if cadence == "" or cadence == {}:
         cadence = None
     conditioning = inp.get("conditioning_evidence", inp.get("conditioning", [])) or []
-    from_state = current.get("state_label", current.get("state")); to_state = nxt.get("state_label", nxt.get("state"))
-    state_at = current.get("state_at", current.get("at")); next_at = nxt.get("state_at", nxt.get("at"))
-    cseq = current.get("sequence"); nseq = nxt.get("sequence")
+    raw_from_state = current.get("state_label", current.get("state"))
+    raw_to_state = nxt.get("state_label", nxt.get("state"))
+    from_state = raw_from_state if isinstance(raw_from_state, str) else None
+    to_state = raw_to_state if isinstance(raw_to_state, str) else None
+    raw_state_at = current.get("state_at", current.get("at"))
+    raw_next_at = nxt.get("state_at", nxt.get("at"))
+    state_at = raw_state_at if type(raw_state_at) is int else None
+    next_at = raw_next_at if type(raw_next_at) is int else None
+    raw_cseq = current.get("sequence"); raw_nseq = nxt.get("sequence")
+    cseq = raw_cseq if type(raw_cseq) is int else None
+    nseq = raw_nseq if type(raw_nseq) is int else None
+    requested_as_of = inp.get("as_of"); use_at = inp.get("use_at")
+    snapshot_at = requested_as_of if type(requested_as_of) is int else (use_at if type(use_at) is int else None)
+    if type(requested_as_of) is int and type(use_at) is int and requested_as_of > use_at:
+        errors.append("claimed snapshot occurs after transition use")
+    for name, value in (("as_of", requested_as_of), ("use_at", use_at)):
+        if value is not None and type(value) is not int:
+            errors.append(f"{name} must be an integer or null")
+    for name, row in (("current", current), ("next", nxt)):
+        for aliases, label in (
+            (("state_label", "state"), "label"),
+            (("state_id", "id", "observation_id"), "identity"),
+            (("state_at", "at", "t", "event_at", "time"), "occurrence"),
+            (("sequence", "event_sequence", "seq"), "sequence"),
+            (("instrument_id", "symbol", "source_symbol"), "instrument identity"),
+        ):
+            if _aliases_conflict(row, aliases):
+                errors.append(f"{name} state {label} aliases conflict")
+        if _time_claim_is_malformed(row, ("state_at", "at", "t", "event_at", "time")):
+            errors.append(f"{name} state occurrence must be an integer or null")
+        sequence_value = row.get("sequence")
+        if sequence_value is not None and type(sequence_value) is not int:
+            errors.append(f"{name} state sequence must be an integer or null")
+        if _aliases_conflict(row, ("available_at", "known_at")):
+            errors.append(f"{name} state availability aliases conflict")
     for name, value in (("current_observation", current or None), ("next_observation", nxt or None),
                         ("next_observation_definition", cadence)):
         if value is None: missing.append(name)
     for name, value in (("current_state_id", current.get("state_id", current.get("id"))),
                         ("next_state_id", nxt.get("state_id", nxt.get("id"))),
                         ("state_at", state_at), ("next_state_at", next_at),
-                        ("current_known_at", _at(current)), ("next_known_at", _at(nxt)),
+                        ("current_known_at", _claimed_availability(current, state_at if type(state_at) is int else None)),
+                        ("next_known_at", _claimed_availability(nxt, next_at if type(next_at) is int else None)),
                         ("current_sequence", cseq), ("next_sequence", nseq)):
         if value is None: missing.append(name)
-    if from_state not in STATES and from_state is not None: errors.append("invalid from state")
-    if to_state not in STATES and to_state is not None: errors.append("invalid to state")
+    if raw_from_state is None:
+        missing.append("current_state_label")
+    elif raw_from_state not in STATES:
+        errors.append("invalid from state")
+    if raw_to_state is None:
+        missing.append("next_state_label")
+    elif raw_to_state not in STATES:
+        errors.append("invalid to state")
     if None not in (state_at, next_at) and not state_at < next_at: errors.append("next state does not follow current state")
     if None not in (cseq, nseq) and nseq != cseq + 1: errors.append("state observations are not adjacent")
     for key in ("instrument_id", "cohort_id", "reset_id"):
         if current.get(key) is None or nxt.get(key) is None: missing.append(key)
         elif current[key] != nxt[key]: errors.append(f"transition crosses {key} boundary")
+    context_instrument = inp.get("instrument_id", inp.get("source_symbol"))
+    if _aliases_conflict(inp, ("instrument_id", "source_symbol")):
+        errors.append("transition context instrument aliases conflict")
+    if context_instrument is not None:
+        if current.get("instrument_id") is None or nxt.get("instrument_id") is None:
+            missing.append("transition_instrument_identity")
+        elif current.get("instrument_id") != context_instrument or nxt.get("instrument_id") != context_instrument:
+            errors.append("state instrument does not match transition context")
+    current_available = _claimed_availability(current, state_at if type(state_at) is int else None)
+    next_available = _claimed_availability(nxt, next_at if type(next_at) is int else None)
+    for name, row, occurrence, availability in (
+        ("current", current, state_at, current_available),
+        ("next", nxt, next_at, next_available),
+    ):
+        if _availability_claim_is_malformed(row):
+            errors.append(f"{name} state availability must be an integer or null")
+        elif availability is None:
+            missing.append(f"{name}_known_at")
+        elif type(occurrence) is int and availability < occurrence:
+            errors.append(f"{name} state availability precedes occurrence")
+
     conditioning_causal = None
+    conditioning_times: list[int | None] = []
+    conditioning_ready = True
     if state_at is not None and conditioning:
-        times = [_at(row) for row in conditioning]
+        if any(not isinstance(row, dict) for row in conditioning):
+            errors.append("conditioning evidence rows must be records")
+            conditioning = [row for row in conditioning if isinstance(row, dict)]
         evidence_ids = [row.get("evidence_id", row.get("id")) for row in conditioning]
         if any(value is None for value in evidence_ids): missing.append("conditioning_identity")
         elif len(evidence_ids) != len(set(evidence_ids)): errors.append("duplicate conditioning evidence identity")
-        if any(at is None for at in times): missing.append("conditioning_availability")
-        else: conditioning_causal = all(at <= state_at for at in times)
+        for index, row in enumerate(conditioning):
+            occurrence = _event_at(row)
+            availability = _claimed_availability(row, occurrence)
+            conditioning_times.append(availability)
+            if _aliases_conflict(row, ("at", "t", "event_at", "time")):
+                errors.append(f"conditioning evidence {index} occurrence aliases conflict")
+            elif _time_claim_is_malformed(row, ("at", "t", "event_at", "time")):
+                errors.append(f"conditioning evidence {index} occurrence must be an integer or null")
+            if _aliases_conflict(row, ("available_at", "known_at")):
+                errors.append(f"conditioning evidence {index} availability aliases conflict")
+            elif _availability_claim_is_malformed(row):
+                errors.append(f"conditioning evidence {index} availability must be an integer or null")
+            elif availability is None:
+                missing.append("conditioning_availability")
+                conditioning_ready = False
+            elif occurrence is not None and availability < occurrence:
+                errors.append(f"conditioning evidence {index} availability precedes occurrence")
+            if snapshot_at is not None and availability is not None and availability > snapshot_at:
+                conditioning_ready = False
+        if any(at is None for at in conditioning_times):
+            conditioning_causal = None
+        else:
+            conditioning_causal = all(at <= state_at for at in conditioning_times)
     elif not conditioning: missing.append("conditioning_evidence")
     if conditioning_causal is False: errors.append("conditioning uses future evidence")
     source_counts_symbol = inp.get("source_counts_symbol")
@@ -1667,9 +2089,33 @@ def o166(inp: dict) -> RecipeResult:
         "current_observation", "next_observation", "next_observation_definition", "current_state_id",
         "next_state_id", "state_at", "next_state_at", "current_known_at", "next_known_at",
         "current_sequence", "next_sequence",
-        "instrument_id", "cohort_id", "reset_id", "conditioning_evidence", "conditioning_availability"))
-    transition_valid = False if errors else True if actual_complete and conditioning_causal is True else None
-    known_at = _max_time(_at(current), _at(nxt), *[_at(row) for row in conditioning])
+        "current_state_label", "next_state_label", "instrument_id", "cohort_id", "reset_id",
+        "conditioning_evidence", "conditioning_availability"))
+    current_ready = current_available is not None and (snapshot_at is None or current_available <= snapshot_at)
+    next_ready = next_available is not None and (snapshot_at is None or next_available <= snapshot_at)
+    transition_ready = current_ready and next_ready and conditioning_ready
+    if not transition_ready:
+        missing.append("pending_transition")
+    transition_valid = False if errors else True if (
+        actual_complete and conditioning_causal is True and transition_ready
+    ) else None
+    all_availability = [current_available, next_available, *conditioning_times]
+    any_unknown_availability = any(value is None for value in all_availability)
+    ready_availability = [value for value in all_availability
+                          if value is not None and (snapshot_at is None or value <= snapshot_at)]
+    claimed_known_at = inp.get("known_at")
+    if "known_at" in inp and claimed_known_at is not None and type(claimed_known_at) is not int:
+        errors.append("transition known_at must be an integer or null")
+    inner_known_at = None if any_unknown_availability else _max_time(*ready_availability)
+    if type(claimed_known_at) is int and inner_known_at is not None and claimed_known_at < inner_known_at:
+        errors.append("transition availability claim precedes inner evidence availability")
+    known_at = None if any_unknown_availability or ("known_at" in inp and claimed_known_at is None) else (
+        claimed_known_at if type(claimed_known_at) is int and (
+            snapshot_at is None or claimed_known_at <= snapshot_at
+        ) else inner_known_at
+    )
+    if errors:
+        transition_valid = False
     reported = inp.get("reported_probability")
     if reported is None and from_state is not None and to_state is not None and probabilities.get(to_state) is not None:
         reported = probabilities[to_state]
@@ -1680,8 +2126,14 @@ def o166(inp: dict) -> RecipeResult:
              "row_sum": None if total in {None, 0} else sum(probabilities.values(), Decimal(0)),
              "cadence": deepcopy(cadence), "current_observation": current or None,
              "next_observation": nxt or None, "conditioning_evidence": deepcopy(conditioning),
-             "max_conditioning_known_at": _max_time(*[_at(row) for row in conditioning]),
-             "automatic_transition": None, "trained_matrix": False}
+             "max_conditioning_known_at": None if any(at is None for at in conditioning_times) else _max_time(*conditioning_times),
+             "automatic_transition": None, "trained_matrix": False,
+             "pending_observations": [name for name, ready in (("current", current_ready), ("next", next_ready)) if not ready],
+             "pending_conditioning": bool(conditioning and not conditioning_ready),
+             "snapshot_at": snapshot_at, "requested_as_of": requested_as_of, "use_at": use_at,
+             "raw_from_state": raw_from_state, "raw_to_state": raw_to_state,
+             "raw_state_at": raw_state_at, "raw_next_state_at": raw_next_at,
+             "raw_current_sequence": raw_cseq, "raw_next_sequence": raw_nseq}
     value.update({"p_dd": probabilities.get("D"), "p_da": probabilities.get("A")})
     if errors:
         return _result("O166", "invalid", value, base_ok=False, coverage_ok=None,
@@ -2035,20 +2487,45 @@ def _derive_lifecycle(recipe_id: str, config: dict, parents: list[dict]) -> Reci
             order = deepcopy(config.get("source_order"))
             if not isinstance(order, dict):
                 raise LifecycleDerivationError("source_order must be the scoped order instruction record")
+            for key in ("instrument_id", "method_id", "as_of", "use_at"):
+                if key in config and key in order and config[key] != order[key]:
+                    raise LifecycleDerivationError(f"source order {key} conflicts with its derived object context")
             if order.get("candidate_id") not in (_parent_value(ledger, "eligible_ids") or []):
                 raise LifecycleDerivationError("source order candidate is absent from the frozen instruction ledger")
             events = []
             for fill in role["fills"]:
+                reports = _parent_value(fill, "fill_reports")
+                if isinstance(reports, list) and reports:
+                    for index, source_report in enumerate(reports):
+                        if not isinstance(source_report, dict):
+                            raise LifecycleDerivationError("fill parent contains a non-record fill report")
+                        event = deepcopy(source_report)
+                        event.setdefault("event_id", event.get("fill_id", f"{fill['object_id']}:{index}"))
+                        event["kind"] = "fill"
+                        events.append(event)
+                    continue
                 at = _parent_value(fill, "actual_fill_at")
                 qty = _parent_value(fill, "actual_fill_quantity")
                 if at is not None:
-                    events.append({"event_id": fill["object_id"], "kind": "fill", "at": at,
-                                   "available_at": fill.get("known_at"), "filled_qty": qty})
+                    event = {"event_id": fill["object_id"], "kind": "fill", "at": at,
+                             "available_at": fill.get("known_at"), "filled_qty": qty,
+                             "order_id": _parent_value(fill, "order_id"),
+                             "position_id": _parent_value(fill, "position_id"),
+                             "instrument_id": _parent_value(fill, "instrument_id")}
+                    if event["instrument_id"] is None and "instrument_id" in fill:
+                        event["instrument_id"] = fill["instrument_id"]
+                    candidate_link = _parent_value(fill, "candidate_id")
+                    if candidate_link is not None:
+                        event["candidate_id"] = candidate_link
+                    events.append(event)
             for action_parent in role["position_actions"]:
                 events.extend(deepcopy(_parent_value(action_parent, "management_actions") or []))
-            inp = {key: deepcopy(order.get(key)) for key in ("candidate_id", "order_id", "position_id", "source_id",
+            inp = {key: deepcopy(order[key]) for key in ("candidate_id", "order_id", "position_id", "instrument_id", "source_id",
                    "method_id", "side", "order_type", "limit", "q", "quantity", "placed_at", "placement_known_at",
-                   "stop", "target", "other_open_positions", "as_of", "use_at", "order_inside_ticks")}
+                   "stop", "target", "other_open_positions", "as_of", "use_at", "order_inside_ticks") if key in order}
+            for key in ("as_of", "use_at"):
+                if key in config:
+                    inp[key] = deepcopy(config[key])
             inp.update(source_policy=_policy_from_definition(definition, config), events=events)
         elif recipe_id == "O151":
             order, trades = role["order"], role["trades"]
@@ -2148,6 +2625,8 @@ def _derive_lifecycle(recipe_id: str, config: dict, parents: list[dict]) -> Reci
             cv, nv = deepcopy(current.get("value", {})), deepcopy(nxt.get("value", {}))
             if cv.get("instrument_id") != nv.get("instrument_id"):
                 raise LifecycleDerivationError("adjacent state parents use different instruments")
+            if config.get("instrument_id") is not None and cv.get("instrument_id") != config.get("instrument_id"):
+                raise LifecycleDerivationError("state parent instrument conflicts with transition context")
             current_record = {"state_label": cv.get("state_label"), "state_at": cv.get("state_at"),
                               "state_id": cv.get("observation_id"), "known_at": current.get("known_at"),
                               "sequence": config.get("current_sequence"), "instrument_id": cv.get("instrument_id"),
@@ -2162,6 +2641,9 @@ def _derive_lifecycle(recipe_id: str, config: dict, parents: list[dict]) -> Reci
                    "cadence": deepcopy(config.get("cadence")), "conditioning_evidence": conditioning,
                    "counts": deepcopy(config.get("counts")), "source_counts_symbol": config.get("source_counts_symbol"),
                    "reported_probability": config.get("reported_probability")}
+            for key in ("as_of", "use_at", "known_at"):
+                if key in config:
+                    inp[key] = deepcopy(config[key])
         else:
             raise LifecycleDerivationError(f"{recipe_id} has no parent-derived lifecycle adapter")
         result = REGISTRATION_OVERRIDES[recipe_id](inp)

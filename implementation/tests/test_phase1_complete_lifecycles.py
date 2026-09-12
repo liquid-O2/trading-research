@@ -39,17 +39,22 @@ def source_policy(**overrides):
 
 
 def order_input(events, *, use_at=30, **overrides):
-    events = [{**event, "event_id": event.get("event_id", f"order-event-{index}")}
-              for index, event in enumerate(events)]
     values = {
         "candidate_id": "c1", "order_id": "o1", "position_id": "p1",
-        "source_id": "refill", "method_id": "M09", "side": "long",
+        "instrument_id": "NQ", "source_id": "refill", "method_id": "M09", "side": "long",
         "order_type": "limit", "limit": 100, "q": Decimal("0.25"),
         "quantity": 3, "placed_at": 10, "events": events,
         "source_policy": source_policy(), "other_open_positions": 0,
         "use_at": use_at,
     }
     values.update(overrides)
+    # These are fully identified synthetic control records. Explicit event
+    # overrides (including a foreign identity or unknown clock) stay intact.
+    values["events"] = [{
+        "event_id": f"order-event-{index}",
+        **{key: values[key] for key in ("candidate_id", "order_id", "position_id", "instrument_id")},
+        "known_at": event.get("at"), **event,
+    } for index, event in enumerate(events)]
     return values
 
 
@@ -455,15 +460,20 @@ def test_derived_cohort_uses_actual_candidate_order_and_fill_identities():
 def test_derived_order_lifecycle_uses_selected_fill_and_position_action_parents():
     definition = parent("definition", "O137", {"model_version": "v1", "frozen_at": 1}, known_at=1)
     ledger = parent("ledger", "O148", {"eligible_ids": ["candidate"]}, known_at=2)
-    fill = parent("fill", "O151", {"actual_fill_at": 10, "actual_fill_quantity": Decimal(2)}, known_at=10)
+    fill = parent("fill", "O151", {"actual_fill_at": 10, "actual_fill_quantity": Decimal(2),
+                                    "order_id": "order", "position_id": "position",
+                                    "candidate_id": "candidate", "instrument_id": "NQ"}, known_at=10)
     action = parent("action", "O142", {
-        "management_actions": [{"event_id": "exit", "kind": "exit_fill", "filled_qty": 2, "at": 15}],
+        "position_id": "position", "candidate_id": "candidate", "instrument_id": "NQ",
+        "management_actions": [{"event_id": "exit", "kind": "exit_fill", "filled_qty": 2, "at": 15,
+                                "known_at": 15, "position_id": "position", "instrument_id": "NQ"}],
     }, known_at=15)
     result = DERIVED_PRODUCERS["O150"]({
         "parent_roles": {"definition": "definition", "instruction_ledger": "ledger",
                          "fills": ["fill"], "position_actions": ["action"]},
         "source_policy": {"policy_id": "order-v1"},
         "source_order": {"candidate_id": "candidate", "order_id": "order", "position_id": "position",
+                         "instrument_id": "NQ",
                          "side": "long", "order_type": "limit", "limit": 100, "q": Decimal("0.25"),
                          "quantity": 2, "placed_at": 5, "placement_known_at": 5, "as_of": 20},
     }, [definition, ledger, fill, action])

@@ -56,7 +56,7 @@
         "implementation/tests/test_phase1_native_windows.py",
         "implementation/validation/phase1-completion/native-clock-coverage.json"
       ],
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "implemented_obligation": "Resolve every physical row in the exact half-open window; certify minute coverage by interval membership and trade coverage against independently retained native minute OHLCV. Missing minutes and cross-source volume discrepancies remain explicit unknown coverage.",
       "legacy_required_inputs": [
         "bars",
@@ -67,53 +67,53 @@
       ],
       "limitations": "Native retained files lack receive timestamps and exchange sequence. June 12 adjacent-minute reconciliation mismatches cannot be repaired by cancelling their net volume; native-clock-coverage.json preserves evidence.",
       "meaningful_schema": {
-        "available_depth": {
-          "nullable": false,
+        "coverage_ok": {
           "types": [
-            "str"
-          ]
+            "bool"
+          ],
+          "nullable": true
         },
         "base_identity_ok": {
-          "nullable": true,
           "types": [
             "bool"
-          ]
-        },
-        "coverage_ok": {
-          "nullable": true,
-          "types": [
-            "bool"
-          ]
-        },
-        "missing_fields": {
-          "nullable": false,
-          "types": [
-            "list"
-          ]
-        },
-        "missing_intervals": {
-          "nullable": false,
-          "types": [
-            "list"
-          ]
+          ],
+          "nullable": true
         },
         "price_coverage": {
-          "nullable": true,
           "types": [
             "bool"
-          ]
+          ],
+          "nullable": true
         },
         "side_coverage": {
-          "nullable": true,
           "types": [
             "bool"
-          ]
+          ],
+          "nullable": true
         },
-        "source_precision": {
-          "nullable": false,
+        "missing_intervals": {
           "types": [
             "list"
-          ]
+          ],
+          "nullable": false
+        },
+        "missing_fields": {
+          "types": [
+            "list"
+          ],
+          "nullable": false
+        },
+        "source_precision": {
+          "types": [
+            "list"
+          ],
+          "nullable": false
+        },
+        "available_depth": {
+          "types": [
+            "str"
+          ],
+          "nullable": false
         }
       },
       "native_producer": true,
@@ -122,22 +122,33 @@
       "producer_module": "native_boundary",
       "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_limitations": "Native retained files lack receive timestamps and exchange sequence. June 12 adjacent-minute reconciliation mismatches cannot be repaired by cancelling their net volume; native-clock-coverage.json preserves evidence.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
-        "sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938"
+        "sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
         "test_P01_exact_interval_coverage_cannot_use_row_count",
         "test_missing_trade_revealed_by_independent_native_minute",
         "test_claimed_subset_cannot_reuse_complete_window_coverage"
-      ]
+      ],
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Original P01 is blocked for missing native inputs. Reviewed the opt-in guard payload hook so the unavailable result retains the complete coverage schema, explicit unknown checks and missing evidence without inventing native members.",
+        "regressions": {
+          "path": "/workspace/implementation/validation/phase1-completion/audit-regressions.json",
+          "sha256": "9a08e2687ee797638e0ebba7fb12841ac4d69e1976eb5cb2b396497daaa9e651"
+        }
+      }
     },
     {
       "derived_parent_roles": null,
@@ -235,11 +246,11 @@
       "reviewed_limitations": "Retained QuantPad streams cannot supply missing exchange sequence or verify cross-stream ordering. No fabricated receive clock.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
-        "sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938"
+        "sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -414,11 +425,11 @@
       "reviewed_limitations": "Native range bars require source-compatible membership and construction settings; unavailable settings remain holes. No row-count time bars or fabricated zero-activity OHLC.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
-        "sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938"
+        "sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -443,26 +454,33 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "Method fixture and explicit native_control separation regressions"
     },
     {
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "id": "C01",
       "implementation_files": "native_resolution.py; contracts.py; semantic_views.py",
       "implemented_obligation": "Resolve immutable file hashes, physical row spans, native instrument definitions and exact decimals; retain typed object lineage. Cited qualitative interpretations require actual immutable source bytes and exact field, author, role and observation identity.",
       "limitations": "Source illustrations retain attribution but do not establish contemporaneous historical selection.",
       "review_basis": "Parent reviewed the shared contract and its executable boundary/report evidence. Domain verdict, data coverage, source interpretation and historical cohort are independently reported.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
-      "sensitive_regression_evidence": "test_locator_false_provenance_rejected; test_actual_cited_interpretation_is_supplied_and_has_immutable_observation; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)"
+      "sensitive_regression_evidence": "test_locator_false_provenance_rejected; test_actual_cited_interpretation_is_supplied_and_has_immutable_observation; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)",
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Actual immutable REF source citations rerun the domain with outer instrument/method/snapshot context. Explicit context contradictions reject in both dependency and operand admission. Foreign event identity cannot be laundered through source or parent-derived wrappers."
+      }
     },
     {
       "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
@@ -475,7 +493,7 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "test_control_asia_midnight_clock_uses_prior_et_date; test_exact_bar_alignment_and_identity; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)"
@@ -491,26 +509,33 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "test_actual_native_result_ignores_supplied_summary_and_retains_members; test_roll_requires_actual_instrument_selection; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)"
     },
     {
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "id": "C04",
       "implementation_files": "native_boundary.py; assembly.py; evidence.py",
       "implemented_obligation": "Propagate latest consumed member, parent and window availability. Reject later observations and source-parent laundering. Preserve false versus unknown and named coverage/source holes.",
       "limitations": "Unknown consumed clocks cannot be replaced with claimed object timestamps.",
       "review_basis": "Parent reviewed the shared contract and its executable boundary/report evidence. Domain verdict, data coverage, source interpretation and historical cohort are independently reported.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
-      "sensitive_regression_evidence": "test_late_member_and_backdated_object_rejected; test_supplied_parent_cannot_launder_unrelated_prices_as_native_selection; test_missing_coverage_survives_method_boundary; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)"
+      "sensitive_regression_evidence": "test_late_member_and_backdated_object_rejected; test_supplied_parent_cannot_launder_unrelated_prices_as_native_selection; test_missing_coverage_survives_method_boundary; implementation/tests/test_phase1_native_boundary_final.py (actual Parquet and immutable instrument definitions)",
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Reviewed occurrence <= availability <= consumed snapshot and snapshot <= use, with preserved timestamps. Proper future tails stay pending. Unknown inner availability is not replaced by an outer known timestamp. Existing native invalid-parent and unknown-clock aggregation remains applicable without modification."
+      }
     },
     {
       "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
@@ -523,7 +548,7 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "test_distinct_instruments_and_versions_keep_separate_denominators; test_supplied_attempts_reconcile_without_entering_discovery"
@@ -539,7 +564,7 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "implementation/tests/test_method_pack_m01_review.py outcome identity and reporting tests"
@@ -555,27 +580,34 @@
       "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_evidence": "implementation/tests/test_method_pack_command.py; implementation/tests/test_method_pack_m01_review.py",
       "report_status_review": "Parent reviewed corrected implementation/check headlines, separate historical/source dimensions, unavailable denominator rendering, and the forced-failure command regression. Counts and domain verdicts are preserved."
     },
     {
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "id": "C08",
       "implementation_files": "protocol.py; fixtures_completion_native.py",
       "implemented_obligation": "Execute positive fixtures plus future-dependency, absent-required-observation and foreign-identity mutations. Empty inputs to recipes without legacy required tuples produce a named observation hole.",
       "limitations": "Passing fixture totals are regression evidence only; they do not prove unpublished source definitions or all method semantics.",
       "review_basis": "Parent reviewed the shared contract and its executable boundary/report evidence. Domain verdict, data coverage, source interpretation and historical cohort are independently reported.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
-      "sensitive_regression_evidence": "run_object_fixtures: 1316 rows passed in native-core sweep; explicit native completeness fixtures O001-F1/F1a/F1b/F1c, O003-F1b and O004-F1"
+      "sensitive_regression_evidence": "run_object_fixtures: 1316 rows passed in native-core sweep; explicit native completeness fixtures O001-F1/F1a/F1b/F1c, O003-F1b and O004-F1",
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Reviewed the exact two valid and four invalid independent inputs, valid state-machine controls, real audited parent compositions, and gate mutation tests. The acceptance matrix and final gate now require current six-case evidence and independently recheck its recorded invariants."
+      }
     }
   ],
   "report_status_correction": {
@@ -589,5 +621,114 @@
     },
     "updated_reference_count": 12,
     "scope": "Prior domain reviews remain valid because domain behavior is unchanged; references now link the passing suite after the separately reviewed report correction."
+  },
+  "correctness_repair": {
+    "review": {
+      "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+      "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+    },
+    "previous_ledger": {
+      "path": "/workspace/implementation/validation/phase1-post-implementation-check/previous-acceptance/native-core-obligations.json",
+      "sha256": "94680bd897454943f7ecc7201ffca01f4b366b07bf96445db8d1c466a6127d12"
+    },
+    "reference_updates": [
+      {
+        "location": "/objects/0/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
+        "old_sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938",
+        "current_sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
+      },
+      {
+        "location": "/objects/0/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/1/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
+        "old_sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938",
+        "current_sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
+      },
+      {
+        "location": "/objects/1/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/2/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
+        "old_sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938",
+        "current_sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
+      },
+      {
+        "location": "/objects/2/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/0/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/1/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/2/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/3/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/4/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/5/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/6/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/7/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/shared_obligations/8/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      }
+    ],
+    "reexamined_obligations": [
+      "O001",
+      "C01",
+      "C04",
+      "C08"
+    ],
+    "unchanged_reviews_retained": true
   }
 }

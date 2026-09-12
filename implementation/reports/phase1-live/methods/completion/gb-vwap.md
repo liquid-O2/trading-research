@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:41:25Z`
+created_at: `2026-09-12T18:01:48Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -58,7 +58,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 28, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -90,16 +90,16 @@ GB-VWAP | M03 | checks_passed | 0 failures | 0 | 0 | implementation checks; hist
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/candidates.jsonl sha256=c2070a8faedea2e51d688ac4f47a73fa6224190135673bc0df4a66d36944c36d
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/objects.jsonl sha256=3631f152e0a13c7c02ed8c684ad278ad7f1a044bb74f20b5bcdc62a1863fa877
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/holes.jsonl sha256=27bbf5d6abf6c8214aa1f11633cedea222b1f2b9c54ab54299db5b40dab863a9
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/reference-outcomes.jsonl sha256=fe5746a3d4bd9b4056d19b42ebe3d21b28ff00ab9e259165d077ccd0dc7a12b0
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/assembly.jsonl sha256=e60102502826045a3362109cced9b075882fe43b63f017836353f82db65df7ec
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/operand-producers.jsonl sha256=21d0ae4c4760223add5f4baaf96bec15ab526d0ebd1b4ff0cff6122211580a6d
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/output-contracts.jsonl sha256=b43b1889ec67685aeb19210ca5db5f8197deaa5ac7c5bd23263fd3b363dd275e
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/native-window-audits.jsonl sha256=33a61642f108a86f81b017d155c6768b48477a3f4f3bf754f04d7bbabc7ef945
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/fixtures.json sha256=72c2e9eb2c22ca57e0f46b6835ceb34076657e751a83a50ddc926cb0f7e3cabb
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/cohort.json sha256=aa9b70fb47fd2b6ddcc213cf938c38734b97a90b513b0890a9adcbbab8a9a75b
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/coverage.json sha256=a222358da6ce85bbe1fec17038f64660b9a702583c8857005e64d474ee311025
-- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-k0gubp66/episodes.json sha256=25cd646ea65465281d42283153e1c7e461947767de64b4c3845af296a73a82a8
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/candidates.jsonl sha256=c170e4c70288add7daa2c4576264a2601a2d31cc6630779625ad708bc4b6439b
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/objects.jsonl sha256=3631f152e0a13c7c02ed8c684ad278ad7f1a044bb74f20b5bcdc62a1863fa877
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/holes.jsonl sha256=69d8c4169ff2414b03593393b68bcf61753b79499c30c04f7dafd858873224d1
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/reference-outcomes.jsonl sha256=fe5746a3d4bd9b4056d19b42ebe3d21b28ff00ab9e259165d077ccd0dc7a12b0
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/assembly.jsonl sha256=e60102502826045a3362109cced9b075882fe43b63f017836353f82db65df7ec
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/operand-producers.jsonl sha256=21d0ae4c4760223add5f4baaf96bec15ab526d0ebd1b4ff0cff6122211580a6d
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/output-contracts.jsonl sha256=08959d2fac3ddd2f7ac3dea499a5d86a84efc164d9efafba1ff14c29b1463ce5
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/native-window-audits.jsonl sha256=33a61642f108a86f81b017d155c6768b48477a3f4f3bf754f04d7bbabc7ef945
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/fixtures.json sha256=3e953dd6832e35272fad1966fce15a194cda6cb87ba6be1a328836cb02d8e74d
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/cohort.json sha256=aa9b70fb47fd2b6ddcc213cf938c38734b97a90b513b0890a9adcbbab8a9a75b
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/coverage.json sha256=a222358da6ce85bbe1fec17038f64660b9a702583c8857005e64d474ee311025
+- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-vwap/run-twqnrzeg/episodes.json sha256=25cd646ea65465281d42283153e1c7e461947767de64b4c3845af296a73a82a8

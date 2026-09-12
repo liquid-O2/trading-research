@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:41:48Z`
+created_at: `2026-09-12T18:02:11Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -61,7 +61,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 70, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -92,15 +92,15 @@ SAINT-AMT | M06 | checks_passed | 0 failures | 0 | 0 | implementation checks; hi
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/holes.jsonl sha256=357c210c80d405f2155f457da78b2462584dc3e813b6b8c4a1e4a7f3dcbd90df
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/operand-producers.jsonl sha256=79fa14b5b761fbb3fb9f050188ca68224632273bb90f728cdeed5586baf9b20a
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/output-contracts.jsonl sha256=b2c0c9b8df2dbd761c8856c212128a9c88491d3148e646f59c955012150e64f5
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/fixtures.json sha256=94399eab42c1b81842107966006466674aac39d33a0acdb4c434e575a5c6e5f2
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/cohort.json sha256=8ab670dcf776089bce7735a7dbac0454651969693108de2ab552036ac7c0c4f1
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-buc1wkzt/coverage.json sha256=4f6bfdd2616f205d17eb67a58c19d688ffe2716d7e731ae3693b9e0bcd0d00a1
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/holes.jsonl sha256=357c210c80d405f2155f457da78b2462584dc3e813b6b8c4a1e4a7f3dcbd90df
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/operand-producers.jsonl sha256=79fa14b5b761fbb3fb9f050188ca68224632273bb90f728cdeed5586baf9b20a
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/output-contracts.jsonl sha256=c20b48545ec479ce57d4fe5bf0d60a466a4b72ac6831cdf04207e1e88b5c0b25
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/fixtures.json sha256=a3723e2624f447efc987fb348f8bd2e2123b0324a4b1037c2fbfd5c679a2f1e6
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/cohort.json sha256=8ab670dcf776089bce7735a7dbac0454651969693108de2ab552036ac7c0c4f1
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/saint-amt/run-um9smcdd/coverage.json sha256=4f6bfdd2616f205d17eb67a58c19d688ffe2716d7e731ae3693b9e0bcd0d00a1

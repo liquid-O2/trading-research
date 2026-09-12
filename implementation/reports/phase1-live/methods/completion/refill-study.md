@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:42:12Z`
+created_at: `2026-09-12T18:02:34Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -59,7 +59,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 54, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -92,15 +92,15 @@ REFILL-STUDY | M09 | checks_passed | 0 failures | 0 | 0 | implementation checks;
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/holes.jsonl sha256=3b5fc624584848f7ba43fa072bbe7dabf87ee83ac58f15801a3a389136a9c9c9
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/operand-producers.jsonl sha256=6bb718a8364e8513156f36cf0182ea4188f3b21a99ba2da6ac78d9bf07cd3bd7
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/output-contracts.jsonl sha256=79e99bbbe4c1452036954211d097765930f49c1d6a0ff19ed53a098b3733143e
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/fixtures.json sha256=b81643c51a7eca2ba279da35b0b2fb082cd4595354024d227332e933a81d8fcb
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/cohort.json sha256=b5f35c8f2b22dff381cd2e191d75ece6bc7b010af10cf3a77a7e11968be9c93a
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-onga_22m/coverage.json sha256=4da1247f21783ec9aefe1279c244a7c4a1fdc8a6ea27f95b7e22be20fc64d2ea
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/holes.jsonl sha256=3b5fc624584848f7ba43fa072bbe7dabf87ee83ac58f15801a3a389136a9c9c9
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/operand-producers.jsonl sha256=6bb718a8364e8513156f36cf0182ea4188f3b21a99ba2da6ac78d9bf07cd3bd7
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/output-contracts.jsonl sha256=477f002a854443aff7f27749daf26bd31eda57319fe091d2d4f8f58f8779a0e6
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/fixtures.json sha256=427b4efc1bd29bf0c4e000643501ccd10c3e8bb9bb8085b6109ed9deb36f0621
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/cohort.json sha256=b5f35c8f2b22dff381cd2e191d75ece6bc7b010af10cf3a77a7e11968be9c93a
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/refill-study/run-e45_qgw8/coverage.json sha256=4da1247f21783ec9aefe1279c244a7c4a1fdc8a6ea27f95b7e22be20fc64d2ea

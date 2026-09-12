@@ -15,7 +15,7 @@ from typing import Any
 from . import FORMULA_VERSION
 from .catalog import BRANCHES, EXTRA_PREDICATES, METHOD_BY_ID, PRIMARY
 from .contracts import OUTPUT_SCHEMAS, fields_for, validate_output
-from .evidence import SchemaError, _has_observation, parse_manifest, score_episode, typed, mark_source_admitted, audit_source_domain_object
+from .evidence import SchemaError, _has_observation, parse_manifest, score_episode, typed, mark_source_admitted, audit_source_domain_object, source_recipe_inputs
 from .expressions import evaluate
 from .native_resolution import ns
 from .logic import kleene_and
@@ -405,7 +405,7 @@ def _audit_source_operand(field, record, evidence, candidate):
                 raise SchemaError(f'{field}: cited recipe input has foreign {key}')
         try:source_citation(payload.get('source_citation'),candidate['method_id'])
         except ValueError as exc:raise SchemaError(str(exc)) from exc
-        audited = validate_output(run_recipe(rid, deepcopy(inputs)))
+        audited = validate_output(run_recipe(rid, source_recipe_inputs(record, inputs)))
         if audited.base_ok is False or audited.state == 'invalid':
             raise SchemaError(f'{field}: cited recipe observation is invalid')
         value = project(view,audited.value,{'known_at':audited.known_at},candidate) if view else audited.value.get(output)

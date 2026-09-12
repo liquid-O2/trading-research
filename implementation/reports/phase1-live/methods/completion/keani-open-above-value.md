@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:42:12Z`
+created_at: `2026-09-12T18:02:34Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -55,7 +55,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 49, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -86,15 +86,15 @@ KEANI-OPEN-ABOVE-VALUE | M08 | checks_passed | 0 failures | 0 | 0 | implementati
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/holes.jsonl sha256=6e47982f192bb58c3ba44eed8b4f3ece7b380cf5ec71458f8574cb4158772d59
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/operand-producers.jsonl sha256=59a7e093809b8c2093911d7cb0200211962d98c5adf73ab3a367bbe8eac1b63d
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/output-contracts.jsonl sha256=56e5c7361e8eb2c1a2dcf4f3e15872e86ea6c89f0d7be10cf7c766af08d83f18
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/fixtures.json sha256=147eaa5a8f87f7bc7b8ff21c420ddbb56ab79c1da74508fafa21f00662a95c9a
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/cohort.json sha256=f79a09a9efbd40300a7ea2d39721ba517097c3b7e2ad1ce2b773ada2edf2111b
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-oqh_iqnl/coverage.json sha256=42c3a3eadb0501d9b5d2d11f986f14375630a8991983ffb5faf73af43df21870
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/holes.jsonl sha256=6e47982f192bb58c3ba44eed8b4f3ece7b380cf5ec71458f8574cb4158772d59
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/operand-producers.jsonl sha256=59a7e093809b8c2093911d7cb0200211962d98c5adf73ab3a367bbe8eac1b63d
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/output-contracts.jsonl sha256=bec2fa850a2a62ab05b31e0dfcc8ae92a78524e384f1e9ba60726a7c7fc70a93
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/fixtures.json sha256=b019e95c63739785d24f00909db09f1138c97531917d02187dd4372939bb0234
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/cohort.json sha256=f79a09a9efbd40300a7ea2d39721ba517097c3b7e2ad1ce2b773ada2edf2111b
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/keani-open-above-value/run-gq9c7q82/coverage.json sha256=42c3a3eadb0501d9b5d2d11f986f14375630a8991983ffb5faf73af43df21870

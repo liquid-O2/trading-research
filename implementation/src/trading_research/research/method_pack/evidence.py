@@ -84,6 +84,26 @@ def source_admitted(record, field):
     return record.get('_source_admission', {}).get(field) is _SOURCE_ADMISSION
 
 
+def source_recipe_inputs(record, inputs):
+    """Bind lifecycle reruns to the supplied object's actual snapshot.
+
+    The domain recipe owns inner event identities and clocks. This boundary
+    supplies the outer context without rewriting contradictory source records
+    or treating a correctly timed, unused event tail as lookahead.
+    """
+    result = deepcopy(inputs)
+    if record.get('recipe_id') in {'O150', 'O166'}:
+        for key in ('instrument_id', 'method_id', 'as_of'):
+            if record.get(key) is None:
+                continue
+            mismatch = (result.get(key) != record[key] if key == 'as_of'
+                        else str(result.get(key)) != str(record[key]))
+            if key in result and mismatch:
+                raise SchemaError(f'supplied lifecycle input/object {key} mismatch')
+            result[key] = record[key]
+    return result
+
+
 def audit_source_domain_object(record, evidence):
     """Recompute a supplied dependency/action from its complete cited inputs.
 
@@ -104,7 +124,7 @@ def audit_source_domain_object(record, evidence):
                 raise SchemaError('supplied dependency/action input identity differs from record')
         try:source_citation(payload.get('source_citation'),record['method_id'])
         except ValueError as exc:raise SchemaError(str(exc)) from exc
-        result=validate_output(run_recipe(record['recipe_id'],deepcopy(inputs)))
+        result=validate_output(run_recipe(record['recipe_id'],source_recipe_inputs(record,inputs)))
         if result.state=='invalid' or result.base_ok is False:raise SchemaError('invalid supplied dependency/action source record')
         if result.known_at is None or record.get('known_at') is None or result.known_at>record['known_at']:
             raise SchemaError('supplied dependency/action backdates actual source inputs')

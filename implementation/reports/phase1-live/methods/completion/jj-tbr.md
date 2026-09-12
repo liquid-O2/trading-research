@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:40:52Z`
+created_at: `2026-09-12T18:01:16Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -74,7 +74,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 107, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -107,16 +107,16 @@ JJ-TBR | M01 | checks_passed | 0 failures | 0 | 0 | implementation checks; histo
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/candidates.jsonl sha256=c8c4a31ff440737076ddbaa4bb2eec57d6c57c1ca510ed5e18d2e852c240b6ed
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/objects.jsonl sha256=5dfe46c0691ce08d95dc45378f8029bf951a0fdeb301627b5ad2fb053247e971
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/holes.jsonl sha256=4a7c7568b1841f2a163c1c14ec83cba61a4ef2b0a6597bd34d1ef187a78b1693
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/reference-outcomes.jsonl sha256=01bd76746564fcf7b5d275d23b91a7d7873f417885b9d0f9211824f39df7ad0e
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/assembly.jsonl sha256=f11266fbdee9421b75dade879587729ac2351e05391a122cbcd5d647bcc67297
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/operand-producers.jsonl sha256=32ed6f03aa14bd28cdfe93e4d96f4f7cc0d3785157fed9b29873e4b8804957c1
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/output-contracts.jsonl sha256=bb91f86a930827aa9a97f797fe059ac74a31e995a5ffeee79a89f69db14e26fc
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/native-window-audits.jsonl sha256=3ea37e89717c2a909baa0e6a0f6706ec76dfba97645b06e882818f26b4b3aa60
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/fixtures.json sha256=38d92cd4116204ec3a4bd04f5c6a4dde4ca7e529d7bd81fda61673ff2931c2b4
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/cohort.json sha256=331b5c55b06478a5c3a0b0db5421e5925f8b4a4ecdd69367cbd443465f3dc5b9
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/coverage.json sha256=7a26a28b9f662d8234efacf2216c96ab1190e44a3b20c987e2fd9855aeea90b8
-- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-8ps6c5q_/episodes.json sha256=67f7f5b84007ed18f0d0d2adc07b275109ea434ea47166c60acd5ff59299c9eb
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/candidates.jsonl sha256=3ed155e1e9dfca44d44e94e31e36536e9370e218265e0b3bce2ce6cfb7bd1e59
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/objects.jsonl sha256=5dfe46c0691ce08d95dc45378f8029bf951a0fdeb301627b5ad2fb053247e971
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/holes.jsonl sha256=87ac21db28ae0848f4b9fc13094d2689adf606d516bcb9af4ac37ed68b0e4c4e
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/reference-outcomes.jsonl sha256=01bd76746564fcf7b5d275d23b91a7d7873f417885b9d0f9211824f39df7ad0e
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/assembly.jsonl sha256=f11266fbdee9421b75dade879587729ac2351e05391a122cbcd5d647bcc67297
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/operand-producers.jsonl sha256=32ed6f03aa14bd28cdfe93e4d96f4f7cc0d3785157fed9b29873e4b8804957c1
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/output-contracts.jsonl sha256=5cbb0d329b932025fcb4a905d6b236a0afea12391bbcec34f1da9a78f92bbb8c
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/native-window-audits.jsonl sha256=3ea37e89717c2a909baa0e6a0f6706ec76dfba97645b06e882818f26b4b3aa60
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/fixtures.json sha256=c507099331608fc6004aa37160d5b07b1c7733c9dc70ce558e8bfa5002086f90
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/cohort.json sha256=331b5c55b06478a5c3a0b0db5421e5925f8b4a4ecdd69367cbd443465f3dc5b9
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/coverage.json sha256=7a26a28b9f662d8234efacf2216c96ab1190e44a3b20c987e2fd9855aeea90b8
+- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/jj-tbr/run-bplyjcio/episodes.json sha256=67f7f5b84007ed18f0d0d2adc07b275109ea434ea47166c60acd5ff59299c9eb

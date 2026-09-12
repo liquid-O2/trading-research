@@ -436,14 +436,24 @@ def o004_local(inp):
     return result
 
 
+def _coverage_hole_payload(missing):
+    return {'coverage_ok': None, 'base_identity_ok': None,
+            'price_coverage': None, 'side_coverage': None, 'missing_intervals': [],
+            'missing_fields': list(missing), 'source_precision': [], 'available_depth': 'unresolved'}
+
+
+GUARD_HOLE_PAYLOADS = {
+    'O001': lambda result: _coverage_hole_payload(
+        hole.removeprefix('HOLE:O001:') for hole in result.hole_ids),
+}
+
+
 def o001_local(inp):
     members, missing = _local_members(inp, 'O001', ('bars','instrument_id','start_ns','end_ns','required_fields'))
     if isinstance(members, RecipeResult):
         return members
     if missing:
-        return RecipeResult('O001', 'hole', {'coverage_ok': None, 'base_identity_ok': None,
-            'price_coverage': None, 'side_coverage': None, 'missing_intervals': [], 'missing_fields': missing,
-            'source_precision': [], 'available_depth': 'unresolved'}, base_ok=None, coverage_ok=None,
+        return RecipeResult('O001', 'hole', _coverage_hole_payload(missing), base_ok=None, coverage_ok=None,
             hole_ids=[f'HOLE:O001:{field}' for field in missing])
     # A complete synthetic tape must be explicitly declared and fully timed;
     # this record remains research_helper and never resolves native provenance.

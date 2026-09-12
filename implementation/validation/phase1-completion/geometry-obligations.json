@@ -143,11 +143,11 @@
       "reviewed_limitations": "Tape proves geometric overlap and literal closes; discretionary reject/hold meaning still requires an admitted source record.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -302,11 +302,11 @@
       "reviewed_limitations": "The fixed 06:00-09:00 ET clock is implemented; missing interval membership remains a hole.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -346,101 +346,101 @@
         "native_controls": [],
         "test_file": "implementation/tests/test_phase1_range_geometry.py"
       },
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "genuine_limits": "Only explicitly verified clocks are faithful; manual clock whitelist does not infer other author windows.",
       "implemented_obligation": "Build another explicitly clocked native range and expose whether the selected source clock was actually verified.",
       "legacy_required_inputs": [],
       "meaningful_schema": {
-        "H": {
-          "nullable": false,
+        "source_clock_id": {
           "types": [
-            "Decimal"
-          ]
+            "str"
+          ],
+          "nullable": true
         },
-        "L": {
-          "nullable": false,
+        "range_id": {
           "types": [
-            "Decimal"
-          ]
-        },
-        "W": {
-          "nullable": false,
-          "types": [
-            "Decimal"
-          ]
-        },
-        "coverage_ok": {
-          "nullable": true,
-          "types": [
-            "bool"
-          ]
-        },
-        "formation_end": {
-          "nullable": false,
-          "types": [
-            "int"
-          ]
-        },
-        "formation_start": {
-          "nullable": false,
-          "types": [
-            "int"
-          ]
+            "str"
+          ],
+          "nullable": true
         },
         "instrument_id": {
-          "nullable": false,
           "types": [
             "str",
             "int"
-          ]
+          ],
+          "nullable": true
+        },
+        "L": {
+          "types": [
+            "Decimal"
+          ],
+          "nullable": true
+        },
+        "H": {
+          "types": [
+            "Decimal"
+          ],
+          "nullable": true
+        },
+        "W": {
+          "types": [
+            "Decimal"
+          ],
+          "nullable": true
+        },
+        "formation_start": {
+          "types": [
+            "int"
+          ],
+          "nullable": true
+        },
+        "formation_end": {
+          "types": [
+            "int"
+          ],
+          "nullable": true
         },
         "known_at": {
-          "nullable": true,
           "types": [
             "int"
-          ]
-        },
-        "member_ids": {
-          "nullable": false,
-          "types": [
-            "list"
-          ]
-        },
-        "parent_id": {
-          "nullable": true,
-          "types": [
-            "str"
-          ]
-        },
-        "range_frozen": {
-          "nullable": false,
-          "types": [
-            "bool"
-          ]
-        },
-        "range_id": {
-          "nullable": false,
-          "types": [
-            "str"
-          ]
+          ],
+          "nullable": true
         },
         "range_known_at": {
-          "nullable": true,
           "types": [
             "int"
-          ]
+          ],
+          "nullable": true
         },
-        "source_clock_id": {
-          "nullable": false,
-          "types": [
-            "str"
-          ]
-        },
-        "source_clock_verified": {
-          "nullable": true,
+        "range_frozen": {
           "types": [
             "bool"
-          ]
+          ],
+          "nullable": false
+        },
+        "coverage_ok": {
+          "types": [
+            "bool"
+          ],
+          "nullable": true
+        },
+        "member_ids": {
+          "types": [
+            "list"
+          ],
+          "nullable": false
+        },
+        "parent_id": {
+          "types": [
+            "str"
+          ],
+          "nullable": true
+        },
+        "source_clock_verified": {
+          "types": [
+            "bool"
+          ],
+          "nullable": true
         }
       },
       "native_producer": true,
@@ -449,21 +449,134 @@
       "producer_module": "range_geometry",
       "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_limitations": "Only explicitly verified clocks are faithful; manual clock whitelist does not infer other author windows.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
         "test_every_owned_geometry_fixture_matches_reviewed_expectations",
         "test_native_0600_0900_range_uses_complete_membership_and_freezes_geometry"
-      ]
+      ],
+      "partial_schema_reinspection": {
+        "reviewer": "parent",
+        "reviewed_at": "2026-09-12T18:03:53.962911+00:00",
+        "previous_schema": {
+          "H": {
+            "nullable": false,
+            "types": [
+              "Decimal"
+            ]
+          },
+          "L": {
+            "nullable": false,
+            "types": [
+              "Decimal"
+            ]
+          },
+          "W": {
+            "nullable": false,
+            "types": [
+              "Decimal"
+            ]
+          },
+          "coverage_ok": {
+            "nullable": true,
+            "types": [
+              "bool"
+            ]
+          },
+          "formation_end": {
+            "nullable": false,
+            "types": [
+              "int"
+            ]
+          },
+          "formation_start": {
+            "nullable": false,
+            "types": [
+              "int"
+            ]
+          },
+          "instrument_id": {
+            "nullable": false,
+            "types": [
+              "str",
+              "int"
+            ]
+          },
+          "known_at": {
+            "nullable": true,
+            "types": [
+              "int"
+            ]
+          },
+          "member_ids": {
+            "nullable": false,
+            "types": [
+              "list"
+            ]
+          },
+          "parent_id": {
+            "nullable": true,
+            "types": [
+              "str"
+            ]
+          },
+          "range_frozen": {
+            "nullable": false,
+            "types": [
+              "bool"
+            ]
+          },
+          "range_id": {
+            "nullable": false,
+            "types": [
+              "str"
+            ]
+          },
+          "range_known_at": {
+            "nullable": true,
+            "types": [
+              "int"
+            ]
+          },
+          "source_clock_id": {
+            "nullable": false,
+            "types": [
+              "str"
+            ]
+          },
+          "source_clock_verified": {
+            "nullable": true,
+            "types": [
+              "bool"
+            ]
+          }
+        },
+        "review": "Reviewed exact original P03/P04/P08 inputs and 15 new full-schema/native-control tests. Missing verified identities, bands and confirmation values legitimately remain null; computed controls preserve values and invalid identity still rejects. This metadata now matches that reviewed partial-result contract. The current stable full suite now verifies this metadata; final acceptance remains separately gated.",
+        "final_test_verification": {
+          "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+          "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+        }
+      },
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Original P03 lacked a verified native clock/range identity. Reviewed the corrected O006 recipe identifier and complete partial clock-range payload; retained literal bounds and formation endpoints while width, identity and clock verification remain unknown.",
+        "regressions": {
+          "path": "/workspace/implementation/validation/phase1-completion/audit-regressions.json",
+          "sha256": "9a08e2687ee797638e0ebba7fb12841ac4d69e1976eb5cb2b396497daaa9e651"
+        }
+      }
     },
     {
       "derived_parent_roles": {
@@ -570,11 +683,11 @@
       "reviewed_limitations": "Pure arithmetic; validity depends entirely on the selected parent range coverage and identity.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -675,11 +788,11 @@
       "reviewed_limitations": "Source anchor/label and path meaning are not inferred from price equality alone.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -788,11 +901,11 @@
       "reviewed_limitations": "Source width class remains unavailable unless separately supplied; each optional denominator must have its own parent.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -895,11 +1008,11 @@
       "reviewed_limitations": "An unfinished or uncovered path cannot establish that a break did not occur; same-time opposite breaks leave order unknown.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1024,11 +1137,11 @@
       "reviewed_limitations": "Other authors' overnight clocks are accepted only as explicitly identified windows; incomplete tape remains a hole.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1140,11 +1253,11 @@
       "reviewed_limitations": "The visit rule and consumption scope are source policy; absent policy keeps retirement unknown.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1259,11 +1372,11 @@
       "reviewed_limitations": "Participation/RVOL context arriving after use is excluded; open location alone does not supply it.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1381,11 +1494,11 @@
       "reviewed_limitations": "The ladder is formulaic; author-selected reversal band and coordinate convention are not auto-discovered.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1440,7 +1553,7 @@
         ],
         "test_file": "implementation/tests/test_phase1_range_geometry.py"
       },
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "genuine_limits": "Projection is arithmetic and does not prove a trade setup or select which range should control.",
       "implemented_obligation": "Project the 1.33-1.66 extension bands from the same selected parent width and reject width substitution.",
       "legacy_required_inputs": [
@@ -1448,41 +1561,41 @@
         "H"
       ],
       "meaningful_schema": {
-        "known_at": {
-          "nullable": true,
+        "upper_band": {
           "types": [
-            "int"
-          ]
+            "list"
+          ],
+          "nullable": true
         },
         "lower_band": {
-          "nullable": false,
           "types": [
             "list"
-          ]
+          ],
+          "nullable": true
         },
         "parent_id": {
-          "nullable": true,
           "types": [
             "str"
-          ]
+          ],
+          "nullable": true
         },
-        "selected_contact": {
-          "nullable": true,
-          "types": [
-            "bool"
-          ]
-        },
-        "selected_contact_at": {
-          "nullable": true,
+        "known_at": {
           "types": [
             "int"
-          ]
+          ],
+          "nullable": true
         },
-        "upper_band": {
-          "nullable": false,
+        "selected_contact": {
           "types": [
-            "list"
-          ]
+            "bool"
+          ],
+          "nullable": true
+        },
+        "selected_contact_at": {
+          "types": [
+            "int"
+          ],
+          "nullable": true
         }
       },
       "native_producer": false,
@@ -1491,21 +1604,79 @@
       "producer_module": "range_geometry",
       "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_limitations": "Projection is arithmetic and does not prove a trade setup or select which range should control.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
         "test_every_owned_geometry_fixture_matches_reviewed_expectations",
         "test_extensions_bind_the_selected_parent_and_do_not_substitute_outer_width"
-      ]
+      ],
+      "partial_schema_reinspection": {
+        "reviewer": "parent",
+        "reviewed_at": "2026-09-12T18:03:53.962946+00:00",
+        "previous_schema": {
+          "known_at": {
+            "nullable": true,
+            "types": [
+              "int"
+            ]
+          },
+          "lower_band": {
+            "nullable": false,
+            "types": [
+              "list"
+            ]
+          },
+          "parent_id": {
+            "nullable": true,
+            "types": [
+              "str"
+            ]
+          },
+          "selected_contact": {
+            "nullable": true,
+            "types": [
+              "bool"
+            ]
+          },
+          "selected_contact_at": {
+            "nullable": true,
+            "types": [
+              "int"
+            ]
+          },
+          "upper_band": {
+            "nullable": false,
+            "types": [
+              "list"
+            ]
+          }
+        },
+        "review": "Reviewed exact original P03/P04/P08 inputs and 15 new full-schema/native-control tests. Missing verified identities, bands and confirmation values legitimately remain null; computed controls preserve values and invalid identity still rejects. This metadata now matches that reviewed partial-result contract. The current stable full suite now verifies this metadata; final acceptance remains separately gated.",
+        "final_test_verification": {
+          "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+          "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+        }
+      },
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Original P04 cannot establish a selected contact band. Reviewed nullable unavailable band fields; unknown bands remain None rather than manufactured numeric bands.",
+        "regressions": {
+          "path": "/workspace/implementation/validation/phase1-completion/audit-regressions.json",
+          "sha256": "9a08e2687ee797638e0ebba7fb12841ac4d69e1976eb5cb2b396497daaa9e651"
+        }
+      }
     },
     {
       "derived_parent_roles": {
@@ -1629,11 +1800,11 @@
       "reviewed_limitations": "Nested geometry does not infer an inner span, labels, or projection parent.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1758,11 +1929,11 @@
       "reviewed_limitations": "No platform Stat+ implementation is reverse-engineered; only supplied envelopes/settings are retained.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1870,11 +2041,11 @@
       "reviewed_limitations": "Unpublished EVRange construction is not reconstructed from midpoint or nearby price data.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -1997,11 +2168,11 @@
       "reviewed_limitations": "Zone bounds/anchor/state history must be supplied; no automatic P-zone detector is implemented.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2111,11 +2282,11 @@
       "reviewed_limitations": "Native range geometry is available; source destination selection and directional draw remain separate qualitative evidence.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2225,11 +2396,11 @@
       "reviewed_limitations": "Window boundaries and branch purpose must be supplied; equality at an excluded boundary stays ambiguous.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2323,11 +2494,11 @@
       "reviewed_limitations": "Cleanliness is a source assessment and remains unclassified automatically.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2422,11 +2593,11 @@
       "reviewed_limitations": "No automatic AMD classifier is implemented from prices.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2520,11 +2691,11 @@
       "reviewed_limitations": "Three attempts are an invalidation signature only under the admitted source policy and same level/branch identity.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2628,11 +2799,11 @@
       "reviewed_limitations": "Opening-range clock must be identified; later retrace absence needs its own covered observation interval.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2739,11 +2910,11 @@
       "reviewed_limitations": "Pivot endpoints and timeframe are selections, so midpoint arithmetic does not certify an automatic swing.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2850,11 +3021,11 @@
       "reviewed_limitations": "Baseline statistic, cohort membership, and high-RVOL threshold must be frozen; incomplete same-clock samples remain a hole.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -2953,11 +3124,11 @@
       "reviewed_limitations": "Near-equality tolerance and objective band are policy inputs; price similarity alone does not create an objective.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3073,11 +3244,11 @@
       "reviewed_limitations": "No news-impact response is inferred before release or from a schedule without vintage identity.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3210,11 +3381,11 @@
       "reviewed_limitations": "An unverified clock or incomplete member interval produces a hole even when observed extrema are measurable.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3362,11 +3533,11 @@
       "reviewed_limitations": "Failure confirmation needs strict event order and a completed actual bar; source-only confirmation cannot be fabricated from caller scalars.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3484,11 +3655,11 @@
       "reviewed_limitations": "Native extrema do not by themselves determine source retirement policy or active state.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3596,11 +3767,11 @@
       "reviewed_limitations": "Tied first executions without unique sequence leave the opening price unknown; close-through requires an actual five-minute bar.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3713,11 +3884,11 @@
       "reviewed_limitations": "Tied unsequenced opening executions leave cash open unknown; only the admitted strict reclaim criterion is implemented.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -3875,11 +4046,11 @@
       "reviewed_limitations": "Weekend conventions and objective-selection time are source policy; gap contact does not imply full fill.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4006,11 +4177,11 @@
       "reviewed_limitations": "Impulse identity/direction are selected upstream; the band does not establish an entry or target.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4114,11 +4285,11 @@
       "reviewed_limitations": "Location is geometric context only and does not create a directional recommendation.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4241,11 +4412,11 @@
       "reviewed_limitations": "Structural break convention and MSS label remain source inputs even when event order is measurable.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4354,11 +4525,11 @@
       "reviewed_limitations": "Automatic gap discovery is not admitted from caller summaries; active/fill state needs complete defining candles and path evidence.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4404,7 +4575,7 @@
         "native_controls": [],
         "test_file": "implementation/tests/test_phase1_range_geometry.py"
       },
-      "final_test_verification_at": "2026-09-12T15:58:58.869836+00:00",
+      "final_test_verification_at": "2026-09-12T18:05:17.977873+00:00",
       "genuine_limits": "Candle geometry can confirm the pattern, but entry mode and stop remain source policy.",
       "implemented_obligation": "Detect bullish or bearish three-candle orderblock confirmation from three distinct complete chronological candles and preserve the audited entry/stop policy.",
       "legacy_required_inputs": [
@@ -4414,59 +4585,59 @@
         "sweep_side"
       ],
       "meaningful_schema": {
-        "candle_ids": {
-          "nullable": false,
-          "types": [
-            "list"
-          ]
-        },
-        "confirmation_at": {
-          "nullable": false,
-          "types": [
-            "int"
-          ]
-        },
-        "confirmed": {
-          "nullable": false,
-          "types": [
-            "bool"
-          ]
-        },
         "ob_band": {
-          "nullable": false,
           "types": [
             "list"
-          ]
+          ],
+          "nullable": true
         },
         "ob_mid": {
-          "nullable": false,
           "types": [
             "Decimal"
-          ]
+          ],
+          "nullable": true
         },
-        "selected_entry_mode": {
-          "nullable": true,
+        "confirmation_at": {
           "types": [
-            "str"
-          ]
+            "int"
+          ],
+          "nullable": true
         },
-        "selected_stop": {
-          "nullable": true,
+        "confirmed": {
           "types": [
-            "Decimal"
-          ]
+            "bool"
+          ],
+          "nullable": true
         },
         "sweep_side": {
-          "nullable": false,
           "types": [
             "str"
-          ]
+          ],
+          "nullable": true
+        },
+        "selected_entry_mode": {
+          "types": [
+            "str"
+          ],
+          "nullable": true
+        },
+        "selected_stop": {
+          "types": [
+            "Decimal"
+          ],
+          "nullable": true
+        },
+        "candle_ids": {
+          "types": [
+            "list"
+          ],
+          "nullable": false
         },
         "timeframe": {
-          "nullable": true,
           "types": [
             "str"
-          ]
+          ],
+          "nullable": true
         }
       },
       "native_producer": true,
@@ -4475,22 +4646,98 @@
       "producer_module": "range_geometry",
       "review_basis": "Parent inspected the contract, implemented domain behavior and native/supplied admission path, reviewed positive and counterexample evidence, and verified the final suite. This marker closes software implementation only.",
       "review_status": "resolved",
-      "reviewed_at": "2026-09-12T15:33:32.472980+00:00",
+      "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
       "reviewed_limitations": "Candle geometry can confirm the pattern, but entry mode and stop remain source policy.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
         "test_every_owned_geometry_fixture_matches_reviewed_expectations",
         "test_orderblock_pattern_is_complete_c2_range_and_has_bearish_mirror",
         "test_derived_orderblock_requires_three_distinct_resolved_native_candles"
-      ]
+      ],
+      "partial_schema_reinspection": {
+        "reviewer": "parent",
+        "reviewed_at": "2026-09-12T18:03:53.962972+00:00",
+        "previous_schema": {
+          "candle_ids": {
+            "nullable": false,
+            "types": [
+              "list"
+            ]
+          },
+          "confirmation_at": {
+            "nullable": false,
+            "types": [
+              "int"
+            ]
+          },
+          "confirmed": {
+            "nullable": false,
+            "types": [
+              "bool"
+            ]
+          },
+          "ob_band": {
+            "nullable": false,
+            "types": [
+              "list"
+            ]
+          },
+          "ob_mid": {
+            "nullable": false,
+            "types": [
+              "Decimal"
+            ]
+          },
+          "selected_entry_mode": {
+            "nullable": true,
+            "types": [
+              "str"
+            ]
+          },
+          "selected_stop": {
+            "nullable": true,
+            "types": [
+              "Decimal"
+            ]
+          },
+          "sweep_side": {
+            "nullable": false,
+            "types": [
+              "str"
+            ]
+          },
+          "timeframe": {
+            "nullable": true,
+            "types": [
+              "str"
+            ]
+          }
+        },
+        "review": "Reviewed exact original P03/P04/P08 inputs and 15 new full-schema/native-control tests. Missing verified identities, bands and confirmation values legitimately remain null; computed controls preserve values and invalid identity still rejects. This metadata now matches that reviewed partial-result contract. The current stable full suite now verifies this metadata; final acceptance remains separately gated.",
+        "final_test_verification": {
+          "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+          "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+        }
+      },
+      "correctness_repair_review": {
+        "evidence": {
+          "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+          "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+        },
+        "review": "Original P08 lacks validated candle identity/timeframe evidence. Reviewed the opt-in full partial orderblock payload with nullable missing geometry/confirmation and no invented candle IDs. It remains a hole.",
+        "regressions": {
+          "path": "/workspace/implementation/validation/phase1-completion/audit-regressions.json",
+          "sha256": "9a08e2687ee797638e0ebba7fb12841ac4d69e1976eb5cb2b396497daaa9e651"
+        }
+      }
     },
     {
       "derived_parent_roles": {
@@ -4613,11 +4860,11 @@
       "reviewed_limitations": "Wick geometry does not prove rejection quality or allowed location without admitted source evidence.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4735,11 +4982,11 @@
       "reviewed_limitations": "Only the declared 14-period policies are evaluated; insufficient or mismatched history stays unknown.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4859,11 +5106,11 @@
       "reviewed_limitations": "Sufficient A+ grade fields are unpublished, so automatic grading remains unavailable.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -4983,11 +5230,11 @@
       "reviewed_limitations": "No automatic balance detector or migration classifier is implemented.",
       "reviewed_producer_file": {
         "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
-        "sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06"
+        "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -5295,7 +5542,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -5407,7 +5654,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -5707,7 +5954,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -5807,7 +6054,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -5893,7 +6140,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6002,7 +6249,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6103,7 +6350,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6204,7 +6451,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6299,7 +6546,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6631,7 +6878,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6744,7 +6991,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6849,7 +7096,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -6969,7 +7216,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7064,7 +7311,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7174,7 +7421,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7280,7 +7527,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7440,7 +7687,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7630,7 +7877,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7760,7 +8007,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -7885,7 +8132,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8015,7 +8262,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8137,7 +8384,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8265,7 +8512,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8387,7 +8634,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8510,7 +8757,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8634,7 +8881,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8765,7 +9012,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8873,7 +9120,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -8997,7 +9244,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9139,7 +9386,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9291,7 +9538,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9421,7 +9668,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9546,7 +9793,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9688,7 +9935,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9811,7 +10058,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -9954,7 +10201,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -10101,7 +10348,7 @@
       },
       "reviewed_test_run": {
         "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
-        "sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8"
+        "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
       },
       "reviewer": "parent",
       "sensitive_regression_tests": [
@@ -10124,5 +10371,737 @@
     },
     "updated_reference_count": 78,
     "scope": "Prior domain reviews remain valid because domain behavior is unchanged; references now link the passing suite after the separately reviewed report correction."
+  },
+  "correctness_repair": {
+    "review": {
+      "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-review.json",
+      "sha256": "bdffba29c71ec7b9d23716d6cee35690da3813b2d53480cb3019b9f29bdc1f60"
+    },
+    "previous_ledger": {
+      "path": "/workspace/implementation/validation/phase1-post-implementation-check/previous-acceptance/geometry-obligations.json",
+      "sha256": "a2828f13efcad2a1938c90133904850a714af5ea71d34cc3e58af3a8ffd03895"
+    },
+    "reference_updates": [
+      {
+        "location": "/objects/0/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/0/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/1/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/1/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/2/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/2/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/3/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/3/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/4/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/4/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/5/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/5/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/6/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/6/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/7/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/7/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/8/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/8/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/9/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/9/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/10/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/10/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/11/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/11/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/12/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/12/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/13/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/13/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/14/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/14/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/15/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/15/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/16/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/16/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/17/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/17/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/18/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/18/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/19/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/19/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/20/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/20/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/21/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/21/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/22/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/22/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/23/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/23/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/24/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/24/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/25/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/25/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/26/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/26/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/27/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/27/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/28/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/28/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/29/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/29/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/30/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/30/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/31/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/31/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/32/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/32/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/33/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/33/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/34/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/34/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/35/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/35/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/36/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/36/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/37/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/37/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/38/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/38/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/39/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/39/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/40/reviewed_producer_file",
+        "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+        "old_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+        "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+      },
+      {
+        "location": "/objects/40/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/41/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/42/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/43/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/44/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/45/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/46/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/47/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/48/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/49/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/50/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/51/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/52/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/53/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/54/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/55/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/56/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/57/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/58/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/59/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/60/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/61/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/62/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/63/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/64/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/65/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/66/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/67/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/68/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/69/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/70/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/71/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/72/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/73/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/74/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/75/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/76/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      },
+      {
+        "location": "/objects/77/reviewed_test_run",
+        "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+        "old_sha256": "90b2952a7f57c5ea456fa17b3903c24f8db4ebbe25b2423edba50d145b83d6e8",
+        "current_sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+      }
+    ],
+    "reexamined_obligations": [
+      "O006",
+      "O015",
+      "O056"
+    ],
+    "unchanged_reviews_retained": true
   }
 }

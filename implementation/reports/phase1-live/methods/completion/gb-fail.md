@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:41:01Z`
+created_at: `2026-09-12T18:01:24Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -72,7 +72,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 50, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -104,16 +104,16 @@ GB-FAIL | M02 | checks_passed | 0 failures | 0 | 0 | implementation checks; hist
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/candidates.jsonl sha256=00439f1e60616e0e58133f2be4293859411cf7bce16d51af7c19b06f33975182
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/objects.jsonl sha256=a6f4965937f3c65c6d0d6b73ac8f664b6d37596ab07ba8a759f8f0c66f82b7f7
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/holes.jsonl sha256=a54e4ddbcb08213c61d3f89e644ba0fd0f4d5128816b0e7ca2d9a46f80dc94b1
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/reference-outcomes.jsonl sha256=cd3a772993558ed34f16f35e6dd788c6612678e39f4e5660ee2504521d0b2dd8
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/assembly.jsonl sha256=ca080ffee705d8a55f8d799451d27d522b75ce6ade6ce562b11de09394f1c8f8
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/operand-producers.jsonl sha256=7c9c03aa822365285dc1852d7da94aca5498c71d30f750266a03d0b79f1dc86a
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/output-contracts.jsonl sha256=5f7c8da8a83d0636dc980721be78f54f2d7888b352e015df4bbe4e07b906b9bc
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/native-window-audits.jsonl sha256=ceebc94d8a69ae9a1aa7c0cd0af3f9337cd7211625e8de921bfb11ace9e1fb4d
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/fixtures.json sha256=6c95450ec0e44e8f2fc02e1d723611a4aeec8cd1ba290ab44567b45a875c0db4
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/cohort.json sha256=e96b2a01310e4a88577e3ce0478af6cf0d8422a6ff96675f414e18594eaebd06
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/coverage.json sha256=81cf564cc0f92fed5181b6566869e03674a41cb448a8136a2bbf028a1642c7c1
-- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-w4m8mzqi/episodes.json sha256=21a5d9c170ca8e11d56014bbc4fa8a636af385c7d58f535ff4ca030a8743257f
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/candidates.jsonl sha256=9c8956dbb464009668c52c9d97dbdee29a072602716288eeddeec4dcf5c6e1cc
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/objects.jsonl sha256=a6f4965937f3c65c6d0d6b73ac8f664b6d37596ab07ba8a759f8f0c66f82b7f7
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/holes.jsonl sha256=6f82193f974322678a2f4daba0139b9c22145364ab16c9df4098760a8d37cceb
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/reference-outcomes.jsonl sha256=cd3a772993558ed34f16f35e6dd788c6612678e39f4e5660ee2504521d0b2dd8
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/assembly.jsonl sha256=ca080ffee705d8a55f8d799451d27d522b75ce6ade6ce562b11de09394f1c8f8
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/operand-producers.jsonl sha256=7c9c03aa822365285dc1852d7da94aca5498c71d30f750266a03d0b79f1dc86a
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/output-contracts.jsonl sha256=cbf5867d14b49ad3c40c966f8327f4f060402a8329dc42af5ef8372a9f8276d8
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/native-window-audits.jsonl sha256=ceebc94d8a69ae9a1aa7c0cd0af3f9337cd7211625e8de921bfb11ace9e1fb4d
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/fixtures.json sha256=856f2dca4960eeb257e2f2569a48760679bd8e2d346b8a9592408c4dc15d10b7
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/cohort.json sha256=e96b2a01310e4a88577e3ce0478af6cf0d8422a6ff96675f414e18594eaebd06
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/coverage.json sha256=81cf564cc0f92fed5181b6566869e03674a41cb448a8136a2bbf028a1642c7c1
+- `episodes.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-fail/run-ln1rs6kv/episodes.json sha256=21a5d9c170ca8e11d56014bbc4fa8a636af385c7d58f535ff4ca030a8743257f

@@ -1,0 +1,692 @@
+{
+  "reviewed_commit": "662463b545394e663937be2d83e0677f50492dc3",
+  "checks": 6,
+  "passed": 6,
+  "failures": 0,
+  "results": [
+    {
+      "probe": "order_control",
+      "recipe_id": "O150",
+      "inputs": {
+        "candidate_id": "candidate-A",
+        "order_id": "order-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "source_id": "refill",
+        "method_id": "REFILL-STUDY",
+        "side": "long",
+        "order_type": "limit",
+        "limit": 100,
+        "q": "0.25",
+        "quantity": 3,
+        "placed_at": 10,
+        "use_at": 30,
+        "other_open_positions": 0,
+        "source_policy": {
+          "policy_id": "refill-v1",
+          "source_id": "refill",
+          "method_id": "REFILL-STUDY",
+          "stop_ticks": 32,
+          "target_ticks": 96,
+          "cancel_minutes": 30,
+          "one_position_at_a_time": true
+        },
+        "events": [
+          {
+            "event_id": "fill-A",
+            "kind": "fill",
+            "qty": 1,
+            "at": 15,
+            "known_at": 15,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "instrument_id": "NQ"
+          }
+        ]
+      },
+      "expected": "Complete valid order record.",
+      "state": "computed",
+      "base_ok": true,
+      "coverage_ok": true,
+      "known_at": 15,
+      "holes": [],
+      "value": {
+        "order_state_timeline": [
+          {
+            "event_id": "fill-A",
+            "at": 15,
+            "available_at": 15,
+            "kind": "fill",
+            "state_before": "resting",
+            "state_after": "partially_filled",
+            "authorized_quantity": "3",
+            "working_quantity_after": "2",
+            "position_quantity_after": "1",
+            "quantity": "1"
+          }
+        ],
+        "remaining_quantity": "2",
+        "filled_quantity": "1",
+        "position_open": true,
+        "bracket_versions": [
+          {
+            "version": 0,
+            "at": 10,
+            "stop": "92.00",
+            "target": "124.00"
+          }
+        ],
+        "lifecycle_valid": true,
+        "source_policy_ok": true,
+        "decision_at": 10,
+        "side": "long",
+        "order_at": 10,
+        "stop_ticks": "32",
+        "target_ticks": "96",
+        "cancel_minutes": "30",
+        "one_position_policy": true,
+        "order_inside_ticks": null,
+        "order_state": "partially_filled",
+        "position_quantity": "1",
+        "authorized_quantity": "3",
+        "order_id": "order-A",
+        "candidate_id": "candidate-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "active_order_id": "order-A",
+        "order_price": "100",
+        "stop": "92.00",
+        "target": "124.00",
+        "pending_events": [
+          {
+            "kind": "cancel",
+            "at": 1800000000010,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "candidate_id": "candidate-A",
+            "instrument_id": "NQ",
+            "synthetic_from_policy": true
+          }
+        ],
+        "snapshot_at": 30,
+        "requested_as_of": null,
+        "use_at": 30,
+        "unapplied_events": [],
+        "ignored_policy_events": [],
+        "unclocked_events": [],
+        "unclocked_fill_quantities": [],
+        "known_prefix_order_state": "partially_filled",
+        "known_prefix_remaining_quantity": "2",
+        "known_prefix_filled_quantity": "1",
+        "known_prefix_position_quantity": "1",
+        "remaining": "2",
+        "filled": "1",
+        "cancel_at": 1800000000010
+      },
+      "source_audit": {
+        "accepted": true,
+        "state": "computed",
+        "base_ok": true,
+        "known_at": 15,
+        "filled_quantity": "1"
+      },
+      "check_passed": true
+    },
+    {
+      "probe": "foreign_order_fill",
+      "recipe_id": "O150",
+      "inputs": {
+        "candidate_id": "candidate-A",
+        "order_id": "order-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "source_id": "refill",
+        "method_id": "REFILL-STUDY",
+        "side": "long",
+        "order_type": "limit",
+        "limit": 100,
+        "q": "0.25",
+        "quantity": 3,
+        "placed_at": 10,
+        "use_at": 30,
+        "other_open_positions": 0,
+        "source_policy": {
+          "policy_id": "refill-v1",
+          "source_id": "refill",
+          "method_id": "REFILL-STUDY",
+          "stop_ticks": 32,
+          "target_ticks": 96,
+          "cancel_minutes": 30,
+          "one_position_at_a_time": true
+        },
+        "events": [
+          {
+            "event_id": "fill-A",
+            "kind": "fill",
+            "qty": 1,
+            "at": 15,
+            "known_at": 15,
+            "order_id": "order-B",
+            "position_id": "position-B",
+            "instrument_id": "ES"
+          }
+        ]
+      },
+      "expected": "Reject a fill that names another order, position and instrument.",
+      "state": "invalid",
+      "base_ok": false,
+      "coverage_ok": null,
+      "known_at": 10,
+      "holes": [
+        "HOLE:O150:lifecycle"
+      ],
+      "value": {
+        "order_state_timeline": [],
+        "remaining_quantity": null,
+        "filled_quantity": null,
+        "position_open": null,
+        "bracket_versions": [
+          {
+            "version": 0,
+            "at": 10,
+            "stop": "92.00",
+            "target": "124.00"
+          }
+        ],
+        "lifecycle_valid": false,
+        "source_policy_ok": true,
+        "decision_at": 10,
+        "side": "long",
+        "order_at": 10,
+        "stop_ticks": "32",
+        "target_ticks": "96",
+        "cancel_minutes": "30",
+        "one_position_policy": true,
+        "order_inside_ticks": null,
+        "order_state": null,
+        "position_quantity": null,
+        "authorized_quantity": null,
+        "order_id": "order-A",
+        "candidate_id": "candidate-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "active_order_id": "order-A",
+        "order_price": "100",
+        "stop": "92.00",
+        "target": "124.00",
+        "pending_events": [
+          {
+            "kind": "cancel",
+            "at": 1800000000010,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "candidate_id": "candidate-A",
+            "instrument_id": "NQ",
+            "synthetic_from_policy": true
+          }
+        ],
+        "snapshot_at": 30,
+        "requested_as_of": null,
+        "use_at": 30,
+        "unapplied_events": [
+          {
+            "event_id": "fill-A",
+            "kind": "fill",
+            "qty": 1,
+            "at": 15,
+            "known_at": 15,
+            "order_id": "order-B",
+            "position_id": "position-B",
+            "instrument_id": "ES"
+          }
+        ],
+        "ignored_policy_events": [],
+        "unclocked_events": [],
+        "unclocked_fill_quantities": [],
+        "known_prefix_order_state": "resting",
+        "known_prefix_remaining_quantity": "3",
+        "known_prefix_filled_quantity": "0",
+        "known_prefix_position_quantity": "0",
+        "remaining": null,
+        "filled": null,
+        "cancel_at": 1800000000010
+      },
+      "source_audit": {
+        "accepted": false,
+        "error": "SchemaError: invalid supplied dependency/action source record"
+      },
+      "check_passed": true
+    },
+    {
+      "probe": "future_fill_backdated",
+      "recipe_id": "O150",
+      "inputs": {
+        "candidate_id": "candidate-A",
+        "order_id": "order-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "source_id": "refill",
+        "method_id": "REFILL-STUDY",
+        "side": "long",
+        "order_type": "limit",
+        "limit": 100,
+        "q": "0.25",
+        "quantity": 3,
+        "placed_at": 10,
+        "use_at": 15,
+        "other_open_positions": 0,
+        "source_policy": {
+          "policy_id": "refill-v1",
+          "source_id": "refill",
+          "method_id": "REFILL-STUDY",
+          "stop_ticks": 32,
+          "target_ticks": 96,
+          "cancel_minutes": 30,
+          "one_position_at_a_time": true
+        },
+        "events": [
+          {
+            "event_id": "fill-A",
+            "kind": "fill",
+            "qty": 1,
+            "at": 20,
+            "known_at": 12,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "instrument_id": "NQ"
+          }
+        ]
+      },
+      "expected": "Reject availability before the event; do not count the fill at snapshot 15.",
+      "state": "invalid",
+      "base_ok": false,
+      "coverage_ok": null,
+      "known_at": 10,
+      "holes": [
+        "HOLE:O150:lifecycle"
+      ],
+      "value": {
+        "order_state_timeline": [],
+        "remaining_quantity": null,
+        "filled_quantity": null,
+        "position_open": null,
+        "bracket_versions": [
+          {
+            "version": 0,
+            "at": 10,
+            "stop": "92.00",
+            "target": "124.00"
+          }
+        ],
+        "lifecycle_valid": false,
+        "source_policy_ok": true,
+        "decision_at": 10,
+        "side": "long",
+        "order_at": 10,
+        "stop_ticks": "32",
+        "target_ticks": "96",
+        "cancel_minutes": "30",
+        "one_position_policy": true,
+        "order_inside_ticks": null,
+        "order_state": null,
+        "position_quantity": null,
+        "authorized_quantity": null,
+        "order_id": "order-A",
+        "candidate_id": "candidate-A",
+        "position_id": "position-A",
+        "instrument_id": "NQ",
+        "active_order_id": "order-A",
+        "order_price": "100",
+        "stop": "92.00",
+        "target": "124.00",
+        "pending_events": [
+          {
+            "kind": "cancel",
+            "at": 1800000000010,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "candidate_id": "candidate-A",
+            "instrument_id": "NQ",
+            "synthetic_from_policy": true
+          }
+        ],
+        "snapshot_at": 15,
+        "requested_as_of": null,
+        "use_at": 15,
+        "unapplied_events": [
+          {
+            "event_id": "fill-A",
+            "kind": "fill",
+            "qty": 1,
+            "at": 20,
+            "known_at": 12,
+            "order_id": "order-A",
+            "position_id": "position-A",
+            "instrument_id": "NQ"
+          }
+        ],
+        "ignored_policy_events": [],
+        "unclocked_events": [],
+        "unclocked_fill_quantities": [],
+        "known_prefix_order_state": "resting",
+        "known_prefix_remaining_quantity": "3",
+        "known_prefix_filled_quantity": "0",
+        "known_prefix_position_quantity": "0",
+        "remaining": null,
+        "filled": null,
+        "cancel_at": 1800000000010
+      },
+      "source_audit": {
+        "accepted": false,
+        "error": "SchemaError: invalid supplied dependency/action source record"
+      },
+      "check_passed": true
+    },
+    {
+      "probe": "transition_control",
+      "recipe_id": "O166",
+      "inputs": {
+        "current_observation": {
+          "state_label": "D",
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 10,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_label": "A",
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 20,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "cadence": "adjacent-state-observations",
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 9
+          }
+        ]
+      },
+      "expected": "Complete valid observed transition.",
+      "state": "computed",
+      "base_ok": true,
+      "coverage_ok": true,
+      "known_at": 20,
+      "holes": [],
+      "value": {
+        "from_state": "D",
+        "to_state": "A",
+        "state_at": 10,
+        "next_state_at": 20,
+        "conditioning_causal": true,
+        "transition_valid": true,
+        "supplied_row_count": null,
+        "reported_probability": null,
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 9
+          }
+        ],
+        "max_conditioning_known_at": 9,
+        "probabilities": {
+          "B": null,
+          "A": null,
+          "D": null,
+          "E": null,
+          "W": null
+        },
+        "row_sum": null,
+        "cadence": "adjacent-state-observations",
+        "current_observation": {
+          "state_label": "D",
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 10,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_label": "A",
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 20,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "automatic_transition": null,
+        "trained_matrix": false,
+        "pending_observations": [],
+        "pending_conditioning": false,
+        "snapshot_at": null,
+        "requested_as_of": null,
+        "use_at": null,
+        "raw_from_state": "D",
+        "raw_to_state": "A",
+        "raw_state_at": 10,
+        "raw_next_state_at": 20,
+        "raw_current_sequence": 1,
+        "raw_next_sequence": 2,
+        "p_dd": null,
+        "p_da": null
+      },
+      "check_passed": true
+    },
+    {
+      "probe": "transition_missing_labels",
+      "recipe_id": "O166",
+      "inputs": {
+        "current_observation": {
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 10,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 20,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "cadence": "adjacent-state-observations",
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 9
+          }
+        ]
+      },
+      "expected": "Missing state labels must leave transition_valid unknown.",
+      "state": "hole",
+      "base_ok": null,
+      "coverage_ok": null,
+      "known_at": 20,
+      "holes": [
+        "HOLE:O166:current_state_label",
+        "HOLE:O166:next_state_label"
+      ],
+      "value": {
+        "from_state": null,
+        "to_state": null,
+        "state_at": 10,
+        "next_state_at": 20,
+        "conditioning_causal": true,
+        "transition_valid": null,
+        "supplied_row_count": null,
+        "reported_probability": null,
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 9
+          }
+        ],
+        "max_conditioning_known_at": 9,
+        "probabilities": {
+          "B": null,
+          "A": null,
+          "D": null,
+          "E": null,
+          "W": null
+        },
+        "row_sum": null,
+        "cadence": "adjacent-state-observations",
+        "current_observation": {
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 10,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 20,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "automatic_transition": null,
+        "trained_matrix": false,
+        "pending_observations": [],
+        "pending_conditioning": false,
+        "snapshot_at": null,
+        "requested_as_of": null,
+        "use_at": null,
+        "raw_from_state": null,
+        "raw_to_state": null,
+        "raw_state_at": 10,
+        "raw_next_state_at": 20,
+        "raw_current_sequence": 1,
+        "raw_next_sequence": 2,
+        "p_dd": null,
+        "p_da": null
+      },
+      "check_passed": true
+    },
+    {
+      "probe": "transition_backdated",
+      "recipe_id": "O166",
+      "inputs": {
+        "current_observation": {
+          "state_label": "D",
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 5,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_label": "A",
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 6,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "cadence": "adjacent-state-observations",
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 4
+          }
+        ],
+        "known_at": 6,
+        "use_at": 7
+      },
+      "expected": "Reject an observed transition claimed available before its state events.",
+      "state": "invalid",
+      "base_ok": false,
+      "coverage_ok": null,
+      "known_at": 6,
+      "holes": [
+        "HOLE:O166:transition"
+      ],
+      "value": {
+        "from_state": "D",
+        "to_state": "A",
+        "state_at": 10,
+        "next_state_at": 20,
+        "conditioning_causal": true,
+        "transition_valid": false,
+        "supplied_row_count": null,
+        "reported_probability": null,
+        "conditioning_evidence": [
+          {
+            "evidence_id": "condition",
+            "known_at": 4
+          }
+        ],
+        "max_conditioning_known_at": 4,
+        "probabilities": {
+          "B": null,
+          "A": null,
+          "D": null,
+          "E": null,
+          "W": null
+        },
+        "row_sum": null,
+        "cadence": "adjacent-state-observations",
+        "current_observation": {
+          "state_label": "D",
+          "state_id": "state-current",
+          "state_at": 10,
+          "known_at": 5,
+          "sequence": 1,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "next_observation": {
+          "state_label": "A",
+          "state_id": "state-next",
+          "state_at": 20,
+          "known_at": 6,
+          "sequence": 2,
+          "instrument_id": "NQ",
+          "cohort_id": "cohort",
+          "reset_id": "session"
+        },
+        "automatic_transition": null,
+        "trained_matrix": false,
+        "pending_observations": [],
+        "pending_conditioning": false,
+        "snapshot_at": 7,
+        "requested_as_of": null,
+        "use_at": 7,
+        "raw_from_state": "D",
+        "raw_to_state": "A",
+        "raw_state_at": 10,
+        "raw_next_state_at": 20,
+        "raw_current_sequence": 1,
+        "raw_next_sequence": 2,
+        "p_dd": null,
+        "p_da": null
+      },
+      "check_passed": true
+    }
+  ]
+}

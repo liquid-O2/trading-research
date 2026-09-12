@@ -52,6 +52,7 @@ NATIVE_VALIDATION_DOCS = (
     IMPLEMENTATION_ROOT / "validation/phase1-completion/native-clock-coverage.json",
 )
 REGRESSION_AUDIT_PATH = IMPLEMENTATION_ROOT / "validation/phase1-completion/audit-regressions.json"
+POSTCHECK_PATH = IMPLEMENTATION_ROOT / "validation/phase1-post-implementation-check/repair-regressions.json"
 
 OBJECT_RE = re.compile(r"^O\d{3}$")
 CORE_RE = re.compile(r"^C\d{2}$")
@@ -678,13 +679,57 @@ def compact_regression_row(row: Any) -> dict[str, Any]:
     return result
 
 
-def regression_audit_summary(path: Path = REGRESSION_AUDIT_PATH) -> dict[str, Any]:
-    """Load an optional fresh 27-probe validation artifact.
+def postcheck_summary(path: Path = POSTCHECK_PATH) -> dict[str, Any]:
+    """Require exact preserved cases, current code, and repaired invariants."""
+    from types import SimpleNamespace
+    sys.path.insert(0, str(IMPLEMENTATION_ROOT / "tools"))
+    import validate_phase1_post_implementation_regressions as checker
 
-    The audit is supplementary evidence: an absent artifact stays explicitly
-    missing and never receives synthetic pass rows or a fabricated denominator.
-    Different callers may use ``probes``, ``results``, or ``checks`` as the
-    row key, so the envelope is normalized while its source hash is retained.
+    base = {**input_record(path), "expected_probe_count": 6, "probe_count": None}
+    if not path.is_file():
+        return {**base, "status": "missing_review", "reason": "independent repair regressions absent"}
+    try:
+        document = read_json(path)
+        _, cases, failures = checker.load_saved_cases()
+        failures = list(failures)
+        expected_hashes = {case.name: case.input_sha256 for case in cases}
+        if document.get("saved_input_hashes") != expected_hashes:
+            failures.append("saved input fingerprints differ from preserved counterexamples")
+        current_hashes, source_failures = checker._source_hashes()
+        failures.extend(source_failures)
+        if document.get("tested_implementation_source_hashes") != current_hashes:
+            failures.append("repair regression implementation hashes are stale")
+        rows = document.get("results", [])
+        if len(rows) != 6 or {row.get("probe") for row in rows} != set(checker.EXPECTED_PROBES):
+            failures.append("expected exactly six distinct preserved cases")
+        case_by_name = {case.name: case for case in cases}
+        for row in rows:
+            case = case_by_name.get(row.get("probe"))
+            if case is None:
+                continue
+            if row.get("inputs") != case.inputs or row.get("input_sha256") != case.input_sha256:
+                failures.append(f"{case.name}: case inputs changed")
+            result = row.get("result", {})
+            failures.extend(checker.evaluate_case(
+                case, SimpleNamespace(**result), schema_ok=result.get("schema_validation", {}).get("ok") is True,
+                schema_error=result.get("schema_validation", {}).get("error"), source_audit=row.get("source_audit")))
+            if row.get("check_passed") is not True or row.get("failures"):
+                failures.append(f"{case.name}: recorded regression failed")
+        if document.get("status") != "pass" or document.get("passed") != 6 or document.get("failures") != 0:
+            failures.append("repair checker did not pass all six cases")
+        return {**base, "probe_count": len(rows), "status": "implementation_fail" if failures else "pass",
+                "failures": failures, "valid_controls": 2, "invalid_cases": 4}
+    except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
+        return {**base, "status": "implementation_fail", "reason": str(exc)}
+
+
+def regression_audit_summary(path: Path = REGRESSION_AUDIT_PATH) -> dict[str, Any]:
+    """Load the required current 27-probe validation artifact.
+
+    Missing evidence never receives synthetic pass rows or a fabricated
+    denominator. Legacy envelopes remain readable, but completion requires
+    current source hashes, full schema checks, and the five quantity controls.
+    Row keys are normalized while the source artifact hash is retained.
     """
 
     base = input_record(path)
@@ -754,6 +799,24 @@ def regression_audit_summary(path: Path = REGRESSION_AUDIT_PATH) -> dict[str, An
         status = "pass"
     else:
         status = "unreviewed"
+    freshness_errors = []
+    if isinstance(document, dict) and document.get("evidence_schema") == "phase1-audit-regressions-v3":
+        sys.path.insert(0, str(IMPLEMENTATION_ROOT / "tools"))
+        from validate_phase1_audit_regressions import source_hashes
+        if document.get("tested_implementation_source_hashes") != source_hashes():
+            freshness_errors.append("27-probe audit implementation hashes are stale")
+        for row in rows:
+            if row.get("original", {}).get("actual", {}).get("schema_validated") is not True:
+                freshness_errors.append(f"{row.get('id')}: original full output schema did not pass")
+            if row.get("id") in {"P21", "P22", "P23", "P24", "P25"}:
+                control = row.get("control") or {}
+                if control.get("status") != "pass" or control.get("actual", {}).get("schema_validated") is not True:
+                    freshness_errors.append(f"{row.get('id')}: identified quantity control did not pass")
+        if freshness_errors:
+            status = "implementation_fail"
+    else:
+        freshness_errors.append("current paired and schema-validated 27-probe evidence is absent")
+        status = "unreviewed" if status != "implementation_fail" else status
     result_ids = []
     for row in compact_rows:
         if isinstance(row, dict):
@@ -773,7 +836,7 @@ def regression_audit_summary(path: Path = REGRESSION_AUDIT_PATH) -> dict[str, An
         "status_counts": dict(sorted(status_counts.items())),
         "result_ids": result_ids,
         "results": compact_rows,
-        "reason": None if len(compact_rows) == 27 else "fresh audit does not contain all 27 probe rows",
+        "reason": "; ".join(freshness_errors) if freshness_errors else (None if len(compact_rows) == 27 else "fresh audit does not contain all 27 probe rows"),
     }
 
 
@@ -995,7 +1058,7 @@ def core_fixture_rows(checks_enabled: bool) -> list[dict[str, Any]]:
         }
         for row in run_core_fixtures()
     ]
-    # Four shared contracts have no small printed fixture. Link their actual
+    # Link shared contracts to actual
     # executed boundary regressions from the final suite, with current input
     # hashes, rather than treating a manual marker as executable evidence.
     evidence_path = IMPLEMENTATION_ROOT / 'validation/phase1-completion/test-run.json'
@@ -1008,13 +1071,23 @@ def core_fixture_rows(checks_enabled: bool) -> list[dict[str, Any]]:
         'C01': ('test_actual_native_result_ignores_supplied_summary_and_retains_members',
                 'test_locator_false_provenance_rejected',
                 'test_missing_schema_and_domain_state_are_implementation_errors',
-                'test_supplied_parent_cannot_launder_unrelated_prices_as_native_selection'),
+                'test_supplied_parent_cannot_launder_unrelated_prices_as_native_selection',
+                'test_independent_invalid_inputs_fail_actual_source_admission',
+                'test_source_transition_cannot_transfer_two_matching_foreign_states',
+                'test_original_legacy_counterexample_returns_its_full_hole_schema'),
+        'C04': ('test_source_snapshot_after_use_is_rejected_without_rewriting_inputs',
+                'test_explicit_unknown_fill_clock_does_not_become_admitted_quantity',
+                'test_real_future_state_parent_cannot_certify_transition_at_earlier_snapshot'),
         'C05': ('test_relabelled_fixture_cannot_enter_contemporary_cohort',
                 'test_raw_derived_cohort_cannot_be_built_from_supplied_assertions',
                 'test_supplied_attempts_reconcile_without_entering_discovery'),
         'C08': ('test_m05_f3_and_c08_mutations_preserve_false_unknown_and_identity',
                 'test_m11_c08_late_missing_and_identity_mutations',
-                'test_m12_method_c08_mutates_late_missing_and_identity_records'),
+                'test_m12_method_c08_mutates_late_missing_and_identity_records',
+                'test_real_audited_parent_outputs_reach_actual_native_order_adapter',
+                'test_native_order_keeps_each_real_partial_fill_clock_with_a_future_report_tail',
+                'test_postcheck_gate_rechecks_evidence_instead_of_trusting_green_status',
+                'test_domain_hole_normalization_does_not_soften_invalid_identity_guard'),
     }
     current = run.get('status') == 'pass' and run.get('exit_code') == 0
     source_hashes = run.get('tested_source_files', {})
@@ -1465,6 +1538,7 @@ def build_markdown(matrix: dict[str, Any]) -> str:
         "",
         f"Object obligations: {matrix['counts']['objects']}; core contracts: {matrix['counts']['core_contracts']}; methods: {matrix['counts']['methods']}; method fields: {matrix['counts']['method_fields']}.",
         f"Registered normal fixtures: {matrix['checks']['object_fixtures']['registered_fixture_count']}; normal object fixtures checked: {matrix['checks']['object_fixtures']['normal_fixture_count']}; object fixture result rows including C08 mutations: {matrix['checks']['object_fixtures']['result_row_count']}; output schema checks: {matrix['checks']['output_schema']['check_count']}.",
+        f"Independent lifecycle repair regressions: {matrix['checks']['post_implementation_regressions']['status']} (six preserved cases required).",
         f"Fresh regression audit: {matrix['checks']['regression_audit']['status']}; probes: {matrix['checks']['regression_audit']['probe_count'] if matrix['checks']['regression_audit']['probe_count'] is not None else '—'} / {matrix['checks']['regression_audit']['expected_probe_count']} expected.",
         "",
         "## Objects",
@@ -1550,6 +1624,7 @@ def build_matrix(*, checks_enabled: bool, extra_ledgers: list[Path] | None = Non
     old_objects, old_core, old_methods = load_old_reports()
     object_ledger_rows, core_ledger_rows, method_field_ledger_rows, ledger_inputs = load_ledgers(extra_ledgers)
     regression_audit = regression_audit_summary()
+    postcheck = postcheck_summary()
     old_object_ids = [row.get("id") for row in old_objects.get("objects", [])]
     expected_object_ids = [f"O{i:03d}" for i in range(1, 167)]
     old_inventory_errors = []
@@ -1641,6 +1716,12 @@ def build_matrix(*, checks_enabled: bool, extra_ledgers: list[Path] | None = Non
     methods = method_rows(old_methods, fields=fields, object_rows=objects, core_rows=core_contracts, checks_enabled=checks_enabled)
     historical = historical_summary(old_methods)
     overall_status = top_status(objects, core_contracts, fields, checks_enabled=checks_enabled, historical=historical)
+    if checks_enabled:
+        audit_statuses = {regression_audit["status"], postcheck["status"]}
+        if "implementation_fail" in audit_statuses:
+            overall_status = "implementation_fail"
+        elif audit_statuses != {"pass"} and overall_status != "implementation_fail":
+            overall_status = "unreviewed"
     fixture_statuses = Counter(row.get("status") for row in fixture_rows)
     schema_statuses = Counter(row.get("status") for row in schema_rows)
     core_statuses = Counter(row.get("status") for row in core_checks)
@@ -1654,7 +1735,7 @@ def build_matrix(*, checks_enabled: bool, extra_ledgers: list[Path] | None = Non
     matrix: dict[str, Any] = {
         "schema": "phase1-obligation-matrix-v1",
         "status": overall_status,
-        "status_rule": "complete requires every object/core/method-field obligation to have an explicit resolved review marker plus passing code, fixture, and schema evidence; registration or fixture-green evidence alone never completes a row",
+        "status_rule": "complete requires every object/core/method-field obligation to have an explicit resolved review marker plus passing code, fixture, and schema evidence, current 27-probe/schema/quantity-control evidence and all six preserved lifecycle regressions; registration or fixture-green evidence alone never completes a row",
         "scope": {
             "objects": "O001..O166",
             "core_contracts": "C00..C08",
@@ -1700,6 +1781,7 @@ def build_matrix(*, checks_enabled: bool, extra_ledgers: list[Path] | None = Non
                 "results": core_checks,
             },
             "regression_audit": regression_audit,
+            "post_implementation_regressions": postcheck,
         },
         "summary": summary,
         "inputs": {
@@ -1711,6 +1793,7 @@ def build_matrix(*, checks_enabled: bool, extra_ledgers: list[Path] | None = Non
             "ledgers": ledger_inputs,
             "native_validation_docs": [input_record(path) for path in NATIVE_VALIDATION_DOCS],
             "regression_audit": input_record(REGRESSION_AUDIT_PATH),
+            "post_implementation_regressions": input_record(POSTCHECK_PATH),
             "inventory_errors": old_inventory_errors,
         },
         "native_artifacts": artifacts,

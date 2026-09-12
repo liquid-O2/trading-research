@@ -1,0 +1,362 @@
+{
+  "schema": "phase1-lifecycle-correctness-repair-review-v1",
+  "reviewer": "parent",
+  "reviewed_at": "2026-09-12T18:07:02.862411+00:00",
+  "reviewed_commit": "662463b545394e663937be2d83e0677f50492dc3",
+  "scope": "O150 event relationship/clock and O166 clock/label repair, O151 report provenance feeding O150, and four legacy partial-result schema gaps exposed by rerunning the original 27 probes through full validation.",
+  "previous_acceptance": {
+    "path": "/workspace/implementation/validation/phase1-post-implementation-check/previous-acceptance/final-acceptance.json",
+    "sha256": "79b0c00f6615f6a20d0fb6627b56358a5e177c5e156d90e797d80892a69f3caf"
+  },
+  "original_negative_check": {
+    "path": "/workspace/implementation/validation/phase1-post-implementation-check/original-check/lifecycle-probes.json",
+    "sha256": "8b7e5fe551e7fa32a11c0abbc43907ce20a85f3e604a45f28a3bed92c2ccfde6"
+  },
+  "current_independent_regressions": {
+    "path": "/workspace/implementation/validation/phase1-post-implementation-check/repair-regressions.json",
+    "sha256": "facb23fd03cda85c56f4d4f88a81c7b3b61e396b7a3f08186ac826eecacb4669"
+  },
+  "current_original_27_regressions": {
+    "path": "/workspace/implementation/validation/phase1-completion/audit-regressions.json",
+    "sha256": "9a08e2687ee797638e0ebba7fb12841ac4d69e1976eb5cb2b396497daaa9e651"
+  },
+  "current_test_run": {
+    "path": "/workspace/implementation/validation/phase1-completion/test-run.json",
+    "sha256": "37d875aed1eee304568d6ed644815d93269f3fb8b2bc9401d515df9c8eff1e59"
+  },
+  "object_review": {
+    "O150": "Reviewed event-to-order/position/instrument/candidate relationships before replay, explicitly linked order generations, occurrence/availability/snapshot/use clocks, pending and unknown rows, caller policy-marker handling, and source-policy cancellation. Rejected or unverifiable records cannot certify filled/position quantities; separately named known-prefix quantities retain useful observed arithmetic. Reviewed valid partial fills, cancel/expiry, amend/reopen, and exits after entry cancellation.",
+    "O151": "Reviewed actual fill occurrence separately from availability, preserved report order/position/instrument provenance, rejected contradictory report clocks and singular foreign reports, and retained each report for O150 replay so a later pending partial fill cannot hide an earlier valid fill. Modeled touch eligibility remains separate from observed execution and queue evidence.",
+    "O166": "Reviewed explicit B/A/D/E/W labels for both adjacent state observations, context/cohort/reset identity, conditioning clocks, and snapshot/use limits. Missing labels retain null states and explicit holes with unknown transition validity; invalid labels/clocks reject. Correct future states remain pending and explicit unknown availability stays unknown. No classifier or learned matrix was introduced."
+  },
+  "legacy_hole_schema_review": {
+    "O001": "Original P01 is blocked for missing native inputs. Reviewed the opt-in guard payload hook so the unavailable result retains the complete coverage schema, explicit unknown checks and missing evidence without inventing native members.",
+    "O006": "Original P03 lacked a verified native clock/range identity. Reviewed the corrected O006 recipe identifier and complete partial clock-range payload; retained literal bounds and formation endpoints while width, identity and clock verification remain unknown.",
+    "O015": "Original P04 cannot establish a selected contact band. Reviewed nullable unavailable band fields; unknown bands remain None rather than manufactured numeric bands.",
+    "O056": "Original P08 lacks validated candle identity/timeframe evidence. Reviewed the opt-in full partial orderblock payload with nullable missing geometry/confirmation and no invented candle IDs. It remains a hole."
+  },
+  "shared_review": {
+    "C01": "Actual immutable REF source citations rerun the domain with outer instrument/method/snapshot context. Explicit context contradictions reject in both dependency and operand admission. Foreign event identity cannot be laundered through source or parent-derived wrappers.",
+    "C04": "Reviewed occurrence <= availability <= consumed snapshot and snapshot <= use, with preserved timestamps. Proper future tails stay pending. Unknown inner availability is not replaced by an outer known timestamp. Existing native invalid-parent and unknown-clock aggregation remains applicable without modification.",
+    "C08": "Reviewed the exact two valid and four invalid independent inputs, valid state-machine controls, real audited parent compositions, and gate mutation tests. The acceptance matrix and final gate now require current six-case evidence and independently recheck its recorded invariants."
+  },
+  "unchanged_scope_evidence": {
+    "legacy_hole_only_changes": [
+      {
+        "file": {
+          "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py",
+          "sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
+        },
+        "changed_existing_functions": [
+          "o001_local"
+        ],
+        "added_functions": [
+          "_coverage_hole_payload"
+        ],
+        "unchanged_existing_functions": [
+          "_bar_hole",
+          "_interval_coverage",
+          "_local_members",
+          "_verified_source_clock",
+          "native_o003",
+          "o001",
+          "o003",
+          "o003_local",
+          "o004",
+          "o004_local",
+          "register_derived",
+          "register_native",
+          "run_native_object"
+        ]
+      },
+      {
+        "file": {
+          "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+          "sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+        },
+        "changed_existing_functions": [
+          "o006"
+        ],
+        "added_functions": [],
+        "unchanged_existing_functions": [
+          "GeometryError",
+          "RangeGeometry",
+          "_absorption",
+          "_audited_source_values",
+          "_bar_from_parent",
+          "_clock",
+          "_complete_candle",
+          "_confirmation_bar",
+          "_d",
+          "_fields",
+          "_invalid",
+          "_native_event_key",
+          "_native_measurement_parent",
+          "_native_range_alias",
+          "_ns",
+          "_observed_parent",
+          "_opening_execution",
+          "_optional_audited_source_values",
+          "_ordered",
+          "_parent_bounds",
+          "_parent_price",
+          "_pick_parent",
+          "_r",
+          "_range_payload",
+          "_reference_bounds",
+          "_relation",
+          "_selected_contact",
+          "_source_values",
+          "build_native_range",
+          "derived_range",
+          "native_o002",
+          "native_o005",
+          "native_o006",
+          "native_o010",
+          "native_o011",
+          "native_o012",
+          "native_o020",
+          "native_o025",
+          "native_o027",
+          "native_o046",
+          "native_o047",
+          "native_o048",
+          "native_o049",
+          "native_o050",
+          "native_o056",
+          "native_o057",
+          "native_o058",
+          "o002",
+          "o005",
+          "o007",
+          "o008",
+          "o009",
+          "o010",
+          "o011",
+          "o012",
+          "o013",
+          "o014",
+          "o015",
+          "o016",
+          "o017",
+          "o018",
+          "o019",
+          "o020",
+          "o021",
+          "o022",
+          "o023",
+          "o024",
+          "o025",
+          "o026",
+          "o027",
+          "o028",
+          "o029",
+          "o046",
+          "o047",
+          "o048",
+          "o049",
+          "o050",
+          "o051",
+          "o052",
+          "o053",
+          "o054",
+          "o055",
+          "o056",
+          "o057",
+          "o058",
+          "o059",
+          "o060"
+        ]
+      },
+      {
+        "file": {
+          "path": "/workspace/implementation/src/trading_research/research/method_pack/objects/__init__.py",
+          "sha256": "807cbc56c661b18690aff0b3853580dd936fc6d28d5e17740f9e0c1af3123d87"
+        },
+        "changed_existing_functions": [
+          "_install_domain"
+        ],
+        "added_functions": [],
+        "unchanged_existing_functions": [
+          "recipes_for",
+          "run_object_fixtures"
+        ]
+      }
+    ],
+    "changed_existing_lifecycle_functions": [
+      "o150",
+      "o151",
+      "o166",
+      "_derive_lifecycle"
+    ],
+    "added_helpers": [
+      "_aliases_conflict",
+      "_availability_claim_is_malformed",
+      "_claimed_availability",
+      "_time_claim_is_malformed"
+    ],
+    "unchanged_existing_functions": [
+      "_schema",
+      "_result",
+      "_holes",
+      "_max_time",
+      "_at",
+      "_event_at",
+      "_kind",
+      "_qty",
+      "_ordered",
+      "_override",
+      "_definition_payload",
+      "o137",
+      "_condition_value",
+      "o138",
+      "o139",
+      "o140",
+      "o141",
+      "_allowed_action",
+      "o142",
+      "o143",
+      "o144",
+      "_scope_matches",
+      "o145",
+      "o146",
+      "o147",
+      "o148",
+      "o149",
+      "_source_policy",
+      "o152",
+      "o155",
+      "o156",
+      "o165",
+      "LifecycleDerivationError",
+      "_derived_roles",
+      "_parent_value",
+      "_parent_time",
+      "_parent_bounds",
+      "_policy_from_definition",
+      "_position_exit_at"
+    ],
+    "changed_adapter_recipe_branches": [
+      "recipe_id == 'O150'",
+      "recipe_id == 'O166'"
+    ],
+    "unchanged_adapter_branches": [
+      "recipe_id == 'O138'",
+      "recipe_id == 'O139'",
+      "recipe_id == 'O140'",
+      "recipe_id == 'O141'",
+      "recipe_id == 'O142'",
+      "recipe_id == 'O143'",
+      "recipe_id == 'O144'",
+      "recipe_id == 'O147'",
+      "recipe_id == 'O148'",
+      "recipe_id == 'O149'",
+      "recipe_id == 'O151'",
+      "recipe_id == 'O152'",
+      "recipe_id == 'O155'",
+      "recipe_id == 'O156'",
+      "recipe_id == 'O165'"
+    ],
+    "actual_source_case_inventory": [
+      {
+        "artifact": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/GB-FAIL-2025-11-20.result.json",
+          "sha256": "9556655a35848ed38d34ec038d24c04a99f59f340995bd06f801841d36170f8d"
+        },
+        "executed_recipes": [
+          "O004",
+          "O046",
+          "O047"
+        ],
+        "affected_lifecycle_executed": false
+      },
+      {
+        "artifact": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/GB-VWAP-2026-02-24.result.json",
+          "sha256": "8dee3baac179e463fd511390fc2f257bf369c93e36a8dd625895ff6b6c542ab0"
+        },
+        "executed_recipes": [
+          "O002",
+          "O004",
+          "O030",
+          "O046"
+        ],
+        "affected_lifecycle_executed": false
+      },
+      {
+        "artifact": {
+          "path": "/workspace/implementation/validation/phase1-completion/source-cases/JJ-range-control-2026-02-24.result.json",
+          "sha256": "d1a1eb358a5a84ac746680a2b15c7aeaa3854ad97c1da85b4d230b8332c78545"
+        },
+        "executed_recipes": [
+          "O005"
+        ],
+        "affected_lifecycle_executed": false
+      }
+    ],
+    "chart_review": "No affected lifecycle recipe executes in the three dated assembled comparisons. Native calculation/chart builders and source selections are unchanged; existing figures and their prior visual reviews remain applicable. Rebuilt method reports still execute current checks and preserve source/history limits."
+  },
+  "changed_tested_inputs": {
+    "implementation/src/trading_research/research/method_pack/assembly.py": {
+      "previous_sha256": "03e9bf861a71e8009dca590a41bc8c32ebb50871450ce3cbbbd86a9a2c0691d5",
+      "current_sha256": "068c858251274ec021a047b7132b10baa633e9c42754a02d099726df02600471"
+    },
+    "implementation/src/trading_research/research/method_pack/evidence.py": {
+      "previous_sha256": "0d387a26e802d5b3698eb4535fc5a2b2c36c22283431a3ef71aad7ff5449bd7c",
+      "current_sha256": "c7c09aa69569b7ba08b2a2f18234f0b8f83c3638626405b7d64f5ed3d379d4f3"
+    },
+    "implementation/src/trading_research/research/method_pack/objects/__init__.py": {
+      "previous_sha256": "897398f17c441c6efe378f890e3943211e43873ca93b38253e0d4ccaca4a7e75",
+      "current_sha256": "807cbc56c661b18690aff0b3853580dd936fc6d28d5e17740f9e0c1af3123d87"
+    },
+    "implementation/src/trading_research/research/method_pack/objects/fixtures_completion_flow.py": {
+      "previous_sha256": "9c88f63270e8cbc7e7f60758f784cbbf82599ce1916436403d1655ee5ffa0f9b",
+      "current_sha256": "50cc993852cc6f6018946cd54380d2f3fac46e01155854d8260ae915b5b414cb"
+    },
+    "implementation/src/trading_research/research/method_pack/objects/lifecycles.py": {
+      "previous_sha256": "da7001dbffbcee62eebdf0e42f6c11f3c8fdb60c4a1020db7043e82f0b874970",
+      "current_sha256": "1a3eb6b5fb96f0e8f53a8c1484c773757264fdc7bb07b165cb1b6d1d7ed8e831"
+    },
+    "implementation/src/trading_research/research/method_pack/objects/native_boundary.py": {
+      "previous_sha256": "b1a426c9b46bb3be04d9fe7a4df7757c2c939e14539003bef8fbbd2defa3a938",
+      "current_sha256": "fc8b07fc0651b79f9397af130bca15baced1963f2de04549a9f9bf437a1ba6a2"
+    },
+    "implementation/src/trading_research/research/method_pack/objects/range_geometry.py": {
+      "previous_sha256": "1629f55e7421f2cae80d9f7024b77b06bbe41e74a2ee88ad448acbab42b83e06",
+      "current_sha256": "38b8b42baf972a009ce586e9bb86faf7eb1940daf0fea6fdc319c6208b084039"
+    },
+    "implementation/tests/test_phase1_complete_lifecycles.py": {
+      "previous_sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda",
+      "current_sha256": "2d2d2f5577cbedb98a679373a096afa6389f5a6719b77e4921ac9293a2a3ec8f"
+    },
+    "implementation/tools/build_phase1_acceptance.py": {
+      "previous_sha256": "2b31b094ec973449072677d07980adfcd6b0409cb79fc8ef241a0239250f1377",
+      "current_sha256": "ceba69ec40e563374c359d45901b989c69295c992297161bc912f548011db466"
+    },
+    "implementation/tools/validate_phase1_audit_regressions.py": {
+      "previous_sha256": "801f6c650e970a675bf7c4960b6e448c98578a00304341dbebf4eac1287bb67d",
+      "current_sha256": "ef10211ee206e75e0a1e1b0f1fb929ffd3350b32f251c1c6a5f72989e90c1561"
+    },
+    "implementation/tools/verify_phase1_completion.py": {
+      "previous_sha256": "86ed271d136329ef99ed9adfb4c7b1577c4a467180e66790d7e97c3ded3c4bc1",
+      "current_sha256": "738d93325b510307299b637f0752738de6cb7586e0f0f2989052e107fe41d7ad"
+    }
+  },
+  "added_tested_inputs": {
+    "implementation/tests/test_phase1_legacy_hole_schemas.py": "9957eba41d567147abf0475fac27fbcd45e8f8223fee22431432fe4a42bfdebf",
+    "implementation/tests/test_phase1_lifecycle_admission.py": "8cc7f906bc1db35ad29dfa9b045de8524d0e460ead2d8db63103416ca3a77ee1",
+    "implementation/tests/test_phase1_lifecycle_correctness.py": "fbcf741d68a579f24af649305e141936d6a2ff4b68fac3391ce72ca9b7c4d9e6",
+    "implementation/tests/test_phase1_postcheck_gate.py": "a8c8949fc7498d500a3f3aa81bf501986ab7b49fb10d0f842973ad98bc7563f7",
+    "implementation/tests/test_phase1_postcheck_regressions.py": "9afffc45d73b28958a50fffdcbde5270110519d2d897b5e36be6636795fd301e",
+    "implementation/tools/validate_phase1_post_implementation_regressions.py": "c3a5607f3efde38fe4023cc0471d15bbddf60c244fb09f4c6f618251c84324e1"
+  },
+  "unchanged_tested_input_count": 372,
+  "current_implementation_dirty_hash": "4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97",
+  "historical_discovery": {
+    "status": "unavailable",
+    "n": null,
+    "search_completed": false
+  },
+  "remaining_defects_in_reviewed_scope": [],
+  "manual_review_rule": "These markers follow inspection of the changed behavior, exact counterexamples, valid controls and passing stable tests. Hash refresh is a reference update after that review, not its substitute."
+}

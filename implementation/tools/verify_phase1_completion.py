@@ -130,6 +130,13 @@ def final_gate():
         assert all(row['status'] == 'complete' for row in matrix[key]), key
     assert matrix['checks']['regression_audit']['status'] == 'pass'
     assert matrix['checks']['regression_audit']['probe_count'] == 27
+    from build_phase1_acceptance import postcheck_summary, regression_audit_summary
+    original_audit = regression_audit_summary()
+    assert original_audit['status'] == 'pass', original_audit
+    postcheck = postcheck_summary()
+    assert postcheck['status'] == 'pass', postcheck
+    assert matrix['checks']['post_implementation_regressions']['status'] == 'pass'
+    verify_ref(matrix['inputs']['post_implementation_regressions'])
     for record in matrix['native_artifacts']:
         verify_ref(record)
     for record in matrix['inputs']['ledgers']:
@@ -249,7 +256,8 @@ def final_gate():
         data_coverage='per_observation_with_evidenced_gaps',
         source_case_agreement='reviewed_figures_controls_and_retained_conflicts',
         historical_discovery=dict(status='unavailable', n=None, search_completed=False),
-        methods=method_rows, evidence=[ref(VALIDATION / p) for p in evidence_paths])
+        methods=method_rows, post_implementation_regressions=postcheck,
+        evidence=[ref(VALIDATION / p) for p in evidence_paths])
     (VALIDATION / 'final-acceptance.json').write_text(json.dumps(outcome, indent=2) + '\n')
     print(json.dumps({k: outcome[k] for k in ('status', 'counts', 'tests', 'historical_discovery')}), flush=True)
     return 0

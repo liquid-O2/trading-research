@@ -239,12 +239,15 @@ def install(fixtures):
         elif rid == "O150":
             placed=inp["placed_at"]
             inp.update(order_id=f"{fid}:order",candidate_id=f"{fid}:candidate",
-                       position_id=f"{fid}:position",order_type="limit",use_at=placed+3,known_at=placed+3,
+                       position_id=f"{fid}:position",instrument_id="NQ-fixture",order_type="limit",use_at=placed+3,known_at=placed+3,
                        source_policy={"policy_id":f"{fid}:policy","stop_ticks":inp["stop_ticks"],
                                       "target_ticks":inp["target_ticks"],"cancel_minutes":inp["cancel_minutes"],
                                       "one_position_at_a_time":True},other_open_positions=0,
-                       order_events=[{"event_id":f"{fid}:fill:0","kind":"fill","qty":1,"at":placed+1},
-                                     {"event_id":f"{fid}:fill:1","kind":"fill","qty":1,"at":placed+2}])
+                       order_events=[{"event_id":f"{fid}:fill:{index}","kind":"fill","qty":1,
+                                      "at":placed+index+1,"known_at":placed+index+1,
+                                      "order_id":f"{fid}:order","position_id":f"{fid}:position",
+                                      "candidate_id":f"{fid}:candidate","instrument_id":"NQ-fixture"}
+                                     for index in range(2)])
             inp.pop("fill_qtys", None)
         elif rid == "O151":
             inp.update(order_id=f"{fid}:order", fill_convention="first later print through limit",

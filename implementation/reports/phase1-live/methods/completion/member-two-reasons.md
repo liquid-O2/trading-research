@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:41:48Z`
+created_at: `2026-09-12T18:02:11Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -57,7 +57,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 56, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -88,15 +88,15 @@ MEMBER-TWO-REASONS | M07 | checks_passed | 0 failures | 0 | 0 | implementation c
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/holes.jsonl sha256=3342c116cb322d651c6f483b2f5fd2246869f3d49f7c107f361dbc54b73f8c01
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/operand-producers.jsonl sha256=8730465a7a9fe6cc8c0f8acb82dd4e54bbffd3f8bb917b78c25a9763bcf38878
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/output-contracts.jsonl sha256=d972f05cb85404ebc5efbdcdae27d1a09aebc06f29c06270045ad54355373fbd
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/fixtures.json sha256=45409d92e208bc0ecfecb72085c49fda66129e236d30c15a95f0b04fe95d6e65
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/cohort.json sha256=6b768ba14e96e0d234b1afee2bac620a5bdb8f9fb0ed6e3ebe49c6077312e1c3
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-aqey5pka/coverage.json sha256=f56d7dc9a2fa094f047f5f00b9bc0641512270b3cc0bf8011437b13ac05aa955
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/holes.jsonl sha256=3342c116cb322d651c6f483b2f5fd2246869f3d49f7c107f361dbc54b73f8c01
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/operand-producers.jsonl sha256=8730465a7a9fe6cc8c0f8acb82dd4e54bbffd3f8bb917b78c25a9763bcf38878
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/output-contracts.jsonl sha256=ae1ac1e57a9633b65ca67735db067b62add420cc8ba20de0dcd748c6bb61ec65
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/fixtures.json sha256=f8492ed892bdf1b5ea4bdaf42253debcb1c2f385ecde383d602b544fadfbe58c
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/cohort.json sha256=6b768ba14e96e0d234b1afee2bac620a5bdb8f9fb0ed6e3ebe49c6077312e1c3
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/member-two-reasons/run-0fs3uelr/coverage.json sha256=f56d7dc9a2fa094f047f5f00b9bc0641512270b3cc0bf8011437b13ac05aa955

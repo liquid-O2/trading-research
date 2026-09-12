@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:47:13Z`
+created_at: `2026-09-12T18:07:33Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -87,7 +87,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 233, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -121,15 +121,15 @@ SIRES | M05 | checks_passed | 0 failures | 0 | 0 | implementation checks; histor
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/holes.jsonl sha256=d7a92a5b659aa331a5477025b38154cf082c7189d58a41268c5be761eccf8bdf
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/operand-producers.jsonl sha256=47a94f76aafc80d4811635ee520bc546b94d45dfd28484ee29af09f76ae7e5ff
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/output-contracts.jsonl sha256=cc7ef85e5a1d14768a0bfe8d40cd4370493af6a24b147f1833664253d2c08d08
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/fixtures.json sha256=6a534307de3311d2e9d233e6549c4d8eb1b123003a95c3ae9046c556b380bde0
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/cohort.json sha256=e60417fa0e95a410e77cbb010c5260679a6d10430ac34e2d0049f37309796d59
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-1rf7mvkj/coverage.json sha256=13c78ad870917093dee6f259530a09e2e082e6c903bf8ffd7d1a184fcd777162
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/holes.jsonl sha256=d7a92a5b659aa331a5477025b38154cf082c7189d58a41268c5be761eccf8bdf
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/operand-producers.jsonl sha256=47a94f76aafc80d4811635ee520bc546b94d45dfd28484ee29af09f76ae7e5ff
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/output-contracts.jsonl sha256=ecafbd4a0c4d671fabbf4ef5d02f04b9970ea91a0a22ff9ca750bdcfbaae4f15
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/fixtures.json sha256=420fd13122438dc888d23a5ed47edfaaa9608aee5ef1167692b68ef7d491aa5b
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/cohort.json sha256=e60417fa0e95a410e77cbb010c5260679a6d10430ac34e2d0049f37309796d59
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/sires/run-0ysw30o0/coverage.json sha256=13c78ad870917093dee6f259530a09e2e082e6c903bf8ffd7d1a184fcd777162

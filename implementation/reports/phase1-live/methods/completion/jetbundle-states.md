@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:42:35Z`
+created_at: `2026-09-12T18:02:57Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -65,7 +65,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 32, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -97,15 +97,15 @@ JETBUNDLE-STATES | M10 | checks_passed | 0 failures | 0 | 0 | implementation che
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/holes.jsonl sha256=596f4ec5cca0f83efc3f51db1c53d17a41cbfcc8c9d03241475048a718fa71b5
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/operand-producers.jsonl sha256=4506c300162944759fc06a3f7d32a0e4795751811991feaa3999751d83c76333
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/output-contracts.jsonl sha256=47d6c140849b41dc01f5163691e5b9757838d29c3eb67e8c29d783680bcb792f
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/fixtures.json sha256=9ad59623b4c71826e4f7ef0573599dcfcfecd6c6065f791c389c6e7d288a9963
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/cohort.json sha256=12587d8f5a094eee5b145909e815964f286000a37a49499492f95f56d06fb4ea
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-up_5612w/coverage.json sha256=019f9611687675abe41ad79356550ff49ec5c433371c890a96fa36a6226a270e
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/holes.jsonl sha256=596f4ec5cca0f83efc3f51db1c53d17a41cbfcc8c9d03241475048a718fa71b5
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/operand-producers.jsonl sha256=4506c300162944759fc06a3f7d32a0e4795751811991feaa3999751d83c76333
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/output-contracts.jsonl sha256=45da19dbc8f047467f9cd0ae4cded679cecdd7697af4686421c7ba9dfa80a7ab
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/fixtures.json sha256=4b7e34e111950cb60d431cfa77c17b8f800234a1b2a3616d140bd98d3d819ca0
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/cohort.json sha256=12587d8f5a094eee5b145909e815964f286000a37a49499492f95f56d06fb4ea
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/jetbundle-states/run-a_8j1qwn/coverage.json sha256=019f9611687675abe41ad79356550ff49ec5c433371c890a96fa36a6226a270e

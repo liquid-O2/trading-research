@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:41:26Z`
+created_at: `2026-09-12T18:01:48Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -59,7 +59,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 30, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -91,15 +91,15 @@ GB-SCALP | M04 | checks_passed | 0 failures | 0 | 0 | implementation checks; his
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/holes.jsonl sha256=549fc384ed6e8966cd4e6e019d9f0fe5810baa47041fd342cb8aad40e98ccd41
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/operand-producers.jsonl sha256=677b9bf5f6083c194dd7e8a7bcfec8419e4c7d3bd70c734a2b76e25dad124f82
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/output-contracts.jsonl sha256=136547bc5731290f457d53e7fadfe391121dde822a8e558878494636a6ac5692
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/fixtures.json sha256=cdb09d8b77036a35e4537d886dab55efed3753ca4c62e6d887d56b33550c9f54
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/cohort.json sha256=2c391d855a5b93031e062f5cda94984faad41a322c836b066da8e4264d02e5b2
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-d65ww1fy/coverage.json sha256=2e2056726bfbb6137dddeef4cc5f7b5e62aaabdc7c1998e97338d4178fd33533
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/holes.jsonl sha256=549fc384ed6e8966cd4e6e019d9f0fe5810baa47041fd342cb8aad40e98ccd41
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/operand-producers.jsonl sha256=677b9bf5f6083c194dd7e8a7bcfec8419e4c7d3bd70c734a2b76e25dad124f82
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/output-contracts.jsonl sha256=4019cc9ed0a1c8cda537be93ed24cdd3142de4695235a6f72a6e7ab25a64b1a8
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/fixtures.json sha256=ef99c5c705e5f32e2639083ab432801ed7ec5e7fb0ff81716f22b1d3796dce35
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/cohort.json sha256=2c391d855a5b93031e062f5cda94984faad41a322c836b066da8e4264d02e5b2
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/gb-scalp/run-3vwypsrb/coverage.json sha256=2e2056726bfbb6137dddeef4cc5f7b5e62aaabdc7c1998e97338d4178fd33533

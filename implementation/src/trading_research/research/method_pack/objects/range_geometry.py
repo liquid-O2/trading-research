@@ -492,7 +492,13 @@ def o005(inp: dict) -> RecipeResult:
 
 
 def o006(inp: dict) -> RecipeResult:
-    return o005(inp) if not isinstance(inp.get("range"), RangeGeometry) else _r("O006", {**_range_payload(inp["range"]), "source_clock_verified": inp.get("source_clock_verified")}, holes=[] if inp.get("source_clock_verified") is True else ["HOLE:O006:source_clock"], known_at=inp["range"].known_at)
+    if not isinstance(inp.get("range"), RangeGeometry):
+        return _r("O006", {"range_id": inp.get("range_id"), "instrument_id": inp.get("instrument_id"),
+            "source_clock_id": inp.get("source_clock_id"), "L": dec(inp.get("L")), "H": dec(inp.get("H")),
+            "W": None, "formation_start": inp.get("start_ns"), "formation_end": inp.get("end_ns"),
+            "range_known_at": None, "range_frozen": False, "member_ids": [], "source_clock_verified": None},
+            holes=["HOLE:O006:native_members", "HOLE:O006:source_clock"], base_ok=None, coverage_ok=None)
+    return _r("O006", {**_range_payload(inp["range"]), "source_clock_verified": inp.get("source_clock_verified")}, holes=[] if inp.get("source_clock_verified") is True else ["HOLE:O006:source_clock"], known_at=inp["range"].known_at)
 
 
 def _selected_contact(inp: Mapping[str, Any], bands: Sequence[Sequence[Decimal]]) -> dict:
@@ -1861,6 +1867,15 @@ REQUIRED_INPUTS = {
 }
 
 
+GUARD_HOLE_PAYLOADS = {
+    # Missing identified candles cannot certify a band, side, or confirmation.
+    # The registry retains any supplied candle literals alongside these holes.
+    "O056": lambda result: {"ob_band": None, "ob_mid": None, "confirmation_at": None,
+        "confirmed": None, "sweep_side": None, "selected_entry_mode": None,
+        "selected_stop": None, "candle_ids": [], "timeframe": None},
+}
+
+
 F = OutputField
 
 
@@ -1879,8 +1894,8 @@ OUTPUT_SCHEMAS = {
         L=(D,False), H=(D,False), W=(D,False), formation_start=(I,False), formation_end=(I,False),
         known_at=N_I, range_known_at=N_I, range_frozen=(B,False), coverage_ok=N_B,
         member_ids=(LST,False), parent_id=N_S),
-    "O006": _fields(source_clock_id=(S,False), range_id=(S,False), instrument_id=((str,int),False),
-        L=(D,False), H=(D,False), W=(D,False), formation_start=(I,False), formation_end=(I,False),
+    "O006": _fields(source_clock_id=N_S, range_id=N_S, instrument_id=((str,int),True),
+        L=N_D, H=N_D, W=N_D, formation_start=N_I, formation_end=N_I,
         known_at=N_I, range_known_at=N_I, range_frozen=(B,False), coverage_ok=N_B,
         member_ids=(LST,False), parent_id=N_S, source_clock_verified=N_B),
     "O007": _fields(parent_id=N_S,q25=(D,False),eq=(D,False),q75=(D,False),selected_contact=N_B,selected_contact_at=N_I),
@@ -1899,7 +1914,7 @@ OUTPUT_SCHEMAS = {
         opening_context=((str,dict),True),rvol_known_at=N_I,open_at=N_I,reference_ids=(LST,False)),
     "O014": _fields(upper_ladder=(MAP,False),lower_ladder=(MAP,False),selected_band=((list,tuple),True),
         sweep_depth_points=N_D,sweep_depth_W=N_D,touch_at=N_I,parent_id=N_S),
-    "O015": _fields(upper_band=(LST,False),lower_band=(LST,False),parent_id=N_S,known_at=N_I,selected_contact=N_B,selected_contact_at=N_I),
+    "O015": _fields(upper_band=(LST,True),lower_band=(LST,True),parent_id=N_S,known_at=N_I,selected_contact=N_B,selected_contact_at=N_I),
     "O016": _fields(outer_id=N_S,inner_id=N_S,outer_width=(D,False),inner_width=N_D,
         outer_mid=(D,False),inner_mid=N_D,parent_binding=N_S,inner_geometry_known=N_B,
         automatic_inner_span=((dict,list),True),literal_labels=(LST,False)),
@@ -1953,8 +1968,8 @@ OUTPUT_SCHEMAS = {
         mss_after_failure=N_B,automatic_mss=((dict,bool),True),linked_gap_id=N_S,failure_id=N_S,order_ok=N_B),
     "O055": _fields(gap_lo=N_D,gap_hi=N_D,gap_known_at=N_I,construction=N_S,gap_id=N_S,
         defining_candle_ids=(LST,False),active_at_use=N_B,contact_or_fill=(MAP,False)),
-    "O056": _fields(ob_band=(LST,False),ob_mid=(D,False),confirmation_at=(I,False),confirmed=(B,False),
-        sweep_side=(S,False),selected_entry_mode=N_S,selected_stop=N_D,candle_ids=(LST,False),timeframe=N_S),
+    "O056": _fields(ob_band=(LST,True),ob_mid=N_D,confirmation_at=N_I,confirmed=N_B,
+        sweep_side=N_S,selected_entry_mode=N_S,selected_stop=N_D,candle_ids=(LST,False),timeframe=N_S),
     "O057": _fields(body_lo=(D,False),body_hi=(D,False),rejection_band=(LST,False),wick_width=(D,False),
         has_wick=(B,False),known_at=N_I,stop_policy=((str,dict),True),entry_policy=((str,dict),True),
         candle_id=N_S,timeframe=N_S),

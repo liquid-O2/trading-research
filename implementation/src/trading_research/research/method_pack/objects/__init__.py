@@ -25,7 +25,9 @@ def _install_domain(module):
     """
     for recipe_id, producer in getattr(module, 'REGISTRATION_OVERRIDES', {}).items():
         required = getattr(module, 'REQUIRED_INPUTS', {}).get(recipe_id, ())
-        def wrapped(inputs, producer=producer, recipe_id=recipe_id, required=required):
+        hole_payload = getattr(module, 'GUARD_HOLE_PAYLOADS', {}).get(recipe_id)
+        def wrapped(inputs, producer=producer, recipe_id=recipe_id, required=required,
+                    hole_payload=hole_payload):
             blocked = guard(inputs, recipe_id, required)
             if blocked is not None:
                 if blocked.reason in {'dependency available after use', 'dependency available after claimed snapshot'} and all(inputs.get(key) is not None for key in required):
@@ -34,6 +36,10 @@ def _install_domain(module):
                     observed.hole_ids = list(dict.fromkeys(observed.hole_ids + blocked.hole_ids))
                     observed.reason = blocked.reason
                     return observed
+                if blocked.state == 'hole' and hole_payload is not None:
+                    # Opt-in domain payloads preserve the guard's unknown
+                    # validity, clocks, holes, and declared literal inputs.
+                    blocked.value = {**hole_payload(blocked), **blocked.value}
                 return blocked
             return producer(inputs)
         wrapped.__name__ = producer.__name__

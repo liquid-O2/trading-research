@@ -3,7 +3,7 @@
 formula_version: `method-pack-v1`
 implementation_checks: `checks_passed`
 historical_discovery: `unavailable`
-created_at: `2026-09-12T16:45:40Z`
+created_at: `2026-09-12T18:06:06Z`
 
 Implementation checks, source reconstruction and historical discovery are separate results. A passing check verifies the report's implementation evidence; it does not establish every private source setting or a historical sample.
 
@@ -59,7 +59,7 @@ Partial years: none.
 ## Validation
 
 Quality: `{"assembly_implementation_failures": 0, "detected_causal_violations": 34, "duplicate_candidates": 0, "fixture_failures": 0, "leakage_count": 0, "missing_operand_implementations": 0, "output_schema_failures": 0, "proxy_as_faithful_count": 0, "rejected_proxy_attempts": 0, "unbound_fields": 0, "year_reconciliation_errors": 0}`.
-Implementation: `0836e3cbb77b1f56df0754e6c5b723dba256bcd1`; content hash `e784524fdf589f4724564ff5c958c5829710fade5d45f0fe448f9273c71c17ed`.
+Implementation: `662463b545394e663937be2d83e0677f50492dc3`; content hash `4962839b1ad3f3216b1541abad364b7a069b1ef94acc88b679df16c614141c97`.
 
 ## Separate acceptance dimensions
 
@@ -91,15 +91,15 @@ STOIC-DATA | M11 | checks_passed | 0 failures | 0 | 0 | implementation checks; h
 
 ## Artifacts
 
-- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/holes.jsonl sha256=63f458df0419f6f6b454eace193a3e959b0dec8cde911fe36686402ff1f5731e
-- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/operand-producers.jsonl sha256=9f0d744f1a88aa40481c551f234fabda9c77dcff73883d8ca0d53163ca319408
-- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/output-contracts.jsonl sha256=25e3950bc15e6642dfbd4519ea1b6073a013e6f26964a55ee508d22c400dad4d
-- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/fixtures.json sha256=35f9eac53d0c53009a7232d037dfc1c3531d9422531214542e0eb26c45a048a7
-- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/cohort.json sha256=3dbe172ceeb8e8f3b69b959e3587a36c72c7d861993e140ea1cef0f34f7b1d10
-- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-mzbep8n5/coverage.json sha256=f62aac397e6bd8917b3fb904261ebd02b02bddbdc0be8c0fc06376caad765d77
+- `candidates.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/candidates.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `objects.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/objects.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `holes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/holes.jsonl sha256=63f458df0419f6f6b454eace193a3e959b0dec8cde911fe36686402ff1f5731e
+- `management.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/management.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `reference-outcomes.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/reference-outcomes.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `assembly.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/assembly.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `operand-producers.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/operand-producers.jsonl sha256=9f0d744f1a88aa40481c551f234fabda9c77dcff73883d8ca0d53163ca319408
+- `output-contracts.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/output-contracts.jsonl sha256=25e3950bc15e6642dfbd4519ea1b6073a013e6f26964a55ee508d22c400dad4d
+- `native-window-audits.jsonl` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/native-window-audits.jsonl sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+- `fixtures.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/fixtures.json sha256=69a70caae8ece0fd3ebbc3425567444ae2bde4d2e69b353bb1d59bac05dc8276
+- `cohort.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/cohort.json sha256=3dbe172ceeb8e8f3b69b959e3587a36c72c7d861993e140ea1cef0f34f7b1d10
+- `coverage.json` /workspace/implementation/reports/phase1-live/methods/completion/stoic-data/run-d13ef3fi/coverage.json sha256=f62aac397e6bd8917b3fb904261ebd02b02bddbdc0be8c0fc06376caad765d77

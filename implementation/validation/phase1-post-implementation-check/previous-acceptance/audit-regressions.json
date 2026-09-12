@@ -1,0 +1,1931 @@
+{
+  "schema": "phase1-audit-regressions-v2",
+  "original": {
+    "path": "/workspace/implementation/reports/phase1-live/methods/charts/full-audit-probes.json",
+    "sha256": "31a6f1889471386f2123afb148730cb00d320414cbd3872a638e0245a73df420"
+  },
+  "status": "pass",
+  "probes": [
+    {
+      "id": "P01",
+      "object_id": "O001",
+      "status": "pass",
+      "original_finding": "Untimed bars accepted as complete interval coverage",
+      "contract_expectation": "Exact requested intervals and native identity must be checked.",
+      "original_input": {
+        "bars": [
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          },
+          {
+            "complete": true
+          }
+        ],
+        "trades": [
+          {
+            "side": "B",
+            "size": 1
+          }
+        ],
+        "required_minutes": 5
+      },
+      "actual": {
+        "recipe_id": "O001",
+        "state": "hole",
+        "value": {
+          "bars": [
+            {
+              "complete": true
+            },
+            {
+              "complete": true
+            },
+            {
+              "complete": true
+            },
+            {
+              "complete": true
+            },
+            {
+              "complete": true
+            }
+          ]
+        },
+        "hole_ids": [
+          "HOLE:O001:instrument_id",
+          "HOLE:O001:start_ns",
+          "HOLE:O001:end_ns",
+          "HOLE:O001:required_fields"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "missing required datum",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_native_contracts.py",
+        "test": "test_P01_exact_interval_coverage_cannot_use_row_count",
+        "sha256": "00d71e60d38e53d3c8b8652009297b7e3e09cbf7fe99c21f12d314543b6710b7"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P02",
+      "object_id": "O004",
+      "status": "pass",
+      "original_finding": "Empty bar marked complete",
+      "contract_expectation": "No OHLC members cannot form a complete time bar.",
+      "original_input": {
+        "members": [],
+        "end_ns": 1768489320000000000,
+        "known_at": 1768489320000000000,
+        "use_at": 1768489380000000000
+      },
+      "actual": {
+        "recipe_id": "O004",
+        "state": "hole",
+        "value": {
+          "bar_id": null,
+          "instrument_id": null,
+          "kind": null,
+          "size": null,
+          "start": null,
+          "end": 1768489320000000000,
+          "O": null,
+          "H": null,
+          "L": null,
+          "C": null,
+          "V": null,
+          "complete": false,
+          "known_at": null,
+          "native_source_compatible": null,
+          "coverage_state": "missing_required_observation",
+          "member_event_ids": [],
+          "missing_intervals": []
+        },
+        "hole_ids": [
+          "HOLE:O004:instrument_id",
+          "HOLE:O004:start_ns",
+          "HOLE:O004:kind",
+          "HOLE:O004:size_minutes"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "missing instrument_id, start_ns, kind, size_minutes",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_native_contracts.py",
+        "test": "test_exact_bar_alignment_and_identity",
+        "sha256": "00d71e60d38e53d3c8b8652009297b7e3e09cbf7fe99c21f12d314543b6710b7"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P03",
+      "object_id": "O006",
+      "status": "pass",
+      "original_finding": "Unverified clock promoted to verified",
+      "contract_expectation": "An absent source clock verification is unknown.",
+      "original_input": {
+        "start_ns": 1768464000000000000,
+        "end_ns": 1768465800000000000,
+        "L": 200,
+        "H": 208,
+        "clock_id": "03:00-03:30",
+        "known_at": 1768465800000000000,
+        "use_at": 1768466100000000000
+      },
+      "actual": {
+        "recipe_id": "O005",
+        "state": "hole",
+        "value": {
+          "known_at": null,
+          "range_known_at": null,
+          "coverage_ok": null,
+          "parent_id": null,
+          "range_id": null,
+          "L": "200",
+          "H": "208",
+          "W": null,
+          "formation_start": 1768464000000000000,
+          "formation_end": 1768465800000000000,
+          "range_frozen": false
+        },
+        "hole_ids": [
+          "HOLE:O005:native_members"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_native_contracts.py",
+        "test": "test_P03_absent_clock_verification_is_unknown",
+        "sha256": "00d71e60d38e53d3c8b8652009297b7e3e09cbf7fe99c21f12d314543b6710b7"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P04",
+      "object_id": "O015",
+      "status": "pass",
+      "original_finding": "Different parent width substituted",
+      "contract_expectation": "Band geometry must use its own parent width.",
+      "original_input": {
+        "L": 100,
+        "H": 120,
+        "parent_id": "inner",
+        "known_at": 1768485600000000000,
+        "use_at": 1768489200000000000,
+        "use_outer_w": true,
+        "outer_W": 40
+      },
+      "actual": {
+        "recipe_id": "O015",
+        "state": "hole",
+        "value": {
+          "parent_id": "inner",
+          "known_at": 1768485600000000000,
+          "selected_contact": null,
+          "selected_contact_at": null,
+          "upper_band": null,
+          "lower_band": null
+        },
+        "hole_ids": [
+          "HOLE:O015:coordinate_convention"
+        ],
+        "known_at": 1768485600000000000,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_range_geometry.py",
+        "test": "test_extensions_bind_the_selected_parent_and_do_not_substitute_outer_width",
+        "sha256": "5d6e394778554beaaa23c3c04763281aa225ccc6f16f6209ea8086bb2c859dc1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P05",
+      "object_id": "O031",
+      "status": "pass",
+      "original_finding": "VWAP result backdated to anchor confirmation",
+      "contract_expectation": "Updated AVWAP availability must include the observed trades.",
+      "original_input": {
+        "trades": [
+          {
+            "price": 100,
+            "size": 1,
+            "t": 10
+          },
+          {
+            "price": 110,
+            "size": 1,
+            "t": 20
+          }
+        ],
+        "anchor_price_at": 10,
+        "anchor_known_at": 10,
+        "as_of": 20,
+        "known_at": 10,
+        "use_at": 15
+      },
+      "actual": {
+        "recipe_id": "O031",
+        "state": "invalid",
+        "value": {
+          "sum_v": "0",
+          "sum_pv": "0",
+          "sum_p2v": "0",
+          "weighted_variance_population": null,
+          "vwap": null,
+          "comparison_vwap": null,
+          "reset_id": null,
+          "reset_at": 10,
+          "basis": null,
+          "as_of": 20,
+          "known_at": null,
+          "member_event_ids": [],
+          "faithful": false,
+          "variant": "source",
+          "vwap_at_retest": null,
+          "vwap_known_at": null,
+          "vwap_reset_verified": null,
+          "source_vwap_known": false,
+          "automatic_reset": null,
+          "anchor_id": null,
+          "anchor_price_at": 10,
+          "anchor_known_at": 10,
+          "anchor_selected_at": null,
+          "anchor_reason": null,
+          "avwap": null,
+          "usable_at": null,
+          "usable": false
+        },
+        "hole_ids": [
+          "HOLE:O031:reset_id",
+          "HOLE:O031:basis",
+          "HOLE:O031:instrument_id",
+          "HOLE:O031:canonical_tape_id",
+          "HOLE:O031:anchor_reason",
+          "HOLE:O031:anchor_selected_at",
+          "HOLE:O031:coverage",
+          "HOLE:O031:source_price_basis",
+          "HOLE:O031:availability",
+          "HOLE:O031:zero_volume",
+          "HOLE:O031:snapshot_after_use"
+        ],
+        "known_at": null,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "snapshot_after_use",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_native_contracts.py",
+        "test": "test_P05_consumed_future_observation_cannot_certify",
+        "sha256": "00d71e60d38e53d3c8b8652009297b7e3e09cbf7fe99c21f12d314543b6710b7"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P06",
+      "object_id": "O047",
+      "status": "pass",
+      "original_finding": "Confirmation before sweep accepted",
+      "contract_expectation": "Sweep must precede confirmation.",
+      "original_input": {
+        "reference_px": 110,
+        "side": "short",
+        "sweep_px": 111,
+        "sweep_at": 30,
+        "confirm_close": 109,
+        "confirm_at": 20,
+        "decision_at": 40,
+        "reference_known_at": 10,
+        "known_at": 20,
+        "use_at": 40
+      },
+      "actual": {
+        "recipe_id": "O047",
+        "state": "invalid",
+        "value": {},
+        "hole_ids": [
+          "HOLE:O047:evidence"
+        ],
+        "known_at": null,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "sweep side must be high or low",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_range_geometry.py",
+        "test": "test_sweep_failure_requires_strict_side_and_strict_event_order_in_both_directions",
+        "sha256": "5d6e394778554beaaa23c3c04763281aa225ccc6f16f6209ea8086bb2c859dc1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P07",
+      "object_id": "O050",
+      "status": "pass",
+      "original_finding": "Future events influence an opening observation",
+      "contract_expectation": "Observation must exclude events after use and advance its own known_at.",
+      "original_input": {
+        "open_px": 100,
+        "open_at": 10,
+        "events": [
+          {
+            "t": 20,
+            "price": 99
+          },
+          {
+            "t": 30,
+            "price": 101
+          }
+        ],
+        "known_at": 10,
+        "use_at": 15
+      },
+      "actual": {
+        "recipe_id": "O050",
+        "state": "hole",
+        "value": {
+          "cash_open": "100",
+          "open_event_id": null,
+          "known_at": 10,
+          "cross_below_at": null,
+          "cross_above_at": null,
+          "source_open_reclaim": null,
+          "reclaim_at": null,
+          "as_of": 15
+        },
+        "hole_ids": [
+          "HOLE:O050:confirmation"
+        ],
+        "known_at": 10,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_range_geometry.py",
+        "test": "test_cash_open_path_is_clipped_to_as_of_and_never_backdates_reclaim",
+        "sha256": "5d6e394778554beaaa23c3c04763281aa225ccc6f16f6209ea8086bb2c859dc1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P08",
+      "object_id": "O056",
+      "status": "pass",
+      "original_finding": "Documented bearish orderblock has no mirrored evaluation",
+      "contract_expectation": "Supplied bearish mirror must use the swept high and close below candle two.",
+      "original_input": {
+        "c1_l": 99,
+        "c2": {
+          "O": 102,
+          "H": 104,
+          "L": 100,
+          "C": 101
+        },
+        "c3_close": 99,
+        "c3_known_at": 1768488180000000000,
+        "decision_at": 1768488240000000000,
+        "known_at": 1768488180000000000,
+        "use_at": 1768488240000000000,
+        "side": "short",
+        "c1_h": 103
+      },
+      "actual": {
+        "recipe_id": "O056",
+        "state": "hole",
+        "value": {
+          "c2": {
+            "O": 102,
+            "H": 104,
+            "L": 100,
+            "C": 101
+          }
+        },
+        "hole_ids": [
+          "HOLE:O056:c1",
+          "HOLE:O056:c3",
+          "HOLE:O056:sweep_side"
+        ],
+        "known_at": 1768488180000000000,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "missing required datum",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_range_geometry.py",
+        "test": "test_orderblock_pattern_is_complete_c2_range_and_has_bearish_mirror",
+        "sha256": "5d6e394778554beaaa23c3c04763281aa225ccc6f16f6209ea8086bb2c859dc1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P09",
+      "object_id": "O058",
+      "status": "pass",
+      "original_finding": "One-volume history accepted for 14-period average",
+      "contract_expectation": "Fourteen completed prior candles are needed for the stated average.",
+      "original_input": {
+        "O": 100,
+        "C": 102,
+        "H": 110,
+        "L": 100,
+        "V": 200,
+        "prior_volumes": [
+          100
+        ],
+        "known_at": 1768488180000000000,
+        "use_at": 1768488240000000000
+      },
+      "actual": {
+        "recipe_id": "O058",
+        "state": "hole",
+        "value": {
+          "body_ratio": "0.2",
+          "volume_average": null,
+          "volume_ratio": null,
+          "small_body": null,
+          "high_volume": null,
+          "source_zone_flag": null,
+          "history_ids": [
+            null
+          ],
+          "thresholds": {
+            "body": "0.6",
+            "volume": "1.5",
+            "periods": 14
+          }
+        },
+        "hole_ids": [
+          "HOLE:O058:current_candle_identity",
+          "HOLE:O058:history_identity",
+          "HOLE:O058:history_clock",
+          "HOLE:O058:history_14"
+        ],
+        "known_at": 1768488180000000000,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_range_geometry.py",
+        "test": "test_absorption_uses_exactly_fourteen_prior_complete_causal_bars",
+        "sha256": "5d6e394778554beaaa23c3c04763281aa225ccc6f16f6209ea8086bb2c859dc1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P10",
+      "object_id": "O065",
+      "status": "pass",
+      "original_finding": "Absent visit coverage certifies untested POC",
+      "contract_expectation": "Missing full visit history is unknown.",
+      "original_input": {
+        "poc": 105,
+        "as_of": 1768488000000000000,
+        "known_at": 1768424400000000000,
+        "use_at": 1768488000000000000
+      },
+      "actual": {
+        "recipe_id": "O065",
+        "state": "hole",
+        "value": {
+          "untested": null,
+          "untested_at_decision": null,
+          "first_qualifying_visit": null,
+          "active_reference_id": null,
+          "poc": "105",
+          "profile_id": null,
+          "snapshot_id": null
+        },
+        "hole_ids": [
+          "HOLE:O065:reference_id",
+          "HOLE:O065:profile_id",
+          "HOLE:O065:snapshot_id",
+          "HOLE:O065:coverage"
+        ],
+        "known_at": 1768424400000000000,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_profiles.py",
+        "test": "test_missing_coverage_is_unknown_and_cannot_certify_an_untested_reference",
+        "sha256": "a303f40f98b0532a0f1267afbdaae021c03f867708a2433d1307c472629287e6"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P11",
+      "object_id": "O081",
+      "status": "pass",
+      "original_finding": "Lower poor-tail branch hard-coded false",
+      "contract_expectation": "Evaluate the explicitly supplied one-letter outer criterion on the lower side.",
+      "original_input": {
+        "rows": {
+          "100": [
+            "D"
+          ],
+          "101": [
+            "B",
+            "D"
+          ]
+        },
+        "instrument": "NQ",
+        "side": "lower",
+        "poor_criterion": "one_letter_outer",
+        "known_at": 1768491000000000000,
+        "use_at": 1768491060000000000
+      },
+      "actual": {
+        "recipe_id": "O081",
+        "state": "invalid",
+        "value": {},
+        "hole_ids": [
+          "HOLE:O081:evidence"
+        ],
+        "known_at": null,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "price_step is required",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_auction_geometry.py",
+        "test": "test_excess_and_poor_extremes_are_side_specific_and_grid_adjacent",
+        "sha256": "c8417d688109aa226a6ff9467cba0b0f55d00b2be550ecd3921c42dd0e4d02a1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P12",
+      "object_id": "O085",
+      "status": "pass",
+      "original_finding": "Reversed break/retest chronology accepted",
+      "contract_expectation": "Retest must follow the break before entry permission.",
+      "original_input": {
+        "shape": "P",
+        "author": "saint",
+        "balance": [
+          100,
+          105
+        ],
+        "known_at": 1768489200000000000,
+        "use_at": 1768489500000000000,
+        "break_at": 30,
+        "retest_at": 20
+      },
+      "actual": {
+        "recipe_id": "O085",
+        "state": "invalid",
+        "value": {},
+        "hole_ids": [
+          "HOLE:O085:ordering"
+        ],
+        "known_at": null,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "break must precede retest",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_auction_geometry.py",
+        "test": "test_shape_break_retest_requires_causal_order_and_decision_clock",
+        "sha256": "c8417d688109aa226a6ff9467cba0b0f55d00b2be550ecd3921c42dd0e4d02a1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P13",
+      "object_id": "O093",
+      "status": "pass",
+      "original_finding": "Missing rejection accepted as route confirmation",
+      "contract_expectation": "Required breakout/tag/rejection/decision sequence cannot pass with absent rejection.",
+      "original_input": {
+        "va_lo": 100,
+        "va_hi": 110,
+        "older_poc": 115,
+        "older_id": "old",
+        "established_id": "est",
+        "breakout_at": 1768488000000000000,
+        "tag_at": 1768488300000000000,
+        "tag_px": 115,
+        "rejection_from": "above",
+        "decision_at": 1768488420000000000,
+        "side": "short",
+        "target": 110,
+        "known_at": 1768486800000000000,
+        "use_at": 1768488420000000000
+      },
+      "actual": {
+        "recipe_id": "O093",
+        "state": "invalid",
+        "value": {},
+        "hole_ids": [
+          "HOLE:O093:identity"
+        ],
+        "known_at": null,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "failed-auction route requires two distinct balance identities",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_auction_geometry.py",
+        "test": "test_failed_auction_routes_keep_sires_and_saint_sequences_distinct",
+        "sha256": "c8417d688109aa226a6ff9467cba0b0f55d00b2be550ecd3921c42dd0e4d02a1"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P14",
+      "object_id": "O102",
+      "status": "pass",
+      "original_finding": "Zero consumption and refresh called replenishment",
+      "contract_expectation": "A nonempty mapping is not executed replenishment.",
+      "original_input": {
+        "lifecycle": {
+          "consumed": 0,
+          "refresh": 0,
+          "final_display": 12
+        },
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000
+      },
+      "actual": {
+        "recipe_id": "O102",
+        "state": "hole",
+        "value": {
+          "price": null,
+          "passive_side": null,
+          "consumption_events": [],
+          "refresh_events": [],
+          "observed_same_price_size_changes": [],
+          "consumption": "0",
+          "refresh": "0",
+          "final_display": "12",
+          "net": null,
+          "bbo_reload_inference": null,
+          "verified_replenishment": null,
+          "hold": null
+        },
+        "hole_ids": [
+          "HOLE:O102:consumption_events",
+          "HOLE:O102:refresh_events",
+          "HOLE:O102:event_identity"
+        ],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_local_flow.py",
+        "test": "test_dom_bbo_change_does_not_invent_execution_depth_or_hidden_reserve",
+        "sha256": "4ba48f165b6f2cae5301aeb92ee5d0ed1137b75d971d5fd6da827cb7e1f544b8"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P15",
+      "object_id": "O107",
+      "status": "pass",
+      "original_finding": "Unknown-side volume omitted from concentration denominator",
+      "contract_expectation": "Unknown-side volume must be retained in total and uncertainty.",
+      "original_input": {
+        "B": 80,
+        "A": 20,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000,
+        "N": 100
+      },
+      "actual": {
+        "recipe_id": "O107",
+        "state": "hole",
+        "value": {
+          "band": null,
+          "extreme": null,
+          "buy_volume": "80",
+          "sell_volume": "20",
+          "unknown_volume": "100",
+          "delta": "60",
+          "total": "200",
+          "fraction": null,
+          "fraction_interval": [
+            "-0.2",
+            "0.8"
+          ],
+          "price_response": null,
+          "source_spike": null
+        },
+        "hole_ids": [
+          "HOLE:O107:unknown_side",
+          "HOLE:O107:classifier"
+        ],
+        "known_at": 1768489200000000000,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_local_flow.py",
+        "test": "test_unknown_volume_makes_delta_concentration_an_interval_p15",
+        "sha256": "4ba48f165b6f2cae5301aeb92ee5d0ed1137b75d971d5fd6da827cb7e1f544b8"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P16",
+      "object_id": "O115",
+      "status": "pass",
+      "original_finding": "Missing defense stages yield order_ok",
+      "contract_expectation": "All required stages need evidence and causal ordering.",
+      "original_input": {
+        "origin": 100,
+        "q": "0.25",
+        "reward_px": "100.75",
+        "entry_at": 1768488181000000000,
+        "entry": 101,
+        "confirm_px": "100.75",
+        "known_at": 1768488180000000000,
+        "use_at": 1768488181000000000
+      },
+      "actual": {
+        "recipe_id": "O115",
+        "state": "hole",
+        "value": {
+          "origin": "100",
+          "direction": null,
+          "stage_ledger": {
+            "defense": null,
+            "replenishment": null,
+            "exhaustion": null,
+            "liftoff": null,
+            "entry": 1768488181000000000
+          },
+          "defender_aggression_events": [],
+          "reward_price": "100.75",
+          "reward_points": "0.75",
+          "reward_ticks": "3",
+          "entry_distance_ticks": "1",
+          "directional_reward": null,
+          "geometry_ok": true,
+          "order_ok": null
+        },
+        "hole_ids": [
+          "HOLE:O115:defense",
+          "HOLE:O115:replenishment",
+          "HOLE:O115:exhaustion",
+          "HOLE:O115:liftoff",
+          "HOLE:O115:direction",
+          "HOLE:O115:defender_aggression"
+        ],
+        "known_at": 1768488181000000000,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_local_flow.py",
+        "test": "test_liftoff_requires_all_ordered_stages_and_directional_reward_p16",
+        "sha256": "4ba48f165b6f2cae5301aeb92ee5d0ed1137b75d971d5fd6da827cb7e1f544b8"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P17",
+      "object_id": "O123",
+      "status": "pass",
+      "original_finding": "Zero lift-off reward passes geometry",
+      "contract_expectation": "The documented two-to-four-tick reward must be checked separately from entry distance.",
+      "original_input": {
+        "origin": 100,
+        "confirm_px": 100,
+        "entry": 100,
+        "q": "0.25",
+        "daily_r": -3,
+        "daily_cap": -4,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000
+      },
+      "actual": {
+        "recipe_id": "O123",
+        "state": "hole",
+        "value": {
+          "branch_id": null,
+          "band_id": null,
+          "side": null,
+          "stage_ledger": {
+            "defense": null,
+            "replenishment": null,
+            "exhaustion": null,
+            "liftoff": null,
+            "decision": null
+          },
+          "defense": null,
+          "replenishment": null,
+          "opponent_thinning": null,
+          "absorber_aggressive": null,
+          "lift_off": null,
+          "reward_ticks": "0E+2",
+          "distance_ticks": "0E+2",
+          "entry_distance_ticks": "0E+2",
+          "reward_gate_ok": false,
+          "entry_gate_ok": true,
+          "daily_r_before": "-3",
+          "daily_stop_ok": true,
+          "geometry_ok": false,
+          "stage_evidence_ok": null,
+          "branch_ok": false,
+          "size_halved_repairs": false
+        },
+        "hole_ids": [
+          "HOLE:O123:defense",
+          "HOLE:O123:replenishment",
+          "HOLE:O123:exhaustion",
+          "HOLE:O123:liftoff",
+          "HOLE:O123:decision",
+          "HOLE:O123:opponent_thinning",
+          "HOLE:O123:absorber_aggressive",
+          "HOLE:O123:lift_off",
+          "HOLE:O123:branch_id",
+          "HOLE:O123:band_id",
+          "HOLE:O123:side"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_flow_sequences.py",
+        "test": "test_stop_branch_enforces_two_to_four_reward_zero_to_two_entry_and_daily_gate_p17",
+        "sha256": "1bd26494ebfa7ad9b349bf56e6c2d81d2c4e0ef98031d379aab606f592cc843d"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P18",
+      "object_id": "O127",
+      "status": "pass",
+      "original_finding": "False tape qualification promoted to true",
+      "contract_expectation": "Explicit failure of the supplied tape criterion must not qualify.",
+      "original_input": {
+        "entry": "101.25",
+        "stop": "99.75",
+        "side": "long",
+        "r_multiple": 2,
+        "known_at": 1768489200000000000,
+        "use_at": 1768489260000000000,
+        "dying_tape": false
+      },
+      "actual": {
+        "recipe_id": "O127",
+        "state": "hole",
+        "value": {
+          "branch_id": null,
+          "side": "long",
+          "buyers_area_id": null,
+          "buyers_area": null,
+          "entry": "101.25",
+          "stop": "99.75",
+          "initial_risk": "1.50",
+          "r_multiple": "2",
+          "r2": "104.25",
+          "r_in_1_to_3": true,
+          "stage_ledger": {
+            "failure": null,
+            "entry_trigger": null,
+            "decision": null
+          },
+          "source_squeeze_failed": null,
+          "tape_died_at_failure": false,
+          "no_aggression_at_failure": null,
+          "buyers_area_identified": null,
+          "entry_above_buyers": null,
+          "stop_below_aggression": null,
+          "qualification": false,
+          "automatic_selector": null,
+          "branch_ok": false
+        },
+        "hole_ids": [
+          "HOLE:O127:failure",
+          "HOLE:O127:entry_trigger",
+          "HOLE:O127:decision",
+          "HOLE:O127:source_squeeze_failed",
+          "HOLE:O127:no_aggression_at_failure",
+          "HOLE:O127:buyers_area_identified",
+          "HOLE:O127:entry_above_buyers",
+          "HOLE:O127:stop_below_aggression",
+          "HOLE:O127:branch_id",
+          "HOLE:O127:buyers_area_id"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_flow_sequences.py",
+        "test": "test_passive_ofm_is_long_only_and_false_dying_tape_cannot_qualify_p18",
+        "sha256": "1bd26494ebfa7ad9b349bf56e6c2d81d2c4e0ef98031d379aab606f592cc843d"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P19",
+      "object_id": "O128",
+      "status": "pass",
+      "original_finding": "Prior-failure condition unconditionally true",
+      "contract_expectation": "No-prior-failure needs eligible observations; absence is unknown.",
+      "original_input": {
+        "catalyst_at": 1768488000000000000,
+        "release_at": 1768488060000000000,
+        "first_pullback_at": 1768488180000000000,
+        "confirm_at": 1768488240000000000,
+        "entry_at": 1768488300000000000,
+        "later_failure_at": 1768489200000000000,
+        "known_at": 1768488300000000000,
+        "use_at": 1768488300000000000
+      },
+      "actual": {
+        "recipe_id": "O128",
+        "state": "hole",
+        "value": {
+          "branch_id": null,
+          "origin_id": null,
+          "side": null,
+          "stage_ledger": {
+            "catalyst": 1768488000000000000,
+            "release": 1768488060000000000,
+            "pullback": 1768488180000000000,
+            "confirmation": 1768488240000000000,
+            "decision": 1768488300000000000
+          },
+          "catalyst_known": null,
+          "fast_release": null,
+          "first_pullback": true,
+          "no_prior_failure": null,
+          "failure_history_complete": null,
+          "prior_failure_ids": [],
+          "opposing_pullback_aggression_absorbed": null,
+          "continuation_confirmed": null,
+          "later_failure_invalidates": false,
+          "later_failure_at": 1768489200000000000,
+          "order_ok": true,
+          "branch_ok": null
+        },
+        "hole_ids": [
+          "HOLE:O128:catalyst_known",
+          "HOLE:O128:fast_release",
+          "HOLE:O128:opposing_pullback_aggression_absorbed",
+          "HOLE:O128:continuation_confirmed",
+          "HOLE:O128:branch_id",
+          "HOLE:O128:origin_id",
+          "HOLE:O128:side",
+          "HOLE:O128:failure_history"
+        ],
+        "known_at": 1768488300000000000,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_flow_sequences.py",
+        "test": "test_clean_squeeze_reads_only_complete_prior_failure_history_p19",
+        "sha256": "1bd26494ebfa7ad9b349bf56e6c2d81d2c4e0ef98031d379aab606f592cc843d"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P20",
+      "object_id": "O131",
+      "status": "pass",
+      "original_finding": "Undated target called pre-existing",
+      "contract_expectation": "A target with unknown availability cannot be certified pre-existing.",
+      "original_input": {
+        "micro_lo": 100,
+        "micro_hi": 102,
+        "complete_at": 1768488000000000000,
+        "entry": 103,
+        "stop": "99.75",
+        "target": 120,
+        "side": "long",
+        "known_at": 1768486800000000000,
+        "use_at": 1768488120000000000
+      },
+      "actual": {
+        "recipe_id": "O131",
+        "state": "hole",
+        "value": {
+          "branch_id": null,
+          "microbalance_id": null,
+          "micro_low": "100",
+          "micro_high": "102",
+          "width": "2",
+          "side": "long",
+          "stage_ledger": {
+            "target_known": null,
+            "microbalance_known": 1768488000000000000,
+            "breakout": null,
+            "decision": 1768488120000000000
+          },
+          "microbalance_frozen": null,
+          "directional_strength": null,
+          "breakout_in_thesis_direction": null,
+          "stop": "99.75",
+          "stop_side_ok": true,
+          "stop_below_opposite": true,
+          "target": "120",
+          "target_id": null,
+          "objective_preexists": null,
+          "preexisting_target": null,
+          "qualifies": null,
+          "automatic_selector": null,
+          "branch_ok": null
+        },
+        "hole_ids": [
+          "HOLE:O131:target_known",
+          "HOLE:O131:breakout",
+          "HOLE:O131:microbalance_frozen",
+          "HOLE:O131:directional_strength",
+          "HOLE:O131:target_known_at",
+          "HOLE:O131:branch_id",
+          "HOLE:O131:microbalance_id",
+          "HOLE:O131:target_id"
+        ],
+        "known_at": 1768488120000000000,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_flow_sequences.py",
+        "test": "test_microbalance_target_must_be_preexisting_and_dated_p20",
+        "sha256": "1bd26494ebfa7ad9b349bf56e6c2d81d2c4e0ef98031d379aab606f592cc843d"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P21",
+      "object_id": "O150",
+      "status": "pass",
+      "original_finding": "Cancellation retains working remainder",
+      "contract_expectation": "Cancellation ends remaining working quantity and preserves the filled position separately.",
+      "original_input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 20,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "hole",
+        "value": {
+          "order_state_timeline": [
+            {
+              "event_id": null,
+              "at": 15,
+              "available_at": 15,
+              "kind": "fill",
+              "state_before": "resting",
+              "state_after": "partially_filled",
+              "authorized_quantity": "3",
+              "working_quantity_after": "2",
+              "position_quantity_after": "1",
+              "quantity": "1"
+            },
+            {
+              "event_id": null,
+              "at": 20,
+              "available_at": 20,
+              "kind": "cancel",
+              "state_before": "partially_filled",
+              "state_after": "canceled",
+              "authorized_quantity": "3",
+              "working_quantity_after": "0",
+              "position_quantity_after": "1"
+            }
+          ],
+          "remaining_quantity": "0",
+          "filled_quantity": "1",
+          "position_open": true,
+          "bracket_versions": [],
+          "lifecycle_valid": null,
+          "source_policy_ok": null,
+          "decision_at": 10,
+          "side": null,
+          "order_at": 10,
+          "stop_ticks": null,
+          "target_ticks": null,
+          "cancel_minutes": null,
+          "one_position_policy": null,
+          "order_inside_ticks": null,
+          "order_state": "canceled",
+          "position_quantity": "1",
+          "authorized_quantity": "3",
+          "order_id": null,
+          "candidate_id": null,
+          "position_id": null,
+          "order_price": "100",
+          "stop": null,
+          "target": null,
+          "pending_events": [],
+          "snapshot_at": 30,
+          "unclocked_events": [],
+          "unclocked_fill_quantities": [],
+          "remaining": "0",
+          "filled": "1",
+          "cancel_at": 20
+        },
+        "hole_ids": [
+          "HOLE:O150:source_policy_definition",
+          "HOLE:O150:order_id",
+          "HOLE:O150:candidate_id",
+          "HOLE:O150:position_id",
+          "HOLE:O150:order_type",
+          "HOLE:O150:side",
+          "HOLE:O150:event_identity"
+        ],
+        "known_at": 20,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_cancel_ends_working_quantity_but_preserves_filled_position_p21",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P22",
+      "object_id": "O150",
+      "status": "pass",
+      "original_finding": "Exit after cancellation rejected",
+      "contract_expectation": "A prior fill remains eligible for a later position exit after the working order is canceled.",
+      "original_input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 20,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          },
+          {
+            "kind": "exit",
+            "at": 25,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "hole",
+        "value": {
+          "order_state_timeline": [
+            {
+              "event_id": null,
+              "at": 15,
+              "available_at": 15,
+              "kind": "fill",
+              "state_before": "resting",
+              "state_after": "partially_filled",
+              "authorized_quantity": "3",
+              "working_quantity_after": "2",
+              "position_quantity_after": "1",
+              "quantity": "1"
+            },
+            {
+              "event_id": null,
+              "at": 20,
+              "available_at": 20,
+              "kind": "cancel",
+              "state_before": "partially_filled",
+              "state_after": "canceled",
+              "authorized_quantity": "3",
+              "working_quantity_after": "0",
+              "position_quantity_after": "1"
+            },
+            {
+              "event_id": null,
+              "at": 25,
+              "available_at": 25,
+              "kind": "exit",
+              "state_before": "canceled",
+              "state_after": "canceled",
+              "authorized_quantity": "3",
+              "working_quantity_after": "0",
+              "position_quantity_after": "0",
+              "quantity": "1"
+            }
+          ],
+          "remaining_quantity": "0",
+          "filled_quantity": "1",
+          "position_open": false,
+          "bracket_versions": [],
+          "lifecycle_valid": null,
+          "source_policy_ok": null,
+          "decision_at": 10,
+          "side": null,
+          "order_at": 10,
+          "stop_ticks": null,
+          "target_ticks": null,
+          "cancel_minutes": null,
+          "one_position_policy": null,
+          "order_inside_ticks": null,
+          "order_state": "canceled",
+          "position_quantity": "0",
+          "authorized_quantity": "3",
+          "order_id": null,
+          "candidate_id": null,
+          "position_id": null,
+          "order_price": "100",
+          "stop": null,
+          "target": null,
+          "pending_events": [],
+          "snapshot_at": 30,
+          "unclocked_events": [],
+          "unclocked_fill_quantities": [],
+          "remaining": "0",
+          "filled": "1",
+          "cancel_at": 20
+        },
+        "hole_ids": [
+          "HOLE:O150:source_policy_definition",
+          "HOLE:O150:order_id",
+          "HOLE:O150:candidate_id",
+          "HOLE:O150:position_id",
+          "HOLE:O150:order_type",
+          "HOLE:O150:side",
+          "HOLE:O150:event_identity"
+        ],
+        "known_at": 25,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_exit_after_entry_order_cancel_closes_only_filled_position_p22",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P23",
+      "object_id": "O150",
+      "status": "pass",
+      "original_finding": "Fill after expiry accepted",
+      "contract_expectation": "Expired working quantity cannot fill without an explicit new/reopened order.",
+      "original_input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "expired",
+            "at": 14
+          },
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "invalid",
+        "value": {
+          "order_state_timeline": [
+            {
+              "event_id": null,
+              "at": 14,
+              "available_at": 14,
+              "kind": "expired",
+              "state_before": "resting",
+              "state_after": "expired",
+              "authorized_quantity": "3",
+              "working_quantity_after": "0",
+              "position_quantity_after": "0"
+            },
+            {
+              "event_id": null,
+              "at": 15,
+              "available_at": 15,
+              "kind": "fill",
+              "state_before": "expired",
+              "state_after": "expired",
+              "authorized_quantity": "3",
+              "working_quantity_after": "0",
+              "position_quantity_after": "0",
+              "quantity": "1"
+            }
+          ],
+          "remaining_quantity": "0",
+          "filled_quantity": "0",
+          "position_open": false,
+          "bracket_versions": [],
+          "lifecycle_valid": false,
+          "source_policy_ok": null,
+          "decision_at": 10,
+          "side": null,
+          "order_at": 10,
+          "stop_ticks": null,
+          "target_ticks": null,
+          "cancel_minutes": null,
+          "one_position_policy": null,
+          "order_inside_ticks": null,
+          "order_state": "expired",
+          "position_quantity": "0",
+          "authorized_quantity": "3",
+          "order_id": null,
+          "candidate_id": null,
+          "position_id": null,
+          "order_price": "100",
+          "stop": null,
+          "target": null,
+          "pending_events": [
+            {
+              "kind": "cancel",
+              "at": 100,
+              "synthetic_from_policy": false
+            }
+          ],
+          "snapshot_at": 30,
+          "unclocked_events": [],
+          "unclocked_fill_quantities": [],
+          "remaining": "0",
+          "filled": "0",
+          "cancel_at": 100
+        },
+        "hole_ids": [
+          "HOLE:O150:lifecycle"
+        ],
+        "known_at": 15,
+        "base_ok": false,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "fill without valid working order",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_expiry_prohibits_fill_until_explicit_reopen_p23",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P24",
+      "object_id": "O150",
+      "status": "pass",
+      "original_finding": "Amended order remainder uses original quantity",
+      "contract_expectation": "Final working remainder must reconcile actual amended quantity less fills.",
+      "original_input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 30,
+        "use_at": 30,
+        "events": [
+          {
+            "kind": "amend",
+            "at": 12,
+            "new_quantity": 5
+          },
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "hole",
+        "value": {
+          "order_state_timeline": [
+            {
+              "event_id": null,
+              "at": 12,
+              "available_at": 12,
+              "kind": "amend",
+              "state_before": "resting",
+              "state_after": "resting",
+              "authorized_quantity": "5",
+              "working_quantity_after": "5",
+              "position_quantity_after": "0"
+            },
+            {
+              "event_id": null,
+              "at": 15,
+              "available_at": 15,
+              "kind": "fill",
+              "state_before": "resting",
+              "state_after": "partially_filled",
+              "authorized_quantity": "5",
+              "working_quantity_after": "4",
+              "position_quantity_after": "1",
+              "quantity": "1"
+            }
+          ],
+          "remaining_quantity": "4",
+          "filled_quantity": "1",
+          "position_open": true,
+          "bracket_versions": [],
+          "lifecycle_valid": null,
+          "source_policy_ok": null,
+          "decision_at": 10,
+          "side": null,
+          "order_at": 10,
+          "stop_ticks": null,
+          "target_ticks": null,
+          "cancel_minutes": null,
+          "one_position_policy": null,
+          "order_inside_ticks": null,
+          "order_state": "partially_filled",
+          "position_quantity": "1",
+          "authorized_quantity": "5",
+          "order_id": null,
+          "candidate_id": null,
+          "position_id": null,
+          "order_price": "100",
+          "stop": null,
+          "target": null,
+          "pending_events": [
+            {
+              "kind": "cancel",
+              "at": 100,
+              "synthetic_from_policy": false
+            }
+          ],
+          "snapshot_at": 30,
+          "unclocked_events": [],
+          "unclocked_fill_quantities": [],
+          "remaining": "4",
+          "filled": "1",
+          "cancel_at": 100
+        },
+        "hole_ids": [
+          "HOLE:O150:source_policy_definition",
+          "HOLE:O150:order_id",
+          "HOLE:O150:candidate_id",
+          "HOLE:O150:position_id",
+          "HOLE:O150:order_type",
+          "HOLE:O150:side",
+          "HOLE:O150:event_identity"
+        ],
+        "known_at": 15,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_amended_quantity_and_price_reconcile_and_reject_below_fills_p24",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P25",
+      "object_id": "O150",
+      "status": "pass",
+      "original_finding": "Fill known_at can predate its event",
+      "contract_expectation": "Lifecycle result availability must include latest incorporated event.",
+      "original_input": {
+        "limit": 100,
+        "placed_at": 10,
+        "decision_at": 9,
+        "quantity": 3,
+        "source_policy": "audit-supplied",
+        "cancel_at": 100,
+        "known_at": 10,
+        "use_at": 12,
+        "events": [
+          {
+            "kind": "fill",
+            "at": 15,
+            "qty": 1
+          }
+        ]
+      },
+      "actual": {
+        "recipe_id": "O150",
+        "state": "hole",
+        "value": {
+          "order_state_timeline": [],
+          "remaining_quantity": "3",
+          "filled_quantity": "0",
+          "position_open": false,
+          "bracket_versions": [],
+          "lifecycle_valid": null,
+          "source_policy_ok": null,
+          "decision_at": 10,
+          "side": null,
+          "order_at": 10,
+          "stop_ticks": null,
+          "target_ticks": null,
+          "cancel_minutes": null,
+          "one_position_policy": null,
+          "order_inside_ticks": null,
+          "order_state": "resting",
+          "position_quantity": "0",
+          "authorized_quantity": "3",
+          "order_id": null,
+          "candidate_id": null,
+          "position_id": null,
+          "order_price": "100",
+          "stop": null,
+          "target": null,
+          "pending_events": [
+            {
+              "kind": "fill",
+              "at": 15,
+              "qty": 1
+            },
+            {
+              "kind": "cancel",
+              "at": 100,
+              "synthetic_from_policy": false
+            }
+          ],
+          "snapshot_at": 12,
+          "unclocked_events": [],
+          "unclocked_fill_quantities": [],
+          "remaining": "3",
+          "filled": "0",
+          "cancel_at": 100
+        },
+        "hole_ids": [
+          "HOLE:O150:source_policy_definition",
+          "HOLE:O150:order_id",
+          "HOLE:O150:candidate_id",
+          "HOLE:O150:position_id",
+          "HOLE:O150:order_type",
+          "HOLE:O150:side",
+          "HOLE:O150:event_identity"
+        ],
+        "known_at": 10,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": null,
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_future_fill_is_not_backdated_into_snapshot_p25",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P26",
+      "object_id": "O154",
+      "status": "pass",
+      "original_finding": "Unproven validation availability still enables overlay",
+      "contract_expectation": "Prior validation and matching process provenance must be established before risk use.",
+      "original_input": {
+        "n": 100,
+        "min_n": 100,
+        "win_rate": "0.55",
+        "avg_rr": 2,
+        "mc_max_streak": 8
+      },
+      "actual": {
+        "recipe_id": "O154",
+        "state": "hole",
+        "value": {
+          "sample_n": 100,
+          "sample_at_least100": true,
+          "winrate_known": true,
+          "average_rr_known": true,
+          "mc_result_known": false,
+          "validation_before_risk": null,
+          "overlay_validation": null,
+          "win_rate": "0.55",
+          "average_rr": "2",
+          "mc_max_loss_streak": null,
+          "simulation_run": false,
+          "sample_ids": [],
+          "process_id": null,
+          "process_version": null,
+          "validation_record_id": null,
+          "observed_sample_win_rate": null,
+          "sample_outcome_counts": {},
+          "closed_denominator": "win_loss",
+          "validation_record": {
+            "n": 100,
+            "min_n": 100,
+            "win_rate": "0.55",
+            "avg_rr": 2,
+            "mc_max_streak": 8
+          }
+        },
+        "hole_ids": [
+          "HOLE:O154:process_id",
+          "HOLE:O154:process_version",
+          "HOLE:O154:prior_closed_sample_records",
+          "HOLE:O154:win_rate_definition",
+          "HOLE:O154:average_rr_definition",
+          "HOLE:O154:supplied_mc_design_and_result",
+          "HOLE:O154:risk_decision_at"
+        ],
+        "known_at": null,
+        "base_ok": true,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "process_id; process_version; prior_closed_sample_records; win_rate_definition; average_rr_definition; supplied_mc_design_and_result; risk_decision_at",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_process_observations.py",
+        "test": "test_validation_requires_actual_prior_sample_and_compatible_supplied_result",
+        "sha256": "08d466859b154f1c0d7688281afd256c0541bba633c6a95e557d6a04f56d8ae8"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    },
+    {
+      "id": "P27",
+      "object_id": "O166",
+      "status": "pass",
+      "original_finding": "Absent current/next observations called causally conditioned",
+      "contract_expectation": "Current/next identities, ordered times, conditioning availability and cadence are required.",
+      "original_input": {
+        "counts": {
+          "D": 84,
+          "A": 12,
+          "B": 4,
+          "E": 0,
+          "W": 0
+        },
+        "cohort_id": "AAPL-20000",
+        "source_symbol": "AAPL",
+        "source_counts_symbol": "AAPL",
+        "row_count": 100,
+        "known_at": 1768489260000000000,
+        "use_at": 1768489320000000000
+      },
+      "actual": {
+        "recipe_id": "O166",
+        "state": "hole",
+        "value": {
+          "from_state": null,
+          "to_state": null,
+          "state_at": null,
+          "next_state_at": null,
+          "conditioning_causal": null,
+          "transition_valid": null,
+          "supplied_row_count": 100,
+          "reported_probability": null,
+          "conditioning_evidence": [],
+          "max_conditioning_known_at": null,
+          "probabilities": {
+            "B": "0.04",
+            "A": "0.12",
+            "D": "0.84",
+            "E": "0",
+            "W": "0"
+          },
+          "row_sum": "1.00",
+          "cadence": null,
+          "current_observation": null,
+          "next_observation": null,
+          "automatic_transition": null,
+          "trained_matrix": false,
+          "p_dd": "0.84",
+          "p_da": "0.12"
+        },
+        "hole_ids": [
+          "HOLE:O166:current_observation",
+          "HOLE:O166:next_observation",
+          "HOLE:O166:next_observation_definition",
+          "HOLE:O166:current_state_id",
+          "HOLE:O166:next_state_id",
+          "HOLE:O166:state_at",
+          "HOLE:O166:next_state_at",
+          "HOLE:O166:current_known_at",
+          "HOLE:O166:next_known_at",
+          "HOLE:O166:current_sequence",
+          "HOLE:O166:next_sequence",
+          "HOLE:O166:instrument_id",
+          "HOLE:O166:cohort_id",
+          "HOLE:O166:reset_id",
+          "HOLE:O166:conditioning_evidence"
+        ],
+        "known_at": null,
+        "base_ok": null,
+        "coverage_ok": null,
+        "parent_ids": [],
+        "evidence_ids": [],
+        "units": {},
+        "applicability": null,
+        "reason": "actual adjacent transition evidence is incomplete",
+        "evidence_class": "research_helper"
+      },
+      "gap_observed": false,
+      "full_observation_regression": {
+        "path": "/workspace/implementation/tests/test_phase1_complete_lifecycles.py",
+        "test": "test_transition_requires_actual_adjacent_state_records_declared_cadence_and_current_conditioning",
+        "sha256": "0782cd16fd686da2e612d61f461e8b25c69c3818241a040ec33dfedc69f7edda"
+      },
+      "scope": "Unchanged original helper probe plus linked complete-observation regression; neither is a historical source candidate."
+    }
+  ],
+  "full_observation_tests_execution": "See final test-run.json; file linkage alone is not a test execution claim."
+}
