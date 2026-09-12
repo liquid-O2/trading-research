@@ -1,0 +1,52 @@
+# Chart evidence review
+
+Analyst visual inspection of 36 existing chart PNGs: first indexed example of every observed rule/verdict pair. Notes use linked records for predicates omitted from the overview. No new replay or outcome selection.
+
+All 50 existing chart files and their scored-record/source-artifact hashes were verified. This follow-on visual sample is 36 charts covering 15 branches; four supported branches have no observed opportunities and therefore no charts. Original chart selection is chronological and stratified, not a random performance sample.
+
+The blue line marks availability; purple marks endpoint or expiry. Minute OHLC bars are plotted at their interval starts, so the bar drawn at an endpoint timestamp belongs to the next interval. Numerical predicates use the linked record. Source-method verdict remains unknown throughout.
+
+| Index and chart | Branch / verdict | Visual observation and limitation |
+| --- | --- | --- |
+| [0](../empirical/charts/opp-2b5cc739fecaf03ebb99a97a.png) | GB-FAIL:previous_hour:comparison-v1 / fail | Short previous-hour sweep stays above the reference at the fixed next close; the fail label describes that endpoint. |
+| [1](../empirical/charts/opp-61fb5d7d4c09d18bf952ccb0.png) | GB-FAIL:cash_open_reclaim_case:comparison-v1 / pass | Cash-open long returns above its reference at the next close; the visible subsequent rise is outside the comparison definition. |
+| [2](../empirical/charts/opp-a7f11b60d2974eeec3dd58c1.png) | GB-FAIL:nyam_box:comparison-v1 / fail | NYAM long fails the fixed next close; a later visible reclaim cannot replace the declared endpoint. |
+| [3](../empirical/charts/opp-70c43be713b792c3c2cdae59.png) | GB-FAIL:previous_hour:comparison-v1 / pass | Previous-hour short closes back below the upper reference at the declared next close. |
+| [4](../empirical/charts/opp-a4852eeb96c20aee4d1bdc4a.png) | GB-FAIL:nyam_box:comparison-v1 / pass | NYAM long reclaims the lower box edge at its next aligned close; this is the parent event for the following refinement example. |
+| [5](../empirical/charts/opp-f32b8d9ec684aae18352292a.png) | GB-FAIL:mss_fvg_refinement:comparison-v1 / fail | The child starts after confirmed NYAM reclaim and runs through its 30-minute horizon. The minute overview does not independently show the declared 2-minute candle grid or prove absence of the refinement pattern. |
+| [6](../empirical/charts/opp-89bd691ccc42cb333be3edd2.png) | GB-FAIL:mss_fvg_refinement:comparison-v1 / pass | The passing child is distinct from its earlier sweep and parent completion. Exact 2-minute candles and wick-gap evidence must be read in the linked record. |
+| [8](../empirical/charts/opp-b6f8044d4fa1a01475bc7380.png) | GB-FAIL:cash_open_reclaim_case:comparison-v1 / fail | Cash-open long fails the fixed close; later price context does not convert it into a passing comparison. |
+| [9](../empirical/charts/opp-278adc79d7586c5425b4e588.png) | JJ-TBR:internal_rotation:comparison-v1 / fail | Midpoint-contact long reaches the opposite range edge first, producing a failed path classification. |
+| [10](../empirical/charts/opp-7478f52c0b6d47c93e2b87e8.png) | JJ-TBR:extension_reaction:comparison-v1 / fail | Lower extension-band contact does not close inward through the near edge at the next aligned 3-minute close. |
+| [11](../empirical/charts/opp-29c59e5aba980bb9d6623dfe.png) | JJ-TBR:judas_reversal:comparison-v1 / fail | Judas long sweep fails the fixed next 3-minute close; the later visible rebound is outside that endpoint decision. |
+| [12](../empirical/charts/opp-fb3d5b122cb1f335e2448981.png) | JJ-TBR:internal_rotation:comparison-v1 / pass | Midpoint-contact short reaches its chosen lower edge first; this measures a path to a range edge. |
+| [13](../empirical/charts/opp-f3963883b8fac7f870765e14.png) | JJ-TBR:judas_reversal:comparison-v1 / pass | Judas short closes inward through the swept upper edge at the fixed next aligned close. |
+| [14](../empirical/charts/opp-a7325652460419eb5451f779.png) | JJ-TBR:extension_reaction:comparison-v1 / pass | Upper extension-band contact closes inward at the fixed next 3-minute close; the chart shows the frozen outer bands. |
+| [15](../empirical/charts/opp-3ae5048f6dbe0b24da42c8a3.png) | GB-FAIL:previous_hour:comparison-v1 / unknown | Opportunity and expiry coincide at 16:00. No admissible later aligned close exists under the frozen rule; this unknown is not a missing-price diagnosis. |
+| [17](../empirical/charts/opp-a6cbb54e47ebea0e858817ee.png) | GB-FAIL:prior_day_level:comparison-v1 / fail | Prior-day short remains above the upper reference at the next close during an upward move. |
+| [18](../empirical/charts/opp-085314bc0a6faf7ea1b8f2a5.png) | SAINT-AMT:continuation_retest:comparison-v1 / fail | Saint continuation long fails at its first later boundary retest. A subsequent recovery is outside the first-retest rule. |
+| [19](../empirical/charts/opp-de4a1185a34113df39982e15.png) | GB-FAIL:prior_day_level:comparison-v1 / pass | Prior-day short passes the next close even though price later rises; a comparison pass is not an executed-trade return. |
+| [21](../empirical/charts/opp-de74f5e823f058b8f42d5122.png) | GB-FAIL:prior_week_level:comparison-v1 / fail | Price is already far above the prior-week high at the action-window opening and remains above at the endpoint. The full-range scale flattens the bars; the chart does not establish a fresh crossing inside the displayed window. |
+| [22](../empirical/charts/opp-26e8b944e2d7f8924c790074.png) | SAINT-AMT:continuation_retest:comparison-v1 / pass | The first retest closes at 2883.0 above the 2882.25 boundary, then the following minute falls. The endpoint line is an interval end, while minute bars are plotted at interval starts. |
+| [24](../empirical/charts/opp-306d004a203aba4455c09b7a.png) | JJ-TBR:judas_reversal:comparison-v1 / unknown | Judas opportunity occurs just before 09:50 expiry; the next aligned 3-minute close falls beyond it. Later visible prices do not resolve this frozen unknown. |
+| [25](../empirical/charts/opp-b0a5bad50a7d4b43b734c541.png) | GB-FAIL:prior_month_level:comparison-v1 / fail | Price remains above the prior-month high at the fixed endpoint. The distant lower reference compresses local bar detail. |
+| [27](../empirical/charts/opp-c0790b23f518a4692ce463e4.png) | GB-FAIL:asia_tdo_case:comparison-v1 / fail | Asia long endpoint closes at 4188.75 above the 4186.75 Asia low but below TDO 4197.0, so it fails. The overview omits the TDO line; the record supplies this indispensable condition. |
+| [28](../empirical/charts/opp-84aa5fe40f8dd033033ce895.png) | GB-FAIL:prior_week_level:comparison-v1 / pass | Prior-week short closes back below the upper reference at the next aligned close. |
+| [29](../empirical/charts/opp-db4ea229f897d4869dcdca2e.png) | GB-FAIL:prior_month_level:comparison-v1 / pass | Prior-month short passes at the upper reference; the distant lower bound compresses local endpoint detail and favors a future zoom inset. |
+| [31](../empirical/charts/opp-d5037a6d76f58804a90e16ab.png) | GB-FAIL:nyam_box:comparison-v1 / unknown | NYAM opportunity is available at 16:00 expiry; coincident vertical lines correctly accompany an unknown next-close outcome. |
+| [32](../empirical/charts/opp-0b46e24a40557b04e0c23f1d.png) | GB-VWAP:source_long:comparison-v1 / unknown | The breakout is visible, but its required pre-bar VWAP snapshot is unavailable. Static Asia/London levels in the chart do not replace the missing prefix. |
+| [33](../empirical/charts/opp-479f5cc2c8cbdffa6df81497.png) | GB-FAIL:asia_tdo_case:comparison-v1 / pass | Asia long passes the next-close comparison; the separate TDO requirement is recorded in the data but is not drawn on the overview. |
+| [35](../empirical/charts/opp-20e0e0e95c72f96041e148e8.png) | JJ-TBR:extension_reaction:comparison-v1 / unknown | Extension-band touch becomes available at 16:00 expiry; the unknown is structural under the fixed next-close rule. |
+| [36](../empirical/charts/opp-ee1932cbf91b85e0ea2d7b0a.png) | GB-FAIL:prior_day_level:comparison-v1 / unknown | Prior-day short becomes available at 16:00 expiry. The next aligned close lies outside the allowed window. |
+| [38](../empirical/charts/opp-1be3423a69720e7a72c4e9d9.png) | SIRES:vwap_deviation_fade:comparison-v1 / pass | Upper deviation-band touch is followed by an inward next 5-minute close, giving the short comparison a pass. |
+| [39](../empirical/charts/opp-c89d2f772faf6940995d32b9.png) | SIRES:vwap_deviation_fade:comparison-v1 / fail | The same session later touches the lower deviation band and the next close remains outside, giving the separate long comparison a fail. |
+| [40](../empirical/charts/opp-1f6ba259616688bde8e16a29.png) | GB-VWAP:source_long:comparison-v1 / fail | Price rises after the breakout but no later admissible VWAP touch occurs by 16:00. The fail means absence of the declared touch, not an unprofitable long. |
+| [41](../empirical/charts/opp-7d27a1b45154834f4a09e80a.png) | GB-VWAP:source_long:comparison-v1 / pass | The first later bar straddles pre-bar VWAP 6989.1329996 and passes despite closing at 6988.0 versus initial breakout close 7011.0. The overview draws session references, not the dynamic VWAP boundary. |
+| [43](../empirical/charts/opp-2a56d4fbb62147edbba7a48e.png) | SIRES:vwap_deviation_fade:comparison-v1 / unknown | One 5-minute trigger bar spans both frozen deviation bands. The observed long opportunity stays unknown; the minute overview alone does not change the frozen ambiguity rule. |
+| [49](../empirical/charts/opp-d9e5c424160647ad875dca50.png) | KEANI-OPEN-ABOVE-VALUE:source_long:comparison-v1 / unknown | The clock-based opening and 10:00 endpoint are visible, with no invented prior-value lines. A-period prices cannot supply the missing previous-session VAH. |
+
+## Diagnostic improvements for later work
+
+Add the TDO line for Asia cases, a labeled pre-bar VWAP at the touch (and its time series) for GB-VWAP, and the 2-minute candle grid/gap for MSS/FVG. A local-price inset would improve prior-month/week examples whose distant opposite boundary compresses the bars. These are presentation limitations of the existing overviews; the exact predicate evidence is retained in the records.
+
+No existing chart, record or verdict was rewritten. [CHART_REVIEW.json](CHART_REVIEW.json) binds each note to its chart, source artifact, scored-record SHA256, clocks, reference, trigger and endpoint.
