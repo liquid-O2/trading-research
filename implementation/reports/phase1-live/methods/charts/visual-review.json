@@ -1,0 +1,176 @@
+{
+  "reviewed_at": "2026-09-12T09:44:12.487264+00:00",
+  "reviewer": "Primary assistant; all chart/source comparisons performed directly, without subagents",
+  "method_performance_claim": false,
+  "rendering": "All latest PNGs visually inspected after the date-axis/wick-clipping repair; no clipping or overlapping text found.",
+  "charts": [
+    {
+      "id": "M01",
+      "chart_sha256": "4a49f4935a45b8f2d7706e0d90aaa55bbb3443528f27f54065768d8851e393e7",
+      "verdict": "geometry_checked",
+      "findings": "Range [24795.25, 24902.25], W=107 points (428 native ticks), EQ=24848.75. The 25/75% lines and beyond-edge 1.33/1.66 projections follow the manual figure. Upper band [25044.56, 25079.87]; lower [24617.63, 24652.94]. Off-tick endpoints retained. Frozen levels start at 09:00. This is a diagnostic date, not a Jumbo source-selected attempt.",
+      "source_references": [
+        [
+          "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+          4
+        ],
+        [
+          "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+          21
+        ]
+      ]
+    },
+    {
+      "id": "M02",
+      "chart_sha256": "8f02a6cf5fc7968619d2a203f1a16e938f2db492719dd8f8cf1f73eba39a99ff",
+      "verdict": "partial_geometry_only",
+      "findings": "NYAM [25146.00, 25291.50] is fixed at 10:00. The first native NQ upper sweep is 10:00:02.006785967, followed by a complete 10:05 close at 25279.00 inside the box. The source figure highlights a later upper test with MSS/FVG around 10:40-10:50. Thus first literal failure is not automatically the source-selected attempt. The figure is MNQZ5; acquired prices are NQZ5. No identical-instrument or pixel-perfect price claim is made. Its 3-minute display does not replace FORMULAS five-minute confirmation rule.",
+      "source_references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          43
+        ],
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          25
+        ]
+      ]
+    },
+    {
+      "id": "M03",
+      "chart_sha256": "dda660e21e771f794fef716de49f053a0e4412a9dd9b862774194b7ce1e53c2e",
+      "verdict": "source_geometry_blocked_comparisons_only",
+      "findings": "The dated price path shows the same opening selloff, recovery and later pullback/continuation shape as p.33. At 10:00 the exact trade-weighted comparison VWAP is 24837.3038465 for the previous-18:00 reset and 24842.0895305 for the 09:30 reset. Neither reset/basis is established as the source VWAP. No London/Asia bounds or source breakout bar are invented; source VWAP remains null.",
+      "source_references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          33
+        ]
+      ]
+    },
+    {
+      "id": "M04",
+      "chart_sha256": "abba11951aa97d8d55605e66ae6a1777dc92f8d25b397771312b4d695f214679",
+      "verdict": "comparison_parent_only",
+      "findings": "On the source September 2 scalp date, the completed comparison NYAM range is [29017.25, 29119.00], midpoint 29068.125. The normalized location is plotted only after the parent closes. The source gives bearish small-scalp commentary, not dated entries or a complete impulse selector. This chosen comparison parent cannot be passed off as that missing impulse. The September 10 bullish case lies beyond the acquired minute endpoint.",
+      "source_references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          40
+        ]
+      ]
+    },
+    {
+      "id": "M05",
+      "chart_sha256": "3c4b4a4bdcbab8856ca3f7aff06b79797e49d0d3b7cd6519fe933a135699e1fb",
+      "verdict": "period_geometry_checked",
+      "findings": "A is 09:30-10:00 with L=24694.50 and H=24964.25. B is 10:00-10:30 with L=24819.50 and H=25014.50. IB is their union, [24694.50, 25014.50], W=320.00, available at 10:30. These agree with the source letter clocks. No trade-visited/range-filled TPO grid, value area, auction route or execution confirmation is inferred.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/tpo-lesson-3.pdf",
+          3
+        ]
+      ]
+    },
+    {
+      "id": "M06",
+      "chart_sha256": "0e8f6314ce6aa8f2e8eca730f35d5ef271a942d9e558b34e7bbca0f604d7f01e",
+      "verdict": "native_profile_only",
+      "findings": "The chosen 09:30-10:00 diagnostic histogram contains 91480 executed contracts across 1080 exact native price rows. Its unique maximum is 24930.00 with 380 contracts; the geometric midpoint is 24829.375. The source figure distinguishes POC from VAH/VAL and describes 68% value. The source auction/bin/VA algorithm is missing, so the native-row maximum is not certified as the source POC and VAH/VAL remain null.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/reading-the-volume-profile.pdf",
+          4
+        ]
+      ]
+    },
+    {
+      "id": "M07",
+      "chart_sha256": "3eb3f7b596f50a4cdbe5d3c4a6dcb20f1bfda15a7b92460ec6985950620c3635",
+      "verdict": "native_profile_only",
+      "findings": "The native NQ volume map is visible, but the source figures show ES tickets requiring an independently known reaction area and minor HVN. Neither pre-use source band nor their confluence tolerance is reconstructable. No histogram peak, POC or prior extreme is renamed as both reasons; no ES price, stop or target is transferred to NQ. The source prose/ticket target conflict remains open.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/10k-first-month.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/10k-first-month.pdf",
+          8
+        ]
+      ]
+    },
+    {
+      "id": "M08",
+      "chart_sha256": "3ce1a374eabe6c90a21ab93015ecc2397e70e511844daf77bc3e5ec0450c9636",
+      "verdict": "A_period_geometry_checked",
+      "findings": "All 30 A minutes are retained. The 09:30 bar opens at 24805.00; the whole-A low is 24694.50, 110.50 points lower. The final A low appears at its 10:00 availability, with the unfinished running low shown separately. The source drawing uses prior VAH for the opening condition and a different developing VAH for the later break/retest. Both VAH values remain null without their source construction; opening price cannot replace A low.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/average-unprofitable-trader.pdf",
+          22
+        ]
+      ]
+    },
+    {
+      "id": "M09",
+      "chart_sha256": "e9dcdac333fca2dce53975fb6f0ad1fdac2d967041bdbe4aaa4facafef8720d3",
+      "verdict": "native_print_geometry_only",
+      "findings": "All 27142 native executions in the fixed 09:30-09:40 window are shown without a size threshold or downsampling: 18556 buy-aggressor and 19336 sell-aggressor contracts. Source p.7 contains clustered zones and distinct returns. Those rectangles/episodes cannot be generated from the missing cluster/normalization rule. No source grade, selected order or positive entry edge is claimed; the later causal correction in OFM p.18 remains applicable.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/refill-effect.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/refill-effect.pdf",
+          12
+        ],
+        [
+          "sources/documents/discretionary/origin-of-the-move.pdf",
+          18
+        ]
+      ]
+    },
+    {
+      "id": "M10",
+      "chart_sha256": "41249314b79d538f58214d1236d7b8cb5feafab883623e95e8c2a2ad3a698fbd",
+      "verdict": "native_source_reconstruction_blocked",
+      "findings": "The dated NQ input view contains 45432 buy and 46048 sell contracts, 91480 total, with zero unknown-side volume. The source p.10 displays heuristic states on AAPL ten-level order-book events. These are different instruments and data structures. No B/A/D/E/W labels, cancellations, efficiency classifier or transition matrix can be compared faithfully; the NQ chart is only an input diagnostic.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+          10
+        ]
+      ]
+    },
+    {
+      "id": "M11",
+      "chart_sha256": "5fc86f7dd23c633232230d1d5623a24be27b53dbf2320a202518bb87c662e0ab",
+      "verdict": "process_geometry_unavailable_vintage_supplement",
+      "findings": "There is no disclosed Stoic score/cycle/trend geometry or process-review journal to replay on a trading session. The supplement shows 12 nonmissing CPI index values across 13 reference months in the civil-date vintage view on 2026-02-24, retaining the October 2025 gap. CPI is an acquired illustrative input, not a claimed Stoic series choice. No z-score substitute, intraday availability assumption or macro decision is introduced.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          5
+        ]
+      ]
+    },
+    {
+      "id": "M12",
+      "chart_sha256": "95671bac0cd0f385978e0cd8d17f49eeca69a4aa95f73e2d6d418bce2a816e87",
+      "verdict": "dated_replay_unavailable_printed_arithmetic_checked",
+      "findings": "The printed ladder uses original baseline risk units 1, 4, 1. Its two closed winning results are +3 and +12 baseline units, cumulative +15; a second loss from +3 leaves -1. The source heading says activation after two wins while its ladder increases risk after the first. This conflict remains. With no underlying dated process/risk journal or prior Monte Carlo validation, the chart is explicitly undated printed arithmetic, not a fabricated historical session.",
+      "source_references": [
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          8
+        ]
+      ]
+    }
+  ]
+}

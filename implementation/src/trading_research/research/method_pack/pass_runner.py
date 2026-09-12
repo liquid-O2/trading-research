@@ -1,6 +1,7 @@
 """One method pass owns fixture verification, evidence scoring and complete reports."""
 
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
@@ -11,7 +12,7 @@ import tempfile
 from . import FORMULA_VERSION, HEADLINE, METHOD_IDS, SLUGS, SOURCE_WIKI_COMMIT
 from .catalog import BRANCHES, EXTRA_PREDICATES, PRIMARY, METHOD_BY_ID, objects_for
 from .contracts import consumed_hashes, fields_for, inventory_errors, sections
-from .discovery import discovery_holes
+from .discovery import discovery_audit, discovery_holes
 from .evidence import CASE_BRANCHES, SchemaError, read_manifest, score_episode
 from .protocol import RECIPES, jsonable
 from .secondary import reference_outcome
@@ -139,7 +140,15 @@ def _run(args, data_root, report_root, supplied, parsed, manifest_hash):
         fixtures_failed.append({'id': 'inventory', 'failures': [error]})
     inventory = inventory_acquired(data_root, method_id)
     inventory['raw_adapter_audit'] = raw_audit
-    requested_years = inventory.get('years', {})
+    # The retained archive includes pre-study history and future calendar rows.
+    # Neither belongs in the 2020+ historical method denominator.
+    requested_years = {year: row for year, row in inventory.get('years', {}).items()
+                       if 2020 <= int(year) <= datetime.now(timezone.utc).year}
+    selector_review = discovery_audit(method_id)
+    study_scope = {'primary_instrument': 'NQ', 'start_date': '2020-01-01',
+                   'end': 'actual acquired endpoint for each selected dependency',
+                   'source_ref': '/workspace/planning/phase-1-live/DATA_SCOPE.md',
+                   'note': 'Archive coverage is inventory only. Source-native non-NQ/process requirements are not replaced with NQ observations.'}
     holes = discovery_holes(method_id) + inventory.get('holes', [])
     if method_id == 'SIRES':
         holes.extend({'hole_id': f'HOLE:M05:{branch}:automatic_admission', 'recipe_id': 'M05',
@@ -226,10 +235,13 @@ def _run(args, data_root, report_root, supplied, parsed, manifest_hash):
         command += ['--formula-version', args.formula_version]
     identity = {'method_id': method_id, 'formula_version': FORMULA_VERSION,
                 'source_wiki_commit': SOURCE_WIKI_COMMIT, 'source_hashes': consumed_hashes(method_id),
+                'discovery_audit_sha256': selector_review['audit_sha256'],
                 **implementation_identity(Path(__file__).resolve().parents[5]),
                 'command': shlex.join(command), 'command_argv': command, 'created_at': utc_now()}
     inclusion = {'method_id': method_id, 'formula_version': FORMULA_VERSION, 'scope': 'acquired',
                  'candidate_discovery': 'hole', 'inclusion_rule': 'Only explicitly supplied C01 episodes; automatic source selector unavailable.',
+                 'historical_study_scope': study_scope, 'discovery_audit': selector_review,
+                 'excluded_from_historical_sample': ['synthetic_fixture', 'chart_geometry_diagnostic', 'archive_inventory_row'],
                  'branches': BRANCHES[method_id], 'required_objects': objects_for(method_id),
                  'source_hashes': identity['source_hashes'], 'ownership': inventory.get('ownership', []),
                  'episode_manifest_sha256': manifest_hash, 'candidate_ids': [c['candidate_id'] for c in candidates]}
@@ -259,6 +271,7 @@ def _run(args, data_root, report_root, supplied, parsed, manifest_hash):
                    or ('**' in line and ('F3' in line or 'conflict' in line.lower() or 'causal correction' in line.lower()))]
     doc = {'identity': identity,
            'scope': {'requested': 'acquired', 'data_root': str(data_root),
+                     'historical_study': study_scope,
                      'requested_date_span': inventory.get('requested_date_span'),
                      'actual_date_span': inventory.get('actual_date_span'),
                      'native_instruments': inventory.get('native_instruments', []),
@@ -281,6 +294,7 @@ def _run(args, data_root, report_root, supplied, parsed, manifest_hash):
                                              for label in ('target_first', 'invalidation_first', 'same_time_unknown', 'neither_observed', 'censored', 'unknown')},
                                   'limitation': 'No inferred outcome window, stop or objective; outcomes never repair entry compliance.'},
            'source_limitations': limitations, 'artifacts': artifacts,
+           'discovery_audit': selector_review,
            'operand_contract': {f: {'type': c.type, 'producer_recipes': c.recipes, 'rule': c.rule} for f, c in fields_for(method_id).items()}}
     errors = validate_report(doc, fixture_rows, candidates)
     if errors:

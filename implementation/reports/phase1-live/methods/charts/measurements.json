@@ -1,0 +1,1302 @@
+{
+  "builder": {
+    "bytes": 40219,
+    "path": "/workspace/implementation/tools/chart_method_pack.py",
+    "sha256": "6ed0ee6ca02a7321da958bc4d8fcc6652ce8f4c5dd881aa9587faf6aecfd42ae"
+  },
+  "chart_spec": {
+    "bytes": 6555,
+    "path": "/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json",
+    "sha256": "62a49c3db096c420654fa1a33f3f05b23111213c9cd05b25ef08a8ceade5f289"
+  },
+  "charts": [
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M01-jj-tbr.png",
+      "chart_sha256": "4a49f4935a45b8f2d7706e0d90aaa55bbb3443528f27f54065768d8851e393e7",
+      "date": "2026-02-24",
+      "geometry": [
+        "O005",
+        "O007",
+        "O014",
+        "O015"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M01:context_selector:confirmation_selector"
+      ],
+      "id": "M01",
+      "inputs": [
+        {
+          "end_ns": 1771952400000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M01-minutes.csv",
+          "row_count": 360,
+          "sha256": "79688e1d6e8522ee36eccb75594369e1a5d49bbf5ad4dd6bd12962c535035a61",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771930800000000000,
+          "time_unit": "ms"
+        }
+      ],
+      "measurements": {
+        "H": "24902.25",
+        "L": "24795.25",
+        "W": "107.00",
+        "at_eq": null,
+        "eq": "24848.7500",
+        "lower_band": [
+          "24617.6300",
+          "24652.9400"
+        ],
+        "parent_id": "NQH6:2026-02-24:06:00-09:00_ET",
+        "q25": "24822.0000",
+        "q75": "24875.5000",
+        "range_frozen": true,
+        "range_known_at": 1771941600000000000,
+        "rounded_projection_prices": false,
+        "source_location_selected": null,
+        "strict_above_eq": null,
+        "strict_below_eq": null,
+        "upper_band": [
+          "25044.5600",
+          "25079.8700"
+        ],
+        "width_ticks": "428"
+      },
+      "method": "JJ-TBR",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+          4
+        ],
+        [
+          "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+          21
+        ]
+      ],
+      "selection": "Common source-dated diagnostic session, not a Jumbo source case.",
+      "view": [
+        "06:00",
+        "12:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M02-gb-fail.png",
+      "chart_sha256": "8f02a6cf5fc7968619d2a203f1a16e938f2db492719dd8f8cf1f73eba39a99ff",
+      "date": "2025-11-20",
+      "geometry": [
+        "O046",
+        "O048"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M02:source_bias:session_admission:risk_objective",
+        "CHART:M02:native_source_instrument"
+      ],
+      "id": "M02",
+      "inputs": [
+        {
+          "end_ns": 1763658000000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M02-minutes.csv",
+          "row_count": 240,
+          "sha256": "b0540432dca10a91b1bf2df2e828b2ce1de372d389ef1f2aa9b06d84c91c37e0",
+          "source": {
+            "bytes": 5450142,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+            "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+          },
+          "start_ns": 1763643600000000000,
+          "time_unit": "ms"
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M02-five-minute-closes.csv",
+          "row_count": 48,
+          "sha256": "4ae5b2a80e5325b3ca4d47f7f91d49b86ad693ae1ab59d88247d3fb4b1e9dfb7"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1763658000000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 22019538,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+              "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e"
+            },
+            "start_ns": 1763650800000000000,
+            "time_unit": "ns"
+          },
+          "rows": 206865
+        }
+      ],
+      "measurements": {
+        "H": "25291.5",
+        "L": "25146.0",
+        "W": "145.5",
+        "boundary_ids": [
+          "2025-11-20:09:00-10:00:high",
+          "2025-11-20:09:00-10:00:low"
+        ],
+        "box_high": "25291.5",
+        "box_low": "25146.0",
+        "box_width": "145.5",
+        "can_sweep": false,
+        "complete": true,
+        "formation_end": 1763650800000000000,
+        "known_at": 1763650800000000000,
+        "literal_boundary_events": [
+          {
+            "close": 25279.0,
+            "first_complete_return_close_ns": 1763651100000000000,
+            "first_sweep_ns": 1763650802006785967,
+            "first_sweep_price": 25291.75,
+            "side": "upper"
+          },
+          {
+            "first_complete_return_close_ns": null,
+            "first_sweep_ns": 1763654413906665893,
+            "first_sweep_price": 25145.75,
+            "side": "lower"
+          }
+        ],
+        "opposing_low": "25146.0",
+        "source_candidate": null,
+        "source_session_id": "2025-11-20:09:00-10:00"
+      },
+      "method": "GB-FAIL",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 158704,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQZ5"
+      },
+      "references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          43
+        ],
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          25
+        ]
+      ],
+      "selection": "Date visible in p.43. Source chart is MNQZ5; acquired chart is native NQZ5 price comparison, not the same instrument or an admitted source attempt.",
+      "view": [
+        "08:00",
+        "12:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M03-gb-vwap.png",
+      "chart_sha256": "dda660e21e771f794fef716de49f053a0e4412a9dd9b862774194b7ce1e53c2e",
+      "date": "2026-02-24",
+      "geometry": [
+        "O030"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M03:minute_volume_boundary_reconciliation",
+        "CHART:M03:vwap_reset:source_price_basis:asia_london_bounds:breakout_bar"
+      ],
+      "id": "M03",
+      "inputs": [
+        {
+          "end_ns": 1771947600000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M03-minutes.csv",
+          "row_count": 140,
+          "sha256": "c65e2240daaf7a61cc7efe724057b505160cf5b87724b481a9ad6bf6e806b142",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771939200000000000,
+          "time_unit": "ms"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1771947600000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 14663077,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+              "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+            },
+            "start_ns": 1771887600000000000,
+            "time_unit": "ns"
+          },
+          "rows": 186670
+        },
+        {
+          "coverage_minute_window": {
+            "end_ns": 1771947600000000000,
+            "kind": "bars",
+            "source": {
+              "bytes": 3584842,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+              "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+            },
+            "start_ns": 1771887600000000000,
+            "time_unit": "ms"
+          },
+          "rows": 1000
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M03-previous-18:00-vwap.csv",
+          "row_count": 140,
+          "sha256": "6727da50fe40067f25f85b0a1b426ba7194b6cf88149d2b518e48244673aba13"
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M03-cash-09:30-vwap.csv",
+          "row_count": 140,
+          "sha256": "bf017bd0b9f7b34c287a5b463df48e1733502f15d7cc86912bf1ff773c10c9ab"
+        }
+      ],
+      "measurements": {
+        "asia_high": null,
+        "comparison_values_at_10:00": {
+          "cash-09:30": {
+            "as_of_ns": 1771945200000000000,
+            "price_ticks_times_volume": 9090217401,
+            "volume": 91480,
+            "vwap": "24842.08953049846961084390031"
+          },
+          "previous-18:00": {
+            "as_of_ns": 1771945200000000000,
+            "price_ticks_times_volume": 19025176048,
+            "volume": 191498,
+            "vwap": "24837.30384651536830671860803"
+          }
+        },
+        "london_high": null,
+        "provider_bar_volume_mismatches": [
+          {
+            "h": 25016.0,
+            "h_trade": 25016.0,
+            "l": 24998.0,
+            "l_trade": 24998.0,
+            "t": 1771947240000,
+            "v": 1952.0,
+            "v_trade": 1953
+          },
+          {
+            "h": 25012.25,
+            "h_trade": 25012.25,
+            "l": 24987.25,
+            "l_trade": 24987.25,
+            "t": 1771947300000,
+            "v": 1918.0,
+            "v_trade": 1917
+          }
+        ],
+        "source_vwap": null,
+        "trade_high_low_match_all_minutes": true
+      },
+      "method": "GB-VWAP",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          33
+        ]
+      ],
+      "selection": "Date printed in the continuation source post. Two explicitly named comparison resets; neither is a verified Green Bird reset.",
+      "view": [
+        "08:20",
+        "10:40"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M04-gb-scalp.png",
+      "chart_sha256": "abba11951aa97d8d55605e66ae6a1777dc92f8d25b397771312b4d695f214679",
+      "date": "2026-09-02",
+      "geometry": [
+        "O046",
+        "O053"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M04:source_selected_impulse:automatic_scalp_admission:position_journal"
+      ],
+      "id": "M04",
+      "inputs": [
+        {
+          "end_ns": 1788361200000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M04-minutes.csv",
+          "row_count": 120,
+          "sha256": "59ad639090c3ce3c316e269ba7ba511c880925ba1f95a137b1b12363fa3ff323",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1788354000000000000,
+          "time_unit": "ms"
+        },
+        {
+          "end_ns": 1788361200000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M04-range-position.csv",
+          "row_count": 60,
+          "sha256": "cdd3aa94036c92fabda523ec200e87e83474082cde0df454fffed8d763291b1e",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1788354000000000000,
+          "time_unit": "ms"
+        }
+      ],
+      "measurements": {
+        "H": "29119.0",
+        "L": "29017.25",
+        "W": "101.75",
+        "automatic_admission": null,
+        "boundary_ids": [
+          "2026-09-02:09:00-10:00:high",
+          "2026-09-02:09:00-10:00:low"
+        ],
+        "box_high": "29119.0",
+        "box_low": "29017.25",
+        "box_width": "101.75",
+        "can_sweep": false,
+        "comparison_midpoint": "29068.125",
+        "complete": true,
+        "formation_end": 1788357600000000000,
+        "known_at": 1788357600000000000,
+        "opposing_low": "29017.25",
+        "source_parent": null,
+        "source_session_id": "2026-09-02:09:00-10:00"
+      },
+      "method": "GB-SCALP",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42004177,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQU6"
+      },
+      "references": [
+        [
+          "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+          40
+        ]
+      ],
+      "selection": "Source bearish-scalp date; fully covered morning only. Completed 09:00-10:00 parent is a comparison choice, not the unpublished selected impulse.",
+      "view": [
+        "09:00",
+        "11:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M05-sires.png",
+      "chart_sha256": "3c4b4a4bdcbab8856ca3f7aff06b79797e49d0d3b7cd6519fe933a135699e1fb",
+      "date": "2026-02-24",
+      "geometry": [
+        "O078",
+        "O082"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M05:tpo_grid_visitation:auction_route:local_flow_confirmation"
+      ],
+      "id": "M05",
+      "inputs": [
+        {
+          "end_ns": 1771947000000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M05-minutes.csv",
+          "row_count": 60,
+          "sha256": "901bb7bbfc947ccaf167bef0629f722483f7f86087d973fcbd741705974741e4",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        }
+      ],
+      "measurements": {
+        "periods": [
+          {
+            "H": "24964.25",
+            "L": "24694.5",
+            "W": "269.75",
+            "known_at_et": "10:00",
+            "period": "A",
+            "start_et": "09:30"
+          },
+          {
+            "H": "25014.5",
+            "L": "24819.5",
+            "W": "195.0",
+            "known_at_et": "10:30",
+            "period": "B",
+            "start_et": "10:00"
+          },
+          {
+            "H": "25014.5",
+            "L": "24694.5",
+            "W": "320.0",
+            "known_at_et": "10:30",
+            "period": "IB",
+            "start_et": "09:30"
+          }
+        ],
+        "tpo_membership_construction": null
+      },
+      "method": "SIRES",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/tpo-lesson-3.pdf",
+          3
+        ]
+      ],
+      "selection": "Common source-dated diagnostic. Published A/B clocks and initial-balance extrema only; no inferred TPO row construction or execution branch.",
+      "view": [
+        "09:30",
+        "10:30"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M06-saint-amt.png",
+      "chart_sha256": "0e8f6314ce6aa8f2e8eca730f35d5ef271a942d9e558b34e7bbca0f604d7f01e",
+      "date": "2026-02-24",
+      "geometry": [
+        "O061",
+        "O064"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M06:source_auction_interval:source_bins:value_area_algorithm:balance_control_selector"
+      ],
+      "id": "M06",
+      "inputs": [
+        {
+          "end_ns": 1771948800000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M06-minutes.csv",
+          "row_count": 90,
+          "sha256": "7875da360dca4fb8cb8d2cb0efba696a5aaedf6c0db29c340fd23f34ca1f575a",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M06-native-profile.csv",
+          "row_count": 1080,
+          "sha256": "9b53a23b05815fe6580764e3382806a3b803e7bad60f7d4d7dc4b9a7c3aa50e6"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1771945200000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 14663077,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+              "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+            },
+            "start_ns": 1771943400000000000,
+            "time_unit": "ns"
+          },
+          "rows": 63289
+        }
+      ],
+      "measurements": {
+        "native_price_rows": 1080,
+        "native_row_poc": {
+          "max": "380",
+          "max_volume": "380",
+          "mid_is_poc_formula": false,
+          "poc": "24930.0",
+          "poc_candidates": [
+            "24930.0"
+          ],
+          "poc_price_or_band": "24930.0",
+          "profile_midpoint": "24829.375",
+          "tie_state": "unique",
+          "tied": false
+        },
+        "native_volume": 91480,
+        "profile_interval": [
+          "09:30",
+          "10:00"
+        ],
+        "profile_known_at_ns": 1771945200000000000,
+        "source_hvn": null,
+        "source_profile_interval": null,
+        "source_value_area": null
+      },
+      "method": "SAINT-AMT",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/reading-the-volume-profile.pdf",
+          4
+        ]
+      ],
+      "selection": "Common source-dated diagnostic. Native volume-at-price over chosen 09:30-10:00 display interval; source auction/bin/VA selection remains unknown.",
+      "view": [
+        "09:30",
+        "11:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M07-member-two-reasons.png",
+      "chart_sha256": "3eb3f7b596f50a4cdbe5d3c4a6dcb20f1bfda15a7b92460ec6985950620c3635",
+      "date": "2026-02-24",
+      "geometry": [
+        "O061"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M07:source_reaction_area:independent_minor_hvn:confluence_tolerance:native_ES_case"
+      ],
+      "id": "M07",
+      "inputs": [
+        {
+          "end_ns": 1771948800000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M07-minutes.csv",
+          "row_count": 90,
+          "sha256": "7875da360dca4fb8cb8d2cb0efba696a5aaedf6c0db29c340fd23f34ca1f575a",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M07-native-profile.csv",
+          "row_count": 1080,
+          "sha256": "9b53a23b05815fe6580764e3382806a3b803e7bad60f7d4d7dc4b9a7c3aa50e6"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1771945200000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 14663077,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+              "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+            },
+            "start_ns": 1771943400000000000,
+            "time_unit": "ns"
+          },
+          "rows": 63289
+        }
+      ],
+      "measurements": {
+        "confluence_band": null,
+        "independent_minor_hvn": null,
+        "native_price_rows": 1080,
+        "native_volume": 91480,
+        "prior_reaction_band": null,
+        "profile_interval": [
+          "09:30",
+          "10:00"
+        ],
+        "profile_known_at_ns": 1771945200000000000,
+        "source_hvn": null,
+        "source_profile_interval": null,
+        "source_value_area": null
+      },
+      "method": "MEMBER-TWO-REASONS",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/10k-first-month.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/10k-first-month.pdf",
+          8
+        ]
+      ],
+      "selection": "Common source-dated diagnostic. Native volume map only. The source ticket is ES; no ES reaction area, minor HVN or ticket is transferred to NQ.",
+      "view": [
+        "09:30",
+        "11:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M08-keani-open-above-value.png",
+      "chart_sha256": "3ce1a374eabe6c90a21ab93015ecc2397e70e511844daf77bc3e5ec0450c9636",
+      "date": "2026-02-24",
+      "geometry": [
+        "O078",
+        "O050"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M08:prior_VAH:developing_VAH:imbalance_band"
+      ],
+      "id": "M08",
+      "inputs": [
+        {
+          "end_ns": 1771948800000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M08-minutes.csv",
+          "row_count": 90,
+          "sha256": "7875da360dca4fb8cb8d2cb0efba696a5aaedf6c0db29c340fd23f34ca1f575a",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        }
+      ],
+      "measurements": {
+        "A_high": "24964.25",
+        "A_known_at_ns": 1771945200000000000,
+        "A_low": "24694.5",
+        "A_minutes": 30,
+        "A_open": "24805.0",
+        "a_low_above_prior_vah": null,
+        "developing_vah": null,
+        "open_bar_known_at_ns": 1771943460000000000,
+        "prior_vah": null
+      },
+      "method": "KEANI-OPEN-ABOVE-VALUE",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/average-unprofitable-trader.pdf",
+          22
+        ]
+      ],
+      "selection": "Common source-dated diagnostic. Complete A low and opening price; no guessed prior/developing VAH or imbalance band.",
+      "view": [
+        "09:30",
+        "11:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M09-refill-study.png",
+      "chart_sha256": "e9dcdac333fca2dce53975fb6f0ad1fdac2d967041bdbe4aaa4facafef8720d3",
+      "date": "2026-02-24",
+      "geometry": [
+        "O098",
+        "O099"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M09:source_cluster_rule:NQ_MNQ_normalization:frozen_zone:grade_model"
+      ],
+      "id": "M09",
+      "inputs": [
+        {
+          "end_ns": 1771944000000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M09-minutes.csv",
+          "row_count": 10,
+          "sha256": "5efc3a41da5bf6783f64d9ae1a10f0d52b6f7a5db55061e3e766f0854443d19a",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1771944000000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 14663077,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+              "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+            },
+            "start_ns": 1771943400000000000,
+            "time_unit": "ns"
+          },
+          "rows": 27142
+        }
+      ],
+      "measurements": {
+        "distinct_source_touches": null,
+        "downsampling": null,
+        "executions_displayed": 27142,
+        "native_volume_by_side": {
+          "A": 19336,
+          "B": 18556
+        },
+        "size_filter": null,
+        "source_grade": null,
+        "source_zones": null
+      },
+      "method": "REFILL-STUDY",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/refill-effect.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/refill-effect.pdf",
+          12
+        ],
+        [
+          "sources/documents/discretionary/origin-of-the-move.pdf",
+          18
+        ]
+      ],
+      "selection": "Common source-dated diagnostic, fixed first ten minutes. All native executions displayed without size threshold or cluster/zone selector.",
+      "view": [
+        "09:30",
+        "09:40"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M10-jetbundle-states.png",
+      "chart_sha256": "41249314b79d538f58214d1236d7b8cb5feafab883623e95e8c2a2ad3a698fbd",
+      "date": "2026-02-24",
+      "geometry": [
+        "O098",
+        "O164"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M10:AAPL_ten_level_events:state_windows_thresholds:provide_cancel_consume_identity"
+      ],
+      "id": "M10",
+      "inputs": [
+        {
+          "end_ns": 1771945200000000000,
+          "kind": "bars",
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M10-minutes.csv",
+          "row_count": 30,
+          "sha256": "e8d07ba663ba0c803a85a0a5c3f7192a2084c0e708453255921e65e0e3eda238",
+          "source": {
+            "bytes": 3584842,
+            "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+            "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+          },
+          "start_ns": 1771943400000000000,
+          "time_unit": "ms"
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M10-execution-volumes.csv",
+          "row_count": 30,
+          "sha256": "0e0f6945f08816f805dde8564b43017819692514a568771796655c3ff41959ec"
+        },
+        {
+          "native_trade_window": {
+            "end_ns": 1771945200000000000,
+            "kind": "trades",
+            "source": {
+              "bytes": 14663077,
+              "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+              "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+            },
+            "start_ns": 1771943400000000000,
+            "time_unit": "ns"
+          },
+          "rows": 63289
+        }
+      ],
+      "measurements": {
+        "buy_volume": 45432,
+        "display_bucket_minutes": 1,
+        "executed_volume": 91480,
+        "native_source_instrument_match": false,
+        "sell_volume": 46048,
+        "source_state": null,
+        "source_state_bucket_minutes": null,
+        "unknown_volume": 0
+      },
+      "method": "JETBUNDLE-STATES",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": {
+        "definition_map": {
+          "bytes": 16406,
+          "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+          "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+        },
+        "instrument_id": 42002475,
+        "q": "0.25",
+        "source_instrument_match": null,
+        "symbol": "NQH6"
+      },
+      "references": [
+        [
+          "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+          10
+        ]
+      ],
+      "selection": "Native NQ input diagnostic only. Missing AAPL ten-level sample and state classifier prevent source-state geometry/transition reproduction.",
+      "view": [
+        "09:30",
+        "10:00"
+      ],
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M11-stoic-data.png",
+      "chart_sha256": "5fc86f7dd23c633232230d1d5623a24be27b53dbf2320a202518bb87c662e0ab",
+      "date": "2026-02-24",
+      "geometry": [
+        "O162"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M11:source_series_transforms:custom_C_score_cycle_trend:process_journal:intraday_available_at"
+      ],
+      "id": "M11",
+      "inputs": [
+        {
+          "native_vintage_source": {
+            "bytes": 235491,
+            "path": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-h233aw4x/normalized-p0wb8u84/CPIAUCSL.jsonl",
+            "sha256": "cb10285c2cbda5c2abe5c7dbdcc109957280da3d9d34d2a74b0be9d76dbc9213"
+          }
+        },
+        {
+          "path": "/workspace/implementation/reports/phase1-live/methods/charts/M11-civil-date-vintages.csv",
+          "row_count": 13,
+          "sha256": "a4ad3472aeb03037e326e85db9271f16e82b29829620e8306426b6f17ba7b1aa"
+        }
+      ],
+      "measurements": {
+        "as_of_civil_date": "2026-02-24",
+        "intraday_known_at": null,
+        "missing_reference_months": [
+          "2025-10-01"
+        ],
+        "nonmissing_values": 12,
+        "reference_months_requested": 13,
+        "series": "CPIAUCSL",
+        "source_model_output": null
+      },
+      "method": "STOIC-DATA",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": null,
+      "references": [
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          5
+        ]
+      ],
+      "selection": "Civil-date CPI vintage illustration as of the common date, not a session decision or disclosed Stoic series/score model.",
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    },
+    {
+      "chart": "/workspace/implementation/reports/phase1-live/methods/charts/M12-stoic-risk.png",
+      "chart_sha256": "95671bac0cd0f385978e0cd8d17f49eeca69a4aa95f73e2d6d418bce2a816e87",
+      "date": null,
+      "geometry": [
+        "O155"
+      ],
+      "historical_N": 0,
+      "hole_ids": [
+        "CHART:M12:dated_process_journal:prior_validation_MC:activation_conflict:other_outcome_transitions"
+      ],
+      "id": "M12",
+      "inputs": [],
+      "measurements": {
+        "dated_session": null,
+        "printed_closed_win_units": [
+          3,
+          12
+        ],
+        "printed_cumulative_two_win_units": 15,
+        "printed_risk_units": [
+          1,
+          4,
+          1
+        ],
+        "printed_second_loss_net_units": -1,
+        "rebase_to_updated_equity": false,
+        "source_activation": null
+      },
+      "method": "STOIC-RISK",
+      "method_interval": null,
+      "method_rate": null,
+      "native_identity": null,
+      "references": [
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          7
+        ],
+        [
+          "sources/documents/discretionary/data-engine.pdf",
+          8
+        ]
+      ],
+      "selection": "Printed baseline arithmetic only. No acquired process journal or risk decisions exist, so no dated historical session can be charted.",
+      "visual_review": "requires manual inspection; see CHART_CHECK.md"
+    }
+  ],
+  "formulas": {
+    "bytes": 719106,
+    "path": "/workspace/planning/phase-1-live/FORMULAS.md",
+    "sha256": "76dc1593df6a08e2822be0bc3a6f5dd7aa1ec835eb5da304e56ac5db999d04da"
+  },
+  "historical_candidates_created": 0,
+  "runtime": {
+    "PyMuPDF": "1.28.2",
+    "matplotlib": "3.11.1",
+    "numpy": "2.3.3",
+    "pandas": "3.0.5",
+    "pyarrow": "25.0.1"
+  },
+  "source_references": [
+    {
+      "method": "M01",
+      "page": 4,
+      "pdf": {
+        "bytes": 2785817,
+        "path": "/workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+        "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M01-source-p04.png",
+      "render_sha256": "18680669d7618d7482a89c1603543eff2b3dc95acaeb7276b8fc911c5035f85a"
+    },
+    {
+      "method": "M02",
+      "page": 43,
+      "pdf": {
+        "bytes": 9061751,
+        "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M02-source-p43.png",
+      "render_sha256": "1f41f07287878c3dbd4f3642435ff17b505811920770dac12ddcb4efa9b700b0"
+    },
+    {
+      "method": "M03",
+      "page": 33,
+      "pdf": {
+        "bytes": 9061751,
+        "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M03-source-p33.png",
+      "render_sha256": "3932c4d406e5e6a8743866a266b2c96a6416b14b780e3f9cfb71204ad313bc24"
+    },
+    {
+      "method": "M04",
+      "page": 40,
+      "pdf": {
+        "bytes": 9061751,
+        "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+        "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M04-source-p40.png",
+      "render_sha256": "1ca29930fa60f8214dad53fa460546e100880272776ec176e0751701f4ba3cf8"
+    },
+    {
+      "method": "M05",
+      "page": 3,
+      "pdf": {
+        "bytes": 1842358,
+        "path": "/workspace/sources/documents/discretionary/tpo-lesson-3.pdf",
+        "sha256": "ae7993b6368594a4d8a90b89edbed1559eda301aa45960a65d07fd5a810cc4a4"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M05-source-p03.png",
+      "render_sha256": "525bb7f271815457654c6f8f39dd74e4df8ec9aa4b57681a631dc912f6cd2db9"
+    },
+    {
+      "method": "M06",
+      "page": 4,
+      "pdf": {
+        "bytes": 1808540,
+        "path": "/workspace/sources/documents/discretionary/reading-the-volume-profile.pdf",
+        "sha256": "e244581ebbc23e4f1bcaa8307aa613863f996342d2119fd30986c7e4f2ca6a2b"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M06-source-p04.png",
+      "render_sha256": "91784b72d3aa2894315d3183d6fb627374f35b47dd2054200b0145659fa92c75"
+    },
+    {
+      "method": "M07",
+      "page": 7,
+      "pdf": {
+        "bytes": 1336653,
+        "path": "/workspace/sources/documents/discretionary/10k-first-month.pdf",
+        "sha256": "37c0188817b624d3a58255f60b75c729ae0b8a434becaa89a343b16f0646f148"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M07-source-p07.png",
+      "render_sha256": "5550efb4a427e47ba38f83284a936eedc41400614c440a27452c69cf5b38034f"
+    },
+    {
+      "method": "M08",
+      "page": 22,
+      "pdf": {
+        "bytes": 7432339,
+        "path": "/workspace/sources/documents/discretionary/average-unprofitable-trader.pdf",
+        "sha256": "cc7520af1a2d22ac6ea27b71e0c97fff2877d76b56d099ccfb4284c3dcf7d771"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M08-source-p22.png",
+      "render_sha256": "821273c16f578bb2e7fe8cfd50c74a2fa420580928d514a367e800806806a199"
+    },
+    {
+      "method": "M09",
+      "page": 7,
+      "pdf": {
+        "bytes": 5497849,
+        "path": "/workspace/sources/documents/discretionary/refill-effect.pdf",
+        "sha256": "164a1d9dc26c8cd20d86a46d9fcb211a8e64607024825f819b497d7e3fcb8d64"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M09-source-p07.png",
+      "render_sha256": "bb653ffc5420bb04430ce8b4988063acaa800a5525925d50c48c84640bc67357"
+    },
+    {
+      "method": "M10",
+      "page": 10,
+      "pdf": {
+        "bytes": 2822900,
+        "path": "/workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+        "sha256": "36d3e210e5a860b6b035cef1c22d4ec285d491e066cfdb4f97b2034b1be04521"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M10-source-p10.png",
+      "render_sha256": "96ce249393ee403fec8e69c15757d0efd1f3db6668b212f4e0fb89f11bc88fae"
+    },
+    {
+      "method": "M11",
+      "page": 5,
+      "pdf": {
+        "bytes": 1867876,
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M11-source-p05.png",
+      "render_sha256": "bd2eaf0a71e971244d9414e28795e2338e3c1cc83198db53f54bce311c937b03"
+    },
+    {
+      "method": "M12",
+      "page": 7,
+      "pdf": {
+        "bytes": 1867876,
+        "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+        "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1"
+      },
+      "render": "/workspace/implementation/reports/phase1-live/methods/charts/M12-source-p07.png",
+      "render_sha256": "6f3fab29b3e89f41ccf55f76afc716679db7bbb06b1df3c33714084553178201"
+    }
+  ],
+  "sources": [
+    {
+      "bytes": 2785817,
+      "path": "/workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf",
+      "sha256": "f645b9770bedaf83664caaa198cb68a61d4fe38325ddd00129bdd6e238886811"
+    },
+    {
+      "bytes": 9061751,
+      "path": "/workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf",
+      "sha256": "133d28ca03811ed9ffc709e24921e25918f331ab48f14ae64a882a1e44f755bb"
+    },
+    {
+      "bytes": 1842358,
+      "path": "/workspace/sources/documents/discretionary/tpo-lesson-3.pdf",
+      "sha256": "ae7993b6368594a4d8a90b89edbed1559eda301aa45960a65d07fd5a810cc4a4"
+    },
+    {
+      "bytes": 1808540,
+      "path": "/workspace/sources/documents/discretionary/reading-the-volume-profile.pdf",
+      "sha256": "e244581ebbc23e4f1bcaa8307aa613863f996342d2119fd30986c7e4f2ca6a2b"
+    },
+    {
+      "bytes": 1336653,
+      "path": "/workspace/sources/documents/discretionary/10k-first-month.pdf",
+      "sha256": "37c0188817b624d3a58255f60b75c729ae0b8a434becaa89a343b16f0646f148"
+    },
+    {
+      "bytes": 7432339,
+      "path": "/workspace/sources/documents/discretionary/average-unprofitable-trader.pdf",
+      "sha256": "cc7520af1a2d22ac6ea27b71e0c97fff2877d76b56d099ccfb4284c3dcf7d771"
+    },
+    {
+      "bytes": 5497849,
+      "path": "/workspace/sources/documents/discretionary/refill-effect.pdf",
+      "sha256": "164a1d9dc26c8cd20d86a46d9fcb211a8e64607024825f819b497d7e3fcb8d64"
+    },
+    {
+      "bytes": 7443891,
+      "path": "/workspace/sources/documents/discretionary/origin-of-the-move.pdf",
+      "sha256": "42222b20e75c8a92da0d793500ebe29ae5e1d2c8e0ddd369ce0a66ee5b0b8284"
+    },
+    {
+      "bytes": 2822900,
+      "path": "/workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf",
+      "sha256": "36d3e210e5a860b6b035cef1c22d4ec285d491e066cfdb4f97b2034b1be04521"
+    },
+    {
+      "bytes": 1867876,
+      "path": "/workspace/sources/documents/discretionary/data-engine.pdf",
+      "sha256": "98034befc15a2c4f52467391d63805505295dfce5a4ec648e01455ebbfb679a1"
+    },
+    {
+      "bytes": 3584842,
+      "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet",
+      "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+    },
+    {
+      "bytes": 16406,
+      "path": "/workspace/data/derived/continuous-futures__instrument-and-roll-maps/nq-instruments.parquet",
+      "sha256": "4f50bd9722bdb1773ba037926c87c2f7eaa42548578de94d9d5c31baac303d2a"
+    },
+    {
+      "bytes": 5450142,
+      "path": "/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2025.parquet",
+      "sha256": "ba227282046f8175d0100fba965ad480a3d2a5b278ca8f0b49800cb8a25ec991"
+    },
+    {
+      "bytes": 22019538,
+      "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2025-11-17.parquet",
+      "sha256": "656799b8c9354521e1646c2798f0c431f92c278237cfdf0148921902bce0111e"
+    },
+    {
+      "bytes": 14663077,
+      "path": "/workspace/data/quantpad/cme__nq-continuous-futures__trades/2026-02-23.parquet",
+      "sha256": "e2e04dfdb3aa7a86f2cb21f6d96c9861bae30a071834e7d6ca693e7ae2f53a46"
+    },
+    {
+      "bytes": 235491,
+      "path": "/workspace/implementation/reports/phase1-live/macro-backfill/fred-h233aw4x/normalized-p0wb8u84/CPIAUCSL.jsonl",
+      "sha256": "cb10285c2cbda5c2abe5c7dbdcc109957280da3d9d34d2a74b0be9d76dbc9213"
+    },
+    {
+      "bytes": 6555,
+      "path": "/workspace/implementation/reports/phase1-live/methods/charts/chart-spec.json",
+      "sha256": "62a49c3db096c420654fa1a33f3f05b23111213c9cd05b25ef08a8ceade5f289"
+    },
+    {
+      "bytes": 40219,
+      "path": "/workspace/implementation/tools/chart_method_pack.py",
+      "sha256": "6ed0ee6ca02a7321da958bc4d8fcc6652ce8f4c5dd881aa9587faf6aecfd42ae"
+    },
+    {
+      "bytes": 719106,
+      "path": "/workspace/planning/phase-1-live/FORMULAS.md",
+      "sha256": "76dc1593df6a08e2822be0bc3a6f5dd7aa1ec835eb5da304e56ac5db999d04da"
+    }
+  ],
+  "version": "method-geometry-2026-09-12",
+  "visual_review": "Manual review recorded separately in CHART_CHECK.md"
+}

@@ -199,10 +199,20 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
         f"- rate: {format_rate(summary.get('rate'))}",
         f"- interval: {format_interval(summary.get('interval'))}",
         f"- candidate_discovery: {doc.get('scope', {}).get('candidate_discovery')}",
+        '- Synthetic fixtures, chart geometry checks and archive rows are excluded from p/f/u/n/N.',
         "",
-        "## Branches",
+        "## Candidate selector review",
         "",
     ]
+    review = doc.get('discovery_audit') or {}
+    if review:
+        lines.extend([f"Audit: `{review['audit_version']}`; source contracts checked against their recorded hashes.",
+                      '', 'branch | complete selector | missing source inputs', '--- | --- | ---'])
+        for branch, row in review['branches'].items():
+            lines.append(f"{branch} | no | {', '.join(row['missing_fields'])}")
+        lines.extend(['', next(iter(review['branches'].values()))['reason'],
+                      '', 'Each branch has a candidate-selector record in the `holes.jsonl` artifact, including its producer rules.'])
+    lines.extend(['', '## Branches', ''])
     for branch, row in [*(doc.get("branches") or {}).items(), *(doc.get("case_branches") or {}).items()]:
         lines.append(
             f"- `{branch}` ({row.get('cohort')}) p={row.get('p')} f={row.get('f')} u={row.get('u')} "
@@ -217,7 +227,8 @@ def markdown_twin(doc: dict, headlines: list[str]) -> str:
     for row in doc['summaries']:
         lines.append(f"{row['predicate']} | {row['cohort']} | {row['evidence_mode']} | {row.get('instrument_id')} | {','.join(row.get('source_versions', []))} | {row['p']} | {row['f']} | {row['u']} | {row['n']} | {row['N']} | {format_year_split(row['years'])}")
     lines.extend(['', '## Coverage', '',
-                  f"Requested span: `{doc['scope'].get('requested_date_span')}`.",
+                  f"Historical study scope: `{doc['scope'].get('historical_study')}`.",
+                  f"Archive requested span (inventory, not the method sample): `{doc['scope'].get('requested_date_span')}`.",
                   f"Observed file span: `{doc['scope'].get('actual_date_span')}`. File endpoints do not prove continuous coverage.",
                   f"Relevant files: {doc['coverage'].get('relevant_file_count', 0)}; disjoint owned tape intervals: {len(doc['ownership'])}.",
                   f"Partial years: {', '.join(doc['scope'].get('partial_endpoint_years', [])) or 'none' }.",
