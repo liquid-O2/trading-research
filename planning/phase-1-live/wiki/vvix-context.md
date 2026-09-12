@@ -10,7 +10,9 @@ VVIX appears in the volatility lesson's broader read of changing volatility cond
 
 **Phase 1 observation.** Record the available value and source interpretation without inventing a universal threshold or borrowing a later observation.
 
-**Existing attachments.** family_vol and [FORMULAS] R-R02 are related. A source-complete VVIX decision mapping is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O045 contract](../FORMULAS.md#o045) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Select the actual available VVIX vintage and retain context and interpretation with no backward use of later releases. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** Missing availability and conflicting release ties remain data limitations. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [VIX and volatility context](vix-context.md) · [Volatility term structure and event change](volatility-curve.md) · [Exposure fitted to source risk constraints](position-sizing.md)
 

@@ -10,7 +10,9 @@ Where the source supplies it, controlling structure determines invalidation befo
 
 **Phase 1 observation.** Risk must be defined before decision. Keep wick versus close invalidation and actual source stop identity explicit; missing general stop rules remain unknown rather than borrowing another case.
 
-**Existing attachments.** [formulas_jumbo.j18_ob_bull/j18_ob_bear](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_s01_refill_long/r_s01_refill_short/r_s07_areas](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-J18/R-S01/R-S07 and GB ingredients. Complete source-linked risk records are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O139 contract](../FORMULAS.md#o139) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Bind the planned stop to the actual selected invalidation reference, side, method, clock, tick size, and adverse-side price comparison. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Exposure fitted to source risk constraints](position-sizing.md) · [Objective selected before entry](trade-objective.md) · [Confirmed protected high or low](protected-high-low.md) · [Source-selected position management](position-management.md)
 
@@ -28,3 +30,5 @@ Where the source supplies it, controlling structure determines invalidation befo
 ### September 12 source binding
 
 **Scoped excursion research record (2026-09-12):** [C2] p.4 recommends collecting 40–80 trades before inspecting MFE/MAE distributions. Keep original entry/exit or observation-end windows, price units, long/short direction, native coverage and censoring in O146/O153 research records. Collect all observed outcomes. Stop/target optimization remains deferred; this count is not a universal validation threshold.
+
+[C2]: </workspace/sources/documents/discretionary/code-2-risk.pdf>

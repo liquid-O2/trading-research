@@ -10,7 +10,9 @@ The printed example risks one baseline unit for 3R, then after that win risks fo
 
 **Phase 1 observation.** Audit the printed ladder separately: first risk=1 / reward=3R; second only after +3 baseline units, risk=4 / reward=3R; second win adds12 and resets. The printed arithmetic is 3−4=−1 or 3+12=15. Other-outcome handling and general rebasing remain unspecified.
 
-**Existing attachments.** No corresponding risk-state object exists in [FORMULAS] or current implementation. Generic return arithmetic is not the complete overlay. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O155 contract](../FORMULAS.md#o155) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Apply the documented STOIC stage ladder to fixed baseline equity/R units and dated prior results without retroactive activation. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior loss-streak validation for Stoic's overlay](loss-streak-validation.md) · [Exposure fitted to source risk constraints](position-sizing.md) · [Outcome distribution of a declared process](outcome-metrics.md)
 

@@ -10,7 +10,9 @@ MAMT explicitly labels the mid of the profile MPOC. It is different from volume 
 
 **Phase 1 observation.** Do not substitute POC for midpoint or prior RTH for ETH. Preserve the prose/figure uncertainty about balance versus VA; report a scoped observation rather than an unconditional probability.
 
-**Existing attachments.** [FORMULAS] R-A13; profile/level geometry in family_value/family_levels. Source scope and the open-inside condition need explicit binding. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O076 contract](../FORMULAS.md#o076) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute MPOC strictly as the midpoint of verified profile high/low and compare it separately with volume POC and later contacts. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** MPOC is a geometric midpoint and must not be substituted for volume POC. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [ETH profile identity](prior-eth-profile.md) · [Profile point of control](profile-poc.md) · [Opening location and participation](open-location-switch.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

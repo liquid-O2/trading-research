@@ -10,7 +10,9 @@ The spread is part of the liquidity and execution context read with DOM and pace
 
 **Phase 1 observation.** Compute from contemporaneous quotes and preserve invalid/crossed/missing quotes. Do not use a session summary as the spread faced at entry.
 
-**Existing attachments.** mbp1_extract and quote fields; [FORMULAS] P3-08. Source-specific quantitative spread filters and order-linked costs are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O112 contract](../FORMULAS.md#o112) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute BBO spread in points and instrument ticks, retaining locked/crossed/stale state and rejecting crossed quotes. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [DOM at a planned location](dom.md) · [Provide, withdraw and consume events](order-participation-events.md) · [Refill-study fill assumption](fill-model.md) · [Trading and account costs](cost-model.md)
 

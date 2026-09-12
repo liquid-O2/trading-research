@@ -10,7 +10,9 @@ Jumbo explicitly says his bubbles are BigTrades, not absorption, and names NQ 10
 
 **Phase 1 observation.** Do not compare London prints with a later 6–9 box or use a full-session future percentile. A named print-size variant cannot be labeled the published 100/75 setting.
 
-**Existing attachments.** [family_tape._big_at](/workspace/implementation/src/trading_research/research/phase1_live/family_tape.py); mbp1_objects trade ingredients; [FORMULAS] R-J15/R-F14/R-F17 and P3-08. The caller must use contemporaneous location and thresholds. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O099 contract](../FORMULAS.md#o099) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Apply the declared big-trade threshold, comparator, and per-print or cluster aggregation without merging the two marker semantics. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Same-price 350% imbalance display](same-price-imbalance.md) · [Zone formed by aggressive prints](refill-zone.md) · [Source execution bars](execution-bars.md)
 

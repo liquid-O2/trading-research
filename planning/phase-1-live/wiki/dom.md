@@ -10,7 +10,9 @@ The DOM combines resting display, executed activity and pace at the planned leve
 
 **Phase 1 observation.** Join observation, response and confirmation at the same level/attempt. Do not substitute final-session median size or an unexecuted displayed wall for local participation.
 
-**Existing attachments.** mbp1_extract and mbp1_objects supply trade/BBO ingredients; [FORMULAS] R-F06/F07/F13 and R-S09. Off-touch depth and verified hidden reserve are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O100 contract](../FORMULAS.md#o100) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure local BBO display and executions while leaving hidden reserve and source defense interpretation unknown unless observed. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed passive replenishment](passive-replenishment.md) · [Iceberg evidence and added participation](iceberg-evidence.md) · [Bid-ask spread](spread-width.md) · [Speed of tape](tape-speed.md) · [At-level DOM rejection](dom-rejection-branch.md)
 

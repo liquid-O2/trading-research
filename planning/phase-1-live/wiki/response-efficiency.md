@@ -10,7 +10,9 @@ jetbundle compares participation with actual price response and whether opposite
 
 **Phase 1 observation.** Use the same local interval and evidence available by the state/decision. Keep an invented response-per-volume ratio named; do not choose the future reversal as the efficiency window.
 
-**Existing attachments.** [mbp1_objects.absorption_a/absorption_b](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_flow.aggressive_at_level/r_f06_dom_absorption](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F06/F07. Full source efficiency and depth measures are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O164 contract](../FORMULAS.md#o164) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute directional effort and response from actual selected interval events and instrument-definition tick size; preserve unknown aggressor bounds and resolve endpoint ties only with actual sequence. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** Effort/response arithmetic does not infer source efficiency class, hidden reserve or absorption; unsequenced different-price endpoint ties remain data ambiguity. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Provide, withdraw and consume events](order-participation-events.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Executed passive replenishment](passive-replenishment.md) · [B–A–D–E–W auction-state alphabet](auction-state.md)
 

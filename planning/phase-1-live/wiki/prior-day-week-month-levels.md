@@ -10,7 +10,9 @@ Green Bird uses prior-day levels, the previous weekly candle's extremes and prev
 
 **Phase 1 observation.** Identify the exact prior period from the source. The reclaim may establish bias for a later aligned pullback, but the bias must exist before that entry; a later sweep cannot explain an earlier trade.
 
-**Existing attachments.** [family_levels.build_level_table](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py); [FORMULAS] R-G05/G08/G09, R-J10/J19. Persistent prior-week/month references and source-scoped retirement are missing or partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O048 contract](../FORMULAS.md#o048) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure prior-period high/low from native members and preserve period identity, scope, end, active state, and retirement policy. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Native extrema do not by themselves determine source retirement policy or active state. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior-session auction landmarks](prior-session-reference-levels.md) · [Chronological liquidity purges](overnight-purge.md) · [Remaining auction objectives](unfinished-business.md) · [Sweep, failure and reclaim](sweep-reclaim.md)
 

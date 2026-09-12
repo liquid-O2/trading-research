@@ -10,7 +10,9 @@ A ledge is the edge/cutoff of the relevant shelf or accepted volume area. Sires 
 
 **Phase 1 observation.** Check that the traded retest returns to the same previously broken ledge. Proximity to a final-profile boundary does not implement the sequence.
 
-**Existing attachments.** [formulas_jumbo.profile_ledges](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_jumbo.a02_ledge_retest_hold](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A02/A16/A17 and P3-07. Exact source edge-selection thresholds are unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O069 contract](../FORMULAS.md#o069) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Derive ledge and retest arithmetic only from selected parent objects; preserve stable lineage separately from equal price and deny late or unrelated retests. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Same price alone cannot substitute for stable ledge identity across snapshots. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile shelf](profile-shelf.md) · [Accepted break and defended boundary retest](break-retest.md) · [Profile value area](value-area.md)
 

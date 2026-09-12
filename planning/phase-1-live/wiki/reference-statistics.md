@@ -10,7 +10,9 @@ The sources present path and landmark statistics with particular windows and con
 
 **Phase 1 observation.** Compare like denominators only. Preserve source claims as claims until their event/cohort is reconstructable; do not transfer an ES appendix percentage to NQ or reinterpret an eventual range path as an opening signal.
 
-**Existing attachments.** stats/report; [FORMULAS] R-J06/J07, R-A13/A15/A18. Old component rates and retrospective labels do not certify the operating method. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O088 contract](../FORMULAS.md#o088) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep a literal source claim separate from a comparable observed cohort and report both/either hit counts and rates without relabeling them as trade win rate. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Literal source percentages are not treated as measured trade performance and incomparable cohorts remain marked. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Retrospective range path](range-path-class.md) · [Opening location and participation](open-location-switch.md) · [Overnight high, low and width](overnight-range.md) · [MPOC: the profile midpoint](mpoc.md) · [Prior-session auction landmarks](prior-session-reference-levels.md)
 

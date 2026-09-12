@@ -10,7 +10,9 @@ An observation is usable only if its evidence supports what the method asks. An 
 
 **Phase 1 observation.** Keep pass / fail / unknown separate. Unknown aggressor, missing depth, missing intrabar order or an undefined source setting cannot become a negative or a passing setup. This page makes no new claim that a dataset has been acquired.
 
-**Existing attachments.** slice and mbp1_extract; mbp1_objects provides trade and best-quote ingredients. Full order/depth reconstruction, several proprietary levels and a complete operator event ledger are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O001 contract](../FORMULAS.md#o001) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Resolve every physical row in the exact half-open window; certify minute coverage by interval membership and trade coverage against independently retained native minute OHLCV. Missing minutes and cross-source volume discrepancies remain explicit unknown coverage. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py).
+
+**Evidence limits.** Native retained files lack receive timestamps and exchange sequence. June 12 adjacent-minute reconciliation mismatches cannot be repaired by cancelling their net volume; native-clock-coverage.json preserves evidence. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [Executed aggressor-side trades](aggressor-trades.md) · [Provide, withdraw and consume events](order-participation-events.md) · [Frozen observation cohort](research-cohort.md)
 

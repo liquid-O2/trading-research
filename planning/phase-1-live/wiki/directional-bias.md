@@ -10,7 +10,9 @@ A prior day/week/month or session reclaim can establish direction for later alig
 
 **Phase 1 observation.** Direction must be recorded before entry; do not derive it from the eventual profitable side. The scalp trigger and complete invalidation algorithm remain unpublished.
 
-**Existing attachments.** family_levels/family_fail and [FORMULAS] R-G01–G11 supply ingredients. A persistent source bias/reclaim ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O136 contract](../FORMULAS.md#o136) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Bind directional bias to a dated support/origin identity and candidate side; later events cannot explain an earlier bias. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior day, week and month extremes](prior-day-week-month-levels.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Source setup quality and exposure](quality-grade.md)
 

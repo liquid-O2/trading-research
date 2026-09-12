@@ -10,7 +10,9 @@ Bar construction changes what a candle, print cluster and confirmation mean. Jum
 
 **Phase 1 observation.** Do not turn a whole morning into one candle, compare adjacent-candle POCs as an intrabar flip, or silently replace a native range bar with a minute bar. Record any replacement as a named approximation.
 
-**Existing attachments.** clocks and mbp1_extract provide time and event ingredients. Native source-compatible range-bar reconstruction and several intrabar footprint stages are missing; [FORMULAS] P3-01/P3-04 and R-F04/F05/F14. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O004 contract](../FORMULAS.md#o004) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Construct the exact ET-aligned time bar from all complete finer bars or identified events, retaining native instrument, original member IDs, OHLCV and latest availability. Missing members prevent completeness. Same-price boundary batches have exact OHLC; differing prices without verified sequence leave boundary order unknown. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py).
+
+**Evidence limits.** Native range bars require source-compatible membership and construction settings; unavailable settings remain holes. No row-count time bars or fabricated zero-activity OHLC. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [POC relocation within a candle](candle-poc-flip.md) · [Diagonal footprint imbalance stacks](footprint-imbalance-zones.md) · [BigTrades aggression markers](big-trades.md)
 

@@ -10,7 +10,9 @@ Trend strength is another quantified context item named in the data-engine macro
 
 **Phase 1 observation.** Preserve a supplied source reading or leave exact computation unknown. Do not choose a detector after seeing the trend outcome.
 
-**Existing attachments.** Missing from [FORMULAS] and current source-method objects. Other authors' microbalance strength is a different observation. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O161 contract](../FORMULAS.md#o161) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain source strength, horizon and scale separately from an explicitly labeled regression slope. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** The strength formula is unpublished. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Stoic's macro indicator set](macro-indicators.md) · [Historical-average and standardized-deviation comparison](standardized-deviation.md) · [Declared model and review version](model-definition.md)
 

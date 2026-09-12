@@ -1,7 +1,9 @@
 # Source: the Pine archive (indicators/Pinescript-indicators--main.zip)
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
-84 files, 51,601 lines, unpacked from `sources/documents/indicators/Pinescript-indicators--main.zip`. Authors: `lucymatos`, `npg` / `notprofessorgreen`, unattributed. Two kinds of content: geometry restatements of Jumbo / session objects (construction references) and **hardcoded statistics tables** typed into the scripts (tier-2 claims with unknown provenance; comparison rows to recompute on F and L, never numbers to store as truth). Every file was read line by line; the full classification of all 84 is in `../REVIEW_LEDGER.md`. `README.md` inside the zip contains only a title. Exactly one byte-identical duplicate pair (`6 to 9 Session and Levels.txt` = `6 to 9 session & levels v2.txt`).
+84 files, 51,601 lines, unpacked from `sources/documents/indicators/Pinescript-indicators--main.zip`. Authors: `lucymatos`, `npg` / `notprofessorgreen`, unattributed. Two kinds of content: geometry restatements of Jumbo / session objects (construction references) and **hardcoded statistics tables** typed into the scripts (tier-2 claims with unknown provenance; comparison rows to recompute on F and L, never numbers to store as truth). Every file was read line by line; the full classification of all 84 is in [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md). `README.md` inside the zip contains only a title. Exactly one byte-identical duplicate pair (`6 to 9 Session and Levels.txt` = `6 to 9 session & levels v2.txt`).
 
 ## Citations
 What each mechanism-relevant file contributes:
@@ -41,4 +43,4 @@ None.
 - Each quoted table gets a recompute row on F and L with the same bucket definitions; the absolute cell difference is reported next to the quoted number.
 
 ## Links
-[index](index.md) · `../REVIEW_LEDGER.md`
+[index](index.md) · [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md)

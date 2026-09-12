@@ -10,7 +10,9 @@ The clock identifies what has finished before a decision. Jumbo's main range for
 
 **Phase 1 observation.** Use America/New_York wall time with date-aware conversion where ET is specified. Preserve a chart's unresolved axis/timezone as unknown. Do not reset every instrument, VWAP or profile at one assumed cash-open clock.
 
-**Existing attachments.** clocks.CLOCKS/clock_bounds; [family_clocks.build_clock_table](/workspace/implementation/src/trading_research/research/phase1_live/family_clocks.py); [FORMULAS] P3-01/P3-06. Exact London bounds and some modern source clock configurations remain unresolved. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O003 contract](../FORMULAS.md#o003) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve date-aware ET clocks and exact native precision; source-clock verification requires exact-window source-admitted evidence or an actual frozen catalog fact with immutable citation verification. Plain caller verification and inferred comparison settings remain unknown. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/native_boundary.py).
+
+**Evidence limits.** Retained QuantPad streams cannot supply missing exchange sequence or verify cross-stream ordering. No fabricated receive clock. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source execution bars](execution-bars.md) · [Jumbo's 06:00–09:00 range](tbr-6-9-range.md) · [Other time-based range formations](tbr-remaining-clocks.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Time-price-opportunity profile](tpo-ib-auction.md)
 

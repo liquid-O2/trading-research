@@ -10,7 +10,9 @@ The data engine compares macro evidence through time; thesis/news reads depend o
 
 **Phase 1 observation.** Use released_at/available_at, not merely the economic period label. Missing historical vintages leave author-faithful historical inputs unknown; this is a compilation requirement for causal records, not a newly attributed author formula.
 
-**Existing attachments.** [family_levels.load_red_folder](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py) is only a calendar ingredient. Full release values, revisions and source macro transformations are missing; related [FORMULAS] R-J20/J21/R-R03. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O162 contract](../FORMULAS.md#o162) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Resolve the chosen series/reference-period initial or latest available vintage at the cutoff; preserve release history and reject impossible release ordering or ambiguous ties. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** Missing observed availability stays unknown; publication-as-availability remains an explicit assumption. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Scheduled news and changing information](news-event-context.md) · [Stoic's macro indicator set](macro-indicators.md) · [Thesis, validity band and death condition](thesis-lifecycle.md) · [Frozen observation cohort](research-cohort.md)
 

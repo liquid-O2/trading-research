@@ -10,7 +10,9 @@ The macro example locates the current cycle before interpreting leverage, credit
 
 **Phase 1 observation.** Retain the historical source conclusion as a case; automatic classification is unknown without supplied rules and vintage data.
 
-**Existing attachments.** The source classifier is missing from [FORMULAS] and current phase1 objects. Generic trend or calendar labels are not substitutes. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O158 contract](../FORMULAS.md#o158) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the source cycle label, rationale and actual available input vintages instead of a majority-vote substitute. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** Source cycle classification is unpublished and no new classifier is invented. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Stoic's macro indicator set](macro-indicators.md) · [Economic observation and release vintage](economic-release-vintage.md) · [Frozen observation cohort](research-cohort.md)
 

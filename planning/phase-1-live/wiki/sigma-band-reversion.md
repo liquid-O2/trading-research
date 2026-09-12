@@ -1,5 +1,7 @@
 # σ-band reversion (Pine AM TBR)
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 A daily-volatility band around the 08:00 open: σ = sample standard deviation of daily % change over a lookback, the touch level at ±0.25σ, and reversion = price returning to the 08:00 open after a touch, tracked cumulatively by 09:00 / 10:00 / 11:00 / 12:00 `[PINE AM TBR - NQ Stats.txt:16, 78, 135–139, 336–357, 415–471]`. The script hardcodes hour-8 touch 78.4% n=732, hour-9 69.7% n=492 and cumulative reversion 27.9 / 68.2 / 76.1 / 78.4 by 09 / 10 / 11 / 12; those are tier-2 claims to recompute, never parameters ([sources-pine-archive](sources-pine-archive.md)). Id `env.tbr.sigma025`. It is an envelope, not the EV range and not SessionStat.
 

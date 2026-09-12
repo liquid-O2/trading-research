@@ -10,7 +10,9 @@ TPO records which source letter periods visited each price and shows the time st
 
 **Phase 1 observation.** Retain letter identity, not just counts. A period is complete at its end; final-day tails and single prints cannot qualify a morning entry.
 
-**Existing attachments.** [mbp1_objects.tpo_trade_visited](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); family_gap; [FORMULAS] R-A04/A14/A15 and R-S09, P3-04. Period identity and developing structure are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O078 contract](../FORMULAS.md#o078) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Construct a dated TPO membership map from a declared trade-visited or complete period-range grid, preserving letter clock and coverage. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** The source letter window is unavailable; 30-minute period-range construction is explicitly comparison-only. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [TPO single-print structure](single-prints.md) · [TPO excess at auction extremes](excess.md) · [TPO poor high and poor low](poor-extremes.md) · [Initial balance](initial-balance.md) · [Profile value area](value-area.md) · [Developing profile snapshot](developing-profile.md)
 

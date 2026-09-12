@@ -1,5 +1,7 @@
 # Manipulation / distribution envelope (Pine statistical OHLC projections)
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 Levels projected from a session open using the average and median of two excursions measured on prior session candles: manipulation = the excursion from the open against the candle's eventual close direction (open − low on an up-close, high − open on a down-close), distribution = the excursion in the close direction (high − open on an up-close, open − low on a down-close) `[PINE Statistical OHLC Projections HTF.txt:322–326]`; averages, medians and 25 / 75 percentiles `[:141–158, 343–355]`; like-for-like slot filters in the sibling files ([sources-pine-archive](sources-pine-archive.md)). Ids `env.pine.manip.{avg,median,p25,p75}` (the distribution twin printed beside each). It is the AMD phase read as an envelope; the phase labels are on [amd-phase-labels](amd-phase-labels.md).
 

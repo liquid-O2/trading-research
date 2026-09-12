@@ -10,7 +10,9 @@ An established balance permits a responsive read at a real outer edge, followed 
 
 **Phase 1 observation.** Require contemporaneous balance plus the selected local entry branch. Record initial fair-value reach, POC behavior and any later far-side objective separately.
 
-**Existing attachments.** [formulas_jumbo.a01_fade/a05_poc_tell/a16_stacked](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A01/A05/A16. A full-morning inside flag and a bare edge predicate do not supply the route. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O090 contract](../FORMULAS.md#o090) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Validate ordered edge arrival and local confirmation inside an actual balance; keep later far-side outcome separate from the rotation setup. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** A later far-side objective is not inferred from a local rotation without an actual outcome parent. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Auction balance](auction-balance.md) · [Profile point of control](profile-poc.md) · [Four-check absorption reversal](absorption-reward-retest.md) · [Failure of aggression in long-gamma balance](balance-failure-fade.md) · [POC failure versus efficient passage](poc-traversal.md)
 

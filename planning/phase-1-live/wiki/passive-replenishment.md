@@ -10,7 +10,9 @@ Passive defense means liquidity is consumed and replenished at the relevant area
 
 **Phase 1 observation.** Keep a BBO reload inference labeled as such. Do not assign a full-session reload flag to a local retest or invent the author's exact refresh threshold/window.
 
-**Existing attachments.** [mbp1_objects.absorption_b/iceberg_touch_infer/on_touch_refill](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [FORMULAS] R-F06/F07/F09/F17 and R-S03. Full off-touch depth and hidden reserve verification are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O102 contract](../FORMULAS.md#o102) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Reconcile consumption and subsequent same-price refresh; zero or unordered activity cannot verify replenishment. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [DOM at a planned location](dom.md) · [Iceberg evidence and added participation](iceberg-evidence.md) · [Zone formed by aggressive prints](refill-zone.md) · [Fresh defense of a continuation band](defended-band-continuation.md)
 

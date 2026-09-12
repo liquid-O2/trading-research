@@ -10,7 +10,9 @@ The VIX lesson uses volatility levels, expected-range examples, completion, even
 
 **Phase 1 observation.** Use the last actually available source observation. Keep the source's illustrated point ranges and threshold descriptions scoped rather than replacing all account/structure risk with a VIX lookup.
 
-**Existing attachments.** [formulas.vix_preopen/vix_band](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); family_vol; [FORMULAS] R-R02. Source-compatible time/vintage and exact regime mapping are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O042 contract](../FORMULAS.md#o042) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Select the latest available VIX observation at decision time with unit and vintage tie checks; later observations cannot modify an earlier snapshot. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** A missing or conflicting contemporaneous observation is a data gap. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Volatility-implied daily-move estimate](expected-daily-move.md) · [Volatility term structure and event change](volatility-curve.md) · [VVIX context](vvix-context.md) · [Scheduled news and changing information](news-event-context.md) · [Exposure fitted to source risk constraints](position-sizing.md)
 

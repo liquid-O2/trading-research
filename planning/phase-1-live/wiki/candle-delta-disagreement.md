@@ -10,7 +10,9 @@ A candle can move one way while executed aggression leans the other, revealing e
 
 **Phase 1 observation.** Keep the same candle and local area throughout. Do not use a final candle state before its observation time or infer executed delta solely from price movement.
 
-**Existing attachments.** [formulas_flow.r_f05_absorption_stack](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); mbp1_objects footprint/delta ingredients; [FORMULAS] R-F05. Current whole-AM aggregation is not the native candle sequence. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O106 contract](../FORMULAS.md#o106) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compare candle direction with exact same-candle execution delta and reject execution membership from another candle. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [POC relocation within a candle](candle-poc-flip.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Footprint-confirmed reaction](footprint-confirmed-reaction.md)
 

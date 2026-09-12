@@ -10,7 +10,9 @@ The flip is a source regime/location reference read with current price and the r
 
 **Phase 1 observation.** Retain the source read or a named scenario; do not combine price-versus-flip and aggregate-sign interpretations opportunistically. The next impulse may require a reread before a new decision.
 
-**Existing attachments.** [family_gex._gex_day/build_gex_table](/workspace/implementation/src/trading_research/research/phase1_live/family_gex.py); [FORMULAS] R-R01. The exact source flip algorithm and consistent dealer-position assumptions are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O035 contract](../FORMULAS.md#o035) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain attributed flip level, units and regime interpretation and compute spot relation using both observation clocks. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** The dealer flip engine is unpublished; spot-minus-flip arithmetic does not infer a gamma regime. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Native options-chain identity](options-nodes.md) · [Gamma call and put walls](gex-walls-and-max-pain.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

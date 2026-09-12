@@ -10,7 +10,9 @@ The NYAM example shows earlier tests of one support band, no fresh buyer defense
 
 **Phase 1 observation.** Check distinct test count=3 and actual no-new-defense evidence before the small short. This is a source-case description; the general quantitative entry selector remains incomplete.
 
-**Existing attachments.** [formulas_flow.r_s02_third_retest](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-S02. Adjacent touch bars and hard-coded zero defense volumes do not reproduce the case. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O134 contract](../FORMULAS.md#o134) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Count distinct return/departure episodes at one support band, preserve third-touch losses in cohort, and leave entry selection unautomated. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior defended reaction area](prior-reaction-area.md) · [DOM at a planned location](dom.md) · [Source setup quality and exposure](quality-grade.md) · [Thesis and execution journal](process-journal.md)
 

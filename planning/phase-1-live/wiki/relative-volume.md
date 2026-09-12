@@ -10,7 +10,9 @@ The opening-location discussion uses participation to frame continuation versus 
 
 **Phase 1 observation.** Keep the stated source cell and named normalization. Do not compare an incomplete current interval with an incompatible full-session baseline or leak 09:30–09:35 volume into a 09:30 decision.
 
-**Existing attachments.** [family_open.build_open_table](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); [FORMULAS] R-J06/J21. Source-exact baseline/threshold and early-decision availability are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O027 contract](../FORMULAS.md#o027) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute current native volume and relative volume against an explicit same-clock arithmetic-mean baseline, retaining sample identities and classification threshold. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Baseline statistic, cohort membership, and high-RVOL threshold must be frozen; incomplete same-clock samples remain a hole. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Opening location and participation](open-location-switch.md) · [Range width and expectations](range-width-context.md) · [Source clocks and availability](clock-grid-and-bars.md)
 

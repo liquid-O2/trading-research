@@ -1,5 +1,7 @@
 # SMT divergence (sister-index hunts)
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 SMT = one index takes a prior high or low while a sister index does not, or takes it later / shallower. Jumbo's classify step asks "whether sister indices already hunted the same side" `[FIND p.3 L57–58]`; the prior assistant asked how the user defines overnight relative strength `[CEX L105]`. Phase 1 treats SMT as a hypothesis evaluated continuously in the window, not a 09:30 snapshot, at several scales `[BRIEF]`. SMT is not treated as a Green Bird edge `[BRIEF]`.
 

@@ -10,7 +10,9 @@ The auction leaves balance or a ledge with participation and acceptance, then re
 
 **Phase 1 observation.** Require known boundary < breakout < retest ≤ confirmation ≤ decision. The selected parent's thesis, regime, risk and objective gates still apply; a missed retest is not permission to chase.
 
-**Existing attachments.** [formulas_jumbo.a02_ledge_retest_hold/a07_break_retest](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_s09_open_above_value](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-A02/A07/R-S09. Side-specific event joins and source bands are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O091 contract](../FORMULAS.md#o091) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Require break, acceptance, departure, same-boundary retest, defense, and initiative in order, with source-held retest and stable boundary identity. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Different-boundary retests or initiative before defense invalidate the sequence; source-held meaning stays source-bound. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile ledge](profile-ledge.md) · [Auction balance](auction-balance.md) · [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Diagonal footprint imbalance stacks](footprint-imbalance-zones.md)
 

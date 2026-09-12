@@ -10,7 +10,9 @@ Sires's codex and review use all trades under a bias/model, with R outcomes, ave
 
 **Phase 1 observation.** Only outcomes after the relevant decision belong to that episode. Preserve losing quarters, unselected cases and causal rebuilds; no rate or P&L is recomputed in this compilation.
 
-**Existing attachments.** stats/report; [FORMULAS] component scores supply only their own event summaries. Whole source-method episode distributions are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O153 contract](../FORMULAS.md#o153) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve all eight outcome categories, explicit closed denominator, process/version/cohort identity, original-R provenance and causal corrections; check literal supplied metric consistency. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** Actual source process results are required. No market-price return series is fabricated; summaries stay attributed summaries. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Frozen observation cohort](research-cohort.md) · [Trading and account costs](cost-model.md) · [Objective selected before entry](trade-objective.md) · [Prior loss-streak validation for Stoic's overlay](loss-streak-validation.md)
 

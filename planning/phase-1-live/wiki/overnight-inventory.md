@@ -10,7 +10,9 @@ Inventory describes the overnight auction's net directional positioning and loca
 
 **Phase 1 observation.** Freeze inventory from overnight observations. Keep a later correction/continuation outcome separate from the initial label and from the source's either-edge statistic.
 
-**Existing attachments.** [FORMULAS] R-A12; family_open and profile ingredients. A source-exact inventory classifier and causal response join are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O074 contract](../FORMULAS.md#o074) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the source overnight inventory label and measured profile evidence; later opening response cannot rewrite the frozen inventory. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Inventory direction is a source label; profile totals alone do not create an automatic classifier. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Overnight volume structure](overnight-profile.md) · [Overnight high, low and width](overnight-range.md) · [Developing auction open type](open-type.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

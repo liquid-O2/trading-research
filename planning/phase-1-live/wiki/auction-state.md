@@ -10,7 +10,9 @@ The guest framework names B balance, A absorption, D discovery, E exhaustion and
 
 **Phase 1 observation.** Classify only from evidence available at state_at. NQ is eligible; AAPL's ten levels are illustrative rather than mandatory. Missing cancellation/required-depth data or unpublished thresholds make faithful automatic state assignment unknown; an annotated state remains identifiable evidence.
 
-**Existing attachments.** The source five-state classifier is missing from [FORMULAS] and current implementation. Generic day or absorption flags are not the complete state model. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O165 contract](../FORMULAS.md#o165) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Record a dated supplied state only when all required evidence, both sides, depth, and availability checks are complete; no automatic state. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Provide, withdraw and consume events](order-participation-events.md) · [Aggressive effort versus price-response efficiency](response-efficiency.md) · [Conditioned next-state transition](auction-state-transition.md) · [Evidence and data coverage](data-coverage.md)
 

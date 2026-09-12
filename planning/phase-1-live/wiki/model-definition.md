@@ -10,7 +10,9 @@ Sires's coaching blueprint defines the product, allowed features, regimes and ac
 
 **Phase 1 observation.** Preserve the version that applied to every observation. A later revision uses earlier completed evidence and starts a new declared comparison; this compile runs no experiment.
 
-**Existing attachments.** slice/compute/stats/report are generic support; [FORMULAS] has no complete versioned author-process object. Model version, rule-breach and revision ledgers are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O137 contract](../FORMULAS.md#o137) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Hash and freeze the process definition, observation inventory, version, and revision lineage before use. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Frozen observation cohort](research-cohort.md) · [Thesis and execution journal](process-journal.md) · [Source account and session stop](daily-loss-limit.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

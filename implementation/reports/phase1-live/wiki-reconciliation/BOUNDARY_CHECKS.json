@@ -1,0 +1,22 @@
+{
+  "schema": "phase1-wiki-reconciliation-boundary-checks-v1",
+  "status": "pass",
+  "checks": [
+    {
+      "check": "ordinary live validator rejects old registry after wiki update",
+      "status": "pass",
+      "reason": "input_identities: fields differ"
+    },
+    {
+      "check": "snapshot archive corruption rejected",
+      "status": "pass",
+      "reason": "snapshot archive changed"
+    },
+    {
+      "check": "member corruption rejected even with recomputed container digest",
+      "status": "pass",
+      "reason": "frozen input changed: implementation/src/trading_research/research/method_pack/catalog.py"
+    }
+  ],
+  "original_snapshot_unchanged": true
+}

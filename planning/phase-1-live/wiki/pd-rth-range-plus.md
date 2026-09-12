@@ -10,7 +10,9 @@ The RTH-only application uses prior 09:30–16:00 highs/lows and M15/H1 imbalanc
 
 **Phase 1 observation.** Direction and target must be selected before entry. Measure subsequent destination reach in the declared RTH scope; preserve ETH hits separately.
 
-**Existing attachments.** [formulas_jumbo.j19_draw/j19_pd_touch/j19_htf_fvg](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); family_levels; [FORMULAS] R-J19. Final morning direction or reach cannot establish an earlier setup. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O020 contract](../FORMULAS.md#o020) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure the prior RTH range from the exact 09:30-16:00 ET native window and retain destination/context fields as separate source information. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Native range geometry is available; source destination selection and directional draw remain separate qualitative evidence. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior-session auction landmarks](prior-session-reference-levels.md) · [Fair-value gaps and higher-timeframe imbalances](fvg-body-gaps.md) · [Chronological liquidity purges](overnight-purge.md) · [Remaining auction objectives](unfinished-business.md)
 

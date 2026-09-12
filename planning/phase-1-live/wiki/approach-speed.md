@@ -10,7 +10,9 @@ Saint reads aggressive arrival versus drift and whether that effort produces acc
 
 **Phase 1 observation.** Keep approach observations before the test and interpret them with the subsequent local response. A qualitative source annotation may be retained; an exact automatic class remains unknown without a declared detector.
 
-**Existing attachments.** [formulas_flow.r_f12_arrival](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F12. Current session-median trade size or maximum price is not local arrival speed; exact class thresholds are unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O113 contract](../FORMULAS.md#o113) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure pre-touch path, duration, net/path speed, and aggressive volumes; exclude post-touch events and keep arrival interpretation supplied. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Speed of tape](tape-speed.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Aggressive effort versus price-response efficiency](response-efficiency.md)
 

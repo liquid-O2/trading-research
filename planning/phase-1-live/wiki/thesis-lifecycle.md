@@ -10,7 +10,9 @@ Sires forms a thesis, states where it dies, trades while it lives and recreates 
 
 **Phase 1 observation.** At a decision, require no observed death under that thesis's recorded conditions. Do not extend validity with future information or reuse an earlier entry's confirmation for a new attempt.
 
-**Existing attachments.** [formulas_flow.r_r03_thesis](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-R03, R-S03/S07/S08. Hard-coding news/value changes away is incomplete; first-invalidation and persistent band state are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O138 contract](../FORMULAS.md#o138) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Maintain the thesis condition ledger, record first death once, and prohibit silent revival without a replacement identity. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source-selected dealing range](dealing-range.md) · [Scheduled news and changing information](news-event-context.md) · [Triad AMT-object first use: IØD and RFZ](correlated-object-first-use.md) · [Freshly qualified re-entry](reentry.md) · [Thesis and execution journal](process-journal.md)
 

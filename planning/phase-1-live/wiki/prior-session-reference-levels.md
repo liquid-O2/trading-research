@@ -10,7 +10,9 @@ Known prior highs/lows, opens/closes, IB references and profile landmarks supply
 
 **Phase 1 observation.** Keep RTH versus ETH, prior versus current, and high-low midpoint versus volume POC separate. The appendix's half-gap of pHOD/pLOD cannot be silently replaced by half the prior-close gap.
 
-**Existing attachments.** family_levels; family_open; [FORMULAS] R-A13/A15/A18, R-J06/J10/J19, R-G05–G09. Complete source-scoped reference/visit ledgers are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O086 contract](../FORMULAS.md#o086) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Bind a prior-session landmark by stable identity and compute half-range gap, half-close gap, and opening relation as distinct quantities. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Half-range and half-close gaps are distinct; landmark kind/role must be supplied. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Prior day, week and month extremes](prior-day-week-month-levels.md) · [Initial balance](initial-balance.md) · [Profile point of control](profile-poc.md) · [MPOC: the profile midpoint](mpoc.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

@@ -1,5 +1,7 @@
 # MVFL indicator zones and bias vote
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 The user-supplied "institutional indicator" `[CEX L17]`, `sources/documents/indicators/momentum-volume-flow-levels.txt`: a seven-condition bias with hysteresis (4 of 7 votes to flip) `[MVFL L2, L9–10]` built on a 5-minute calculation timeframe `[MVFL L5–6]`, two of whose conditions create price zones: delta-event zones from k-means clustering of outsized delta bars `[MVFL L19–37]`, and volume-anomaly zones from bars whose volume exceeds 2.5 × a 20-bar average `[MVFL L39–46]`, both traded as break / rejection levels `[MVFL L139–150, L178–181, L414–432]`, inside a London / NY session filter `[MVFL L51–56]`. Ids `flow.delta.zone.kmeans`, `flow.vol.anomaly.zone`, `bias.mvfl`. Tier 2: constructions to rebuild, no hardcoded statistic to trust; the prior review kept the shelf-clustering idea, session window and hysteresis and asked for a rebuild on true aggressor delta `[CEX L33]` (assistant note, tier 4).
 

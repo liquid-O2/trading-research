@@ -10,7 +10,9 @@ Management follows the entry and the chosen source policy: static objectives, pa
 
 **Phase 1 observation.** Require action after entry and supporting evidence known by that action. Trail only confirmed structure when that policy requires it; add risk only after earlier risk is secured. Whole-AM excursions are not post-entry management evidence.
 
-**Existing attachments.** [formulas_jumbo.j24_management](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_f10_protected_low](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) and related R-S helpers; [FORMULAS] R-J24/R-F10/R-S01/S05/S07. Complete action and position-exposure ledgers are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O142 contract](../FORMULAS.md#o142) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Apply only ordered executed management actions to position, stop, and target ledgers while preserving initial risk. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Confirmed protected high or low](protected-high-low.md) · [Objective selected before entry](trade-objective.md) · [Exposure fitted to source risk constraints](position-sizing.md) · [Observed order lifecycle](order-lifecycle.md) · [Freshly qualified re-entry](reentry.md)
 

@@ -10,7 +10,9 @@ NWOG is the area between the source's Friday-close and Sunday-open references. G
 
 **Phase 1 observation.** Do not silently replace Friday close with RTH close or settlement. Freeze the gap and chosen destination before entry; measure later contact/fill separately.
 
-**Existing attachments.** family_levels NWOG fields; [FORMULAS] R-G07/G09. The exact endpoint convention and entry-linked outcome need source verification. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O051 contract](../FORMULAS.md#o051) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Construct a new-week gap from separate Friday-close and Sunday-open parents and distinguish contact from full fill. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Weekend conventions and objective-selection time are source policy; gap contact does not imply full fill. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Green Bird's midnight true-day open](true-day-open.md) · [Prior-session auction landmarks](prior-session-reference-levels.md) · [Remaining auction objectives](unfinished-business.md) · [Source-selected position management](position-management.md)
 

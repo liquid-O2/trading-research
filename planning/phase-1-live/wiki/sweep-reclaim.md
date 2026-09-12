@@ -10,7 +10,9 @@ Green Bird shorts after a high is swept and price fails back below, or buys afte
 
 **Phase 1 observation.** Require reference_known_at ≤ sweep_at < confirm_at ≤ decision_at. If the source uses reclaim/hold without a specified duration, retain that source observation or mark its automatic detector unknown; do not invent a universal 30-minute cap.
 
-**Existing attachments.** [family_fail._failback](/workspace/implementation/src/trading_research/research/phase1_live/family_fail.py); [formulas.reclaim_5m](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); [grid.failback_wick_c5](/workspace/implementation/src/trading_research/research/phase1_live/grid.py); [FORMULAS] R-G01–G05/G08 and R-J01. Grouping five observed rows and stamping their start is not a clock-aligned five-minute close. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O047 contract](../FORMULAS.md#o047) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure a strict sweep and completed failure/reclaim close against an actual reference parent, using only raw or O004 confirmation bars and audited source policy. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Failure confirmation needs strict event order and a completed actual bar; source-only confirmation cannot be fabricated from caller scalars. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Green Bird's finished session references](session-fail-boxes.md) · [Green Bird's midnight true-day open](true-day-open.md) · [Measured 50–61.8% retracement](golden-pocket.md) · [Jumbo orderblocks](sweep-cisd-blocks.md)
 

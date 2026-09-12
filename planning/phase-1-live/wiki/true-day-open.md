@@ -10,7 +10,9 @@ TDO is the midnight opening price used as confluence, reclaim confirmation or de
 
 **Phase 1 observation.** Distinguish the midnight open from an 18:00 session open, range open or 09:30 cash open. When TDO is required, its relevant close must be complete before entry.
 
-**Existing attachments.** family_levels TDO fields; [formulas.reclaim_5m](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); [FORMULAS] R-G02/G06/G09. Event linkage and source-specific optionality remain partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O049 contract](../FORMULAS.md#o049) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Resolve the midnight true-day-open from the first causally ordered execution and evaluate any required close-through only from an actual complete five-minute bar. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Tied first executions without unique sequence leave the opening price unknown; close-through requires an actual five-minute bar. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Green Bird's finished session references](session-fail-boxes.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [09:30 cash-open price](cash-open-reference.md) · [New-week opening gap](new-week-opening-gap.md)
 

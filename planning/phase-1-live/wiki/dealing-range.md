@@ -10,7 +10,9 @@ The dealing range is the actual swing/auction band framing the thesis, control a
 
 **Phase 1 observation.** Require the band to be defined before the attempted reaction. Keep microbalance, larger dealing range and prior profile separate; stop-out alone does not redraw the band.
 
-**Existing attachments.** [formulas_flow.r_s07_areas/r_s08_minor_node](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) and profile ingredients; [FORMULAS] R-S07/S08, R-A16/A17. Stable band identity and source selection are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O071 contract](../FORMULAS.md#o071) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute the dealing band and controlling reference from actual selected parents; admit source rationale/thesis fields only through audited selection and leave unavailable source qualifiers unknown. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** The dealing range and controlling reference are source selections, not automatically optimized. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Auction balance](auction-balance.md) · [Prior defended reaction area](prior-reaction-area.md) · [Fresh defense of a continuation band](defended-band-continuation.md) · [Freshly qualified re-entry](reentry.md)
 

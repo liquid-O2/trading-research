@@ -1,5 +1,7 @@
 # Volatility estimators (features, not a product)
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 Named volatility features attached to every session row and used as EV-range estimators: realized (RV from 1-minute returns, HAR-RV), range-based (Garman–Klass, Yang–Zhang), implied (ATM IV, 25-delta skew from NDX / NQ.OPT quotes), and VX term structure. They are features and regime slicers; no deployed forward-volatility product `[BRIEF]`.
 

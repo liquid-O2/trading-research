@@ -10,7 +10,9 @@ Saint reads attempted acceptance in lower/older value, its failure, return into 
 
 **Phase 1 observation.** Require the original balance to be actually reaccepted and the local control to confirm the return. Do not merge the authors' differing failed-auction definitions into a single trigger.
 
-**Existing attachments.** [formulas_jumbo.a08_reaccept/a05_poc_tell](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py) and profile ingredients; [FORMULAS] R-A03/A05/A08. The complete Saint event sequence is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O094 contract](../FORMULAS.md#o094) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep original and tested value identities distinct and validate Saint exploration, failure, return, re-acceptance, and control in order. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** The Saint route requires distinct value identities and full ordered source observations. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Re-acceptance into value](value-reacceptance.md) · [POC failure versus efficient passage](poc-traversal.md) · [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Sires's narrower Failed Auction setup](failed-auction-sires.md)
 

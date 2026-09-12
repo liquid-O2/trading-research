@@ -10,7 +10,9 @@ A repeatable process collects all eligible observations uniformly, then compares
 
 **Phase 1 observation.** Retain all eligible observations under the original definition. Future day selection cannot supply an earlier feature or candidate; reverse/rotating diagnostic splits are not forward estimates. No model is trained in this compile.
 
-**Existing attachments.** slice/compute/stats/report provide generic support. Complete source-compatible episode/selection joins are missing from [FORMULAS] and operator objects. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O148 contract](../FORMULAS.md#o148) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Hash the fixed eligible cohort, account for selected/order/fill identities, and preserve uniform inclusion and split direction. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Declared model and review version](model-definition.md) · [Memory of earlier zone tests](zone-touch-memory.md) · [Supplied refill-touch grade](touch-grader.md) · [Refill-study fill assumption](fill-model.md) · [Outcome distribution of a declared process](outcome-metrics.md)
 

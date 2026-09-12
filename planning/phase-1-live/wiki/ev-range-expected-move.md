@@ -10,7 +10,9 @@ EVRange is a separately named expected-range reference in the raw examples, used
 
 **Phase 1 observation.** Check contact with an identified source band and the chosen TBR branch. Do not rename an inner profile box EV or substitute EV width for an unrelated range projection.
 
-**Existing attachments.** [family_env.build_env_table](/workspace/implementation/src/trading_research/research/phase1_live/family_env.py); [FORMULAS] R-J13. The exact EV estimator is unpublished; the current average-excursion construction is a named approximation. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O018 contract](../FORMULAS.md#o018) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Carry a versioned, anchored EVRange observation and expose supplied midpoint geometry without auto-deriving unpublished bounds. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Unpublished EVRange construction is not reconstructed from midpoint or nearby price data. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Nested source range geometry](nested-range-geometry.md) · [Range EQ and quadrants](range-internals.md) · [SessionStat+ envelopes](sessionstat-9-12-envelope.md) · [Time-anchored P-zones](p-zones-benchmark.md)
 

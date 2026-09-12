@@ -10,7 +10,9 @@ Trade CVD accumulates signed executed volume under a chosen reset. Sires checks 
 
 **Phase 1 observation.** Use only pre-decision trades and a like-unit reference. Keep alternative resets or estimated delta explicitly named; missing CVD confirmation remains unknown rather than silently true.
 
-**Existing attachments.** [mbp1_objects.cvd_from_trades](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); family_flow; formulas_flow; [FORMULAS] R-F02/F08/F09/F15 and P3-08. Source reference-line construction and some sign/retest joins are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O105 contract](../FORMULAS.md#o105) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Reset CVD at the declared clock, filter by as-of, preserve unknown aggressor volume as an interval, and require a same-unit reference. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Signed volume-by-price profile](weekly-delta-profile.md) · [Four-check absorption reversal](absorption-reward-retest.md) · [Aggressive Origin of the Move](ofm-aggressive-branch.md)
 

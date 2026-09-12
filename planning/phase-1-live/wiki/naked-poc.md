@@ -10,7 +10,9 @@ An older POC that has not yet been revisited is a possible destination or reacti
 
 **Phase 1 observation.** No visit after the current decision may determine whether the POC was naked before it. Keep prior and established-balance identities separate.
 
-**Existing attachments.** Profile and level ingredients; [formulas_jumbo.a06_failed_auction](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A06/P3-04. A persistent as-of untouched-reference ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O065 contract](../FORMULAS.md#o065) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Evaluate whether an identified prior POC remained untested through a fully covered decision interval using actual post-formation visits. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** No-test conclusions require full interval coverage; same price with another identity is not the same reference. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile point of control](profile-poc.md) · [Remaining auction objectives](unfinished-business.md) · [Sires's narrower Failed Auction setup](failed-auction-sires.md)
 

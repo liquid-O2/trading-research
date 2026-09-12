@@ -10,7 +10,9 @@ Stoic discusses position relative to historical averages and standard deviations
 
 **Phase 1 observation.** Freeze the comparison history before the evaluated observation. A conventional standardized deviation may be named explicitly, but cannot claim to reproduce an unpublished author score.
 
-**Existing attachments.** Missing source-specific transforms and thresholds in [FORMULAS] and implementation; generic statistics provide only ingredients. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O160 contract](../FORMULAS.md#o160) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute selected prior-record mean, sample/population scale, raw deviation and standardized deviation with distinct series IDs, causal vintages and a zero-scale case. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** The source baseline and variance convention must be observed; no fitted baseline search is performed. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Stoic's macro indicator set](macro-indicators.md) · [Economic observation and release vintage](economic-release-vintage.md) · [Stoic's custom C-score](c-score.md) · [Frozen observation cohort](research-cohort.md)
 

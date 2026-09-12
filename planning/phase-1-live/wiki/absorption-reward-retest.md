@@ -10,7 +10,9 @@ The strict reversal starts at a fixed real extreme: opposing aggression is absor
 
 **Phase 1 observation.** Require absorption < own reward < defended reward retest ≤ decision, all at the fixed source extreme. Moving today's value edge or picking the first AM print as origin does not pass.
 
-**Existing attachments.** [formulas_flow.reward_3tick/r_f08_abs_four_check](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F08 with F02/F06/F07. Source CVD reference, reward window and same-event stages remain incomplete. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O122 contract](../FORMULAS.md#o122) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Require the strict absorption-reward-return-renewed-defense sequence and independent CVD/delta filters. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Absorption: effort without price reward](absorption-and-big-trades.md) · [Price reward near the absorption origin](reward-system-3tick.md) · [Cumulative volume delta and its source reference](cvd-variants.md) · [Executed passive replenishment](passive-replenishment.md) · [Failure of aggression in long-gamma balance](balance-failure-fade.md)
 

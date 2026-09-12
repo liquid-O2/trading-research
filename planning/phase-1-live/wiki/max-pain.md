@@ -10,7 +10,9 @@ The source gamma panels include a max-pain reference alongside walls. A panel's 
 
 **Phase 1 observation.** Keep the literal source reference distinct from a named payout/OI approximation. Do not derive an entry or guaranteed expiry target from a displayed level.
 
-**Existing attachments.** family_options and [FORMULAS] R-R01/P3-05 have related options inputs. The exact source construction and entry-linked use are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O037 contract](../FORMULAS.md#o037) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain max-pain identity separately from same-price walls and calculate only the stated difference. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** The payout engine and terminal prediction are not inferred from a supplied max-pain label. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Native options-chain identity](options-nodes.md) · [Gamma call and put walls](gex-walls-and-max-pain.md) · [Source gamma regime](gex-regime.md)
 

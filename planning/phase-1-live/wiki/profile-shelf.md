@@ -10,7 +10,9 @@ A shelf is a shelf-like accepted volume structure; the body and its transition m
 
 **Phase 1 observation.** Preserve whether the source means the accepted body or transition band. Do not infer a fixed thickness or turn every local volume decline into the same object.
 
-**Existing attachments.** [formulas_jumbo.profile_ledges/profile_nodes](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A02/A16/A17, R-J17 and P3-07. Source thickness and automatic shelf selection remain partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O068 contract](../FORMULAS.md#o068) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure source-selected shelf and transition-band volume with shelf/edge identity and no automatic shelf discovery. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Shelf and transition selection are source-supplied; no automatic shelf algorithm is claimed. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile ledge](profile-ledge.md) · [Low-volume node](lvn.md) · [High-volume node](hvn.md) · [Accepted break and defended boundary retest](break-retest.md)
 

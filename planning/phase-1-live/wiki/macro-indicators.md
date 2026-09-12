@@ -10,7 +10,9 @@ The macro application identifies the cycle, examines leverage/credit/housing/val
 
 **Phase 1 observation.** Use the series/vintages available by the historical decision and a previously declared comparison. Missing series or decision rules leave exact outputs unknown; no fresh macro verdict is inferred here.
 
-**Existing attachments.** A dated economic calendar is only an ingredient; [FORMULAS] and implementation do not contain Stoic's full series set, cycle classifier or decision thresholds. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O157 contract](../FORMULAS.md#o157) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain explicitly selected leverage/credit/housing/valuation series and causal vintages; preserve a supplied historical verdict without making a current classifier. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/process_observations.py).
+
+**Evidence limits.** Macro collection is deferred and required source series definitions must be supplied. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Economic observation and release vintage](economic-release-vintage.md) · [Stoic's macro-cycle classification](macro-cycle.md) · [Stoic's custom C-score](c-score.md) · [Historical-average and standardized-deviation comparison](standardized-deviation.md) · [Stoic's trend-strength measure](trend-strength.md)
 

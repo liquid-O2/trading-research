@@ -10,7 +10,9 @@ The manual's personal reversal entry choice uses a short-timeframe three-candle 
 
 **Phase 1 observation.** Do not replace the full C2 range with a wick. Page 29's midpoint/conservative stop captions and drawings do not settle one universal stop rule; retain the fixture geometry and unresolved policy.
 
-**Existing attachments.** [formulas_jumbo.j18_ob_bull/j18_ob_bear](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); family_gap; [FORMULAS] R-J18. Full source entry, timing and management linkage is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O056 contract](../FORMULAS.md#o056) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Detect bullish or bearish three-candle orderblock confirmation from three distinct complete chronological candles and preserve the audited entry/stop policy. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Candle geometry can confirm the pattern, but entry mode and stop remain source policy. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo rejection blocks](rejection-block.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Source execution bars](execution-bars.md) · [Entry-side structural invalidation](structural-risk.md)
 

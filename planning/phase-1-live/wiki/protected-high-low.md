@@ -10,7 +10,9 @@ Protected structure follows demonstrated control. In the K18 short, the prior lo
 
 **Phase 1 observation.** The stop action must follow confirmation, not merely the earlier pivot bar. Keep structure formation, confirmation and management timestamps separate.
 
-**Existing attachments.** [formulas_flow.r_f10_protected_low](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F10 and R-S01/S05/S07. High-side symmetry and event-time confirmation are incomplete. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O143 contract](../FORMULAS.md#o143) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Trail only after the protected price and required confirmation are known, with side-specific protection. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Signed volume-by-price profile](weekly-delta-profile.md) · [Entry-side structural invalidation](structural-risk.md) · [Source-selected position management](position-management.md) · [Price-defined microbalance continuation](microbalance.md)
 

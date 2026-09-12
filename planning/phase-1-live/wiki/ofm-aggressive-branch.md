@@ -10,7 +10,9 @@ Repeated unpaid effort establishes a catalyst; an attempted squeeze fails; price
 
 **Phase 1 observation.** Require catalyst < first release < failure ≤ refill < drive < defended retest ≤ decision, plus the source's short-gamma and common thesis gates. Do not select final-AM extrema as stages.
 
-**Existing attachments.** [formulas_flow.r_f15_ofm/r_f14_imb350/r_s03_second_defence/r_s04_ath_ofm](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F14/F15/F17, R-S03/S04. The current trigger can ignore required release/failure/refill flags. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O126 contract](../FORMULAS.md#o126) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Audit the complete aggressive OFM catalyst-to-reward sequence while preserving the optional CVD filter as unknown when absent. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Origin-of-the-Move catalyst](ofm-catalyst.md) · [Zone formed by aggressive prints](refill-zone.md) · [Cumulative volume delta and its source reference](cvd-variants.md) · [Source gamma regime](gex-regime.md) · [Deliberate pre-confirmation attempts](early-attempts.md) · [Passive Origin-of-the-Move variant](ofm-passive-branch.md)
 

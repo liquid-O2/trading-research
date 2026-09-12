@@ -10,7 +10,9 @@ Premium and discount describe position within a declared price range or value co
 
 **Phase 1 observation.** For a literal price-range split, midpoint=(H+L)/2. Retain the source's alternative value/VWAP meaning explicitly; never use a completed-day range to qualify an earlier pullback.
 
-**Existing attachments.** formulas and sessions supply midpoint geometry; [FORMULAS] R-G10, R-A01/A16 and R-F01/F03. The directional-scalp impulse and complete trigger are unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O053 contract](../FORMULAS.md#o053) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute midpoint, normalized location, premium/discount, and optional value relation from selected range, price, and value parents. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Location is geometric context only and does not create a directional recommendation. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Measured 50–61.8% retracement](golden-pocket.md) · [Source-selected dealing range](dealing-range.md) · [Profile value area](value-area.md) · [Session VWAP](vwap-session.md)
 

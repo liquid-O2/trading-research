@@ -10,7 +10,9 @@ The extension-reaction example points toward still-owed equal highs after the so
 
 **Phase 1 observation.** Identify the objective before entry and retain an unspecified equality tolerance as unresolved or named. Do not choose whichever later double top/bottom makes the target look successful.
 
-**Existing attachments.** family_levels and [formulas_jumbo.j10_draw](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py) are related; [FORMULAS] R-J10. Source-exact equality tolerance and target-selection ledger are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O028 contract](../FORMULAS.md#o028) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Create an equal-high/low objective from at least two dated contributor parents and an explicit equality/band policy; track remaining status at selection. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Near-equality tolerance and objective band are policy inputs; price similarity alone does not create an objective. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Remaining auction objectives](unfinished-business.md) · [Objective selected before entry](trade-objective.md) · [The 1.33–1.66 extension area](extensions-1-33-1-66.md)
 

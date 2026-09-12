@@ -10,7 +10,9 @@ Inside the larger directional auction a small price balance forms, then strength
 
 **Phase 1 observation.** Freeze the actual small balance before its break. Do not select a later winning box or replace it with a fixed clock box; qualification requires the parent auction/thesis gates.
 
-**Existing attachments.** [formulas_flow.r_s05_microbalance](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-S05. Current price-run detection can retain the last box and final-AM close instead of the source episode. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O131 contract](../FORMULAS.md#o131) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze a positive-width microbalance, adverse-side stop, pre-existing target, and dated breakout in thesis direction. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Auction balance](auction-balance.md) · [Thesis, validity band and death condition](thesis-lifecycle.md) · [Entry-side structural invalidation](structural-risk.md) · [Confirmed protected high or low](protected-high-low.md)
 

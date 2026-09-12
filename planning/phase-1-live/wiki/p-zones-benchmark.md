@@ -10,7 +10,9 @@ The source shows P-zones with session anchors, learning-window/percentile contro
 
 **Phase 1 observation.** A source-annotated zone may support a fixture. Automatic author-faithful qualification is unknown without the engine. Preserve time-specific reversal evidence instead of forcing every zone into 09:40–09:50.
 
-**Existing attachments.** [family_env.build_env_table](/workspace/implementation/src/trading_research/research/phase1_live/family_env.py); [FORMULAS] R-J12/P3-02. Exact P-zone construction and active-zone state are missing; historical quantile bands are approximations. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O019 contract](../FORMULAS.md#o019) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Track an anchored P-zone through dated state and path events, separating active-at-use from the source zone label. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Zone bounds/anchor/state history must be supplied; no automatic P-zone detector is implemented. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source range-open and range-close references](range-open-close.md) · [Jumbo reversal and action windows](reversal-time-window.md) · [Remaining auction objectives](unfinished-business.md)
 

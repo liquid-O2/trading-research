@@ -10,7 +10,9 @@ The source gamma read uses the relevant native options complex, particularly QQQ
 
 **Phase 1 observation.** Preserve the source 0DTE cohort rather than silently pooling later expiries. Do not map strikes by an unstated ratio and then label the result author-exact; other native products are comparison variants unless source-bound.
 
-**Existing attachments.** family_options and family_gex; [FORMULAS] R-R01/P3-05. Native ingredients exist; faithful dealer-position signs, complete source expiry selection and level mapping are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O034 contract](../FORMULAS.md#o034) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build a full dated option identity from product, class, expiry, strike, right and OSI key; calculate 0DTE from observation date and retain only a contemporaneous explicit mapping. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** An absent contemporaneous index/option-to-futures mapping cannot be inferred from nearby price. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Gamma-flip reference](gex-flip.md) · [Gamma call and put walls](gex-walls-and-max-pain.md) · [Source max-pain reference](max-pain.md) · [Source KG1 level](kg1-level.md)
 

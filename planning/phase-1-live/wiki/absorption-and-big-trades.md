@@ -10,7 +10,9 @@ Absorption requires aggressive effort making little progress against liquidity t
 
 **Phase 1 observation.** Evaluate effort and response locally, before the decision. Preserve missing passive evidence; do not use the future reversal itself as proof of the earlier entry prerequisite.
 
-**Existing attachments.** [mbp1_objects.absorption_a/absorption_b](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_flow.r_f06_dom_absorption/r_f08_abs_four_check](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F06–F09/F16. Thresholds and BBO-only reload remain partial proxies. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O101 contract](../FORMULAS.md#o101) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep aggressive effort, price response, passive defense, and source absorption as separate evidence; later decline cannot repair missing passive proof. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed passive replenishment](passive-replenishment.md) · [Aggressive effort versus price-response efficiency](response-efficiency.md) · [Four-check absorption reversal](absorption-reward-retest.md) · [Failure of aggression in long-gamma balance](balance-failure-fade.md) · [Jumbo Absorption Zone+ candle](absorption-candle-jumbo.md)
 

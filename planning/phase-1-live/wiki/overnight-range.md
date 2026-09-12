@@ -10,7 +10,9 @@ Overnight price extremes frame remaining liquidity and opening context. Sires's 
 
 **Phase 1 observation.** Keep the whole overnight range separate from 6–9 and from the prior RTH range. Evaluate touches and purges after each reference becomes known.
 
-**Existing attachments.** clocks; sessions; [family_levels.build_level_table](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py); [FORMULAS] R-J04/J10, R-A12 and P3-06. Exact configured window identity is required. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O011 contract](../FORMULAS.md#o011) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure overnight high, low, width, exact window identity, member ownership, and availability; enforce Sires 18:00-09:30 ET when selected. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Other authors' overnight clocks are accepted only as explicitly identified windows; incomplete tape remains a hole. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Overnight volume structure](overnight-profile.md) · [Overnight directional inventory](overnight-inventory.md) · [Chronological liquidity purges](overnight-purge.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

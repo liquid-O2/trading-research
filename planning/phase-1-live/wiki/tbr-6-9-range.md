@@ -10,7 +10,9 @@ The main New York formation range supplies its high, low, width and internal ref
 
 **Phase 1 observation.** Reconstruct the completed box before evaluating a touch. Measure later path and branch-specific reaction without choosing the deepest or best eventual excursion as the entry.
 
-**Existing attachments.** [sessions.build_session/projections](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); family_range; family_clocks; [FORMULAS] R-J05/J07/J23, P3-01/P3-06. Geometry exists; source-open identity and modern inner ranges require separate records. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O005 contract](../FORMULAS.md#o005) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze the dated 06:00-09:00 ET high, low, width, member identity, availability, and interval coverage from native members. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** The fixed 06:00-09:00 ET clock is implemented; missing interval membership remains a hole. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Range EQ and quadrants](range-internals.md) · [Source range-open and range-close references](range-open-close.md) · [Range width and expectations](range-width-context.md) · [Retrospective range path](range-path-class.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [The 1.33–1.66 extension area](extensions-1-33-1-66.md)
 

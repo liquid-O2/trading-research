@@ -10,7 +10,9 @@ High-only, low-only, both and neither describe which sides of a completed range 
 
 **Phase 1 observation.** Use only observations after the frozen range. Report the stated 09:00–12:00, 09:30–10:30 or other source window separately; never pool them as one probability or reuse the result as entry direction.
 
-**Existing attachments.** family_path; [sessions.build_session](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); [FORMULAS] R-J01–J07. Daily path flags are useful descriptive outputs, not a method scorer. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O010 contract](../FORMULAS.md#o010) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Replay a covered post-formation path to identify which side broke first and any later EQ return without turning an unfinished absence into false. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** An unfinished or uncovered path cannot establish that a break did not occur; same-time opposite breaks leave order unknown. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo's 06:00–09:00 range](tbr-6-9-range.md) · [Range width and expectations](range-width-context.md) · [Jumbo reversal and action windows](reversal-time-window.md) · [Accumulation, manipulation and distribution phases](amd-phase-labels.md)
 

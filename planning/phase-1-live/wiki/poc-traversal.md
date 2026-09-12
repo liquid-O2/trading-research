@@ -10,7 +10,9 @@ Repeated failure to cross and hold POC favors rotational chop. Efficient passage
 
 **Phase 1 observation.** Keep unsuccessful tests distinct from aggressive passage. Measure initial POC behavior before any later far-edge result; the future result cannot decide which interpretation was live.
 
-**Existing attachments.** [formulas_jumbo.a05_poc_tell/a03_reentry_traverse](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A03/A05/A08. Entry-conditioned progression and source control evidence are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O095 contract](../FORMULAS.md#o095) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Count distinct failed POC tests through as-of, preserve efficient-passage interpretation, and admit a held retest only when available. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Unknown test identity or a future retest remains a hole; failure and efficient passage stay distinct reads. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile point of control](profile-poc.md) · [Re-acceptance into value](value-reacceptance.md) · [Rotation within accepted balance](balance-rotation.md) · [Executed aggressor-side trades](aggressor-trades.md)
 

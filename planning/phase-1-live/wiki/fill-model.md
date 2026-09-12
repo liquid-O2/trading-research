@@ -10,7 +10,9 @@ The study's touch-or-trade-through execution assumption determines which passive
 
 **Phase 1 observation.** Keep discovered touches, selected orders and modeled fills as separate denominators. Never claim actual queue fills from a price touch or compare unmatched filled cohorts as matched executions.
 
-**Existing attachments.** [FORMULAS] R-F17 only covers related zone/revisit ingredients. The documented order/fill lifecycle and queue model are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O151 contract](../FORMULAS.md#o151) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Separate modeled touch-fill eligibility from actual fill reports and leave queue priority unverified without order-level evidence. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Observed order lifecycle](order-lifecycle.md) · [Frozen observation cohort](research-cohort.md) · [Trading and account costs](cost-model.md)
 

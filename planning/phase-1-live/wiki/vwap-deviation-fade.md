@@ -10,7 +10,9 @@ In an appropriate auction context, price reaches the selected source VWAP deviat
 
 **Phase 1 observation.** Use the selected deviation and contemporaneous VWAP. Absorption at an unrelated later price does not confirm this touch; a missing reset remains unknown for an author-faithful construction.
 
-**Existing attachments.** [formulas_flow.running_vwap/r_f01_vwap_fade/r_f03_convergence](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F01/F03 with F02/F06. Exact source reset/deviation and at-band confirmation are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O125 contract](../FORMULAS.md#o125) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze the selected VWAP deviation band and pre-existing objective; later VWAP cannot rewrite the target. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Session VWAP](vwap-session.md) · [VWAP deviation bands](vwap-deviations.md) · [Anchored VWAP](vwap-anchored.md) · [Cumulative volume delta and its source reference](cvd-variants.md) · [DOM at a planned location](dom.md)
 

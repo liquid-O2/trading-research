@@ -10,7 +10,9 @@ Balance is an accepted area with repeated two-sided trade; imbalance is directio
 
 **Phase 1 observation.** Fix the actual balance before the arrival. Do not redraw it after seeing the desired result, use an arbitrary stale profile, or let final-day shape become the initial context.
 
-**Existing attachments.** family_value; [family_open.value_area](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); formulas_jumbo profile helpers; [FORMULAS] R-A01–A11/A16/A17. Automatic source-selected balance bands are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O060 contract](../FORMULAS.md#o060) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Represent an identified accepted auction balance, its width, migration state, scale, profile identity, and point-in-band relation without automatic balance discovery. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** No automatic balance detector or migration classifier is implemented. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source-selected dealing range](dealing-range.md) · [Volume profile](value-and-profiles.md) · [Profile value area](value-area.md) · [Profile shape and trade permission](profile-shape.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

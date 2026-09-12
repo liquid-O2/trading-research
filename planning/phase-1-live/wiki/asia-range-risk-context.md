@@ -10,7 +10,9 @@ The trapped-buyer example keeps its target within a realistic Asia-session range
 
 **Phase 1 observation.** Preserve the cited case and its source session identity. Do not infer a universal clock, percentage of range, or fixed point target from one ticket.
 
-**Existing attachments.** Clock/range and ticket-distance ingredients; [FORMULAS] R-F13 has related entry context. Source-exact Asia-range target selection and management are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O089 contract](../FORMULAS.md#o089) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure entry-stop-target distances for the cited Asia-range case while preserving the source range reference and leaving automatic target construction unavailable. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** The implementation records cited distances only; it does not derive a general Asia-range target rule. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Entry-side structural invalidation](structural-risk.md) · [Source-selected position management](position-management.md)
 

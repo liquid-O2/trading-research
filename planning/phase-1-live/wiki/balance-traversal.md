@@ -10,7 +10,9 @@ Price traverses a whole established balance without holding; later retests can t
 
 **Phase 1 observation.** Record traversal, absence of source-defined hold and later same-structure retest as ordered events. A whole-AM range or final close cannot reconstruct them.
 
-**Existing attachments.** [formulas_jumbo.a09_traverse_nohold](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A09. The helper's fixed time limits are measurement variants, not the full source rule. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O096 contract](../FORMULAS.md#o096) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Validate a complete entry-to-exit traversal of one identified balance and causal one-side control, without imposing an unsupported 30-minute cap. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** No unsupported maximum duration is enforced; incomplete path coverage or future control stays unresolved/invalid. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Auction balance](auction-balance.md) · [Accepted break and defended boundary retest](break-retest.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

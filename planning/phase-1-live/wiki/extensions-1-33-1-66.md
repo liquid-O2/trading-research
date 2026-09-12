@@ -10,7 +10,9 @@ Jumbo reads the extended area on either side after expansion and looks for react
 
 **Phase 1 observation.** For an identified beyond-edge ladder use H+kW or L−kW, k=1.33/1.66. Preserve the source's coordinate/anchor convention; do not project every chart with outer 6–9 or EV width.
 
-**Existing attachments.** [sessions.projections](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); [formulas_jumbo.band_133_166](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); family_env; [FORMULAS] R-J08/J09 and P3-02. Beyond-edge geometry is available; modern inner-span identity is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O015 contract](../FORMULAS.md#o015) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Project the 1.33-1.66 extension bands from the same selected parent width and reject width substitution. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Projection is arithmetic and does not prove a trade setup or select which range should control. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Nested source range geometry](nested-range-geometry.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [SessionStat+ envelopes](sessionstat-9-12-envelope.md) · [Remaining auction objectives](unfinished-business.md)
 

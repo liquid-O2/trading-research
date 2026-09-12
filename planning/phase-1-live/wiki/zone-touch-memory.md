@@ -10,7 +10,9 @@ The Refill study grades a newly encountered touch using earlier defense history,
 
 **Phase 1 observation.** Every memory event must be earlier than the current touch and resolved by its feature time. Retain unselected touches; later-day selection cannot enter a historical decision.
 
-**Existing attachments.** [FORMULAS] R-F17 has related revisit ingredients. A causal persistent touch-memory/availability ledger and the published grade transformations are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O117 contract](../FORMULAS.md#o117) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Count only prior resolved touches known by the feature clock and keep current touch and unresolved history outside causal memory. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Zone formed by aggressive prints](refill-zone.md) · [Supplied refill-touch grade](touch-grader.md) · [Frozen observation cohort](research-cohort.md) · [Prior defended reaction area](prior-reaction-area.md)
 

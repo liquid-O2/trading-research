@@ -10,7 +10,9 @@ An untouched or still-relevant prior/session extreme, POC, poor extreme, single-
 
 **Phase 1 observation.** Freeze identity and priority before entry. In Jumbo's RTH-only application preserve ETH hits without retiring the RTH objective; in the purged-overnight branch retain actual earlier sweeps.
 
-**Existing attachments.** family_levels; [formulas_jumbo.j10_draw/j19_draw](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J10/J19, R-A18 and R-G01–G09. A persistent source-scoped objective ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O087 contract](../FORMULAS.md#o087) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze objective priority and retirement from actual covered visits under the declared RTH/ETH scope and consumption rule. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Absence of a visit requires covered history; ETH visits cannot retire an RTH-only objective. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Chronological liquidity purges](overnight-purge.md) · [PD RTH Range+ destinations](pd-rth-range-plus.md) · [Untested prior POC](naked-poc.md) · [TPO single-print structure](single-prints.md) · [TPO poor high and poor low](poor-extremes.md)
 

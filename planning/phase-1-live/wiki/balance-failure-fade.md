@@ -10,7 +10,9 @@ In long-gamma balance, aggression at an extreme repeatedly goes unpaid; price le
 
 **Phase 1 observation.** Require failure < leave < same-area retest ≤ decision with aggression still unpaid. Do not promote a touch without the retest or add the strict absorption-reversal reward gate.
 
-**Existing attachments.** [formulas_flow.r_f16_balance_fade](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F16. Opposite 6–9 edge is not automatically the source's prior-control target. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O129 contract](../FORMULAS.md#o129) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Audit long-gamma balance-extreme failure, departure, same-area retest, and prior opposite-control target without inheriting another branch gate. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Auction balance](auction-balance.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Four-check absorption reversal](absorption-reward-retest.md)
 

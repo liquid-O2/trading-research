@@ -10,7 +10,9 @@ The BigTrades charts show a 350% imbalance display and a small band around the a
 
 **Phase 1 observation.** Retain the literal display and ratio ambiguity. Do not silently set one numeric ratio as author-exact or use the final candle band before it is known.
 
-**Existing attachments.** [formulas_flow.r_f14_imb350](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F14/F15. The source's 350% wording does not unambiguously equate 350% more with 3.5 times. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O110 contract](../FORMULAS.md#o110) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Disambiguate 350-percent-of from 350-percent-more and require an explicit zero-denominator rule. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Diagonal footprint imbalance stacks](footprint-imbalance-zones.md) · [BigTrades aggression markers](big-trades.md) · [Origin-of-the-Move catalyst](ofm-catalyst.md) · [Aggressive Origin of the Move](ofm-aggressive-branch.md)
 

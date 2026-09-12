@@ -10,7 +10,9 @@ The range narrative can describe formation/balance, a sweep or misleading openin
 
 **Phase 1 observation.** Keep descriptive phase labels separate from the ordered entry predicate. A label inferred from the finished morning cannot become opening context.
 
-**Existing attachments.** family_path and [FORMULAS] R-J01–J05 hold related range/path ingredients. A uniquely disclosed universal phase detector is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O023 contract](../FORMULAS.md#o023) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve a contemporaneous source phase label and dated transition sequence without automatic phase inference. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** No automatic AMD classifier is implemented from prices. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Retrospective range path](range-path-class.md) · [Jumbo reversal and action windows](reversal-time-window.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md)
 

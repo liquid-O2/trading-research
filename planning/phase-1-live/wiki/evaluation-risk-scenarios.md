@@ -10,7 +10,9 @@ The paper explores modeled evaluation outcomes using its supplied trade/process 
 
 **Phase 1 observation.** Preserve scenario assumptions and source outputs without rerunning or treating them as live expectations. The underlying cohort must remain causally valid before any downstream evaluation claim.
 
-**Existing attachments.** Generic stats/report are only ingredients. Exact source path generation and evaluation/account lifecycle are missing from [FORMULAS]. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O156 contract](../FORMULAS.md#o156) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the supplied refill scenario assumptions and reported results while exposing missing path rules and causal limits. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Frozen observation cohort](research-cohort.md) · [Outcome distribution of a declared process](outcome-metrics.md) · [Trading and account costs](cost-model.md) · [Supplied refill-touch grade](touch-grader.md)
 

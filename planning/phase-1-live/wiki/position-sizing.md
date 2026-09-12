@@ -10,7 +10,9 @@ The sources connect exposure to stop distance, case quality and account limits. 
 
 **Phase 1 observation.** Verify the actual selected source policy and units. Do not pool fixed research brackets, funded-account examples and the compounding overlay as one sizing rule; no orders or simulations are run here.
 
-**Existing attachments.** Some r_s01/r_s07 ticket-distance helpers exist; [FORMULAS] R-S01/S07, R-J21/J24. Event-linked sizing, account constraints and aggregate exposure are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O140 contract](../FORMULAS.md#o140) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Calculate unit, position, and aggregate monetary risk with quantity policy and account cap in compatible units. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Entry-side structural invalidation](structural-risk.md) · [Source setup quality and exposure](quality-grade.md) · [Source account and session stop](daily-loss-limit.md) · [Stoic's printed asymmetric risk ladder](asymmetric-risk-state.md) · [Observed order lifecycle](order-lifecycle.md)
 

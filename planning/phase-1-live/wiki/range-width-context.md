@@ -10,7 +10,9 @@ Width conditions expectations: a wide/extended overnight can call for restrained
 
 **Phase 1 observation.** Keep width/price percent distinct from width/prior-RTH-width. Freeze the comparison before entry; final break class is a later outcome. No universal author threshold for extended is supplied.
 
-**Existing attachments.** [sessions.width_bin](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); family_range; family_open; [FORMULAS] R-J03/J04/J07/J21. Generic ratio buckets do not reproduce a source price-percent table. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O009 contract](../FORMULAS.md#o009) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure range width in points, ticks, percent, and prior-width ratio using separately identified denominator parents. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Source width class remains unavailable unless separately supplied; each optional denominator must have its own parent. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo's 06:00–09:00 range](tbr-6-9-range.md) · [Overnight high, low and width](overnight-range.md) · [Retrospective range path](range-path-class.md) · [Opening location and participation](open-location-switch.md)
 

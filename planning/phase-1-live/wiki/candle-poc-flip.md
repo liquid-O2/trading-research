@@ -10,7 +10,9 @@ The footprint schematic moves POC within the evolving candle after the local abs
 
 **Phase 1 observation.** Require both POC observations to belong to the same candle and to be available before decision. Adjacent-candle POCs or a whole morning treated as one candle do not pass.
 
-**Existing attachments.** [formulas_flow.r_f05_absorption_stack](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F05. An event-time intrabar POC series and same-candle flip detector are missing or partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O108 contract](../FORMULAS.md#o108) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compare at least two visible POC snapshots sharing one candle identity and reject cross-candle rewrites. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source execution bars](execution-bars.md) · [Profile point of control](profile-poc.md) · [Candle direction versus executed delta](candle-delta-disagreement.md) · [Footprint-confirmed reaction](footprint-confirmed-reaction.md)
 

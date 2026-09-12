@@ -10,7 +10,9 @@ The Refill study grades an already-found zone touch using pre-touch memory, cons
 
 **Phase 1 observation.** Audit only a supplied frozen grade: inputs/model available before order, current-touch outcome excluded, unselected cohort retained. Without the supplied engine/grade the author-faithful field is unknown; no new grader is built here.
 
-**Existing attachments.** [FORMULAS] R-F17 and profile/flow ingredients are partial inputs. The published classifier, feature transformations, hold label and threshold are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O149 contract](../FORMULAS.md#o149) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Apply a pre-known supplied grading rule to causal features while excluding post-touch labels and leaving automatic grading unknown. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Memory of earlier zone tests](zone-touch-memory.md) · [Frozen observation cohort](research-cohort.md) · [Observed order lifecycle](order-lifecycle.md) · [Outcome distribution of a declared process](outcome-metrics.md)
 

@@ -10,7 +10,9 @@ Sires's framework uses the relevant 0DTE complex to frame balance/responsive beh
 
 **Phase 1 observation.** Bind the regime available before the branch choice. Preserve uncertainty near the flip and source-specific permissions; price response/confirmation is still required.
 
-**Existing attachments.** [family_gex._gex_day/build_gex_table](/workspace/implementation/src/trading_research/research/phase1_live/family_gex.py); family_options; [FORMULAS] R-R01. Pooled 0–14DTE assumed-sign output is not an author-exact 0DTE regime. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O033 contract](../FORMULAS.md#o033) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the observed source gamma regime, native 0DTE product identity, eligible rereads and source-scoped branch permission; later rereads contribute availability. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** No gamma exposure engine is published in the source and no native option-chain feed is supplied here. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Native options-chain identity](options-nodes.md) · [Gamma-flip reference](gex-flip.md) · [Gamma call and put walls](gex-walls-and-max-pain.md) · [Aggressive Origin of the Move](ofm-aggressive-branch.md) · [Failure of aggression in long-gamma balance](balance-failure-fade.md)
 

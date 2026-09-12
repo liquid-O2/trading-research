@@ -10,7 +10,9 @@ Sires's codex records bias/validity times, reason and confidence, every trade, r
 
 **Phase 1 observation.** Keep pre-entry rationale separate from later explanation. Retain every eligible observation under its original model version; review changes cannot relabel earlier inputs.
 
-**Existing attachments.** stats/report/compute provide generic summaries/storage; no full author journal exists in [FORMULAS] or current operator objects. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O146 contract](../FORMULAS.md#o146) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Reconcile every eligible candidate to a uniform journal row and separate pre-entry inputs from post-trade outcomes and reviews. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Declared model and review version](model-definition.md) · [Thesis, validity band and death condition](thesis-lifecycle.md) · [Frozen observation cohort](research-cohort.md) · [Outcome distribution of a declared process](outcome-metrics.md) · [Trading and account costs](cost-model.md)
 
@@ -27,3 +29,5 @@ Sires's codex records bias/validity times, reason and confidence, every trade, r
 ### September 12 source binding
 
 **Scoped codex record (2026-09-12):** [C1] p.6 supplies integer confidence 1–5 at session start, original reason/validity band, every attempt, revisions, execution breaches and missed rules, with a review example after 30 sessions. Keep the original record and later review as separate versions. [C2] p.4 adds the 40–80-trade MFE/MAE collection example, with explicit native excursion windows/censoring. These settings belong to the Sires process configuration and do not become global sample-sufficiency rules. Stoic's data-engine application is our own research process, not an entry strategy.
+
+[C2]: </workspace/sources/documents/discretionary/code-2-risk.pdf>

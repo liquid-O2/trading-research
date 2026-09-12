@@ -10,7 +10,9 @@ A raw Green Bird chart labels the 9–10 high sweep/failed breakout, then MSS pl
 
 **Phase 1 observation.** Preserve the actual chart sequence: failure before structure confirmation before entry. Do not backdate a fractal pivot to its price bar before the confirming future bars exist.
 
-**Existing attachments.** [FORMULAS] R-G01/R-G09 provide surrounding failure ingredients. An event-linked source MSS detector and its exact swing-confirmation parameters are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O054 contract](../FORMULAS.md#o054) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Validate the ordered failure, confirmed swing, structural break, and entry sequence while preserving source break convention and episode identity. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Structural break convention and MSS label remain source inputs even when event order is measurable. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Sweep, failure and reclaim](sweep-reclaim.md) · [Fair-value gaps and higher-timeframe imbalances](fvg-body-gaps.md) · [Entry-side structural invalidation](structural-risk.md)
 

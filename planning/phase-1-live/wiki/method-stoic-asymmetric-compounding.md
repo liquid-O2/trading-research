@@ -10,7 +10,7 @@ The risk overlay has different inputs and a different loop, so it stays separate
 3. **Second trade.** Risk the original one plus the three just banked, four units total. A 3R win earns twelve more units; a loss leaves the two-trade sequence down one unit ([DATA] p.7).
 4. **Reset after the second win.** Return to base risk and repeat. Retain the source's stated volatility and validation constraints ([DATA] pp.7–8).
 
-**Not standalone:** a win streak does not generate a trade; this overlay consumes trades admitted by an already validated process. No corresponding risk-state object exists in [FORMULAS] or the implementation. Generic summary/bootstrap functions are not the source Monte Carlo loss-streak validation.
+**Not standalone:** a win streak does not generate a trade; this overlay consumes trades admitted by an already validated process. The [printed risk-state ladder](asymmetric-risk-state.md) and [prior loss-streak validation](loss-streak-validation.md) now have implemented contracts. Actual prior process, account and Monte Carlo records remain required; generic bootstrap output does not establish the source validation.
 
 The page heading says the overlay activates on a “two trade winning streak,” while its explicit ladder increases risk **after the first 3R win**. Preserve that discrepancy. The following Phase 1 predicate checks the **printed ladder**, not an invented resolution of the heading:
 
@@ -30,6 +30,20 @@ END
 ```
 
 Citation: [DATA] pp.7–8. Units use the initial baseline of the printed illustration, so `3 - 4 = -1` and `3 + 12 = 15`; silently rebasing every percentage on the changed equity produces different arithmetic. Handling after other outcomes, the sizing denominator in a general implementation, and the heading's alternative activation rule are not fully specified. The generic overlay is therefore only partially reconstructable. This is a rule/arithmetic audit, not a new simulation or a profitability claim.
+
+## Implementation and empirical status — 2026-09-12
+
+The [M12 contract](../FORMULAS.md#m12) and its 15 operand bindings are implemented and reviewed. [Method evaluation](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [causal assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) consume the selected object evidence. [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repairs](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) establish software completion; the source and data limits described below remain.
+
+The frozen empirical v1 run has the following branch dispositions. Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
+
+| Branch | Frozen disposition | Recorded p / f / u | Jobs processed / eligible | Missing-input jobs |
+|---|---|---:|---:|---:|
+| `first` | `supplied_only` | unavailable | — | — |
+| `second` | `supplied_only` | unavailable | — | — |
+| `reset_after_second_win` | `supplied_only` | unavailable | — | — |
+
+All declared jobs for these branches are accounted for; none remain pending. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
 
 ## Objects used by this method
 

@@ -10,7 +10,9 @@ The K18 recap records small B+ pre-file attempts with a cheap buffer before full
 
 **Phase 1 observation.** Record case fidelity: thesis alive, deliberate early choice and predefined risk. Automatic full entry qualification remains unknown; do not make the exception erase the later retest requirement.
 
-**Existing attachments.** [FORMULAS] R-S01/S03/R-F15 provide surrounding components; a full repeatable early-admission rule is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O133 contract](../FORMULAS.md#o133) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain deliberate pre-confirmation attempts in the cohort, with predefined small risk and no thesis death inferred from loss alone. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source setup quality and exposure](quality-grade.md) · [Aggressive Origin of the Move](ofm-aggressive-branch.md) · [Entry-side structural invalidation](structural-risk.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

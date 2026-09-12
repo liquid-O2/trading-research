@@ -10,7 +10,9 @@ The source panel includes a hedging-pressure gauge as part of its regime/locatio
 
 **Phase 1 observation.** A chart annotation can preserve what was visible; an automatic equivalent is unknown. Do not infer the gauge's threshold from later price behavior.
 
-**Existing attachments.** family_gex and [FORMULAS] R-R01 are related. The faithful source gauge is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O040 contract](../FORMULAS.md#o040) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve gauge scale and units; percentage conversion is available only for an actual percent scale, with no fabricated entry permission. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** Pressure interpretation remains an attributed source observation, not an automatic classifier. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Source VOL-GEX readout](vol-gex.md) · [Source Vol Trigger readout](volatility-trigger.md)
 

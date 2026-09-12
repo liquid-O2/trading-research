@@ -10,7 +10,9 @@ Locate the opening auction against already-known prior value, prior price range 
 
 **Phase 1 observation.** An RVOL statistic for 09:30–09:35 is unavailable at 09:30. Keep the source's cell denominator and outcome window; never label Keani from open > future current-day VAH.
 
-**Existing attachments.** [family_open.build_open_table](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); [FORMULAS] R-J06/J21, R-A10 and R-S09. Current final-path direction and future participation inputs are not contemporaneous context. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O013 contract](../FORMULAS.md#o013) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Classify the cash open relative to prior value, prior range, and optional current range while excluding participation context unavailable at use time. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Participation/RVOL context arriving after use is excluded; open location alone does not supply it. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile value area](value-area.md) · [Prior-session auction landmarks](prior-session-reference-levels.md) · [Developing profile snapshot](developing-profile.md) · [Time-price-opportunity profile](tpo-ib-auction.md)
 

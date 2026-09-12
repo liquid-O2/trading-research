@@ -10,7 +10,9 @@ The Refill study first constructs an area from clustered large aggressive orders
 
 **Phase 1 observation.** Require formation < departure < current return, with frozen bounds. Keep touches separate and link fresh local defense before any claimed confirmed entry.
 
-**Existing attachments.** [mbp1_objects.on_touch_refill](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_flow.r_f17_refill_zone](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F17/P3-08. Source clustering, NQ/MNQ normalization and full order lifecycle are missing; ≥100/2-minute/2-tick is a variant. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O116 contract](../FORMULAS.md#o116) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze the source-defined zone, formation identities, departure, and distinct return touch without letting later highs redefine it. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Memory of earlier zone tests](zone-touch-memory.md) · [Executed passive replenishment](passive-replenishment.md) · [Origin-of-the-Move catalyst](ofm-catalyst.md) · [Fresh defense of a continuation band](defended-band-continuation.md)
 

@@ -10,7 +10,9 @@ The execution clips read the opposing side's prints shrinking while the absorbin
 
 **Phase 1 observation.** Require the relevant opposing sequence at the same band. Do not infer universal 10/100-lot NQ cutoffs or substitute a whole-session percentile for the illustrated clip.
 
-**Existing attachments.** [formulas_flow.digits_thinning](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F09/P3-08. Source-local grouping, side alignment and full stage sequence are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O114 contract](../FORMULAS.md#o114) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Record execution-size digit groups and decline pattern while requiring the source grouping threshold before classification. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Defense, replenishment, exhaustion and lift-off](stop-four-stage.md) · [Absorber becomes aggressive and price lifts off](lift-off.md) · [Speed of tape](tape-speed.md) · [Executed aggressor-side trades](aggressor-trades.md)
 

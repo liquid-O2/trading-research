@@ -1,5 +1,7 @@
 # Daily open (18:00) and the Sunday weekly open
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 The 18:00 ET first print of each futures session, drawn as the "6 PM Daily Open" line, and the Sunday 18:00 weekly open `[PINE Sessions & VP with prev session VP & daily weekly opens.txt:84, 90, 641–642, 673–685]`. Green Bird's NWOG is the Sunday 18:00 open against Friday's close `[GB L60]`; Ethos measures overnight inventory from 6 pm `[MAMT p.14]`. Id `lvl.1800open`; the Sunday instance is the Sunday endpoint of `lvl.nwog` on [session-fail-boxes](session-fail-boxes.md).
 

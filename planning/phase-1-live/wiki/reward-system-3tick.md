@@ -10,7 +10,9 @@ The strict absorption reversal asks for the new controlling side to gain actual 
 
 **Phase 1 observation.** Keep tick distance distinct from number of events or elapsed time. Do not convert three-tick replenishment into a three-event horizon, and do not borrow one clip's digits across instruments.
 
-**Existing attachments.** [formulas_flow.reward_3tick/r_f08_abs_four_check/liftoff_upticks](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F08/F09. The first AM trade is not the source origin; exact reward window/reference remains partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O104 contract](../FORMULAS.md#o104) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure directional reward from the selected origin edge and keep reward, return, and renewed defense as distinct dated events. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Four-check absorption reversal](absorption-reward-retest.md) · [Defense, replenishment, exhaustion and lift-off](stop-four-stage.md) · [Absorber becomes aggressive and price lifts off](lift-off.md) · [Aggressor print-size thinning](digit-thinning.md)
 

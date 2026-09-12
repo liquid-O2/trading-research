@@ -10,7 +10,9 @@ C1 compares ES, NQ and YM reacting to their corresponding AMT objects at differe
 
 **Phase 1 observation.** Require each native object to exist before its own use and the correlated event before the revised decision. Do not substitute arbitrary high/low disagreement or a future peer-market target hit.
 
-**Existing attachments.** family_flow sister-market ingredients; [FORMULAS] R-R04. Source-compatible native-object matching and first-use/target-consumption logic are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O147 contract](../FORMULAS.md#o147) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Record native AMT objects and first-use times for ES/NQ/YM while preserving the documented IOD and RFZ revisions. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Remaining auction objectives](unfinished-business.md) · [TPO single-print structure](single-prints.md) · [Auction balance](auction-balance.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

@@ -10,7 +10,9 @@ The manual draws mean-reversal levels and a shaded exhaustion area beyond each r
 
 **Phase 1 observation.** Bind the reversal to its first eligible source sequence rather than the eventual high/low. Keep printed statistical claims scoped; an ambiguous reversal definition cannot be promoted to a method win rate.
 
-**Existing attachments.** [sessions.projections](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); [family_env.build_env_table](/workspace/implementation/src/trading_research/research/phase1_live/family_env.py); [FORMULAS] R-J01/J02/J18/J22, P3-02. Geometry is partial support; choosing the deepest final-AM excursion leaks. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O014 contract](../FORMULAS.md#o014) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Project the configured exhaustion ladder from one frozen range and measure observed sweep depth independently of the source-selected reversal band. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** The ladder is formulaic; author-selected reversal band and coordinate convention are not auto-discovered. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo reversal and action windows](reversal-time-window.md) · [The 1.33–1.66 extension area](extensions-1-33-1-66.md) · [Jumbo orderblocks](sweep-cisd-blocks.md) · [Jumbo rejection blocks](rejection-block.md) · [Jumbo failure signatures and three attempts](jumbo-failure-attempts.md)
 

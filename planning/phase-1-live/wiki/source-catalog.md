@@ -1,5 +1,7 @@
 # Source catalog and attribution
 
+Read the [Karpathy + Matt Pocock compilation rules][METHOD] before maintaining this wiki. Follow the [current status](current-status.md) for implementation and empirical evidence.
+
 Page numbers are one-based PDF pages, including covers. The source review underlying this compile covered every PDF below in full, including its charts and diagrams; the method and object pages cite the pages used for each claim. Settings, numerical examples, contradictions and incomplete disclosures were retained according to their role. Marketing, account screenshots and decorative images do not create entry rules.
 
 | Key / source file | Pages | Attribution and place in this compilation |
@@ -48,51 +50,35 @@ Page numbers are one-based PDF pages, including covers. The source review underl
 
 The [media archive][ZIP] has no independent textual rule authority. Its SDRange upgrade frames match [JR] pp.16–18, post 2005354451008426148; the older embedded-video frames match [JR] pp.27–28, post 1907376388916568139. The four GsIT images match [JR] p.68, post 1928125498736955814; non-chart photographs add no rule. Other repeated stills were matched by their archive filenames to the PDF captions. A frame is not treated as a new trade or a new method merely because it appears in both places.
 
-### Existing-file map
+### Current implementation and evidence map
 
-Shorthand code references on the method and object pages resolve inside [CODE]. These are attachment points, not a claim that every proposed input field is already produced.
+The active package is [method_pack][CODE]. These links supersede the older `phase1_live` component/caller notes as the entry points for current behavior. Object pages link directly to their reviewed domain implementations.
 
-| Current file | Role in this compilation |
+| File or report | Role |
 |---|---|
-| [clocks.py](/workspace/implementation/src/trading_research/research/phase1_live/clocks.py) | Clock specifications and window availability. |
-| [sessions.py](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py) | Frozen range geometry and retrospective path observations. |
-| [family_range.py](/workspace/implementation/src/trading_research/research/phase1_live/family_range.py) | Range-family measurements. |
-| [family_path.py](/workspace/implementation/src/trading_research/research/phase1_live/family_path.py) | Path-family measurements. |
-| [family_clocks.py](/workspace/implementation/src/trading_research/research/phase1_live/family_clocks.py) | Other clock/range constructions. |
-| [family_open.py](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py) | Prior value, opening-location cells and RVOL ingredients. |
-| [family_env.py](/workspace/implementation/src/trading_research/research/phase1_live/family_env.py) | Extension geometry and disclosed envelope/P-zone approximations. |
-| [family_fail.py](/workspace/implementation/src/trading_research/research/phase1_live/family_fail.py) | Box sweep/fail-back ingredients. |
-| [family_levels.py](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py) | Reference levels and assembled daily flags. |
-| [family_value.py](/workspace/implementation/src/trading_research/research/phase1_live/family_value.py) | Profile, delta and value ingredients. |
-| [family_gap.py](/workspace/implementation/src/trading_research/research/phase1_live/family_gap.py) | Candle/block, open/day-label and TPO ingredients. |
-| [family_flow.py](/workspace/implementation/src/trading_research/research/phase1_live/family_flow.py) | CVD and sister-market ingredients. |
-| [family_tape.py](/workspace/implementation/src/trading_research/research/phase1_live/family_tape.py) | Tape-derived daily flags; many inputs still aggregate beyond the candidate decision. |
-| [mbp1_extract.py](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_extract.py) | Available trade and best-quote extraction. |
-| [mbp1_objects.py](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py) | Trade CVD, limited absorption/reload, footprint and profile primitives. |
-| [formulas.py](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py) | Shared geometry, close/reclaim and scalar helper functions. |
-| [formulas_jumbo.py](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py) | Jumbo/AMT component helpers and fixture definitions. |
-| [formulas_flow.py](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) | Flow, regime and execution-component helpers. |
-| [family_recipes.py](/workspace/implementation/src/trading_research/research/phase1_live/family_recipes.py) | Assembly of daily recipe flags; not an operator event ledger. |
-| [family_gex.py](/workspace/implementation/src/trading_research/research/phase1_live/family_gex.py) | An assumed gamma scenario, not a recovered proprietary dealer-position model. |
-| [family_options.py](/workspace/implementation/src/trading_research/research/phase1_live/family_options.py) | Native options/OI ingredients with product identity. |
-| [family_vol.py](/workspace/implementation/src/trading_research/research/phase1_live/family_vol.py) | Volatility measurements; not an independent source entry method. |
-| [grid.py](/workspace/implementation/src/trading_research/research/phase1_live/grid.py) | Named touch/hold/reject/break measurements. |
-| [recipe_score.py](/workspace/implementation/src/trading_research/research/phase1_live/recipe_score.py) | Joins and scores component flags; cannot certify the whole loops above. |
-| [compute.py](/workspace/implementation/src/trading_research/research/phase1_live/compute.py) | Retained row storage and assembly. |
-| [slice.py](/workspace/implementation/src/trading_research/research/phase1_live/slice.py) | Declared sample and coverage selection. |
-| [stats.py](/workspace/implementation/src/trading_research/research/phase1_live/stats.py) | Summary statistics for correctly defined observations. |
-| [report.py](/workspace/implementation/src/trading_research/research/phase1_live/report.py) | Reporting support. |
+| [FORMULAS](../FORMULAS.md) | Canonical 166 objects, 9 shared contracts and 12 method contracts. |
+| [Object domains](/workspace/implementation/src/trading_research/research/method_pack/objects/) | Native geometry/profiles/flow, parent-derived observations and supplied process/lifecycle records. |
+| [Native resolution](/workspace/implementation/src/trading_research/research/method_pack/native_resolution.py) and [native windows](/workspace/implementation/src/trading_research/research/method_pack/native_windows.py) | Exact physical input identity, event availability and native coverage. |
+| [Contracts](/workspace/implementation/src/trading_research/research/method_pack/contracts.py) and [evidence](/workspace/implementation/src/trading_research/research/method_pack/evidence.py) | Typed output schemas, provenance and causal admission. |
+| [Assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) and [semantic views](/workspace/implementation/src/trading_research/research/method_pack/semantic_views.py) | Selected parent graph, operand bindings and source/native evidence projection. |
+| [Methods](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [expression evaluation](/workspace/implementation/src/trading_research/research/method_pack/expressions.py) | Branch-specific source predicates and three-valued verdicts. |
+| [Object runner](/workspace/implementation/tools/run_phase1_objects.py) | Declared implementation runner; see its method-pack commands. |
+| [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repair review](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) | Implemented obligations, tests and remaining evidence boundaries. |
+| [Source cases](/workspace/implementation/src/trading_research/research/method_pack/source_cases_v2.json) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md) | Dated cases, source images, settings, losses, early attempts and unresolved conflicts. |
+| [Frozen comparison registry](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_REGISTRY.json) and [readable rules](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md) | All 50 branch dispositions, 19 comparison definitions and 8 additional observation units. |
+| [Empirical runner](/workspace/implementation/src/trading_research/research/method_pack/empirical_runner.py) and [completion](/workspace/implementation/reports/phase1-live/empirical/COMPLETION_REPORT.md) | Frozen sampled discovery/replay and final scope accounting. |
+| [Results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md), [PHASE/audit tables](/workspace/implementation/reports/phase1-live/empirical/PHASE_AND_AUDIT_TABLES.md) and [charts](/workspace/implementation/reports/phase1-live/empirical/charts/README.md) | Group denominators, evidence limits and visually reviewed examples. |
+| [Wiki reconciliation](/workspace/implementation/reports/phase1-live/wiki-reconciliation/README.md) | Updated documentation and reproduction of the historical run against its exact frozen definitions. |
 
-The existing score tables are component observations with differing event definitions and, in places, stale caller descriptions. No old rate is promoted here to a method win rate, no missing observation is converted to false, and no report is regenerated. This compile writes only wiki pages, its index and its ingest log.
-
+The [older component package](/workspace/implementation/src/trading_research/research/phase1_live/) and prior score tables remain historical evidence. Their differing daily/component definitions do not establish source-method win rates. Source predicates, research comparison endpoints and actual execution records retain separate roles.
 
 ## How to use the evidence
 
 Follow [METHOD]: immutable raw evidence → compiled concept pages → [index](index.md) → [ingest log](log.md). Raw post and figure outrank a distillation; a distillation outranks [OPERATORS]; [OPERATORS] outranks an older wiki sentence. Citations use full file paths and one-based PDF pages, with post IDs when present. Copies and recap titles do not add methods.
 
-The [RULES], [FORMULAS], [AUDIT] and [AUDIT-F] documents were read for object names, code attachments, source conflicts and evidence limits. Their old recipe boundaries and status labels are not the method taxonomy. No audit or implementation was rerun in this compile. The research and risk parts of Stoic’s source are separately mapped to [the data engine](method-stoic-data-engine.md) and [asymmetric compounding](method-stoic-asymmetric-compounding.md).
+The [RULES], [FORMULAS], [AUDIT] and [AUDIT-F] documents were read for object names, code attachments, source conflicts and evidence limits. Their old recipe boundaries and status labels are not the method taxonomy. That initial compile predates the implementation, repairs and empirical acceptance linked above; this reconciliation updates their status without changing source evidence or frozen rules. The research and risk parts of Stoic’s source are separately mapped to [the data engine](method-stoic-data-engine.md) and [asymmetric compounding](method-stoic-asymmetric-compounding.md).
 
-Existing braindumps under /workspace/sources/documents/conversations/ and the Jumbo conversation export remain raw task context. They are not silently promoted to an author’s entry rule. Legacy pages outside the current index are outside this compiled map.
+Existing braindumps under /workspace/sources/documents/conversations/ and the Jumbo conversation export remain raw task context. They are not silently promoted to an author’s entry rule. The index separately links eight retained background notes. Their old hypotheses and Pine constructions remain outside the current method/object contracts and empirical v1 scope.
 
 [JR]: </workspace/sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf>
 [GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
@@ -135,7 +121,7 @@ Existing braindumps under /workspace/sources/documents/conversations/ and the Ju
 [AVG]: </workspace/sources/documents/discretionary/average-unprofitable-trader.pdf>
 [MATH]: </workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf>
 [DATA]: </workspace/sources/documents/discretionary/data-engine.pdf>
-[CODE]: </workspace/implementation/src/trading_research/research/phase1_live/>
+[CODE]: </workspace/implementation/src/trading_research/research/method_pack/>
 [ZIP]: </workspace/sources/x-raw-2026-09-11/JJumboFX_media_v2.zip>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
 [RULES]: </workspace/planning/phase-1-live/RULES.md>

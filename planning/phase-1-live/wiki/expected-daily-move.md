@@ -10,7 +10,9 @@ The lesson figure displays expected daily move (%) = VIX / √252 and also discu
 
 **Phase 1 observation.** Keep the displayed formula separate from a fixed ES point-anchor table or an NQ estimate. Do not use later realized range to set the pre-entry expectation.
 
-**Existing attachments.** family_vol; [formulas.vix_band](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); [FORMULAS] R-R02. Exact source example-to-instrument mapping and event-time update are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O043 contract](../FORMULAS.md#o043) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Calculate VIX daily percentage, fraction and optional points with the factor of 100 and explicit conversion instrument; propagate both input clocks. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** A points estimate needs a contemporaneous instrument price and is not a must-travel price target. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [VIX and volatility context](vix-context.md) · [Volatility term structure and event change](volatility-curve.md) · [Source-selected position management](position-management.md)
 

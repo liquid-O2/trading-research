@@ -10,7 +10,9 @@ The volatility lesson reads curve shape, expansion/crush and event changes as co
 
 **Phase 1 observation.** Preserve point-in-time alignment and source conventions. A post-event crush cannot be used as information before the release.
 
-**Existing attachments.** family_vol; [FORMULAS] R-R02. Source-selected tenor/ratio and event-change interpretation are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O044 contract](../FORMULAS.md#o044) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retain the exact selected tenor pair, comparable units and chosen difference/ratio; include an event change only after its actual publication. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** Curve shape and event interpretation require the source observation; no tenor substitution occurs. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [VIX and volatility context](vix-context.md) · [VVIX context](vvix-context.md) · [Scheduled news and changing information](news-event-context.md) · [Thesis, validity band and death condition](thesis-lifecycle.md)
 

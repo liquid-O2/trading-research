@@ -8,9 +8,11 @@ Jumbo's PD RTH Range+ uses M15/H1 imbalance destinations; Green Bird's chart use
 
 **Record before use.** Instrument, timeframe/bar kind, defining completed candles, source gap bounds, known_at, active/fill state and role as entry area or destination.
 
-**Phase 1 observation.** The gap becomes known only after its defining confirmation. Keep wick-bound and body-bound constructions distinct if the source does not resolve them; the current helper is not proof of a complete method.
+**Phase 1 observation.** The gap becomes known only after its defining confirmation. Keep wick-bound and body-bound constructions distinct if the source does not resolve them; implemented geometry alone does not establish the source's complete entry sequence.
 
-**Existing attachments.** family_gap; [formulas_jumbo.j19_htf_fvg](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J19 and related R-G01/R-G09 ingredients. Source-specific entry and fill-state joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O055 contract](../FORMULAS.md#o055) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve an identified three-candle imbalance/FVG, active-state history, direction, and actual defining candle parent IDs; measure contact/fill separately. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Automatic gap discovery is not admitted from caller summaries; active/fill state needs complete defining candles and path evidence. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [PD RTH Range+ destinations](pd-rth-range-plus.md) · [Market-structure shift after failure](market-structure-shift.md) · [Remaining auction objectives](unfinished-business.md)
 

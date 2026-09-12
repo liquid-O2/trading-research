@@ -10,7 +10,9 @@ In the purged single-break case, the overnight auction has already taken relevan
 
 **Phase 1 observation.** For purged context, the relevant sweep must precede the entry decision. Do not retire the RTH-only objective because of an ETH sweep, and do not use a later day's first hit to rewrite earlier state.
 
-**Existing attachments.** [sessions._purged](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); family_levels; [formulas_jumbo.j10_draw](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J04/J10/J19. A persistent source-scoped consumption ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O012 contract](../FORMULAS.md#o012) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Retire a selected liquidity reference only after an ordered qualifying native visit in the declared consumption scope. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** The visit rule and consumption scope are source policy; absent policy keeps retirement unknown. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Remaining auction objectives](unfinished-business.md) · [PD RTH Range+ destinations](pd-rth-range-plus.md) · [Overnight high, low and width](overnight-range.md) · [Range width and expectations](range-width-context.md)
 

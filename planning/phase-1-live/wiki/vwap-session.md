@@ -10,7 +10,9 @@ VWAP is the auction's volume-weighted average under the selected reset and price
 
 **Phase 1 observation.** Only pre-touch volume may define the average. Do not use 18:00 or 09:30 as author-exact without verifying the source; record the reset variant and keep unresolved fidelity unknown.
 
-**Existing attachments.** [formulas_flow.running_vwap](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); family_value; [FORMULAS] R-F01/F03 and partial GB level ingredients. HLC3/bar-volume VWAP is a named approximation; Green Bird's exact reset is unpublished. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O030 contract](../FORMULAS.md#o030) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute price-volume and squared-price-volume sums from actual resolved trades or complete contiguous bars; clip snapshots, retain unknown-side execution volume, and require an exact reset-to-cutoff membership interval. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** The Green Bird reset and price basis and the truncated Sires price basis are unpublished or unreadable. Frozen named comparisons compute literal values without certifying those author settings. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Anchored VWAP](vwap-anchored.md) · [VWAP deviation bands](vwap-deviations.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Accepted break and defended boundary retest](break-retest.md)
 

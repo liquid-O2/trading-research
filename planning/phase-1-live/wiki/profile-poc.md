@@ -10,7 +10,9 @@ Volume POC identifies the highest-volume price under the selected construction. 
 
 **Phase 1 observation.** Match the specific prior/current/older POC before measuring touch or passage. The after-the-fact POC/refill alignment in the clean-continuation recap cannot become a pre-entry gate. [CONT] p.9.
 
-**Existing attachments.** [family_open.value_area](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); [mbp1_objects.vp_rth](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [formulas_jumbo.a05_poc_tell](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A05/A06 and P3-04. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O064 contract](../FORMULAS.md#o064) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Return all maximum-volume POC candidates and select a POC only under an explicit tie policy. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** A tied POC stays unresolved without a named lowest/highest/supplied policy. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Volume profile](value-and-profiles.md) · [Untested prior POC](naked-poc.md) · [MPOC: the profile midpoint](mpoc.md) · [POC failure versus efficient passage](poc-traversal.md) · [Sires's narrower Failed Auction setup](failed-auction-sires.md)
 

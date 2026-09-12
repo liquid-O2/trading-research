@@ -10,7 +10,9 @@ Saint's short example shows aggressive buying at an upper HTF extreme repeatedly
 
 **Phase 1 observation.** Do not duplicate today's AM high to create two failures. If buyers instead take and defend the area, the current read must change before any new trade. A short mirror is not assumed without evidence.
 
-**Existing attachments.** [formulas_flow.r_f13_trapped_buyers](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F13. Local concentration, separate historical attempts and same-boundary current confirmation are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O119 contract](../FORMULAS.md#o119) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Require two distinct prior failed pushes known before the current test and keep current body-selling evidence separate. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Local delta concentration at an extreme](delta-spike.md) · [Higher- and lower-timeframe control alignment](htf-ltf-alignment.md) · [Accepted break and defended boundary retest](break-retest.md) · [Executed aggressor-side trades](aggressor-trades.md)
 

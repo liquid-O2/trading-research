@@ -10,7 +10,9 @@ The DOM lesson refines defense through executed depletion, continuing replenishm
 
 **Phase 1 observation.** Require actual execution before inferring replenishment. Missing source depth makes the faithful hidden-liquidity claim unknown; the specific lesson's two-tick refinement is not a universal detector setting.
 
-**Existing attachments.** [mbp1_objects.iceberg_touch_infer](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [FORMULAS] R-F07. BBO inference exists; verified hidden reserve, off-touch depth and the full participant sequence are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O103 contract](../FORMULAS.md#o103) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compare executed and displayed quantities within the declared area while refusing to infer participant identity or hidden reserve from BBO alone. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed passive replenishment](passive-replenishment.md) · [DOM at a planned location](dom.md) · [At-level DOM rejection](dom-rejection-branch.md)
 

@@ -10,7 +10,9 @@ The larger auction frames the direction/reaction and objective; the lower timefr
 
 **Phase 1 observation.** Confirm the current LTF side rather than reusing an earlier historical failure. A late supported flip can revise the read; it must be observed before the new decision.
 
-**Existing attachments.** Profile and flow ingredients; [FORMULAS] R-A07/A08, R-F13 and R-S01–S09. A stable HTF → LTF → same-band event join is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O097 contract](../FORMULAS.md#o097) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Require a live higher-timeframe thesis and current lower-timeframe control on the same area; preserve both availability clocks and reject free two-sided chop. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Alignment fails for dead thesis, opposite side, different area, stale/future control, or free two-sided chop. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Thesis, validity band and death condition](thesis-lifecycle.md) · [Auction balance](auction-balance.md) · [Accepted break and defended boundary retest](break-retest.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Source-selected dealing range](dealing-range.md)
 

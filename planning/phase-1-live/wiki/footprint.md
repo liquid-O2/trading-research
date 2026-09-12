@@ -10,7 +10,9 @@ A footprint locates executed buy/sell participation at prices inside the actual 
 
 **Phase 1 observation.** Keep filters and units with the display. The required pattern must occur at the chosen retest/location before entry; a final-AM delta total cannot replace repeated local body aggression.
 
-**Existing attachments.** [mbp1_objects.footprint_4x](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py) and trade ingredients; family_tape; [FORMULAS] R-F04/F05/F13/F14, R-J15/J16 and R-S09. Native source bars and local multi-candle joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O120 contract](../FORMULAS.md#o120) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build a complete tick-row footprint from same-candle executions, preserving unknown volume, POC ties, body/wick delta, as-of, and display settings. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source execution bars](execution-bars.md) · [Executed aggressor-side trades](aggressor-trades.md) · [Diagonal footprint imbalance stacks](footprint-imbalance-zones.md) · [POC relocation within a candle](candle-poc-flip.md) · [Trapped aggression at an auction extreme](trapped-buyers.md)
 

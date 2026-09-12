@@ -10,7 +10,9 @@ KG1 supplies a source level in the NYAM retest example and an additional compati
 
 **Phase 1 observation.** Use an identified source level for a fixture; automatic author-faithful generation remains unknown. Still require the selected retest/reaction and source risk policy.
 
-**Existing attachments.** family_gex/level ingredients are only surrounding context; [FORMULAS] R-R01/R-S01/R-S06. The KG1 level engine is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O041 contract](../FORMULAS.md#o041) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the KG1 band and identity and require actual independent prior-reaction and minor-HVN records; same-price and KG1 labels do not count as two reasons. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** Unpublished KG1 generation and missing actual reason records remain explicit; source-domain admission audits every consumed field. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [KG1 retest and subsequent trailing](kg1-retest.md) · [Prior defended reaction area](prior-reaction-area.md) · [High-volume node](hvn.md) · [Native options-chain identity](options-nodes.md)
 

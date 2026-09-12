@@ -10,7 +10,9 @@ The lesson anchors VWAP to a relevant swing, event or weekly/monthly context and
 
 **Phase 1 observation.** Distinguish the swing's price time from when that swing became confirmed. Do not backdate a future-confirmed anchor or treat every weekly/monthly reset as the same object.
 
-**Existing attachments.** [formulas_flow.running_vwap](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py) provides cumulative ingredients; [FORMULAS] R-F03/P3-02. Source event/swing anchors and confirmation-time joins are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O031 contract](../FORMULAS.md#o031) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Derive an anchored VWAP from the selected real anchor parent and every eligible execution/bar; anchor availability and snapshot cutoff both constrain use. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** A source anchor needs an identified selected parent; unavailable author selection remains a case record limitation. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Session VWAP](vwap-session.md) · [VWAP deviation bands](vwap-deviations.md) · [Thesis, validity band and death condition](thesis-lifecycle.md) · [Prior defended reaction area](prior-reaction-area.md)
 

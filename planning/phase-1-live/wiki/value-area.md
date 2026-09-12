@@ -10,7 +10,9 @@ VAH and VAL bound the selected profile's value area. They are not the whole pric
 
 **Phase 1 observation.** Use the profile actually referenced. A prior fixed VA boundary and today's moving VA boundary cannot be exchanged; opening inside balance is not automatically opening inside its VA.
 
-**Existing attachments.** [family_open.value_area](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); [formulas_flow.developing_va](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-A01/A03/A04/A08 and R-S09, P3-04. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O062 contract](../FORMULAS.md#o062) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Expose VAL/VAH, target fraction, volume inside, achieved fraction, and exact value-area algorithm/tie configuration from a selected profile snapshot. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Source fractions are known, but undisclosed expansion/tie algorithms stay null unless a named comparison is declared. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Volume profile](value-and-profiles.md) · [Developing profile snapshot](developing-profile.md) · [Profile point of control](profile-poc.md) · [Re-acceptance into value](value-reacceptance.md) · [Opening location and participation](open-location-switch.md)
 

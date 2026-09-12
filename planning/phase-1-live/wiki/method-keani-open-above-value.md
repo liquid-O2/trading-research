@@ -5,13 +5,13 @@ Operating method / KEANI-OPEN-ABOVE-VALUE. [Index](index.md) · [Phase 1 observa
 
 [AVG] pp.21–22 calls this **Keani's own setup**, which Sires then validates through AMT. It is separate from the unnamed member above.
 
-| Step | Source loop | Attachment |
+| Step | Source loop | Current implementation and evidence limits |
 |---|---|---|
-| 1 | Current TPO opens fully above yesterday's value: the entire A period is clear of prior VAH. Observe the developing profile around 10:00. | Prior profile/VA, TPO and `developing_va` ingredients; R-S09. Comparing the 09:30 open with a future current-day VAH is the wrong opening condition. |
-| 2 | Value builds higher; observe rejection at POC or previous VAH within that bullish auction. | Profile/rejection primitives attach; the ordered value-build/rejection event is **missing**. |
-| 3 | Price breaks the current developing VAH with aggressive buying imbalances. Freeze the actual imbalance prices and their known time. | `r_s09_open_above_value` and R-F04 stack ingredients. Developing VAH and the defended imbalance band are distinct objects. |
-| 4 | Price returns to those imbalance prices; buyers defend them, with the DOM and time of day supporting the trade. | `r_s09_open_above_value` partially encodes retest/hold. The caller does not provide this same-band sequence or the DOM confirmation. |
-| 5 | Enter long toward a worthwhile, preselected HTF objective, with defined risk. | Source-linked risk/target is **missing**. A clean retest into no objective does not pass the source checklist. |
+| 1 | Current TPO opens fully above yesterday's value: the entire A period is clear of prior VAH. Observe the developing profile around 10:00. | [O050](cash-open-reference.md) · [O061](value-and-profiles.md) · [O062](value-area.md) · [O078](tpo-ib-auction.md). The complete A period is checked against the available prior profile, with native profile and time-period identities. All four frozen empirical openings remain unclassified because prior profiles are unverified. |
+| 2 | Value builds higher; observe rejection at POC or previous VAH within that bullish auction. | [O063](developing-profile.md). Developing snapshots and ordered value-build/rejection evidence are implemented; later profile values cannot rewrite an earlier observation. |
+| 3 | Price breaks the current developing VAH with aggressive buying imbalances. Freeze the actual imbalance prices and their known time. | [O063](developing-profile.md) · [O109](footprint-imbalance-zones.md). The developing-VAH breakout and actual imbalance band retain separate identities and clocks. The source's aggressive breakout interpretation remains distinct from literal price measurements. |
+| 4 | Price returns to those imbalance prices; buyers defend them, with the DOM and time of day supporting the trade. | [O100](dom.md) · [O109](footprint-imbalance-zones.md) · [O120](footprint.md). The later retest must join the same imbalance and its local defense. Missing DOM/source confirmation remains an explicit hole. |
+| 5 | Enter long toward a worthwhile, preselected HTF objective, with defined risk. | [O139](structural-risk.md) · [O141](trade-objective.md) · [O142](position-management.md) · [O150](order-lifecycle.md). Preselected risk, objective and subsequent management/lifecycle admission are implemented. They remain unavailable for a historical candidate without the source records. |
 
 All steps: [AVG] pp.21–22. **Not standalone:** an opening gap, `open > current VAH`, an eventual bullish day, or a break without defense on return. Around 10:00 is an observation point, not access to the finished day type. The displayed dashboard results and the document's data-collection discussion do not establish this setup's entry edge.
 
@@ -33,6 +33,18 @@ AND defense_at <= decision_at AND side = 'long'
 ```
 
 Citation: [AVG] pp.21–22. The source's near-10:00 observation does not define an exact universal minute tolerance. Missing that convention is an explicitly named timing variant. A developing-VAL short is not claimed as Keani's published mirror.
+
+## Implementation and empirical status — 2026-09-12
+
+The [M08 contract](../FORMULAS.md#m08) and its 23 operand bindings are implemented and reviewed. [Method evaluation](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [causal assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) consume the selected object evidence. [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repairs](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) establish software completion; the source and data limits described below remain.
+
+The frozen empirical v1 run has the following branch dispositions. Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
+
+| Branch | Frozen disposition | Recorded p / f / u | Jobs processed / eligible | Missing-input jobs |
+|---|---|---:|---:|---:|
+| `source_long` | `measured` | 0 / 0 / 4 | 4 / 4 | 0 |
+
+All declared jobs for these branches are accounted for; none remain pending. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. All four observed openings are unknown because the required prior profiles are unverified. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
 
 ## Objects used by this method
 

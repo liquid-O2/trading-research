@@ -10,7 +10,9 @@ The gamma material marks call/put walls and also shows ranked wall references. T
 
 **Phase 1 observation.** Use the source-selected wall set, then require local rejection/defense or aggressive break according to the branch. Do not substitute maximum OI for every wall definition.
 
-**Existing attachments.** family_options/family_gex; [FORMULAS] R-R01/P3-05. Exact source wall ranking and positioning assumptions remain missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O036 contract](../FORMULAS.md#o036) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve every wall identity, dated price/band, units and selected wall; compute same-unit spot relations and prevent max-pain identity aliasing. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** Wall generation requires the unpublished source engine or actual attributed readouts. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Native options-chain identity](options-nodes.md) · [Source max-pain reference](max-pain.md) · [DOM at a planned location](dom.md) · [Accepted break and defended boundary retest](break-retest.md)
 

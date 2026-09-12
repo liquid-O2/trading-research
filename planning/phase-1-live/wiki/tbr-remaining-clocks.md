@@ -10,7 +10,9 @@ The manual applies the same framework to Asia 20:00–20:30, midnight 00:00–00
 
 **Phase 1 observation.** A projection must exist before its alleged reversal. Keep manual and later-platform configurations separate; an unknown formation window makes automatic author-faithful construction unknown.
 
-**Existing attachments.** clocks.CLOCKS; [family_clocks.build_clock_table](/workspace/implementation/src/trading_research/research/phase1_live/family_clocks.py); [sessions.projections](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py); [FORMULAS] R-J09/J23. Retained 00:00–03:00 London is an approximation, not a universally verified author clock. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O006 contract](../FORMULAS.md#o006) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build another explicitly clocked native range and expose whether the selected source clock was actually verified. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Only explicitly verified clocks are faithful; manual clock whitelist does not infer other author windows. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [Jumbo's 06:00–09:00 range](tbr-6-9-range.md) · [Range EQ and quadrants](range-internals.md) · [Source session-cleanliness assessment](clean-session-label.md)
 

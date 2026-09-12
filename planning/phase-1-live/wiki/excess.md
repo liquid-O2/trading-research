@@ -10,7 +10,9 @@ Excess describes the taper/rejection structure at an auction extreme in the time
 
 **Phase 1 observation.** Classify high and low separately from observations available then. Keep the exact source criterion or a named variant; final profile completion cannot be known at the first touch.
 
-**Existing attachments.** family_gap and TPO ingredients; [FORMULAS] R-A14. Source-compatible tail/letter classification is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O080 contract](../FORMULAS.md#o080) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Evaluate side-specific extreme TPO tails for the declared same-letter excess criterion on an explicit price grid. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Excess depends on declared side/grid/criterion and does not follow from any two sparse rows. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Time-price-opportunity profile](tpo-ib-auction.md) · [TPO poor high and poor low](poor-extremes.md) · [TPO single-print structure](single-prints.md)
 

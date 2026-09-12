@@ -1,5 +1,7 @@
 # Prior RTH quadrants
 
+**Historical background — scope clarified 2026-09-12.** This retained note predates the current M01–M12 / O001–O166 contracts and is outside empirical v1. Its “faithful object,” upgrade and outcome sections describe earlier proposals; they do not report current implementation acceptance or measured results. Source/Pine constructions and old statistics remain distinct from author rules. See the [current method map](index.md), [status](current-status.md), [source catalog](source-catalog.md) and [historical review ledger](/workspace/planning/phase-1-from-scratch/REVIEW_LEDGER.md).
+
 ## Definition
 The 25 / 50 / 75% levels of the previous day's RTH range, used on single-break days as the inner entry levels beside the 6–9 quadrants: "for single days where it's a single break, he uses either the 6 to 9 session or the previous day RTH sessions, like 75%, 25%, and 50% zones" `[DTM L19]`; continuation inside the range using one of the equilibrium levels `[DRFL L906]`. Jumbo's PD RTH Range+ carries the prior RTH high, low and key levels as the daily direction reference `[TBR p.32–33]`. Ids `lvl.prior-rth.q25`, `lvl.prior-rth.q50`, `lvl.prior-rth.q75`.
 

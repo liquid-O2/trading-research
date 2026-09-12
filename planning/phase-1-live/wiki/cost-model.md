@@ -10,7 +10,9 @@ The coaching review compares aggregate outcomes with fees/payout economics; the 
 
 **Phase 1 observation.** Separate one-trade execution costs from account/evaluation costs, and source assumptions from observations. Preserve the study's cost units before interpreting its reported R outcomes.
 
-**Existing attachments.** stats/report have generic summaries; [FORMULAS] has no full source-specific order/account cost ledger. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O152 contract](../FORMULAS.md#o152) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Reconcile trade costs and stop slippage against the fixed R denominator while keeping account fees separate. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Observed order lifecycle](order-lifecycle.md) · [Refill-study fill assumption](fill-model.md) · [Outcome distribution of a declared process](outcome-metrics.md) · [Thesis and execution journal](process-journal.md)
 

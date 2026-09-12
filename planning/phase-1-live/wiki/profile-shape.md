@@ -10,7 +10,9 @@ Balanced, double-distribution, trending and P/b shapes describe where the auctio
 
 **Phase 1 observation.** Preserve source-specific permission. Saint's trending-profile stand-down and Sires's established-trend continuation belong to different loops; shape alone cannot select between them.
 
-**Existing attachments.** Profile helpers and [FORMULAS] R-A11/A17. An automatic universal shape-to-direction mapping is missing and unsupported. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O085 contract](../FORMULAS.md#o085) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve a source profile-shape label and permission, sub-balance/LVN identities, and completed break-retest evidence without inferring direction from shape. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** P/b shape direction and trade permission are not inferred automatically. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Auction balance](auction-balance.md) · [Profile shelf](profile-shelf.md) · [Low-volume node](lvn.md) · [Accepted break and defended boundary retest](break-retest.md) · [Developing auction day structure](day-type.md)
 

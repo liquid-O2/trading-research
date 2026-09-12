@@ -10,7 +10,9 @@ Range open and close are separately drawn references. Their identity must be rea
 
 **Phase 1 observation.** Match label plus value and source date before using the reference. Separate source-open identification from measured low-to-open reach; unresolved axis mapping is unknown.
 
-**Existing attachments.** [sessions.build_session](/workspace/implementation/src/trading_research/research/phase1_live/sessions.py) exposes the first open; [FORMULAS] R-J05/J12 and P3-01. The source-specific open/close identity and path join are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O008 contract](../FORMULAS.md#o008) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Bind range-open and range-close prices to selected parent observations while preserving source anchor identity and directed-path evidence. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Source anchor/label and path meaning are not inferred from price equality alone. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Range EQ and quadrants](range-internals.md) · [Time-anchored P-zones](p-zones-benchmark.md) · [Source clocks and availability](clock-grid-and-bars.md)
 

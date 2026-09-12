@@ -10,7 +10,9 @@ A volume profile distributes executed volume by price over a specified auction. 
 
 **Phase 1 observation.** Use only volume accumulated by the observation time. An OHLC allocation proxy must keep that label; final RTH volume/delta cannot confirm an earlier EQ touch.
 
-**Existing attachments.** [family_open.scan_prior_rth_trade_vp](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); family_value; [mbp1_objects.vp_rth](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [FORMULAS] P3-04/P3-07 and R-J16/J17, R-A01–A18. Developing source-aligned snapshots are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O061 contract](../FORMULAS.md#o061) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build an immutable volume-by-price profile from canonical native executions, preserving B/A/N ownership, binning, coverage, event IDs, and instrument definition. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Profile validity depends on exact instrument definition, bin rules, canonical execution ownership, and coverage; quotes are excluded. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile point of control](profile-poc.md) · [Profile value area](value-area.md) · [High-volume node](hvn.md) · [Low-volume node](lvn.md) · [Profile shelf](profile-shelf.md) · [Profile ledge](profile-ledge.md) · [Developing profile snapshot](developing-profile.md)
 

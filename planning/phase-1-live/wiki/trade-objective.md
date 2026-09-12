@@ -10,7 +10,9 @@ The method selects a real destination: range/internal/opposing liquidity, POC/sh
 
 **Phase 1 observation.** Freeze the objective before decision when the source requires one. Score reach only afterward; distinguish an unpublished target algorithm from an observed trade result.
 
-**Existing attachments.** family_levels; [formulas_jumbo.j10_draw/j19_draw/j21_targets](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J10/J19/J21, R-A03/A05/A06 and R-G01–G09. Full entry-linked selection and progression are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O141 contract](../FORMULAS.md#o141) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Select one dated active objective before entry and keep later outcome separate from objective selection. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Remaining auction objectives](unfinished-business.md) · [Profile point of control](profile-poc.md) · [Saint's Asia-range target context](asia-range-risk-context.md) · [Source-selected position management](position-management.md) · [Observed order lifecycle](order-lifecycle.md)
 

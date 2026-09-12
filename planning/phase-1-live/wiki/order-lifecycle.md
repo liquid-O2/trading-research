@@ -10,7 +10,9 @@ An entry instruction, drawn ticket, resting order, triggered order, fill, cancel
 
 **Phase 1 observation.** For the documented Refill configuration preserve 12-tick inside entry, 32-tick stop, 96-tick target, 30-minute cancellation and one position at a time. Other authors/cases retain their own rules; no live orders are placed.
 
-**Existing attachments.** Partial ticket geometry in [formulas_jumbo.j18_ob_bull/j18_ob_bear](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py) and [formulas_flow.r_s01_refill_long/r_s01_refill_short](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-J18/R-F15/R-F17/R-S01. Full event lifecycle is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O150 contract](../FORMULAS.md#o150) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Reconcile the full order and position state machine across placement, amendment, fills, cancel/expiry/reopen, brackets, exits, and source policy. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Refill-study fill assumption](fill-model.md) · [Trading and account costs](cost-model.md) · [Entry-side structural invalidation](structural-risk.md) · [Objective selected before entry](trade-objective.md) · [Source-selected position management](position-management.md)
 

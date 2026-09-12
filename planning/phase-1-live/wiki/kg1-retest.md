@@ -10,7 +10,9 @@ The NYAM example uses a known KG1 level, an aggressive confirmed retest, entry a
 
 **Phase 1 observation.** Check source level known ≤ retest ≤ aggressive confirmation ≤ decision. The figures show target expansion as well as trailing; do not attribute the entire 0.69→1.83 change to reduced initial risk.
 
-**Existing attachments.** Generic gamma, level and refill ingredients attach; [FORMULAS] R-S01 and R-R01 are partial surroundings. The KG1 engine and full trailing-convexity algorithm are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O132 contract](../FORMULAS.md#o132) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep KG1 known before retest/confirmation, preserve original risk, and apply later management changes only after entry. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/flow_sequences.py).
+
+**Evidence limits.** Each required stage, side, parent band and source qualifier needs its own causal observation. Unpublished author classifications remain source limitations; a missing private stage or attempt record is not replaced by a supplied true flag. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source KG1 level](kg1-level.md) · [Source-selected position management](position-management.md) · [Confirmed protected high or low](protected-high-low.md)
 

@@ -10,7 +10,9 @@ The source settings display body threshold 0.6, volume multiplier 1.5 and a 14-p
 
 **Phase 1 observation.** Check the displayed source constants and completed bar before use. Keep exact inequality, warm-up and reset conventions explicit where unpublished; never use a centered future-volume average.
 
-**Existing attachments.** family_gap/family_levels; [FORMULAS] R-J14. Retained 0.3/2.5 constants do not match the printed settings; a reset that only starts at 09:30 can also delay availability. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O058 contract](../FORMULAS.md#o058) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure body and volume ratios from one current complete candle plus exactly fourteen causal same-timeframe bars under explicit averaging/reset/equality policies. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Only the declared 14-period policies are evaluated; insufficient or mismatched history stays unknown. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source execution bars](execution-bars.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Jumbo failure signatures and three attempts](jumbo-failure-attempts.md)
 

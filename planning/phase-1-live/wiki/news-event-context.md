@@ -10,7 +10,9 @@ News and range conditions change target ambition or thesis validity. Jumbo discu
 
 **Phase 1 observation.** Only information already released can kill or revise a thesis at a decision. Do not hard-code news_change=false or assume a full calendar from a dated event file.
 
-**Existing attachments.** [family_levels.load_red_folder](/workspace/implementation/src/trading_research/research/phase1_live/family_levels.py); [formulas_jumbo.j21_class/j21_targets](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_r03_thesis](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-J20/J21/R-R03. Date-only calendar entries do not provide complete event times or release information. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O029 contract](../FORMULAS.md#o029) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Separate schedule publication, actual release, vintage, source response, and thesis revision by their real availability times. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** No news-impact response is inferred before release or from a schedule without vintage identity. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Thesis, validity band and death condition](thesis-lifecycle.md) · [Economic observation and release vintage](economic-release-vintage.md) · [Range width and expectations](range-width-context.md) · [VIX and volatility context](vix-context.md)
 

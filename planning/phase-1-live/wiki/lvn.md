@@ -10,7 +10,9 @@ An LVN is the lower-participation connection between accepted areas; price can t
 
 **Phase 1 observation.** Retain zero-volume/missing-bin distinctions and both transitions. An LVN computed strictly inside 6–9 cannot simultaneously prove a source node outside that same range.
 
-**Existing attachments.** [formulas_jumbo.profile_nodes/profile_ledges](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_f11_delta_lvn](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-A17, R-F11 and R-J17. Sparse-bin heuristics and final-RTH profiles are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O067 contract](../FORMULAS.md#o067) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure volume in a source-selected bridge/LVN band and preserve the identities of the two accepted areas and their transition evidence. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** LVN/bridge selection and accepted-area identities are source-supplied; no automatic trough algorithm is claimed. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [High-volume node](hvn.md) · [Profile shelf](profile-shelf.md) · [Profile ledge](profile-ledge.md) · [Overnight volume structure](overnight-profile.md) · [Signed volume-by-price profile](weekly-delta-profile.md)
 

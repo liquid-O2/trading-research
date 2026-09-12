@@ -10,7 +10,9 @@ An HVN is a locally accepted concentration of volume; a minor HVN can refine a r
 
 **Phase 1 observation.** Keep the node as an area where the source draws one. Require actual contact and method-specific reaction; do not use a whole-day node or an unrelated prior extreme as the two reasons.
 
-**Existing attachments.** [formulas_jumbo.profile_nodes](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [formulas_flow.r_s06_two_reason/r_s08_minor_node](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-A16/A17, R-S06/S08 and R-J17. Source band selection is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O066 contract](../FORMULAS.md#o066) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure volume in a source-selected HVN band from the actual profile while leaving automatic node selection unavailable. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** HVN band selection is source-supplied; no automatic peak-band algorithm is claimed. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Volume profile](value-and-profiles.md) · [Low-volume node](lvn.md) · [Prior defended reaction area](prior-reaction-area.md) · [Source-selected dealing range](dealing-range.md)
 

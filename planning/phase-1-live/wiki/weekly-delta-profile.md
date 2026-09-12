@@ -10,7 +10,9 @@ Executed delta by price adds who traded aggressively to where volume was accepte
 
 **Phase 1 observation.** Keep price-unit and delta-unit references distinct. A full-current-week or final-RTH delta profile cannot confirm an earlier trade; preserve the source's price/effort response.
 
-**Existing attachments.** [family_tape.build_weekly_delta_table](/workspace/implementation/src/trading_research/research/phase1_live/family_tape.py); [family_value.scan_rth_delta](/workspace/implementation/src/trading_research/research/phase1_live/family_value.py); [formulas_flow.r_f11_delta_lvn](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F10/F11, R-J16 and P3-08. Causal profile selection is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O077 contract](../FORMULAS.md#o077) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Expose signed volume by price from canonical B/A/N rows, retaining exact known delta and bounded uncertainty when aggression is unknown. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Unknown aggressor volume yields an interval, never an invented exact delta. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Cumulative volume delta and its source reference](cvd-variants.md) · [Low-volume node](lvn.md) · [Confirmed protected high or low](protected-high-low.md)
 

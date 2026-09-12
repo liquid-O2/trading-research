@@ -10,7 +10,9 @@ A poor extreme indicates incomplete auction structure under the selected TPO rea
 
 **Phase 1 observation.** Do not combine distinct poor readings into one always-true flag. Evaluate each extreme under the selected definition and preserve unknown coverage.
 
-**Existing attachments.** family_gap; [FORMULAS] R-A14/A18. The source's exact letter-aware criterion and persistent repair history are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O081 contract](../FORMULAS.md#o081) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Evaluate poor-high/poor-low structure only under the instrument-specific adjacent-row criterion and compatible source grid. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** The one-row NQ criterion is instrument-specific; incompatible grids leave the label unknown. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Time-price-opportunity profile](tpo-ib-auction.md) · [TPO excess at auction extremes](excess.md) · [Remaining auction objectives](unfinished-business.md)
 

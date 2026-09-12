@@ -10,7 +10,9 @@ The developing profile is the state visible so far. Sires rereads it after an im
 
 **Phase 1 observation.** Freeze the relevant snapshot at each stage. Keani's opening test uses yesterday's VAH; his later breakout uses developing VAH. Keep those two known times and identities separate.
 
-**Existing attachments.** family_value; [formulas_flow.developing_va](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [mbp1_objects.vp_rth](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); [FORMULAS] R-J16, R-A01/A17, R-S09. Reliable event-time snapshots and joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O063 contract](../FORMULAS.md#o063) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Freeze an immutable developing-RTH profile snapshot at as-of so later events cannot revise the earlier snapshot. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Snapshot immutability is enforced; it does not forecast the later developing POC. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Volume profile](value-and-profiles.md) · [Profile value area](value-area.md) · [Time-price-opportunity profile](tpo-ib-auction.md) · [Opening location and participation](open-location-switch.md)
 

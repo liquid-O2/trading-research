@@ -10,7 +10,9 @@ Sires discusses trend, normal, normal variation, neutral and nontrend behavior, 
 
 **Phase 1 observation.** Reassess after impulses. Keep the evidence available at each decision; do not substitute a final trend-day label for the earlier thesis or override Saint's rebalance requirement.
 
-**Existing attachments.** family_gap; [FORMULAS] R-A10/A11/A15. Generic daily labels do not implement source-specific evolving permissions. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O084 contract](../FORMULAS.md#o084) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve provisional and final auction day-type observations with taxonomy, author, evidence cutoff, and permission reference. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Provisional and final labels never substitute for each other or backdate their evidence. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Developing auction open type](open-type.md) · [Initial balance](initial-balance.md) · [Profile shape and trade permission](profile-shape.md) · [Auction balance](auction-balance.md)
 

@@ -10,7 +10,9 @@ Profiles can combine the periods relevant to the current auction and its higher-
 
 **Phase 1 observation.** Only completed/available constituent observations enter the profile. Record a fixed-lookback experiment as a named variant rather than the author's selected auction.
 
-**Existing attachments.** family_value and profile primitives; [FORMULAS] R-A16/A17/P3-07. Source-selected multi-session composites are missing or partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O070 contract](../FORMULAS.md#o070) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compose explicitly selected compatible profile parents with disjoint native event ownership and reconcile every row and total. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Constituents must share instrument/tick/bin semantics and have disjoint event IDs; undisclosed value-area algorithms propagate holes. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source-selected dealing range](dealing-range.md) · [Volume profile](value-and-profiles.md) · [High-volume node](hvn.md) · [Low-volume node](lvn.md) · [Prior defended reaction area](prior-reaction-area.md)
 

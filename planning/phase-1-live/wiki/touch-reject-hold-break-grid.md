@@ -10,7 +10,9 @@ The authors distinguish arrival, failure, acceptance and defended retest; their 
 
 **Phase 1 observation.** Freeze the level before use. A completed bar is known at its close; a same-bar sequence unresolved by OHLC stays unknown. Record target-first, invalidation-first and no-hit/censored outcomes after the decision, with full coverage.
 
-**Existing attachments.** [FORMULAS] §0.2 / P3-03; [grid.touch_level](/workspace/implementation/src/trading_research/research/phase1_live/grid.py), [grid.reject_after_touch](/workspace/implementation/src/trading_research/research/phase1_live/grid.py), [grid.hold_after_break](/workspace/implementation/src/trading_research/research/phase1_live/grid.py) and [grid.failback_wick_c5](/workspace/implementation/src/trading_research/research/phase1_live/grid.py). The default two ticks, half-range rejection in 15 minutes, 30-minute hold and 30-minute fail-back cap are named research settings. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O002 contract](../FORMULAS.md#o002) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure contact, overlap, strict break side, and sweep depth from native events/bars against an actual parent band; keep literal close return separate from audited source reject/hold labels. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Tape proves geometric overlap and literal closes; discretionary reject/hold meaning still requires an admitted source record. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Evidence and data coverage](data-coverage.md) · [Source clocks and availability](clock-grid-and-bars.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [Accepted break and defended boundary retest](break-retest.md)
 

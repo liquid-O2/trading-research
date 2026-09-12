@@ -10,7 +10,9 @@ A concentration of aggressive delta at a fixed auction extreme must be interpret
 
 **Phase 1 observation.** Preserve actual aggressor sign, location and observed outcome separately. Do not settle the source caption conflict by inventing a universal buy/sell rule.
 
-**Existing attachments.** [family_value.scan_rth_delta](/workspace/implementation/src/trading_research/research/phase1_live/family_value.py); formulas_flow helpers; [FORMULAS] R-F05/F08/F13 and R-J16. Exact source spike thresholds and reliable local joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O107 contract](../FORMULAS.md#o107) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute delta concentration over total volume and retain an interval when aggressor side is unknown; source spike classification remains supplied. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/local_flow.py).
+
+**Evidence limits.** Native executions and BBO support literal measurements. Source-only filters and defense/absorption/replenishment interpretations require attributed observations; the tape does not prove hidden reserve or full-depth order history. Timestamp ties without sequence retain ordering uncertainty. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Executed aggressor-side trades](aggressor-trades.md) · [Absorption: effort without price reward](absorption-and-big-trades.md) · [Trapped aggression at an auction extreme](trapped-buyers.md) · [Signed volume-by-price profile](weekly-delta-profile.md)
 

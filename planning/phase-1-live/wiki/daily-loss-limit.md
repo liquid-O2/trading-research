@@ -10,7 +10,9 @@ The sources limit further exposure after adverse results or when the planned ses
 
 **Phase 1 observation.** Apply the specific source policy known before the attempt. In STOP's branch daily R before must be greater than −4; do not erase earlier losses through re-entry naming or a later policy change.
 
-**Existing attachments.** [FORMULAS] R-J22/R-J24/R-S07 have related flags. A persistent account/attempt ledger is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O145 contract](../FORMULAS.md#o145) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute daily R strictly from same-source/account/session prior results and enforce the fixed pre-entry policy limit. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Exposure fitted to source risk constraints](position-sizing.md) · [Freshly qualified re-entry](reentry.md) · [Thesis and execution journal](process-journal.md) · [Prior loss-streak validation for Stoic's overlay](loss-streak-validation.md)
 

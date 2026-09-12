@@ -10,7 +10,9 @@ A previously observed clean reaction or defended band supplies a location for a 
 
 **Phase 1 observation.** The earlier defense must precede the current test, and both must concern the same source band. Do not use the outcome of the new touch to invent its prior memory.
 
-**Existing attachments.** [formulas_flow.r_s06_two_reason/r_s08_minor_node](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-S06/S08. Current helpers do not supply complete contact, history and same-band joins. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O072 contract](../FORMULAS.md#o072) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Derive prior/current defense from identified parents with strict lineage and event ordering; equal price cannot transfer history between bands and pre-contact or future control is denied. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Prior defense does not imply current defense; a fresh post-contact observation is required. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [High-volume node](hvn.md) · [Source-selected dealing range](dealing-range.md) · [Memory of earlier zone tests](zone-touch-memory.md) · [Freshly qualified re-entry](reentry.md)
 

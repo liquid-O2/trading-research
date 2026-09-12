@@ -10,7 +10,9 @@ The January 14 post describes clean retraces to each swing's midpoint on a trend
 
 **Phase 1 observation.** Measure the retrace after the swing becomes known. Label any fractal detector as a named construction; a final trend-day label cannot select an earlier trade.
 
-**Existing attachments.** [formulas_jumbo.j25_fractal_swings/j25_mid_retrace_hold](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J25. Current one-minute/backdated or independently chosen pivots do not establish the source's completed swing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O026 contract](../FORMULAS.md#o026) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute a swing midpoint from two confirmed, identified endpoints and record a later midpoint contact without selecting pivots automatically. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Pivot endpoints and timeframe are selections, so midpoint arithmetic does not certify an automatic swing. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Range EQ and quadrants](range-internals.md) · [Fair-value gaps and higher-timeframe imbalances](fvg-body-gaps.md) · [Source clocks and availability](clock-grid-and-bars.md) · [Retrospective range path](range-path-class.md)
 

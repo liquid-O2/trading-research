@@ -10,7 +10,9 @@ The lesson draws standard-deviation bands around the selected VWAP and reads abs
 
 **Phase 1 observation.** Freeze the band from information available at the touch. Keep each disclosed or named multiplier separate and require the selected Sires branch's auction and flow gates.
 
-**Existing attachments.** [formulas_flow.running_vwap/r_f01_vwap_fade](/workspace/implementation/src/trading_research/research/phase1_live/formulas_flow.py); [FORMULAS] R-F01/F03/P3-02. Exact source variance/reset construction and local confirmation are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O032 contract](../FORMULAS.md#o032) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Derive weighted population dispersion from the identical VWAP parent membership; preserve reset, snapshot and band identity and reject mixed or contact-inclusive snapshots. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** An undisclosed platform variance rule stays unavailable; the explicitly named comparison rule is implemented. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Session VWAP](vwap-session.md) · [Anchored VWAP](vwap-anchored.md) · [Confirmed VWAP deviation fade](vwap-deviation-fade.md) · [Absorption: effort without price reward](absorption-and-big-trades.md)
 

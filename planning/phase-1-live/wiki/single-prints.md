@@ -10,7 +10,9 @@ Single prints are interior thin time structure left by directional movement betw
 
 **Phase 1 observation.** Exclude merely outer tails from an interior-single-print definition. Never fabricate the band from an unrelated fixed-price offset or use final-day membership before it is known.
 
-**Existing attachments.** [mbp1_objects.tpo_trade_visited](/workspace/implementation/src/trading_research/research/phase1_live/mbp1_objects.py); family_gap; [FORMULAS] R-A14/A18. True interior letter-aware bands and an unfinished-reference ledger are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O079 contract](../FORMULAS.md#o079) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Find source-selected interior single-print rows and evaluate later repair without treating outer tails as single prints. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Interior band and repair convention are source selections; outer tails are excluded by contract. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Time-price-opportunity profile](tpo-ib-auction.md) · [TPO excess at auction extremes](excess.md) · [Remaining auction objectives](unfinished-business.md)
 

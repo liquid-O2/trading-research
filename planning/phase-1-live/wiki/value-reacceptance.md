@@ -10,7 +10,9 @@ When price leaves or opens outside accepted value and then re-enters with accept
 
 **Phase 1 observation.** Require the actual original area and completed source acceptance before changing the trade read. Preserve different conditions and target denominators rather than pooling them into a single probability.
 
-**Existing attachments.** [formulas_jumbo.a03_reentry_traverse/a08_reaccept](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-A03/A04/A08. Testing only one value boundary can wrongly count excursions outside the other side as inside. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O092 contract](../FORMULAS.md#o092) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Require a return from outside and two consecutive complete whole-range-inside half-hours before certifying value re-acceptance. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Point-in-band prints or incomplete periods cannot certify whole-range re-acceptance. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Profile value area](value-area.md) · [POC failure versus efficient passage](poc-traversal.md) · [Saint's failed auction and return to value](failed-auction-saint.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

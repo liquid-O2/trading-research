@@ -10,7 +10,9 @@ A stop-out can leave the wider thesis/band intact, but a new entry requires retu
 
 **Phase 1 observation.** Require prior exit < fresh confirmation ≤ new decision, same valid band and current daily permission; also run the full selected execution branch. Unknown fresh evidence is not a pass.
 
-**Existing attachments.** [FORMULAS] R-R03/R-S03/R-S07/R-S08 are ingredients. Persistent thesis/band identities, distinct attempts and loss-limit state are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O144 contract](../FORMULAS.md#o144) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Allow re-entry only after the linked parent exit, in the same live thesis band, with fresh confirmation and a full branch verdict. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/lifecycles.py).
+
+**Evidence limits.** Actual thesis, instruction, fill, management, account or state records are required for a historical instance. Scoped source policies and supplied interpretations cannot manufacture missing private records or a contemporaneous cohort. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Thesis, validity band and death condition](thesis-lifecycle.md) · [Source-selected dealing range](dealing-range.md) · [Fresh defense of a continuation band](defended-band-continuation.md) · [Defense, replenishment, exhaustion and lift-off](stop-four-stage.md) · [Source account and session stop](daily-loss-limit.md)
 

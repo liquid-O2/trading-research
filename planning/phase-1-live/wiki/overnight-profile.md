@@ -10,7 +10,9 @@ The overnight profile describes accepted volume, bridge LVNs, shelves and POC be
 
 **Phase 1 observation.** Preserve the profile shown by the source. Do not change an older POC aligned with an overnight LVN into a developing RTH POC chosen after the fact.
 
-**Existing attachments.** [family_open.value_area](/workspace/implementation/src/trading_research/research/phase1_live/family_open.py); family_value; [FORMULAS] R-A12/A13, R-J06 and P3-04. Exact source band selection and some POC-alignment joins are partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O073 contract](../FORMULAS.md#o073) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Bind overnight profile structure to the exact Sires O011 window, preserve older-POC identity and optional opening response, and never auto-select an LVN. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** The Sires clock is enforceable, while unpublished LVN selection and value-area expansion remain holes. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Overnight directional inventory](overnight-inventory.md) · [Overnight high, low and width](overnight-range.md) · [ETH profile identity](prior-eth-profile.md) · [MPOC: the profile midpoint](mpoc.md) · [Opening location and participation](open-location-switch.md)
 

@@ -10,7 +10,9 @@ The source's ETH profile must be identified from its actual auction window and l
 
 **Phase 1 observation.** Keep the 94% either-overnight-edge claim separate from the 73% open-inside-previous-ETH-balance claim. If a drawing and prose do not settle balance versus VA or exact scope, record the conflict rather than choose the convenient denominator.
 
-**Existing attachments.** family_open/family_value; [FORMULAS] R-A12/A13 and R-J06. Generic prior/full/overnight field names do not resolve source identity. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O075 contract](../FORMULAS.md#o075) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep prior-ETH profile identity distinct and evaluate source scope, balance/value bands, and cohort eligibility at the open. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
+
+**Evidence limits.** Cohort eligibility remains unknown until source scope is resolved and the ETH profile identity is correct. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Overnight volume structure](overnight-profile.md) · [MPOC: the profile midpoint](mpoc.md) · [Profile value area](value-area.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

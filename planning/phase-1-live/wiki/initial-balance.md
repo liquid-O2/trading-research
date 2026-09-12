@@ -10,7 +10,9 @@ The initial balance is the early completed opening range used to read later rang
 
 **Phase 1 observation.** Use the source initial interval; distinguish its high/low from a prior day's IB. A final-day extension cannot label the initial opening decision.
 
-**Existing attachments.** family_gap and clock/range ingredients; [FORMULAS] R-A10/A14/A15. Later day-type classification remains an outcome. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O082 contract](../FORMULAS.md#o082) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build initial balance only after complete A and B periods and keep later upper/lower extensions separate from IB geometry. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/auction_geometry.py).
+
+**Evidence limits.** Incomplete A/B periods cannot certify IB; later extensions do not revise IB bounds. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Time-price-opportunity profile](tpo-ib-auction.md) · [Developing auction day structure](day-type.md) · [Prior-session auction landmarks](prior-session-reference-levels.md) · [Source-conditioned reference statistics](reference-statistics.md)
 

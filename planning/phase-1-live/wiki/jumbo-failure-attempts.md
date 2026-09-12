@@ -10,7 +10,9 @@ The manual rejects the reversal idea after three failed attempts at the same lev
 
 **Phase 1 observation.** Count source-defined attempts at the same level, not repeated rows from one touch. Evaluate the failure decision from evidence available then and record any later reduced allocation separately.
 
-**Existing attachments.** [formulas_jumbo.j22_three_strike/j22_failed](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py); [FORMULAS] R-J22/J24. Distinct attempt and management ledgers are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O024 contract](../FORMULAS.md#o024) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Count distinct failed attempts at the same level and branch by the decision time and apply the source invalidation/allocation policy separately. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Three attempts are an invalidation signature only under the admitted source policy and same level/branch identity. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Jumbo Absorption Zone+ candle](absorption-candle-jumbo.md) · [Source-selected position management](position-management.md) · [Exposure fitted to source risk constraints](position-sizing.md)
 

@@ -2,14 +2,14 @@
 
 Start with the operating method, then follow its objects. This is the compiled shared language for Phase 1: source sequence, object identity, availability and observable outcomes. Methods, research processes and risk overlays retain their source attribution. Parts of a loop are not separate systems.
 
-[Raw sources and precedence](source-catalog.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Ingest log](log.md)
+[Current implementation and empirical status](current-status.md) · [Raw sources and precedence](source-catalog.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Ingest log](log.md)
 
 ## Operating methods
 
 | ID | Attributed method | Ordered loop |
 |---|---|---|
 | JJ-TBR | [JJumboFX — SDRange / Time-Based Ranges](method-jumbo-tbr.md) | Session geometry → context → location → selected confirmation → risk, target and reassessment. |
-| GB-FAIL | [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) | Known reference → sweep → failed break / reclaim → structural entry → opposing liquidity. |
+| GB-FAIL | [Green Bird — failed breakout / failed breakdown](method-green-bird-failure.md) | Known reference → case-specific sweep / reclaim entry → structural risk → opposing liquidity; preserve the November 2025 sweep-entry exception. |
 | GB-VWAP | [Green Bird — VWAP continuation](method-green-bird-vwap-continuation.md) | Close above London and Asia highs → return to VWAP → continuation long. |
 | GB-SCALP | [Green Bird — directional scalps](method-green-bird-directional-scalps.md) | Directional read → favorable pullback → small exposure → limited scalp; complete trigger unpublished. |
 | SIRES | [Sires — thesis, risk and order flow](method-sires-thesis-flow.md) | Model and account constraints → auction and regime → thesis → permitted local confirmation → risk, management, fresh re-entry and review. |
@@ -25,7 +25,7 @@ GB-SCALP has only a partial case description. REFILL-STUDY is a research / execu
 
 ## Objects used by the methods
 
-Each entry has a source citation, its role, a boundary on standalone use, an observation record, an existing attachment or missing piece, and links back to its methods. Execution branches below remain inside the named parent method.
+Each entry has a source citation, its role, a boundary on standalone use, an observation record, a current contract/code attachment and explicit evidence limits, and links back to its methods. Execution branches below remain inside the named parent method.
 
 ### Observation foundations
 
@@ -250,6 +250,19 @@ Each entry has a source citation, its role, a boundary on standalone use, an obs
 
 ## Compilation boundary
 
-12 operating-method entries and 166 object pages are mapped here. [Source-sequence fidelity](source-sequence-fidelity.md) is the common observation contract; [the source catalog](source-catalog.md) maps all 41 PDFs and the associated media archive. Undefined detector thresholds, source contradictions and absent data remain explicit. No author’s complete loop is inferred from an old component pass rate. Compilation follows [METHOD]; later contradiction/staleness lint is a separate pass.
+12 operating-method entries and 166 object pages are mapped here. [Source-sequence fidelity](source-sequence-fidelity.md) is the common observation contract; [the source catalog](source-catalog.md) maps all 41 PDFs and the associated media archive. Undefined detector thresholds, source contradictions and absent data remain explicit. No author’s complete loop is inferred from an old component pass rate. Compilation and this 2026-09-12 reconciliation follow [METHOD]. The [current status](current-status.md) separates completed software, the completed sampled replay and unresolved historical/source evidence.
+
+## Retained background
+
+These eight earlier research/Pine notes remain for provenance. They are outside the 166 current object contracts and the empirical v1 measurement scope; their proposed variants and old statistics are not newly accepted methods.
+
+- [Daily open (18:00) and the Sunday weekly open](daily-open-1800.md)
+- [Manipulation / distribution envelope (Pine statistical OHLC projections)](manipulation-distribution-envelope.md)
+- [MVFL indicator zones and bias vote](mvfl-indicator-zones.md)
+- [Prior RTH quadrants](prior-rth-quadrants.md)
+- [σ-band reversion (Pine AM TBR)](sigma-band-reversion.md)
+- [SMT divergence (sister-index hunts)](smt-divergence.md)
+- [Source: the Pine archive (indicators/Pinescript-indicators--main.zip)](sources-pine-archive.md)
+- [Volatility estimators (features, not a product)](vol-estimators.md)
 
 [METHOD]: </workspace/sources/method/agent-method-matt-wiki.md>

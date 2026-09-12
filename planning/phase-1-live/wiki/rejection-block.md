@@ -10,7 +10,9 @@ The rejection block is the rejection wick used as a chosen reversal-entry area, 
 
 **Phase 1 observation.** Require the selected source rejection at the allowed location before entry. Preserve which block was actually used; do not merge the two to choose a better stop afterward.
 
-**Existing attachments.** family_gap and [formulas_jumbo.j18_ob_bull/j18_ob_bear](/workspace/implementation/src/trading_research/research/phase1_live/formulas_jumbo.py) are related; [FORMULAS] R-J18. Distinct source rejection-wick execution is partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O057 contract](../FORMULAS.md#o057) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure body and rejection wick geometry from one actual complete candle while keeping rejection, location, entry, and stop permissions source-bound. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Wick geometry does not prove rejection quality or allowed location without admitted source evidence. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo orderblocks](sweep-cisd-blocks.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Entry-side structural invalidation](structural-risk.md)
 

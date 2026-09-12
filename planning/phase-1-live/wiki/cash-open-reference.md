@@ -10,7 +10,9 @@ The cash-open price anchors the opening read. Green Bird's September 1 example d
 
 **Phase 1 observation.** Keep source-specific direction and timing. Do not fabricate a short mirror of a one-sided example or force an unstated five-minute duration onto it.
 
-**Existing attachments.** family_open; family_levels; [FORMULAS] R-G04, R-J02, R-A10 and R-S09. Green Bird's exact opening confirmation detector remains incomplete. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O050 contract](../FORMULAS.md#o050) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Resolve the 09:30 cash open and replay the native path through the snapshot to locate below/above crossings and strict reclaim. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Tied unsequenced opening executions leave cash open unknown; only the admitted strict reclaim criterion is implemented. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Opening location and participation](open-location-switch.md) · [Developing auction open type](open-type.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Green Bird's midnight true-day open](true-day-open.md)
 

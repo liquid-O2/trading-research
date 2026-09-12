@@ -10,7 +10,9 @@ The manual's Judas opening leg runs from the 09:30 open toward exhaustion, with 
 
 **Phase 1 observation.** Check the timing required by the selected fixture/branch. Keep outbound and reversal legs separate, and leave an undocumented exact tolerance unknown.
 
-**Existing attachments.** [FORMULAS] R-J01/J02/J20; clock and grid ingredients. A joint source-timed branch record is missing; first post-news touch is not necessarily the delayed reversal. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O021 contract](../FORMULAS.md#o021) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Evaluate an actual action timestamp against explicit reversal/action window boundaries and surface boundary ambiguity. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Window boundaries and branch purpose must be supplied; equality at an excluded boundary stays ambiguous. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [Retrospective range path](range-path-class.md) · [Scheduled news and changing information](news-event-context.md) · [Time-anchored P-zones](p-zones-benchmark.md)
 

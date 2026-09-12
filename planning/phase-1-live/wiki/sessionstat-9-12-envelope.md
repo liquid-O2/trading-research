@@ -10,7 +10,9 @@ SessionStat frames likely reach and exhaustion with average/median high-low boxe
 
 **Phase 1 observation.** Keep average and median as separate boundaries. The source settings do not justify min(mean_up,mean_down) or another invented minimum-average formula. A plotted source band can be annotated; a computed approximation must retain its name.
 
-**Existing attachments.** [family_env.build_env_table](/workspace/implementation/src/trading_research/research/phase1_live/family_env.py); [FORMULAS] R-J11/P3-02. Average-excursion approximations exist; the exact minimum-average engine is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O017 contract](../FORMULAS.md#o017) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Carry cited Stat+ average/median/min-average envelopes with complete settings identity; compute only the labeled midpoint. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** No platform Stat+ implementation is reverse-engineered; only supplied envelopes/settings are retained. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo EVRange](ev-range-expected-move.md) · [The 1.33–1.66 extension area](extensions-1-33-1-66.md) · [Range exhaustion and mean-reversal area](range-exhaustion-area.md) · [Source clocks and availability](clock-grid-and-bars.md)
 

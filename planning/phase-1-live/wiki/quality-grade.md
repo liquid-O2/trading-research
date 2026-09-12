@@ -10,7 +10,9 @@ Green Bird says no relevant sweep means not A+, while his raw record also includ
 
 **Phase 1 observation.** Grade the actual candidate, not any sweep somewhere that day. Keep incomplete pre-confirmation cases separate from passes of the confirmed-refill or failure predicate.
 
-**Existing attachments.** [FORMULAS] R-G10/G11 and R-S01/S03 attach only partially. A universal grade engine and event-linked sizing record are missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O059 contract](../FORMULAS.md#o059) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve the source setup grade and selected exposure while separating necessary conditions from unpublished sufficient A+ criteria. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Sufficient A+ grade fields are unpublished, so automatic grading remains unavailable. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Sweep, failure and reclaim](sweep-reclaim.md) · [Deliberate pre-confirmation attempts](early-attempts.md) · [Exposure fitted to source risk constraints](position-sizing.md) · [Thesis and execution journal](process-journal.md)
 

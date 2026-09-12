@@ -10,7 +10,9 @@ NYAM is the completed 09:00–10:00 box; the previous-hour trade uses the comple
 
 **Phase 1 observation.** Check formation before sweep or breakout. Preserve each hour as an episode; data coverage cannot be replaced by a hard-coded number of hours. The scalp posts do not acquire a trigger just because boxes are present.
 
-**Existing attachments.** [family_fail.build_fail_table](/workspace/implementation/src/trading_research/research/phase1_live/family_fail.py); [formulas.clock_hour_boxes](/workspace/implementation/src/trading_research/research/phase1_live/formulas.py); family_levels; [FORMULAS] R-G01/G02/G03/G09. Inferred London bounds cannot be labeled author-exact. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O046 contract](../FORMULAS.md#o046) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Build a finished local/session box from complete contiguous members, with identified boundaries, measurable width, explicit clock verification, and coverage state. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** An unverified clock or incomplete member interval produces a hole even when observed extrema are measurable. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source clocks and availability](clock-grid-and-bars.md) · [Sweep, failure and reclaim](sweep-reclaim.md) · [Prior day, week and month extremes](prior-day-week-month-levels.md) · [Green Bird's midnight true-day open](true-day-open.md) · [Session VWAP](vwap-session.md)
 

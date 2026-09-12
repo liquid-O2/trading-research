@@ -10,7 +10,9 @@ Later charts layer inner profile/range spans inside the outer 6–9 framework an
 
 **Phase 1 observation.** A figure-annotated span can support a fixture observation. Automatic generation remains unknown without its source construction; never silently substitute the outer width.
 
-**Existing attachments.** family_range/family_env supply generic geometry; [FORMULAS] R-J13/J16/J17 identify nearby components. The exact modern inner-range construction is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O016 contract](../FORMULAS.md#o016) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Preserve distinct outer and inner range identities, compute both widths/midpoints, and bind later projection to the selected span. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Nested geometry does not infer an inner span, labels, or projection parent. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Jumbo's 06:00–09:00 range](tbr-6-9-range.md) · [The 1.33–1.66 extension area](extensions-1-33-1-66.md) · [Jumbo EVRange](ev-range-expected-move.md) · [Volume profile](value-and-profiles.md)
 

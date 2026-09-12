@@ -289,3 +289,199 @@ Read first: [agent-method-matt-wiki.md](/workspace/sources/method/agent-method-m
 - 2026-09-11 · [response-efficiency.md](response-efficiency.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
 - 2026-09-11 · [auction-state.md](auction-state.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
 - 2026-09-11 · [auction-state-transition.md](auction-state-transition.md) · Compiled the object’s source meaning, method role, observation boundary and attachments.
+
+## 2026-09-12 — implementation and empirical reconciliation
+
+Reconciled against accepted implementation/repair and empirical reports at commit `8449573`, following the [Karpathy + Matt Pocock rules](/workspace/sources/method/agent-method-matt-wiki.md). Source citations and contracts retain authority; software completion, comparison results and unavailable source executions remain separate. The exact earlier definition files are preserved for historical-run verification.
+
+- 2026-09-12 · [absorption-and-big-trades.md](absorption-and-big-trades.md) · Replace stale attachments with the reviewed O101 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [absorption-candle-jumbo.md](absorption-candle-jumbo.md) · Replace stale attachments with the reviewed O058 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [absorption-reward-retest.md](absorption-reward-retest.md) · Replace stale attachments with the reviewed O122 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [aggressor-trades.md](aggressor-trades.md) · Replace stale attachments with the reviewed O098 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [amd-phase-labels.md](amd-phase-labels.md) · Replace stale attachments with the reviewed O023 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [approach-speed.md](approach-speed.md) · Replace stale attachments with the reviewed O113 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [asia-range-risk-context.md](asia-range-risk-context.md) · Replace stale attachments with the reviewed O089 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [asymmetric-risk-state.md](asymmetric-risk-state.md) · Replace stale attachments with the reviewed O155 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [auction-balance.md](auction-balance.md) · Replace stale attachments with the reviewed O060 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [auction-state-transition.md](auction-state-transition.md) · Replace stale attachments with the reviewed O166 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [auction-state.md](auction-state.md) · Replace stale attachments with the reviewed O165 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [balance-failure-fade.md](balance-failure-fade.md) · Replace stale attachments with the reviewed O129 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [balance-rotation.md](balance-rotation.md) · Replace stale attachments with the reviewed O090 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [balance-traversal.md](balance-traversal.md) · Replace stale attachments with the reviewed O096 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [big-trades.md](big-trades.md) · Replace stale attachments with the reviewed O099 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [break-retest.md](break-retest.md) · Replace stale attachments with the reviewed O091 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [c-score.md](c-score.md) · Replace stale attachments with the reviewed O159 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [candle-delta-disagreement.md](candle-delta-disagreement.md) · Replace stale attachments with the reviewed O106 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [candle-poc-flip.md](candle-poc-flip.md) · Replace stale attachments with the reviewed O108 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [cash-open-reference.md](cash-open-reference.md) · Replace stale attachments with the reviewed O050 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [clean-session-label.md](clean-session-label.md) · Replace stale attachments with the reviewed O022 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [clean-squeeze.md](clean-squeeze.md) · Replace stale attachments with the reviewed O128 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [clock-grid-and-bars.md](clock-grid-and-bars.md) · Replace stale attachments with the reviewed O003 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [composite-profiles.md](composite-profiles.md) · Replace stale attachments with the reviewed O070 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [confirmed-swing-midpoint.md](confirmed-swing-midpoint.md) · Replace stale attachments with the reviewed O026 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [correlated-object-first-use.md](correlated-object-first-use.md) · Replace stale attachments with the reviewed O147 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [cost-model.md](cost-model.md) · Replace stale attachments with the reviewed O152 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [current-status.md](current-status.md) · Add current software and empirical scope, remaining evidence gaps and historical-definition reproduction.
+- 2026-09-12 · [cvd-variants.md](cvd-variants.md) · Replace stale attachments with the reviewed O105 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [daily-loss-limit.md](daily-loss-limit.md) · Replace stale attachments with the reviewed O145 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [daily-open-1800.md](daily-open-1800.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [data-coverage.md](data-coverage.md) · Replace stale attachments with the reviewed O001 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [day-type.md](day-type.md) · Replace stale attachments with the reviewed O084 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [dealing-range.md](dealing-range.md) · Replace stale attachments with the reviewed O071 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [defended-band-continuation.md](defended-band-continuation.md) · Replace stale attachments with the reviewed O130 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [delta-spike.md](delta-spike.md) · Replace stale attachments with the reviewed O107 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [developing-profile.md](developing-profile.md) · Replace stale attachments with the reviewed O063 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [digit-thinning.md](digit-thinning.md) · Replace stale attachments with the reviewed O114 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [directional-bias.md](directional-bias.md) · Replace stale attachments with the reviewed O136 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [dom-rejection-branch.md](dom-rejection-branch.md) · Replace stale attachments with the reviewed O121 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [dom.md](dom.md) · Replace stale attachments with the reviewed O100 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [early-attempts.md](early-attempts.md) · Replace stale attachments with the reviewed O133 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [economic-release-vintage.md](economic-release-vintage.md) · Replace stale attachments with the reviewed O162 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [equal-high-low-objectives.md](equal-high-low-objectives.md) · Replace stale attachments with the reviewed O028 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [ev-range-expected-move.md](ev-range-expected-move.md) · Replace stale attachments with the reviewed O018 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [evaluation-risk-scenarios.md](evaluation-risk-scenarios.md) · Replace stale attachments with the reviewed O156 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [excess.md](excess.md) · Replace stale attachments with the reviewed O080 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [execution-bars.md](execution-bars.md) · Replace stale attachments with the reviewed O004 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [expected-daily-move.md](expected-daily-move.md) · Replace stale attachments with the reviewed O043 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [extensions-1-33-1-66.md](extensions-1-33-1-66.md) · Replace stale attachments with the reviewed O015 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [failed-auction-saint.md](failed-auction-saint.md) · Replace stale attachments with the reviewed O094 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [failed-auction-sires.md](failed-auction-sires.md) · Replace stale attachments with the reviewed O093 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [fill-model.md](fill-model.md) · Replace stale attachments with the reviewed O151 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [footprint-confirmed-reaction.md](footprint-confirmed-reaction.md) · Replace stale attachments with the reviewed O124 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [footprint-imbalance-zones.md](footprint-imbalance-zones.md) · Replace stale attachments with the reviewed O109 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [footprint.md](footprint.md) · Replace stale attachments with the reviewed O120 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [fvg-body-gaps.md](fvg-body-gaps.md) · Replace stale attachments with the reviewed O055 contract, actual domain code and explicit evidence limits. Clarify that geometry completion does not establish a complete entry.
+- 2026-09-12 · [gex-flip.md](gex-flip.md) · Replace stale attachments with the reviewed O035 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [gex-regime.md](gex-regime.md) · Replace stale attachments with the reviewed O033 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [gex-walls-and-max-pain.md](gex-walls-and-max-pain.md) · Replace stale attachments with the reviewed O036 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [golden-pocket.md](golden-pocket.md) · Replace stale attachments with the reviewed O052 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [hedging-pressure.md](hedging-pressure.md) · Replace stale attachments with the reviewed O040 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [htf-ltf-alignment.md](htf-ltf-alignment.md) · Replace stale attachments with the reviewed O097 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [hvn.md](hvn.md) · Replace stale attachments with the reviewed O066 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [iceberg-evidence.md](iceberg-evidence.md) · Replace stale attachments with the reviewed O103 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [index.md](index.md) · Link current status and all methods/objects; identify eight retained background notes.
+- 2026-09-12 · [initial-balance.md](initial-balance.md) · Replace stale attachments with the reviewed O082 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [jumbo-failure-attempts.md](jumbo-failure-attempts.md) · Replace stale attachments with the reviewed O024 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [kg1-level.md](kg1-level.md) · Replace stale attachments with the reviewed O041 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [kg1-retest.md](kg1-retest.md) · Replace stale attachments with the reviewed O132 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [late-resistance-fade.md](late-resistance-fade.md) · Replace stale attachments with the reviewed O135 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [lift-off.md](lift-off.md) · Replace stale attachments with the reviewed O115 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [log.md](log.md) · Record this reconciliation with one entry per touched wiki page.
+- 2026-09-12 · [loss-streak-validation.md](loss-streak-validation.md) · Replace stale attachments with the reviewed O154 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [lvn.md](lvn.md) · Replace stale attachments with the reviewed O067 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [macro-cycle.md](macro-cycle.md) · Replace stale attachments with the reviewed O158 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [macro-indicators.md](macro-indicators.md) · Replace stale attachments with the reviewed O157 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [manipulation-distribution-envelope.md](manipulation-distribution-envelope.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [market-structure-shift.md](market-structure-shift.md) · Replace stale attachments with the reviewed O054 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [max-pain.md](max-pain.md) · Replace stale attachments with the reviewed O037 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [method-green-bird-directional-scalps.md](method-green-bird-directional-scalps.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-green-bird-failure.md](method-green-bird-failure.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count. Distinguish the November 2025 MNQ sweep entry from later MSS/FVG annotation.
+- 2026-09-12 · [method-green-bird-vwap-continuation.md](method-green-bird-vwap-continuation.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-jetbundle-auction-states.md](method-jetbundle-auction-states.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-jumbo-tbr.md](method-jumbo-tbr.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-keani-open-above-value.md](method-keani-open-above-value.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-member-two-reasons.md](method-member-two-reasons.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-refill-effect.md](method-refill-effect.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-saint-amt.md](method-saint-amt.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-sires-thesis-flow.md](method-sires-thesis-flow.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [method-stoic-asymmetric-compounding.md](method-stoic-asymmetric-compounding.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count. Replace the obsolete claim that risk-state implementation is missing.
+- 2026-09-12 · [method-stoic-data-engine.md](method-stoic-data-engine.md) · Reconcile implemented steps and source limits; record every frozen branch disposition and observed comparison count.
+- 2026-09-12 · [microbalance.md](microbalance.md) · Replace stale attachments with the reviewed O131 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [model-definition.md](model-definition.md) · Replace stale attachments with the reviewed O137 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [mpoc.md](mpoc.md) · Replace stale attachments with the reviewed O076 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [mvfl-indicator-zones.md](mvfl-indicator-zones.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [naked-poc.md](naked-poc.md) · Replace stale attachments with the reviewed O065 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [nested-range-geometry.md](nested-range-geometry.md) · Replace stale attachments with the reviewed O016 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [new-week-opening-gap.md](new-week-opening-gap.md) · Replace stale attachments with the reviewed O051 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [news-event-context.md](news-event-context.md) · Replace stale attachments with the reviewed O029 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [ofm-aggressive-branch.md](ofm-aggressive-branch.md) · Replace stale attachments with the reviewed O126 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [ofm-catalyst.md](ofm-catalyst.md) · Replace stale attachments with the reviewed O118 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [ofm-passive-branch.md](ofm-passive-branch.md) · Replace stale attachments with the reviewed O127 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [open-location-switch.md](open-location-switch.md) · Replace stale attachments with the reviewed O013 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [open-type.md](open-type.md) · Replace stale attachments with the reviewed O083 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [opening-range-midpoint.md](opening-range-midpoint.md) · Replace stale attachments with the reviewed O025 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [options-nodes.md](options-nodes.md) · Replace stale attachments with the reviewed O034 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [order-lifecycle.md](order-lifecycle.md) · Replace stale attachments with the reviewed O150 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [order-participation-events.md](order-participation-events.md) · Replace stale attachments with the reviewed O163 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [outcome-metrics.md](outcome-metrics.md) · Replace stale attachments with the reviewed O153 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [overnight-inventory.md](overnight-inventory.md) · Replace stale attachments with the reviewed O074 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [overnight-profile.md](overnight-profile.md) · Replace stale attachments with the reviewed O073 contract, actual domain code and explicit evidence limits. Retain the reviewed native overnight-profile source boundary.
+- 2026-09-12 · [overnight-purge.md](overnight-purge.md) · Replace stale attachments with the reviewed O012 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [overnight-range.md](overnight-range.md) · Replace stale attachments with the reviewed O011 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [p-zones-benchmark.md](p-zones-benchmark.md) · Replace stale attachments with the reviewed O019 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [passive-replenishment.md](passive-replenishment.md) · Replace stale attachments with the reviewed O102 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [pd-rth-range-plus.md](pd-rth-range-plus.md) · Replace stale attachments with the reviewed O020 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [poc-traversal.md](poc-traversal.md) · Replace stale attachments with the reviewed O095 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [poor-extremes.md](poor-extremes.md) · Replace stale attachments with the reviewed O081 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [position-management.md](position-management.md) · Replace stale attachments with the reviewed O142 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [position-sizing.md](position-sizing.md) · Replace stale attachments with the reviewed O140 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [premium-discount-50.md](premium-discount-50.md) · Replace stale attachments with the reviewed O053 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [prior-day-week-month-levels.md](prior-day-week-month-levels.md) · Replace stale attachments with the reviewed O048 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [prior-eth-profile.md](prior-eth-profile.md) · Replace stale attachments with the reviewed O075 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [prior-reaction-area.md](prior-reaction-area.md) · Replace stale attachments with the reviewed O072 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [prior-rth-quadrants.md](prior-rth-quadrants.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [prior-session-reference-levels.md](prior-session-reference-levels.md) · Replace stale attachments with the reviewed O086 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [process-journal.md](process-journal.md) · Replace stale attachments with the reviewed O146 contract, actual domain code and explicit evidence limits. Retain the reviewed process-policy binding and resolve C2 citation.
+- 2026-09-12 · [profile-ledge.md](profile-ledge.md) · Replace stale attachments with the reviewed O069 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [profile-poc.md](profile-poc.md) · Replace stale attachments with the reviewed O064 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [profile-shape.md](profile-shape.md) · Replace stale attachments with the reviewed O085 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [profile-shelf.md](profile-shelf.md) · Replace stale attachments with the reviewed O068 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [protected-high-low.md](protected-high-low.md) · Replace stale attachments with the reviewed O143 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [quality-grade.md](quality-grade.md) · Replace stale attachments with the reviewed O059 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [range-exhaustion-area.md](range-exhaustion-area.md) · Replace stale attachments with the reviewed O014 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [range-internals.md](range-internals.md) · Replace stale attachments with the reviewed O007 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [range-open-close.md](range-open-close.md) · Replace stale attachments with the reviewed O008 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [range-path-class.md](range-path-class.md) · Replace stale attachments with the reviewed O010 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [range-width-context.md](range-width-context.md) · Replace stale attachments with the reviewed O009 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [reentry.md](reentry.md) · Replace stale attachments with the reviewed O144 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [reference-statistics.md](reference-statistics.md) · Replace stale attachments with the reviewed O088 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [refill-zone.md](refill-zone.md) · Replace stale attachments with the reviewed O116 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [rejection-block.md](rejection-block.md) · Replace stale attachments with the reviewed O057 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [relative-volume.md](relative-volume.md) · Replace stale attachments with the reviewed O027 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [research-cohort.md](research-cohort.md) · Replace stale attachments with the reviewed O148 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [response-efficiency.md](response-efficiency.md) · Replace stale attachments with the reviewed O164 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [reversal-time-window.md](reversal-time-window.md) · Replace stale attachments with the reviewed O021 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [reward-system-3tick.md](reward-system-3tick.md) · Replace stale attachments with the reviewed O104 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [same-price-imbalance.md](same-price-imbalance.md) · Replace stale attachments with the reviewed O110 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [session-fail-boxes.md](session-fail-boxes.md) · Replace stale attachments with the reviewed O046 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [sessionstat-9-12-envelope.md](sessionstat-9-12-envelope.md) · Replace stale attachments with the reviewed O017 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [sigma-band-reversion.md](sigma-band-reversion.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [single-prints.md](single-prints.md) · Replace stale attachments with the reviewed O079 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [smt-divergence.md](smt-divergence.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [source-catalog.md](source-catalog.md) · Replace the obsolete implementation map with current code, source calibration and accepted reports.
+- 2026-09-12 · [source-sequence-fidelity.md](source-sequence-fidelity.md) · Reconcile implemented evaluation/assembly with source fidelity and frozen comparison boundaries.
+- 2026-09-12 · [sources-pine-archive.md](sources-pine-archive.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [spread-width.md](spread-width.md) · Replace stale attachments with the reviewed O112 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [standardized-deviation.md](standardized-deviation.md) · Replace stale attachments with the reviewed O160 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [stop-four-stage.md](stop-four-stage.md) · Replace stale attachments with the reviewed O123 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [structural-risk.md](structural-risk.md) · Replace stale attachments with the reviewed O139 contract, actual domain code and explicit evidence limits. Retain the reviewed structural-risk source binding and resolve C2 citation.
+- 2026-09-12 · [sweep-cisd-blocks.md](sweep-cisd-blocks.md) · Replace stale attachments with the reviewed O056 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [sweep-reclaim.md](sweep-reclaim.md) · Replace stale attachments with the reviewed O047 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [tape-speed.md](tape-speed.md) · Replace stale attachments with the reviewed O111 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [tbr-6-9-range.md](tbr-6-9-range.md) · Replace stale attachments with the reviewed O005 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [tbr-remaining-clocks.md](tbr-remaining-clocks.md) · Replace stale attachments with the reviewed O006 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [thesis-lifecycle.md](thesis-lifecycle.md) · Replace stale attachments with the reviewed O138 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [third-retest-attempt.md](third-retest-attempt.md) · Replace stale attachments with the reviewed O134 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [touch-grader.md](touch-grader.md) · Replace stale attachments with the reviewed O149 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [touch-reject-hold-break-grid.md](touch-reject-hold-break-grid.md) · Replace stale attachments with the reviewed O002 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [tpo-ib-auction.md](tpo-ib-auction.md) · Replace stale attachments with the reviewed O078 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [trade-objective.md](trade-objective.md) · Replace stale attachments with the reviewed O141 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [trapped-buyers.md](trapped-buyers.md) · Replace stale attachments with the reviewed O119 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [trend-strength.md](trend-strength.md) · Replace stale attachments with the reviewed O161 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [true-day-open.md](true-day-open.md) · Replace stale attachments with the reviewed O049 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [unfinished-business.md](unfinished-business.md) · Replace stale attachments with the reviewed O087 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [value-and-profiles.md](value-and-profiles.md) · Replace stale attachments with the reviewed O061 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [value-area.md](value-area.md) · Replace stale attachments with the reviewed O062 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [value-reacceptance.md](value-reacceptance.md) · Replace stale attachments with the reviewed O092 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vix-context.md](vix-context.md) · Replace stale attachments with the reviewed O042 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vol-estimators.md](vol-estimators.md) · Mark this retained earlier proposal as background outside current object contracts and empirical v1.
+- 2026-09-12 · [vol-gex.md](vol-gex.md) · Replace stale attachments with the reviewed O039 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [volatility-curve.md](volatility-curve.md) · Replace stale attachments with the reviewed O044 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [volatility-trigger.md](volatility-trigger.md) · Replace stale attachments with the reviewed O038 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vvix-context.md](vvix-context.md) · Replace stale attachments with the reviewed O045 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vwap-anchored.md](vwap-anchored.md) · Replace stale attachments with the reviewed O031 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vwap-deviation-fade.md](vwap-deviation-fade.md) · Replace stale attachments with the reviewed O125 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vwap-deviations.md](vwap-deviations.md) · Replace stale attachments with the reviewed O032 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [vwap-session.md](vwap-session.md) · Replace stale attachments with the reviewed O030 contract, actual domain code and explicit evidence limits. Retain the reviewed price-times-quantity VWAP source boundary.
+- 2026-09-12 · [weekly-delta-profile.md](weekly-delta-profile.md) · Replace stale attachments with the reviewed O077 contract, actual domain code and explicit evidence limits.
+- 2026-09-12 · [zone-touch-memory.md](zone-touch-memory.md) · Replace stale attachments with the reviewed O117 contract, actual domain code and explicit evidence limits.

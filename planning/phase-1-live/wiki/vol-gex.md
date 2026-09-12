@@ -10,7 +10,9 @@ VOL-GEX appears as a source gamma-panel readout; its exact construction is not p
 
 **Phase 1 observation.** Keep drawn evidence separate from computed approximations. Do not silently make an undefined readout a mandatory passing filter.
 
-**Existing attachments.** family_gex and [FORMULAS] R-R01 provide related inputs. A source-compatible VOL-GEX object is missing. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O039 contract](../FORMULAS.md#o039) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Keep the source Vol/GEX value and its units distinct from the labeled arithmetic comparison. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Evidence limits.** The exact source Vol/GEX engine is unavailable. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Source gamma regime](gex-regime.md) · [Source Vol Trigger readout](volatility-trigger.md) · [Source hedging-pressure gauge](hedging-pressure.md) · [Native options-chain identity](options-nodes.md)
 

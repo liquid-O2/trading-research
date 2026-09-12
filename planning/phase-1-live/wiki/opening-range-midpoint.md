@@ -10,7 +10,9 @@ The July 21 raw post describes adapting with the 6–9 range and OR-mid retracem
 
 **Phase 1 observation.** Only use the completed selected OR. Do not infer its clock from the presence of a midpoint line or pick a later favorable opening interval.
 
-**Existing attachments.** clocks/family_clocks and formulas_jumbo range helpers; [FORMULAS] R-J05/J23. Source-specific OR clock and entry-linked retrace remain partial. Component mappings refer to [FORMULAS] and the current code; missing stages remain missing.
+**Current implementation (2026-09-12).** [O025 contract](../FORMULAS.md#o025) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure opening-range high, low, and midpoint from an identified native interval while keeping later midpoint retrace evidence distinct. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/range_geometry.py).
+
+**Evidence limits.** Opening-range clock must be identified; later retrace absence needs its own covered observation interval. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
 
 **Related objects.** [Other time-based range formations](tbr-remaining-clocks.md) · [Range EQ and quadrants](range-internals.md) · [Source-selected position management](position-management.md)
 
