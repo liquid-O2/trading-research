@@ -120,7 +120,7 @@ class Evaluation:
     unknown: list[str]
 
 
-def evaluate(method_id, predicate, values):
+def evaluate(method_id, predicate, values, *, excluded_fields=frozenset()):
     contracts = fields_for(method_id)
 
     def side_guard(node):
@@ -132,10 +132,14 @@ def evaluate(method_id, predicate, values):
 
     def walk(node):
         operator = node[0]
+        if operator in ('<', '<=', '>', '>=', '=', '<>', '!=') and any(n[0] == 'field' and n[1] in excluded_fields for n in node[1:]):
+            return Evaluation(True, set(), [], [])
         if operator == 'literal':
             return Evaluation(node[1], set(), [], [])
         if operator == 'field':
             name = node[1]
+            if name in excluded_fields:
+                return Evaluation(True, set(), [], [])
             if name == 'sires_branch_ok':
                 try:
                     return walk(expression_for(method_id, name, values.get('branch')))
@@ -193,7 +197,7 @@ def evaluate(method_id, predicate, values):
               ('JETBUNDLE-STATES', 'transition_observation'): 'state_observation',
               ('STOIC-DATA', 'macro_application'): 'process'}.get((method_id, predicate))
     if parent:
-        extra = evaluate(method_id, parent, values)
+        extra = evaluate(method_id, parent, values, excluded_fields=excluded_fields)
         result.value = kleene_and(result.value, extra.value)
         result.fields |= extra.fields
         result.failed += extra.failed

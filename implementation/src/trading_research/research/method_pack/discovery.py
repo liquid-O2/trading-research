@@ -59,6 +59,22 @@ def discovery_holes(method_id: str) -> list[dict]:
     } for branch, row in review['branches'].items()]
 
 
-def run_historical(method_id: str) -> list[dict]:
-    discovery_holes(method_id)
-    return []
+def run_historical(method_id: str, *, market=None, manifest=None, coverage_id=None) -> list[dict]:
+    """Run the selected historical research contract or reproduce the old audit.
+
+    The explicit v2 boundary prevents a legacy method-pass invocation from
+    silently inheriting changed clocks, scope or research assumptions.
+    """
+    if market is None and manifest is None:
+        discovery_holes(method_id)
+        return []
+    if market is None or manifest is None:
+        raise ValueError('historical research requires both market and selected manifest')
+    from .native_discovery import run_method, scan_branch
+    if coverage_id is not None:
+        from .branch_coverage import validate_manifest
+        validate_manifest(manifest)
+        rows=[r for r in manifest['branches'] if r['method_id']==method_id and r['coverage_id']==coverage_id]
+        if len(rows)!=1:raise ValueError('selected branch not in manifest')
+        return [scan_branch(market,rows[0])]
+    return run_method(method_id, market, manifest)

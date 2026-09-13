@@ -1,0 +1,152 @@
+# GB-FAIL: current v2 research
+
+The declared annual sample covers 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. Every declared branch/date job is retained. These are ordered market or process observations under frozen research assumptions. They are not reconstructed author trades or fills.
+
+| Branch/unit | Unit | N observed | n | p | f | u | Scope |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| nyam_box | market_sequence | 8 | 7 | 3 | 4 | 1 | observed_subset_with_input_limits |
+| previous_hour | market_sequence | 38 | 35 | 12 | 23 | 3 | observed_subset_with_input_limits |
+| asia_tdo_case | market_sequence | 10 | 9 | 1 | 8 | 1 | observed_subset_with_input_limits |
+| prior_day_level | market_sequence | 3 | 3 | 0 | 3 | 0 | observed_subset_with_input_limits |
+| prior_week_level | market_sequence | 6 | 4 | 0 | 4 | 2 | observed_subset_with_input_limits |
+| prior_month_level | market_sequence | 4 | 2 | 0 | 2 | 2 | observed_subset_with_input_limits |
+| cash_open_reclaim_case | market_sequence | 5 | 5 | 0 | 5 | 0 | observed_subset_with_input_limits |
+| mss_fvg_refinement | market_sequence | 3 | 3 | 0 | 3 | 0 | observed_subset_with_input_limits |
+
+## nyam_box (catalog branch)
+
+finished 09–10 box → contextual sweep → five-minute reclaim → opposing box liquidity. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 3/4/1; n=7.
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 2 | 1 | 1 | 0 | True | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--nyam_box.json.gz) |
+| 2021-01-04 | 1 | 0 | 1 | 0 | True | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--nyam_box.json.gz) |
+| 2022-01-03 | 0 | 0 | 0 | 1 | True | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--nyam_box.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--nyam_box.json.gz) |
+| 2024-01-02 | 1 | 1 | 0 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--nyam_box.json.gz) |
+| 2025-01-02 | 2 | 1 | 1 | 0 | True | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--nyam_box.json.gz) |
+| 2026-01-02 | 1 | 0 | 1 | 0 | True | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--nyam_box.json.gz) |
+
+## previous_hour (catalog branch)
+
+finished prior clock-hour reference → contextual sweep → reclaim → opposing hour liquidity. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 12/23/3; n=35.
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 6 | 1 | 5 | 0 | True | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--previous_hour.json.gz) |
+| 2021-01-04 | 4 | 0 | 4 | 2 | True | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--previous_hour.json.gz) |
+| 2022-01-03 | 5 | 5 | 0 | 1 | True | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--previous_hour.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--previous_hour.json.gz) |
+| 2024-01-02 | 8 | 3 | 5 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--previous_hour.json.gz) |
+| 2025-01-02 | 6 | 2 | 4 | 0 | True | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--previous_hour.json.gz) |
+| 2026-01-02 | 6 | 1 | 5 | 0 | True | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--previous_hour.json.gz) |
+
+## asia_tdo_case (catalog branch)
+
+completed Asia range + midnight TDO → sweep → reclaim with TDO confirmation. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 1/8/1; n=9.
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 1 | 0 | 1 | 0 | True | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2021-01-04 | 1 | 0 | 1 | 1 | True | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2022-01-03 | 2 | 0 | 2 | 0 | True | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2025-01-02 | 2 | 1 | 1 | 0 | True | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--asia_tdo_case.json.gz) |
+| 2026-01-02 | 2 | 0 | 2 | 0 | True | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--asia_tdo_case.json.gz) |
+
+## prior_day_level (catalog branch)
+
+same-contract previous actual RTH reference → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 0/3/0; n=3.
+
+Observed scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records).
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 0 | 0 | 0 | 0 | False | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2021-01-04 | 0 | 0 | 0 | 0 | False | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2022-01-03 | 2 | 0 | 2 | 0 | False | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2025-01-02 | 0 | 0 | 0 | 0 | False | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--prior_day_level.json.gz) |
+| 2026-01-02 | 0 | 0 | 0 | 0 | False | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--prior_day_level.json.gz) |
+
+## prior_week_level (catalog branch)
+
+same-contract prior-week matching sessions → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 0/4/2; n=4.
+
+Observed scope/record limits: same_contract_prior_scope_unknown (11 job records); calendar_unverified (9 job records).
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 0 | 0 | 0 | 0 | False | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2021-01-04 | 0 | 0 | 0 | 2 | False | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2022-01-03 | 1 | 0 | 1 | 0 | False | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2025-01-02 | 1 | 0 | 1 | 0 | False | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--prior_week_level.json.gz) |
+| 2026-01-02 | 1 | 0 | 1 | 0 | False | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--prior_week_level.json.gz) |
+
+## prior_month_level (catalog branch)
+
+same-contract prior-month matching sessions → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 0/2/2; n=2.
+
+Observed scope/record limits: same_contract_prior_scope_unknown (110 job records); calendar_unverified (11 job records).
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 0 | 0 | 0 | 0 | False | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2021-01-04 | 0 | 0 | 0 | 1 | False | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2022-01-03 | 0 | 0 | 0 | 0 | False | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | False | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2025-01-02 | 1 | 0 | 1 | 0 | False | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--prior_month_level.json.gz) |
+| 2026-01-02 | 0 | 0 | 0 | 1 | False | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--prior_month_level.json.gz) |
+
+## cash_open_reclaim_case (catalog branch)
+
+09:30 open → below-open manipulation → reclaim → retracement objective with low invalidation. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 0/5/0; n=5.
+
+Observed scope/record limits: cash_open_order_unknown (2 job records).
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 1 | 0 | 1 | 0 | True | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2021-01-04 | 0 | 0 | 0 | 0 | False | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2022-01-03 | 1 | 0 | 1 | 0 | True | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2025-01-02 | 1 | 0 | 1 | 0 | True | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+| 2026-01-02 | 1 | 0 | 1 | 0 | True | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--cash_open_reclaim_case.json.gz) |
+
+## mss_fvg_refinement (catalog branch)
+
+completed parent reclaim → later three 2-minute candles → MSS plus actual wick FVG; annotation unit. Source: GB pp.21,23,25,27,30–35,38–40,43.
+
+Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Native jobs: 7. Observed sequence p/f/u: 0/3/0; n=3.
+
+| Date | n | p | f | u | Observed scope complete | Executions | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2020-01-02 | 1 | 0 | 1 | 0 | True | 198050 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2020-01-02/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2021-01-04 | 0 | 0 | 0 | 0 | True | 431378 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2021-01-04/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2022-01-03 | 0 | 0 | 0 | 0 | True | 324395 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2022-01-03/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2023-01-02 | 0 | 0 | 0 | 0 | False | 0 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2023-01-02/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2024-01-02 | 1 | 0 | 1 | 0 | True | 370432 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2024-01-02/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2025-01-02 | 1 | 0 | 1 | 0 | True | 470052 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2025-01-02/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+| 2026-01-02 | 0 | 0 | 0 | 0 | True | 352408 | [job](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/jobs/evaluation/2026-01-02/GB-FAIL--branch--mss_fvg_refinement.json.gz) |
+
+Counts from dependent branches are not a pooled family win rate. The pilot is separate. Full-feed completeness and author-exact measurement remain unestablished.

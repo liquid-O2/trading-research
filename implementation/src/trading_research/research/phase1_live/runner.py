@@ -131,6 +131,16 @@ def build_parser() -> argparse.ArgumentParser:
     mp.add_argument("--report-root", default="/workspace/implementation/reports/phase1-live/methods")
     mp.add_argument("--episodes", default=None)
     mp.add_argument("--formula-version", default=None)
+    native = sub.add_parser("historical-replay", help="versioned native method research; preserves the v1 comparison")
+    native.add_argument("action", choices=("freeze", "run", "report", "verify"))
+    native.add_argument("--run-root", required=True)
+    native.add_argument("--scope", default="/workspace/implementation/reports/phase1-live/implementation-v2/SCOPE_POLICY.json")
+    native.add_argument("--records", default=None)
+    native.add_argument("--strategy", action="store_true", help="freeze source-inspired strategy reconstruction without personal execution gates")
+    native.add_argument("--date-from", default=None, help="freeze an inclusive all-date evaluation range")
+    native.add_argument("--date-to", default=None)
+    native.add_argument("--cohort", choices=("pilot", "evaluation"), default="evaluation")
+    native.add_argument("--workers", type=int, choices=(1,2,3,4), default=1)
     return p
 
 
@@ -145,4 +155,7 @@ def main(argv=None) -> int:
     if args.cmd == "method-pass":
         from trading_research.research.method_pack.pass_runner import cmd_method_pass
         return cmd_method_pass(args)
+    if args.cmd == "historical-replay":
+        from trading_research.research.method_pack.historical_runner import main as historical_main
+        return historical_main(args)
     return 2

@@ -1,0 +1,21 @@
+{
+  "schema": "phase1-calendar-recovery-attempt-v2",
+  "date": "2026-09-13",
+  "authoritative_index": "https://www.cmegroup.com/content/cmegroup/cn-s/tools-information/holiday-calendar.html",
+  "located_files": [
+    "https://www.cmegroup.com/tools-information/holiday-calendar/files/2023-new-years-holiday-schedule.xls",
+    "https://www.cmegroup.com/tools-information/holiday-calendar/files/2021-holiday-calendars.zip",
+    "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-holiday-calendars.zip",
+    "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-holiday-calendars.zip"
+  ],
+  "attempts": [
+    "Web reader located original CME links but cannot parse application/vnd.ms-excel or application/zip",
+    "Direct HTTPS downloads timed out; HTTP/1.1 returned CME IP-block response"
+  ],
+  "response_path": "/workspace/implementation/reports/phase1-live/implementation-v2/calendar-evidence/cme-download-response.json",
+  "response_sha256": "eecde3fafbde4090c30e610a7ed4b8d877f8351c0490e4189574890e8a5a4f7e",
+  "admission": "No absent holiday interval certified from an unread workbook; remaining dates keep explicit unknown schedule evidence. No cash-calendar substitution. No contact sent or paid data purchase.",
+  "matching_product_available_evidence": [
+    "nq_session_policy_v2.json contains dated June 28 2021 halt-removal evidence and admitted 2023 Thanksgiving/Christmas and 2024 New Year EQUITIES rows."
+  ]
+}

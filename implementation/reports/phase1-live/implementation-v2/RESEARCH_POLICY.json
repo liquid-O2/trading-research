@@ -1,0 +1,453 @@
+{
+  "schema": "phase1-pre-replay-research-policy-v2",
+  "frozen_at": "2026-09-13T08:43:58.853556+00:00",
+  "assumptions": {
+    "event_population": {
+      "id": "A2-EVENT",
+      "value": "owned_observed_executions",
+      "reason": "Measure recorded T events consistently on event time; completeness and unknown gaps remain separate. This is not a historical-feed-arrival or fill claim."
+    },
+    "profile": {
+      "id": "A2-PROFILE",
+      "value": {
+        "fraction": ".70",
+        "poc_tie": "lowest",
+        "va_tie": "both"
+      },
+      "reason": "Freeze contiguous executed-volume value and deterministic ties; source profile platforms do not publish one universal setting."
+    },
+    "balance": {
+      "id": "A2-BALANCE",
+      "value": {
+        "pivot_bars": 2,
+        "bar_seconds": 300,
+        "alternating_pivots": 4,
+        "edge_tolerance_fraction": ".25",
+        "max_width_prior_fraction": ".5"
+      },
+      "reason": "A price-defined balance requires repeated alternating, confirmed boundary tests. No elapsed-time box alone selects a microbalance or source auction."
+    },
+    "context": {
+      "id": "A2-CONTEXT",
+      "value": {
+        "wide_ratio": "1",
+        "compression_ratio": ".5",
+        "direction": "last_completed_structure_and_preopen_displacement"
+      },
+      "reason": "Compare completed overnight and 6\u20139 widths to the prior same-contract RTH width; wide means at least prior width, compressed at most half. These are minimal ordinal research choices, not author-exact labels."
+    },
+    "flow": {
+      "id": "A2-FLOW",
+      "value": {
+        "local_horizon_seconds": 120,
+        "effort_seconds": 5,
+        "reward_ticks": 3,
+        "no_progress_ticks": 2,
+        "near_origin_ticks": 3,
+        "entry_distance_ticks": 2,
+        "band_halfwidth_ticks": 2,
+        "thinning_fraction": ".5",
+        "minimum_effort_events": 2
+      },
+      "reason": "Observe actual executions and completed depth-one updates at an already fixed band. Compare effort/pace against its immediately preceding equal-duration window. Preserve exact 2\u20134 tick STOP reward and distinct reward/retest; no hidden reserve or order identity inference."
+    },
+    "imbalance": {
+      "id": "A2-IMBALANCE",
+      "value": {
+        "ratio": "3",
+        "consecutive_rows": 3,
+        "zero": "skip"
+      },
+      "reason": "Fixed diagonal ratio and three adjacent native ticks for a research footprint stack. The source figure/wording disagreement remains a source limit, not a parameter search."
+    },
+    "mss_fvg": {
+      "id": "A2-MSS-FVG",
+      "value": {
+        "seconds": 120,
+        "horizon_minutes": 30
+      },
+      "reason": "Retain a two-minute post-parent annotation unit, with three distinct aligned candles. It never delays the November 20 displayed sweep entry."
+    },
+    "gb_sessions": {
+      "id": "A2-GB-CLOCK",
+      "value": {
+        "asia": [
+          "20:00",
+          "00:00"
+        ],
+        "london": [
+          "02:00",
+          "05:00"
+        ],
+        "vwap_reset": "18:00",
+        "reclaim_seconds": 300,
+        "action_end": "16:00"
+      },
+      "reason": "Keep explicitly named operational Asia/London clocks where exact London settings are absent. Five-minute reclaim is used for the cited close variants, separately from the sweep-entry source case."
+    },
+    "tbr_sessions": {
+      "id": "A2-TBR-CLOCK",
+      "value": {
+        "main": [
+          "06:00",
+          "09:00"
+        ],
+        "other": [
+          [
+            "20:00",
+            "20:30"
+          ],
+          [
+            "00:00",
+            "00:30"
+          ],
+          [
+            "03:00",
+            "03:30"
+          ],
+          [
+            "09:30",
+            "10:00"
+          ],
+          [
+            "10:00",
+            "10:30"
+          ],
+          [
+            "12:00",
+            "12:30"
+          ],
+          [
+            "15:00",
+            "15:30"
+          ]
+        ],
+        "other_action_minutes": 60,
+        "confirmation_seconds": 180,
+        "outbound_end": "09:40"
+      },
+      "reason": "TBR p.7 publishes all seven formations. The research action horizon and selected three-minute block confirmation are frozen choices; source personal signatures are not universal."
+    },
+    "tbr_projection": {
+      "id": "A2-TBR-PROJ",
+      "value": {
+        "exhaustion": ".5",
+        "extension": [
+          "1.33",
+          "1.66"
+        ],
+        "internal": [
+          ".25",
+          ".5",
+          ".75"
+        ]
+      },
+      "reason": "Named range geometry only. Reversal permits a strict shallow edge sweep; an exact exhaustion-depth touch is not mandatory. Extended targets stop at the range edge."
+    },
+    "reaction": {
+      "id": "A2-REACTION-HVN",
+      "value": {
+        "reaction_ticks": 4,
+        "hvn_radius_ticks": 2,
+        "confluence_ticks": 2,
+        "target_r": "1.5"
+      },
+      "reason": "A confirmed earlier reaction and a locally maximal volume node use disjoint observation windows and separate IDs. Two-tick confluence is an explicit scale choice. Member target follows prose; conflicting ticket/trailing states remain source limits."
+    },
+    "keani_time": {
+      "id": "A2-KEANI-TIME",
+      "value": {
+        "a_start": "09:30",
+        "a_end": "10:00",
+        "latest_break": "11:00"
+      },
+      "reason": "Around 10:00 operationalized as completed A through 11:00. Opening above value only starts an observation; higher developing value, rejection, actual imbalance break and defended same-band retest are required."
+    },
+    "refill": {
+      "id": "A2-REFILL",
+      "value": {
+        "min_event_quantity": 100,
+        "min_events": 2,
+        "formation_seconds": 120,
+        "span_ticks": 2,
+        "departure_ticks": 4,
+        "response_ticks": 4,
+        "horizon_minutes": 15
+      },
+      "reason": "Retain the original nonoverlapping native large-execution pair study threshold and lifecycle. No threshold reduction, proprietary touch grader, selected order or fictional fills."
+    },
+    "outcomes": {
+      "id": "A2-OUTCOME",
+      "value": {
+        "horizon_minutes": 60,
+        "same_batch": "unknown",
+        "costs": "not_a_fill_model"
+      },
+      "reason": "First observed target/structural invalidation after completed sequence, with preselected objective. Missing future scope stays unknown. Endpoint observations are not profit or author trades."
+    },
+    "risk": {
+      "id": "A2-STRUCTURAL-RISK",
+      "value": {
+        "outside_structure_ticks": 1,
+        "default_size": null
+      },
+      "reason": "One native tick beyond the observed invalidation structure makes the operational stop strictly outside. No account size, execution or author-exact stop is inferred."
+    },
+    "auction_selection": {
+      "id": "A2-AUCTION-SAMPLE",
+      "value": {
+        "primary": "latest_confirmed_by_0930_else_first_confirmed_after",
+        "contacts": "first_distinct_per_side",
+        "vwap_deviation_sd": 1,
+        "saint_ltf_seconds": 60,
+        "saint_value_fraction": ".68",
+        "control": "two_successive_directional_body_and_delta_closes",
+        "member_prior_split": "12:45",
+        "keani_fallback_objective": "A_high_plus_A_width",
+        "jet_observation": [
+          "09:30",
+          "09:32"
+        ]
+      },
+      "reason": "Bounded deterministic auction observation: select the latest price-defined balance already known at the cash open, or the first subsequently confirmed one if none exists. Do not replace failed sequences with later favorable balances. VWAP tests use the first one-SD visit per side."
+    },
+    "macro": {
+      "id": "A2-MACRO",
+      "value": {
+        "release_as_availability": true,
+        "initial_only": true,
+        "standardization_prior_values": 12
+      },
+      "reason": "Use already verified initial CPI/payroll BLS clocks only under explicit publication-as-availability assumption. Civil-date daily series do not acquire an invented intraday clock. Custom cycle/C-score rules remain separate."
+    }
+  },
+  "branch_definitions": {
+    "JJ-TBR": {
+      "judas_outbound": [
+        "TBR pp.8\u201310",
+        "pre-open direction \u2192 09:30 outbound \u2192 selected exhaustion \u2192 exit by reversal window"
+      ],
+      "judas_reversal": [
+        "TBR pp.8\u201311,27\u201329",
+        "frozen range/context \u2192 edge sweep \u2192 09:40\u201309:50 block/rejection \u2192 opposing draw"
+      ],
+      "single_extended": [
+        "TBR pp.12\u201314,24",
+        "extended overnight \u2192 EQ/quadrant \u2192 directional confirmation \u2192 range-edge target/reduced expectation"
+      ],
+      "single_purged": [
+        "TBR pp.12\u201315",
+        "dated prior-liquidity purge \u2192 compressed range \u2192 internal contact/confirmation \u2192 expansion"
+      ],
+      "internal_rotation": [
+        "JR pp.3,38\u201343;TBR pp.12,24",
+        "wide balanced context \u2192 named internal \u2192 actual reversal signature \u2192 nearer named target"
+      ],
+      "extension_reaction": [
+        "TBR pp.20\u201321;JR pp.23\u201326,57",
+        "prior expansion \u2192 actual parent 1.33\u20131.66 projection \u2192 response \u2192 still-unused objective"
+      ],
+      "other_session": [
+        "TBR p.7,36;JR pp.46,50\u201351",
+        "one of seven published formations \u2192 fixed context/location \u2192 selected confirmation/risk/objective"
+      ],
+      "timed_pzone_reversal": [
+        "JR pp.16\u201318,53\u201355,58\u201362",
+        "dated supplied P-zone \u2192 contact \u2192 reversal \u2192 directed named destination"
+      ]
+    },
+    "GB-FAIL": {
+      "nyam_box": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "finished 09\u201310 box \u2192 contextual sweep \u2192 five-minute reclaim \u2192 opposing box liquidity"
+      ],
+      "previous_hour": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "finished prior clock-hour reference \u2192 contextual sweep \u2192 reclaim \u2192 opposing hour liquidity"
+      ],
+      "asia_tdo_case": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "completed Asia range + midnight TDO \u2192 sweep \u2192 reclaim with TDO confirmation"
+      ],
+      "prior_day_level": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "same-contract previous actual RTH reference \u2192 sweep/reclaim \u2192 selected opposing level"
+      ],
+      "prior_week_level": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "same-contract prior-week matching sessions \u2192 sweep/reclaim \u2192 selected opposing level"
+      ],
+      "prior_month_level": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "same-contract prior-month matching sessions \u2192 sweep/reclaim \u2192 selected opposing level"
+      ],
+      "cash_open_reclaim_case": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "09:30 open \u2192 below-open manipulation \u2192 reclaim \u2192 retracement objective with low invalidation"
+      ],
+      "mss_fvg_refinement": [
+        "GB pp.21,23,25,27,30\u201335,38\u201340,43",
+        "completed parent reclaim \u2192 later three 2-minute candles \u2192 MSS plus actual wick FVG; annotation unit"
+      ]
+    },
+    "GB-VWAP": {
+      "source_long": [
+        "GB p.33 posts 2026329904690712970/2026386393820283204",
+        "both finished session highs \u2192 close above \u2192 later contemporaneous VWAP return \u2192 long risk/continuation observation"
+      ]
+    },
+    "GB-SCALP": {
+      "bearish_small_scalp": [
+        "GB p.40 post 2095257805242446135",
+        "pre-existing bearish direction \u2192 pullback \u2192 supplied small exposure and limited management; entry rule unpublished"
+      ],
+      "bullish_discount_pullback": [
+        "GB p.40 post 2098075540607410229",
+        "NYAM direction \u2192 selected impulse discount pullback \u2192 small exposure/process audit; entry rule unpublished"
+      ]
+    },
+    "SIRES": {
+      "dom_rejection": [
+        "DOM6/DOM7 pp.3\u20137",
+        "planned level \u2192 arriving effort/no progress \u2192 depth-one defense/rejection"
+      ],
+      "absorption_reward_retest": [
+        "ABS pp.5\u201313",
+        "real extreme \u2192 opposing effort/passive defense \u2192 own reward near origin \u2192 distinct reward-area retest/fresh defense"
+      ],
+      "stop_four_stage": [
+        "STOP pp.10,12,14",
+        "real extreme \u2192 defense \u2192 replenishment \u2192 opposing print thinning \u2192 absorber aggression and 2\u20134 tick lift-off; account -4R checked separately"
+      ],
+      "footprint_confirmed_reaction": [
+        "FP9 pp.4\u20137",
+        "known level \u2192 same-candle delta disagreement/absorption \u2192 within-candle POC relocation \u2192 local flow"
+      ],
+      "vwap_deviation_fade": [
+        "VWAP pp.3\u20138",
+        "auction context \u2192 pre-touch executed VWAP/deviation \u2192 same-band absorption \u2192 local CVD/ladder confirmation"
+      ],
+      "ofm_aggressive": [
+        "OFM pp.3\u201313;BIG pp.7\u201314,18;CONT p.10",
+        "catalyst \u2192 release \u2192 failed squeeze \u2192 catalyst reclaim/refill \u2192 initiative/wicks \u2192 defended drive retest; source gamma retained separately"
+      ],
+      "ofm_passive": [
+        "OFM p.14",
+        "failed squeeze \u2192 dying tape/no aggressive failure \u2192 actual buyer area \u2192 trigger above buyers and stop below aggression"
+      ],
+      "clean_squeeze": [
+        "CONT p.11;OFM p.5",
+        "catalyst \u2192 fast release with no earlier failure \u2192 first pullback \u2192 opposing absorption \u2192 continuation"
+      ],
+      "balance_failure_fade": [
+        "BIG pp.14\u201315,18",
+        "balance extreme \u2192 unpaid aggression \u2192 leave \u2192 same-area retest still unpaid \u2192 prior opposite-control target; dated gamma input separate"
+      ],
+      "defended_band_continuation": [
+        "NYAM pp.4\u20135;K18 pp.7,11,14;CONT pp.4\u201310;ANAT p.7",
+        "prior band control \u2192 distinct current return \u2192 fresh same-side defense/refresh and executed aggression"
+      ],
+      "microbalance_break": [
+        "K2345 pp.4\u20137",
+        "larger direction \u2192 price-defined alternating-pivot microbalance \u2192 strength/break \u2192 stop behind that structure"
+      ],
+      "kg1_retest": [
+        "NYAM pp.8\u20139",
+        "dated source KG1 \u2192 actual same-band retest \u2192 aggressive confirmation \u2192 supplied management policy"
+      ]
+    },
+    "SAINT-AMT": {
+      "continuation_retest": [
+        "RTVP pp.3\u201311;WIC pp.7\u201310",
+        "fitted HTF accepted balance \u2192 actual LTF balance break \u2192 same-boundary retest \u2192 repeated directional aggression"
+      ],
+      "trapped_buyers_retest": [
+        "TRAP pp.3\u201310;WIC pp.7\u201310",
+        "two distinct earlier upper buying failures \u2192 current LTF down break \u2192 same-boundary retest \u2192 repeated body selling"
+      ],
+      "failed_auction_return": [
+        "AMTL pp.8\u201310",
+        "original balance \u2192 distinct older value tested/rejected \u2192 original balance reacceptance \u2192 local control"
+      ],
+      "poc_traversal": [
+        "RTVP pp.5\u20138;AMTL pp.8\u201311",
+        "original balance reacceptance \u2192 aggressive POC passage \u2192 source hold \u2192 far-edge objective"
+      ]
+    },
+    "MEMBER-TWO-REASONS": {
+      "resistance_short": [
+        "K10 pp.5\u20137,12",
+        "prior reaction + independently observed nearby minor HVN \u2192 current rejection \u2192 stop above rejection"
+      ],
+      "planned_return_long": [
+        "K10 pp.6\u20138,12",
+        "planned prior structure + independent minor HVN \u2192 second/distinct return \u2192 buyers absorb/hold \u2192 structural stop"
+      ]
+    },
+    "KEANI-OPEN-ABOVE-VALUE": {
+      "source_long": [
+        "AVG pp.21\u201322",
+        "whole A above prior VAH \u2192 higher developing value/rejection \u2192 aggressive VAH imbalance break \u2192 defended same-imbalance retest"
+      ]
+    },
+    "REFILL-STUDY": {
+      "touch_record": [
+        "REF pp.5\u20139;OFM pp.15\u201318",
+        "large execution cluster \u2192 immutable zone \u2192 departure \u2192 distinct return with pre-touch memory \u2192 later label"
+      ],
+      "supplied_selected_order": [
+        "REF p.12,16;OFM p.18",
+        "actual supplied model selection \u2192 12/32/96 tick configuration \u2192 30 minute cancel \u2192 one position \u2192 actual lifecycle/cost audit"
+      ]
+    },
+    "JETBUNDLE-STATES": {
+      "B": [
+        "MATH pp.4\u201311",
+        "native provide/withdraw/consume and response observations \u2192 supplied B label/qualitative criteria; no invented classifier"
+      ],
+      "A": [
+        "MATH pp.4\u201311",
+        "native provide/withdraw/consume and response observations \u2192 supplied A label/qualitative criteria; no invented classifier"
+      ],
+      "D": [
+        "MATH pp.4\u201311",
+        "native provide/withdraw/consume and response observations \u2192 supplied D label/qualitative criteria; no invented classifier"
+      ],
+      "E": [
+        "MATH pp.4\u201311",
+        "native provide/withdraw/consume and response observations \u2192 supplied E label/qualitative criteria; no invented classifier"
+      ],
+      "W": [
+        "MATH pp.4\u201311",
+        "native provide/withdraw/consume and response observations \u2192 supplied W label/qualitative criteria; no invented classifier"
+      ]
+    },
+    "STOIC-DATA": {
+      "process_review": [
+        "DATA pp.3\u20134",
+        "frozen declared process \u2192 uniform inclusion \u2192 all observations \u2192 winner/loser comparison \u2192 prior-sample revision"
+      ],
+      "macro_application": [
+        "DATA pp.5\u20136",
+        "actual vintage admission \u2192 selected indicator historical comparison \u2192 supplied custom cycle/C-score/trend interpretation"
+      ]
+    },
+    "STOIC-RISK": {
+      "first": [
+        "DATA pp.7\u20138",
+        "prior process/100+ sample and validation \u2192 printed first stage arithmetic; no historical ledger reconstructed"
+      ],
+      "second": [
+        "DATA pp.7\u20138",
+        "prior process/100+ sample and validation \u2192 printed second stage arithmetic; no historical ledger reconstructed"
+      ],
+      "reset_after_second_win": [
+        "DATA pp.7\u20138",
+        "prior process/100+ sample and validation \u2192 printed reset_after_second_win stage arithmetic; no historical ledger reconstructed"
+      ]
+    }
+  },
+  "scope_sha256": "7b304ca36b923f28664ab9fce984ea9cbccb4338743ee8e6fe0171b05103ffb1",
+  "exposure": "No new method/outcome replay has run. Existing old results were known; preparation exposed native input counts and price-balance counts (including an implementation fix to use extrema when O/C order is ambiguous). Pilot debugging may change implementation but cannot tune these thresholds or replace dates based on outcomes.",
+  "sha256": "b92d66cecdf2cd3bc5712b90640e8901b566a53d9c2ffd47b9a018718d8237fc"
+}

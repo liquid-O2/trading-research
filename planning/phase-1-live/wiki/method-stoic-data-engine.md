@@ -1,5 +1,60 @@
 # Stoic — data engine / quantifying fundamentals
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+STOIC-DATA: 0 setup, 0 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/STOIC-DATA.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| context_or_research:condition_present | 3 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| process_review | 1 | 1 | 0 | 0 | bounded_observed_population_measured |
+| macro_application | 0 | 0 | 0 | 1 | observed_subset_with_input_limits |
+| unit: macro_application | 0 | 0 | 0 | 1 | observed_subset_with_input_limits |
+
+**process_review** — frozen declared process → uniform inclusion → all observations → winner/loser comparison → prior-sample revision. Source: DATA pp.3–4. Scanner: `trading_research.research.method_pack.historical_process_scanners:scan_stoic_data`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+**macro_application** — actual vintage admission → selected indicator historical comparison → supplied custom cycle/C-score/trend interpretation. Source: DATA pp.5–6. Scanner: `trading_research.research.method_pack.historical_process_scanners:scan_stoic_data`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `cycle_and_indicator_rules_recorded`: source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation. Existing 20-series/37003-vintage bundles are used directly; initial BLS clocks and specified standardized comparisons are available. Source proprietary transforms and non-initial intraday clocks are not supplied by that recovery. Source: DATA pp.5–6;O157–O161.
+
+Inspected local evidence: ['implementation/reports/phase1-live/macro-backfill/verification.json', 'planning/phase-1-live/wiki/c-score.md'].
+
+Recorded scope/record limits: source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation (1 job records).
+
+**macro_application** — actual vintage admission → selected indicator historical comparison → supplied custom cycle/C-score/trend interpretation. Source: DATA pp.5–6. Scanner: `trading_research.research.method_pack.native_discovery:extra_stoic`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `cycle_and_indicator_rules_recorded`: source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation. Existing 20-series/37003-vintage bundles are used directly; initial BLS clocks and specified standardized comparisons are available. Source proprietary transforms and non-initial intraday clocks are not supplied by that recovery. Source: DATA pp.5–6;O157–O161.
+
+Inspected local evidence: ['implementation/reports/phase1-live/macro-backfill/verification.json', 'planning/phase-1-live/wiki/c-score.md'].
+
+Recorded scope/record limits: source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation (1 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/STOIC-DATA.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / STOIC-DATA. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 

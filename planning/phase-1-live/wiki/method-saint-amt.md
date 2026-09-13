@@ -1,5 +1,59 @@
 # Saint — AMT on live markets and confirmed alignment
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+SAINT-AMT: 0 setup, 26 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/SAINT-AMT.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| entry_setup:no_setup | 26 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| continuation_retest | 5 | 0 | 5 | 0 | observed_subset_with_input_limits |
+| trapped_buyers_retest | 3 | 0 | 3 | 0 | observed_subset_with_input_limits |
+| failed_auction_return | 4 | 0 | 4 | 5 | observed_subset_with_input_limits |
+| poc_traversal | 5 | 0 | 5 | 4 | observed_subset_with_input_limits |
+
+**continuation_retest** — fitted HTF accepted balance → actual LTF balance break → same-boundary retest → repeated directional aggression. Source: RTVP pp.3–11;WIC pp.7–10. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_saint`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no distinct confirmed LTF price balance (3 job records); no confirmed HTF price balance in observed prefix (1 job records).
+
+**trapped_buyers_retest** — two distinct earlier upper buying failures → current LTF down break → same-boundary retest → repeated body selling. Source: TRAP pp.3–10;WIC pp.7–10. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_saint`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no distinct confirmed LTF price balance (3 job records); no confirmed HTF price balance in observed prefix (1 job records).
+
+**failed_auction_return** — original balance → distinct older value tested/rejected → original balance reacceptance → local control. Source: AMTL pp.8–10. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_saint`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (1 job records); same_contract_prior_scope_unknown (1 job records); no distinct older completed auction in current admitted prefix (1 job records); no confirmed HTF price balance in observed prefix (1 job records).
+
+**poc_traversal** — original balance reacceptance → aggressive POC passage → source hold → far-edge objective. Source: RTVP pp.5–8;AMTL pp.8–11. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_saint`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (1 job records); same_contract_prior_scope_unknown (1 job records); no distinct older completed auction in current admitted prefix (1 job records); no confirmed HTF price balance in observed prefix (1 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/SAINT-AMT.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / SAINT-AMT. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 

@@ -265,8 +265,8 @@ class TradeBars:
     """Stream 1-second or 1-minute trade bars without mixing native contracts."""
 
     def __init__(self, seconds: int, start_ns: int, end_ns: int):
-        if seconds not in {1, 60}:
-            raise ValueError("supported source views are 1-second and 1-minute bars")
+        if seconds not in {1, 60, 120, 180, 300, 1800}:
+            raise ValueError("unsupported event-time bar duration")
         self.duration = seconds * NS
         self.start_ns, self.end_ns = _bounds(start_ns, end_ns)
         self.bars: dict[Any, _Bar] = {}

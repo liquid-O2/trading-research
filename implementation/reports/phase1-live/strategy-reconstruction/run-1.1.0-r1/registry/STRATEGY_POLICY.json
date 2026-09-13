@@ -1,0 +1,70 @@
+{
+  "auction": {
+    "high_efficiency": 0.6,
+    "high_effort_multiple": 1.5,
+    "inventory": "displayed depth-one additions/removals; removal less executions is an estimate, not identified cancels",
+    "low_efficiency": 0.2,
+    "replenishment_stop_fraction": 0.25,
+    "response": "difference of first/last quarter-window execution VWAP; efficiency divided by window range",
+    "source": "the-math-behind-auction-market-theory.pdf pp.4\u201311",
+    "window_seconds": 120
+  },
+  "calendar": {
+    "interpretation": "reconstruction calendar assumption, not newly recovered CME schedule evidence",
+    "model": "regular NQ schedule with inferred New Year/Christmas RTH closures",
+    "scope": "fixed-date New Year/Christmas closures, including Monday observance; Friday before Saturday New Year remains regular, corroborated by 390 native 2021-12-31 RTH minute records; other unverified holidays remain unavailable"
+  },
+  "exposure": "prior v2 engineering outcomes have been inspected; no holdout or profitability claim",
+  "gamma": {
+    "KG1": "largest absolute signed gamma strike; same-time NQ/QQQ mapping; inferred key-gamma node, not proprietary KG1",
+    "expiry": "0DTE if quoted; otherwise nearest listed expiry explicitly identified as a front-expiry approximation",
+    "inventory_assumption": "call OI positive, put OI negative; model sign convention, not observed dealer inventory",
+    "max_quote_age_seconds": 180,
+    "oi": "latest prior-date snapshot only",
+    "option_model": "European Black-Scholes, r=q=0, midquote implied volatility, 100 shares/contract",
+    "quote_availability": "minute label plus 60 seconds; completed QQQ and NQ minute prices only",
+    "source": "gex-framework.pdf pp.4\u201320; ny-am-session.pdf pp.8\u20139"
+  },
+  "macro": {
+    "model": "equal mean of signed initial-release z scores: payroll positive, CPI negative; 12 prior initial observations",
+    "output": "research context only; not proprietary C-score or an entry",
+    "source": "data-engine.pdf pp.5\u20136"
+  },
+  "measurements": {
+    "absence": "all canonical records in an owned active-contract interval are enumerated; no execution does not imply missing data; market feed completeness remains separate",
+    "candle_endpoints": "same-contract published OHLCV after interval close; fill only after native H/L/V and all already-known endpoints match",
+    "flow_entry_price": "adverse-side observed price in the last execution timestamp batch; tick-valid research entry, not an actual fill",
+    "local_flow_price": "execution VWAP of first and last timestamp batches; causal, order independent, not an inferred exchange sequence",
+    "prior_range": "fallback to all acquired published prior RTH continuous-chart bars; contract changes remain explicit and unadjusted; empty post-expiration c.0 mapping windows excluded with recorded expiry and roll-map identity; never substituted for native volume profile or depth"
+  },
+  "personal_exclusions": {
+    "GB-SCALP": [
+      "small_size_recorded",
+      "source_scalp_management_recorded"
+    ],
+    "SIRES": [
+      "daily_r_before"
+    ]
+  },
+  "purpose": "recreate strategy conditions from sources, excluding personal execution records",
+  "pzone": {
+    "anchors": [
+      "02:00",
+      "09:00",
+      "10:00"
+    ],
+    "clock": "historical minute-bar training only, prior dates; live anchor uses event-time bars",
+    "distance": "maximum up/down move from anchor to 16:00 divided by pre-anchor 60-minute range",
+    "live_scale": "current completed pre-anchor 60-minute range; quarter-point outward rounding",
+    "lookback_sessions": 500,
+    "minimum_sessions": 20,
+    "quantiles": [
+      0.7,
+      0.8
+    ],
+    "source": "JJumboFX_Raw_X_Archive_v2.pdf pp.16\u201318,53\u201355,60\u201361",
+    "target": "frozen anchor price; support and resistance evaluated only toward anchor",
+    "volume_filter": "historical session volume at least median of prior training sessions"
+  },
+  "version": "1.1.0"
+}

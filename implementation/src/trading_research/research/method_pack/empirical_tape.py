@@ -730,7 +730,7 @@ def _validate_m09_trade(row: Mapping[str, Any], instrument_id: int | str,
 
 def _m09_opportunity(zone: M09Zone, touch: Mapping[str, Any], *, rule: Mapping[str, Any],
                      partition: Mapping[str, Any], registry_sha256: str,
-                     opportunity_index: int, expiry_at: int) -> Opportunity:
+                     opportunity_index: int, expiry_at: int, departure_at: int | None = None) -> Opportunity:
     event = touch["event_ns"]
     identity = {"rule_id": rule["rule_id"], "registry_sha256": registry_sha256,
                 "partition_id": partition["partition_id"], "zone_id": zone.zone_id,
@@ -744,6 +744,9 @@ def _m09_opportunity(zone: M09Zone, touch: Mapping[str, Any], *, rule: Mapping[s
         trigger["member_event_ids"] = list(touch["member_event_ids"])
         trigger["prices"] = list(touch["prices"])
     session_date = partition.get("session_date", partition.get("date"))
+    reference = zone.reference()
+    if departure_at is not None:
+        reference['departure_at'] = departure_at
     return Opportunity(
         opportunity_id="opp-" + content_hash(identity)[:24],
         rule_id=rule["rule_id"], method_id="REFILL-STUDY", branch="touch_record",
@@ -752,7 +755,7 @@ def _m09_opportunity(zone: M09Zone, touch: Mapping[str, Any], *, rule: Mapping[s
         occurrence_start=event, occurrence_end=event + 1,
         available_at=available,
         reference_id=zone.zone_id, reference_known_at=zone.known_at,
-        reference=zone.reference(), trigger=trigger,
+        reference=reference, trigger=trigger,
         expiry_at=max(available, expiry_at),
         assumption_ids=tuple(rule["assumption_ids"]),
         registry_sha256=registry_sha256,
@@ -888,7 +891,8 @@ def m09_research_comparison(trades: Iterable[Mapping[str, Any]], *,
                 opp = _m09_opportunity(zone, touch, rule=rule, partition=partition,
                                        registry_sha256=registry_sha256,
                                        opportunity_index=state["touch_count"],
-                                       expiry_at=expiry)
+                                       expiry_at=expiry,
+                                       departure_at=state['departed_at'] if params.get('retain_stage_receipts') else None)
                 opportunities.append(opp)
                 state["touch_count"] += 1
                 state["armed"] = False

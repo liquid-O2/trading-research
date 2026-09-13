@@ -1,5 +1,93 @@
 # JJumboFX — SDRange / Time-Based Ranges framework
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+JJ-TBR: 16 setup, 74 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/JJ-TBR.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| entry_setup:no_setup | 74 |
+| entry_setup:setup | 16 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| judas_outbound | 5 | 3 | 2 | 1 | observed_subset_with_input_limits |
+| judas_reversal | 4 | 0 | 4 | 4 | observed_subset_with_input_limits |
+| single_extended | 1 | 0 | 1 | 1 | observed_subset_with_input_limits |
+| single_purged | 1 | 0 | 1 | 1 | observed_subset_with_input_limits |
+| internal_rotation | 2 | 0 | 2 | 2 | observed_subset_with_input_limits |
+| extension_reaction | 6 | 0 | 6 | 2 | observed_subset_with_input_limits |
+| other_session | 33 | 5 | 28 | 13 | observed_subset_with_input_limits |
+| timed_pzone_reversal | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| unit: management | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+
+**judas_outbound** — pre-open direction → 09:30 outbound → selected exhaustion → exit by reversal window. Source: TBR pp.8–10. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**judas_reversal** — frozen range/context → edge sweep → 09:40–09:50 block/rejection → opposing draw. Source: TBR pp.8–11,27–29. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**single_extended** — extended overnight → EQ/quadrant → directional confirmation → range-edge target/reduced expectation. Source: TBR pp.12–14,24. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**single_purged** — dated prior-liquidity purge → compressed range → internal contact/confirmation → expansion. Source: TBR pp.12–15. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**internal_rotation** — wide balanced context → named internal → actual reversal signature → nearer named target. Source: JR pp.3,38–43;TBR pp.12,24. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**extension_reaction** — prior expansion → actual parent 1.33–1.66 projection → response → still-unused objective. Source: TBR pp.20–21;JR pp.23–26,57. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (1 job records).
+
+**other_session** — one of seven published formations → fixed context/location → selected confirmation/risk/objective. Source: TBR p.7,36;JR pp.46,50–51. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); formation_has_no_observed_executions (7 job records).
+
+**timed_pzone_reversal** — dated supplied P-zone → contact → reversal → directed named destination. Source: JR pp.16–18,53–55,58–62. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `source_zone_known`, `zone_known_at`: dated source P-zone band ID, bounds, active state, generator version and named destination. Source catalog contains case readouts/settings, not a historical 2020+ P-zone series or generator. Usage scanner accepts dated supplied bands; no approximate substitute. Source: JR pp.16–18,53–55,58–62;O019.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/p-zones-benchmark.md', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: no dated P-zone bands/destinations (7 job records); calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records); dated source P-zone band ID, bounds, active state, generator version and named destination (7 job records).
+
+**management** — management process/management unit. Source: FORMULAS:M01. Scanner: `trading_research.research.method_pack.native_discovery:extra_jumbo`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records); actual account/session closed R and active quantity/order ledger (7 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/JJ-TBR.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / JJ-TBR. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 
@@ -75,11 +163,25 @@ END
 
 Citations for the sequence: [TBR] pp.6–12, 20–29, 37; [JR] pp.3, 14, 25, 33, 50–57. A source-drawn proprietary band can support a fixture check; an automatically generated approximation cannot set `source_zone_known` true. Report branch eligibility, confirmation, and directional target outcomes separately. Negative controls include momentum through an exhaustion level without rejection, a presumed purge occurring after entry, and a location/target picked from the final morning range. No current R-J predicate establishes this whole loop.
 
+## Definition and scanner correction — 2026-09-13
+
+The five legacy `unavailable_definition` rows below **have source definitions and implemented M01 predicates**. No comparison scanner was registered for them in empirical v1. Their source sequences above remain the definitions; this table identifies the work still needed for historical discovery.
+
+| Branch | Existing definition and implementation | Actual unresolved scope |
+|---|---|---|
+| `judas_outbound` | TBR pp.8–10 defines the cash-open outbound leg, exhaustion destination and exit approaching 09:40–09:50; M01 checks its ordered context and objective. | Build discovery using an explicit pre-open directional/context rule and selected confirmation. The later day's path cannot supply direction retrospectively. The cash-open clock itself is known. |
+| `single_extended` | TBR pp.12–14, 24 defines extended overnight context, EQ/quadrant entry, range-edge target and reduced expectations; M01 and [range-width geometry](range-width-context.md) exist. | Operationalize context classification and entry confirmation. The printed 106.50 range on p.13 is an example, not a universal extended threshold. The target/reduced-expectation policy is published, contrary to the blanket registry reason. |
+| `single_purged` | TBR pp.12–15 defines prior overnight stop hunts followed by expansion from internals; [purge lifecycle](overnight-purge.md) and M01 ordering exist. | Connect named prior-liquidity references, their causal sweeps and compressed context to discovery. Some reference/confirmation selection remains to be specified; the purge sequence is defined. |
+| `other_session` | TBR p.7 prints seven additional formation windows: 20:00–20:30, 00:00–00:30, 03:00–03:30, 09:30–10:00, 10:00–10:30, 12:00–12:30, 15:00–15:30; [O006](tbr-remaining-clocks.md) builds explicitly clocked ranges. | The registry's blanket claim that formation clocks are absent is incorrect. Implement manual variants with their applicable confirmation/action rules. Verify later-platform London configuration separately; its uncertainty does not invalidate the printed manual clocks. |
+| `timed_pzone_reversal` | JR pp.53–55 defines the illustrated directed reversals; [O019](p-zones-benchmark.md) and M01 check supplied zone identity, state and path. | Historical automatic P-zone generation or a historical series of actual source zones is missing. JR pp.16–18, 58–62 shows controls rather than the formula. This is a zone-generation/input limitation, not absence of the reversal usage definition. |
+
+These are unscanned historical populations, not zero-opportunity searches. See the [source/evaluator/scanner distinction](current-status.md#correction-definitions-exist-18-branches-were-not-scanned). No scanner or empirical result changed in this correction.
+
 ## Implementation and empirical status — 2026-09-12
 
 The [M01 contract](../FORMULAS.md#m01) and its 40 operand bindings are implemented and reviewed. [Method evaluation](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [causal assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) consume the selected object evidence. [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repairs](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) establish software completion; the source and data limits described below remain.
 
-The frozen empirical v1 run has the following branch dispositions. Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
+The frozen empirical v1 run has the following historical dispositions. **`unavailable_definition` is the original registry label, not the current assessment of source availability; those rows were not scanned.** Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
 
 | Branch | Frozen disposition | Recorded p / f / u | Jobs processed / eligible | Missing-input jobs |
 |---|---|---:|---:|---:|
@@ -92,7 +194,7 @@ The frozen empirical v1 run has the following branch dispositions. Counts are **
 | `other_session` | `unavailable_definition` | unavailable | — | — |
 | `timed_pzone_reversal` | `unavailable_definition` | unavailable | — | — |
 
-All declared jobs for these branches are accounted for; none remain pending. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. Separate `management` units remain supplied-only and outside the market-opportunity denominator. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
+All scheduled comparison jobs are accounted for. The unsupported branches had no historical searches scheduled; they were recorded as dispositions only. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. Separate `management` units remain supplied-only and outside the market-opportunity denominator. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
 
 ## Objects used by this method
 

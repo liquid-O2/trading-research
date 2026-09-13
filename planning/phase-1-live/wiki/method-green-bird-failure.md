@@ -1,5 +1,72 @@
 # Green Bird — failed breakout / failed breakdown
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+GB-FAIL: 22 setup, 62 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/GB-FAIL.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| entry_setup:no_setup | 62 |
+| entry_setup:setup | 22 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| nyam_box | 7 | 3 | 4 | 1 | observed_subset_with_input_limits |
+| previous_hour | 35 | 12 | 23 | 3 | observed_subset_with_input_limits |
+| asia_tdo_case | 9 | 1 | 8 | 1 | observed_subset_with_input_limits |
+| prior_day_level | 3 | 0 | 3 | 0 | observed_subset_with_input_limits |
+| prior_week_level | 4 | 0 | 4 | 2 | observed_subset_with_input_limits |
+| prior_month_level | 2 | 0 | 2 | 2 | observed_subset_with_input_limits |
+| cash_open_reclaim_case | 5 | 0 | 5 | 0 | observed_subset_with_input_limits |
+| mss_fvg_refinement | 3 | 0 | 3 | 0 | observed_subset_with_input_limits |
+
+**nyam_box** — finished 09–10 box → contextual sweep → five-minute reclaim → opposing box liquidity. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+**previous_hour** — finished prior clock-hour reference → contextual sweep → reclaim → opposing hour liquidity. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+**asia_tdo_case** — completed Asia range + midnight TDO → sweep → reclaim with TDO confirmation. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+**prior_day_level** — same-contract previous actual RTH reference → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records).
+
+**prior_week_level** — same-contract prior-week matching sessions → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: same_contract_prior_scope_unknown (11 job records); calendar_unverified (9 job records).
+
+**prior_month_level** — same-contract prior-month matching sessions → sweep/reclaim → selected opposing level. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: same_contract_prior_scope_unknown (110 job records); calendar_unverified (11 job records).
+
+**cash_open_reclaim_case** — 09:30 open → below-open manipulation → reclaim → retracement objective with low invalidation. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: cash_open_order_unknown (2 job records).
+
+**mss_fvg_refinement** — completed parent reclaim → later three 2-minute candles → MSS plus actual wick FVG; annotation unit. Source: GB pp.21,23,25,27,30–35,38–40,43. Scanner: `trading_research.research.method_pack.historical_price_scanners:scan_green_failure`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/GB-FAIL.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / GB-FAIL. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 

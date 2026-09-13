@@ -1,10 +1,56 @@
 # Phase 1 wiki
 
+<!-- phase1-strategy-current -->
+Current strategy reconstruction: **66 setups, 258 no-setup rejections and 0 unavailable market-input candidates** in the declared evaluation sample. Context and research units are separate.
+
+Personal size, account limits and executed-order records do not gate setups. Auction states, QQQ gamma/key levels, P-zones and macro context have explicit source-inspired implementations. A no-setup rejection is not a losing trade or a software failure.
+
+[Completion report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/COMPLETION_REPORT.md) · [Strategy results](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/STRATEGY_RESULTS.md) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md) · [Charts](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/charts/README.md).
+
+Validation: 803 passed, 36 subtests passed in 110.74s (0:01:50); 776 completed jobs across all 58 branch/extra units; 77 primary charts visually checked.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current v2 coverage and measurements
+
+Current registry/run v2.0.0 is accepted under identity `1ab8b9d7eb2e8aa36c053033754aac854908a2e90373457fb730671329dc5a60`. All **776 declared jobs** completed across the seven-date pilot and seven-date evaluation sample, with all **50 branches and eight additional units** retained. This is a bounded annual engineering/research sample, not a full-archive census. Pilot/evaluation overlap and prior outcome exposure are explicit; their counts are never pooled.
+
+The implementation uses owned MBP-1 event-time executions, same-contract references and a versioned NQ session policy. Author-exact selections, actual orders/fills and account records remain separate. **Software completion does not establish full historical author-method measurement or profitability.**
+
+[Current completion report and reproduction commands](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md) · [Current branch results](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/RESULTS.md) · [Authoritative branch/object/operand manifest](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/registry/coverage.json) · [Diagnostic chart index](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/charts/README.md)
+
+| Method | Catalog branches | Additional units | n | p | f | u |
+| --- | --- | --- | --- | --- | --- | --- |
+| JJ-TBR | 8 | 1 | 52 | 8 | 44 | 24 |
+| GB-FAIL | 8 | 0 | 68 | 16 | 52 | 9 |
+| GB-VWAP | 1 | 0 | 2 | 2 | 0 | 1 |
+| GB-SCALP | 2 | 1 | 0 | 0 | 0 | 12 |
+| SIRES | 12 | 3 | 69 | 7 | 62 | 16 |
+| SAINT-AMT | 4 | 0 | 17 | 0 | 17 | 9 |
+| MEMBER-TWO-REASONS | 2 | 0 | 2 | 0 | 2 | 0 |
+| KEANI-OPEN-ABOVE-VALUE | 1 | 0 | 6 | 0 | 6 | 0 |
+| REFILL-STUDY | 2 | 1 | 0 | 0 | 0 | 0 |
+| JETBUNDLE-STATES | 5 | 1 | 0 | 0 | 0 | 35 |
+| STOIC-DATA | 2 | 1 | 1 | 1 | 0 | 1 |
+| STOIC-RISK | 3 | 0 | 0 | 0 | 0 | 0 |
+
+Family sums are audit counts across dependent observations, not a win rate. Each method page gives its complete branch/unit counts, scanner behavior and exact remaining limits.
+
+<!-- /phase1-native-v2-current -->
+
+## Method definitions and historical comparison context
+
 Start with the operating method, then follow its objects. This is the compiled shared language for Phase 1: source sequence, object identity, availability and observable outcomes. Methods, research processes and risk overlays retain their source attribution. Parts of a loop are not separate systems.
 
 [Current implementation and empirical status](current-status.md) · [Raw sources and precedence](source-catalog.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Ingest log](log.md)
 
 ## Operating methods
+
+**Definition availability correction (2026-09-13):** the frozen run's 18 `unavailable_definition` labels mean those branches were not supported by its historical scanner. All 18 have documented sequences here. Read the [source/evaluator/scanner distinction](current-status.md#correction-definitions-exist-18-branches-were-not-scanned) before interpreting the historical status tables.
 
 | ID | Attributed method | Ordered loop |
 |---|---|---|

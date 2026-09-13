@@ -1,5 +1,67 @@
 # Sires × TeamVOT — The Refill Effect
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+REFILL-STUDY: 0 setup, 0 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/REFILL-STUDY.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| touch_record | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| supplied_selected_order | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| unit: selected_order_configuration | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+
+**touch_record** — large execution cluster → immutable zone → departure → distinct return with pre-touch memory → later label. Source: REF pp.5–9;OFM pp.15–18. Scanner: `trading_research.research.method_pack.historical_process_scanners:scan_refill`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+**supplied_selected_order** — actual supplied model selection → 12/32/96 tick configuration → 30 minute cancel → one position → actual lifecycle/cost audit. Source: REF p.12,16;OFM p.18. Scanner: `trading_research.research.method_pack.historical_process_scanners:scan_refill`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `grade_model_frozen_before_touch`, `grade_available_at`, `touch_selected_without_future_information`: original frozen touch model/features/grade and selected order lifecycle. Cited causal rebuild is negative; original classifier/normalization and private selections are unpublished. Native zone/return denominator remains separate. Source: REF pp.8–9,12,16;OFM pp.15–18;O149.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/touch-grader.md', 'planning/phase-1-live/wiki/order-lifecycle.md'].
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records); original frozen touch model/features/grade and selected order lifecycle (7 job records); actual account/session closed R and active quantity/order ledger (7 job records).
+
+**selected_order_configuration** — selected_order_configuration process/management unit. Source: FORMULAS:M09. Scanner: `trading_research.research.method_pack.native_discovery:extra_refill`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `grade_model_frozen_before_touch`, `grade_available_at`, `touch_selected_without_future_information`: original frozen touch model/features/grade and selected order lifecycle. Cited causal rebuild is negative; original classifier/normalization and private selections are unpublished. Native zone/return denominator remains separate. Source: REF pp.8–9,12,16;OFM pp.15–18;O149.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/touch-grader.md', 'planning/phase-1-live/wiki/order-lifecycle.md'].
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records); original frozen touch model/features/grade and selected order lifecycle (7 job records); actual account/session closed R and active quantity/order ledger (7 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/REFILL-STUDY.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / REFILL-STUDY. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 

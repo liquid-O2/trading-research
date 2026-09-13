@@ -1,5 +1,139 @@
 # Sires — thesis, risk, and order flow
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+SIRES: 12 setup, 84 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/SIRES.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| entry_setup:no_setup | 84 |
+| entry_setup:setup | 12 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| dom_rejection | 5 | 1 | 4 | 3 | observed_subset_with_input_limits |
+| absorption_reward_retest | 7 | 0 | 7 | 1 | observed_subset_with_input_limits |
+| stop_four_stage | 7 | 0 | 7 | 1 | observed_subset_with_input_limits |
+| footprint_confirmed_reaction | 8 | 0 | 8 | 0 | observed_subset_with_input_limits |
+| vwap_deviation_fade | 7 | 0 | 7 | 2 | observed_subset_with_input_limits |
+| ofm_aggressive | 7 | 0 | 7 | 1 | observed_subset_with_input_limits |
+| ofm_passive | 3 | 0 | 3 | 2 | observed_subset_with_input_limits |
+| clean_squeeze | 5 | 0 | 5 | 3 | observed_subset_with_input_limits |
+| balance_failure_fade | 5 | 0 | 5 | 3 | observed_subset_with_input_limits |
+| defended_band_continuation | 2 | 0 | 2 | 0 | observed_subset_with_input_limits |
+| microbalance_break | 13 | 6 | 7 | 0 | observed_subset_with_input_limits |
+| kg1_retest | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| unit: case_description | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| unit: management | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+| unit: reentry | 0 | 0 | 0 | 0 | observed_subset_with_input_limits |
+
+**dom_rejection** — planned level → arriving effort/no progress → depth-one defense/rejection. Source: DOM6/DOM7 pp.3–7. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**absorption_reward_retest** — real extreme → opposing effort/passive defense → own reward near origin → distinct reward-area retest/fresh defense. Source: ABS pp.5–13. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**stop_four_stage** — real extreme → defense → replenishment → opposing print thinning → absorber aggression and 2–4 tick lift-off; account -4R checked separately. Source: STOP pp.10,12,14. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual account/session closed R and active quantity/order ledger (7 job records); no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**footprint_confirmed_reaction** — known level → same-candle delta disagreement/absorption → within-candle POC relocation → local flow. Source: FP9 pp.4–7. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**vwap_deviation_fade** — auction context → pre-touch executed VWAP/deviation → same-band absorption → local CVD/ladder confirmation. Source: VWAP pp.3–8. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**ofm_aggressive** — catalyst → release → failed squeeze → catalyst reclaim/refill → initiative/wicks → defended drive retest; source gamma retained separately. Source: OFM pp.3–13;BIG pp.7–14,18;CONT p.10. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `short_gamma`, `long_gamma`, `branch_regime_allowed`: dated source dealer-map regime and selected native product/transform. Local option contract/quote/OI data exist; they do not disclose author dealer positions or gamma-map formula. Observable OFM/fade stages run independently. Source: BIG pp.14–18;GEX pp.4–20;O033–O040.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/gex-regime.md', 'data/thetadata-opra', 'data/manifests'].
+
+Recorded scope/record limits: dated source dealer-map regime and selected native product/transform (7 job records); no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**ofm_passive** — failed squeeze → dying tape/no aggressive failure → actual buyer area → trigger above buyers and stop below aggression. Source: OFM p.14. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**clean_squeeze** — catalyst → fast release with no earlier failure → first pullback → opposing absorption → continuation. Source: CONT p.11;OFM p.5. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**balance_failure_fade** — balance extreme → unpaid aggression → leave → same-area retest still unpaid → prior opposite-control target; dated gamma input separate. Source: BIG pp.14–15,18. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `short_gamma`, `long_gamma`, `branch_regime_allowed`: dated source dealer-map regime and selected native product/transform. Local option contract/quote/OI data exist; they do not disclose author dealer positions or gamma-map formula. Observable OFM/fade stages run independently. Source: BIG pp.14–18;GEX pp.4–20;O033–O040.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/gex-regime.md', 'data/thetadata-opra', 'data/manifests'].
+
+Recorded scope/record limits: dated source dealer-map regime and selected native product/transform (7 job records); no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**defended_band_continuation** — prior band control → distinct current return → fresh same-side defense/refresh and executed aggression. Source: NYAM pp.4–5;K18 pp.7,11,14;CONT pp.4–10;ANAT p.7. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: no confirmed alternating-pivot auction in observed prefix (1 job records).
+
+**microbalance_break** — larger direction → price-defined alternating-pivot microbalance → strength/break → stop behind that structure. Source: K2345 pp.4–7. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: earlier potential directional breakout close is unknown (1 job records).
+
+**kg1_retest** — dated source KG1 → actual same-band retest → aggressive confirmation → supplied management policy. Source: NYAM pp.8–9. Scanner: `trading_research.research.method_pack.historical_flow:scan_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `source_kg1_level_known`, `level_known_at`: dated source KG1 level/band, identity and version. Retained source cases provide limited readouts; no historical generator/series. Existing options snapshots cannot establish proprietary KG1. Source: NYAM pp.8–9;K10 pp.4–6;O041.
+
+Inspected local evidence: ['planning/phase-1-live/wiki/kg1-level.md', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: dated KG1 band and identity absent (7 job records); dated source KG1 level/band, identity and version (7 job records).
+
+**case_description** — case_description process/management unit. Source: FORMULAS:M05. Scanner: `trading_research.research.method_pack.native_discovery:extra_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records).
+
+**management** — management process/management unit. Source: FORMULAS:M05. Scanner: `trading_research.research.method_pack.native_discovery:extra_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records); actual account/session closed R and active quantity/order ledger (7 job records).
+
+**reentry** — reentry process/management unit. Source: FORMULAS:M05. Scanner: `trading_research.research.method_pack.native_discovery:extra_sires`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Remaining operand(s) `daily_r_before`, `daily_limit_allows_entry`: actual account/session closed R and active quantity/order ledger. Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them. Source: STOP pp.12,14;O140,O145,O150.
+
+Inspected local evidence: ['implementation/src/trading_research/research/method_pack/objects/lifecycles.py', 'implementation/src/trading_research/research/method_pack/source_cases_v2.json'].
+
+Recorded scope/record limits: actual dated process/source records absent (7 job records); actual account/session closed R and active quantity/order ledger (7 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/SIRES.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / SIRES. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 
@@ -107,11 +241,33 @@ Citations: [RD] pp.4–5; [K18] pp.8–14; [ANAT] pp.7–10; [STOP] pp.6, 14–1
 
 **Key fidelity limits.** The strict absorption reversal's “real extreme, not POC” restriction does not prohibit every other Sires setup from using POC as a destination or a different continuation context. [ABS] p.11 repeats contradictory directional annotations at its two extremes; its lower-side example cannot settle an exact signed-delta rule. [FP8] p.5's highlighted cells conflict with the stated diagonal ratio. The plotted CVD reference and “Speed of Tape (10)” reset/unit are unpublished. These remain unknown fields for author-exact automatic scoring. The current morning-level R-F/R-S booleans do not measure the complete operating loop.
 
+## Definition and scanner correction — 2026-09-13
+
+All eleven legacy `unavailable_definition` branches below **have documented source sequences, O121–O132 branch objects (excluding the separately scanned O125 comparison), and M05 predicates**. The branch producers evaluate selected observations; empirical v1 does not connect these eleven branches to automatic historical discovery. The table identifies what is defined and what still needs implementation or a specific input.
+
+| Branch | Existing definition | Actual unresolved scope |
+|---|---|---|
+| `dom_rejection` | DOM6/DOM7 pp.3–7: premarked location, aggression without progress, rejection and selected additional participation; [O121](dom-rejection-branch.md). | Connect level selection and native at-level flow observations to discovery. MBP-1 can supply best-level updates and executions; deeper queues/individual hidden-order identity require different evidence. Neither limit erases the sequence. |
+| `absorption_reward_retest` | ABS pp.5–13: real extreme → absorption → own-side reward near origin → freshly defended reward retest, with CVD; [O122](absorption-reward-retest.md). | Build linked extreme, effort/reward and retest discovery; identify the exact source CVD reference and remaining quantitative choices. The reward/retest definition is present. |
+| `stop_four_stage` | STOP p.10 explicitly lists defense, replenishment, exhaustion and lift-off; pp.12, 14 give reward/entry-distance, print-thinning and daily-risk checks; [O123](stop-four-stage.md). | Derive and link these stages from native events at an identified location. Clarify the spatial replenishment convention and source CVD reference; retain instrument-specific scope. A historical account ledger affects account-risk evaluation, not availability of the market sequence. |
+| `footprint_confirmed_reaction` | FP9 pp.4–7: valid level → candle/delta disagreement and absorption → intrabar POC relocation → selected flow confirmation; [O124](footprint-confirmed-reaction.md). | Connect native execution-bar construction, evolving POC snapshots and location selection. Identify remaining platform conventions individually; do not substitute final-candle summaries for the intrabar path. |
+| `ofm_aggressive` | OFM pp.3–13; BIG pp.7–14, 18: catalyst → release → failure → refill → drive → defended retest; [O126](ofm-aggressive-branch.md). | Build causal episode discovery and explicit event/pace qualification. The source short-gamma context needs a dated map or separately named research treatment; the ordered OFM definition is published. |
+| `ofm_passive` | OFM p.14 expressly describes failed squeeze with dying tape and no aggression at failure, entry above buyers, stop below aggression, 1R–3R objective; [O127](ofm-passive-branch.md). | Operationalize squeeze/buyer-area selection and dying-tape measurement. The registry's private-passive-order explanation does not justify suppressing this published market sequence. This example does not require inferring an individual's passive order identity. |
+| `clean_squeeze` | CONT p.11 describes fast aggressive release without the failed first attempt, then opposing buyers absorbed and an available short entry; [O128](clean-squeeze.md). | Implement release/pullback/absorption discovery with explicit pace criteria and decision-time history. The registry statement that the clean-state and squeeze qualification are unpublished is too broad and incorrect for this documented sequence. |
+| `balance_failure_fade` | BIG pp.14–15, 18: long-gamma balance extreme, unpaid aggression, leave, same-area retest still unpaid, prior opposite-control target; [O129](balance-failure-fade.md). | Derive balance/extreme and failure/retest stages; identify dated gamma context separately. Do not replace the branch with a generic touch or add another branch's own-reward condition. |
+| `defended_band_continuation` | NYAM pp.4–5; K18 pp.7, 11, 14; CONT pp.4–10; ANAT p.7: prior band control, return and fresh same-side defense; [O130](defended-band-continuation.md). | Connect causal band history and fresh event observations to discovery, including thesis invalidation. Prior defense alone cannot stand for current defense. |
+| `microbalance_break` | K2345 pp.4–7: price-defined small balance within larger direction, strength/break, structural stop and prior objective; [O131](microbalance.md). | Implement causal price-balance selection and strength measurement; identify algorithmic choices as research assumptions where the source gives no exact thresholds. The setup is defined even though a universal detector is not. |
+| `kg1_retest` | NYAM pp.8–9: known KG1, aggressive retest, entry and later management; [O132](kg1-retest.md). | The KG1 level generator or dated historical level series is a distinct external input gap; the usage sequence is defined. A generic gamma wall cannot silently replace KG1. |
+
+Missing stages in a particular replay do not prove that their definitions are unpublished. Extract observable stages from native executions/book events where supported, and name the precise remaining setting, selection rule, depth requirement or external level. This correction does not certify a complete automatic scanner for any of these eleven branches.
+
+These are unscanned historical populations, not zero-opportunity searches. See the [source/evaluator/scanner distinction](current-status.md#correction-definitions-exist-18-branches-were-not-scanned). No scanner or empirical result changed in this correction.
+
 ## Implementation and empirical status — 2026-09-12
 
 The [M05 contract](../FORMULAS.md#m05) and its 135 operand bindings are implemented and reviewed. [Method evaluation](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [causal assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) consume the selected object evidence. [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repairs](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) establish software completion; the source and data limits described below remain.
 
-The frozen empirical v1 run has the following branch dispositions. Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
+The frozen empirical v1 run has the following historical dispositions. **`unavailable_definition` is the original registry label, not the current assessment of source availability; those rows were not scanned.** Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
 
 | Branch | Frozen disposition | Recorded p / f / u | Jobs processed / eligible | Missing-input jobs |
 |---|---|---:|---:|---:|
@@ -128,7 +284,7 @@ The frozen empirical v1 run has the following branch dispositions. Counts are **
 | `microbalance_break` | `unavailable_definition` | unavailable | — | — |
 | `kg1_retest` | `unavailable_definition` | unavailable | — | — |
 
-All declared jobs for these branches are accounted for; none remain pending. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. Separate `case_description`, `management`, `reentry` units remain supplied-only and outside the market-opportunity denominator. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
+All scheduled comparison jobs are accounted for. The unsupported branches had no historical searches scheduled; they were recorded as dispositions only. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. Separate `case_description`, `management`, `reentry` units remain supplied-only and outside the market-opportunity denominator. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
 
 ## Objects used by this method
 

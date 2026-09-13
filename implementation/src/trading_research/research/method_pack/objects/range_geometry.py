@@ -1140,7 +1140,16 @@ def _complete_candle(candle: Mapping[str,Any],name:str)->None:
 def o056(inp: dict) -> RecipeResult:
     try:
         c1,c2,c3=inp.get("c1"),inp.get("c2"),inp.get("c3")
-        for candle,name in ((c1,"C1"),(c2,"C2"),(c3,"C3")):_complete_candle(candle,name)
+        # O056 consumes extrema and the third close, not the first two bodies.
+        # Older callers certify full candles; event adapters can independently
+        # certify observation scope while leaving unconsumed endpoints unknown.
+        side=inp.get("sweep_side")
+        for candle,name,required in ((c1,"C1",("L",) if side=="low" else ("H",)),
+                (c2,"C2",("L","H")),(c3,"C3",("C",))):
+            if not candle or not (candle.get("observed_complete") is True or candle.get("complete") is True):
+                raise GeometryError(f"{name} observation window is incomplete")
+            if any(candle.get(k) is None for k in (*required,"start","end","candle_id")):
+                raise GeometryError(f"{name} required O056 field is unknown")
         if not (c1["end"]<=c2["start"] and c2["end"]<=c3["start"]):raise GeometryError("orderblock candles are not chronological")
         side=inp.get("sweep_side")
         if side=="low":confirmed=dec(c2["L"])<dec(c1["L"]) and dec(c3["C"])>dec(c2["H"])

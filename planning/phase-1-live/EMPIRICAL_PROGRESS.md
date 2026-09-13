@@ -1,5 +1,21 @@
 # Empirical extension progress
 
+<!-- phase1-strategy-current -->
+Current strategy reconstruction: **66 setups, 258 no-setup rejections and 0 unavailable market-input candidates** in the declared evaluation sample. Context and research units are separate.
+
+Personal size, account limits and executed-order records do not gate setups. Auction states, QQQ gamma/key levels, P-zones and macro context have explicit source-inspired implementations. A no-setup rejection is not a losing trade or a software failure.
+
+[Completion report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/COMPLETION_REPORT.md) · [Strategy results](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/STRATEGY_RESULTS.md) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md) · [Charts](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/charts/README.md).
+
+Validation: 803 passed, 36 subtests passed in 110.74s (0:01:50); 776 completed jobs across all 58 branch/extra units; 77 primary charts visually checked.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+> **Historical execution log; work completed.** Earlier “working” and “pending” entries below describe their dates. For current status, accepted results and subsequent data investigations, start with [PHASE.md](PHASE.md).
+
 2026-09-12: Executing SOURCE_CALIBRATION_DISCOVERY_HANDOFF.md on
 `codex/phase1-calibration-discovery-v1`, starting at
 `c6052fe5f29e06949255653270aebcfd0a8caca8`.
@@ -133,3 +149,14 @@ Final records: `implementation/reports/phase1-live/empirical/COMPLETION_REPORT.m
 ## Subsequent publication authorization
 
 After empirical acceptance, the user explicitly requested committing the completed extension and pushing it to `main`. The acceptance record above describes the local completion state before this later authorization. Existing unrelated untracked audit, derived-view and source files remain excluded from this commit.
+
+
+## 2026-09-13 — native v2 implementation accepted
+
+Current registry/run v2.0.0 is accepted under identity `1ab8b9d7eb2e8aa36c053033754aac854908a2e90373457fb730671329dc5a60`. All **776 declared jobs** completed across the seven-date pilot and seven-date evaluation sample, with all **50 branches and eight additional units** retained. This is a bounded annual engineering/research sample, not a full-archive census. Pilot/evaluation overlap and prior outcome exposure are explicit; their counts are never pooled.
+
+The implementation uses owned MBP-1 event-time executions, same-contract references and a versioned NQ session policy. Author-exact selections, actual orders/fills and account records remain separate. **Software completion does not establish full historical author-method measurement or profitability.**
+
+[Current completion report and reproduction commands](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md) · [Current branch results](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/RESULTS.md) · [Authoritative branch/object/operand manifest](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/registry/coverage.json) · [Diagnostic chart index](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/charts/README.md)
+
+Validation: **773 passed, 36 subtests passed in 119.44s (0:01:59)**; 5 shared-contract, 1316 object and 169 method controls; 50 selected predicate controls; three actual native future-perturbation checks; 27 audit and six lifecycle regressions; the upstream reaction/HVN probe rejects reuse of the reaction period as an independent HVN; timestamp-tie and unknown-aggressor controls preserve independently computable prices and volume. Every chart in the 90-chart diagnostic set was visually inspected. Exact acceptance evidence is in [ACCEPTANCE.json](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/ACCEPTANCE.json).

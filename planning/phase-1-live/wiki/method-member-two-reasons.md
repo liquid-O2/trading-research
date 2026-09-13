@@ -1,5 +1,50 @@
 # Unnamed member — prior reaction area plus minor HVN
 
+<!-- phase1-strategy-current -->
+## Current reconstructed strategy
+
+MEMBER-TWO-REASONS: 1 setup, 6 no setup, 0 unavailable input. Personal execution requirements are excluded from qualification.
+
+[Current method report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/strategy-methods/MEMBER-TWO-REASONS.md) · [Versioned policy](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/registry/STRATEGY_POLICY.json) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md).
+
+| Scope and classification | Observations |
+| --- | --- |
+| entry_setup:no_setup | 6 |
+| entry_setup:setup | 1 |
+
+The preserved source audit below describes its original scope. An inferred level/state is identified as our model; it is not a recovered author label or evidence of an actual trade.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
+<!-- phase1-native-v2-current -->
+## Current native research implementation — 2026-09-13
+
+Every listed scanner/interface ran for its declared dates or actual collection unit. Source definitions below remain the owner of the method; frozen operational choices are in [the research policy](/workspace/implementation/reports/phase1-live/implementation-v2/RESEARCH_POLICY.json).
+
+Evaluation dates: 2020-01-02, 2021-01-04, 2022-01-03, 2023-01-02, 2024-01-02, 2025-01-02, 2026-01-02. No date was replaced because of missing coverage. `n=p+f`; `N observed=n+u`. A missing population scope is recorded separately from an observed zero.
+
+| Branch/unit | n | p | f | u | Observed scope |
+| --- | --- | --- | --- | --- | --- |
+| resistance_short | 1 | 0 | 1 | 0 | observed_subset_with_input_limits |
+| planned_return_long | 1 | 0 | 1 | 0 | observed_subset_with_input_limits |
+
+**resistance_short** — prior reaction + independently observed nearby minor HVN → current rejection → stop above rejection. Source: K10 pp.5–7,12. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_member`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records).
+
+**planned_return_long** — planned prior structure + independent minor HVN → second/distinct return → buyers absorb/hold → structural stop. Source: K10 pp.6–8,12. Scanner: `trading_research.research.method_pack.historical_auction_scanners:scan_member`. Operational assumptions are frozen in the policy linked above; exact operands and their derivations are retained in the date-level evidence.
+
+Recorded scope/record limits: calendar_unverified (5 job records); same_contract_prior_scope_unknown (4 job records).
+
+Native market/process research is executed; author-exact verdicts and faithful disagreements remain unknown. No comparison observation is represented as a fill. [Date-level evidence for this method](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/methods/MEMBER-TWO-REASONS.md) · [Software acceptance and remaining external inputs](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md).
+
+<!-- /phase1-native-v2-current -->
+
+## Source definitions and retained historical comparison notes
+
 Operating method / MEMBER-TWO-REASONS. [Index](index.md) · [Phase 1 observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
 
 
@@ -35,18 +80,31 @@ AND (
 
 Citation: [K10] pp.5–8, 12. Score the structural sequence and post-entry outcomes in the instrument actually shown. A target-policy check is separate and unknown when the prose and ticket conflict. The student's case is not automatic evidence for transferring the same thresholds to another contract.
 
+## Definition and scanner correction — 2026-09-13
+
+Both legacy `unavailable_definition` rows below **have source definitions and implemented M07 predicates**. The limitation is absent historical discovery of the selected reaction/HVN context and its subsequent confirmation, not missing source documents or an undefined two-reason method.
+
+| Branch | Existing definition | Actual unresolved scope |
+|---|---|---|
+| `resistance_short` | K10 pp.5–7: premarked prior resistance/reaction plus an independent nearby minor HVN, rejection, stop above the rejection high; [prior reaction](prior-reaction-area.md), [HVN](hvn.md) and M07 geometry/order checks exist. | Build causal reaction-area and minor-HVN selection with explicit profile window, scale and proximity rules, then detect current rejection. Those operational choices need source support or named research assumptions; the two-reason short is defined. |
+| `planned_return_long` | K10 p.8: a preplanned return to structure, buyers absorbing and holding at the level, followed by the long; M07 checks the area/contact/reaction and structural risk. | Connect the planned structure to historical return and absorption discovery. The general method's two-reason context and the long case's own evidence must retain their scopes. Later expansion is an outcome, not an entry selector. |
+
+K10 pp.7–8 states a planned 1.5R target while the figures preserve different ticket/outcome states. K10 p.9 explicitly withholds the full trailing mechanism. These are specific target/management issues; they do not make the entry sequences unavailable. KG1 is an additional location input, not a requirement to erase the independently described reaction/HVN model.
+
+These are unscanned historical populations, not zero-opportunity searches. See the [source/evaluator/scanner distinction](current-status.md#correction-definitions-exist-18-branches-were-not-scanned). No scanner or empirical result changed in this correction.
+
 ## Implementation and empirical status — 2026-09-12
 
 The [M07 contract](../FORMULAS.md#m07) and its 18 operand bindings are implemented and reviewed. [Method evaluation](/workspace/implementation/src/trading_research/research/method_pack/methods.py) and [causal assembly](/workspace/implementation/src/trading_research/research/method_pack/assembly.py) consume the selected object evidence. [Implementation acceptance](/workspace/implementation/reports/phase1-live/methods/COMPLETION_REPORT.md) and [repairs](/workspace/implementation/reports/phase1-live/methods/POST_IMPLEMENTATION_REPAIR.md) establish software completion; the source and data limits described below remain.
 
-The frozen empirical v1 run has the following branch dispositions. Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
+The frozen empirical v1 run has the following historical dispositions. **`unavailable_definition` is the original registry label, not the current assessment of source availability; those rows were not scanned.** Counts are **recorded comparison opportunities**, with separate branch denominators; jobs processed can still contain missing inputs. See [exact definitions](/workspace/implementation/reports/phase1-live/empirical/registry/CANDIDATE_RULES.md), [group results](/workspace/implementation/reports/phase1-live/empirical/RESULTS.md) and [calibration](/workspace/implementation/reports/phase1-live/empirical/calibration/CALIBRATION_REPORT.md).
 
 | Branch | Frozen disposition | Recorded p / f / u | Jobs processed / eligible | Missing-input jobs |
 |---|---|---:|---:|---:|
 | `resistance_short` | `unavailable_definition` | unavailable | — | — |
 | `planned_return_long` | `unavailable_definition` | unavailable | — | — |
 
-All declared jobs for these branches are accounted for; none remain pending. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
+All scheduled comparison jobs are accounted for. The unsupported branches had no historical searches scheduled; they were recorded as dispositions only. Zero recorded rows under missing scope do not mean a completed zero-opportunity population. The complete **source-method verdict remains unknown**; these counts establish neither author-selected trades nor fills, P&L or a pooled success rate. The [current status page](current-status.md) explains the sampled dates, evidence boundary and frozen-run reproduction.
 
 ## Objects used by this method
 

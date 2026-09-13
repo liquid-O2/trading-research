@@ -1,5 +1,7 @@
 # Source calibration, candidate rules and historical replay
 
+> **Executed handoff; retained as history.** The empirical extension described below was completed. Its opening “not started” statement and stage instructions are not current work orders. Start with [PHASE.md](PHASE.md); do not restart the 165-job run from this brief.
+
 Prepared 2026-09-12 for one new task in the existing `/workspace` environment. Recommended lead: GPT-6 Astra, High effort. This file is an execution brief; the empirical work has not been started by preparing it.
 
 ## Objective and authorization

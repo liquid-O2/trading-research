@@ -1,0 +1,23 @@
+{
+  "version": "NQ-matching-hours-v2.0.0",
+  "product": "NQ",
+  "timezone": "America/New_York",
+  "regular_hours": "Sunday 18:00 through Friday 17:00 ET; daily maintenance 17:00–18:00 ET",
+  "regular_source": "https://www.cmegroup.com/markets/equities/nasdaq/e-mini-nasdaq-100.timeAndSales.html?videoId=6396076863112",
+  "historical_halt": {"before": "2021-06-28", "start_et": "16:15", "end_et": "16:30", "source_url": "https://www.cftc.gov/sites/default/files/filings/orgrules/21/06/rule061421cmedcm001.pdf", "reviewed_product_scope": "CME certification of removal of all affected CME/CBOT equity futures/options halt, including NQ, effective trade date June 28, 2021"},
+  "study_rth": "09:30–16:00 ET intersect matching hours; a research/source reference window, not settlement time",
+  "unverified_holidays": "Calendar-date flags request matching-hours evidence. They never create a futures closure or license skipping a prior date.",
+  "exceptions": {
+    "2023-11-23": {"state": "early_close", "rth_end": "13:00", "closed_local": [["13:00", "18:00"]], "source_url": "https://www.cmegroup.com/trading-hours/files/thanksgiving-day-2023.pdf", "reviewed_product_scope": "EQUITIES row: 12:00 CT halt and 17:00 CT open; general most-active equity-index schedule, checked against NQ regular product scope", "exchange_trade_date": "2023-11-24"},
+    "2023-11-24": {"state": "early_close", "rth_end": "13:15", "closed_local": [["13:15", "23:59"]], "source_url": "https://www.cmegroup.com/trading-hours/files/thanksgiving-day-2023.pdf", "reviewed_product_scope": "EQUITIES row: 12:15 CT close; NQ equity-index scope"},
+    "2023-12-25": {"state": "closed_rth", "rth_end": null, "closed_local": [["00:00", "18:00"]], "source_url": "https://www.cmegroup.com/trading-hours/files/christmas-day-2023.pdf", "reviewed_product_scope": "EQUITIES row: 17:00 CT opening for December 26, no earlier matching session"},
+    "2024-01-01": {"state": "closed_rth", "rth_end": null, "closed_local": [["00:00", "18:00"]], "source_url": "https://www.cmegroup.com/trading-hours/files/new-years-day-2024.pdf", "reviewed_product_scope": "EQUITIES table: 17:00 CT opening for January 2. Footer contains incompatible dates; the dated table is used."}
+  },
+  "external_recovery": {
+    "inspected_local": "coverage-audit/README.md, data-recovery-v1/calendar_evidence.json and native catalog: no archived NQ TradingSessionList or exchange security-status series found",
+    "attempted_urls": ["https://www.cmegroup.com/trading-hours/files/new-years-day-2020.pdf", "https://www.cmegroup.com/trading-hours/files/new-years-2021.pdf", "https://www.cmegroup.com/trading-hours/files/new-years-day-2023.pdf", "https://www.cmegroup.com/trading-hours/files/new-years-day-2025.pdf", "https://www.cmegroup.com/trading-hours/files/new-years-day-2026.pdf"],
+    "result": "Web retrieval failed for these dated URLs; regular-hours pages and clearing/cash notices do not certify those NQ holiday matching windows.",
+    "schedule_format": "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457704103/CME+Globex+Market+Schedule+File+Overview",
+    "schedule_limit": "CME publishes current-week TradingSessionList.dat, not a documented 2020+ archive; midweek changes require security-status evidence. Missing dated schedules remain exact input limits."
+  }
+}

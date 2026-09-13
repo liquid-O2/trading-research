@@ -1,5 +1,19 @@
 # Ingest log
 
+<!-- phase1-strategy-current -->
+Current strategy reconstruction: **66 setups, 258 no-setup rejections and 0 unavailable market-input candidates** in the declared evaluation sample. Context and research units are separate.
+
+Personal size, account limits and executed-order records do not gate setups. Auction states, QQQ gamma/key levels, P-zones and macro context have explicit source-inspired implementations. A no-setup rejection is not a losing trade or a software failure.
+
+[Completion report](/workspace/implementation/reports/phase1-live/strategy-reconstruction/COMPLETION_REPORT.md) · [Strategy results](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/STRATEGY_RESULTS.md) · [Source conformance](/workspace/planning/phase-1-live/STRATEGY_SOURCE_CONFORMANCE.md) · [Charts](/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1/charts/README.md).
+
+Validation: 803 passed, 36 subtests passed in 110.74s (0:01:50); 776 completed jobs across all 58 branch/extra units; 77 primary charts visually checked.
+<!-- /phase1-strategy-current -->
+
+## Preserved v2 source-audit baseline
+
+The following section records the earlier, broader source-audit scope. Its personal-record requirements and p/f/u counts are historical comparisons; the strategy scope and current classifications above supersede them.
+
 Format: date · what was read · how · notes. Raw sources are immutable; this log records the compile, not edits to sources.
 
 ## 2026-09-09 — live compile from coverage audit
@@ -485,3 +499,28 @@ Reconciled against accepted implementation/repair and empirical reports at commi
 - 2026-09-12 · [vwap-session.md](vwap-session.md) · Replace stale attachments with the reviewed O030 contract, actual domain code and explicit evidence limits. Retain the reviewed price-times-quantity VWAP source boundary.
 - 2026-09-12 · [weekly-delta-profile.md](weekly-delta-profile.md) · Replace stale attachments with the reviewed O077 contract, actual domain code and explicit evidence limits.
 - 2026-09-12 · [zone-touch-memory.md](zone-touch-memory.md) · Replace stale attachments with the reviewed O117 contract, actual domain code and explicit evidence limits.
+
+
+## 2026-09-13 — correct definition availability versus historical discovery
+
+Read all 18 affected branch definitions and their linked objects; traced registry `SPECS`/status defaults, supported-only scheduling, method predicates and selected-episode producers. Direct PDF checks: TBR pp.6–9, 12–15, 36; CONT p.11; STOP pp.6–15; K10 pp.5–9; OFM p.14; NYAM pp.8–9. Visually inspected TBR pp.7, 13, CONT p.11 and STOP p.10. This targeted check is not a new exhaustive review of every source PDF.
+
+- `method-jumbo-tbr.md`: distinguished five documented sequences from absent historical scanners; corrected blanket claims about missing manual clocks and reduced-expectation policy.
+- `method-sires-thesis-flow.md`: distinguished eleven documented sequences from scanner/input/operational gaps; corrected clean-squeeze and passive-OFM explanations.
+- `method-member-two-reasons.md`: distinguished two documented entry sequences from automatic profile/reaction selection and separate management limitations.
+- `current-status.md`: explained the registry-default cause and source/evaluator/scanner/input dimensions; narrowed completion claims and linked completed recovery work.
+- `index.md`: routed readers to the definition/scanner correction before historical labels.
+- `../PHASE.md`: narrowed completion wording to the contracted checks and scheduled comparisons; identified unimplemented historical discovery explicitly.
+
+No source, market data, executable implementation, frozen registry or accepted result was changed. Legacy labels remain in historical tables with an explicit correction; no outcomes were replayed and no new historical family verdict was produced.
+
+
+## 2026-09-13 — native v2 implementation accepted
+
+Current registry/run v2.0.0 is accepted under identity `1ab8b9d7eb2e8aa36c053033754aac854908a2e90373457fb730671329dc5a60`. All **776 declared jobs** completed across the seven-date pilot and seven-date evaluation sample, with all **50 branches and eight additional units** retained. This is a bounded annual engineering/research sample, not a full-archive census. Pilot/evaluation overlap and prior outcome exposure are explicit; their counts are never pooled.
+
+The implementation uses owned MBP-1 event-time executions, same-contract references and a versioned NQ session policy. Author-exact selections, actual orders/fills and account records remain separate. **Software completion does not establish full historical author-method measurement or profitability.**
+
+[Current completion report and reproduction commands](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md) · [Current branch results](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/RESULTS.md) · [Authoritative branch/object/operand manifest](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/registry/coverage.json) · [Diagnostic chart index](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/charts/README.md)
+
+Validation: **773 passed, 36 subtests passed in 119.44s (0:01:59)**; 5 shared-contract, 1316 object and 169 method controls; 50 selected predicate controls; three actual native future-perturbation checks; 27 audit and six lifecycle regressions; the upstream reaction/HVN probe rejects reuse of the reaction period as an independent HVN; timestamp-tie and unknown-aggressor controls preserve independently computable prices and volume. Every chart in the 90-chart diagnostic set was visually inspected. Exact acceptance evidence is in [ACCEPTANCE.json](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/ACCEPTANCE.json).
