@@ -1,5 +1,11 @@
 # Finish Phase 1 implementation
 
+**Executed implementation work order; not a certificate that all of Phase 1 is complete.** The implementation was delivered in commit `84221545fac35d35ff24f2ebc264aec7d1145b61`. The gap descriptions below are retained as the historical work order and must not be treated as fresh evidence that those defects still exist.
+
+**User clarification, 2026-09-13:** Phase 1 includes historical measurement of the implemented setups. Phase 2 is the context layer for selecting specific setups. The earlier allowance below for a bounded engineering sample establishes implementation validation only; it does not replace the remaining Phase 1 measurement.
+
+Continue from the accepted implementation: freeze the measurement scope and outcome definitions, scan the declared NQ 2020+ study, retain coverage/exposure and separate setup denominators, measure subsequent behavior, and publish the setup evidence. Preserve source-required setup context. Do not start a cross-setup context selector, optimize it, or call that Phase 1 measurement. Do not restart the completed implementation checklist below. [Current status](PHASE.md) and the accepted strategy-reconstruction report identify the actual baseline.
+
 Prepared 2026-09-13 after a final integration review. This is a work order for a new task, not another source-definition book. Execute it through implementation, native replay, verification and current documentation. Do not stop after an audit, a plan, a status rename or a fixture-only acceptance.
 
 ## Objective and boundaries

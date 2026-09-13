@@ -1,4 +1,18 @@
+<!-- full-phase1-measurement-current -->
+# Phase 1 — full acquired historical measurement
+
+The unchanged versioned scanners searched **1,742 declared session dates**, 2020-01-01 through 2026-09-03, across all 50 branches and eight additional observation units. The composed census contains **99,294 daily jobs** and **18,747 qualifying market setups**, plus three actual collection-process jobs. The independent primary run and all 90 calendar-recovery dates completed and were verified.
+
+**The acquired observed-input census is executed. Input-limited populations remain unmeasured beyond the observed subset; the exact affected branch/session denominators are listed below.** Qualification does not establish a winning trade. All reported outcomes are subsequent observed prices; no return simulation or actual fill is claimed. Phase 2 remains the additional context layer that selects which setups to use.
+
+[Current measurement report and exact limitations](/workspace/implementation/reports/phase1-live/historical-measurement/MEASUREMENT_REPORT.md).
+<!-- /full-phase1-measurement-current -->
+
+## Preserved implementation and prior measurement history
+
 # Trading research
+
+**Current status:** setup implementation and bounded validation are complete; Phase 1 historical setup measurement remains. Phase 2 is the context layer for selecting setups. See the [current phase boundary and next work](planning/phase-1-live/PHASE.md).
 
 <!-- phase1-strategy-current -->
 Current strategy reconstruction: **66 setups, 258 no-setup rejections and 0 unavailable market-input candidates** in the declared evaluation sample. Context and research units are separate.

@@ -1,5 +1,9 @@
 # Ingest log
 
+## 2026-09-13 — user correction to phase boundaries
+
+The user clarified that setup measurement belongs to Phase 1; Phase 2 is the context layer selecting specific setups. Updated PHASE, current-status, the root README and the executed implementation handoff to separate completed implementation/bounded validation from outstanding Phase 1 historical measurement. Source-required context inside each setup remains part of its definition. Historical acceptance reports, source definitions, code and data were unchanged.
+
 <!-- phase1-strategy-current -->
 Current strategy reconstruction: **66 setups, 258 no-setup rejections and 0 unavailable market-input candidates** in the declared evaluation sample. Context and research units are separate.
 
@@ -524,3 +528,12 @@ The implementation uses owned MBP-1 event-time executions, same-contract referen
 [Current completion report and reproduction commands](/workspace/implementation/reports/phase1-live/implementation-v2/COMPLETION_REPORT.md) · [Current branch results](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/RESULTS.md) · [Authoritative branch/object/operand manifest](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/registry/coverage.json) · [Diagnostic chart index](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/charts/README.md)
 
 Validation: **773 passed, 36 subtests passed in 119.44s (0:01:59)**; 5 shared-contract, 1316 object and 169 method controls; 50 selected predicate controls; three actual native future-perturbation checks; 27 audit and six lifecycle regressions; the upstream reaction/HVN probe rejects reuse of the reaction period as an independent HVN; timestamp-tie and unknown-aggressor controls preserve independently computable prices and volume. Every chart in the 90-chart diagnostic set was visually inspected. Exact acceptance evidence is in [ACCEPTANCE.json](/workspace/implementation/reports/phase1-live/implementation-v2/run-2.0.0-r9/ACCEPTANCE.json).
+
+
+## 2026-09-13 — full acquired Phase 1 measurement
+
+The unchanged versioned scanners searched **1,742 declared session dates**, 2020-01-01 through 2026-09-03, across all 50 branches and eight additional observation units. The composed census contains **99,294 daily jobs** and **18,747 qualifying market setups**, plus three actual collection-process jobs. The independent primary run and all 90 calendar-recovery dates completed and were verified.
+
+**The acquired observed-input census is executed. Input-limited populations remain unmeasured beyond the observed subset; the exact affected branch/session denominators are listed below.** Qualification does not establish a winning trade. All reported outcomes are subsequent observed prices; no return simulation or actual fill is claimed. Phase 2 remains the additional context layer that selects which setups to use.
+
+[Current report](/workspace/implementation/reports/phase1-live/historical-measurement/MEASUREMENT_REPORT.md).

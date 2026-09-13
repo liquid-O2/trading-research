@@ -1,0 +1,175 @@
+{
+  "exposure": {
+    "additional_exposure": "All earlier empirical, source-case, development and reconstruction outcomes may have informed the fixed implementations. Do not label remaining dates an untouched confirmatory holdout. New full-population outcomes have not been read at this freeze.",
+    "outcome_blind": false,
+    "prior_evaluation_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-02",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02"
+    ],
+    "prior_integration_dates": [
+      "2020-07-01",
+      "2021-08-31",
+      "2021-09-01",
+      "2021-12-31",
+      "2022-01-03",
+      "2025-06-10",
+      "2026-06-02",
+      "2026-06-03",
+      "2026-06-04",
+      "2026-07-06",
+      "2026-07-07",
+      "2026-07-08",
+      "2026-08-03",
+      "2026-08-04",
+      "2026-08-31",
+      "2026-09-01",
+      "2026-09-02",
+      "2026-09-03"
+    ],
+    "prior_pilot_dates": [
+      "2020-01-02",
+      "2021-09-01",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-09-01"
+    ],
+    "purpose": "full-population descriptive measurement, no untouched holdout claim"
+  },
+  "frozen_at": "2026-09-13T15:41:08.833478+00:00",
+  "outcomes": {
+    "anchor": "Existing decision_at and geometry.entry when defined; otherwise the declared measurement-only reference. Only strictly subsequent native timestamps contribute; same-timestamp executions are excluded because order is unresolved.",
+    "coverage": "missing future interval explicitly unresolved; observed excursion extrema are lower bounds under gaps, never complete-horizon values",
+    "excursion_horizons_minutes": [
+      5,
+      15,
+      30,
+      60
+    ],
+    "execution": "no simulated returns or actual fills; no new entry/exit/cost model",
+    "expiry": "Published outbound 09:40 ET deadline where applicable; otherwise existing 60-minute measurement horizon is measurement expiry, not invented source exit",
+    "fixed_horizon_cap": "16:00 ET study-session endpoint; retain requested horizon and actual observed endpoint separately; truncation is not a complete fixed horizon",
+    "missing_geometry": "If geometry.entry is undefined, use the existing trigger C only if known at decision; otherwise the first strictly subsequent native timestamp-batch execution VWAP as a labeled measurement-only price origin, and record its later start. This never asserts an entry or adds a setup rule. Undefined stop/target remain undefined; excursions are independent of those missing boundaries.",
+    "ordering": "whole native timestamp batches; both boundaries in first crossing batch means unresolved ordering; earlier coverage gap means population first boundary unknown",
+    "price_units": "NQ points and ticks (0.25); favorable/adverse nonnegative maximum signed distance from fixed entry; no return or fill claim",
+    "published_rules": "Preserve existing observe_outcome: A2-OUTCOME 60 minutes, session end cap and Judas outbound 09:40 ET cap; retain original boundary result alongside added descriptive metrics"
+  },
+  "population": {
+    "additional_units": 8,
+    "branches": 50,
+    "denominators": "one unique coverage_id/session per search; full input eligible, partial/unavailable, scheduled closure, and personal/process scope are separately counted; partial observed setups never imply a complete-session denominator",
+    "duplicates": "preserve distinct physical executions; unique coverage_id/candidate_id opportunities; cross-branch same-event instances retained as distinct definitions and never pooled as independent trades",
+    "end_rule": "all acquired sessions through actual owned input endpoint; required earlier lookbacks are inputs only",
+    "instrument": "NQ",
+    "lookbacks": {
+      "pzone_calendar_days": 1100,
+      "pzone_sessions": 500,
+      "structural_calendar_days": 62
+    },
+    "primary_endpoint_utc": "actual acquired NQ endpoint, 2026-09-03T06:09:59.901114377Z",
+    "selection": "all calendar weekdays including holidays and partial endpoint sessions for explicit dispositions; no outcome-dependent exclusions, replacements or sampling",
+    "start_session_date": "2020-01-01"
+  },
+  "reporting_scope_clarification": {
+    "annotation": "GB-FAIL mss_fvg_refinement is a supplemental post-parent observation as stated in its existing source definition; legacy assessment retained but not counted as a standalone entry",
+    "external_requirements": "Only enumerated original audit requirements are removed from market eligibility. A scanner-reported missing model or market input remains unavailable.",
+    "prior_attempt": "run-1.0.0 stopped during initial census execution for accounting-only correction; no aggregate outcomes or threshold changes; source rules unchanged; caches preserved"
+  },
+  "run_id": "phase1-full-history-1.0.1",
+  "schema": "phase1-full-historical-measurement-protocol-v1.1",
+  "scope": "existing reconstructed entry setups; source-intrinsic context retained; context, process, supplemental observations and personal execution units remain separate; no Phase 2 selector or parameter tuning",
+  "setup_baseline": {
+    "accepted_run": "/workspace/implementation/reports/phase1-live/strategy-reconstruction/run-1.1.0-r1",
+    "commit": "84221545fac35d35ff24f2ebc264aec7d1145b61",
+    "registry_sha256": "b64ffea8a5793620bcdd09960a49ec9619e1c0dd3aa33466b5b08d5f16e92f22",
+    "software_sha256": "aa1e55f8dd6f9178a101359e9abfaee3f350400ac942138449cfbfd03d281c0d",
+    "source_contract_sha256": "a3d0149f4703af7e9a77a11614c58e2647a8eaf7cf625e8e08fcbf351eb00065",
+    "strategy_policy": {
+      "auction": {
+        "high_efficiency": 0.6,
+        "high_effort_multiple": 1.5,
+        "inventory": "displayed depth-one additions/removals; removal less executions is an estimate, not identified cancels",
+        "low_efficiency": 0.2,
+        "replenishment_stop_fraction": 0.25,
+        "response": "difference of first/last quarter-window execution VWAP; efficiency divided by window range",
+        "source": "the-math-behind-auction-market-theory.pdf pp.4\u201311",
+        "window_seconds": 120
+      },
+      "calendar": {
+        "interpretation": "reconstruction calendar assumption, not newly recovered CME schedule evidence",
+        "model": "regular NQ schedule with inferred New Year/Christmas RTH closures",
+        "scope": "fixed-date New Year/Christmas closures, including Monday observance; Friday before Saturday New Year remains regular, corroborated by 390 native 2021-12-31 RTH minute records; other unverified holidays remain unavailable"
+      },
+      "exposure": "prior v2 engineering outcomes have been inspected; no holdout or profitability claim",
+      "gamma": {
+        "KG1": "largest absolute signed gamma strike; same-time NQ/QQQ mapping; inferred key-gamma node, not proprietary KG1",
+        "expiry": "0DTE if quoted; otherwise nearest listed expiry explicitly identified as a front-expiry approximation",
+        "inventory_assumption": "call OI positive, put OI negative; model sign convention, not observed dealer inventory",
+        "max_quote_age_seconds": 180,
+        "oi": "latest prior-date snapshot only",
+        "option_model": "European Black-Scholes, r=q=0, midquote implied volatility, 100 shares/contract",
+        "quote_availability": "minute label plus 60 seconds; completed QQQ and NQ minute prices only",
+        "source": "gex-framework.pdf pp.4\u201320; ny-am-session.pdf pp.8\u20139"
+      },
+      "macro": {
+        "model": "equal mean of signed initial-release z scores: payroll positive, CPI negative; 12 prior initial observations",
+        "output": "research context only; not proprietary C-score or an entry",
+        "source": "data-engine.pdf pp.5\u20136"
+      },
+      "measurements": {
+        "absence": "all canonical records in an owned active-contract interval are enumerated; no execution does not imply missing data; market feed completeness remains separate",
+        "candle_endpoints": "same-contract published OHLCV after interval close; fill only after native H/L/V and all already-known endpoints match",
+        "flow_entry_price": "adverse-side observed price in the last execution timestamp batch; tick-valid research entry, not an actual fill",
+        "local_flow_price": "execution VWAP of first and last timestamp batches; causal, order independent, not an inferred exchange sequence",
+        "prior_range": "fallback to all acquired published prior RTH continuous-chart bars; contract changes remain explicit and unadjusted; empty post-expiration c.0 mapping windows excluded with recorded expiry and roll-map identity; never substituted for native volume profile or depth"
+      },
+      "personal_exclusions": {
+        "GB-SCALP": [
+          "small_size_recorded",
+          "source_scalp_management_recorded"
+        ],
+        "SIRES": [
+          "daily_r_before"
+        ]
+      },
+      "purpose": "recreate strategy conditions from sources, excluding personal execution records",
+      "pzone": {
+        "anchors": [
+          "02:00",
+          "09:00",
+          "10:00"
+        ],
+        "clock": "historical minute-bar training only, prior dates; live anchor uses event-time bars",
+        "distance": "maximum up/down move from anchor to 16:00 divided by pre-anchor 60-minute range",
+        "live_scale": "current completed pre-anchor 60-minute range; quarter-point outward rounding",
+        "lookback_sessions": 500,
+        "minimum_sessions": 20,
+        "quantiles": [
+          0.7,
+          0.8
+        ],
+        "source": "JJumboFX_Raw_X_Archive_v2.pdf pp.16\u201318,53\u201355,60\u201361",
+        "target": "frozen anchor price; support and resistance evaluated only toward anchor",
+        "volume_filter": "historical session volume at least median of prior training sessions"
+      },
+      "version": "1.1.0"
+    }
+  },
+  "supersedes": {
+    "path": "implementation/reports/phase1-live/historical-measurement/run-1.0.0/protocol/MEASUREMENT_PROTOCOL.json",
+    "reason": "Pre-execution transcription correction: current A2-OUTCOME setting is 60 minutes. Add explicit measurement-only price origin for setup observations without an entry.",
+    "sha256": "8a9051ca3d826315819c6e7e2203b7b5134365f67469d0ce6fbad73a4f332fcc"
+  },
+  "verification": {
+    "charts": "deterministic earliest candidate by branch and outcome category, ties candidate_id; include zero-setup/limitation examples per missing branch; visually inspect every selected chart",
+    "checkpoints": "immutable run/code/protocol/input hashes; resumable bounded date jobs; compare exact checkpoint hashes on repeat",
+    "frozen_setup_rules": "do not change baseline setup rules for result improvement; unavoidable correctness repairs require documented separate identity and preservation",
+    "reports": "branch/year/session-class frequency and denominators; native evidence, source and assumption versions, trigger/confirmation, geometry, outcomes and exclusions"
+  }
+}
