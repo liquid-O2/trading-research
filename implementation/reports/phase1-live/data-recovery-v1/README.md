@@ -83,6 +83,32 @@ Databento does not print a bar for an interval without trades. Thus absence in b
 
 **Disposition:** 320 nonempty overnight/reference/prefix requests retain exact instruments, full windows, missing ranges and consumers. They require native event coverage and sequence/gap or session-status evidence before classifying absent minutes. The 120-minute July 2020 prefix hole is explicitly retained; it is not treated as normal sparse activity.
 
+
+## Follow-up correction: event time and the 2020 MBP-1 archive
+
+The tape implementation **already buckets executions on event time** (`empirical_tape.py`, line 480). Its validation then requires exact minute OHLCV agreement against downloaded vendor bars (lines 546–571), whose documented buckets use receive time. That mixes clocks. A mismatch under this check is not sufficient evidence of lost executions. The appropriate follow-on design is to build candles and execution measures consistently on event time and make the vendor-bar comparison a diagnostic that accounts for its different clock. Receive timestamps are needed for exact reproduction of the vendor buckets, not as a prerequisite for event-time research. This correction documents the implementation issue; it does not claim that the production check or accepted replay has been changed.
+
+The earlier explanation based only on the standalone-trade archive was too narrow. Local NQ bars begin in September 2010, **MBP-1 begins January 1, 2020 at 23:00 UTC**, and the standalone-trade records begin September 1, 2021 at 18:00 UTC. The catalog's standalone-trade `expected_start=2020-01` and “2020 onward” scope do not agree with its actual observed first record. MBP-1 includes execution records, so it is an available source for event-time reconstruction from 2020. Only execution actions contribute traded OHLCV and delta; quote changes do not. [Vendor MBP-1 schema](https://databento.com/docs/schemas-and-data-formats/mbp-1), [OHLCV clock convention](https://databento.com/docs/schemas-and-data-formats/ohlcv).
+
+The [read-only MBP-1 follow-up](OVERNIGHT_MBP_FOLLOWUP.json) checks every missing overnight/prefix slot against owned file coverage. Of 10,393 unique missing slots, **10,270 predate MBP-1 and 123 overlap it**. Actual records in those 123 slots contain no executions:
+
+| UTC interval | Missing minutes | Observed book records | Interpretation |
+| --- | ---: | ---: | --- |
+| 2020-01-02 04:38–04:39 | 1 | 21 | Quiet-minute candidate: book activity with no recorded trades |
+| 2021-11-01 04:33–04:34 | 1 | 52 | Quiet-minute candidate: book activity with no recorded trades |
+| 2023-07-04 22:36–22:37 | 1 | 10 | Quiet-minute candidate: book activity with no recorded trades |
+| 2020-06-30 22:00–2020-07-01 00:00 | 120 | 1 | Coverage cause unresolved; do not treat the whole interval as proven quiet |
+
+The single record in the two-hour block also appears in an overlapping monthly file. File diagnostics remain separate, and that duplicate is not counted as additional activity. The three isolated minutes support the no-trade explanation but do not independently certify an uninterrupted exchange feed. No minute was filled, no quote was substituted for an execution, and the remaining input requests are investigation scopes rather than a requirement to purchase data already held locally.
+
+**Raw-data preservation:** existing raw files must remain unchanged. Any future event-time reconstruction belongs in a separate derived dataset with source hashes, physical membership and its own versioned input identity. This follow-up reads raw files and verifies their hashes before and after inspection.
+
+Reproduce this additional check before running `verify_recovery.py`:
+
+```bash
+python implementation/reports/phase1-live/data-recovery-v1/audit_overnight_mbp.py
+```
+
 ## Verification and reproduction
 
 The verification script rehashes every audited source, checks native file byte/row counts against the canonical manifest, reconciles all 1,294 prior inputs directly to accepted checkpoints, validates all 102 initial SIRES failures and eight unknown prefixes, checks tape equality and bar resampling, and confirms the accepted implementation and splits are unchanged. These are data-audit checks; no new production test-suite run or strategy replay is claimed.

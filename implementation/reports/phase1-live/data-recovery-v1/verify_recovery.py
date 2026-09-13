@@ -16,8 +16,13 @@ def digest(p):
 def read(p):return json.loads(p.read_text())
 def main():
     c=read(OUT/'BAR_CENSUS.json');t=read(OUT/'TAPE_RECONCILIATION.json');r=read(OUT/'RECOVERED_AUGUST_REFERENCE.json');s=read(OUT/'SUMMARY.json')
+    followup=read(OUT/'OVERNIGHT_MBP_FOLLOWUP.json')
+    assert followup['summary']['unique_missing_slots']==10393
+    assert followup['summary']['slots_before_first_MBP_record']==10270
+    assert followup['summary']['slots_overlapping_MBP_files']==123
+    assert all(x['execution_rows']==0 for x in followup['file_window_results'])
     sources={}
-    for doc in [c,t,r]:
+    for doc in [c,t,r,followup]:
         for key,value in doc['source_files'].items():
             if key in sources:assert value['sha256']==sources[key]['sha256']
             sources[key]=value
@@ -63,7 +68,7 @@ def main():
     for split in accepted['splits'].values():assert digest(Path(split['path']))==split['sha256']
     assert not s['accepted_results_changed'] and not s['new_replay']
     artifact_hashes={p.name:digest(p) for p in OUT.iterdir() if p.is_file() and p.name!='VERIFICATION.json'}
-    receipt={'schema':'phase1-data-recovery-verification-v1','passed':True,'source_files_rehashed':len(sources),'canonical_native_files_checked':len(raw),'canonical_manifest_sha256':digest(manifest_path),'prior_windows_reconciled_to_accepted_checkpoints':len(actual),'prior_missing_rule_jobs':dict(rule_jobs),'observed_unknown_prefixes_checked':8,'SIRES_initial_prefix_failures_checked':102,'tape_multiset_and_bar_resampling_checks':4,'recovered_patch_rows_verified':780,'accepted_implementation_and_splits_unchanged':True,'accepted_manifest_file_sha256':digest(EMP/'RUN_MANIFEST.json'),'new_test_suite_run':False,'artifact_sha256':artifact_hashes}
+    receipt={'schema':'phase1-data-recovery-verification-v1','passed':True,'source_files_rehashed':len(sources),'canonical_native_files_checked':len(raw),'canonical_manifest_sha256':digest(manifest_path),'prior_windows_reconciled_to_accepted_checkpoints':len(actual),'prior_missing_rule_jobs':dict(rule_jobs),'observed_unknown_prefixes_checked':8,'SIRES_initial_prefix_failures_checked':102,'tape_multiset_and_bar_resampling_checks':4,'recovered_patch_rows_verified':780,'overnight_MBP_overlap_slots_checked':123,'accepted_implementation_and_splits_unchanged':True,'accepted_manifest_file_sha256':digest(EMP/'RUN_MANIFEST.json'),'new_test_suite_run':False,'artifact_sha256':artifact_hashes}
     (OUT/'VERIFICATION.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n');print(json.dumps({k:v for k,v in receipt.items() if k!='artifact_sha256'},indent=2))
 
 if __name__=='__main__':main()
