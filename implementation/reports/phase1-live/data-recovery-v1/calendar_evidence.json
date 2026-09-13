@@ -1,0 +1,57 @@
+{
+  "schema": "phase1-calendar-evidence-v1",
+  "reviewed_on_utc": "2026-09-13",
+  "admission": "Diagnostic calendar evidence only. The accepted all-weekdays reference policy remains frozen. Entries with insufficient product/session scope never certify a closure.",
+  "verified_RTH_closures": [
+    {
+      "date": "2012-10-29",
+      "product_scope": "CME US equity index futures and options, including Globex",
+      "matching_halt_local": "08:15 America/Chicago",
+      "required_RTH": "09:30-16:00 America/New_York",
+      "conclusion": "Scheduled emergency halt covers the entire required RTH window. Overnight trading existed; this is not an all-day trading closure.",
+      "source_url": "https://www.cmegroup.com/media-room/press-releases/2012/10/28/media_alert_cme_grouptocloseusequityindexfuturesandoptionsonfutu.html"
+    },
+    {
+      "date": "2012-10-30",
+      "product_scope": "CME US equity index futures and options, including Globex",
+      "matching_halt_local": "08:15 America/Chicago",
+      "required_RTH": "09:30-16:00 America/New_York",
+      "conclusion": "Scheduled emergency halt covers the entire required RTH window. Overnight trading existed; this is not an all-day trading closure.",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-464.html"
+    }
+  ],
+  "limited_scope_evidence": [
+    {
+      "date": "2023-01-02",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2023-new-years-advisory.pdf",
+      "verified": "CME observed New Year's holiday and clearing-cycle changes",
+      "not_verified": "Exact NQ Globex trading hours; the document links to the rolling holiday calendar instead of specifying historical product hours"
+    },
+    {
+      "dates": ["2022-12-26", "2023-01-02"],
+      "source_url": "https://www.nasdaqtrader.com/TraderNews.aspx?id=ETA2022-106",
+      "verified": "Underlying Nasdaq US equity and option markets closed",
+      "not_verified": "NQ futures trading hours"
+    },
+    {
+      "date": "2012-04-06",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-124.html",
+      "verified": "Good Friday; equity products marked to previous settlement",
+      "not_verified": "Exact NQ matching hours; linked historical Globex schedule returned 404"
+    }
+  ],
+  "unavailable_historical_schedule_urls": [
+    {"url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2011-4th-of-july.pdf", "result": "404", "discovered_from": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv11-219.pdf"},
+    {"url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2012-good-friday.pdf", "result": "404", "discovered_from": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-124.html"},
+    {"url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2016-4th-of-july-holiday-schedule.pdf", "result": "retrieval unavailable", "discovered_from": "https://github.com/rsheftel/pandas_market_calendars/blob/master/pandas_market_calendars/calendars/cme.py"}
+  ],
+  "current_calendar_limit": {"url": "https://www.cmegroup.com/trading-hours.html", "finding": "Current page describes 2026/2027 downloads and a date/product selector. This is not evidence of a complete 2010-2023 historical NQ schedule."},
+  "policy_requirements_for_a_separate_version": [
+    "Identify NQ Globex matching sessions in America/Chicago and convert using date-specific America/New_York rules.",
+    "Distinguish a missing cash RTH from an overnight trading session and from a CME clearing trade date.",
+    "Declare whether prior day means previous calendar weekday or previous eligible trading session. For prior week/month, declare how full closures and partial RTH sessions contribute.",
+    "Keep instrument identity fixed unless a separately declared roll-reference definition explicitly changes it.",
+    "Do not replace an unavailable calendar entry with assumed normal hours. Do not synthesize a price on closed minutes.",
+    "Record new policy and input hashes, exposure and denominators before any follow-on outcome replay."
+  ]
+}

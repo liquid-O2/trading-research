@@ -1,0 +1,178 @@
+{
+  "accepted_run_changed": false,
+  "limit": "Complete bar-grid recovery from owned native aggregates, not an independently certified execution feed or a trade-volume profile. Accepted empirical denominators stay frozen; any outcome replay must bind this new input identity explicitly.",
+  "recovered_input_path": "data/derived/phase1-data-recovery-v1/NQU6-2026-08-03_04-RTH-1m-from-1s.parquet",
+  "reference": {
+    "complete_minute_grid": true,
+    "definition_change": false,
+    "expected_minutes": 8190,
+    "expected_weekdays": [
+      "2026-08-03",
+      "2026-08-04",
+      "2026-08-05",
+      "2026-08-06",
+      "2026-08-07",
+      "2026-08-10",
+      "2026-08-11",
+      "2026-08-12",
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-17",
+      "2026-08-18",
+      "2026-08-19",
+      "2026-08-20",
+      "2026-08-21",
+      "2026-08-24",
+      "2026-08-25",
+      "2026-08-26",
+      "2026-08-27",
+      "2026-08-28",
+      "2026-08-31"
+    ],
+    "formation_end": 1788206400000000000,
+    "formation_start": 1785763800000000000,
+    "high": 30287.5,
+    "input_resolution_change": "two missing dates subsampled from owned native 1s; existing 1m rows retained",
+    "instrument_id": 42004177,
+    "kind": "prior_month_RTH",
+    "known_at": 1788206400000000000,
+    "low": 28313.5,
+    "original_1m_minutes": 7410,
+    "raw_symbol": "NQU6",
+    "recovered_minutes": 780,
+    "source_faithful": false,
+    "volume": 7706764
+  },
+  "replay_run": false,
+  "schema": "phase1-recovered-prior-reference-v1",
+  "selection": "All recoverable slots from exhaustive census; selected before examining a follow-on outcome",
+  "source_files": {
+    "data/derived/phase1-data-recovery-v1/NQU6-2026-08-03_04-RTH-1m-from-1s.parquet": {
+      "bytes": 50969,
+      "mtime_ns": 1789280414000000000,
+      "sha256": "b3cf11c1c46eff3bbefedf036aea6bb4d5216d1ad06ba75a9a05302314bfe67d"
+    },
+    "data/quantpad/cme__nq-continuous-futures__ohlcv-1m/2026.parquet": {
+      "bytes": 3584842,
+      "mtime_ns": 1788363964000000000,
+      "sha256": "8ac43f71e56842bc2dea7a934b3e4ba44861db84da5341bc7d4d7ea6beb01171"
+    },
+    "data/quantpad/cme__nq-continuous-futures__ohlcv-1s/2026.parquet": {
+      "bytes": 93640084,
+      "mtime_ns": 1788367982000000000,
+      "sha256": "550658089fa69a213b9327260f0ec1c8909ceac3c1ba299da335b05d412206c5"
+    },
+    "implementation/reports/phase1-live/data-recovery-v1/BAR_CENSUS.json": {
+      "bytes": 3934285,
+      "mtime_ns": 1789280235000000000,
+      "sha256": "88a483ac3b854ef0264355d6474c2e07640b35bdd3c0d81b8f67621f7dc8489a"
+    },
+    "implementation/reports/phase1-live/data-recovery-v1/audit_tape.py": {
+      "bytes": 12085,
+      "mtime_ns": 1789279858000000000,
+      "sha256": "8956258795e265d699d9a2d9316719ec7bc1aad169c42dba9d0a6d8d6b26f0d6"
+    },
+    "implementation/reports/phase1-live/data-recovery-v1/recover_august.py": {
+      "bytes": 5205,
+      "mtime_ns": 1789280408000000000,
+      "sha256": "4673452454a129359636e82c26dc628a6cc8f9fcc1b73d171af129ca5c7c87fc"
+    }
+  },
+  "source_membership": {
+    "all_August_1m": {
+      "first_ranges": [
+        [
+          195724,
+          222304
+        ]
+      ],
+      "hash_encoding": "ordered physical row indices as little-endian int64",
+      "last_ranges": [
+        [
+          195724,
+          222304
+        ]
+      ],
+      "range_count": 1,
+      "reproduction": "Use exact hashed source file, instrument ID and half-open event-time window; retain all matching physical rows.",
+      "row_count": 26580,
+      "row_ids_sha256": "8fad69e1e0763d3a233ca83e489ef31ba1dc780b936453537d43c5ed6fe5b3ff"
+    },
+    "all_August_1s": {
+      "first_ranges": [
+        [
+          7600040,
+          8685009
+        ]
+      ],
+      "hash_encoding": "ordered physical row indices as little-endian int64",
+      "last_ranges": [
+        [
+          7600040,
+          8685009
+        ]
+      ],
+      "range_count": 1,
+      "reproduction": "Use exact hashed source file, instrument ID and half-open event-time window; retain all matching physical rows.",
+      "row_count": 1084969,
+      "row_ids_sha256": "a1817b45d63001320d023980a0dd42abceba9bd8c1882b9637bfd4a1614cf9d0"
+    },
+    "patch_1s": [
+      {
+        "end_ns": 1785787200000000000,
+        "membership": {
+          "first_ranges": [
+            [
+              7629377,
+              7652247
+            ]
+          ],
+          "hash_encoding": "ordered physical row indices as little-endian int64",
+          "last_ranges": [
+            [
+              7629377,
+              7652247
+            ]
+          ],
+          "range_count": 1,
+          "reproduction": "Use exact hashed source file, instrument ID and half-open event-time window; retain all matching physical rows.",
+          "row_count": 22870,
+          "row_ids_sha256": "205b4fa5f1b98a180232505a727d48ea287f319169b5f834b38d8cae124000e2"
+        },
+        "start_ns": 1785763800000000000
+      },
+      {
+        "end_ns": 1785873600000000000,
+        "membership": {
+          "first_ranges": [
+            [
+              7683922,
+              7707002
+            ]
+          ],
+          "hash_encoding": "ordered physical row indices as little-endian int64",
+          "last_ranges": [
+            [
+              7683922,
+              7707002
+            ]
+          ],
+          "range_count": 1,
+          "reproduction": "Use exact hashed source file, instrument ID and half-open event-time window; retain all matching physical rows.",
+          "row_count": 23080,
+          "row_ids_sha256": "4d863a020f9784b8275e9ab8eeaf3d2fd447aea05e2d966e6399f4ed15d3132b"
+        },
+        "start_ns": 1785850200000000000
+      }
+    ]
+  },
+  "validation": {
+    "OHLCV_mismatches": 0,
+    "duplicate_timestamp_instrument_keys": 0,
+    "missing_minutes_without_1s": 0,
+    "overlapping_RTH_minutes_compared": 7410,
+    "patch_roundtrip_exact": true,
+    "patch_rows": 780,
+    "source_prices_on_quarter_point_tick": true
+  }
+}
