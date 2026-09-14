@@ -96,3 +96,40 @@ Matches the evening-refinement picture.
 ## Not done
 
 - No git commit. P3/P5/P7 still out of scope. TBR quadrant entries (f5) remain a missing-stage assignment. C6 is D1, already in round 1. P15-13 still owns Saint arrival/alignment/profile stages.
+
+## Round 4 decisions (C3 stop excursion, C1 Judas entry window)
+
+- **C3 stop / sweep extremes.** After the confirming five-minute bar is found, high/low/stop/sweep_high/sweep_low are taken from `m.bars(trigger['start'], confirmation_end)` — the whole 1-minute excursion through that bar. `cash_open_reclaim_case` target uses the same recomputed low. `confirm_bar_offset` 0 keeps `confirmation_end == sweep_candle_end`, so first-candle episodes are unchanged. `details['excursion_bars'] = confirm_bar_offset + 1`. P4 empty-path still does not search later bars and still leaves high/low/stop None.
+- **C1 judas_reversal entry window.** TBR p.8 places the reversal trade in 09:40–09:50. `entry_in_reversal_window = (m.at('09:40') <= decision_at < m.at('09:50'))`. Sweep search and `source_time_window` (09:30–09:50) are unchanged. Do not defer or reprice: decision_at, entry, and stop stay the O056 confirmation.
+- **bind() rejected the operand.** `entry_in_reversal_window` is not an M01 field (`unknown historical operand JJ-TBR:entry_in_reversal_window`). Recorded the boolean on `values` and on a `reversal_entry_window` stage (`bind_rejected_unknown_operand`, `bind_rejected_operand`). When False, evaluate() is left as-is (operands stay truthful) and the episode is failed after `finish()` with `research_verdict=fail` and reason `entry_outside_reversal_window` appended to `failed`. That is the existing episode fail shape, not a new Kleene layer.
+- **09:38 vs 09:39.** A 09:33 sweep's O056 C3 on the 180s grid ends at 09:39; the last minute inside that bar is 09:38. The test uses decision_at 09:39, which is still `< 09:40`. Control uses a 09:36 sweep so C3 ends at 09:42.
+- **Frozen scan_jumbo cannot pass a 09:33 sweep** (N=0, C1 round 2). The new test shows pre-window repaired conjuncts pass and the round-4 gate fails. Control repaired pass.
+- **Preview.** Only GB-FAIL and JJ-TBR rows are refreshed (`run_preview.py --only GB-FAIL JJ-TBR --merge`). Other family rows stay round 3.
+
+## Round 4 commands
+
+```
+cd implementation
+PYTHONPATH=src /workspace/implementation/.venv/bin/python -m pytest -p no:cacheprovider -q tests/rule_discovery/test_baseline_repairs.py --tb=short
+# 22 passed in 22.20s, exit 0
+```
+
+```
+cd implementation
+PYTHONPATH=src /workspace/implementation/.venv/bin/python \
+  /workspace/.worktrees/baseline-repair/planning/research-program/reviews/phase1-code-review-2026-09-14/repair-preview/run_preview.py \
+  --only GB-FAIL JJ-TBR --merge
+# 40/40 dates ok, orchestrator_wall_s 175.8216, exit 0
+```
+
+## Preview result (round 4, not a receipt)
+
+Only GB-FAIL and JJ-TBR rows were refreshed. Other families remain round 3.
+
+- **C3 GB-FAIL.** 188 episodes had `confirm_bar_offset > 0`; 123 of those changed stop vs the first-candle extreme. Verdict counts unchanged except `cash_open_reclaim_case` 17→18 pass (14→15 fail→pass): a later reclaim whose first-candle stop sat inside the excursion now has `risk_defined`. asia_tdo 13, nyam_box 50, previous_hour 198, prior_day 31, prior_month 4, prior_week 14, mss_fvg 2 pass unchanged.
+- **C1 judas_reversal.** 37 B0.1 episodes; 31 fail `entry_outside_reversal_window`. Pass 5→2 (the three early O056 completions leave the pass set). fail 32→35. `verdict_changed` vs B0 stays 0 because most C1 extra episodes do not share B0 candidate ids. `no_setup` stays 32: the window fail is applied after `finish()`, so reconstruct `strategy_assessment` is not rewritten.
+- **Other JJ-TBR** episode/pass/fail counts unchanged vs round 3 (C2 10:00 window already in). Wall seconds on those rows are the round-4 subset rerun.
+
+## Not done (round 4)
+
+- No git commit. P3/P5/P7 still out of scope. TBR quadrant entries (f5) remain a missing-stage assignment. `entry_in_reversal_window` was not added to FORMULAS/M01 (frozen pack). Strategy_assessment for the 3 Judas research-fail/setup rows was not rewritten.

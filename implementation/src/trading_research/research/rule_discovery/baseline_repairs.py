@@ -561,9 +561,36 @@ def _ob_repaired(m,touch,side,end):
         return result.get('confirmed'),c,stop,result
     return (None if ambiguous else absent_repaired(m,touch['start'],end)),None,None,None
 
+def _bind_judas_entry_window(m,e,decision):
+    """C1 round 4: TBR p.8 reversal trade is 09:40-09:50. entry_in_reversal_window is not an M01 field, so bind() raises; the operand is stored on values and the reversal_entry_window stage. A False window fails the episode after evaluate() with reason entry_outside_reversal_window; entry/stop/decision_at are not moved."""
+    in_window=m.at('09:40')<=decision<m.at('09:50')
+    bind_rejected=False
+    try:
+        e.bind({'entry_in_reversal_window':in_window},
+            operation='TBR p.8 places the reversal trade between 09:40 and 09:50; decision_at is the O056 confirmation known_at',
+            known_at=decision,assumption='A2-TBR-CLOCK')
+    except ValueError:
+        bind_rejected=True
+        e.values['entry_in_reversal_window']=in_window
+    details={'entry_in_reversal_window':in_window,'bind_rejected_unknown_operand':bind_rejected}
+    if bind_rejected:
+        details['bind_rejected_operand']='entry_in_reversal_window'
+    if not in_window:
+        details['reason']='entry_outside_reversal_window'
+    e.stage('reversal_entry_window',decision,observed=in_window,details=details)
+    return in_window
+
+def _fail_entry_outside_reversal_window(episode):
+    episode['research_verdict']='fail'
+    failed=list(episode.get('failed') or [])
+    if 'entry_outside_reversal_window' not in failed:
+        failed.append('entry_outside_reversal_window')
+    episode['failed']=failed
+    return episode
+
 def scan_jumbo_repaired(m,branch):
     """P2: historical_price_scanners.py:40,171. Frozen scan_jumbo calls absent() from _ob and from the extension_reaction prior_expansion conjunct. Change: use _ob_repaired and absent_repaired.
-    C1: historical_price_scanners.py:71,89-90. Frozen judas_reversal searches the sweep only inside 09:40-09:50. Change: search the outbound sweep in 09:30-09:40 and keep the reversal window 09:40-09:50; a sweep found only in 09:40-09:50 stays accepted and is flagged sweep_in_reversal_window. source_time_window is True for a sweep in 09:30-09:50. Confirmation remains the frozen O056 search around the sweep bar.
+    C1: historical_price_scanners.py:71,89-90. Frozen judas_reversal searches the sweep only inside 09:40-09:50. Change: search the outbound sweep in 09:30-09:40 and keep the reversal window 09:40-09:50; a sweep found only in 09:40-09:50 stays accepted and is flagged sweep_in_reversal_window. source_time_window is True for a sweep in 09:30-09:50. Confirmation remains the frozen O056 search around the sweep bar. Round 4: the reversal entry itself must fall in 09:40-09:50 (TBR p.8). entry_in_reversal_window is recorded on the reversal_entry_window stage; bind() rejects the unknown M01 operand so the verdict is forced fail with reason entry_outside_reversal_window when decision_at is outside that window. Do not defer or reprice.
     C2: historical_price_scanners.py:72. Frozen overrides action_end=16:00 for single_extended, single_purged, internal_rotation and extension_reaction. Change: leave the formation action_end at 10:00; the 16:00 population stays B0.
     C7: historical_price_scanners.py:137,145,153,163,176,179. Frozen binds exit_window_recorded, source_clock_verified, source_case_verified and the restating flags location_touched, reduced_expectations, expansion_policy, source_zone_known as by-construction literals. Change: keep those frozen values and record literal_operand_kind=by_construction."""
     method='JJ-TBR';episodes=[];omissions=[]
@@ -723,13 +750,19 @@ def scan_jumbo_repaired(m,branch):
             if getattr(m,'reconstruct',False) and confirm:
                 e.geometry['confirmation_bar']=confirm
             _record_c7(e,decision,by_construction=by_construction)
-            episodes.append(e.finish(decision_at=decision,entry=entry,stop=stop,target=target))
+            in_reversal_window=True
+            if branch=='judas_reversal':
+                in_reversal_window=_bind_judas_entry_window(m,e,decision)
+            episode=e.finish(decision_at=decision,entry=entry,stop=stop,target=target)
+            if branch=='judas_reversal' and not in_reversal_window:
+                episode=_fail_entry_outside_reversal_window(episode)
+            episodes.append(episode)
     if prior['omissions']:omissions.extend(prior['omissions'])
     return window_result(m,method,branch,episodes,omissions=omissions)
 
 def scan_green_failure_repaired(m,branch):
     """P4: historical_price_scanners.py:224-225. Frozen scan_green_failure raises ValueError on max()/min() of an empty sweep path. Change: record an availability omission and emit the episode as input-unknown.
-    C3: historical_price_scanners.py:219-223. Frozen reads only the five-minute candle containing the sweep. Change: take the first complete five-minute close back through the level at or after the sweep candle, forward to the branch end bound, and record confirm_bar_offset (0 = sweep candle). Stop and objective stay on the sweep-candle extreme.
+    C3: historical_price_scanners.py:219-223. Frozen reads only the five-minute candle containing the sweep. Change: take the first complete five-minute close back through the level at or after the sweep candle, forward to the branch end bound, and record confirm_bar_offset (0 = sweep candle). Round 4: after that confirming bar is found, recompute high/low/stop/sweep_high/sweep_low (and the cash_open_reclaim_case target from low) over m.bars(trigger['start'], confirmation_end), the whole excursion through the confirming bar. confirm_bar_offset 0 is unchanged. details['excursion_bars'] = confirm_bar_offset + 1. Empty-path P4 still does not search later bars.
     C7: historical_price_scanners.py:230,238,242. Frozen binds bias_recorded to computed pre-touch presence, source_session_allowed=True, and structural pocket_required/retracement_entry=False. Change: keep bias_recorded as that computed presence and record context_direction_unevaluated; keep source_session_allowed with literal_operand_kind=by_construction; keep the structural flags and record them in structural_not_required when False."""
     method='GB-FAIL';episodes=[]
     if branch=='mss_fvg_refinement':return scan_green_refinement_repaired(m,branch)
@@ -750,19 +783,15 @@ def scan_green_failure_repaired(m,branch):
             sweep_candle_end=aligned+5*MINUTE
             path=m.bars(trigger['start'],sweep_candle_end)
             confirm=None;close=None;usable=False;confirm_bar_offset=None;confirmation_end=sweep_candle_end
+            high=low=stop=None
+            target=None if branch=='cash_open_reclaim_case' else (ref['low'] if side=='short' else ref['high'])
             if not path:
                 omissions.append({'kind':'availability','reason':'sweep path empty: no bars known at or before confirmation_end','window':[trigger['start'],sweep_candle_end],'side':side,'reference_id':ref.get('id')})
-                high=low=stop=None
-                target=None if branch=='cash_open_reclaim_case' else (ref['low'] if side=='short' else ref['high'])
                 cand=m.bars(aligned,sweep_candle_end,300)
                 row=cand[0] if cand else None
                 if row is not None and row['observed_complete'] and row['C'] is not None:
                     confirm=row;close=row['C'];usable=True;confirm_bar_offset=0
             else:
-                high=max(r['H'] for r in path);low=min(r['L'] for r in path)
-                stop=high+Q if side=='short' else low-Q
-                target=ref['low'] if side=='short' else ref['high']
-                if branch=='cash_open_reclaim_case':target=boundary+(boundary-low)*D('.5')
                 offset=0
                 while True:
                     bar_start=aligned+offset*5*MINUTE
@@ -777,6 +806,11 @@ def scan_green_failure_repaired(m,branch):
                     if ok_bar and confirm is None:
                         confirm=row;close=row['C'];usable=True;confirm_bar_offset=offset;confirmation_end=bar_end
                     offset+=1
+                excursion=m.bars(trigger['start'],confirmation_end) or path
+                high=max(r['H'] for r in excursion);low=min(r['L'] for r in excursion)
+                stop=high+Q if side=='short' else low-Q
+                target=ref['low'] if side=='short' else ref['high']
+                if branch=='cash_open_reclaim_case':target=boundary+(boundary-low)*D('.5')
             decision=confirmation_end
             pre=m.range(m.at('06:00'),min(begin,m.at('09:30')),'gb-precontext')
             context_known=pre is not None and pre['known_at']<=trigger['start']
@@ -796,8 +830,11 @@ def scan_green_failure_repaired(m,branch):
                 operation='identified finished reference and first strict sweep; first complete five-minute reclaim at or after the sweep candle; C7 bias_recorded is computed presence with unevaluated direction',
                 parents=[ref['id'],trigger['bar_id']],known_at=decision,assumption='A2-GB-CLOCK/A2-CONTEXT/A2-STRUCTURAL-RISK')
             e.stage('reference',ref['known_at'],observed=_known(ref)).stage('sweep',contact['at'],observed=True,parents=contact['event_ids'])
+            reclaim_details={'tdo':tdo,'tdo_required':tdo_required,'confirm_bar_offset':confirm_bar_offset}
+            if confirm_bar_offset is not None:
+                reclaim_details['excursion_bars']=confirm_bar_offset+1
             e.stage('five_minute_reclaim',confirmation_end,observed=None if close is None else sg*(close-boundary)>0,
-                parents=[confirm['bar_id']] if confirm else [],details={'tdo':tdo,'tdo_required':tdo_required,'confirm_bar_offset':confirm_bar_offset})
+                parents=[confirm['bar_id']] if confirm else [],details=reclaim_details)
             if getattr(m,'reconstruct',False):e.geometry['confirmation_bar']=confirm
             structural_false=['pocket_required','retracement_entry']
             if not tdo_required:structural_false.append('tdo_required')

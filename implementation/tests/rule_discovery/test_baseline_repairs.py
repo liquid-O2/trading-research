@@ -12,7 +12,7 @@ from trading_research.research.method_pack.empirical_market import clock
 from trading_research.research.method_pack.event_time import aggregate_events, VERSION, CONTRACT, MINUTE, SECOND
 from trading_research.research.method_pack.historical_assembly import absent
 from trading_research.research.method_pack.historical_auction_scanners import _control_absence
-from trading_research.research.method_pack.historical_features import HistoricalFeatures
+from trading_research.research.method_pack.historical_features import HistoricalFeatures, Q
 from trading_research.research.method_pack.historical_auction_scanners import scan_keani, scan_saint
 from trading_research.research.method_pack.historical_flow import local_observations, scan_sires, scan_microbalance
 from trading_research.research.method_pack.historical_price_scanners import scan_green_failure, scan_green_vwap, scan_jumbo
@@ -429,10 +429,12 @@ def test_c3_frozen_reads_sweep_candle_repaired_takes_next_reclaim():
     assert D(str(frozen_inside["values"]["confirm_close"])) == D("100.0")
     assert D(str(repaired_later["values"]["confirm_close"])) == D("100.0")
     assert _stage_details(repaired_later, "five_minute_reclaim")["confirm_bar_offset"] == 1
+    assert _stage_details(repaired_later, "five_minute_reclaim")["excursion_bars"] == 2
     assert repaired_later["values"]["confirm_at"] > frozen_later["values"]["confirm_at"]
     assert repaired_later["research_verdict"] == "pass"
     assert D(str(repaired_inside["values"]["confirm_close"])) == D("100.0")
     assert _stage_details(repaired_inside, "five_minute_reclaim")["confirm_bar_offset"] == 0
+    assert _stage_details(repaired_inside, "five_minute_reclaim")["excursion_bars"] == 1
     assert repaired_inside["research_verdict"] == "pass"
 
 
@@ -664,3 +666,123 @@ def test_c3_mss_fvg_emits_when_parent_pass_returns():
     assert frozen_later["N_observed"] == 0
     assert any(e["research_verdict"] == "pass" for e in scan_green_failure_repaired(later, "nyam_box")["episodes"])
     assert repaired_later["N_observed"] == 1
+
+
+class _PriorWidthMarket(Market):
+    """Supplies a completed prior-day width so judas_reversal context_fixed and reversal_context can pass."""
+
+    def prior(self, kind="day"):
+        return {
+            "kind": kind,
+            "sessions": [],
+            "omissions": [],
+            "scope_complete": True,
+            "range_scope_complete": True,
+            "range": {
+                "id": "prior-day-fixture",
+                "low": D("90"),
+                "high": D("110"),
+                "known_at": START,
+                "start": START,
+                "end": START + MINUTE,
+                "complete": True,
+                "coverage": {"observed_scope_complete": True},
+            },
+        }
+
+
+def _judas_reversal_pass_tape(sweep_text):
+    """06:00-09:00 H101/L99, high sweep, O056 C3 close still above the opposing edge."""
+    s = _at(sweep_text)
+    c2_start = s // (3 * MINUTE) * (3 * MINUTE)
+    c3_start = c2_start + 3 * MINUTE
+    c3_end = c3_start + 3 * MINUTE
+    ev = []
+    at = START
+    while at < END:
+        if c2_start <= at < c3_start:
+            px = 100.5
+        elif c3_start <= at < c3_end:
+            px = 100.25
+        else:
+            px = 100.0
+        ev.append(raw(at, px))
+        at += MINUTE
+    ev += [raw(_at("07:00"), 101.0), raw(_at("08:00"), 99.0)]
+    ev += [raw(s + 1, 101.5), raw(s + 2, 101.75)]
+    return ev
+
+
+def test_c1_entry_outside_reversal_window_fails():
+    # A 09:33 sweep's O056 C3 on the 180s grid ends at 09:39 (last minute inside that bar is 09:38).
+    # Frozen scan_jumbo does not see 09:30-09:40 sweeps. Pre-window repaired operands pass;
+    # the round-4 gate fails with entry_outside_reversal_window. Control C3 ends at 09:42.
+    early = _PriorWidthMarket(_judas_reversal_pass_tape("09:33"))
+    control = _PriorWidthMarket(_judas_reversal_pass_tape("09:36"))
+    frozen_early = scan_jumbo(early, "judas_reversal")
+    repaired_early = _short_episode(scan_jumbo_repaired(early, "judas_reversal"))
+    repaired_control = _short_episode(scan_jumbo_repaired(control, "judas_reversal"))
+    assert frozen_early["N_observed"] == 0
+    assert _at("09:30") <= repaired_early["values"]["sweep_at"] < _at("09:40")
+    assert repaired_early["values"]["source_confirmation"] is True
+    assert repaired_early["values"]["source_time_window"] is True
+    assert repaired_early["values"]["risk_defined"] is True
+    assert repaired_early["values"]["objective_fixed"] is True
+    assert repaired_early["values"]["context_fixed"] is True
+    assert repaired_early["values"]["reversal_context"] is True
+    assert repaired_early["decision_at"] < _at("09:40")
+    assert repaired_early["decision_at"] == _at("09:39")
+    assert repaired_early["research_verdict"] == "fail"
+    assert "entry_outside_reversal_window" in repaired_early["failed"]
+    window = _stage_details(repaired_early, "reversal_entry_window")
+    assert window["entry_in_reversal_window"] is False
+    assert window["reason"] == "entry_outside_reversal_window"
+    assert window["bind_rejected_unknown_operand"] is True
+    assert repaired_early["values"]["entry_in_reversal_window"] is False
+    assert repaired_early["geometry"]["entry"] is not None
+    assert repaired_early["geometry"]["stop"] is not None
+    assert repaired_early["decision_at"] == repaired_early["values"]["confirm_at"]
+
+    assert _at("09:40") <= repaired_control["decision_at"] < _at("09:50")
+    assert repaired_control["decision_at"] == _at("09:42")
+    assert repaired_control["values"]["source_confirmation"] is True
+    assert repaired_control["research_verdict"] == "pass"
+    assert _stage_details(repaired_control, "reversal_entry_window")["entry_in_reversal_window"] is True
+    assert "entry_outside_reversal_window" not in (repaired_control["failed"] or [])
+
+
+def _gbfail_extended_excursion():
+    ev = [raw(t, 100.0) for t in range(_at("06:00"), _at("09:00"), 60 * SECOND)]
+    for t in range(_at("09:00"), _at("10:00"), 60 * SECOND):
+        ev.append(raw(t, 101.0 if (t // (60 * SECOND)) % 2 else 99.0))
+    ev += [raw(t, 100.0) for t in range(_at("10:15"), _at("16:00"), 60 * SECOND)]
+    ev += [raw(_at("10:00"), 100.0)]
+    ev += [raw(_at("10:01"), 102.0), raw(_at("10:02"), 102.5)]
+    ev += [raw(t, 102.0) for t in range(_at("10:03"), _at("10:05"), 60 * SECOND)]
+    ev += [raw(t, 102.0) for t in range(_at("10:05"), _at("10:10"), 60 * SECOND)]
+    ev += [raw(_at("10:06"), 103.5)]
+    ev += [raw(t, 100.0) for t in range(_at("10:10"), _at("10:15"), 60 * SECOND)]
+    return Market(ev)
+
+
+def test_c3_stop_uses_full_excursion_through_confirming_bar():
+    m = _gbfail_extended_excursion()
+    frozen = _short_episode(scan_green_failure(m, "nyam_box"))
+    repaired = _short_episode(scan_green_failure_repaired(m, "nyam_box"))
+    candle1 = m.bars(_at("10:05"), _at("10:10"), 300)
+    assert candle1 and candle1[0]["H"] is not None
+    candle1_high = D(str(candle1[0]["H"]))
+    assert candle1_high >= D("103.5")
+    frozen_style_path = m.bars(repaired["trigger"]["start"], _at("10:05"))
+    assert frozen_style_path
+    frozen_style_stop = max(r["H"] for r in frozen_style_path) + Q
+    assert frozen_style_stop < candle1_high
+    repaired_stop = D(str(repaired["geometry"]["stop"]))
+    assert repaired_stop >= candle1_high + Q
+    assert repaired_stop > candle1_high
+    assert D(str(frozen["geometry"]["stop"])) == frozen_style_stop
+    assert D(str(frozen["geometry"]["stop"])) < candle1_high
+    assert _stage_details(repaired, "five_minute_reclaim")["confirm_bar_offset"] == 2
+    assert _stage_details(repaired, "five_minute_reclaim")["excursion_bars"] == 3
+    assert D(str(repaired["values"]["sweep_high"])) >= candle1_high
+    assert D(str(repaired["values"]["confirm_close"])) == D("100.0")

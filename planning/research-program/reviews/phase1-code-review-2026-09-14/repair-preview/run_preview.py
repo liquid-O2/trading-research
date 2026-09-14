@@ -7,10 +7,14 @@ from __future__ import annotations
 
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from decimal import Decimal as D
 from pathlib import Path
+import argparse
 import json
 import time
 import traceback
+
+from trading_research.research.method_pack.historical_features import Q, MINUTE
 
 from trading_research.research.method_pack import historical_runner as hr
 from trading_research.research.method_pack.measurement_runner import configure_runtime
@@ -46,6 +50,52 @@ def slim_row(row):
         "observation_unit": row["observation_unit"],
         "assumption_ids": row["assumption_ids"],
     }
+
+
+def _stage_details(episode, name):
+    for stage in episode.get("stages") or []:
+        if stage.get("stage") == name:
+            return stage.get("details") or {}
+    return {}
+
+
+def _gb_fail_stop_stats(market, document):
+    offset_gt0 = 0
+    stop_changed = 0
+    for episode in document.get("episodes") or []:
+        offset = _stage_details(episode, "five_minute_reclaim").get("confirm_bar_offset")
+        if not isinstance(offset, int) or offset <= 0:
+            continue
+        offset_gt0 += 1
+        start = (episode.get("trigger") or {}).get("start")
+        if start is None:
+            continue
+        aligned = start // (5 * MINUTE) * 5 * MINUTE
+        try:
+            path = market.bars(start, aligned + 5 * MINUTE)
+        except Exception:
+            continue
+        if not path:
+            continue
+        high = max(row["H"] for row in path)
+        low = min(row["L"] for row in path)
+        first_stop = high + Q if episode.get("side") == "short" else low - Q
+        actual = (episode.get("geometry") or {}).get("stop")
+        if actual is None:
+            continue
+        if D(str(actual)) != D(str(first_stop)):
+            stop_changed += 1
+    return {"confirm_bar_offset_gt0": offset_gt0, "stop_changed": stop_changed}
+
+
+def _judas_window_stats(document):
+    n = 0
+    for episode in document.get("episodes") or []:
+        details = _stage_details(episode, "reversal_entry_window")
+        failed = episode.get("failed") or []
+        if details.get("entry_in_reversal_window") is False or "entry_outside_reversal_window" in failed:
+            n += 1
+    return {"entry_outside_reversal_window": n}
 
 
 def _counts(document):
@@ -131,6 +181,11 @@ def _process_date(payload):
             t2 = time.monotonic()
             b01 = scan_branch_repaired(market, row)
             t3 = time.monotonic()
+            extras = {}
+            if row["method_id"] == "GB-FAIL":
+                extras = _gb_fail_stop_stats(market, b01)
+            elif row["coverage_id"] == "JJ-TBR:branch:judas_reversal":
+                extras = _judas_window_stats(b01)
             record.update(
                 ok=True,
                 b0=_counts(b0),
@@ -141,6 +196,7 @@ def _process_date(payload):
                 wall_seconds=round(t3 - t0, 4),
                 baseline_version_b0=b0.get("baseline_version"),
                 baseline_version_b01=b01.get("baseline_version"),
+                _round4=extras,
             )
         except Exception as exc:
             record.update(
@@ -215,6 +271,21 @@ def aggregate(date_results, dates, calendar_n):
         slot["wall_seconds"] = round(slot["wall_seconds"], 4)
         branches.append(slot)
     failed_dates = [item["date"] for item in date_results if not item.get("ok")]
+    diagnostics = {
+        "gb_fail": {"confirm_bar_offset_gt0": 0, "stop_changed": 0},
+        "judas_reversal": {"entry_outside_reversal_window": 0},
+    }
+    for item in date_results:
+        for record in item.get("branches") or []:
+            extras = record.get("_round4") or {}
+            cid = record["coverage_id"]
+            if cid.startswith("GB-FAIL:"):
+                diagnostics["gb_fail"]["confirm_bar_offset_gt0"] += extras.get("confirm_bar_offset_gt0", 0)
+                diagnostics["gb_fail"]["stop_changed"] += extras.get("stop_changed", 0)
+            elif cid == "JJ-TBR:branch:judas_reversal":
+                diagnostics["judas_reversal"]["entry_outside_reversal_window"] += extras.get(
+                    "entry_outside_reversal_window", 0
+                )
     return {
         "schema": "baseline-repair-delta-preview-v1",
         "header": "Preview for the orchestrator, not a receipt. B0 is native_discovery.scan_branch; B0.1 is scan_branch_repaired. No files were written under implementation/reports/phase1-live.",
@@ -227,6 +298,7 @@ def aggregate(date_results, dates, calendar_n):
         "n_dates": len(dates),
         "n_branches": len(branches),
         "branches": branches,
+        "round4_diagnostics": diagnostics,
         "wall_seconds_total": round(sum(item.get("wall_seconds") or 0 for item in date_results), 4),
         "date_results": [
             {
@@ -254,6 +326,10 @@ def render_md(payload):
         f"- Date source: {payload['date_source']}",
         f"- Branches: {payload['n_branches']}",
         f"- Wall seconds (sum of per-date worker elapsed): {payload['wall_seconds_total']}",
+    ]
+    if payload.get("round4_note"):
+        lines.append(f"- Note: {payload['round4_note']}")
+    lines += [
         "",
         "| branch | dates | ep B0 | ep B0.1 | pass B0 | pass B0.1 | fail B0 | fail B0.1 | unknown B0 | unknown B0.1 | no-setup B0 | no-setup B0.1 | verdict changed | directions | pass to unknown (C7) | wall s |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: |",
@@ -277,7 +353,33 @@ def render_md(payload):
     return "\n".join(lines)
 
 
-def main():
+def _row_wanted(row, only):
+    if not only:
+        return True
+    cid = row["coverage_id"]
+    method = row["method_id"]
+    return cid in only or method in only or any(cid.startswith(f"{token}:") for token in only)
+
+
+def merge_payload(existing, fresh, refreshed_ids):
+    by_id = {row["coverage_id"]: row for row in existing.get("branches") or []}
+    for row in fresh.get("branches") or []:
+        by_id[row["coverage_id"]] = row
+    existing["branches"] = [by_id[cid] for cid in sorted(by_id)]
+    existing["round4_note"] = "only GB-FAIL and JJ-TBR rows were refreshed in round four"
+    existing["round4_refreshed_coverage_ids"] = sorted(refreshed_ids)
+    existing["round4_wall_seconds_orchestrator"] = fresh.get("wall_seconds_orchestrator")
+    existing["round4_diagnostics"] = fresh.get("round4_diagnostics")
+    existing["round4_date_results"] = fresh.get("date_results")
+    existing["n_branches"] = len(existing["branches"])
+    return existing
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--only", nargs="*", default=None, help="method_id prefixes or coverage ids to run")
+    parser.add_argument("--merge", action="store_true", help="replace matching rows in existing delta files")
+    args = parser.parse_args(argv)
     configure_runtime()
     install_write_guard()
     dates, calendar_n = census_dates()
@@ -287,6 +389,10 @@ def main():
     if len(rows) != len(wanted):
         missing = wanted - {row["coverage_id"] for row in rows}
         raise SystemExit(f"coverage rows missing: {sorted(missing)}")
+    if args.only:
+        rows = [row for row in rows if _row_wanted(row, args.only)]
+        if not rows:
+            raise SystemExit(f"no coverage rows matched --only {args.only}")
     started = time.monotonic()
     date_results = []
     with ProcessPoolExecutor(max_workers=MAX_WORKERS) as pool:
@@ -312,11 +418,15 @@ def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     json_path = OUT_DIR / "BASELINE_REPAIR_DELTA.json"
     md_path = OUT_DIR / "BASELINE_REPAIR_DELTA.md"
+    if args.merge:
+        existing = json.loads(json_path.read_text())
+        payload = merge_payload(existing, payload, [row["coverage_id"] for row in rows])
     json_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     md_path.write_text(render_md(payload))
     print("wrote", json_path)
     print("wrote", md_path)
-    print("orchestrator_wall_s", payload["wall_seconds_orchestrator"])
+    print("orchestrator_wall_s", payload.get("round4_wall_seconds_orchestrator") or payload["wall_seconds_orchestrator"])
+    print("round4_diagnostics", json.dumps(payload.get("round4_diagnostics") or {}))
 
 
 if __name__ == "__main__":
