@@ -1,0 +1,454 @@
+{
+  "schema": "foundation-adversarial-results-v1",
+  "harness_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+  "input_hashes": {
+    "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20",
+    "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json": "549429da5d43ff6fc347723fe4f4c8eda4550b31190bb94324ab82e2afba2c4f",
+    "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json": "e1046c17650332378273a0c6e2a2c796ba3abd6a0d1113fb371aef998143cfea",
+    "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json": "645df877df943877a46f87d79f74101ba55249f637900f2a2e73db6448b35089"
+  },
+  "cases": [
+    {
+      "case": "valid_p15_00",
+      "kind": "cli",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.42168140690773726,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "valid_p15_01",
+      "kind": "cli",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4672931684181094,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "valid_subphase",
+      "kind": "cli",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.5354202631860971,
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "required_artifacts_omitted",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/required_artifacts_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.3534360947087407,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/required_artifacts_omitted.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "required_baseline_binding_omitted",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/required_baseline_binding_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.5510246148332953,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/required_baseline_binding_omitted.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "plan_sha256_replaced",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/plan_sha256_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4799821935594082,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/plan_sha256_replaced.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "code_sha256_replaced",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/code_sha256_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.566640960983932,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/code_sha256_replaced.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "run_id_replaced",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/run_id_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.5071932412683964,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/run_id_replaced.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "non_hex_plan_identity",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/non_hex_plan_identity.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.3797482429072261,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/non_hex_plan_identity.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "failed_test_excused_as_implemented",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/failed_test_excused_as_implemented.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4224889222532511,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/failed_test_excused_as_implemented.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "command_logs_omitted",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/command_logs_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4776584701612592,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/command_logs_omitted.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "false_acceptance_flag",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/false_acceptance_flag.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.5178613811731339,
+      "stdout": "[\n  {\n    \"code\": \"ACCEPTANCE\",\n    \"detail\": \"required acceptance key A01 is not true\",\n    \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/false_acceptance_flag.json\"\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "case": "failed_parent_control",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4762183204293251,
+      "stdout": "[\n  {\n    \"code\": \"ACCEPTANCE\",\n    \"detail\": \"required acceptance key A01 is not true\",\n    \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"DISPOSITION\",\n    \"detail\": \"disposition blocked_implementation is not allowed for P15-00\",\n    \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"BLOCKED_IMPLEMENTATION\",\n    \"detail\": \"blocked_implementation is not an accepted terminal\",\n    \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  }\n]\n",
+      "stderr": ""
+    },
+    {
+      "case": "child_of_failed_parent",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/child/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json",
+        "--receipts-root",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/predecessors"
+      ],
+      "seconds": 0.37887602392584085,
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/child/TASK_RECEIPT.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "phase_2_closed_using_one_phase_1_5_receipt",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "phase",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/false-phase-2.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.4249929878860712,
+      "stdout": "{\n  \"kind\": \"phase\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/false-phase-2.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "unknown_subphase_with_no_tasks",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/unknown-subphase.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.3342761965468526,
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/unknown-subphase.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "subphase_reuses_wrong_task_receipt",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/wrong-subphase-task.json",
+        "--graph",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/TASK_GRAPH_BEFORE.json"
+      ],
+      "seconds": 0.46922030486166477,
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/wrong-subphase-task.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "valid_lineage",
+      "kind": "cli",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "passed": true,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/valid.json"
+      ],
+      "seconds": 0.3068252122029662,
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/valid.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "lineage_child_overrides_ancestor_clock",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/future.json"
+      ],
+      "seconds": 0.341050798073411,
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/future.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "lineage_invalid_availability_type",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/bad-clock.json"
+      ],
+      "seconds": 0.33996293880045414,
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/bad-clock.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "lineage_artifact_hash_omitted",
+      "kind": "cli",
+      "expected_exit": 2,
+      "actual_exit": 0,
+      "passed": false,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/no-hash.json"
+      ],
+      "seconds": 0.36365030054003,
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/lineage/no-hash.json\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "case": "trade_valid_evidence",
+      "kind": "constructor",
+      "expected": "accepted",
+      "actual": "accepted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "case": "reference_valid_evidence",
+      "kind": "constructor",
+      "expected": "accepted",
+      "actual": "accepted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "case": "trade_late_evidence",
+      "kind": "constructor",
+      "expected": "ContractError",
+      "actual": "accepted",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "case": "reference_late_evidence",
+      "kind": "constructor",
+      "expected": "ContractError",
+      "actual": "accepted",
+      "passed": false,
+      "detail": ""
+    },
+    {
+      "case": "valid_forecast",
+      "kind": "constructor",
+      "expected": "accepted",
+      "actual": "accepted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "case": "forecast_training_ends_after_issue",
+      "kind": "constructor",
+      "expected": "ContractError",
+      "actual": "accepted",
+      "passed": false,
+      "detail": ""
+    }
+  ],
+  "status": "fail"
+}

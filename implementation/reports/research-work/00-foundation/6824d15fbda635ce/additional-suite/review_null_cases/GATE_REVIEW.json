@@ -1,0 +1,105 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "d7f8878b0aa7fda33d0b88d194afff6ca2afb00ea4d85dcca251016b511bb019"
+  },
+  "code_snapshots": {
+    "P15-00": {
+      "code_sha256": "07f88385af3f8ba1a4597fd1563721eb5a6b367167eee6187f85495031d9ba30",
+      "path": "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "04b69c9b7d33a685b449a33081fdf63ecaa4c7b7519399448550e2c959bfc807"
+    },
+    "P15-01": {
+      "code_sha256": "166b0dbf158e13aca856e6a7ca0d7c005c33a184174d56bb4ba93e8ae06b0f52",
+      "path": "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "f53e6454e7162e0070f8c4252d2fe204258cddd3c6f0ed48ccc5e0c462dc5d08"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/fixed-suite"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/INDEPENDENT_RESULTS.json",
+      "log_sha256": "5cf01df4d7b617ba6c9adb03a2472f5d8941ad9e74fe16516408a0e7c3e5d683"
+    }
+  ],
+  "evidence_matrices": {
+    "P15-00": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "6a44fa50544aceda0b8b8dc462c807ef2dbd039a778e481e973464dd85c036e5"
+    },
+    "P15-01": {
+      "path": "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "827214d686d2a84d81d351391da9ecfbf565f458905865546b43f7305f02291d"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional_probe.py",
+      "resolution": "resolved",
+      "resolution_evidence": "additional_probe 14/14 and sibling-hole tests",
+      "severity": "integrity",
+      "summary": "Ten v2 invalid cases fail closed; unsupported matrix rows and unpaired independent hashes also fail."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "file_digest",
+      "resolution": "resolved",
+      "resolution_evidence": "4d96f149d81ffad8173b59bde2d807026e6b8e1fac61c3814531c7b61137b4a0 unchanged",
+      "severity": "integrity",
+      "summary": "v1 and rejected v2 receipts remain byte-identical."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/additional-suite/review_null_cases/INDEPENDENT_RESULTS.json",
+    "results_sha256": "5cf01df4d7b617ba6c9adb03a2472f5d8941ad9e74fe16516408a0e7c3e5d683",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; inherit-parent reviewer is not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "2967a01721052e8d250b9aeb1e42f619eacbcb76a80386654a87b8e28161ba90"
+  },
+  "reviewed_at": "2026-09-14T13:19:23Z",
+  "reviewed_task_ids": [
+    "P15-00",
+    "P15-01"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "00-foundation",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun.",
+    "Pinned 27-case and 14-case suites are not exhaustive."
+  ],
+  "verdict": "pass"
+}

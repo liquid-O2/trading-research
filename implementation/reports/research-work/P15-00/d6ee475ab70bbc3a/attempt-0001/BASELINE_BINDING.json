@@ -1,0 +1,918 @@
+{
+  "acceptance_status": "completed_with_explicit_input_limitations",
+  "census": {
+    "setups_are_branch_opportunities": true,
+    "setups_are_independent_trades": false,
+    "status": "pass",
+    "totals": {
+      "daily_jobs": 99294,
+      "duplicate_opportunities": 0,
+      "future_leakage": 0,
+      "native_executions": 591714592,
+      "sessions": 1742,
+      "setups": 18747
+    }
+  },
+  "clock_contract": "event-time-observed-v2.0.0",
+  "identities": {
+    "acceptance_file_sha256": "2025cac657fe329b8ae9c6d86a004cbca25661b6fb95d4cb4e5c1d3715b28c91",
+    "calendar_file_sha256": "f51a534348061f835995b5699da303f71aa3960174c1afc680eaafa55c3dbd26",
+    "calendar_sha256": "8508a2bfadc1af381bf1b35345d9c6519a7d07999d18955cfddc7bd500b4ecb2",
+    "census_file_sha256": "623aa3d6973dd356912e2b190ec86cc89757b97eaae78003cec7be255f236ec9",
+    "coverage_file_sha256": "e26b81224b32a3be04e2b04e97752c5a86c286fd5a135389145ce90f3104f510",
+    "coverage_sha256": "cddf4a52d79bf9c00ad5e84c29e51222876e09f4f156bd09f0e0f818462940c8",
+    "population_file_sha256": "d87c591137c6cf08a61327a9c0f18d362b4669581e7958b6e46ca2b5ea366493",
+    "protocol_file_sha256": "051269f53c91c0a9ea53c619a2d0de8689696a4e55a9a137ad3024a089217ce9",
+    "registry_file_sha256": "4dd9515b4e176e852f604fffa05dd752c7a446e4e8deffd4e1e5d555f7c88719",
+    "registry_sha256": "63e572556212f5c02f524af1cb8b70ef4e35eaa07649c24b78bb604d79f9cbf6",
+    "report_file_sha256": "5ba288ba113b2554375308a03564cdc02264cbeab0a9ebd38c97222d129671c6",
+    "scope_sha256": "03bd0cca39b890c2cfdb243740baab52ff39def4acb79507af696810877f01d2",
+    "software_sha256": "baf81dbb3c7bb2ca676a94a6f4881e3adad77dde04683983887ec5d31ef6db31"
+  },
+  "phase1_run_id": "phase1-full-history-1.0.1",
+  "schema": "research-baseline-binding-v1",
+  "software_sha256": "baf81dbb3c7bb2ca676a94a6f4881e3adad77dde04683983887ec5d31ef6db31",
+  "strategy_reconstruction": true,
+  "study_end": "2026-09-03",
+  "study_start": "2020-01-01",
+  "units": {
+    "branch_count": 50,
+    "extra_unit_count": 8,
+    "methods": 12,
+    "scope_counts": {
+      "context_or_research": 10,
+      "entry_setup": 37,
+      "personal_execution_out_of_scope": 7,
+      "supplemental_observation": 4
+    },
+    "unit_count": 58,
+    "units": [
+      {
+        "branch": "judas_outbound",
+        "coverage_id": "JJ-TBR:branch:judas_outbound",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "judas_reversal",
+        "coverage_id": "JJ-TBR:branch:judas_reversal",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "single_extended",
+        "coverage_id": "JJ-TBR:branch:single_extended",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "single_purged",
+        "coverage_id": "JJ-TBR:branch:single_purged",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "internal_rotation",
+        "coverage_id": "JJ-TBR:branch:internal_rotation",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "extension_reaction",
+        "coverage_id": "JJ-TBR:branch:extension_reaction",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "other_session",
+        "coverage_id": "JJ-TBR:branch:other_session",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "timed_pzone_reversal",
+        "coverage_id": "JJ-TBR:branch:timed_pzone_reversal",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "pzone",
+            "recovery": "Source catalog contains case readouts/settings, not a historical 2020+ P-zone series or generator. Usage scanner accepts dated supplied bands; no approximate substitute.",
+            "required": "dated source P-zone band ID, bounds, active state, generator version and named destination"
+          }
+        ],
+        "method_id": "JJ-TBR",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "management",
+        "coverage_id": "JJ-TBR:unit:management",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "JJ-TBR",
+        "observation_unit": "management",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_jumbo",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_jumbo",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "nyam_box",
+        "coverage_id": "GB-FAIL:branch:nyam_box",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "previous_hour",
+        "coverage_id": "GB-FAIL:branch:previous_hour",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "asia_tdo_case",
+        "coverage_id": "GB-FAIL:branch:asia_tdo_case",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "prior_day_level",
+        "coverage_id": "GB-FAIL:branch:prior_day_level",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "prior_week_level",
+        "coverage_id": "GB-FAIL:branch:prior_week_level",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "prior_month_level",
+        "coverage_id": "GB-FAIL:branch:prior_month_level",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "cash_open_reclaim_case",
+        "coverage_id": "GB-FAIL:branch:cash_open_reclaim_case",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "mss_fvg_refinement",
+        "coverage_id": "GB-FAIL:branch:mss_fvg_refinement",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-FAIL",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_failure",
+        "scope_kind": "supplemental_observation"
+      },
+      {
+        "branch": "source_long",
+        "coverage_id": "GB-VWAP:branch:source_long",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "GB-VWAP",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_price_scanners:scan_green_vwap",
+        "scanner": "trading_research.research.method_pack.historical_price_scanners:scan_green_vwap",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "bearish_small_scalp",
+        "coverage_id": "GB-SCALP:branch:bearish_small_scalp",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "scalp_process",
+            "recovery": "The two posts disclose directional pullback and small-exposure behavior, not a repeatable complete entry. Native directional/pullback observations and supplied process audit are connected separately.",
+            "required": "actual size/management record plus author entry detector if automatic admission is requested"
+          }
+        ],
+        "method_id": "GB-SCALP",
+        "observation_unit": "source_case_structure",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_scalp",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_scalp",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "bullish_discount_pullback",
+        "coverage_id": "GB-SCALP:branch:bullish_discount_pullback",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "scalp_process",
+            "recovery": "The two posts disclose directional pullback and small-exposure behavior, not a repeatable complete entry. Native directional/pullback observations and supplied process audit are connected separately.",
+            "required": "actual size/management record plus author entry detector if automatic admission is requested"
+          }
+        ],
+        "method_id": "GB-SCALP",
+        "observation_unit": "source_case_structure",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_scalp",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_scalp",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "automatic_admission",
+        "coverage_id": "GB-SCALP:unit:automatic_admission",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "scalp_process",
+            "recovery": "The two posts disclose directional pullback and small-exposure behavior, not a repeatable complete entry. Native directional/pullback observations and supplied process audit are connected separately.",
+            "required": "actual size/management record plus author entry detector if automatic admission is requested"
+          }
+        ],
+        "method_id": "GB-SCALP",
+        "observation_unit": "automatic_admission",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_scalp",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_scalp",
+        "scope_kind": "supplemental_observation"
+      },
+      {
+        "branch": "dom_rejection",
+        "coverage_id": "SIRES:branch:dom_rejection",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "absorption_reward_retest",
+        "coverage_id": "SIRES:branch:absorption_reward_retest",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "stop_four_stage",
+        "coverage_id": "SIRES:branch:stop_four_stage",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "footprint_confirmed_reaction",
+        "coverage_id": "SIRES:branch:footprint_confirmed_reaction",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "vwap_deviation_fade",
+        "coverage_id": "SIRES:branch:vwap_deviation_fade",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "ofm_aggressive",
+        "coverage_id": "SIRES:branch:ofm_aggressive",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "gamma",
+            "recovery": "Local option contract/quote/OI data exist; they do not disclose author dealer positions or gamma-map formula. Observable OFM/fade stages run independently.",
+            "required": "dated source dealer-map regime and selected native product/transform"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "ofm_passive",
+        "coverage_id": "SIRES:branch:ofm_passive",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "clean_squeeze",
+        "coverage_id": "SIRES:branch:clean_squeeze",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "balance_failure_fade",
+        "coverage_id": "SIRES:branch:balance_failure_fade",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "gamma",
+            "recovery": "Local option contract/quote/OI data exist; they do not disclose author dealer positions or gamma-map formula. Observable OFM/fade stages run independently.",
+            "required": "dated source dealer-map regime and selected native product/transform"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "defended_band_continuation",
+        "coverage_id": "SIRES:branch:defended_band_continuation",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "microbalance_break",
+        "coverage_id": "SIRES:branch:microbalance_break",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "kg1_retest",
+        "coverage_id": "SIRES:branch:kg1_retest",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "kg1",
+            "recovery": "Retained source cases provide limited readouts; no historical generator/series. Existing options snapshots cannot establish proprietary KG1.",
+            "required": "dated source KG1 level/band, identity and version"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scanner": "trading_research.research.method_pack.historical_flow:scan_sires",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "case_description",
+        "coverage_id": "SIRES:unit:case_description",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SIRES",
+        "observation_unit": "case_description",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scope_kind": "supplemental_observation"
+      },
+      {
+        "branch": "management",
+        "coverage_id": "SIRES:unit:management",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "management",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "reentry",
+        "coverage_id": "SIRES:unit:reentry",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "SIRES",
+        "observation_unit": "reentry",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_sires",
+        "scope_kind": "supplemental_observation"
+      },
+      {
+        "branch": "continuation_retest",
+        "coverage_id": "SAINT-AMT:branch:continuation_retest",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SAINT-AMT",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "trapped_buyers_retest",
+        "coverage_id": "SAINT-AMT:branch:trapped_buyers_retest",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SAINT-AMT",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "failed_auction_return",
+        "coverage_id": "SAINT-AMT:branch:failed_auction_return",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SAINT-AMT",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "poc_traversal",
+        "coverage_id": "SAINT-AMT:branch:poc_traversal",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "SAINT-AMT",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_saint",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "resistance_short",
+        "coverage_id": "MEMBER-TWO-REASONS:branch:resistance_short",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "MEMBER-TWO-REASONS",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_member",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_member",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "planned_return_long",
+        "coverage_id": "MEMBER-TWO-REASONS:branch:planned_return_long",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "MEMBER-TWO-REASONS",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_member",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_member",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "source_long",
+        "coverage_id": "KEANI-OPEN-ABOVE-VALUE:branch:source_long",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "KEANI-OPEN-ABOVE-VALUE",
+        "observation_unit": "market_sequence",
+        "producer": "trading_research.research.method_pack.historical_auction_scanners:scan_keani",
+        "scanner": "trading_research.research.method_pack.historical_auction_scanners:scan_keani",
+        "scope_kind": "entry_setup"
+      },
+      {
+        "branch": "touch_record",
+        "coverage_id": "REFILL-STUDY:branch:touch_record",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "REFILL-STUDY",
+        "observation_unit": "zone_return",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_refill",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_refill",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "supplied_selected_order",
+        "coverage_id": "REFILL-STUDY:branch:supplied_selected_order",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "selection",
+            "recovery": "Cited causal rebuild is negative; original classifier/normalization and private selections are unpublished. Native zone/return denominator remains separate.",
+            "required": "original frozen touch model/features/grade and selected order lifecycle"
+          },
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "REFILL-STUDY",
+        "observation_unit": "selected_order",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_refill",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_refill",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "selected_order_configuration",
+        "coverage_id": "REFILL-STUDY:unit:selected_order_configuration",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "selection",
+            "recovery": "Cited causal rebuild is negative; original classifier/normalization and private selections are unpublished. Native zone/return denominator remains separate.",
+            "required": "original frozen touch model/features/grade and selected order lifecycle"
+          },
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "REFILL-STUDY",
+        "observation_unit": "selected_order_configuration",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_refill",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_refill",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "B",
+        "coverage_id": "JETBUNDLE-STATES:branch:B",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "state_observation",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "A",
+        "coverage_id": "JETBUNDLE-STATES:branch:A",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "state_observation",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "D",
+        "coverage_id": "JETBUNDLE-STATES:branch:D",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "state_observation",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "E",
+        "coverage_id": "JETBUNDLE-STATES:branch:E",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "state_observation",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "W",
+        "coverage_id": "JETBUNDLE-STATES:branch:W",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "state_observation",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_jetbundle",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "transition_observation",
+        "coverage_id": "JETBUNDLE-STATES:unit:transition_observation",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "state_label",
+            "recovery": "Numeric source illustration does not publish classifier thresholds/priority. Native participation/efficiency runs; no classifier invented or trained.",
+            "required": "dated actual B–A–D–E–W labels or published fully specified classifier/qualitative annotation records"
+          }
+        ],
+        "method_id": "JETBUNDLE-STATES",
+        "observation_unit": "transition_observation",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_jet",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_jet",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "process_review",
+        "coverage_id": "STOIC-DATA:branch:process_review",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [],
+        "method_id": "STOIC-DATA",
+        "observation_unit": "process_record",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_stoic_data",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_stoic_data",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "macro_application",
+        "coverage_id": "STOIC-DATA:branch:macro_application",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "macro_custom",
+            "recovery": "Existing 20-series/37003-vintage bundles are used directly; initial BLS clocks and specified standardized comparisons are available. Source proprietary transforms and non-initial intraday clocks are not supplied by that recovery.",
+            "required": "source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation"
+          }
+        ],
+        "method_id": "STOIC-DATA",
+        "observation_unit": "process_record",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_stoic_data",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_stoic_data",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "macro_application",
+        "coverage_id": "STOIC-DATA:unit:macro_application",
+        "extra_unit": true,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "macro_custom",
+            "recovery": "Existing 20-series/37003-vintage bundles are used directly; initial BLS clocks and specified standardized comparisons are available. Source proprietary transforms and non-initial intraday clocks are not supplied by that recovery.",
+            "required": "source custom indicator set/transforms, C-score/cycle/trend formula and historical interpretation"
+          }
+        ],
+        "method_id": "STOIC-DATA",
+        "observation_unit": "macro_application",
+        "producer": "trading_research.research.method_pack.native_discovery:extra_stoic",
+        "scanner": "trading_research.research.method_pack.native_discovery:extra_stoic",
+        "scope_kind": "context_or_research"
+      },
+      {
+        "branch": "first",
+        "coverage_id": "STOIC-RISK:branch:first",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "validated_process",
+            "recovery": "Printed first/second/reset arithmetic is available and executable. Neither the private prior sample nor Monte Carlo specification is present; a new simulation would not reconstruct it.",
+            "required": "actual prior validated trade sample, win/RR metrics, Monte Carlo loss-streak result and stage ledger"
+          },
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "STOIC-RISK",
+        "observation_unit": "process_record",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "second",
+        "coverage_id": "STOIC-RISK:branch:second",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "validated_process",
+            "recovery": "Printed first/second/reset arithmetic is available and executable. Neither the private prior sample nor Monte Carlo specification is present; a new simulation would not reconstruct it.",
+            "required": "actual prior validated trade sample, win/RR metrics, Monte Carlo loss-streak result and stage ledger"
+          },
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "STOIC-RISK",
+        "observation_unit": "process_record",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scope_kind": "personal_execution_out_of_scope"
+      },
+      {
+        "branch": "reset_after_second_win",
+        "coverage_id": "STOIC-RISK:branch:reset_after_second_win",
+        "extra_unit": false,
+        "implementation_state": "reachable",
+        "input_limits": [
+          {
+            "id": "validated_process",
+            "recovery": "Printed first/second/reset arithmetic is available and executable. Neither the private prior sample nor Monte Carlo specification is present; a new simulation would not reconstruct it.",
+            "required": "actual prior validated trade sample, win/RR metrics, Monte Carlo loss-streak result and stage ledger"
+          },
+          {
+            "id": "account",
+            "recovery": "Public market events and illustrated tickets are not a historical account ledger. The connected process interface audits supplied real records; market-stage measurement does not wait for them.",
+            "required": "actual account/session closed R and active quantity/order ledger"
+          }
+        ],
+        "method_id": "STOIC-RISK",
+        "observation_unit": "process_record",
+        "producer": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scanner": "trading_research.research.method_pack.historical_process_scanners:scan_risk",
+        "scope_kind": "personal_execution_out_of_scope"
+      }
+    ]
+  },
+  "wiki_not_used_for_identity": true
+}

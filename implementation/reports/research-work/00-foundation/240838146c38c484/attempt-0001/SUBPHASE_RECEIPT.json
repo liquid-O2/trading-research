@@ -1,0 +1,116 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "coverage": {
+    "input_groups": {
+      "current_session_executions": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_month_levels": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_same_contract_rth_profile": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      }
+    },
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "previously_exposed_engineering_dates_declared": true,
+    "unknown": 390,
+    "year_complete_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02"
+    ]
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06"
+  ],
+  "reason": "v2 foundation repair candidate; original v1 receipts preserved",
+  "run_id": "240838146c38c484",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator"
+  },
+  "subphase_id": "00-foundation",
+  "task_receipts": {
+    "P15-00": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "2c70bb6ee4a4a1db7ea60c452af8e94cb52e7f68dce24f3e569112bb37e39de0"
+    },
+    "P15-01": {
+      "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "01522514007c1677d553726c0b6a867aa2047f50607d004858886c0c896dc27d"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_00.py",
+        "tests/rule_discovery/test_p15_01.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/pytest.log",
+      "log_sha256": "534872368a38f65abb7a6fbf716d702193c4af569b08239e9c3050b0b57a2af2",
+      "seconds": 130.19822713825852
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/verify_p15_00.log",
+      "log_sha256": "e2b9a0edcfa2ec63ada318d9ee24ffe739f28207ef71614cb0737033f7055d22",
+      "seconds": 0.01
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/verify_p15_01.log",
+      "log_sha256": "72e6cd4508bfec85f95969798cf41c214a0ecb290e313764f1e82ed6ff1aecf2",
+      "seconds": 0.01
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Independent 27-case suite and GATE_REVIEW are bound after this candidate."
+  ]
+}

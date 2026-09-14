@@ -1,0 +1,103 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true
+  },
+  "artifact_manifest": [
+    {
+      "bytes": 3185,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/DRAFT_MANIFEST.json",
+      "rows": null,
+      "schema": "research-draft-manifest-v1",
+      "sha256": "fe066b6f3d9a56e16e35d5a30a599978da7e6b7d14be7dba378aa6643c8bb426"
+    },
+    {
+      "bytes": 43999,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/BASELINE_BINDING.json",
+      "rows": null,
+      "schema": "research-baseline-binding-v1",
+      "sha256": "45f5b3392d8c34f5448479054c1131b65114ccf4e64448f9dfe92e106b75aa29"
+    },
+    {
+      "bytes": 2401,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/EXPOSURE_LEDGER.json",
+      "rows": null,
+      "schema": "research-exposure-ledger-v1",
+      "sha256": "beff47242922e676761af88189e10a3a4b77d338cf6f4726a7407c0fc0acd2cb"
+    },
+    {
+      "bytes": 344742,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/ENGINEERING_DATES.json",
+      "rows": null,
+      "schema": "research-engineering-dates-v1",
+      "sha256": "265711a69e9501e6f623118a4e8865d5c9b080515004da731867367c90dc4e88"
+    },
+    {
+      "bytes": 12584,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/SCHEMA_EXAMPLES.json",
+      "rows": null,
+      "schema": "research-schema-examples-v1",
+      "sha256": "7f2f0d137aa94c1e8979e6893e3df85aea234cc2e2a4b86a840543d8d52d31f3"
+    },
+    {
+      "bytes": 614,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/WORKTREE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-worktree-snapshot-v1",
+      "sha256": "640b182d6899cc4016e5c663d75d53a28ba3848ca491226272d02e8acaef7fb5"
+    },
+    {
+      "bytes": 1069,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/REPORT.md",
+      "rows": null,
+      "schema": "research-task-report-v1",
+      "sha256": "109ac74e2d0509a7294be9babc6770cc0a7b9c32bdcd4f15958f55de7b38eaf1"
+    },
+    {
+      "bytes": 99,
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/pytest.log",
+      "rows": null,
+      "schema": "pytest-log",
+      "sha256": "658ac989eb9501788d497c60eb1b96e7da98f10e22f5132a8442035c303865db"
+    }
+  ],
+  "code_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "/workspace/implementation/tests/rule_discovery/test_p15_00.py",
+        "-q"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/pytest.log",
+      "log_sha256": "658ac989eb9501788d497c60eb1b96e7da98f10e22f5132a8442035c303865db",
+      "seconds": 3.779
+    }
+  ],
+  "coverage": {
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "native": false,
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "07b831e13a2b824ecb8963c8a01bc35bde57464f3529efaa179ef92cbda14fd9",
+  "predecessor_receipts": {},
+  "reason": "Implemented typed records, canonical identity, baseline binding and receipt serialization against the accepted Phase 1 census. The P15-01 verifier did not exist at write time.",
+  "run_id": "b291864ccceaca9a",
+  "schema_version": "research-task-receipt-v1",
+  "task_id": "P15-00",
+  "unresolved": [
+    "P15-01 verifier is pending and must verify this receipt retrospectively"
+  ]
+}

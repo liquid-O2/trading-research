@@ -1,0 +1,63 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "4d96f149d81ffad8173b59bde2d807026e6b8e1fac61c3814531c7b61137b4a0"
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/INDEPENDENT_RESULTS.json",
+      "resolution": "resolved",
+      "resolution_evidence": "RESULTS.json status=pass, 27/27 passed, harness_sha256 matches pin",
+      "severity": "integrity",
+      "summary": "Independent 27-case suite now rejects the 18 previously accepted invalid cases and still accepts the valid controls."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/ENGINEERING_DATES.json",
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/SCHEMA_EXAMPLES.json"
+      ],
+      "id": "F02",
+      "reproduction": "types.py constructors and ENGINEERING_DATES discriminating_negatives",
+      "resolution": "resolved",
+      "resolution_evidence": "prior status=partial unknown=390; native kind=native",
+      "severity": "causality",
+      "summary": "NativeTrade/Reference/Forecast reject late nested evidence; 2020-01-02 prior-profile is not complete."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F03",
+      "reproduction": "file_digest of reviewed identities",
+      "resolution": "resolved",
+      "resolution_evidence": "hashes a4c5e6bc... 549429da... e1046c17... unchanged",
+      "severity": "integrity",
+      "summary": "Original v1 receipts remain byte-identical under explicit supersession."
+    }
+  ],
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "4ad9caa91e240bba553cd99dfd445c8ebee75a352ee32953fa71fe1a6899a85c",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; no nested worker; not cross-model",
+  "reviewed_task_ids": [],
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "no-such-subphase",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun."
+  ],
+  "verdict": "pass"
+}

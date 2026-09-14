@@ -1,0 +1,49 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v1",
+    "research-subphase-receipt-v1",
+    "research-phase-receipt-v1",
+    "research-lineage-manifest-v1",
+    "research-baseline-binding-v1",
+    "research-engineering-dates-v1"
+  ],
+  "coverage": {
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "native": false,
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06"
+  ],
+  "reason": "P15-00 bound the accepted Phase 1 census and typed records. P15-01 verified those receipts with verify_research_release.py. Software checks passed. Input limits stay documented.",
+  "run_id": "f7135f8d696ff1f5",
+  "schema_version": "research-subphase-receipt-v1",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "live_agents_cap": 3,
+    "p15_00_writer": "coordinator",
+    "p15_01_writer": "poteto-agent:01a09f22-0fbf-70e1-8ae6-f4a785343a20",
+    "shared_checkout_one_writer": true,
+    "subphase_writer": "coordinator"
+  },
+  "subphase_id": "00-foundaton",
+  "task_receipts": {},
+  "test_evidence": [],
+  "unresolved": [
+    "later Phase 1.5 subphases are not started",
+    "session prefix holes are not in the calendar coverage used for engineering dates",
+    "reviewer is parent Grok, not a different model family",
+    "no PR, push, merge or live trading"
+  ]
+}

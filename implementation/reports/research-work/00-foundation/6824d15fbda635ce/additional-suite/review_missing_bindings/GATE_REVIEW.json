@@ -1,0 +1,54 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "d7f8878b0aa7fda33d0b88d194afff6ca2afb00ea4d85dcca251016b511bb019"
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional_probe.py",
+      "resolution": "resolved",
+      "resolution_evidence": "additional_probe 14/14 and sibling-hole tests",
+      "severity": "integrity",
+      "summary": "Ten v2 invalid cases fail closed; unsupported matrix rows and unpaired independent hashes also fail."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "file_digest",
+      "resolution": "resolved",
+      "resolution_evidence": "4d96f149d81ffad8173b59bde2d807026e6b8e1fac61c3814531c7b61137b4a0 unchanged",
+      "severity": "integrity",
+      "summary": "v1 and rejected v2 receipts remain byte-identical."
+    }
+  ],
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "5cf01df4d7b617ba6c9adb03a2472f5d8941ad9e74fe16516408a0e7c3e5d683",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; inherit-parent reviewer is not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "2967a01721052e8d250b9aeb1e42f619eacbcb76a80386654a87b8e28161ba90"
+  },
+  "reviewed_task_ids": [],
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "no-such-subphase",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun.",
+    "Pinned 27-case and 14-case suites are not exhaustive."
+  ],
+  "verdict": "pass"
+}

@@ -1,0 +1,133 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true
+  },
+  "artifact_manifest": [
+    {
+      "bytes": 1724,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/DRAFT_MANIFEST.json",
+      "rows": null,
+      "schema": "research-draft-manifest-v1",
+      "sha256": "e5f23c506b52a38211fd70cfb0f126fce93cf54af1d976f0984784dc20717781"
+    },
+    {
+      "bytes": 4896,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/VERIFIER_CASES.json",
+      "rows": null,
+      "schema": "research-verifier-cases-v1",
+      "sha256": "4742d4b234969da8f1df301af535822920cd5af6ff09c72c1b975b3c44b62400"
+    },
+    {
+      "bytes": 558,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/WORKTREE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-worktree-snapshot-v1",
+      "sha256": "480398fbd5dc7ebcfbae63d00b1d232bb71004c5a9df5d0b5db2568ce4ea7688"
+    },
+    {
+      "bytes": 3176,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/REPORT.md",
+      "rows": null,
+      "schema": "research-task-report-v1",
+      "sha256": "fc1e505c2ffaf4ad356e97335fa7baa3546097ca4fa524a6328d9c764f61fdf3"
+    },
+    {
+      "bytes": 2378,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/WORK_LOG.md",
+      "rows": null,
+      "schema": "research-work-log-v1",
+      "sha256": "09764ff440f3be024a5f50c3e8af24bdd3fea9136ea57574ce7d7428e59122a1"
+    },
+    {
+      "bytes": 2030,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/DECISIONS.tsv",
+      "rows": null,
+      "schema": "research-decisions-tsv-v1",
+      "sha256": "782be4f196e60c2dd03542eb38cf76fd4032711d2461ec7c17359deec13d9908"
+    },
+    {
+      "bytes": 99,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/pytest.log",
+      "rows": null,
+      "schema": "pytest-log",
+      "sha256": "a1916dac373b19b74f5657b863d0410635f63e6e09225cf77ddbb84fac13a871"
+    },
+    {
+      "bytes": 151,
+      "path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/verify_p15_00.log",
+      "rows": null,
+      "schema": "verify-log",
+      "sha256": "b994e1787f44c76569b2330ce42fa72b62d865035f30dc3191b69588b502efdc"
+    }
+  ],
+  "code_sha256": "78980dab561eccdd3880ab925690548a8e37ef76f1d56976d9c254db29d93557",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "/workspace/implementation/tests/rule_discovery/test_p15_01.py",
+        "-q"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/pytest.log",
+      "log_sha256": "a1916dac373b19b74f5657b863d0410635f63e6e09225cf77ddbb84fac13a871",
+      "seconds": 7.568
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/verify_p15_00.log",
+      "log_sha256": "b994e1787f44c76569b2330ce42fa72b62d865035f30dc3191b69588b502efdc",
+      "seconds": 0.389
+    }
+  ],
+  "coverage": {
+    "bound_from": "P15-00 ENGINEERING_DATES.json",
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "engineering_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02",
+      "2023-11-06"
+    ],
+    "native": false,
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "61dfe7d2135988cef82c0bb1f94046b0e9c3a7829e794a3d5c8d56ceb4a4a5a1",
+  "predecessor_receipts": {
+    "P15-00": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+  },
+  "reason": "Implemented task/subphase/phase/lineage verification and retrospectively verified the accepted P15-00 receipt.",
+  "run_id": "039267553e8bf721",
+  "schema_version": "research-task-receipt-v1",
+  "task_id": "P15-01",
+  "unresolved": [
+    "coordinator writes SUBPHASE_RECEIPT.json",
+    "nested pstack review agents were not spawned",
+    "no MBP-1 census on this task",
+    "phase-1-5 and phase-2 are not complete"
+  ]
+}

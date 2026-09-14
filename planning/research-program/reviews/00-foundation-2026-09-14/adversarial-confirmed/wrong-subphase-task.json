@@ -1,0 +1,102 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v1",
+    "research-subphase-receipt-v1",
+    "research-phase-receipt-v1",
+    "research-lineage-manifest-v1",
+    "research-baseline-binding-v1",
+    "research-engineering-dates-v1"
+  ],
+  "coverage": {
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "native": false,
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06"
+  ],
+  "reason": "P15-00 bound the accepted Phase 1 census and typed records. P15-01 verified those receipts with verify_research_release.py. Software checks passed. Input limits stay documented.",
+  "run_id": "f7135f8d696ff1f5",
+  "schema_version": "research-subphase-receipt-v1",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "live_agents_cap": 3,
+    "p15_00_writer": "coordinator",
+    "p15_01_writer": "poteto-agent:01a09f22-0fbf-70e1-8ae6-f4a785343a20",
+    "shared_checkout_one_writer": true,
+    "subphase_writer": "coordinator"
+  },
+  "subphase_id": "00-foundation",
+  "task_receipts": {
+    "P15-00": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+    },
+    "P15-01": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "/workspace/implementation/tests/rule_discovery/test_p15_00.py",
+        "/workspace/implementation/tests/rule_discovery/test_p15_01.py",
+        "-q"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/pytest.log",
+      "log_sha256": "523317fccdf4265af2d5575ce866ccd142e7df1e9655497135e1f30e7ba13386",
+      "seconds": 9.844
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/verify_p15_00.log",
+      "log_sha256": "b994e1787f44c76569b2330ce42fa72b62d865035f30dc3191b69588b502efdc",
+      "seconds": 0.416
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/verify_p15_01.log",
+      "log_sha256": "243664ed004e922e12690c69cc0bfe6e97ec1ef70c2d38fd1f22907d7d057d48",
+      "seconds": 0.482
+    }
+  ],
+  "unresolved": [
+    "later Phase 1.5 subphases are not started",
+    "session prefix holes are not in the calendar coverage used for engineering dates",
+    "reviewer is parent Grok, not a different model family",
+    "no PR, push, merge or live trading"
+  ]
+}

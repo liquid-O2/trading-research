@@ -1,6 +1,5 @@
-# Planning
+# Research plans
 
-- `phase-1-live/` is the live plan.
-- `phase-1-fable/`, `phase-1-from-scratch/`, and `phase-1-compare/` are prior Phase 1 plan trees. Do not edit them.
+[Program roadmap](/workspace/planning/ROADMAP.md) · [Shared contracts](/workspace/planning/research-program/README.md) · [Phase 1 completion](/workspace/planning/phase-1-live/PHASE.md) · [Phase 1.5](/workspace/planning/phase-1-5/README.md) · [Phase 2](/workspace/planning/phase-2/README.md) · [Shared wiki](/workspace/wiki/index.md).
 
-Implementation is `/workspace/implementation/`.
+The older `phase-1-from-scratch` and `phase-1-fable` directories are preserved historical material. Current work uses the roadmap and its selected phase pack.

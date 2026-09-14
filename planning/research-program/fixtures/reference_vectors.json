@@ -1,0 +1,249 @@
+{
+  "schema": "research-plan-reference-vectors-v1",
+  "status": "specification fixtures; not implementation test results",
+  "numeric_tolerance": {
+    "absolute": 1e-08,
+    "relative": 1e-07
+  },
+  "cases": [
+    {
+      "id": "ev_conventional",
+      "inputs": {
+        "spot": 100,
+        "annual_sigma": 0.2,
+        "years": 0.25
+      },
+      "expected": {
+        "points": 10
+      }
+    },
+    {
+      "id": "gk_flat",
+      "inputs": {
+        "O": 100,
+        "H": 100,
+        "L": 100,
+        "C": 100
+      },
+      "expected": {
+        "variance": 0
+      }
+    },
+    {
+      "id": "gk_range",
+      "inputs": {
+        "O": 100,
+        "H": 110,
+        "L": 90,
+        "C": 100
+      },
+      "expected": {
+        "variance": 0.020134364008631726
+      }
+    },
+    {
+      "id": "yz_constant_returns",
+      "inputs": {
+        "n": 3,
+        "o": [
+          0.01,
+          0.01,
+          0.01
+        ],
+        "c": [
+          0.02,
+          0.02,
+          0.02
+        ],
+        "u": [
+          0.03,
+          0.03,
+          0.03
+        ],
+        "d": [
+          -0.01,
+          -0.01,
+          -0.01
+        ]
+      },
+      "expected": {
+        "k": 0.10179640718562875,
+        "variance": 0.0005389221556886226
+      }
+    },
+    {
+      "id": "rv_round_trip",
+      "inputs": {
+        "prices": [
+          100,
+          101,
+          100
+        ]
+      },
+      "expected": {
+        "variance": 0.0001980181681750177
+      }
+    },
+    {
+      "id": "linear_quantile",
+      "inputs": {
+        "values": [
+          0,
+          10,
+          20,
+          30
+        ],
+        "p": 0.25
+      },
+      "expected": {
+        "quantile": 7.5
+      }
+    },
+    {
+      "id": "bsm_atm",
+      "inputs": {
+        "S": 100,
+        "K": 100,
+        "r": 0,
+        "q": 0,
+        "T": 1,
+        "sigma": 0.2,
+        "right": "call"
+      },
+      "expected": {
+        "price": 7.965567455405798,
+        "delta": 0.539827837277029,
+        "gamma": 0.01984762737385059,
+        "vega": 39.69525474770118,
+        "vanna": 0.1984762737385059
+      }
+    },
+    {
+      "id": "cvd_unknown",
+      "inputs": {
+        "signed_trades": [
+          [
+            1,
+            10
+          ],
+          [
+            -1,
+            4
+          ],
+          [
+            null,
+            6
+          ]
+        ]
+      },
+      "expected": {
+        "delta": 6,
+        "total_volume": 20,
+        "unknown_volume": 6,
+        "known_volume_ratio": 0.42857142857142855,
+        "admitted": false
+      }
+    },
+    {
+      "id": "costed_long",
+      "inputs": {
+        "entry_ask": 100,
+        "exit_bid": 102,
+        "slippage_each_points": 0.25,
+        "round_trip_commission": 5,
+        "dollars_per_point": 20
+      },
+      "expected": {
+        "entry": 100.25,
+        "exit": 101.75,
+        "net_points": 1.25,
+        "net_dollars": 25
+      }
+    },
+    {
+      "id": "oi_prefix_clipping",
+      "inputs": {
+        "prior_oi": 100,
+        "contributions": [
+          -150,
+          60
+        ]
+      },
+      "expected": {
+        "raw_prefix": [
+          -50,
+          10
+        ],
+        "clipped_prefix": [
+          0,
+          10
+        ]
+      }
+    },
+    {
+      "id": "ordered_target",
+      "inputs": {
+        "entry": 100,
+        "stop": 99,
+        "target": 102,
+        "side": 1,
+        "future_batches": [
+          [
+            100.5
+          ],
+          [
+            102
+          ],
+          [
+            98.5
+          ]
+        ],
+        "coverage": "complete"
+      },
+      "expected": {
+        "result": "target_first"
+      }
+    },
+    {
+      "id": "ordered_ambiguous",
+      "inputs": {
+        "entry": 100,
+        "stop": 99,
+        "target": 102,
+        "side": 1,
+        "future_batches": [
+          [
+            100.5
+          ],
+          [
+            98.5,
+            102
+          ]
+        ],
+        "coverage": "complete"
+      },
+      "expected": {
+        "result": "same_batch_ambiguous"
+      }
+    },
+    {
+      "id": "topology",
+      "inputs": {
+        "low": 99,
+        "high": 101,
+        "tick": 0.25,
+        "future_batches": [
+          [
+            102
+          ],
+          [
+            98
+          ]
+        ]
+      },
+      "expected": {
+        "result": "up_then_down"
+      }
+    }
+  ]
+}

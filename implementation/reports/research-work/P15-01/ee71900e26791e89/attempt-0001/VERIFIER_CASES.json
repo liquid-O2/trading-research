@@ -1,0 +1,36 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "cases": [
+    {
+      "expected_exit": 0,
+      "id": "valid_bootstrap",
+      "test": "test_a05_valid_bootstrap_p15_00_receipt_verifies"
+    },
+    {
+      "code": "ACCEPTANCE",
+      "expected_exit": 2,
+      "id": "matrix_unsupported",
+      "test": "test_matrix_unsupported_cannot_close_accepted_task"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "review_hash_key_split",
+      "test": "test_gate_review_input_hash_must_pair_path_and_digest"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "review_nonobject",
+      "test": "test_gate_review_nonobject_fails_closed"
+    },
+    {
+      "code": "ACCEPTANCE",
+      "expected_exit": 2,
+      "id": "matrix_failed_checks",
+      "test": "test_matrix_failed_checks_rejected_when_accepted"
+    }
+  ],
+  "schema": "research-verifier-cases-v2",
+  "task_id": "P15-01"
+}

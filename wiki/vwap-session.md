@@ -1,0 +1,29 @@
+# Session VWAP
+
+Object in [Green Bird — VWAP continuation](method-green-bird-vwap-continuation.md) · [Sires — thesis, risk and order flow](method-sires-thesis-flow.md).
+
+VWAP is the auction's volume-weighted average under the selected reset and price basis. Green Bird's explicit continuation returns to VWAP after closing above both session highs; Sires uses VWAP as fair-value location or destination within a thesis. [GB] p.33, posts 2026329904690712970 / 2026386393820283204; [VWAP] pp.3–8; [CONT] p.5.
+
+**Not a standalone trade.** A VWAP touch is not a trade. Green Bird's continuation does not inherit Sires's fade or tape-confirmation rule, and the session reset is not universally established from a settings label.
+
+**Record before use.** Instrument, source reset/anchor and confidence, event price/volume basis, cumulative sums/as_of, VWAP_at_touch and known_at.
+
+**Phase 1 observation.** Only pre-touch volume may define the average. Do not use 18:00 or 09:30 as author-exact without verifying the source; record the reset variant and keep unresolved fidelity unknown.
+
+**Source-object implementation snapshot (2026-09-12).** [O030 contract](/workspace/planning/phase-1-live/FORMULAS.md#o030) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Compute price-volume and squared-price-volume sums from actual resolved trades or complete contiguous bars; clip snapshots, retain unknown-side execution volume, and require an exact reset-to-cutoff membership interval. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/context_observations.py).
+
+**Source-specific evidence limits.** The Green Bird reset and price basis and the truncated Sires price basis are unpublished or unreadable. Frozen named comparisons compute literal values without certifying those author settings. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.
+
+**Related objects.** [Anchored VWAP](vwap-anchored.md) · [VWAP deviation bands](vwap-deviations.md) · [Green Bird's finished session references](session-fail-boxes.md) · [Accepted break and defended boundary retest](break-retest.md)
+
+[Index](index.md) · [Observation contract](source-sequence-fidelity.md) · [Source map](source-catalog.md)
+
+[GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
+[VWAP]: </workspace/sources/documents/discretionary/vwap-lesson-10.pdf>
+[CONT]: </workspace/sources/documents/discretionary/a-clean-continuation-short.pdf>
+[FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+
+### September 12 source binding
+
+**Illustrated Sires configuration (2026-09-12):** [VWAP] p.8 shows Session anchor, offset 0, Chart timeframe and Wait for timeframe closes enabled. The price-source field is truncated to `(H + L + …)`; HLC3 is an inference, not a fully verified label. Retain the source-price uncertainty, platform session-clock uncertainty and the distinct visible/discussed band settings in a versioned record. A bar-price VWAP needs complete configured bars and their closing availability. Do not transfer Sires settings to Green Bird.

@@ -1,0 +1,248 @@
+{
+  "case_count": 14,
+  "cases": [
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "description": "Unmodified actual P15-00 receipt.",
+      "expected_exit": 0,
+      "id": "valid_task_control",
+      "passed": true,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--gate-review",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/GATE_REVIEW.json"
+      ],
+      "description": "Unmodified actual v2 candidate and review.",
+      "expected_exit": 0,
+      "id": "valid_review_control",
+      "passed": true,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--gate-review",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/review_nonobject/GATE_REVIEW.json"
+      ],
+      "description": "Review is a JSON list with no review fields.",
+      "expected_exit": 2,
+      "id": "review_nonobject",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--gate-review",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/review_null_cases/GATE_REVIEW.json"
+      ],
+      "description": "Results have 27 null cases, no harness identity, arbitrary input keys, and disagree with the declared results SHA256.",
+      "expected_exit": 2,
+      "id": "review_null_cases",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--gate-review",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/review_missing_bindings/GATE_REVIEW.json"
+      ],
+      "description": "Review lacks code, matrix, graph, command and reviewer bindings; substitutes an unknown subphase and no reviewed tasks.",
+      "expected_exit": 2,
+      "id": "review_missing_bindings",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/matrix_failed_checks/TASK_RECEIPT.json"
+      ],
+      "description": "All required matrix checks explicitly fail and contain no evidence while receipt acceptance flags remain true.",
+      "expected_exit": 2,
+      "id": "matrix_failed_checks",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/matrix_failed_checks/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/matrix_nonexistent_references/TASK_RECEIPT.json"
+      ],
+      "description": "Passing matrix rows cite nonexistent symbols, test node IDs and evidence pointers; all artifact file hashes remain valid.",
+      "expected_exit": 2,
+      "id": "matrix_nonexistent_references",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/matrix_nonexistent_references/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/code_false_file_hash/TASK_RECEIPT.json"
+      ],
+      "description": "Declared source hash is all zeroes; receipt, draft, run ID, artifact hashes and evidence-file hashes are rebound consistently. Relocated snapshot has no code copies.",
+      "expected_exit": 2,
+      "id": "code_false_file_hash",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/code_false_file_hash/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/plan_no_preserved_copies/TASK_RECEIPT.json"
+      ],
+      "description": "Plan files retain valid claimed digests but snapshot_paths is empty and the relocated snapshot has no preserved plan copies.",
+      "expected_exit": 2,
+      "id": "plan_no_preserved_copies",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/plan_no_preserved_copies/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/artifact_wrong_schema/TASK_RECEIPT.json"
+      ],
+      "description": "SCHEMA_EXAMPLES is an unrelated unsupported schema; manifest and matrix hashes are refreshed but its declared schema is unchanged.",
+      "expected_exit": 2,
+      "id": "artifact_wrong_schema",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/artifact_wrong_schema/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_valid_control/LINEAGE_MANIFEST.json"
+      ],
+      "description": "Existing evidence artifact and row available before the root cutoff.",
+      "expected_exit": 0,
+      "id": "lineage_valid_control",
+      "passed": true,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_valid_control/LINEAGE_MANIFEST.json\"\n}\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_late_control/LINEAGE_MANIFEST.json"
+      ],
+      "description": "An explicit late availability clock must be rejected.",
+      "expected_exit": 2,
+      "id": "lineage_late_control",
+      "passed": true,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_late_control/LINEAGE_MANIFEST.json#records[0].features[0].evidence[0]\"\n  },\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_late_control/LINEAGE_MANIFEST.json#records[0].features[0].evidence[0]\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_missing_clock_and_path/LINEAGE_MANIFEST.json"
+      ],
+      "description": "Evidence under root issue 10 omits availability and artifact path and names a nonexistent row at event 100.",
+      "expected_exit": 2,
+      "id": "lineage_missing_clock_and_path",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_missing_clock_and_path/LINEAGE_MANIFEST.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_nonexistent_row/LINEAGE_MANIFEST.json"
+      ],
+      "description": "A real, correctly hashed artifact is paired with a row ID that does not exist.",
+      "expected_exit": 2,
+      "id": "lineage_nonexistent_row",
+      "passed": false,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/in-progress/before-fix-additional-suite/lineage_nonexistent_row/LINEAGE_MANIFEST.json\"\n}\n"
+    }
+  ],
+  "input_hashes": {
+    "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/GATE_REVIEW.json": "7e8a9ccb7afbd8dbcbcefc8d8e145ccbb54504a417b35cea87c2eb516c95e21d",
+    "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json": "4d96f149d81ffad8173b59bde2d807026e6b8e1fac61c3814531c7b61137b4a0",
+    "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json": "2c70bb6ee4a4a1db7ea60c452af8e94cb52e7f68dce24f3e569112bb37e39de0",
+    "/workspace/implementation/src/trading_research/research/contracts/receipts.py": "df5c21553a0a627a769342808943be8ec9ce7773e693d827f48119292cab8b42",
+    "/workspace/planning/research-program/TASK_GRAPH.json": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4",
+    "/workspace/tools/check_foundation_adversarial.py": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800"
+  },
+  "invalid_acceptances": 10,
+  "kind": "additional-foundation-v2-review",
+  "matched_expectations": 4
+}

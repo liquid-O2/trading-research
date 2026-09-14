@@ -1,0 +1,5 @@
+ts	phase	decision	why	evidence	result
+2026-09-14T11:13:13Z	verifier	recompute identities from snapshot bytes	zeros are valid hex so format checks were not enough	receipts.py:_check_identities	tests green
+2026-09-14T11:13:13Z	verifier	walk predecessors recursively and fail blocked parents	hashed failed parent previously passed the child	receipts.py:_check_predecessors	tests green
+2026-09-14T11:13:13Z	verifier	bind task_receipts keys to document.task_id	Phase 2 reused P15-00 for every task id	receipts.py:TASK_MISMATCH	tests green
+2026-09-14T11:13:13Z	lineage	carry ancestor issue/decision cutoffs and require leaf hashes	child issued at 100 made evidence at 100 usable by root issued at 10	receipts.py:_walk_lineage	tests green

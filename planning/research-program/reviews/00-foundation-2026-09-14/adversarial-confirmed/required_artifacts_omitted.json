@@ -1,0 +1,46 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true
+  },
+  "artifact_manifest": [],
+  "code_sha256": "42f72649cd1671b84708b2aecb6a27db4baa6f1344b0d0674f0d7f9eb06b8af1",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "/workspace/implementation/tests/rule_discovery/test_p15_00.py",
+        "-q"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/pytest.log",
+      "log_sha256": "658ac989eb9501788d497c60eb1b96e7da98f10e22f5132a8442035c303865db",
+      "seconds": 3.779
+    }
+  ],
+  "coverage": {
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "native": false,
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "07b831e13a2b824ecb8963c8a01bc35bde57464f3529efaa179ef92cbda14fd9",
+  "predecessor_receipts": {},
+  "reason": "Implemented typed records, canonical identity, baseline binding and receipt serialization against the accepted Phase 1 census. The P15-01 verifier did not exist at write time.",
+  "run_id": "b291864ccceaca9a",
+  "schema_version": "research-task-receipt-v1",
+  "task_id": "P15-00",
+  "unresolved": [
+    "P15-01 verifier is pending and must verify this receipt retrospectively"
+  ]
+}

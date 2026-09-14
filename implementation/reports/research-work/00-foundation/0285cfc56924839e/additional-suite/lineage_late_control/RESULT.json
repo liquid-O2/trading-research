@@ -1,0 +1,16 @@
+{
+  "actual_exit": 2,
+  "argv": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/tools/verify_research_release.py",
+    "lineage",
+    "--manifest",
+    "/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/lineage_late_control/LINEAGE_MANIFEST.json"
+  ],
+  "description": "An explicit late availability clock must be rejected.",
+  "expected_exit": 2,
+  "id": "lineage_late_control",
+  "passed": true,
+  "stderr": "",
+  "stdout": "[\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/lineage_late_control/LINEAGE_MANIFEST.json#records[0].features[0].evidence[0]\"\n  },\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/lineage_late_control/LINEAGE_MANIFEST.json#records[0].features[0].evidence[0]\"\n  }\n]\n"
+}

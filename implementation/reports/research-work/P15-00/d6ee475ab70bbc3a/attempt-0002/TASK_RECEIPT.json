@@ -1,0 +1,90 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true
+  },
+  "artifact_manifest": [
+    {
+      "bytes": 3185,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/DRAFT_MANIFEST.json",
+      "rows": null,
+      "schema": "research-draft-manifest-v1",
+      "sha256": "bc388bd46716c011df2b083a280c301490c9917718aa3738f2d045d7ca6d3c3c"
+    },
+    {
+      "bytes": 43999,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/BASELINE_BINDING.json",
+      "rows": null,
+      "schema": "research-baseline-binding-v1",
+      "sha256": "45f5b3392d8c34f5448479054c1131b65114ccf4e64448f9dfe92e106b75aa29"
+    },
+    {
+      "bytes": 2401,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/EXPOSURE_LEDGER.json",
+      "rows": null,
+      "schema": "research-exposure-ledger-v1",
+      "sha256": "beff47242922e676761af88189e10a3a4b77d338cf6f4726a7407c0fc0acd2cb"
+    },
+    {
+      "bytes": 344742,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/ENGINEERING_DATES.json",
+      "rows": null,
+      "schema": "research-engineering-dates-v1",
+      "sha256": "265711a69e9501e6f623118a4e8865d5c9b080515004da731867367c90dc4e88"
+    },
+    {
+      "bytes": 12584,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/SCHEMA_EXAMPLES.json",
+      "rows": null,
+      "schema": "research-schema-examples-v1",
+      "sha256": "7f2f0d137aa94c1e8979e6893e3df85aea234cc2e2a4b86a840543d8d52d31f3"
+    },
+    {
+      "bytes": 614,
+      "path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/WORKTREE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-worktree-snapshot-v1",
+      "sha256": "640b182d6899cc4016e5c663d75d53a28ba3848ca491226272d02e8acaef7fb5"
+    }
+  ],
+  "code_sha256": "9f819ff017c5bf830faa012df81da883ed32b89182fb822aff03ee5ae350c0c0",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "/workspace/implementation/tests/rule_discovery/test_p15_00.py",
+        "-q"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0002/pytest.log",
+      "log_sha256": "22e8eb7fdb493db469dc87335b2fc196dc7496342d6443776dd7cb80f8b3d628",
+      "seconds": 3.843
+    }
+  ],
+  "coverage": {
+    "complete_eligible_dates": 1666,
+    "declared_dates": 1742,
+    "native": false,
+    "previous_attempt": "/workspace/implementation/reports/research-work/P15-00/d6ee475ab70bbc3a/attempt-0001",
+    "setups": 18747,
+    "setups_are_independent_trades": false,
+    "unknown": 73
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "07b831e13a2b824ecb8963c8a01bc35bde57464f3529efaa179ef92cbda14fd9",
+  "predecessor_receipts": {},
+  "reason": "Implemented typed records, canonical identity, baseline binding and receipt serialization against the accepted Phase 1 census. The P15-01 verifier did not exist at write time.",
+  "run_id": "d6ee475ab70bbc3a",
+  "schema_version": "research-task-receipt-v1",
+  "task_id": "P15-00",
+  "unresolved": [
+    "P15-01 verifier is pending and must verify this receipt retrospectively"
+  ]
+}

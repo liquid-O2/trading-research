@@ -1,0 +1,498 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "PREDECESSOR_MISSING",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 2 PREDECESSOR_MISSING",
+      "id": "A01",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "missing predecessor fails even if the report says PASS",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a01_missing_predecessor_fails_even_if_report_says_pass"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_artifacts"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "ARTIFACT_HASH",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 2 ARTIFACT_HASH",
+      "id": "A02",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "tampered artifact byte or flipped acceptance flag fails",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a02_tampering_one_artifact_byte_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_phase_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "BLOCKED_IMPLEMENTATION",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 2",
+      "id": "A03",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "blocked_implementation never passes a phase gate",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a03_blocked_implementation_never_passes_a_phase_gate"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_phase_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "PHASE_1_5_GATE",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 2 PHASE_1_5_GATE",
+      "id": "A04",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "Phase 2 without an actual Phase 1.5 release fails",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a04_phase_2_without_complete_phase_1_5_gate_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_task_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "ok",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A05",
+      "observed": "0",
+      "oracle": "CLI",
+      "requirement": "valid bootstrap receipt verifies",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a05_valid_bootstrap_p15_00_receipt_verifies"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_commands"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "exit_code",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A06",
+      "observed": "0",
+      "oracle": "measured pytest",
+      "requirement": "command exit codes, hashes and coverage recorded",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_a06_command_exit_codes_hashes_and_coverage_recorded"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_evidence_matrix"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/VERIFIER_CASES.json",
+          "selector": "/cases",
+          "sha256": "388d7ce11e1a6ea802ed60d2da14c298aa1af2d713d679048942f4de9068b145"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "INVENTORY",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "forged empty evidence fails",
+      "id": "A07",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "matrix completeness refers to the other entries",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_forged_evidence_matrix_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "FailureCode"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/VERIFIER_CASES.json",
+          "selector": "/cases",
+          "sha256": "388d7ce11e1a6ea802ed60d2da14c298aa1af2d713d679048942f4de9068b145"
+        }
+      ],
+      "expected": "INVENTORY/IDENTITY/PREDECESSOR/UNKNOWN_SUBPHASE",
+      "id": "A08",
+      "observed": "isolated codes",
+      "oracle": "unit CLI",
+      "requirement": "assigned S01-S05 probes have isolated failure codes",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s01_empty_manifest_fails_inventory"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_predecessors"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "child_of_failed_parent",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "exit 2",
+      "id": "A09",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "recursive verification rejects failed parent, wrong task id, unknown subphase, missing Phase 1.5 release",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s04_child_of_failed_parent_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_inventory"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "row_count",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "INVENTORY",
+      "id": "A10",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "required artifacts, schemas, row counts and identity bindings enforced",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s01_row_count_mismatch_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_commands"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "COMMAND_EXIT",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "COMMAND_EXIT",
+      "id": "A11",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "failed or unlogged commands never pass via unresolved prose",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_failed_command_not_excused_by_unresolved"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_walk_lineage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "LINEAGE_CLOCK",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "LINEAGE_CLOCK",
+      "id": "A12",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "lineage keeps ancestor cutoffs; --gate-review is separate",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_lineage_child_cannot_relax_ancestor_cutoff"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "PINNED_CHECKER_SHA256"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/VERIFIER_CASES.json",
+          "selector": "/cases",
+          "sha256": "388d7ce11e1a6ea802ed60d2da14c298aa1af2d713d679048942f4de9068b145"
+        }
+      ],
+      "expected": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+      "id": "A13",
+      "observed": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+      "oracle": "ASSURANCE_CASES.json",
+      "requirement": "isolated 27-mode coverage recorded; independent suite is the coordinator gate",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s03_replaced_identities_fail"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_inventory"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "INVENTORY",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "INVENTORY",
+      "id": "S01",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "empty manifest and omitted required artifact fail INVENTORY",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s01_empty_manifest_fails_inventory"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_evidence_matrix"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "forged",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "INVENTORY",
+      "id": "S02",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "acceptance flags with forged empty evidence fail",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_forged_evidence_matrix_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "_check_identities"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "IDENTITY",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "IDENTITY",
+      "id": "S03",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "replaced plan identity fails IDENTITY",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s03_replaced_identities_fail"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_subphase_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "UNKNOWN_SUBPHASE",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "UNKNOWN_SUBPHASE",
+      "id": "S04",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "failed parent, unknown subphase, wrong task, phase-2 reuse fail",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_s04_unknown_subphase_fails"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "verify_lineage_manifest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-01/7da6cc99d954e280/attempt-0001/pytest.log",
+          "selector": "LINEAGE_CLOCK",
+          "sha256": "fa59900f900a32ce557245ef795f4828f8f4cb7b4853561bf6be4530089798bd"
+        }
+      ],
+      "expected": "LINEAGE_CLOCK/LINEAGE_HASH",
+      "id": "S05",
+      "observed": "2",
+      "oracle": "CLI",
+      "requirement": "lineage ancestor cutoff and malformed clocks fail",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_01.py::test_lineage_invalid_clock_and_missing_hash_fail"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-01"
+}

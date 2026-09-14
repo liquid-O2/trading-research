@@ -1,0 +1,197 @@
+{
+  "cases": [
+    {
+      "actual_codes": [],
+      "actual_exit": 0,
+      "expected_codes": [],
+      "expected_exit": 0,
+      "id": "A05_bootstrap_p15_00",
+      "notes": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "PREDECESSOR_MISSING"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "PREDECESSOR_MISSING"
+      ],
+      "expected_exit": 2,
+      "id": "A01_missing_predecessor_report_pass",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "ARTIFACT_HASH",
+        "ARTIFACT_BYTES",
+        "ARTIFACT_HASH"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "ARTIFACT_HASH"
+      ],
+      "expected_exit": 2,
+      "id": "A02_tamper_artifact_byte",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "ACCEPTANCE"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "ACCEPTANCE"
+      ],
+      "expected_exit": 2,
+      "id": "A02_flip_acceptance_flag",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "BLOCKED_IMPLEMENTATION",
+        "GATE",
+        "SOFTWARE_MISSING"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "BLOCKED_IMPLEMENTATION",
+        "GATE"
+      ],
+      "expected_exit": 2,
+      "id": "A03_blocked_implementation_phase_pass",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "TASK_MISSING",
+        "SOFTWARE_MISSING",
+        "GATE"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "TASK_MISSING",
+        "SOFTWARE_MISSING",
+        "GATE"
+      ],
+      "expected_exit": 2,
+      "id": "A03_input_limits_cannot_excuse_missing_software",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "PHASE_1_5_GATE"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "PHASE_1_5_GATE"
+      ],
+      "expected_exit": 2,
+      "id": "A04_phase2_missing_phase15_gate",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "ACCEPTANCE"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "ACCEPTANCE"
+      ],
+      "expected_exit": 2,
+      "id": "independent_negative_omitted_A04",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [
+        "LINEAGE_CLOCK",
+        "LINEAGE_CLOCK"
+      ],
+      "actual_exit": 2,
+      "expected_codes": [
+        "LINEAGE_CLOCK"
+      ],
+      "expected_exit": 2,
+      "id": "lineage_future_available_at",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [],
+      "actual_exit": 0,
+      "expected_codes": [],
+      "expected_exit": 0,
+      "id": "lineage_valid",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [],
+      "actual_exit": 0,
+      "expected_codes": [],
+      "expected_exit": 0,
+      "id": "no_profitability_requirement",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [],
+      "actual_exit": 0,
+      "expected_codes": [],
+      "expected_exit": 0,
+      "id": "P15-01_predecessor_binds_actual_P15-00",
+      "notes": "",
+      "pass": true
+    },
+    {
+      "actual_codes": [],
+      "actual_exit": 0,
+      "expected_codes": [],
+      "expected_exit": 0,
+      "id": "pytest_test_p15_01",
+      "notes": "15 passed in 6.03s",
+      "pass": true
+    }
+  ],
+  "p15_00_retrospective": {
+    "argv": [
+      "/workspace/implementation/.venv/bin/python",
+      "/workspace/implementation/tools/verify_research_release.py",
+      "task",
+      "--receipt",
+      "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json"
+    ],
+    "cwd": "/workspace",
+    "exit_code": 0,
+    "log_path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/verify_p15_00.log",
+    "log_sha256": "b994e1787f44c76569b2330ce42fa72b62d865035f30dc3191b69588b502efdc",
+    "receipt": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+    "receipt_sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20",
+    "seconds": 0.389
+  },
+  "pytest": {
+    "argv": [
+      "/workspace/implementation/.venv/bin/python",
+      "-m",
+      "pytest",
+      "/workspace/implementation/tests/rule_discovery/test_p15_01.py",
+      "-q"
+    ],
+    "cwd": "/workspace/implementation",
+    "exit_code": 0,
+    "log_path": "/workspace/implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/pytest.log",
+    "log_sha256": "a1916dac373b19b74f5657b863d0410635f63e6e09225cf77ddbb84fac13a871",
+    "seconds": 7.568,
+    "summary": "15 passed in 6.03s"
+  },
+  "run_id": "039267553e8bf721",
+  "schema": "research-verifier-cases-v1",
+  "task_id": "P15-01"
+}

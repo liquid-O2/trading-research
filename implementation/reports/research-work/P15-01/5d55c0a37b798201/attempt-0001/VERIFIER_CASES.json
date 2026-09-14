@@ -1,0 +1,66 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "cases": [
+    {
+      "expected_exit": 0,
+      "id": "valid_bootstrap",
+      "test": "test_a05_valid_bootstrap_p15_00_receipt_verifies"
+    },
+    {
+      "code": "INVENTORY",
+      "expected_exit": 2,
+      "id": "required_artifacts_omitted",
+      "test": "test_s01_empty_manifest_fails_inventory"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "review_nonobject",
+      "test": "test_gate_review_nonobject_fails_closed"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "review_null_cases",
+      "test": "test_gate_review_null_cases_and_wrong_results_hash_fail"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "review_missing_bindings",
+      "test": "test_gate_review_missing_bindings_fail_per_field"
+    },
+    {
+      "code": "ACCEPTANCE",
+      "expected_exit": 2,
+      "id": "matrix_failed_checks",
+      "test": "test_matrix_failed_checks_rejected_when_accepted"
+    },
+    {
+      "code": "INVENTORY",
+      "expected_exit": 2,
+      "id": "matrix_nonexistent_references",
+      "test": "test_matrix_nonexistent_symbol_node_and_selector_fail"
+    },
+    {
+      "code": "IDENTITY",
+      "expected_exit": 2,
+      "id": "code_false_file_hash",
+      "test": "test_code_false_file_hash_and_plan_copies_fail"
+    },
+    {
+      "code": "SCHEMA",
+      "expected_exit": 2,
+      "id": "artifact_wrong_schema",
+      "test": "test_artifact_wrong_schema_and_unrelated_contents_fail"
+    },
+    {
+      "code": "LINEAGE_CLOCK",
+      "expected_exit": 2,
+      "id": "lineage_missing_clock_and_path",
+      "test": "test_lineage_missing_clock_path_and_row_fail"
+    }
+  ],
+  "schema": "research-verifier-cases-v2",
+  "task_id": "P15-01"
+}

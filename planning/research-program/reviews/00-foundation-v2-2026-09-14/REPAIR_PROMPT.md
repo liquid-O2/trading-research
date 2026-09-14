@@ -1,0 +1,17 @@
+# One prompt for the remaining 00-foundation repair
+
+```text
+/poteto-mode new task. Finish the remaining 00-foundation repair in /workspace; stop at this subphase boundary.
+
+Read /workspace/AGENTS.md, /workspace/planning/phase-1-5/subphases/00-foundation/RUNBOOK.md and /workspace/planning/research-program/ASSURANCE.md. Inspect the actual verifier and producers, then /workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md and its saved additional-suite/RESULTS.json. This review found ten invalid submissions accepted by the current verifier despite 45 targeted tests and all 27 pinned cases passing. The findings enforce the already authorized assurance contract; no further plan amendment is needed.
+
+Use parent Grok for every role and the installed pstack/poteto workflow. Keep one code writer per shared checkout; a separate read-only reviewer is permitted. Record actual commands and evidence. Do not change the pinned /workspace/tools/check_foundation_adversarial.py, the review probe, its expected outcomes or the specification to obtain a pass.
+
+Reproduce and repair all five findings: (1) fail closed on non-object/malformed reviews, validate exact candidate task scope and every required graph/registry/code/matrix/command/results binding, and require the exact real checker cases and inputs; (2) reconcile matrix statuses with acceptance and disposition, require executed behavior evidence, and resolve real symbols, tests/audit commands and evidence selectors; (3) verify exact required plan/code inventories and actual preserved file bytes, dependency/runtime and input identities rather than merely hashing their declared documents; (4) validate supported parsed artifact schemas and contents against declarations; (5) require typed lineage availability/cutoffs, artifact paths and resolvable row IDs, preserving the declared outcome-edge rules. Repair producers wherever stricter checks expose incomplete real artifacts.
+
+Save failing controls before fixes and passing reruns afterward. Add focused tests for each failure code/field plus accepted controls so an unrelated malformed field cannot masquerade as a safeguard. Inspect neighboring omission and malformed-input paths in these same validators. Preserve both historical v1 outputs and the reviewed v2 attempts; create new immutable task/subphase/review attempts with complete snapshots and rebound identities. Preserve the accepted Phase 1 evidence and raw data. Do not rerun the full census or start 01.
+
+Completion requires all targeted tests, the unchanged 27-case checker on actual new P15-00/P15-01/subphase receipts, all 14 additional review probes on the actual new P15-00/subphase/review, and final subphase --gate-review verification. The additional probe is /workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional_probe.py; run it with --p15-00 PATH --subphase PATH --review PATH --output-root NEW_DIRECTORY. All three accepted controls must return 0, and all eleven invalid cases must return structured exit 2. Write a fresh GATE_REVIEW after the candidate is immutable, bound to the reviewed code and current evidence; retain final verification as a sidecar to avoid circular hashes.
+
+Return exact new artifact paths/hashes, the reproduced defects and repair evidence, all verification results and remaining limitations. No PR, push, merge or downstream implementation. Stop after 00 is verifiably closed.
+```

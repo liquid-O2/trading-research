@@ -1,0 +1,96 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "cases": [
+    {
+      "expected_exit": 0,
+      "id": "valid_bootstrap",
+      "test": "test_a05_valid_bootstrap_p15_00_receipt_verifies"
+    },
+    {
+      "code": "INVENTORY",
+      "expected_exit": 2,
+      "id": "required_artifacts_omitted",
+      "test": "test_s01_empty_manifest_fails_inventory"
+    },
+    {
+      "code": "INVENTORY",
+      "expected_exit": 2,
+      "id": "required_baseline_binding_omitted",
+      "test": "test_s01_required_task_artifact_omitted_fails"
+    },
+    {
+      "code": "IDENTITY",
+      "expected_exit": 2,
+      "id": "plan_sha256_replaced",
+      "test": "test_s03_replaced_identities_fail"
+    },
+    {
+      "code": "SCHEMA",
+      "expected_exit": 2,
+      "id": "non_hex_plan_identity",
+      "test": "test_s03_non_hex_plan_identity_fails"
+    },
+    {
+      "code": "COMMAND_EXIT",
+      "expected_exit": 2,
+      "id": "failed_test_excused_as_implemented",
+      "test": "test_failed_command_not_excused_by_unresolved"
+    },
+    {
+      "code": "COMMAND_MISSING",
+      "expected_exit": 2,
+      "id": "command_logs_omitted",
+      "test": "test_command_logs_omitted_fail"
+    },
+    {
+      "code": "PREDECESSOR_HASH",
+      "expected_exit": 2,
+      "id": "child_of_failed_parent",
+      "test": "test_s04_child_of_failed_parent_fails"
+    },
+    {
+      "code": "UNKNOWN_SUBPHASE",
+      "expected_exit": 2,
+      "id": "unknown_subphase_with_no_tasks",
+      "test": "test_s04_unknown_subphase_fails"
+    },
+    {
+      "code": "TASK_MISMATCH",
+      "expected_exit": 2,
+      "id": "subphase_reuses_wrong_task_receipt",
+      "test": "test_s04_subphase_reuses_wrong_task_receipt"
+    },
+    {
+      "code": "PHASE_1_5_GATE",
+      "expected_exit": 2,
+      "id": "phase_2_closed_using_one_phase_1_5_receipt",
+      "test": "test_s04_phase_2_without_release_fails"
+    },
+    {
+      "code": "LINEAGE_CLOCK",
+      "expected_exit": 2,
+      "id": "lineage_child_overrides_ancestor_clock",
+      "test": "test_lineage_child_cannot_relax_ancestor_cutoff"
+    },
+    {
+      "code": "LINEAGE_CLOCK",
+      "expected_exit": 2,
+      "id": "lineage_invalid_availability_type",
+      "test": "test_lineage_invalid_clock_and_missing_hash_fail"
+    },
+    {
+      "code": "LINEAGE_HASH",
+      "expected_exit": 2,
+      "id": "lineage_artifact_hash_omitted",
+      "test": "test_lineage_invalid_clock_and_missing_hash_fail"
+    },
+    {
+      "code": "GATE_REVIEW",
+      "expected_exit": 2,
+      "id": "gate_review_stale",
+      "test": "test_gate_review_missing_and_stale_fail"
+    }
+  ],
+  "schema": "research-verifier-cases-v2",
+  "task_id": "P15-01"
+}

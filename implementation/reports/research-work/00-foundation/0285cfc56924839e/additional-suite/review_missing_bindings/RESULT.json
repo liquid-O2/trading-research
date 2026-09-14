@@ -1,0 +1,18 @@
+{
+  "actual_exit": 2,
+  "argv": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/tools/verify_research_release.py",
+    "subphase",
+    "--receipt",
+    "/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/attempt-0001/SUBPHASE_RECEIPT.json",
+    "--gate-review",
+    "/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json"
+  ],
+  "description": "Review lacks code, matrix, graph, command and reviewer bindings; substitutes an unknown subphase and no reviewed tasks.",
+  "expected_exit": 2,
+  "id": "review_missing_bindings",
+  "passed": true,
+  "stderr": "",
+  "stdout": "[\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"reviewed_at is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"reviewer is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"unknown review subphase no-such-subphase\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"reviewed_task_ids do not match the candidate task set\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"graph path is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"review commands are missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"code_snapshots binding is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  },\n  {\n    \"code\": \"GATE_REVIEW\",\n    \"detail\": \"evidence_matrices binding is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/additional-suite/review_missing_bindings/GATE_REVIEW.json\"\n  }\n]\n"
+}

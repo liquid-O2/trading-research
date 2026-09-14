@@ -1,0 +1,42 @@
+{
+  "schema": "research-plan-amendments-v1",
+  "amendments": [
+    {
+      "id": "research-assurance-2026-09-14-v2",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-13-v1",
+      "new_plan_version": "research-plan-2026-09-14-v2",
+      "scope": "All 46 Phase 1.5/Phase 2 tasks and all 17 subphases",
+      "reason": "Independent foundation audit found false acceptance; user requested concrete prevention of silent failures throughout both packs.",
+      "original_foundation_admission_rejected": [
+        {
+          "path": "implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+        },
+        {
+          "path": "implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "549429da5d43ff6fc347723fe4f4c8eda4550b31190bb94324ab82e2afba2c4f"
+        },
+        {
+          "path": "implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json",
+          "sha256": "e1046c17650332378273a0c6e2a2c796ba3abd6a0d1113fb371aef998143cfea"
+        }
+      ],
+      "review": "planning/research-program/reviews/00-foundation-2026-09-14/REVIEW.md",
+      "changes": [
+        "Per-task evidence matrix and assigned adversarial cases; coordinator review sidecar for every subphase",
+        "Required artifact/schema/identity/dependency/command verification with current assurance version",
+        "Native coverage by input group, same-contract lookbacks, actual native replay and clock boundaries",
+        "Fixed independent foundation acceptance suite; immutable failed/superseded attempts",
+        "Acyclic task, subphase, phase and review finalization"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. Repair P15-00/P15-01 under new snapshots/draft/run identities, then obtain a matching passing review before 01-native-and-outcomes. Later tasks start under this amended contract.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Record the coverage-rule correction and deterministic per-group reselection before any new outcome inspection."
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true,
+    "A07": true,
+    "A08": true,
+    "A09": true,
+    "A10": true,
+    "A11": true,
+    "A12": true,
+    "A13": true
+  },
+  "artifact_manifest": [
+    {
+      "bytes": 773,
+      "path": "/workspace/implementation/reports/research-work/00-foundation/0285cfc56924839e/fixed-suite/child/DRAFT_MANIFEST.json",
+      "rows": null,
+      "schema": "research-draft-manifest-v2",
+      "sha256": "ac8762fcf322be84796b156681226d40e45334df92e2f3651bbe6b43528f81f9"
+    },
+    {
+      "bytes": 2252,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/PLAN_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-plan-snapshot-v2",
+      "sha256": "ab7bb0501b8947f81a1f31d216bb1385877fb650b2e6b7ffbd01a482c3186da9"
+    },
+    {
+      "bytes": 2265,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/CODE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-code-snapshot-v2",
+      "sha256": "1bf1c2544c840fc412ca8421b428c7ecdc1179c71672486bcd70f1b5a7b5d031"
+    },
+    {
+      "bytes": 16830,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/EVIDENCE_MATRIX.json",
+      "rows": null,
+      "schema": "research-evidence-matrix-v2",
+      "sha256": "54da1bc61e802dc8a1b786d67aa8d0e4b8cef1fc02735d5bb5d9adc42d639c5e"
+    },
+    {
+      "bytes": 1805,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/VERIFIER_CASES.json",
+      "rows": null,
+      "schema": "research-verifier-cases-v2",
+      "sha256": "bd4dc747263804503681cd07e627f9715ebd73e3bee1fbe7dd53ef93cee6c116"
+    },
+    {
+      "bytes": 389,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/WORK_LOG.md",
+      "rows": null,
+      "schema": "research-work-log-v1",
+      "sha256": "65a8f6e031bb9ab1a77ef9c2ae5a28f56e873fb1eebad9d2512f27a197823253"
+    },
+    {
+      "bytes": 239,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/DECISIONS.tsv",
+      "rows": null,
+      "schema": "research-decisions-tsv-v1",
+      "sha256": "eb07673cd2d0060848e9326adb1db34c42b6bd2b5fe1743566031b8c47808bd1"
+    },
+    {
+      "bytes": 469,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/WORKTREE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-worktree-snapshot-v1",
+      "sha256": "86acb907cd8435b3f8ecdcb6a8ab9528a0dc8fd13e272943f82edc3415f13342"
+    },
+    {
+      "bytes": 99,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/REPORT.md",
+      "rows": null,
+      "schema": "research-task-report-v1",
+      "sha256": "2859cac9510bd6e567d5eb4ba4d95eae80947cb34db2cf08f00f706821e885fa"
+    },
+    {
+      "bytes": 4215,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/pytest.log",
+      "rows": null,
+      "schema": "pytest-log",
+      "sha256": "c87f1180c9d6aa343945f76f89ef76432e23f68b57fa9bcb4139c6abf78a946d"
+    },
+    {
+      "bytes": 151,
+      "path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/verify_p15_00.log",
+      "rows": null,
+      "schema": "verify-log",
+      "sha256": "473e0c82a6a364a7003784bcfa30a0f2f1d9adc6f88ac6bd2f9b78d0d51894bf"
+    }
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "code_sha256": "cb791e9bc7669cdbc84b524f2a0a5422398132bf84a260c4c3dfcbe802305d70",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_01.py",
+        "-v",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/pytest.log",
+      "log_sha256": "c87f1180c9d6aa343945f76f89ef76432e23f68b57fa9bcb4139c6abf78a946d",
+      "seconds": 62.62300487887114
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-01/5d55c0a37b798201/attempt-0001/verify_p15_00.log",
+      "log_sha256": "473e0c82a6a364a7003784bcfa30a0f2f1d9adc6f88ac6bd2f9b78d0d51894bf",
+      "seconds": 2.1265474688261747
+    }
+  ],
+  "coverage": {
+    "native": false,
+    "predecessor": "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json",
+    "unknown": 0
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "b76ad826bfc3a620631b926471a63bacc98dc7e59a30dd1d65d00d55908ada19",
+  "predecessor_receipts": {
+    "P15-00": "347117fdc2a03c55d843abc82e5791481a9489bd78668f3aca896c258088b847"
+  },
+  "reason": "v3 verifier: fail-closed review bindings, matrix reconciliation, snapshot bytes, schema and lineage leaves",
+  "run_id": "9006fc4f957e4ec8",
+  "schema_version": "research-task-receipt-v2",
+  "task_id": "P15-01",
+  "unresolved": [
+    "Independent 27-case suite is a coordinator gate after this receipt."
+  ]
+}
