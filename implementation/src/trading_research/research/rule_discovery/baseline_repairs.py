@@ -21,10 +21,10 @@ from trading_research.research.method_pack.historical_flow import (
     _timestamp,
     _seen,
     _base,
-    scan_microbalance,
 )
 from trading_research.research.method_pack.historical_price_scanners import _known, _context, _gb_refs
 from trading_research.research.method_pack.historical_auction_scanners import primary_balance, _control, _upper_failures
+from trading_research.research.method_pack.historical_process_scanners import scan_supplied_unit, macro_at
 from trading_research.research.method_pack.branch_coverage import setting
 from trading_research.research.method_pack.native_discovery import scan_branch as native_scan_branch
 
@@ -46,6 +46,16 @@ MEMBER_BRANCHES = ("resistance_short", "planned_return_long")
 JJ_TBR_ABSENT_BRANCHES = (
     "judas_reversal", "single_extended", "single_purged", "internal_rotation",
     "extension_reaction", "other_session", "timed_pzone_reversal",
+)
+JJ_TBR_REPAIRED_BRANCHES = JJ_TBR_ABSENT_BRANCHES + ("judas_outbound",)
+JJ_TBR_C2_BRANCHES = ("single_extended", "single_purged", "internal_rotation", "extension_reaction")
+GB_FAIL_SWEEP_BRANCHES = (
+    "nyam_box", "previous_hour", "asia_tdo_case", "cash_open_reclaim_case",
+    "prior_day_level", "prior_week_level", "prior_month_level",
+)
+REFILL_RECORD_CONJUNCTS = (
+    "zone_definition_recorded", "instrument_and_threshold_preserved",
+    "thesis_recorded", "label_uses_only_post_touch_observations",
 )
 
 
@@ -90,6 +100,53 @@ REPAIRS = {
         "fixture": "f2_absent_empty_interval.py",
         "fixtures": ("f2_absent_empty_interval.py", "repro_p2_saint.py"),
     },
+    "C1": {
+        "branch_ids": (_cid("JJ-TBR", "judas_reversal"),),
+        "frozen_symbol": "trading_research.research.method_pack.historical_price_scanners.scan_jumbo",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_jumbo_repaired",
+        "fixture": "f1_judas_reversal_sweep_window.py",
+    },
+    "C2": {
+        "branch_ids": tuple(_cid("JJ-TBR", b) for b in JJ_TBR_C2_BRANCHES),
+        "frozen_symbol": "trading_research.research.method_pack.historical_price_scanners.scan_jumbo",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_jumbo_repaired",
+        "fixture": "f2_single_breakout_action_window.py",
+    },
+    "C3": {
+        "branch_ids": tuple(_cid("GB-FAIL", b) for b in GB_FAIL_BRANCHES),
+        "frozen_symbol": "trading_research.research.method_pack.historical_price_scanners.scan_green_failure",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_green_failure_repaired",
+        "fixture": "f3_gbfail_five_minute_reclaim_window.py",
+    },
+    "C4": {
+        "branch_ids": (_cid("KEANI-OPEN-ABOVE-VALUE", "source_long"),),
+        "frozen_symbol": "trading_research.research.method_pack.historical_auction_scanners.scan_keani",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_keani_repaired",
+        "fixture": "f4_keani_rejection_level.py",
+    },
+    "C5": {
+        "branch_ids": (_cid("SIRES", "microbalance_break"),),
+        "frozen_symbol": "trading_research.research.method_pack.historical_flow.scan_microbalance",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_microbalance_repaired",
+        "fixture": "f6_microbalance_thesis_direction.py",
+    },
+    "C7": {
+        "branch_ids": tuple(_cid("GB-FAIL", b) for b in GB_FAIL_BRANCHES)
+        + (_cid("GB-VWAP", "source_long"),)
+        + (_cid("JJ-TBR", "judas_outbound"), _cid("JJ-TBR", "other_session"))
+        + tuple(_cid("SAINT-AMT", b) for b in SAINT_BRANCHES)
+        + (
+            _cid("SIRES", "absorption_reward_retest"),
+            _cid("SIRES", "stop_four_stage"),
+            _cid("SIRES", "defended_band_continuation"),
+            _cid("SIRES", "kg1_retest"),
+            _cid("SIRES", "microbalance_break"),
+        )
+        + (_cid("REFILL-STUDY", "touch_record"), _cid("STOIC-DATA", "macro_application")),
+        "frozen_symbol": "trading_research.research.method_pack.historical_price_scanners.scan_green_failure",
+        "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_branch_repaired",
+        "fixture": "f7_constant_operand_census.py",
+    },
 }
 
 
@@ -100,6 +157,62 @@ def affected_branch_ids():
             if cid not in seen:
                 seen.append(cid)
     return tuple(seen)
+
+
+def _price_sign(value):
+    """Numeric sign of a price difference. Not historical_features.sign (side)."""
+    if value is None:
+        return None
+    if value > 0:
+        return 1
+    if value < 0:
+        return -1
+    return 0
+
+
+def _thesis_direction(micro, htf):
+    """C5 operational rule: +1 when the microbalance midpoint is in the lower
+    half of the larger balance, -1 in the upper half, None if either midpoint
+    is unknown or the microbalance sits on the larger midpoint."""
+    if micro is None or htf is None:
+        return None
+    if micro.get('low') is None or micro.get('high') is None:
+        return None
+    if htf.get('low') is None or htf.get('high') is None:
+        return None
+    micro_mid = (micro['low'] + micro['high']) / 2
+    htf_mid = (htf['low'] + htf['high']) / 2
+    if micro_mid < htf_mid:
+        return 1
+    if micro_mid > htf_mid:
+        return -1
+    return None
+
+
+def _record_c7(e, decision, unevaluated=(), structural_false=(), *, by_construction=(),
+               operational_assumption=(), assumption_id=None, context_direction_unevaluated=False):
+    """Attach C7 details. literal_operand_kind is a map of operand name to kind so a
+    mixed stage can carry by_construction beside context_direction_unevaluated,
+    unevaluated_operand, structural_not_required, or operational_assumption."""
+    details = {}
+    kinds = {}
+    for name in by_construction:
+        kinds[name] = 'by_construction'
+    for name in operational_assumption:
+        kinds[name] = 'operational_assumption'
+    if kinds:
+        details['literal_operand_kind'] = kinds
+    if assumption_id is not None:
+        details['assumption_id'] = assumption_id
+    if context_direction_unevaluated:
+        details['context_direction_unevaluated'] = True
+    if unevaluated:
+        details['unevaluated_operand'] = list(unevaluated)
+    if structural_false:
+        details['structural_not_required'] = list(structural_false)
+    if details:
+        e.stage('baseline_repair', decision, observed=None, details=details)
+    return e
 
 
 def absent_repaired(market, start, end, *, fields=(), seconds=60):
@@ -201,7 +314,8 @@ def flow_absent_repaired(m,start,end,chunks):
     return absent_repaired(m,start,end)
 
 def _flow_episode_repaired(m,branch,ref,trigger,side,band,*,vwap=None):
-    """P1: historical_flow.py:140. Frozen _flow_episode calls local_observations. Change: call local_observations_repaired and flow_absent_repaired."""
+    """P1: historical_flow.py:140. Frozen _flow_episode calls local_observations. Change: call local_observations_repaired and flow_absent_repaired.
+    C7: historical_flow.py:130,170,177,204,240,244. Frozen binds location_touched, real_extreme, selected_deviation_touched, same_band_retest and kg1_retest as literals or by-construction expressions. Change: keep those frozen values and record literal_operand_kind=by_construction."""
     contact=exact_contact(m,trigger,*band)
     if not contact:return None
     obs=local_observations_repaired(m,contact['at'],band,side);st=flow_stages(obs);cat=_catalyst_stages(obs,st)
@@ -333,13 +447,19 @@ def _flow_episode_repaired(m,branch,ref,trigger,side,band,*,vwap=None):
         m.domain('O101',{'events':defense['events'],'band':band,'aggressive_side':'sell' if side=='long' else 'buy',
             'origin':defense['first'],'later_px':defense['last'],'q':Q,'passive_defense':defense['displayed_defense'],
             'source_absorption':None,'known_at':defense['known_at']})
+    by_construction=['location_touched']
+    if branch in {'absorption_reward_retest','stop_four_stage'}:by_construction.append('real_extreme')
+    elif branch=='vwap_deviation_fade':by_construction.append('selected_deviation_touched')
+    elif branch=='defended_band_continuation':by_construction.append('same_band_retest')
+    elif branch=='kg1_retest':by_construction.append('kg1_retest')
+    _record_c7(e,decision,by_construction=by_construction)
     return e.finish(decision_at=decision,entry=entry,stop=stop,target=target)
 
 def scan_sires_repaired(m,branch):
-    """P6: historical_flow.py:306. Frozen per-side dedup keys on the pivot-id tuple, so pivot-less KG1 references collapse. Change: key on the reference's own identifier (id, else a hash of bounds and kind) plus side. P1: dispatch through _flow_episode_repaired."""
+    """P6: historical_flow.py:306. Frozen per-side dedup keys on the pivot-id tuple, so pivot-less KG1 references collapse. Change: key on the reference's own identifier (id, else a hash of bounds and kind) plus side. P1: dispatch through _flow_episode_repaired. C5: microbalance_break dispatches to scan_microbalance_repaired."""
     episodes=[];omissions=[]
     allbars=m.bars(m.start,m.end,300);auction=balances(allbars)
-    if branch=='microbalance_break':return scan_microbalance(m,branch,auction)
+    if branch=='microbalance_break':return scan_microbalance_repaired(m,branch,auction)
     if branch=='kg1_retest':
         refs=[{**r,'external_record':True,'low':D(str(r['low'])),'high':D(str(r['high']))} for r in m.supplied('kg1',m.end)]
         if not refs and getattr(m,'reconstruct',False):
@@ -389,6 +509,40 @@ def scan_sires_repaired(m,branch):
     if not auction and branch!='kg1_retest':omissions.append({'reason':'no confirmed alternating-pivot auction in observed prefix','kind':'measured_selection'})
     return window_result(m,'SIRES',branch,episodes,omissions=omissions)
 
+def scan_microbalance_repaired(m,branch,auction=None):
+    """C5: historical_flow.py:337,346. Frozen selects the trigger with sg*(C-boundary)>0 and then binds breakout_in_thesis_direction to the same expression, so it can never refuse. Change: thesis direction is an independent operational conjunct, +1 when the microbalance midpoint lies in the lower half of the larger balance and -1 in the upper half; the conjunct is sign(C-boundary) equal to that direction, and None when the larger balance or the microbalance midpoint is unknown.
+    C7: historical_flow.py:130,346. Frozen binds location_touched and microbalance_frozen as by-construction literals. Change: keep those frozen values and record literal_operand_kind=by_construction."""
+    auction=auction if auction is not None else balances(m.bars(m.start,m.end,300));episodes=[];omissions=[]
+    used=set()
+    for ref in auction:
+        if ref['known_at']>=m.end:continue
+        prior=[r for r in auction if r['known_at']<ref['start'] and r['width']>ref['width']]
+        if not prior:continue
+        htf=prior[-1]
+        thesis_dir=_thesis_direction(ref,htf)
+        for side in ('long','short'):
+            boundary=ref['high'] if side=='long' else ref['low'];sg=sign(side)
+            selection=m.bars(max(ref['known_at'],m.at('09:30')),m.end)
+            trigger=next((r for r in selection if r['observed_complete'] and r['C'] is not None and sg*(r['C']-boundary)>0),None)
+            omissions.extend(close_selection_omissions(selection,trigger,boundary,side))
+            if trigger is None or trigger['bar_id'] in used:continue
+            used.add(trigger['bar_id']);stop=ref['low']-Q if side=='long' else ref['high']+Q
+            target=htf['high'] if side=='long' else htf['low']
+            e=HistoricalEpisode(m,'SIRES',branch,side,trigger,ref)
+            contact={'at':trigger['start'],'event_ids':[trigger['bar_id']]}
+            _base(e,m,ref,contact,side,trigger['known_at'],trigger['C'],stop,target)
+            strength=None if trigger['delta'] is None else sg*trigger['delta']>0
+            break_sign=_price_sign(trigger['C']-boundary)
+            in_thesis=None if thesis_dir is None or break_sign is None else break_sign==thesis_dir
+            e.bind({'microbalance_frozen':True,'directional_strength':strength,'breakout_in_thesis_direction':in_thesis,
+                'stop_behind_microbalance':stop<ref['low'] if side=='long' else stop>ref['high'],
+                'microbalance_known_at':ref['known_at'],'breakout_at':trigger['known_at']},operation='price-defined alternating pivots inside earlier larger balance; C5 operational thesis direction from larger-balance half; C7 microbalance_frozen by construction',
+                parents=[ref['id'],htf['id'],trigger['bar_id']],known_at=trigger['known_at'],assumption='A2-BALANCE')
+            e.stage('confirmed_price_balance',ref['known_at'],observed=True).stage('directional_break',trigger['known_at'],observed=strength,details={'thesis_direction':thesis_dir})
+            _record_c7(e,trigger['known_at'],by_construction=('location_touched','microbalance_frozen'))
+            episodes.append(e.finish(decision_at=trigger['known_at'],entry=trigger['C'],stop=stop,target=target))
+    return window_result(m,'SIRES',branch,episodes,omissions=omissions)
+
 def _ob_repaired(m,touch,side,end):
     """P2: historical_price_scanners.py:40. Frozen _ob certifies confirmation absence via absent(). Change: call absent_repaired so a zero-length window is unknown."""
     sec=setting('tbr_sessions')['confirmation_seconds'];duration=sec*SECOND
@@ -408,7 +562,10 @@ def _ob_repaired(m,touch,side,end):
     return (None if ambiguous else absent_repaired(m,touch['start'],end)),None,None,None
 
 def scan_jumbo_repaired(m,branch):
-    """P2: historical_price_scanners.py:40,171. Frozen scan_jumbo calls absent() from _ob and from the extension_reaction prior_expansion conjunct. Change: use _ob_repaired and absent_repaired."""
+    """P2: historical_price_scanners.py:40,171. Frozen scan_jumbo calls absent() from _ob and from the extension_reaction prior_expansion conjunct. Change: use _ob_repaired and absent_repaired.
+    C1: historical_price_scanners.py:71,89-90. Frozen judas_reversal searches the sweep only inside 09:40-09:50. Change: search the outbound sweep in 09:30-09:40 and keep the reversal window 09:40-09:50; a sweep found only in 09:40-09:50 stays accepted and is flagged sweep_in_reversal_window. source_time_window is True for a sweep in 09:30-09:50. Confirmation remains the frozen O056 search around the sweep bar.
+    C2: historical_price_scanners.py:72. Frozen overrides action_end=16:00 for single_extended, single_purged, internal_rotation and extension_reaction. Change: leave the formation action_end at 10:00; the 16:00 population stays B0.
+    C7: historical_price_scanners.py:137,145,153,163,176,179. Frozen binds exit_window_recorded, source_clock_verified, source_case_verified and the restating flags location_touched, reduced_expectations, expansion_policy, source_zone_known as by-construction literals. Change: keep those frozen values and record literal_operand_kind=by_construction."""
     method='JJ-TBR';episodes=[];omissions=[]
     context=_context(m);main=context['pre'];prior=context['prior'];pw=context['prior_width']
     formations=[(m.at('06:00'),m.at('09:00'),'main',m.at('09:30'),m.at('10:00'))]
@@ -436,8 +593,8 @@ def scan_jumbo_repaired(m,branch):
         width=ref['high']-ref['low']
         if width<=0:
             omissions.append({'reason':'nonpositive_formation_width','reference_id':ref['id']});continue
-        if branch=='judas_reversal':action_start,action_end=m.at('09:40'),m.at('09:50')
-        if branch in {'internal_rotation','extension_reaction','single_extended','single_purged'}:action_end=m.at('16:00')
+        if branch=='judas_reversal':
+            action_start,action_end=m.at('09:30'),m.at('09:50')
         if action_end<=action_start:continue
         rows=m.bars(action_start,action_end)
         sides=(zone['side'],) if zone and zone.get('inferred_zone') else ('long','short')
@@ -451,10 +608,19 @@ def scan_jumbo_repaired(m,branch):
                 location=[(ref['low']+ref['high'])/2]*2
             elif branch=='extension_reaction':
                 location=[ref['low']-D('.66')*width,ref['low']-D('.33')*width] if side=='long' else [ref['high']+D('.33')*width,ref['high']+D('.66')*width]
+            sweep_in_reversal_window=None
             if branch=='judas_outbound':
                 trigger=next(iter(rows),None)
                 target=ref['high']+width*D('.5') if side=='long' else ref['low']-width*D('.5')
-            elif branch in {'judas_reversal','other_session'}:
+            elif branch=='judas_reversal':
+                def _edge_sweep(bar_rows):
+                    return next((r for r in bar_rows if r['L']<edge),None) if side=='long' else next((r for r in bar_rows if r['H']>edge),None)
+                trigger=_edge_sweep(m.bars(m.at('09:30'),m.at('09:40')))
+                sweep_in_reversal_window=False
+                if trigger is None:
+                    trigger=_edge_sweep(m.bars(m.at('09:40'),m.at('09:50')))
+                    sweep_in_reversal_window=True
+            elif branch=='other_session':
                 trigger=next((r for r in rows if r['L']<edge if side=='long'),None) if side=='long' else next((r for r in rows if r['H']>edge),None)
             else:trigger=first_contact(rows,*location)
             if trigger is None:continue
@@ -507,19 +673,22 @@ def scan_jumbo_repaired(m,branch):
                 'objective_fixed':None if entry is None else sg*(target-entry)>0},
                 operation='frozen completed range, pre-touch context and exact selected O056 full-C2 signature',
                 parents=[ref['id'],trigger['bar_id']],known_at=decision,assumption='A2-CONTEXT/A2-TBR-CLOCK/A2-STRUCTURAL-RISK')
+            by_construction=['location_touched']
             if branch=='judas_outbound':
                 e.bind({'directional_context':direction_ok,'at_rth_open':first is not None and m.at('09:30')<=first[0]<m.at('09:30')+SECOND,
                     'objective_is_selected_exhaustion':target==(ref['high']+width*D('.5') if side=='long' else ref['low']-width*D('.5')),
-                    'exit_window_recorded':True},operation='opening execution policy with selected 0.5W exhaustion and 09:40 exit horizon',assumption='A2-TBR-PROJ/A2-TBR-CLOCK')
+                    'exit_window_recorded':True},operation='opening execution policy with selected 0.5W exhaustion and 09:40 exit horizon; C7 exit_window_recorded by construction',assumption='A2-TBR-PROJ/A2-TBR-CLOCK')
+                by_construction.append('exit_window_recorded')
             elif branch=='judas_reversal':
                 e.bind({'reversal_context':None if pw is None else width>0,'edge_swept':trigger['L']<edge if side=='long' else trigger['H']>edge,
-                    'sweep_at':touch,'source_time_window':m.at('09:40')<=touch<m.at('09:50'),
+                    'sweep_at':touch,'source_time_window':m.at('09:30')<=touch<m.at('09:50'),
                     'objective_is_opposing_draw':target==(ref['high'] if side=='long' else ref['low'])},
-                    operation='strict frozen edge sweep in reversal window and opposing edge identity',assumption='A2-CONTEXT')
+                    operation='strict frozen edge sweep in Judas 09:30-09:40 or reversal 09:40-09:50 and opposing edge identity',assumption='A2-CONTEXT')
             elif branch=='single_extended':
                 e.bind({'extended_context':extended,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
                     'objective_is_range_edge':target in (ref['low'],ref['high']),'reduced_expectations':True},
                     operation='overnight width vs prior RTH and range EQ contact; edge target policy',assumption='A2-CONTEXT/A2-TBR-PROJ')
+                by_construction.append('reduced_expectations')
             elif branch=='single_purged':
                 old=prior['range'];purges=[]
                 if old:
@@ -529,6 +698,7 @@ def scan_jumbo_repaired(m,branch):
                 e.bind({'purged_compressed_context':None if compressed is None or not prior.get('range_scope_complete',prior['scope_complete']) else compressed and bool(purges),
                     'purge_known_at':purgeat,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
                     'expansion_policy':True},operation='chronological prior-session liquidity sweep before compressed EQ contact',parents=[old['id']] if old else [],assumption='A2-CONTEXT')
+                by_construction.append('expansion_policy')
             elif branch=='internal_rotation':
                 e.bind({'rotation_context':rotation,'entry_at_named_internal_or_ev_band':trigger['L']<=location[0]<=trigger['H'],
                     'objective_is_named_rotation_target':target in (ref['low'],ref['high'])},operation='wide completed range and named EQ/edge rotation',assumption='A2-CONTEXT')
@@ -541,20 +711,26 @@ def scan_jumbo_repaired(m,branch):
                     'reaction_side_confirmed':ok,'objective_is_remaining_draw':target_unused},
                     operation='elapsed parent expansion, exact 1.33–1.66 band, unconsumed opposing edge',assumption='A2-TBR-PROJ')
             elif branch=='other_session':
-                e.bind({'source_clock_verified':True,'source_case_verified':True},kind='policy',operation='enumerated TBR p.7 formation identity; research action/confirmation policy',assumption='A2-TBR-CLOCK')
+                e.bind({'source_clock_verified':True,'source_case_verified':True},kind='policy',operation='enumerated TBR p.7 formation identity; C7 source_clock_verified and source_case_verified by construction',assumption='A2-TBR-CLOCK')
+                by_construction.extend(['source_clock_verified','source_case_verified'])
             elif branch=='timed_pzone_reversal':
                 destination=D(str(zone['destination_price']));target=destination
                 e.bind({'source_zone_known':True,'zone_known_at':zone['known_at'],'source_time_window':zone['known_at']<=touch<zone['expires_at'],
                     'directed_path_recorded':bool(zone.get('destination_id'))},operation='frozen P-zone and directed anchor destination; inferred model identified in reference',parents=[zone['id']],kind='inferred_model' if zone.get('inferred_zone') else 'record',known_at=zone['known_at'])
-            e.stage('contact',touch,observed=True,parents=[ref['id']]).stage('opening_context_confirmation' if branch=='judas_outbound' else 'selected_full_C2_confirmation',None if confirm is None else confirm['known_at'],observed=ok)
+                by_construction.append('source_zone_known')
+            contact_details=None if sweep_in_reversal_window is None else {'sweep_in_reversal_window':sweep_in_reversal_window}
+            e.stage('contact',touch,observed=True,parents=[ref['id']],details=contact_details).stage('opening_context_confirmation' if branch=='judas_outbound' else 'selected_full_C2_confirmation',None if confirm is None else confirm['known_at'],observed=ok)
             if getattr(m,'reconstruct',False) and confirm:
                 e.geometry['confirmation_bar']=confirm
+            _record_c7(e,decision,by_construction=by_construction)
             episodes.append(e.finish(decision_at=decision,entry=entry,stop=stop,target=target))
     if prior['omissions']:omissions.extend(prior['omissions'])
     return window_result(m,method,branch,episodes,omissions=omissions)
 
 def scan_green_failure_repaired(m,branch):
-    """P4: historical_price_scanners.py:224-225. Frozen scan_green_failure raises ValueError on max()/min() of an empty sweep path. Change: record an availability omission and emit the episode as input-unknown."""
+    """P4: historical_price_scanners.py:224-225. Frozen scan_green_failure raises ValueError on max()/min() of an empty sweep path. Change: record an availability omission and emit the episode as input-unknown.
+    C3: historical_price_scanners.py:219-223. Frozen reads only the five-minute candle containing the sweep. Change: take the first complete five-minute close back through the level at or after the sweep candle, forward to the branch end bound, and record confirm_bar_offset (0 = sweep candle). Stop and objective stay on the sweep-candle extreme.
+    C7: historical_price_scanners.py:230,238,242. Frozen binds bias_recorded to computed pre-touch presence, source_session_allowed=True, and structural pocket_required/retracement_entry=False. Change: keep bias_recorded as that computed presence and record context_direction_unevaluated; keep source_session_allowed with literal_operand_kind=by_construction; keep the structural flags and record them in structural_not_required when False."""
     method='GB-FAIL';episodes=[]
     if branch=='mss_fvg_refinement':return scan_green_refinement_repaired(m,branch)
     refs,omissions=_gb_refs(m,branch)
@@ -570,21 +746,38 @@ def scan_green_failure_repaired(m,branch):
             if trigger is None:continue
             contact=exact_contact(m,trigger,boundary,boundary,strict='above' if side=='short' else 'below')
             if contact is None:continue
-            confirmation_end=(trigger['start']//(5*MINUTE)+1)*5*MINUTE
-            confirms=m.bars(confirmation_end-5*MINUTE,confirmation_end,300)
-            confirm=confirms[0] if confirms else None
-            usable=confirm is not None and confirm['observed_complete'] and confirm['C'] is not None
-            decision=confirmation_end;close=confirm['C'] if usable else None
-            path=m.bars(trigger['start'],confirmation_end)
+            aligned=trigger['start']//(5*MINUTE)*5*MINUTE
+            sweep_candle_end=aligned+5*MINUTE
+            path=m.bars(trigger['start'],sweep_candle_end)
+            confirm=None;close=None;usable=False;confirm_bar_offset=None;confirmation_end=sweep_candle_end
             if not path:
-                omissions.append({'kind':'availability','reason':'sweep path empty: no bars known at or before confirmation_end','window':[trigger['start'],confirmation_end],'side':side,'reference_id':ref.get('id')})
+                omissions.append({'kind':'availability','reason':'sweep path empty: no bars known at or before confirmation_end','window':[trigger['start'],sweep_candle_end],'side':side,'reference_id':ref.get('id')})
                 high=low=stop=None
                 target=None if branch=='cash_open_reclaim_case' else (ref['low'] if side=='short' else ref['high'])
+                cand=m.bars(aligned,sweep_candle_end,300)
+                row=cand[0] if cand else None
+                if row is not None and row['observed_complete'] and row['C'] is not None:
+                    confirm=row;close=row['C'];usable=True;confirm_bar_offset=0
             else:
                 high=max(r['H'] for r in path);low=min(r['L'] for r in path)
                 stop=high+Q if side=='short' else low-Q
                 target=ref['low'] if side=='short' else ref['high']
                 if branch=='cash_open_reclaim_case':target=boundary+(boundary-low)*D('.5')
+                offset=0
+                while True:
+                    bar_start=aligned+offset*5*MINUTE
+                    bar_end=bar_start+5*MINUTE
+                    if bar_start>=end:break
+                    cand=m.bars(bar_start,bar_end,300)
+                    row=cand[0] if cand else None
+                    ok_bar=row is not None and row['observed_complete'] and row['C'] is not None
+                    if ok_bar and sg*(row['C']-boundary)>0:
+                        confirm=row;close=row['C'];usable=True;confirm_bar_offset=offset;confirmation_end=bar_end
+                        break
+                    if ok_bar and confirm is None:
+                        confirm=row;close=row['C'];usable=True;confirm_bar_offset=offset;confirmation_end=bar_end
+                    offset+=1
+            decision=confirmation_end
             pre=m.range(m.at('06:00'),min(begin,m.at('09:30')),'gb-precontext')
             context_known=pre is not None and pre['known_at']<=trigger['start']
             e=HistoricalEpisode(m,method,branch,side,trigger,ref)
@@ -600,19 +793,24 @@ def scan_green_failure_repaired(m,branch):
                 'tdo_required':tdo_required,'source_tdo_close_confirmed':None if tdo is None or close is None else sg*(close-tdo)>0,
                 'pocket_required':False,'retracement_entry':False,'risk_defined':None if close is None or stop is None else sg*(close-stop)>0,
                 'objective_fixed':None if close is None or target is None else sg*(target-close)>0},
-                operation='identified finished reference and first strict sweep; next aligned five-minute reclaim with branch-specific TDO',
+                operation='identified finished reference and first strict sweep; first complete five-minute reclaim at or after the sweep candle; C7 bias_recorded is computed presence with unevaluated direction',
                 parents=[ref['id'],trigger['bar_id']],known_at=decision,assumption='A2-GB-CLOCK/A2-CONTEXT/A2-STRUCTURAL-RISK')
             e.stage('reference',ref['known_at'],observed=_known(ref)).stage('sweep',contact['at'],observed=True,parents=contact['event_ids'])
             e.stage('five_minute_reclaim',confirmation_end,observed=None if close is None else sg*(close-boundary)>0,
-                parents=[confirm['bar_id']] if confirm else [],details={'tdo':tdo,'tdo_required':tdo_required})
+                parents=[confirm['bar_id']] if confirm else [],details={'tdo':tdo,'tdo_required':tdo_required,'confirm_bar_offset':confirm_bar_offset})
             if getattr(m,'reconstruct',False):e.geometry['confirmation_bar']=confirm
+            structural_false=['pocket_required','retracement_entry']
+            if not tdo_required:structural_false.append('tdo_required')
+            _record_c7(e,decision,(),structural_false,by_construction=('source_session_allowed',),
+                context_direction_unevaluated=True)
             episodes.append(e.finish(decision_at=decision,entry=close,stop=stop,target=target))
     result=window_result(m,method,branch,episodes,omissions=omissions)
     if getattr(m,'reconstruct',False):result['reference_selections']=[r for r in refs if r is not None]
     return result
 
 def scan_green_refinement_repaired(m,branch):
-    """P4: historical_price_scanners.py:257. Frozen scan_green_refinement calls scan_green_failure as parent. Change: call scan_green_failure_repaired."""
+    """P4: historical_price_scanners.py:257. Frozen scan_green_refinement calls scan_green_failure as parent. Change: call scan_green_failure_repaired.
+    C3 applies through the nyam_box parent reclaim. C7: parent bias_recorded stays the frozen computed presence with context_direction_unevaluated; retracement_entry is required True for this annotation."""
     parent=scan_green_failure_repaired(m,'nyam_box');episodes=[]
     for episode in parent['episodes']:
         if episode['research_verdict']!='pass':continue
@@ -633,12 +831,16 @@ def scan_green_refinement_repaired(m,branch):
         e.geometry['mss_fvg']={'candles':[a,b,c],'gap':gap,'structure':structure,'parent_entry_at':start}
         e.stage('parent_entry',start,observed=True,parents=[episode['candidate_id']])
         e.stage('later_MSS_FVG_annotation',c['known_at'],observed=gap and structure,parents=[r['bar_id'] for r in triple])
+        structural_false=['pocket_required'] if episode['values'].get('pocket_required') is False else []
+        _record_c7(e,c['known_at'],(),structural_false,by_construction=('source_session_allowed',),
+            context_direction_unevaluated=True)
         out=e.finish(decision_at=c['known_at'],entry=None,stop=None,target=None)
         out['parent_entry_at']=start;out['observation_unit']='post_parent_annotation';episodes.append(out)
     return window_result(m,'GB-FAIL',branch,episodes,omissions=parent['omissions'])
 
 def scan_green_vwap_repaired(m,branch):
-    """D1: historical_price_scanners.py:314. Frozen scan_green_vwap rebinds continuation_context with the retest-absence answer, overwriting the breakout-context conjunct from line 308. Change: keep continuation_context as the breakout comparison and record the retest conjunct on retest_at/retest_low/retest_high. P2: the later_VWAP_return stage uses absent_repaired."""
+    """D1: historical_price_scanners.py:314. Frozen scan_green_vwap rebinds continuation_context with the retest-absence answer, overwriting the breakout-context conjunct from line 308. Change: keep continuation_context as the breakout comparison and record the retest conjunct on retest_at/retest_low/retest_high. P2: the later_VWAP_return stage uses absent_repaired.
+    C7: historical_price_scanners.py:309. Frozen binds vwap_reset_verified to True. Change: keep True as the A2-GB-CLOCK 18:00 reset operational assumption and record literal_operand_kind=operational_assumption."""
     refs={name:m.range(m.at(lo,-1 if lo>='18:00' else 0),m.at(hi),name) for name,(lo,hi) in
           ((name,setting('gb_sessions')[name]) for name in ('asia','london'))}
     if any(r is None for r in refs.values()):return window_result(m,'GB-VWAP',branch,[],omissions=[{'reason':'session_reference_missing'}])
@@ -668,11 +870,12 @@ def scan_green_vwap_repaired(m,branch):
         'breakout_at':breakout['known_at'],'breakout_close':breakout['C'],'vwap_reset_verified':True,
         'vwap_known_at':vw['known_at'] if vw else None,'vwap_at_retest':vw['price'] if vw else None,
         'retest_at':retest_at,'retest_low':retest['L'] if retest else None,'retest_high':retest['H'] if retest else None,
-        'risk_defined':None if entry is None else entry>stop},operation='finished Asia/London highs, five-minute break, later contemporaneous execution VWAP return',
+        'risk_defined':None if entry is None else entry>stop},operation='finished Asia/London highs, five-minute break, later contemporaneous execution VWAP return; C7 vwap_reset_verified is A2-GB-CLOCK operational assumption',
         parents=[asia['id'],london['id'],breakout['bar_id']],known_at=decision,assumption='A2-GB-CLOCK/A2-STRUCTURAL-RISK')
     if retest is None:e.bind({'retest_at':None,'retest_low':None,'retest_high':None},operation='no later VWAP retest in declared observed horizon')
     e.stage('above_both_highs',breakout['end'],observed=True).stage('later_VWAP_return',retest_at,
         observed=True if retest else absent_repaired(m,breakout['end'],deadline),details=vw)
+    _record_c7(e,decision,operational_assumption=('vwap_reset_verified',),assumption_id='A2-GB-CLOCK')
     return window_result(m,'GB-VWAP',branch,[e.finish(decision_at=decision,entry=entry,stop=stop)],omissions=omissions)
 
 def _control_absence_repaired(m,after,end,side):
@@ -696,21 +899,23 @@ def _control_absence_repaired(m,after,end,side):
     return None if uncertain else absent_repaired(m,after,end)
 
 def _saint_base_repaired(e,m,ref,arrival,control,decision,side,entry,stop,target,*,control_start=None):
-    """P2: historical_auction_scanners.py:50. Frozen _saint_base calls _control_absence. Change: call _control_absence_repaired."""
+    """P2: historical_auction_scanners.py:50. Frozen _saint_base calls _control_absence. Change: call _control_absence_repaired.
+    C7: historical_auction_scanners.py:46,49,51. Frozen binds profile_allows_trade from the HTF profile, arrival_read_recorded=True and alignment_ok=True if control else None. Change: bind those three to None as unevaluated market stages until P15-13."""
     profile=m.profile(ref['start'],ref['known_at'],'.68')
     permission=None if profile['poc'] is None else ref['low']<=profile['poc']<=ref['high']
     e.bind({'balance_fixed_before_use':ref['known_at']<=arrival,'balance_known_at':ref['known_at'],
-        'profile_allows_trade':permission,'arrival_read_recorded':True,'arrival_at':arrival,
+        'profile_allows_trade':None,'arrival_read_recorded':None,'arrival_at':arrival,
         'control_evidence_recorded':True if control else _control_absence_repaired(m,arrival//MINUTE*MINUTE if control_start is None else control_start,decision,side),
-        'control_at':control['known_at'] if control else None,'alignment_ok':True if control else None,
+        'control_at':control['known_at'] if control else None,'alignment_ok':None,
         'risk_defined':None if entry is None else sign(side)*(entry-stop)>0,
         'objective_fixed':None if entry is None else sign(side)*(target-entry)>0},
-        operation='distinct HTF price balance with 68% profile and current repeated directional body/delta control',
+        operation='distinct HTF price balance with 68% profile and current repeated directional body/delta control; C7 profile_allows_trade, arrival_read_recorded, alignment_ok unevaluated',
         parents=[ref['id'],profile['id']],known_at=decision,assumption='A2-BALANCE/A2-STRUCTURAL-RISK')
     e.geometry['htf_profile']=profile
 
 def scan_saint_repaired(m,branch):
-    """P2: historical_auction_scanners.py:98,108,109,158,161,162,168. Frozen scan_saint calls absent() and _control_absence, certifying absence from a zero-length window as False. Change: call absent_repaired and _control_absence_repaired."""
+    """P2: historical_auction_scanners.py:98,108,109,158,161,162,168. Frozen scan_saint calls absent() and _control_absence, certifying absence from a zero-length window as False. Change: call absent_repaired and _control_absence_repaired.
+    C7: historical_auction_scanners.py:46,49,51,103. arrival_read_recorded, alignment_ok and profile_allows_trade stay None with unevaluated_operand. ltf_balance_broken stays True with literal_operand_kind=by_construction."""
     ref,allbalances=primary_balance(m);episodes=[];omissions=[]
     if ref is None:return window_result(m,'SAINT-AMT',branch,[],omissions=[{'reason':'no confirmed HTF price balance in observed prefix','kind':'measured_selection'}])
     begin=max(ref['known_at'],m.at('09:30'))
@@ -758,6 +963,9 @@ def scan_saint_repaired(m,branch):
                 e.geometry.update(control_bars=controlbars,control_search_window=[control_start,decision])
             e.stage('ltf_break',trigger['end'],observed=True).stage('same_boundary_retest',touch['at'] if touch else None,observed=held)
             e.stage('current_control',control['end'] if control else None,observed=bool(controlbars))
+            by_construction=('ltf_balance_broken',) if branch=='continuation_retest' else ()
+            _record_c7(e,decision,('profile_allows_trade','arrival_read_recorded','alignment_ok'),
+                by_construction=by_construction)
             episodes.append(e.finish(decision_at=decision,entry=entry,stop=stop,target=target))
     else:
         older=[r for r in allbalances if r['known_at']<ref['start'] and r['id']!=ref['id']]
@@ -815,11 +1023,13 @@ def scan_saint_repaired(m,branch):
                 e.geometry.update(control_bars=controlbars,control_search_window=[control_start,decision])
             for name,row in [('exploration',trigger),('older_touch',oldtouch),('older_rejection',rejection),('reacceptance',reaccept),('poc_passage',passage),('control',control)]:
                 e.stage(name,row['known_at'] if row else None,observed=True if row else None)
+            _record_c7(e,decision,('profile_allows_trade','arrival_read_recorded','alignment_ok'))
             episodes.append(e.finish(decision_at=decision,entry=entry,stop=stop,target=target))
     return window_result(m,'SAINT-AMT',branch,episodes,omissions=omissions)
 
 def scan_member_repaired(m,branch):
-    """P1: historical_auction_scanners.py:219. Frozen scan_member calls local_observations. P2: flow_absent uses absent(). Change: call local_observations_repaired and flow_absent_repaired."""
+    """P1: historical_auction_scanners.py:219. Frozen scan_member calls local_observations. P2: flow_absent uses absent(). Change: call local_observations_repaired and flow_absent_repaired.
+    C7: historical_auction_scanners.py:234. Frozen binds actual_band_contact=True. Change: keep the frozen value and record literal_operand_kind=by_construction."""
     prior=m.prior('day');episodes=[];omissions=list(prior['omissions'])
     if not prior['sessions']:return window_result(m,'MEMBER-TWO-REASONS',branch,[],omissions=omissions)
     day=prior['sessions'][-1];win=day['window'];from trading_research.research.method_pack.empirical_market import clock
@@ -885,21 +1095,34 @@ def scan_member_repaired(m,branch):
     e.stage('current_contact',contact['at'],observed=True).stage('local_response',selected['known_at'] if selected else None,observed=selected is not None)
     if getattr(m,'reconstruct',False):
         e.geometry['local_flow']=[{k:v for k,v in r.items() if k not in {'events','event_ids','book_changes'}} for r in observed]
+    _record_c7(e,decision,by_construction=('actual_band_contact',))
     return window_result(m,'MEMBER-TWO-REASONS',branch,[e.finish(decision_at=decision,entry=entry,stop=stop,target=target)],omissions=omissions)
 
 def scan_keani_repaired(m,branch):
-    """P1: historical_auction_scanners.py:278. Frozen scan_keani calls local_observations. P2: absent() and flow_absent certify a collapsed window as False. Change: call local_observations_repaired, flow_absent_repaired and absent_repaired."""
+    """P1: historical_auction_scanners.py:278. Frozen scan_keani calls local_observations. P2: absent() and flow_absent certify a collapsed window as False. Change: call local_observations_repaired, flow_absent_repaired and absent_repaired.
+    C4: historical_auction_scanners.py:258-260. Frozen tests a wick into the developing value-area low. Change: the rejection candle wicks into the developing POC or the previous day's value-area high and closes back above it; record which level. The developing-VAL variant stays B0."""
     prior=m.prior('day');old=prior['sessions'][-1]['window'] if prior['sessions'] else None
     p=old.profile(old.start,old.end) if old else None
     a=m.range(m.at('09:30'),m.at('10:00'),'Keani-A')
     if a is None:return window_result(m,'KEANI-OPEN-ABOVE-VALUE',branch,[],omissions=[*prior['omissions'],{'reason':'A period has no observed executions'}])
     initial=m.profile(a['start'],a['end']);limit=m.at(setting('keani_time')['latest_break'])
     observation=breakout=band=retest=defense=contact=None;dev=None;imbalance=None;obs=None;ambiguous_imbalance=[]
+    rejection_level=None
     for row in m.bars(a['end'],limit):
         current=m.profile(a['start'],row['start'])
         higher=current['val'] is not None and initial['val'] is not None and current['val']>initial['val'] and current['vah']>=initial['vah']
-        rejection=higher and row['C'] is not None and row['L']<=current['val'] and row['C']>current['val']
-        if observation is None and rejection:observation=row;continue
+        poc=current.get('poc')
+        prior_vah=p['vah'] if p and p.get('vah') is not None and prior.get('scope_complete') else None
+        hit_poc=poc is not None and row['C'] is not None and row['L']<=poc and row['C']>poc
+        hit_vah=prior_vah is not None and row['C'] is not None and row['L']<=prior_vah and row['C']>prior_vah
+        rejection=higher and row['C'] is not None and (hit_poc or hit_vah)
+        if observation is None and rejection:
+            observation=row
+            names=[]
+            if hit_poc:names.append('developing_poc')
+            if hit_vah:names.append('prior_day_vah')
+            rejection_level=names[0] if len(names)==1 else names
+            continue
         if observation and row['observed_complete'] and row['C'] is not None and current['vah'] is not None and row['C']>current['vah']:
             footprint=m.window.footprints.get(row['start'])
             if footprint:
@@ -939,13 +1162,82 @@ def scan_keani_repaired(m,branch):
         operation='whole A above prior value, later higher-building/rejected developing value, actual diagonal buy stack break, same-stack-band defended return',
         parents=[a['id'],p['profile_id']] if p else [a['id']],known_at=decision,
         assumption='A2-KEANI-TIME/A2-PROFILE/A2-IMBALANCE/A2-FLOW/A2-STRUCTURAL-RISK')
-    e.geometry.update(prior_profile=p,a_profile=initial,developing_profile=dev,imbalance=imbalance,imbalance_band=band)
+    e.geometry.update(prior_profile=p,a_profile=initial,developing_profile=dev,imbalance=imbalance,imbalance_band=band,rejection_level=rejection_level)
     if getattr(m,'reconstruct',False):e.geometry.update(observation_bar=observation,breakout_bar=breakout)
     for name,row in [('developing_value_rejection',observation),('imbalance_break',breakout),('same_band_return',retest),('buyer_defense',defense)]:
-        e.stage(name,row['known_at'] if row else None,observed=True if row else absent_stage)
+        details={'rejection_level':rejection_level} if name=='developing_value_rejection' else None
+        e.stage(name,row['known_at'] if row else None,observed=True if row else absent_stage,details=details)
     omissions=[*prior['omissions']]
     if ambiguous_imbalance:omissions.append({'kind':'input_ambiguity','reason':'candidate footprint has unknown aggressor quantity; diagonal imbalance cannot be certified','candle_ids':ambiguous_imbalance,'required_fields':['aggressor_side']})
     return window_result(m,'KEANI-OPEN-ABOVE-VALUE',branch,[e.finish(decision_at=decision,entry=entry,stop=stop,target=target)],omissions=omissions)
+
+def scan_refill_repaired(m,branch):
+    """C7: historical_process_scanners.py:38-43. Frozen binds four REFILL record conjuncts to True. Change: keep those frozen values and record literal_operand_kind=by_construction."""
+    if branch!='touch_record':return scan_supplied_unit(m,'REFILL-STUDY',branch,extra=False)
+    from trading_research.research.method_pack.empirical_tape import m09_research_comparison
+    rule={'rule_id':'v2:REFILL-STUDY:touch_record','method_id':'REFILL-STUDY','branch':branch,
+        'evidence_mode':'research_comparison','assumption_ids':['A2-REFILL'],'parameters':{**setting('refill'),'retain_stage_receipts':True}}
+    start=m.at('09:30');end=m.end
+    events=m.local(start,end)
+    result=m09_research_comparison(events,rule=rule,partition={'partition_id':str(m.day),
+        'session_date':str(m.day),'instrument_id':m.instrument_id},registry_sha256=m.records['registry_sha256'],
+        tick_size=Q,coverage_ok=True if m.coverage(start,end)['observed_scope_complete'] else None,session_end=end)
+    episodes=[];prior_by_zone=defaultdict(list)
+    for record in result['records']:
+        opp=record['opportunity'];replay=record['replay'];ref=opp['reference'];trigger=opp['trigger'];at=opp['available_at']
+        old=[r for r in prior_by_zone[opp['reference_id']] if r['resolved_at']<opp['occurrence_start']]
+        e=HistoricalEpisode(m,'REFILL-STUDY',branch,opp['side'],{'id':opp['opportunity_id'],'at':opp['occurrence_start']},
+            {**ref,'id':ref['reference_id']})
+        e.bind({'zone_definition_recorded':True,'zone_frozen':ref['immutable'],'zone_known_at':ref['known_at'],
+            'instrument_and_threshold_preserved':True,'departure_observed':ref.get('departure_at') is not None,
+            'departure_at':ref.get('departure_at'),'distinct_touch_id':opp['opportunity_id'] not in {r['id'] for r in old},
+            'touch_at':opp['occurrence_start'],'thesis_recorded':True,'feature_max_known_at':max([ref['known_at']]+[r['resolved_at'] for r in old]),
+            'memory_uses_only_prior_resolved_touches':all(r['resolved_at']<opp['occurrence_start'] for r in old),
+            'label_uses_only_post_touch_observations':True},operation='existing immutable nonoverlapping large-execution-pair state machine; C7 four record conjuncts by construction',
+            parents=ref['formation_event_ids'],known_at=at,assumption='A2-REFILL')
+        e.stage('zone_formation',ref['known_at'],observed=True).stage('departure',ref.get('departure_at'),observed=True)
+        e.stage('distinct_return',opp['occurrence_start'],observed=True)
+        _record_c7(e,at,by_construction=REFILL_RECORD_CONJUNCTS)
+        out=e.finish(decision_at=at,entry=D(str(trigger['price'])))
+        out['refill_response']=replay;out['prior_resolved_memory']=old
+        episodes.append(out)
+        resolved=replay.get('completed_at',replay.get('completion_at',opp['expiry_at']))
+        prior_by_zone[opp['reference_id']].append({'id':opp['opportunity_id'],'resolved_at':resolved,'verdict':replay.get('verdict')})
+    out=window_result(m,'REFILL-STUDY',branch,episodes)
+    out['zone_formation_count']=len(result['zones']);out['formation_ambiguities']=result['ambiguities']
+    out['native_execution_members']=result['physical_member_count']
+    return out
+
+def scan_stoic_data_repaired(m,branch,*,extra=False):
+    """C7: historical_process_scanners.py:165. Frozen binds cycle_and_indicator_rules_recorded to True on the reconstruct path, else None. Change: keep that frozen value and record literal_operand_kind=by_construction."""
+    records=m.records.get('process_review',[]);episodes=[]
+    macro=macro_at(m,m.at('09:30')) if branch=='macro_application' else None
+    for record in records:
+        start=record['collection_started_at'];decision=record['collection_completed_at']
+        eligible=record['eligible_ids'];included=record['included_ids'];feature_rows=record['features'];outcomes=record['outcomes']
+        e=HistoricalEpisode(m,'STOIC-DATA',branch,'not_applicable',{'id':record['id'],'at':start},
+            {'id':record['spec_sha256'],'known_at':record['spec_frozen_at']},predicate='macro_application' if branch=='macro_application' else 'process')
+        e.bind({'process_spec_frozen':bool(record['spec_sha256']),'spec_known_at':record['spec_frozen_at'],
+            'sample_start_at':start,'inclusion_rule_fixed':record['inclusion_sha256']==record['frozen_inclusion_sha256'],
+            'uniform_schema':len(set(record['record_schemas']))<=1,'all_eligible_observations_retained':set(eligible)==set(included) and len(included)==len(set(included)),
+            'features_available_before_decisions':all(r['known_at']<=r['decision_at'] for r in feature_rows),
+            'outcomes_separated_from_inputs':not set(record['feature_fields'])&set(record['outcome_fields']),
+            'aggregate_winner_loser_comparison_recorded':sum(record['comparison_counts'].values())==len(outcomes),
+            'revision_uses_only_prior_sample':all(r['sample_completed_at']<r['revised_at'] for r in record['revisions'])},
+            operation='actual collection manifest, exact eligible/retained membership, feature clocks and separate outcome tables',
+            parents=[record['id']],known_at=decision,kind='process')
+        if macro:
+            observations=macro['initial_publication_observations']
+            e.bind({'release_vintages_recorded':all(r['current'] is not None for r in observations),
+                'historical_comparison_defined':all(r['comparison_history_complete'] for r in observations),
+                'cycle_and_indicator_rules_recorded':True if getattr(m,'reconstruct',False) else None},operation='existing verified initial BLS vintages and 12-prior-observation O160 comparison; C7 cycle_and_indicator_rules_recorded by construction',
+                parents=[r['current']['observation_id'] for r in observations if r['current']],known_at=m.at('09:30'),assumption='A2-MACRO')
+            e.geometry['macro']=macro
+            _record_c7(e,decision,by_construction=('cycle_and_indicator_rules_recorded',))
+        episodes.append(e.finish(decision_at=decision))
+    out=window_result(m,'STOIC-DATA',branch,episodes,extra=extra,omissions=[] if records else [{'reason':'collection review is emitted after this date job finishes','kind':'pending_process_record'}])
+    if macro:out['measured_quantities']=macro
+    return out
 
 
 def _attach(result, row, version):
@@ -963,6 +1255,8 @@ def _scanner_for(row):
         return scan_green_vwap_repaired
     if method == 'GB-FAIL' and branch in GB_FAIL_BRANCHES:
         return scan_green_failure_repaired
+    if method == 'SIRES' and branch == 'microbalance_break':
+        return scan_microbalance_repaired
     if method == 'SIRES' and branch in SIRES_LOCAL_BRANCHES:
         return scan_sires_repaired
     if method == 'SAINT-AMT' and branch in SAINT_BRANCHES:
@@ -971,8 +1265,12 @@ def _scanner_for(row):
         return scan_member_repaired
     if method == 'KEANI-OPEN-ABOVE-VALUE' and branch == 'source_long':
         return scan_keani_repaired
-    if method == 'JJ-TBR' and branch in JJ_TBR_ABSENT_BRANCHES:
+    if method == 'JJ-TBR' and branch in JJ_TBR_REPAIRED_BRANCHES:
         return scan_jumbo_repaired
+    if method == 'REFILL-STUDY' and branch == 'touch_record':
+        return scan_refill_repaired
+    if method == 'STOIC-DATA' and branch == 'macro_application':
+        return scan_stoic_data_repaired
     return None
 
 

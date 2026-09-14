@@ -185,6 +185,7 @@ def aggregate(date_results, dates, calendar_n):
                     "strategy_status_directions": Counter(),
                     "only_b0": 0,
                     "only_b01": 0,
+                    "pass_to_unknown": 0,
                     "wall_seconds": 0.0,
                     "errors": [],
                 },
@@ -205,6 +206,7 @@ def aggregate(date_results, dates, calendar_n):
             slot["strategy_status_directions"].update(trans["strategy_status_directions"])
             slot["only_b0"] += trans["only_b0"]
             slot["only_b01"] += trans["only_b01"]
+            slot["pass_to_unknown"] += trans["directions"].get("pass->unknown", 0)
     branches = []
     for cid in sorted(by_branch):
         slot = by_branch[cid]
@@ -253,8 +255,8 @@ def render_md(payload):
         f"- Branches: {payload['n_branches']}",
         f"- Wall seconds (sum of per-date worker elapsed): {payload['wall_seconds_total']}",
         "",
-        "| branch | dates | ep B0 | ep B0.1 | pass B0 | pass B0.1 | fail B0 | fail B0.1 | unknown B0 | unknown B0.1 | no-setup B0 | no-setup B0.1 | verdict changed | directions | wall s |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |",
+        "| branch | dates | ep B0 | ep B0.1 | pass B0 | pass B0.1 | fail B0 | fail B0.1 | unknown B0 | unknown B0.1 | no-setup B0 | no-setup B0.1 | verdict changed | directions | pass to unknown (C7) | wall s |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: |",
     ]
     for row in payload["branches"]:
         directions = ", ".join(f"{k}:{v}" for k, v in sorted(row["directions"].items())) or "—"
@@ -262,7 +264,7 @@ def render_md(payload):
             f"| `{row['coverage_id']}` | {row['dates_run']} | {row['episodes_b0']} | {row['episodes_b01']} | "
             f"{row['pass_b0']} | {row['pass_b01']} | {row['fail_b0']} | {row['fail_b01']} | "
             f"{row['unknown_b0']} | {row['unknown_b01']} | {row['no_setup_b0']} | {row['no_setup_b01']} | "
-            f"{row['verdict_changed']} | {directions} | {row['wall_seconds']:.1f} |"
+            f"{row['verdict_changed']} | {directions} | {row.get('pass_to_unknown', 0)} | {row['wall_seconds']:.1f} |"
         )
     if payload["dates_failed"]:
         lines += ["", "## Failed dates", "", ", ".join(payload["dates_failed"])]
