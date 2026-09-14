@@ -1,0 +1,16 @@
+{
+  "actual_exit": 2,
+  "argv": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/tools/verify_research_release.py",
+    "lineage",
+    "--manifest",
+    "/workspace/implementation/reports/research-work/hardening-2026-09-14/hardening-2/additional-suite-verify/lineage_nonexistent_row/LINEAGE_MANIFEST.json"
+  ],
+  "description": "A real, correctly hashed artifact is paired with a row ID that does not exist.",
+  "expected_exit": 2,
+  "id": "lineage_nonexistent_row",
+  "passed": true,
+  "stderr": "",
+  "stdout": "[\n  {\n    \"code\": \"LINEAGE_HASH\",\n    \"detail\": \"evidence leaf row_ids do not resolve in the artifact\",\n    \"path\": \"/workspace/implementation/reports/research-work/hardening-2026-09-14/hardening-2/additional-suite-verify/lineage_nonexistent_row/LINEAGE_MANIFEST.json#records[0].features[0].evidence[0]\"\n  }\n]\n"
+}

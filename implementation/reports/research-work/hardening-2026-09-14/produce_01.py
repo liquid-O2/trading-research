@@ -505,7 +505,7 @@ def main() -> int:
     checker_out = ROOT / "implementation/reports/research-work/01-native-and-outcomes" / run_id_sub / "fixed-suite"
     checker = run(
         [str(PYTHON), str(CHECKER), "--p15-00", str(P15_00_RECEIPT), "--p15-01", str(P15_01_RECEIPT),
-         "--subphase", str(ROOT / "implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json"),
+         "--subphase", str(ROOT / "implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json"),
          "--output-root", str(checker_out)],
         ROOT / "implementation",
         attempt_sub / "foundation_checker.log",

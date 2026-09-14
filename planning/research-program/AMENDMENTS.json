@@ -712,6 +712,57 @@
         }
       ],
       "previous_entry_sha256": "591852ab27062eda5954ce62edd14551aa6e9b73bc21df43485472ca32e4890d"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward.",
+      "id": "amendment-2026-09-14-verifier-mid-chain-walk",
+      "date": "2026-09-14",
+      "scope": "Verifier plan-file amendment walk and gate-review graph binding; no formula, gate, budget or date of existing banks changed",
+      "reason": "verifier defect: amendment walk started at the chain root; gate-review graph binding had no chain tolerance",
+      "changes": [
+        "receipts.py _plan_superseded_by_amendments starts the path walk at the first chained entry whose sha256_before for that path equals the declared hash",
+        "previous_entry_sha256 is checked for every new-shape entry from the first chained entry onward even when the path walk starts mid-chain",
+        "an entry dated before the receipt draft is skipped unless it supplies the declared hash's successor",
+        "GATE_REVIEW graph hash and independent-results current-graph binding accept a mid-chain hash when the same walk connects it to the live graph",
+        "subphase and phase CLI gain --amendments",
+        "tests in tests/rule_discovery/test_p15_01.py for mid-chain, missing later entry, wrong later previous_entry_sha256, gate-review graph binding, and predating skip/reject",
+        "runner.py predecessor pins retargeted to the new P15-00/P15-01 receipts after those attempts existed"
+      ],
+      "changed_files": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "sha256_before": "b5e8d55e220554f9dda1b878444496cc3c6f3337c7677bc40871f5cfb5b1d3e2",
+          "sha256_after": "60f29b851c9d924f603ee029c1b48a79cbc9da5296050f0a4d3db21f79e5b29a"
+        },
+        {
+          "path": "implementation/tests/rule_discovery/test_p15_01.py",
+          "sha256_before": "512a851c3035eb95fce31c27491dbf7428eeaf52ab6e5b7fbb43e66318046945",
+          "sha256_after": "c0308999a81f1b219b01f590c564d68e776ded08179f8ac7e1b6269fcf513055"
+        },
+        {
+          "path": "implementation/tools/verify_research_release.py",
+          "sha256_before": "331cd7434d4a54b09a0b28b8df133f1fe973f6710a6a5663458c20dff6a0ffcb",
+          "sha256_after": "e4e8c4efe83cf985dea844b474f6bc12560d576e2c612d2d110638cd5a1e7c60"
+        },
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "sha256_before": "d2c86e38243f52e6cbd971431d430c6a353990d6d82c8ede07a138fbc22c1c19",
+          "sha256_after": "0b421f5111a88e3b7815204470c7e0d60554622fea9120f812126bbca41f2782"
+        }
+      ],
+      "previous_entry_sha256": "fd854349f5670c3b996e334c97808b8f664f6395a62b5c74c3750b3dd59edccb"
     }
   ]
 }

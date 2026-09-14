@@ -1,0 +1,629 @@
+{
+  "schema": "research-plan-amendments-v1",
+  "amendments": [
+    {
+      "id": "research-assurance-2026-09-14-v2",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-13-v1",
+      "new_plan_version": "research-plan-2026-09-14-v2",
+      "scope": "All 46 Phase 1.5/Phase 2 tasks and all 17 subphases",
+      "reason": "Independent foundation audit found false acceptance; user requested concrete prevention of silent failures throughout both packs.",
+      "original_foundation_admission_rejected": [
+        {
+          "path": "implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+        },
+        {
+          "path": "implementation/reports/research-work/P15-01/039267553e8bf721/attempt-0001/TASK_RECEIPT.json",
+          "sha256": "549429da5d43ff6fc347723fe4f4c8eda4550b31190bb94324ab82e2afba2c4f"
+        },
+        {
+          "path": "implementation/reports/research-work/00-foundation/f7135f8d696ff1f5/attempt-0001/SUBPHASE_RECEIPT.json",
+          "sha256": "e1046c17650332378273a0c6e2a2c796ba3abd6a0d1113fb371aef998143cfea"
+        }
+      ],
+      "review": "planning/research-program/reviews/00-foundation-2026-09-14/REVIEW.md",
+      "changes": [
+        "Per-task evidence matrix and assigned adversarial cases; coordinator review sidecar for every subphase",
+        "Required artifact/schema/identity/dependency/command verification with current assurance version",
+        "Native coverage by input group, same-contract lookbacks, actual native replay and clock boundaries",
+        "Fixed independent foundation acceptance suite; immutable failed/superseded attempts",
+        "Acyclic task, subphase, phase and review finalization"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. Repair P15-00/P15-01 under new snapshots/draft/run identities, then obtain a matching passing review before 01-native-and-outcomes. Later tasks start under this amended contract.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Record the coverage-rule correction and deterministic per-group reselection before any new outcome inspection."
+    },
+    {
+      "id": "research-plan-2026-09-14-v3",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-14-v2",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v2",
+      "scope": "Planning contracts, Phase 1.5/Phase 2 task graph, Strategy Book acceptance, Phase 2 entry-gate exception for P2-09/P2-10/P2-03",
+      "reason": "Add Strategy Book deliverables, retention/failure-attribution/revisit bookkeeping, and a bounded Phase 2 start exception for strategy-agnostic native adapters and volatility arithmetic. No formula, budget, gate threshold or date of the existing banks is changed.",
+      "plan_version_decision": "Bumped to research-plan-2026-09-14-v3. Plan-version continuity between predecessor and successor receipts is not enforced. receipts.py _check_predecessors (lines 553-638) requires TASK_GRAPH dependencies, matching SHA-256 digests and recursive verification; it never reads a plan_version field. identity.py RECEIPT_KEYS (lines 29-44) and validate_receipt_shape (lines 172-194) bind plan_sha256 and predecessor digest maps, not a plan version string. receipts.py _check_identities (lines 1188-1190) recomputes this receipt's plan_sha256 from PLAN_SNAPSHOT.files only. Therefore a plan-file amendment does not require predecessor receipts to share the successor's plan version string.",
+      "changes": [
+        "ROADMAP.md: plan version v3; retention section summarizing RETENTION.md rules 1-5 and the Phase 2 split; Phase 2 gate exception for P2-09, P2-10 and P2-03 from verified P15-02 with re-verification under P2-00 before P2-04, P2-11 or method experts consume those receipts",
+        "EVALUATION.md: TrialRecord.failure_attribution with RETENTION.md rule 2 labels and thresholds; bounded revisit rule 3; support section states a disposition never deletes a candidate",
+        "SEARCH_CONTRACT.md: same TrialRecord.failure_attribution field and bounded revisit rule",
+        "P15-20 and P2-24: Strategy Book version 1/2 acceptance keys, DELIVERABLES.md and RETENTION.md on the read-first lists",
+        "TASK_GRAPH.json required reads: DELIVERABLES.md and RETENTION.md on P15-17, P15-18, P15-20, P2-22, P2-23, P2-24",
+        "TASK_GRAPH.json dependencies: P2-09 starts from P15-02; P2-10 unchanged (P2-09); P2-03 starts from P15-02 and P2-10; P2-00 re-verifies P2-09, P2-10 and P2-03; P2-04 waits for that P2-00 re-verification. No other dependency lists changed.",
+        "Phase 2 SPEC.md and P2-00/P2-09/P2-10/P2-03/P2-04 cards state the same exception",
+        "Generated runbooks, PROMPTS.md and phase READMEs rebuilt from canonical sources"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Acceptance amendment research-assurance-2026-09-14-v2",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256_before": "3af3ebfeab8479584787597894861e82b8fbc185b22abfc940a9542c4e9eff10",
+          "sha256_after": "a2a5187de01a183f1b04db94c310d19c4dfc646d74b7f6d30c566d9e4af1796b"
+        },
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256_before": "e5fba6c0e4638b208b246e709ce62151f7045cdf6b1b95a57d0968c1a2e4a140",
+          "sha256_after": "1daeccb06662eb582a0c0ce8bcfe6a6175b6d8cecfe34e6c0181c926405ce4ea"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd",
+          "sha256_after": "b3af86be048851eaab433ddb70dc6cc6e474e82b9c49f626a8cf2973142ecb19"
+        },
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256_before": "f301fd2586737aa4ffcf798355f4873325ce535b52de14c3eb77dadea3767a62",
+          "sha256_after": "c3ac03a84139c228b45fbab113383e4c13a8af535c4100e599796d7c344b0589"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256_before": "71409730fa93f2020edda6f797db6de36468e733770594e5dfdecb8ddccbff80",
+          "sha256_after": "0cb63b98da547febd74cfd4f4f4ea2b92eafe23e591c59fb60281234af22b069"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256_before": "534ec1e86193da5e7d1bcda6333c33ecdb73be6d87003f0b5b3bf2716f5790d7",
+          "sha256_after": "235c30efa9c57362aa79c270caa468a94a09fff0a1b4c65af390970ed8edf446"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256_before": "c95b5e27fa8d05297004a8b38d55bef6c12fb2c845c7aa242f93392b8762f20a",
+          "sha256_after": "221316c031edabc99085fa2c32d91dccc15d1aee4613faa9cc89bb3a3834eacb"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "5528f4b796b41dae45834dc83163e364daaac922370f3a8125da2b9c60da8dcd",
+          "sha256_after": "c4ed600bc8ec8b5ec141a63ef58988faa5fc0ff486afd0bfa3dde8da7a25a00d"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "f8010426bf937dbc7a32f7da3777bedfe23f3bd22d0c36be4722b7096854e5e6",
+          "sha256_after": "f201770cec6ca0c9a63689299d4285ae3b0170636c06bebefc64acf82c3ec830"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "bc6150970acdcf6147923ae4e0af1c171d8d879052fe651f87375aa490b888bb",
+          "sha256_after": "58a81c06c513dff53b05901058153098ab5b493a59ac4283a23fe82f907816f4"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "42a120d4aaaf5d61eaea565829c99dd1cdee99074d3f7f62d615d25bf52682e5",
+          "sha256_after": "72bda904b834d3288ea5bee1e2eb4641c07c1a445cfff33363aa8f78ae54ae9d"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "57397e2cc759d8fed5611cc54eaac0a3e8a6dafe04596117e6ffbb042b1f2787",
+          "sha256_after": "3d4b13dd869eaa8ad50d95cda9bcaf2d442ba73ddd71003a761195bbde0d2c14"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "f5d9e3aa9afdf26ec1206d9bdbff57416f58633dc82be01eaf110756e6fe568c",
+          "sha256_after": "b02759d936894eabbef6faae35ef664b8529a25272ae35b766cbb1253887fdc4"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256_before": "42528498586be4f1ef91542acf3c086f2fb1e936f551270015ed9d20e53a233b",
+          "sha256_after": "acb02ce086d389fe60cbf3ffcb39a5b3c2b65d40e73cb9c509d06e5bd0418d9c"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "ab91aefb42ef5031ae8bd5295d2530f5b28bb6c3c33a1bd65b43a6bf351f2cb8",
+          "sha256_after": "88606063fa6768181baf969e536435ff65323feab18cc921636e8be6aba23dbf"
+        },
+        {
+          "path": "planning/phase-2/SPEC.md",
+          "sha256_before": "61dc33d207b10a984cbf02969195ec31f97a5a99c1f232d558d4c2549424b9d0",
+          "sha256_after": "4d8367f2203536d24720ef0a7f8507c9097988e2a474590c62794d7eabd17a76"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256_before": "d7953fa24e66de9cbec725c1acab5b7f68f143d161a88caee58b5d632a383f36",
+          "sha256_after": "f0c90a303bec23be7e1a255682409bcbf2878d63a146ec76596ad0fa4d86f524"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256_before": "3592648de8d242bba7ba1804240149abcf6120906c5d370cdeedf6ec3e07c695",
+          "sha256_after": "f0e53458add0ab8f4973695bdef779fe0f2829cc2a8b8982aeb2a8b3c809bd84"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256_before": "72e6a155c4a6e42744823846e69eab5120e76f9fb31e8d21d9741e5eb5d0b056",
+          "sha256_after": "31907e03af02047d9154ae0628adbe1fd69156ae6136f06501d8736a6965f483"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256_before": "951c87f3e02af40bf3c7ce599591523b070cdd0068ce38805cb1cfbc947e2eae",
+          "sha256_after": "d1aaeccd5060179a89ceabfd99cadff6a0caad879c6bc8a1c63cb00edd59c9fa"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256_before": "f6c0f3218fb077df66951676e75ca6404fc191f3105344211947d30a49020f70",
+          "sha256_after": "9e75cee2b9d0a823a51ae3bc57de4f91f4b8a95fda1158c8f08b9308af5bec6e"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256_before": "2c028f6bec3022a9eb79d9b17f2501280a8753436d454aa93d8c88fe3eefefce",
+          "sha256_after": "a8e3d10d760c35f6ddd8787352273d13e95d79a6cf6de288178447e2dc2d660d"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256_before": "3bf54d4dfa47d80c5f090884f4552d7dfd24c0a765cc456a60b5fffaafba3a9b",
+          "sha256_after": "39e5721e8ae6401c9043bce1df9fe44dbf578812b7d693486786ca9621853262"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "dfcb5e9815c71bd854fec9ef67e53cc07b32686bb0c3bf5342fb9cfc88ed5d5e",
+          "sha256_after": "6aa3d1feca9115f32ca7d2e18084401bcfc195588a44bd3060789ee0b28107d3"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "85bfc1ae057f048458eccba869322f3f1667fc6a27a02863b6d8d471c82a57f6",
+          "sha256_after": "3f0c21943ca493382438101f66ee6d1af78bbb8566df5affae3a74b5e2727df2"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "302c071e4674c27c364972424269938ac5f76c1186e945232f462080d436da1b",
+          "sha256_after": "4a62e89b542572c0b83b83e0d57f384331e0e726fe1671550d580792d113b70a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "e82b32e9a82f5d667e455ad105a88509b602290d540256870f899cbeccf79b1a",
+          "sha256_after": "f2dbed2c03e0558a55ed8a033bf1911ac8595e102972897b2ef58bca505807d7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "c5c5745ebdd5a97cd674210e95604dd7e25c3a531920af3bf5299b70e8837f28",
+          "sha256_after": "1dd19ea1653412b192d6f535b6a02e4586f0294faaf2f724254712f91bc1496e"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "143dc118f34d3f99a1426e690d13d320f659c4da7658efa86312c5d9e24d7284",
+          "sha256_after": "e9334be755072f8d23c4749b673681a7de45ad48a02fdf3b28d499166b18357d"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "9e5cbd9380692593064d6754d87ee293adf74f7d882dff57624154e3be699539",
+          "sha256_after": "61c3423227100fcc71c761401916f0712dddd0fda1fe1d05ad7208382f89c6b3"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "7e8e8b68cc7f228601a039e4105ada3e485a59cfc9aad2c479b68b21246032ab",
+          "sha256_after": "f77f1eca269f68ea149170fca086d8c66e005e09a2a6f540ae5c12dc9604335b"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "sha256_after": "64c9cc548dc21d5646ae5526fa95a8702aad502f5b07f6ba987a0b40ab713372"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256_before": "febf04e6cfcee3f07bd08afb609bf8f2801c31f38e4afafe40b826dff11686a7",
+          "sha256_after": "344d343233b61fc80016a62b62f1b9eda522b6f5721202f2d6556d88202c7f44"
+        },
+        {
+          "path": "planning/research-program/RETENTION.md",
+          "sha256_before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "sha256_after": "2dcfa87bcb2519adba8a7ea95a710ed6eed092124cf3dacedc8cc1588cd59fdc"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4",
+          "sha256_after": "f0aedc9efa00799df9a5e4aa1854c8024952a194f761aecac4ec20e2da41df92"
+        }
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-plan-2026-09-14-v3. P2-09, P2-10 and P2-03 may proceed from a verified P15-02 receipt; P2-00 must re-verify those receipts before P2-04, P2-11 or any method expert consumes them.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Retention statuses and first attributions are reporting fields; they do not reopen a closed search budget.",
+      "previous_entry_sha256": "63db41d844f8685c202ad7a726395828d6e57451d9c654b9fce7dc4d34f2a8d4"
+    },
+    {
+      "id": "research-assurance-2026-09-14-v3",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "scope": "Verifier supersession rule, assurance v3 pin, and planning files changed since research-plan-2026-09-14-v3",
+      "reason": "Replace live-byte identity checks with a supersession rule so a planning amendment and later legitimate code edits do not invalidate earlier receipts. Pins research-assurance-2026-09-14-v3. Records every planning file changed since the research-plan-2026-09-14-v3 entry, including the orchestrator's EVALUATION.md deduplication. Independent outcome-fixture checker remains tools/check_outcome_fixtures.py sha256 0cd6910c9e9024342678df1d197c625d049eebb3cd5883f74499518092a6752d; that tool is not edited.",
+      "previous_entry_sha256": "ef4ed7acdd1dd40852755eb59a01a57d382433bffac2e6a36f01e36ba735d84e",
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256_before": "1daeccb06662eb582a0c0ce8bcfe6a6175b6d8cecfe34e6c0181c926405ce4ea",
+          "sha256_after": "e5fba6c0e4638b208b246e709ce62151f7045cdf6b1b95a57d0968c1a2e4a140"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "b3af86be048851eaab433ddb70dc6cc6e474e82b9c49f626a8cf2973142ecb19",
+          "sha256_after": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256_before": "0cb63b98da547febd74cfd4f4f4ea2b92eafe23e591c59fb60281234af22b069",
+          "sha256_after": "a5d4676861710ab6e9b1c1db89df90cfdbc58f2cb14220799ef64d0507126311"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256_before": "235c30efa9c57362aa79c270caa468a94a09fff0a1b4c65af390970ed8edf446",
+          "sha256_after": "b457e19ab863c06c61e97849e209d93ab4ea9da60595363a40e045bc1a6e3fa0"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256_before": "221316c031edabc99085fa2c32d91dccc15d1aee4613faa9cc89bb3a3834eacb",
+          "sha256_after": "95c52df221c216eb2c2c4103053990a0a8b257c69403ba4e0435de727361a09a"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "c4ed600bc8ec8b5ec141a63ef58988faa5fc0ff486afd0bfa3dde8da7a25a00d",
+          "sha256_after": "68f7c9bfbb622d151f8ee310c5284e002fc36bab40e7e43cc2e85a81482aca49"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "f201770cec6ca0c9a63689299d4285ae3b0170636c06bebefc64acf82c3ec830",
+          "sha256_after": "0d65a9c8d306b603b9f338d0d292fbe3b7efb521912e1b1bbff38895ad1a4838"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "58a81c06c513dff53b05901058153098ab5b493a59ac4283a23fe82f907816f4",
+          "sha256_after": "27c1fee43da17a3a67b53f692aedccf75935bd04f188a202949af1d59988e5c8"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "72bda904b834d3288ea5bee1e2eb4641c07c1a445cfff33363aa8f78ae54ae9d",
+          "sha256_after": "e706c63df8cb8c0f60090829320904619bdcec39e3341427014fc5da5abbba90"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "3d4b13dd869eaa8ad50d95cda9bcaf2d442ba73ddd71003a761195bbde0d2c14",
+          "sha256_after": "fad47b1888acc77d9cfd9bdeb798602fbe2dd7c87765ad58246835014cca4cde"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-00.md",
+          "sha256_before": "12133aa7a4d522d6e7ca9bd526e91526fa577f90c886df03052f4970dbca145f",
+          "sha256_after": "c103ad8636afeda1a475524d591d9fb678e6d6059d1288f30d6f37492a0b7e1f"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-01.md",
+          "sha256_before": "111b6833417de823280e49742fe4d55143533a19943b6bc4e5c3c25795fdf469",
+          "sha256_after": "4a3af3bad17cc571e7feb55b8f90bf5e73e4b4432f79a0041439e11ab6570af0"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-02.md",
+          "sha256_before": "49e326604f3da6c5695cb46b9911b1e453261211a61eb57970e29e4e2d8dc4f8",
+          "sha256_after": "859ef466fbe06a88ea00ec6629970c10d0aa7f63e50e4ab4d2fbbef8e1f93645"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-03.md",
+          "sha256_before": "557dc087fa4d69ed1044fe20a0f128e263438b0240a8fb6a331d950e3c0810fb",
+          "sha256_after": "598bc10662be944c5b1f0d6ed9923b35d845f7a3d31e27c4a029edbf0a7dcfa4"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-04.md",
+          "sha256_before": "29f5fa6cbade206adb742b90fbe99a9a5d8a6491a6acea1bd8f3b6902c1d9471",
+          "sha256_after": "c3b0b690e5fa0783fdbb5dffb963bc068839516878722562718e04f99cfb3f43"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-05.md",
+          "sha256_before": "84f761716893317f47fc081e3ba8a9ce0eb93a1fd468635b0dea06bebdfb677f",
+          "sha256_after": "9cde3c4da6a5eef716d6ca53a4c35c83a208c9959c94a2e0575eedf0a0f0bf5e"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-06.md",
+          "sha256_before": "4dda33d1b2ea58b8f00fefb9924de1642db044946dcfdf9a0030f1653a15634b",
+          "sha256_after": "150cb76d05b75e647fa101c87652ba624d2ead26fd7d3303fb8c4e4fbfb369eb"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-07.md",
+          "sha256_before": "1bb71ba1ade90072a7553a9d0808147abd6cd3deb8c370fe12362d1bf5b981ba",
+          "sha256_after": "7a74557f3f64546e288ac271ab8a0b5215ba1333f2c04d667ac9f3b6112bba50"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-08.md",
+          "sha256_before": "c265f202b5175e50f25f7e8308511233571ebcb48f70b4625138910c631245dd",
+          "sha256_after": "942c9358890970d143c3a461fdb61efbbd6c3bcce16a57ab49fb36beda89b7b3"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-09.md",
+          "sha256_before": "4ba8d8f1f5d37f4c12e4e68bf1162913a32d9ad120a660692f8dc4827c4a1128",
+          "sha256_after": "183657cf0c704de0c75e033b979cf0b10504568900a81f277f6fcfd2d4d405db"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-10.md",
+          "sha256_before": "97984f10457491d4c15b466b026e503ba1d2856c2ec8dc08ffe6d13977d547f2",
+          "sha256_after": "57d49aa5ebd8fedbbc01c11a5d1513455884bec2fcccae57797b50bb99220e77"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-11.md",
+          "sha256_before": "6d8967486a8c0a7839e99f2c9464b48ffa540d0a803c772c5aa06e2756f58aba",
+          "sha256_after": "b5517850677d07b1a09d5a49aff846a467596d861acf56e9d5c7887ad9da8323"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-12.md",
+          "sha256_before": "5576f9c23601dc17681c70f3fa38c581d7d7e613447495c778c68ea7bdf5b29c",
+          "sha256_after": "5c0d5486e9d8ac679cbed4205bb363720bbe292fa8af94250a2232a014a83f0b"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-13.md",
+          "sha256_before": "8fadfdff2a40b6ece9c883ceccfac96127a50d85ffddf26a70502f9db88c0166",
+          "sha256_after": "9c1c520256c031e6234bec4e79678efd91087207a470bd000f763934770a9b36"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-14.md",
+          "sha256_before": "79468a20da287e5e1e54cfdd8ab44b433b6d69f2bfbbedbf466eb0220781837e",
+          "sha256_after": "e2983127c414efb44a2e6116f121b5b706f17cf755244da8af6d28fa54ecb713"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-15.md",
+          "sha256_before": "b27d097f0bcaac35ac02cad63291fbaa6170b22dff0a9ee24585e069f9e340d0",
+          "sha256_after": "36eca822f469a64cdfc14b1336b90385bf5576ed8b83ca3b88be9400f1e603c6"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-16.md",
+          "sha256_before": "1461b0036f6f43a7dd67a3f3ccb9ce4573cc5d5f1b9043b50c01bfb8fcf4f73b",
+          "sha256_after": "87885d92f52557a5d40a6e80a359ecf7d5ccc3341388ef942941e7e241c27466"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "1e9a27a3d3538e416295ede017f2ed0bc1730825ad941c7a4a472bf722e8631d",
+          "sha256_after": "f2f41325e967f95849de071c0674b68cb2a6f6944f615efb902e404878d67c60"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-18.md",
+          "sha256_before": "a8d20e78a548d670d6c2ec4a7a492eb50be8a6b8ede5ed2c052f739e9b0e43a9",
+          "sha256_after": "21e2593b0596242968f3330b20b3918ae96488d0b12c9cc6cd9f41aa154bc308"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-19.md",
+          "sha256_before": "95f231ac0a720528b3f8aad0004b9410b5b6da27e29c2203809753949548fee4",
+          "sha256_after": "dff474165c7c4e6913210bd0349f5bde86fda3b503ac95e55bf4da12fb06b9ab"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "b02759d936894eabbef6faae35ef664b8529a25272ae35b766cbb1253887fdc4",
+          "sha256_after": "04601fbbbc31d45c93fe5b2e60d314bea7270a9f58b16db49460aae115ce1ee3"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256_before": "acb02ce086d389fe60cbf3ffcb39a5b3c2b65d40e73cb9c509d06e5bd0418d9c",
+          "sha256_after": "42528498586be4f1ef91542acf3c086f2fb1e936f551270015ed9d20e53a233b"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256_before": "88606063fa6768181baf969e536435ff65323feab18cc921636e8be6aba23dbf",
+          "sha256_after": "ab91aefb42ef5031ae8bd5295d2530f5b28bb6c3c33a1bd65b43a6bf351f2cb8"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256_before": "f0c90a303bec23be7e1a255682409bcbf2878d63a146ec76596ad0fa4d86f524",
+          "sha256_after": "a8890b47e114669ed4df6c23aa3ac94b60c147d5ef5f5217c0daf549549feb7a"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256_before": "f0e53458add0ab8f4973695bdef779fe0f2829cc2a8b8982aeb2a8b3c809bd84",
+          "sha256_after": "6514f57d4c277dd6e446ea49a0bbfe26aeca4d619c9bd59e121a61bcbcc07274"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256_before": "31907e03af02047d9154ae0628adbe1fd69156ae6136f06501d8736a6965f483",
+          "sha256_after": "2103620d667a4f551c4a2a04c97a7de025fc11a550648aca322b7b9ec99125d5"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256_before": "d1aaeccd5060179a89ceabfd99cadff6a0caad879c6bc8a1c63cb00edd59c9fa",
+          "sha256_after": "3e95e236d991c71ef688ed20b6818c5d55c0d3c2fe12812113413bb466620a62"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256_before": "9e75cee2b9d0a823a51ae3bc57de4f91f4b8a95fda1158c8f08b9308af5bec6e",
+          "sha256_after": "9d5897678e89806614ec7a74fbb9bddd9defce4e5390e2f99a60bdfefd552570"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256_before": "a8e3d10d760c35f6ddd8787352273d13e95d79a6cf6de288178447e2dc2d660d",
+          "sha256_after": "f34c936b2f3396631bc87ba78cb0fbefe7dd499f2d5252ca110a57944e69037d"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256_before": "39e5721e8ae6401c9043bce1df9fe44dbf578812b7d693486786ca9621853262",
+          "sha256_after": "c1502ce86c19f79d191c5b4a223d941cefd659f8f0fda3fdfb6534f1f76a4004"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "6aa3d1feca9115f32ca7d2e18084401bcfc195588a44bd3060789ee0b28107d3",
+          "sha256_after": "18f7e76aa4a50d256f62279a2dc81bd6921f78e4e469214a651748ef57d146bd"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "3f0c21943ca493382438101f66ee6d1af78bbb8566df5affae3a74b5e2727df2",
+          "sha256_after": "6931c43064b91c9adbebdf050129c2c1b249f78bde544815e8d663d4023c1325"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256_before": "4a62e89b542572c0b83b83e0d57f384331e0e726fe1671550d580792d113b70a",
+          "sha256_after": "0d3a5008e0319c707f8b1dbc757fff04f2c54743dd25ad02d75d06b7cf382862"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-01.md",
+          "sha256_before": "4c4d631ca75098182a5aceabeea62e4b353edfdb99a97396c9c968dd345a9fd6",
+          "sha256_after": "ba89b1d15cdaad734007818b807e8179b787ae5d064fe63cce681444405e5559"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-02.md",
+          "sha256_before": "d1ab62fd2d1e55acf6466d88297d8499ed46b5e8b66413057bdf62bb5d43bcb6",
+          "sha256_after": "4598df27948a3238615777a9a85529600e34b1c3b8711282da369c42f0285648"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256_before": "f2dbed2c03e0558a55ed8a033bf1911ac8595e102972897b2ef58bca505807d7",
+          "sha256_after": "3ea1abed7683b2acdc100370fe918de360ad5db2ad968fad105d5ef326fdefe7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256_before": "1dd19ea1653412b192d6f535b6a02e4586f0294faaf2f724254712f91bc1496e",
+          "sha256_after": "da8dfc8e20a5964867a018a79515121ed644f91314ceb2816bcdeb09907c13ee"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-05.md",
+          "sha256_before": "89630002e51fff3447ff9867273eda7ecbd07d6cfd6bd7d0ef57ceaab9101aca",
+          "sha256_after": "26dcbba7e1cf112e1d44e8aeb5ebfb3d9381666e10cd3701257c1c78dbbc432c"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-06.md",
+          "sha256_before": "a547e232486ac2bb8c74d3125d39b5638bc1b817fb8d14e62f9bf8e9c788a08d",
+          "sha256_after": "ac61fd231e7bd52a2c8830138ae7a8dc922dcef8dff3acea1c9f3d499c575c6a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-07.md",
+          "sha256_before": "2222fea2612f1ae7493c7f05e1a0aab66bbfcbcecae5c4f861842ac2c43a0160",
+          "sha256_after": "43d6f8881f46ad936675025aad6c186be012bb45d9447e722c4d8ce46908273a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-08.md",
+          "sha256_before": "d664c10c2753351b3ad72761514aaa3c85ffe8518177e7737c1f41d8cecce427",
+          "sha256_after": "91f360d51936b9b0eab49284c5151275d74993bb6a8984cfef295bb421be6462"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256_before": "e9334be755072f8d23c4749b673681a7de45ad48a02fdf3b28d499166b18357d",
+          "sha256_after": "08b39d97089e5b63a71945fcb975185a59f3ca051b4bb244320c2037f8f70261"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256_before": "61c3423227100fcc71c761401916f0712dddd0fda1fe1d05ad7208382f89c6b3",
+          "sha256_after": "6d5bd4f82e780e8c8546b1e2f8f31b4ffb182337deafcbc89e54f5bb93826ee8"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-11.md",
+          "sha256_before": "52a0a0affee1ddd03e149e796cc9186928b9c87c2adad53a2b479b24f804243e",
+          "sha256_after": "7f38d5c1aaf80bedbd547782670c7e1335aaa4f3a3f39345cfd3fb2f791fcdab"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-12.md",
+          "sha256_before": "1f4cd55b11cefb60bb43334145a9e51ae616bf602d24c707177ea998513c2d59",
+          "sha256_after": "a770f4d08e96ce5ae55f1e1e58ee17e4581ab0eb960631d3b900807fd56e7cd6"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-13.md",
+          "sha256_before": "31100d78e9e160cc82d74048b3e57f11275f5230d6386de8953c4d61ba136c9b",
+          "sha256_after": "ec6aaa9bd6159881c5666948d78eeaffcb921d018ffdc28241f7803d3ed5b56f"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-14.md",
+          "sha256_before": "2011881918b1eab3a3ae4dcb33215a789f394f0d5d06d6682b6b6ea4e20c2784",
+          "sha256_after": "35a59b4fde62206b2ea48d0859c4bd07cf85cdf513e19d12cfb2bd5ee23bbfd2"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-15.md",
+          "sha256_before": "ee9a9526358391a243e3cf5b441c3957b16d97eb4f4dee79bb2e33b8f3f9307b",
+          "sha256_after": "09fd428ef5279f75a8ad25f5be7e173b55d98c014eb6ef58f8c3e1caa22242e7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-16.md",
+          "sha256_before": "d4a66006e71c4a5d3c6ed523833d24a2ae1c400f6946e236e694ffe25d0dfeca",
+          "sha256_after": "a4803c5358a85b072205934cca081e5abaae69df62b6d194e6d22c8ef692116c"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-17.md",
+          "sha256_before": "d52f0c867a448a7f9f4dea2595a49f2f95de60921582ddf6d2707e138b4b9d08",
+          "sha256_after": "c354ba81fc9cf9289728f9b112a1107a5ddd21faf71a48ea771e9035cf8284e5"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-18.md",
+          "sha256_before": "e76748da7af49dc956cc17a6dd91206a5851b99b24b8712d185cb2e003c649f3",
+          "sha256_after": "a8bd085a96da9e267a89d7fd35e8ebc432f295ca35c6201fac93ec6db2799326"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-19.md",
+          "sha256_before": "7a1b47665497843ff091df289fd287815f32c9e3ba230f9179492daf3c449467",
+          "sha256_after": "0c9b84ce41f8dd3dbdef82ba842306f77c5296e227c7e962a5e22a05770532a1"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-20.md",
+          "sha256_before": "925605d8d807b8aa972aa01217b7f74497fb83bf101d14d848c8515392749488",
+          "sha256_after": "67ad4f6ed5324911ec3e6717381ecca93bb5b92178ba926ffc99e25f0bb3eb35"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-21.md",
+          "sha256_before": "fd3769f04be82f9fb5d7a35bdc863a06cf69bb91f957729ad720fbe9e20533d7",
+          "sha256_after": "debb51e7d191f0a24749b58fefdebfc174637cdc9559637361b073c06cce505b"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-22.md",
+          "sha256_before": "d669ba1735c08ef5990705b2080f716cbda972fb6527bcb926122dbd62eafc2d",
+          "sha256_after": "e1b64962e4033d4c7914dfd4410644438bfa341771d64778b15d4157bcf902a1"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-23.md",
+          "sha256_before": "8c1224ff7532fa37c6abc7e3ee78cfe15e9b671823801dff84510c5a6e0e898a",
+          "sha256_after": "c00872107304dec4a34a71a39c2a0b940b64021f9300bf909404768175193fe4"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "f77f1eca269f68ea149170fca086d8c66e005e09a2a6f540ae5c12dc9604335b",
+          "sha256_after": "c9082328066d72ab7f07461f279d49fb1ef4cb7102aa3609afb62cceba3b780c"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE.md",
+          "sha256_before": "f8d791051f645007db0d0935e9b438321081d14dd0f55e037244802c36246eb4",
+          "sha256_after": "ffc5acfe2551a42ad6553a0eea46c821ef7ead32436f91bea13e69fa2304ca35"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "2967a01721052e8d250b9aeb1e42f619eacbcb76a80386654a87b8e28161ba90",
+          "sha256_after": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256_before": "344d343233b61fc80016a62b62f1b9eda522b6f5721202f2d6556d88202c7f44",
+          "sha256_after": "3c0628acd7db481adfa41e4b6a11fc87368909c67bf213d82061643cc2cfadd1"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "f0aedc9efa00799df9a5e4aa1854c8024952a194f761aecac4ec20e2da41df92",
+          "sha256_after": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7"
+        },
+        {
+          "path": "planning/research-program/WORKFLOW.md",
+          "sha256_before": "32e3a490917feb0b7a7ad96c42ac1187f57df142be6746e54144d8c1b8200bc3",
+          "sha256_after": "c499743426deb9865a02d1d8cca3938070fe9797af7bb8147beb2d40e618f4cb"
+        }
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward."
+    }
+  ]
+}

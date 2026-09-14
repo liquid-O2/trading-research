@@ -1,0 +1,811 @@
+{
+  "byte_for_byte": true,
+  "command": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/reports/research-work/hardening-2026-09-14/run_parity.py"
+  ],
+  "comparison": "gzip.compress(canonical job) vs run-1.0.1 jobs/evaluation/<date>/<branch>.json.gz; semantic payload compared separately; gold wrappers are not copied",
+  "date_count": 60,
+  "dates": [
+    "2020-01-02",
+    "2020-03-02",
+    "2020-03-13",
+    "2020-04-01",
+    "2020-06-01",
+    "2020-07-01",
+    "2020-09-01",
+    "2020-10-01",
+    "2020-12-01",
+    "2021-01-04",
+    "2021-03-01",
+    "2021-04-01",
+    "2021-06-01",
+    "2021-07-01",
+    "2021-09-01",
+    "2021-10-01",
+    "2021-12-01",
+    "2022-01-03",
+    "2022-03-01",
+    "2022-04-01",
+    "2022-06-01",
+    "2022-07-01",
+    "2022-09-01",
+    "2022-10-03",
+    "2022-12-01",
+    "2023-01-03",
+    "2023-03-01",
+    "2023-03-13",
+    "2023-04-03",
+    "2023-06-01",
+    "2023-07-05",
+    "2023-09-01",
+    "2023-10-02",
+    "2023-11-06",
+    "2023-11-24",
+    "2023-12-01",
+    "2024-01-02",
+    "2024-03-01",
+    "2024-04-01",
+    "2024-06-03",
+    "2024-07-01",
+    "2024-09-03",
+    "2024-10-01",
+    "2024-12-02",
+    "2025-01-02",
+    "2025-03-03",
+    "2025-04-01",
+    "2025-06-02",
+    "2025-07-01",
+    "2025-09-02",
+    "2025-10-01",
+    "2025-12-01",
+    "2026-01-02",
+    "2026-01-05",
+    "2026-01-06",
+    "2026-01-07",
+    "2026-01-08",
+    "2026-01-09",
+    "2026-01-12",
+    "2026-09-03"
+  ],
+  "jobs": 3420,
+  "matches": 3420,
+  "mismatch_dates": [],
+  "mismatch_diagnosis": "Order recovered from run-1.0.1 jobs/evaluation/<date>/completion.json plus each job file's st_mtime_ns and recorded len(input_receipts). measurement_runner.date_job uses one HistoricalFeatures per invocation and skips existing jobs on resume; a drop in unique receipt count is a new invocation. Each invocation is replayed through one HistoricalFeatures in that recovered order. Wrappers are not copied from gold. All 3420 jobs byte-identical.",
+  "mismatches": [],
+  "order_artifact": "run-1.0.1/jobs/evaluation/<date>/completion.json job list, st_mtime_ns of each jobs/evaluation/<date>/<branch>.json.gz, and len(input_receipts) recorded in that job",
+  "order_derivation": "measurement_runner.date_job constructs one HistoricalFeatures, then writes manifest branches while skipping jobs that already exist. A resume therefore starts a new HistoricalFeatures and only scans the missing jobs. Unique input_receipts length is non-decreasing within one invocation and drops at a resume. Jobs are ordered by (st_mtime_ns, completion.json index) and split into invocations at a length drop. Each invocation is replayed through one HistoricalFeatures in that recovered order. Wrappers are not copied from gold.",
+  "required_specials": {
+    "dst_fall": "2023-11-06",
+    "dst_spring": "2023-03-13",
+    "early_close": "2023-11-24",
+    "partial": "2026-09-03",
+    "roll_week": "2020-03-13"
+  },
+  "results": [
+    {
+      "date": "2020-01-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 130.38466151244938
+    },
+    {
+      "date": "2020-03-02",
+      "invocation_sizes": [
+        46,
+        11
+      ],
+      "invocations": 2,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 135.4076617397368
+    },
+    {
+      "date": "2020-03-13",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 115.35630967933685
+    },
+    {
+      "date": "2020-04-01",
+      "invocation_sizes": [
+        31,
+        26
+      ],
+      "invocations": 2,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 95.18753177952021
+    },
+    {
+      "date": "2020-06-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 116.8123055305332
+    },
+    {
+      "date": "2020-07-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 130.98381674382836
+    },
+    {
+      "date": "2020-09-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 108.36601879727095
+    },
+    {
+      "date": "2020-10-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 103.97690762672573
+    },
+    {
+      "date": "2020-12-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 93.52639954257756
+    },
+    {
+      "date": "2021-01-04",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 100.64515601284802
+    },
+    {
+      "date": "2021-03-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 142.45619000587612
+    },
+    {
+      "date": "2021-04-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 118.11390557419509
+    },
+    {
+      "date": "2021-06-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 127.728924353607
+    },
+    {
+      "date": "2021-07-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 159.7025135718286
+    },
+    {
+      "date": "2021-09-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 153.157691068016
+    },
+    {
+      "date": "2021-10-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 180.60394756961614
+    },
+    {
+      "date": "2021-12-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 166.65970550756902
+    },
+    {
+      "date": "2022-01-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 133.95569420978427
+    },
+    {
+      "date": "2022-03-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 136.21554512809962
+    },
+    {
+      "date": "2022-04-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 136.45770396105945
+    },
+    {
+      "date": "2022-06-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 171.69620261900127
+    },
+    {
+      "date": "2022-07-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 164.24262586887926
+    },
+    {
+      "date": "2022-09-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 193.50999615900218
+    },
+    {
+      "date": "2022-10-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 118.15419978648424
+    },
+    {
+      "date": "2022-12-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 175.6475868569687
+    },
+    {
+      "date": "2023-01-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 176.67838221415877
+    },
+    {
+      "date": "2023-03-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 127.38391142245382
+    },
+    {
+      "date": "2023-03-13",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 119.99737371876836
+    },
+    {
+      "date": "2023-04-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 139.2938191955909
+    },
+    {
+      "date": "2023-06-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 216.51809525955468
+    },
+    {
+      "date": "2023-07-05",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 139.59655979834497
+    },
+    {
+      "date": "2023-09-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 201.0197457894683
+    },
+    {
+      "date": "2023-10-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 185.8755758292973
+    },
+    {
+      "date": "2023-11-06",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 159.50697360374033
+    },
+    {
+      "date": "2023-11-24",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 139.67523961886764
+    },
+    {
+      "date": "2023-12-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 219.1411994677037
+    },
+    {
+      "date": "2024-01-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 123.30131571833044
+    },
+    {
+      "date": "2024-03-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 165.54439876321703
+    },
+    {
+      "date": "2024-04-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 171.47766083851457
+    },
+    {
+      "date": "2024-06-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 156.26122825220227
+    },
+    {
+      "date": "2024-07-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 176.62702585104853
+    },
+    {
+      "date": "2024-09-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 143.76328643597662
+    },
+    {
+      "date": "2024-10-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 155.6015799958259
+    },
+    {
+      "date": "2024-12-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 119.2552672829479
+    },
+    {
+      "date": "2025-01-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 144.903318233788
+    },
+    {
+      "date": "2025-03-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 180.70738578028977
+    },
+    {
+      "date": "2025-04-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 224.41092103160918
+    },
+    {
+      "date": "2025-06-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 148.09751555602998
+    },
+    {
+      "date": "2025-07-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 145.17987932730466
+    },
+    {
+      "date": "2025-09-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 195.35517987143248
+    },
+    {
+      "date": "2025-10-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 224.3671390833333
+    },
+    {
+      "date": "2025-12-01",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 255.70458175893873
+    },
+    {
+      "date": "2026-01-02",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 236.5152501417324
+    },
+    {
+      "date": "2026-01-05",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 258.6926390007138
+    },
+    {
+      "date": "2026-01-06",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 204.84825268387794
+    },
+    {
+      "date": "2026-01-07",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 176.3026102380827
+    },
+    {
+      "date": "2026-01-08",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 226.91313903965056
+    },
+    {
+      "date": "2026-01-09",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 243.3400885956362
+    },
+    {
+      "date": "2026-01-12",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 193.3385706935078
+    },
+    {
+      "date": "2026-09-03",
+      "invocation_sizes": [
+        57
+      ],
+      "invocations": 1,
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": 57,
+      "wall_seconds": 64.1917190188542
+    }
+  ],
+  "schema_version": "research-native-parity-v1",
+  "semantic_matches": 3420
+}

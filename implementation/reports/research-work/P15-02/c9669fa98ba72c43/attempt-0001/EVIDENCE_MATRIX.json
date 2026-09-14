@@ -1,0 +1,584 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline.py",
+          "symbol": "scan_baseline"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a01_empty_delta_preserves_baseline_records",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "episodes equal",
+      "id": "A01",
+      "observed": "pass",
+      "oracle": "scan_branch",
+      "requirement": "empty delta preserves baseline records",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a01_empty_delta_preserves_baseline_records"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "interrupt_resume_check"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a02_one_and_four_workers_same_semantic_hashes",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "4 jobs",
+      "id": "A02",
+      "observed": "4",
+      "oracle": "resume fixture",
+      "requirement": "one and four workers same identities",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a02_one_and_four_workers_same_semantic_hashes"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "contract_selection"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a03_transform_hash_change_invalidates_identity",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "mismatch flag present",
+      "id": "A03",
+      "observed": "pass",
+      "oracle": "causal vs archive",
+      "requirement": "transform hash change invalidates identity",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a03_transform_hash_change_invalidates_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "interrupt_resume_check"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a04_resume_rejects_truncated_shard",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "partial_rejected",
+      "id": "A04",
+      "observed": "true",
+      "oracle": "resume fixture",
+      "requirement": "resume rejects truncated shard",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a04_resume_rejects_truncated_shard"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "NativeMarketView.executions"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a05_partial_gap_and_ambiguous_batch_stay_explicit",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "internal_order_known false",
+      "id": "A05",
+      "observed": "pass",
+      "oracle": "synthetic batches",
+      "requirement": "partial gap and ambiguous batch stay explicit",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a05_partial_gap_and_ambiguous_batch_stay_explicit"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "cgroup_worker_count"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a06_runtime_and_worker_count_are_recorded",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": ">=1",
+      "id": "A06",
+      "observed": "pass",
+      "oracle": "cgroup",
+      "requirement": "runtime and worker count recorded",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a06_runtime_and_worker_count_are_recorded"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "required_matrix_ids"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a07_required_matrix_ids_match_graph",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "A01-A08 plus assigned S",
+      "id": "A07",
+      "observed": "other entries",
+      "oracle": "TASK_GRAPH",
+      "requirement": "matrix ids match graph",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a07_required_matrix_ids_match_graph"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/rule_discovery/test_p15_02.py",
+          "symbol": "test_a08_assigned_failure_probes_are_present"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_a08_assigned_failure_probes_are_present",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "named tests exist",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "source",
+      "requirement": "assigned probes present",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_a08_assigned_failure_probes_are_present"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/receipts.py",
+          "symbol": "required_matrix_ids"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s01_required_artifact_name_is_enforced",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "NATIVE_PARITY.json",
+      "id": "S01",
+      "observed": "present",
+      "oracle": "graph artifacts",
+      "requirement": "required artifact names",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s01_required_artifact_name_is_enforced"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "vwap_from_prefix"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s02_vwap_sensitive_control_fails_if_reversed",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "reversed fails",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "synthetic",
+      "requirement": "VWAP sensitive control",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s02_vwap_sensitive_control_fails_if_reversed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "digest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s03_identities_recompute_from_bytes",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "order independent",
+      "id": "S03",
+      "observed": "pass",
+      "oracle": "digest",
+      "requirement": "identities recompute from bytes",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s03_identities_recompute_from_bytes"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "NativeMarketView"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s05_nested_future_trade_rejected",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "future ignored",
+      "id": "S05",
+      "observed": "pass",
+      "oracle": "prefix",
+      "requirement": "nested future trade rejected",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s05_nested_future_trade_rejected"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "population_coverage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s06_incomplete_prior_does_not_fill_from_another_group",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_p3_population_completeness_uses_earliest_formation_clock",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "not complete",
+      "id": "S06",
+      "observed": "pass",
+      "oracle": "groups",
+      "requirement": "incomplete prior does not fill from another group",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s06_incomplete_prior_does_not_fill_from_another_group"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s07_native_parquet_row_replays",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "12933.75",
+      "id": "S07",
+      "observed": "12933.75",
+      "oracle": "parquet",
+      "requirement": "native parquet row replays",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s07_native_parquet_row_replays"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "vwap_from_prefix"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s08_future_mutation_does_not_change_earlier_vwap",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "100.00",
+      "id": "S08",
+      "observed": "100.00",
+      "oracle": "prefix",
+      "requirement": "future mutation does not change earlier VWAP",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s08_future_mutation_does_not_change_earlier_vwap"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "NativeMarketView.executions"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s09_permutation_preserves_ambiguity",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "internal_order_known false",
+      "id": "S09",
+      "observed": "pass",
+      "oracle": "same-ns batch",
+      "requirement": "permutation preserves ambiguity",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s09_permutation_preserves_ambiguity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "stratified_parity_dates"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s10_dst_early_close_and_roll_are_labelled",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "specials present",
+      "id": "S10",
+      "observed": "pass",
+      "oracle": "date policy",
+      "requirement": "DST early close and roll labelled",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s10_dst_early_close_and_roll_are_labelled"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "coverage_from_minutes"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_p2_zero_length_coverage_is_unknown_never_complete",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/CACHE_PROFILE.json",
+          "selector": "/seam_ownership",
+          "sha256": "5b13e895f55acd8ec50810ebb338b08e5ee54609d7479e3c184a9dcd38d842da"
+        }
+      ],
+      "expected": "MISSING not COMPLETE",
+      "id": "S11",
+      "observed": "MISSING",
+      "oracle": "coverage(t,t)",
+      "requirement": "complete empty is zero; zero-length coverage unknown",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_p2_zero_length_coverage_is_unknown_never_complete"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "interrupt_resume_check"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s12_four_jobs_reconcile_after_resume",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "4",
+      "id": "S12",
+      "observed": "4",
+      "oracle": "resume",
+      "requirement": "four jobs reconcile after resume",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s12_four_jobs_reconcile_after_resume"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "install_write_guard"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s13_write_guard_blocks_cache_miss",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "CacheWriteBlocked",
+      "id": "S13",
+      "observed": "pass",
+      "oracle": "guard",
+      "requirement": "write guard blocks cache miss",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s13_write_guard_blocks_cache_miss"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "decode_arrow_table"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/pytest.log",
+          "selector": "test_s15_duplicate_and_shuffled_keys",
+          "sha256": "73f4db9ca3281266dece67d16d22ef3cd3850401dc899f5c553a40eb4f2e1c92"
+        }
+      ],
+      "expected": "stable",
+      "id": "S15",
+      "observed": "pass",
+      "oracle": "arrays",
+      "requirement": "duplicate and shuffled keys",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_02.py::test_s15_duplicate_and_shuffled_keys"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-02"
+}

@@ -1,0 +1,32 @@
+PASS  long target_first: got='target_first' want='target_first'
+PASS  long target_first resolved_at: got=1600000002000000000 want=1600000002000000000
+PASS  short target_first: got='target_first' want='target_first'
+PASS  long same_batch_ambiguous: got='same_batch_ambiguous' want='same_batch_ambiguous'
+PASS  short same_batch_ambiguous: got='same_batch_ambiguous' want='same_batch_ambiguous'
+PASS  long prior_gap_unknown: got='prior_gap_unknown' want='prior_gap_unknown'
+PASS  short prior_gap_unknown: got='prior_gap_unknown' want='prior_gap_unknown'
+PASS  long neither: got='neither' want='neither'
+PASS  short neither: got='neither' want='neither'
+PASS  invalid_geometry: got='invalid_geometry' want='invalid_geometry'
+PASS  net_dollars 25: got=Decimal('25.00') want=Decimal('25.00')
+PASS  net_points 1.25: got=Decimal('1.25') want=Decimal('1.25')
+PASS  module fixture match: got=True want=True
+PASS  short net_dollars 25: got=Decimal('25.00') want=Decimal('25.00')
+PASS  MFE points: got=Decimal('4') want=Decimal('4')
+PASS  MAE points: got=Decimal('1') want=Decimal('1')
+PASS  MFE/S: got=Decimal('1') want=Decimal('1')
+PASS  MAE/S: got=Decimal('0.25') want=Decimal('0.25')
+PASS  short MFE/S: got=Decimal('1') want=Decimal('1')
+PASS  short MAE/S: got=Decimal('0.25') want=Decimal('0.25')
+PASS  causal_scale floor: got=Decimal('1.00') want=Decimal('1.00')
+PASS  causal_scale missing<60: got=None want=None
+PASS  causal_scale gap: got=None want=None
+PASS  zero-entry day zero_entry: got=True want=True
+PASS  zero-entry day complete: got=True want=True
+PASS  zero-entry day realized: got=Decimal('0') want=Decimal('0')
+PASS  traded day zero_entry False: got=False want=False
+PASS  missing day has unsupported fill: got=True want=True
+PASS  zero-entry day in series: got=True want=True
+PASS  missing day absent from series: got=False want=False
+
+TOTAL FAILURES: 0 []

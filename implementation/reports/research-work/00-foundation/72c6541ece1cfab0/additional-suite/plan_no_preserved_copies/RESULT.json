@@ -1,0 +1,16 @@
+{
+  "actual_exit": 2,
+  "argv": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/tools/verify_research_release.py",
+    "task",
+    "--receipt",
+    "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/additional-suite/plan_no_preserved_copies/TASK_RECEIPT.json"
+  ],
+  "description": "Plan files retain valid claimed digests but snapshot_paths is empty and the relocated snapshot has no preserved plan copies.",
+  "expected_exit": 2,
+  "id": "plan_no_preserved_copies",
+  "passed": true,
+  "stderr": "",
+  "stdout": "[\n  {\n    \"code\": \"ARTIFACT_MISSING\",\n    \"detail\": \"plan snapshot_paths is missing or empty\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/additional-suite/plan_no_preserved_copies/PLAN_SNAPSHOT.json\"\n  }\n]\n"
+}

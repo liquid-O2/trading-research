@@ -1,0 +1,110 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "07d0388d88e35348b18e717d9ad7ea9149dce35caddc95a8dfd5c20adbd5ac4f"
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional_probe.py",
+      "resolution": "resolved",
+      "resolution_evidence": "test_gate_review_nonobject_fails_closed and additional_probe invalid cases",
+      "severity": "integrity",
+      "summary": "Verifier now rejects non-object reviews, unbound reviews and independent results that omit pinned case identities."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "test_matrix_failed_checks_rejected_when_accepted",
+      "resolution": "resolved",
+      "resolution_evidence": "INVENTORY/ACCEPTANCE on forged matrices",
+      "severity": "integrity",
+      "summary": "Failed matrix rows cannot close an accepted task; symbols, node ids and selectors must resolve."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/CODE_SNAPSHOT.json"
+      ],
+      "id": "F03",
+      "reproduction": "test_code_false_file_hash_and_plan_copies_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "IDENTITY/ARTIFACT_MISSING on false hashes and empty snapshot_paths",
+      "severity": "integrity",
+      "summary": "Plan/code snapshot hashes are recomputed from workspace bytes and preserved copies."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/SCHEMA_EXAMPLES.json"
+      ],
+      "id": "F04",
+      "reproduction": "test_artifact_wrong_schema_and_unrelated_contents_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "SCHEMA on research-wrong-v900 and unrelated contents",
+      "severity": "integrity",
+      "summary": "Declared research schemas must match parsed labels and characteristic contents."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F05",
+      "reproduction": "test_lineage_missing_clock_path_and_row_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "LINEAGE_CLOCK/LINEAGE_HASH on omitted clocks and bad rows",
+      "severity": "causality",
+      "summary": "Lineage leaves require availability clocks, artifact paths and resolvable row IDs; outcome edges may have later event clocks."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F06",
+      "reproduction": "file_digest of preserved identities",
+      "resolution": "resolved",
+      "resolution_evidence": "unchanged hashes a4c5e6bc... and 240838146c38c484",
+      "severity": "integrity",
+      "summary": "v1 and rejected v2 receipts remain byte-identical."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/src/trading_research/research/contracts/receipts.py"
+      ],
+      "id": "F07",
+      "reproduction": "test_supersession_mid_chain_declared_hash_accepted and sibling rejection tests",
+      "resolution": "resolved",
+      "resolution_evidence": "mid-chain, predating-skip, and gate-review graph-hash tests with isolated FailureCode IDENTITY/GATE_REVIEW and passing controls",
+      "severity": "integrity",
+      "summary": "Plan-file live mismatch verifies through an ordered AMENDMENTS.json chain starting at the declared hash; code-file live mismatch verifies through a later verified successor receipt. Assurance version mismatch is IDENTITY. Gate-review graph binding follows the same walk."
+    }
+  ],
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "2829310135408277ae70efd5b0c38795c355e76fc2f41c5354e30b298ba12753",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; no nested worker; not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+  },
+  "reviewed_task_ids": [],
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "no-such-subphase",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun."
+  ],
+  "verdict": "pass"
+}
