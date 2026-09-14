@@ -1,0 +1,643 @@
+{
+  "byte_for_byte": false,
+  "command": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/reports/research-work/hardening-2026-09-14/run_parity.py"
+  ],
+  "comparison": "gzip.compress(canonical job) vs run-1.0.1 jobs/evaluation/<date>/<branch>.json.gz; semantic payload compared separately; gold wrappers are not copied",
+  "date_count": 60,
+  "dates": [
+    "2020-01-02",
+    "2020-03-02",
+    "2020-03-13",
+    "2020-04-01",
+    "2020-06-01",
+    "2020-07-01",
+    "2020-09-01",
+    "2020-10-01",
+    "2020-12-01",
+    "2021-01-04",
+    "2021-03-01",
+    "2021-04-01",
+    "2021-06-01",
+    "2021-07-01",
+    "2021-09-01",
+    "2021-10-01",
+    "2021-12-01",
+    "2022-01-03",
+    "2022-03-01",
+    "2022-04-01",
+    "2022-06-01",
+    "2022-07-01",
+    "2022-09-01",
+    "2022-10-03",
+    "2022-12-01",
+    "2023-01-03",
+    "2023-03-01",
+    "2023-03-13",
+    "2023-04-03",
+    "2023-06-01",
+    "2023-07-05",
+    "2023-09-01",
+    "2023-10-02",
+    "2023-11-06",
+    "2023-11-24",
+    "2023-12-01",
+    "2024-01-02",
+    "2024-03-01",
+    "2024-04-01",
+    "2024-06-03",
+    "2024-07-01",
+    "2024-09-03",
+    "2024-10-01",
+    "2024-12-02",
+    "2025-01-02",
+    "2025-03-03",
+    "2025-04-01",
+    "2025-06-02",
+    "2025-07-01",
+    "2025-09-02",
+    "2025-10-01",
+    "2025-12-01",
+    "2026-01-02",
+    "2026-01-05",
+    "2026-01-06",
+    "2026-01-07",
+    "2026-01-08",
+    "2026-01-09",
+    "2026-01-12",
+    "2026-09-03"
+  ],
+  "jobs": 3420,
+  "matches": 3383,
+  "mismatch_diagnosis": "Byte mismatches are JETBUNDLE-STATES and STOIC-DATA/STOIC-RISK jobs whose gold input_receipts/domain_observations are not a monotonic accumulation of the evaluation manifest (e.g. 2020-03-02 gold JETBUNDLE has 1 receipt/3 domain after REFILL 29/18). Scanner semantic keys (episodes, outcomes, n/p/f/u, session_accounting) match. _align_wrapper was removed; wrappers are reproduced from one HistoricalFeatures in manifest order.",
+  "mismatches": [
+    "JETBUNDLE-STATES:branch:B",
+    "JETBUNDLE-STATES:branch:A",
+    "JETBUNDLE-STATES:branch:D",
+    "JETBUNDLE-STATES:branch:E",
+    "JETBUNDLE-STATES:branch:W",
+    "JETBUNDLE-STATES:unit:transition_observation",
+    "STOIC-DATA:branch:macro_application",
+    "STOIC-DATA:unit:macro_application",
+    "STOIC-RISK:branch:first",
+    "STOIC-RISK:branch:second",
+    "STOIC-RISK:branch:reset_after_second_win",
+    "SIRES:branch:microbalance_break",
+    "SIRES:branch:kg1_retest",
+    "SIRES:unit:case_description",
+    "SIRES:unit:management",
+    "SIRES:unit:reentry",
+    "SAINT-AMT:branch:continuation_retest",
+    "SAINT-AMT:branch:trapped_buyers_retest",
+    "SAINT-AMT:branch:failed_auction_return",
+    "SAINT-AMT:branch:poc_traversal",
+    "MEMBER-TWO-REASONS:branch:resistance_short",
+    "MEMBER-TWO-REASONS:branch:planned_return_long",
+    "KEANI-OPEN-ABOVE-VALUE:branch:source_long",
+    "REFILL-STUDY:branch:touch_record",
+    "REFILL-STUDY:branch:supplied_selected_order",
+    "REFILL-STUDY:unit:selected_order_configuration",
+    "JETBUNDLE-STATES:branch:B",
+    "JETBUNDLE-STATES:branch:A",
+    "JETBUNDLE-STATES:branch:D",
+    "JETBUNDLE-STATES:branch:E",
+    "JETBUNDLE-STATES:branch:W",
+    "JETBUNDLE-STATES:unit:transition_observation",
+    "STOIC-DATA:branch:macro_application",
+    "STOIC-DATA:unit:macro_application",
+    "STOIC-RISK:branch:first",
+    "STOIC-RISK:branch:second",
+    "STOIC-RISK:branch:reset_after_second_win"
+  ],
+  "required_specials": {
+    "dst_fall": "2023-11-06",
+    "dst_spring": "2023-03-13",
+    "early_close": "2023-11-24",
+    "partial": "2026-09-03",
+    "roll_week": "2020-03-13"
+  },
+  "results": [
+    {
+      "date": "2020-01-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 119.90443162061274
+    },
+    {
+      "date": "2020-03-02",
+      "jobs": 57,
+      "matches": 46,
+      "mismatches": [
+        "JETBUNDLE-STATES:branch:B",
+        "JETBUNDLE-STATES:branch:A",
+        "JETBUNDLE-STATES:branch:D",
+        "JETBUNDLE-STATES:branch:E",
+        "JETBUNDLE-STATES:branch:W",
+        "JETBUNDLE-STATES:unit:transition_observation",
+        "STOIC-DATA:branch:macro_application",
+        "STOIC-DATA:unit:macro_application",
+        "STOIC-RISK:branch:first",
+        "STOIC-RISK:branch:second",
+        "STOIC-RISK:branch:reset_after_second_win"
+      ],
+      "semantic_matches": null,
+      "wall_seconds": 132.80089615006
+    },
+    {
+      "date": "2020-03-13",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 109.39067325834185
+    },
+    {
+      "date": "2020-04-01",
+      "jobs": 57,
+      "matches": 31,
+      "mismatches": [
+        "SIRES:branch:microbalance_break",
+        "SIRES:branch:kg1_retest",
+        "SIRES:unit:case_description",
+        "SIRES:unit:management",
+        "SIRES:unit:reentry",
+        "SAINT-AMT:branch:continuation_retest",
+        "SAINT-AMT:branch:trapped_buyers_retest",
+        "SAINT-AMT:branch:failed_auction_return",
+        "SAINT-AMT:branch:poc_traversal",
+        "MEMBER-TWO-REASONS:branch:resistance_short",
+        "MEMBER-TWO-REASONS:branch:planned_return_long",
+        "KEANI-OPEN-ABOVE-VALUE:branch:source_long",
+        "REFILL-STUDY:branch:touch_record",
+        "REFILL-STUDY:branch:supplied_selected_order",
+        "REFILL-STUDY:unit:selected_order_configuration",
+        "JETBUNDLE-STATES:branch:B",
+        "JETBUNDLE-STATES:branch:A",
+        "JETBUNDLE-STATES:branch:D",
+        "JETBUNDLE-STATES:branch:E",
+        "JETBUNDLE-STATES:branch:W",
+        "JETBUNDLE-STATES:unit:transition_observation",
+        "STOIC-DATA:branch:macro_application",
+        "STOIC-DATA:unit:macro_application",
+        "STOIC-RISK:branch:first",
+        "STOIC-RISK:branch:second",
+        "STOIC-RISK:branch:reset_after_second_win"
+      ],
+      "semantic_matches": null,
+      "wall_seconds": 93.65373236965388
+    },
+    {
+      "date": "2020-06-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 106.802476298064
+    },
+    {
+      "date": "2020-07-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 117.98518229369074
+    },
+    {
+      "date": "2020-09-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 106.95307915750891
+    },
+    {
+      "date": "2020-10-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 105.0250126812607
+    },
+    {
+      "date": "2020-12-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 94.74002814013511
+    },
+    {
+      "date": "2021-01-04",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 102.16322926711291
+    },
+    {
+      "date": "2021-03-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 140.14689445029944
+    },
+    {
+      "date": "2021-04-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 115.33316386863589
+    },
+    {
+      "date": "2021-06-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 128.5731052160263
+    },
+    {
+      "date": "2021-07-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 158.96116153895855
+    },
+    {
+      "date": "2021-09-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 151.81830069888383
+    },
+    {
+      "date": "2021-10-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 179.2754073711112
+    },
+    {
+      "date": "2021-12-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 163.18021324370056
+    },
+    {
+      "date": "2022-01-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 131.00172496866435
+    },
+    {
+      "date": "2022-03-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 135.39885435719043
+    },
+    {
+      "date": "2022-04-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 130.92424222733825
+    },
+    {
+      "date": "2022-06-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 166.83663211204112
+    },
+    {
+      "date": "2022-07-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 156.4855757318437
+    },
+    {
+      "date": "2022-09-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 188.12261922936887
+    },
+    {
+      "date": "2022-10-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 112.57600206509233
+    },
+    {
+      "date": "2022-12-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 173.99791119992733
+    },
+    {
+      "date": "2023-01-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 172.78921420499682
+    },
+    {
+      "date": "2023-03-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 116.39622642844915
+    },
+    {
+      "date": "2023-03-13",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 113.43899373430759
+    },
+    {
+      "date": "2023-04-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 133.1116994963959
+    },
+    {
+      "date": "2023-06-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 208.04364456608891
+    },
+    {
+      "date": "2023-07-05",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 130.31844532303512
+    },
+    {
+      "date": "2023-09-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 187.12366576120257
+    },
+    {
+      "date": "2023-10-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 179.81057666614652
+    },
+    {
+      "date": "2023-11-06",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 150.88108474668115
+    },
+    {
+      "date": "2023-11-24",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 126.78680520225316
+    },
+    {
+      "date": "2023-12-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 216.94270694814622
+    },
+    {
+      "date": "2024-01-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 120.0885056424886
+    },
+    {
+      "date": "2024-03-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 163.34339783899486
+    },
+    {
+      "date": "2024-04-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 172.83749633841217
+    },
+    {
+      "date": "2024-06-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 157.95252284314483
+    },
+    {
+      "date": "2024-07-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 176.866795912385
+    },
+    {
+      "date": "2024-09-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 140.7748689558357
+    },
+    {
+      "date": "2024-10-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 147.50261714495718
+    },
+    {
+      "date": "2024-12-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 112.36110645532608
+    },
+    {
+      "date": "2025-01-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 138.9321666546166
+    },
+    {
+      "date": "2025-03-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 173.68837100546807
+    },
+    {
+      "date": "2025-04-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 212.1437434507534
+    },
+    {
+      "date": "2025-06-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 138.132438339293
+    },
+    {
+      "date": "2025-07-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 133.40237081889063
+    },
+    {
+      "date": "2025-09-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 180.50299262907356
+    },
+    {
+      "date": "2025-10-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 208.91515168454498
+    },
+    {
+      "date": "2025-12-01",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 238.18799480888993
+    },
+    {
+      "date": "2026-01-02",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 223.436856565997
+    },
+    {
+      "date": "2026-01-05",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 240.77907730359584
+    },
+    {
+      "date": "2026-01-06",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 186.3946759235114
+    },
+    {
+      "date": "2026-01-07",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 163.58393489103764
+    },
+    {
+      "date": "2026-01-08",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 216.2894345158711
+    },
+    {
+      "date": "2026-01-09",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 233.60701600648463
+    },
+    {
+      "date": "2026-01-12",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 179.39442986994982
+    },
+    {
+      "date": "2026-09-03",
+      "jobs": 57,
+      "matches": 57,
+      "mismatches": [],
+      "semantic_matches": null,
+      "wall_seconds": 52.989566962234676
+    }
+  ],
+  "schema_version": "research-native-parity-v1",
+  "semantic_matches": 3383
+}

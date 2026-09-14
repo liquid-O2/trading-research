@@ -1,0 +1,119 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2",
+    "research-subphase-receipt-v2",
+    "research-gate-review-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "coverage": {
+    "input_groups": {
+      "current_session_executions": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_month_levels": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_same_contract_rth_profile": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      }
+    },
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "previously_exposed_engineering_dates_declared": true,
+    "unknown": 390,
+    "year_complete_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02"
+    ]
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06"
+  ],
+  "reason": "00-foundation rebound under research-assurance-2026-09-14-v3 with plan/code supersession; earlier attempts preserved",
+  "run_id": "1d17f7f63296a745",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator-parent-grok"
+  },
+  "subphase_id": "00-foundation",
+  "task_receipts": {
+    "P15-00": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "3015157cd6a5fd81ea4bb8c222de85a96c456c24a63ad43bb231859cbd7a4cd6"
+    },
+    "P15-01": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "3015157cd6a5fd81ea4bb8c222de85a96c456c24a63ad43bb231859cbd7a4cd6"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_00.py",
+        "tests/rule_discovery/test_p15_01.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/pytest.log",
+      "log_sha256": "edb3d25899e9455e032bf771a80f6b2244a06d451ba4375926f93426d42e1e1b",
+      "seconds": 185.96183251123875
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/verify_p15_00.log",
+      "log_sha256": "5f4888d666052703501a41fe0069f3954b390bb516bdb5a684c825215e53d51e",
+      "seconds": 2.4141194811090827
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/verify_p15_01.log",
+      "log_sha256": "b1621c87d99e8ccb85bb5b133e4dfe98d4e7299afd38a4679dee9341767109c7",
+      "seconds": 3.976857887580991
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun."
+  ]
+}

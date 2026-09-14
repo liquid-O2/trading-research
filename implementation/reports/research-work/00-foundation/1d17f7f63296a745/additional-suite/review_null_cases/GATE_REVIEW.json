@@ -1,0 +1,207 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "5f09f6b80ce81b30b018395ec1a6139f8376ed0eafe786430848a20287bddf91"
+  },
+  "code_snapshots": {
+    "P15-00": {
+      "code_sha256": "facdf7eba4415e18a612e94f4456d3c4bd0fafda23420e7b65920d0af4bbc23e",
+      "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "a323555477b23651489e7fac3ea89795407e6542ad25d11f2e7d70e15b228d1d"
+    },
+    "P15-01": {
+      "code_sha256": "3e08e755397384c28bb8b693ed8cc478b0c25b790f4a136767a7ce4d53080f91",
+      "path": "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "fbaa99145ca8df328b72dc9248ceeb632ae52d74e77d8106af322dfa43ae3261"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_00.py",
+        "tests/rule_discovery/test_p15_01.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/pytest.log",
+      "log_sha256": "edb3d25899e9455e032bf771a80f6b2244a06d451ba4375926f93426d42e1e1b",
+      "seconds": 185.96183251123875
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/verify_p15_00.log",
+      "log_sha256": "5f4888d666052703501a41fe0069f3954b390bb516bdb5a684c825215e53d51e",
+      "seconds": 2.4141194811090827
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/verify_p15_01.log",
+      "log_sha256": "b1621c87d99e8ccb85bb5b133e4dfe98d4e7299afd38a4679dee9341767109c7",
+      "seconds": 3.976857887580991
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/fixed-suite"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/INDEPENDENT_RESULTS.json",
+      "log_sha256": "329a75516df76c3af1dc47d4af2ee56d368cf66bc3d2b8f52f765af525956b91",
+      "seconds": 38.56791906338185
+    }
+  ],
+  "evidence_matrices": {
+    "P15-00": {
+      "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "acae1453d566d1ca13b250cd47351ea980c3d76bbc6057a9700d9336f732b143"
+    },
+    "P15-01": {
+      "path": "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "d04580b6f3ba3ee22e30d90e7fa15e616e7d40e243d408c88d5a0d926b274972"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional_probe.py",
+      "resolution": "resolved",
+      "resolution_evidence": "test_gate_review_nonobject_fails_closed and additional_probe invalid cases",
+      "severity": "integrity",
+      "summary": "Verifier now rejects non-object reviews, unbound reviews and independent results that omit pinned case identities."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "test_matrix_failed_checks_rejected_when_accepted",
+      "resolution": "resolved",
+      "resolution_evidence": "INVENTORY/ACCEPTANCE on forged matrices",
+      "severity": "integrity",
+      "summary": "Failed matrix rows cannot close an accepted task; symbols, node ids and selectors must resolve."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/CODE_SNAPSHOT.json"
+      ],
+      "id": "F03",
+      "reproduction": "test_code_false_file_hash_and_plan_copies_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "IDENTITY/ARTIFACT_MISSING on false hashes and empty snapshot_paths",
+      "severity": "integrity",
+      "summary": "Plan/code snapshot hashes are recomputed from workspace bytes and preserved copies."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json"
+      ],
+      "id": "F04",
+      "reproduction": "test_artifact_wrong_schema_and_unrelated_contents_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "SCHEMA on research-wrong-v900 and unrelated contents",
+      "severity": "integrity",
+      "summary": "Declared research schemas must match parsed labels and characteristic contents."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F05",
+      "reproduction": "test_lineage_missing_clock_path_and_row_fail",
+      "resolution": "resolved",
+      "resolution_evidence": "LINEAGE_CLOCK/LINEAGE_HASH on omitted clocks and bad rows",
+      "severity": "causality",
+      "summary": "Lineage leaves require availability clocks, artifact paths and resolvable row IDs; outcome edges may have later event clocks."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/P15-00/91ade001fb32cb9b/attempt-0001/TASK_RECEIPT.json",
+        "/workspace/implementation/reports/research-work/00-foundation/240838146c38c484/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F06",
+      "reproduction": "file_digest of preserved identities",
+      "resolution": "resolved",
+      "resolution_evidence": "unchanged hashes a4c5e6bc... and 240838146c38c484",
+      "severity": "integrity",
+      "summary": "v1 and rejected v2 receipts remain byte-identical."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/src/trading_research/research/contracts/receipts.py"
+      ],
+      "id": "F07",
+      "reproduction": "test_supersession_valid_amendment_chain_accepted and sibling rejection tests",
+      "resolution": "resolved",
+      "resolution_evidence": "seven supersession tests with isolated FailureCode IDENTITY and passing controls",
+      "severity": "integrity",
+      "summary": "Plan-file live mismatch verifies through an ordered AMENDMENTS.json chain; code-file live mismatch verifies through a later verified successor receipt. Assurance version mismatch is IDENTITY."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/review_null_cases/INDEPENDENT_RESULTS.json",
+    "results_sha256": "329a75516df76c3af1dc47d4af2ee56d368cf66bc3d2b8f52f765af525956b91",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; no nested worker; not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+  },
+  "reviewed_at": "2026-09-14T16:32:19Z",
+  "reviewed_task_ids": [
+    "P15-00",
+    "P15-01"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "00-foundation",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Phase 1 census was not rerun."
+  ],
+  "verdict": "pass"
+}

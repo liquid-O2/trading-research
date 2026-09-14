@@ -9,9 +9,9 @@ This file is the starting context for a new session with no knowledge of the pre
 - **The goal:** build an adaptive NQ decision process with independently testable context, location, response, entry and risk/management components. Source methods provide baselines and mechanisms. There is no agreed fixed number of models.
 - **Phase 1 is complete** for the acquired observed-input population. Its census contains 18,747 observed setups. These are opportunities and subsequent price observations, not independent executed trades or proven profits.
 - **Phase 1.5 and Phase 2 are fully specified:** 46 task cards in 17 subphases. Most of that implementation does not exist yet.
-- **Phase 1.5 `00-foundation` and `01-native-and-outcomes` are closed.** Foundation identities remain P15-00 `40ffb49bc037e3cc`, P15-01 `ee71900e26791e89`, subphase `6824d15fbda635ce` and matching GATE_REVIEW. The [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) rejected attempt `240838146c38c484`; that attempt is preserved and is not that gate. Native/outcomes identities are P15-02 `ebb1b8270700be4d`, P15-03 `53e8f17617f39a87`, subphase `95522aebaedfa3ed` and matching GATE_REVIEW.
+- **Phase 1.5 `00-foundation` and `01-native-and-outcomes` are closed** under assurance `research-assurance-2026-09-14-v3`. Foundation identities are P15-00 `3df87f26477a4205`, P15-01 `89ba731db83660ab`, subphase `1d17f7f63296a745` and matching GATE_REVIEW. Native/outcomes identities are P15-02 `c9756fc1e534b240`, P15-03 `babe7a991b6b3dc1`, subphase `50587897e824ede8` and matching GATE_REVIEW. Earlier closed attempts `cac8165617b72e9f` / `6986d93967e3eaea` / `ceb48321823736a3`, `40ffb49bc037e3cc` / `ee71900e26791e89` / `6824d15fbda635ce` and `ebb1b8270700be4d` / `53e8f17617f39a87` / `95522aebaedfa3ed` are preserved. The [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) rejected attempt `240838146c38c484`; that attempt is preserved and is not that gate.
 - **Do not start `02-source-reconstruction` until a later user-dispatched coordinator prompt.** All of Phase 1.5 must subsequently finish before Phase 2 implementation. Phase 3 and Phase 4 have agreed scope but no detailed implementation packs yet.
-- **Immediate engineering work:** execute `02-source-reconstruction` from the closed 01 receipts below, which themselves require the closed v3 foundation receipts, not rejected v1 or v2 attempts. Historical repair context remains in the [v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and [repair prompt](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REPAIR_PROMPT.md).
+- **Immediate engineering work:** execute `02-source-reconstruction` from the closed 01 receipts in section 8 (`c9756fc1e534b240` / `babe7a991b6b3dc1` / `50587897e824ede8`), which themselves require the closed v3 foundation receipts there, not rejected v1 or v2 attempts. Known baseline discrepancies: [phase1-code-review-2026-09-14](/workspace/planning/research-program/reviews/phase1-code-review-2026-09-14/). Historical repair context remains in the [v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and [repair prompt](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REPAIR_PROMPT.md).
 - **User constraint:** usage available for this assistant is limited. The user has been using Grok for implementation and wants bounded, self-contained handoffs, practical progress and honest verification. Do not restart a planning interview or expand the specifications by default.
 
 The wiki now records the closed v3 identities. The root README and some planning reports may still retain documentation-only wording; task cards and TASK_GRAPH retain `planned` authoring status. Use dated execution evidence to determine actual progress. Neither a stale README sentence nor a `planned` card header establishes runtime status.
@@ -176,18 +176,20 @@ Engineering slices are deterministic coverage-based checks per required input gr
 
 ## 8. Current stopping point
 
-The current assurance identifier is **`research-assurance-2026-09-14-v2`** and plan version is **`research-plan-2026-09-14-v2`**. `01-native-and-outcomes` is closed on the identities in the first table. `00-foundation` remains closed on the v3 identities in the historical table. Stop here. Do not start `02-source-reconstruction` in this run. The next eligible coordinator prompt is that subphase's runbook.
+The current assurance identifier is **`research-assurance-2026-09-14-v3`** and plan version is **`research-plan-2026-09-14-v3`**. `00-foundation` and `01-native-and-outcomes` are closed on the identities in the tables below. Stop here. Do not start `02-source-reconstruction` in this run. The next eligible coordinator prompt is that subphase's runbook.
 
 ### 01-native-and-outcomes closed artifacts
 
 | Artifact | Path | SHA256 |
 | --- | --- | --- |
-| P15-02 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json) | `97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f` |
-| P15-03 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json) | `cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412` |
-| 01 candidate | [SUBPHASE_RECEIPT.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/SUBPHASE_RECEIPT.json) | `8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67` |
-| Matching review | [GATE_REVIEW.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/GATE_REVIEW.json) | `5d192e5f438f9c11355063204526eca0a6a1be0a4b95361727ab73393caceaa2` |
+| P15-02 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-02/c9756fc1e534b240/attempt-0001/TASK_RECEIPT.json) | `95a7d487041c3dd5a04d9c5a1f6e4be9551200389df63dd005c484960b31d97e` |
+| P15-03 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/TASK_RECEIPT.json) | `5a8e5c5b6abad01e0c79bd8f59015cc63982e2c1ba868a17cf8ca2661378f561` |
+| 01 candidate | [SUBPHASE_RECEIPT.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/SUBPHASE_RECEIPT.json) | `fb0ea6af7469146a4c37bfb673128ebcd6cd740cb3d986f39a39e0c288f74c62` |
+| Matching review | [GATE_REVIEW.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/GATE_REVIEW.json) | `5c89cd6cff76f07ce6b8b18e6445e5c1e762749ab5a50ca6cd9fc26a559b1d49` |
 
-Pytest 26 passed (P15-02) and 22 passed (P15-03). Both task verifiers exit 0. Subphase `--gate-review` exits 0. Pinned checker 27/27 on the closed foundation receipts. Parity 3420/3420. Diagnostics through 2021-12-31 are descriptive only.
+Pytest 31 passed (P15-02) and 24 passed (P15-03); whole `tests/rule_discovery` 118 passed. Both task verifiers exit 0. Subphase `--gate-review` exits 0. Pinned checker 27/27 on the closed foundation receipts. Byte parity **3420/3420**, `byte_for_byte` true; no remaining mismatch dates. Order recovered from run-1.0.1 `completion.json` + job `st_mtime_ns` + recorded `len(input_receipts)`. MarketView n=20 median 3.108s p90 4.848s. Diagnostics through 2021-12-31 are descriptive only.
+
+Previous 01 admissions (preserved): P15-02 `cac8165617b72e9f` sha256 `e126ac230dab484ac141a0ef161e71103dff5f57a8d6fb6aef0836222c1049ce`; P15-03 `6986d93967e3eaea` sha256 `f6796aea3233899dfa869508ba22024d3ed8fa4a53e0afcc63564b6c71714c30`; subphase `ceb48321823736a3` sha256 `b38561c6a34155297ff23ab0d9e1c4ff123f147a7a257feabdef414098dee302`; GATE_REVIEW sha256 `cb7627a236a2208d071a073703ed5bea055abc0128f98ac83fa87f042c1da883`. Earlier: P15-02 `ebb1b8270700be4d` sha256 `97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f`; P15-03 `53e8f17617f39a87` sha256 `cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412`; subphase `95522aebaedfa3ed` sha256 `8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67`; GATE_REVIEW sha256 `5d192e5f438f9c11355063204526eca0a6a1be0a4b95361727ab73393caceaa2`. Failed 01 bind `e2a2392f99657c2b` is preserved.
 
 ### Latest foundation verification evidence (unchanged historical gate)
 
@@ -205,12 +207,14 @@ Current closed artifacts:
 
 | Artifact | Path | SHA256 |
 | --- | --- | --- |
-| P15-00 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json) | `ce57e93846d6a1b3af936703058e15b012aa23720387f00bad4c37cac1341858` |
-| P15-01 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json) | `73ec9ea4ccd580275d47901cb807f57733f91d7914daf0e10e7e24fbe5962617` |
-| Foundation candidate | [SUBPHASE_RECEIPT.json](/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json) | `d7f8878b0aa7fda33d0b88d194afff6ca2afb00ea4d85dcca251016b511bb019` |
-| Matching review | [GATE_REVIEW.json](/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/GATE_REVIEW.json) | `d9a6b98c06d67b8716f526710af2eee9c0db92b6503e271fca7f6b03ac4aed95` |
-| Fixed suite | [RESULTS.json](/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/fixed-suite/RESULTS.json) | `5cf01df4d7b617ba6c9adb03a2472f5d8941ad9e74fe16516408a0e7c3e5d683` |
-| Additional suite | [RESULTS.json](/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/additional-suite/RESULTS.json) | `b2cf057201988690c08644e29f96ca8bd2dd3a97764e5e70f09555351cc4acf9` |
+| P15-00 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json) | `3015157cd6a5fd81ea4bb8c222de85a96c456c24a63ad43bb231859cbd7a4cd6` |
+| P15-01 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json) | `f131b0dba6df354ca7f557f16e408d7bf11b24296b17e242810c75cbc743fc00` |
+| Foundation candidate | [SUBPHASE_RECEIPT.json](/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json) | `5f09f6b80ce81b30b018395ec1a6139f8376ed0eafe786430848a20287bddf91` |
+| Matching review | [GATE_REVIEW.json](/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/GATE_REVIEW.json) | `dd40523977581bc681cc7a61433b01cf323a0d8bf503b38c60e1587997c711b4` |
+| Fixed suite | [RESULTS.json](/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/fixed-suite/RESULTS.json) | `329a75516df76c3af1dc47d4af2ee56d368cf66bc3d2b8f52f765af525956b91` |
+| Additional suite | [RESULTS.json](/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/RESULTS.json) | `234704945d775f878b8f18eaaeeb2d94e32127fa8a40a8565df2d862b047b50a` |
+
+Previous foundation admission (preserved): P15-00 `40ffb49bc037e3cc` sha256 `ce57e93846d6a1b3af936703058e15b012aa23720387f00bad4c37cac1341858`; P15-01 `ee71900e26791e89` sha256 `73ec9ea4ccd580275d47901cb807f57733f91d7914daf0e10e7e24fbe5962617`; subphase `6824d15fbda635ce` sha256 `d7f8878b0aa7fda33d0b88d194afff6ca2afb00ea4d85dcca251016b511bb019`; GATE_REVIEW sha256 `d9a6b98c06d67b8716f526710af2eee9c0db92b6503e271fca7f6b03ac4aed95`.
 
 ### Five v2 defect groups, now repaired on the v3 receipts
 
@@ -247,7 +251,7 @@ The saved [transcript review](/workspace/planning/research-program/reviews/00-fo
 
 ## 9. How the next session should continue
 
-Reading this handoff does not itself request a code change or launch all phases. Follow the user's new task. If asked to resume implementation, the next eligible engineering task is `01-native-and-outcomes` from the closed v3 receipts in section 8. Do not treat rejected v1 or v2 attempts as that gate.
+Reading this handoff does not itself request a code change or launch all phases. Follow the user's new task. If asked to resume implementation, the next eligible engineering task is `02-source-reconstruction` from the closed 01 receipts in section 8 (`c9756fc1e534b240` / `babe7a991b6b3dc1` / `50587897e824ede8`). Do not treat rejected v1 or v2 attempts as that gate. Do not start 02 unless the user dispatches that coordinator prompt.
 
 1. Read [AGENTS.md](/workspace/AGENTS.md), the latest [review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and [single remaining repair prompt](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REPAIR_PROMPT.md). Inspect the actual relevant validators/producers and current identities. If they have not changed, use the retained failing results instead of another broad audit.
 2. Use the existing [00 runbook](/workspace/planning/phase-1-5/subphases/00-foundation/RUNBOOK.md) and [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md). Fix the existing five groups, one validator at a time. Add field/failure-specific tests with valid controls; ensure a different malformed field is not accidentally causing the desired rejection. Repair real artifact producers wherever stricter checks expose incomplete output.

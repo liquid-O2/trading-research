@@ -1,0 +1,23 @@
+{
+  "bootstrap": {
+    "block_length": 5,
+    "draws": 2000,
+    "generator": "numpy.random.Generator(PCG64(15022026))",
+    "sensitivity_blocks": [
+      1,
+      10
+    ]
+  },
+  "holm_alpha": 0.05,
+  "primary_score": "mean_daily_net_points_one_mini_benchmark",
+  "promotion": [
+    "software_causality_pass",
+    "support_gate",
+    "paired_mean_improvement_lb>0",
+    "holm_p<=0.05",
+    "three_outer_blocks",
+    "no_cost_stress_sign_reversal"
+  ],
+  "registered_before_candidate_search": true,
+  "schema_version": "research-evaluation-protocol-v1"
+}

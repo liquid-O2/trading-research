@@ -1,0 +1,16 @@
+{
+  "actual_exit": 2,
+  "argv": [
+    "/workspace/implementation/.venv/bin/python",
+    "/workspace/implementation/tools/verify_research_release.py",
+    "task",
+    "--receipt",
+    "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/TASK_RECEIPT.json"
+  ],
+  "description": "SCHEMA_EXAMPLES is an unrelated unsupported schema; manifest and matrix hashes are refreshed but its declared schema is unchanged.",
+  "expected_exit": 2,
+  "id": "artifact_wrong_schema",
+  "passed": true,
+  "stderr": "",
+  "stdout": "[\n  {\n    \"code\": \"SCHEMA\",\n    \"detail\": \"parsed schema research-wrong-v900 != declared research-schema-examples-v2\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/SCHEMA_EXAMPLES.json\"\n  },\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"evidence selector /author_exact_unknown_round_trip/source_exact does not resolve\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/EVIDENCE_MATRIX.json#checks[3]\"\n  },\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"evidence selector /native_replay/kind does not resolve\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/EVIDENCE_MATRIX.json#checks[11]\"\n  },\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"evidence selector /native_replay/source_sha256 does not resolve\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/EVIDENCE_MATRIX.json#checks[18]\"\n  },\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"evidence selector /decimal_canonical does not resolve\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/EVIDENCE_MATRIX.json#checks[21]\"\n  },\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"evidence selector /author_exact_unknown_round_trip does not resolve\",\n    \"path\": \"/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/artifact_wrong_schema/EVIDENCE_MATRIX.json#checks[22]\"\n  }\n]\n"
+}

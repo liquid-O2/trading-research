@@ -1,0 +1,183 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2",
+    "research-subphase-receipt-v2",
+    "research-gate-review-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "coverage": {
+    "baseline_label": "B0 frozen scanners; B0.1 corrected MarketView",
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "parity_jobs": 3420,
+    "parity_matches": 3420,
+    "parity_mismatches": 0,
+    "seam_ownership": "contiguous_when_empty",
+    "unknown": 0
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2020-03-02",
+    "2020-03-13",
+    "2020-04-01",
+    "2020-06-01",
+    "2020-07-01",
+    "2020-09-01",
+    "2020-10-01",
+    "2020-12-01",
+    "2021-01-04",
+    "2021-03-01",
+    "2021-04-01",
+    "2021-06-01",
+    "2021-07-01",
+    "2021-09-01",
+    "2021-10-01",
+    "2021-12-01",
+    "2022-01-03",
+    "2022-03-01",
+    "2022-04-01",
+    "2022-06-01",
+    "2022-07-01",
+    "2022-09-01",
+    "2022-10-03",
+    "2022-12-01",
+    "2023-01-03",
+    "2023-03-01",
+    "2023-03-13",
+    "2023-04-03",
+    "2023-06-01",
+    "2023-07-05",
+    "2023-09-01",
+    "2023-10-02",
+    "2023-11-06",
+    "2023-11-24",
+    "2023-12-01",
+    "2024-01-02",
+    "2024-03-01",
+    "2024-04-01",
+    "2024-06-03",
+    "2024-07-01",
+    "2024-09-03",
+    "2024-10-01",
+    "2024-12-02",
+    "2025-01-02",
+    "2025-03-03",
+    "2025-04-01",
+    "2025-06-02",
+    "2025-07-01",
+    "2025-09-02",
+    "2025-10-01",
+    "2025-12-01",
+    "2026-01-02",
+    "2026-01-05",
+    "2026-01-06",
+    "2026-01-07",
+    "2026-01-08",
+    "2026-01-09",
+    "2026-01-12",
+    "2026-09-03"
+  ],
+  "reason": "01-native-and-outcomes rebound: recovered run-1.0.1 job order, B8 producers, columnar decode",
+  "run_id": "50587897e824ede8",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator-parent-grok"
+  },
+  "subphase_id": "01-native-and-outcomes",
+  "task_receipts": {
+    "P15-02": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-02/c9756fc1e534b240/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "95a7d487041c3dd5a04d9c5a1f6e4be9551200389df63dd005c484960b31d97e"
+    },
+    "P15-03": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "5a8e5c5b6abad01e0c79bd8f59015cc63982e2c1ba868a17cf8ca2661378f561"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_02.py",
+        "tests/rule_discovery/test_p15_03.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/pytest.log",
+      "log_sha256": "f1bd97e461e6c0df4a5676befda79d2ba2c9bccf1a8b84c1df758b38ae905551",
+      "seconds": 152.24896257556975
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-02/c9756fc1e534b240/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/verify_p15_02.log",
+      "log_sha256": "0b7a74ad25d82c0c844b20594541aeb13c1b088bdc4985360406c1684c8cdf90",
+      "seconds": 7.0837975442409515
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/verify_p15_03.log",
+      "log_sha256": "743c76e5474ea240168f3caa0b4dd58939bd9cd1d21cd2376967f7d77f4f0c6d",
+      "seconds": 9.111975158564746
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/fixed-suite"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/foundation_checker.log",
+      "log_sha256": "00ca0a3fadb4eb2d058b0fa3048624916a9309315b80808237aae855675443c2",
+      "seconds": 45.995961954817176
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_outcome_fixtures.py"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/50587897e824ede8/attempt-0001/outcome_fixtures.log",
+      "log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+      "seconds": 0.3427562415599823
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity."
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "b38561c6a34155297ff23ab0d9e1c4ff123f147a7a257feabdef414098dee302"
+  },
+  "code_snapshots": {
+    "P15-02": {
+      "code_sha256": "da96a5f2a6face1bdceaf425e698b383ac0ae472399bbeecda0640cbbfabb1d0",
+      "path": "/workspace/implementation/reports/research-work/P15-02/cac8165617b72e9f/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "be255a77698d24490b9bd0559d70819ad628791989ee5e6adbe6ccef8c13c095"
+    },
+    "P15-03": {
+      "code_sha256": "41ad033a1b21222caf59197e9b17e9a78cf2546f650f74d865d80fa6ece30296",
+      "path": "/workspace/implementation/reports/research-work/P15-03/6986d93967e3eaea/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "ed79a57392e1a30d9e1543b3b985ef61ae594be9189a98bdd54689ff30093817"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_02.py",
+        "tests/rule_discovery/test_p15_03.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/pytest.log",
+      "log_sha256": "22e33cd6a51b7f3bceb7a34f1c68eab67da159373cfa911685c3652e4c3fd05b",
+      "seconds": 129.08014875184745
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-02/cac8165617b72e9f/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/verify_p15_02.log",
+      "log_sha256": "e93bbb0d1f9baf14cede5117a0a323faeeed605bdb7e0210414aa1bd93cebf7d",
+      "seconds": 6.110268893651664
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-03/6986d93967e3eaea/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/verify_p15_03.log",
+      "log_sha256": "edac69002890311b362397e4e511f2f5172ab620f563f35a39fcb975609afbb0",
+      "seconds": 7.639486010186374
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/e2a2392f99657c2b/fixed-suite"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/foundation_checker.log",
+      "log_sha256": "0346344cd39581dd154d3a02ac8998db9157c6dd1dc0e1afa75a7686241444f9",
+      "seconds": 36.96104336716235
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_outcome_fixtures.py"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/outcome_fixtures.log",
+      "log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+      "seconds": 0.3325406024232507
+    }
+  ],
+  "evidence_matrices": {
+    "P15-02": {
+      "path": "/workspace/implementation/reports/research-work/P15-02/cac8165617b72e9f/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "7c0c35db967ec293499ec38cb03af550f2cbce863a4f7620ad154cb5cab4068a"
+    },
+    "P15-03": {
+      "path": "/workspace/implementation/reports/research-work/P15-03/6986d93967e3eaea/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "6fbf91061b3aff8de38a28f8295e8bb4e409fe21dd191cbc47fd76ecccfff19e"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-02/cac8165617b72e9f/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "test_p2_zero_length_coverage_is_unknown_never_complete",
+      "resolution": "resolved",
+      "resolution_evidence": "test_p2, test_p3, test_b9",
+      "severity": "integrity",
+      "summary": "Zero-length coverage is unknown; population completeness uses earliest formation clock; seams are contiguous when empty."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-03/6986d93967e3eaea/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "test_p5_first_passage_includes_tail_span",
+      "resolution": "resolved",
+      "resolution_evidence": "test_p5, test_p7",
+      "severity": "integrity",
+      "summary": "first_passage and interval_extrema share (t, t+h], including the tail print."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/e2a2392f99657c2b/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F03",
+      "reproduction": "/workspace/tools/check_outcome_fixtures.py",
+      "resolution": "resolved",
+      "resolution_evidence": "check_outcome_fixtures.py 0cd6910c9e9024342678df1d197c625d049eebb3cd5883f74499518092a6752d exit 0; foundation 27/27",
+      "severity": "integrity",
+      "summary": "Pinned outcome fixture checker and foundation checker both bind this review."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/ceb48321823736a3/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "62e8092a9d3c3af89039cccea182714a85d5a554bd431cbf9ae4aa41de740111",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+  },
+  "reviewed_at": "2026-09-14T17:14:12Z",
+  "reviewed_task_ids": [
+    "P15-02",
+    "P15-03"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "01-native-and-outcomes",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Gold JETBUNDLE/STOIC wrapper discontinuity on some dates."
+  ],
+  "verdict": "pass"
+}

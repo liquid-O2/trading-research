@@ -1,0 +1,6 @@
+# 00-foundation v3 coordinator work log
+
+P15-00 /workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/TASK_RECEIPT.json 3015157cd6a5fd81ea4bb8c222de85a96c456c24a63ad43bb231859cbd7a4cd6
+P15-01 /workspace/implementation/reports/research-work/P15-01/89ba731db83660ab/attempt-0001/TASK_RECEIPT.json f131b0dba6df354ca7f557f16e408d7bf11b24296b17e242810c75cbc743fc00
+SUBPHASE /workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/attempt-0001/SUBPHASE_RECEIPT.json 5f09f6b80ce81b30b018395ec1a6139f8376ed0eafe786430848a20287bddf91
+Preserved v1 f7135f8d696ff1f5 and rejected v2 240838146c38c484.

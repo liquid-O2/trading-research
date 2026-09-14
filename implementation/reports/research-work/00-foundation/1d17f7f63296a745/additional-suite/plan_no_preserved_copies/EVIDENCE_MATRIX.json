@@ -1,0 +1,653 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "bind_units"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/BASELINE_BINDING.json",
+          "selector": "/census/totals/setups",
+          "sha256": "5cd655500dfd41b7f14a1659a593849258910b7a117717a7f0a99e4ea445d37c"
+        }
+      ],
+      "expected": "18747 setups, 50+8 units",
+      "id": "A01",
+      "observed": "18747",
+      "oracle": "accepted census",
+      "requirement": "50 branches and 8 extra units reconcile; 18747 setups are not independent trades",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a01_units_and_census_are_the_accepted_registry"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "digest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/plan_no_preserved_copies/PLAN_SNAPSHOT.json",
+          "selector": "/files",
+          "sha256": "ee5dc3d6f336ca33d1b3e5c6691089c8d1807e6e892d3185ae154f5b15fd6c73"
+        }
+      ],
+      "expected": "order-independent digest",
+      "id": "A02",
+      "observed": "624fa492e373ef301470c1b08c9a250716663327d9106b8088f8a4bc6abe104e",
+      "oracle": "SHA256(canonical_json(files))",
+      "requirement": "canonical hashes ignore key order and worker count",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a02_canonical_hashes_ignore_key_order_and_worker_count"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "require_not_future"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "test_a03_future_invalid_side_geometry_and_nan_fail",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        }
+      ],
+      "expected": "ContractError",
+      "id": "A03",
+      "observed": "ContractError",
+      "oracle": "constructor boundary",
+      "requirement": "future evidence, invalid side/geometry and NaN fail",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a03_future_invalid_side_geometry_and_nan_fail"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "source_exact_from_baseline"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json",
+          "selector": "/author_exact_unknown_round_trip/source_exact",
+          "sha256": "0b98855f95292ee2dfa5026e7aba71937cd30434470b3b97384d8acc845d233a"
+        }
+      ],
+      "expected": "false",
+      "id": "A04",
+      "observed": "false",
+      "oracle": "source_exact_from_baseline",
+      "requirement": "author_exact unknown stays unknown",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a04_author_exact_unknown_stays_unknown"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "select_engineering_dates"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/ENGINEERING_DATES.json",
+          "selector": "/year_slots",
+          "sha256": "3b1699dd7c6f47dc3b647807cfbbd2ba07084f48302cc04daec0a11ae050ec06"
+        }
+      ],
+      "expected": "seven year slots plus dst",
+      "id": "A05",
+      "observed": "7",
+      "oracle": "coverage rows",
+      "requirement": "eight-date selection preserves missing year slots",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a05_eight_date_selection_preserves_missing_year_slots"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "write_p15_00_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "test_a06_receipt_records_commands_hashes_and_bootstrap_predecessors",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A06",
+      "observed": "0",
+      "oracle": "measured pytest",
+      "requirement": "commands, hashes, coverage and bootstrap predecessors",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a06_receipt_records_commands_hashes_and_bootstrap_predecessors"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "write_p15_00_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/REPORT.md",
+          "selector": "/",
+          "sha256": "0230ea347d332ed728af56cc2828d3f2dad5a1829768bffe0ae1b1956f3b6fda"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "passed",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/BASELINE_BINDING.json",
+          "selector": "/schema",
+          "sha256": "5cd655500dfd41b7f14a1659a593849258910b7a117717a7f0a99e4ea445d37c"
+        }
+      ],
+      "expected": "A01-A13 plus assigned S ids",
+      "id": "A07",
+      "observed": "other entries in this matrix",
+      "oracle": "ASSURANCE.md A07",
+      "requirement": "evidence matrix resolves every required id without hashing itself",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a06_receipt_records_commands_hashes_and_bootstrap_predecessors"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "NativeTrade"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "test_a09_nested_clocks_and_deserializers_reject_late_and_malformed",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        }
+      ],
+      "expected": "late evidence ContractError",
+      "id": "A08",
+      "observed": "ContractError",
+      "oracle": "parameterized constructors",
+      "requirement": "assigned silent-failure probes have positive and negative controls",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a09_nested_clocks_and_deserializers_reject_late_and_malformed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "parse_native_trade"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "test_a09_nested_clocks_and_deserializers_reject_late_and_malformed",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        }
+      ],
+      "expected": "ContractError on late JSON",
+      "id": "A09",
+      "observed": "ContractError",
+      "oracle": "from_mapping",
+      "requirement": "deserializers reject late parents, malformed clocks and aliasing",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a09_nested_clocks_and_deserializers_reject_late_and_malformed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "build_input_groups"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/ENGINEERING_DATES.json",
+          "selector": "/discriminating_negatives/2020-01-02_prior_profile",
+          "sha256": "3b1699dd7c6f47dc3b647807cfbbd2ba07084f48302cc04daec0a11ae050ec06"
+        }
+      ],
+      "expected": "not complete; 390 unknown minutes",
+      "id": "A10",
+      "observed": "partial; 390",
+      "oracle": "Keani source_long session_accounting",
+      "requirement": "engineering slots use native coverage by input group and lookback",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a10_a12_native_group_coverage_and_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "semantic_run_id"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/plan_no_preserved_copies/PLAN_SNAPSHOT.json",
+          "selector": "/files",
+          "sha256": "ee5dc3d6f336ca33d1b3e5c6691089c8d1807e6e892d3185ae154f5b15fd6c73"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/CODE_SNAPSHOT.json",
+          "selector": "/",
+          "sha256": "a323555477b23651489e7fac3ea89795407e6542ad25d11f2e7d70e15b228d1d"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/",
+          "sha256": "542587260e54c0c07d6b856fa0fc2bab41dc1f7ff671831c9f6cc87f3ebc88d9"
+        }
+      ],
+      "expected": "3df87f26477a4205",
+      "id": "A11",
+      "observed": "3df87f26477a4205",
+      "oracle": "SHA256(canonical draft)[:16]",
+      "requirement": "plan/code/run identities recompute from snapshots",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a11_a13_identities_recompute_and_supersede_without_overwrite"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json",
+          "selector": "/native_replay/kind",
+          "sha256": "0b98855f95292ee2dfa5026e7aba71937cd30434470b3b97384d8acc845d233a"
+        }
+      ],
+      "expected": "native",
+      "id": "A12",
+      "observed": "native",
+      "oracle": "parquet row 769284",
+      "requirement": "native row replayed; gap/conflict fixtures labelled synthetic",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a10_a12_native_group_coverage_and_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "SUPERSEDED_P15_00"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+          "selector": "/run_id",
+          "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+        }
+      ],
+      "expected": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20",
+      "id": "A13",
+      "observed": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20",
+      "oracle": "file_digest of preserved v1 receipt",
+      "requirement": "original reviewed receipt bytes preserved with supersession",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a11_a13_identities_recompute_and_supersede_without_overwrite"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "write_p15_00_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/BASELINE_BINDING.json",
+          "selector": "/schema",
+          "sha256": "5cd655500dfd41b7f14a1659a593849258910b7a117717a7f0a99e4ea445d37c"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/00-foundation/1d17f7f63296a745/additional-suite/plan_no_preserved_copies/PLAN_SNAPSHOT.json",
+          "selector": "/schema_version",
+          "sha256": "ee5dc3d6f336ca33d1b3e5c6691089c8d1807e6e892d3185ae154f5b15fd6c73"
+        }
+      ],
+      "expected": "BASELINE_BINDING and identity snapshots exist",
+      "id": "S01",
+      "observed": "present",
+      "oracle": "attempt inventory",
+      "requirement": "required P15-00 artifacts are present on the written attempt",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a06_receipt_records_commands_hashes_and_bootstrap_predecessors"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "bind_baseline"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/BASELINE_BINDING.json",
+          "selector": "/census/setups_are_independent_trades",
+          "sha256": "5cd655500dfd41b7f14a1659a593849258910b7a117717a7f0a99e4ea445d37c"
+        }
+      ],
+      "expected": "false",
+      "id": "S02",
+      "observed": "false",
+      "oracle": "accepted census",
+      "requirement": "census 18747 is not native execution count",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a01_units_and_census_are_the_accepted_registry"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "digest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/plan_sha256",
+          "sha256": "542587260e54c0c07d6b856fa0fc2bab41dc1f7ff671831c9f6cc87f3ebc88d9"
+        }
+      ],
+      "expected": "624fa492e373ef301470c1b08c9a250716663327d9106b8088f8a4bc6abe104e",
+      "id": "S03",
+      "observed": "624fa492e373ef301470c1b08c9a250716663327d9106b8088f8a4bc6abe104e",
+      "oracle": "recomputed files digest",
+      "requirement": "plan/code/run recompute; zeros would not match",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a11_a13_identities_recompute_and_supersede_without_overwrite"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "parse_native_trade"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/pytest.log",
+          "selector": "test_a09_nested_clocks_and_deserializers_reject_late_and_malformed",
+          "sha256": "ddd23455eeb3371b63c7c310fa00a25ad1d377ca672f33233eb8c6682873d9b9"
+        }
+      ],
+      "expected": "ContractError",
+      "id": "S05",
+      "observed": "ContractError",
+      "oracle": "boundary tests",
+      "requirement": "nested late evidence rejected at construction and JSON parse",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a09_nested_clocks_and_deserializers_reject_late_and_malformed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "load_job_coverage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/ENGINEERING_DATES.json",
+          "selector": "/discriminating_negatives/2020-01-02_prior_profile/unknown_interval_count",
+          "sha256": "3b1699dd7c6f47dc3b647807cfbbd2ba07084f48302cc04daec0a11ae050ec06"
+        }
+      ],
+      "expected": "390",
+      "id": "S06",
+      "observed": "390",
+      "oracle": "job session_accounting",
+      "requirement": "open calendar day with missing prior profile is not complete",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a10_a12_native_group_coverage_and_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json",
+          "selector": "/native_replay/source_sha256",
+          "sha256": "0b98855f95292ee2dfa5026e7aba71937cd30434470b3b97384d8acc845d233a"
+        }
+      ],
+      "expected": "4c6bac25de73e5ffe94dbc385665422593c2f552a575486939bf784546ffee8a",
+      "id": "S07",
+      "observed": "4c6bac25de73e5ffe94dbc385665422593c2f552a575486939bf784546ffee8a",
+      "oracle": "file_digest parquet",
+      "requirement": "native parquet row reopened; synthetic fixtures labelled",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a10_a12_native_group_coverage_and_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/baseline_manifest.py",
+          "symbol": "select_engineering_dates"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/ENGINEERING_DATES.json",
+          "selector": "/dst_slot",
+          "sha256": "3b1699dd7c6f47dc3b647807cfbbd2ba07084f48302cc04daec0a11ae050ec06"
+        }
+      ],
+      "expected": "2023-11-06",
+      "id": "S10",
+      "observed": "{'anchor': '2023-11-05', 'date': '2023-11-06', 'status': 'complete', 'tie_rule': 'earlier'}",
+      "oracle": "NQSessionPolicy",
+      "requirement": "DST slot uses bound policy nearest 2023-11-05, earlier tie",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a05_eight_date_selection_preserves_missing_year_slots"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "write_bytes_new"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/b291864ccceaca9a/attempt-0001/TASK_RECEIPT.json",
+          "selector": "/schema_version",
+          "sha256": "a4c5e6bcecdae8af24b69021bf3d9da50f084ee4a2e96c18857e621d69785d20"
+        }
+      ],
+      "expected": "research-task-receipt-v1",
+      "id": "S13",
+      "observed": "research-task-receipt-v1",
+      "oracle": "preserved file",
+      "requirement": "v1 receipt bytes unchanged after v2 write",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a11_a13_identities_recompute_and_supersede_without_overwrite"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/identity.py",
+          "symbol": "canonical_value"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json",
+          "selector": "/decimal_canonical",
+          "sha256": "0b98855f95292ee2dfa5026e7aba71937cd30434470b3b97384d8acc845d233a"
+        }
+      ],
+      "expected": "1.00",
+      "id": "S14",
+      "observed": "1.00",
+      "oracle": "canonical JSON string",
+      "requirement": "Decimal 1.00 scale and nonfinite values are distinct/rejected",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_decimal_one_keeps_documented_scale"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "source_exact_from_baseline"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-00/3df87f26477a4205/attempt-0001/SCHEMA_EXAMPLES.json",
+          "selector": "/author_exact_unknown_round_trip",
+          "sha256": "0b98855f95292ee2dfa5026e7aba71937cd30434470b3b97384d8acc845d233a"
+        }
+      ],
+      "expected": "false",
+      "id": "S31",
+      "observed": "false",
+      "oracle": "author_exact_verdict unknown",
+      "requirement": "unknown source_exact does not become true",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_00.py::test_a04_author_exact_unknown_stays_unknown"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-00"
+}
