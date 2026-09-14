@@ -1052,6 +1052,8 @@
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
         "planning/phase-1-5/SPEC.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -1117,6 +1119,8 @@
         "planning/phase-1-5/SEARCH_CONTRACT.md",
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -1248,6 +1252,8 @@
         "planning/phase-1-5/SEARCH_CONTRACT.md",
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -1256,7 +1262,12 @@
         "CENSUS_RECONCILIATION.json",
         "VISUAL_QA.json",
         "COMPLETION_REPORT.md",
-        "PHASE2_HANDOFF.md"
+        "PHASE2_HANDOFF.md",
+        "STRATEGY_BOOK.md",
+        "STRATEGY_BOOK.json",
+        "STRATEGY_BOOK_CSVS/",
+        "REGIME_DIMENSIONS.json",
+        "RETENTION_SET.json"
       ],
       "native": true,
       "test": "implementation/tests/rule_discovery/test_p15_20.py",
@@ -1269,7 +1280,12 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1299,7 +1315,10 @@
       "subphase": "00-entry-gate",
       "title": "Verify Phase 1.5 and freeze Phase 2 scope",
       "dependencies": [
-        "P15-20"
+        "P15-20",
+        "P2-09",
+        "P2-10",
+        "P2-03"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/types.py",
@@ -1495,8 +1514,7 @@
       "subphase": "02-native-options-baseline",
       "title": "Implement native option/spot/OI adapters",
       "dependencies": [
-        "P2-00",
-        "P2-01"
+        "P15-02"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/options/instruments.py",
@@ -1681,7 +1699,7 @@
       "subphase": "03-joint-volatility",
       "title": "Implement volatility arithmetic and multi-horizon targets",
       "dependencies": [
-        "P2-02",
+        "P15-02",
         "P2-10"
       ],
       "owns": [
@@ -1739,7 +1757,8 @@
       "subphase": "03-joint-volatility",
       "title": "Fit one joint volatility expert and its ablations",
       "dependencies": [
-        "P2-03"
+        "P2-03",
+        "P2-00"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/volatility.py",
@@ -2809,6 +2828,8 @@
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
         "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -2873,6 +2894,8 @@
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
         "planning/research-program/DATA_CONTRACTS.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -2939,6 +2962,8 @@
         "planning/phase-2/METHOD_EXPERTS.md",
         "planning/research-program/EVALUATION.md",
         "planning/research-program/OUTCOMES.md",
+        "planning/research-program/DELIVERABLES.md",
+        "planning/research-program/RETENTION.md",
         "planning/research-program/ASSURANCE.md",
         "planning/research-program/SILENT_FAILURES.md"
       ],
@@ -2948,7 +2973,13 @@
         "INPUT_CONSUMPTION_AUDIT.json",
         "VISUAL_QA.json",
         "COMPLETION_REPORT.md",
-        "PHASE3_HANDOFF.md"
+        "PHASE3_HANDOFF.md",
+        "STRATEGY_BOOK.md",
+        "STRATEGY_BOOK.json",
+        "STRATEGY_BOOK_CSVS/",
+        "REGIME_DIMENSIONS.json",
+        "RETENTION_SET.json",
+        "EXPERT_SCORECARDS/"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_24.py",
@@ -2961,7 +2992,13 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2993,7 +3030,7 @@
       ]
     }
   ],
-  "plan_version": "research-plan-2026-09-14-v2",
+  "plan_version": "research-plan-2026-09-14-v3",
   "assurance_version": "research-assurance-2026-09-14-v2",
   "required_task_artifacts": [
     "DRAFT_MANIFEST.json",

@@ -1,6 +1,6 @@
 # Finite breadth and refinement search
 
-Owner `P15-08` registers the candidate bank; `P15-17` executes breadth; `P15-18` refines. Read [specification](SPEC.md), [evaluation](/workspace/planning/research-program/EVALUATION.md) and [outcomes](/workspace/planning/research-program/OUTCOMES.md) together.
+Owner `P15-08` registers the candidate bank; `P15-17` executes breadth; `P15-18` refines. Read [specification](SPEC.md), [evaluation](/workspace/planning/research-program/EVALUATION.md), [outcomes](/workspace/planning/research-program/OUTCOMES.md) and [retention](../research-program/RETENTION.md) together.
 
 ## Candidate identity and counts
 
@@ -52,8 +52,12 @@ If two families share a primitive, share cached calculations but keep their fitt
 
 ## Trial ledger and final choice
 
-`TrialRecord`: trial_id, parent_trial_ids, family, branch, outer_fold, stage, bank, exact parameters, code/data/plan hashes, fit/tune/calibration windows, outcome-exposure cutoff, candidate population counts, score/loss, support, all test metrics, reason, disposition, runtime and artifacts. Write append-only JSONL; a new attempt gets a new ID and `replaces_attempt_id`, leaving the old row intact.
+`TrialRecord`: trial_id, parent_trial_ids, family, branch, outer_fold, stage, bank, exact parameters, code/data/plan hashes, fit/tune/calibration windows, outcome-exposure cutoff, candidate population counts, score/loss, support, all test metrics, reason, disposition, runtime, artifacts, and `failure_attribution`. Write append-only JSONL; a new attempt gets a new ID and `replaces_attempt_id`, leaving the old row intact.
 
-Select a final recommended research rule only by the shared promotion gates. Record the fold-specific selected rule role separately from an all-history descriptive final recommendation. Phase 2 historical training consumes the fold-specific causal role or B0, never a backward-applied final winner. Unselected alternatives remain available as research evidence, not automatically active downstream inputs.
+`failure_attribution` is required for every deselected, inconclusive or not-promoted candidate. It is an ordered list drawn from `frequency` (entries below the frequency floor), `location_miss` (objective not reached while price came within 0.25 S of it, or adverse excursion beyond 0.5 S before any favorable 0.5 S), `confirmation_delay` (missed-move share above the family median), `adverse_before_target` (stop-first share above the family baseline), `cost_sensitivity` (sign reversal under the stress setting), `support` (below the support gate), `coverage` (unexplained input coverage loss). Each is computed from the diagnostics the Strategy Book already reports, with these thresholds fixed before any candidate result is read.
+
+Bounded revisits: Phase 3 re-screens every retained candidate whose first attribution is `location_miss`, using its improved locations. Phase 4 re-screens every retained candidate whose first attribution is `confirmation_delay` or `adverse_before_target`, using the response and entry experts. A revisit is one registered pass over the retained set with the same folds, scores and promotion gates; it is not a new open search and adds no neighbors.
+
+Select a final recommended research rule only by the shared promotion gates. Record the fold-specific selected rule role separately from an all-history descriptive final recommendation. Phase 2 historical training consumes the fold-specific causal role or B0, never a backward-applied final winner. Unselected alternatives remain available as research evidence, not automatically active downstream inputs. A disposition never deletes a candidate.
 
 The exit study compares E0–E4 after entry selection is frozen. Its trials are an additional, separately counted decision family; it cannot rescue an entry candidate by replacing the primary exit during the earlier rule test. Final release includes both unchanged-entry evidence and the frozen baseline management policy for Phase 2 suitability labels.

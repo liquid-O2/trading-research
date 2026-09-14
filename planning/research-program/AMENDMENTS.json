@@ -37,6 +37,176 @@
       ],
       "execution_rule": "Preserve old reports and their original plan identities. Repair P15-00/P15-01 under new snapshots/draft/run identities, then obtain a matching passing review before 01-native-and-outcomes. Later tasks start under this amended contract.",
       "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Record the coverage-rule correction and deterministic per-group reselection before any new outcome inspection."
+    },
+    {
+      "id": "research-plan-2026-09-14-v3",
+      "date": "2026-09-14",
+      "prior_plan_version": "research-plan-2026-09-14-v2",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v2",
+      "scope": "Planning contracts, Phase 1.5/Phase 2 task graph, Strategy Book acceptance, Phase 2 entry-gate exception for P2-09/P2-10/P2-03",
+      "reason": "Add Strategy Book deliverables, retention/failure-attribution/revisit bookkeeping, and a bounded Phase 2 start exception for strategy-agnostic native adapters and volatility arithmetic. No formula, budget, gate threshold or date of the existing banks is changed.",
+      "plan_version_decision": "Bumped to research-plan-2026-09-14-v3. Plan-version continuity between predecessor and successor receipts is not enforced. receipts.py _check_predecessors (lines 553-638) requires TASK_GRAPH dependencies, matching SHA-256 digests and recursive verification; it never reads a plan_version field. identity.py RECEIPT_KEYS (lines 29-44) and validate_receipt_shape (lines 172-194) bind plan_sha256 and predecessor digest maps, not a plan version string. receipts.py _check_identities (lines 1188-1190) recomputes this receipt's plan_sha256 from PLAN_SNAPSHOT.files only. Therefore a plan-file amendment does not require predecessor receipts to share the successor's plan version string.",
+      "changes": [
+        "ROADMAP.md: plan version v3; retention section summarizing RETENTION.md rules 1-5 and the Phase 2 split; Phase 2 gate exception for P2-09, P2-10 and P2-03 from verified P15-02 with re-verification under P2-00 before P2-04, P2-11 or method experts consume those receipts",
+        "EVALUATION.md: TrialRecord.failure_attribution with RETENTION.md rule 2 labels and thresholds; bounded revisit rule 3; support section states a disposition never deletes a candidate",
+        "SEARCH_CONTRACT.md: same TrialRecord.failure_attribution field and bounded revisit rule",
+        "P15-20 and P2-24: Strategy Book version 1/2 acceptance keys, DELIVERABLES.md and RETENTION.md on the read-first lists",
+        "TASK_GRAPH.json required reads: DELIVERABLES.md and RETENTION.md on P15-17, P15-18, P15-20, P2-22, P2-23, P2-24",
+        "TASK_GRAPH.json dependencies: P2-09 starts from P15-02; P2-10 unchanged (P2-09); P2-03 starts from P15-02 and P2-10; P2-00 re-verifies P2-09, P2-10 and P2-03; P2-04 waits for that P2-00 re-verification. No other dependency lists changed.",
+        "Phase 2 SPEC.md and P2-00/P2-09/P2-10/P2-03/P2-04 cards state the same exception",
+        "Generated runbooks, PROMPTS.md and phase READMEs rebuilt from canonical sources"
+      ],
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Acceptance amendment research-assurance-2026-09-14-v2",
+        "Accepted Phase 1 code/data/report identities"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/ROADMAP.md",
+          "sha256": "a2a5187de01a183f1b04db94c310d19c4dfc646d74b7f6d30c566d9e4af1796b"
+        },
+        {
+          "path": "planning/phase-1-5/PROMPTS.md",
+          "sha256": "1daeccb06662eb582a0c0ce8bcfe6a6175b6d8cecfe34e6c0181c926405ce4ea"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256": "b3af86be048851eaab433ddb70dc6cc6e474e82b9c49f626a8cf2973142ecb19"
+        },
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256": "c3ac03a84139c228b45fbab113383e4c13a8af535c4100e599796d7c344b0589"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/00-foundation/RUNBOOK.md",
+          "sha256": "0cb63b98da547febd74cfd4f4f4ea2b92eafe23e591c59fb60281234af22b069"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md",
+          "sha256": "1053f86233068cd5883ee9d23f637bc2c4a7f110941bc35f9c614574c5bf2476"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md",
+          "sha256": "221316c031edabc99085fa2c32d91dccc15d1aee4613faa9cc89bb3a3834eacb"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256": "c4ed600bc8ec8b5ec141a63ef58988faa5fc0ff486afd0bfa3dde8da7a25a00d"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256": "f201770cec6ca0c9a63689299d4285ae3b0170636c06bebefc64acf82c3ec830"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256": "bfbc775a69fcc7773310a76ba43219f746680dfd70a7fae9fc5fd722c2d10daa"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256": "acf55ef66ef1ed33325c91c26abdaa183e1fff8e8c4ccff50f7c0dd04dfa57bc"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256": "8daa214ab740606e6be55eee8e3f9125adb9ce540dae230062f55d84c697669c"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256": "b02759d936894eabbef6faae35ef664b8529a25272ae35b766cbb1253887fdc4"
+        },
+        {
+          "path": "planning/phase-2/PROMPTS.md",
+          "sha256": "acb02ce086d389fe60cbf3ffcb39a5b3c2b65d40e73cb9c509d06e5bd0418d9c"
+        },
+        {
+          "path": "planning/phase-2/README.md",
+          "sha256": "88606063fa6768181baf969e536435ff65323feab18cc921636e8be6aba23dbf"
+        },
+        {
+          "path": "planning/phase-2/SPEC.md",
+          "sha256": "4d8367f2203536d24720ef0a7f8507c9097988e2a474590c62794d7eabd17a76"
+        },
+        {
+          "path": "planning/phase-2/subphases/00-entry-gate/RUNBOOK.md",
+          "sha256": "f166e3c8ae1acc1e3d10c06019f9ad239157cf845a4217b332c7c17089f013c7"
+        },
+        {
+          "path": "planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md",
+          "sha256": "ca455304d8f91a112bc9d4da530543eacd339811289ee55073e8075bfd3ecb63"
+        },
+        {
+          "path": "planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md",
+          "sha256": "31907e03af02047d9154ae0628adbe1fd69156ae6136f06501d8736a6965f483"
+        },
+        {
+          "path": "planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md",
+          "sha256": "efd9961cc1aff4a388d201d907630d933eb06fe9f42564147d6751f7e75595a7"
+        },
+        {
+          "path": "planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md",
+          "sha256": "8da6b15ada812f49fcb288fb512810005efe39bcff74a841346e994c9bc8c1ff"
+        },
+        {
+          "path": "planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md",
+          "sha256": "9d67ad81cf94facfc9344b76437a78e7db145943d6e23ca20cac6d6d7de0ac7e"
+        },
+        {
+          "path": "planning/phase-2/subphases/06-method-experts/RUNBOOK.md",
+          "sha256": "c7cc31c198b4c002d946bcf6cbf8a0e40760ef239745c33e0fe930347da3889b"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256": "d72cb6cb7306515cd065d630caaeee056c397be4225281f404e823a566f6ce58"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256": "6c62facb72b13680643e8a62243904882038c76d0fe892af76d10a7603171b2a"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-00.md",
+          "sha256": "8539c68a5eec5164e5492ee2ea75c87ec05b01b9e5ff2904188e5c542dfa66ae"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-03.md",
+          "sha256": "f2dbed2c03e0558a55ed8a033bf1911ac8595e102972897b2ef58bca505807d7"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-04.md",
+          "sha256": "1dd19ea1653412b192d6f535b6a02e4586f0294faaf2f724254712f91bc1496e"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-09.md",
+          "sha256": "e9334be755072f8d23c4749b673681a7de45ad48a02fdf3b28d499166b18357d"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-10.md",
+          "sha256": "61c3423227100fcc71c761401916f0712dddd0fda1fe1d05ad7208382f89c6b3"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256": "f77f1eca269f68ea149170fca086d8c66e005e09a2a6f540ae5c12dc9604335b"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256": "64c9cc548dc21d5646ae5526fa95a8702aad502f5b07f6ba987a0b40ab713372"
+        },
+        {
+          "path": "planning/research-program/EVALUATION.md",
+          "sha256": "6f878ac84ec2613feb75410ed1448c0a020d6473de11f38bf5398fb2505da7c1"
+        },
+        {
+          "path": "planning/research-program/RETENTION.md",
+          "sha256": "2dcfa87bcb2519adba8a7ea95a710ed6eed092124cf3dacedc8cc1588cd59fdc"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256": "b9fcdfe9bd520a4687acccc42e29111a941d6d13031839b20091d64ccb8fe139"
+        }
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-plan-2026-09-14-v3. P2-09, P2-10 and P2-03 may proceed from a verified P15-02 receipt; P2-00 must re-verify those receipts before P2-04, P2-11 or any method expert consumes them.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Retention statuses and first attributions are reporting fields; they do not reopen a closed search budget."
     }
   ]
 }

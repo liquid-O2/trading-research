@@ -12,14 +12,14 @@ Start with [copyable prompts](/workspace/planning/phase-1-5/PROMPTS.md). Send th
 
 | Order | Subphase/runbook | Tasks | Exit evidence |
 | --- | --- | --- | --- |
-| 0 | [00-foundation](/workspace/planning/phase-1-5/subphases/00-foundation/RUNBOOK.md) | P15-00, P15-01 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 1 | [01-native-and-outcomes](/workspace/planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md) | P15-02, P15-03 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 2 | [02-source-reconstruction](/workspace/planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md) | P15-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 3 | [03-primitives](/workspace/planning/phase-1-5/subphases/03-primitives/RUNBOOK.md) | P15-05, P15-06, P15-07, P15-08 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 4 | [04-family-adapters](/workspace/planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md) | P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 5 | [05-finite-search](/workspace/planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md) | P15-17, P15-18 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 6 | [06-exit-controls](/workspace/planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md) | P15-19 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 7 | [07-release](/workspace/planning/phase-1-5/subphases/07-release/RUNBOOK.md) | P15-20 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 0 | [00-foundation](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/00-foundation/RUNBOOK.md) | P15-00, P15-01 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 1 | [01-native-and-outcomes](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/01-native-and-outcomes/RUNBOOK.md) | P15-02, P15-03 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 2 | [02-source-reconstruction](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/02-source-reconstruction/RUNBOOK.md) | P15-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 3 | [03-primitives](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/03-primitives/RUNBOOK.md) | P15-05, P15-06, P15-07, P15-08 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 4 | [04-family-adapters](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md) | P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 5 | [05-finite-search](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md) | P15-17, P15-18 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 6 | [06-exit-controls](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md) | P15-19 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 7 | [07-release](/workspace/.worktrees/docs-amend/planning/phase-1-5/subphases/07-release/RUNBOOK.md) | P15-20 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 
 ## Operating rules
 

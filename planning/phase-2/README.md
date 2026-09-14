@@ -12,15 +12,15 @@ Start with [copyable prompts](/workspace/planning/phase-2/PROMPTS.md). Send the 
 
 | Order | Subphase/runbook | Tasks | Exit evidence |
 | --- | --- | --- | --- |
-| 0 | [00-entry-gate](/workspace/planning/phase-2/subphases/00-entry-gate/RUNBOOK.md) | P2-00 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 1 | [01-datasets-and-fitting](/workspace/planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md) | P2-01, P2-02 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 2 | [02-native-options-baseline](/workspace/planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md) | P2-09, P2-10 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 3 | [03-joint-volatility](/workspace/planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md) | P2-03, P2-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 4 | [04-context-mechanisms](/workspace/planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md) | P2-05, P2-06, P2-07, P2-11, P2-08 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 5 | [05-intraday-oi](/workspace/planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md) | P2-12 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 6 | [06-method-experts](/workspace/planning/phase-2/subphases/06-method-experts/RUNBOOK.md) | P2-13, P2-14, P2-15, P2-16, P2-17, P2-18, P2-19, P2-20, P2-21 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 7 | [07-plans-and-adaptation](/workspace/planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md) | P2-22, P2-23 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 8 | [08-release](/workspace/planning/phase-2/subphases/08-release/RUNBOOK.md) | P2-24 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 0 | [00-entry-gate](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/00-entry-gate/RUNBOOK.md) | P2-00 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 1 | [01-datasets-and-fitting](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md) | P2-01, P2-02 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 2 | [02-native-options-baseline](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md) | P2-09, P2-10 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 3 | [03-joint-volatility](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md) | P2-03, P2-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 4 | [04-context-mechanisms](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md) | P2-05, P2-06, P2-07, P2-11, P2-08 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 5 | [05-intraday-oi](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md) | P2-12 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 6 | [06-method-experts](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/06-method-experts/RUNBOOK.md) | P2-13, P2-14, P2-15, P2-16, P2-17, P2-18, P2-19, P2-20, P2-21 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 7 | [07-plans-and-adaptation](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md) | P2-22, P2-23 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 8 | [08-release](/workspace/.worktrees/docs-amend/planning/phase-2/subphases/08-release/RUNBOOK.md) | P2-24 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 
 ## Operating rules
 

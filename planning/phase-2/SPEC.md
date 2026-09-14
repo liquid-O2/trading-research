@@ -1,6 +1,6 @@
 # Phase 2 context and expert specification
 
-Entry gate: a verified Phase 1.5 phase receipt covering every task and family, including its limitations and fold-specific selected-rule manifests. Do not begin this implementation while any Phase 1.5 task is still in progress. This pack is written now so the next implementer can start without another planning interview.
+Entry gate: a verified Phase 1.5 phase receipt covering every task and family, including its limitations and fold-specific selected-rule manifests. Exception: P2-09, P2-10 and P2-03 may start from the verified P15-02 receipt (the native MarketView) instead of waiting for that phase receipt; their receipts must be re-verified under P2-00 before P2-04, P2-11 or any method expert consumes them. Do not begin any other Phase 2 implementation while any Phase 1.5 task is still in progress. This pack is written now so the next implementer can start without another planning interview.
 
 ## Result and code boundaries
 
