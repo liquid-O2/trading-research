@@ -624,6 +624,94 @@
       ],
       "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain; code-file live mismatches verify through a later verified successor receipt.",
       "exposure_rule": "Carry all previously exposed dates and inspected coverage forward."
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward.",
+      "id": "amendment-2026-09-14-timing-t4-and-stage-status",
+      "date": "2026-09-14",
+      "scope": "planning-only; no formula, gate, budget or date of existing banks changed",
+      "reason": "Timing bank T4 (no clock limit) registered before any search result; per-stage status list required in the Strategy Book; A15 added to both release cards. Orchestrator-authored text.",
+      "changes": [
+        "SEARCH_CONTRACT.md: Timing row gains T4 and its eligible population; custom reversal timing recipe gains the T4 paragraph",
+        "DELIVERABLES.md section 1: per-stage status list and literal-operand disclosure",
+        "P15-20.md and P2-24.md: acceptance key A15",
+        "generated runbooks and prompts rebuilt",
+        "TASK_GRAPH.json: acceptance lists of P15-20 and P2-24 gain A15"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/SEARCH_CONTRACT.md",
+          "sha256_before": "c3ac03a84139c228b45fbab113383e4c13a8af535c4100e599796d7c344b0589",
+          "sha256_after": "70001063cb309bd8626bd767cb4788a420d0a7b155fb401ea4b7dd893929577b"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/03-primitives/RUNBOOK.md",
+          "sha256_before": "68f7c9bfbb622d151f8ee310c5284e002fc36bab40e7e43cc2e85a81482aca49",
+          "sha256_after": "71c4770b71446aecd1eb90906edbe47cafda51dfa10d57916d49842bfaa5fa36"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/04-family-adapters/RUNBOOK.md",
+          "sha256_before": "0d65a9c8d306b603b9f338d0d292fbe3b7efb521912e1b1bbff38895ad1a4838",
+          "sha256_after": "aa006397cea114565d2f83193a95806bdf4cb786bfedba247f7980336a5465c0"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "27c1fee43da17a3a67b53f692aedccf75935bd04f188a202949af1d59988e5c8",
+          "sha256_after": "de164cae7d0eaf08c665198e2fefdce7a5f98ba07267c84f93fce789eaca0bad"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/06-exit-controls/RUNBOOK.md",
+          "sha256_before": "e706c63df8cb8c0f60090829320904619bdcec39e3341427014fc5da5abbba90",
+          "sha256_after": "89bcc4a3c7ed6077c7bc20733b5240385d96e34b65a25d6e8606a21626e7f5c8"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/07-release/RUNBOOK.md",
+          "sha256_before": "fad47b1888acc77d9cfd9bdeb798602fbe2dd7c87765ad58246835014cca4cde",
+          "sha256_after": "e51b55ce7b65583bc5aa95a75b48860743782625da96f8d3f4b92550b5deb23c"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-20.md",
+          "sha256_before": "04601fbbbc31d45c93fe5b2e60d314bea7270a9f58b16db49460aae115ce1ee3",
+          "sha256_after": "91f32804bb69bdd0e36e98e5da7f56ca6194f3b1cfbe642318c55de269e56c17"
+        },
+        {
+          "path": "planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md",
+          "sha256_before": "18f7e76aa4a50d256f62279a2dc81bd6921f78e4e469214a651748ef57d146bd",
+          "sha256_after": "36173d87aeeabc0ebc81aa61a95a7b7b555d026f8265367f7258680f76ef1bab"
+        },
+        {
+          "path": "planning/phase-2/subphases/08-release/RUNBOOK.md",
+          "sha256_before": "6931c43064b91c9adbebdf050129c2c1b249f78bde544815e8d663d4023c1325",
+          "sha256_after": "27d4d6ca91c53d71c3fe72c3760ecb8e78056e6c30bcf55026e20f8a22a177b5"
+        },
+        {
+          "path": "planning/phase-2/tasks/P2-24.md",
+          "sha256_before": "c9082328066d72ab7f07461f279d49fb1ef4cb7102aa3609afb62cceba3b780c",
+          "sha256_after": "f970ccece7b37d4bd416cb22011c7d6b6d6ac7d9a83f9d18a0d7c64ebe4a756b"
+        },
+        {
+          "path": "planning/research-program/DELIVERABLES.md",
+          "sha256_before": "64c9cc548dc21d5646ae5526fa95a8702aad502f5b07f6ba987a0b40ab713372",
+          "sha256_after": "7ee3d882f43c9aa2d53b7b4db7a281e719d78b2bb16669b894d33cf884d300cd"
+        },
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "859d5c6e84de08cfe81f050bbb5da8f4a937f95898b34e695c1acc19027729c7",
+          "sha256_after": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca"
+        }
+      ],
+      "previous_entry_sha256": "591852ab27062eda5954ce62edd14551aa6e9b73bc21df43485472ca32e4890d"
     }
   ]
 }

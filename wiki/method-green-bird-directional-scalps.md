@@ -32,6 +32,9 @@ AND source_directional_pullback_observed AND source_scalp_management_recorded
 That is `case_description_ok`, not full entry qualification. `sequence_ok = NULL` for automatic method admission until the missing trigger is specified by evidence. The posts demonstrate that non-A+ trading occurs; they do not establish a reusable trigger or its performance.
 
 
+**Source addition, 2026-09-14.** The 2026-09-11 trades ([raw](/workspace/sources/x-raw-2026-09-14/greenbirdtrader/README.md)) supply a continuation trigger this page records as unpublished: after a defined impulse, a New York pullback into the golden pocket `[L + 0.50(H-L), L + 0.618(H-L)]` in the impulse direction, stop beyond the far edge of the pocket, objective the impulse extreme or the prior-day extreme; the entry bar is an operational choice. Defined as `golden_pocket_continuation` in [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md). Printed fixture on MNQU2026, 2026-09-11: entry 29,382.00, stop 29,347.00, targets 29,494.50 and 29,521.75. `sequence_ok` remains NULL for the accepted M04 scorer; the addition is measured separately.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

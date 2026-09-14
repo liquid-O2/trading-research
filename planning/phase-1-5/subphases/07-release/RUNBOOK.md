@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `b521c39e7817fa60126aa70b7d2e6157f3dfd03b011b3777a12ee5dc2a599d57`.
+Source content SHA256: `3b1ea5cd7a493fd77f35244990a9a83d1c3f8879d291041505abbbcddaef321a`.
 
 Previous gate: **06-exit-controls**. External task dependencies: P15-19. Read and verify their actual receipts before implementation.
 
@@ -617,7 +617,7 @@ Always include B0, the accepted source-inspired reconstruction. A candidate chan
 | Delta | C1 normalized5m; C2 5m half-life; C3 past-bucket robust score | Every branch that actually consumes delta/flow in Sires, GB-SCALP, Saint; confirm input use in the source adapter. A branch with no delta input is explicitly not applicable. |
 | Sequence | S1 reclaim; S2 defended retest; S3 flow-supported reclaim; S4 failure-to-progress | JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest. Do not change the Judas outbound opening-entry branch into a retest without a distinct custom family. The separate Timing bank explicitly tests custom Judas reversal windows. |
 | Memory | M1 require at most 1 previous completed distinct contact; M2 require previous resolved120s favorable reaction >.25S and no subsequent invalidation | Existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately. Not a universal ban on old/saturated levels. |
-| Timing | T1 source reversal/action window +15m; T2 window -15m using only an already complete formation; T3 condition-defined morning reversal | JJ judas_reversal/other_session and GB nyam_box custom siblings. If formation is not yet available at T2, omit with a reason; never truncate a source range and call it unchanged. |
+| Timing | T1 source reversal/action window +15m; T2 window -15m using only an already complete formation; T3 condition-defined morning reversal; T4 no clock limit: the same sweep and confirmation searched from 09:30 through the account-day flatten, with expiry 60 minutes after qualification | JJ judas_reversal/other_session and GB nyam_box custom siblings. If formation is not yet available at T2, omit with a reason; never truncate a source range and call it unchanged. T4 applies to JJ judas_reversal and every GB-FAIL sweep branch as a custom sibling; source-identity output remains B0. |
 
 This is at most 19 nonbaseline axis recipes per branch, but only applicable cells are created. `P15-08` emits a concrete expanded `candidate-bank.json` with a maximum of 160 nonbaseline branch candidates for the breadth round, plus all baseline branches. If the mechanical expansion exceeds160, apply round-robin by bank then family then branch ID, taking one candidate per applicable family/bank before second candidates; preserve deferred cells and their deterministic order. No result may affect this expansion. This cap is a first-stage breadth budget, not a claim that exactly 160 models should exist.
 
@@ -626,6 +626,8 @@ Separate method adapters own source constraints and construction. `P15-09` Jumbo
 ### Custom reversal timing recipe
 
 T1/T2 shift the action-window start and end together by the registered offset, keeping formation already complete; source-identity output remains B0 and changed clocks use custom sibling IDs. Their expiry is the shifted window end, capped at account-day flatten. T3 uses the source-frozen overnight/range reference and a 09:30–12:00 ET custom action window. Require a strict edge sweep, then a complete trailing 15-minute balance with width<=.75 of the 60-minute scale ending before that balance and efficiency<=.35, then the S1 reclaim within 10 minutes. Entry follows that causal reclaim, structural stop is beyond the swept extreme by1 tick, objective is the still-unconsumed opposite frozen edge, and expiry is the earlier of 60 minutes after qualification or 12:00. If the objective is already consumed after the sweep, reject it. Retain all unchanged source context that can be evaluated before contact; publish the timing/balance additions as our hypothesis, not an author Judas formula. This tests condition-based reversal beyond a small clock adjustment.
+
+T4 removes the reversal clock entirely: after the source-frozen sweep and its five-minute confirmation, the entry may occur at any time from 09:30 to the account-day flatten; structural stop and objective are unchanged; expiry is the earlier of 60 minutes after qualification or the flatten. It tests whether the source's clock limit adds value beyond the sweep-and-reclaim mechanism itself. Its refinement neighborhood in the table below is the T issue offset row, unchanged.
 
 ### Breadth stage
 
@@ -779,7 +781,7 @@ Receipts, matrices and gate reviews prove that software ran and that checks pass
 
 One entry per family and per branch in the frozen Phase 1 registry, including research, process and risk units, with entry setups distinguished from observations. Every number carries a pointer to the immutable artifact it was computed from. Sections per branch:
 
-1. **Definition.** Source method, branch, ordered stages, reference, confirmation, structural stop and objective, expiry, session clock, and for every operand whether it is source-exact, printed-but-different, inferred or not identifiable, linking the source-reconstruction ledger row.
+1. **Definition.** Source method, branch, ordered stages, reference, confirmation, structural stop and objective, expiry, session clock, and for every operand whether it is source-exact, printed-but-different, inferred or not identifiable, linking the source-reconstruction ledger row. For every source stage of the branch, one status: evaluated, evaluated_with_inferred_substitute, structural_not_required, unevaluated, scheduled_build, or personal_record_excluded, with the ledger row or code reference that justifies it. Where a literal operand is kept by construction or by declared assumption, the entry names it and the assumption ID.
 2. **Population.** Eligible account days, opportunities, opportunities per day and per week, by year; unknown-input, ambiguous-order and missing-coverage counts; the stage-rejection funnel (how many contacts fail at which prerequisite).
 3. **Base rates, baseline B0, fixed one-contract benchmark.** Ordered outcome rates (target first, stop first, neither, ambiguous) on the rule's structural geometry and on the diagnostic grid; net points per opportunity (mean, median, 5th and 95th percentiles); win rate and payoff ratio; expectancy per eligible day; daily P&L distribution (median, mean, 5th percentile, worst day, fraction of days below zero); maximum drawdown from day start; time to resolution; MFE and MAE quantiles at each horizon; confirmation delay; missed-move counts. Every rate carries the contract's block-bootstrap 95% interval and its support count.
 4. **Conditional rates by pre-registered regime dimension.** One-way cuts only, no interactions, each cell with count, rate and interval, cells under 30 opportunities marked low-support. Dimensions are frozen in `REGIME_DIMENSIONS.json` before any candidate result is read, each computed causally from owned data as of the decision time: calendar year and outer fold; session bucket (Asia, London, New York morning, New York afternoon); day of week; realized-volatility tercile from the prior 20 sessions' daily ranges; overnight range relative to its prior-20-session median, in terciles; prior-close VIX bucket (below 15, 15 to 20, 20 to 30, above 30); inferred aggregate gamma sign at 09:32 (positive, negative, unknown; labelled inferred); prior-day type by the registered trend-or-balance rule; scheduled macro release day (CPI, payrolls, FOMC) where the calendar is owned. This section is descriptive. It never selects candidates, and it is disclosed in the exposure ledger.
@@ -911,6 +913,7 @@ Acceptance amendment: `research-assurance-2026-09-14-v3`. Assigned cases: **S01,
 - [ ] A11: Every number carries a pointer to the immutable artifact it was computed from.
 - [ ] A12: `REGIME_DIMENSIONS.json` was frozen before any candidate result was read.
 - [ ] A13: The release reports the retention set with statuses and first attributions.
+- [ ] A15: Every branch entry carries the per-stage status list defined in DELIVERABLES.md section 1, and every unevaluated or scheduled_build stage names its owning task.
 
 ### Commands and evidence
 
@@ -945,7 +948,7 @@ Expected artifacts under the task’s immutable report run (large data shards ma
 - `STRATEGY_BOOK_CSVS/`
 - `REGIME_DIMENSIONS.json`
 - `RETENTION_SET.json`
-- `TASK_RECEIPT.json` and `REPORT.md`, including acceptance keys A01–A13 and exact predecessor/artifact hashes.
+- `TASK_RECEIPT.json` and `REPORT.md`, including acceptance keys A01–A15 and exact predecessor/artifact hashes.
 
 ### Completion and stop rules
 
@@ -962,7 +965,7 @@ Generated from the task graph and pstack execution contract by tools/build_resea
 Read /workspace/planning/phase-1-5/tasks/P15-20.md and /workspace/planning/research-program/PSTACK_EXECUTION.md. Use the installed pstack router and the card's required contracts; this is execution of an existing specification.
 Use the coordinator's actual working root, code identity, predecessor receipt paths/hashes, frozen manifest, dates and run root. Resolve missing values from those artifacts; report unresolved fields to the coordinator instead of inventing them.
 Use the parent Grok model for every pstack role (inherit-parent means omit model). Use the installed poteto-agent wrapper when supported. No nested delegation; the coordinator owns fresh review and shared-file integration. Respect its single-writer checkout assignment.
-Follow the exact formulas, clocks, schemas, allowed paths, finite budgets and A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13 checks. Name the data shape, implement one vertical behavior, run sensitive tests and the declared native slice/full run, and inspect actual output.
+Follow the exact formulas, clocks, schemas, allowed paths, finite budgets and A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13, A15 checks. Name the data shape, implement one vertical behavior, run sensitive tests and the declared native slice/full run, and inspect actual output.
 Done means all required artifacts exist and verify_research_release.py task exits 0 on the actual TASK_RECEIPT.json, with truthful coverage and disposition. Return real artifact paths, command results, decision-trail path and limitations. Keep runtime todos in the run's WORK_LOG.md and record playbook skips there.
 Apply /workspace/planning/research-program/ASSURANCE.md and the card's assigned silent-failure cases: S01, S02, S03, S04, S06, S07, S11, S12, S24, S31, S32. Produce EVIDENCE_MATRIX.json linking every required check to real code, executed commands, hashes and inspected output selectors. Show sensitive accepted/rejected controls; preserve missing/ambiguous data and all declared jobs. A pass flag or your own verifier alone cannot prove completion. Return the evidence for the coordinator's separate GATE_REVIEW.json; do not edit fixed independent checks to obtain a pass.
 Preserve accepted Phase 1 evidence, raw sources, missing/ambiguous inputs and unsuccessful trials. Perform the local task only; no external publication, shipping workflow or later phase. Do not stop at a plan or a passing toy test.

@@ -21,3 +21,7 @@ An observation is usable only if its evidence supports what the method asks. An 
 [MATH]: </workspace/sources/documents/discretionary/the-math-behind-auction-market-theory.pdf>
 [DATA]: </workspace/sources/documents/discretionary/data-engine.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+## What "unknown" means in the accepted census, audited 2026-09-14
+
+All 17,037 distinct unknown minutes were checked against the raw parquet ([audit](/workspace/planning/research-program/reviews/unknown-audit-2026-09-14/UNKNOWN_AUDIT.md)). 16,938 have no rows of any kind: exchange closures, holiday evenings and the archive end on 2026-09-03. 96 sit on the hairline gap between two monthly files that neither file owns, and 3 are quote-only minutes that the rules refuse to read as trades. Candidate-level `data_unavailable` (421 of 101,710 candidates) arises mostly from same-nanosecond prints at two prices with no sequence column, which the rules refuse to order. About 22,600 branch-session labels concern inputs the project never owned. "Zero unknown minutes" means the archive file demonstrably covers the interval, not that a trade printed in every minute. The new Phase 1.5 engine treats adjacent monthly files as contiguous when the seam gap holds no rows, as a labelled rule recorded in its coverage receipts.

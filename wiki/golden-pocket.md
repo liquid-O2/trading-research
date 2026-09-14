@@ -20,3 +20,5 @@ Green Bird's golden pocket is the 50–61.8% retracement of the explicitly measu
 
 [GB]: </workspace/sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+**Continuation use, 2026-09-14.** A dated Green Bird example uses the pocket of a defined impulse as a pullback entry area in the impulse direction, not only as confluence inside a failure trade; see the scalps method page and [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md).

@@ -129,3 +129,7 @@ Existing braindumps under /workspace/sources/documents/conversations/ and the Ju
 [AUDIT-F]: </workspace/planning/phase-1-live/CHART_AUDIT_FABLE.md>
 [OPERATORS]: </workspace/planning/phase-1-live/OPERATORS.md>
 [METHOD]: </workspace/sources/method/agent-method-matt-wiki.md>
+
+## Additions 2026-09-14
+
+Two greenbirdtrader posts, raw capture [sources/x-raw-2026-09-14/greenbirdtrader](/workspace/sources/x-raw-2026-09-14/greenbirdtrader/README.md): post 2099513366326730859 (2026-09-14, London-low sweep and reclaim long, Asia-high failed-breakout short, four photos) and post 2099503614372741234 (2026-09-11 trades posted 2026-09-14, overnight previous-day-low reclaim long and golden-pocket continuation long, three photos). Both postdate the 2026-09-11 X archive and the native data endpoint; they are dated examples with printed prices. Chart footers read "UTC-4".

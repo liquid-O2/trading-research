@@ -22,3 +22,7 @@ The clock identifies what has finished before a decision. Jumbo's main range for
 [TBR]: </workspace/sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf>
 [AVG]: </workspace/sources/documents/discretionary/average-unprofitable-trader.pdf>
 [FORMULAS]: </workspace/planning/phase-1-live/FORMULAS.md>
+
+## Source clock zones, caveat recorded 2026-09-14
+
+Every source-stated time in this wiki is converted as New York time with daylight-saving handling. An author who states a window in a fixed offset or a platform default would have every winter window shifted by one hour under that conversion. Chart footers in the September 2026 Green Bird posts read "UTC-4", consistent with daylight time; other sources and seasons are unverified. The reconstruction ledger records each source's clock zone with evidence, and clock-based branches carry `clock_zone_unverified` until it is established. See [source additions](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md).

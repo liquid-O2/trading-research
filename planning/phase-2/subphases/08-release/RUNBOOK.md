@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `17d90826371ab6dbbd9d18a377f51de95f62b46c7cfa65fd8714f618375116eb`.
+Source content SHA256: `6cfb541f7a336d0bbb757270c0d8e5547addb5114c3bab9b09724c6470e16c5e`.
 
 Previous gate: **07-plans-and-adaptation**. External task dependencies: P2-23. Read and verify their actual receipts before implementation.
 
@@ -846,7 +846,7 @@ Receipts, matrices and gate reviews prove that software ran and that checks pass
 
 One entry per family and per branch in the frozen Phase 1 registry, including research, process and risk units, with entry setups distinguished from observations. Every number carries a pointer to the immutable artifact it was computed from. Sections per branch:
 
-1. **Definition.** Source method, branch, ordered stages, reference, confirmation, structural stop and objective, expiry, session clock, and for every operand whether it is source-exact, printed-but-different, inferred or not identifiable, linking the source-reconstruction ledger row.
+1. **Definition.** Source method, branch, ordered stages, reference, confirmation, structural stop and objective, expiry, session clock, and for every operand whether it is source-exact, printed-but-different, inferred or not identifiable, linking the source-reconstruction ledger row. For every source stage of the branch, one status: evaluated, evaluated_with_inferred_substitute, structural_not_required, unevaluated, scheduled_build, or personal_record_excluded, with the ledger row or code reference that justifies it. Where a literal operand is kept by construction or by declared assumption, the entry names it and the assumption ID.
 2. **Population.** Eligible account days, opportunities, opportunities per day and per week, by year; unknown-input, ambiguous-order and missing-coverage counts; the stage-rejection funnel (how many contacts fail at which prerequisite).
 3. **Base rates, baseline B0, fixed one-contract benchmark.** Ordered outcome rates (target first, stop first, neither, ambiguous) on the rule's structural geometry and on the diagnostic grid; net points per opportunity (mean, median, 5th and 95th percentiles); win rate and payoff ratio; expectancy per eligible day; daily P&L distribution (median, mean, 5th percentile, worst day, fraction of days below zero); maximum drawdown from day start; time to resolution; MFE and MAE quantiles at each horizon; confirmation delay; missed-move counts. Every rate carries the contract's block-bootstrap 95% interval and its support count.
 4. **Conditional rates by pre-registered regime dimension.** One-way cuts only, no interactions, each cell with count, rate and interval, cells under 30 opportunities marked low-support. Dimensions are frozen in `REGIME_DIMENSIONS.json` before any candidate result is read, each computed causally from owned data as of the decision time: calendar year and outer fold; session bucket (Asia, London, New York morning, New York afternoon); day of week; realized-volatility tercile from the prior 20 sessions' daily ranges; overnight range relative to its prior-20-session median, in terciles; prior-close VIX bucket (below 15, 15 to 20, 20 to 30, above 30); inferred aggregate gamma sign at 09:32 (positive, negative, unknown; labelled inferred); prior-day type by the registered trend-or-balance rule; scheduled macro release day (CPI, payrolls, FOMC) where the calendar is owned. This section is descriptive. It never selects candidates, and it is disclosed in the exposure ledger.
@@ -980,6 +980,7 @@ Acceptance amendment: `research-assurance-2026-09-14-v3`. Assigned cases: **S01,
 - [ ] A12: `REGIME_DIMENSIONS.json` was frozen before any candidate result was read.
 - [ ] A13: The release reports the retention set with statuses and first attributions.
 - [ ] A14: Every expert has a scorecard.
+- [ ] A15: Every branch entry carries the per-stage status list defined in DELIVERABLES.md section 1, and every unevaluated or scheduled_build stage names its owning task.
 
 ### Commands and evidence
 
@@ -1016,7 +1017,7 @@ Expected artifacts under the task’s immutable report run (large data shards ma
 - `REGIME_DIMENSIONS.json`
 - `RETENTION_SET.json`
 - `EXPERT_SCORECARDS/`
-- `TASK_RECEIPT.json` and `REPORT.md`, including acceptance keys A01–A14 and exact predecessor/artifact hashes.
+- `TASK_RECEIPT.json` and `REPORT.md`, including acceptance keys A01–A15 and exact predecessor/artifact hashes.
 
 ### Completion and stop rules
 
@@ -1033,7 +1034,7 @@ Generated from the task graph and pstack execution contract by tools/build_resea
 Read /workspace/planning/phase-2/tasks/P2-24.md and /workspace/planning/research-program/PSTACK_EXECUTION.md. Use the installed pstack router and the card's required contracts; this is execution of an existing specification.
 Use the coordinator's actual working root, code identity, predecessor receipt paths/hashes, frozen manifest, dates and run root. Resolve missing values from those artifacts; report unresolved fields to the coordinator instead of inventing them.
 Use the parent Grok model for every pstack role (inherit-parent means omit model). Use the installed poteto-agent wrapper when supported. No nested delegation; the coordinator owns fresh review and shared-file integration. Respect its single-writer checkout assignment.
-Follow the exact formulas, clocks, schemas, allowed paths, finite budgets and A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13, A14 checks. Name the data shape, implement one vertical behavior, run sensitive tests and the declared native slice/full run, and inspect actual output.
+Follow the exact formulas, clocks, schemas, allowed paths, finite budgets and A01, A02, A03, A04, A05, A06, A07, A08, A09, A10, A11, A12, A13, A14, A15 checks. Name the data shape, implement one vertical behavior, run sensitive tests and the declared native slice/full run, and inspect actual output.
 Done means all required artifacts exist and verify_research_release.py task exits 0 on the actual TASK_RECEIPT.json, with truthful coverage and disposition. Return real artifact paths, command results, decision-trail path and limitations. Keep runtime todos in the run's WORK_LOG.md and record playbook skips there.
 Apply /workspace/planning/research-program/ASSURANCE.md and the card's assigned silent-failure cases: S01, S02, S03, S04, S06, S07, S11, S12, S18, S20, S24, S25, S27, S28, S29, S30, S31, S32. Produce EVIDENCE_MATRIX.json linking every required check to real code, executed commands, hashes and inspected output selectors. Show sensitive accepted/rejected controls; preserve missing/ambiguous data and all declared jobs. A pass flag or your own verifier alone cannot prove completion. Return the evidence for the coordinator's separate GATE_REVIEW.json; do not edit fixed independent checks to obtain a pass.
 Preserve accepted Phase 1 evidence, raw sources, missing/ambiguous inputs and unsuccessful trials. Perform the local task only; no external publication, shipping workflow or later phase. Do not stop at a plan or a passing toy test.

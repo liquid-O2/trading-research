@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `298d7484ca893b45144b24e2d8a38a7f92093c11bb8bbee9fa0d460939b91875`.
+Source content SHA256: `b7aebef6581fc789d498ce9682c933b2b798e66b49bd9e6200db35da58503b82`.
 
 Previous gate: **02-source-reconstruction**. External task dependencies: P15-02, P15-03, P15-04. Read and verify their actual receipts before implementation.
 
@@ -812,7 +812,7 @@ Always include B0, the accepted source-inspired reconstruction. A candidate chan
 | Delta | C1 normalized5m; C2 5m half-life; C3 past-bucket robust score | Every branch that actually consumes delta/flow in Sires, GB-SCALP, Saint; confirm input use in the source adapter. A branch with no delta input is explicitly not applicable. |
 | Sequence | S1 reclaim; S2 defended retest; S3 flow-supported reclaim; S4 failure-to-progress | JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest. Do not change the Judas outbound opening-entry branch into a retest without a distinct custom family. The separate Timing bank explicitly tests custom Judas reversal windows. |
 | Memory | M1 require at most 1 previous completed distinct contact; M2 require previous resolved120s favorable reaction >.25S and no subsequent invalidation | Existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately. Not a universal ban on old/saturated levels. |
-| Timing | T1 source reversal/action window +15m; T2 window -15m using only an already complete formation; T3 condition-defined morning reversal | JJ judas_reversal/other_session and GB nyam_box custom siblings. If formation is not yet available at T2, omit with a reason; never truncate a source range and call it unchanged. |
+| Timing | T1 source reversal/action window +15m; T2 window -15m using only an already complete formation; T3 condition-defined morning reversal; T4 no clock limit: the same sweep and confirmation searched from 09:30 through the account-day flatten, with expiry 60 minutes after qualification | JJ judas_reversal/other_session and GB nyam_box custom siblings. If formation is not yet available at T2, omit with a reason; never truncate a source range and call it unchanged. T4 applies to JJ judas_reversal and every GB-FAIL sweep branch as a custom sibling; source-identity output remains B0. |
 
 This is at most 19 nonbaseline axis recipes per branch, but only applicable cells are created. `P15-08` emits a concrete expanded `candidate-bank.json` with a maximum of 160 nonbaseline branch candidates for the breadth round, plus all baseline branches. If the mechanical expansion exceeds160, apply round-robin by bank then family then branch ID, taking one candidate per applicable family/bank before second candidates; preserve deferred cells and their deterministic order. No result may affect this expansion. This cap is a first-stage breadth budget, not a claim that exactly 160 models should exist.
 
@@ -821,6 +821,8 @@ Separate method adapters own source constraints and construction. `P15-09` Jumbo
 ### Custom reversal timing recipe
 
 T1/T2 shift the action-window start and end together by the registered offset, keeping formation already complete; source-identity output remains B0 and changed clocks use custom sibling IDs. Their expiry is the shifted window end, capped at account-day flatten. T3 uses the source-frozen overnight/range reference and a 09:30–12:00 ET custom action window. Require a strict edge sweep, then a complete trailing 15-minute balance with width<=.75 of the 60-minute scale ending before that balance and efficiency<=.35, then the S1 reclaim within 10 minutes. Entry follows that causal reclaim, structural stop is beyond the swept extreme by1 tick, objective is the still-unconsumed opposite frozen edge, and expiry is the earlier of 60 minutes after qualification or 12:00. If the objective is already consumed after the sweep, reject it. Retain all unchanged source context that can be evaluated before contact; publish the timing/balance additions as our hypothesis, not an author Judas formula. This tests condition-based reversal beyond a small clock adjustment.
+
+T4 removes the reversal clock entirely: after the source-frozen sweep and its five-minute confirmation, the entry may occur at any time from 09:30 to the account-day flatten; structural stop and objective are unchanged; expiry is the earlier of 60 minutes after qualification or the flatten. It tests whether the source's clock limit adds value beyond the sweep-and-reclaim mechanism itself. Its refinement neighborhood in the table below is the T issue offset row, unchanged.
 
 ### Breadth stage
 
