@@ -1,3 +1,5 @@
+# Rejection audit — are the no-setup rejections genuine? 2026-09-14
+
 PHASE 1 "NO SETUP" REJECTION AUDIT - independent, read-only. SCRATCH =
 /tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/rejection-audit
 

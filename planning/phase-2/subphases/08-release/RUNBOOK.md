@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `cb22d7493f3fb6e4f3298c170a9be613c4ec43e9db7b9862853215fccd06acb5`.
+Source content SHA256: `757158fed53bb592bc59fe6b5e2d135334046b4bca0f6853c6860526989caf03`.
 
 Previous gate: **07-plans-and-adaptation**. External task dependencies: P2-23. Read and verify their actual receipts before implementation.
 
@@ -25,13 +25,13 @@ The native slice, numerical checks, coverage, future perturbation, actual output
 Collect verified task receipts for every listed task. Record acceptance checks, hashes, native date/coverage identities, schema versions, shared-file integration diffs, runtime and remaining input limits. Write SUBPHASE_RECEIPT.json under a new immutable report run and verify it with verify_research_release.py subphase. The foundation coordinator first creates that verifier and retrospectively verifies its bootstrap task. Then apply ASSURANCE.md: inspect every EVIDENCE_MATRIX.json and assigned failure case, run required independent checks, and write a separately hashed GATE_REVIEW.json referencing the immutable candidate receipt. Closure requires receipt verification plus a matching passing review with no unresolved correctness, causality or integrity findings. Valid controls must pass as well as invalid controls fail.
 
 Return the user a concise completion report, both required family tables when reporting family results, real evidence links, limitations and the next eligible prompt. A subphase gate closes only this subphase. Phase 2 requires all of Phase 1.5 closed first.
-Canonical source: [PSTACK_EXECUTION.md](/workspace/.worktrees/docs-amend/planning/research-program/PSTACK_EXECUTION.md).
+Canonical source: [PSTACK_EXECUTION.md](/workspace/planning/research-program/PSTACK_EXECUTION.md).
 
 ## Run these packs through pstack in Grok
 
 The user's Grok build includes pstack. Start each new coordinator, worker or review task with `/poteto-mode new task.` followed by the concrete goal and finish condition. Resume prompts say that they are taking over existing work. The installed router owns skill sequencing. These packs supply the research specification, ownership and proof requirements.
 
-Every route and subphase obeys [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md) and the task's assigned [silent failure checks](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md). The v2 acceptance amendment requires real behavior evidence and a separately bound review at each subphase boundary. The [foundation repair](/workspace/.worktrees/docs-amend/planning/research-program/FOUNDATION_REPAIR.md) is the current entry; a prior closing message or receipt PASS does not overrule the independent findings.
+Every route and subphase obeys [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md) and the task's assigned [silent failure checks](/workspace/planning/research-program/SILENT_FAILURES.md). The v2 acceptance amendment requires real behavior evidence and a separately bound review at each subphase boundary. The [foundation repair](/workspace/planning/research-program/FOUNDATION_REPAIR.md) is the current entry; a prior closing message or receipt PASS does not overrule the independent findings.
 
 Read the installed `poteto-mode/SKILL.md` and the matched playbook before acting. Use the installation exposed by the Grok build; the public repository's `pstack/skills/` prefix is a source locator, not an assumed local installation path. Record the installed revision or content hash when available. The [reviewed guide](https://github.com/cursor/plugins/blob/5bf2b1544db739998121a306340631963c2ff3de/pstack/docs/guide/02-poteto-mode.md) explains goal-based routing and the `new task` phrase. Do not fabricate `/feature`, `/hillclimb` or `/autonomous-run` commands; those are playbook names.
 
@@ -60,7 +60,7 @@ This table records project-specific routing decisions after reviewing all 23 pot
 | “Profile this measured runtime; show before and after.” | Perf issue (`playbooks/perf-issue.md`). | Same workload and semantic output, recorded timing/memory change, resource contract satisfied. |
 | “Pause safely and leave a resume point.” | Pause safely (`playbooks/pause-safely.md`). | Durable manifests, completed-shard inventory, pending jobs, decision trail and exact next command. An incomplete run stays incomplete. |
 
-The registered market experiments are not the pstack **Eval** playbook. That playbook measures agent/prompt behavior with blinded candidate agents; it does not define financial model evaluation. Use [EVALUATION.md](/workspace/.worktrees/docs-amend/planning/research-program/EVALUATION.md) for folds, outcomes, selection and statistical gates.
+The registered market experiments are not the pstack **Eval** playbook. That playbook measures agent/prompt behavior with blinded candidate agents; it does not define financial model evaluation. Use [EVALUATION.md](/workspace/planning/research-program/EVALUATION.md) for folds, outcomes, selection and statistical gates.
 
 Use Hillclimb's frozen measurement and one-change discipline where useful, but its ordinary “keep improving” stop rule does not apply to these finite research tasks. Do not enlarge the candidate bank, add attempts, discard losing evidence, demand a profitable winner or change exposed dates. Research uncertainty can be an accepted result after software and execution are verified. Unverified implementation is never a pass.
 
@@ -129,11 +129,11 @@ These prompts authorize local implementation, declared research runs and their d
 
 At final review, link the real receipts and decision trail, state what was verified and list material limits. Include both required tables when reporting family results. Separate software verification from whether a market hypothesis passed its statistical gate. Return the next eligible subphase prompt without executing it.
 
-Canonical source: [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md).
+Canonical source: [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md).
 
 ## Evidence and failure checks
 
-Acceptance amendment `research-assurance-2026-09-14-v2`. This is part of every Phase 1.5 and Phase 2 task. It strengthens software acceptance without changing research formulas, candidate budgets or statistical thresholds. [Amendment history](/workspace/.worktrees/docs-amend/planning/research-program/AMENDMENTS.json) preserves the previous foundation identities. [Failure cases](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md) and their [machine-readable assignment](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE_CASES.json) specify the additional checks by task.
+Acceptance amendment `research-assurance-2026-09-14-v2`. This is part of every Phase 1.5 and Phase 2 task. It strengthens software acceptance without changing research formulas, candidate budgets or statistical thresholds. [Amendment history](/workspace/planning/research-program/AMENDMENTS.json) preserves the previous foundation identities. [Failure cases](/workspace/planning/research-program/SILENT_FAILURES.md) and their [machine-readable assignment](/workspace/planning/research-program/ASSURANCE_CASES.json) specify the additional checks by task.
 
 ### Completion requires observable behavior
 
@@ -218,7 +218,7 @@ A fresh reviewer receives the specification and actual code/artifact paths befor
 
 For foundation and final phase closure rerun the fixed foundation suite against the bound foundation receipts/code. For intervening tasks, verify its accepted result hashes and run affected cases whenever shared contracts/verification/cache code changes. Never reuse stale validation after changing tested code. Keep failed and superseded outputs; invalidate dependent artifacts explicitly and rebuild affected descendants under new identities. No implementation or research run was performed merely by authoring this amendment.
 
-Canonical source: [SILENT_FAILURES.md](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md).
+Canonical source: [SILENT_FAILURES.md](/workspace/planning/research-program/SILENT_FAILURES.md).
 
 ## Silent failure checks
 
@@ -408,7 +408,7 @@ Assigned tasks: P15-17, P15-18, P15-19, P15-20, P2-02, P2-04, P2-05, P2-06, P2-0
 
 **Evidence:** Train/tune/calibration/output date ranges and row counts, job inventory, resource logs, exact unresolved work and full-run reconciliation.
 
-Canonical source: [ROADMAP.md](/workspace/.worktrees/docs-amend/planning/ROADMAP.md).
+Canonical source: [ROADMAP.md](/workspace/planning/ROADMAP.md).
 
 ## Research program roadmap
 
@@ -442,7 +442,7 @@ The objective is an adaptive NQ decision process whose context, location and res
 
 ### Retention, failure attribution and revisits
 
-[Retention rules](/workspace/.worktrees/docs-amend/planning/research-program/RETENTION.md) add bookkeeping and bounded revisits; they change no formula, budget, gate or date of the existing banks.
+[Retention rules](/workspace/planning/research-program/RETENTION.md) add bookkeeping and bounded revisits; they change no formula, budget, gate or date of the existing banks.
 
 1. **Nothing is discarded.** Every registry branch stays in the retention set through Phase 4 with a status: `active_selected`, `active_baseline` or `inactive_retained`. Every attempted candidate keeps its full population definition, parameters and diagnostics in the trial ledger. "Inactive" means not consumed by the next phase's training by default; it never means deleted.
 2. **Failure attribution.** Every deselected, inconclusive or not-promoted candidate records `failure_attribution` on its TrialRecord: an ordered list drawn from `frequency` (entries below the frequency floor), `location_miss` (objective not reached while price came within 0.25 S of it, or adverse excursion beyond 0.5 S before any favorable 0.5 S), `confirmation_delay` (missed-move share above the family median), `adverse_before_target` (stop-first share above the family baseline), `cost_sensitivity` (sign reversal under the stress setting), `support` (below the support gate), `coverage` (unexplained input coverage loss). Each is computed from the diagnostics the Strategy Book already reports, with the thresholds fixed before any candidate result is read.
@@ -458,17 +458,17 @@ Start at the selected phase README, then use its `PROMPTS.md`. Each subphase has
 
 Phase 1 source definitions and archived evidence remain read-only. New code belongs to the namespaces named in the task cards. New reports get new immutable run directories. Do not patch an accepted report, source file or old scanner merely to make a comparison look better.
 
-Canonical source: [WORKFLOW.md](/workspace/.worktrees/docs-amend/planning/research-program/WORKFLOW.md).
+Canonical source: [WORKFLOW.md](/workspace/planning/research-program/WORKFLOW.md).
 
 ## Execution and handoff contract
 
 Read this as an implementation work order when the user starts a pack. The current artifact is a plan. A task is complete only when its declared behavior is implemented and verified, or its explicit data/identifiability gate returns an evidenced terminal disposition. Merely writing a report, passing toy tests or finding no profitable variant does not prove implementation completeness.
 
-All 46 tasks and all 17 subphases also obey [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md) and their assigned [silent failure checks](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md). This is acceptance amendment `research-assurance-2026-09-14-v2`, recorded in [AMENDMENTS.json](/workspace/.worktrees/docs-amend/planning/research-program/AMENDMENTS.json). The original `00-foundation` completion failed independent review; use [the repair work order](/workspace/.worktrees/docs-amend/planning/research-program/FOUNDATION_REPAIR.md) before `01-native-and-outcomes`. Existing Phase 1 acceptance remains under its original protocol. The casebook adds specific software checks; it does not enlarge the research search space.
+All 46 tasks and all 17 subphases also obey [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md) and their assigned [silent failure checks](/workspace/planning/research-program/SILENT_FAILURES.md). This is acceptance amendment `research-assurance-2026-09-14-v2`, recorded in [AMENDMENTS.json](/workspace/planning/research-program/AMENDMENTS.json). The original `00-foundation` completion failed independent review; use [the repair work order](/workspace/planning/research-program/FOUNDATION_REPAIR.md) before `01-native-and-outcomes`. Existing Phase 1 acceptance remains under its original protocol. The casebook adds specific software checks; it does not enlarge the research search space.
 
 The task graph/cards describe the frozen specification and retain their authoring status. Track actual execution progress in verified receipts and the shared wiki; do not alter a frozen task's content/check boxes merely to record completion and thereby change its plan identity. A real specification amendment gets a new version and exposure record.
 
-The user's Grok build includes pstack. Enter through the generated `/poteto-mode new task` prompts and follow [PSTACK_EXECUTION](/workspace/.worktrees/docs-amend/planning/research-program/PSTACK_EXECUTION.md) for installed-playbook routing, Grok-only role overrides, bounded worker briefs, decision trails and host-capability adaptations. The router chooses supporting skills. The task cards remain the authority for formulas, finite experiments and completion.
+The user's Grok build includes pstack. Enter through the generated `/poteto-mode new task` prompts and follow [PSTACK_EXECUTION](/workspace/planning/research-program/PSTACK_EXECUTION.md) for installed-playbook routing, Grok-only role overrides, bounded worker briefs, decision trails and host-capability adaptations. The router chooses supporting skills. The task cards remain the authority for formulas, finite experiments and completion.
 
 ### Work shape
 
@@ -564,7 +564,7 @@ Every family report and phase summary prints both workspace-mandated tables:
 
 At handoff give the user the completed subphase, verification evidence, exact limitations, next eligible prompt and real artifact links. Update the shared wiki with concise definitions/status and links to immutable evidence; do not paste full reports into multiple wiki pages. No external messages, publishing or trading are authorized by these packs.
 
-Canonical source: [SPEC.md](/workspace/.worktrees/docs-amend/planning/phase-2/SPEC.md).
+Canonical source: [SPEC.md](/workspace/planning/phase-2/SPEC.md).
 
 ## Phase 2 context and expert specification
 
@@ -578,15 +578,15 @@ New root: `implementation/src/trading_research/research/experts/`. Reuse `resear
 
 | Expert/artifact | Output | Required specification |
 | --- | --- | --- |
-| `joint_volatility` | Joint multihead future variance, intervals and converted movement scale | [Volatility](/workspace/.worktrees/docs-amend/planning/phase-2/VOLATILITY.md) |
-| `range_path` | Remaining up/down excursion, first-passage time distributions, break topology and post-break acceptance | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
-| `auction_session` | Current operational auction/day-state descriptors, future transitions, session opportunity quality | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
-| `flow_memory` | Rewarded aggression, failed pushes, defended persistence and transition forecasts | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
-| `cross_market` | Native related-market divergence, lead/lag, spot/IV coupling and NQ path contribution | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
-| `options_context` | Native chain exposure, flow, changes, shock scenarios and context forecast | [Options](/workspace/.worktrees/docs-amend/planning/phase-2/OPTIONS.md) |
-| `intraday_oi` | Weakly supervised OI change estimates, uncertainty and baseline comparison | [Options](/workspace/.worktrees/docs-amend/planning/phase-2/OPTIONS.md) |
-| one artifact per source entry method | Occurrence probability, conditional utility/path, session/branch/reference suitability and conditional plan | [Method experts](/workspace/.worktrees/docs-amend/planning/phase-2/METHOD_EXPERTS.md) |
-| research-process artifacts | Refilling memory, jetbundle transitions and macro-state contribution; risk remains a rule overlay | [Method experts](/workspace/.worktrees/docs-amend/planning/phase-2/METHOD_EXPERTS.md) |
+| `joint_volatility` | Joint multihead future variance, intervals and converted movement scale | [Volatility](/workspace/planning/phase-2/VOLATILITY.md) |
+| `range_path` | Remaining up/down excursion, first-passage time distributions, break topology and post-break acceptance | [Context](/workspace/planning/phase-2/CONTEXT.md) |
+| `auction_session` | Current operational auction/day-state descriptors, future transitions, session opportunity quality | [Context](/workspace/planning/phase-2/CONTEXT.md) |
+| `flow_memory` | Rewarded aggression, failed pushes, defended persistence and transition forecasts | [Context](/workspace/planning/phase-2/CONTEXT.md) |
+| `cross_market` | Native related-market divergence, lead/lag, spot/IV coupling and NQ path contribution | [Context](/workspace/planning/phase-2/CONTEXT.md) |
+| `options_context` | Native chain exposure, flow, changes, shock scenarios and context forecast | [Options](/workspace/planning/phase-2/OPTIONS.md) |
+| `intraday_oi` | Weakly supervised OI change estimates, uncertainty and baseline comparison | [Options](/workspace/planning/phase-2/OPTIONS.md) |
+| one artifact per source entry method | Occurrence probability, conditional utility/path, session/branch/reference suitability and conditional plan | [Method experts](/workspace/planning/phase-2/METHOD_EXPERTS.md) |
+| research-process artifacts | Refilling memory, jetbundle transitions and macro-state contribution; risk remains a rule overlay | [Method experts](/workspace/planning/phase-2/METHOD_EXPERTS.md) |
 
 These are responsibility names, not a prescribed final model count. Unsupported heads remain explicitly unavailable. Shared input features are computed once; separately fitted experts have separate parameters, targets, validation and retirement decisions.
 
@@ -625,7 +625,7 @@ Phase 2 may recommend side, reference identity, confirmation recipe, target ambi
 
 Compare ungated source rules, a price-context baseline, a fixed context score and the fitted method expert with identical response and execution policies. Context contribution must survive incremental/ablation tests and changed coverage. All final entry/economic claims remain reserved for the integrated phase.
 
-Canonical source: [ADAPTATION.md](/workspace/.worktrees/docs-amend/planning/phase-2/ADAPTATION.md).
+Canonical source: [ADAPTATION.md](/workspace/planning/phase-2/ADAPTATION.md).
 
 ## Refit, intraday adaptation and replay release
 
@@ -655,7 +655,7 @@ Compare annual/monthly/weekly/monthly-plus-intraday on paired days and loss/util
 
 The Phase 3 handoff lists each expert output, units, horizon, availability, confidence/support, fallback, model identity, measured incremental contribution and input limitations. It explicitly reserves native actionable location extraction/arrival-reaction evaluation for Phase 3, final response/entry integration for Phase 4, and later learned management for a separately planned milestone. Missing native NDX/SPX inputs yield `closed_with_limits` and exact restricted downstream scope, never a false complete-native release.
 
-Canonical source: [METHOD_EXPERTS.md](/workspace/.worktrees/docs-amend/planning/phase-2/METHOD_EXPERTS.md).
+Canonical source: [METHOD_EXPERTS.md](/workspace/planning/phase-2/METHOD_EXPERTS.md).
 
 ## Method-specific context experts and conditional plans
 
@@ -732,7 +732,7 @@ For a comparison-only selector, keep a qualifying source opportunity if the late
 
 Admit a context expert for downstream use only with the shared support/causality gates and demonstrated loss/calibration improvement or a measured conditional-utility contribution with uncertainty. Useful descriptive context can be retained as descriptive even when its fitted head fails. Separate branch reliability, calibration, incremental value, opportunity loss and actual model consumption. Final entry selection and combined account economics remain Phase 4 work.
 
-Canonical source: [EVALUATION.md](/workspace/.worktrees/docs-amend/planning/research-program/EVALUATION.md).
+Canonical source: [EVALUATION.md](/workspace/planning/research-program/EVALUATION.md).
 
 ## Chronological evaluation and selection
 
@@ -752,7 +752,7 @@ Examples: for test 2022, initial fit is 2020-01-01 through 2021-06-30, tune July
 
 Purge any training row whose label interval overlaps a tune/calibration/test interval or whose label was not available before the fitting cutoff. Add one entire eligible account day between adjacent partitions; the earlier partition loses the boundary day. Group all events, variants, overlapping horizons and assets from one account day together. No row-wise shuffle split, ordinary IID standard error, or random-fold stacking.
 
-Hyperparameter tuning uses the fixed grid in [model fitting](/workspace/.worktrees/docs-amend/planning/research-program/MODEL_FITTING.md). Rule selection uses the finite bank in the [Phase 1.5 search contract](/workspace/planning/phase-1-5/SEARCH_CONTRACT.md). Ties within 1% of the best tuning loss/score choose the simpler model, then lower candidate ID lexically. Complexity order is constant/base rule, linear, hinge basis, combination; fewer changed axes wins within an order. Never use test results to break ties.
+Hyperparameter tuning uses the fixed grid in [model fitting](/workspace/planning/research-program/MODEL_FITTING.md). Rule selection uses the finite bank in the [Phase 1.5 search contract](/workspace/planning/phase-1-5/SEARCH_CONTRACT.md). Ties within 1% of the best tuning loss/score choose the simpler model, then lower candidate ID lexically. Complexity order is constant/base rule, linear, hinge basis, combination; fewer changed axes wins within an order. Never use test results to break ties.
 
 ### Causal stacking and adaptation
 
@@ -766,13 +766,13 @@ Initial Phase 2 comparison holds parameters fixed for an outer test year. The ad
 
 For a fitted continuous expert: at least 500 complete training rows on 100 account days, and 100 evaluation rows on 30 days. For a binary head: additionally at least 20 examples of each class on at least 10 distinct training days. For multiclass: apply that condition to each class; unsupported classes are pooled into an explicit `other_low_support` only if the target contract allows it, otherwise use the empirical prior and mark the head low-support. Never silently remove rare source branches.
 
-For a Phase 1.5 upgrade: at least 100 resolved benchmark opportunities on 30 eligible test days in aggregate, represented in at least three outer blocks. A branch below the gate is `inconclusive_support`, even if all six examples succeed. It remains in the registry and downstream baseline allowlist, with low-support status. Support gates are research defaults and their counts must be shown alongside sensitivity at half/twice the gate; changing the gate cannot manufacture a claim. A disposition never deletes a candidate: the trial ledger, its `failure_attribution` field and the bounded revisit rule are defined once in the [search contract](/workspace/.worktrees/docs-amend/planning/phase-1-5/SEARCH_CONTRACT.md) and the [retention rules](/workspace/.worktrees/docs-amend/planning/research-program/RETENTION.md). A disposition never deletes a candidate: `inconclusive_support`, `rejected_by_evidence`, `retained_baseline` and `unsupported_owned_input` keep the full population, parameters and diagnostics in the trial ledger and the retention set; "inactive" means not consumed by the next phase's training by default.
+For a Phase 1.5 upgrade: at least 100 resolved benchmark opportunities on 30 eligible test days in aggregate, represented in at least three outer blocks. A branch below the gate is `inconclusive_support`, even if all six examples succeed. It remains in the registry and downstream baseline allowlist, with low-support status. Support gates are research defaults and their counts must be shown alongside sensitivity at half/twice the gate; changing the gate cannot manufacture a claim. A disposition never deletes a candidate: `inconclusive_support`, `rejected_by_evidence`, `retained_baseline` and `unsupported_owned_input` keep the full population, parameters and diagnostics in the trial ledger and the retention set, and "inactive" means not consumed by the next phase's training by default. The trial ledger, its `failure_attribution` field and the bounded revisit rule are defined once in the [search contract](/workspace/planning/phase-1-5/SEARCH_CONTRACT.md) and the [retention rules](/workspace/planning/research-program/RETENTION.md).
 
 ### Scores and uncertainty
 
 Each family report contains (a) all attempted variants, (b) common complete-day paired comparisons, and (c) full candidate-specific coverage. A method's own source prerequisites remain in its eligible population. No missing feature/outcome is silently treated as no-setup. Unresolved order is an explicit excluded primary outcome with counts and pessimistic/optimistic bounds.
 
-For setup rules the primary score is the mean daily net points in the deterministic one-contract benchmark in [outcomes](/workspace/.worktrees/docs-amend/planning/research-program/OUTCOMES.md). Compare a candidate with the unchanged baseline on common complete eligible days, including zero-entry days. Also report eligible opportunities/day, retained baseline opportunities, new opportunities, ordered target/stop rate, median net points/opportunity, drawdown from day-start, confirmation delay and missed-move counts. This benchmark measures an isolated family under a fixed scheduler; it is not a combined portfolio or a certification of the user's daily target.
+For setup rules the primary score is the mean daily net points in the deterministic one-contract benchmark in [outcomes](/workspace/planning/research-program/OUTCOMES.md). Compare a candidate with the unchanged baseline on common complete eligible days, including zero-entry days. Also report eligible opportunities/day, retained baseline opportunities, new opportunities, ordered target/stop rate, median net points/opportunity, drawdown from day-start, confirmation delay and missed-move counts. This benchmark measures an isolated family under a fixed scheduler; it is not a combined portfolio or a certification of the user's daily target.
 
 For forecasts: QLIKE for variance; pinball for excursion/time quantiles; multiclass log loss and Brier for probabilities; absolute error for continuous state forecasts; censored time outcomes use the discrete survival loss specified in Phase 2. Report calibration and support for every head, horizon, session and year. Standardize multihead tuning losses by the loss of the training-only baseline, with denominator `max(abs(baseline_loss), 1e-8)` except QLIKE: use QLIKE excess `y/v - log(y/v) - 1` for positive y, and ordinary QLIKE differences for zero y. Average only supported heads with equal head weights; report the supported-head set so missing difficult heads cannot improve the aggregate silently.
 
@@ -788,7 +788,7 @@ Show every eligible account day: net dollars, trades, zero-trade indicator, day-
 
 Phase 1.5 and Phase 2 may close with retained baselines or negative/inconclusive findings. They cannot claim the final economic goal is met. Only a later combined decision replay can evaluate the integrated historical daily distribution; future realized performance remains a separate question.
 
-Canonical source: [OUTCOMES.md](/workspace/.worktrees/docs-amend/planning/research-program/OUTCOMES.md).
+Canonical source: [OUTCOMES.md](/workspace/planning/research-program/OUTCOMES.md).
 
 ## Outcome labels and fixed execution benchmark
 
@@ -836,7 +836,7 @@ Hold a frozen set of entries, sizes, costs and initial structural stops constant
 
 No target/stop uses a future maximum or an ex-post optimal exit. Entries with unavailable initial R remain in the denominator ledger and are unsupported for E3/E4. Report paired entry-level and serialized daily results; entries changed by prior exit occupancy are separately identified. Choose exits only in inner tuning; final test comparisons retain every policy. This is a bounded baseline study, not the final learned management system.
 
-Canonical source: [DELIVERABLES.md](/workspace/.worktrees/docs-amend/planning/research-program/DELIVERABLES.md).
+Canonical source: [DELIVERABLES.md](/workspace/planning/research-program/DELIVERABLES.md).
 
 ## Phase deliverables and definition of done
 
@@ -878,7 +878,7 @@ Per strategy, adding to version 1: fitted conditional probability of target-firs
 | 1.5 / 07 | Strategy Book version 1 and the release. |
 | 2 / 00–08 | Expert scorecards as each is fitted; Strategy Book version 2 at release. |
 
-Canonical source: [RETENTION.md](/workspace/.worktrees/docs-amend/planning/research-program/RETENTION.md).
+Canonical source: [RETENTION.md](/workspace/planning/research-program/RETENTION.md).
 
 ## Retention, failure attribution and revisit rules
 
@@ -900,7 +900,7 @@ The program selects components in sequence: rules in Phase 1.5, context in Phase
 
 The gate "complete all Phase 1.5 before implementing Phase 2" protects Phase 2 from consuming unverified Phase 1.5 research outputs. The strategy-agnostic experts consume only the verified native market view, outcome contracts and raw options data, not selected rules. After subphase 01 verifies, P2-09 and P2-10 (native option, spot and OI adapters, pricing, Greeks, exposure boards) and P2-03 (volatility arithmetic and targets) can be implemented in a separate git worktree by a second writer, with their own receipts, and merged at the Phase 1.5 release. Anything that reads a selected rule or a Phase 1.5 candidate result stays behind the gate. This is a user decision because it narrows a settled gate.
 
-Canonical source: [P2-24.md](/workspace/.worktrees/docs-amend/planning/phase-2/tasks/P2-24.md).
+Canonical source: [P2-24.md](/workspace/planning/phase-2/tasks/P2-24.md).
 
 ## P2-24 — Verify the complete context release and Phase 3 handoff
 
@@ -927,8 +927,8 @@ Implement only this task and its declared outputs. Preserve accepted Phase 1 cod
 - [METHOD_EXPERTS.md](/workspace/planning/phase-2/METHOD_EXPERTS.md)
 - [EVALUATION.md](/workspace/planning/research-program/EVALUATION.md)
 - [OUTCOMES.md](/workspace/planning/research-program/OUTCOMES.md)
-- [DELIVERABLES.md](/workspace/.worktrees/docs-amend/planning/research-program/DELIVERABLES.md)
-- [RETENTION.md](/workspace/.worktrees/docs-amend/planning/research-program/RETENTION.md)
+- [DELIVERABLES.md](/workspace/planning/research-program/DELIVERABLES.md)
+- [RETENTION.md](/workspace/planning/research-program/RETENTION.md)
 
 The named phase specification provides the exact formulas, proposed signatures, units and literal fixtures for this task. Existing symbols are marked as existing; proposed modules/commands are created by their owner tasks. Do not substitute remembered formulas or undocumented library defaults.
 

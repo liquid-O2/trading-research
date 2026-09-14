@@ -14,7 +14,7 @@ Use one coordinator per subphase. A shared checkout has one code writer at a tim
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 00-entry-gate in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/00-entry-gate/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/00-entry-gate/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (Phase 1.5 final release) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -28,7 +28,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 01-datasets-and-fitting in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/01-datasets-and-fitting/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (00-entry-gate) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -42,7 +42,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 02-native-options-baseline in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/02-native-options-baseline/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (01-datasets-and-fitting) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -56,7 +56,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 03-joint-volatility in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/03-joint-volatility/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (02-native-options-baseline) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -70,7 +70,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 04-context-mechanisms in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/04-context-mechanisms/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (03-joint-volatility) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -84,7 +84,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 05-intraday-oi in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/05-intraday-oi/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (04-context-mechanisms) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -98,7 +98,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 06-method-experts in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/06-method-experts/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/06-method-experts/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (05-intraday-oi) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -112,7 +112,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 07-plans-and-adaptation in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/07-plans-and-adaptation/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (06-method-experts) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.
@@ -126,7 +126,7 @@ This is local implementation and evidence, with no PR/push/merge or shipping wor
 
 ```text
 /poteto-mode new task. Implement Phase 2 subphase 08-release in /workspace.
-Read /workspace/AGENTS.md and /workspace/.worktrees/docs-amend/planning/phase-2/subphases/08-release/RUNBOOK.md.
+Read /workspace/AGENTS.md and /workspace/planning/phase-2/subphases/08-release/RUNBOOK.md.
 This is one bounded autonomous run using the existing specification. Let the installed pstack router select the playbook and supporting skills. Copy its steps into runtime todos, record skips, and apply the runbook's PSTACK_EXECUTION contract.
 Verify the previous gate (07-plans-and-adaptation) and exact predecessor receipts before starting. For a prior research subphase, also require the matching passing GATE_REVIEW.json under ASSURANCE.md. The accepted Phase 1 census retains its original acceptance protocol. The old foundation receipts need the documented repair; a historical PASS string cannot waive the amendment.
 Use the parent Grok model for every role, including design, judgment and review; inherit-parent means omit the model field. Use the installed poteto-agent/native Grok wrapper, at most three live agents including you. One code writer per shared checkout; you own integration and fresh review. Give each worker its generated card prompt and actual input/receipt/run paths.

@@ -1,3 +1,5 @@
+# Phase 1 accepted research code — adversarial review findings, 2026-09-14
+
 PHASE 1 ACCEPTED RESEARCH CODE - ADVERSARIAL REVIEW (read-only; no census run)
 Repro scripts sit beside this file; run with /workspace/implementation/.venv/bin/python <script>. All import harness.py,
 an in-memory HistoricalFeatures over synthetic MBP-1 rows built the way tests/test_phase1_historical_replay.py builds one.
