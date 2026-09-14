@@ -2,9 +2,9 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `537bb16c35766f3608ba441af09b135496e1b6558b56c877919264a2519e7461`.
+Source content SHA256: `81e267469c990fb6c39baa72ee0bc99bdbb6d23c7f135f48e3da5ae7651dcac8`.
 
-Previous gate: **Phase 1.5 final release**. External task dependencies: P15-20, P2-03, P2-09, P2-10. Read and verify their actual receipts before implementation.
+Previous gate: **Phase 1.5 final release**. External task dependencies: P15-20. Read and verify their actual receipts before implementation.
 
 ## Coordinator work order
 
@@ -18,7 +18,7 @@ The native slice, numerical checks, coverage, future perturbation, actual output
 
 | Task | Dependencies | Canonical card |
 | --- | --- | --- |
-| P2-00 — Verify Phase 1.5 and freeze Phase 2 scope | P15-20, P2-09, P2-10, P2-03 | [Task](/workspace/planning/phase-2/tasks/P2-00.md) |
+| P2-00 — Verify Phase 1.5 and freeze Phase 2 scope | P15-20 | [Task](/workspace/planning/phase-2/tasks/P2-00.md) |
 
 ## Subphase completion
 
@@ -1118,11 +1118,11 @@ Canonical source: [P2-00.md](/workspace/.worktrees/docs-amend/planning/phase-2/t
 
 Status: **planned; implementation not started by this planning task**.
 
-Subphase: `00-entry-gate`. Dependencies: P15-20, P2-09, P2-10, P2-03.
+Subphase: `00-entry-gate`. Dependencies: P15-20.
 
 ### Goal and boundary
 
-Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify the P2-09, P2-10 and P2-03 receipts that may have started from verified P15-02; P2-04, P2-11 and method experts must not consume those receipts until this re-verification passes.
+Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify every P2-09, P2-10 and P2-03 receipt that already exists under the early-start exception of the Phase 2 gate; P2-04, P2-11 and the method experts must not consume those receipts until this re-verification passes.
 
 Implement only this task and its declared outputs. Preserve accepted Phase 1 code/reports, immutable sources and raw data. All new numerical recipes are registered research policies unless the source ledger proves literal attribution. No future input, later fit or all-history selected rule may enter an earlier decision.
 
@@ -1143,7 +1143,7 @@ Read the complete [type blueprint](/workspace/planning/research-program/TYPE_REF
 
 ### Input and ownership contract
 
-Consume verified predecessor receipts: **P15-20, P2-09, P2-10, P2-03**. Their hashes and actual artifact paths go in this task receipt. Required schema details are in DATA_CONTRACTS; source adapters also read their named method predicates.
+Consume verified predecessor receipts: **P15-20**. Their hashes and actual artifact paths go in this task receipt. Required schema details are in DATA_CONTRACTS; source adapters also read their named method predicates.
 
 Allowed implementation/test paths:
 
@@ -1157,7 +1157,7 @@ A worker does not edit another task’s shared files. Request an explicit integr
 
 ### Implementation steps
 
-1. Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify the P2-09, P2-10 and P2-03 receipts that may have started from verified P15-02; P2-04, P2-11 and method experts must not consume those receipts until this re-verification passes.
+1. Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify every P2-09, P2-10 and P2-03 receipt that already exists under the early-start exception of the Phase 2 gate; P2-04, P2-11 and the method experts must not consume those receipts until this re-verification passes.
 2. Implement the Phase 2 runner entrypoint and additive expert/forecast/target schemas against shared contracts. Freeze input release, plan/exposure and requested native-root coverage cells.
 3. Build owned-data availability ledger with actual timestamps, products, exercise/settlement, calendars, spot/option/OI/release vintages. Search owned catalog and native definitions, never infer data existence from an old wishlist.
 4. Trace one actual output through its serialized schema, feature/stage parents and native receipt. Then run the verification below and write immutable evidence. A formula unit test alone does not complete a native-data or fitted-expert task.
