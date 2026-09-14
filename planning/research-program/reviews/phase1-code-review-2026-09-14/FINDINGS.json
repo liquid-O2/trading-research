@@ -1,0 +1,86 @@
+[
+  {
+    "id": "P1",
+    "severity": "medium",
+    "location": "method_pack/historical_flow.py:63-64",
+    "defect": "local_observations compares each 5-second effort window with the previous non-empty chunk instead of its immediately preceding equal-duration window, so a quiet interval silently changes the effort baseline.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f7_previous_chunk_skips_empty.py",
+    "observed": "quiet +5s window absent -> [(0,10,True),(10,4,False)]; same tape with one far-from-band print at +5s -> [(0,10,True),(5,0,False),(10,4,True)]",
+    "expected": "the +10s window scores identically in both tapes; its true predecessor has opposing=0 either way",
+    "affected": "all 11 SIRES local branches, MEMBER-TWO-REASONS long and short, KEANI buyer_defense (everything consuming flow_stages defense/refresh/thinning and _catalyst_stages)",
+    "changes_accepted_census": true,
+    "existing_test": "tests/test_phase1_historical_replay.py exercises local_observations on a dense tape only - weaker"
+  },
+  {
+    "id": "P2",
+    "severity": "medium",
+    "location": "method_pack/event_time.py:298 via method_pack/historical_assembly.py:91-94",
+    "defect": "EventWindow.coverage reports observed_scope_complete=True for end<=start, so absent() certifies absence from zero minutes of evidence; measurement_outcomes.rounded_coverage:53-55 guards the same case, coverage() does not.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f2_absent_empty_interval.py",
+    "observed": "coverage(t,t) complete True; absent(m,t,t) False; scan_green_vwap with the 5m breakout on the final bar -> continuation_context False -> research_verdict 'fail'",
+    "expected": "no observable post-breakout window -> None -> research_verdict 'unknown'",
+    "affected": "historical_price_scanners:40,171,314 and historical_auction_scanners:98,108,109,158,161,162,168 - any absent()/_control_absence/flow_absent whose window collapses at the session end",
+    "changes_accepted_census": true,
+    "existing_test": "tests/test_phase1_historical_replay.py:288-291 asserts absent() only on a positive-length interval - weaker"
+  },
+  {
+    "id": "P3",
+    "severity": "medium",
+    "location": "method_pack/historical_assembly.py:99",
+    "defect": "window_result measures coverage from 09:30 to market end only, while references are formed from 18:00, so a wholly unobserved formation window still reports population_complete=True.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f5_population_coverage_scope.py",
+    "observed": "60 unknown minutes inside the Asia formation; whole-window coverage complete False; population_complete True, population_candidate_count 1, omissions []",
+    "expected": "population_complete False and population_candidate_count None",
+    "affected": "all 50 branches; the Phase 1.5 denominator",
+    "changes_accepted_census": true,
+    "existing_test": "population_complete is only asserted in tests/test_empirical_reporting.py for a different module - absent for window_result"
+  },
+  {
+    "id": "P4",
+    "severity": "medium",
+    "location": "method_pack/historical_price_scanners.py:224-225",
+    "defect": "path=m.bars(trigger.start, confirmation_end) drops bars whose known_at exceeds the aligned 5-minute boundary (event_time.py:290); when the sweep bar is the last minute of its block and arrives late, path is empty and max()/min() raise.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f4_green_failure_empty_path.py",
+    "observed": "ValueError: max() iterable argument is empty - scan_green_failure aborts",
+    "expected": "an availability omission recorded on the branch",
+    "affected": "GB-FAIL nyam_box, previous_hour, asia_tdo_case, cash_open_reclaim_case, prior_*_level, and mss_fvg_refinement through its parent",
+    "changes_accepted_census": false,
+    "existing_test": "no test builds a late-availability sweep bar - absent"
+  },
+  {
+    "id": "P5",
+    "severity": "low",
+    "location": "method_pack/historical_outcomes.py:27-32",
+    "defect": "observe_outcome builds no tail span, so the final partial second of the horizon is never scanned; measurement_outcomes.boundary_order:121-123 does scan it, and the two accepted outcome modules disagree whenever decision_at is not second-aligned.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f1_observe_outcome_tail.py",
+    "observed": "observe_outcome -> 'no_boundary_in_observed_horizon', resolved_at None; boundary_order on the same episode -> 'objective_observed' at the target print",
+    "expected": "target_observed from both modules",
+    "affected": "SIRES, MEMBER-TWO-REASONS, KEANI and REFILL-STUDY (event-derived decision times); JJ-TBR/GB-FAIL/SAINT decisions are minute-aligned and unexposed",
+    "changes_accepted_census": false,
+    "existing_test": "nothing in tests/ imports observe_outcome - absent"
+  },
+  {
+    "id": "P6",
+    "severity": "low",
+    "location": "method_pack/historical_flow.py:306",
+    "defect": "scan_sires de-duplicates references by their pivot-id tuple; KG1 references carry no pivots, so all supplied KG1 levels share the key ((), side) and only the first is scanned.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f3_kg1_reference_collapse.py",
+    "observed": "two supplied KG1 levels, both contacted -> 2 episodes, both from reference 'kg1-a'",
+    "expected": "each reference enumerates its own long/short population, up to 4 episodes",
+    "affected": "SIRES kg1_retest",
+    "changes_accepted_census": false,
+    "existing_test": "no scanner-level kg1 test exists - absent"
+  },
+  {
+    "id": "P7",
+    "severity": "low",
+    "location": "method_pack/measurement_outcomes.py:82 versus :114-123",
+    "defect": "interval_extrema uses (start,end] while boundary_order scans [start,end) inside the same measure_setup record, so a print exactly at the horizon end is an excursion but never a first passage.",
+    "reproduction": "/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/code-review-phase1/f6_interval_end_mismatch.py",
+    "observed": "extrema high 101 with favorable_points 1 (full target distance) while boundary result is 'expired_without_observed_boundary'",
+    "expected": "one closing-endpoint convention per measurement record",
+    "affected": "every measured setup (measure_setup horizons versus its boundary block)",
+    "changes_accepted_census": false,
+    "existing_test": "tests/test_phase1_measurement.py covers both helpers but never a print at end_ns - weaker"
+  }
+]

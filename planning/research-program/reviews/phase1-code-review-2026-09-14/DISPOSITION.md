@@ -1,0 +1,25 @@
+# Disposition of the 2026-09-14 Phase 1 code review
+
+Orchestrator ruling on [FINDINGS.md](FINDINGS.md) (seven proven defects with reproductions in this directory, thirteen unproven suspicions). The reviewer's verdict is accepted: the causal spine is sound and no post-decision read was found; the defects are boundary and bookkeeping errors, three of which move measured pass, fail and unknown counts or the population denominator.
+
+## Rulings
+
+1. The accepted run `run-1.0.1` and the frozen `method_pack` code stay unchanged. They remain **B0** and the byte-identical parity target for P15-02's baseline delegation.
+2. A corrected baseline **B0.1** is registered as a separately versioned rule and exposure amendment, as SPEC.md requires for a discovered baseline bug. Phase 1.5 comparisons in P15-17 and P15-18 pair every candidate against B0.1. The B0 to B0.1 difference is reported per branch as its own "baseline repair" row in the Strategy Book and is never folded into a candidate's delta.
+3. Where each fix lives:
+   - **P2** zero-length coverage certified complete: the new MarketView coverage in P15-02 returns unknown for a zero-length or unobservable interval, never complete. Fixture required at the 01 hardening pass.
+   - **P3** population completeness measured from 09:30: P15-02 and P15-03 measure it from the earliest reference-formation clock the branch consumes, per the registry's required input groups. Fixture at 01 hardening.
+   - **P5** missing tail span and **P7** mixed endpoint conventions: P15-03 first passage and extrema use one convention, the contract's `(t, t+h]`, with the tail span included. Fixture at 01 hardening.
+   - **P1** effort window compared with the previous non-empty chunk: the Sires adapter P15-12, and Member P15-14 and Keani P15-15 where they share the flow stages, compare with the immediately preceding equal-duration window, an empty window counting as zero effort and recorded. B0.1 rule ID; fixture from `f7_previous_chunk_skips_empty.py`.
+   - **P4** empty sweep path raising: the Green Bird failure adapter P15-10 records an availability omission instead. Fixture from `f4_green_failure_empty_path.py`.
+   - **P6** pivot-less references collapsing: the Sires key-gamma adapter P15-12 keys dedup on the reference lifecycle ID. Fixture from `f3_kg1_reference_collapse.py`.
+4. The thirteen unproven suspicions are assigned for adjudication with fixtures, each becoming a ledger row that is either confirmed (a B0.1 fixture) or refuted (a test proving the current behavior): `expressions.py` items to P15-07; balance-adoption and vacuous `all()` items to P15-13 and P15-12; `price_origin` fallback and the `known_at=None` guard to P15-03; `delta()` unknown handling to P15-06; the value-area walk on sparse rows to P15-05; late-`known_at` bar drops without omission to P15-02.
+5. Required before subphase 02: a hardening pass on the closed 01 attempts adding the P2, P3, P5 and P7 fixtures to the new modules, with fixes if any fail, producing new immutable attempts and a fresh gate review.
+6. At the next status update: a dated `wiki/log.md` entry and a "known baseline discrepancies" note in `wiki/current-status.md` linking this directory.
+
+## Addendum from the rejection audit, 2026-09-14
+
+The independent [rejection audit](../rejection-audit-2026-09-14/REJECTION_AUDIT.md) re-measured 690 failing conjuncts across all 258 reconstruction-sample rejections and 527 across a stratified 196-episode census sample (40 dates, 36 branches), 83% by recomputation rather than reading. Result: 0 of 258 sample rejections are artifacts; 21 of the 1,644-episode census pool (1.3%) are, extrapolating to roughly 800 of 72,387 census rejections, and those become `data_unavailable`, never setups. P1 is inert on this tape (every published 5-second flow window is contiguous); P2 accounts for 30 SAINT-AMT conjunct instances but is decisive in only 4 episodes; P3 touches only `population_complete`.
+
+- **D1**, proven here and previously listed as an unproven suspicion: `historical_price_scanners.py:314` rebinds the GB-VWAP `continuation_context` operand with the retest-absence answer, discarding the `True` computed at line 308. Every GB-VWAP rejection in the census pool is this artifact (reproduction `repro_d1.py`, example 2023-12-08). Ruling: the Green Bird VWAP adapter P15-11 evaluates the breakout-context conjunct and the retest conjunct as separate operands; B0.1 rule ID; fixture from `repro_d1.py`. Until then GB-VWAP's rejection column is treated as unknown, and the Strategy Book marks the branch's B0 population as affected.
+- Recorded `failed_conditions` name at least one vacuous reason in 3 to 4% of rejections; verdicts are trustworthy, the failure-reason metadata is not. The new outcome and diagnostics code in P15-03 must not consume `failed_conditions` as ground truth for the rejection funnel; it recomputes conjunct outcomes.
