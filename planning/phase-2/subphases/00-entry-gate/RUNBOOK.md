@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `53c5abf015f4d29863a1d2f426549b5adb50e945d03430a1d5ecb481d74343a2`.
+Source content SHA256: `81e267469c990fb6c39baa72ee0bc99bdbb6d23c7f135f48e3da5ae7651dcac8`.
 
 Previous gate: **Phase 1.5 final release**. External task dependencies: P15-20. Read and verify their actual receipts before implementation.
 
@@ -25,13 +25,13 @@ The native slice, numerical checks, coverage, future perturbation, actual output
 Collect verified task receipts for every listed task. Record acceptance checks, hashes, native date/coverage identities, schema versions, shared-file integration diffs, runtime and remaining input limits. Write SUBPHASE_RECEIPT.json under a new immutable report run and verify it with verify_research_release.py subphase. The foundation coordinator first creates that verifier and retrospectively verifies its bootstrap task. Then apply ASSURANCE.md: inspect every EVIDENCE_MATRIX.json and assigned failure case, run required independent checks, and write a separately hashed GATE_REVIEW.json referencing the immutable candidate receipt. Closure requires receipt verification plus a matching passing review with no unresolved correctness, causality or integrity findings. Valid controls must pass as well as invalid controls fail.
 
 Return the user a concise completion report, both required family tables when reporting family results, real evidence links, limitations and the next eligible prompt. A subphase gate closes only this subphase. Phase 2 requires all of Phase 1.5 closed first.
-Canonical source: [PSTACK_EXECUTION.md](/workspace/planning/research-program/PSTACK_EXECUTION.md).
+Canonical source: [PSTACK_EXECUTION.md](/workspace/.worktrees/docs-amend/planning/research-program/PSTACK_EXECUTION.md).
 
 ## Run these packs through pstack in Grok
 
 The user's Grok build includes pstack. Start each new coordinator, worker or review task with `/poteto-mode new task.` followed by the concrete goal and finish condition. Resume prompts say that they are taking over existing work. The installed router owns skill sequencing. These packs supply the research specification, ownership and proof requirements.
 
-Every route and subphase obeys [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md) and the task's assigned [silent failure checks](/workspace/planning/research-program/SILENT_FAILURES.md). The v2 acceptance amendment requires real behavior evidence and a separately bound review at each subphase boundary. The [foundation repair](/workspace/planning/research-program/FOUNDATION_REPAIR.md) is the current entry; a prior closing message or receipt PASS does not overrule the independent findings.
+Every route and subphase obeys [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md) and the task's assigned [silent failure checks](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md). The v2 acceptance amendment requires real behavior evidence and a separately bound review at each subphase boundary. The [foundation repair](/workspace/.worktrees/docs-amend/planning/research-program/FOUNDATION_REPAIR.md) is the current entry; a prior closing message or receipt PASS does not overrule the independent findings.
 
 Read the installed `poteto-mode/SKILL.md` and the matched playbook before acting. Use the installation exposed by the Grok build; the public repository's `pstack/skills/` prefix is a source locator, not an assumed local installation path. Record the installed revision or content hash when available. The [reviewed guide](https://github.com/cursor/plugins/blob/5bf2b1544db739998121a306340631963c2ff3de/pstack/docs/guide/02-poteto-mode.md) explains goal-based routing and the `new task` phrase. Do not fabricate `/feature`, `/hillclimb` or `/autonomous-run` commands; those are playbook names.
 
@@ -60,7 +60,7 @@ This table records project-specific routing decisions after reviewing all 23 pot
 | “Profile this measured runtime; show before and after.” | Perf issue (`playbooks/perf-issue.md`). | Same workload and semantic output, recorded timing/memory change, resource contract satisfied. |
 | “Pause safely and leave a resume point.” | Pause safely (`playbooks/pause-safely.md`). | Durable manifests, completed-shard inventory, pending jobs, decision trail and exact next command. An incomplete run stays incomplete. |
 
-The registered market experiments are not the pstack **Eval** playbook. That playbook measures agent/prompt behavior with blinded candidate agents; it does not define financial model evaluation. Use [EVALUATION.md](/workspace/planning/research-program/EVALUATION.md) for folds, outcomes, selection and statistical gates.
+The registered market experiments are not the pstack **Eval** playbook. That playbook measures agent/prompt behavior with blinded candidate agents; it does not define financial model evaluation. Use [EVALUATION.md](/workspace/.worktrees/docs-amend/planning/research-program/EVALUATION.md) for folds, outcomes, selection and statistical gates.
 
 Use Hillclimb's frozen measurement and one-change discipline where useful, but its ordinary “keep improving” stop rule does not apply to these finite research tasks. Do not enlarge the candidate bank, add attempts, discard losing evidence, demand a profitable winner or change exposed dates. Research uncertainty can be an accepted result after software and execution are verified. Unverified implementation is never a pass.
 
@@ -129,11 +129,11 @@ These prompts authorize local implementation, declared research runs and their d
 
 At final review, link the real receipts and decision trail, state what was verified and list material limits. Include both required tables when reporting family results. Separate software verification from whether a market hypothesis passed its statistical gate. Return the next eligible subphase prompt without executing it.
 
-Canonical source: [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md).
+Canonical source: [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md).
 
 ## Evidence and failure checks
 
-Acceptance amendment `research-assurance-2026-09-14-v2`. This is part of every Phase 1.5 and Phase 2 task. It strengthens software acceptance without changing research formulas, candidate budgets or statistical thresholds. [Amendment history](/workspace/planning/research-program/AMENDMENTS.json) preserves the previous foundation identities. [Failure cases](/workspace/planning/research-program/SILENT_FAILURES.md) and their [machine-readable assignment](/workspace/planning/research-program/ASSURANCE_CASES.json) specify the additional checks by task.
+Acceptance amendment `research-assurance-2026-09-14-v2`. This is part of every Phase 1.5 and Phase 2 task. It strengthens software acceptance without changing research formulas, candidate budgets or statistical thresholds. [Amendment history](/workspace/.worktrees/docs-amend/planning/research-program/AMENDMENTS.json) preserves the previous foundation identities. [Failure cases](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md) and their [machine-readable assignment](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE_CASES.json) specify the additional checks by task.
 
 ### Completion requires observable behavior
 
@@ -218,7 +218,7 @@ A fresh reviewer receives the specification and actual code/artifact paths befor
 
 For foundation and final phase closure rerun the fixed foundation suite against the bound foundation receipts/code. For intervening tasks, verify its accepted result hashes and run affected cases whenever shared contracts/verification/cache code changes. Never reuse stale validation after changing tested code. Keep failed and superseded outputs; invalidate dependent artifacts explicitly and rebuild affected descendants under new identities. No implementation or research run was performed merely by authoring this amendment.
 
-Canonical source: [SILENT_FAILURES.md](/workspace/planning/research-program/SILENT_FAILURES.md).
+Canonical source: [SILENT_FAILURES.md](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md).
 
 ## Silent failure checks
 
@@ -338,11 +338,11 @@ Assigned tasks: P15-00, P15-04, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, 
 
 **Evidence:** Raw/normalized round-trip, source/operator ledger, scope/availability receipts and downstream allowlist with exact limitations.
 
-Canonical source: [ROADMAP.md](/workspace/planning/ROADMAP.md).
+Canonical source: [ROADMAP.md](/workspace/.worktrees/docs-amend/planning/ROADMAP.md).
 
 ## Research program roadmap
 
-Status: implementation specifications, version `research-plan-2026-09-14-v2`. Phase 1 is complete for the acquired observed-input population. The original Phase 1.5 foundation implementation failed independent acceptance review; the remaining subphases and Phase 2 are specified.
+Status: implementation specifications, version `research-plan-2026-09-14-v3`. Phase 1 is complete for the acquired observed-input population. The original Phase 1.5 foundation implementation failed independent acceptance review; the remaining subphases and Phase 2 are specified.
 
 The [v2 assurance amendment](/workspace/planning/research-program/ASSURANCE.md) applies to all 46 tasks and all 17 subphases. Until replacement foundation receipts and their matching review pass, use the [foundation repair prompt](/workspace/planning/research-program/FOUNDATION_REPAIR.md#copyable-repair-prompt), before `01-native-and-outcomes`. [Current execution status](/workspace/wiki/current-status.md) links the applicable evidence; an old completion message cannot authorize the next subphase.
 
@@ -357,7 +357,7 @@ The objective is an adaptive NQ decision process whose context, location and res
 | 4 — scope reserved | Response/entry experts and integrator: combine context and location, choose whether/when to enter NQ, use cross-asset responses, evaluate account-level execution and risk. | Combined historical replay and daily economic distribution; prospective evidence remains separate. |
 | Later management work — recommendation | Empirical exit/management specialists, thesis changes and re-entry after fixed-entry controls. | Not a user-approved numbered Phase 5; do not silently add partial contracts to a one-mini account. |
 
-**All of Phase 1.5 must finish before Phase 2 implementation.** The packs may be read now; their runners may not cross this gate. Independent tasks within a released subphase can run concurrently with one owner per output path.
+**All of Phase 1.5 must finish before Phase 2 implementation**, except that P2-09, P2-10 and P2-03 may start from the verified P15-02 receipt (the native MarketView) instead of waiting for the Phase 1.5 release. Those three receipts must be re-verified under P2-00 before P2-04, P2-11 or any method expert consumes them. The packs may be read now; their runners may not otherwise cross this gate. Independent tasks within a released subphase can run concurrently with one owner per output path.
 
 ### Decisions that implementation must preserve
 
@@ -370,6 +370,16 @@ The objective is an adaptive NQ decision process whose context, location and res
 - Use owned data only. Missing inputs get precise availability dispositions; no paid acquisition proposals or external account actions are part of these packs.
 - The eventual economic objective jointly optimizes profit and downside. The user's ambition is $3,000 per trading day, with less than $1,000/day unacceptable for the eventual system and a $1,000 maximum daily loss measured from day-start. Keep every eligible zero-trade day visible. A historical average cannot substitute for that daily requirement. Phase 1.5/2 component admission is not certification that this objective is achievable.
 
+### Retention, failure attribution and revisits
+
+[Retention rules](/workspace/.worktrees/docs-amend/planning/research-program/RETENTION.md) add bookkeeping and bounded revisits; they change no formula, budget, gate or date of the existing banks.
+
+1. **Nothing is discarded.** Every registry branch stays in the retention set through Phase 4 with a status: `active_selected`, `active_baseline` or `inactive_retained`. Every attempted candidate keeps its full population definition, parameters and diagnostics in the trial ledger. "Inactive" means not consumed by the next phase's training by default; it never means deleted.
+2. **Failure attribution.** Every deselected, inconclusive or not-promoted candidate records `failure_attribution` on its TrialRecord: an ordered list drawn from `frequency` (entries below the frequency floor), `location_miss` (objective not reached while price came within 0.25 S of it, or adverse excursion beyond 0.5 S before any favorable 0.5 S), `confirmation_delay` (missed-move share above the family median), `adverse_before_target` (stop-first share above the family baseline), `cost_sensitivity` (sign reversal under the stress setting), `support` (below the support gate), `coverage` (unexplained input coverage loss). Each is computed from the diagnostics the Strategy Book already reports, with the thresholds fixed before any candidate result is read.
+3. **Bounded revisits.** Phase 3 re-screens every retained candidate whose first attribution is `location_miss`, using its improved locations. Phase 4 re-screens every retained candidate whose first attribution is `confirmation_delay` or `adverse_before_target`, using the response and entry experts. A revisit is one registered pass over the retained set with the same folds, scores and promotion gates; it is not a new open search and adds no neighbors.
+4. **Phase 2 is split.** Strategy-agnostic context experts (joint volatility, remaining range and passage time, auction and day state, options flow and exposure, intraday OI, cross-market coupling) are fitted once in Phase 2 and are final inputs to Phases 3 and 4. Method-specific suitability experts and conditional plans fitted in Phase 2 are provisional: they are fitted on B0 or the selected rule with baseline locations, and they must be refit in Phase 4 on the final rule-plus-location combination before any decision integration. Phase 2 produces dispositions for strategies, never discards.
+5. **Every release reports the retention set** with statuses and first attributions, so a reader knows what is inactive, why, and which later phase will revisit it.
+
 ### Reading and starting
 
 Start at the selected phase README, then use its `PROMPTS.md`. Each subphase has a generated `RUNBOOK.md` containing the applicable contracts and its task cards. The coordinator reads one runbook; a worker receives one task card plus the named contract sections. Bundles are generated from canonical files, never independently edited.
@@ -378,17 +388,17 @@ Start at the selected phase README, then use its `PROMPTS.md`. Each subphase has
 
 Phase 1 source definitions and archived evidence remain read-only. New code belongs to the namespaces named in the task cards. New reports get new immutable run directories. Do not patch an accepted report, source file or old scanner merely to make a comparison look better.
 
-Canonical source: [WORKFLOW.md](/workspace/planning/research-program/WORKFLOW.md).
+Canonical source: [WORKFLOW.md](/workspace/.worktrees/docs-amend/planning/research-program/WORKFLOW.md).
 
 ## Execution and handoff contract
 
 Read this as an implementation work order when the user starts a pack. The current artifact is a plan. A task is complete only when its declared behavior is implemented and verified, or its explicit data/identifiability gate returns an evidenced terminal disposition. Merely writing a report, passing toy tests or finding no profitable variant does not prove implementation completeness.
 
-All 46 tasks and all 17 subphases also obey [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md) and their assigned [silent failure checks](/workspace/planning/research-program/SILENT_FAILURES.md). This is acceptance amendment `research-assurance-2026-09-14-v2`, recorded in [AMENDMENTS.json](/workspace/planning/research-program/AMENDMENTS.json). The original `00-foundation` completion failed independent review; use [the repair work order](/workspace/planning/research-program/FOUNDATION_REPAIR.md) before `01-native-and-outcomes`. Existing Phase 1 acceptance remains under its original protocol. The casebook adds specific software checks; it does not enlarge the research search space.
+All 46 tasks and all 17 subphases also obey [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md) and their assigned [silent failure checks](/workspace/.worktrees/docs-amend/planning/research-program/SILENT_FAILURES.md). This is acceptance amendment `research-assurance-2026-09-14-v2`, recorded in [AMENDMENTS.json](/workspace/.worktrees/docs-amend/planning/research-program/AMENDMENTS.json). The original `00-foundation` completion failed independent review; use [the repair work order](/workspace/.worktrees/docs-amend/planning/research-program/FOUNDATION_REPAIR.md) before `01-native-and-outcomes`. Existing Phase 1 acceptance remains under its original protocol. The casebook adds specific software checks; it does not enlarge the research search space.
 
 The task graph/cards describe the frozen specification and retain their authoring status. Track actual execution progress in verified receipts and the shared wiki; do not alter a frozen task's content/check boxes merely to record completion and thereby change its plan identity. A real specification amendment gets a new version and exposure record.
 
-The user's Grok build includes pstack. Enter through the generated `/poteto-mode new task` prompts and follow [PSTACK_EXECUTION](/workspace/planning/research-program/PSTACK_EXECUTION.md) for installed-playbook routing, Grok-only role overrides, bounded worker briefs, decision trails and host-capability adaptations. The router chooses supporting skills. The task cards remain the authority for formulas, finite experiments and completion.
+The user's Grok build includes pstack. Enter through the generated `/poteto-mode new task` prompts and follow [PSTACK_EXECUTION](/workspace/.worktrees/docs-amend/planning/research-program/PSTACK_EXECUTION.md) for installed-playbook routing, Grok-only role overrides, bounded worker briefs, decision trails and host-capability adaptations. The router chooses supporting skills. The task cards remain the authority for formulas, finite experiments and completion.
 
 ### Work shape
 
@@ -484,11 +494,11 @@ Every family report and phase summary prints both workspace-mandated tables:
 
 At handoff give the user the completed subphase, verification evidence, exact limitations, next eligible prompt and real artifact links. Update the shared wiki with concise definitions/status and links to immutable evidence; do not paste full reports into multiple wiki pages. No external messages, publishing or trading are authorized by these packs.
 
-Canonical source: [SPEC.md](/workspace/planning/phase-2/SPEC.md).
+Canonical source: [SPEC.md](/workspace/.worktrees/docs-amend/planning/phase-2/SPEC.md).
 
 ## Phase 2 context and expert specification
 
-Entry gate: a verified Phase 1.5 phase receipt covering every task and family, including its limitations and fold-specific selected-rule manifests. Do not begin this implementation while any Phase 1.5 task is still in progress. This pack is written now so the next implementer can start without another planning interview.
+Entry gate: a verified Phase 1.5 phase receipt covering every task and family, including its limitations and fold-specific selected-rule manifests. Exception: P2-09, P2-10 and P2-03 may start from the verified P15-02 receipt (the native MarketView) instead of waiting for that phase receipt; their receipts must be re-verified under P2-00 before P2-04, P2-11 or any method expert consumes them. Do not begin any other Phase 2 implementation while any Phase 1.5 task is still in progress. This pack is written now so the next implementer can start without another planning interview.
 
 ### Result and code boundaries
 
@@ -498,15 +508,15 @@ New root: `implementation/src/trading_research/research/experts/`. Reuse `resear
 
 | Expert/artifact | Output | Required specification |
 | --- | --- | --- |
-| `joint_volatility` | Joint multihead future variance, intervals and converted movement scale | [Volatility](/workspace/planning/phase-2/VOLATILITY.md) |
-| `range_path` | Remaining up/down excursion, first-passage time distributions, break topology and post-break acceptance | [Context](/workspace/planning/phase-2/CONTEXT.md) |
-| `auction_session` | Current operational auction/day-state descriptors, future transitions, session opportunity quality | [Context](/workspace/planning/phase-2/CONTEXT.md) |
-| `flow_memory` | Rewarded aggression, failed pushes, defended persistence and transition forecasts | [Context](/workspace/planning/phase-2/CONTEXT.md) |
-| `cross_market` | Native related-market divergence, lead/lag, spot/IV coupling and NQ path contribution | [Context](/workspace/planning/phase-2/CONTEXT.md) |
-| `options_context` | Native chain exposure, flow, changes, shock scenarios and context forecast | [Options](/workspace/planning/phase-2/OPTIONS.md) |
-| `intraday_oi` | Weakly supervised OI change estimates, uncertainty and baseline comparison | [Options](/workspace/planning/phase-2/OPTIONS.md) |
-| one artifact per source entry method | Occurrence probability, conditional utility/path, session/branch/reference suitability and conditional plan | [Method experts](/workspace/planning/phase-2/METHOD_EXPERTS.md) |
-| research-process artifacts | Refilling memory, jetbundle transitions and macro-state contribution; risk remains a rule overlay | [Method experts](/workspace/planning/phase-2/METHOD_EXPERTS.md) |
+| `joint_volatility` | Joint multihead future variance, intervals and converted movement scale | [Volatility](/workspace/.worktrees/docs-amend/planning/phase-2/VOLATILITY.md) |
+| `range_path` | Remaining up/down excursion, first-passage time distributions, break topology and post-break acceptance | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
+| `auction_session` | Current operational auction/day-state descriptors, future transitions, session opportunity quality | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
+| `flow_memory` | Rewarded aggression, failed pushes, defended persistence and transition forecasts | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
+| `cross_market` | Native related-market divergence, lead/lag, spot/IV coupling and NQ path contribution | [Context](/workspace/.worktrees/docs-amend/planning/phase-2/CONTEXT.md) |
+| `options_context` | Native chain exposure, flow, changes, shock scenarios and context forecast | [Options](/workspace/.worktrees/docs-amend/planning/phase-2/OPTIONS.md) |
+| `intraday_oi` | Weakly supervised OI change estimates, uncertainty and baseline comparison | [Options](/workspace/.worktrees/docs-amend/planning/phase-2/OPTIONS.md) |
+| one artifact per source entry method | Occurrence probability, conditional utility/path, session/branch/reference suitability and conditional plan | [Method experts](/workspace/.worktrees/docs-amend/planning/phase-2/METHOD_EXPERTS.md) |
+| research-process artifacts | Refilling memory, jetbundle transitions and macro-state contribution; risk remains a rule overlay | [Method experts](/workspace/.worktrees/docs-amend/planning/phase-2/METHOD_EXPERTS.md) |
 
 These are responsibility names, not a prescribed final model count. Unsupported heads remain explicitly unavailable. Shared input features are computed once; separately fitted experts have separate parameters, targets, validation and retirement decisions.
 
@@ -545,7 +555,7 @@ Phase 2 may recommend side, reference identity, confirmation recipe, target ambi
 
 Compare ungated source rules, a price-context baseline, a fixed context score and the fitted method expert with identical response and execution policies. Context contribution must survive incremental/ablation tests and changed coverage. All final entry/economic claims remain reserved for the integrated phase.
 
-Canonical source: [DATA_CONTRACTS.md](/workspace/planning/research-program/DATA_CONTRACTS.md).
+Canonical source: [DATA_CONTRACTS.md](/workspace/.worktrees/docs-amend/planning/research-program/DATA_CONTRACTS.md).
 
 ## Data, time and identity contracts
 
@@ -553,7 +563,7 @@ Owner tasks: `P15-00` defines schemas and baseline binding; `P15-02` supplies na
 
 The complete declaration blueprint is [TYPE_REFERENCE.py](/workspace/planning/research-program/TYPE_REFERENCE.py). P15-00 implements the shared/native/rule portion; P2-00 adds expert declarations after the phase gate. Markdown excerpts explain the same fields. At construction, copy and recursively freeze nested mappings/sequences so a frozen record cannot be changed through an aliased dictionary; serialize immutable mappings back to canonical JSON. Validate units, finite values, IDs, intervals, enum domains and nested evidence clocks at the boundary.
 
-The v2 acceptance amendment in [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md) makes these boundaries executable requirements for every evidence-bearing constructor and deserializer. A late nested parent, malformed clock or future-trained forecast must fail even if its immediate wrapper looks valid. It also defines preserved plan/code snapshots, required artifact inventory, native evidence selectors and engineering coverage by input group. Task-specific formulas and the declared future-outcome edge convention remain unchanged.
+The v2 acceptance amendment in [ASSURANCE.md](/workspace/.worktrees/docs-amend/planning/research-program/ASSURANCE.md) makes these boundaries executable requirements for every evidence-bearing constructor and deserializer. A late nested parent, malformed clock or future-trained forecast must fail even if its immediate wrapper looks valid. It also defines preserved plan/code snapshots, required artifact inventory, native evidence selectors and engineering coverage by input group. Task-specific formulas and the declared future-outcome edge convention remain unchanged.
 
 ### Clock invariant
 
@@ -697,7 +707,7 @@ An option midpoint is usable when bid/ask are nonnegative, ask >= bid, timestamp
 
 Baseline OI is the latest available dated observation, with age in sessions; exposure uses current as-of price/IV/time. An intraday OI estimate is a separate model output with uncertainty. Next-day OI can supervise training only after its availability clock. Expiry-driven zero OI is not a label of intraday opening/closing flow. Underlying cash indices have price and option flow, not a fictitious underlying trade tape.
 
-Canonical source: [TYPE_REFERENCE.py](/workspace/planning/research-program/TYPE_REFERENCE.py).
+Canonical source: [TYPE_REFERENCE.py](/workspace/.worktrees/docs-amend/planning/research-program/TYPE_REFERENCE.py).
 
 ## Type declaration blueprint
 
@@ -1102,7 +1112,7 @@ class Expert(Protocol):
 
 ```
 
-Canonical source: [P2-00.md](/workspace/planning/phase-2/tasks/P2-00.md).
+Canonical source: [P2-00.md](/workspace/.worktrees/docs-amend/planning/phase-2/tasks/P2-00.md).
 
 ## P2-00 — Verify Phase 1.5 and freeze Phase 2 scope
 
@@ -1112,7 +1122,7 @@ Subphase: `00-entry-gate`. Dependencies: P15-20.
 
 ### Goal and boundary
 
-Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts.
+Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify every P2-09, P2-10 and P2-03 receipt that already exists under the early-start exception of the Phase 2 gate; P2-04, P2-11 and the method experts must not consume those receipts until this re-verification passes.
 
 Implement only this task and its declared outputs. Preserve accepted Phase 1 code/reports, immutable sources and raw data. All new numerical recipes are registered research policies unless the source ledger proves literal attribution. No future input, later fit or all-history selected rule may enter an earlier decision.
 
@@ -1147,7 +1157,7 @@ A worker does not edit another task’s shared files. Request an explicit integr
 
 ### Implementation steps
 
-1. Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts.
+1. Run the Phase 1.5 phase verifier. Require every Phase 1.5 task, all family dispositions and causal selected-rule manifests before writing any Phase 2 implementation artifacts. Re-verify every P2-09, P2-10 and P2-03 receipt that already exists under the early-start exception of the Phase 2 gate; P2-04, P2-11 and the method experts must not consume those receipts until this re-verification passes.
 2. Implement the Phase 2 runner entrypoint and additive expert/forecast/target schemas against shared contracts. Freeze input release, plan/exposure and requested native-root coverage cells.
 3. Build owned-data availability ledger with actual timestamps, products, exercise/settlement, calendars, spot/option/OI/release vintages. Search owned catalog and native definitions, never infer data existence from an old wishlist.
 4. Trace one actual output through its serialized schema, feature/stage parents and native receipt. Then run the verification below and write immutable evidence. A formula unit test alone does not complete a native-data or fitted-expert task.
