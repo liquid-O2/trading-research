@@ -1,0 +1,151 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "80f2203c943c41ee8c4f7a4bb68891b8ec97320cc1aadaec5885200dec5ca9bf"
+  },
+  "code_snapshots": {
+    "P15-04": {
+      "code_sha256": "b636c433c9dead65c3385ba5fb0004bfee47bd1c6a7d69b17f94b725cf67d747",
+      "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "277232040418b32ea60588fe77eb9795ecaf44616580efeeab879f22998fb657"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_04.py",
+        "-v",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+      "log_sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452",
+      "seconds": 13.034
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/verify_p15_04.log",
+      "log_sha256": "bcea76709da040803d34e57399777e919394b9305a5910af21517acc6c8619a6",
+      "seconds": 8.3874780992046
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/a4c95ab43aef1038/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/02-source-reconstruction/fixed-suite"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/INDEPENDENT_RESULTS.json",
+      "log_sha256": "7e44dd68660e25d321248498e1c8baef5da41c22650b4538864f47c7980f259e",
+      "seconds": 41.34
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_outcome_fixtures.py"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/outcome_fixtures.log",
+      "log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+      "seconds": 0.4
+    }
+  ],
+  "evidence_matrices": {
+    "P15-04": {
+      "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "4aff4797e7bade085a8ea2950fb18adb272fdf40bf02049d835ef86a176128e1"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "test_a02_conventional_ev_fixture_gives_10",
+      "resolution": "resolved",
+      "resolution_evidence": "pytest 22 passed; SOURCE_CHECKS ev-conventional-fixture agree",
+      "severity": "integrity",
+      "summary": "Conventional EV fixture 100, 0.2, 0.25 traces to 10 points."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/REFILL_PRINTED_REPLAY.json"
+      ],
+      "id": "F02",
+      "reproduction": "replay_printed_refill 2024-12-01 to 2025-11-30",
+      "resolution": "accepted-limit",
+      "resolution_evidence": "SOURCE_CHECKS.json status disagree; no parameter tuned",
+      "severity": "integrity",
+      "summary": "Refill printed-figure replay disagrees on R sign and median dip; hold rate within 5pp. Recorded finding."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F03",
+      "reproduction": "check_foundation_adversarial.py and check_outcome_fixtures.py",
+      "resolution": "resolved",
+      "resolution_evidence": "INDEPENDENT_RESULTS.json status pass; outcome_fixtures.log",
+      "severity": "integrity",
+      "summary": "Independent foundation checker 27/27 and outcome fixtures TOTAL FAILURES 0."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "outcome_fixture_checker_path": "/workspace/tools/check_outcome_fixtures.py",
+    "outcome_fixture_checker_sha256": "0cd6910c9e9024342678df1d197c625d049eebb3cd5883f74499518092a6752d",
+    "outcome_fixture_log": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/outcome_fixtures.log",
+    "outcome_fixture_log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/02-source-reconstruction/c8a2842644f906d6/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "7e44dd68660e25d321248498e1c8baef5da41c22650b4538864f47c7980f259e",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+  },
+  "reviewed_at": "2026-09-14T22:30:35Z",
+  "reviewed_task_ids": [
+    "P15-04"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "02-source-reconstruction",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Winter clock-zone footers were not found for most sources."
+  ],
+  "verdict": "pass"
+}

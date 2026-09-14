@@ -1,0 +1,1454 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "counts_by_classification": {
+    "inferred-no-printed-formula": 14,
+    "not-identifiable-from-owned-source": 11,
+    "printed-but-implementation-differs": 8,
+    "printed-formula-recovered": 15
+  },
+  "counts_by_disposition": {
+    "not_identifiable": 17,
+    "research_alternative_recorded_only": 7,
+    "uncertain_no_change": 12,
+    "versioned_baseline_amendment": 4,
+    "wiring_only": 8
+  },
+  "no_forward_vol_optimizer": true,
+  "no_pzone_optimizer": true,
+  "operand_overrides": [
+    {
+      "axis": "bigtrades_threshold",
+      "baseline_rule_id": "A2-REFILL",
+      "consumed_by": [
+        "P15-09",
+        "P15-16"
+      ],
+      "exposure_note": "B0 keeps flat 100. 04 adapters that read this operand use B0.1 session-conditional thresholds.",
+      "parameters": {
+        "b0_flat": 100,
+        "london": 75,
+        "ny": 100,
+        "other": 100
+      },
+      "preserves_b0": true,
+      "provenance": "source_literal",
+      "rule_id": "P15-04-B0.1-bigtrades-session",
+      "schema_version": "research-operand-override-v1",
+      "version": "B0.1-2026-09-14"
+    },
+    {
+      "axis": "tbr_extension",
+      "baseline_rule_id": "A2-TBR-PROJ",
+      "consumed_by": [
+        "P15-09"
+      ],
+      "exposure_note": "Jumbo adapter in 04 consumes the 1.5 extension. B0 remains 1.33/1.66.",
+      "parameters": {
+        "extension_b0": [
+          "1.33",
+          "1.66"
+        ],
+        "extension_b01": [
+          "1.33",
+          "1.5",
+          "1.66"
+        ],
+        "internal": [
+          "0.25",
+          "0.5",
+          "0.75"
+        ]
+      },
+      "preserves_b0": true,
+      "provenance": "source_literal",
+      "rule_id": "P15-04-B0.1-tbr-projection-1.5",
+      "schema_version": "research-operand-override-v1",
+      "version": "B0.1-2026-09-14"
+    },
+    {
+      "axis": "refill_execution",
+      "baseline_rule_id": "A2-REFILL",
+      "consumed_by": [
+        "P15-16"
+      ],
+      "exposure_note": "Printed 12/32/96/30min execution is B0.1 for REFILL-STUDY replay only. B0 stays 4/2/2 ticks and 15 minutes.",
+      "parameters": {
+        "cancel_minutes": 30,
+        "inside_ticks": 12,
+        "one_position_at_a_time": true,
+        "round_trip_cost_ticks": 1,
+        "stop_slippage_ticks": 1,
+        "stop_ticks": 32,
+        "target_ticks": 96
+      },
+      "preserves_b0": true,
+      "provenance": "source_literal",
+      "rule_id": "P15-04-B0.1-refill-printed-execution",
+      "schema_version": "research-operand-override-v1",
+      "version": "B0.1-2026-09-14"
+    },
+    {
+      "axis": "max_pain",
+      "baseline_rule_id": "O037",
+      "consumed_by": [
+        "P2-09"
+      ],
+      "exposure_note": "Wiring only. No Phase 1.5 setup consumes O037.",
+      "parameters": {
+        "definition": "strike_minimizing_option_value",
+        "oi_clock": "prior_date"
+      },
+      "preserves_b0": true,
+      "provenance": "source_literal",
+      "rule_id": "P15-04-O037-max-pain-wiring",
+      "schema_version": "research-operand-override-v1",
+      "version": "B0.1-2026-09-14"
+    },
+    {
+      "axis": "expected_daily_move",
+      "baseline_rule_id": "O043",
+      "consumed_by": [
+        "P2-03",
+        "P2-11"
+      ],
+      "exposure_note": "Already coded. Register as an available context operand. VIX is usable only after publication. No Phase 1.5 population change.",
+      "parameters": {
+        "formula": "VIX/sqrt(252)",
+        "unit": "percent_then_points"
+      },
+      "preserves_b0": true,
+      "provenance": "source_literal",
+      "rule_id": "P15-04-O043-ev-wiring",
+      "schema_version": "research-operand-override-v1",
+      "version": "B0"
+    }
+  ],
+  "row_count": 48,
+  "rows": [
+    {
+      "availability_clock": "VIX daily value usable only after its publication clock",
+      "classification": "printed-formula-recovered",
+      "discrepancy": "p.3 text layer has no 'Expected Daily Move (%) = VIX / sqrt(252)'. It discusses VIX as a fear gauge. p.4 prints undated ES range examples. The audit cites embedded figure X226. Disposition kept as orchestrated.",
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P2-03",
+        "P2-11"
+      ],
+      "formula": "daily_move_percent = VIX / sqrt(252)",
+      "implementation_constants": {
+        "divisor": "sqrt(252)",
+        "percent_to_points": "P/100"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/objects/rest_recipes.py:304-314",
+      "notes": "Already coded. Bound to no Phase 1.5 branch. A04: undated VIX->ES examples are not a replay check.",
+      "operand_id": "O043",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/vix-lesson-4.pdf p.3 (figure cited) and p.4",
+      "row_id": "L001",
+      "rule_id": "P15-04-O043-ev-wiring",
+      "source_exact": false,
+      "verbatim_quote": "VIX around 12.5 ES roughly a 30 point day",
+      "wiki_object": "expected-daily-move.md"
+    },
+    {
+      "availability_clock": "prior settlement known at session start; VolIndex after its print",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P2-03"
+      ],
+      "formula": "exp(log(prior_settle) +/- sigma*k)",
+      "implementation_constants": {
+        "conventions": [
+          "/16",
+          "/sqrt(365)"
+        ],
+        "k": [
+          "0.25",
+          "0.5",
+          "1.0",
+          "1.5"
+        ]
+      },
+      "implementation_file": "not implemented as a Phase 1.5 candidate",
+      "notes": "coded-alternative, not the author's EVRange. Input note for the Phase 2 volatility pack. Not a Phase 1.5 candidate.",
+      "operand_id": "O043-logspace-alternative",
+      "quote_confirmed": true,
+      "raw_anchor": "Pinescript-indicators--main.zip / Expected Volatility .txt L58-61 and L77-100",
+      "row_id": "L002",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "a = VolatilityIndex/16/100; b = VolatilityIndex/math.sqrt(365)/100; exp(logIndex +/- sigma*k), k in {0.25,0.5,1.0,1.5}",
+      "wiki_object": "ev-range-expected-move.md"
+    },
+    {
+      "availability_clock": "prior-date OI plus chain coverage receipt, same clock as existing walls",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P2-09"
+      ],
+      "formula": "argmin_K sum_calls OI*max(K-strike,0) + sum_puts OI*max(strike-K,0)",
+      "implementation_constants": {
+        "not_in_strategy_options.py": true,
+        "oi_clock": "prior_date"
+      },
+      "implementation_file": "implementation/src/trading_research/research/rule_discovery/reconstruction.py:max_pain_strike",
+      "notes": "Accepted strategy_options.py is not edited. No Phase 1.5 setup consumes O037.",
+      "operand_id": "O037",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/gex-framework.pdf p.13",
+      "row_id": "L003",
+      "rule_id": "P15-04-O037-max-pain-wiring",
+      "source_exact": true,
+      "verbatim_quote": "MAX PAIN Strike where option value is lowest.",
+      "wiki_object": "gex-walls-and-max-pain.md"
+    },
+    {
+      "availability_clock": "event time of the large print, classified in America/New_York",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": null,
+      "disposition": "versioned_baseline_amendment",
+      "downstream_consumers": [
+        "P15-09",
+        "P15-16",
+        "P15-04"
+      ],
+      "formula": "qualify if size >= 100 in NY, >= 75 in London (B0.1); B0 is flat 100",
+      "implementation_constants": {
+        "b0": 100,
+        "b01_london": 75,
+        "b01_ny": 100
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:63-65",
+      "notes": "London-session size 80 qualifies under B0.1 and not B0. NY size 80 qualifies under neither.",
+      "operand_id": "A2-REFILL.min_event_quantity",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/jjumbo-findings.pdf p.9",
+      "row_id": "L004",
+      "rule_id": "P15-04-B0.1-bigtrades-session",
+      "source_exact": true,
+      "verbatim_quote": "I use a 100 threshold on NQ during NY and 75 during London.",
+      "wiki_object": "big-trades.md"
+    },
+    {
+      "availability_clock": "event time of the large print",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": null,
+      "disposition": "versioned_baseline_amendment",
+      "downstream_consumers": [
+        "P15-09",
+        "P15-16"
+      ],
+      "formula": "same as L004",
+      "implementation_constants": {
+        "b0": 100
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:63-65",
+      "notes": "Corroborating raw-archive copy of the same sentence.",
+      "operand_id": "A2-REFILL.min_event_quantity",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/xfcmg2.pdf p.25",
+      "row_id": "L004b",
+      "rule_id": "P15-04-B0.1-bigtrades-session",
+      "source_exact": true,
+      "verbatim_quote": "I use a 100 threshold on NQ during NY and 75 during London",
+      "wiki_object": "big-trades.md"
+    },
+    {
+      "availability_clock": "touch time; 30-minute cancel from entry",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": null,
+      "disposition": "versioned_baseline_amendment",
+      "downstream_consumers": [
+        "P15-16"
+      ],
+      "formula": "limit 12 ticks inside; stop 32; target 96; 30-minute cancel; one position; 1-tick RT; 1-tick stop slip",
+      "implementation_constants": {
+        "b0": {
+          "departure_ticks": 4,
+          "horizon_minutes": 15,
+          "min_event_quantity": 100,
+          "response_ticks": 4,
+          "span_ticks": 2
+        },
+        "b01": {
+          "cancel_minutes": 30,
+          "inside_ticks": 12,
+          "one_position_at_a_time": true,
+          "round_trip_cost_ticks": 1,
+          "stop_slippage_ticks": 1,
+          "stop_ticks": 32,
+          "target_ticks": 96
+        }
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:63-65",
+      "notes": "B0 preserved. Replay is a recorded finding, not a parameter search.",
+      "operand_id": "A2-REFILL.execution",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/refill-effect.pdf p.12",
+      "row_id": "L005",
+      "rule_id": "P15-04-B0.1-refill-printed-execution",
+      "source_exact": true,
+      "verbatim_quote": "12 ticks inside the level, stop 32 ticks, target 96 ticks, cancel after 30 minutes",
+      "wiki_object": "method-refill-effect.md"
+    },
+    {
+      "availability_clock": "session box as displayed; measurement end uncertain",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": "f02 Session 2 09:50 versus f05 S2 10:00. Uncertain whether 18:00 is measurement end or display expiry.",
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "code_end": "16:00",
+        "s2_f02": "09:50",
+        "s2_f05": "10:00",
+        "source_panel_end": "18:00"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_pzones.py:44,74",
+      "notes": "Opened both frames this session. Do not change 16:00 on one observation.",
+      "operand_id": "A2-PZONE.session_end",
+      "quote_confirmed": true,
+      "raw_anchor": "/workspace/sources/x-raw-2026-09-11/JJumboFX_media_v2/jjumbo/video_frames/SDRange_upgrade_2005354451008426148_f05.jpg and /workspace/sources/x-raw-2026-09-11/JJumboFX_media_v2/jjumbo/video_frames/SDRange_upgrade_2005354451008426148_f02.jpg",
+      "row_id": "L006",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "S1 09:00-18:00; S2 10:00-18:00; S3 02:00-18:00. f02 table Session 2 09:50 vs f05 S2 10:00.",
+      "wiki_object": "p-zones-benchmark.md"
+    },
+    {
+      "availability_clock": "not identifiable",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "expiry": "m.end"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_pzones.py:74",
+      "notes": "The checkbox is visible. The invalidation predicate never appears in owned material.",
+      "operand_id": "A2-PZONE.delete_invalidated",
+      "quote_confirmed": true,
+      "raw_anchor": "/workspace/sources/x-raw-2026-09-11/JJumboFX_media_v2/jjumbo/video_frames/SDRange_upgrade_2005354451008426148_f05.jpg",
+      "row_id": "L007",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Delete invalidated zones (checkbox on f05). No rule for what invalidates a zone.",
+      "wiki_object": "p-zones-benchmark.md"
+    },
+    {
+      "availability_clock": "not identifiable",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": "Code uses .70/.80. Source panel stops at Auto.",
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "code_quantiles": [
+          ".70",
+          ".80"
+        ]
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_policy.py:31-32",
+      "notes": "Learning window 500 sessions is printed on f05 and matched in code.",
+      "operand_id": "A2-PZONE.percentiles",
+      "quote_confirmed": true,
+      "raw_anchor": "/workspace/sources/x-raw-2026-09-11/JJumboFX_media_v2/jjumbo/video_frames/SDRange_upgrade_2005354451008426148_f05.jpg",
+      "row_id": "L008",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Percentile-style scaling [Auto]. Numeric percentiles never appear.",
+      "wiki_object": "p-zones-benchmark.md"
+    },
+    {
+      "availability_clock": "session high/low known at 09:00",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": "session_high + {0.5,1.0,2.0}*range and mirrored lows",
+      "implementation_constants": {
+        "tbr_projection_b0": {
+          "extension": [
+            "1.33",
+            "1.66"
+          ],
+          "internal": [
+            ".25",
+            ".5",
+            ".75"
+          ]
+        }
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:56-57",
+      "notes": "Attribution: indicator(title = \"6-9 session & levels\") with no author, licence, or JJumbo line. Wiki sources-pine-archive.md lists archive authors lucymatos / npg / unattributed. Not the author's own published code, so deviations stay recorded-only.",
+      "operand_id": "A2-TBR-PROJ.range_deviations",
+      "quote_confirmed": true,
+      "raw_anchor": "Pinescript-indicators--main.zip / 6 to 9 Session and Levels.txt L1-3 and L306-311",
+      "row_id": "L009",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "//@version=6\nindicator(title = \"6-9 session & levels\", shorttitle = \"6-9\", overlay=true)\n\n// === Input Definitions ===\n\n// Input Groups\nvar g_SESS = \"========= Session Settings ==========\"\nvar g_ANCHOR = \"========= Anchor Settings ==========\" | float dev_05_upper = session_high + (sess_range * 0.5) float dev_05_lower = session_low - (sess_range * 0.5) float dev_10_upper = session_high + (sess_range * 1.0) float dev_10_lower = session_low - (sess_range * 1.0) float dev_20_upper = session_high + (sess_range * 2.0) float dev_20_lower = session_low - (sess_range * 2.0)",
+      "wiki_object": "tbr-6-9-range.md"
+    },
+    {
+      "availability_clock": "range frozen at session end 09:00",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": null,
+      "disposition": "versioned_baseline_amendment",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": "high + 1.5*(high-low) lies between 1.33 and 1.66 extensions",
+      "implementation_constants": {
+        "b0": [
+          "1.33",
+          "1.66"
+        ],
+        "b01": [
+          "1.33",
+          "1.5",
+          "1.66"
+        ]
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:56-57",
+      "notes": "Jumbo adapter in 04 consumes B0.1. B0 preserved.",
+      "operand_id": "A2-TBR-PROJ.extension_1.5",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/jjumbo-findings.pdf p.12",
+      "row_id": "L010",
+      "rule_id": "P15-04-B0.1-tbr-projection-1.5",
+      "source_exact": true,
+      "verbatim_quote": "Session rectangle + fib 0 / 0.25 / 0.5 / 0.75 / 1, then 1.5 and 1.33 / 1.66",
+      "wiki_object": "extensions-1-33-1-66.md"
+    },
+    {
+      "availability_clock": "completed footprint row",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-12"
+      ],
+      "formula": "imbalance if aggressive/opposite >= r, r in {3,4}",
+      "implementation_constants": {
+        "b0_ratio": 3,
+        "consecutive_rows": 3,
+        "printed_band": [
+          3,
+          4
+        ]
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:45-46",
+      "notes": "Keep 3 as B0. Record 4 as research_alternative_recorded_only.",
+      "operand_id": "A2-IMBALANCE.ratio",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/fp-lesson-8.pdf p.5",
+      "row_id": "L011",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Most platforms mark them when one side is 3x to 4x larger than the diagonal opposite.",
+      "wiki_object": "footprint-imbalance-zones.md"
+    },
+    {
+      "availability_clock": "profile known at window end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-13"
+      ],
+      "formula": "value area fraction 0.68 for Saint",
+      "implementation_constants": {
+        "saint_value_fraction": ".68"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:70-74",
+      "notes": "Printed-formula-recovered. Already in assumptions.auction_selection.",
+      "operand_id": "A2-AUCTION-SAMPLE.saint_value_fraction",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/reading-the-volume-profile.pdf p.4",
+      "row_id": "L012",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "the band where roughly 68 percent of",
+      "wiki_object": "value-area.md"
+    },
+    {
+      "availability_clock": "profile known at window end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": "needle not in opened text: 'On any fixed range volume profile, set Value Area Volume to 70.'",
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-05",
+        "P15-13"
+      ],
+      "formula": "value area volume 70 percent",
+      "implementation_constants": {
+        "fraction": ".70"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/event_time.py:326-329",
+      "notes": "Printed-formula-recovered. POC tie and contiguous-adjacent algorithm remain unprinted.",
+      "operand_id": "A2-PROFILE.fraction",
+      "quote_confirmed": false,
+      "raw_anchor": "sources/documents/discretionary/amt-lesson-1.pdf p.5",
+      "row_id": "L013",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "On any fixed range volume profile, set Value Area Volume to 70.",
+      "wiki_object": "value-area.md"
+    },
+    {
+      "availability_clock": "VWAP window end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": "vwap-lesson-10.pdf text layer has no printed sigma formula; arithmetic is SPEC.",
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-05",
+        "P15-12"
+      ],
+      "formula": "sd = sqrt(sum(v*(p-VWAP)^2)/sum(v)); band = VWAP +/- k*sd with k=1 inferred",
+      "implementation_constants": {
+        "k": 1,
+        "k_status": "inferred"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/event_time.py:335-344",
+      "notes": "Arithmetic recovered. k=1 inferred-no-printed-formula as a nested note.",
+      "operand_id": "A2-AUCTION-SAMPLE.vwap_deviation_sd",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/vwap-lesson-10.pdf (qualitative) and SPEC Numerical reconstruction work",
+      "row_id": "L014",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "volume-weighted price dispersion sqrt(sum(v*(p-VWAP)^2)/sum(v)); bands VWAP+/-1 dispersion",
+      "wiki_object": "vwap-deviations.md"
+    },
+    {
+      "availability_clock": "09:32 option/spot minute",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-12",
+        "P2-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "band": "0.25",
+        "inferred": true,
+        "snapshot": "09:32"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_options.py:140-151",
+      "notes": "strategy_policy.py already says inferred key-gamma node, not proprietary KG1.",
+      "operand_id": "KG1",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/ny-am-session.pdf p.9",
+      "row_id": "L015",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "so this was a kg one retest trade with the trailing convexity, that's why I got out there.",
+      "wiki_object": "kg1-level.md"
+    },
+    {
+      "availability_clock": "initial BLS publication",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-15",
+        "P2-08"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "is_source_C_score": false,
+        "pair": [
+          "CPIAUCSL",
+          "PAYEMS"
+        ],
+        "prior": 12
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_context.py:88-101",
+      "notes": "12-observation baseline, payroll/CPI pair and equal weighting are unprinted.",
+      "operand_id": "A2-MACRO.C_score",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/data-engine.pdf p.5",
+      "row_id": "L016",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "C-SCORES Custom scoring of fundamentals so different releases become comparable.",
+      "wiki_object": "c-score.md"
+    },
+    {
+      "availability_clock": "120-second window end",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-14"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "absorption_eff": 0.2,
+        "discovery_eff": 0.6,
+        "effort": 1.5,
+        "window_s": 120
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_context.py:54-69",
+      "notes": "Source states qualitative conjunctions. Every numeric threshold is a research choice.",
+      "operand_id": "A2-AUCTION-SAMPLE.thresholds",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/the-math-behind-auction-market-theory.pdf p.8",
+      "row_id": "L017",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Real absorption needs three things present together",
+      "wiki_object": "auction-state.md"
+    },
+    {
+      "availability_clock": "named session end",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": "needle not in opened text: '20:00-00:00'",
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-10",
+        "P15-11"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "action_end": "16:00",
+        "asia": [
+          "20:00",
+          "00:00"
+        ],
+        "london": [
+          "02:00",
+          "05:00"
+        ],
+        "reclaim_seconds": 300,
+        "vwap_reset": "18:00"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:49-51",
+      "notes": "Archive states the author never published the clocks. 300-second reclaim is unprinted.",
+      "operand_id": "A2-GB-CLOCK",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-11/greenbirdtrader-complete.pdf pp.1-2",
+      "row_id": "L018",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Asia High / Asia Low = high and low of roughly 20:00-00:00 ET. London 2:00 AM - 5:00 AM is a compilation; he never typed 2-5.",
+      "wiki_object": "method-green-bird-failure.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "alternating_pivots": 4,
+        "bar_seconds": 300,
+        "edge_tolerance_fraction": ".25",
+        "max_width_prior_fraction": ".5",
+        "pivot_bars": 2
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 4 alternating pivots, 300 s bars, .25 edge, .5 max width, 2 pivot bars. No located source sentence.",
+      "operand_id": "A2-BALANCE",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L019",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "compression_ratio": ".5",
+        "direction": "last_completed_structure_and_preopen_displacement",
+        "wide_ratio": "1"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. wide_ratio 1, compression .5. No located source sentence.",
+      "operand_id": "A2-CONTEXT",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L020",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "a_end": "10:00",
+        "a_start": "09:30",
+        "latest_break": "11:00"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. a_end 10:00, latest_break 11:00. No located source sentence.",
+      "operand_id": "A2-KEANI-TIME",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L021",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "horizon_minutes": 30,
+        "seconds": 120
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 120 s, 30 min. No located source sentence.",
+      "operand_id": "A2-MSS-FVG",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L022",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "costs": "not_a_fill_model",
+        "horizon_minutes": 60,
+        "same_batch": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 60 min horizon. No located source sentence.",
+      "operand_id": "A2-OUTCOME",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L023",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "confluence_ticks": 2,
+        "hvn_radius_ticks": 2,
+        "reaction_ticks": 4,
+        "target_r": "1.5"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 2/2/4 ticks, target_r 1.5. No located source sentence.",
+      "operand_id": "A2-REACTION-HVN",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L024",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "default_size": null,
+        "outside_structure_ticks": 1
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 1 tick outside. No located source sentence.",
+      "operand_id": "A2-STRUCTURAL-RISK",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L025",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "value": "owned_observed_executions"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. owned_observed_executions. No located source sentence.",
+      "operand_id": "A2-EVENT",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L026",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-08",
+        "P15-09",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "contacts": "first_distinct_per_side",
+        "control": "two_successive_directional_body_and_delta_closes",
+        "jet_observation": [
+          "09:30",
+          "09:32"
+        ],
+        "keani_fallback_objective": "A_high_plus_A_width",
+        "member_prior_split": "12:45",
+        "primary": "latest_confirmed_by_0930_else_first_confirmed_after",
+        "saint_ltf_seconds": 60,
+        "saint_value_fraction": ".68",
+        "vwap_deviation_sd": 1
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:ASSUMPTIONS",
+      "notes": "Audit ledger item 15. 09:30/09:32, member_prior_split 12:45. No located source sentence.",
+      "operand_id": "A2-AUCTION-SAMPLE.jet_observation",
+      "quote_confirmed": true,
+      "raw_anchor": "none found in owned PDFs/scripts this session",
+      "row_id": "L027",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "source-catalog.md"
+    },
+    {
+      "availability_clock": "not identifiable",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-09",
+        "P2-03"
+      ],
+      "formula": null,
+      "implementation_constants": {},
+      "implementation_file": "implementation/src/trading_research/research/method_pack/objects/range_geometry.py",
+      "notes": "Bands, probabilities and conditioning are never printed.",
+      "operand_id": "O018",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-11/JJumboFX_Raw_X_Archive_v2.pdf p.3",
+      "row_id": "L028",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "few scalps at the open back and forth from EVrange to EQ",
+      "wiki_object": "ev-range-expected-move.md"
+    },
+    {
+      "availability_clock": "named session end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": "eight printed windows including 06:00-09:00 main",
+      "implementation_constants": {
+        "confirmation_seconds": 180,
+        "main": [
+          "06:00",
+          "09:00"
+        ],
+        "other": [
+          [
+            "20:00",
+            "20:30"
+          ],
+          [
+            "00:00",
+            "00:30"
+          ],
+          [
+            "03:00",
+            "03:30"
+          ],
+          [
+            "09:30",
+            "10:00"
+          ],
+          [
+            "10:00",
+            "10:30"
+          ],
+          [
+            "12:00",
+            "12:30"
+          ],
+          [
+            "15:00",
+            "15:30"
+          ]
+        ],
+        "other_action_minutes": 60,
+        "outbound_end": "09:40"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:52-55",
+      "notes": "180 s confirmation and 60-minute action horizon remain inferred (L030).",
+      "operand_id": "A2-TBR-CLOCK.windows",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf p.7",
+      "row_id": "L029",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "08:00pm - 08:30pm (Asia opening range)",
+      "wiki_object": "tbr-remaining-clocks.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "confirmation_seconds": 180,
+        "other_action_minutes": 60
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:52-55",
+      "notes": "09:40-09:50 is printed. 180 s block confirmation is not.",
+      "operand_id": "A2-TBR-CLOCK.confirmation_seconds",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf p.8",
+      "row_id": "L030",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "the actual reversal trade between the 9:40 and 9:50",
+      "wiki_object": "tbr-remaining-clocks.md"
+    },
+    {
+      "availability_clock": "completed reward print",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-12"
+      ],
+      "formula": "reward_ticks = 3",
+      "implementation_constants": {
+        "reward_ticks": 3
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:41-44",
+      "notes": "Other seven flow constants remain inferred-no-printed-formula.",
+      "operand_id": "A2-FLOW.reward_ticks",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/stop-re-entering.pdf p.3",
+      "row_id": "L031",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "Three ticks or more is the minimum worth trusting.",
+      "wiki_object": "reward-system-3tick.md"
+    },
+    {
+      "availability_clock": "research choice",
+      "classification": "inferred-no-printed-formula",
+      "discrepancy": null,
+      "disposition": "not_identifiable",
+      "downstream_consumers": [
+        "P15-12"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "band_halfwidth_ticks": 2,
+        "effort_seconds": 5,
+        "entry_distance_ticks": 2,
+        "local_horizon_seconds": 120,
+        "minimum_effort_events": 2,
+        "near_origin_ticks": 3,
+        "no_progress_ticks": 2,
+        "thinning_fraction": ".5"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:41-44",
+      "notes": "band_halfwidth, effort_seconds, entry_distance, local_horizon, min_events, no_progress, thinning remain unprinted.",
+      "operand_id": "A2-FLOW.other",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/stop-re-entering.pdf p.10",
+      "row_id": "L032",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "My minimum filter is three ticks of replenishment",
+      "wiki_object": "reward-system-3tick.md"
+    },
+    {
+      "availability_clock": "prior-date OI; quote age 180 s",
+      "classification": "printed-but-implementation-differs",
+      "discrepancy": "$-per-1% scaling, inventory sign, r=q=0, grid and 180 s bound are not printed.",
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P2-09"
+      ],
+      "formula": "wall = max |signed gamma| among calls>=spot / puts<=spot",
+      "implementation_constants": {
+        "grid": "0.90-1.10",
+        "q": 0,
+        "quote_age_s": 180,
+        "r": 0
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/strategy_options.py:103-105",
+      "notes": "Wall definitions match. Unprinted scaling stays labelled.",
+      "operand_id": "O036",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/discretionary/gex-framework.pdf p.13",
+      "row_id": "L033",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "CALL WALL Largest call gamma above. PUT WALL Largest put gamma below.",
+      "wiki_object": "gex-walls-and-max-pain.md"
+    },
+    {
+      "availability_clock": "London box complete, then sweep any time after",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-10"
+      ],
+      "formula": "sweep finished London extreme, five-minute reclaim, optional HL/LH retest",
+      "implementation_constants": {
+        "box": "operational 02:00-05:00 ET under A2-GB-CLOCK"
+      },
+      "implementation_file": "not implemented in 02; family adapter P15-10 owns the branch",
+      "notes": "Operational clock 02:00-05:00 is labelled operational. Do not implement the branch here.",
+      "operand_id": "GB-FAIL.A1.london_box",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-14/greenbirdtrader/tweet-2099513366326730859.json",
+      "row_id": "L034",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "London low gets swept before the NY open. We reclaim it, retest it and form a higher low.",
+      "wiki_object": "method-green-bird-failure.md"
+    },
+    {
+      "availability_clock": "Asia box complete",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-10"
+      ],
+      "formula": "sweep Asia extreme, five-minute close back through, opposite liquidity",
+      "implementation_constants": {
+        "asia_box": "20:00-00:00 without TDO confluence"
+      },
+      "implementation_file": "not implemented in 02; family adapter P15-10",
+      "notes": "Printed-formula-recovered. Not implemented in this subphase.",
+      "operand_id": "GB-FAIL.A2.asia_box",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-14/greenbirdtrader/tweet-2099513366326730859.json",
+      "row_id": "L035",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "Price pushes higher, sweeps the Asia high and fails to hold above it. There's my failed breakout.",
+      "wiki_object": "method-green-bird-failure.md"
+    },
+    {
+      "availability_clock": "reference known-at through account-day end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-10"
+      ],
+      "formula": "scan prior_day/week/month, asia_tdo, asia_box, london_box from known-at",
+      "implementation_constants": {
+        "accepted_start": "09:30",
+        "addition": "from reference known-at"
+      },
+      "implementation_file": "accepted scanner starts 09:30; P15-10 owns the widened window",
+      "notes": "Accepted 09:30-start population stays B0. Widened window is the addition.",
+      "operand_id": "GB-FAIL.A3.overnight_scan",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-14/greenbirdtrader/tweet-2099503614372741234.json",
+      "row_id": "L036",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "Overnight, the sweep below the previous day's low and reclaim gave me the first long.",
+      "wiki_object": "method-green-bird-failure.md"
+    },
+    {
+      "availability_clock": "impulse complete, then NY pullback",
+      "classification": "printed-formula-recovered",
+      "discrepancy": "Entry bar is operational: the post says hit the continuation long without naming the bar.",
+      "disposition": "research_alternative_recorded_only",
+      "downstream_consumers": [
+        "P15-11"
+      ],
+      "formula": "pullback into golden pocket of a defined impulse, stop beyond far edge",
+      "implementation_constants": {
+        "entry_bar": "operational five-minute close",
+        "pocket": "[L+0.50(H-L), L+0.618(H-L)]"
+      },
+      "implementation_file": "not implemented in 02; family adapter P15-11",
+      "notes": "Rule is printed-formula-recovered. Trigger bar is operational.",
+      "operand_id": "GB-SCALP.A4.golden_pocket_continuation",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/x-raw-2026-09-14/greenbirdtrader/tweet-2099503614372741234.json",
+      "row_id": "L037",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Waited for the NY session pullback into the golden pocket, then hit the continuation long.",
+      "wiki_object": "method-green-bird-directional-scalps.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "printed-formula-recovered",
+      "discrepancy": "Winter footer not confirmed. If the author meant fixed UTC-4 all year, winter windows shift one hour under our DST conversion.",
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-10",
+        "P15-11"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "observed": "UTC-4 on 2026-09-14",
+        "winter": "unverified"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py (America/New_York DST)",
+      "notes": "clock_zone_unverified for GB-FAIL nyam_box, previous_hour, asia_tdo_case, asia_box, london_box, prior_* and GB-VWAP/GB-SCALP session windows.",
+      "operand_id": "clock_zone.GreenBird",
+      "quote_confirmed": true,
+      "raw_anchor": "/workspace/sources/x-raw-2026-09-14/greenbirdtrader/tweet-2099513366326730859-photo1.jpg",
+      "row_id": "L038",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "Chart footer 09:49:14 AM UTC-4 ETH on 2026-09-14 (DST). No winter UTC-5 footer opened this session.",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "TBR p.7 clocks lack a zone. Frames f02/f05 have no timezone footer. clock_zone_unverified for all JJ-TBR branches.",
+      "operand_id": "clock_zone.JJumboFX",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L039",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-12"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "Lesson PDFs opened this session have no chart footer timezone. clock_zone_unverified for SIRES session-tied branches.",
+      "operand_id": "clock_zone.Sires",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L040",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-13"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "reading-the-volume-profile and amt-on-live-markets have no timezone footer. clock_zone_unverified.",
+      "operand_id": "clock_zone.Saint",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L041",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-13"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "10k-first-month.pdf has no timezone footer. clock_zone_unverified.",
+      "operand_id": "clock_zone.Member",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L042",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-13"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "average-unprofitable-trader.pdf not re-opened for a footer this session. clock_zone_unverified.",
+      "operand_id": "clock_zone.Keani",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L043",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-16"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "refill-effect.pdf tables have no timezone. clock_zone_unverified for REFILL-STUDY.",
+      "operand_id": "clock_zone.Refill study",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L044",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-14"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "the-math-behind-auction-market-theory.pdf has no timezone footer. clock_zone_unverified.",
+      "operand_id": "clock_zone.jetbundle",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L045",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "do not change any clock",
+      "classification": "not-identifiable-from-owned-source",
+      "discrepancy": null,
+      "disposition": "uncertain_no_change",
+      "downstream_consumers": [
+        "P15-15"
+      ],
+      "formula": null,
+      "implementation_constants": {
+        "conversion": "America/New_York with DST",
+        "source_zone": "unknown"
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/clocks.py",
+      "notes": "data-engine.pdf has no timezone footer. clock_zone_unverified.",
+      "operand_id": "clock_zone.Stoic",
+      "quote_confirmed": true,
+      "raw_anchor": "opened PDFs/frames this session; no zone footer found",
+      "row_id": "L046",
+      "rule_id": null,
+      "source_exact": false,
+      "verbatim_quote": "",
+      "wiki_object": "clock-grid-and-bars.md"
+    },
+    {
+      "availability_clock": "range frozen at session end",
+      "classification": "printed-formula-recovered",
+      "discrepancy": null,
+      "disposition": "wiring_only",
+      "downstream_consumers": [
+        "P15-09"
+      ],
+      "formula": "1.33 and 1.66 of the session range",
+      "implementation_constants": {
+        "extension": [
+          "1.33",
+          "1.66"
+        ]
+      },
+      "implementation_file": "implementation/src/trading_research/research/method_pack/branch_coverage.py:56-57",
+      "notes": "Already in B0. 1.5 is the B0.1 addition in L010.",
+      "operand_id": "A2-TBR-PROJ.extension_1.33_1.66",
+      "quote_confirmed": true,
+      "raw_anchor": "sources/documents/jumbo/Time-Based ranges Framework (JJumbo).pdf p.21",
+      "row_id": "L047",
+      "rule_id": null,
+      "source_exact": true,
+      "verbatim_quote": "1.33 1.66 Retracement/Reversal levels",
+      "wiki_object": "extensions-1-33-1-66.md"
+    }
+  ],
+  "schema_version": "research-source-reconstruction-ledger-v1",
+  "task_id": "P15-04"
+}

@@ -1,0 +1,40 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "deterministic_checks": [
+    {
+      "id": "refill-printed-figure-2024-12-01-2025-11-30",
+      "known_differences_before_run": [
+        "owned replay is NQ only; printed figure includes MNQ",
+        "owned scanner starts 09:30 with min_event_quantity 100 and 4-tick departure",
+        "printed zone definition is not fully recoverable; we reuse the existing refill scanner population"
+      ],
+      "printed": {
+        "end": "2025-11-30",
+        "hold_rate": 0.42,
+        "median_winner_dip_ticks": 18,
+        "per_trade_r": -0.285,
+        "sessions": 235,
+        "start": "2024-12-01",
+        "universe": "CME NQ and MNQ",
+        "zone_touch_events": 41152
+      },
+      "status": "registered",
+      "tolerances": {
+        "hold_rate_pp": 5,
+        "median_winner_dip_ticks": 6,
+        "per_trade_r_sign": "equal"
+      }
+    },
+    {
+      "T": "0.25",
+      "expected_points": "10",
+      "id": "ev-conventional-fixture",
+      "sigma": "0.2",
+      "spot": "100",
+      "status": "registered",
+      "why": "Second deterministic check. SPEC fixture traces through serialized schema. Independent of the refill printed-figure replay."
+    }
+  ],
+  "registered_before_replay": true,
+  "schema_version": "research-source-checks-v1"
+}

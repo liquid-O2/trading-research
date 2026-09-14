@@ -1,0 +1,103 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "schema_version": "research-dependency-limits-v1",
+  "tasks": {
+    "P15-05": {
+      "inferred_or_unavailable": [
+        "A2-PZONE.percentiles",
+        "O018"
+      ],
+      "limits": "Formations may not treat unpublished P-zone percentiles or EVRange bands as source-exact."
+    },
+    "P15-08": {
+      "inferred_or_unavailable": [
+        "A2-BALANCE",
+        "A2-CONTEXT",
+        "A2-EVENT"
+      ],
+      "limits": "Candidate bank must label these research choices, not recovered constants."
+    },
+    "P15-09": {
+      "inferred_or_unavailable": [
+        "A2-PZONE.session_end",
+        "A2-PZONE.delete_invalidated",
+        "A2-PZONE.percentiles",
+        "O018",
+        "clock_zone.JJumboFX"
+      ],
+      "limits": "Jumbo adapter keeps 16:00 measurement. 1.5 extension and session-conditional BigTrades come from B0.1 overrides. Range deviations are recorded-only."
+    },
+    "P15-10": {
+      "inferred_or_unavailable": [
+        "A2-GB-CLOCK.london_bounds_author",
+        "clock_zone.GreenBird"
+      ],
+      "limits": "A1-A3 are recorded for the adapter. Do not treat 02:00-05:00 as author-printed. Winter hour shift unverified."
+    },
+    "P15-11": {
+      "inferred_or_unavailable": [
+        "GB-SCALP.A4.entry_bar",
+        "clock_zone.GreenBird"
+      ],
+      "limits": "Golden-pocket geometry is printed. The five-minute close trigger is operational."
+    },
+    "P15-12": {
+      "inferred_or_unavailable": [
+        "KG1",
+        "A2-IMBALANCE.ratio_4",
+        "A2-FLOW.other",
+        "clock_zone.Sires"
+      ],
+      "limits": "KG1 stays inferred. Footprint 4x is recorded-only. Keep ratio 3 as B0."
+    },
+    "P15-13": {
+      "inferred_or_unavailable": [
+        "clock_zone.Saint",
+        "clock_zone.Member",
+        "clock_zone.Keani"
+      ],
+      "limits": "Value-area fractions 0.68/0.70 are recovered. Clock zone unverified."
+    },
+    "P15-14": {
+      "inferred_or_unavailable": [
+        "A2-AUCTION-SAMPLE.thresholds",
+        "clock_zone.jetbundle"
+      ],
+      "limits": "Auction-state numeric thresholds are inferred."
+    },
+    "P15-15": {
+      "inferred_or_unavailable": [
+        "A2-MACRO.C_score",
+        "clock_zone.Stoic"
+      ],
+      "limits": "C-score constants are inferred. Personal risk ladder stays out of setup scope."
+    },
+    "P15-16": {
+      "inferred_or_unavailable": [
+        "printed refill zone recipe",
+        "clock_zone.Refill study"
+      ],
+      "limits": "Use existing scanner population. Printed execution is B0.1 replay only."
+    },
+    "P2-03": {
+      "inferred_or_unavailable": [
+        "O018 bands",
+        "O043 same-day unpublished VIX"
+      ],
+      "limits": "O043 is available after VIX publication. Log-space IV is a coded alternative note, not a candidate."
+    },
+    "P2-09": {
+      "inferred_or_unavailable": [
+        "full OPRA chain",
+        "same-day OI"
+      ],
+      "limits": "Max pain uses prior-date OI and the same coverage receipt as walls."
+    },
+    "P2-11": {
+      "inferred_or_unavailable": [
+        "O043 before publication"
+      ],
+      "limits": "Do not use same-day unpublished VIX as a predictor."
+    }
+  }
+}

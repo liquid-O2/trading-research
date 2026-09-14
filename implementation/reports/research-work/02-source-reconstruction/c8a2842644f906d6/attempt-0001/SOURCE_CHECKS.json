@@ -1,0 +1,72 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "deterministic_checks": [
+    {
+      "agreement": {
+        "hold_rate": true,
+        "median_winner_dip": false,
+        "per_trade_r_sign": false
+      },
+      "finding": "Disagreement is a recorded finding, not a failure to fix. No parameter was tuned.",
+      "id": "refill-printed-figure-2024-12-01-2025-11-30",
+      "known_differences_before_run": [
+        "owned replay is NQ only; printed figure includes MNQ",
+        "owned scanner starts 09:30 with min_event_quantity 100 and 4-tick departure",
+        "printed zone definition is not fully recoverable; we reuse the existing refill scanner population"
+      ],
+      "observed": {
+        "end": "2025-11-30",
+        "fail": 70,
+        "hold": 51,
+        "hold_rate": 0.4146341463414634,
+        "jobs": 260,
+        "known_differences": [
+          "owned NQ only versus printed CME NQ and MNQ",
+          "owned scanner 09:30 start, min 100 contracts, 4-tick departure versus unpublished printed zone recipe",
+          "tick-count and contract differences listed, not tuned"
+        ],
+        "median_winner_dip_ticks": 7.0,
+        "native_days": 15,
+        "native_fail_days": 0,
+        "neither": 2,
+        "per_trade_r": 0.6547004132231405,
+        "printed_sessions": 235,
+        "printed_touches": 41152,
+        "schema_version": "research-refill-printed-replay-v1",
+        "skipped_one_position": 701,
+        "start": "2024-12-01",
+        "touches": 824,
+        "traded": 123,
+        "unknown": 0
+      },
+      "printed": {
+        "end": "2025-11-30",
+        "hold_rate": 0.42,
+        "median_winner_dip_ticks": 18,
+        "per_trade_r": -0.285,
+        "sessions": 235,
+        "start": "2024-12-01",
+        "universe": "CME NQ and MNQ",
+        "zone_touch_events": 41152
+      },
+      "status": "disagree",
+      "tolerances": {
+        "hold_rate_pp": 5,
+        "median_winner_dip_ticks": 6,
+        "per_trade_r_sign": "equal"
+      }
+    },
+    {
+      "T": "0.25",
+      "expected_points": "10",
+      "id": "ev-conventional-fixture",
+      "observed_points": "10.00",
+      "sigma": "0.2",
+      "spot": "100",
+      "status": "agree",
+      "why": "Second deterministic check. SPEC fixture traces through serialized schema. Independent of the refill printed-figure replay."
+    }
+  ],
+  "registered_before_replay": true,
+  "schema_version": "research-source-checks-v1"
+}

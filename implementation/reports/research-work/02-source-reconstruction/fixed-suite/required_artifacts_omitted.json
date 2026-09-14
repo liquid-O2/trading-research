@@ -1,0 +1,79 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true,
+    "A07": true,
+    "A08": true,
+    "A09": true,
+    "A10": true,
+    "A11": true,
+    "A12": true,
+    "A13": true
+  },
+  "artifact_manifest": [],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "code_sha256": "facdf7eba4415e18a612e94f4456d3c4bd0fafda23420e7b65920d0af4bbc23e",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_00.py",
+        "-v",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/pytest.log",
+      "log_sha256": "3175710ac3d0d6122834f465a54c078655c6b291d3cc54efd0c93211c6a5978d",
+      "seconds": 145.04488171637058
+    }
+  ],
+  "coverage": {
+    "input_groups": {
+      "current_session_executions": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_month_levels": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      },
+      "prior_same_contract_rth_profile": {
+        "complete_year_slots": 7,
+        "dst_date": "2023-11-06"
+      }
+    },
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "previously_exposed_engineering_dates_declared": true,
+    "unknown": 390,
+    "year_complete_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02"
+    ]
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "15d494e64e46bdb75023c7a737b31c57695828017ad09ef6ef3a4645733bd81a",
+  "predecessor_receipts": {},
+  "reason": "v3 foundation repair: fail-closed review, matrix, snapshot bytes, schema and lineage leaves",
+  "run_id": "ea9693217cb577cb",
+  "schema_version": "research-task-receipt-v2",
+  "task_id": "P15-00",
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Independent 27-case suite is run by the coordinator after this receipt is immutable.",
+    "Rejected v2 attempt 91ade001fb32cb9b is preserved and is not this candidate."
+  ]
+}

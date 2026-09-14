@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `ad58b49e1b70ff1a9eb61a812dc1997d32db3cedc87ec30b8d06b243bf3af0e6`.
+Source content SHA256: `739d9b5ddce476ade0dc0b902eec7628cd96bb00a768b46fa4485191d619160e`.
 
 Previous gate: **03-primitives**. External task dependencies: P15-08. Read and verify their actual receipts before implementation.
 
@@ -999,6 +999,9 @@ Acceptance amendment: `research-assurance-2026-09-14-v3`. Assigned cases: **S01,
 ### Acceptance checklist
 
 - [ ] A01: Previous-week/month references stop at the prior completed same-contract window.
+- [ ] A01-GB-A1: `london_box` from [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md) A1.
+- [ ] A01-GB-A2: `asia_box` from [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md) A2.
+- [ ] A01-GB-A3: overnight scan window from [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md) A3.
 - [ ] A02: Sweep-entry and reclaim-entry cases are not collapsed into one later confirmation.
 - [ ] A03: A missing prior period is unknown, not a substitute nearby level.
 - [ ] A04: Changed geometry/sequence enumerates its own population, not a filter of already-qualified baseline setups.
@@ -1121,6 +1124,7 @@ Acceptance amendment: `research-assurance-2026-09-14-v3`. Assigned cases: **S01,
 ### Acceptance checklist
 
 - [ ] A01: An unclosed prerequisite bar cannot admit a VWAP source setup.
+- [ ] A01-GB-A4: `golden_pocket_continuation` from [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md) A4.
 - [ ] A02: Custom short/anchor variants are never labelled a source-long branch.
 - [ ] A03: Scalp direction mirrors and unknown automatic-admission scope retain independent records.
 - [ ] A04: Changed geometry/sequence enumerates its own population, not a filter of already-qualified baseline setups.

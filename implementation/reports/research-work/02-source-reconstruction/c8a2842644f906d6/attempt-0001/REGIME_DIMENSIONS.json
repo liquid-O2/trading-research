@@ -1,0 +1,71 @@
+{
+  "descriptive_only": true,
+  "dimensions": [
+    {
+      "availability_clock": "account-day label known at open",
+      "id": "calendar_year_outer_fold",
+      "owned_data": "/workspace/implementation/reports/phase1-live/historical-measurement/run-1.0.1/protocol/SCOPE.json",
+      "rule": "account-day year; outer fold is that year as test in EVALUATION.md",
+      "source_operand": "session_date"
+    },
+    {
+      "availability_clock": "decision_at",
+      "id": "session_bucket",
+      "owned_data": "setup-records.jsonl.gz decision_session",
+      "rule": "Asia 00:00-03:00, London/Europe 03:00-09:30, NY morning 09:30-12:00, NY afternoon 12:00-16:00 ET, intersect matching hours",
+      "source_operand": "decision_session / decision_at"
+    },
+    {
+      "availability_clock": "account-day label",
+      "id": "day_of_week",
+      "owned_data": "setup-records.jsonl.gz session_date",
+      "rule": "weekday of the account-day label in America/New_York",
+      "source_operand": "session_date"
+    },
+    {
+      "availability_clock": "prior session complete",
+      "id": "realized_vol_tercile",
+      "owned_data": "Phase 1 job coverage / native daily ranges when present; else unknown",
+      "rule": "prior 20 complete sessions' daily ranges, terciles of that history ending before the account day",
+      "source_operand": "prior same-contract daily high-low"
+    },
+    {
+      "availability_clock": "09:30",
+      "id": "overnight_range_tercile",
+      "owned_data": "native session ranges when present; else unknown",
+      "rule": "overnight range relative to its prior-20-session median, terciles",
+      "source_operand": "overnight high-low"
+    },
+    {
+      "availability_clock": "prior session VIX close after publication",
+      "id": "prior_close_vix_bucket",
+      "owned_data": "/workspace/data/free-sources/context__volatility__normalized/VIX.parquet",
+      "rule": "prior-close VIX: below 15, 15 to 20, 20 to 30, above 30",
+      "source_operand": "O043 / VIX publication"
+    },
+    {
+      "availability_clock": "09:32",
+      "id": "inferred_gamma_sign_0932",
+      "owned_data": "QQQ prior-OI gamma model; unknown when chain missing",
+      "rule": "inferred aggregate gamma sign at 09:32: positive, negative, unknown; labelled inferred",
+      "source_operand": "strategy_options.gamma_at"
+    },
+    {
+      "availability_clock": "prior session complete",
+      "id": "prior_day_type",
+      "owned_data": "Phase 1 path class when present; else unknown",
+      "rule": "registered trend-or-balance rule on the prior complete session",
+      "source_operand": "prior session path class"
+    },
+    {
+      "availability_clock": "civil date of the owned calendar",
+      "id": "macro_release_day",
+      "owned_data": "/workspace/data/free-sources/context__event-calendar__normalized/economic-releases.parquet; /workspace/data/free-sources/context__event-calendar__normalized/fomc-meetings.parquet",
+      "rule": "CPI, payrolls, FOMC on the owned calendar",
+      "source_operand": "A2-MACRO"
+    }
+  ],
+  "frozen_before_candidate_results": true,
+  "no_candidate_threshold_or_date_from_these_tables": true,
+  "schema_version": "research-regime-dimensions-v1"
+}

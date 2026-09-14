@@ -1,0 +1,378 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "build_ledger_rows"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/SOURCE_RECONSTRUCTION_LEDGER.json",
+          "selector": "/row_count",
+          "sha256": "fc8c30bcb6e8801aed619f3f38dd0a8a86508e03a6c3729f776eb6980014fbda"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_a01_every_recoverable_row_present",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": ">=40 rows covering RECOVERABLE NOW plus item 15",
+      "id": "A01",
+      "observed": "48 rows",
+      "oracle": "opened PDFs/scripts/frames this session",
+      "requirement": "Every input-limited numerical operand has a source pointer, implementation state, clock and disposition.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a01_every_recoverable_row_present"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "conventional_horizon_move"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/SOURCE_CHECKS.json",
+          "selector": "/deterministic_checks/1/status",
+          "sha256": "c51b7bb3fc4adab6a96d1831659dccc95eb4c15794e112a76258116eacdb5af7"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_a02_conventional_ev_fixture_gives_10",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "10 points",
+      "id": "A02",
+      "observed": "10",
+      "oracle": "spot*sigma*sqrt(T)",
+      "requirement": "EV point/variance/annualization units remain distinct; the 100,.2,.25 fixture gives 10.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a02_conventional_ev_fixture_gives_10"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "ledger_document"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/SOURCE_RECONSTRUCTION_LEDGER.json",
+          "selector": "/no_pzone_optimizer",
+          "sha256": "fc8c30bcb6e8801aed619f3f38dd0a8a86508e03a6c3729f776eb6980014fbda"
+        }
+      ],
+      "expected": "no_pzone_optimizer true",
+      "id": "A03",
+      "observed": "true",
+      "oracle": "ledger flags",
+      "requirement": "No P-zone/forward-volatility optimizer is added in Phase 1.5.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a03_no_pzone_optimizer_flag"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "build_ledger_rows"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_a04_undated_figure_is_not_source_exact_replay",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "L001 source_exact false",
+      "id": "A04",
+      "observed": "false",
+      "oracle": "A04 on undated VIX->ES examples",
+      "requirement": "A figure without dated inputs cannot produce a fabricated source-exact pass.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a04_undated_figure_is_not_source_exact_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "build_ledger_rows"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/SOURCE_RECONSTRUCTION_LEDGER.json",
+          "selector": "/rows/0/raw_anchor",
+          "sha256": "fc8c30bcb6e8801aed619f3f38dd0a8a86508e03a6c3729f776eb6980014fbda"
+        }
+      ],
+      "expected": "anchors under sources/ or opened frames",
+      "id": "A05",
+      "observed": "sources/documents/discretionary/vix-lesson-4.pdf p.3 (figure cited) and p.4",
+      "oracle": "raw archive paths",
+      "requirement": "Updated source ledger links to immutable evidence without editing sources.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a05_ledger_links_without_editing_sources"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "write_p15_04_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/predecessor_receipts",
+          "sha256": "ae3a1685e66ada5ee0cec15bddedafc05673c38ce6a4358a1f405464517f7315"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "22 passed",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "P15-00 and P15-02 hashes bound; pytest 22 passed",
+      "id": "A06",
+      "observed": "bound; 22 passed",
+      "oracle": "predecessor receipts named in current-status.md",
+      "requirement": "Evidence includes command exit codes, artifact hashes, coverage/unknown counts, runtime, actual output inspection and declared limitations. Predecessor receipts verify.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s03_owned_paths_and_override_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "validate_ledger"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s01_ledger_rejects_missing_required_row",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "A01-A08 and S01,S02,S03,S21,S31 each appear once",
+      "id": "A07",
+      "observed": "matrix lists those ids; this check cites the other tests rather than hashing itself",
+      "oracle": "required_matrix_ids",
+      "requirement": "EVIDENCE_MATRIX.json resolves every acceptance key and assigned failure case to actual code, executed commands, hashed evidence.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_a01_every_recoverable_row_present"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "require_source_stages"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s21_omitted_stage_fails_unless_registered_axis",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "S21 omit fails; S31 unknown stays unknown; S02 first_passage",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "pytest nodeids",
+      "requirement": "Assigned silent-failure probes pass with sensitive positive and negative controls.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s21_omitted_stage_fails_unless_registered_axis"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "validate_ledger"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s01_ledger_rejects_missing_required_row",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "validate_ledger errors nonempty after deleting L003",
+      "id": "S01",
+      "observed": "errors nonempty",
+      "oracle": "isolated mutation of a valid ledger copy",
+      "requirement": "Missing required ledger row is rejected.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s01_ledger_rejects_missing_required_row"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "printed_refill_geometry"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s02_first_passage_on_printed_refill_fixture",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "target_first vs stop_first",
+      "id": "S02",
+      "observed": "target_first then stop_first",
+      "oracle": "independent first_passage",
+      "requirement": "Central printed refill geometry first_passage fails if reversed.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s02_first_passage_on_printed_refill_fixture"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "P15_04_OWNED"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/CODE_SNAPSHOT.json",
+          "selector": "/files",
+          "sha256": "277232040418b32ea60588fe77eb9795ecaf44616580efeeab879f22998fb657"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s03_owned_paths_and_override_identity",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "mutating owned hash changes digest",
+      "id": "S03",
+      "observed": "digest changed",
+      "oracle": "identity.digest",
+      "requirement": "Plan/code identities recompute; omitting an owned file changes the digest.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s03_owned_paths_and_override_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "require_source_stages"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s21_omitted_stage_fails_unless_registered_axis",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "False unless replacement_axis",
+      "id": "S21",
+      "observed": "False then True",
+      "oracle": "required stage set",
+      "requirement": "Omitting a source-required stage fails unless that axis is the registered replacement.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s21_omitted_stage_fails_unless_registered_axis"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/reconstruction.py",
+          "symbol": "unknown_stays_unknown"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/pytest.log",
+          "selector": "test_s31_unknown_does_not_become_bool",
+          "sha256": "d34673d556f261117e2c980d816ddc5ed2472e9b04e71d552aa0453dd85cb452"
+        }
+      ],
+      "expected": "None and 'unknown' stay 'unknown'",
+      "id": "S31",
+      "observed": "unknown",
+      "oracle": "round-trip",
+      "requirement": "Unknown source_exact does not become true or false implicitly.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_04.py::test_s31_unknown_does_not_become_bool"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-04"
+}
