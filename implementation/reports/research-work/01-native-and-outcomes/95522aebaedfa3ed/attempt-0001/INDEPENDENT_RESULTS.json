@@ -1,0 +1,457 @@
+{
+  "cases": [
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "valid_p15_00",
+      "expected_exit": 0,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.9343985114246607,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "valid_p15_01",
+      "expected_exit": 0,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 3.580679628998041,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"task\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "valid_subphase",
+      "expected_exit": 0,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 5.582616505213082,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"subphase\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json\"\n}\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/required_artifacts_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "required_artifacts_omitted",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.2942302981391549,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"artifact_manifest is empty\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/required_artifacts_omitted.json\"\n  },\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"PLAN_SNAPSHOT, CODE_SNAPSHOT and DRAFT_MANIFEST are required identity bindings\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/required_artifacts_omitted.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/required_baseline_binding_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "required_baseline_binding_omitted",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 2.2662664018571377,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"INVENTORY\",\n    \"detail\": \"required artifacts missing: ['BASELINE_BINDING.json']\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/required_baseline_binding_omitted.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/plan_sha256_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "plan_sha256_replaced",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 2.2735110791400075,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"plan_sha256 does not recompute from PLAN_SNAPSHOT.files\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/plan_sha256_replaced.json\"\n  },\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"draft plan_sha256 does not match receipt\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/plan_sha256_replaced.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/code_sha256_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "code_sha256_replaced",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 2.228204395622015,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"code_sha256 does not recompute from CODE_SNAPSHOT\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/code_sha256_replaced.json\"\n  },\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"draft code_sha256 does not match receipt\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/code_sha256_replaced.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/run_id_replaced.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "run_id_replaced",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.8941632620990276,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"IDENTITY\",\n    \"detail\": \"run_id does not recompute from DRAFT_MANIFEST\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/run_id_replaced.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/non_hex_plan_identity.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "non_hex_plan_identity",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.2773457234725356,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"SCHEMA\",\n    \"detail\": \"plan_sha256 must be a lowercase SHA-256 hex digest\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/non_hex_plan_identity.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/failed_test_excused_as_implemented.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "failed_test_excused_as_implemented",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.9052280308678746,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"COMMAND_EXIT\",\n    \"detail\": \"required command exit_code 1 cannot be excused\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/failed_test_excused_as_implemented.json#command_results[0]\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/command_logs_omitted.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "command_logs_omitted",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.7880495144054294,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"COMMAND_MISSING\",\n    \"detail\": \"required command log_path is missing\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/command_logs_omitted.json#command_results[0]\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/false_acceptance_flag.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "false_acceptance_flag",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.796487302519381,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"ACCEPTANCE\",\n    \"detail\": \"required acceptance key A01 is not true\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/false_acceptance_flag.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "failed_parent_control",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 1.7079664058983326,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"ACCEPTANCE\",\n    \"detail\": \"required acceptance key A01 is not true\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"DISPOSITION\",\n    \"detail\": \"disposition blocked_implementation is not allowed for P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"BLOCKED_IMPLEMENTATION\",\n    \"detail\": \"blocked_implementation is not an accepted terminal\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/child/TASK_RECEIPT.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json",
+        "--receipts-root",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors"
+      ],
+      "case": "child_of_failed_parent",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 2.892211874946952,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"PREDECESSOR_HASH\",\n    \"detail\": \"predecessor P15-00 receipt failed recursive verification\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"ACCEPTANCE\",\n    \"detail\": \"required acceptance key A01 is not true\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"DISPOSITION\",\n    \"detail\": \"disposition blocked_implementation is not allowed for P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"BLOCKED_IMPLEMENTATION\",\n    \"detail\": \"blocked_implementation is not an accepted terminal\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/predecessors/P15-00/attempt-0001/TASK_RECEIPT.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "phase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/false-phase-2.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "phase_2_closed_using_one_phase_1_5_receipt",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.44522429816424847,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"PHASE_1_5_GATE\",\n    \"detail\": \"phase-2 receipts require an actual Phase 1.5 release path/hash\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/false-phase-2.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-00] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-01] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-02] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-09] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-10] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-11] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-03] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-04] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-05] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-06] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-07] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-08] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-12] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-13] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-14] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-15] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-16] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-17] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-18] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-19] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-20] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-21] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-22] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-23] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  },\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P2-24] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/unknown-subphase.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "unknown_subphase_with_no_tasks",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.3425922663882375,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"UNKNOWN_SUBPHASE\",\n    \"detail\": \"unknown subphase 00-foundaton\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/unknown-subphase.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "subphase",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/wrong-subphase-task.json",
+        "--graph",
+        "/workspace/planning/research-program/TASK_GRAPH.json"
+      ],
+      "case": "subphase_reuses_wrong_task_receipt",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 3.5540071865543723,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"TASK_MISMATCH\",\n    \"detail\": \"task_receipts[P15-01] points to task_id P15-00\",\n    \"path\": \"/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 0,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/valid.json"
+      ],
+      "case": "valid_lineage",
+      "expected_exit": 0,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.29038506001234055,
+      "stderr": "",
+      "stdout": "{\n  \"kind\": \"lineage\",\n  \"ok\": true,\n  \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/valid.json\"\n}\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/future.json"
+      ],
+      "case": "lineage_child_overrides_ancestor_clock",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.2945934785529971,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/future.json#records[0].parents[0]\"\n  },\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"event_at_ns 100 exceeds ancestor cutoff 10\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/future.json#records[0].parents[0]\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/bad-clock.json"
+      ],
+      "case": "lineage_invalid_availability_type",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.29950545728206635,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"available_at_ns must be an int nanosecond clock\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/bad-clock.json#records[0].parents[0]\"\n  },\n  {\n    \"code\": \"LINEAGE_CLOCK\",\n    \"detail\": \"evidence leaf is missing available_at_ns\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/bad-clock.json#records[0].parents[0]\"\n  }\n]\n"
+    },
+    {
+      "actual_exit": 2,
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "lineage",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/no-hash.json"
+      ],
+      "case": "lineage_artifact_hash_omitted",
+      "expected_exit": 2,
+      "kind": "cli",
+      "passed": true,
+      "seconds": 0.30118824914097786,
+      "stderr": "",
+      "stdout": "[\n  {\n    \"code\": \"LINEAGE_HASH\",\n    \"detail\": \"evidence leaf is missing artifact_sha256\",\n    \"path\": \"/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite/lineage/no-hash.json#records[0].parents[0]\"\n  }\n]\n"
+    },
+    {
+      "actual": "accepted",
+      "case": "trade_valid_evidence",
+      "detail": "",
+      "expected": "accepted",
+      "kind": "constructor",
+      "passed": true
+    },
+    {
+      "actual": "accepted",
+      "case": "reference_valid_evidence",
+      "detail": "",
+      "expected": "accepted",
+      "kind": "constructor",
+      "passed": true
+    },
+    {
+      "actual": "ContractError",
+      "case": "trade_late_evidence",
+      "detail": "future evidence: trade available_at_ns is earlier than its evidence",
+      "expected": "ContractError",
+      "kind": "constructor",
+      "passed": true
+    },
+    {
+      "actual": "ContractError",
+      "case": "reference_late_evidence",
+      "detail": "future evidence: reference parent availability exceeds issue time",
+      "expected": "ContractError",
+      "kind": "constructor",
+      "passed": true
+    },
+    {
+      "actual": "accepted",
+      "case": "valid_forecast",
+      "detail": "",
+      "expected": "accepted",
+      "kind": "constructor",
+      "passed": true
+    },
+    {
+      "actual": "ContractError",
+      "case": "forecast_training_ends_after_issue",
+      "detail": "future evidence: train_end_ns must be <= fit_available_at_ns <= issue_at_ns",
+      "expected": "ContractError",
+      "kind": "constructor",
+      "passed": true
+    }
+  ],
+  "harness_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+  "input_hashes": {
+    "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json": "d7f8878b0aa7fda33d0b88d194afff6ca2afb00ea4d85dcca251016b511bb019",
+    "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/SUBPHASE_RECEIPT.json": "8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67",
+    "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json": "ce57e93846d6a1b3af936703058e15b012aa23720387f00bad4c37cac1341858",
+    "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json": "73ec9ea4ccd580275d47901cb807f57733f91d7914daf0e10e7e24fbe5962617",
+    "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json": "97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f",
+    "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json": "cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412",
+    "/workspace/planning/research-program/TASK_GRAPH.json": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4"
+  },
+  "schema": "foundation-adversarial-results-v1",
+  "status": "pass"
+}

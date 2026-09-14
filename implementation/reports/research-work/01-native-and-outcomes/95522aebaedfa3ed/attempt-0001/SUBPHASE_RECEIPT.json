@@ -1,0 +1,160 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2",
+    "research-subphase-receipt-v2",
+    "research-gate-review-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "coverage": {
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "parity_dates": [
+      "2020-01-02",
+      "2020-03-02",
+      "2020-03-13",
+      "2020-04-01",
+      "2020-06-01",
+      "2020-07-01",
+      "2020-09-01",
+      "2020-10-01",
+      "2020-12-01",
+      "2021-01-04",
+      "2021-03-01",
+      "2021-04-01",
+      "2021-06-01",
+      "2021-07-01",
+      "2021-09-01",
+      "2021-10-01",
+      "2021-12-01",
+      "2022-01-03",
+      "2022-03-01",
+      "2022-04-01",
+      "2022-06-01",
+      "2022-07-01",
+      "2022-09-01",
+      "2022-10-03",
+      "2022-12-01",
+      "2023-01-03",
+      "2023-03-01",
+      "2023-03-13",
+      "2023-04-03",
+      "2023-06-01",
+      "2023-07-05",
+      "2023-09-01",
+      "2023-10-02",
+      "2023-11-06",
+      "2023-11-24",
+      "2023-12-01",
+      "2024-01-02",
+      "2024-03-01",
+      "2024-04-01",
+      "2024-06-03",
+      "2024-07-01",
+      "2024-09-03",
+      "2024-10-01",
+      "2024-12-02",
+      "2025-01-02",
+      "2025-03-03",
+      "2025-04-01",
+      "2025-06-02",
+      "2025-07-01",
+      "2025-09-02",
+      "2025-10-01",
+      "2025-12-01",
+      "2026-01-02",
+      "2026-01-05",
+      "2026-01-06",
+      "2026-01-07",
+      "2026-01-08",
+      "2026-01-09",
+      "2026-01-12",
+      "2026-09-03"
+    ],
+    "parity_jobs": 3420,
+    "parity_matches": 3420
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06",
+    "2026-09-03"
+  ],
+  "reason": "01-native-and-outcomes closed: MarketView, baseline byte-parity, ordered labels and fit-period diagnostics",
+  "run_id": "95522aebaedfa3ed",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator-parent-grok"
+  },
+  "subphase_id": "01-native-and-outcomes",
+  "task_receipts": {
+    "P15-02": {
+      "path": "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f"
+    },
+    "P15-03": {
+      "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_02.py",
+        "tests/rule_discovery/test_p15_03.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/pytest.log",
+      "log_sha256": "217f4bb972e35752ca52a69614323afeff2d53d93ae313ffe0f7f07198ecb3e0",
+      "seconds": 134.0584306558594
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/verify_p15_02.log",
+      "log_sha256": "7ded0b0049aa03b18ea027b959a9c4210104f331c3e71b893dcbf75fb8ac0f72",
+      "seconds": 4.968116043135524
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/verify_p15_03.log",
+      "log_sha256": "db7e1d8ba4a24d268d23bf4f702d1f5e0711775d7d09faa2dd2b35d01881a361",
+      "seconds": 5.610080022364855
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "MarketView quotes are trade-synchronous BBO because mixed-action iteration is refused by the frozen tape adapter.",
+    "Phase 1 census was not rerun."
+  ]
+}

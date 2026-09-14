@@ -1,0 +1,601 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/ambiguous",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "same_batch_ambiguous",
+      "id": "A01",
+      "observed": "same_batch_ambiguous",
+      "oracle": "literal OUTCOMES.md fixtures",
+      "requirement": "Same-batch ambiguity and prior gap unknown",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a01_same_batch_ambiguous_and_prior_gap_unknown"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/execution.py",
+          "symbol": "worked_net_pnl_fixture"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EXECUTION_FIXTURES.json",
+          "selector": "/worked/net_dollars",
+          "sha256": "606bc11dcabdbddefc0f1ca507db69244122c313ec36f5963c852b15021d541b"
+        }
+      ],
+      "expected": "25.00",
+      "id": "A02",
+      "observed": "25.00",
+      "oracle": "ask 100 +1 tick, bid 102 -1 tick, $5 commission",
+      "requirement": "Worked $25 net P&L; gap not clipped at -1000",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a02_worked_net_pnl_and_gap_not_clipped"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/execution.py",
+          "symbol": "replay_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_a03_zero_entry_day_stays_in_denominator",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "mean includes zero day",
+      "id": "A03",
+      "observed": "1",
+      "oracle": "two complete days",
+      "requirement": "Zero-entry complete day stays in denominator",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a03_zero_entry_day_stays_in_denominator"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "purge_overlap"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/SPLIT_MANIFEST.json",
+          "selector": "/purge",
+          "sha256": "a195e16397387329e30b44eceb3da7c6620d9853c8d9b019bc3a8af0fa981259"
+        }
+      ],
+      "expected": "embargo one day",
+      "id": "A04",
+      "observed": "one account-day embargo",
+      "oracle": "EVALUATION.md",
+      "requirement": "Account-day rows never split across partitions",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a04_account_day_rows_do_not_split"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_a05_reversed_side_and_future_import_fail",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "invalid_geometry; scanners do not import outcomes",
+      "id": "A05",
+      "observed": "invalid_geometry",
+      "oracle": "source import scan",
+      "requirement": "Reversed geometry and future-label import fail",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a05_reversed_side_and_future_import_fail"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "evaluation_protocol"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EVALUATION_PROTOCOL.json",
+          "selector": "/primary_score",
+          "sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b"
+        }
+      ],
+      "expected": "mean_daily_net_points_one_mini_benchmark",
+      "id": "A06",
+      "observed": "mean_daily_net_points_one_mini_benchmark",
+      "oracle": "EVALUATION.md",
+      "requirement": "Protocol records primary score before search",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a06_protocol_records_primary_score"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "write_p15_03_receipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/schema_version",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "graph ids",
+      "id": "A07",
+      "observed": "22 checks",
+      "oracle": "required_matrix_ids",
+      "requirement": "Matrix ids cover Axx and assigned Sxx",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a07_required_matrix_ids_match_graph"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_a08_assigned_failure_probes_are_present",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "S tests present",
+      "id": "A08",
+      "observed": "present",
+      "oracle": "test file",
+      "requirement": "Assigned silent-failure probes present",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_a08_assigned_failure_probes_are_present"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "split_manifest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/SPLIT_MANIFEST.json",
+          "selector": "/schema_version",
+          "sha256": "a195e16397387329e30b44eceb3da7c6620d9853c8d9b019bc3a8af0fa981259"
+        }
+      ],
+      "expected": "different date lists differ",
+      "id": "S01",
+      "observed": "differ",
+      "oracle": "canonical JSON",
+      "requirement": "Split identity changes with dates",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s01_forged_split_identity_changes"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/target_first",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "target_first vs stop_first/neither",
+      "id": "S02",
+      "observed": "target_first",
+      "oracle": "literal prices",
+      "requirement": "Wrong side does not keep target_first",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s02_sensitive_target_first_reverses_on_wrong_side"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "evaluation_protocol"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EVALUATION_PROTOCOL.json",
+          "selector": "/registered_before_candidate_search",
+          "sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b"
+        }
+      ],
+      "expected": "stable digest",
+      "id": "S03",
+      "observed": "true",
+      "oracle": "digest equality",
+      "requirement": "Protocol digest is canonical",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s03_protocol_identity_is_canonical"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/types.py",
+          "symbol": "CoverageReceipt"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_s05_coverage_receipt_rejects_late_evidence",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "ContractError",
+      "id": "S05",
+      "observed": "ContractError",
+      "oracle": "available_at 100 vs window 10",
+      "requirement": "Coverage receipt rejects late evidence",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s05_coverage_receipt_rejects_late_evidence"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "causal_scale"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_s06_missing_scale_is_not_filled",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "None when minutes<60",
+      "id": "S06",
+      "observed": "None",
+      "oracle": "OUTCOMES.md",
+      "requirement": "Missing scale is not filled",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s06_missing_scale_is_not_filled"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_s07_native_scale_uses_owned_row_clock",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "kind native",
+      "id": "S07",
+      "observed": "native",
+      "oracle": "parquet row 769284",
+      "requirement": "Native row clocks replay",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s07_native_scale_uses_owned_row_clock"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/target_first",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "target_first",
+      "id": "S08",
+      "observed": "target_first",
+      "oracle": "horizon end 15",
+      "requirement": "Later prices do not change earlier passage",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s08_later_price_does_not_change_earlier_passage"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/ambiguous",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "same_batch_ambiguous",
+      "id": "S09",
+      "observed": "same_batch_ambiguous",
+      "oracle": "swapped prices",
+      "requirement": "Batch order does not invent passage",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s09_batch_order_does_not_invent_passage"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "split_manifest"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/SPLIT_MANIFEST.json",
+          "selector": "/outer",
+          "sha256": "a195e16397387329e30b44eceb3da7c6620d9853c8d9b019bc3a8af0fa981259"
+        }
+      ],
+      "expected": "2023 dates in test 2023",
+      "id": "S10",
+      "observed": "2023",
+      "oracle": "calendar years",
+      "requirement": "DST dates stay in the same outer year",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s10_split_keeps_dst_year_together"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "first_passage"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/LABEL_FIXTURES.json",
+          "selector": "/gap",
+          "sha256": "9ccf019946686767b95361dfa18484e2521730a17ce76af412efdb6e6fbe70e5"
+        }
+      ],
+      "expected": "prior_gap_unknown or missing_future",
+      "id": "S11",
+      "observed": "prior_gap_unknown",
+      "oracle": "unknown interval",
+      "requirement": "Missing future is not neither",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s11_missing_future_is_not_neither"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/outcomes.py",
+          "symbol": "excursions"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/pytest.log",
+          "selector": "test_s14_units_and_scale",
+          "sha256": "45e9c365660a7779994db1519eaf84e679b0db32d31f040fa8b38daf71d9df56"
+        }
+      ],
+      "expected": "MFE 4 MAE 1",
+      "id": "S14",
+      "observed": "4 and 1",
+      "oracle": "OUTCOMES.md worked vector",
+      "requirement": "Units: MFE/MAE example and scale floor",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s14_units_and_scale"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "purge_overlap"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/SPLIT_MANIFEST.json",
+          "selector": "/outer/0/test_year",
+          "sha256": "a195e16397387329e30b44eceb3da7c6620d9853c8d9b019bc3a8af0fa981259"
+        }
+      ],
+      "expected": "2022",
+      "id": "S16",
+      "observed": "2022",
+      "oracle": "outer year list",
+      "requirement": "Overlapping labels purged at fold boundary",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s16_label_boundary_purge"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/evaluation.py",
+          "symbol": "holm"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EVALUATION_PROTOCOL.json",
+          "selector": "/registered_before_candidate_search",
+          "sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b"
+        }
+      ],
+      "expected": "true",
+      "id": "S17",
+      "observed": "true",
+      "oracle": "protocol freeze",
+      "requirement": "Primary score registered before search",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s17_future_labels_do_not_enter_fit"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/contracts/execution.py",
+          "symbol": "replay_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EXECUTION_FIXTURES.json",
+          "selector": "/worked/match",
+          "sha256": "606bc11dcabdbddefc0f1ca507db69244122c313ec36f5963c852b15021d541b"
+        }
+      ],
+      "expected": "true",
+      "id": "S30",
+      "observed": "true",
+      "oracle": "one-mini BBO benchmark",
+      "requirement": "Costed replay keeps zero days and occupancy",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_03.py::test_s30_costed_replay_and_zero_day"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-03"
+}

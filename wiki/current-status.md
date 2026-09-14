@@ -1,6 +1,6 @@
 # Research status
 
-Phase 1 setup implementation and measurement are complete for the acquired observed-input population. Phase 1.5 subphase `00-foundation` is closed under assurance `research-assurance-2026-09-14-v2` on the new immutable receipts below. The earlier v2 attempt `240838146c38c484` was rejected by the [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and remains preserved. The original 2026-09-14 v1 completion also remains preserved as a rejected historical attempt. Later Phase 1.5 subphases and Phase 2 are specified and have not been executed.
+Phase 1 setup implementation and measurement are complete for the acquired observed-input population. Phase 1.5 subphase `00-foundation` is closed under assurance `research-assurance-2026-09-14-v2`. Phase 1.5 subphase `01-native-and-outcomes` is closed on the immutable receipts below. The earlier foundation v2 attempt `240838146c38c484` was rejected by the [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and remains preserved. The original 2026-09-14 v1 completion also remains preserved as a rejected historical attempt. Later Phase 1.5 subphases and Phase 2 are specified and have not been executed.
 
 ## Phase 1 baseline
 
@@ -32,9 +32,17 @@ Original rejected v1 receipts, hashes unchanged:
 
 [Independent review that rejected v1](/workspace/planning/research-program/reviews/00-foundation-2026-09-14/REVIEW.md) · [v1 reproductions](/workspace/planning/research-program/reviews/00-foundation-2026-09-14/adversarial-confirmed/RESULTS.json) · [Independent review that rejected v2](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) · [v2 additional reproductions](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/additional-suite/RESULTS.json) · [ASSURANCE.md](/workspace/planning/research-program/ASSURANCE.md).
 
+## Phase 1.5 native views and outcomes
+
+P15-02 wraps HistoricalFeatures in a columnar MarketView and replays baseline scanners. P15-03 adds ordered first-passage labels, the one-mini costed benchmark, chronological splits and fit-period diagnostics. Task verifiers exit 0. Subphase `--gate-review` exits 0. Pinned checker 27/27 on the closed foundation receipts. Baseline parity is 3420/3420 jobs on 60 stratified dates versus run-1.0.1. Diagnostics through 2021-12-31 are descriptive and were not used to change the bank, thresholds or dates.
+
+[P15-02 `ebb1b8270700be4d`](/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json) sha256 `97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f` · [P15-03 `53e8f17617f39a87`](/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json) sha256 `cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412` · [Subphase `95522aebaedfa3ed`](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/SUBPHASE_RECEIPT.json) sha256 `8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67` · [GATE_REVIEW.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/GATE_REVIEW.json) sha256 `5d192e5f438f9c11355063204526eca0a6a1be0a4b95361727ab73393caceaa2`.
+
+MarketView quotes are trade-synchronous BBO. Mixed-action MBP-1 iteration is refused by the frozen tape adapter. Exchange-feed completeness remains unknown. Same-model coordinator review is not cross-model diversity.
+
 ## Next phases
 
-[Phase 1.5](/workspace/planning/phase-1-5/README.md) reconstructs remaining numerical rules, screens representative mechanisms, refines promising families within a finite budget and measures individual setup changes. Finishing it is a prerequisite to starting Phase 2 implementation. The current eligible work is `01-native-and-outcomes`, using the closed v3 foundation receipts `40ffb49bc037e3cc` / `ee71900e26791e89` / `6824d15fbda635ce` and matching GATE_REVIEW.json above. Do not treat rejected v1 receipts or rejected v2 attempt `240838146c38c484` as that gate. This status update did not start 01.
+[Phase 1.5](/workspace/planning/phase-1-5/README.md) reconstructs remaining numerical rules, screens representative mechanisms, refines promising families within a finite budget and measures individual setup changes. Finishing it is a prerequisite to starting Phase 2 implementation. The current eligible work is `02-source-reconstruction`, using the closed 01 receipts `ebb1b8270700be4d` / `53e8f17617f39a87` / `95522aebaedfa3ed` and matching GATE_REVIEW.json above, which themselves require the closed v3 foundation receipts `40ffb49bc037e3cc` / `ee71900e26791e89` / `6824d15fbda635ce`. Do not treat rejected v1 receipts or rejected v2 attempt `240838146c38c484` as that gate. This status update did not start 02.
 
 [Phase 2](/workspace/planning/phase-2/README.md) builds jointly fitted intraday volatility forecasts, native options context with intraday updates, auction/session/cross-market forecasts and method-specific context experts. It supplies conditional plans; final entry integration belongs to Phase 4. [Architecture](research-architecture.md) and the [roadmap](/workspace/planning/ROADMAP.md) define the boundaries.
 

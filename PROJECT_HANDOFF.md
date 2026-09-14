@@ -9,14 +9,14 @@ This file is the starting context for a new session with no knowledge of the pre
 - **The goal:** build an adaptive NQ decision process with independently testable context, location, response, entry and risk/management components. Source methods provide baselines and mechanisms. There is no agreed fixed number of models.
 - **Phase 1 is complete** for the acquired observed-input population. Its census contains 18,747 observed setups. These are opportunities and subsequent price observations, not independent executed trades or proven profits.
 - **Phase 1.5 and Phase 2 are fully specified:** 46 task cards in 17 subphases. Most of that implementation does not exist yet.
-- **Only Phase 1.5 `00-foundation` has been implemented and closed so far.** The current admitted identities are P15-00 `40ffb49bc037e3cc`, P15-01 `ee71900e26791e89`, subphase `6824d15fbda635ce` and matching GATE_REVIEW. The [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) rejected attempt `240838146c38c484`; that attempt is preserved and is not this gate.
-- **Do not start `01-native-and-outcomes` until a later user-dispatched coordinator prompt.** All of Phase 1.5 must subsequently finish before Phase 2 implementation. Phase 3 and Phase 4 have agreed scope but no detailed implementation packs yet.
-- **Immediate engineering work:** execute `01-native-and-outcomes` from the closed v3 receipts below, not from rejected v1 or v2 attempts. Historical repair context remains in the [v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and [repair prompt](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REPAIR_PROMPT.md).
+- **Phase 1.5 `00-foundation` and `01-native-and-outcomes` are closed.** Foundation identities remain P15-00 `40ffb49bc037e3cc`, P15-01 `ee71900e26791e89`, subphase `6824d15fbda635ce` and matching GATE_REVIEW. The [2026-09-14 v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) rejected attempt `240838146c38c484`; that attempt is preserved and is not that gate. Native/outcomes identities are P15-02 `ebb1b8270700be4d`, P15-03 `53e8f17617f39a87`, subphase `95522aebaedfa3ed` and matching GATE_REVIEW.
+- **Do not start `02-source-reconstruction` until a later user-dispatched coordinator prompt.** All of Phase 1.5 must subsequently finish before Phase 2 implementation. Phase 3 and Phase 4 have agreed scope but no detailed implementation packs yet.
+- **Immediate engineering work:** execute `02-source-reconstruction` from the closed 01 receipts below, which themselves require the closed v3 foundation receipts, not rejected v1 or v2 attempts. Historical repair context remains in the [v2 review](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REVIEW.md) and [repair prompt](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/REPAIR_PROMPT.md).
 - **User constraint:** usage available for this assistant is limited. The user has been using Grok for implementation and wants bounded, self-contained handoffs, practical progress and honest verification. Do not restart a planning interview or expand the specifications by default.
 
 The wiki now records the closed v3 identities. The root README and some planning reports may still retain documentation-only wording; task cards and TASK_GRAPH retain `planned` authoring status. Use dated execution evidence to determine actual progress. Neither a stale README sentence nor a `planned` card header establishes runtime status.
 
-The rejected v2 identities remain those in the review's [INPUT_IDENTITIES.json](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/INPUT_IDENTITIES.json). Current admission uses the new receipts named in section 8.
+The rejected v2 identities remain those in the review's [INPUT_IDENTITIES.json](/workspace/planning/research-program/reviews/00-foundation-v2-2026-09-14/INPUT_IDENTITIES.json). Current admission uses the receipts named in section 8.
 
 ## 2. The project objective and settled decisions
 
@@ -174,13 +174,22 @@ Canonical details: [DATA_CONTRACTS.md](/workspace/planning/research-program/DATA
 
 Engineering slices are deterministic coverage-based checks per required input group, including year/DST slots and separate partial/roll/gap/ambiguity evidence. They do not replace the complete registered research run or the actual training-history requirements. The fixed independent suite is a minimum, not an exhaustive proof.
 
-## 8. Current foundation review — exact stopping point
+## 8. Current stopping point
 
-The current assurance identifier is **`research-assurance-2026-09-14-v2`** and plan version is **`research-plan-2026-09-14-v2`**. The 2026-09-14 v2 findings already followed that contract; the repair implemented those existing rules. No further research-plan expansion was required.
+The current assurance identifier is **`research-assurance-2026-09-14-v2`** and plan version is **`research-plan-2026-09-14-v2`**. `01-native-and-outcomes` is closed on the identities in the first table. `00-foundation` remains closed on the v3 identities in the historical table. Stop here. Do not start `02-source-reconstruction` in this run. The next eligible coordinator prompt is that subphase's runbook.
 
-`00-foundation` is closed on the v3 identities below. Stop here. Do not start `01-native-and-outcomes` in this repair. The next eligible coordinator prompt is that subphase's runbook.
+### 01-native-and-outcomes closed artifacts
 
-### Latest verification evidence
+| Artifact | Path | SHA256 |
+| --- | --- | --- |
+| P15-02 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json) | `97c677a2ef9d29c1144dbb5e30e3f9e8ebddac54862bf10bb1e815358b48392f` |
+| P15-03 | [TASK_RECEIPT.json](/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json) | `cfe8fc68c1cda6cb4bcb6d48a9012623169d6a5dad7773613c5085c239721412` |
+| 01 candidate | [SUBPHASE_RECEIPT.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/SUBPHASE_RECEIPT.json) | `8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67` |
+| Matching review | [GATE_REVIEW.json](/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/GATE_REVIEW.json) | `5d192e5f438f9c11355063204526eca0a6a1be0a4b95361727ab73393caceaa2` |
+
+Pytest 26 passed (P15-02) and 22 passed (P15-03). Both task verifiers exit 0. Subphase `--gate-review` exits 0. Pinned checker 27/27 on the closed foundation receipts. Parity 3420/3420. Diagnostics through 2021-12-31 are descriptive only.
+
+### Latest foundation verification evidence (unchanged historical gate)
 
 | Check | Actual observed result |
 | --- | --- |

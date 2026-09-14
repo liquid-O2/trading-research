@@ -1,0 +1,174 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v2",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "8de21ad751caecab4cd9feafa73f4d8b56cb8349ea53750e792789203f119b67"
+  },
+  "code_snapshots": {
+    "P15-02": {
+      "code_sha256": "e337a85e1e237aff2248c98005f3a54518eefcc1c843979c32e76bc6d04ab8ff",
+      "path": "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "fab07e37ddb3916aa52c6c3c1c66ed0ceb3aa65aacb71345788a73320734f140"
+    },
+    "P15-03": {
+      "code_sha256": "a726a16414d27fed8ce3e25652f50c59f5c41c08c9e27a7f4b433aeb8c35b4f3",
+      "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "f31fc17f56297190b7c2300b4620d77e5cfb52c3c7c050bc4b9d9a8e53a03d06"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/40ffb49bc037e3cc/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/ee71900e26791e89/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/6824d15fbda635ce/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/01-native-and-outcomes/fixed-suite"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/FOUNDATION_CHECKER_RESULTS.json",
+      "log_sha256": "e9649e59fbd2cd2f8dca5576c8a76b0d3fb1d5278dfe51e9c0db8b65b775018d",
+      "seconds": 36.64
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-c",
+        "compose independent results input_hashes for 01 candidate"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/INDEPENDENT_RESULTS.json",
+      "log_sha256": "c0f036aa44eb0300012c73c0371a1d37578b3dee6aa6d207dfce15c51c1b988b",
+      "seconds": 0.01
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_02.py",
+        "tests/rule_discovery/test_p15_03.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/pytest.log",
+      "log_sha256": "217f4bb972e35752ca52a69614323afeff2d53d93ae313ffe0f7f07198ecb3e0",
+      "seconds": 134.0584306558594
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/verify_p15_02.log",
+      "log_sha256": "7ded0b0049aa03b18ea027b959a9c4210104f331c3e71b893dcbf75fb8ac0f72",
+      "seconds": 4.968116043135524
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/implementation/tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/verify_p15_03.log",
+      "log_sha256": "db7e1d8ba4a24d268d23bf4f702d1f5e0711775d7d09faa2dd2b35d01881a361",
+      "seconds": 5.610080022364855
+    }
+  ],
+  "evidence_matrices": {
+    "P15-02": {
+      "path": "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "1385bf9a9bdbc7b8e94035090f353ee22b13d6be4de64e1a003843558c574d13"
+    },
+    "P15-03": {
+      "path": "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "caf7a5cbc2e209eb970d59cf40d3e2a534a64abc62353558758baa8301bfd9b0"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/NATIVE_PARITY.json"
+      ],
+      "id": "F01",
+      "reproduction": "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/NATIVE_PARITY.json",
+      "resolution": "resolved",
+      "resolution_evidence": "matches==jobs==3420",
+      "severity": "integrity",
+      "summary": "Baseline parity 3420/3420 byte matches after domain-path alignment."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-03/53e8f17617f39a87/attempt-0001/EXECUTION_FIXTURES.json"
+      ],
+      "id": "F02",
+      "reproduction": "execution.worked_net_pnl_fixture",
+      "resolution": "resolved",
+      "resolution_evidence": "25.00",
+      "severity": "correctness",
+      "summary": "Independent $25 net-P&L arithmetic (1.50*20)-5."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-02/ebb1b8270700be4d/attempt-0001/pytest.log"
+      ],
+      "id": "F03",
+      "reproduction": "replay_native_row",
+      "resolution": "resolved",
+      "resolution_evidence": "1609770600002445765",
+      "severity": "causality",
+      "summary": "Native parquet row 769284 replays event_ns 1609770600002445765."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "90dc3be7bd99d90fc0e15e0b62a5424608b7dbaa867a1d02f8692830e56931f4"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/01-native-and-outcomes/95522aebaedfa3ed/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "c0f036aa44eb0300012c73c0371a1d37578b3dee6aa6d207dfce15c51c1b988b",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; inherit-parent reviewer is not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "2967a01721052e8d250b9aeb1e42f619eacbcb76a80386654a87b8e28161ba90"
+  },
+  "reviewed_at": "2026-09-14T15:11:00Z",
+  "reviewed_task_ids": [
+    "P15-02",
+    "P15-03"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "01-native-and-outcomes",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "Pinned 27-case suite is not exhaustive of P15-02/P15-03 behavior.",
+    "Phase 1 census was not rerun."
+  ],
+  "verdict": "pass"
+}
