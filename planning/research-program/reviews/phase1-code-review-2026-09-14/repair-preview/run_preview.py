@@ -98,6 +98,53 @@ def _judas_window_stats(document):
     return {"entry_outside_reversal_window": n}
 
 
+def _judas_deferred_stats(document):
+    pass_n = 0
+    fail_window = 0
+    fail_other = 0
+    unknown_n = 0
+    for episode in document.get("episodes") or []:
+        failed = episode.get("failed") or []
+        verdict = episode.get("research_verdict")
+        if verdict == "pass":
+            pass_n += 1
+        elif verdict == "unknown":
+            unknown_n += 1
+        elif "reclaim_not_held_at_window" in failed:
+            fail_window += 1
+        else:
+            fail_other += 1
+    return {
+        "pass": pass_n,
+        "fail_reclaim_not_held_at_window": fail_window,
+        "fail_other": fail_other,
+        "unknown": unknown_n,
+        "episodes": pass_n + fail_window + fail_other + unknown_n,
+    }
+
+
+DEFERRED_COVERAGE_ID = "JJ-TBR:branch:judas_reversal_deferred"
+JUDAS_COVERAGE_ID = "JJ-TBR:branch:judas_reversal"
+
+
+def _ensure_judas_deferred_row(rows):
+    if any(row["coverage_id"] == DEFERRED_COVERAGE_ID for row in rows):
+        return rows
+    parent = next((row for row in rows if row["coverage_id"] == JUDAS_COVERAGE_ID), None)
+    if parent is None:
+        return rows
+    return list(rows) + [
+        {**parent, "coverage_id": DEFERRED_COVERAGE_ID, "branch": "judas_reversal_deferred"}
+    ]
+
+
+def _b0_row(row):
+    """Accepted B0 has no deferred Judas branch; compare that row to native judas_reversal."""
+    if row["coverage_id"] != DEFERRED_COVERAGE_ID:
+        return row
+    return {**row, "coverage_id": JUDAS_COVERAGE_ID, "branch": "judas_reversal"}
+
+
 def _counts(document):
     episodes = document.get("episodes") or []
     no_setup = 0
@@ -177,15 +224,17 @@ def _process_date(payload):
         record = {"coverage_id": row["coverage_id"], "date": day}
         try:
             t1 = time.monotonic()
-            b0 = scan_branch(market, row)
+            b0 = scan_branch(market, _b0_row(row))
             t2 = time.monotonic()
             b01 = scan_branch_repaired(market, row)
             t3 = time.monotonic()
             extras = {}
             if row["method_id"] == "GB-FAIL":
                 extras = _gb_fail_stop_stats(market, b01)
-            elif row["coverage_id"] == "JJ-TBR:branch:judas_reversal":
+            elif row["coverage_id"] == JUDAS_COVERAGE_ID:
                 extras = _judas_window_stats(b01)
+            elif row["coverage_id"] == DEFERRED_COVERAGE_ID:
+                extras = _judas_deferred_stats(b01)
             record.update(
                 ok=True,
                 b0=_counts(b0),
@@ -197,6 +246,7 @@ def _process_date(payload):
                 baseline_version_b0=b0.get("baseline_version"),
                 baseline_version_b01=b01.get("baseline_version"),
                 _round4=extras,
+                _round5=extras,
             )
         except Exception as exc:
             record.update(
@@ -274,18 +324,28 @@ def aggregate(date_results, dates, calendar_n):
     diagnostics = {
         "gb_fail": {"confirm_bar_offset_gt0": 0, "stop_changed": 0},
         "judas_reversal": {"entry_outside_reversal_window": 0},
+        "judas_reversal_deferred": {
+            "pass": 0,
+            "fail_reclaim_not_held_at_window": 0,
+            "fail_other": 0,
+            "unknown": 0,
+            "episodes": 0,
+        },
     }
     for item in date_results:
         for record in item.get("branches") or []:
-            extras = record.get("_round4") or {}
+            extras = record.get("_round5") or record.get("_round4") or {}
             cid = record["coverage_id"]
             if cid.startswith("GB-FAIL:"):
                 diagnostics["gb_fail"]["confirm_bar_offset_gt0"] += extras.get("confirm_bar_offset_gt0", 0)
                 diagnostics["gb_fail"]["stop_changed"] += extras.get("stop_changed", 0)
-            elif cid == "JJ-TBR:branch:judas_reversal":
+            elif cid == JUDAS_COVERAGE_ID:
                 diagnostics["judas_reversal"]["entry_outside_reversal_window"] += extras.get(
                     "entry_outside_reversal_window", 0
                 )
+            elif cid == DEFERRED_COVERAGE_ID:
+                for key in diagnostics["judas_reversal_deferred"]:
+                    diagnostics["judas_reversal_deferred"][key] += extras.get(key, 0)
     return {
         "schema": "baseline-repair-delta-preview-v1",
         "header": "Preview for the orchestrator, not a receipt. B0 is native_discovery.scan_branch; B0.1 is scan_branch_repaired. No files were written under implementation/reports/phase1-live.",
@@ -299,6 +359,7 @@ def aggregate(date_results, dates, calendar_n):
         "n_branches": len(branches),
         "branches": branches,
         "round4_diagnostics": diagnostics,
+        "round5_diagnostics": diagnostics,
         "wall_seconds_total": round(sum(item.get("wall_seconds") or 0 for item in date_results), 4),
         "date_results": [
             {
@@ -327,7 +388,9 @@ def render_md(payload):
         f"- Branches: {payload['n_branches']}",
         f"- Wall seconds (sum of per-date worker elapsed): {payload['wall_seconds_total']}",
     ]
-    if payload.get("round4_note"):
+    if payload.get("round5_note"):
+        lines.append(f"- Note: {payload['round5_note']}")
+    elif payload.get("round4_note"):
         lines.append(f"- Note: {payload['round4_note']}")
     lines += [
         "",
@@ -361,16 +424,16 @@ def _row_wanted(row, only):
     return cid in only or method in only or any(cid.startswith(f"{token}:") for token in only)
 
 
-def merge_payload(existing, fresh, refreshed_ids):
+def merge_payload(existing, fresh, refreshed_ids, *, round_key="round5", note=None):
     by_id = {row["coverage_id"]: row for row in existing.get("branches") or []}
     for row in fresh.get("branches") or []:
         by_id[row["coverage_id"]] = row
     existing["branches"] = [by_id[cid] for cid in sorted(by_id)]
-    existing["round4_note"] = "only GB-FAIL and JJ-TBR rows were refreshed in round four"
-    existing["round4_refreshed_coverage_ids"] = sorted(refreshed_ids)
-    existing["round4_wall_seconds_orchestrator"] = fresh.get("wall_seconds_orchestrator")
-    existing["round4_diagnostics"] = fresh.get("round4_diagnostics")
-    existing["round4_date_results"] = fresh.get("date_results")
+    existing[f"{round_key}_note"] = note or "only JJ-TBR rows were refreshed in round five"
+    existing[f"{round_key}_refreshed_coverage_ids"] = sorted(refreshed_ids)
+    existing[f"{round_key}_wall_seconds_orchestrator"] = fresh.get("wall_seconds_orchestrator")
+    existing[f"{round_key}_diagnostics"] = fresh.get("round5_diagnostics") or fresh.get("round4_diagnostics")
+    existing[f"{round_key}_date_results"] = fresh.get("date_results")
     existing["n_branches"] = len(existing["branches"])
     return existing
 
@@ -386,8 +449,10 @@ def main(argv=None):
     registry, manifest = hr.load_registry(PHASE1_RUN, check_software=False)
     wanted = set(affected_branch_ids())
     rows = [slim_row(row) for row in manifest["branches"] if row["coverage_id"] in wanted]
-    if len(rows) != len(wanted):
-        missing = wanted - {row["coverage_id"] for row in rows}
+    rows = _ensure_judas_deferred_row(rows)
+    present = {row["coverage_id"] for row in rows}
+    if present != wanted:
+        missing = wanted - present
         raise SystemExit(f"coverage rows missing: {sorted(missing)}")
     if args.only:
         rows = [row for row in rows if _row_wanted(row, args.only)]
@@ -420,13 +485,24 @@ def main(argv=None):
     md_path = OUT_DIR / "BASELINE_REPAIR_DELTA.md"
     if args.merge:
         existing = json.loads(json_path.read_text())
-        payload = merge_payload(existing, payload, [row["coverage_id"] for row in rows])
+        payload = merge_payload(
+            existing,
+            payload,
+            [row["coverage_id"] for row in rows],
+            round_key="round5",
+            note="only JJ-TBR rows were refreshed in round five",
+        )
     json_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     md_path.write_text(render_md(payload))
     print("wrote", json_path)
     print("wrote", md_path)
-    print("orchestrator_wall_s", payload.get("round4_wall_seconds_orchestrator") or payload["wall_seconds_orchestrator"])
-    print("round4_diagnostics", json.dumps(payload.get("round4_diagnostics") or {}))
+    print(
+        "orchestrator_wall_s",
+        payload.get("round5_wall_seconds_orchestrator")
+        or payload.get("round4_wall_seconds_orchestrator")
+        or payload["wall_seconds_orchestrator"],
+    )
+    print("round5_diagnostics", json.dumps(payload.get("round5_diagnostics") or {}))
 
 
 if __name__ == "__main__":

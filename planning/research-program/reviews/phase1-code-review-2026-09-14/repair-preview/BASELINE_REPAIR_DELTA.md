@@ -6,9 +6,9 @@ Preview for the orchestrator, not a receipt. B0 is native_discovery.scan_branch;
 - B0.1: `B0.1-2026-09-14` via `scan_branch_repaired`
 - Dates: 40 (2020-01-01 .. 2026-09-03)
 - Date source: extract_b.py even spacing: idx=round(i*(N-1)/39) over 1742 run-1.0.1 jobs/evaluation session dates
-- Branches: 38
+- Branches: 39
 - Wall seconds (sum of per-date worker elapsed): 4681.4275
-- Note: only GB-FAIL and JJ-TBR rows were refreshed in round four
+- Note: only JJ-TBR rows were refreshed in round five
 
 | branch | dates | ep B0 | ep B0.1 | pass B0 | pass B0.1 | fail B0 | fail B0.1 | unknown B0 | unknown B0.1 | no-setup B0 | no-setup B0.1 | verdict changed | directions | pass to unknown (C7) | wall s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: |
@@ -21,14 +21,15 @@ Preview for the orchestrator, not a receipt. B0 is native_discovery.scan_branch;
 | `GB-FAIL:branch:prior_month_level` | 40 | 20 | 20 | 1 | 4 | 18 | 14 | 1 | 2 | 18 | 14 | 4 | fail->pass:3, fail->unknown:1 | 0 | 638.9 |
 | `GB-FAIL:branch:prior_week_level` | 40 | 24 | 24 | 6 | 14 | 18 | 9 | 0 | 1 | 18 | 9 | 9 | fail->pass:8, fail->unknown:1 | 0 | 164.2 |
 | `GB-VWAP:branch:source_long` | 40 | 27 | 27 | 10 | 10 | 17 | 0 | 0 | 17 | 17 | 0 | 17 | fail->unknown:17 | 0 | 97.2 |
-| `JJ-TBR:branch:extension_reaction` | 40 | 49 | 25 | 6 | 4 | 43 | 21 | 0 | 0 | 43 | 21 | 0 | — | 0 | 5.9 |
-| `JJ-TBR:branch:internal_rotation` | 40 | 38 | 28 | 1 | 1 | 37 | 27 | 0 | 0 | 37 | 27 | 0 | — | 0 | 0.9 |
-| `JJ-TBR:branch:judas_outbound` | 40 | 38 | 38 | 35 | 35 | 3 | 3 | 0 | 0 | 3 | 3 | 0 | — | 0 | 60.0 |
-| `JJ-TBR:branch:judas_reversal` | 40 | 32 | 37 | 3 | 2 | 29 | 35 | 0 | 0 | 29 | 32 | 0 | — | 0 | 12.3 |
-| `JJ-TBR:branch:other_session` | 40 | 304 | 304 | 55 | 55 | 249 | 249 | 0 | 0 | 249 | 249 | 0 | — | 0 | 32.1 |
-| `JJ-TBR:branch:single_extended` | 40 | 19 | 14 | 0 | 0 | 19 | 14 | 0 | 0 | 19 | 14 | 0 | — | 0 | 5.3 |
-| `JJ-TBR:branch:single_purged` | 40 | 19 | 14 | 1 | 0 | 18 | 14 | 0 | 0 | 18 | 14 | 0 | — | 0 | 0.7 |
-| `JJ-TBR:branch:timed_pzone_reversal` | 40 | 63 | 63 | 7 | 7 | 56 | 56 | 0 | 0 | 56 | 56 | 0 | — | 0 | 182.9 |
+| `JJ-TBR:branch:extension_reaction` | 40 | 49 | 25 | 6 | 4 | 43 | 21 | 0 | 0 | 43 | 21 | 0 | — | 0 | 6.3 |
+| `JJ-TBR:branch:internal_rotation` | 40 | 38 | 28 | 1 | 1 | 37 | 27 | 0 | 0 | 37 | 27 | 0 | — | 0 | 1.1 |
+| `JJ-TBR:branch:judas_outbound` | 40 | 38 | 38 | 35 | 35 | 3 | 3 | 0 | 0 | 3 | 3 | 0 | — | 0 | 52.9 |
+| `JJ-TBR:branch:judas_reversal` | 40 | 32 | 37 | 3 | 2 | 29 | 35 | 0 | 0 | 29 | 35 | 0 | — | 0 | 12.0 |
+| `JJ-TBR:branch:judas_reversal_deferred` | 40 | 32 | 37 | 3 | 5 | 29 | 32 | 0 | 0 | 29 | 32 | 0 | — | 0 | 1.1 |
+| `JJ-TBR:branch:other_session` | 40 | 304 | 304 | 55 | 55 | 249 | 249 | 0 | 0 | 249 | 249 | 0 | — | 0 | 33.5 |
+| `JJ-TBR:branch:single_extended` | 40 | 19 | 14 | 0 | 0 | 19 | 14 | 0 | 0 | 19 | 14 | 0 | — | 0 | 5.5 |
+| `JJ-TBR:branch:single_purged` | 40 | 19 | 14 | 1 | 0 | 18 | 14 | 0 | 0 | 18 | 14 | 0 | — | 0 | 1.0 |
+| `JJ-TBR:branch:timed_pzone_reversal` | 40 | 63 | 63 | 7 | 7 | 56 | 56 | 0 | 0 | 56 | 56 | 0 | — | 0 | 184.6 |
 | `KEANI-OPEN-ABOVE-VALUE:branch:source_long` | 40 | 38 | 38 | 0 | 2 | 36 | 35 | 2 | 1 | 36 | 35 | 2 | fail->pass:1, unknown->pass:1 | 0 | 54.6 |
 | `MEMBER-TWO-REASONS:branch:planned_return_long` | 40 | 18 | 18 | 8 | 8 | 10 | 10 | 0 | 0 | 10 | 10 | 0 | — | 0 | 60.1 |
 | `MEMBER-TWO-REASONS:branch:resistance_short` | 40 | 15 | 15 | 4 | 4 | 11 | 11 | 0 | 0 | 11 | 11 | 0 | — | 0 | 55.7 |

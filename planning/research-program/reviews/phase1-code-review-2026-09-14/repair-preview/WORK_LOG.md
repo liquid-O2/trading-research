@@ -133,3 +133,43 @@ Only GB-FAIL and JJ-TBR rows were refreshed. Other families remain round 3.
 ## Not done (round 4)
 
 - No git commit. P3/P5/P7 still out of scope. TBR quadrant entries (f5) remain a missing-stage assignment. `entry_in_reversal_window` was not added to FORMULAS/M01 (frozen pack). Strategy_assessment for the 3 Judas research-fail/setup rows was not rewritten.
+
+## Round 5 decisions (deferred Judas entry, post-finish strategy status)
+
+- **Deferred variant is a labelled entry-timing sibling of `judas_reversal`, not a new M01 CASE.** FORMULAS has no `judas_reversal_deferred` branch. `HistoricalEpisode` evaluates the `judas_reversal` CASE (`values['branch']` stays `judas_reversal`); after `finish()` the episode is relabelled `judas_reversal_deferred` and `candidate_id` is recomputed from that identity. Window-result `branch` and coverage id are `judas_reversal_deferred`.
+- **`scan_jumbo_repaired(m, 'judas_reversal')` produces both episode sets.** Strict episodes stay in `episodes`; deferred go to `deferred_variant`. Direct callers of the strict branch keep the same `N_observed`. `scan_jumbo_repaired(m, 'judas_reversal_deferred')` returns only the deferred set. `scan_branch_repaired` returns each under its coverage id with `baseline_version=B0.1-2026-09-14`.
+- **REPAIRS.** `judas_reversal_deferred` is added to C1 `branch_ids` and `JJ_TBR_REPAIRED_BRANCHES`. No new REPAIRS key: `test_repairs_registry_covers_named_defects` still expects the round-2/4 key set. Frozen coverage.json has no deferred row; `run_preview.py` clones the `judas_reversal` manifest row.
+- **Swept edge is the 6-9 formation edge**, not the wick extreme. Long: close `>` formation low. Short: close `<` formation high. Remaining beyond the wick but still outside the range is not a held reclaim. Search is 1-minute complete bars in `[09:40, 09:50)` via `m.bars(09:40, 09:50)`. First bar that is complete *and* on the reversal side; a 09:40 miss can still enter at 09:41. No such bar fails with `reclaim_not_held_at_window` after `finish()`. Confirmations already in 09:40–09:50 are not repriced.
+- **Stop and objective (target) stay the O056/strict values.** Entry and `decision_at` become that bar's close and `known_at`. `risk_defined` / `objective_fixed` recompute from the new entry. `confirm_at` stays the O056 known_at.
+- **Post-finish fail is generic.** `_fail_after_finish(episode, reason)` sets `research_verdict=fail`, appends the reason, and `_sync_strategy_status` maps pass/fail/unknown → setup/no_setup/data_unavailable (or condition_present/absent for non-entry_setup). Used for `entry_outside_reversal_window` and `reclaim_not_held_at_window`. Not per-reason copies.
+- **Preview B0 for the deferred row is native `judas_reversal`.** Accepted B0 has no deferred branch; `scan_branch` would KeyError. The deferred B0.1 row sits beside that B0. Candidate ids differ (branch in identity), so `verdict_changed` vs B0 is not the comparison to read; pass/fail/no_setup columns are.
+- **Merge.** Only JJ-TBR rows (including the new deferred row) are refreshed. Round-4 GB-FAIL diagnostics stay. Note line: only JJ-TBR rows were refreshed in round five.
+
+## Round 5 commands
+
+```
+cd implementation
+PYTHONPATH=src /workspace/implementation/.venv/bin/python -m pytest -p no:cacheprovider -q tests/rule_discovery/test_baseline_repairs.py --tb=short
+# 25 passed in 26.66s, exit 0
+```
+
+```
+cd implementation
+PYTHONPATH=src /workspace/implementation/.venv/bin/python \
+  /workspace/.worktrees/baseline-repair/planning/research-program/reviews/phase1-code-review-2026-09-14/repair-preview/run_preview.py \
+  --only JJ-TBR --merge
+# 40/40 dates ok, orchestrator_wall_s 66.0647, exit 0
+```
+
+## Preview result (round 5, not a receipt)
+
+Only JJ-TBR rows were refreshed, including the new `judas_reversal_deferred` row. Other families remain round 3/4.
+
+- **C1 judas_reversal (strict).** Still 37 B0.1 episodes, 2 pass, 35 fail, 31 `entry_outside_reversal_window`. `no_setup` 32→35, equal to fail. The three post-finish window fails now rewrite strategy status.
+- **C1 judas_reversal_deferred.** 37 episodes (same sweep population). pass 5, fail 32, no_setup 32. Of the 37: 5 pass, 13 fail `reclaim_not_held_at_window`, 19 fail for other reasons, 0 unknown. The 5 passes are the 2 in-window strict passes plus the 3 early O056 completions whose reclaim still held at 09:40.
+- **Other JJ-TBR** episode/pass/fail/no_setup unchanged vs round 4.
+
+## Not done (round 5)
+
+- No git commit. P3/P5/P7 still out of scope. TBR quadrant entries (f5) remain a missing-stage assignment. `entry_in_reversal_window` and `judas_reversal_deferred` were not added to FORMULAS/M01 (frozen pack); deferred episodes evaluate the `judas_reversal` CASE and are relabelled after `finish()`.
+

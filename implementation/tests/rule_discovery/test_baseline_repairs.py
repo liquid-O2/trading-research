@@ -786,3 +786,78 @@ def test_c3_stop_uses_full_excursion_through_confirming_bar():
     assert _stage_details(repaired, "five_minute_reclaim")["excursion_bars"] == 3
     assert D(str(repaired["values"]["sweep_high"])) >= candle1_high
     assert D(str(repaired["values"]["confirm_close"])) == D("100.0")
+
+
+def _judas_deferred_no_hold_tape():
+    """09:33 high sweep, O056 C3 at 09:39, then 09:40-09:50 closes stay above the swept 6-9 high."""
+    s = _at("09:33")
+    c2_start = s // (3 * MINUTE) * (3 * MINUTE)
+    c3_start = c2_start + 3 * MINUTE
+    c3_end = c3_start + 3 * MINUTE
+    ev = []
+    at = START
+    while at < END:
+        if c2_start <= at < c3_start:
+            px = 100.5
+        elif c3_start <= at < c3_end:
+            px = 100.25
+        elif _at("09:40") <= at < _at("09:50"):
+            px = 102.0
+        else:
+            px = 100.0
+        ev.append(raw(at, px))
+        at += MINUTE
+    ev += [raw(_at("07:00"), 101.0), raw(_at("08:00"), 99.0)]
+    ev += [raw(s + 1, 101.5), raw(s + 2, 101.75)]
+    return ev
+
+
+def test_c1_deferred_entry_holds_at_0940():
+    # 09:33 sweep, O056 confirmation at 09:39. Strict fails the reversal window.
+    # Deferred enters at the first complete 09:40 bar while the short close stays below the swept high.
+    m = _PriorWidthMarket(_judas_reversal_pass_tape("09:33"))
+    strict = _short_episode(scan_jumbo_repaired(m, "judas_reversal"))
+    deferred = _short_episode(scan_jumbo_repaired(m, "judas_reversal_deferred"))
+    bar = m.bars(_at("09:40"), _at("09:41"))
+    assert bar and bar[0]["observed_complete"] and bar[0]["C"] is not None
+    assert strict["research_verdict"] == "fail"
+    assert "entry_outside_reversal_window" in strict["failed"]
+    assert deferred["branch"] == "judas_reversal_deferred"
+    assert deferred["research_verdict"] == "pass"
+    assert D(str(deferred["geometry"]["entry"])) == D(str(bar[0]["C"]))
+    assert deferred["decision_at"] == bar[0]["known_at"]
+    assert D(str(deferred["geometry"]["stop"])) == D(str(strict["geometry"]["stop"]))
+    assert D(str(deferred["geometry"]["target"])) == D(str(strict["geometry"]["target"]))
+    row = _row(
+        "JJ-TBR",
+        "judas_reversal_deferred",
+        "trading_research.research.method_pack.historical_price_scanners:scan_jumbo",
+    )
+    dispatched = scan_branch_repaired(m, row)
+    assert dispatched["baseline_version"] == BASELINE_REPAIR_VERSION
+    assert dispatched["branch"] == "judas_reversal_deferred"
+    assert dispatched["coverage_id"] == "JJ-TBR:branch:judas_reversal_deferred"
+
+
+def test_c1_deferred_reclaim_not_held_at_window():
+    m = _PriorWidthMarket(_judas_deferred_no_hold_tape())
+    deferred = _short_episode(scan_jumbo_repaired(m, "judas_reversal_deferred"))
+    assert deferred["values"]["source_confirmation"] is True
+    assert deferred["decision_at"] < _at("09:40")
+    assert deferred["research_verdict"] == "fail"
+    assert "reclaim_not_held_at_window" in deferred["failed"]
+
+
+def test_post_finish_failure_strategy_status_matches_verdict():
+    m = _PriorWidthMarket(
+        _judas_reversal_pass_tape("09:33"),
+        records={"strategy_reconstruction": True},
+    )
+    repaired = _short_episode(scan_jumbo_repaired(m, "judas_reversal"))
+    assert repaired["research_verdict"] == "fail"
+    assert "entry_outside_reversal_window" in repaired["failed"]
+    assessment = repaired["strategy_assessment"]
+    assert assessment is not None
+    assert assessment["status"] == "no_setup"
+    mapped = {"pass": "setup", "fail": "no_setup", "unknown": "data_unavailable"}
+    assert assessment["status"] == mapped[repaired["research_verdict"]]

@@ -47,7 +47,8 @@ JJ_TBR_ABSENT_BRANCHES = (
     "judas_reversal", "single_extended", "single_purged", "internal_rotation",
     "extension_reaction", "other_session", "timed_pzone_reversal",
 )
-JJ_TBR_REPAIRED_BRANCHES = JJ_TBR_ABSENT_BRANCHES + ("judas_outbound",)
+JJ_TBR_REPAIRED_BRANCHES = JJ_TBR_ABSENT_BRANCHES + ("judas_outbound", "judas_reversal_deferred")
+JUDAS_REVERSAL_VARIANTS = ("judas_reversal", "judas_reversal_deferred")
 JJ_TBR_C2_BRANCHES = ("single_extended", "single_purged", "internal_rotation", "extension_reaction")
 GB_FAIL_SWEEP_BRANCHES = (
     "nyam_box", "previous_hour", "asia_tdo_case", "cash_open_reclaim_case",
@@ -101,7 +102,7 @@ REPAIRS = {
         "fixtures": ("f2_absent_empty_interval.py", "repro_p2_saint.py"),
     },
     "C1": {
-        "branch_ids": (_cid("JJ-TBR", "judas_reversal"),),
+        "branch_ids": (_cid("JJ-TBR", "judas_reversal"), _cid("JJ-TBR", "judas_reversal_deferred")),
         "frozen_symbol": "trading_research.research.method_pack.historical_price_scanners.scan_jumbo",
         "corrected_symbol": "trading_research.research.rule_discovery.baseline_repairs.scan_jumbo_repaired",
         "fixture": "f1_judas_reversal_sweep_window.py",
@@ -561,13 +562,13 @@ def _ob_repaired(m,touch,side,end):
         return result.get('confirmed'),c,stop,result
     return (None if ambiguous else absent_repaired(m,touch['start'],end)),None,None,None
 
-def _bind_judas_entry_window(m,e,decision):
-    """C1 round 4: TBR p.8 reversal trade is 09:40-09:50. entry_in_reversal_window is not an M01 field, so bind() raises; the operand is stored on values and the reversal_entry_window stage. A False window fails the episode after evaluate() with reason entry_outside_reversal_window; entry/stop/decision_at are not moved."""
+def _bind_judas_entry_window(m,e,decision,*,fail_reason=None):
+    """C1 round 4: TBR p.8 reversal trade is 09:40-09:50. entry_in_reversal_window is not an M01 field, so bind() raises; the operand is stored on values and the reversal_entry_window stage. A False window fails the episode after evaluate(); entry/stop/decision_at are not moved on the strict variant."""
     in_window=m.at('09:40')<=decision<m.at('09:50')
     bind_rejected=False
     try:
         e.bind({'entry_in_reversal_window':in_window},
-            operation='TBR p.8 places the reversal trade between 09:40 and 09:50; decision_at is the O056 confirmation known_at',
+            operation='TBR p.8 places the reversal trade between 09:40 and 09:50; decision_at is the O056 confirmation known_at, or the deferred 09:40-bar known_at',
             known_at=decision,assumption='A2-TBR-CLOCK')
     except ValueError:
         bind_rejected=True
@@ -576,24 +577,76 @@ def _bind_judas_entry_window(m,e,decision):
     if bind_rejected:
         details['bind_rejected_operand']='entry_in_reversal_window'
     if not in_window:
-        details['reason']='entry_outside_reversal_window'
+        details['reason']=fail_reason or 'entry_outside_reversal_window'
     e.stage('reversal_entry_window',decision,observed=in_window,details=details)
     return in_window
 
-def _fail_entry_outside_reversal_window(episode):
+def _strategy_status_for_verdict(verdict, scope='entry_setup'):
+    """Map a research verdict onto the reconstruct strategy status so no_setup matches fail."""
+    if scope!='entry_setup':
+        return {'pass':'condition_present','fail':'condition_absent','unknown':'data_unavailable'}.get(verdict)
+    return {'pass':'setup','fail':'no_setup','unknown':'data_unavailable'}.get(verdict)
+
+def _sync_strategy_status(episode):
+    """Generic post-finish repair: strategy status follows research verdict. One place, not per reason."""
+    assessment=episode.get('strategy_assessment')
+    if not assessment:
+        return episode
+    status=_strategy_status_for_verdict(episode.get('research_verdict'), assessment.get('scope') or 'entry_setup')
+    if status is not None:
+        assessment['status']=status
+    return episode
+
+def _fail_after_finish(episode, reason):
+    """Force a fail after finish() and keep strategy status aligned with the research verdict."""
     episode['research_verdict']='fail'
     failed=list(episode.get('failed') or [])
-    if 'entry_outside_reversal_window' not in failed:
-        failed.append('entry_outside_reversal_window')
+    if reason not in failed:
+        failed.append(reason)
     episode['failed']=failed
+    assessment=episode.get('strategy_assessment')
+    if assessment is not None:
+        conditions=list(assessment.get('failed_conditions') or [])
+        if reason not in conditions:
+            conditions.append(reason)
+        assessment['failed_conditions']=conditions
+    return _sync_strategy_status(episode)
+
+def _close_holds_swept_edge(bar, side, edge):
+    """Reversal side of the swept 6-9 edge: long close above the swept low, short close below the swept high."""
+    close=bar.get('C')
+    if close is None:
+        return False
+    return close>edge if side=='long' else close<edge
+
+def _relabel_episode_branch(episode, branch):
+    """Keep M01 evaluate() on the judas_reversal CASE, then label the deferred variant."""
+    identity={'method':episode['method'],'branch':branch,'predicate':episode['predicate'],
+        'side':episode['side'],'session_date':episode['session_date'],
+        'instrument_id':episode['instrument_id'],'reference_id':episode['reference_id'],
+        'trigger_id':episode['trigger_id'],'occurrence_at':episode['occurrence_at']}
+    episode['branch']=branch
+    episode['candidate_id']='native-v2:'+content_hash(identity)[:32]
     return episode
+
+def _deferred_judas_entry(m, confirm, entry, decision, side, edge):
+    """If O056 completes before 09:40, enter at the first complete bar at or after 09:40 still on the reversal side of the swept edge. Stop and objective stay with the caller. Returns (entry, decision, fail_reason)."""
+    window_start,window_end=m.at('09:40'),m.at('09:50')
+    if confirm is None or decision is None or not (decision<window_start):
+        return entry,decision,None
+    for bar in m.bars(window_start,window_end):
+        if not bar.get('observed_complete') or bar.get('C') is None:
+            continue
+        if _close_holds_swept_edge(bar, side, edge):
+            return bar['C'],bar['known_at'],None
+    return entry,decision,'reclaim_not_held_at_window'
 
 def scan_jumbo_repaired(m,branch):
     """P2: historical_price_scanners.py:40,171. Frozen scan_jumbo calls absent() from _ob and from the extension_reaction prior_expansion conjunct. Change: use _ob_repaired and absent_repaired.
-    C1: historical_price_scanners.py:71,89-90. Frozen judas_reversal searches the sweep only inside 09:40-09:50. Change: search the outbound sweep in 09:30-09:40 and keep the reversal window 09:40-09:50; a sweep found only in 09:40-09:50 stays accepted and is flagged sweep_in_reversal_window. source_time_window is True for a sweep in 09:30-09:50. Confirmation remains the frozen O056 search around the sweep bar. Round 4: the reversal entry itself must fall in 09:40-09:50 (TBR p.8). entry_in_reversal_window is recorded on the reversal_entry_window stage; bind() rejects the unknown M01 operand so the verdict is forced fail with reason entry_outside_reversal_window when decision_at is outside that window. Do not defer or reprice.
+    C1: historical_price_scanners.py:71,89-90. Frozen judas_reversal searches the sweep only inside 09:40-09:50. Change: search the outbound sweep in 09:30-09:40 and keep the reversal window 09:40-09:50; a sweep found only in 09:40-09:50 stays accepted and is flagged sweep_in_reversal_window. source_time_window is True for a sweep in 09:30-09:50. Confirmation remains the frozen O056 search around the sweep bar. Round 4: the strict reversal entry itself must fall in 09:40-09:50 (TBR p.8). entry_in_reversal_window is recorded on the reversal_entry_window stage; bind() rejects the unknown M01 operand so the verdict is forced fail with reason entry_outside_reversal_window when decision_at is outside that window. Round 5: when branch is judas_reversal, also produce judas_reversal_deferred as a separate episode set. For an O056 confirmation before 09:40, the deferred variant enters at the first complete bar at or after 09:40 whose close is still on the reversal side of the swept 6-9 edge (long close above that low, short close below that high); entry is that bar's close, decision its known_at, stop and objective unchanged. No such bar by 09:50 fails with reclaim_not_held_at_window. Confirmations already inside 09:40-09:50 are identical in both variants.
     C2: historical_price_scanners.py:72. Frozen overrides action_end=16:00 for single_extended, single_purged, internal_rotation and extension_reaction. Change: leave the formation action_end at 10:00; the 16:00 population stays B0.
     C7: historical_price_scanners.py:137,145,153,163,176,179. Frozen binds exit_window_recorded, source_clock_verified, source_case_verified and the restating flags location_touched, reduced_expectations, expansion_policy, source_zone_known as by-construction literals. Change: keep those frozen values and record literal_operand_kind=by_construction."""
-    method='JJ-TBR';episodes=[];omissions=[]
+    method='JJ-TBR';episodes=[];omissions=[];deferred_episodes=[]
     context=_context(m);main=context['pre'];prior=context['prior'];pw=context['prior_width']
     formations=[(m.at('06:00'),m.at('09:00'),'main',m.at('09:30'),m.at('10:00'))]
     if branch=='other_session':
@@ -620,7 +673,7 @@ def scan_jumbo_repaired(m,branch):
         width=ref['high']-ref['low']
         if width<=0:
             omissions.append({'reason':'nonpositive_formation_width','reference_id':ref['id']});continue
-        if branch=='judas_reversal':
+        if branch in JUDAS_REVERSAL_VARIANTS:
             action_start,action_end=m.at('09:30'),m.at('09:50')
         if action_end<=action_start:continue
         rows=m.bars(action_start,action_end)
@@ -639,7 +692,7 @@ def scan_jumbo_repaired(m,branch):
             if branch=='judas_outbound':
                 trigger=next(iter(rows),None)
                 target=ref['high']+width*D('.5') if side=='long' else ref['low']-width*D('.5')
-            elif branch=='judas_reversal':
+            elif branch in JUDAS_REVERSAL_VARIANTS:
                 def _edge_sweep(bar_rows):
                     return next((r for r in bar_rows if r['L']<edge),None) if side=='long' else next((r for r in bar_rows if r['H']>edge),None)
                 trigger=_edge_sweep(m.bars(m.at('09:30'),m.at('09:40')))
@@ -651,7 +704,7 @@ def scan_jumbo_repaired(m,branch):
                 trigger=next((r for r in rows if r['L']<edge if side=='long'),None) if side=='long' else next((r for r in rows if r['H']>edge),None)
             else:trigger=first_contact(rows,*location)
             if trigger is None:continue
-            strict=('below' if side=='long' else 'above') if branch in {'judas_reversal','other_session'} else None
+            strict=('below' if side=='long' else 'above') if branch in {'judas_reversal','judas_reversal_deferred','other_session'} else None
             contact=exact_contact(m,trigger,*location,strict=strict) if branch!='judas_outbound' else None
             if branch!='judas_outbound' and contact is None:continue
             touch=contact['at'] if contact else trigger['start'];deadline=min(action_end,trigger['end']+30*MINUTE)
@@ -681,84 +734,104 @@ def scan_jumbo_repaired(m,branch):
             if branch=='judas_outbound' and first:
                 episode_trigger={'id':f'opening-batch:{m.instrument_id}:{first[0]}','at':first[0],
                     'known_at':decision,'prices':sorted(prices),'event_ids':[r['event_id'] for r in first[1]]}
-            e=HistoricalEpisode(m,method,branch,side,episode_trigger,ref)
-            # Context is calculated only from pre-touch observations. The full
-            # overnight range ends at 09:30, so other-session contexts use their
-            # own completed formation and cannot borrow this future snapshot.
-            preopen=context['overnight'] if context['overnight'] and context['overnight']['known_at']<=touch else None
-            observedwidth=None if preopen is None else preopen['high']-preopen['low']
-            extended=None if pw is None or observedwidth is None else observedwidth>=pw
-            compressed=None if pw is None else width<=pw*D(setting('context')['compression_ratio'])
-            rotation=None if pw is None else width>=pw*D(setting('context')['wide_ratio'])
-            contextat=end if branch=='other_session' or zone else m.at('09:30')
-            direction_ok=context['direction']==side if context['direction'] else None
-            if branch=='other_session':direction_ok=ref['close'] is not None and ref['open'] is not None
-            e.bind({'range_frozen':_known(ref),'range_known_at':ref['known_at'],
-                'context_fixed':direction_ok if branch=='judas_outbound' else True if branch=='other_session' else None if pw is None else True,
-                'context_at':contextat,'location_touched':True,'touch_at':touch,'source_confirmation':ok,
-                'confirm_at':confirm['known_at'] if confirm else None,'risk_defined':None if entry is None or stop is None else sg*(entry-stop)>0,
-                'objective_fixed':None if entry is None else sg*(target-entry)>0},
-                operation='frozen completed range, pre-touch context and exact selected O056 full-C2 signature',
-                parents=[ref['id'],trigger['bar_id']],known_at=decision,assumption='A2-CONTEXT/A2-TBR-CLOCK/A2-STRUCTURAL-RISK')
-            by_construction=['location_touched']
-            if branch=='judas_outbound':
-                e.bind({'directional_context':direction_ok,'at_rth_open':first is not None and m.at('09:30')<=first[0]<m.at('09:30')+SECOND,
-                    'objective_is_selected_exhaustion':target==(ref['high']+width*D('.5') if side=='long' else ref['low']-width*D('.5')),
-                    'exit_window_recorded':True},operation='opening execution policy with selected 0.5W exhaustion and 09:40 exit horizon; C7 exit_window_recorded by construction',assumption='A2-TBR-PROJ/A2-TBR-CLOCK')
-                by_construction.append('exit_window_recorded')
-            elif branch=='judas_reversal':
-                e.bind({'reversal_context':None if pw is None else width>0,'edge_swept':trigger['L']<edge if side=='long' else trigger['H']>edge,
-                    'sweep_at':touch,'source_time_window':m.at('09:30')<=touch<m.at('09:50'),
-                    'objective_is_opposing_draw':target==(ref['high'] if side=='long' else ref['low'])},
-                    operation='strict frozen edge sweep in Judas 09:30-09:40 or reversal 09:40-09:50 and opposing edge identity',assumption='A2-CONTEXT')
-            elif branch=='single_extended':
-                e.bind({'extended_context':extended,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
-                    'objective_is_range_edge':target in (ref['low'],ref['high']),'reduced_expectations':True},
-                    operation='overnight width vs prior RTH and range EQ contact; edge target policy',assumption='A2-CONTEXT/A2-TBR-PROJ')
-                by_construction.append('reduced_expectations')
-            elif branch=='single_purged':
-                old=prior['range'];purges=[]
-                if old:
-                    for r in m.bars(max(m.start,old['known_at']),min(touch,m.at('09:30'))):
-                        if r['H']>old['high'] or r['L']<old['low']:purges.append(r)
-                purgeat=purges[0]['known_at'] if purges else None
-                e.bind({'purged_compressed_context':None if compressed is None or not prior.get('range_scope_complete',prior['scope_complete']) else compressed and bool(purges),
-                    'purge_known_at':purgeat,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
-                    'expansion_policy':True},operation='chronological prior-session liquidity sweep before compressed EQ contact',parents=[old['id']] if old else [],assumption='A2-CONTEXT')
-                by_construction.append('expansion_policy')
-            elif branch=='internal_rotation':
-                e.bind({'rotation_context':rotation,'entry_at_named_internal_or_ev_band':trigger['L']<=location[0]<=trigger['H'],
-                    'objective_is_named_rotation_target':target in (ref['low'],ref['high'])},operation='wide completed range and named EQ/edge rotation',assumption='A2-CONTEXT')
-            elif branch=='extension_reaction':
-                before=m.bars(end,touch) if touch>end else []
-                expansion=any(r['L']<ref['low'] if side=='long' else r['H']>ref['high'] for r in before)
-                target_unused=not any(r['L']<=target<=r['H'] for r in before)
-                e.bind({'prior_expansion':expansion or absent_repaired(m,end,touch) if touch>end else False,
-                    'touch_in_source_extension_area':trigger['L']<=location[1] and trigger['H']>=location[0],
-                    'reaction_side_confirmed':ok,'objective_is_remaining_draw':target_unused},
-                    operation='elapsed parent expansion, exact 1.33–1.66 band, unconsumed opposing edge',assumption='A2-TBR-PROJ')
-            elif branch=='other_session':
-                e.bind({'source_clock_verified':True,'source_case_verified':True},kind='policy',operation='enumerated TBR p.7 formation identity; C7 source_clock_verified and source_case_verified by construction',assumption='A2-TBR-CLOCK')
-                by_construction.extend(['source_clock_verified','source_case_verified'])
-            elif branch=='timed_pzone_reversal':
-                destination=D(str(zone['destination_price']));target=destination
-                e.bind({'source_zone_known':True,'zone_known_at':zone['known_at'],'source_time_window':zone['known_at']<=touch<zone['expires_at'],
-                    'directed_path_recorded':bool(zone.get('destination_id'))},operation='frozen P-zone and directed anchor destination; inferred model identified in reference',parents=[zone['id']],kind='inferred_model' if zone.get('inferred_zone') else 'record',known_at=zone['known_at'])
-                by_construction.append('source_zone_known')
-            contact_details=None if sweep_in_reversal_window is None else {'sweep_in_reversal_window':sweep_in_reversal_window}
-            e.stage('contact',touch,observed=True,parents=[ref['id']],details=contact_details).stage('opening_context_confirmation' if branch=='judas_outbound' else 'selected_full_C2_confirmation',None if confirm is None else confirm['known_at'],observed=ok)
-            if getattr(m,'reconstruct',False) and confirm:
-                e.geometry['confirmation_bar']=confirm
-            _record_c7(e,decision,by_construction=by_construction)
-            in_reversal_window=True
-            if branch=='judas_reversal':
-                in_reversal_window=_bind_judas_entry_window(m,e,decision)
-            episode=e.finish(decision_at=decision,entry=entry,stop=stop,target=target)
-            if branch=='judas_reversal' and not in_reversal_window:
-                episode=_fail_entry_outside_reversal_window(episode)
-            episodes.append(episode)
+            variant_jobs=[(branch,entry,decision,None)]
+            if branch in JUDAS_REVERSAL_VARIANTS:
+                d_entry,d_decision,d_fail=_deferred_judas_entry(m,confirm,entry,decision,side,edge)
+                if branch=='judas_reversal':
+                    variant_jobs=[('judas_reversal',entry,decision,None),
+                                  ('judas_reversal_deferred',d_entry,d_decision,d_fail)]
+                else:
+                    variant_jobs=[('judas_reversal_deferred',d_entry,d_decision,d_fail)]
+            for variant,var_entry,var_decision,var_fail in variant_jobs:
+                eval_branch='judas_reversal' if variant in JUDAS_REVERSAL_VARIANTS else variant
+                e=HistoricalEpisode(m,method,eval_branch,side,episode_trigger,ref)
+                # Context is calculated only from pre-touch observations. The full
+                # overnight range ends at 09:30, so other-session contexts use their
+                # own completed formation and cannot borrow this future snapshot.
+                preopen=context['overnight'] if context['overnight'] and context['overnight']['known_at']<=touch else None
+                observedwidth=None if preopen is None else preopen['high']-preopen['low']
+                extended=None if pw is None or observedwidth is None else observedwidth>=pw
+                compressed=None if pw is None else width<=pw*D(setting('context')['compression_ratio'])
+                rotation=None if pw is None else width>=pw*D(setting('context')['wide_ratio'])
+                contextat=end if branch=='other_session' or zone else m.at('09:30')
+                direction_ok=context['direction']==side if context['direction'] else None
+                if branch=='other_session':direction_ok=ref['close'] is not None and ref['open'] is not None
+                e.bind({'range_frozen':_known(ref),'range_known_at':ref['known_at'],
+                    'context_fixed':direction_ok if branch=='judas_outbound' else True if branch=='other_session' else None if pw is None else True,
+                    'context_at':contextat,'location_touched':True,'touch_at':touch,'source_confirmation':ok,
+                    'confirm_at':confirm['known_at'] if confirm else None,'risk_defined':None if var_entry is None or stop is None else sg*(var_entry-stop)>0,
+                    'objective_fixed':None if var_entry is None else sg*(target-var_entry)>0},
+                    operation='frozen completed range, pre-touch context and exact selected O056 full-C2 signature',
+                    parents=[ref['id'],trigger['bar_id']],known_at=var_decision,assumption='A2-CONTEXT/A2-TBR-CLOCK/A2-STRUCTURAL-RISK')
+                by_construction=['location_touched']
+                if branch=='judas_outbound':
+                    e.bind({'directional_context':direction_ok,'at_rth_open':first is not None and m.at('09:30')<=first[0]<m.at('09:30')+SECOND,
+                        'objective_is_selected_exhaustion':target==(ref['high']+width*D('.5') if side=='long' else ref['low']-width*D('.5')),
+                        'exit_window_recorded':True},operation='opening execution policy with selected 0.5W exhaustion and 09:40 exit horizon; C7 exit_window_recorded by construction',assumption='A2-TBR-PROJ/A2-TBR-CLOCK')
+                    by_construction.append('exit_window_recorded')
+                elif variant in JUDAS_REVERSAL_VARIANTS:
+                    e.bind({'reversal_context':None if pw is None else width>0,'edge_swept':trigger['L']<edge if side=='long' else trigger['H']>edge,
+                        'sweep_at':touch,'source_time_window':m.at('09:30')<=touch<m.at('09:50'),
+                        'objective_is_opposing_draw':target==(ref['high'] if side=='long' else ref['low'])},
+                        operation='strict frozen edge sweep in Judas 09:30-09:40 or reversal 09:40-09:50 and opposing edge identity',assumption='A2-CONTEXT')
+                elif branch=='single_extended':
+                    e.bind({'extended_context':extended,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
+                        'objective_is_range_edge':target in (ref['low'],ref['high']),'reduced_expectations':True},
+                        operation='overnight width vs prior RTH and range EQ contact; edge target policy',assumption='A2-CONTEXT/A2-TBR-PROJ')
+                    by_construction.append('reduced_expectations')
+                elif branch=='single_purged':
+                    old=prior['range'];purges=[]
+                    if old:
+                        for r in m.bars(max(m.start,old['known_at']),min(touch,m.at('09:30'))):
+                            if r['H']>old['high'] or r['L']<old['low']:purges.append(r)
+                    purgeat=purges[0]['known_at'] if purges else None
+                    e.bind({'purged_compressed_context':None if compressed is None or not prior.get('range_scope_complete',prior['scope_complete']) else compressed and bool(purges),
+                        'purge_known_at':purgeat,'entry_at_eq_or_quadrant':trigger['L']<=location[0]<=trigger['H'],
+                        'expansion_policy':True},operation='chronological prior-session liquidity sweep before compressed EQ contact',parents=[old['id']] if old else [],assumption='A2-CONTEXT')
+                    by_construction.append('expansion_policy')
+                elif branch=='internal_rotation':
+                    e.bind({'rotation_context':rotation,'entry_at_named_internal_or_ev_band':trigger['L']<=location[0]<=trigger['H'],
+                        'objective_is_named_rotation_target':target in (ref['low'],ref['high'])},operation='wide completed range and named EQ/edge rotation',assumption='A2-CONTEXT')
+                elif branch=='extension_reaction':
+                    before=m.bars(end,touch) if touch>end else []
+                    expansion=any(r['L']<ref['low'] if side=='long' else r['H']>ref['high'] for r in before)
+                    target_unused=not any(r['L']<=target<=r['H'] for r in before)
+                    e.bind({'prior_expansion':expansion or absent_repaired(m,end,touch) if touch>end else False,
+                        'touch_in_source_extension_area':trigger['L']<=location[1] and trigger['H']>=location[0],
+                        'reaction_side_confirmed':ok,'objective_is_remaining_draw':target_unused},
+                        operation='elapsed parent expansion, exact 1.33–1.66 band, unconsumed opposing edge',assumption='A2-TBR-PROJ')
+                elif branch=='other_session':
+                    e.bind({'source_clock_verified':True,'source_case_verified':True},kind='policy',operation='enumerated TBR p.7 formation identity; C7 source_clock_verified and source_case_verified by construction',assumption='A2-TBR-CLOCK')
+                    by_construction.extend(['source_clock_verified','source_case_verified'])
+                elif branch=='timed_pzone_reversal':
+                    destination=D(str(zone['destination_price']));target=destination
+                    e.bind({'source_zone_known':True,'zone_known_at':zone['known_at'],'source_time_window':zone['known_at']<=touch<zone['expires_at'],
+                        'directed_path_recorded':bool(zone.get('destination_id'))},operation='frozen P-zone and directed anchor destination; inferred model identified in reference',parents=[zone['id']],kind='inferred_model' if zone.get('inferred_zone') else 'record',known_at=zone['known_at'])
+                    by_construction.append('source_zone_known')
+                contact_details=None if sweep_in_reversal_window is None else {'sweep_in_reversal_window':sweep_in_reversal_window}
+                e.stage('contact',touch,observed=True,parents=[ref['id']],details=contact_details).stage('opening_context_confirmation' if branch=='judas_outbound' else 'selected_full_C2_confirmation',None if confirm is None else confirm['known_at'],observed=ok)
+                if getattr(m,'reconstruct',False) and confirm:
+                    e.geometry['confirmation_bar']=confirm
+                _record_c7(e,var_decision,by_construction=by_construction)
+                in_reversal_window=True
+                if variant in JUDAS_REVERSAL_VARIANTS:
+                    in_reversal_window=_bind_judas_entry_window(m,e,var_decision,fail_reason=var_fail)
+                episode=e.finish(decision_at=var_decision,entry=var_entry,stop=stop,target=target)
+                if var_fail:
+                    episode=_fail_after_finish(episode,var_fail)
+                elif variant in JUDAS_REVERSAL_VARIANTS and not in_reversal_window:
+                    episode=_fail_after_finish(episode,'entry_outside_reversal_window')
+                if variant=='judas_reversal_deferred':
+                    episode=_relabel_episode_branch(episode,'judas_reversal_deferred')
+                if variant==branch:
+                    episodes.append(episode)
+                elif variant=='judas_reversal_deferred':
+                    deferred_episodes.append(episode)
     if prior['omissions']:omissions.extend(prior['omissions'])
-    return window_result(m,method,branch,episodes,omissions=omissions)
+    result=window_result(m,method,branch,episodes,omissions=omissions)
+    if branch=='judas_reversal':
+        result['deferred_variant']=window_result(m,method,'judas_reversal_deferred',deferred_episodes,omissions=omissions)
+    return result
 
 def scan_green_failure_repaired(m,branch):
     """P4: historical_price_scanners.py:224-225. Frozen scan_green_failure raises ValueError on max()/min() of an empty sweep path. Change: record an availability omission and emit the episode as input-unknown.
@@ -1316,8 +1389,17 @@ def scan_branch_repaired(market, row):
 
     Records match the frozen scan_branch schema with one added field
     baseline_version: B0.1-2026-09-14 on a repaired branch, B0 otherwise.
+    Judas reversal returns two labelled sets: judas_reversal (strict) and
+    judas_reversal_deferred (window entry), each with its own coverage_id.
     """
     scanner = _scanner_for(row)
     if scanner is None:
         return _attach(native_scan_branch(market, row), row, B0_VERSION)
-    return _attach(scanner(market, row['branch']), row, BASELINE_REPAIR_VERSION)
+    if row.get('method_id')=='JJ-TBR' and row.get('branch')=='judas_reversal_deferred':
+        produced=scan_jumbo_repaired(market,'judas_reversal')
+        deferred=produced.get('deferred_variant') or scan_jumbo_repaired(market,'judas_reversal_deferred')
+        return _attach(deferred, row, BASELINE_REPAIR_VERSION)
+    result=scanner(market, row['branch'])
+    if isinstance(result, dict):
+        result.pop('deferred_variant', None)
+    return _attach(result, row, BASELINE_REPAIR_VERSION)
