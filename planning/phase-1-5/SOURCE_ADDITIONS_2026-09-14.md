@@ -29,3 +29,7 @@ MNQU2026, 2026-09-14: long entry 28,903.75, exit 29,037.00 (about 100 points); s
 ## Wiki work at the next writer window
 
 Add both posts to `wiki/source-catalog.md`; add the examples and the four additions to `wiki/method-green-bird-failure.md` and `wiki/method-green-bird-directional-scalps.md` with the raw anchors; add a dated `wiki/log.md` entry. Add A1 to A4 to the acceptance checklists of P15-10 and P15-11, rebuild the bundles, and record the change in AMENDMENTS.json.
+
+## Clock caveat for every source-stated time
+
+The chart footers in these posts read "UTC-4", so the times on them are New York daylight time, which our clocks reproduce. But an author who writes "02:00 to 05:00" or "20:00 to 00:00" in text may mean a fixed offset all year, a platform default, or a different zone, and our implementation converts every stated clock as New York time with daylight-saving handling. For a source that does not, every winter session window shifts by one hour. The reconstruction ledger records, per source, the zone each stated clock is expressed in and the evidence for it (chart footers across summer and winter posts, or an explicit statement), and lists the branches whose windows would move if the zone were a fixed offset. Until a source's zone is established, its clock-based branches carry the label `clock_zone_unverified`.
