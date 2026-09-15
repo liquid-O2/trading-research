@@ -61,7 +61,6 @@ Code citations: M = `implementation/src/trading_research/research/method_pack/`;
 - W:32 “[O064](profile-poc.md) · [O067](lvn.md) · [O139](structural-risk.md) · [O141](trade-objective.md) · [O142](position-management.md).” — Accurate supplied-record capability, misleading as recovery of actual discretionary target selection or management in the scan.
 - W:32 “Fixed next-area objectives, structural invalidation and management records are implemented.” — Accurate supplied-record capability, misleading as recovery of actual discretionary target selection or management in the scan.
 
-===== SAINT-AMT.md — part 2/2 =====
 - W:32 “Source selection and actual management require contemporaneous evidence.” — Accurate supplied-record capability, misleading as recovery of actual discretionary target selection or management in the scan.
 - W:34 “The failed-auction branch in [AMTL] pp.8–10 is **lower value tried → failure to accept → return into original value → read POC/acceptance again**.” — Accurate broader Saint failed-auction read and warning against importing Sires’s older-POC rule; AMTL pp.8–11. However the SQL below still makes older value mandatory.
 - W:34 “Its live example can dip deeply and take time to confirm.” — Accurate broader Saint failed-auction read and warning against importing Sires’s older-POC rule; AMTL pp.8–11. However the SQL below still makes older value mandatory.

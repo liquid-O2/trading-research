@@ -64,7 +64,6 @@ No additional complete VWAP entry rule absent everywhere was found: reset, gener
 
 - **W31 “The post gives a 30-point stop and a 150-point result for this trade.”** Replace: “The February 24 caption reports 150 points; the February 25 reply reports a 30-point stop and 100-point win. Preserve the conflicting result reports. The chart does not supply an execution ledger or universal stop/target rule.” GB 33–34 posts 2026329904690712970/2026623532096971050; prior GB-VWAP.A2.
 
-===== GB-VWAP.md — part 2/2 =====
 - **W5/16 “complete” / “measured observed setup population.”** Replace: “The historical count measures our frozen London/Asia-close→VWAP-return reconstruction. Its clocks, 5-minute close, 18:00 reset, minute entry/stop and 60-minute expiry are not all source-stated; fixtures check the declared reconstruction.” Code§3; F13.
 - **A/green_vwap_scalp.py:46–57“source_window” / source-return deadline claim in linked planning:** Replace descriptive text with “declared 60-minute research retest window; source expiry unpublished.” If adopting the RTH-end ruling, name it as the next baseline variant, retaining unobserved source parameters. GB 33 has no 60-minute clock.
 - **W12 D 1 window status**, if used to explain unknowns: replace with “D 1 preserves eligible breakout context; a complete 60-minute period without retest is a negative for that window, while a later return remains censored by the research deadline.” F13/disposition; R967–978. This does not assert all 628 unknowns are 619 censor cases.

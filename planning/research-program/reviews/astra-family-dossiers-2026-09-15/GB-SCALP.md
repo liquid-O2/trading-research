@@ -55,7 +55,6 @@ R=stated; E=example; D=unpublished/discretionary. Separate original small scalp 
 | §1 rule | B0 / B0.1 /04 implementation and judgement | Prior / new evidence |
 |---|---|---|
 
-===== GB-SCALP.md — part 2/2 =====
 |1–2 directional context|M/historical_process_scanners.py:60–73 takes last pivot direction 06–09:30 for short or 09–10 for long. **Operationalized selector**, not published source formula.|F01 and prior GB-SCALP.A; screenshot multiple decisions cannot validate one pivot rule.|
 |3 pullback/size/management|M/historical_process_scanners.py:70–84first 50%contact; small_size/management None; automatic_entry_admission None; observation unit directional pullback. **Invented mechanical selector**, missing actual size/management, correctly unknown admission.|F01;M/strategy_policy.py:6, 41–46 excludes size/management but labels entry_setup; inconsistency remains.|
 |3 original entry unknown|M/method_slices/m04.py:1–8, 23, 41–105 explicitly synthetic Jan 15, 2026 case;M/catalog.py:57, 70, 111 descriptive admission hole. **Matches epistemic limit**, synthetic fixtures cannot recover trigger.|F01. New:synthetic positive case numbers/time stamps must not be mistaken for Sep 2/10 example fits.|

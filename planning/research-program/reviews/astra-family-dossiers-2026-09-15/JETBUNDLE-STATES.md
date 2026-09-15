@@ -69,7 +69,6 @@ Code citations: M = `implementation/src/trading_research/research/method_pack/`;
 - Missing page detail: AAPL-quantile dependence,15,000-event displayed subset, full printed matrix with blanks/rounding, and exact dated Sires drawings. Contributor separation is correct; the latter belong to a separately attributed application/figure appendix. Navigation and source aliases add no entry rule.
 
 
-===== JETBUNDLE-STATES.md — part 2/2 =====
 - Catalog audit: wiki/source-catalog.md:48 “| [MATH] — the-math-behind-auction-market-theory.pdf | 16 | jetbundle pp.3–11 ([jetbundle — participation and auction states](method-jetbundle-auction-states.md)); Sires pp.12–14 ([Sires — thesis, risk and order flow](method-sires-thesis-flow.md)) |” — Accurate page count and broad attribution/scope, verified against the complete raw PDF. This attribution does not certify every caption, implementation claim or traded outcome; the refinements are in §§1–6.
 - Catalog audit: wiki/source-catalog.md:5 “Settings, numerical examples, contradictions and incomplete disclosures were retained according to their role.” — Misleading if read as exhaustive retention: this dossier identifies further figure-specific qualifications. The page-count/attribution inventory is accurate; a prior inspection claim cannot substitute for those missing details.
 

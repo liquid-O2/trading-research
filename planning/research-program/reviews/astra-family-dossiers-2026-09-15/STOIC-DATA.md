@@ -91,5 +91,4 @@ Code citations: M = `implementation/src/trading_research/research/method_pack/`;
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 |---|---|---|---|---|---|---|
 
-===== STOIC-DATA.md — part 2/2 =====
 | STOIC-DATA | source review | process only; model unpublished | figures inspected; native replay not run | no new leakage estimate | operational limits explicit | SD14; custom model and supplied research records |
