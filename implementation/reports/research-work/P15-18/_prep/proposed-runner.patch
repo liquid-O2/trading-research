@@ -1,0 +1,16 @@
+*** Begin Patch
+*** Update File: implementation/src/trading_research/research/rule_discovery/runner.py
+@@
+     elif task_id == "P15-08":
+         from trading_research.research.rule_discovery.registry import slice_p15_08
+         result = slice_p15_08(payload["date"])
++    elif task_id == "P15-18":
++        from trading_research.research.rule_discovery.search import slice_p15_18
++        result = slice_p15_18(payload["date"])
+     elif task_id == "P15-09":
+         from trading_research.research.rule_discovery.source_adapters.jumbo import slice_family
+         result = slice_family(payload["date"])
+*** End Patch
+
+Coordinator-owned. Do not apply until search.py exists and defines slice_p15_18.
+P15-17 owns search.py. This patch is a registration stub only.
