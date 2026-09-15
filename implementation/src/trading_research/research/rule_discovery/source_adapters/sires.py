@@ -153,6 +153,61 @@ def apply_sires_rules(document: Mapping[str, Any], market, branch: str, version:
 register_family_transform(FAMILY, apply_sires_rules)
 
 
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """B0.1 flow-stage confirmation at this contact."""
+    from trading_research.research.rule_discovery.baseline_repairs import _flow_episode_repaired
+    from trading_research.research.rule_discovery.source_adapters.confirmation import (
+        bounds,
+        contact_as_trigger,
+        contact_side,
+        scanner_ref,
+    )
+
+    trigger = contact_as_trigger(market, contact)
+    side = contact_side(contact)
+    ref = scanner_ref(reference, formation)
+    lo, hi = bounds(ref)
+    if lo is None or hi is None:
+        lo, hi = ref.get("low"), ref.get("high")
+    band = [lo, hi]
+    episode = None
+    if lo is not None and hi is not None:
+        episode = _flow_episode_repaired(market, branch, ref, trigger, side, band)
+    if episode is not None:
+        values = dict(episode.get("values") or {})
+        confirm_at = values.get("confirm_at") or episode.get("decision_at")
+        decision = episode.get("decision_at")
+        return {
+            "values": values,
+            "confirm_at": confirm_at,
+            "decision_at": decision,
+            "cutoff_ns": decision,
+            "source_confirmation": values.get("source_confirmation", True if episode.get("research_verdict") == "pass" else False if episode.get("research_verdict") == "fail" else None),
+        }
+    decision = trigger.get("known_at") or trigger.get("end")
+    touch_at = contact.get("at_ns") or trigger.get("start")
+    known = ref.get("known_at")
+    gamma_branch = branch in {"ofm_aggressive", "balance_failure_fade"}
+    values = {
+        "branch": branch,
+        "side": side,
+        "thesis_alive": None,
+        "auction_route_ok": ref.get("complete", True),
+        "branch_regime_allowed": None if gamma_branch else True,
+        "location_fixed": None if known is None or touch_at is None else int(known) <= int(touch_at),
+        "location_touched": True,
+        "objective_fixed": None,
+        "risk_defined": None,
+        "thesis_known_at": known,
+        "location_known_at": known,
+        "touch_at": touch_at,
+        "confirm_at": None,
+        "decision_at": decision,
+        "source_confirmation": None,
+    }
+    return {"values": values, "confirm_at": None, "decision_at": decision, "cutoff_ns": decision, "source_confirmation": None}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 

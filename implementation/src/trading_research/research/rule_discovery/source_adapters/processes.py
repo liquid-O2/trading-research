@@ -232,6 +232,129 @@ def native_bbo_cannot_certify_ten_level() -> bool:
     return True
 
 
+def _departure_before_touch(market, *, lo, hi, zone_known_at: int, touch_at: int):
+    """Last complete bar outside the band by DEPARTURE_TICKS before touch. False if none, unknown if the window is unobservable."""
+    from decimal import Decimal
+
+    from trading_research.research.method_pack.historical_features import Q
+
+    if touch_at <= zone_known_at:
+        return None, False
+    dep = Q * DEPARTURE_TICKS
+    lo_d, hi_d = Decimal(str(lo)), Decimal(str(hi))
+    try:
+        bars = list(market.bars(int(zone_known_at), int(touch_at)))
+    except (TypeError, ValueError, AttributeError):
+        return None, None
+    complete = None
+    if hasattr(market, "coverage"):
+        try:
+            cov = market.coverage(int(zone_known_at), int(touch_at))
+            if cov is not None:
+                complete = bool(cov.get("observed_scope_complete"))
+        except (TypeError, ValueError, AttributeError):
+            complete = None
+    if not bars:
+        return None, None if complete is not False else False
+    last = None
+    for row in bars:
+        start = row.get("start")
+        if start is None or int(start) >= int(touch_at):
+            continue
+        low, high = row.get("L"), row.get("H")
+        if low is None or high is None:
+            continue
+        low_d, high_d = Decimal(str(low)), Decimal(str(high))
+        if low_d > hi_d + dep or high_d < lo_d - dep:
+            last = row.get("known_at") or row.get("end") or start
+    if last is None:
+        return None, False if complete is not False else None
+    last_i = int(last)
+    if not (int(zone_known_at) < last_i < int(touch_at)):
+        return last_i, False
+    return last_i, True
+
+
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """Touch-causality clocks from formation freeze, pre-touch departure, and the contact."""
+    from trading_research.research.rule_discovery.source_adapters.confirmation import (
+        bounds,
+        contact_as_trigger,
+        contact_side,
+        scanner_ref,
+    )
+
+    trigger = contact_as_trigger(market, contact)
+    side = contact_side(contact)
+    complete = bool(trigger.get("observed_complete") or trigger.get("complete") or contact.get("complete", True))
+    touch_at = contact.get("at_ns") or trigger.get("start")
+    decision = trigger.get("known_at") or trigger.get("end") or contact.get("available_at_ns")
+    ok = True if complete else None
+    if branch != "touch_record":
+        values = {
+            "branch": branch,
+            "side": side,
+            "source_confirmation": ok,
+            "confirm_at": decision if ok else None,
+            "decision_at": decision,
+            "location_touched": True,
+            "distinct_touch_id": True,
+        }
+        return {"values": values, "confirm_at": values["confirm_at"], "decision_at": decision, "cutoff_ns": decision, "source_confirmation": ok}
+
+    ref = scanner_ref(reference, formation)
+    lo, hi = bounds(ref)
+
+    def _first_clock(*values):
+        for item in values:
+            if item is not None:
+                return int(item)
+        return None
+
+    zone_known_at = _first_clock(
+        (formation or {}).get("available_at_ns"),
+        (reference or {}).get("issue_at_ns"),
+        ref.get("known_at"),
+        (formation or {}).get("end_ns"),
+    )
+    departure_at, departed = (None, None)
+    if zone_known_at is not None and touch_at is not None and lo is not None and hi is not None:
+        departure_at, departed = _departure_before_touch(
+            market, lo=lo, hi=hi, zone_known_at=int(zone_known_at), touch_at=int(touch_at)
+        )
+    elif zone_known_at is None or touch_at is None:
+        departed = None
+    else:
+        departed = None
+    feature_clocks = [int(zone_known_at)] if zone_known_at is not None else []
+    prior_resolved: list[int] = []
+    feature_max_known_at = max(feature_clocks) if feature_clocks else None
+    memory_ok = None if touch_at is None else all(int(item) < int(touch_at) for item in prior_resolved)
+    pre_touch = [clock for clock in (zone_known_at, departure_at, feature_max_known_at) if clock is not None]
+    label_ok = None if touch_at is None else all(int(clock) <= int(touch_at) for clock in pre_touch)
+    values = {
+        "branch": branch,
+        "side": side,
+        "zone_definition_recorded": True if lo is not None and hi is not None and zone_known_at is not None else None,
+        "zone_frozen": True if zone_known_at is not None else None,
+        "zone_known_at": None if zone_known_at is None else int(zone_known_at),
+        "instrument_and_threshold_preserved": True if getattr(market, "instrument_id", None) is not None else None,
+        "departure_observed": departed,
+        "departure_at": departure_at,
+        "distinct_touch_id": True,
+        "touch_at": touch_at,
+        "thesis_recorded": True,
+        "feature_max_known_at": feature_max_known_at,
+        "memory_uses_only_prior_resolved_touches": memory_ok,
+        "label_uses_only_post_touch_observations": label_ok,
+        "source_confirmation": ok if departed is not False else False,
+        "confirm_at": decision if ok else None,
+        "decision_at": decision,
+        "location_touched": True,
+    }
+    return {"values": values, "confirm_at": values["confirm_at"], "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 

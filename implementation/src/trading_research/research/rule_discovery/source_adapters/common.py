@@ -839,8 +839,32 @@ def enumerate_bar_contacts(
     )
 
 
-def evaluate_family_rule_at_contact(contact: Mapping[str, Any]) -> str:
+def evaluate_family_rule_at_contact(
+    contact: Mapping[str, Any],
+    *,
+    family: str | None = None,
+    branch: str | None = None,
+    market=None,
+    view=None,
+    reference: Mapping[str, Any] | None = None,
+    formation: Mapping[str, Any] | None = None,
+    changed_axis: str = "none",
+) -> str:
     """Family rule at this contact. Never assign setup by construction."""
+    if market is not None and family:
+        from trading_research.research.rule_discovery.source_adapters.confirmation import evaluate_confirmation
+
+        decision = evaluate_confirmation(
+            market,
+            family=family,
+            branch=branch or (FAMILY_BRANCHES.get(family) or ("unknown",))[0],
+            contact=contact,
+            reference=reference,
+            formation=formation,
+            changed_axis=changed_axis,
+            view=view,
+        )
+        return decision.status
     if contact.get("complete") is False:
         return "unknown"
     confirmation = contact.get("source_confirmation")
@@ -858,31 +882,70 @@ def _episodes_from_contacts(
     formation: dict[str, Any],
     reference: dict[str, Any],
     contacts: list[dict[str, Any]],
+    market=None,
+    view=None,
+    changed_axis: str = "none",
 ) -> list[dict[str, Any]]:
     episodes = []
     for contact in contacts:
-        status = evaluate_family_rule_at_contact(contact)
-        episodes.append(
-            {
-                "candidate_id": f"cand:{family}:{branch}:{contact['contact_id']}",
-                "method": family,
-                "branch": branch,
-                "side": contact["side"],
-                "values": {
-                    "location_touched": True,
-                    "own_population": True,
-                    "changed_axis": True,
-                    "source_confirmation": contact.get("source_confirmation"),
-                    "complete_bar": contact.get("complete"),
-                },
-                "strategy_assessment": {"status": status},
-                "status": status,
-                "contact": contact,
-                "reference": reference,
-                "formation": formation,
-                "baseline_version": "candidate",
+        decision = None
+        if market is not None:
+            from trading_research.research.rule_discovery.source_adapters.confirmation import evaluate_confirmation
+
+            decision = evaluate_confirmation(
+                market,
+                family=family,
+                branch=branch,
+                contact=contact,
+                reference=reference,
+                formation=formation,
+                changed_axis=changed_axis,
+                view=view,
+            )
+            contact["source_confirmation"] = decision.source_confirmation
+            status = decision.status
+            values = {
+                "location_touched": True,
+                "own_population": True,
+                "changed_axis": changed_axis not in {"none", "baseline", ""},
+                "source_confirmation": decision.source_confirmation,
+                "complete_bar": contact.get("complete"),
             }
-        )
+            values.update(decision.values)
+            assessment = {
+                "status": status,
+                "failed_conditions": list(decision.failed_conditions),
+                "unavailable_conditions": list(decision.unavailable_conditions),
+            }
+        else:
+            status = evaluate_family_rule_at_contact(contact)
+            values = {
+                "location_touched": True,
+                "own_population": True,
+                "changed_axis": True,
+                "source_confirmation": contact.get("source_confirmation"),
+                "complete_bar": contact.get("complete"),
+            }
+            assessment = {"status": status}
+        row = {
+            "candidate_id": f"cand:{family}:{branch}:{contact['contact_id']}",
+            "method": family,
+            "branch": branch,
+            "side": contact["side"],
+            "values": values,
+            "strategy_assessment": assessment,
+            "status": status,
+            "contact": contact,
+            "reference": reference,
+            "formation": formation,
+            "baseline_version": "candidate",
+        }
+        if decision is not None:
+            row["research_verdict"] = decision.research_verdict
+            row["failed"] = list(decision.failed)
+            row["unknown"] = list(decision.unknown)
+            row["decision_at"] = decision.decision_at_ns
+        episodes.append(row)
     return episodes
 
 
@@ -1061,7 +1124,18 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
         ref_row = reference_record(reference)
         side = "short" if reference is high_ref else "long"
         subset = [c for c in contacts if c["reference_id"] == reference.reference_id]
-        episodes.extend(_episodes_from_contacts(family=family, branch=branch, formation=form_row, reference=ref_row, contacts=subset))
+        episodes.extend(
+            _episodes_from_contacts(
+                family=family,
+                branch=branch,
+                formation=form_row,
+                reference=ref_row,
+                contacts=subset,
+                market=market,
+                view=view,
+                changed_axis="Formation",
+            )
+        )
     candidate_ids = {ep["candidate_id"] for ep in episodes} | {c["contact_id"] for c in contacts}
     baseline_ids = baseline_contact_ids(baseline["b01"])
     enumeration = enumerate_own_population(baseline_ids=baseline_ids, candidate_ids=candidate_ids, geometry_changed=True)
@@ -1070,7 +1144,16 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
         {
             "contact_id": contact["contact_id"],
             "geometric_reason": contact.get("geometric_reason"),
-            "status": evaluate_family_rule_at_contact(contact),
+            "status": evaluate_family_rule_at_contact(
+                contact,
+                family=family,
+                branch=branch,
+                market=market,
+                view=view,
+                reference=form_row,
+                formation=form_row,
+                changed_axis="Formation",
+            ),
         }
         for contact in contacts
         if contact["contact_id"] in new_ids or f"cand:{family}:{branch}:{contact['contact_id']}" in new_ids
@@ -1169,6 +1252,9 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
                 formation=form_row,
                 reference=reference_record(reference),
                 contacts=found,
+                market=market,
+                view=view,
+                changed_axis="Reference",
             )
         )
     candidate_ids = {ep["candidate_id"] for ep in episodes} | {c["contact_id"] for c in contacts}
@@ -1179,7 +1265,16 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
         {
             "contact_id": contact["contact_id"],
             "geometric_reason": contact.get("geometric_reason"),
-            "status": evaluate_family_rule_at_contact(contact),
+            "status": evaluate_family_rule_at_contact(
+                contact,
+                family=family,
+                branch=branch,
+                market=market,
+                view=view,
+                reference=form_row,
+                formation=form_row,
+                changed_axis="Reference",
+            ),
         }
         for contact in contacts
         if contact["contact_id"] in new_ids or f"cand:{family}:{branch}:{contact['contact_id']}" in new_ids

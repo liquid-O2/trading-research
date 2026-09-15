@@ -75,6 +75,75 @@ def golden_pocket_continuation(low: Decimal, high: Decimal, side: str) -> dict[s
     }
 
 
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """Later VWAP retest (GB-VWAP) or the pullback bar (GB-SCALP)."""
+    from trading_research.research.method_pack.historical_features import MINUTE, Q
+    from trading_research.research.rule_discovery.source_adapters.confirmation import contact_as_trigger, px, scanner_ref
+
+    trigger = contact_as_trigger(market, contact)
+    family = "GB-VWAP" if branch == "source_long" else "GB-SCALP"
+    if family == "GB-SCALP":
+        decision = trigger.get("known_at") or trigger.get("end")
+        values = {
+            "branch": branch,
+            "side": contact.get("side") or "long",
+            "source_confirmation": True if trigger.get("observed_complete") else None,
+            "confirm_at": decision,
+            "decision_at": decision,
+            "location_touched": True,
+        }
+        return {"values": values, "confirm_at": decision, "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+    deadline = min(int(market.end), int(trigger["end"]) + 60 * MINUTE)
+    retest = None
+    vw = None
+    for row in market.bars(trigger["end"], deadline):
+        snapshot = market.vwap(row["start"])
+        if snapshot.get("price") is not None and row["L"] <= snapshot["price"] <= row["H"]:
+            retest = row
+            vw = snapshot
+            break
+    from trading_research.research.rule_discovery.baseline_repairs import absent_repaired
+
+    missing_retest = None if retest is not None else absent_repaired(market, trigger["end"], deadline)
+    decision = retest["known_at"] if retest else deadline
+    stop = retest["L"] - Q if retest else None
+    entry = retest["C"] if retest else None
+    asia = (reference or {}).get("asia")
+    london = (reference or {}).get("london")
+    if asia is None or london is None:
+        from trading_research.research.method_pack.branch_coverage import setting
+
+        sessions = setting("gb_sessions")
+        asia_lo, asia_hi = sessions["asia"]
+        london_lo, london_hi = sessions["london"]
+        asia = market.range(market.at(asia_lo, -1 if asia_lo >= "18:00" else 0), market.at(asia_hi), "asia")
+        london = market.range(market.at(london_lo, -1 if london_lo >= "18:00" else 0), market.at(london_hi), "london")
+    ref_ok = asia is not None and london is not None
+    values = {
+        "branch": branch,
+        "side": "long",
+        "reference_frozen": bool(ref_ok),
+        "london_high": None if london is None else px(london.get("high")),
+        "london_known_at": None if london is None else london.get("known_at"),
+        "asia_high": None if asia is None else px(asia.get("high")),
+        "asia_known_at": None if asia is None else asia.get("known_at"),
+        "continuation_context": True if trigger.get("C") is not None and ref_ok and px(trigger["C"]) > max(px(asia["high"]), px(london["high"])) else None,
+        "breakout_at": trigger.get("known_at") or trigger.get("end"),
+        "breakout_close": px(trigger.get("C")),
+        "vwap_reset_verified": True,
+        "vwap_known_at": None if vw is None else vw.get("known_at"),
+        "vwap_at_retest": None if vw is None else vw.get("price"),
+        "retest_at": None if retest is None else retest.get("known_at"),
+        "retest_low": None if retest is None else retest.get("L"),
+        "retest_high": None if retest is None else retest.get("H"),
+        "risk_defined": (entry > stop) if entry is not None and stop is not None else (False if missing_retest is False else None),
+        "decision_at": decision,
+        "source_confirmation": True if retest is not None else missing_retest,
+        "confirm_at": decision if retest is not None else None,
+    }
+    return {"values": values, "confirm_at": values["confirm_at"], "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 
