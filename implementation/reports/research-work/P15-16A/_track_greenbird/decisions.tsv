@@ -1,0 +1,6 @@
+ts	phase	decision	why	evidence	result
+2026-09-15T12:00:00Z	frame	B0.2 lives in green_b02.py with adapter wrappers	keep B0/B0.1 frozen and stay off integration-owned common.py	implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py	open
+2026-09-15T12:30:00Z	rulings	F07 value is prior range midpoint; 9-10 box direction only after 10:00	pages do not print a VA percent; later box close cannot leak into a 09:33 entry	WORK_LOG.md	registered OD
+2026-09-15T13:00:00Z	harness	synthetic ruling tests pass 16/16	fixtures use literal cases from RR-11..15, F01, F06, F07, F13	pytest -k not byte_identity and not replay_inside and not nine_date	tests green
+2026-09-15T14:00:00Z	verify	full greenbird file plus P15-10 and P15-11	37 passed in 127.64s, B0/B0.1 hashes unchanged	tests/rule_discovery/test_p15_16a_greenbird.py	VERIFIED
+2026-09-15T14:10:00Z	replay	inside-tape misses reported, not loosened	6 of 7 RR-16 dates are no_matching_episode; 04-28 detected	_track_greenbird/REPLAY_GB.json	findings recorded

@@ -1,0 +1,151 @@
+{
+  "F01-scalp-observations": {
+    "file_line": "green_b02.py:1599",
+    "finding": "F01",
+    "kind": "literal",
+    "source": "GB p.40"
+  },
+  "F06-A1-london": {
+    "file_line": "green_b02.py:727",
+    "finding": "F06",
+    "kind": "literal",
+    "parameters": {
+      "stop_baseline": "retest_higher_low_minus_tick",
+      "stop_variant_od": "beyond_sweep_extreme"
+    },
+    "source": "GB NG 2099513366326730859; GB p.60"
+  },
+  "F06-A2-asia": {
+    "file_line": "green_b02.py:917",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB pp.19, 27; NG 2099513366326730859"
+  },
+  "F06-A3-pdl": {
+    "file_line": "green_b02.py:1063",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB pp.25, 48, 52-54; NG 2099503614372741234"
+  },
+  "F06-A4-pocket": {
+    "file_line": "green_b02.py:108",
+    "finding": "F06",
+    "kind": "OD",
+    "parameters": {
+      "confirmation": "five_minute_close_out",
+      "far_edge_variant": true,
+      "stop": "near_50_edge"
+    },
+    "source": "OD:five_minute_close_out_of_pocket; stop_near_50_edge; far_edge_variant"
+  },
+  "F06-A5-nwog": {
+    "file_line": "green_b02.py:1297",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB p.37 and pp.23, 30-39"
+  },
+  "F07-directional-bias": {
+    "file_line": "green_b02.py:294",
+    "finding": "F07",
+    "kind": "OD",
+    "parameters": {
+      "no_daily_cap": true,
+      "nyam_box": "09:00-10:00 close vs open, available only at/after 10:00",
+      "prior": "close vs prior RTH midpoint (value unpublished; midpoint registered)"
+    },
+    "source": "OD:prior_close_vs_range_midpoint,nyam_box_close_vs_open"
+  },
+  "F13-gb-vwap": {
+    "file_line": "green_b02.py:1471",
+    "finding": "F13",
+    "kind": "OD",
+    "parameters": {
+      "candidate": "60m",
+      "census_unknowns": 628,
+      "no_retest": "fail",
+      "retest_horizon": "rth_close"
+    },
+    "source": "OD:retest_horizon_rth_close; 60m_candidate"
+  },
+  "F18-clock-seasonal-ny": {
+    "file_line": "green_b02.py:146",
+    "finding": "F18",
+    "kind": "literal",
+    "source": "GB pp.43, 45, 48"
+  },
+  "RR-11-sessions-boxes": {
+    "file_line": "green_b02.py:98",
+    "finding": "RR-11",
+    "kind": "OD",
+    "parameters": {
+      "asia_baseline_apr_aug": "20:00-23:00",
+      "asia_baseline_sep": "20:00-00:00",
+      "asia_variants": [
+        "20:00-21:00",
+        "20:00-23:00",
+        "20:00-00:00"
+      ],
+      "entry_windows": [
+        "00:00-02:00",
+        "20:00-23:00",
+        "03:00-06:00",
+        "09:30-11:30",
+        "12:45-14:30"
+      ],
+      "london_baseline": "02:00-05:00",
+      "london_variants": [
+        "03:00-04:30",
+        "02:00-05:00"
+      ],
+      "ny": [
+        "09:00-10:00",
+        "09:00-09:30",
+        "09:30-10:00",
+        "10:00-11:00"
+      ]
+    },
+    "source": "OD:asia_box_windows,london_box_windows,ny_sub_boxes"
+  },
+  "RR-12-position-size": {
+    "file_line": "green_b02.py:140",
+    "finding": "RR-12",
+    "kind": "literal",
+    "parameters": {
+      "amount": 750,
+      "scored": false
+    },
+    "source": "GB pp.52-53, 56, 58, 60"
+  },
+  "RR-12-risk-exits": {
+    "file_line": "green_b02.py:128",
+    "finding": "RR-12",
+    "kind": "literal",
+    "parameters": {
+      "author_spacing": [
+        8,
+        25
+      ],
+      "ladder_spacing_od_baseline": 15,
+      "risk_dollars": 750
+    },
+    "source": "GB pp.52-53, 56, 58, 60"
+  },
+  "RR-13-confirmation-modes": {
+    "file_line": "green_b02.py:375",
+    "finding": "RR-13",
+    "kind": "literal",
+    "source": "GB pp.19, 25; RR-13 at-level box edges"
+  },
+  "RR-14-golden-pocket": {
+    "file_line": "green_b02.py:108",
+    "finding": "RR-14",
+    "kind": "literal",
+    "source": "GB pp.23, 25, 51; raw capture 2026-09-11"
+  },
+  "RR-15-objective-horizon": {
+    "file_line": "green_b02.py:171",
+    "finding": "RR-15",
+    "kind": "literal",
+    "source": "GB pp.51-54"
+  }
+}

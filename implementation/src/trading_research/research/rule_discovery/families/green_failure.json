@@ -4,5 +4,24 @@
   "task_id": "P15-10",
   "branches": ["nyam_box", "previous_hour", "asia_tdo_case", "cash_open_reclaim_case", "prior_day_level", "prior_week_level", "prior_month_level", "mss_fvg_refinement"],
   "source_additions": ["london_box", "asia_box", "overnight_scan"],
-  "clock_zone_unverified": true
+  "clock_zone_unverified": true,
+  "baselines": {
+    "B0.2": {
+      "version": "B0.2-2026-09-15",
+      "scan": "trading_research.research.rule_discovery.source_adapters.green_failure:scan_b02",
+      "replay": "trading_research.research.rule_discovery.source_adapters.green_failure:replay_example",
+      "branches": [
+        "london_box",
+        "asia_box",
+        "asia_tdo_case",
+        "prior_day_level",
+        "nyam_box",
+        "previous_hour",
+        "nwog",
+        "cash_open_reclaim_case",
+        "golden_pocket"
+      ],
+      "clock_zone_unverified": false
+    }
+  }
 }
