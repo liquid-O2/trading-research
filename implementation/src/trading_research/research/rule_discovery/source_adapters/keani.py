@@ -198,3 +198,324 @@ def slice_family(day: str) -> dict[str, Any]:
     payload["population_kind"] = "engineering_slice"
     payload["adapter_rules_applied"] = True
     return payload
+
+
+from decimal import Decimal as _D
+
+from trading_research.research.rule_discovery.source_adapters.b02_saint_track import (
+    Q as B02_Q,
+    cascade_stages,
+    combine_verdict,
+    dec,
+    episode_doc,
+    export_rules,
+    first_touch,
+    fixtures,
+    market_at,
+    market_bars,
+    parse_rec,
+    replay_match,
+    stage,
+    window_doc,
+)
+
+RULES = {
+    "F16-a-period": {"kind": "literal", "source": "TPO p.3"},
+    "F16-observation-1000": {"kind": "literal", "source": "AVG p.21"},
+    "F16-no-1100-cutoff": {"kind": "literal", "source": "F16"},
+    "F16-no-60m-expiry": {"kind": "literal", "source": "F16"},
+    "F16-no-val-rise": {"kind": "literal", "source": "F16"},
+    "F16-open-above-value": {"kind": "literal", "source": "AVG pp.21-22"},
+    "F16-rejection-poc-or-prior-vah": {
+        "kind": "literal",
+        "source": "AVG p.21",
+        "unresolved": "AVG p.22 caption draws rejection at POC and prior VAH (AND). AVG p.21 prose is OR (POC or prior VAH). B0.2 implements the p.21 OR reading. The p.21/p.22 conflict is unresolved.",
+        "conflict": "p.21 OR vs p.22 AND",
+    },
+    "F16-imbalance-vah-break": {"kind": "OD", "source": "OD:O109 buy run or synth fixture band (AVG pp.21-28)"},
+    "F16-defended-retest": {"kind": "literal", "source": "AVG pp.21-28"},
+    "F16-three-tick-reward": {"kind": "literal", "source": "AVG p.24"},
+    "F16-htf-objective": {"kind": "OD", "source": "OD:nearest of prior-day high, prior VAH, weekly high above (F16)"},
+}
+
+
+def _rules():
+    return export_rules(RULES, RULE_FNS)
+
+
+def _prior_profile(market):
+    fx = fixtures(market)
+    if fx.get("prior_vah") is not None or fx.get("prior_day_high") is not None:
+        return {
+            "vah": fx.get("prior_vah"),
+            "high": fx.get("prior_day_high"),
+            "scope_complete": True,
+        }
+    try:
+        prior = market.prior("day")
+        if not prior.get("sessions"):
+            return {}
+        win = prior["sessions"][-1]["window"]
+        p = win.profile(win.start, win.end)
+        rng = prior.get("range") or {}
+        return {"vah": p.get("vah") if p else None, "high": rng.get("high"), "scope_complete": prior.get("scope_complete")}
+    except Exception:
+        return {}
+
+
+def _weekly_high(market):
+    fx = fixtures(market)
+    if fx.get("weekly_high") is not None:
+        return dec(fx["weekly_high"])
+    try:
+        prior = market.prior("week")
+        rng = (prior or {}).get("range") or {}
+        if rng.get("high") is not None:
+            return dec(rng["high"])
+    except Exception:
+        return None
+    return None
+
+
+def _nearest_htf(entry, prior_day_high, prior_vah, weekly_high):
+    candidates = []
+    for name, level in (("prior_day_high", prior_day_high), ("prior_vah", prior_vah), ("weekly_high", weekly_high)):
+        if level is None:
+            continue
+        px = dec(level)
+        if px > dec(entry):
+            candidates.append((px - dec(entry), name, px))
+    if not candidates:
+        return None, None
+    _dist, name, px = min(candidates)
+    return name, px
+
+
+def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    a_start = market_at(market, "09:30")
+    a_end = market_at(market, "10:00")
+    a = None
+    try:
+        a = market.range(a_start, a_end, "Keani-A")
+    except Exception:
+        a = None
+    fx = fixtures(market)
+    if fx.get("a_period"):
+        a = dict(fx["a_period"])
+        a.setdefault("start", a_start)
+        a.setdefault("end", a_end)
+    prior = _prior_profile(market)
+    prior_vah = prior.get("vah")
+    prior_high = prior.get("high")
+    weekly = _weekly_high(market)
+    fully_above = False
+    if a is not None and prior_vah is not None and a.get("low") is not None:
+        fully_above = dec(a["low"]) >= dec(prior_vah)
+    extra = {
+        "fully_above_a_eligible": 1 if fully_above else 0,
+        "a_period": ["09:30", "10:00"],
+        "cutoff_1100": False,
+        "retest_expiry_60m": False,
+        "val_rise_required": False,
+    }
+    ctx = stage(
+        "context",
+        "pass" if fully_above else ("unknown" if a is None or prior_vah is None else "fail"),
+        a_end,
+        {"a_low": str(a["low"]) if a and a.get("low") is not None else None, "prior_vah": str(prior_vah) if prior_vah is not None else None, "a_period": "09:30-10:00"},
+    )
+    ref = stage("reference", "pass" if prior_vah is not None else "unknown", a_end, {"prior_vah": str(prior_vah) if prior_vah is not None else None})
+    if a is None:
+        stages = cascade_stages([ctx, ref])
+        verdict, failed, unknown = combine_verdict(stages)
+        ep = episode_doc(
+            family=FAMILY,
+            branch=branch,
+            side="long",
+            market=market,
+            verdict=verdict,
+            failed=failed,
+            unknown=unknown,
+            stages=stages,
+            rules=_rules(),
+            values={"a_period_complete": False},
+            decision_at=a_end,
+        )
+        return [ep], extra
+    bars = market_bars(market, a_end, getattr(market, "end", a_end), 60)
+    observation = None
+    breakout = None
+    band = fx.get("imbalance_band")
+    if band:
+        band = [dec(band[0]), dec(band[1])]
+    for row in bars:
+        current = None
+        try:
+            current = market.profile(a["start"], row["start"])
+        except Exception:
+            current = fx.get("developing_profile")
+        poc = None if current is None else current.get("poc")
+        hit_poc = poc is not None and row.get("C") is not None and row.get("L") is not None and dec(row["L"]) <= dec(poc) and dec(row["C"]) > dec(poc)
+        hit_vah = prior_vah is not None and row.get("C") is not None and row.get("L") is not None and dec(row["L"]) <= dec(prior_vah) and dec(row["C"]) > dec(prior_vah)
+        if observation is None and (hit_poc or hit_vah):
+            observation = dict(row)
+            observation["rejection_level"] = "developing_poc" if hit_poc else "prior_day_vah"
+            continue
+        if observation and (row.get("observed_complete") or row.get("complete")) and row.get("C") is not None:
+            vah = None if current is None else current.get("vah")
+            if vah is not None and dec(row["C"]) > dec(vah):
+                runs = []
+                try:
+                    im = market.domain("O109", {"candle_id": row.get("bar_id")})
+                    runs = im.get("buy_runs") or []
+                except Exception:
+                    runs = []
+                if fx.get("imbalance_band") is not None:
+                    runs = [{"band": fx["imbalance_band"]}]
+                if runs or fx.get("imbalance_band") is not None:
+                    breakout = row
+                    if runs and not band:
+                        band = [dec(v) for v in runs[0]["band"]]
+                    break
+    loc = stage(
+        "location",
+        "pass" if observation else ("fail" if bars else "unknown"),
+        int(observation.get("known_at") or observation["end"]) if observation else a_end,
+        {
+            "rejection": None if observation is None else observation.get("rejection_level"),
+            "val_rise_required": False,
+            "poc_or_prior_vah": "OR",
+            "p22_and_unresolved": True,
+        },
+    )
+    trig = stage(
+        "trigger",
+        "pass" if breakout else "fail",
+        int(breakout.get("known_at") or breakout["end"]) if breakout else None,
+        {"breakout": True if breakout else False, "cutoff_1100": False},
+    )
+    retest = None
+    reward = None
+    if breakout and band:
+        after = [r for r in bars if int(r["start"]) >= int(breakout["end"])]
+        retest = first_touch(after, band[0], band[1])
+        if retest:
+            later = [r for r in after if int(r["start"]) >= int(retest["end"])]
+            need = dec(retest.get("C") or band[1]) + B02_Q * 3
+            for row in later:
+                if row.get("C") is not None and dec(row["C"]) >= need:
+                    if row.get("L") is None or dec(row["L"]) >= dec(band[0]) - B02_Q:
+                        reward = row
+                        break
+    conf_verdict = "fail"
+    if retest and reward:
+        conf_verdict = "pass"
+    elif retest and not reward:
+        conf_verdict = "fail"
+    elif breakout and not retest:
+        conf_verdict = "fail"
+    conf = stage(
+        "confirmation",
+        conf_verdict,
+        int((reward or retest or breakout).get("known_at") or (reward or retest or breakout)["end"]) if (reward or retest or breakout) else None,
+        {"retest": True if retest else False, "three_tick_reward": True if reward else False, "expiry_60m": False},
+    )
+    entry = dec((retest or breakout or {}).get("C") or (a.get("high") if a else 0))
+    stop = (band[0] - B02_Q) if band else (dec(a["low"]) - B02_Q if a.get("low") is not None else None)
+    name, target = _nearest_htf(entry, prior_high, prior_vah, weekly)
+    used_a_width = False
+    if target is None:
+        obj_verdict = "unknown"
+    else:
+        obj_verdict = "pass"
+    obj = stage("objective", obj_verdict, a_end, {"selector": name, "target": str(target) if target is not None else None, "a_high_plus_a_width": used_a_width})
+    risk = stage("risk", "pass" if entry is not None and stop is not None and entry > stop else "unknown", a_end, {"stop": str(stop) if stop is not None else None, "entry": str(entry)})
+    stages = cascade_stages([ctx, ref, loc, trig, conf, risk, obj])
+    verdict, failed, unknown = combine_verdict(stages)
+    decision = int((reward or retest or breakout or {"known_at": a_end}).get("known_at") or a_end)
+    values = {
+        "a_period": "09:30-10:00",
+        "time_of_day_allowed": True,
+        "val_rise_required": False,
+        "three_tick_reward": True if reward else False,
+        "objective_kind": name,
+        "a_high_plus_a_width": False,
+        "cutoff_1100": False,
+        "retest_expiry_60m": False,
+    }
+    ep = episode_doc(
+        family=FAMILY,
+        branch=branch,
+        side="long",
+        market=market,
+        verdict=verdict,
+        failed=failed,
+        unknown=unknown,
+        stages=stages,
+        rules=_rules(),
+        values=values,
+        decision_at=decision,
+        reference=a,
+        trigger=breakout or observation or {},
+        geometry={"entry": entry, "stop": stop, "target": target, "imbalance_band": band},
+    )
+    return [ep], extra
+
+
+def scan_b02(market, rec) -> dict[str, Any]:
+    family, branches = parse_rec(rec, FAMILY, BRANCHES)
+    episodes = []
+    extra = {"family": family, "branches": list(branches), "fully_above_a_eligible": 0}
+    for branch in branches:
+        eps, meta = scan_keani_branch_b02(market, branch)
+        episodes.extend(eps)
+        extra.update(meta)
+    rules = _rules()
+    for episode in episodes:
+        episode["rules"] = rules
+    branch = branches[0] if len(branches) == 1 else None
+    return window_doc(FAMILY, branch, market, episodes, rules, extra=extra)
+
+
+def replay_example(market, example) -> dict[str, Any]:
+    expected = (example or {}).get("expected_detection") or {}
+    if not example or example.get("id") is None:
+        return {
+            "detected": None,
+            "branch": "source_long",
+            "our_side": None,
+            "our_level": None,
+            "our_entry_ns": None,
+            "author_level": None,
+            "author_side": expected.get("side"),
+            "divergence": "no dated example",
+        }
+    if market is None:
+        return {
+            "detected": None,
+            "branch": "source_long",
+            "our_side": None,
+            "our_level": None,
+            "our_entry_ns": None,
+            "author_level": None,
+            "author_side": expected.get("side"),
+            "divergence": "no dated example",
+        }
+    doc = scan_b02(market, {"family": FAMILY, "branch": "source_long"})
+    return replay_match(doc, example)
+
+
+RULE_FNS = {
+    "F16-a-period": scan_keani_branch_b02,
+    "F16-observation-1000": scan_keani_branch_b02,
+    "F16-no-1100-cutoff": scan_keani_branch_b02,
+    "F16-no-60m-expiry": scan_keani_branch_b02,
+    "F16-no-val-rise": scan_keani_branch_b02,
+    "F16-open-above-value": scan_keani_branch_b02,
+    "F16-rejection-poc-or-prior-vah": scan_keani_branch_b02,
+    "F16-imbalance-vah-break": scan_keani_branch_b02,
+    "F16-defended-retest": scan_keani_branch_b02,
+    "F16-three-tick-reward": scan_keani_branch_b02,
+    "F16-htf-objective": _nearest_htf,
+}
+

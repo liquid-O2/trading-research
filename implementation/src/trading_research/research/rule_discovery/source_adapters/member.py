@@ -225,3 +225,364 @@ def slice_family(day: str) -> dict[str, Any]:
     payload["population_kind"] = "engineering_slice"
     payload["adapter_rules_applied"] = True
     return payload
+
+
+from decimal import Decimal as _D
+
+from trading_research.research.rule_discovery.source_adapters.b02_saint_track import (
+    FIXED_RISK_USD,
+    NQ_TICK_VALUE,
+    Q as B02_Q,
+    cascade_stages,
+    combine_verdict,
+    dec,
+    episode_doc,
+    export_rules,
+    first_touch,
+    fixtures,
+    market_at,
+    market_bars,
+    parse_rec,
+    replay_match,
+    stage,
+    window_doc,
+)
+
+REACTION_TICKS = 4
+CONFLUENCE_TICKS = 2
+HVN_RADIUS = 2
+TARGET_R = _D("1.5")
+
+RULES = {
+    "F15-no-1245-split": {"kind": "literal", "source": "K10 pp.5-8"},
+    "F15-two-reasons": {
+        "kind": "OD",
+        "source": "OD:reaction_ticks=4, confluence_ticks=2, look-left any prior history (K10 pp.5-8)",
+    },
+    "F15-kg1-alternative": {"kind": "OD", "source": "OD:KG1 aligned within confluence_ticks (K10 p.6)"},
+    "F15-independence-admission": {"kind": "literal", "source": "K10 pp.5-8"},
+    "F15-target-1.5R": {"kind": "literal", "source": "K10 pp.7-8"},
+    "F15-ticket-rr-conflict": {"kind": "literal", "source": "K10 pp.7-8 tickets R:R 1.00 and 9.60"},
+    "F15-stop-beyond-rejection": {"kind": "literal", "source": "K10 pp.7-8"},
+    "F15-fixed-500-risk": {"kind": "literal", "source": "K10 p.13"},
+    "F15-k10-p13-drawn-directions": {
+        "kind": "literal",
+        "source": "K10 p.13",
+        "notes": "Drawings are two SELL and one BUY. Caption says three shorts. B0.2 uses the drawn directions as the negative control. Caption is conflicting evidence.",
+    },
+    "RR-23-instrument-transfer": {"kind": "OD", "source": "OD:instrument transfer NQ from ES-202609 (K10 pp.7-8,12-13)"},
+}
+
+K10_P13_DRAWN_DIRECTIONS = ("short", "short", "long")
+K10_P13_CAPTION = "three shorts"
+
+
+def _rules():
+    return export_rules(RULES, RULE_FNS)
+
+
+def _look_left_reactions(market, side: str):
+    fx = fixtures(market)
+    if fx.get("reactions") is not None:
+        wanted = "high" if side == "short" else "low"
+        return [dict(r) for r in fx["reactions"] if r.get("side") == wanted]
+    try:
+        from trading_research.research.method_pack.historical_features import pivots
+
+        prior = market.prior("day")
+        rows = []
+        if prior.get("sessions"):
+            win = prior["sessions"][-1]["window"]
+            rows.extend(win.bars(win.start, win.end, 300))
+        rows.extend(market_bars(market, getattr(market, "start", 0), getattr(market, "end", 0), 300))
+        qualified = []
+        for reaction in pivots(rows):
+            after = [r for r in rows if r["start"] >= reaction["at"] and r["known_at"] <= reaction["known_at"]]
+            if not after:
+                continue
+            distance = (
+                reaction["price"] - min(r["L"] for r in after)
+                if reaction["side"] == "high"
+                else max(r["H"] for r in after) - reaction["price"]
+            )
+            if distance >= B02_Q * REACTION_TICKS:
+                qualified.append(dict(reaction, reaction_distance=distance))
+        wanted = "high" if side == "short" else "low"
+        return [r for r in qualified if r["side"] == wanted]
+    except Exception:
+        return []
+
+
+def _look_left_hvns(market):
+    fx = fixtures(market)
+    if fx.get("hvns") is not None:
+        return [dict(r) for r in fx["hvns"]]
+    try:
+        prior = market.prior("day")
+        if not prior.get("sessions"):
+            return []
+        win = prior["sessions"][-1]["window"]
+        profile = win.profile(win.start, win.end)
+        levels = {r["price"]: r["total_volume"] for r in profile["rows"]}
+        nodes = []
+        for price, volume in levels.items():
+            if volume <= 0:
+                continue
+            if all(volume > levels.get(price + B02_Q * i, _D(0)) for i in range(-HVN_RADIUS, HVN_RADIUS + 1) if i):
+                nodes.append({"price": price, "id": f"hvn:{price}", "known_at": profile.get("known_at"), "parent": profile.get("profile_id") or profile.get("id")})
+        return nodes
+    except Exception:
+        return []
+
+
+def _kg1_levels(market):
+    fx = fixtures(market)
+    if fx.get("kg1") is not None:
+        return list(fx["kg1"])
+    try:
+        from trading_research.research.method_pack.strategy_options import key_gamma_reference
+
+        return list(key_gamma_reference(market) or [])
+    except Exception:
+        return []
+
+
+def _pair_reasons(reactions, hvns, kg1, side: str):
+    pairs = []
+    for reaction in reactions:
+        px = dec(reaction["price"])
+        matching = [n for n in hvns if abs(dec(n["price"]) - px) <= B02_Q * CONFLUENCE_TICKS]
+        if matching:
+            node = min(matching, key=lambda n: (abs(dec(n["price"]) - px), dec(n["price"])))
+            pairs.append((reaction, node, "hvn"))
+            continue
+        kg_hit = []
+        for node in kg1:
+            level = node.get("price")
+            if level is None and node.get("low") is not None and node.get("high") is not None:
+                level = (dec(node["low"]) + dec(node["high"])) / 2
+            elif level is None:
+                level = node.get("low")
+            if level is not None and not isinstance(level, bool) and abs(dec(level) - px) <= B02_Q * CONFLUENCE_TICKS:
+                kg_hit.append(node)
+        if kg_hit:
+            pairs.append((reaction, kg_hit[0], "kg1"))
+    return pairs
+
+
+def _independent(reaction, second, kind: str) -> bool:
+    if second is None:
+        return False
+    r_id = str(reaction.get("id") or reaction.get("parent") or "")
+    s_id = str(second.get("id") or second.get("parent") or "")
+    if r_id and s_id and r_id == s_id:
+        return False
+    r_win = reaction.get("window")
+    s_win = second.get("window")
+    if r_win and s_win and tuple(r_win) == tuple(s_win):
+        return False
+    return True
+
+
+def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
+    side = "short" if branch == "resistance_short" else "long"
+    sg = 1 if side == "long" else -1
+    reactions = _look_left_reactions(market, side)
+    hvns = _look_left_hvns(market)
+    kg1 = _kg1_levels(market)
+    pairs = _pair_reasons(reactions, hvns, kg1, side)
+    fx = fixtures(market)
+    if fx.get("force_pair"):
+        pairs = [tuple(fx["force_pair"])]
+    if not pairs:
+        ctx = stage("context", "fail", None, {"split_1245": False, "reasons": 0})
+        stages = cascade_stages([ctx])
+        verdict, failed, unknown = combine_verdict(stages)
+        return [
+            episode_doc(
+                family=FAMILY,
+                branch=branch,
+                side=side,
+                market=market,
+                verdict=verdict,
+                failed=failed,
+                unknown=unknown,
+                stages=stages,
+                rules=_rules(),
+                values={"split_1245": False, "k10_p13_drawn_directions": list(K10_P13_DRAWN_DIRECTIONS)},
+                decision_at=getattr(market, "end", None),
+            )
+        ]
+    reaction, second, kind = pairs[-1]
+    independent = _independent(reaction, second, kind)
+    if fx.get("independent") is not None:
+        independent = bool(fx["independent"])
+    px = dec(reaction["price"])
+    second_px = dec(second.get("price") or second.get("low") or px)
+    lo = min(px, second_px) - B02_Q
+    hi = max(px, second_px) + B02_Q
+    start = market_at(market, "09:30") if getattr(market, "day", None) is not None else getattr(market, "start", 0)
+    try:
+        start = market_at(market, "09:30")
+    except Exception:
+        start = getattr(market, "start", 0)
+    bars = market_bars(market, start, getattr(market, "end", start), 60)
+    contact = first_touch(bars, lo, hi)
+    if fx.get("contact"):
+        contact = dict(fx["contact"])
+    ctx = stage("context", "pass", reaction.get("known_at"), {"split_1245": False, "look_left": True})
+    ref = stage("reference", "pass" if independent else "fail", reaction.get("known_at"), {"reaction": str(px), "second": str(second_px), "kind": kind, "independent": independent})
+    loc = stage("location", "pass", reaction.get("known_at"), {"low": str(lo), "high": str(hi)})
+    if contact is None:
+        trig = stage("trigger", "fail", None, {"touch": False})
+        stages = cascade_stages([ctx, ref, loc, trig])
+        verdict, failed, unknown = combine_verdict(stages)
+        return [
+            episode_doc(
+                family=FAMILY,
+                branch=branch,
+                side=side,
+                market=market,
+                verdict=verdict,
+                failed=failed,
+                unknown=unknown,
+                stages=stages,
+                rules=_rules(),
+                values={"independent": independent, "split_1245": False},
+                decision_at=getattr(market, "end", None),
+                reference={"low": lo, "high": hi},
+            )
+        ]
+    trig = stage("trigger", "pass", int(contact.get("known_at") or contact["end"]), {"touch": True})
+    after = [r for r in bars if int(r["start"]) >= int(contact["start"])]
+    observed = after[:5] or [contact]
+    high = max(dec(r["H"]) for r in observed if r.get("H") is not None)
+    low = min(dec(r["L"]) for r in observed if r.get("L") is not None)
+    entry = dec(contact.get("C") or px)
+    stop = high + B02_Q if side == "short" else low - B02_Q
+    if fx.get("rejection_high") is not None and side == "short":
+        high = dec(fx["rejection_high"])
+        stop = high + B02_Q
+    if fx.get("rejection_low") is not None and side == "long":
+        low = dec(fx["rejection_low"])
+        stop = low - B02_Q
+    r_dist = abs(entry - stop)
+    target = entry + sg * r_dist * TARGET_R
+    stop_ticks = (r_dist / B02_Q) if r_dist > 0 else _D("1")
+    qty = (FIXED_RISK_USD / (stop_ticks * NQ_TICK_VALUE)) if stop_ticks > 0 else None
+    stop_ok = stop > high if side == "short" else stop < low
+    conf = stage("confirmation", "pass" if independent else "fail", int(contact.get("known_at") or contact["end"]), {"independent": independent, "kind": kind})
+    risk = stage(
+        "risk",
+        "pass" if stop_ok else "fail",
+        int(contact.get("known_at") or contact["end"]),
+        {
+            "stop": str(stop),
+            "rejection_high": str(high) if side == "short" else None,
+            "rejection_low": str(low) if side == "long" else None,
+            "risk_usd": str(FIXED_RISK_USD),
+            "quantity": str(qty) if qty is not None else None,
+            "tick_value": str(NQ_TICK_VALUE),
+            "instrument_transfer": True,
+        },
+    )
+    obj = stage(
+        "objective",
+        "pass",
+        int(contact.get("known_at") or contact["end"]),
+        {
+            "target_r": "1.5",
+            "target": str(target),
+            "conflicting_evidence": [{"ticket": "first", "rr": 1.00}, {"ticket": "second", "rr": 9.60}],
+        },
+    )
+    stages = cascade_stages([ctx, ref, loc, trig, conf, risk, obj])
+    verdict, failed, unknown = combine_verdict(stages)
+    decision = int(contact.get("known_at") or contact["end"])
+    values = {
+        "split_1245": False,
+        "independent": independent,
+        "target_r": "1.5",
+        "conflicting_evidence": [{"ticket": "first", "rr": 1.00}, {"ticket": "second", "rr": 9.60}],
+        "stop_above_rejection_high": bool(side == "short" and stop > high),
+        "quantity": str(qty) if qty is not None else None,
+        "risk_usd": "500",
+        "instrument_transfer": True,
+        "k10_p13_drawn_directions": list(K10_P13_DRAWN_DIRECTIONS),
+        "k10_p13_caption": K10_P13_CAPTION,
+    }
+    return [
+        episode_doc(
+            family=FAMILY,
+            branch=branch,
+            side=side,
+            market=market,
+            verdict=verdict,
+            failed=failed,
+            unknown=unknown,
+            stages=stages,
+            rules=_rules(),
+            values=values,
+            decision_at=decision,
+            reference={"low": lo, "high": hi, "reaction": px},
+            trigger=contact,
+            geometry={"entry": entry, "stop": stop, "target": target},
+        )
+    ]
+
+
+def scan_b02(market, rec) -> dict[str, Any]:
+    family, branches = parse_rec(rec, FAMILY, BRANCHES)
+    episodes = []
+    for branch in branches:
+        episodes.extend(scan_member_branch_b02(market, branch))
+    rules = _rules()
+    for episode in episodes:
+        episode["rules"] = rules
+    branch = branches[0] if len(branches) == 1 else None
+    return window_doc(FAMILY, branch, market, episodes, rules, extra={"family": family, "branches": list(branches)})
+
+
+def replay_example(market, example) -> dict[str, Any]:
+    instrument = str((example or {}).get("instrument") or "")
+    example_id = str((example or {}).get("id") or "")
+    if example_id == "MB-2026-07-K10" or instrument.upper().startswith("ES") or (example or {}).get("inside_tape") is False:
+        expected = (example or {}).get("expected_detection") or {}
+        return {
+            "detected": None,
+            "branch": expected.get("branch"),
+            "our_side": None,
+            "our_level": None,
+            "our_entry_ns": None,
+            "author_level": None,
+            "author_side": expected.get("side"),
+            "divergence": "ES tape required",
+        }
+    if market is None:
+        return {
+            "detected": None,
+            "branch": None,
+            "our_side": None,
+            "our_level": None,
+            "our_entry_ns": None,
+            "author_level": None,
+            "author_side": None,
+            "divergence": "date outside tape",
+        }
+    doc = scan_b02(market, {"family": FAMILY})
+    return replay_match(doc, example)
+
+
+RULE_FNS = {
+    "F15-no-1245-split": scan_member_branch_b02,
+    "F15-two-reasons": _pair_reasons,
+    "F15-kg1-alternative": _kg1_levels,
+    "F15-independence-admission": _independent,
+    "F15-target-1.5R": scan_member_branch_b02,
+    "F15-ticket-rr-conflict": scan_member_branch_b02,
+    "F15-stop-beyond-rejection": scan_member_branch_b02,
+    "F15-fixed-500-risk": scan_member_branch_b02,
+    "F15-k10-p13-drawn-directions": scan_member_branch_b02,
+    "RR-23-instrument-transfer": replay_example,
+}
+
