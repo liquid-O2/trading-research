@@ -1,0 +1,35 @@
+{
+  "family": "SAINT-AMT",
+  "produced_by": {
+    "test": "test_replay_writes",
+    "command": "replay_example(load_source_market(example['date']), example)",
+    "dates": [
+      "2026-08-10"
+    ],
+    "fixture_injection": "FixtureMarket overlay, inner market.b02_fixtures unchanged"
+  },
+  "examples": [
+    {
+      "detected": false,
+      "branch": "continuation_retest",
+      "our_side": "short",
+      "our_level": 29857.0,
+      "our_entry_ns": 1786313460000000000,
+      "author_level": 29729.25,
+      "author_side": "short",
+      "divergence": "level",
+      "id": "SA-2026-08-10-ASIA"
+    },
+    {
+      "detected": false,
+      "branch": "continuation_retest",
+      "our_side": "short",
+      "our_level": 29782.25,
+      "our_entry_ns": 1786368960000000000,
+      "author_level": null,
+      "author_side": "short",
+      "divergence": "no printed fill",
+      "id": "SA-2026-08-04-12-WIC"
+    }
+  ]
+}
