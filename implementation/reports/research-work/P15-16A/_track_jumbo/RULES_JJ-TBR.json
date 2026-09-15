@@ -1,0 +1,182 @@
+[
+  {
+    "rule_id": "RR-01-extension-band-1.33-1.66",
+    "kind": "literal",
+    "source": "JR p.23; o015",
+    "finding": "RR-01",
+    "file_line": "source_adapters/jumbo.py:315"
+  },
+  {
+    "rule_id": "RR-01-OD-near-band-0.33-0.66",
+    "kind": "OD",
+    "source": "OD:historical scanner band, not source",
+    "finding": "RR-01",
+    "file_line": "source_adapters/jumbo.py:338"
+  },
+  {
+    "rule_id": "RR-03-sweep-from-09:00",
+    "kind": "literal",
+    "source": "JR p.20",
+    "finding": "RR-03",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-03-modal-reversal-09:40-09:50",
+    "kind": "literal",
+    "source": "JR p.70",
+    "finding": "RR-03",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-03-extension-after-10:00",
+    "kind": "literal",
+    "source": "JR pp.25-26",
+    "finding": "RR-03",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-04-london-02:00-03:00",
+    "kind": "literal",
+    "source": "JR pp.50, 63-64",
+    "finding": "RR-04",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-05-pzone-anchors",
+    "kind": "literal",
+    "source": "JR pp.16-18",
+    "finding": "RR-05",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-05-OD-absorption-proxy",
+    "kind": "OD",
+    "source": "OD:TBR p.35 body<=0.6 vol>=1.5x14-period average",
+    "finding": "RR-05",
+    "file_line": "source_adapters/jumbo.py:1309",
+    "parameters": {
+      "body_ratio_max": "0.6",
+      "volume_mult": "1.5",
+      "volume_lookback": 14
+    }
+  },
+  {
+    "rule_id": "RR-06-reclaim-entry",
+    "kind": "literal",
+    "source": "JR p.71",
+    "finding": "RR-06",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-06-objective-plus-0.5",
+    "kind": "literal",
+    "source": "JR p.71",
+    "finding": "RR-06",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-06-projection-ladder",
+    "kind": "literal",
+    "source": "JR pp.16-18",
+    "finding": "RR-06",
+    "file_line": "source_adapters/jumbo.py:350"
+  },
+  {
+    "rule_id": "RR-06-sweep-depth-recorded",
+    "kind": "literal",
+    "source": "F11; RR-06",
+    "finding": "F11",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-07-OD-sessionstat-60",
+    "kind": "OD",
+    "source": "OD:60-session mean/median of selected clock from native tape",
+    "finding": "RR-07",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-07-evrange-fixture",
+    "kind": "literal",
+    "source": "F17; JR pp.30-33",
+    "finding": "RR-07",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-08-open-location-at-09:30",
+    "kind": "literal",
+    "source": "JR pp.36, 38, 42",
+    "finding": "RR-08",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-08-OD-branch-selector",
+    "kind": "OD",
+    "source": "OD:TBR pp.12-24 no numeric threshold",
+    "finding": "RR-08",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "RR-09-published-statistics",
+    "kind": "literal",
+    "source": "JR pp.23, 37, 70",
+    "finding": "RR-09",
+    "file_line": "source_adapters/jumbo.py:1478"
+  },
+  {
+    "rule_id": "RR-09-bigtrades-deferred",
+    "kind": "OD",
+    "source": "deferred: JR p.50 BigTrades NQ >=100 NY / >=75 London; JR pp.49-50 35% footprint filter is a different flow view; neither series is on the native tape",
+    "finding": "RR-09",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F08-single-extended-reduced-after-10:00",
+    "kind": "literal",
+    "source": "TBR p.12",
+    "finding": "F08",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F11-confirm-3m-ob-baseline",
+    "kind": "literal",
+    "source": "TBR p.27",
+    "finding": "F11",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F11-OD-confirm-2m-5m-rejection",
+    "kind": "OD",
+    "source": "OD:2m/5m OB and rejection-block variants",
+    "finding": "F11",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F12-candidate-references-unchanged",
+    "kind": "literal",
+    "source": "F12 note only",
+    "finding": "F12",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F17-pzone-generator-unknown",
+    "kind": "OD",
+    "source": "OD:proprietary P-zone generator unknown",
+    "finding": "F17",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F18-ny-clock-ET",
+    "kind": "literal",
+    "source": "TBR p.6",
+    "finding": "F18",
+    "file_line": "source_adapters/jumbo.py:1309"
+  },
+  {
+    "rule_id": "F19-chart-clocks-UK-UTC",
+    "kind": "literal",
+    "source": "JR p.71 ticket UTC; 2026 NT charts UK",
+    "finding": "F19",
+    "file_line": "source_adapters/jumbo.py:1309"
+  }
+]
