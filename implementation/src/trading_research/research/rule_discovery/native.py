@@ -40,6 +40,8 @@ NS = 1_000_000_000
 MINUTE_NS = 60 * NS
 TICK = Decimal("0.25")
 TICK_FLOAT = 0.25
+PRICE_UNIT = Decimal("0.0001")
+UNITS_PER_TICK = 2500
 ACTION_TRADE = 1
 ACTION_OTHER = 0
 SIDE_BUY = 1
@@ -79,6 +81,16 @@ def price_to_ticks(price: Decimal | int | str) -> int:
     return int(quanta)
 
 
+def price_to_units(price: Decimal | int | str) -> int:
+    """Integer 0.0001 price units. Derived levels need not sit on the 0.25 grid."""
+    value = price if isinstance(price, Decimal) else Decimal(str(price))
+    scaled = value / PRICE_UNIT
+    integral = scaled.to_integral_value()
+    if scaled != integral:
+        raise ContractError("price is not representable at 0.0001")
+    return int(integral)
+
+
 def ticks_to_decimal(ticks: int) -> Decimal:
     return (Decimal(int(ticks)) * TICK).quantize(TICK)
 
@@ -112,6 +124,12 @@ def cgroup_worker_count() -> int:
         text = v2.read_text().strip().split()
         if len(text) == 2 and text[0] != "max":
             return max(1, math.floor(int(text[0]) / int(text[1])))
+    try:
+        affinity = os.sched_getaffinity(0)
+        if affinity:
+            return max(1, len(affinity))
+    except (AttributeError, OSError):
+        pass
     return max(1, int(os.cpu_count() or 1))
 
 
@@ -225,10 +243,10 @@ def _map_dictionary(column: pa.Array, mapping: Mapping[str, int], default: int) 
     if len(column) == 0:
         return np.zeros(0, dtype=np.int8)
     as_string = pc.cast(column, pa.string())
-    values = as_string.to_numpy(zero_copy_only=False)
-    out = np.full(len(values), default, dtype=np.int8)
+    out = np.full(len(as_string), default, dtype=np.int8)
     for token, code in mapping.items():
-        out[values == token] = np.int8(code)
+        mask = pc.equal(as_string, pa.scalar(token)).to_numpy(zero_copy_only=False)
+        out[mask] = np.int8(code)
     return out
 
 
@@ -240,6 +258,7 @@ def decode_arrow_table(
     instrument_id: str,
     source_file: str,
     row_offsets: np.ndarray,
+    materialize_row_ids: bool = True,
 ) -> SessionArrays:
     names = set(table.column_names)
     time_name = "t" if "t" in names else "ts_event"
@@ -277,12 +296,18 @@ def decode_arrow_table(
         known = np.maximum(t_ns, recv_ns)
     seq = table.column("exchange_sequence").fill_null(-1).cast(pa.int64()).to_numpy(zero_copy_only=False).astype(np.int64) if "exchange_sequence" in names else np.full(t_ns.size, -1, dtype=np.int64)
     file_name = Path(source_file).name
-    row_id = np.array([f"{file_name}:{int(offset)}" for offset in row_offsets], dtype=object)
+    if materialize_row_ids:
+        row_id = np.array([f"{file_name}:{int(offset)}" for offset in row_offsets], dtype=object)
+    else:
+        row_id = np.empty(t_ns.size, dtype=object)
     ooo = np.flatnonzero(t_ns[1:] < t_ns[:-1]) + 1 if t_ns.size else np.zeros(0, dtype=np.int64)
     batch_starts = np.ones(t_ns.size, dtype=np.bool_)
     if t_ns.size:
         batch_starts[1:] = t_ns[1:] != t_ns[:-1]
-    source_hash = memoized_file_digest(source_file) if Path(source_file).is_file() else EMPTY_SHA256
+    if materialize_row_ids and Path(source_file).is_file():
+        source_hash = memoized_file_digest(source_file)
+    else:
+        source_hash = EMPTY_SHA256
     return SessionArrays(
         t_ns=t_ns,
         price_ticks=price_ticks,
@@ -352,6 +377,28 @@ def _concat_session_arrays(parts: list[SessionArrays], *, start_ns: int, end_ns:
     )
 
 
+_SPAN_COLUMNS = (
+    "t",
+    "ts_event",
+    "action",
+    "side",
+    "price",
+    "size",
+    "bid_px",
+    "bid",
+    "ask_px",
+    "ask",
+    "bid_sz",
+    "bid_size",
+    "ask_sz",
+    "ask_size",
+    "flags",
+    "ts_recv",
+    "exchange_sequence",
+    "instrument_id",
+)
+
+
 def load_span_arrow(
     path: Path,
     start_ns: int,
@@ -366,6 +413,7 @@ def load_span_arrow(
     timestamp_index = names.index(field_name)
     native_type = parquet.schema_arrow.field(field_name).type
     factor = {"s": NS, "ms": 1_000_000, "us": 1_000, "ns": 1}.get(getattr(native_type, "unit", "ns"), 1)
+    columns = [name for name in _SPAN_COLUMNS if name in names]
     tables: list[pa.Table] = []
     offsets: list[np.ndarray] = []
     row_offset = 0
@@ -378,7 +426,7 @@ def load_span_arrow(
             if int(hi) * factor < start_ns or int(lo) * factor >= end_ns:
                 row_offset += group_rows
                 continue
-        batch = parquet.read_row_group(group)
+        batch = parquet.read_row_group(group, columns=columns or None)
         times = batch.column(field_name)
         if pa.types.is_timestamp(native_type):
             times = times.cast(pa.timestamp("ns", tz=native_type.tz)).cast(pa.int64())
@@ -397,7 +445,7 @@ def load_span_arrow(
             continue
         selected = batch.filter(mask)
         filtered_times = pc.filter(times, mask)
-        selected = selected.set_column(timestamp_index, field_name, filtered_times)
+        selected = selected.set_column(selected.schema.get_field_index(field_name), field_name, filtered_times)
         tables.append(selected)
         physical = pc.add(pc.cast(indices, pa.int64()), pa.scalar(row_offset, type=pa.int64()))
         offsets.append(physical.to_numpy(zero_copy_only=False).astype(np.int64))
@@ -565,6 +613,61 @@ def bars_reduceat(arrays: SessionArrays, start_ns: int, end_ns: int, seconds: in
             }
         )
     return rows
+
+
+def bars_arrays(arrays: SessionArrays, start_ns: int, end_ns: int, seconds: int = 60) -> dict[str, np.ndarray]:
+    """Minute (or other) bars as struct-of-arrays. No per-row dicts."""
+    from trading_research.research.rule_discovery.kernels import minute_bars_kernel
+
+    width = int(seconds) * NS
+    if width <= 0 or end_ns <= start_ns or arrays.t_ns.size == 0:
+        empty = np.zeros(0, dtype=np.int64)
+        return {
+            "start_ns": empty,
+            "end_ns": empty,
+            "open_ticks": empty,
+            "high_ticks": empty,
+            "low_ticks": empty,
+            "close_ticks": empty,
+            "volume": empty,
+            "signed": empty,
+            "unknown": empty,
+            "known_at_ns": empty,
+        }
+    trade = arrays.is_trade
+    t_ns = arrays.t_ns[trade]
+    ticks = arrays.price_ticks[trade]
+    size = arrays.size[trade]
+    side = arrays.side[trade].astype(np.int64)
+    known_at = arrays.known_at_ns[trade]
+    if seconds == 60:
+        packed = minute_bars_kernel(t_ns, ticks, size, side, known_at, np.int64(start_ns), np.int64(end_ns))
+        names = (
+            "start_ns",
+            "end_ns",
+            "open_ticks",
+            "high_ticks",
+            "low_ticks",
+            "close_ticks",
+            "volume",
+            "signed",
+            "unknown",
+            "known_at_ns",
+        )
+        return {name: packed[i] for i, name in enumerate(names)}
+    rows = bars_reduceat(arrays, start_ns, end_ns, seconds)
+    return {
+        "start_ns": np.array([row["start_ns"] for row in rows], dtype=np.int64),
+        "end_ns": np.array([row["end_ns"] for row in rows], dtype=np.int64),
+        "open_ticks": np.array([row["open_ticks"] for row in rows], dtype=np.int64),
+        "high_ticks": np.array([row["high_ticks"] for row in rows], dtype=np.int64),
+        "low_ticks": np.array([row["low_ticks"] for row in rows], dtype=np.int64),
+        "close_ticks": np.array([row["close_ticks"] for row in rows], dtype=np.int64),
+        "volume": np.array([row["volume"] for row in rows], dtype=np.int64),
+        "signed": np.array([row["signed"] for row in rows], dtype=np.int64),
+        "unknown": np.array([row["unknown"] for row in rows], dtype=np.int64),
+        "known_at_ns": np.array([row["known_at_ns"] for row in rows], dtype=np.int64),
+    }
 
 
 def python_vwap(ticks: list[int], sizes: list[int]) -> tuple[Decimal | None, Decimal | None, int]:
@@ -871,6 +974,7 @@ def load_session_arrays(
                 instrument_id=str(chosen),
                 source_file=str(path),
                 row_offsets=offsets,
+                materialize_row_ids=False,
             )
         )
     arrays = _concat_session_arrays(parts, start_ns=start_ns, end_ns=end_ns, instrument_id=str(chosen))

@@ -2,20 +2,35 @@
 from __future__ import annotations
 
 from datetime import date
-from decimal import Decimal
+from functools import lru_cache
 from typing import Any
 import time
 
 import numpy as np
 
 from trading_research.errors import ContractError
-from trading_research.research.contracts.types import Contact, Coverage, EvidenceRef
+from trading_research.research.contracts.types import Coverage
 from trading_research.research.method_pack.clocks import et_ns
+from trading_research.research.rule_discovery.kernels import (
+    C2_HALF_LIFE_NS,
+    book_observe_kernel,
+    c2_fold_kernel,
+    contact_lifecycle_kernel,
+    delta_imbalance_kernel,
+    s1_machine_kernel,
+    s2_machine_kernel,
+    s3_machine_kernel,
+    s4_machine_kernel,
+    sweep_displacement_kernel,
+    warmup_kernels,
+)
 from trading_research.research.rule_discovery.native import (
     NS,
+    bars_arrays,
     build_market_view,
     cvd_from_prefix,
     install_write_guard,
+    price_to_ticks,
     vwap_from_prefix,
 )
 from trading_research.research.rule_discovery.registry import (
@@ -27,7 +42,13 @@ from trading_research.research.rule_discovery.registry import (
 MEASUREMENT_FAMILY = "SAINT-AMT"
 MEASUREMENT_BRANCH = "continuation_retest"
 C1_WINDOW_NS = 5 * 60 * NS
-EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+
+@lru_cache(maxsize=1)
+def _cached_candidate_bank() -> dict[str, Any]:
+    from trading_research.research.rule_discovery.registry import expand_candidate_bank
+
+    return expand_candidate_bank()
 
 
 def _time(fn, bucket: dict[str, float], name: str) -> Any:
@@ -85,10 +106,8 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
         c1_normalized,
         c3_zscore,
         emit_features,
-        python_c2_series,
     )
     from trading_research.research.rule_discovery.formations import (
-        complete_minute_rows,
         f1_trailing_minutes,
         f2_volume_completed,
         f3_balance,
@@ -97,16 +116,14 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
     )
     from trading_research.research.rule_discovery.profiles import build_profile, location_objects
     from trading_research.research.rule_discovery.references import r1_frozen_band, r2_prior_edge
-    from trading_research.research.rule_discovery.registry import expand_candidate_bank
     from trading_research.research.rule_discovery.sequences import (
-        advance_sequence,
+        advance_on_bars,
         cohort_signed_mean,
-        initial_state,
-        recipe_spec,
     )
 
     family_seconds: dict[str, float] = {bank: 0.0 for bank in BANKS}
     recipes_run: list[str] = []
+    warmup_kernels()
     started_view = time.monotonic()
     view = build_market_view(day, full_account_day=True)
     view_seconds = time.monotonic() - started_view
@@ -117,7 +134,12 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
     ticks = prefix.ticks[left:right]
     sizes = prefix.size[left:right]
 
-    rows = complete_minute_rows(view.arrays, view.start_ns, issue)
+    bars = bars_arrays(view.arrays, view.start_ns, issue)
+    n_bars = int(bars["start_ns"].size)
+    rows = [
+        {key: int(bars[key][i]) for key in bars}
+        for i in range(n_bars)
+    ]
     volumes = [int(row["volume"]) for row in rows[-20:]]
     median = median_int(volumes) if volumes else 0
     f1 = f2 = f3 = None
@@ -162,9 +184,16 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
         c1_signed, c1_vol, c1_unknown = cvd_from_prefix(prefix, max(view.start_ns, issue - DELTA_C1_NS), issue)
         c1 = c1_normalized(c1_signed, c1_vol, c1_unknown)
         features = emit_features({"delta": signed, "volume": volume, "unknown": unknown, "c0": signed}, available_at_ns=issue)
-        events = [(int(row["end_ns"]), int(row["signed"]), int(row["volume"]) - int(row["unknown"])) for row in rows]
-        series = _time(lambda: python_c2_series(events), family_seconds, "Delta")
-        c2_last = series[-1] if series else None
+        if n_bars:
+            known = bars["volume"] - bars["unknown"]
+            zs, ks, norms = _time(
+                lambda: c2_fold_kernel(bars["end_ns"], bars["signed"], known, np.int64(C2_HALF_LIFE_NS)),
+                family_seconds,
+                "Delta",
+            )
+            c2_last = {"t_ns": int(bars["end_ns"][-1]), "z": float(zs[-1]), "known": float(ks[-1]), "normalized": float(norms[-1]) if norms[-1] == norms[-1] else None}
+        else:
+            c2_last = None
         _time(lambda: c3_zscore(float(signed), ()), family_seconds, "Delta")
         for recipe in RECIPES["Delta"]:
             if applicable("Delta", str(recipe["id"]), family, branch)[0]:
@@ -197,48 +226,51 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
 
     sequence_states = {}
     if any(applicable("Sequence", str(recipe["id"]), family, branch)[0] for recipe in RECIPES["Sequence"]):
-        ev = EvidenceRef(EMPTY_SHA256, ("slice",), issue, issue, issue, Coverage.COMPLETE, ())
-        contact = Contact(
-            contact_id=f"{day}:c",
-            reference_id=f"{day}:r",
-            batch_id=f"{day}:b",
-            at_ns=issue,
-            available_at_ns=issue,
-            side=1,
-            kind="touch",
-            possible_prices=(Decimal("100"),),
-            departure_evidence=(ev,),
-            evidence=(ev,),
-        )
         cohort_mean = cohort_signed_mean(markouts[120], 1)
         c1_value = c1.get("value")
+        lo_seq = int(bars["low_ticks"][0]) if n_bars else 0
+        hi_seq = int(bars["high_ticks"][0]) if n_bars else 0
+        contact_i = 0
+        deadline_i = max(n_bars - 1, 0)
+        if formed and n_bars:
+            lo_seq = price_to_ticks(formed[0].low)
+            hi_seq = price_to_ticks(formed[0].high)
+            idx = contact_lifecycle_kernel(bars["high_ticks"], bars["low_ticks"], np.int64(lo_seq), np.int64(hi_seq), np.int64(4))
+            if idx.size:
+                contact_i = int(idx[0])
         for recipe in RECIPES["Sequence"]:
             recipe_id = str(recipe["id"])
             if not applicable("Sequence", recipe_id, family, branch)[0]:
                 continue
-            spec = recipe_spec(recipe_id)
-            state = initial_state(spec, contact, now_ns=issue, expiry_ns=min(view.end_ns, issue + 600 * NS))
-
-            def _advance(state=state, spec=spec, recipe_id=recipe_id):
-                now = issue + NS
-                if recipe_id == "S4":
-                    return advance_sequence(state, None, spec, now_ns=now, inputs={"opposing_aggression": 0, "opposing_exceeds_quantile": False, "seconds_after_contact": 1})
-                stepped = advance_sequence(state, None, spec, now_ns=now, inputs={"sweep_ticks": 2, "swept_extreme": 99})
-                return advance_sequence(
-                    stepped,
-                    None,
-                    spec,
-                    now_ns=now + NS,
-                    inputs={
-                        "complete_bar": {"close_inside": True, "event_ns": now + NS},
-                        "c1": c1_value,
-                        "cohort_120_mean": cohort_mean,
-                        "cohort_120": markouts[120],
-                        "cohort_available_at_ns": issue,
-                    },
-                )
-
-            sequence_states[recipe_id] = _time(_advance, family_seconds, "Sequence")
+            if n_bars == 0:
+                sequence_states[recipe_id] = "contacted"
+                recipes_run.append(recipe_id)
+                continue
+            result = _time(
+                lambda recipe_id=recipe_id: advance_on_bars(
+                    recipe_id,
+                    bars["high_ticks"],
+                    bars["low_ticks"],
+                    bars["close_ticks"],
+                    lo=lo_seq,
+                    hi=hi_seq,
+                    side=1,
+                    contact_i=contact_i,
+                    deadline_i=deadline_i,
+                    c1_value=None if c1_value is None else float(c1_value),
+                    cohort_mean=cohort_mean,
+                    cohort_after=False,
+                    opposing=bars["unknown"],
+                    quantile=0,
+                    adverse_ticks=np.zeros(n_bars, dtype=np.int64),
+                    cap_ticks=2,
+                    contact_extreme=lo_seq,
+                    pressure_last_i=min(contact_i + 2, deadline_i),
+                ),
+                family_seconds,
+                "Sequence",
+            )
+            sequence_states[recipe_id] = result["state"]
             recipes_run.append(recipe_id)
 
     references = {}
@@ -286,12 +318,92 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
                     references[recipe_id] = None
             recipes_run.append(recipe_id)
 
+    contact_n = 0
+    if formed and n_bars:
+        lo_ticks = price_to_ticks(formed[0].low)
+        hi_ticks = price_to_ticks(formed[0].high)
+        idx = contact_lifecycle_kernel(bars["high_ticks"], bars["low_ticks"], np.int64(lo_ticks), np.int64(hi_ticks), np.int64(4))
+        contact_n = int(idx.size)
+        _time(
+            lambda: sweep_displacement_kernel(bars["high_ticks"], bars["low_ticks"], np.int64(lo_ticks), np.int64(hi_ticks), np.int64(1)),
+            family_seconds,
+            "Sequence",
+        )
+        if contact_n:
+            ci = np.int64(int(idx[0]))
+            dl = np.int64(n_bars - 1)
+            _time(
+                lambda: s1_machine_kernel(bars["high_ticks"], bars["low_ticks"], bars["close_ticks"], np.int64(lo_ticks), np.int64(hi_ticks), np.int64(1), ci, dl),
+                family_seconds,
+                "Sequence",
+            )
+            _time(
+                lambda: s2_machine_kernel(bars["high_ticks"], bars["low_ticks"], bars["close_ticks"], np.int64(lo_ticks), np.int64(hi_ticks), np.int64(1), ci, dl),
+                family_seconds,
+                "Sequence",
+            )
+            _time(
+                lambda: s3_machine_kernel(
+                    bars["high_ticks"],
+                    bars["low_ticks"],
+                    bars["close_ticks"],
+                    np.int64(lo_ticks),
+                    np.int64(hi_ticks),
+                    np.int64(1),
+                    ci,
+                    dl,
+                    0.0 if c1.get("value") is None else float(c1["value"]),
+                    np.int64(1 if c1.get("available") else 0),
+                    0.0,
+                    np.int64(0),
+                    np.int64(0),
+                ),
+                family_seconds,
+                "Sequence",
+            )
+            _time(
+                lambda: s4_machine_kernel(
+                    bars["unknown"],
+                    np.int64(0),
+                    np.zeros(n_bars, dtype=np.int64),
+                    np.int64(2),
+                    bars["close_ticks"],
+                    np.int64(lo_ticks),
+                    np.int64(1),
+                    ci,
+                    ci,
+                    dl,
+                ),
+                family_seconds,
+                "Sequence",
+            )
+        arrays = view.arrays
+        if arrays.t_ns.size:
+            _time(
+                lambda: book_observe_kernel(
+                    arrays.bid_ticks,
+                    arrays.ask_ticks,
+                    arrays.bid_sz,
+                    arrays.ask_sz,
+                    np.int64(lo_ticks),
+                    np.int64(1),
+                ),
+                family_seconds,
+                "Sequence",
+            )
+            trade = arrays.is_trade
+            _time(
+                lambda: delta_imbalance_kernel(arrays.size[trade], arrays.side[trade].astype(np.int64)),
+                family_seconds,
+                "Delta",
+            )
+
     for recipe in RECIPES["Timing"]:
         if applicable("Timing", str(recipe["id"]), family, branch)[0]:
             recipes_run.append(str(recipe["id"]))
             family_seconds["Timing"] += 0.0
 
-    bank = _time(expand_candidate_bank, family_seconds, "Timing")
+    bank = _time(_cached_candidate_bank, family_seconds, "Timing")
     import resource as pyresource
 
     peak_rss = int(pyresource.getrusage(pyresource.RUSAGE_SELF).ru_maxrss) * 1024
@@ -317,7 +429,8 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
         "profile_available": bool((profiles.get("P1") or {}).get("available")),
         "profile_volume": (profiles.get("P1") or {}).get("volume"),
         "location_objects": len(locations),
-        "bar_count": len(rows),
+        "bar_count": n_bars,
+        "contact_n": contact_n,
         "c0": signed,
         "volume": volume,
         "unknown": unknown,
@@ -327,7 +440,7 @@ def run_candidate_branch_session(day: str, *, family: str = MEASUREMENT_FAMILY, 
         "unresolved_cohorts": markouts.get(30, {}).get("unresolved"),
         "markout_120_buy_mean": markouts.get(120, {}).get("buy", {}).get("mean"),
         "memory_prior_resolved": None if memory is None else memory.get("prior_resolved_count"),
-        "sequence_states": {key: state.state for key, state in sequence_states.items()},
+        "sequence_states": dict(sequence_states),
         "references": sorted(references),
         "bank_candidates": bank["counts"]["nonbaseline_selected"],
         "coverage": view.coverage(view.start_ns, issue).status.value,
