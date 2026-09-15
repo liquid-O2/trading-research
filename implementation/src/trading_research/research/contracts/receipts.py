@@ -1742,6 +1742,145 @@ def _bind_review_file(
     return path
 
 
+def _registry_cases_by_id(document: Mapping[str, Any] | None) -> dict[str, Mapping[str, Any]]:
+    if not isinstance(document, dict):
+        return {}
+    rows = document.get("cases")
+    if not isinstance(rows, list):
+        return {}
+    mapped: dict[str, Mapping[str, Any]] = {}
+    for row in rows:
+        if isinstance(row, dict) and isinstance(row.get("id"), str) and row["id"] not in mapped:
+            mapped[row["id"]] = row
+    return mapped
+
+
+def _review_bound_case_ids(
+    graph: TaskGraph,
+    expected_tasks: list[str],
+    comparison_cases: Mapping[str, Mapping[str, Any]],
+) -> list[str]:
+    expected = {str(item) for item in expected_tasks}
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for task_id in expected_tasks:
+        spec = graph.require(task_id)
+        if spec is None:
+            continue
+        for case_id in spec.assurance_cases:
+            if case_id in seen:
+                continue
+            seen.add(case_id)
+            ordered.append(case_id)
+    for case_id, row in comparison_cases.items():
+        tasks = row.get("tasks")
+        if not isinstance(tasks, list):
+            continue
+        if not expected.intersection(str(item) for item in tasks):
+            continue
+        if case_id in seen:
+            continue
+        seen.add(case_id)
+        ordered.append(case_id)
+    return ordered
+
+
+def _pinned_registry_snapshot_copy(
+    review_path: Path,
+    candidate_path: Path,
+    candidate_doc: Mapping[str, Any] | None,
+    pinned_hash: str,
+) -> Path | None:
+    candidates = (
+        review_path.parent / "snapshots/plan" / CANONICAL_REGISTRY_REL,
+        review_path.parent / "snapshots" / CANONICAL_REGISTRY_REL,
+        candidate_path.parent / "snapshots/plan" / CANONICAL_REGISTRY_REL,
+        candidate_path.parent / "snapshots" / CANONICAL_REGISTRY_REL,
+    )
+    for path in candidates:
+        if path.is_file() and file_digest(path) == pinned_hash:
+            return path
+    if not isinstance(candidate_doc, dict):
+        return None
+    refs = candidate_doc.get("task_receipts")
+    if not isinstance(refs, dict):
+        return None
+    for ref in refs.values():
+        if not isinstance(ref, dict) or not isinstance(ref.get("path"), str):
+            continue
+        receipt_path = Path(ref["path"])
+        if not receipt_path.is_file():
+            continue
+        receipt, receipt_fail = load_json_document(receipt_path)
+        if receipt_fail or not isinstance(receipt, dict):
+            continue
+        named = _manifest_by_name(receipt.get("artifact_manifest"))
+        plan_entry = named.get("PLAN_SNAPSHOT.json")
+        if plan_entry is None or not isinstance(plan_entry.get("path"), str):
+            continue
+        snapshot, snapshot_fail = load_json_document(Path(plan_entry["path"]))
+        if snapshot_fail or not isinstance(snapshot, dict):
+            continue
+        copies = snapshot.get("snapshot_paths")
+        if not isinstance(copies, dict):
+            continue
+        rel = copies.get(CANONICAL_REGISTRY_REL)
+        if not isinstance(rel, str) or not rel:
+            continue
+        copy = receipt_path.parent / rel
+        if copy.is_file() and file_digest(copy) == pinned_hash:
+            return copy
+    return None
+
+
+def _check_review_bound_registry_cases(
+    failures: list[CheckFailure],
+    *,
+    review_path: Path,
+    candidate_path: Path,
+    candidate_doc: Mapping[str, Any] | None,
+    pinned_hash: str,
+    live_path: Path,
+    graph: TaskGraph,
+    expected_tasks: list[str],
+) -> None:
+    live_doc, live_fail = load_json_document(live_path)
+    live_ok = not live_fail and isinstance(live_doc, dict)
+    live_cases = _registry_cases_by_id(live_doc if live_ok else None)
+    pinned_copy = _pinned_registry_snapshot_copy(review_path, candidate_path, candidate_doc, pinned_hash)
+    used_live_fallback = pinned_copy is None
+    comparison_doc: Mapping[str, Any] | None = None
+    if pinned_copy is not None:
+        pinned_doc, pinned_fail = load_json_document(pinned_copy)
+        if not pinned_fail and isinstance(pinned_doc, dict):
+            comparison_doc = pinned_doc
+        else:
+            used_live_fallback = True
+    if comparison_doc is None:
+        comparison_doc = live_doc if live_ok else None
+        used_live_fallback = True
+    comparison_cases = _registry_cases_by_id(comparison_doc)
+    loc = str(review_path)
+    for case_id in _review_bound_case_ids(graph, expected_tasks, comparison_cases):
+        live_case = live_cases.get(case_id)
+        if live_case is None:
+            detail = f"review-bound case {case_id} changed after the gate closed"
+            if used_live_fallback:
+                detail = f"{detail}; no pinned registry snapshot copy; fell back to live registry"
+            _append(failures, FailureCode.GATE_REVIEW, loc, detail)
+            continue
+        pinned_case = comparison_cases.get(case_id)
+        if pinned_case is None:
+            continue
+        if pinned_case.get("probe") != live_case.get("probe") or pinned_case.get("expected") != live_case.get("expected"):
+            _append(
+                failures,
+                FailureCode.GATE_REVIEW,
+                loc,
+                f"review-bound case {case_id} changed after the gate closed",
+            )
+
+
 def verify_gate_review(
     review_path: Path,
     candidate_path: Path,
@@ -1819,11 +1958,43 @@ def verify_gate_review(
             _append(failures, FailureCode.GATE_REVIEW, str(review_path), "review graph hash is not the current task graph")
     registry = document.get("registry")
     registry_path = DEFAULT_ROOT / CANONICAL_REGISTRY_REL
-    bound_registry = _bind_review_file(registry, failures, str(review_path), label="registry")
+    bound_registry = _bind_review_file(
+        registry,
+        failures,
+        str(review_path),
+        label="registry",
+        require_hash_match=False,
+    )
+    check_registry_cases = False
+    pinned_registry_hash = ""
     if bound_registry is not None and bound_registry.resolve() != registry_path.resolve():
         _append(failures, FailureCode.GATE_REVIEW, str(review_path), "review registry is not ASSURANCE_CASES.json")
-    elif isinstance(registry, dict) and _hex_digest(registry.get("sha256")) and registry_path.is_file() and registry.get("sha256") != file_digest(registry_path):
-        _append(failures, FailureCode.GATE_REVIEW, str(review_path), "review registry hash is not the current assurance registry")
+    elif isinstance(registry, dict) and _hex_digest(registry.get("sha256")) and registry_path.is_file():
+        pinned_registry_hash = str(registry["sha256"])
+        live_registry_hash = file_digest(registry_path)
+        if pinned_registry_hash != live_registry_hash:
+            connected = _plan_superseded_by_amendments(
+                CANONICAL_REGISTRY_REL,
+                pinned_registry_hash,
+                live_registry_hash,
+                draft_date=review_date,
+                amendments=amendments,
+            )
+            if not connected:
+                _append(
+                    failures,
+                    FailureCode.ARTIFACT_HASH,
+                    str(registry_path),
+                    "registry hash does not match file bytes",
+                )
+                _append(
+                    failures,
+                    FailureCode.GATE_REVIEW,
+                    str(review_path),
+                    "review registry hash is not the current assurance registry",
+                )
+            else:
+                check_registry_cases = True
     commands = document.get("commands")
     if not isinstance(commands, list) or not commands:
         _append(failures, FailureCode.GATE_REVIEW, str(review_path), "review commands are missing")
@@ -1839,6 +2010,17 @@ def verify_gate_review(
         matrices = {}
     candidate_doc, candidate_fail = load_json_document(Path(candidate_path))
     failures.extend(candidate_fail)
+    if check_registry_cases:
+        _check_review_bound_registry_cases(
+            failures,
+            review_path=review_path,
+            candidate_path=Path(candidate_path),
+            candidate_doc=candidate_doc if isinstance(candidate_doc, dict) else None,
+            pinned_hash=pinned_registry_hash,
+            live_path=registry_path,
+            graph=graph,
+            expected_tasks=expected_tasks,
+        )
     task_refs: dict[str, Mapping[str, Any]] = {}
     if isinstance(candidate_doc, dict) and isinstance(candidate_doc.get("task_receipts"), dict):
         task_refs = candidate_doc["task_receipts"]
