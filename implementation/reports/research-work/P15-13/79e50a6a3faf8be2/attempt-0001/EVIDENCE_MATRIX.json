@@ -1,0 +1,481 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_a01_later_htf_cannot_explain_earlier_retest",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/",
+          "sha256": "a4fb451c275ba075cab0d4b7e7b2933ac061f927f02f6006e47e8dbe5e2ba28d"
+        }
+      ],
+      "expected": "pass",
+      "id": "A01",
+      "observed": "pass",
+      "oracle": "task card A01",
+      "requirement": "Family A01 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_a01_later_htf_cannot_explain_earlier_retest"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_a02_ltf_without_htf_does_not_qualify",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "A02",
+      "observed": "pass",
+      "oracle": "task card A02",
+      "requirement": "Family A02 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_a02_ltf_without_htf_does_not_qualify"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_a03_profile_raw_volume_permission",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "A03",
+      "observed": "pass",
+      "oracle": "task card A03",
+      "requirement": "Family A03 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_a03_profile_raw_volume_permission"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_a04_operational_stages_leave_unknown",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "A04",
+      "observed": "pass",
+      "oracle": "task card A04",
+      "requirement": "Own population / family A04.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_a04_operational_stages_leave_unknown"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "47af3c7a6f305d30aaf88a46080b6e8d9d2424420ff85bcb577411392b14e81f"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/populations",
+          "sha256": "a4fb451c275ba075cab0d4b7e7b2933ac061f927f02f6006e47e8dbe5e2ba28d"
+        }
+      ],
+      "expected": "slice exit 0",
+      "id": "A05",
+      "observed": "0",
+      "oracle": "native slice",
+      "requirement": "Native/future/long-short checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_a04_operational_stages_leave_unknown"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/THROUGHPUT.json",
+          "selector": "/p90_seconds",
+          "sha256": "be4878cee7c4dfe6c3a2dc9f4df199ac1cb04d543aaf2c2ebf7a582634acaa8d"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "47af3c7a6f305d30aaf88a46080b6e8d9d2424420ff85bcb577411392b14e81f"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A06",
+      "observed": "0",
+      "oracle": "logged commands",
+      "requirement": "Commands, hashes, coverage, runtime.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "all A/S ids present",
+      "id": "A07",
+      "observed": "present",
+      "oracle": "required_matrix_ids",
+      "requirement": "Matrix completeness vs other checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "probes pass",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES",
+      "requirement": "Assigned silent-failure probes.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S01",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S01.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S02.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S03",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S03.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S07",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S07.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S08.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S09",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S09.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S21",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S21.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S22",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S22.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-13/79e50a6a3faf8be2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "24744440cddc2915e468855d0c819c5bd604d9422e33ab8039434cd480957f78"
+        }
+      ],
+      "expected": "pass",
+      "id": "S31",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S31.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_13.py::test_s07_native_replay"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-13"
+}

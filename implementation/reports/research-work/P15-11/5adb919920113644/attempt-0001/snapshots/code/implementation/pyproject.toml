@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trading-research"
+version = "0.1.0"
+description = "Phase 1 live object measurement and later-phase implementation"
+requires-python = ">=3.12,<3.13"
+dependencies = ["pypdf==6.18.1"]
+
+[project.optional-dependencies]
+data = ["pyarrow==25.0.1", "python-dateutil==2.9.0.post0"]
+research = ["numpy==2.3.3", "numba==0.67.0"]
+charts = ["numpy==2.3.3", "matplotlib==3.11.2", "pymupdf==1.28.2"]
+test = ["pytest==9.1.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"trading_research.research.method_pack" = ["*.json"]

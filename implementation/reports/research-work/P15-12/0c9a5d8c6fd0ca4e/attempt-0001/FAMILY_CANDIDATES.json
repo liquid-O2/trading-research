@@ -1,0 +1,2803 @@
+{
+  "candidates": [
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F1",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "minutes": 60
+      },
+      "provenance": "custom",
+      "recipe_id": "F1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (auction/pivots fade)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R1",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "provenance": "custom",
+      "recipe_id": "R1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S1",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "deadline_s": 600
+      },
+      "provenance": "custom",
+      "recipe_id": "S1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F2",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "F2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (auction/pivots fade)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R2",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "provenance": "custom",
+      "recipe_id": "R2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S2",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "S2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F3",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "provenance": "custom",
+      "recipe_id": "F3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (HTF auction band as the defended reference)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R1",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "vwap_deviation_fade",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "provenance": "custom",
+      "recipe_id": "R1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C3",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "history_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "C3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S3",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (HTF auction band as the defended reference)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R2",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "vwap_deviation_fade",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "provenance": "custom",
+      "recipe_id": "R2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S4",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S4"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "pressure_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S4",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (microbalance inside HTF auction)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S1",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "deadline_s": 600
+      },
+      "provenance": "custom",
+      "recipe_id": "S1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (microbalance inside HTF auction)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C3",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "history_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "C3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S2",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "S2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "candle_delta_disagreement,source_flow_confirmation",
+          "lines": "199-200",
+          "note": "bar delta disagreement and own_delta flow confirmation",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "footprint_confirmed_reaction",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S3",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "candle_delta_disagreement,source_flow_confirmation",
+          "lines": "199-200",
+          "note": "bar delta disagreement and own_delta flow confirmation",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "footprint_confirmed_reaction",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S4",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S4"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "pressure_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S4",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "dom_rejection",
+      "candidate_id": "SIRES:dom_rejection:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "stop_four_stage",
+      "candidate_id": "SIRES:stop_four_stage:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "ofm_aggressive",
+      "candidate_id": "SIRES:ofm_aggressive:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "ofm_passive",
+      "candidate_id": "SIRES:ofm_passive:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "kg1_retest",
+      "candidate_id": "SIRES:kg1_retest:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    }
+  ],
+  "cases": [
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F1",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "minutes": 60
+      },
+      "provenance": "custom",
+      "recipe_id": "F1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (auction/pivots fade)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R1",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "provenance": "custom",
+      "recipe_id": "R1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S1",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "deadline_s": 600
+      },
+      "provenance": "custom",
+      "recipe_id": "S1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F2",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "F2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (auction/pivots fade)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R2",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "provenance": "custom",
+      "recipe_id": "R2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S2",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "S2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Formation",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F3",
+      "changed_axis": "formation",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Formation",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Formation: JJ other_session, single_extended, single_purged, internal_rotation; GB nyam_box/previous_hour; Saint balance branches; Sires microbalance.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "F3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "provenance": "custom",
+      "recipe_id": "F3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (HTF auction band as the defended reference)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R1",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "vwap_deviation_fade",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "provenance": "custom",
+      "recipe_id": "R1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C3",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "cvd_filter_ok",
+          "lines": "174",
+          "note": "binds cvd_filter_ok to own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "history_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "C3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S3",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (HTF auction band as the defended reference)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Reference",
+      "baseline": false,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R2",
+      "changed_axis": "reference",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Reference",
+        "branch": "vwap_deviation_fade",
+        "contract": "SEARCH_CONTRACT.md Reference: custom siblings of GB-VWAP, GB-SCALP and Sires vwap_deviation_fade/defended_band_continuation only.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "R2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "provenance": "custom",
+      "recipe_id": "R2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S4",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires reaction/retest"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "absorption_reward_retest",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S4"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "pressure_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S4",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "balance_failure_fade",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P1",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (microbalance inside HTF auction)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 0
+      },
+      "provenance": "custom",
+      "recipe_id": "P1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S1",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "deadline_s": 600
+      },
+      "provenance": "custom",
+      "recipe_id": "S1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Profile",
+      "baseline": false,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P2",
+      "changed_axis": "profile",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires balance references (microbalance inside HTF auction)",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py"
+        },
+        "applicable": true,
+        "bank": "Profile",
+        "branch": "microbalance_break",
+        "contract": "SEARCH_CONTRACT.md Profile: Saint and Member profile references; Keani developing value; Sires balance references.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "P2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "bandwidth": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "P2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C3",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "executed_aggression,control_side_matches_thesis",
+          "lines": "241-242",
+          "note": "both fields bind own_delta",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "history_sessions": 20
+      },
+      "provenance": "custom",
+      "recipe_id": "C3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S2",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "provenance": "custom",
+      "recipe_id": "S2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M2",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "provenance": "custom",
+      "recipe_id": "M2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C1",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "candle_delta_disagreement,source_flow_confirmation",
+          "lines": "199-200",
+          "note": "bar delta disagreement and own_delta flow confirmation",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "footprint_confirmed_reaction",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "window_minutes": 5
+      },
+      "provenance": "custom",
+      "recipe_id": "C1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S3",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S3"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S3",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Memory",
+      "baseline": false,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:M1",
+      "changed_axis": "memory",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": null,
+        "applicable": true,
+        "bank": "Memory",
+        "branch": "defended_band_continuation",
+        "contract": "SEARCH_CONTRACT.md Memory: existing reference-contact candidates in Member/Sires/Saint; Refilling observations separately.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "M1"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "provenance": "custom",
+      "recipe_id": "M1",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Delta",
+      "baseline": false,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C2",
+      "changed_axis": "delta",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "field": "candle_delta_disagreement,source_flow_confirmation",
+          "lines": "199-200",
+          "note": "bar delta disagreement and own_delta flow confirmation",
+          "path": "implementation/src/trading_research/research/method_pack/historical_flow.py",
+          "symbol": "_flow_episode"
+        },
+        "applicable": true,
+        "bank": "Delta",
+        "branch": "footprint_confirmed_reaction",
+        "contract": "SEARCH_CONTRACT.md Delta: confirm input use in the source adapter. A branch with no delta input is explicitly not applicable.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "C2"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "half_life_s": 300
+      },
+      "provenance": "custom",
+      "recipe_id": "C2",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "Sequence",
+      "baseline": false,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S4",
+      "changed_axis": "sequence",
+      "counts_toward_cap": true,
+      "evidence": {
+        "adapter": {
+          "note": "Sires continuation"
+        },
+        "applicable": true,
+        "bank": "Sequence",
+        "branch": "clean_squeeze",
+        "contract": "SEARCH_CONTRACT.md Sequence: JJ reversal/extension/other_session; GB failure/scalps; Sires reaction/continuation; Saint retests; Member reaction; Keani retest.",
+        "family": "SIRES",
+        "reason": null,
+        "recipe_id": "S4"
+      },
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {
+        "pressure_s": 120
+      },
+      "provenance": "custom",
+      "recipe_id": "S4",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ]
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "dom_rejection",
+      "candidate_id": "SIRES:dom_rejection:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "stop_four_stage",
+      "candidate_id": "SIRES:stop_four_stage:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "ofm_aggressive",
+      "candidate_id": "SIRES:ofm_aggressive:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "ofm_passive",
+      "candidate_id": "SIRES:ofm_passive:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    },
+    {
+      "bank": "B0",
+      "baseline": true,
+      "branch": "kg1_retest",
+      "candidate_id": "SIRES:kg1_retest:B0",
+      "changed_axis": "none",
+      "counts_toward_cap": false,
+      "family": "SIRES",
+      "one_axis": true,
+      "parameters": {},
+      "provenance": "source_inspired",
+      "recipe_id": "B0",
+      "required_stages": [
+        "formation",
+        "contact",
+        "confirmation"
+      ],
+      "scope": "entry_setup"
+    }
+  ],
+  "family": "SIRES",
+  "schema_version": "research-family-candidates-v1",
+  "task_id": "P15-12"
+}

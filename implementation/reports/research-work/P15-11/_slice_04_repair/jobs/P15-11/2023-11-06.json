@@ -1,0 +1,247 @@
+{
+  "clock_zone_unverified": true,
+  "d1": {
+    "b01": "continuation_context stays the breakout conjunct; retest_at is separate",
+    "effect": "every GB-VWAP rejection in the audited pool is this artifact",
+    "example": "2023-12-08",
+    "finding": "D1",
+    "fixture": "test_p15_11.py::test_d1_retest_window_does_not_overwrite_breakout_context",
+    "frozen_symbol": "historical_price_scanners.scan_green_vwap",
+    "lines": "308-then-314",
+    "mechanism": "continuation_context rebound to retest-absence",
+    "retest_window": "breakout_end to min(session_end, breakout_end+60m)"
+  },
+  "date": "2023-11-06",
+  "native_executions": 299212,
+  "peak_rss_bytes": 527663104,
+  "population_kind": "engineering_slice",
+  "populations": {
+    "B0": {
+      "episodes": 3,
+      "no_setup": 0,
+      "omissions": 2,
+      "other": 0,
+      "rejected": 0,
+      "setup": 3,
+      "unknown": 0
+    },
+    "B0.1": {
+      "episodes": 3,
+      "no_setup": 0,
+      "omissions": 2,
+      "other": 0,
+      "rejected": 0,
+      "setup": 3,
+      "unknown": 0
+    }
+  },
+  "scalp": {
+    "branches": [
+      "bearish_small_scalp",
+      "bullish_discount_pullback"
+    ],
+    "clock_zone_unverified": true,
+    "date": "2023-11-06",
+    "family": "GB-SCALP",
+    "full_history_run": false,
+    "native_executions": 299212,
+    "peak_rss_bytes": 527663104,
+    "population_kind": "engineering_slice",
+    "populations": {
+      "B0": {
+        "episodes": 2,
+        "no_setup": 0,
+        "omissions": 2,
+        "other": 0,
+        "rejected": 0,
+        "setup": 2,
+        "unknown": 0
+      },
+      "B0.1": {
+        "episodes": 2,
+        "no_setup": 0,
+        "omissions": 2,
+        "other": 0,
+        "rejected": 0,
+        "setup": 2,
+        "unknown": 0
+      }
+    },
+    "scans": [
+      {
+        "b01_episode_ids": [
+          "native-v2:fafd3228ec876bbe8185b44063c061c1"
+        ],
+        "b01_status": [
+          "setup"
+        ],
+        "b0_episode_ids": [
+          "native-v2:fafd3228ec876bbe8185b44063c061c1"
+        ],
+        "b0_status": [
+          "setup"
+        ],
+        "branch": "bearish_small_scalp",
+        "clock_zone_unverified": true,
+        "coverage_id": "GB-SCALP:branch:bearish_small_scalp",
+        "populations": {
+          "B0": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 1,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0.1": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 1,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0_to_B0.1": {
+            "episodes": 0,
+            "no_setup": 0,
+            "rejected": 0,
+            "setup": 0,
+            "unknown": 0
+          }
+        },
+        "repaired": false
+      },
+      {
+        "b01_episode_ids": [
+          "native-v2:429993de40cfab437e43bb94170de18e"
+        ],
+        "b01_status": [
+          "setup"
+        ],
+        "b0_episode_ids": [
+          "native-v2:429993de40cfab437e43bb94170de18e"
+        ],
+        "b0_status": [
+          "setup"
+        ],
+        "branch": "bullish_discount_pullback",
+        "clock_zone_unverified": true,
+        "coverage_id": "GB-SCALP:branch:bullish_discount_pullback",
+        "populations": {
+          "B0": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 1,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0.1": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 1,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0_to_B0.1": {
+            "episodes": 0,
+            "no_setup": 0,
+            "rejected": 0,
+            "setup": 0,
+            "unknown": 0
+          }
+        },
+        "repaired": false
+      }
+    ],
+    "wall_seconds": 2.7087391074746847
+  },
+  "task_id": "P15-11",
+  "vwap": {
+    "branches": [
+      "source_long"
+    ],
+    "clock_zone_unverified": true,
+    "date": "2023-11-06",
+    "family": "GB-VWAP",
+    "full_history_run": false,
+    "native_executions": 299212,
+    "peak_rss_bytes": 457506816,
+    "population_kind": "engineering_slice",
+    "populations": {
+      "B0": {
+        "episodes": 1,
+        "no_setup": 0,
+        "omissions": 0,
+        "other": 0,
+        "rejected": 0,
+        "setup": 1,
+        "unknown": 0
+      },
+      "B0.1": {
+        "episodes": 1,
+        "no_setup": 0,
+        "omissions": 0,
+        "other": 0,
+        "rejected": 0,
+        "setup": 1,
+        "unknown": 0
+      }
+    },
+    "scans": [
+      {
+        "b01_episode_ids": [
+          "native-v2:1fdef79e9cf994ef05064b113552f2e2"
+        ],
+        "b01_status": [
+          "setup"
+        ],
+        "b0_episode_ids": [
+          "native-v2:1fdef79e9cf994ef05064b113552f2e2"
+        ],
+        "b0_status": [
+          "setup"
+        ],
+        "branch": "source_long",
+        "clock_zone_unverified": true,
+        "coverage_id": "GB-VWAP:branch:source_long",
+        "populations": {
+          "B0": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 0,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0.1": {
+            "episodes": 1,
+            "no_setup": 0,
+            "omissions": 0,
+            "other": 0,
+            "rejected": 0,
+            "setup": 1,
+            "unknown": 0
+          },
+          "B0_to_B0.1": {
+            "episodes": 0,
+            "no_setup": 0,
+            "rejected": 0,
+            "setup": 0,
+            "unknown": 0
+          }
+        },
+        "repaired": true
+      }
+    ],
+    "wall_seconds": 11.959187720902264
+  },
+  "wall_seconds": 14.73497885838151,
+  "worker_pid": 2258911
+}
