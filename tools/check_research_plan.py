@@ -102,8 +102,8 @@ def main() -> int:
                        "EVIDENCE_MATRIX.json", "WORK_LOG.md", "DECISIONS.tsv", "REPORT.md"}
     if set(graph.get("required_task_artifacts", [])) != required_common:
         errors.append("common task evidence artifacts are missing or changed")
-    if len(indexed) != len(tasks) or len(tasks) != 46:
-        errors.append("task IDs/count must be 46 unique planned tasks")
+    if len(indexed) != len(tasks) or len(tasks) != 47:
+        errors.append("task IDs/count must be 47 unique planned tasks")
     active, visited = set(), set()
 
     def visit(task_id):
@@ -153,7 +153,7 @@ def main() -> int:
                 errors.append(f"task card omits an owned path: {task['id']} {owned}")
     if "P15-20" not in indexed["P2-00"]["dependencies"]:
         errors.append("Phase 2 entry gate is missing the complete Phase 1.5 release")
-    expected = {"phase-1-5": 21, "phase-2": 25}
+    expected = {"phase-1-5": 22, "phase-2": 25}
     if Counter(t["phase"] for t in tasks) != expected:
         errors.append("phase task counts differ")
     by_phase_group = Counter((t["phase"], t["subphase"]) for t in tasks)
@@ -225,8 +225,8 @@ def main() -> int:
                 errors.append(f"worker model override missing: {path.relative_to(ROOT)}")
             if "No nested delegation" not in content:
                 errors.append(f"worker delegation bound missing: {path.relative_to(ROOT)}")
-    if prompt_count != 72:
-        errors.append(f"expected 72 copyable pstack prompts, found {prompt_count}")
+    if prompt_count != 73:
+        errors.append(f"expected 73 copyable pstack prompts, found {prompt_count}")
     for (phase, group) in by_phase_group:
         runbook = ROOT / "planning" / phase / "subphases" / group / "RUNBOOK.md"
         content = generated[runbook]

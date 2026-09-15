@@ -811,6 +811,77 @@
         }
       ],
       "previous_entry_sha256": "1cf27d2b461dcc84e1284b87a464f4643d19474c553b507229434aa63c69d0bb"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-15-source-fidelity-task-p15-16a",
+      "date": "2026-09-15",
+      "scope": "Adds task P15-16A (source-fidelity baseline B0.2 and author-example replay) to 05-finite-search as P15-17's predecessor; corrects three SOURCE_ADDITIONS lines the fidelity review found overstated; rebuilds the 05 bundles. No formula, gate, budget, bank or date of existing banks changed.",
+      "reason": "Astra source-fidelity review (planning/research-program/reviews/astra-fidelity-2026-09-15/REVIEW.md, commit 4a775b07) and the orchestrating session's rulings (DISPOSITION.md addendum 'source-fidelity rulings (2026-09-15)'): the entry-strategy baselines are not yet faithful replications; upgrades may not be searched against an unfaithful baseline.",
+      "changes": [
+        "TASK_GRAPH.json: new task P15-16A in 05-finite-search; P15-17 depends on it",
+        "planning/phase-1-5/tasks/P15-16A.md: new canonical card with acceptance keys A01-A08",
+        "planning/phase-1-5/tasks/P15-17.md: dependency and pairing baseline B0.2",
+        "SILENT_FAILURES.md: P15-16A assigned the same cases as P15-16",
+        "SOURCE_ADDITIONS_2026-09-14.md: A1 retest mandatory; A4 pocket drawn in the leg's direction; drawn target is not a realized exit",
+        "05-finite-search RUNBOOK, README and PROMPTS rebuilt",
+        "SILENT_FAILURES assurance JSON: P15-16A added to the same cases as P15-16; check_research_plan.py counts 47 tasks, 22 Phase 1.5 tasks, 73 prompts"
+      ],
+      "changed_files": [
+        {
+          "path": "planning/research-program/TASK_GRAPH.json",
+          "sha256_before": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca",
+          "sha256_after": "3e3438e2b5d75589ec7218d6301236a558566229dc4c578f59c9e38a27e453da"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-17.md",
+          "sha256_before": "f2f41325e967f95849de071c0674b68cb2a6f6944f615efb902e404878d67c60",
+          "sha256_after": "a03d8df09e2fa9fa585b463f2d04cd80a634e9e0088507b1966e3fb972b929da"
+        },
+        {
+          "path": "planning/research-program/SILENT_FAILURES.md",
+          "sha256_before": "487c492df36161b6cda72bdeb54fa45a027b870793b19c08bc2577a0cc60679b",
+          "sha256_after": "75fd0c8c3bb0ae4f55ac621db114afacf619371660c3497d0a1926c222f72155"
+        },
+        {
+          "path": "planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md",
+          "sha256_before": "7c4f42188b90af411a0261b9df759c60017e8a65a2436a330c8083768ab0c06d",
+          "sha256_after": "42f7970a2a280629e95d36439c1cec72164bc04a674c941b78c40d3d75d6cc44"
+        },
+        {
+          "path": "planning/phase-1-5/subphases/05-finite-search/RUNBOOK.md",
+          "sha256_before": "de164cae7d0eaf08c665198e2fefdce7a5f98ba07267c84f93fce789eaca0bad",
+          "sha256_after": "39223a89381fabea4224b6e1da9d194ffbbec9a60b0ecb2f1a545e86a80ba9c2"
+        },
+        {
+          "path": "planning/phase-1-5/README.md",
+          "sha256_before": "a156e092f533ce3055df2fc348b53926e0e70aed841f0b20ee249eb1962314dd",
+          "sha256_after": "76ad0dcb3b3b294190d5518c07c294d8f795f618546370c6da3a16600515b40a"
+        },
+        {
+          "path": "planning/phase-1-5/tasks/P15-16A.md",
+          "sha256_before": null,
+          "sha256_after": "2f586e53d78069c0cb1095ae930998a759d52bf47cefb4a6eea7034d5ed78898"
+        },
+        {
+          "path": "planning/research-program/ASSURANCE_CASES.json",
+          "sha256_before": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee",
+          "sha256_after": "93024ac8800d426d3d871535a670e6b9bd51ca179309071607409755ca5a10de"
+        }
+      ],
+      "previous_entry_sha256": "043439c5c7406a63915bb2c03f38a0dc510ffd01b442a4d4abe5cc935625ede9"
     }
   ]
 }

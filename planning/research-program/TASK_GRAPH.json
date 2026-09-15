@@ -1025,6 +1025,79 @@
       ]
     },
     {
+      "id": "P15-16A",
+      "phase": "phase-1-5",
+      "subphase": "05-finite-search",
+      "title": "Source-fidelity baseline B0.2 and author-example replay",
+      "dependencies": [
+        "P15-09",
+        "P15-10",
+        "P15-11",
+        "P15-12",
+        "P15-13",
+        "P15-14",
+        "P15-15",
+        "P15-16"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/",
+        "implementation/src/trading_research/research/rule_discovery/families/",
+        "implementation/src/trading_research/research/rule_discovery/run_adapter_populations.py",
+        "implementation/tools/replay_author_examples.py",
+        "implementation/tests/rule_discovery/test_p15_16a.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/PSTACK_EXECUTION.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-1-5/SPEC.md",
+        "planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md",
+        "planning/research-program/PERFORMANCE.md",
+        "planning/research-program/reviews/phase1-code-review-2026-09-14/DISPOSITION.md",
+        "planning/research-program/reviews/astra-fidelity-2026-09-15/REVIEW.md",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "FIDELITY_MATRIX.json",
+        "B02_SUMMARY.json",
+        "B02_SUMMARY.md",
+        "AUTHOR_EXAMPLE_REPLAY.json",
+        "AUTHOR_EXAMPLE_REPLAY.md",
+        "LEDGER_CORRECTIONS.json",
+        "FAMILY_REPORT.md"
+      ],
+      "native": true,
+      "test": "implementation/tests/rule_discovery/test_p15_16a.py",
+      "path": "planning/phase-1-5/tasks/P15-16A.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified"
+      ],
+      "assurance_cases": [
+        "S01",
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09",
+        "S21",
+        "S22",
+        "S31"
+      ]
+    },
+    {
       "id": "P15-17",
       "phase": "phase-1-5",
       "subphase": "05-finite-search",
@@ -1037,7 +1110,8 @@
         "P15-13",
         "P15-14",
         "P15-15",
-        "P15-16"
+        "P15-16",
+        "P15-16A"
       ],
       "owns": [
         "implementation/src/trading_research/research/rule_discovery/search.py",
