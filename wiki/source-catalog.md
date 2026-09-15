@@ -134,6 +134,10 @@ Existing braindumps under /workspace/sources/documents/conversations/ and the Ju
 
 Two greenbirdtrader posts, raw capture [sources/x-raw-2026-09-14/greenbirdtrader](/workspace/sources/x-raw-2026-09-14/greenbirdtrader/README.md): post 2099513366326730859 (2026-09-14, London-low sweep and reclaim long, Asia-high failed-breakout short, four photos) and post 2099503614372741234 (2026-09-11 trades posted 2026-09-14, overnight previous-day-low reclaim long and golden-pocket continuation long, three photos). Both postdate the 2026-09-11 X archive and the native data endpoint; they are dated examples with printed prices. Chart footers read "UTC-4".
 
+## Addition 2026-09-15
+
+One greenbirdtrader post, raw capture [sources/x-raw-2026-09-15/greenbirdtrader](/workspace/sources/x-raw-2026-09-15/greenbirdtrader/README.md): post 2099958990486798753 (2026-09-15, the framework statement; a 09:00–10:00 box-high sweep short, a London-low sweep and reclaim long, and an afternoon sweep of the New York session low long, four photos, MNQZ2026, chart footers "UTC-4"). Postdates the native data endpoint; a dated example with printed prices. Rulings in [SOURCE_ADDITIONS_2026-09-15.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-15.md).
+
 ## Fidelity re-read 2026-09-15: dated examples, instruments and clocks
 
 Every source above was re-read in full on 2026-09-15 with all charts, tickets and whiteboards rendered at native resolution (657 page renders, 535 embedded images) and the small print read from zoomed crops. The reading is recorded per method in each method page's "Source fidelity re-read, 2026-09-15" section. Three catalog-level facts came out of it.
