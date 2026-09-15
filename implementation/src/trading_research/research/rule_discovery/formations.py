@@ -129,21 +129,19 @@ def f2_volume_completed(
     median_volume: int,
     max_minutes: int = F2_MAX_MINUTES,
 ) -> dict[str, Any]:
+    from trading_research.research.rule_discovery.kernels import f2_walk_kernel
+
     eligible = [row for row in rows if int(row["end_ns"]) <= issue_ns]
     if not eligible:
         return {"available": False, "reason": "no complete minutes", "rows": [], "overshoot": 0}
     walk = list(reversed(eligible[-max_minutes:]))
-    included: list[Mapping[str, Any]] = []
-    acc = 0
-    for row in walk:
-        included.append(row)
-        acc += int(row["volume"])
-        if acc >= median_volume:
-            break
-    else:
+    volumes = np.array([int(row["volume"]) for row in walk], dtype=np.int64)
+    minutes, overshoot, acc = f2_walk_kernel(volumes, np.int64(median_volume), np.int64(max_minutes))
+    if int(minutes) == 0:
         return {"available": False, "reason": "volume threshold not reached within 180 matching minutes", "rows": [], "overshoot": 0}
-    included.reverse()
-    overshoot = acc - int(median_volume)
+    included = list(reversed(walk[: int(minutes)]))
+    acc = int(acc)
+    overshoot = int(overshoot)
     return {
         "available": True,
         "reason": None,

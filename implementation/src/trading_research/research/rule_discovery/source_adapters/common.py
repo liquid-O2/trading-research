@@ -29,12 +29,17 @@ from trading_research.research.rule_discovery.baseline_repairs import (
     scan_branch_repaired,
 )
 from trading_research.research.rule_discovery.formations import f1_trailing_minutes, f2_volume_completed, freeze_formation, median_int
+from trading_research.research.rule_discovery.kernels import lifecycle_contact_indices
 from trading_research.research.rule_discovery.native import (
     NativeMarketView,
     build_market_view,
     cgroup_worker_count,
     install_write_guard,
+    UNITS_PER_TICK,
+    price_to_ticks,
+    price_to_units,
     prior_complete_same_contract_dates,
+    ticks_to_decimal,
 )
 from trading_research.research.rule_discovery.registry import expand_candidate_bank
 from trading_research.research.rule_discovery.runner import peak_rss_bytes
@@ -759,27 +764,48 @@ def enumerate_lifecycle_contacts(
     This is the method_pack `distinct_contacts` primitive (4-tick departure) that
     B0.1 scanners already use. Not a per-bar dwell enumeration.
     """
-    from trading_research.research.method_pack.historical_features import Q as HQ
-    from trading_research.research.method_pack.historical_features import distinct_contacts
-
     contacts: list[dict[str, Any]] = []
     lid = reference_lifecycle_id or reference_id
-    for i, row in enumerate(distinct_contacts(list(bars), lower, upper, departure=HQ * 4)):
+    bar_list = list(bars)
+    if not bar_list:
+        return contacts
+    highs: list[int] = []
+    lows: list[int] = []
+    for row in bar_list:
+        if "high_ticks" in row:
+            highs.append(int(row["high_ticks"]) * UNITS_PER_TICK)
+            lows.append(int(row["low_ticks"]) * UNITS_PER_TICK)
+        else:
+            highs.append(price_to_units(row["H"]))
+            lows.append(price_to_units(row["L"]))
+    lo_units = price_to_units(lower)
+    hi_units = price_to_units(upper)
+    indices = lifecycle_contact_indices(highs, lows, lo_units, hi_units, 4 * UNITS_PER_TICK)
+    for i, idx in enumerate(indices.tolist()):
+        row = bar_list[idx]
         complete = bool(row.get("complete") or row.get("observed_complete"))
-        contact_id = f"{lid}:{row.get('bar_id') or row['start']}:{i}"
+        start_ns = int(row["start"]) if "start" in row else int(row["start_ns"])
+        known = row.get("known_at") if "known_at" in row else row.get("known_at_ns")
+        end_ns = int(row["end"]) if "end" in row else int(row["end_ns"])
+        low_s = str(row["L"]) if "L" in row else str(ticks_to_decimal(int(row["low_ticks"])))
+        high_s = str(row["H"]) if "H" in row else str(ticks_to_decimal(int(row["high_ticks"])))
+        close_v = row.get("C")
+        if close_v is None and "close_ticks" in row:
+            close_v = ticks_to_decimal(int(row["close_ticks"]))
+        contact_id = f"{lid}:{row.get('bar_id') or start_ns}:{i}"
         contacts.append(
             {
                 "contact_id": contact_id,
                 "reference_id": reference_id,
                 "reference_lifecycle_id": lid,
-                "at_ns": int(row["start"]),
-                "available_at_ns": int(row.get("known_at") or row["end"]),
+                "at_ns": start_ns,
+                "available_at_ns": int(known or end_ns),
                 "side": side,
                 "kind": "touch",
                 "bar_id": row.get("bar_id"),
-                "low": str(row["L"]),
-                "high": str(row["H"]),
-                "close": None if row.get("C") is None else str(row["C"]),
+                "low": low_s,
+                "high": high_s,
+                "close": None if close_v is None else str(close_v),
                 "complete": complete,
                 "source_confirmation": row.get("source_confirmation"),
             }

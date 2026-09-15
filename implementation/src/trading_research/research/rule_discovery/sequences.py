@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Any, Mapping, Sequence
 
+import numpy as np
+
 from trading_research.errors import ContractError
 from trading_research.research.contracts.types import (
     Contact,
@@ -304,6 +306,103 @@ def mirror(distance: int, side: int) -> int:
 def recipe_spec(recipe_id: str) -> SequenceSpec:
     stages = {"S1": S1_STAGES, "S2": S2_STAGES, "S3": S3_STAGES, "S4": S4_STAGES}[recipe_id]
     return SequenceSpec(recipe_id=recipe_id, ordered_stages=stages, deadline_seconds=DEFAULT_DEADLINE_S, parameters={})
+
+
+KERNEL_STATE_NAME = {
+    0: "contacted",
+    1: "swept",
+    2: "reclaimed",
+    3: "confirmed",
+    4: "expired",
+    5: "invalidated",
+    6: "input_unknown",
+    7: "pressure_observed",
+    8: "stalled",
+}
+
+
+def advance_on_bars(
+    recipe_id: str,
+    high,
+    low,
+    close,
+    *,
+    lo: int,
+    hi: int,
+    side: int,
+    contact_i: int,
+    deadline_i: int,
+    c1_value: float | None = None,
+    cohort_mean: float | None = None,
+    cohort_after: bool = False,
+    opposing=None,
+    quantile: int = 0,
+    adverse_ticks=None,
+    cap_ticks: int = 2,
+    contact_extreme: int = 0,
+    pressure_last_i: int = 0,
+) -> dict[str, Any]:
+    """Drive S1–S4 over bar arrays in one @njit pass. No Python per-bar state."""
+    from trading_research.research.rule_discovery.kernels import (
+        s1_machine_kernel,
+        s2_machine_kernel,
+        s3_machine_kernel,
+        s4_machine_kernel,
+    )
+
+    high_a = np.asarray(high, dtype=np.int64)
+    low_a = np.asarray(low, dtype=np.int64)
+    close_a = np.asarray(close, dtype=np.int64)
+    lo_i = np.int64(lo)
+    hi_i = np.int64(hi)
+    side_i = np.int64(side)
+    contact = np.int64(contact_i)
+    deadline = np.int64(deadline_i)
+    if recipe_id == "S1":
+        state, sweep_i, confirm_i = s1_machine_kernel(high_a, low_a, close_a, lo_i, hi_i, side_i, contact, deadline)
+        extra = {"sweep_i": int(sweep_i), "confirm_i": int(confirm_i)}
+    elif recipe_id == "S2":
+        state, sweep_i, reclaim_i, confirm_i = s2_machine_kernel(high_a, low_a, close_a, lo_i, hi_i, side_i, contact, deadline)
+        extra = {"sweep_i": int(sweep_i), "reclaim_i": int(reclaim_i), "confirm_i": int(confirm_i)}
+    elif recipe_id == "S3":
+        c1_ok = 0 if c1_value is None else 1
+        cohort_ok = 0 if cohort_mean is None else 1
+        state, sweep_i, confirm_i = s3_machine_kernel(
+            high_a,
+            low_a,
+            close_a,
+            lo_i,
+            hi_i,
+            side_i,
+            contact,
+            deadline,
+            0.0 if c1_value is None else float(c1_value),
+            np.int64(c1_ok),
+            0.0 if cohort_mean is None else float(cohort_mean),
+            np.int64(cohort_ok),
+            np.int64(1 if cohort_after else 0),
+        )
+        extra = {"sweep_i": int(sweep_i), "confirm_i": int(confirm_i)}
+    elif recipe_id == "S4":
+        n = close_a.size
+        opp = np.zeros(n, dtype=np.int64) if opposing is None else np.asarray(opposing, dtype=np.int64)
+        adv = np.zeros(n, dtype=np.int64) if adverse_ticks is None else np.asarray(adverse_ticks, dtype=np.int64)
+        state, event_i = s4_machine_kernel(
+            opp,
+            np.int64(quantile),
+            adv,
+            np.int64(cap_ticks),
+            close_a,
+            np.int64(contact_extreme),
+            side_i,
+            contact,
+            np.int64(pressure_last_i),
+            deadline,
+        )
+        extra = {"event_i": int(event_i)}
+    else:
+        raise ContractError(f"unknown recipe {recipe_id}")
+    return {"recipe_id": recipe_id, "state": KERNEL_STATE_NAME[int(state)], **extra}
 
 
 def slice_p15_07(day: str) -> dict[str, Any]:

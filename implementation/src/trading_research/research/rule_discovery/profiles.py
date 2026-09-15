@@ -98,9 +98,11 @@ def python_smooth(raw: Sequence[int], bandwidth: int) -> list[float]:
 def vector_profile(ticks: np.ndarray, sizes: np.ndarray, *, bandwidth: int) -> dict[str, Any]:
     if ticks.size == 0 or int(sizes.sum()) <= 0:
         return {"available": False, "reason": "empty or zero-volume", "raw": np.zeros(0, dtype=np.int64)}
+    from trading_research.research.rule_discovery.kernels import profile_accumulate_kernel
+
     lo = int(ticks.min())
-    offset = (ticks - lo).astype(np.int64)
-    raw = np.bincount(offset, weights=sizes.astype(np.float64)).astype(np.int64)
+    n_bins = int(ticks.max()) - lo + 1
+    raw = profile_accumulate_kernel(ticks.astype(np.int64, copy=False), sizes.astype(np.int64, copy=False), np.int64(lo), np.int64(n_bins))
     kernel = triangular_kernel(bandwidth)
     full = np.convolve(raw.astype(np.float64), kernel, mode="full")
     start = (kernel.size - 1) // 2

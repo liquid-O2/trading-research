@@ -276,7 +276,7 @@ def slice_run(
     unknown = [item for item in selected if item not in declared and item != PARTIAL_FINAL.isoformat()]
     if unknown:
         raise IntegrityError(f"dates outside frozen population: {unknown}")
-    worker_n = workers if workers is not None else 4
+    worker_n = workers if workers is not None else cgroup_worker_count()
     jobs_dir = root / "jobs" / task_id
     jobs_dir.mkdir(parents=True, exist_ok=True)
     inventory = [{"date": item, "task_id": task_id, "status": "declared"} for item in selected]
@@ -645,6 +645,50 @@ def write_named_receipt(
     )
     write_task_receipt(attempt / "TASK_RECEIPT.json", receipt)
     return receipt
+
+
+def _replay_date_guarded(day: str) -> dict[str, Any]:
+    install_write_guard()
+    return replay_date(day)
+
+
+def replay_parity_sample(dates: list[str] | None = None, *, workers: int | None = None) -> dict[str, Any]:
+    """Byte-for-byte baseline delegation vs run-1.0.1 on the stratified sample."""
+    install_write_guard()
+    selected = list(dates or stratified_parity_dates())
+    worker_n = 1 if workers is None else max(1, int(workers))
+    results = []
+    if worker_n <= 1:
+        for item in selected:
+            results.append(_replay_date_guarded(item))
+    else:
+        with ProcessPoolExecutor(max_workers=worker_n) as pool:
+            futures = {pool.submit(_replay_date_guarded, item): item for item in selected}
+            for future in as_completed(futures):
+                results.append(future.result())
+        results.sort(key=lambda item: item["date"])
+    jobs = sum(int(item.get("jobs") or 0) for item in results)
+    matches = sum(int(item.get("matches") or 0) for item in results)
+    mismatches = [item for row in results for item in row.get("mismatches") or []]
+    return {
+        "schema_version": "research-baseline-parity-v1",
+        "session_count": len(selected),
+        "dates": [item["date"] for item in results],
+        "jobs": jobs,
+        "matches": matches,
+        "mismatches": mismatches,
+        "byte_equal": jobs == matches and not mismatches,
+        "workers": worker_n,
+        "results": [
+            {
+                "date": item["date"],
+                "jobs": item.get("jobs"),
+                "matches": item.get("matches"),
+                "mismatches": item.get("mismatches"),
+            }
+            for item in results
+        ],
+    }
 
 
 def primitive_throughput_dates() -> list[str]:
