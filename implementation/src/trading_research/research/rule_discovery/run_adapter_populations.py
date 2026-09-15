@@ -58,6 +58,7 @@ RUNNER_RELATIVE = "implementation/src/trading_research/research/rule_discovery/r
 STAGE_KEYS = ("arrival_read_recorded", "alignment_ok", "profile_allows_trade")
 VWAP_COVERAGE_ID = "GB-VWAP:branch:source_long"
 VWAP_CENSUS_JOB = "GB-VWAP--branch--source_long.json.gz"
+JOB_PATH_SCHEME = "coverage_id--json.gz"
 
 _STATE: dict = {}
 
@@ -115,7 +116,7 @@ DECISIONS = [
     "Default --baseline B0.1 keeps the frozen BRANCH_RECORDS table and does not recompute B0/B0.1.",
     "--baseline B0.2 dispatches every family's scan_b02; B0 and B0.1 rows are read from run-1.0.1 and census 20def36e065c13d7.",
     "gb_fail_0930/overnight redirect to green_failure.scan_b02; golden_pocket redirects to green_vwap_scalp.scan_b02.",
-    "Jobs are jobs/<date>/<branch>.json.gz. Branch names in this population do not collide.",
+    "Jobs are jobs/<date>/<coverage_id with ':' replaced by '--'>.json.gz (JOB_PATH_SCHEME=coverage_id--json.gz). Branch names may collide across families.",
     "cpu_quota reads cgroup v1 cpu.cfs_quota_us/period first, then v2 cpu.max.",
     "default_workers is floor(quota/period)-5, at least 1 (12 on this machine).",
     "install_write_guard is on. A cache miss fails the date.",
@@ -184,11 +185,24 @@ def build_manifest(registry, dates, workers, *, baseline="B0.1", rows=None):
         "registry_sha256": registry["registry_sha256"],
         "schema": MANIFEST_SCHEMA,
         "worker_count": workers,
+        "job_path_scheme": JOB_PATH_SCHEME,
     }
 
 
-def job_path(run_root: Path, day: str, branch: str) -> Path:
-    return run_root / "jobs" / day / f"{branch}.json.gz"
+def job_filename(coverage_id: str) -> str:
+    return coverage_id.replace(":", "--") + ".json.gz"
+
+
+def job_path(run_root: Path, day: str, coverage_id: str) -> Path:
+    return run_root / "jobs" / day / job_filename(coverage_id)
+
+
+def resolve_recorded_job_path(run_root: Path, item: dict) -> Path:
+    """Resolve a job from a completion/manifest record, not from JOB_PATH_SCHEME."""
+    recorded = Path(item["path"])
+    if recorded.is_file():
+        return recorded
+    return run_root / "jobs" / recorded.parent.name / recorded.name
 
 
 def init_run(workers=None, reports_parent=None, baseline="B0.1"):
@@ -248,6 +262,16 @@ def init_run(workers=None, reports_parent=None, baseline="B0.1"):
             lines.append(f"- {item}")
         lines.append("")
         log_path.write_text("\n".join(lines))
+    write_json_atomic(
+        run_root / "RUN_META.json",
+        {
+            "job_path_scheme": JOB_PATH_SCHEME,
+            "failed_dates": [],
+            "achieved_concurrency": 0,
+            "wall_seconds_orchestrator": 0.0,
+            "worker_count": workers,
+        },
+    )
     protocol = registry["scope"]["measurement_protocol"]
     return {
         "run_id": run_id,
@@ -574,7 +598,7 @@ def _process_date(day):
     errors = []
     for rec in rows:
         cid = rec["coverage_id"]
-        path = job_path(run_root, day, rec["branch"])
+        path = job_path(run_root, day, rec["coverage_id"])
         t0 = time.monotonic()
         try:
             if path.exists():
@@ -1070,6 +1094,7 @@ def main(argv=None):
         if unknown:
             raise SystemExit(f"dates outside calendar: {sorted(unknown)}")
     run_meta = {
+        "job_path_scheme": JOB_PATH_SCHEME,
         "failed_dates": [],
         "achieved_concurrency": 0,
         "wall_seconds_orchestrator": 0.0,
@@ -1088,6 +1113,7 @@ def main(argv=None):
             second = retry_failed(ctx, failed, workers)
             failed = list(second.get("failed_dates") or [])
         run_meta = {
+            "job_path_scheme": JOB_PATH_SCHEME,
             "failed_dates": failed,
             "achieved_concurrency": max(first.get("achieved_concurrency") or 0, second.get("achieved_concurrency") or 0),
             "wall_seconds_orchestrator": round(

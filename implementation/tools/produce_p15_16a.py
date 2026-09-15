@@ -29,7 +29,9 @@ IMP = ROOT / "implementation"
 PY = IMP / ".venv/bin/python"
 REPORTS = ROOT / "implementation/reports/research-work"
 TRACK = REPORTS / "P15-16A"
-B02_RUN = TRACK / "1e13829f2c88f1e1"
+OLD_B02_RUN = TRACK / "1e13829f2c88f1e1"
+B02_RUN = TRACK / "4e3ed4d86149bf9c"
+REPLAY_SRC = TRACK / "79fb63c5a6a7dc90/attempt-0001"
 LEDGER = ROOT / "planning/phase-1-5/SOURCE_RECONSTRUCTION_LEDGER.json"
 FIDELITY_SCHEMA = "research-fidelity-matrix-v1"
 LEDGER_SCHEMA = "research-ledger-corrections-v1"
@@ -70,58 +72,56 @@ PLAN_PATHS = (
     "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json",
 )
 
-FAMILY_JSON = tuple(
-    sorted(
-        f"implementation/src/trading_research/research/rule_discovery/families/{name}"
-        for name in (
-            "green_failure.json",
-            "green_vwap_scalp.json",
-            "jumbo.json",
-            "keani.json",
-            "member.json",
-            "processes.json",
-            "saint.json",
-            "sires.json",
+def _repo_files(relative_dir: str, suffix: str) -> tuple[str, ...]:
+    root = ROOT / relative_dir
+    out: list[str] = []
+    if not root.is_dir():
+        return ()
+    for path in sorted(root.rglob(f"*{suffix}")):
+        if not path.is_file():
+            continue
+        if "__pycache__" in path.parts or path.suffix == ".pyc":
+            continue
+        if path.suffix != suffix:
+            continue
+        out.append(path.relative_to(ROOT).as_posix())
+    return tuple(out)
+
+
+ADAPTER_PY = _repo_files("implementation/src/trading_research/research/rule_discovery/source_adapters", ".py")
+FAMILY_JSON = _repo_files("implementation/src/trading_research/research/rule_discovery/families", ".json")
+CONTRACT_TESTS = _repo_files("implementation/tests/contracts", ".py")
+
+CODE_PATHS = tuple(
+    dict.fromkeys(
+        ADAPTER_PY
+        + FAMILY_JSON
+        + (
+            "implementation/src/trading_research/research/rule_discovery/native.py",
+            "implementation/src/trading_research/research/rule_discovery/runner.py",
+            "implementation/src/trading_research/research/rule_discovery/engine_slice.py",
+            "implementation/src/trading_research/research/rule_discovery/formations.py",
+            "implementation/src/trading_research/research/rule_discovery/profiles.py",
+            "implementation/src/trading_research/research/rule_discovery/sequences.py",
+            "implementation/src/trading_research/research/rule_discovery/kernels.py",
+            "implementation/src/trading_research/research/rule_discovery/census_reader.py",
+            "implementation/src/trading_research/research/rule_discovery/baseline.py",
+            "implementation/src/trading_research/research/rule_discovery/run_adapter_populations.py",
+            "implementation/src/trading_research/research/contracts/receipts.py",
+            "implementation/src/trading_research/research/contracts/identity.py",
+            "implementation/tools/replay_author_examples.py",
+            "implementation/tools/produce_p15_16a.py",
+            "implementation/tests/rule_discovery/test_p15_16a.py",
+            "implementation/tests/rule_discovery/test_p15_16a_jumbo.py",
+            "implementation/tests/rule_discovery/test_p15_16a_greenbird.py",
+            "implementation/tests/rule_discovery/test_p15_16a_sires.py",
+            "implementation/tests/rule_discovery/test_p15_16a_saint.py",
+            "implementation/tests/rule_discovery/test_engine_hygiene.py",
         )
+        + CONTRACT_TESTS
     )
 )
-
-OWNED = (
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/",
-    "implementation/src/trading_research/research/rule_discovery/families/",
-    "implementation/src/trading_research/research/rule_discovery/run_adapter_populations.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/confirmation.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/jumbo.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/green_failure.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/sires.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/member.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/processes.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/b02_saint_track.py",
-    "implementation/tools/replay_author_examples.py",
-    "implementation/tests/rule_discovery/test_p15_16a.py",
-)
-
-CODE_PATHS = OWNED + FAMILY_JSON + (
-    "implementation/src/trading_research/research/rule_discovery/native.py",
-    "implementation/src/trading_research/research/rule_discovery/runner.py",
-    "implementation/src/trading_research/research/rule_discovery/engine_slice.py",
-    "implementation/src/trading_research/research/rule_discovery/formations.py",
-    "implementation/src/trading_research/research/rule_discovery/profiles.py",
-    "implementation/src/trading_research/research/rule_discovery/sequences.py",
-    "implementation/src/trading_research/research/rule_discovery/kernels.py",
-    "implementation/src/trading_research/research/rule_discovery/census_reader.py",
-    "implementation/src/trading_research/research/rule_discovery/baseline.py",
-    "implementation/src/trading_research/research/rule_discovery/source_adapters/__init__.py",
-    "implementation/src/trading_research/research/contracts/receipts.py",
-    "implementation/pyproject.toml",
-)
+OWNED = CODE_PATHS
 
 NODE = "implementation/tests/rule_discovery/test_p15_16a.py"
 LEDGER_FIX = {
@@ -554,12 +554,11 @@ def assemble_ledger() -> dict:
     }
 
 
-KEANI_COVERAGE = "KEANI-OPEN-ABOVE-VALUE:branch:source_long"
-KEANI_COLLISION = (
-    "Job files are jobs/<date>/<branch>.json.gz. "
-    "KEANI-OPEN-ABOVE-VALUE:branch:source_long collides with GB-VWAP:branch:source_long; "
-    "no KEANI job file exists. B0.2 is not measured for KEANI. "
-    "The runner declared 39*1742=67938 jobs; distinct gzip files on disk are fewer by one branch."
+OLD_COLLISION = (
+    "The previous B0.2 run root 1e13829f2c88f1e1 is superseded: jobs were named "
+    "jobs/<date>/<branch>.json.gz so KEANI-OPEN-ABOVE-VALUE:branch:source_long collided "
+    "with GB-VWAP:branch:source_long. Distinct gzip files on that root: 66196. "
+    "This run uses coverage_id--json.gz job paths; KEANI is measured; jobs_declared = 39 x 1742 = 67938."
 )
 
 
@@ -592,27 +591,11 @@ def assemble_b02_summary() -> dict | None:
         item["pass_b01"] = census_row.get("pass_b01") or row.get("census_b01_pass")
         item["fail_b01"] = census_row.get("fail_b01") or row.get("census_b01_fail")
         item["unknown_b01"] = census_row.get("unknown_b01") or row.get("census_b01_unknown")
-        if row.get("coverage_id") == KEANI_COVERAGE:
-            item["measured"] = False
-            item["not_measured_reason"] = KEANI_COLLISION
-            item["episodes_b02"] = None
-            item["pass_b02"] = None
-            item["fail_b02"] = None
-            item["unknown_b02"] = None
-            item["dates_run"] = 0
-            item["delta_pass"] = None
-            item["delta_fail"] = None
-            item["delta_unknown"] = None
-            item["episodes"] = None
-            item["pass"] = None
-            item["fail"] = None
-            item["unknown"] = None
-        else:
-            item["measured"] = True
-            item["episodes_b02"] = row.get("episodes")
-            item["pass_b02"] = row.get("pass")
-            item["fail_b02"] = row.get("fail")
-            item["unknown_b02"] = row.get("unknown")
+        item["measured"] = True
+        item["episodes_b02"] = row.get("episodes")
+        item["pass_b02"] = row.get("pass")
+        item["fail_b02"] = row.get("fail")
+        item["unknown_b02"] = row.get("unknown")
         branches.append(item)
     return {
         "schema": B02_SUMMARY_SCHEMA,
@@ -626,8 +609,9 @@ def assemble_b02_summary() -> dict | None:
         "job_count": distinct_jobs,
         "runner_declared_job_count": summary.get("job_count"),
         "distinct_job_files": distinct_jobs,
-        "keani_b02": "not_measured",
-        "keani_collision": KEANI_COLLISION,
+        "keani_b02": "measured",
+        "superseded_run_root": str(OLD_B02_RUN),
+        "superseded_reason": OLD_COLLISION,
         "dates_first": summary.get("dates_first"),
         "dates_last": summary.get("dates_last"),
         "branches": branches,
@@ -653,12 +637,12 @@ def render_b02_summary_md(payload: dict) -> str:
         f"- Dates: {payload.get('n_dates')} ({payload.get('dates_first')} .. {payload.get('dates_last')})",
         f"- Branches: {payload.get('n_branches')}",
         f"- Distinct job files: {payload.get('distinct_job_files')}",
-        f"- Runner-declared jobs (39*1742): {payload.get('runner_declared_job_count')}",
+        f"- Runner-declared jobs: {payload.get('runner_declared_job_count')}",
         f"- KEANI B0.2: {payload.get('keani_b02')}",
         f"- Census: `{payload.get('census_run_id')}`",
         f"- B0 source: {payload.get('b0_source')}",
         "",
-        payload.get("keani_collision") or "",
+        payload.get("superseded_reason") or "",
         "",
         "| branch | dates | B0.2 ep | B0.2 pass | B0.2 fail | B0.2 unk | B0 ep | B0 pass | B0.1 ep | B0.1 pass | delta pass vs B0.1 |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
@@ -698,8 +682,8 @@ def render_family_report(attempt: Path, fidelity: dict, summary: dict | None) ->
             slot["unknown"] += int(row.get("unknown_b02") or row.get("unknown") or 0)
             slot["branches"] += 1
     keani_note = ""
-    if summary and summary.get("keani_collision"):
-        keani_note = summary["keani_collision"]
+    if summary and summary.get("superseded_reason"):
+        keani_note = summary["superseded_reason"]
     lines = [
         "# P15-16A family report",
         "",
@@ -943,7 +927,7 @@ def produce(pending_s01_s03: bool) -> Path:
         shutil.rmtree(staging)
     staging.mkdir(parents=True, exist_ok=True)
     cmd0 = run_cmd(
-        [str(PY), "-m", "pytest", "tests/rule_discovery/test_p15_16a.py", "-v", "-p", "no:cacheprovider"],
+        [str(PY), "-m", "pytest", "tests/rule_discovery", "tests/contracts", "-v", "-p", "no:cacheprovider"],
         IMP,
         staging / "pytest.log",
     )
@@ -988,6 +972,8 @@ def produce(pending_s01_s03: bool) -> Path:
         shutil.copy2(attempt / "B02_SUMMARY.md", B02_RUN / "B02_SUMMARY.md")
     for name in ("AUTHOR_EXAMPLE_REPLAY.json", "AUTHOR_EXAMPLE_REPLAY.md", "SUMMARY.json", "RUN_COMPLETE.json"):
         src = B02_RUN / name
+        if not src.is_file() and name.startswith("AUTHOR_EXAMPLE_REPLAY"):
+            src = REPLAY_SRC / name
         if src.is_file():
             shutil.copy2(src, attempt / name)
     family_md = render_family_report(attempt, fidelity, b02_summary)
@@ -1016,9 +1002,7 @@ def produce(pending_s01_s03: bool) -> Path:
         "- RR-02 is partial (EQ two-sided; q1 long / q3 short stay the default pair).\n"
         "- F18 is partial (JJ-TBR dropped from CLOCK_ZONE_UNVERIFIED_FAMILIES; GB names remain).\n"
         "- S01/S03 unproduced; probes stage has not run. No verifier command is recorded on this receipt.\n"
-        "- KEANI-OPEN-ABOVE-VALUE B0.2 is not measured: job files are "
-        "`jobs/<date>/<branch>.json.gz`, which collides with GB-VWAP `source_long`. "
-        f"Distinct job files: {n_jobs}; runner declared {(b02_summary or {}).get('runner_declared_job_count')}.\n"
+        f"- {OLD_COLLISION}\n"
     )
     write_matrix(attempt, [cmd0], pending_s01_s03=pending_s01_s03)
     named = [
@@ -1057,20 +1041,13 @@ def produce(pending_s01_s03: bool) -> Path:
             "population_kind": "full_history" if (attempt / "B02_SUMMARY.json").is_file() else "full_history_pending",
             "b02_run_root": str(B02_RUN),
             "keani_b02": (b02_summary or {}).get("keani_b02"),
+            "superseded_run_root": str(OLD_B02_RUN),
         },
-        unresolved=(
-            [
-                "S01/S03 unproduced; probes stage has not run",
-                "KEANI-OPEN-ABOVE-VALUE B0.2 not measured: job path collides with GB-VWAP:branch:source_long",
-            ]
-            if pending_s01_s03
-            else ["KEANI-OPEN-ABOVE-VALUE B0.2 not measured: job path collides with GB-VWAP:branch:source_long"]
-        ),
+        unresolved=(["S01/S03 unproduced; probes stage has not run"] if pending_s01_s03 else []),
         reason=(
-            "P15-16A B0.2 source-fidelity baseline integration. S01/S03 unproduced. "
-            "KEANI B0.2 not measured (job-path collision)."
+            "P15-16A B0.2 source-fidelity baseline integration. S01/S03 unproduced."
             if pending_s01_s03
-            else "P15-16A B0.2 source-fidelity baseline integration. KEANI B0.2 not measured (job-path collision)."
+            else "P15-16A B0.2 source-fidelity baseline integration."
         ),
     )
     return attempt

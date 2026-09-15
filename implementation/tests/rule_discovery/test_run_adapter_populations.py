@@ -7,11 +7,18 @@ import json
 from trading_research.research.rule_discovery.run_adapter_populations import (
     BRANCH_IDS,
     BRANCH_RECORDS,
+    JOB_PATH_SCHEME,
+    VWAP_CENSUS_JOB,
     _completion_ok,
     init_run,
+    job_filename,
+    job_path,
     read_job,
+    resolve_recorded_job_path,
     run_dates,
 )
+
+B01_ROOT = Path("/workspace/implementation/reports/research-work/adapter-populations/dd386316321ee58d")
 
 DATES = ["2021-01-04", "2022-06-15", "2023-12-08"]
 REQUIRED_FILES = (
@@ -56,12 +63,12 @@ def test_adapter_populations_three_native_dates(tmp_path: Path):
         assert not (day_dir / "FAILURE.json").exists(), day
         assert _completion_ok(completion_path, ctx, ctx["rows"]) is True
         gz = sorted(path.name for path in day_dir.glob("*.json.gz"))
-        assert gz == sorted(f"{row['branch']}.json.gz" for row in BRANCH_RECORDS)
-        for name in REQUIRED_FILES:
-            assert (day_dir / f"{name}.json.gz").is_file(), name
+        assert gz == sorted(job_filename(row["coverage_id"]) for row in BRANCH_RECORDS)
+        for rec in BRANCH_RECORDS:
+            assert (day_dir / job_filename(rec["coverage_id"])).is_file(), rec["coverage_id"]
         completion = json.loads(completion_path.read_text())
         for rec in BRANCH_RECORDS:
-            document = read_job(day_dir / f"{rec['branch']}.json.gz")
+            document = read_job(day_dir / job_filename(rec["coverage_id"]))
             assert document.get("baseline_version")
             assert "wall_seconds" in document
             assert "peak_rss_bytes" in document
@@ -85,3 +92,31 @@ def test_adapter_populations_three_native_dates(tmp_path: Path):
         day_dir = ctx["run_root"] / "jobs" / day
         assert not (day_dir / "FAILURE.json").exists(), day
         assert _completion_ok(day_dir / "completion.json", ctx, ctx["rows"]) is True
+
+
+def test_job_path_coverage_ids_sharing_a_branch_name_do_not_collide():
+    root = Path("/tmp/job-path-collision")
+    keani = "KEANI-OPEN-ABOVE-VALUE:branch:source_long"
+    vwap = "GB-VWAP:branch:source_long"
+    left = job_path(root, "2026-01-02", keani)
+    right = job_path(root, "2026-01-02", vwap)
+    assert left != right
+    assert left.name == "KEANI-OPEN-ABOVE-VALUE--branch--source_long.json.gz"
+    assert right.name == VWAP_CENSUS_JOB
+    assert JOB_PATH_SCHEME == "coverage_id--json.gz"
+    assert job_filename(vwap) == VWAP_CENSUS_JOB
+
+
+def test_b01_run_root_readers_use_recorded_paths_not_the_scheme():
+    manifest = json.loads((B01_ROOT / "MANIFEST.json").read_text())
+    assert "job_path_scheme" not in manifest
+    day = "2021-01-04"
+    completion = json.loads((B01_ROOT / "jobs" / day / "completion.json").read_text())
+    assert completion["jobs"]
+    for item in completion["jobs"]:
+        recorded = resolve_recorded_job_path(B01_ROOT, item)
+        assert recorded.is_file(), recorded
+        assert recorded.name == f"{item['branch']}.json.gz"
+        scheme = job_path(B01_ROOT, day, item["coverage_id"])
+        assert scheme != recorded
+        assert scheme.name == job_filename(item["coverage_id"])

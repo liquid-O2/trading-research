@@ -19,7 +19,6 @@ from trading_research.research.contracts.identity import (
     canonical_value,
     code_snapshot_document,
     digest,
-    directory_listing_digest,
     file_digest,
     make_task_receipt,
     plan_snapshot_document,
@@ -574,10 +573,7 @@ def write_task_identity(
     import sys
 
     plan_files = {rel: file_digest(ROOT / rel) for rel in plan_paths}
-    code_files = {}
-    for rel in code_paths:
-        path = ROOT / rel
-        code_files[rel] = directory_listing_digest(path) if path.is_dir() else file_digest(path)
+    code_files = {rel: file_digest(ROOT / rel) for rel in code_paths}
     plan_copies = write_snapshot_tree(attempt, "plan", plan_files, root=ROOT)
     code_copies = write_snapshot_tree(attempt, "code", code_files, root=ROOT)
     lock = ROOT / "implementation/uv.lock"

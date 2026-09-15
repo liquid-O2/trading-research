@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Iterable, Literal, Mapping
 import ast
 import json
+import os
 
 from trading_research.errors import ContractError
 from trading_research.research.contracts.identity import (
@@ -431,6 +432,9 @@ def _unresolved_text(item: Any) -> str:
     return json.dumps(item, sort_keys=True, default=str)
 
 
+_RECEIPT_WALK_SKIP = frozenset({"jobs", "snapshots", "decoded", "__pycache__"})
+
+
 def locate_task_receipts(task_id: str, receipts_root: Path) -> tuple[Path, ...]:
     base = Path(receipts_root) / task_id
     if base.is_file():
@@ -445,6 +449,53 @@ def locate_all_task_receipts(receipts_root: Path) -> tuple[Path, ...]:
     if not root.exists():
         return ()
     return tuple(sorted(path for path in root.rglob("TASK_RECEIPT.json") if path.is_file()))
+
+
+def _index_task_receipts(receipts_root: Path) -> tuple[Path, ...]:
+    root = Path(receipts_root)
+    found: list[Path] = []
+    if root.is_file() and root.name == "TASK_RECEIPT.json":
+        return (root,)
+    if not root.exists():
+        return ()
+    for dirpath, dirnames, filenames in os.walk(root, topdown=True):
+        dirnames[:] = [name for name in dirnames if name not in _RECEIPT_WALK_SKIP and not name.startswith("_work")]
+        if "TASK_RECEIPT.json" in filenames:
+            found.append(Path(dirpath) / "TASK_RECEIPT.json")
+    return tuple(sorted(found))
+
+
+def _unique_failures(failures: Iterable[CheckFailure]) -> tuple[CheckFailure, ...]:
+    seen: set[tuple[str, str, str]] = set()
+    ordered: list[CheckFailure] = []
+    for item in failures:
+        key = (item.code, item.path, item.detail)
+        if key in seen:
+            continue
+        seen.add(key)
+        ordered.append(item)
+    return tuple(ordered)
+
+
+def _unpinned_owned_paths(owns: Iterable[str], code_files: Mapping[str, Any], workspace: Path) -> list[str]:
+    missing: list[str] = []
+    for rel in owns:
+        if str(rel).endswith("/"):
+            directory = workspace / rel
+            if not directory.is_dir():
+                missing.append(str(rel))
+                continue
+            for child in directory.rglob("*"):
+                if any(part == "__pycache__" for part in child.parts):
+                    continue
+                if child.suffix == ".pyc" or not child.is_file():
+                    continue
+                key = child.relative_to(workspace).as_posix()
+                if key not in code_files:
+                    missing.append(key)
+        elif rel not in code_files:
+            missing.append(str(rel))
+    return missing
 
 
 class _VerifyState:
@@ -463,6 +514,31 @@ class _VerifyState:
         self.identity_checked: dict[str, dict[str, Any]] = {}
         self._amendments: Mapping[str, Any] | None = None
         self._amendments_loaded = False
+        self._all_receipts: tuple[Path, ...] | None = None
+
+    def all_receipts(self) -> tuple[Path, ...]:
+        if self._all_receipts is None:
+            self._all_receipts = _index_task_receipts(self.receipts_root)
+        return self._all_receipts
+
+    def receipts_for(self, task_id: str) -> tuple[Path, ...]:
+        root = self.receipts_root
+        found: list[Path] = []
+        direct = root / task_id
+        if direct.is_file():
+            found.append(direct)
+        try:
+            root_resolved = root.resolve()
+        except OSError:
+            root_resolved = root
+        for path in self.all_receipts():
+            try:
+                rel = path.resolve().relative_to(root_resolved)
+            except ValueError:
+                continue
+            if rel.parts and rel.parts[0] == task_id:
+                found.append(path)
+        return tuple(sorted(set(found)))
 
     def amendments(self) -> Mapping[str, Any] | None:
         if not self._amendments_loaded:
@@ -648,7 +724,7 @@ def _receipt_lists_predecessor(
         hinted = _predecessor_path(value)
         if hinted is not None:
             search.append(hinted)
-        search.extend(locate_task_receipts(str(dep), state.receipts_root))
+        search.extend(state.receipts_for(str(dep)))
         matched = _matching_receipt(str(dep), digest_value, search)
         if matched is None:
             continue
@@ -683,7 +759,7 @@ def _code_superseded_by_successor(
         synthetic = {"predecessor_receipts": predecessors, "artifact_manifest": []}
         if _receipt_lists_predecessor(synthetic, other_doc_path, current_id, current_digest, state):
             return True
-    for candidate in locate_all_task_receipts(state.receipts_root):
+    for candidate in state.all_receipts():
         cand = str(candidate)
         if cand == str(receipt_path) or cand in state.visiting:
             continue
@@ -863,7 +939,10 @@ def _check_predecessors(
         search = []
         if hinted is not None:
             search.append(hinted)
-        search.extend(locate_task_receipts(dep, receipts_root))
+        if state is not None:
+            search.extend(state.receipts_for(dep))
+        else:
+            search.extend(locate_task_receipts(dep, receipts_root))
         search.extend(artifact_paths)
         matched = _matching_receipt(dep, expected, search)
         if matched is not None and graph is not None:
@@ -1530,7 +1609,7 @@ def _check_identities(
     else:
         spec = graph.require(str(receipt.get("task_id") or ""))
         if spec is not None:
-            missing_code = [rel for rel in spec.owns if rel not in code_files]
+            missing_code = _unpinned_owned_paths(spec.owns, code_files, DEFAULT_ROOT)
             if missing_code:
                 _append(
                     failures,
@@ -1672,7 +1751,8 @@ def verify_task_receipt(
         )
     finally:
         state.visiting.discard(str(path))
-    return VerificationResult("task", not failures, str(path), tuple(failures))
+    unique = _unique_failures(failures)
+    return VerificationResult("task", not unique, str(path), unique)
 
 
 def _parse_task_ref(task_id: str, raw: Any, receipt_path: Path, failures: list[CheckFailure], *, want_disposition: bool) -> TaskRef | None:
@@ -2299,7 +2379,8 @@ def verify_subphase_receipt(
                 amendments_path=resolved_amendments,
             )
         )
-    return VerificationResult("subphase", not failures, str(path), tuple(failures))
+    unique = _unique_failures(failures)
+    return VerificationResult("subphase", not unique, str(path), unique)
 
 
 def verify_phase_receipt(
