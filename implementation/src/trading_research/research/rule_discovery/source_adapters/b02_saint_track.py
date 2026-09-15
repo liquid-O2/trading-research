@@ -38,7 +38,7 @@ SLICE_DATES = [
     "2026-09-03",
 ]
 HASH_DATES = ["2021-01-04", "2022-01-03"]
-TRACK_DIR = Path("/workspace/.worktrees/b02-saint/implementation/reports/research-work/P15-16A/_track_saint")
+TRACK_DIR = Path("/workspace/implementation/reports/research-work/P15-16A/_track_saint")
 AUTHOR_EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NQ_TICK_VALUE = Decimal("5")
 FIXED_RISK_USD = Decimal("500")

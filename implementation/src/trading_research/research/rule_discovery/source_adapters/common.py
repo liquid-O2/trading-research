@@ -60,7 +60,6 @@ NATIVE_ROW = 769284
 # Ledger L039-L046: session windows from sources whose clock zone is unverified.
 CLOCK_ZONE_UNVERIFIED_FAMILIES = frozenset(
     {
-        "JJ-TBR",
         "GB-FAIL",
         "GB-VWAP",
         "GB-SCALP",
@@ -264,12 +263,14 @@ def frozen_scan_document(market: HistoricalFeatures, method_id: str, branch: str
     return dict(native_scan_branch(market, coverage_row(method_id, branch)))
 
 
-def dual_scan(market: HistoricalFeatures, method_id: str, branch: str) -> dict[str, Any]:
+def dual_scan(market: HistoricalFeatures, method_id: str, branch: str, *, include_b02: bool = False) -> dict[str, Any]:
     """B0 frozen scanner plus B0.1 repaired-or-frozen scanner.
 
     Adapter transforms bind on B0.1 only. B0 is frozen scan_branch output with
     baseline_version tags; DISPOSITION ruling 1 keeps that the byte-identical
-    parity target.
+    parity target. Do not call scan_b02 here. B0.2 is a separate adapter
+    function attached only when include_b02 is True, so default B0/B0.1
+    documents stay byte-identical.
     """
     row = coverage_row(method_id, branch)
     frozen = native_scan_branch(market, row)
@@ -285,7 +286,7 @@ def dual_scan(market: HistoricalFeatures, method_id: str, branch: str) -> dict[s
         b01 = transform(b01, market, branch, B01)
     b0_counts = population_counts(b0)
     b01_counts = population_counts(b01)
-    return {
+    payload = {
         "schema_version": "research-family-dual-scan-v1",
         "family": method_id,
         "branch": branch,
@@ -303,6 +304,11 @@ def dual_scan(market: HistoricalFeatures, method_id: str, branch: str) -> dict[s
             },
         },
     }
+    if include_b02:
+        b02 = family_scan_b02(market, method_id, branch)
+        payload["b02"] = b02
+        payload["populations"]["B0.2"] = population_counts(b02)
+    return payload
 
 
 def empty_delta_spec(family: str, branch: str) -> RuleSpec:
@@ -472,36 +478,83 @@ def baseline_repair_source() -> dict[str, Any]:
     }
 
 
-def scan_family_date(day: str, method_id: str, branches: tuple[str, ...]) -> dict[str, Any]:
+def _b02_scanner(method_id: str):
+    if method_id == "JJ-TBR":
+        from trading_research.research.rule_discovery.source_adapters.jumbo import scan_b02
+        return scan_b02
+    if method_id == "GB-FAIL":
+        from trading_research.research.rule_discovery.source_adapters.green_failure import scan_b02
+        return scan_b02
+    if method_id in {"GB-VWAP", "GB-SCALP"}:
+        from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp import scan_b02
+        return scan_b02
+    if method_id == "SIRES":
+        from trading_research.research.rule_discovery.source_adapters.sires import scan_b02
+        return scan_b02
+    if method_id == "SAINT-AMT":
+        from trading_research.research.rule_discovery.source_adapters.saint import scan_b02
+        return scan_b02
+    if method_id == "MEMBER-TWO-REASONS":
+        from trading_research.research.rule_discovery.source_adapters.member import scan_b02
+        return scan_b02
+    if method_id == "KEANI-OPEN-ABOVE-VALUE":
+        from trading_research.research.rule_discovery.source_adapters.keani import scan_b02
+        return scan_b02
+    if method_id == "REFILL-STUDY":
+        from trading_research.research.rule_discovery.source_adapters.processes import scan_b02
+        return scan_b02
+    raise ContractError(f"no B0.2 scanner for {method_id}")
+
+
+def family_scan_b02(market, method_id: str, branch: str) -> dict[str, Any]:
+    scanner = _b02_scanner(method_id)
+    rec = {
+        "family": method_id,
+        "method_id": method_id,
+        "branch": branch,
+        "coverage_id": coverage_id(method_id, branch),
+    }
+    return scanner(market, rec)
+
+
+def scan_family_date(day: str, method_id: str, branches: tuple[str, ...], *, include_b02: bool = False) -> dict[str, Any]:
     install_write_guard()
     started = time.monotonic()
     market = load_source_market(day)
-    scans = [dual_scan(market, method_id, branch) for branch in branches]
+    scans = [dual_scan(market, method_id, branch, include_b02=include_b02) for branch in branches]
+    populations = {
+        "B0": _sum_counts([item["populations"]["B0"] for item in scans]),
+        "B0.1": _sum_counts([item["populations"]["B0.1"] for item in scans]),
+    }
+    if include_b02:
+        populations["B0.2"] = _sum_counts([item["populations"].get("B0.2") or {} for item in scans])
+    rows = []
+    for item in scans:
+        row = {
+            "branch": item["branch"],
+            "coverage_id": item["coverage_id"],
+            "repaired": item["repaired"],
+            "clock_zone_unverified": item["clock_zone_unverified"],
+            "populations": item["populations"],
+            "b0_episode_ids": [ep.get("candidate_id") for ep in item["b0"].get("episodes") or []],
+            "b01_episode_ids": [ep.get("candidate_id") for ep in item["b01"].get("episodes") or []],
+            "b0_status": [episode_status(ep) for ep in item["b0"].get("episodes") or []],
+            "b01_status": [episode_status(ep) for ep in item["b01"].get("episodes") or []],
+            "arrival_none_count": (item.get("b01") or {}).get("arrival_none_count"),
+            "status_changed_from_arrival_none": (item.get("b01") or {}).get("status_changed_from_arrival_none"),
+        }
+        if include_b02:
+            b02 = item.get("b02") or {}
+            row["b02_episode_ids"] = [ep.get("candidate_id") for ep in b02.get("episodes") or []]
+            row["b02_status"] = [episode_status(ep) for ep in b02.get("episodes") or []]
+        rows.append(row)
     return {
         "date": day,
         "family": method_id,
         "branches": list(branches),
         "clock_zone_unverified": clock_zone_unverified(method_id),
-        "scans": [
-            {
-                "branch": item["branch"],
-                "coverage_id": item["coverage_id"],
-                "repaired": item["repaired"],
-                "clock_zone_unverified": item["clock_zone_unverified"],
-                "populations": item["populations"],
-                "b0_episode_ids": [ep.get("candidate_id") for ep in item["b0"].get("episodes") or []],
-                "b01_episode_ids": [ep.get("candidate_id") for ep in item["b01"].get("episodes") or []],
-                "b0_status": [episode_status(ep) for ep in item["b0"].get("episodes") or []],
-                "b01_status": [episode_status(ep) for ep in item["b01"].get("episodes") or []],
-                "arrival_none_count": (item.get("b01") or {}).get("arrival_none_count"),
-                "status_changed_from_arrival_none": (item.get("b01") or {}).get("status_changed_from_arrival_none"),
-            }
-            for item in scans
-        ],
-        "populations": {
-            "B0": _sum_counts([item["populations"]["B0"] for item in scans]),
-            "B0.1": _sum_counts([item["populations"]["B0.1"] for item in scans]),
-        },
+        "scans": rows,
+        "populations": populations,
         "wall_seconds": time.monotonic() - started,
         "peak_rss_bytes": peak_rss_bytes(),
         "native_executions": market.window.document["row_count"],
@@ -1223,40 +1276,43 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
     form_row = formation_record(formed)
     contacts: list[dict[str, Any]] = []
     episodes: list[dict[str, Any]] = []
-    side_by_kind = {"R-eq": "long", "R-q1": "long", "R-q3": "short"}
+    # RR-02: EQ is two-sided. Quadrant sides stay case-selected (q1 long / q3 short
+    # as the default pair); the family adapter binds the trade side from context.
+    side_by_kind = {"R-eq": None, "R-q1": "long", "R-q3": "short"}
     for reference in refs:
         kind = next((name for name in ("R-q1", "R-q3", "R-eq") if name in reference.reference_id), "R-eq")
-        side = side_by_kind.get(kind, "long")
-        found = enumerate_bar_contacts(
-            market,
-            lower=reference.lower,
-            upper=reference.upper,
-            start_ns=issue_ns,
-            end_ns=expiry_ns,
-            reference_id=reference.reference_id,
-            side=side,
-            reference_lifecycle_id=reference.reference_lifecycle_id,
-        )
-        for hit in found:
-            if kind == "R-q1":
-                hit["geometric_reason"] = "q1 is not the EQ-only source location"
-            elif kind == "R-q3":
-                hit["geometric_reason"] = "q3 is not the EQ-only source location"
-            else:
-                hit["geometric_reason"] = "EQ contact on the candidate's own source-window reference"
-        contacts.extend(found)
-        episodes.extend(
-            _episodes_from_contacts(
-                family=family,
-                branch=branch,
-                formation=form_row,
-                reference=reference_record(reference),
-                contacts=found,
-                market=market,
-                view=view,
-                changed_axis="Reference",
+        sides = ("long", "short") if side_by_kind.get(kind) is None else (side_by_kind[kind],)
+        for side in sides:
+            found = enumerate_bar_contacts(
+                market,
+                lower=reference.lower,
+                upper=reference.upper,
+                start_ns=issue_ns,
+                end_ns=expiry_ns,
+                reference_id=reference.reference_id + f":{side}",
+                side=side,
+                reference_lifecycle_id=reference.reference_lifecycle_id,
             )
-        )
+            for hit in found:
+                if kind == "R-q1":
+                    hit["geometric_reason"] = "q1 is not the EQ-only source location"
+                elif kind == "R-q3":
+                    hit["geometric_reason"] = "q3 is not the EQ-only source location"
+                else:
+                    hit["geometric_reason"] = "EQ contact on the candidate's own source-window reference"
+            contacts.extend(found)
+            episodes.extend(
+                _episodes_from_contacts(
+                    family=family,
+                    branch=branch,
+                    formation=form_row,
+                    reference=reference_record(reference),
+                    contacts=found,
+                    market=market,
+                    view=view,
+                    changed_axis="Reference",
+                )
+            )
     candidate_ids = {ep["candidate_id"] for ep in episodes} | {c["contact_id"] for c in contacts}
     baseline_ids = baseline_contact_ids(baseline["b01"])
     enumeration = enumerate_own_population(baseline_ids=baseline_ids, candidate_ids=candidate_ids, geometry_changed=True)

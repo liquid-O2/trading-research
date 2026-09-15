@@ -265,7 +265,7 @@ EVRANGE_FIXTURES = {
     "2026-09-01": {"lower": Decimal("29058"), "upper": Decimal("29195"), "plus_50": Decimal("29290")},
 }
 
-RULES: dict[str, dict[str, Any]] = {
+RULES = {
     "RR-01-extension-band-1.33-1.66": {"kind": "literal", "source": "JR p.23; o015", "finding": "RR-01"},
     "RR-01-OD-near-band-0.33-0.66": {"kind": "OD", "source": "OD:historical scanner band, not source", "finding": "RR-01"},
     "RR-03-sweep-from-09:00": {"kind": "literal", "source": "JR p.20", "finding": "RR-03"},
@@ -328,10 +328,16 @@ def extension_reaction_bands(high, low, width=None) -> dict[str, Any]:
             "parent_id": "jj-tbr-b02",
         }
     )
+    value = result.value or {}
+    upper = value.get("upper_band")
+    lower = value.get("lower_band")
+    if not upper or not lower or len(upper) < 2 or len(lower) < 2:
+        return {"upper": None, "lower": None, "width": width_d, "available": False, "reason": result.reason}
     return {
-        "upper": [Decimal(result.value["upper_band"][0]), Decimal(result.value["upper_band"][1])],
-        "lower": [Decimal(result.value["lower_band"][0]), Decimal(result.value["lower_band"][1])],
+        "upper": [Decimal(str(upper[0])), Decimal(str(upper[1]))],
+        "lower": [Decimal(str(lower[0])), Decimal(str(lower[1]))],
         "width": width_d,
+        "available": True,
     }
 
 
@@ -993,6 +999,8 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
         return [], [{"reason": "formation_has_no_observed_executions"}]
     high, low = formation["high"], formation["low"]
     bands = extension_reaction_bands(high, low)
+    if not bands.get("available"):
+        return [], [{"reason": "extension_band_unavailable", "detail": bands.get("reason")}]
     action = _bars(market, _at(market, "10:00"), _at(market, "16:00"), 60)
     box = _sessionstat_box(market)
     episodes = []
@@ -1015,7 +1023,7 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
         target = low if side == "long" else high
         ob = _three_candle_ob(_bars(market, touch["start"], touch["start"] + 30 * NS_MINUTE, 180), side)
         stages = [
-            _stage("context", "pass", _at(market, "09:30")),
+            _stage("context", "pass", _at(market, "09:30"), session="ny_am", after_0930=True),
             _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low), ladder=projection_ladder(high, low)),
             _stage("location", "pass", formation["known_at"], band=[str(band[0]), str(band[1])], sessionstat_coincidence=coincidence),
             _stage("trigger", "pass", touch["start"], after_1000=touch["start"] >= _at(market, "10:00")),
@@ -1069,9 +1077,14 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
         ("long", loc["eq"], "eq"),
         ("short", loc["q3"], "q3"),
         ("short", loc["eq"], "eq"),
-        ("long", bands["lower"][0], "ext"),
-        ("short", bands["upper"][0], "ext"),
     ]
+    if bands.get("available"):
+        contacts.extend(
+            [
+                ("long", bands["lower"][0], "ext"),
+                ("short", bands["upper"][0], "ext"),
+            ]
+        )
     seen: set[tuple[str, str]] = set()
     for side, level, kind in contacts:
         touch = _touch_band(action, level, level) if kind != "ext" else _touch_band(
@@ -1322,7 +1335,11 @@ def scan_b02(market, rec) -> dict[str, Any]:
         if scanner is None:
             omissions.append({"reason": "unknown_branch", "branch": item})
             continue
-        part, omit = scanner(market)
+        try:
+            part, omit = scanner(market)
+        except Exception as exc:
+            omissions.append({"reason": "scan_error", "branch": item, "error": f"{type(exc).__name__}: {exc}"})
+            continue
         episodes.extend(part)
         omissions.extend(omit)
     return _document(day, branch or "all", episodes, omissions)

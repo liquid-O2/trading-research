@@ -310,10 +310,16 @@ def _as_view(market) -> NativeMarketView | None:
         return None
     if isinstance(market, NativeMarketView) or hasattr(market, "arrays"):
         return market
+    attached = getattr(market, "_native_view", None)
+    if attached is not None:
+        return attached
     day = getattr(market, "day", None)
     if day is None:
         return None
-    return build_market_view(str(day), full_account_day=True)
+    try:
+        return build_market_view(str(day), full_account_day=True)
+    except Exception:
+        return None
 
 
 def scan_b02(market, rec) -> dict[str, Any]:

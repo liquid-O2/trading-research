@@ -767,7 +767,7 @@ def _scan_a1_london(market) -> list[dict[str, Any]]:
             _stage("context", "pass", sweep_at, session=session_label(market, sweep_at)),
             _stage("reference", "pass", int(ref["known_at"]), low=level),
             _stage("location", "pass", sweep_at, sweep=True),
-            _stage("trigger", "pass", sweep_at),
+            _stage("trigger", "pass", sweep_at, sweep=True, level=level),
             _stage("confirmation", "fail", sweep_at, reason="no_reclaim"),
         ]
         return [
@@ -806,9 +806,9 @@ def _scan_a1_london(market) -> list[dict[str, Any]]:
     if retest is None or not hl_ok:
         stages = [
             _stage("context", "pass", retest_start, session=session_label(market, retest_start)),
-            _stage("reference", "pass", int(ref["known_at"])),
-            _stage("location", "pass", sweep_at),
-            _stage("trigger", "pass", sweep_at),
+            _stage("reference", "pass", int(ref["known_at"]), id=ref.get("id"), level=level),
+            _stage("location", "pass", sweep_at, sweep=True, level=level),
+            _stage("trigger", "pass", sweep_at, sweep=True, level=level),
             _stage("confirmation", "fail", retest_start, reason="mandatory_retest_or_higher_low_missing"),
         ]
         return [
@@ -835,9 +835,9 @@ def _scan_a1_london(market) -> list[dict[str, Any]]:
     if post_open is None:
         stages = [
             _stage("context", "pass", int(market.at("09:30")), session="ny_am"),
-            _stage("reference", "pass", int(ref["known_at"])),
-            _stage("location", "pass", sweep_at),
-            _stage("trigger", "pass", sweep_at),
+            _stage("reference", "pass", int(ref["known_at"]), id=ref.get("id"), level=level),
+            _stage("location", "pass", sweep_at, sweep=True, level=level),
+            _stage("trigger", "pass", sweep_at, sweep=True, level=level),
             _stage("confirmation", "fail", int(market.at("09:30")), reason="no_post_open_close"),
         ]
         return [
@@ -953,9 +953,9 @@ def _scan_asia_high(market) -> list[dict[str, Any]]:
     if confirm is None:
         stages = [
             _stage("context", "pass", sweep_at, session=session_label(market, sweep_at)),
-            _stage("reference", "pass", int(ref["known_at"])),
-            _stage("location", "pass", sweep_at),
-            _stage("trigger", "pass", sweep_at),
+            _stage("reference", "pass", int(ref["known_at"]), id=ref.get("id"), level=level),
+            _stage("location", "pass", sweep_at, sweep=True, level=level),
+            _stage("trigger", "pass", sweep_at, sweep=True, level=level),
             _stage("confirmation", "fail", sweep_at, reason="no_five_minute_close", tdo_required=False),
         ]
         return [
@@ -1016,8 +1016,8 @@ def _scan_asia_tdo(market) -> list[dict[str, Any]]:
         stages = [
             _stage("context", "pass", sweep_at, session=session_label(market, sweep_at)),
             _stage("reference", "pass", int(ref["known_at"]), asia_high=level, tdo=tdo),
-            _stage("location", "pass", sweep_at),
-            _stage("trigger", "pass", sweep_at),
+            _stage("location", "pass", sweep_at, sweep=True, level=level),
+            _stage("trigger", "pass", sweep_at, sweep=True, level=level, tdo=tdo),
             _stage("confirmation", "fail", sweep_at, reason="no_five_minute_close_below_tdo"),
         ]
         return [
@@ -1079,8 +1079,8 @@ def _scan_pdl(market) -> list[dict[str, Any]]:
             stages = [
                 _stage("context", "pass", sweep_at, session=session_label(market, sweep_at)),
                 _stage("reference", "pass", int(ref.get("known_at") or begin), level=level),
-                _stage("location", "pass", sweep_at),
-                _stage("trigger", "pass", sweep_at),
+                _stage("location", "pass", sweep_at, sweep=True, level=level),
+                _stage("trigger", "pass", sweep_at, sweep=True, level=level),
                 _stage("confirmation", "fail", sweep_at, reason="no_five_minute_close"),
             ]
             episodes.append(
@@ -1143,8 +1143,8 @@ def _scan_box_at_level(market, *, branch: str, ref: Mapping[str, Any], begin: in
             stages = [
                 _stage("context", "pass", int(sweep.get("start") or begin), session=session_label(market, int(sweep.get("start") or begin))),
                 _stage("reference", "pass", int(ref.get("known_at") or begin), level=level),
-                _stage("location", "pass", int(sweep.get("start") or begin)),
-                _stage("trigger", "pass", int(sweep.get("start") or begin)),
+                _stage("location", "pass", int(sweep.get("start") or begin), sweep=True, level=level),
+                _stage("trigger", "pass", int(sweep.get("start") or begin), sweep=True, level=level, mode="at_level"),
                 _stage("confirmation", "fail", int(sweep.get("end") or begin), reason="no_return_to_level", mode="at_level"),
             ]
             episodes.append(
@@ -1405,8 +1405,8 @@ def _scan_golden_pocket(market, *, family: str, branch: str, kinds: tuple[str, .
             stages = [
                 _stage("context", "pass", int(pullback.get("start") or begin), session=session_label(market, int(pullback.get("start") or begin))),
                 _stage("reference", "pass", begin, not_9_10_box=True),
-                _stage("location", "pass", int(pullback.get("start") or begin)),
-                _stage("trigger", "pass", int(pullback.get("start") or begin)),
+                _stage("location", "pass", int(pullback.get("start") or begin), pocket_touch=True, near=near),
+                _stage("trigger", "pass", int(pullback.get("start") or begin), pocket_touch=True, near=near),
                 _stage("confirmation", "fail", int(pullback.get("end") or begin), reason="no_close_out_of_pocket", mode_od=True),
             ]
             episodes.append(
@@ -1539,7 +1539,7 @@ def _scan_vwap(market) -> list[dict[str, Any]]:
             _stage("context", "pass", break_end, session="ny_am"),
             _stage("reference", "pass", begin, asia_high=asia["high"], london_high=london["high"]),
             _stage("location", "pass", break_end, breakout=True),
-            _stage("trigger", "pass", break_end),
+            _stage("trigger", "pass", break_end, breakout=True, close=breakout.get("C"), boundary=boundary),
             _stage("confirmation", verdict_stage, rth_end, reason="no_retest_before_rth_close", horizon="rth_close", candidate_60m=False),
         ]
         return [
@@ -1656,7 +1656,10 @@ def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
             omissions.append({"reason": "unknown_b02_branch", "branch": name})
             continue
         used.append(name)
-        episodes.extend(fn(market))
+        try:
+            episodes.extend(fn(market))
+        except Exception as exc:
+            omissions.append({"reason": "scan_error", "branch": name, "error": f"{type(exc).__name__}: {exc}"})
     label = used[0] if len(used) == 1 else "B0.2"
     return _document(market, family, label, episodes, omissions=omissions)
 

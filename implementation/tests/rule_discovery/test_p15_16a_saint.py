@@ -233,6 +233,21 @@ def test_F05_poc_tell_selects_target():
     assert push_doc["episodes"][0]["side"] == "long"
 
 
+def test_F05_poc_none_open_is_not_a_push():
+    """A bar with C/delta but no open is not close-above-open; do not crash or admit VAH."""
+    t0 = _t("10:00")
+    bars = _fill(START, 2, 150, 151, 149, 150) + [
+        synth_bar(t0, 150, 160, 150, 158, delta=10),
+        synth_bar(t0 + MINUTE, 157, 158, 149.75, 151, delta=1),
+        synth_bar(t0 + 2 * MINUTE, 151, 170, 151, 165, delta=8),
+    ]
+    for row in bars:
+        row["O"] = None
+    doc = saint_scan(_saint_market(bars), {"family": "SAINT-AMT", "branch": "poc_traversal"})
+    assert doc["episodes"]
+    assert doc["episodes"][0]["values"].get("target_edge") != "VAH"
+
+
 def test_RR22_asia_session_not_ny_only():
     asia_day = date(2026, 8, 11)
     start = clock(date(2026, 8, 10), "18:00")

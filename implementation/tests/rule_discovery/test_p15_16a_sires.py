@@ -38,7 +38,7 @@ from trading_research.research.rule_discovery.source_adapters.sires_b02 import (
     STAGE_ORDER,
 )
 
-TRACK = Path("/workspace/.worktrees/b02-sires/implementation/reports/research-work/P15-16A/_track_sires")
+TRACK = Path("/workspace/implementation/reports/research-work/P15-16A/_track_sires")
 EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 BYTE_BEFORE = TRACK / "BYTE_IDENTITY_BEFORE.json"
 SI_IDS = (

@@ -13,7 +13,7 @@ from trading_research.research.rule_discovery.runner import (
     stratified_parity_dates,
 )
 
-PARITY_PATH = Path("/workspace/.worktrees/stage-a-r3/implementation/reports/research-work/P15-17/_track_r3/PARITY_STRATIFIED.json")
+PARITY_PATH = Path("/workspace/implementation/reports/research-work/P15-17/_track_r3/PARITY_STRATIFIED.json")
 
 
 def test_write_guard_blocks_build_event_window():

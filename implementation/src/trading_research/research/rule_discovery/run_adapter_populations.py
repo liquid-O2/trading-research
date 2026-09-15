@@ -14,11 +14,7 @@ import traceback
 
 from trading_research.research.method_pack import historical_runner as hr
 from trading_research.research.method_pack.empirical_protocol import content_hash
-from trading_research.research.method_pack.historical_assembly import HistoricalEpisode, window_result
-from trading_research.research.method_pack.historical_features import Q, MINUTE, sign
-from trading_research.research.method_pack.historical_flow import exact_contact
 from trading_research.research.method_pack.historical_outcomes import observe_outcome
-from trading_research.research.method_pack.historical_price_scanners import _gb_refs, _known
 from trading_research.research.method_pack.measurement_outcomes import measure_setup
 from trading_research.research.method_pack.measurement_runner import (
     configure_runtime,
@@ -29,7 +25,6 @@ from trading_research.research.rule_discovery.baseline import PHASE1_RUN
 from trading_research.research.rule_discovery.baseline_repairs import (
     BASELINE_REPAIR_VERSION,
     _attach,
-    _record_c7,
 )
 from trading_research.research.rule_discovery.native import cgroup_worker_count, install_write_guard
 from trading_research.research.rule_discovery.run_baseline_repair import (
@@ -44,12 +39,14 @@ from trading_research.research.rule_discovery.run_baseline_repair import (
     write_job_atomic,
     write_json_atomic,
 )
-from trading_research.research.rule_discovery.source_adapters.common import coverage_row, dual_scan, golden_pocket
-from trading_research.research.rule_discovery.source_adapters.green_failure import overnight_scan_branches
+from trading_research.research.rule_discovery.source_adapters.common import FAMILY_BRANCHES, coverage_row, dual_scan
+from trading_research.research.rule_discovery.source_adapters import green_failure, green_vwap_scalp
 
 WORKTREE = Path(__file__).resolve().parents[5]
 RUNNER_PATH = Path(__file__).resolve()
 REPORTS_PARENT = WORKTREE / "implementation/reports/research-work/adapter-populations"
+B02_REPORTS_PARENT = WORKTREE / "implementation/reports/research-work/P15-16A"
+B02_VERSION = "B0.2-2026-09-15"
 CENSUS_RUN_ID = "20def36e065c13d7"
 CENSUS_ROOT = Path("/workspace/implementation/reports/research-work/baseline-repair") / CENSUS_RUN_ID
 CENSUS_UNKNOWN_TOTAL = 628
@@ -87,19 +84,43 @@ BRANCH_RECORDS: tuple[dict[str, str], ...] = (
 )
 BRANCH_IDS = tuple(row["coverage_id"] for row in BRANCH_RECORDS)
 
+
+def b02_branch_records() -> tuple[dict[str, str], ...]:
+    from trading_research.research.rule_discovery.source_adapters.green_b02 import B02_BRANCHES
+
+    rows: list[dict[str, str]] = []
+    families = (
+        ("JJ-TBR", FAMILY_BRANCHES["JJ-TBR"]),
+        ("GB-FAIL", B02_BRANCHES["GB-FAIL"]),
+        ("GB-VWAP", B02_BRANCHES["GB-VWAP"]),
+        ("GB-SCALP", B02_BRANCHES["GB-SCALP"]),
+        ("SIRES", FAMILY_BRANCHES["SIRES"]),
+        ("SAINT-AMT", FAMILY_BRANCHES["SAINT-AMT"]),
+        ("MEMBER-TWO-REASONS", FAMILY_BRANCHES["MEMBER-TWO-REASONS"]),
+        ("KEANI-OPEN-ABOVE-VALUE", FAMILY_BRANCHES["KEANI-OPEN-ABOVE-VALUE"]),
+        ("REFILL-STUDY", FAMILY_BRANCHES["REFILL-STUDY"]),
+    )
+    for family, branches in families:
+        for branch in branches:
+            rows.append(_branch(family, branch, "b02"))
+    return tuple(rows)
+
+
+def records_for_baseline(baseline: str) -> tuple[dict[str, str], ...]:
+    if baseline == "B0.2":
+        return b02_branch_records()
+    return BRANCH_RECORDS
+
 DECISIONS = [
-    "Population is the frozen BRANCH_RECORDS table (family, branch, coverage_id, scan_kind).",
-    "Persist adapter B0.1 only. dual_scan B0 is not written.",
+    "Default --baseline B0.1 keeps the frozen BRANCH_RECORDS table and does not recompute B0/B0.1.",
+    "--baseline B0.2 dispatches every family's scan_b02; B0 and B0.1 rows are read from run-1.0.1 and census 20def36e065c13d7.",
+    "gb_fail_0930/overnight redirect to green_failure.scan_b02; golden_pocket redirects to green_vwap_scalp.scan_b02.",
     "Jobs are jobs/<date>/<branch>.json.gz. Branch names in this population do not collide.",
     "cpu_quota reads cgroup v1 cpu.cfs_quota_us/period first, then v2 cpu.max.",
     "default_workers is floor(quota/period)-5, at least 1 (12 on this machine).",
     "install_write_guard is on. A cache miss fails the date.",
     "load_registry(..., check_software=False) because this runner sits beside frozen baseline_repairs.py.",
-    "london_box/asia_box copy the repaired GB-FAIL sweep/reclaim loop from max(09:30, known_at).",
-    "overnight_scan concatenates overnight_scan_branches() with begin max(window start, known_at), not 09:30.",
-    "golden_pocket_continuation is operational overnight-impulse geometry assembled without HistoricalEpisode.bind.",
-    "SAINT dual_scan binds C7 stages after ensure_transforms imports saint.",
-    "GB-VWAP joins census B0.1 jobs on candidate_id and counts unknown that become pass or fail.",
+    "SIRES and REFILL-STUDY B0.2 use the R3 NativeMarketView array plane attached once per date.",
     "Resume skips a date with a valid completion.json. Existing job gz files are kept.",
     "SUMMARY.json and RUN_COMPLETE.json are written only when all 1742 dates have a valid completion.",
 ]
@@ -150,10 +171,12 @@ def code_identity():
     }
 
 
-def build_manifest(registry, dates, workers):
+def build_manifest(registry, dates, workers, *, baseline="B0.1", rows=None):
+    records = [dict(row) for row in (rows if rows is not None else BRANCH_RECORDS)]
     return {
-        "branch_records": [dict(row) for row in BRANCH_RECORDS],
-        "branches": list(BRANCH_IDS),
+        "baseline": baseline,
+        "branch_records": records,
+        "branches": [row["coverage_id"] for row in records],
         "census_run_id": CENSUS_RUN_ID,
         "census_summary_sha256": sha256_file(CENSUS_ROOT / "SUMMARY.json"),
         "code_identity": code_identity(),
@@ -168,16 +191,24 @@ def job_path(run_root: Path, day: str, branch: str) -> Path:
     return run_root / "jobs" / day / f"{branch}.json.gz"
 
 
-def init_run(workers=None, reports_parent=None):
+def init_run(workers=None, reports_parent=None, baseline="B0.1"):
     configure_runtime()
     install_write_guard()
     ensure_transforms()
     if workers is None:
         workers = default_workers()
-    parent = Path(reports_parent) if reports_parent is not None else REPORTS_PARENT
+    if baseline not in {"B0", "B0.1", "B0.2"}:
+        raise SystemExit(f"unsupported baseline {baseline}")
+    rows = [dict(row) for row in records_for_baseline(baseline)]
+    if reports_parent is not None:
+        parent = Path(reports_parent)
+    elif baseline == "B0.2":
+        parent = B02_REPORTS_PARENT
+    else:
+        parent = REPORTS_PARENT
     registry, _coverage = hr.load_registry(PHASE1_RUN, check_software=False)
     dates = evaluation_dates(registry)
-    manifest = build_manifest(registry, dates, workers)
+    manifest = build_manifest(registry, dates, workers, baseline=baseline, rows=rows)
     canonical = canonical_json(manifest)
     digest = sha256_bytes(canonical)
     run_id = digest[:16]
@@ -194,15 +225,16 @@ def init_run(workers=None, reports_parent=None):
     log_path = run_root / "WORK_LOG.md"
     if not log_path.exists():
         quota = cpu_quota()
+        version = B02_VERSION if baseline == "B0.2" else BASELINE_REPAIR_VERSION
         lines = [
             "# Adapter-population full-history work log",
             "",
             f"- Run id: `{run_id}`",
             f"- Manifest sha256: `{digest}`",
-            f"- Baseline: `{BASELINE_REPAIR_VERSION}`",
+            f"- Baseline: `{version}`",
             f"- Dates: {len(dates)} ({dates[0]} .. {dates[-1]})",
-            f"- Branches: {len(BRANCH_RECORDS)}",
-            f"- Jobs: {len(dates) * len(BRANCH_RECORDS)}",
+            f"- Branches: {len(rows)}",
+            f"- Jobs: {len(dates) * len(rows)}",
             f"- Workers requested: {workers}",
             f"- default_workers: {default_workers()}",
             f"- cgroup_worker_count: {cgroup_worker_count()}",
@@ -223,9 +255,10 @@ def init_run(workers=None, reports_parent=None):
         "manifest": manifest,
         "manifest_sha256": digest,
         "registry": registry,
-        "rows": [dict(row) for row in BRANCH_RECORDS],
+        "rows": rows,
         "dates": dates,
         "workers": workers,
+        "baseline": baseline,
         "software_sha256": content_hash(manifest["code_identity"]),
         "measurement_protocol_sha256": protocol["sha256"],
         "registry_sha256": registry["registry_sha256"],
@@ -321,173 +354,6 @@ def _finish_document(document, market, row, ctx, wall_seconds, rss):
     return document
 
 
-def _window_start_ns(market):
-    document = getattr(market.window, "document", None) or {}
-    start = document.get("start_ns", document.get("start"))
-    if start is None:
-        start = market.at("18:00", -1)
-    return start
-
-
-def _addition_ref(market, name: str):
-    if name == "london_box":
-        return market.range(market.at("02:00"), market.at("05:00"), "london-box")
-    if name == "asia_box":
-        return market.range(market.at("20:00", -1), market.at("00:00"), "asia-box")
-    raise ValueError(name)
-
-
-def _gb_fail_sweep(m, branch, refs, omissions, *, begin_for, tdo_required):
-    method = "GB-FAIL"
-    episodes = []
-    for ref in refs:
-        if ref is None:
-            continue
-        begin = begin_for(ref)
-        end = m.end
-        if begin >= end:
-            continue
-        if branch == "previous_hour":
-            end = min(end, ref["known_at"] + 60 * MINUTE)
-        rows = m.bars(begin, end)
-        for side in (("long",) if branch == "cash_open_reclaim_case" else ("short", "long")):
-            boundary = ref["high"] if side == "short" else ref["low"]
-            sg = sign(side)
-            trigger = next((r for r in rows if (r["H"] > boundary if side == "short" else r["L"] < boundary)), None)
-            if trigger is None:
-                continue
-            contact = exact_contact(m, trigger, boundary, boundary, strict="above" if side == "short" else "below")
-            if contact is None:
-                continue
-            aligned = trigger["start"] // (5 * MINUTE) * 5 * MINUTE
-            sweep_candle_end = aligned + 5 * MINUTE
-            path = m.bars(trigger["start"], sweep_candle_end)
-            confirm = None
-            close = None
-            usable = False
-            confirm_bar_offset = None
-            confirmation_end = sweep_candle_end
-            high = low = stop = None
-            target = None if branch == "cash_open_reclaim_case" else (ref["low"] if side == "short" else ref["high"])
-            if not path:
-                omissions.append(
-                    {
-                        "kind": "availability",
-                        "reason": "sweep path empty: no bars known at or before confirmation_end",
-                        "window": [trigger["start"], sweep_candle_end],
-                        "side": side,
-                        "reference_id": ref.get("id"),
-                    }
-                )
-                cand = m.bars(aligned, sweep_candle_end, 300)
-                row = cand[0] if cand else None
-                if row is not None and row["observed_complete"] and row["C"] is not None:
-                    confirm = row
-                    close = row["C"]
-                    usable = True
-                    confirm_bar_offset = 0
-            else:
-                offset = 0
-                while True:
-                    bar_start = aligned + offset * 5 * MINUTE
-                    bar_end = bar_start + 5 * MINUTE
-                    if bar_start >= end:
-                        break
-                    cand = m.bars(bar_start, bar_end, 300)
-                    row = cand[0] if cand else None
-                    ok_bar = row is not None and row["observed_complete"] and row["C"] is not None
-                    if ok_bar and sg * (row["C"] - boundary) > 0:
-                        confirm = row
-                        close = row["C"]
-                        usable = True
-                        confirm_bar_offset = offset
-                        confirmation_end = bar_end
-                        break
-                    if ok_bar and confirm is None:
-                        confirm = row
-                        close = row["C"]
-                        usable = True
-                        confirm_bar_offset = offset
-                        confirmation_end = bar_end
-                    offset += 1
-                excursion = m.bars(trigger["start"], confirmation_end) or path
-                high = max(r["H"] for r in excursion)
-                low = min(r["L"] for r in excursion)
-                stop = high + Q if side == "short" else low - Q
-                target = ref["low"] if side == "short" else ref["high"]
-                if branch == "cash_open_reclaim_case":
-                    target = boundary + (boundary - low) * D(".5")
-            decision = confirmation_end
-            pre = m.range(m.at("06:00"), min(begin, m.at("09:30")), "gb-precontext")
-            context_known = pre is not None and pre["known_at"] <= trigger["start"]
-            e = HistoricalEpisode(m, method, branch, side, trigger, ref)
-            tdo_rows = m.bars(m.at("00:00"), m.at("00:00") + MINUTE)
-            tdo = tdo_rows[0]["O"] if tdo_rows else None
-            inside = None if close is None else (ref["low"] < close < ref["high"] if ref["low"] != ref["high"] else True)
-            e.bind(
-                {
-                    "reference_frozen": _known(ref),
-                    "reference_known_at": ref["known_at"],
-                    "reference_px": boundary,
-                    "bias_recorded": context_known,
-                    "context_at": pre["known_at"] if pre else None,
-                    "source_session_allowed": True,
-                    "sweep_at": contact["at"],
-                    "sweep_high": high,
-                    "sweep_low": low,
-                    "confirmation_mode": "five_minute_close",
-                    "complete_clock_five_minute_bar": True if usable else None,
-                    "confirm_at": confirmation_end if confirm else None,
-                    "confirm_close": close,
-                    "box_return_ok": inside,
-                    "tdo_required": tdo_required,
-                    "source_tdo_close_confirmed": None if tdo is None or close is None else sg * (close - tdo) > 0,
-                    "pocket_required": False,
-                    "retracement_entry": False,
-                    "risk_defined": None if close is None or stop is None else sg * (close - stop) > 0,
-                    "objective_fixed": None if close is None or target is None else sg * (target - close) > 0,
-                },
-                operation="identified finished reference and first strict sweep; first complete five-minute reclaim at or after the sweep candle; C7 bias_recorded is computed presence with unevaluated direction",
-                parents=[ref["id"], trigger["bar_id"]],
-                known_at=decision,
-                assumption="A2-GB-CLOCK/A2-CONTEXT/A2-STRUCTURAL-RISK",
-            )
-            e.stage("reference", ref["known_at"], observed=_known(ref)).stage(
-                "sweep", contact["at"], observed=True, parents=contact["event_ids"]
-            )
-            reclaim_details = {"tdo": tdo, "tdo_required": tdo_required, "confirm_bar_offset": confirm_bar_offset}
-            if confirm_bar_offset is not None:
-                reclaim_details["excursion_bars"] = confirm_bar_offset + 1
-            e.stage(
-                "five_minute_reclaim",
-                confirmation_end,
-                observed=None if close is None else sg * (close - boundary) > 0,
-                parents=[confirm["bar_id"]] if confirm else [],
-                details=reclaim_details,
-            )
-            if getattr(m, "reconstruct", False):
-                e.geometry["confirmation_bar"] = confirm
-            structural_false = ["pocket_required", "retracement_entry"]
-            if not tdo_required:
-                structural_false.append("tdo_required")
-            _record_c7(
-                e,
-                decision,
-                (),
-                structural_false,
-                by_construction=("source_session_allowed",),
-                context_direction_unevaluated=True,
-            )
-            episodes.append(e.finish(decision_at=decision, entry=close, stop=stop, target=target))
-    return episodes
-
-
-def _stamp_addition(document, rec):
-    document["coverage_id"] = rec["coverage_id"]
-    document["baseline_version"] = BASELINE_REPAIR_VERSION
-    return document
-
-
 def _scan_dual_b01(market, rec):
     family = rec["family"]
     branch = rec["branch"]
@@ -496,177 +362,87 @@ def _scan_dual_b01(market, rec):
     return document
 
 
-def _scan_gb_fail_0930(market, rec):
-    branch = rec["branch"]
-    ref = _addition_ref(market, branch)
-    refs = [] if ref is None else [ref]
-    omissions: list = []
-    episodes = _gb_fail_sweep(
-        market,
-        branch,
-        refs,
-        omissions,
-        begin_for=lambda item: max(market.at("09:30"), item["known_at"]),
-        tdo_required=False,
-    )
-    result = window_result(market, "GB-FAIL", branch, episodes, omissions=omissions)
-    if getattr(market, "reconstruct", False):
-        result["reference_selections"] = [item for item in refs if item is not None]
-    return _stamp_addition(result, rec)
-
-
-def _scan_overnight(market, rec):
-    episodes = []
-    omissions: list = []
-    seen: set[str] = set()
-    window_start = _window_start_ns(market)
-    for name in overnight_scan_branches():
-        if name in {"london_box", "asia_box"}:
-            ref = _addition_ref(market, name)
-            refs = [] if ref is None else [ref]
-            tdo_required = False
-        else:
-            refs, extra = _gb_refs(market, name)
-            omissions.extend(extra)
-            tdo_required = name == "asia_tdo_case"
-        # Overnight starts at known-at inside the loaded account-day, not 09:30.
-        part = _gb_fail_sweep(
-            market,
-            "overnight_scan",
-            refs,
-            omissions,
-            begin_for=lambda item, start=window_start: max(start, item["known_at"]),
-            tdo_required=tdo_required,
-        )
-        for episode in part:
-            episode["overnight_of"] = name
-            geometry = dict(episode.get("geometry") or {})
-            geometry["overnight_of"] = name
-            episode["geometry"] = geometry
+def _ensure_candidate_ids(document, rec):
+    episodes = list(document.get("episodes") or [])
+    seen = set()
+    for index, episode in enumerate(episodes):
+        cid = episode.get("candidate_id")
+        if not cid:
+            cid = f"b02:{rec.get('family')}:{rec.get('branch')}:{index}"
+            episode["candidate_id"] = cid
+        if cid in seen:
+            episode["candidate_id"] = f"{cid}:{index}"
             cid = episode["candidate_id"]
-            if cid in seen:
-                episode["candidate_id"] = f"{name}:{cid}"
-            seen.add(episode["candidate_id"])
-            episodes.append(episode)
-    result = window_result(market, "GB-FAIL", "overnight_scan", episodes, omissions=omissions)
-    return _stamp_addition(result, rec)
+        seen.add(cid)
+    document["episodes"] = episodes
+    return document
 
 
-def _golden_episode(market, impulse, side, pocket, pullback, confirm, verdict):
-    lo, hi = (None, None) if pocket is None else pocket
-    if side == "long":
-        stop = None if lo is None else lo - Q
-        target = impulse.get("high")
-    elif side == "short":
-        stop = None if hi is None else hi + Q
-        target = impulse.get("low")
-    else:
-        stop = None
-        target = None
-    entry = None if confirm is None else confirm.get("C")
-    if confirm is not None:
-        decision_at = confirm.get("known_at")
-    elif pullback is not None:
-        decision_at = pullback.get("known_at")
-    else:
-        decision_at = impulse.get("known_at")
-    identity = {
-        "method": "GB-SCALP",
-        "branch": "golden_pocket_continuation",
-        "side": side,
-        "session_date": str(market.day),
-        "instrument_id": market.instrument_id,
-        "reference_id": impulse.get("id"),
-    }
-    status = {"pass": "setup", "fail": "no_setup", "unknown": "data_unavailable"}[verdict]
-    return {
-        "schema": "phase1-historical-episode-v2",
-        "candidate_id": "adapter:golden_pocket_continuation:" + content_hash(identity)[:32],
-        "method": "GB-SCALP",
-        "branch": "golden_pocket_continuation",
-        "side": side,
-        "session_date": str(market.day),
-        "instrument_id": market.instrument_id,
-        "decision_at": decision_at,
-        "values": {
-            "branch": "golden_pocket_continuation",
-            "side": side,
-            "operational_rule_label": "operational",
-            "decision_at": decision_at,
-        },
-        "research_verdict": verdict,
-        "failed": [],
-        "unknown": [] if verdict == "pass" else ["qualifying_close"],
-        "strategy_assessment": {"status": status, "scope": "entry_setup"},
-        "reference": impulse,
-        "trigger": pullback if pullback is not None else impulse,
-        "geometry": {
-            "impulse": impulse,
-            "pocket": None if pocket is None else {"low": lo, "high": hi},
-            "pullback": pullback,
-            "entry": entry,
-            "stop": stop,
-            "target": target,
-            "operational_rule_label": "operational",
-        },
-        "actual_trade": False,
-        "faithful_eligible": False,
-        "author_exact_verdict": "unknown",
-        "input_sha256": market.window.document["input_sha256"],
-    }
-
-
-def _scan_golden_pocket(market, rec):
+def _scan_b02(market, rec):
+    family = rec["family"]
     branch = rec["branch"]
-    impulse = market.range(market.at("18:00", -1), market.at("09:30"), "overnight-impulse")
-    if impulse is None:
-        return _stamp_addition(window_result(market, "GB-SCALP", branch, []), rec)
-    open_px = impulse.get("open")
-    close_px = impulse.get("close")
-    if open_px is None or close_px is None:
-        episode = _golden_episode(market, impulse, None, None, None, None, "unknown")
-        return _stamp_addition(window_result(market, "GB-SCALP", branch, [episode]), rec)
-    side = "long" if close_px > open_px else "short"
-    lo, hi = golden_pocket(impulse["low"], impulse["high"])
-    bars = market.bars(market.at("09:30"), market.end, 300)
-    pullback_i = None
-    for i, row in enumerate(bars):
-        if not row.get("observed_complete"):
-            continue
-        low, high = row.get("L"), row.get("H")
-        if low is None or high is None:
-            continue
-        if low <= hi and high >= lo:
-            pullback_i = i
-            break
-    confirm = None
-    pullback = None if pullback_i is None else bars[pullback_i]
-    if pullback_i is not None:
-        for row in bars[pullback_i + 1 :]:
-            if not row.get("observed_complete") or row.get("C") is None:
-                continue
-            close = row["C"]
-            if side == "long" and close > hi:
-                confirm = row
-                break
-            if side == "short" and close < lo:
-                confirm = row
-                break
-    verdict = "pass" if confirm is not None else "unknown"
-    episode = _golden_episode(market, impulse, side, (lo, hi), pullback, confirm, verdict)
-    return _stamp_addition(window_result(market, "GB-SCALP", branch, [episode]), rec)
+    payload = dict(rec)
+    if family == "GB-FAIL":
+        document = green_failure.scan_b02(market, payload)
+    elif family in {"GB-VWAP", "GB-SCALP"}:
+        document = green_vwap_scalp.scan_b02(market, payload)
+    else:
+        from trading_research.research.rule_discovery.source_adapters.common import family_scan_b02
+
+        view = market
+        if family in {"SIRES", "REFILL-STUDY"}:
+            view = getattr(market, "_native_view", None) or market
+        document = family_scan_b02(view, family, branch)
+    document = dict(document)
+    document.setdefault("coverage_id", rec["coverage_id"])
+    document.setdefault("baseline_version", B02_VERSION)
+    document.setdefault("method_id", family)
+    document.setdefault("family", family)
+    document.setdefault("branch", branch)
+    return _ensure_candidate_ids(document, rec)
+
+
+def _scan_gb_fail_redirect(market, rec):
+    payload = dict(rec)
+    payload.setdefault("family", "GB-FAIL")
+    return _scan_b02(market, payload)
+
+
+def _scan_overnight_redirect(market, rec):
+    payload = dict(rec)
+    payload["family"] = "GB-FAIL"
+    payload["branch"] = "all"
+    return _scan_b02(market, payload)
+
+
+def _scan_golden_pocket_redirect(market, rec):
+    payload = dict(rec)
+    payload["family"] = "GB-SCALP"
+    payload["branch"] = "golden_pocket_continuation"
+    return _scan_b02(market, payload)
 
 
 _SCANNERS = {
     "dual_b01": _scan_dual_b01,
-    "gb_fail_0930": _scan_gb_fail_0930,
-    "overnight": _scan_overnight,
-    "golden_pocket": _scan_golden_pocket,
+    "b02": _scan_b02,
+    "gb_fail_0930": green_failure.scan_b02,
+    "overnight": _scan_overnight_redirect,
+    "golden_pocket": _scan_golden_pocket_redirect,
 }
 
 
 def _scan_record(market, rec):
-    scanner = _SCANNERS[rec["scan_kind"]]
+    kind = rec["scan_kind"]
+    if kind == "gb_fail_0930":
+        payload = dict(rec)
+        payload.setdefault("family", "GB-FAIL")
+        return _ensure_candidate_ids(green_failure.scan_b02(market, payload), payload)
+    if kind == "golden_pocket":
+        payload = dict(rec)
+        payload["family"] = "GB-SCALP"
+        payload["branch"] = "golden_pocket_continuation"
+        return _ensure_candidate_ids(green_vwap_scalp.scan_b02(market, payload), payload)
+    scanner = _SCANNERS[kind]
     return scanner(market, rec)
 
 
@@ -774,6 +550,13 @@ def _process_date(day):
     try:
         registry, _manifest = hr.load_registry(PHASE1_RUN, check_software=False)
         market = HistoricalFeatures(day, records=hr._records(registry))
+        if ctx.get("baseline") == "B0.2":
+            from trading_research.research.rule_discovery.native import build_market_view
+
+            try:
+                market._native_view = build_market_view(day, full_account_day=True)
+            except Exception:
+                market._native_view = None
     except Exception as exc:
         payload = {
             "date": day,
@@ -808,7 +591,8 @@ def _process_date(day):
                 rss = peak_rss_bytes()
                 document["wall_seconds"] = wall
                 document["peak_rss_bytes"] = rss
-                document["baseline_version"] = document.get("baseline_version") or BASELINE_REPAIR_VERSION
+                default_version = B02_VERSION if ctx.get("baseline") == "B0.2" else BASELINE_REPAIR_VERSION
+                document["baseline_version"] = document.get("baseline_version") or default_version
                 digest = write_job_atomic(path, document)
             branch_stats[cid] = _branch_stats(day, rec, document, wall, rss)
             jobs.append({"coverage_id": cid, "branch": rec["branch"], "path": str(path), "sha256": digest})
@@ -978,6 +762,7 @@ def run_dates(ctx, dates, workers):
         "registry_sha256": ctx["registry_sha256"],
         "software_sha256": ctx["software_sha256"],
         "measurement_protocol_sha256": ctx["measurement_protocol_sha256"],
+        "baseline": ctx.get("baseline") or "B0.1",
     }
     failed = []
     completed = len(already)
@@ -1257,9 +1042,10 @@ def main(argv=None):
     parser.add_argument("--skip-run", action="store_true")
     parser.add_argument("--summarize-only", action="store_true")
     parser.add_argument("--reports-parent", type=Path, default=None)
+    parser.add_argument("--baseline", default="B0.1", choices=("B0", "B0.1", "B0.2"))
     args = parser.parse_args(argv)
     workers = args.workers
-    ctx = init_run(workers=workers, reports_parent=args.reports_parent)
+    ctx = init_run(workers=workers, reports_parent=args.reports_parent, baseline=args.baseline)
     print(
         json.dumps(
             {

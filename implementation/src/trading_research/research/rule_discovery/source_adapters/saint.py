@@ -283,7 +283,7 @@ def slice_family(day: str) -> dict[str, Any]:
 
 
 # B0.2-2026-09-15. Finding ids in rule_id. Does not run on B0/B0.1 paths.
-from decimal import Decimal as _D
+from decimal import Decimal as _D, InvalidOperation as _InvalidOperation
 
 from trading_research.research.rule_discovery.source_adapters.b02_saint_track import (
     B02_VERSION,
@@ -337,6 +337,17 @@ RULES = {
     "RR-22-asia-range": {"kind": "literal", "source": "TRAP p.8"},
     "RR-22-long-mirror": {"kind": "literal", "source": "TRAP long mirror as ruled"},
 }
+
+
+def _bar_px(row, key):
+    """Decimal OHLC/delta or None. Missing/non-numeric is not a comparable price."""
+    value = row.get(key) if isinstance(row, Mapping) else None
+    if value is None:
+        return None
+    try:
+        return dec(value)
+    except (_InvalidOperation, TypeError, ValueError):
+        return None
 
 
 def classify_arrival(approach_bars, balance_width):
@@ -578,7 +589,7 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
         },
         require=("balance_known",),
     )
-    session_open = bars[0]["O"] if bars else None
+    session_open = bars[0].get("O") if bars else None
     loc = stage_from(
         "location",
         balance.get("known_at") if balance else None,
@@ -837,11 +848,24 @@ def _scan_poc(market, balance, bars):
     for row in inside:
         if not (row.get("observed_complete") or row.get("complete")):
             continue
-        tagged = row.get("L") is not None and row.get("H") is not None and dec(row["L"]) <= dec(poc) <= dec(row["H"])
-        if tagged and abs(dec(row["C"]) - dec(poc)) <= B02_Q * 2:
+        low_px = _bar_px(row, "L")
+        high_px = _bar_px(row, "H")
+        close_px = _bar_px(row, "C")
+        open_px = _bar_px(row, "O")
+        delta_px = _bar_px(row, "delta")
+        tagged = low_px is not None and high_px is not None and low_px <= dec(poc) <= high_px
+        if tagged and close_px is not None and abs(close_px - dec(poc)) <= B02_Q * 2:
             fail_holds += 1
             last_fail = row
-        if row.get("delta") is not None and dec(row["C"]) > dec(poc) and dec(row["delta"]) > 0 and dec(row["C"]) > dec(row["O"]):
+        # Close-above-open push requires a numeric open; missing O is not that tell.
+        if (
+            delta_px is not None
+            and close_px is not None
+            and open_px is not None
+            and close_px > dec(poc)
+            and delta_px > 0
+            and close_px > open_px
+        ):
             push = row
             after = [r for r in inside if int(r["start"]) >= int(row["end"])]
             hold = first_touch(after, dec(poc) - B02_Q, dec(poc) + B02_Q)

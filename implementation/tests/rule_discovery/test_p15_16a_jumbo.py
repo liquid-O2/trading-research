@@ -33,7 +33,7 @@ from trading_research.research.rule_discovery.source_adapters.jumbo import (
     scan_b02,
 )
 
-TRACK = Path("/workspace/.worktrees/b02-jumbo/implementation/reports/research-work/P15-16A/_track_jumbo")
+TRACK = Path("/workspace/implementation/reports/research-work/P15-16A/_track_jumbo")
 EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NS_MINUTE = 60_000_000_000
 

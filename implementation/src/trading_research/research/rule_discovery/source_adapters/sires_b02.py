@@ -444,10 +444,16 @@ def _as_view(market) -> NativeMarketView | None:
         return None
     if isinstance(market, NativeMarketView) or hasattr(market, "arrays"):
         return market
+    attached = getattr(market, "_native_view", None)
+    if attached is not None:
+        return attached
     day = getattr(market, "day", None)
     if day is None:
         return None
-    return build_market_view(str(day), full_account_day=True)
+    try:
+        return build_market_view(str(day), full_account_day=True)
+    except Exception:
+        return None
 
 
 def _cutoff(arrays, rec: Mapping[str, Any]) -> int:
@@ -1213,10 +1219,24 @@ def replay_example(market, example) -> dict[str, Any]:
 
     def level_of(ep):
         geo = ep.get("geometry") or {}
-        entry = geo.get("entry")
-        if entry is None:
-            return None
-        return float(entry) * TICK_POINTS
+        values = ep.get("values") or {}
+        ref = ep.get("reference") or {}
+        for raw in (
+            geo.get("entry"),
+            geo.get("reference_level"),
+            geo.get("reference_px"),
+            values.get("entry"),
+            values.get("reference_px"),
+            ref.get("ticks"),
+            geo.get("wick_ticks"),
+        ):
+            if raw is None:
+                continue
+            try:
+                return float(raw) * TICK_POINTS
+            except (TypeError, ValueError):
+                continue
+        return None
 
     best = None
     reason = "miss:no_episode"
@@ -1273,5 +1293,13 @@ def replay_example(market, example) -> dict[str, Any]:
         "our_entry_ns": best.get("decision_at"),
         "author_level": author_level,
         "author_side": author_side,
-        "divergence": "match" if reason != "match_branch_only" else reason,
+        "divergence": _replay_divergence(reason, best.get("side"), author_side),
     }
+
+
+def _replay_divergence(reason: str, our_side, author_side) -> str:
+    if reason != "match_branch_only":
+        return "match"
+    if author_side and our_side and our_side != author_side:
+        return f"match_branch_only;miss:side our={our_side} author={author_side}"
+    return "match_branch_only"
