@@ -189,4 +189,6 @@ The orchestrating session re-read every family against its raw sources with all 
 
 **JETBUNDLE, STOIC.** No change; definitions verified literal against MATH and DATA.
 
+**Author-example fixtures.** The dated examples with printed levels, fills, resting orders and expected detections are compiled in [AUTHOR_EXAMPLES_2026-09-15.json](/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json) (54 examples, 42 inside the native calendar); P15-16A replays that file (A03) and supersedes the review's J/G/S index where the two overlap.
+
 **Clocks (all families).** Deepchart screenshots print ET; the 2026 NinjaTrader screenshots print UK local time; TradingView prints the footer's UTC−4/−5; the Tradesea chart and the 2025-01-28 order ticket print UTC; Sierra Chart prints ET. Every replay fixture carries its converted ET time.

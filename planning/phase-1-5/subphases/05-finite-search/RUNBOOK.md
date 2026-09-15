@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `98d74ade6579dc908c192991645f6d4e7d0b9c8b87e771890e3df7ff18b175ae`.
+Source content SHA256: `292548507578fbf8605a0dc3cce9a5d8bf4356b867bb44a75e9570bfc61cf204`.
 
 Previous gate: **04-family-adapters**. External task dependencies: P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16. Read and verify their actual receipts before implementation.
 
@@ -940,6 +940,8 @@ The orchestrating session re-read every family against its raw sources with all 
 **KEANI.** F16 stands; no dated ticket exists; the replay set is empty and the stage funnel is the fidelity report.
 
 **JETBUNDLE, STOIC.** No change; definitions verified literal against MATH and DATA.
+
+**Author-example fixtures.** The dated examples with printed levels, fills, resting orders and expected detections are compiled in [AUTHOR_EXAMPLES_2026-09-15.json](/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json) (54 examples, 42 inside the native calendar); P15-16A replays that file (A03) and supersedes the review's J/G/S index where the two overlap.
 
 **Clocks (all families).** Deepchart screenshots print ET; the 2026 NinjaTrader screenshots print UK local time; TradingView prints the footer's UTC−4/−5; the Tradesea chart and the 2025-01-28 order ticket print UTC; Sierra Chart prints ET. Every replay fixture carries its converted ET time.
 
