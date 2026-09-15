@@ -218,3 +218,14 @@ def test_s07_native_minute_close_is_tagged_not_bbo():
         pytest.skip("QQQ 1m missing")
     assert spot.age_policy == "completed_native_minute_close"
     assert spot.native is True
+
+
+def test_s14_nonfinite_and_wrong_unit_targets_rejected():
+    with pytest.raises(ContractError):
+        realized_variance([100.0, float("nan")])
+    with pytest.raises(ContractError):
+        realized_variance([100.0, float("inf")])
+    with pytest.raises(ContractError):
+        realized_variance([100.0, -1.0])
+    with pytest.raises(ContractError):
+        garman_klass(100.0, 110.0, 90.0, 0.0)
