@@ -519,3 +519,36 @@ def test_s25_cash_index_board_blocked_without_intraday_spot():
     assert root_spec("SPX").native_intraday_spot is False
     spot = spot_at("SPX", DAY, et_ns(DAY, 10, 0))
     assert spot is None or spot.native is False
+
+
+def test_s13_semantic_run_id_mutations_and_conflicting_root(tmp_path):
+    from trading_research.errors import IntegrityError
+    from trading_research.research.contracts.identity import semantic_run_id, write_bytes_new
+
+    base = {
+        "schema_version": "research-draft-manifest-v2",
+        "transform_version": "v1",
+        "input_identities": {"slice": {"path": "/slice", "sha256": "aa" * 32}},
+        "registered_candidate_config": {"window": 20},
+        "cutoff": "2026-09-03",
+    }
+    root_id = semantic_run_id(base)
+    byte_changed = dict(base)
+    byte_changed["input_identities"] = {"slice": {"path": "/slice", "sha256": "bb" * 32}}
+    assert semantic_run_id(byte_changed) != root_id
+    schema = dict(base)
+    schema["schema_version"] = "research-draft-manifest-v3"
+    assert semantic_run_id(schema) != root_id
+    transform = dict(base)
+    transform["transform_version"] = "v2"
+    assert semantic_run_id(transform) != root_id
+    param = dict(base)
+    param["registered_candidate_config"] = {"window": 21}
+    assert semantic_run_id(param) != root_id
+    cutoff = dict(base)
+    cutoff["cutoff"] = "2020-01-02"
+    assert semantic_run_id(cutoff) != root_id
+    frozen = tmp_path / "root.bin"
+    write_bytes_new(frozen, b"alpha")
+    with pytest.raises(IntegrityError):
+        write_bytes_new(frozen, b"beta")
