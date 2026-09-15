@@ -60,6 +60,10 @@ Citation: [AVG] pp.21–22. The source's near-10:00 observation does not define 
 What the implementation added that the source does not state: an 11:00 cutoff and a 60-minute retest expiry (the A period ends at 10:00 and the observation is "around 10:00"); a "developing VAL rise" condition; an objective of A-high plus A-width (the objective is a higher-timeframe level: POC, value, VAH, a poor high). Ruled F16. The B0.1 count of 39 passes in 1,695 A observations is not contradicted by the source, but the funnel (open above value, rejection at POC or prior VAH, aggressive VAH break with imbalances, defended retest) must be reported stage by stage. No dated ticket exists for this setup; the author-example replay is recorded as none.
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [KEANI-OPEN-ABOVE-VALUE.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/KEANI-OPEN-ABOVE-VALUE.md), ruled SD11: [AVG] p.21 says rejection at POC or previous VAH while the p.22 caption says both; B0.2 adopts the explicit OR reading and records the caption conflict; the dashboard (151 trades, 102 wins, 49 losses, 67.55%, PF 1.27, net +$9,788, expectancy $64.82) is account-level evidence, not this setup's; equality of the A low with the prior VAH fails the strict fully-above condition.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

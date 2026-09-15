@@ -38,7 +38,7 @@ Operating method / GB-FAIL. [Index](index.md) · [Phase 1 observation contract](
 
 - NYAM / completed hour / Asia failures use their own finished reference. A sweep during construction is part of the box.
 - A prior-day/week/month reclaim can establish a bias for subsequent aligned pullbacks. Do not demand a fresh NYAM sweep for a separately cited prior-level trade.
-- The golden pocket is `[L + 0.50(H-L), L + 0.618(H-L)]` for the illustrated retracement of a down impulse; direction and measured impulse matter. The September 1 source combines it with an actual PDL sweep and five-minute failure ([GB] p.25). The July example combines a fib pullback and hourly-low reclaim ([GB] p.35).
+- The golden pocket is `[L + 0.50(H-L), L + 0.618(H-L)]` for the illustrated retracement of a down impulse; direction and measured impulse matter. The September 1 source combines it with an actual PDL sweep and five-minute failure ([GB] p.25). The 2026-08-12 example (post 2087610880162664526) combines a fib pullback and hourly-low reclaim ([GB] p.35).
 - The 09:30 manipulation branch is the source's below-open/reclaim long with a retracement objective and stop at the lows ([GB] p.40). Its confirmation duration is not fully specified by that reply; do not silently impose all parameters from the PDL example.
 - A+ requires a relevant sweep; “no sweep = not A+” is a necessary quality condition, not proof that every sweep is A+ or that no other trade is allowed ([GB] pp.21–23, 37–40). R-G11 attaches to grading this candidate, not an OR across unrelated boxes somewhere during the day.
 
@@ -125,6 +125,10 @@ All 60 pages of [GB] and the 2026-09-14 raw capture were re-read with every char
 
 The three session boxes as painted, the level set, the two confirmation modes (5-minute close for level cases, at-level failure for box cases), the fixed-dollar risk with derived quantity, the limit ladder toward the opposing liquidity, and the author-example replay of the dated sessions above that fall inside the native calendar (2025-11-20 through 2026-08-19; the 2026-08-27 to 2026-09-14 examples postdate the data endpoint and are recorded as data_unavailable).
 
+
+### Astra dossier corrections (2026-09-15, night)
+
+From [GB-FAIL.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/GB-FAIL.md), ruled SD03: the London-low long's stop sits below the retest's higher low and above the earlier sweep (2026-09-14 photo 1: live 28,903.75, stop 28,875.25, early sweep ≈28,827), so the A1 structural stop is "below the retest's higher low", not "beyond the sweep extreme"; live and drawn prices are distinct fixtures (2026-09-01 live 4 @ 29,254 / drawn 29,253.75; 2026-09-08 Asia live 29,730.75 / drawn 29,730.50; 2026-09-14 live 29,081.75 / drawn 29,081.50, other account 2 @ 29,074.25) and the replay compares against the live fill where one exists; 2025-11-19 adds a previous-week-low reclaim long (1 @ 24,625 with the sell limit 24,999 above PDH 24,975, [GB] p.31); 2026-08-27 has an earlier prior-hour attempt (5 @ 29,613.75, stop 29,633, target 29,427.75, [GB] p.38) before the 29,642.25 one, and 2026-08-28's ticket is 5 @ 29,674.25 with stop 29,708.75 and target 29,374 ([GB] p.39); the "do not average down" sentence above is house policy, not an anchored author statement.
 
 ## Objects used by this method
 

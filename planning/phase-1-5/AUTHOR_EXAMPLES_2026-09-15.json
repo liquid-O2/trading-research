@@ -1825,7 +1825,7 @@
           "action": "sell",
           "qty": 4,
           "price": 29253.75,
-          "note": "after the sweep above PDL and the 5-minute close below; stop 29303.50 (49.75), target 29044, R:R 4.22"
+          "note": "live 4 @ 29254 (drawn 29253.75); after the sweep above PDL and the 5-minute close below; stop 29303.50 (49.75), target 29044 (drawn; live target 29043.75), R:R 4.22"
         },
         {
           "time_et": "11:45",
@@ -1911,7 +1911,7 @@
           "action": "sell",
           "qty": 1,
           "price": 29730.5,
-          "note": "after the 5-minute close below TDO; stop 29748.25 (17.75, 71 ticks, Amount 750), target 29571 (R:R 8.99); +100 with partials"
+          "note": "live 29730.75 (drawn 29730.50) after the 5-minute close below TDO; stop 29748.25 (17.75, 71 ticks, Amount 750), target 29571 (R:R 8.99); +100 with partials"
         },
         {
           "time_et": "NY AM",
@@ -1970,7 +1970,7 @@
           "time_et": "10:00",
           "action": "buy",
           "price": 29382,
-          "note": "continuation long; stop 29347 (35, the 50% line), targets 29494.50 and 29521.75; second ticket 29382.25 with sells 29469.75 / 29496.75 / 29528.25"
+          "note": "live 2 @ 29381.75 (drawn 29382); stop 29347 inside the upper part of the pocket ~29318-29352 (35 points); drawn target 29521.75, pending 29494.50 and 29522 straddling PDH ~29508; second account 3 @ 29382.25 with sells 29469.75 / 29496.75 / 29528.25"
         }
       ],
       "expected_detection": {
@@ -2008,7 +2008,7 @@
           "time_et": "09:40",
           "action": "buy",
           "price": 28903.75,
-          "note": "after the 5-minute close back above the London low; stop 28875.25; targets TDO 29018 then 29036.75; +100"
+          "note": "live 1 @ 28903.75 after the 5-minute close back above the London low; drawn stop 28875.25 below the retest's higher low and above the early sweep low ~28827; targets TDO 29018 then 29037 (pending sell 29036.75); +100"
         },
         {
           "time_et": "09:55-10:05",
@@ -2018,7 +2018,7 @@
           "time_et": "10:10",
           "action": "sell",
           "price": 29081.5,
-          "note": "stop 29098.75 (17.25), target 28890.50, R:R 11.09; second account 29074.25 with buy limits 28952 / 28843.25"
+          "note": "live 29081.75 (drawn 29081.50); stop 29098.75 (17.25); drawn target 28890.25 / pending buy 28890.50, R:R 11.09; second account 2 @ 29074.25 with buy limits 28952 / 28843.25"
         }
       ],
       "expected_detection": {
@@ -2139,7 +2139,7 @@
           "action": "sell",
           "qty": 1,
           "price": 29901.75,
-          "note": "replay: stop 29911.75 (-200); flat at 10:21 +565 (29873.50)"
+          "note": "replay: stop 29911.75 (-200); later flat with daily +565; the exact exit fill is not printed (29873.50 is the inferred level)"
         },
         {
           "time_et": "10:24",
@@ -2196,21 +2196,21 @@
           "action": "sell",
           "qty": 1,
           "price": 29608.5,
-          "note": "third retest, no buyers; stopped -100 (29613.50)"
+          "note": "third retest, no buyers; image shows -100 floating with a -235 working stop at 29621.25, not a filled -100 stop"
         },
         {
           "time_et": "10:17",
           "action": "buy",
           "qty": 1,
           "price": 29654.5,
-          "note": "stop 29640.00 (58 ticks); R:R 0.69 -> trailed to 1.83, target band 29680.25"
+          "note": "stop 29640.00 (58 ticks, unchanged in the images); target extended from 40 to 106 ticks (R:R 0.69 -> 1.83), narrated trail not visible; band 29680.25"
         },
         {
           "time_et": "10:36",
           "action": "sell",
           "qty": 1,
           "price": 29764.25,
-          "note": "stop 29769.25, target 29721.50 (+855 limit); day about +1000"
+          "note": "stop 29769.25, target 29721.50 (+855 limit); position still open in the image (-55 floating); day about +1000 per the six-account card"
         }
       ],
       "expected_detection": {
@@ -2284,7 +2284,7 @@
       "actions": [
         {
           "time_et": "10:14-10:32",
-          "note": "nine attempts (losses) at the band before it resolved"
+          "note": "nine trades L,L,W,L,W,W,L,L,W: four wins +1445, five losses -945, net +500, equity trough -480 against a stated $250 daily cap; p.8 BUY drawing 35 ticks/$175 risk vs 188 ticks/$940; p.9 SELL 15 ticks/$75 vs 211 ticks/$1055"
         }
       ],
       "expected_detection": {
@@ -2604,16 +2604,15 @@
         {
           "time_et": "19:51",
           "action": "sell",
-          "qty": 5,
+          "qty": null,
           "price": 29729.25,
-          "note": "retest short after the break below 29740; stop box to 29736.75"
+          "note": "retest short after the break below 29740; drawn stop 29736.75 (7.5 points), drawn target 29678.75 (50.5 points, 6.73R); quantity not printed (a 5-lot MNQ read of the +$501.50 realized panel is an inference)"
         },
         {
           "time_et": "later",
-          "action": "buy",
-          "qty": 5,
-          "price": 29678.75,
-          "note": "target inside Asia's usual 150-160 point range; +501.50"
+          "action": "exit",
+          "price": null,
+          "note": "realized +501.50 on the Tradesea panel; the exit arrow near 29676 is not an exact fill; the Sim2 DOM panel is a separate evidence state"
         }
       ],
       "expected_detection": {
@@ -2702,7 +2701,8 @@
         "objective_band": [
           7625.75,
           7639.25
-        ]
+        ],
+        "p13_drawings": "two SELL (2 @ 20 ticks; 1.82 @ 22 ticks) and one BUY (1.82 @ 22 ticks), R:R 1.00 each; the caption says three shorts"
       },
       "actions": [
         {
@@ -2717,6 +2717,10 @@
           "qty": 2,
           "price": 7530,
           "note": "BUY 2 | R:R 9.60; stop 20 ticks; target 192 ticks (+4800) to 7578"
+        },
+        {
+          "time_et": "p.13",
+          "note": "negative-control drawings: two shorts and one long against HTF demand; use the drawn directions"
         }
       ],
       "expected_detection": {

@@ -9,7 +9,7 @@ Phase 1 setup implementation and the acquired historical census are complete. Th
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
 | REFILL-STUDY | full acquired historical measurement | 0 | not claimed | all sessions searched; input-limited scope explicit | implementation/reports/phase1-live/historical-measurement/run-1.0.1/methods/REFILL-STUDY.md |
-| REFILL-STUDY | engineering slice (9 dates, not a family population) | labelled population_scale_unreconciled | not claimed | F-REFILL-POP path (ii): pre-registration ordering cannot be established; 260-session printed-figure replay not re-run; 9-date slice is not the registered window | implementation/reports/research-work/P15-16/ |
+| REFILL-STUDY | engineering slice (9 dates, not a family population) | labelled population_scale_unreconciled | not claimed | F-REFILL-POP path (ii): pre-registration ordering cannot be established; the repository's 260-date registered window has not been reconciled to the paper's 235 RTH sessions; 9-date slice is not the registered window | implementation/reports/research-work/P15-16/ |
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -67,6 +67,10 @@ Citations: [REF] pp.5–12, 16, 22; [OFM] pp.15–18. This second predicate veri
 
 Against the implementation: the zone construction (print clusters with size thresholds and width) is the source's and the adapter's ≥40 prints in 5 seconds with ≥80 size is an operational stand-in; the touch definition, the 30-minute horizon and the bracket are literal; the "hold" label boundary is not printed and must be registered as an operational choice; the population target for reconciliation is about 175 touches per session. The correction in [OFM] p.18 stands: the fully causal mechanical rebuild was negative, so no automatic positive entry edge is claimed.
 
+
+### Astra dossier corrections (2026-09-15, night)
+
+From [REFILL-STUDY.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/REFILL-STUDY.md), ruled SD12: [REF] p.5 is a dated MNQ chart, 2025-01-10 09:36–09:44 ET (≥40-print bubbles; a dated fixture, not an order ledger); the paper's split statements (156 tuning / 79 held-out sessions versus "first half / second half") disagree; the p.15 engine panel prints rest_min=30, variant=3, entry_in=12, t_minutes=30, sl 32, tp 96 with n 64, WR 68.8, PF 1.80, net $2,112.39, largest loss −$300.62 (undefined settings and a loss larger than a 32-tick one-lot stop); the p.19 and p.20 pass-rate panels (60/80/100 → 96.7 / 92.2 / 85.7% versus 40 to 150 → 99.8 / 98.3 / 95.0 / 90.1 / 85.4 / 79.6%) and the p.21 daily-stop increments (+3, +7, +11, +13, +14, +13 points) and payout panels (95.6 / 99.8 / 100% versus 95.5 / 99.6%) are preserved separately without choosing one; the green bubbles are buy aggressors, so the caption's "absorb" is not direct passive-refill evidence. The outcome moments reconcile (542 × 0.143 ≈ 77.5R; 30% at +3R and 70% at −1R ≈ +0.14R).
 
 ## Objects used by this method
 

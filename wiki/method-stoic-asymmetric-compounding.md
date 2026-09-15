@@ -23,9 +23,9 @@ Operating method / STOIC-RISK. [Index](index.md) · [Phase 1 observation contrac
 
 The risk overlay has different inputs and a different loop, so it stays separate:
 
-1. **Establish eligibility.** An existing trading process must have at least 100 observations, known win rate and average R:R, and a Monte Carlo estimate of maximum loss streak; base risk must not exceed 1% ([DATA] p.8).
+1. **Establish eligibility.** An existing trading process must have at least 100 consistently recorded prior trades, known win rate and average R:R, and a Monte Carlo estimate of maximum loss streak; base risk must not exceed 1% ([DATA] p.8).
 2. **First trade.** In the printed illustration, risk one baseline unit (1% of initial account units) for 3R. A win banks three baseline units ([DATA] p.7).
-3. **Second trade.** Risk the original one plus the three just banked, four units total. A 3R win earns twelve more units; a loss leaves the two-trade sequence down one unit ([DATA] p.7).
+3. **Second trade.** Risk the original one plus the three just banked, four units total. A 3R win earns twelve more units; a loss leaves the two-trade sequence down one unit net from the initial baseline, which is four units given back from the intermediate three-unit peak ([DATA] p.7).
 4. **Reset after the second win.** Return to base risk and repeat. Retain the source's stated volatility and validation constraints ([DATA] pp.7–8).
 
 **Not standalone:** a win streak does not generate a trade; this overlay consumes trades admitted by an already validated process. The [printed risk-state ladder](asymmetric-risk-state.md) and [prior loss-streak validation](loss-streak-validation.md) now have implemented contracts. Actual prior process, account and Monte Carlo records remain required; generic bootstrap output does not establish the source validation.

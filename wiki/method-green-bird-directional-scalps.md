@@ -41,6 +41,10 @@ That is `case_description_ok`, not full entry qualification. `sequence_ok = NULL
 The 2026 charts in [GB] pp.44–58 show what the author's non-A+ trading looks like on the tape: repeated small entries in both directions inside the 10:00–11:00 box (2026-09-10, arrows at 10:00–11:30 with a long 1 at 29,222 and a sell limit at 29,276 at the 10:30 high) ([GB] p.57), both edges of the 9–10 box traded on 2026-04-28 ([GB] p.45), and a PM reversal long sized 28 MNQ from a fresh 12:30 low on a losing morning (Day P&L −$20,841 with +$45,680 open) ([GB] p.50). These are directional scalps against the same level set as the failure method, with the same fixed-dollar risk and limit ladders. The complete trigger remains unpublished; the record does show that (a) scalps use the same session boxes and levels, (b) the exit is again a limit ladder, and (c) the author sizes scalps smaller only in the sense of fewer copy accounts, not a different risk unit. The golden-pocket continuation (2026-09-11) is the one scalp branch with a printed rule and ticket; its stop sat at the pocket's 50% line, not beyond the far edge, and the registered A4 definition is corrected accordingly in [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md).
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [GB-SCALP.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/GB-SCALP.md), ruled SD04: the 2026-09-11 stop 29,347 sits inside the upper part of the drawn pocket (≈29,318–29,352), the live entry is 2 @ 29,381.75 (drawn 29,382), the pending targets 29,494.50 and 29,522 straddle PDH ≈29,508, and the other account's 3 @ 29,382.25 carries limits 29,469.75 / 29,496.75 / 29,528.25; the golden-pocket example adds a continuation case but does not recover the September 2 and 10 scalp trigger, which stays unpublished.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

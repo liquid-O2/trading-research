@@ -176,6 +176,10 @@ All 28 discretionary PDFs were re-read in full, and every session chart, order t
 The first-fifteen-minutes timing, the level set, the resting-stop OFM entry, the two three-tick measurements, the literal location rule, the trailing rule, the per-family aggression thresholds, and the author-example replay of the nine dated sessions above (all inside the native calendar).
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [SIRES.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/SIRES.md), ruled SD05 to SD08: the passive OFM (no aggression at the failure, [OFM] p.14) and the two long-gamma fade variants ([BIG] pp.14–15 without own reward; [GEX] p.18 with own aggression) are separate literal branches; the NYAM trade-3 images show target extension (40 → 106 ticks) with the 58-tick stop unchanged, so the trail is narrated, not shown; [OFM] p.14 shows an open losing long at x8 replay, not a take-profit; [STOP] pp.11–13 mix Nov 7 and Nov 13 ES SIM tickets; the STOP entry window is 1–2 ticks (0 ticks is an OD variant); [C3] p.7's 40% intraday value area is a registered profile variant; the ANAT session is nine trades L,L,W,L,W,W,L,L,W (+$1,445 − $945 = +$500, trough −$480 against a stated $250 cap); the MAMT appendix figures keep their contract-group denominators (1,040 ES days 2021–24: either overnight edge 92.49 / 95.40 / 94.64 / 95.00%, both 20.16 / 23.75 / 22.22 / 23.85%, overnight VPOC 90.12 / 86.21 / 87.74 / 90.00%, at-least-one IB break 98.81 / 99.62 / 96.55 / 98.08%, both 35.97 / 31.80 / 25.29 / 22.31%) beside the 73% midpoint figure; [AMT1] p.5 and [VWAP] p.3 print UTC−4 footers and MAMT states PST for its statistics; a caption, a review bracket, an open platform position and a completed fill are separate evidence types.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

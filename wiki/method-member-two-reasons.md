@@ -67,6 +67,10 @@ Citation: [K10] pp.5–8, 12. Score the structural sequence and post-entry outco
 **Consequence.** The only worked example is on ES. The two-reason rule, the marked-level discipline and the fixed-dollar sizing are instrument-agnostic, but the author-example replay needs an ES tape; the native census tape is NQ and ES is held only as an options decode in Phase 2. B0.2 records the replay as data_unavailable until an ES tape exists, and the NQ adapter is labelled a transfer.
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [MEMBER-TWO-REASONS.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/MEMBER-TWO-REASONS.md), ruled SD10: [K10] p.13 shows two SELL drawings (2 @ 20 ticks; 1.82 @ 22 ticks) and one BUY (1.82 @ 22 ticks), R:R 1.00 each, although the caption says three shorts; fixtures use the drawn directions; the four displayed payouts (July 8 $2,000; June 30 $1,845.50; June 23 $1,223.75; June 22 $1,974.50) sum to $7,043.75 on one account, a subset of the cohort.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

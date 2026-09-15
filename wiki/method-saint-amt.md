@@ -100,6 +100,10 @@ Citations: [RTVP] pp.5–11; [AMTL] pp.8–12; [WIC] pp.7–10; [TRAP] pp.3–10
 2026-08-10 evening ET (Asia session of 2026-08-11) with the balance 29,600–29,960, the breakout below 29,740 and the retest short at 29,729.25; the WIC week (2026-08-04 to 2026-08-12) for the higher-timeframe balance and its retest that confirmed sellers (the 29,730–29,745 break, the 29,740–29,760 retest, the drop to 29,540). Both lie inside the native calendar.
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [SAINT-AMT.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/SAINT-AMT.md), ruled SD09: the double-distribution route runs from the upper edge of the lower shelf to the lower edge of the upper shelf ([RTVP] p.8), so the traversal target is the near edge of the opposite shelf, not the far balance edge; the TRAP drawing is entry 29,729.25 / stop 29,736.75 / target 29,678.75 (7.5 and 50.5 points, 6.73R drawn); the quantity is not printed (the 5-lot reading of the +$501.50 panel in the re-read above is an inference) and the Sim2 DOM panel is a separate evidence state; the failed-auction branch must not require an older value area.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

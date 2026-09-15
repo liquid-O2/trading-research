@@ -149,6 +149,10 @@ The 2026 NinjaTrader screenshots print UK local time (09:40 ET appears as 14:40)
 Timed windows as stated (09:00 close, 09:40–09:50 modal reversal, extension after 10:00, London 02:00–03:00 build); the P-zone anchors; the level set above; the reclaim entry and the +0.5 exit; the published statistics (86.46%, the 1.33/1.66 capture table, the first-hour sweep table) reproduced on our tape as the plausibility section of the Strategy Book; and the author-example replay of the eleven dated sessions above (the 2025 and 2026-01 to 2026-08 dates lie inside the run-1.0.1 calendar; 2026-08-28 and 2026-09-01 lie after the native data endpoint).
 
 
+### Astra dossier corrections (2026-09-15, night)
+
+From [JJ-TBR.md](/workspace/planning/research-program/reviews/astra-family-dossiers-2026-09-15/JJ-TBR.md), ruled SD01 and SD02: the 35% footprint transaction filter ([JR] pp.49–50) is a separate flow view from the 100/75 BigTrades threshold and is labelled as such; SessionStat readouts depend on chart aggregation and cannot span midnight ([SS] pp.7–8), so a supplied readout keeps its chart settings; the manual's "before 10:00" preference belongs to the extended case only; the 2025-01-28 ticket clock is UTC by the 09:53 ET match, recorded as an inference.
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.
