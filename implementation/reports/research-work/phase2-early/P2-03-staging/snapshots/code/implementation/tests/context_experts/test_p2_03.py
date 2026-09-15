@@ -178,6 +178,37 @@ def test_matching_midpoints_match_python_reference():
     assert ref[1] is None or np.isnan(vec[1]) or vec[1] == ref[1]
 
 
+def test_g3_every_slice_date_has_a_target_row_including_incomplete(tmp_path):
+    """Fails if an incomplete slice date is dropped instead of emitting status=incomplete."""
+    import json
+    from pathlib import Path
+
+    from trading_research.research.experts.options.slice_runner import run_p2_03_slice
+
+    dates = ["2026-09-03"]
+    run_p2_03_slice(tmp_path, dates)
+    rows = json.loads((tmp_path / "VOLATILITY_TARGETS.json").read_text())["rows"]
+    assert len(rows) == len(dates)
+    row = rows[0]
+    assert row["day"] == "2026-09-03"
+    assert row["status"] == "incomplete"
+    assert "partial" in (row.get("reason") or "").lower()
+    assert row.get("heads") in (None, [])
+    assert row.get("variance") is None
+    if row.get("heads"):
+        assert all(h.get("variance") is None for h in row["heads"])
+
+    slice_path = Path(__file__).resolve().parents[2] / "reports/research-work/phase2-early/P2-03/VOLATILITY_TARGETS.json"
+    dates_path = Path(__file__).resolve().parents[2] / "reports/research-work/phase2-early/P2-10/THROUGHPUT.json"
+    if slice_path.is_file() and dates_path.is_file():
+        slice_dates = json.loads(dates_path.read_text())["dates"]
+        produced = json.loads(slice_path.read_text())["rows"]
+        assert len(produced) == len(slice_dates)
+        by_day = {r["day"]: r for r in produced}
+        assert by_day["2026-09-03"]["status"] == "incomplete"
+        assert by_day["2026-09-03"].get("heads") in (None, [])
+
+
 def test_s07_native_minute_close_is_tagged_not_bbo():
     from trading_research.research.experts.options.native import spot_at
 

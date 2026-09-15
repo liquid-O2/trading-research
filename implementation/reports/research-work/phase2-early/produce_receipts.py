@@ -256,6 +256,99 @@ def _matrix(task_id: str, spec: dict, attempt: Path, command_index: int) -> dict
     return {"schema_version": "research-evidence-matrix-v2", "task_id": task_id, "assurance_version": ASSURANCE_VERSION, "checks": checks}
 
 
+def _slice(impl: Path, name: str) -> Path:
+    return impl / "reports/research-work/phase2-early" / name
+
+
+def _load(path: Path) -> dict:
+    return json.loads(path.read_text()) if path.is_file() else {}
+
+
+def _unresolved(task_id: str, impl: Path) -> list[str]:
+    items = [
+        "Exchange-feed completeness remains unknown.",
+        "NQ/ES option quotes are ohlcv-1m last-trade mids (no owned BBO DBN), age-filtered as option quotes.",
+        "Cash-index intraday spot is not owned.",
+        "Profile-family Level Atlas cells remain deferred to Phase 3.",
+        "NQ/ES boards are degenerate (median n_live 2 / 7) until a BBO or MBP schema is owned.",
+    ]
+    boards = _load(_slice(impl, "P2-10") / "EXPOSURE_BOARDS.json")
+    depth = boards.get("depth_by_root") or {}
+    if depth:
+        parts = []
+        for root, rec in depth.items():
+            live = rec.get("n_live") or {}
+            parts.append(f"{root} n_live median={live.get('median')} p10={live.get('p10')} p90={live.get('p90')}")
+        items.append("Board depth (20-date EXPOSURE_BOARDS): " + "; ".join(parts))
+    if task_id == "P2-10":
+        atlas = _load(_slice(impl, "P2-10") / "LEVEL_ATLAS_SUMMARY.json")
+        recon = ((atlas.get("deviations") or {}).get("reconciliation") or {})
+        items.append(
+            f"Census reconciliation: {recon.get('n_row_days')} row-days + {recon.get('n_missing')} listed missing = {recon.get('n_census')} census dates; identity={recon.get('identity')}."
+        )
+        overall = (atlas.get("summary") or {}).get("overall") or {}
+        h8 = overall.get("high_within_8") or {}
+        unres = overall.get("high_within_8_unrestricted") or {}
+        items.append(
+            f"Headline after-availability high-within-8 (QQQ+SPY): rate={h8.get('rate')} n={h8.get('n')}. Superseded unrestricted diagnostic: rate={unres.get('rate')} n={unres.get('n')}."
+        )
+    if task_id == "P2-03":
+        targets = _load(_slice(impl, "P2-03") / "VOLATILITY_TARGETS.json").get("rows") or []
+        incomplete = [r for r in targets if r.get("status") == "incomplete"]
+        items.append(f"VOLATILITY_TARGETS rows={len(targets)}; incomplete={[(r.get('day'), r.get('reason')) for r in incomplete]}.")
+    return items
+
+
+def _draft_report_body(task_id: str, impl: Path) -> str:
+    lines = ["", "receipt_state=draft_pending_merge. Nothing finalized. No GATE_REVIEW.json.", ""]
+    boards = _load(_slice(impl, "P2-10") / "EXPOSURE_BOARDS.json")
+    depth = boards.get("depth_by_root") or {}
+    if depth:
+        lines.append("## Board depth (per root, 20-date slice)")
+        lines.append("")
+        for root, rec in depth.items():
+            live = rec.get("n_live") or {}
+            oi = rec.get("n_with_oi") or {}
+            fresh = rec.get("n_with_fresh_quote") or {}
+            lines.append(
+                f"- {root}: n_days={rec.get('n_days')} n_boards={rec.get('n_boards')} "
+                f"n_live median/p10/p90={live.get('median')}/{live.get('p10')}/{live.get('p90')} "
+                f"n_with_oi median/p10/p90={oi.get('median')}/{oi.get('p10')}/{oi.get('p90')} "
+                f"n_with_fresh_quote median/p10/p90={fresh.get('median')}/{fresh.get('p10')}/{fresh.get('p90')}"
+            )
+            refusals = rec.get("refusals") or {}
+            for day, reason in sorted(refusals.items()):
+                lines.append(f"  - {day}: {reason}")
+        lines.append("")
+    if task_id == "P2-10":
+        atlas = _load(_slice(impl, "P2-10") / "LEVEL_ATLAS_SUMMARY.json")
+        recon = ((atlas.get("deviations") or {}).get("reconciliation") or {})
+        lines.append("## Census reconciliation")
+        lines.append("")
+        lines.append(
+            f"{recon.get('n_row_days')} atlas row-days + {recon.get('n_missing')} listed missing = {recon.get('n_census')} census dates; identity={recon.get('identity')}."
+        )
+        lines.append("")
+        lines.append("NQ and ES cells are labelled degenerate board (median n_live 2 / 7) and are not evidence for the futures-option levels thesis until a BBO or MBP schema is owned.")
+        lines.append("")
+        overall = (atlas.get("summary") or {}).get("overall") or {}
+        h8 = overall.get("high_within_8") or {}
+        unres = overall.get("high_within_8_unrestricted") or {}
+        lines.append(
+            f"Headline after-availability high-within-8 (QQQ+SPY): {h8.get('rate')} n={h8.get('n')}. "
+            f"Superseded unrestricted diagnostic: {unres.get('rate')} n={unres.get('n')}."
+        )
+        lines.append("")
+    if task_id == "P2-03":
+        targets = _load(_slice(impl, "P2-03") / "VOLATILITY_TARGETS.json").get("rows") or []
+        lines.append(f"VOLATILITY_TARGETS row count {len(targets)}. Incomplete days:")
+        for row in targets:
+            if row.get("status") == "incomplete":
+                lines.append(f"- {row.get('day')}: {row.get('reason')}")
+        lines.append("")
+    return "\n".join(lines) + "\n"
+
+
 def produce(task_id: str, *, draft: bool, root: Path) -> Path:
     spec = TASKS[task_id]
     impl = root / "implementation"
@@ -332,10 +425,20 @@ def produce(task_id: str, *, draft: bool, root: Path) -> Path:
     write_json_document(attempt / "DRAFT_MANIFEST.json", draft_doc)
     for name, _schema in spec["artifacts"]:
         src = slice_src / name
-        if src.is_file():
-            shutil.copy2(src, attempt / name)
+        if not src.is_file() and not src.is_symlink():
+            continue
+        dest = attempt / name
+        if name == "LEVEL_ATLAS.json":
+            if dest.exists() or dest.is_symlink():
+                dest.unlink()
+            dest.symlink_to(src.resolve())
+            continue
+        shutil.copy2(src, dest)
     for src in sorted(slice_src.glob("LEVEL_ATLAS_*.csv")):
         shutil.copy2(src, attempt / src.name)
+    headline_csv = slice_src / "LEVEL_ATLAS_HEADLINE.csv"
+    if headline_csv.is_file():
+        shutil.copy2(headline_csv, attempt / headline_csv.name)
     pytest_log = attempt / "pytest.log"
     cmd = _run(
         [sys.executable, "-m", "pytest", spec["test"], "-q", "-p", "no:cacheprovider"],
@@ -359,8 +462,9 @@ def produce(task_id: str, *, draft: bool, root: Path) -> Path:
         encoding="utf-8",
     )
     report_tp = "See THROUGHPUT.json on this attempt for median/p90 seconds, dates, workers and peak RSS.\n" if tp.is_file() else ""
+    extra = _draft_report_body(task_id, impl)
     (attempt / "REPORT.md").write_text(
-        f"# {task_id}\n\nDraft receipt. Orchestrator re-runs produce_receipts.py --finalize after merge.\n{report_tp}",
+        f"# {task_id}\n\nDraft receipt. Orchestrator re-runs produce_receipts.py --finalize after merge.\n{report_tp}{extra}",
         encoding="utf-8",
     )
     named = [
@@ -389,12 +493,7 @@ def produce(task_id: str, *, draft: bool, root: Path) -> Path:
         disposition="implemented_verified",
         reason=f"{task_id} native slice and tests. Draft until merge.",
         coverage={"native": True, "market_feed_completeness": "unknown"},
-        unresolved=[
-            "Exchange-feed completeness remains unknown.",
-            "NQ/ES option quotes are ohlcv-1m last-trade mids (no owned BBO DBN), age-filtered as option quotes.",
-            "Cash-index intraday spot is not owned.",
-            "Profile-family Level Atlas cells remain deferred to Phase 3.",
-        ],
+        unresolved=_unresolved(task_id, impl),
     )
     target = attempt / "TASK_RECEIPT.json"
     if draft:

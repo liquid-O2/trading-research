@@ -366,6 +366,8 @@ def board_levels(board: BoardArrays, *, asof_ns: int, day: date) -> dict[str, An
         "front_bucket": dte,
         "n_contracts": int(board.osi.size),
         "n_live": int(np.count_nonzero(np.isfinite(board.iv) & (board.reject == 0))),
+        "n_with_oi": int(np.count_nonzero(board.oi > 0)),
+        "n_with_fresh_quote": int(np.count_nonzero(board.reject == 0)),
         "n_rejected": int(np.count_nonzero(board.reject != 0)),
         "signed_gamma_sum": float(np.sum(board.signed_gamma)),
         "abs_gamma_sum": float(np.sum(board.abs_gamma)),

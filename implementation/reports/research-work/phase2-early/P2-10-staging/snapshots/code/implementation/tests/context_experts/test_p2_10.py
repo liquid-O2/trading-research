@@ -357,6 +357,79 @@ def test_atlas_summary_has_intervals_and_breakdowns():
     branch = summary["alignment_outcomes"]["by_branch_and_level"][0]
     assert "unconditional" in branch
     assert "conditional" in branch["bins"]["within_0.1"]
+    assert "high_within_8_unrestricted" in summary["by_kind"]["key_gamma"]
+
+
+def test_g5_headline_proximity_is_after_availability_only():
+    """Fails if headline rates count extremes that printed before the level was known."""
+    from trading_research.research.experts.options.atlas import _summarize
+
+    base = {
+        "day": "2024-01-02",
+        "kind": "key_gamma",
+        "root": "QQQ",
+        "year": "2024",
+        "expiry_bucket": "1-7",
+        "high_session_bucket": "rth",
+        "vol_regime": "mid",
+        "high": {"within_4": False, "within_8": True, "within_16": True},
+        "low": {"within_4": False, "within_8": False, "within_16": True},
+        "control": {"high": {"within_4": False, "within_8": False, "within_16": True}, "low": {"within_8": False}},
+    }
+    after = {**base, "high_after_available": True, "low_after_available": True}
+    before = {**base, "day": "2024-01-03", "high_after_available": False, "low_after_available": False}
+    summary = _summarize([after, before], [], [], [])
+    headline = summary["by_kind"]["key_gamma"]["high_within_8"]
+    unrestricted = summary["by_kind"]["key_gamma"]["high_within_8_unrestricted"]
+    assert headline["n"] == 1
+    assert unrestricted["n"] == 2
+    assert headline["rate"] == 1.0
+    assert abs(unrestricted["rate"] - 1.0) < 1e-12
+
+
+def test_g4_complete_observed_scope_without_board_names_refusing_rule():
+    """Fails if a complete_observed_scope day with no board is dropped instead of named."""
+    import json
+    from pathlib import Path
+
+    from trading_research.research.experts.options.slice_runner import attempt_board, collect_exposure_days
+
+    rec = attempt_board("NQ", date(2020, 1, 2))
+    assert rec["board"] is None
+    assert rec["reason"] == "no_oi_vintage_before_asof"
+    rec_age = attempt_board("NQ", date(2020, 6, 1))
+    assert rec_age["board"] is None
+    assert rec_age["reason"] == "no_fresh_midpoint_under_60s_age_rule"
+    collected = collect_exposure_days(["2020-01-02", "2020-06-01"], roots=("NQ",))
+    pairs = {(row["root"], row["day"]) for row in collected["days"]}
+    assert pairs == {("NQ", "2020-01-02"), ("NQ", "2020-06-01")}
+    by_day = {row["day"]: row for row in collected["days"]}
+    assert by_day["2020-01-02"]["reason"] == "no_oi_vintage_before_asof"
+    assert by_day["2020-06-01"]["reason"] == "no_fresh_midpoint_under_60s_age_rule"
+    assert all((row.get("board") is None) != (row.get("reason") is None) or row.get("status") == "ok" for row in collected["days"])
+    boards_path = Path(__file__).resolve().parents[2] / "reports/research-work/phase2-early/P2-10/EXPOSURE_BOARDS.json"
+    avail_path = Path(__file__).resolve().parents[2] / "reports/research-work/phase2-early/P2-09/OPTIONS_AVAILABILITY.json"
+    if boards_path.is_file() and avail_path.is_file():
+        payload = json.loads(boards_path.read_text())
+        days = payload.get("days") or []
+        assert days, "EXPOSURE_BOARDS.days must record every root×date"
+        keys = {(row["root"], row["day"]) for row in days}
+        slice_dates = json.loads(
+            Path(__file__).resolve().parents[2].joinpath("reports/research-work/phase2-early/P2-10/THROUGHPUT.json").read_text()
+        )["dates"]
+        for root in ("QQQ", "SPY", "NQ", "ES"):
+            for day in slice_dates:
+                assert (root, day) in keys
+        by_key = {(row["root"], row["day"]): row for row in days}
+        coverage = json.loads(avail_path.read_text()).get("coverage") or []
+        for row in coverage:
+            if row.get("root") not in ("QQQ", "SPY", "NQ", "ES"):
+                continue
+            rec = by_key.get((row["root"], row["day"]))
+            if rec is None:
+                continue
+            if row.get("disposition") == "complete_observed_scope" and rec.get("board") is None:
+                assert rec.get("reason"), f"{row['root']} {row['day']} complete_observed_scope with no board must name the refusing rule"
 
 
 def test_atlas_emits_all_root_csvs_and_named_deviations(tmp_path):
@@ -375,7 +448,11 @@ def test_atlas_emits_all_root_csvs_and_named_deviations(tmp_path):
     assert "P15-02" in md
     assert "selects nothing" in md.lower()
     assert "unsupported_owned_input" in md
-    assert payload["deviations"]["missing_slice_dates"] == ["2024-01-02", "2026-09-03"]
+    missing = payload["deviations"]["missing_slice_dates"]
+    missing_days = [item["day"] if isinstance(item, dict) else item for item in missing]
+    assert missing_days == ["2024-01-02", "2026-09-03"]
+    assert all(isinstance(item, dict) and item.get("reason") for item in missing)
+    assert "degenerate board (median n_live 2 / 7)" in md
     for root in REQUIRED_ROOTS:
         path = tmp_path / f"LEVEL_ATLAS_{root}.csv"
         assert path.is_file()

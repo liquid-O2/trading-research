@@ -1,0 +1,86 @@
+# Native options context and intraday updates
+
+Owners `P2-09` instrument/quote adapters, `P2-10` pricing/exposure boards, `P2-11` flow and scenarios, `P2-12` learned intraday OI. All formulas here are explicit research models. Native instrument prices and model-derived exposures are different kinds of evidence; neither reveals an actual dealer's inventory.
+
+## Universe and availability
+
+Required roots are NDX/NDXP, SPX/SPXW, QQQ, SPY, NQ and ES options on their actual native underlying. Keep root, exercise and settlement conventions from dated owned instrument definitions. The current product descriptions from [Nasdaq](https://www.nasdaq.com/products/north-american-markets/nasdaq-100-options-xnd-ndx) and [Cboe SPX specifications](https://www.cboe.com/tradable-products/sp-500/spx-options/spx-specifications) are reference checks, not a substitute for historical contract metadata. Futures option exercise/underlying delivery also comes from the actual product definition.
+
+At each time the eligible universe is all owned, then-known active contracts in the latest available definitions/chain, plus contracts first observed and available by that time. Do not look ahead to the final daily chain to learn which strikes will trade. Include all owned expiries; boards are0DTE,1–7,8–30,31–90 and>90 calendar days, split by root and settlement style. 0DTE means expiry on the local date with positive time remaining, not already settled. Record complete-chain versus scoped intraday coverage for each root/day; the absence of a strike from a scoped feed is not zero exposure or zero flow.
+
+Use the quote/spot/OI clocks and filters in [data contracts](/workspace/planning/research-program/DATA_CONTRACTS.md). Rates and dividends require dated availability. For European spot contracts, derive a forward from synchronous call-put pairs at the same strike and expiry when at least three valid pairs exist: each pair implies `F=K+exp(r*T)*(C-P)`; use the median across the five strikes nearest spot, at least three. If a dated rate is absent, a separately flagged r=0 sensitivity model is allowed; it is not the primary rate-supported result. Record pair dispersion and reject relative dispersion>.01. For American contracts, parity-derived forward is not assumed exact; require dated dividend/carry inputs or use the explicitly labelled equivalent-European approximation with a coverage limitation.
+
+Each expensive surface snapshot is frozen after a completed 5-minute bucket. Downstream minute/quarter-hour issues use the last completed available surface, maximum age10 minutes; reprice Greeks with current valid spot/IV/time when possible and record which inputs moved. No interpolation through a missing session or expiry. Native NDX/SPX intraday spot absence blocks native cash-index intraday exposure; mapped QQQ/futures remains a separately labelled historical comparison only.
+
+## Pricing and Greeks
+
+Proposed pure functions:
+
+```python
+def european_price(underlier, strike, tau_years, sigma, rate, carry, right, model) -> float: ...
+def implied_vol(mid, instrument, market_inputs) -> IVResult: ...
+def european_greeks(instrument, market_inputs, sigma) -> Greeks: ...
+def american_tree_price(instrument, market_inputs, sigma, steps=400) -> float: ...
+def exposure_board(contracts, oi_state, surface, inventory_scenario) -> ExposureBoard: ...
+def decompose_change(previous, current, order=("spot","iv","time","oi","universe")) -> tuple[Change, ...]: ...
+```
+
+Let Phi be the standard normal CDF using `0.5*(1+erf(x/sqrt(2)))`, phi=`exp(-x*x/2)/sqrt(2*pi)`. T is exact seconds to settlement/exercise expiry divided by365*86400, sigma is annualized log volatility. Positive S/F,K,sigma,T are required. Expired contracts return expiry/intrinsic status and no live Greeks.
+
+For European spot BSM with continuous dividend yield q and rate r:
+
+`d1=[ln(S/K)+(r-q+.5*sigma²)*T]/(sigma*sqrt(T))`, `d2=d1-sigma*sqrt(T)`.
+
+`call=S*exp(-qT)*Phi(d1)-K*exp(-rT)*Phi(d2)`; `put=K*exp(-rT)*Phi(-d2)-S*exp(-qT)*Phi(-d1)`.
+
+`delta_call=exp(-qT)*Phi(d1)`, `delta_put=exp(-qT)*(Phi(d1)-1)`, `gamma=exp(-qT)*phi(d1)/(S*sigma*sqrt(T))`, `vega=S*exp(-qT)*phi(d1)*sqrt(T)`, `vanna=-exp(-qT)*phi(d1)*d2/sigma`. Vega is derivative per 1.00 absolute volatility; vanna is delta derivative per 1.00 absolute volatility. A one-volatility-point shock is .01, not1.
+
+For European futures options use Black76: replace underlying by F; `d1=[ln(F/K)+.5*sigma²*T]/(sigma*sqrt(T))`; discount the full payoff by exp(-rT). Call=`exp(-rT)*(F*Phi(d1)-K*Phi(d2))`, put analogous. Delta with respect to F is exp(-rT)*Phi(d1) for calls and exp(-rT)*(Phi(d1)-1) for puts. Gamma=`exp(-rT)*phi(d1)/(F*sigma*sqrt(T))`; vega=`exp(-rT)*F*phi(d1)*sqrt(T)`; vanna=`-exp(-rT)*phi(d1)*d2/sigma`. Do not substitute spot BSM Greeks while labelling them futures Greeks.
+
+For American contracts the full-history context reference uses equivalent-European BSM/Black76 with a mandatory `american_equivalent_european_approximation` flag and continuous-carry provenance. This keeps the full native-chain experiment computationally bounded; it is not an exact American valuation. The mandatory sensitivity model is a400-step Cox–Ross–Rubinstein tree with continuous carry. `dt=T/N`, `u=exp(sigma*sqrt(dt))`, `d=1/u`, spot risk-neutral `p=(exp((r-q)dt)-d)/(u-d)`; for futures p=(1-d)/(u-d). Reject p outside[0,1], then retry N=800 once; failure remains explicit. Terminal payoff is max(s*(U-K),0). Backward node value=`max(intrinsic, exp(-r*dt)*(p*up+(1-p)*down))`. Dated discrete dividends not represented by continuous q are flagged `continuous_dividend_approximation`; price/Greek comparisons must separate this cohort. This is a specified numerical approximation, not an exact American price.
+
+American delta/gamma use central underlying bumps `h=max(.01,.001*U)`; vega uses volatility bump v=.001; vanna uses the four-price mixed central derivative divided by4*h*v. If sigma<=v, use v=sigma/2. Compute N400 and N800 for numerical sensitivity on engineering cases; exclude primary Greeks if their relative difference exceeds10% using denominator max(abs(N800),1e-6), but retain price/IV and the numerical limitation. Run this sensitivity on a deterministic sample of 16 valid contracts per supported American root/engineering date: four expiry groups (0DTE,1–7,8–30,>30) by four absolute log-moneyness rank quartiles, choosing the earliest stable contract ID in each populated cell. Keep missing cells. The full-history reference stays the fast equivalent-European model; flag any root/expiry/moneyness cohort with>10% Greek discrepancy in the sensitivity sample as model-limited, and compare forecasts with that cohort excluded. Report the sampled scope; do not claim all American Greeks were individually validated.
+
+IV inversion uses bisection sigma in[1e-4,5], up to100 iterations; stop price error<=max(1e-6,1e-5*mid) or sigma bracket<=1e-8. A target outside endpoint prices is `no_bracket`, not clipped IV. European bounds and parity must pass; American prices must be at least intrinsic and no more than underlying for calls or strike for puts (discount conventions may tighten but never loosen incorrectly). Use the instrument's recorded reference model for primary inversion/Greeks and its American tree dispatch for the bounded sensitivity sample. Never label the equivalent-European result an exact American Greek. Persist model version, rate/carry provenance, quote filters, convergence and numerical flags.
+
+Independent fixtures: S=K=100,T=1,r=q=0,sigma=.2 gives European call≈7.96556746, delta≈.539827837, gamma≈.019847627, vega≈39.69525475 and vanna≈.198476274. Put-call parity C-P=S exp(-qT)-K exp(-rT). At r=0 and F=S, Black76 and zero-carry BSM coincide. Finite-difference each analytic Greek at h=.01 and v=.0001 within relative1e-4 on nondegenerate cases. An American call with q=0 should approach its European value as N grows; early exercise should not artificially increase its value materially beyond convergence error.
+
+## Exposure and flow units
+
+For signed position estimate n contracts, multiplier M and underlying U: delta notional=`n*M*U*delta`; gamma hedge-notional change per 1% underlying move=`.01*n*M*U²*gamma`; vega dollars per 1 vol point=`.01*n*M*vega`; vanna delta-notional change per 1 vol point=`.01*n*M*U*vanna`. Store units and underlying separately; never sum raw NQ and SPX points into a combined level.
+
+Inventory scenarios: unsigned OI-weighted magnitude; call-positive/put-negative proxy (existing baseline assumption); its sign reverse; all-long; all-short. These are sensitivity scenarios, never known dealer positions. Intraday trade direction does not identify whether an existing position was opened or closed. Report scenario-dependent sign flips separately from stable concentration. Baseline B0 uses latest available OI revalued with current native spot/IV/time. B1 adds observed flow descriptors but leaves OI fixed. B2 adds the trained OI estimate. Compare all three on equal coverage.
+
+Trade sign is +1 at/above a synchronized ask, -1 at/below bid; inside-spread or missing/ambiguous quote is unknown. Preserve vendor conditions, exchange sequence, quote age, corrections and cancellations under the native event contract. Group possible multi-leg events by explicit trade-condition/package ID where owned; otherwise mark `possible_complex` for same-underlying/expiry events within 1ms with multiple strikes/rights. This heuristic is a flag, not proof of a spread or roll; do not infer aggressive opening inventory from it.
+
+For known signed trades record contracts=sum(s*q), premium=sum(s*q*M*trade_price), delta=sum(s*q*M*U*delta), gamma=sum(s*q*.01*M*U²*gamma), vega=sum(s*q*.01*M*vega), and vanna analog. Also record unsigned and unknown-sign totals. Trade Greeks use only surface inputs available by that trade. Rolling windows5/30/60 minutes and account-day cumulative flow are distinct columns. Missing scoped strikes do not contribute zeros to an asserted full-chain flow total.
+
+## Boards, migration and repricing
+
+Per root/expiry bucket/strike retain OI, volume, all exposure units, distance from spot, IV, age and uncertainty. Extract local concentration maxima over adjacent strikes, their share of total absolute exposure and gap to the next node; retain nonmaximum nodes. Weighted centroid=`sum(K*abs(exposure))/sum(abs(exposure))`, explicitly `exposure_centroid`, not VWAP. Churn is `sum_K abs(w_K_now-w_K_prev)/2` on normalized absolute weights over the union of then-known strikes. Migration is matched-node strike change and centroid change, with new/disappeared nodes separate. These are context features; location entry/reaction rules await Phase 3.
+
+Decompose exposure change using a fixed telescoping order: change spot only; then IV surface; then elapsed time; then OI/flow state; then universe. Each component is the difference between consecutive repricings, so sum equals final minus initial exactly. Also compute reverse order as attribution sensitivity; components are order-dependent interaction allocations, not unique causes. Missing a required input produces an unresolved component and no false exact decomposition. Quote-universe change is not dealer rehedging.
+
+Shock grid is spot returns{-1%,-.5%,0,+.5%,+1%} × parallel IV changes{-2,0,+2 vol points} × elapsed time{0,30,120 minutes}, bounded before actual expiry. Reprice full models; keep strike IV fixed under spot changes (`sticky_strike`) and compare a separately labelled sticky-log-moneyness interpolation sensitivity. No negative volatility; invalid shock cells are unavailable. The grid is context sensitivity, not a future path prediction. Scenario summaries include gamma sign/size, delta-notional change, vega/vanna and concentration migration.
+
+Surface features: nearest-ATM IV by minimum abs(log(K/F)), ties tighter spread then lower strike;25-delta call/put IV by linear interpolation in absolute delta between bracketing strikes (no extrapolation); RR=IV_call25-IV_put25, BF=.5*(IV_call25+IV_put25)-IV_ATM. Across expiries interpolate **total variance** w=IV²*T linearly at 7,30,90 calendar days only when bracketed; convert back sqrt(w/T). A negative forward variance between nodes is a surface-quality flag; do not arbitrarily smooth it away. Store term slope w(T2)-w(T1) over T2-T1 and missing brackets.
+
+## Fitted options-context expert
+
+P2-11 fits its own artifact after the joint-volatility code/causal forecasts exist. For each root and expiry bucket, consume these exact board summaries: log1p total OI, log1p unsigned trade quantity5m/30m, signed premium5m/30m and signed delta30m, unsigned gamma magnitude, call-positive/put-negative gamma proxy, vega/vanna proxy, exposure-centroid log-distance from underlying, top-node share, churn,5m IV change, term slope, unknown-flow fraction, quote-coverage fraction and model-limited fraction. Keep root/bucket names and missing masks; normalize exposures by their trailing 20-session same-time median absolute value, minimum 10 prior sessions. If denominator is0, mark unavailable rather than divide by1 and obscure units.
+
+Targets are NQ signed midpoint change/S over next 30/60 minutes and log variance surprise `log((observed_RV+1e-12)/(causal_joint_vol_RV+1e-12))` over the same horizons. Use the exact volatility label builder and causal joint-vol forecasts, with separately masked targets. Fit ridge/hinge regression and .1/.5/.9 quantiles, compare zero/price-only baselines, B0 versus B1 flow, and leave-one-root-out ablations. Hinge products are gamma_proxy×spot_return5m, vanna_proxy×IV_change5m, flow_delta30m×centroid_distance, churn×top_node_share, term_slope×time_to_close, and unknown_flow_fraction×flow_premium5m, for the NQ board aggregate summed across expiry buckets after unit-safe normalization. B2 uses the same recipe and feature names with causal estimated OI/updated boards after P2-12; the dependency runner refits/replays it under a new version, never mutating B0/B1. Final downstream B2 assessment is in P2-24.
+
+## Learned intraday OI update
+
+Training unit g is one native contract and one verified full trade-reporting cycle with complete flow and beginning/end OI whose effective dates bracket that cycle. Both OI publications must be available before fitting. Exclude expiry day, contract adjustment/corporate-action days, uncertain cycle boundaries and `abs(delta_OI)>total_trade_quantity`. Keep all excluded counts. Expiring0DTE terminal OI cannot validate intraday OI. Nonexpiring contracts with next-day OI support only an aggregate endpoint target, not observed intraday inventory.
+
+For trade i, standardized prefix-known features x_i are: intercept; known trade sign and unknown-sign mask; log1p size; spread/mid; abs log-moneyness; log1p time-to-expiry hours; call/put; possible-complex flag; time-of-day sine/cosine; cumulative unsigned volume/max(prior OI,1); cumulative signed volume/max(prior OI,1); and prior 5-minute IV change. Fit transformations on training groups only. No end-of-day quantity or future OI enters x_i.
+
+Let `a_i=tanh(beta.T x_i)` be a bounded net-opening contribution in[-1,1], not a probability of dealer direction. Predict `Dhat_g=sum_i q_i*a_i`; `V_g=max(1,sum_i q_i)`. Minimize `L=(1/G)*sum_g((Dhat_g-D_g)/V_g)^2 + lambda*sum(beta_nonintercept²)`. Gradient=`(2/G)*sum_g[(Dhat_g-D_g)/V_g² * sum_i q_i*(1-a_i²)*x_i] +2*lambda*D*beta`. Initialize beta0; Adam lr.01, betas(.9,.999), epsilon1e-8, exactly 2,000 steps; retain best training objective, tune lambda{.001,.01,.1} on chronological complete contract-day groups. Native day grouping prevents train/test trades from the same day leaking across roots.
+
+Intraday OI estimate at t is `max(0, OI_start + sum_(i available<=t) q_i*tanh(beta.T*x_i))`. Keep the unclipped estimate and clipping amount. Recompute from the cumulative raw sum; do not recursively discard negative contributions at each prefix. For each contract-day also evaluate clipped endpoint error separately from the fitted unclipped endpoint objective. Minimum 100 complete contract-day groups on30 days, and at least 10 groups per supported root/exercise cohort; below this retain B0 with low support.
+
+Uncertainty: refit20 day-block bootstrap parameter replicates using the training data and seeds15022026+j, j=0..19, then report .1/.9 quantiles of prefix OI. These are model-sensitivity intervals, not calibrated confidence intervals for unobserved true intraday OI. Evaluate held-out endpoint MAE, signed bias and normalized error against unchanged prior OI and a training-mean opening-fraction baseline. Separately test whether B2 improves NQ context forecasts/conditional utility over B0/B1 under chronological stacking. Endpoint calibration alone cannot establish reaction quality or actual inventory accuracy.
+
+Fixtures: priorOI100 and contributions+10,-5 gives raw/clipped105; contribution -150 gives raw-50, clipped0 with amount50; later+60 gives raw10, clipped10, not60. Beta0 predicts no change. One trade q10 with tanh(beta.x)=.5 predicts+5. Compare analytic gradient with central finite differences1e-6 at nonzero beta, absolute tolerance1e-5. Replace next-day OI after a snapshot and prove its stored features, OI estimate and forecast unchanged.

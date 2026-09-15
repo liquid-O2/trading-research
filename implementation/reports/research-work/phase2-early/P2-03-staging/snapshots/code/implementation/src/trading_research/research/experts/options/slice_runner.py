@@ -34,7 +34,9 @@ from trading_research.research.experts.labels.volatility import HEADS, build_hea
 from trading_research.research.experts.options.atlas import (
     build_atlas,
     census_status,
+    compute_full_history_chain_coverage,
     preserve_20date_atlas,
+    refresh_atlas_artifacts,
 )
 from trading_research.research.experts.options.boards import SCENARIOS, board_levels, build_board
 from trading_research.research.experts.options.instruments import (
@@ -209,6 +211,150 @@ def _job_record(name: str, started: float, **extra: Any) -> dict[str, Any]:
     }
 
 
+def incomplete_target_row(day: date, text: str, reason: str) -> dict[str, Any]:
+    """Slice-date target with no variance. status=incomplete names the absent input."""
+    return {
+        "day": text,
+        "status": "incomplete",
+        "reason": reason,
+        "issue_ns": et_ns(day, 10, 0),
+        "heads": None,
+        "head_names": list(HEADS),
+        "sampling": "bbo_midpoint_age_le_5s",
+        "unsupported_close_cross": [],
+    }
+
+
+def attempt_board(root: str, day: date) -> dict[str, Any]:
+    """Return a 10:00 ET board or a named rule that refused it."""
+    text = day.isoformat()
+    asof = et_ns(day, 10, 0)
+    rec: dict[str, Any] = {
+        "root": root,
+        "day": text,
+        "asof_ns": asof,
+        "status": "unavailable",
+        "reason": None,
+        "board": None,
+        "n_live": 0,
+        "n_with_oi": 0,
+        "n_with_fresh_quote": 0,
+        "n_quotes": None,
+        "n_snapshot": None,
+        "spot": None,
+    }
+    quotes = load_quote_arrays(root, day)
+    oi = load_oi_available_at(root, asof, day=day)
+    spot = spot_at(root, day, asof)
+    rec["n_quotes"] = None if quotes is None else int(quotes.t_ns.size)
+    rec["spot"] = None if spot is None else float(spot.price)
+    if quotes is None:
+        rec["reason"] = "no_quotes"
+        return rec
+    if oi is None:
+        rec["reason"] = "no_oi_vintage_before_asof"
+        return rec
+    if spot is None:
+        spec = root_spec(root)
+        rec["reason"] = "cash_index_intraday_spot_absent" if not spec.native_intraday_spot else "no_spot"
+        return rec
+    snap = snapshot_quotes(quotes, snapshot_end_ns=asof, session_close_ns=et_ns(day, 16, 0))
+    rec["n_snapshot"] = int(snap.osi.size)
+    if snap.osi.size == 0:
+        rec["reason"] = "no_fresh_midpoint_under_60s_age_rule"
+        return rec
+    board = build_board(snap, oi, underlier=float(spot.price), rate=0.0, carry=0.0, asof_ns=asof)
+    levels = board_levels(board, asof_ns=asof, day=day)
+    rec.update(
+        {
+            "status": "ok",
+            "reason": None,
+            "board": levels,
+            "n_live": int(levels["n_live"]),
+            "n_with_oi": int(levels["n_with_oi"]),
+            "n_with_fresh_quote": int(levels["n_with_fresh_quote"]),
+        }
+    )
+    return rec
+
+
+def collect_exposure_days(dates: list[str], *, roots: tuple[str, ...] = ("QQQ", "SPY", "NQ", "ES")) -> dict[str, Any]:
+    """Every root×date is either a board or an explicit refusal reason."""
+    days: list[dict[str, Any]] = []
+    boards: list[dict[str, Any]] = []
+    quality: list[dict[str, Any]] = []
+    jobs: list[dict[str, Any]] = []
+    for text in dates:
+        day = date.fromisoformat(text)
+        t0 = time.monotonic()
+        for root in roots:
+            rec = attempt_board(root, day)
+            days.append(
+                {
+                    "root": rec["root"],
+                    "day": rec["day"],
+                    "asof_ns": rec["asof_ns"],
+                    "status": rec["status"],
+                    "reason": rec["reason"],
+                    "n_live": rec["n_live"],
+                    "n_with_oi": rec["n_with_oi"],
+                    "n_with_fresh_quote": rec["n_with_fresh_quote"],
+                    "n_quotes": rec["n_quotes"],
+                    "n_snapshot": rec["n_snapshot"],
+                    "board": rec["board"],
+                }
+            )
+            if rec["board"] is not None:
+                boards.append(rec["board"])
+                quality.append(
+                    {
+                        "root": root,
+                        "day": text,
+                        "status": "ok",
+                        "n_live": rec["n_live"],
+                        "n_with_oi": rec["n_with_oi"],
+                        "n_with_fresh_quote": rec["n_with_fresh_quote"],
+                        "n_rejected": rec["board"]["n_rejected"],
+                        "atm_status": rec["board"]["atm_iv"]["status"],
+                        "call25_status": rec["board"]["call25"]["status"],
+                        "scenario_label": rec["board"]["scenario_label"],
+                        "american_equivalent_european_approximation": rec["board"]["american_equivalent_european_approximation"],
+                        "negative_forward_variance": False,
+                    }
+                )
+            else:
+                quality.append({"root": root, "day": text, "status": rec["reason"], "reason": rec["reason"]})
+        jobs.append(_job_record(f"boards:{text}", t0))
+    return {"days": days, "boards": boards, "quality": quality, "jobs": jobs, "depth_by_root": depth_by_root(days)}
+
+
+def depth_by_root(days: list[dict[str, Any]]) -> dict[str, Any]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for rec in days:
+        grouped.setdefault(rec["root"], []).append(rec)
+    out: dict[str, Any] = {}
+    for root, items in grouped.items():
+        def dist(vals: list[int]) -> dict[str, float]:
+            xs = [float(v) for v in vals]
+            return {"median": _pct(xs, 50), "p10": _pct(xs, 10), "p90": _pct(xs, 90)}
+
+        live = [int(x.get("n_live") or 0) for x in items]
+        oi = [int(x.get("n_with_oi") or 0) for x in items]
+        fresh = [int(x.get("n_with_fresh_quote") or 0) for x in items]
+        ok_items = [x for x in items if x.get("status") == "ok"]
+        n_ok = len(ok_items)
+        out[root] = {
+            "n_days": len(items),
+            "n_boards": n_ok,
+            "n_live": dist([int(x.get("n_live") or 0) for x in ok_items] or live),
+            "n_with_oi": dist([int(x.get("n_with_oi") or 0) for x in ok_items] or oi),
+            "n_with_fresh_quote": dist([int(x.get("n_with_fresh_quote") or 0) for x in ok_items] or fresh),
+            "n_live_including_refusals": dist(live),
+            "refusals": {x["day"]: x.get("reason") for x in items if x.get("status") != "ok"},
+        }
+    return out
+
+
 def run_p2_09_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
     run_root.mkdir(parents=True, exist_ok=True)
     jobs = []
@@ -280,6 +426,11 @@ def run_p2_09_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
     replay = replay_quote_row(QQQ_QUOTE_2024, 1) if Path(QQQ_QUOTE_2024).is_file() else {"kind": "missing"}
     throughput = measure_throughput(dates[:20] if len(dates) >= 8 else dates)
     ledger = ledger_document()
+    atlas_boards_path = run_root.parent / "P2-10" / "ATLAS_BOARDS.json"
+    atlas_boards = []
+    if atlas_boards_path.is_file():
+        atlas_boards = list(json.loads(atlas_boards_path.read_text()).get("boards") or [])
+    chain_coverage = compute_full_history_chain_coverage(atlas_boards=atlas_boards)
     availability = {
         "schema_version": "research-options-availability-v1",
         "coverage": coverage,
@@ -288,6 +439,7 @@ def run_p2_09_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
         "coverage_by_year": {
             root: search_futures_option_inputs(root).get("coverage_by_year") for root in FUTURES_OPTION_ROOTS
         },
+        "chain_coverage_full_history": chain_coverage,
         "decode": decode_log,
         "worker_count": min(4, worker_count()),
         "wall_seconds": time.monotonic() - started_all,
@@ -384,44 +536,10 @@ def run_p2_10_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
         "delta_rel": abs(n400["delta"] - n800["delta"]) / max(abs(n800["delta"]), 1e-6),
         "american_equivalent_european_on_full_chain": True,
     }
-    boards = []
-    quality = []
-    jobs = []
-    for text in dates:
-        day = date.fromisoformat(text)
-        t0 = time.monotonic()
-        for root in ("QQQ", "SPY", "NQ", "ES"):
-            quotes = load_quote_arrays(root, day)
-            asof = et_ns(day, 10, 0)
-            oi = load_oi_available_at(root, asof, day=day)
-            spot = spot_at(root, day, asof)
-            if quotes is None or oi is None or spot is None:
-                quality.append({"root": root, "day": text, "status": "unavailable"})
-                continue
-            if oi.available_at_ns > asof:
-                quality.append({"root": root, "day": text, "status": "oi_not_yet_available", "available_at_ns": oi.available_at_ns})
-                continue
-            snap = snapshot_quotes(quotes, snapshot_end_ns=asof, session_close_ns=et_ns(day, 16, 0))
-            if snap.osi.size == 0:
-                quality.append({"root": root, "day": text, "status": "empty_snapshot"})
-                continue
-            board = build_board(snap, oi, underlier=float(spot.price), rate=0.0, carry=0.0, asof_ns=asof)
-            levels = board_levels(board, asof_ns=asof, day=day)
-            boards.append(levels)
-            quality.append(
-                {
-                    "root": root,
-                    "day": text,
-                    "n_live": levels["n_live"],
-                    "n_rejected": levels["n_rejected"],
-                    "atm_status": levels["atm_iv"]["status"],
-                    "call25_status": levels["call25"]["status"],
-                    "scenario_label": levels["scenario_label"],
-                    "american_equivalent_european_approximation": levels["american_equivalent_european_approximation"],
-                    "negative_forward_variance": False,
-                }
-            )
-        jobs.append(_job_record(f"boards:{text}", t0))
+    collected = collect_exposure_days(dates)
+    boards = collected["boards"]
+    quality = collected["quality"]
+    jobs = collected["jobs"]
     throughput = throughput_document(
         [float(j["wall_seconds"]) for j in jobs],
         dates,
@@ -430,38 +548,60 @@ def run_p2_10_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
     )
     write_json_document(run_root / "PRICING_FIXTURES.json", pricing)
     write_json_document(run_root / "GREEK_SENSITIVITY.json", greek_sens)
-    write_json_document(run_root / "EXPOSURE_BOARDS.json", {"schema_version": "research-exposure-boards-v1", "boards": boards, "jobs": jobs})
+    write_json_document(
+        run_root / "EXPOSURE_BOARDS.json",
+        {
+            "schema_version": "research-exposure-boards-v1",
+            "boards": boards,
+            "days": collected["days"],
+            "depth_by_root": collected["depth_by_root"],
+            "jobs": jobs,
+        },
+    )
     write_json_document(run_root / "SURFACE_QUALITY.json", {"schema_version": "research-surface-quality-v1", "rows": quality})
     write_json_document(run_root / "THROUGHPUT.json", throughput)
     avail_path = run_root.parent / "P2-09" / "OPTIONS_AVAILABILITY.json"
-    coverage = json.loads(avail_path.read_text()).get("coverage") if avail_path.is_file() else None
-    preserve_20date_atlas(run_root)
-    atlas_boards, atlas_meta = expand_atlas_boards(boards, dates, cache_path=run_root / "ATLAS_BOARDS.json")
-    build_atlas(
-        atlas_boards,
-        run_root,
-        coverage=coverage,
-        slice_dates=atlas_meta["dates"],
-        census_root=Path(atlas_meta["census_root"]) if atlas_meta.get("census_root") else None,
-        provisional=bool(atlas_meta.get("provisional")),
-    )
+    if avail_path.is_file():
+        avail_doc = json.loads(avail_path.read_text())
+        avail_doc["board_depth_20date"] = collected["depth_by_root"]
+        write_json_document(avail_path, avail_doc)
+    coverage = None
+    chain_coverage = None
+    if avail_path.is_file():
+        avail = json.loads(avail_path.read_text())
+        coverage = avail.get("coverage")
+        chain_coverage = avail.get("chain_coverage_full_history")
+    atlas_json = run_root / "LEVEL_ATLAS.json"
+    atlas_cache = run_root / "ATLAS_BOARDS.json"
+    if atlas_json.is_file() and atlas_cache.is_file():
+        cached = json.loads(atlas_cache.read_text())
+        atlas_boards = list(cached.get("boards") or [])
+        atlas_meta = refresh_atlas_artifacts(
+            run_root,
+            coverage=coverage,
+            atlas_boards=atlas_boards,
+            chain_coverage=chain_coverage,
+        )
+    else:
+        preserve_20date_atlas(run_root)
+        atlas_boards, atlas_meta = expand_atlas_boards(boards, dates, cache_path=atlas_cache)
+        if chain_coverage is None:
+            chain_coverage = compute_full_history_chain_coverage(atlas_boards=atlas_boards)
+        build_atlas(
+            atlas_boards,
+            run_root,
+            coverage=coverage,
+            slice_dates=atlas_meta["dates"],
+            census_root=Path(atlas_meta["census_root"]) if atlas_meta.get("census_root") else None,
+            provisional=bool(atlas_meta.get("provisional")),
+            chain_coverage=chain_coverage,
+        )
     return {"boards": len(boards), "atlas_boards": len(atlas_boards), "jobs": len(jobs), "throughput": throughput, "atlas": atlas_meta}
 
 
 def _one_board(root: str, day: date, text: str) -> dict[str, Any] | None:
-    quotes = load_quote_arrays(root, day)
-    asof = et_ns(day, 10, 0)
-    oi = load_oi_available_at(root, asof, day=day)
-    spot = spot_at(root, day, asof)
-    if quotes is None or oi is None or spot is None:
-        return None
-    if oi.available_at_ns > asof:
-        return None
-    snap = snapshot_quotes(quotes, snapshot_end_ns=asof, session_close_ns=et_ns(day, 16, 0))
-    if snap.osi.size == 0:
-        return None
-    board = build_board(snap, oi, underlier=float(spot.price), rate=0.0, carry=0.0, asof_ns=asof)
-    return board_levels(board, asof_ns=asof, day=day)
+    rec = attempt_board(root, day)
+    return rec.get("board")
 
 
 def expand_atlas_boards(
@@ -543,8 +683,10 @@ def run_p2_03_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
         t0 = time.monotonic()
         bars = load_minute_bars(Path("/workspace/data/quantpad/cme__nq-continuous-futures__ohlcv-1m"), day)
         if bars is None:
-            features.append({"day": text, "status": "missing_nq_1m"})
-            jobs.append(_job_record(f"vol:{text}", t0, status="missing"))
+            reason = "partial_session_2026-09-03" if text == "2026-09-03" else "missing_nq_1m"
+            features.append({"day": text, "status": reason})
+            targets.append(incomplete_target_row(day, text, reason))
+            jobs.append(_job_record(f"vol:{text}", t0, status=reason))
             continue
         rth0 = et_ns(day, 9, 30)
         rth1 = et_ns(day, 16, 0)
@@ -555,6 +697,7 @@ def run_p2_03_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
         c = bars["c"][in_rth]
         if o.size == 0:
             features.append({"day": text, "status": "empty_rth"})
+            targets.append(incomplete_target_row(day, text, "empty_rth"))
             jobs.append(_job_record(f"vol:{text}", t0, status="empty_rth"))
             continue
         gk_day = garman_klass(float(o[0]), float(np.max(h)), float(np.min(l)), float(c[-1]))
@@ -609,6 +752,8 @@ def run_p2_03_slice(run_root: Path, dates: list[str]) -> dict[str, Any]:
         targets.append(
             {
                 "day": text,
+                "status": "ok",
+                "reason": None,
                 "issue_ns": issue,
                 "heads": heads_to_json(heads),
                 "unsupported_close_cross": [h.name for h in close_cross],
