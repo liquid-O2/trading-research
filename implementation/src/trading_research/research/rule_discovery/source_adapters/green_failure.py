@@ -15,6 +15,11 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     enumerate_own_population,
     scan_family_date,
 )
+from trading_research.research.rule_discovery.source_adapters.green_b02 import (
+    RULES as B02_RULES,
+    replay_example as gb_replay_example,
+    scan_b02 as gb_scan_b02,
+)
 
 FAMILY = "GB-FAIL"
 BRANCHES = FAMILY_BRANCHES[FAMILY]
@@ -213,3 +218,18 @@ def slice_family(day: str) -> dict[str, Any]:
     payload["clock_zone_unverified"] = clock_zone_unverified(FAMILY)
     payload["population_kind"] = "engineering_slice"
     return payload
+
+
+RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("RR-11", "RR-12", "RR-13", "RR-14", "RR-15", "F06", "F07", "F18"))}
+
+
+def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    payload = dict(rec or {})
+    payload.setdefault("family", FAMILY)
+    return gb_scan_b02(market, payload)
+
+
+def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
+    payload = dict(example)
+    payload.setdefault("family", FAMILY)
+    return gb_replay_example(market, payload)

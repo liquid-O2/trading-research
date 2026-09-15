@@ -2,9 +2,10 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
+from typing import Any, Mapping
 
 from trading_research.research.contracts.types import RuleSpec
+
 from trading_research.research.rule_discovery.source_adapters.common import (
     FAMILY_BRANCHES,
     clock_zone_unverified,
@@ -12,6 +13,11 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     dual_scan,
     golden_pocket,
     scan_family_date,
+)
+from trading_research.research.rule_discovery.source_adapters.green_b02 import (
+    RULES as B02_RULES,
+    replay_example as gb_replay_example,
+    scan_b02 as gb_scan_b02,
 )
 
 FAMILY_VWAP = "GB-VWAP"
@@ -172,3 +178,21 @@ def slice_family(day: str) -> dict[str, Any]:
 def _merge(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
     keys = set(a) | set(b)
     return {key: int(a.get(key, 0)) + int(b.get(key, 0)) for key in keys}
+
+
+RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("F01", "F13", "F06-A4", "RR-14", "RR-12", "F07"))}
+
+
+def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    payload = dict(rec or {})
+    payload.setdefault("family", FAMILY_VWAP)
+    return gb_scan_b02(market, payload)
+
+
+def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
+    payload = dict(example)
+    if "GB-SCALP" in str(payload.get("family") or "") and "VWAP" not in str(payload.get("family") or ""):
+        payload["family"] = FAMILY_SCALP
+    else:
+        payload.setdefault("family", FAMILY_VWAP)
+    return gb_replay_example(market, payload)
