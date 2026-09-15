@@ -12,6 +12,15 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     register_family_transform,
     scan_family_date,
 )
+from trading_research.research.rule_discovery.source_adapters.sires_b02 import (
+    B02_VERSION,
+    RULES,
+    replay_example,
+    rules_payload,
+    scan_b02,
+)
+
+_ = (B02_VERSION, RULES, replay_example, rules_payload, scan_b02)
 
 FAMILY = "SIRES"
 BRANCHES = FAMILY_BRANCHES[FAMILY]

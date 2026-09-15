@@ -13,6 +13,15 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     dispatch_scan_variant,
     scan_family_date,
 )
+from trading_research.research.rule_discovery.source_adapters.refill_b02 import (
+    B02_VERSION,
+    RULES,
+    replay_example,
+    rules_payload,
+    scan_b02,
+)
+
+_ = (B02_VERSION, RULES, replay_example, rules_payload, scan_b02)
 
 FAMILY_REFILL = "REFILL-STUDY"
 FAMILY_JET = "JETBUNDLE-STATES"

@@ -1,0 +1,44 @@
+[
+  {
+    "rule_id": "F10_zone_from_aggressive_clusters",
+    "kind": "OD",
+    "source": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80",
+    "file_line": "refill_b02.py:137"
+  },
+  {
+    "rule_id": "F10_literal_cluster_size_family",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:32"
+  },
+  {
+    "rule_id": "F10_actual_departure",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:46"
+  },
+  {
+    "rule_id": "F10_distinct_later_touches",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:61"
+  },
+  {
+    "rule_id": "F20_printed_bracket",
+    "kind": "literal",
+    "source": "REF p.12",
+    "file_line": "refill_b02.py:114"
+  },
+  {
+    "rule_id": "RR21_hold_label_boundary",
+    "kind": "OD",
+    "source": "OD:HOLD_BOUNDARY_TICKS=8,HOLD_WINDOW_NS=30m",
+    "file_line": "refill_b02.py:88"
+  },
+  {
+    "rule_id": "RR21_population_175",
+    "kind": "literal",
+    "source": "REF p.8",
+    "file_line": "refill_b02.py:RULES[RR21_population_175]"
+  }
+]
