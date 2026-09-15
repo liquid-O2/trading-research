@@ -1,0 +1,439 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_FIXTURES.json",
+          "selector": "s2-retest-before-reclaim",
+          "sha256": "5223582c18c6ea433e20f3badcba7c185dce97c971b06411246bcdc65f81a546"
+        }
+      ],
+      "expected": "not confirmed",
+      "id": "A01",
+      "observed": "not confirmed",
+      "oracle": "stage order",
+      "requirement": "A retest before a reclaim cannot satisfy S2.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a01_retest_before_reclaim_cannot_satisfy_s2"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a02_missing_aggression_cannot_qualify_s3_s4",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "input_unknown",
+      "id": "A02",
+      "observed": "input_unknown",
+      "oracle": "SPEC",
+      "requirement": "Missing aggression cannot qualify S3/S4.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a02_missing_aggression_cannot_qualify_s3_s4"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a03_same_batch_cannot_satisfy_two_stages",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "not confirmed",
+      "id": "A03",
+      "observed": "not confirmed",
+      "oracle": "same batch_id",
+      "requirement": "Same-batch observations cannot invent stage order.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a03_same_batch_cannot_satisfy_two_stages"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "rearm_ready"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/REARM_CASES.json",
+          "selector": "rearm-4-ticks",
+          "sha256": "17f56501490a6da5ae457457277983fb8b84522904ae16bdc8217198468c1a08"
+        }
+      ],
+      "expected": "expired stays expired",
+      "id": "A04",
+      "observed": "expired",
+      "oracle": "deadline",
+      "requirement": "Expired contacts do not revive without rearm.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a04_expired_does_not_revive_without_rearm"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "mirror"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a05_mirrored_long_short",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "4 and -4",
+      "id": "A05",
+      "observed": "4/-4",
+      "oracle": "side sign",
+      "requirement": "Mirrored long/short distances.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a05_mirrored_long_short"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "slice_p15_07"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_SLICE.json",
+          "selector": "/dates",
+          "sha256": "a0d972137a47f4be90e7ac1883301526e6454b44134333442bb7e9266ec794ef"
+        }
+      ],
+      "expected": "jobs",
+      "id": "A06",
+      "observed": "9",
+      "oracle": "engineering dates",
+      "requirement": "Commands and native slice.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "causal_case"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_FIXTURES.json",
+          "selector": "case-unknown",
+          "sha256": "5223582c18c6ea433e20f3badcba7c185dce97c971b06411246bcdc65f81a546"
+        }
+      ],
+      "expected": "all keys",
+      "id": "A07",
+      "observed": "pass",
+      "oracle": "other checks",
+      "requirement": "Matrix completeness.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_case_unknown_selector_propagates"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "causal_or"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_or_retains_both_operands",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "right operand retained",
+      "id": "A08",
+      "observed": "retained",
+      "oracle": "DISPOSITION ruling 4",
+      "requirement": "CASE/OR fixtures.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_or_retains_both_operands"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "recipe_spec"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_FIXTURES.json",
+          "selector": "/cases",
+          "sha256": "5223582c18c6ea433e20f3badcba7c185dce97c971b06411246bcdc65f81a546"
+        }
+      ],
+      "expected": "cases present",
+      "id": "S01",
+      "observed": "2",
+      "oracle": "inventory",
+      "requirement": "Fixture inventory.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a01_retest_before_reclaim_cannot_satisfy_s2"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a01_retest_before_reclaim_cannot_satisfy_s2",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "no confirm",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "retest before reclaim",
+      "requirement": "Sensitive S2 order fixture.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a01_retest_before_reclaim_cannot_satisfy_s2"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "write_task_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/plan_sha256",
+          "sha256": "2bac70b15186b62fa9f01d391fb793742a55583655135b5d41521ae3ecb2810f"
+        }
+      ],
+      "expected": "64 hex",
+      "id": "S03",
+      "observed": "present",
+      "oracle": "digest",
+      "requirement": "Identities.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_s22_rearm_uses_frozen_threshold"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "initial_state"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a04_expired_does_not_revive_without_rearm",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "no revival",
+      "id": "S05",
+      "observed": "expired",
+      "oracle": "terminal",
+      "requirement": "Sequence clocks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a04_expired_does_not_revive_without_rearm"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_SLICE.json",
+          "selector": "/native_replay/row",
+          "sha256": "a0d972137a47f4be90e7ac1883301526e6454b44134333442bb7e9266ec794ef"
+        }
+      ],
+      "expected": "769284",
+      "id": "S07",
+      "observed": "769284",
+      "oracle": "parquet",
+      "requirement": "Native replay.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_a04_expired_does_not_revive_without_rearm",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "expired",
+      "id": "S08",
+      "observed": "expired",
+      "oracle": "terminal state",
+      "requirement": "Later inputs cannot revive expiry.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_a04_expired_does_not_revive_without_rearm"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "advance_sequence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+          "selector": "test_s09_ambiguous_batch_does_not_order_stages",
+          "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+        }
+      ],
+      "expected": "not confirmed",
+      "id": "S09",
+      "observed": "not confirmed",
+      "oracle": "same batch",
+      "requirement": "Ambiguous batch does not order stages.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_s09_ambiguous_batch_does_not_order_stages"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/sequences.py",
+          "symbol": "rearm_ready"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/REARM_CASES.json",
+          "selector": "/cases/0/ready",
+          "sha256": "17f56501490a6da5ae457457277983fb8b84522904ae16bdc8217198468c1a08"
+        }
+      ],
+      "expected": "max(4, 0.1S)",
+      "id": "S22",
+      "observed": "true/false",
+      "oracle": "SPEC rearm",
+      "requirement": "Rearm uses frozen threshold.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_07.py::test_s22_rearm_uses_frozen_threshold"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-07"
+}

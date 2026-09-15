@@ -1,0 +1,151 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2",
+    "research-subphase-receipt-v2",
+    "research-gate-review-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "coverage": {
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "slice_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02",
+      "2023-11-06",
+      "2026-09-03"
+    ],
+    "unknown": 0
+  },
+  "gate": "fail",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06",
+    "2026-09-03"
+  ],
+  "reason": "03-primitives: F1-F3, profiles, C0-C3, S1-S4, references and the finite candidate bank including T4 and B0.1 Judas labels.",
+  "run_id": "d1233f78bb5f0abc",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator-parent-grok"
+  },
+  "subphase_id": "03-primitives",
+  "task_receipts": {
+    "P15-05": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-05/8e1ea422bfc8678d/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "98446a3ddf415d871ea9925bb5ef89dba48d228c55e160e084b8d561404a687e"
+    },
+    "P15-06": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "695926a3ad20ec4606166b4cc9c39f880560e5306f737fd9b90f5fb910fe0c54"
+    },
+    "P15-07": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-07/e5095d226d582db7/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "072620b19480589ec74093ac662c9302085694c1484fee9467ac60d523dcf043"
+    },
+    "P15-08": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "a996df236b5f37edc890afa1af5ef78927dbdbf3fd36f24b53ebbe2eeabcadd9"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_05.py",
+        "tests/rule_discovery/test_p15_06.py",
+        "tests/rule_discovery/test_p15_07.py",
+        "tests/rule_discovery/test_p15_08.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/d1233f78bb5f0abc/attempt-0001/pytest.log",
+      "log_sha256": "57941f29b6c78ccfa6fe726c82ad9af4533ebb6e3d6da2489fc98a6d878095fa",
+      "seconds": 9.283731865696609
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-05/8e1ea422bfc8678d/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/d1233f78bb5f0abc/attempt-0001/verify_p15-05.log",
+      "log_sha256": "1ab216da269d0ba773efb7ac771563299c5aa13233dee8d4de79a7fcb60a1f0d",
+      "seconds": 11.851218723692
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 2,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/d1233f78bb5f0abc/attempt-0001/verify_p15-06.log",
+      "log_sha256": "e44b5bbfbd28b95fc4f7e27963c09198f3ba21f2ad8e95fa42c9e168b3a4dd69",
+      "seconds": 11.042421751655638
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-07/e5095d226d582db7/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 2,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/d1233f78bb5f0abc/attempt-0001/verify_p15-07.log",
+      "log_sha256": "3ba6de1c2bf66350675f65ce5d8e8c34d0993b044532f2063b7f556cf7b4955f",
+      "seconds": 15.65522253792733
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 2,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/d1233f78bb5f0abc/attempt-0001/verify_p15-08.log",
+      "log_sha256": "19e6991c2ed1c1a20aa3ec3155a7ea8ec6bd3ee00a1b4384c50620540e3955a6",
+      "seconds": 19.71180117689073
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "20-session p90 is measured on full account-day view plus all applicable bank primitives for SAINT-AMT continuation_retest; a miss is an engineering finding, bank not reduced.",
+    "F2 prior-20-session median on the slice uses the last 20 bars of the loaded session as a labelled stand-in.",
+    "expressions.py remains frozen; CASE unknown selector and OR short-circuit confirmed at expressions.py:150-153 and :171-175; causal CASE/OR live in sequences.py."
+  ]
+}

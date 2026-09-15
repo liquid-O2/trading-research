@@ -1,0 +1,520 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "fixture_plus10_minus4_unknown6"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/CVD_CASES.json",
+          "selector": "plus10-minus4-unknown6",
+          "sha256": "eab854bb69761a7168f18c1aa6ca05dfe07601b24ff9914c4c6d255951a39351"
+        }
+      ],
+      "expected": "6/20/6 admitted false",
+      "id": "A01",
+      "observed": "6/20/6 false",
+      "oracle": "SPEC fixture",
+      "requirement": "+10,-4,unknown6 yields delta6,total20,unknown6 and unsupported normalized admission.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a01_unknown_volume_is_never_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "c2_step"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/CVD_CASES.json",
+          "selector": "half-life",
+          "sha256": "eab854bb69761a7168f18c1aa6ca05dfe07601b24ff9914c4c6d255951a39351"
+        }
+      ],
+      "expected": "z=5",
+      "id": "A02",
+      "observed": "5.0",
+      "oracle": "exp(-ln2)",
+      "requirement": "Half-life decay halves after 300s.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a02_half_life_halves_after_300s"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "markout"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/COHORT_CASES.json",
+          "selector": "resolved-buy",
+          "sha256": "2dc685e6ad8d9474ad378365e727f7e7bd0ea9ff92288c9068ea1c980ebed45b"
+        }
+      ],
+      "expected": "future mid ignored",
+      "id": "A03",
+      "observed": "unresolved 1",
+      "oracle": "snapshot clock",
+      "requirement": "Unresolved cohort does not create a known future markout.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a03_unresolved_cohort_has_no_future_markout"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "markout"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/COHORT_CASES.json",
+          "selector": "unequal-qty",
+          "sha256": "2dc685e6ad8d9474ad378365e727f7e7bd0ea9ff92288c9068ea1c980ebed45b"
+        }
+      ],
+      "expected": "M_h=9/11",
+      "id": "A03b",
+      "observed": "0.8181818181818182",
+      "oracle": "SPEC M_h",
+      "requirement": "Volume-weighted SPEC markout on unequal quantities.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_markout_volume_weighted_unequal_quantities"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "markout"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_a04_high_cvd_is_not_rewarded_buying",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "rewarded_buyers false",
+      "id": "A04",
+      "observed": "false",
+      "oracle": "buy markout mean",
+      "requirement": "High CVD is not labelled rewarded buying.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a04_high_cvd_is_not_rewarded_buying"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "emit_features"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/DELTA_DICTIONARY.json",
+          "selector": "/variants",
+          "sha256": "b89726a98d694212ec5a3e7523b37533b6e879c7be162f0b2dca493506218ed0"
+        }
+      ],
+      "expected": "C0 C1 C2 C3",
+      "id": "A05",
+      "observed": "C0-C3",
+      "oracle": "FeatureValue names",
+      "requirement": "Advertised variants appear with lineage.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a05_variants_emitted_with_lineage"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "slice_p15_06"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/PRIMITIVE_SLICE.json",
+          "selector": "/dates",
+          "sha256": "a67ab4b13af2c535dd97ee52b29094abc1d4bd99efe62ea2126e9325f21ed7ed"
+        }
+      ],
+      "expected": "slice jobs",
+      "id": "A06",
+      "observed": "9",
+      "oracle": "engineering dates",
+      "requirement": "Commands, hashes, coverage, runtime.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "batch_delta"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_a01_unknown_volume_is_never_zero",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "all keys",
+      "id": "A07",
+      "observed": "pass",
+      "oracle": "other checks",
+      "requirement": "Matrix completeness.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a01_unknown_volume_is_never_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "frozen_delta_ignores_unknown"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_frozen_delta_drops_unknown_column",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "unknown dropped in frozen delta",
+      "id": "A08",
+      "observed": "6 from 10-4",
+      "oracle": "DISPOSITION ruling 4",
+      "requirement": "Silent-failure probes.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_frozen_delta_drops_unknown_column"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "batch_delta"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/CVD_CASES.json",
+          "selector": "/cases",
+          "sha256": "eab854bb69761a7168f18c1aa6ca05dfe07601b24ff9914c4c6d255951a39351"
+        }
+      ],
+      "expected": "cases present",
+      "id": "S01",
+      "observed": "2",
+      "oracle": "inventory",
+      "requirement": "Malformed cases fail.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a01_unknown_volume_is_never_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "fixture_plus10_minus4_unknown6"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/CVD_CASES.json",
+          "selector": "/cases/0/unknown",
+          "sha256": "eab854bb69761a7168f18c1aa6ca05dfe07601b24ff9914c4c6d255951a39351"
+        }
+      ],
+      "expected": "unknown 6",
+      "id": "S02",
+      "observed": "6",
+      "oracle": "never zero",
+      "requirement": "Sensitive unknown-volume fixture.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a01_unknown_volume_is_never_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "write_task_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/code_sha256",
+          "sha256": "6a4469616eaab1eeae9818896ae90ceb9b4db974ac338b152cf84c9acc5505e5"
+        }
+      ],
+      "expected": "64 hex",
+      "id": "S03",
+      "observed": "present",
+      "oracle": "digest",
+      "requirement": "Identities recompute.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a05_variants_emitted_with_lineage"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "feature"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_a05_variants_emitted_with_lineage",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "evidence clocks <= available",
+      "id": "S05",
+      "observed": "pass",
+      "oracle": "types.FeatureValue",
+      "requirement": "Feature clocks reject future evidence via FeatureValue.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a05_variants_emitted_with_lineage"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/PRIMITIVE_SLICE.json",
+          "selector": "/native_replay/row",
+          "sha256": "a67ab4b13af2c535dd97ee52b29094abc1d4bd99efe62ea2126e9325f21ed7ed"
+        }
+      ],
+      "expected": "769284",
+      "id": "S07",
+      "observed": "769284",
+      "oracle": "parquet row",
+      "requirement": "Native replay.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "markout"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_a03_unresolved_cohort_has_no_future_markout",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "unresolved",
+      "id": "S08",
+      "observed": "1",
+      "oracle": "snapshot_ns",
+      "requirement": "Future mid cannot resolve earlier cohort.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_a03_unresolved_cohort_has_no_future_markout"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "batch_delta"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_s09_same_timestamp_batch_does_not_invent_aggressor",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "unknown 10",
+      "id": "S09",
+      "observed": "10",
+      "oracle": "side 0",
+      "requirement": "Unknown aggressors stay unknown.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s09_same_timestamp_batch_does_not_invent_aggressor"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "markout"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_s11_missing_horizon_is_unknown_not_zero",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "mean None",
+      "id": "S11",
+      "observed": "None",
+      "oracle": "incomplete horizon",
+      "requirement": "Missing horizon is unknown not zero.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s11_missing_horizon_is_unknown_not_zero"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/delta.py",
+          "symbol": "batch_delta"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_s14_literal_vector_and_mirror",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "sign flip",
+      "id": "S14",
+      "observed": "pass",
+      "oracle": "long vs short",
+      "requirement": "Literal vector mirrors.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s14_literal_vector_and_mirror"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/cohorts.py",
+          "symbol": "memory_features"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0001/pytest.log",
+          "selector": "test_s23_resolved_only_updates_memory",
+          "sha256": "6df9e2f948ad975a31903715e761c710065fb645e3f834f73ac88a870f9e0287"
+        }
+      ],
+      "expected": "favorable 1 of 2",
+      "id": "S23",
+      "observed": "1",
+      "oracle": "available flag",
+      "requirement": "Only matured cohorts update memory.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_06.py::test_s23_resolved_only_updates_memory"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-06"
+}

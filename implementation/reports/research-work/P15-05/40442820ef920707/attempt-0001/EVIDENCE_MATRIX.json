@@ -1,0 +1,513 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "f2_volume_completed"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/FORMATION_CASES.json",
+          "selector": "f2-overshoot",
+          "sha256": "01d0f9047779dae8c4596bd8ca34521d3d00e046e14e023f7265b93e89cf34cf"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_a01_f2_includes_final_minute_and_overshoot",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "overshoot 4, final minute volume 8",
+      "id": "A01",
+      "observed": "4",
+      "oracle": "walk-back cumulative minus median",
+      "requirement": "F2 includes its entire final minute and records volume overshoot.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a01_f2_includes_final_minute_and_overshoot"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "f3_balance"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/FORMATION_CASES.json",
+          "selector": "f3-order",
+          "sha256": "01d0f9047779dae8c4596bd8ca34521d3d00e046e14e023f7265b93e89cf34cf"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_a02_f3_uses_prior_scale_and_15_30_60_order",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "first qualifying length 30",
+      "id": "A02",
+      "observed": "30",
+      "oracle": "SPEC F3 order",
+      "requirement": "F3 uses scale from before formation and 15,30,60 order.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a02_f3_uses_prior_scale_and_15_30_60_order"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "python_value_area"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/PROFILE_CASES.json",
+          "selector": "volume-conserved",
+          "sha256": "a0c34e6e042b46658fef5434e0336b7d05f3e62cad6efdbcf0c7e7c0a022ba03"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_a03_profile_volume_conserved_and_value_area_raw",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "raw sum equals volume",
+      "id": "A03",
+      "observed": "40",
+      "oracle": "sum of bincount",
+      "requirement": "Profile raw volume conserved; 70% area uses neighbor ranking and raw total.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a03_profile_volume_conserved_and_value_area_raw"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "poc_tick"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_a04_poc_ties_and_empty_zero_volume",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "POC 10; empty unavailable",
+      "id": "A04",
+      "observed": "10",
+      "oracle": "closest to VWAP then lower tick",
+      "requirement": "Plateau/node ties deterministic; empty and zero-volume explicit.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a04_poc_ties_and_empty_zero_volume"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "future_perturbation_stable"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_a05_future_bars_do_not_resize_frozen_formation",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "ids and geometry unchanged",
+      "id": "A05",
+      "observed": "stable",
+      "oracle": "cutoff-bounded bars",
+      "requirement": "Future bars cannot alter a frozen formation or node.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a05_future_bars_do_not_resize_frozen_formation"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "slice_p15_05"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/PRIMITIVE_SLICE.json",
+          "selector": "/dates",
+          "sha256": "8971ef0c929b282e1fea8937c20e4de6da374ba17bab3b169fdf9f5a6c1d0383"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "6cc3a41e8288ad66b1f163e73a8f6fa9a5ebc6b0d4b288d789f88efe9bc8d2e5"
+        }
+      ],
+      "expected": "slice jobs equal dates",
+      "id": "A06",
+      "observed": "9",
+      "oracle": "engineering dates",
+      "requirement": "Commands, hashes, coverage, runtime, output inspection.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s07_native_replay_row_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "validate_cases"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s01_cases_document_rejects_missing_members",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "required ids present",
+      "id": "A07",
+      "observed": "pass",
+      "oracle": "matrix completeness vs other checks",
+      "requirement": "Evidence matrix resolves every key.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s01_cases_document_rejects_missing_members"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "frozen_sparse_row_value_area"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/PROFILE_CASES.json",
+          "selector": "sparse-va",
+          "sha256": "a0c34e6e042b46658fef5434e0336b7d05f3e62cad6efdbcf0c7e7c0a022ba03"
+        }
+      ],
+      "expected": "frozen sparse walk confirmed; contiguous implemented",
+      "id": "A08",
+      "observed": "confirmed",
+      "oracle": "DISPOSITION ruling 4",
+      "requirement": "Assigned silent-failure probes pass.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_value_area_sparse_rows_defect_confirmed"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "validate_cases"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s01_cases_document_rejects_missing_members",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "missing cases rejected",
+      "id": "S01",
+      "observed": "errors nonempty",
+      "oracle": "omit cases key",
+      "requirement": "Missing required artifacts fail.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s01_cases_document_rejects_missing_members"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "f2_volume_completed"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/FORMATION_CASES.json",
+          "selector": "/cases/0/overshoot",
+          "sha256": "01d0f9047779dae8c4596bd8ca34521d3d00e046e14e023f7265b93e89cf34cf"
+        }
+      ],
+      "expected": "overshoot 4",
+      "id": "S02",
+      "observed": "4",
+      "oracle": "literal volumes 8,3,3 vs median 10",
+      "requirement": "Central behavior has a sensitive fixture.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_a01_f2_includes_final_minute_and_overshoot"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "write_task_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/plan_sha256",
+          "sha256": "229aceab2e1eeeba6a260a272061aaedc7a18c4348714e1205cc3ec9cfb86957"
+        }
+      ],
+      "expected": "64 hex plan hash",
+      "id": "S03",
+      "observed": "present",
+      "oracle": "digest of plan files",
+      "requirement": "Plan/code identities recompute.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s13_bandwidth_and_cutoff_change_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "freeze_formation"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s05_nested_future_rejected_on_formation",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "ContractError",
+      "id": "S05",
+      "observed": "raised",
+      "oracle": "formation end > available",
+      "requirement": "Nested future evidence rejected.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s05_nested_future_rejected_on_formation"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/PRIMITIVE_SLICE.json",
+          "selector": "/native_replay/row",
+          "sha256": "8971ef0c929b282e1fea8937c20e4de6da374ba17bab3b169fdf9f5a6c1d0383"
+        }
+      ],
+      "expected": "kind native row 769284",
+      "id": "S07",
+      "observed": "769284",
+      "oracle": "replay_native_row",
+      "requirement": "Native parquet row replays.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s07_native_replay_row_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "profile_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s08_profile_identity_stable_under_post_cutoff_ticks",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "same as_of keeps id",
+      "id": "S08",
+      "observed": "stable",
+      "oracle": "as_of in identity",
+      "requirement": "Post-cutoff ticks change identity only after cutoff.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s08_profile_identity_stable_under_post_cutoff_ticks"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "PROFILE_WINDOWS"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s10_profile_windows_are_registered",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "6 windows",
+      "id": "S10",
+      "observed": "6",
+      "oracle": "LEVEL_ATLAS",
+      "requirement": "Profile windows include overnight and DST-capable clocks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s10_profile_windows_are_registered"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/profiles.py",
+          "symbol": "build_profile"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s13_bandwidth_and_cutoff_change_identity",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "distinct ids",
+      "id": "S13",
+      "observed": "distinct",
+      "oracle": "profile_identity payload",
+      "requirement": "Bandwidth and cutoff change identity.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s13_bandwidth_and_cutoff_change_identity"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "python_bar_window"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s14_python_bars_match_reduceat",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "exact equality",
+      "id": "S14",
+      "observed": "equal",
+      "oracle": "python_bars vs bars_reduceat",
+      "requirement": "Python bars match reduceat.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s14_python_bars_match_reduceat"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/formations.py",
+          "symbol": "f3_balance"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/pytest.log",
+          "selector": "test_s22_new_geometry_is_enumerated",
+          "sha256": "7cd11dde7828a178eb35d1a6dccf6285c45a80495d68d8fe6c1f416030eadb9c"
+        }
+      ],
+      "expected": "F1 and F3 distinct ids",
+      "id": "S22",
+      "observed": "distinct",
+      "oracle": "separate construction_kind",
+      "requirement": "Changed rules enumerate their own formations.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_05.py::test_s22_new_geometry_is_enumerated"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-05"
+}

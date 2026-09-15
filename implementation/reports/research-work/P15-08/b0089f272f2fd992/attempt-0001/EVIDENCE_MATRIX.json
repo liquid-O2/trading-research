@@ -1,0 +1,466 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/no_other_candidates",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "one_axis true",
+      "id": "A01",
+      "observed": "true",
+      "oracle": "SEARCH_CONTRACT",
+      "requirement": "Every candidate changes one axis and names source prerequisites.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a01_one_axis_and_source_prerequisites"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/counts/nonbaseline_selected",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "<=160",
+      "id": "A02",
+      "observed": "160",
+      "oracle": "round-robin cap",
+      "requirement": "Bank expansion is byte-identical across runs.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a02_bank_byte_identical_before_outcomes"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/references.py",
+          "symbol": "r1_frozen_band"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/pytest.log",
+          "selector": "test_a03_formation_unavailable_at_earlier_issue",
+          "sha256": "d40e75daf7fc696ac3833f57279b6deb4d4fd6b63d463cbc73f4dc1ef4fe8c05"
+        }
+      ],
+      "expected": "ContractError",
+      "id": "A03",
+      "observed": "raised",
+      "oracle": "available_at_ns",
+      "requirement": "Formation unavailable at earlier issue rejects.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a03_formation_unavailable_at_earlier_issue"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/references.py",
+          "symbol": "density_matched_control"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CONTROL_MANIFEST.json",
+          "selector": "/offsets",
+          "sha256": "4932665a02aeb7b99fcea3d2e81d9c9cfcb91b103866b6d3eee9d851d13679fd"
+        }
+      ],
+      "expected": "width preserved",
+      "id": "A04",
+      "observed": "pass",
+      "oracle": "VWAP +/- 1 disp",
+      "requirement": "Reference counts, widths, issue/expiry and controls reconcile.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a04_reference_counts_widths_issue_expiry_controls"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/counts/process_units",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "process not entry",
+      "id": "A05",
+      "observed": "true",
+      "oracle": "extra_unit",
+      "requirement": "All methods have a baseline; process units are not entries.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a05_every_method_has_baseline_process_not_entry"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "slice_p15_08"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/APPLICABILITY_MATRIX.json",
+          "selector": "/counts",
+          "sha256": "9a1642ad0b6760f2a316c47c82b44f962df359d5d923827e9aed6274754724f2"
+        }
+      ],
+      "expected": "jobs",
+      "id": "A06",
+      "observed": "9",
+      "oracle": "engineering dates",
+      "requirement": "Commands and native slice.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "to_rule_spec"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/pytest.log",
+          "selector": "test_a01_one_axis_and_source_prerequisites",
+          "sha256": "d40e75daf7fc696ac3833f57279b6deb4d4fd6b63d463cbc73f4dc1ef4fe8c05"
+        }
+      ],
+      "expected": "all keys",
+      "id": "A07",
+      "observed": "pass",
+      "oracle": "other checks",
+      "requirement": "Matrix completeness.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a01_one_axis_and_source_prerequisites"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/APPLICABILITY_MATRIX.json",
+          "selector": "/t4_sweep_branches",
+          "sha256": "9a1642ad0b6760f2a316c47c82b44f962df359d5d923827e9aed6274754724f2"
+        }
+      ],
+      "expected": "T4 present, cap held, per-branch evidence",
+      "id": "A08",
+      "observed": "true",
+      "oracle": "SEARCH_CONTRACT T4 2026-09-14",
+      "requirement": "Silent-failure probes including S24 and adapter-evidenced applicability.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s24_no_unregistered_trial"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "cell_evidence"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/APPLICABILITY_MATRIX.json",
+          "selector": "/delta_adapter_branches",
+          "sha256": "9a1642ad0b6760f2a316c47c82b44f962df359d5d923827e9aed6274754724f2"
+        }
+      ],
+      "expected": "GB-SCALP delta deferred; T4 excludes mss_fvg_refinement",
+      "id": "A08b",
+      "observed": "evidenced",
+      "oracle": "SEARCH_CONTRACT + source adapters",
+      "requirement": "Delta/T4/Sequence/Profile membership is evidenced per branch.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_applicability_matrix_records_per_branch_evidence"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/candidates",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "candidates list",
+      "id": "S01",
+      "observed": "160",
+      "oracle": "inventory",
+      "requirement": "Bank inventory.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a02_bank_byte_identical_before_outcomes"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "to_rule_spec"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/pytest.log",
+          "selector": "test_a01_one_axis_and_source_prerequisites",
+          "sha256": "d40e75daf7fc696ac3833f57279b6deb4d4fd6b63d463cbc73f4dc1ef4fe8c05"
+        }
+      ],
+      "expected": "changed_axis not none",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "RuleSpec",
+      "requirement": "Sensitive one-axis fixture.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_a01_one_axis_and_source_prerequisites"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/runner.py",
+          "symbol": "write_task_identity"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/DRAFT_MANIFEST.json",
+          "selector": "/plan_sha256",
+          "sha256": "3f7b524c006081b0a84777b5af0ee90b9210a2cb0ee40f22acd7f1dbf8928276"
+        }
+      ],
+      "expected": "64 hex",
+      "id": "S03",
+      "observed": "present",
+      "oracle": "digest",
+      "requirement": "Identities.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_control_offset_deterministic"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/native.py",
+          "symbol": "replay_native_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "d40e75daf7fc696ac3833f57279b6deb4d4fd6b63d463cbc73f4dc1ef4fe8c05"
+        }
+      ],
+      "expected": "native",
+      "id": "S07",
+      "observed": "native",
+      "oracle": "parquet",
+      "requirement": "Native replay.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "applicable"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/pytest.log",
+          "selector": "test_s08_t2_does_not_borrow_future_range",
+          "sha256": "d40e75daf7fc696ac3833f57279b6deb4d4fd6b63d463cbc73f4dc1ef4fe8c05"
+        }
+      ],
+      "expected": "require_complete_formation",
+      "id": "S08",
+      "observed": "true",
+      "oracle": "SEARCH_CONTRACT T2",
+      "requirement": "T2 requires a complete formation.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s08_t2_does_not_borrow_future_range"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/counts/per_bank",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "F3 present",
+      "id": "S22",
+      "observed": "present",
+      "oracle": "enumerate own population",
+      "requirement": "New geometry candidates are not filtered from baseline-only sets.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s22_new_geometry_candidate_not_filtered_from_baseline_only"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "expand_candidate_bank"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/no_other_candidates",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "unique ids, cap, T4",
+      "id": "S24",
+      "observed": "true",
+      "oracle": "set reconciliation",
+      "requirement": "No unregistered trials.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s24_no_unregistered_trial"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/registry.py",
+          "symbol": "to_rule_spec"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-08/b0089f272f2fd992/attempt-0001/CANDIDATE_BANK.json",
+          "selector": "/b0_1_judas_labels",
+          "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+        }
+      ],
+      "expected": "strict and deferred",
+      "id": "S31",
+      "observed": "2 labels",
+      "oracle": "corrected baseline",
+      "requirement": "B0.1 Judas labels stay source_inspired.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_08.py::test_s31_unknown_provenance_stays_labelled"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-08"
+}

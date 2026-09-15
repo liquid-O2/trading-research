@@ -10,6 +10,8 @@ A shelf is a shelf-like accepted volume structure; the body and its transition m
 
 **Phase 1 observation.** Preserve whether the source means the accepted body or transition band. Do not infer a fixed thickness or turn every local volume decline into the same object.
 
+**P15-05 research choice (not a recovered source formula).** LEVEL_ATLAS registers this operational definition for measurement: a shelf is a run of at least three adjacent bins whose volumes lie within 20% of each other and whose mean exceeds twice the profile's median occupied-bin volume, bounded on one side by a drop of at least 50%. The ledge is that boundary bin. Family adapters consume the primitive; this is a labelled hypothesis, not an author rule. Implementation: `rule_discovery/profiles.py`.
+
 **Source-object implementation snapshot (2026-09-12).** [O068 contract](/workspace/planning/phase-1-live/FORMULAS.md#o068) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Measure source-selected shelf and transition-band volume with shelf/edge identity and no automatic shelf discovery. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
 
 **Source-specific evidence limits.** Shelf and transition selection are source-supplied; no automatic shelf algorithm is claimed. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.

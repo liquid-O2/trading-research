@@ -1,0 +1,171 @@
+{
+  "acceptance_checks": {
+    "A01": true,
+    "A02": true,
+    "A03": true,
+    "A04": true,
+    "A05": true,
+    "A06": true,
+    "A07": true,
+    "A08": true
+  },
+  "artifact_manifest": [
+    {
+      "bytes": 1225,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/DRAFT_MANIFEST.json",
+      "rows": null,
+      "schema": "research-draft-manifest-v2",
+      "sha256": "2bac70b15186b62fa9f01d391fb793742a55583655135b5d41521ae3ecb2810f"
+    },
+    {
+      "bytes": 2433,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/PLAN_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-plan-snapshot-v2",
+      "sha256": "364746caf7e624facf2571bd2e9d510d31739e32aa6a0b9ea50edea63fbabe7a"
+    },
+    {
+      "bytes": 3394,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/CODE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-code-snapshot-v2",
+      "sha256": "0cea7baf2dfed4108726c58c04adf1cd0ac31767141e5712426ad678458db11a"
+    },
+    {
+      "bytes": 241,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_FIXTURES.json",
+      "rows": 2,
+      "schema": "research-sequence-fixtures-v1",
+      "sha256": "5223582c18c6ea433e20f3badcba7c185dce97c971b06411246bcdc65f81a546"
+    },
+    {
+      "bytes": 129,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/REARM_CASES.json",
+      "rows": 1,
+      "schema": "research-rearm-cases-v1",
+      "sha256": "17f56501490a6da5ae457457277983fb8b84522904ae16bdc8217198468c1a08"
+    },
+    {
+      "bytes": 3210,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/SEQUENCE_SLICE.json",
+      "rows": null,
+      "schema": "research-sequence-slice-v1",
+      "sha256": "a0d972137a47f4be90e7ac1883301526e6454b44134333442bb7e9266ec794ef"
+    },
+    {
+      "bytes": 14157,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/EVIDENCE_MATRIX.json",
+      "rows": 16,
+      "schema": "research-evidence-matrix-v2",
+      "sha256": "dac2dea7f1baca6354f776e20f1247fd2da83ba4f114518e43aeda9260e3efc3"
+    },
+    {
+      "bytes": 145,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/WORK_LOG.md",
+      "rows": null,
+      "schema": "research-work-log-v1",
+      "sha256": "87c183f2cb1b4047c11a98e9daef2cbd3b9298f7b6625006f1a32b42cf9be5f4"
+    },
+    {
+      "bytes": 275,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/DECISIONS.tsv",
+      "rows": null,
+      "schema": "research-decisions-tsv-v1",
+      "sha256": "0edb40b659efba342a910fc8081676e1e3d61d16b5781fbbd39b4f085fa9e884"
+    },
+    {
+      "bytes": 209,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/WORKTREE_SNAPSHOT.json",
+      "rows": null,
+      "schema": "research-worktree-snapshot-v1",
+      "sha256": "5bf1e386321a5f689834c706c6e60bf5d6d30e18f7f59d6b80a0e85de6383b8b"
+    },
+    {
+      "bytes": 156,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/REPORT.md",
+      "rows": null,
+      "schema": "research-task-report-v1",
+      "sha256": "af8b146047517cabe78cba470cb75e14a52c2dbd84584a505c6f3728cb437a0a"
+    },
+    {
+      "bytes": 1377,
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+      "rows": null,
+      "schema": "pytest-log",
+      "sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c"
+    }
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "code_sha256": "6f4aff8ea59a3d7491de91a334db553c3ae222a39f53846e225607aa2df9bb23",
+  "command_results": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_07.py",
+        "-v",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/pytest.log",
+      "log_sha256": "8f2858c1e21c96a969beda4a949f3491eb242c90f14d33cad6a22937e7346d6c",
+      "seconds": 8.5598282860592
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/run_rule_discovery.py",
+        "slice",
+        "--run-root",
+        "/workspace/implementation/reports/research-work/P15-07/_slice",
+        "--manifest",
+        "/workspace/implementation/reports/research-work/P15-07/_slice/FROZEN_MANIFEST.json",
+        "--dates",
+        "2020-01-02,2021-01-04,2022-01-03,2023-01-03,2024-01-02,2025-01-02,2026-01-02,2023-11-06,2026-09-03",
+        "--task",
+        "P15-07",
+        "--workers",
+        "1"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/slice.log",
+      "log_sha256": "dcf94a84eec34307aaf17ce56f25ec183fe520999b78a234b86dd712ba6870ce",
+      "seconds": 39.870284100063145
+    }
+  ],
+  "coverage": {
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "slice_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02",
+      "2023-11-06",
+      "2026-09-03"
+    ],
+    "throughput_sessions": 20
+  },
+  "disposition": "implemented_verified",
+  "plan_sha256": "d407aff3bb1be4a9116afff8adea4b38144bf8ced987151429eeb049112658d9",
+  "predecessor_receipts": {
+    "P15-05": "28961dd8cecdb84e64c552542e502bacb787d9d6fae8140db0916cfedb82cdc0",
+    "P15-06": "59705913d2a45685b6b8a5b7883713ca919b98f561b26c85d3ba03da6e89ae4f"
+  },
+  "reason": "P15-07 S1-S4 response machines and CASE/OR adjudication.",
+  "run_id": "7aa938605dc472a6",
+  "schema_version": "research-task-receipt-v2",
+  "task_id": "P15-07",
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model review is not cross-model diversity.",
+    "expressions.py remains frozen; causal CASE/OR live in sequences.py."
+  ]
+}

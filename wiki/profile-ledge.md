@@ -10,6 +10,8 @@ A ledge is the edge/cutoff of the relevant shelf or accepted volume area. Sires 
 
 **Phase 1 observation.** Check that the traded retest returns to the same previously broken ledge. Proximity to a final-profile boundary does not implement the sequence.
 
+**P15-05 research choice (not a recovered source formula).** LEVEL_ATLAS registers the ledge as the boundary bin of a shelf: the adjacent bin whose volume drops by at least 50% from the shelf mean. It is not interchangeable with a value-area line. Family adapters consume the primitive. Implementation: `rule_discovery/profiles.py`.
+
 **Source-object implementation snapshot (2026-09-12).** [O069 contract](/workspace/planning/phase-1-live/FORMULAS.md#o069) is complete, with executable checks passing in the [object review](/workspace/implementation/validation/phase1-completion/obligation-matrix.json). Derive ledge and retest arithmetic only from selected parent objects; preserve stable lineage separately from equal price and deny late or unrelated retests. [Implementation](/workspace/implementation/src/trading_research/research/method_pack/objects/profile_integration.py).
 
 **Source-specific evidence limits.** Same price alone cannot substitute for stable ledge identity across snapshots. See [current status](current-status.md) for the separate historical comparison scope; implementation completion does not establish a source trade or its performance.

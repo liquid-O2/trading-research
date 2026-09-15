@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "correct": null,
+      "defect": "CASE selector None matches no WHEN key and takes ELSE instead of propagating unknown",
+      "frozen": false,
+      "frozen_ref": {
+        "code": "selected = next((body for key, body in node[2] if key[1] == selector.value), node[3])",
+        "end_line": 153,
+        "path": "implementation/src/trading_research/research/method_pack/expressions.py",
+        "start_line": 150,
+        "symbol": "evaluate.walk CASE"
+      },
+      "id": "case-unknown"
+    },
+    {
+      "correct_operands": [
+        "left_field",
+        "right_field"
+      ],
+      "defect": "OR short-circuits on True left and drops the right operands from the causality check",
+      "frozen_fields": [
+        "left_field"
+      ],
+      "frozen_ref": {
+        "code": "if operator == 'OR' and left.value is True: return left",
+        "end_line": 175,
+        "path": "implementation/src/trading_research/research/method_pack/expressions.py",
+        "start_line": 171,
+        "symbol": "evaluate.walk OR"
+      },
+      "id": "or-operands"
+    },
+    {
+      "cannot_confirm": true,
+      "id": "s2-retest-before-reclaim"
+    }
+  ],
+  "schema_version": "research-sequence-fixtures-v1"
+}

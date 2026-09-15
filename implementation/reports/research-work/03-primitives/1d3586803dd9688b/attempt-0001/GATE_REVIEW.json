@@ -1,0 +1,228 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "candidate": {
+    "path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/SUBPHASE_RECEIPT.json",
+    "sha256": "6568959907590dce2f193bedddb6d2fcb7c891b590c0fb2469c710ef694767e0"
+  },
+  "code_snapshots": {
+    "P15-05": {
+      "code_sha256": "db49ddedba16da9a235fbab9045991cdcdebaeb899e0e40021c0aecc9637d11a",
+      "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "b4c9200baf5eff67dd870a839ac5befc914831168ce1b97f4c0538bd9063c2e6"
+    },
+    "P15-06": {
+      "code_sha256": "e83c5f6d9247bd14e63f229f8d0c1fca3eca9e24ebb1f488464d5d4e4604c521",
+      "path": "/workspace/implementation/reports/research-work/P15-06/f8d351d8b47b4583/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "460ba4c9baa64a2c80087a88aed420b194d992e7ea28e4a559dfe50653c0fade"
+    },
+    "P15-07": {
+      "code_sha256": "6f4aff8ea59a3d7491de91a334db553c3ae222a39f53846e225607aa2df9bb23",
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "0cea7baf2dfed4108726c58c04adf1cd0ac31767141e5712426ad678458db11a"
+    },
+    "P15-08": {
+      "code_sha256": "4def1decd34fa1f1063cf2885ed1cb13b182a8e610b750f4f1653c23a8577b20",
+      "path": "/workspace/implementation/reports/research-work/P15-08/4d3a6dd40b39d3b2/attempt-0001/CODE_SNAPSHOT.json",
+      "sha256": "19baf5dbfaf8b43b6fd4f0e06527a00a02858e4bb186df22404af2c90eafdf98"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_05.py",
+        "tests/rule_discovery/test_p15_06.py",
+        "tests/rule_discovery/test_p15_07.py",
+        "tests/rule_discovery/test_p15_08.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/pytest.log",
+      "log_sha256": "54dd2478adf39b079fa41fa332f8f9ceb91a56f8b303b255c8b19afb00eb18eb",
+      "seconds": 7.6715232115238905
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/verify_p15-05.log",
+      "log_sha256": "71a31e0bdb680b5986cfc1715364b82a8c6267941453577f917633a8d1e9b9a5",
+      "seconds": 10.341822262853384
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-06/f8d351d8b47b4583/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/verify_p15-06.log",
+      "log_sha256": "dba026b7aad1026bdfa2589ab5c454195f9b99005054c13847c07ab2f5d6b99a",
+      "seconds": 10.100336575880647
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/verify_p15-07.log",
+      "log_sha256": "27be66cbf34beb0327ee1a1aeec8ce7449e5238d69070055061d2ec88095d16a",
+      "seconds": 13.928483137860894
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-08/4d3a6dd40b39d3b2/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/verify_p15-08.log",
+      "log_sha256": "ea1c71699b98064f41c7d142d9f8373d615fc21170f397c041943fee8f407fa9",
+      "seconds": 16.57475601322949
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_foundation_adversarial.py",
+        "--p15-00",
+        "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/TASK_RECEIPT.json",
+        "--p15-01",
+        "/workspace/implementation/reports/research-work/P15-01/a4c95ab43aef1038/attempt-0001/TASK_RECEIPT.json",
+        "--subphase",
+        "/workspace/implementation/reports/research-work/00-foundation/72c6541ece1cfab0/attempt-0001/SUBPHASE_RECEIPT.json",
+        "--output-root",
+        "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/fixed-suite"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/independent_checker.log",
+      "log_sha256": "6408712d5e4e82e86eaee765c8df7217d9423bce918138ba419ae5efb526655b",
+      "seconds": 39.43452652730048
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "/workspace/tools/check_outcome_fixtures.py"
+      ],
+      "cwd": "/workspace",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/outcome_fixtures.log",
+      "log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+      "seconds": 0.2894920688122511
+    }
+  ],
+  "evidence_matrices": {
+    "P15-05": {
+      "path": "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "1677fe0410efa4d58bcff0b6dab7939cedfbde7ed5cd730fc7b274b0d9e27691"
+    },
+    "P15-06": {
+      "path": "/workspace/implementation/reports/research-work/P15-06/f8d351d8b47b4583/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "ba78620a95f408bacc9219a03447b5cd4f3d82de928ffe9c074a3f7a990f6a88"
+    },
+    "P15-07": {
+      "path": "/workspace/implementation/reports/research-work/P15-07/7aa938605dc472a6/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "dac2dea7f1baca6354f776e20f1247fd2da83ba4f114518e43aeda9260e3efc3"
+    },
+    "P15-08": {
+      "path": "/workspace/implementation/reports/research-work/P15-08/4d3a6dd40b39d3b2/attempt-0001/EVIDENCE_MATRIX.json",
+      "sha256": "2d72863d76c417b5e20a356d3d6b2108065bf0a036644d1fffddf6b2480ff6e9"
+    }
+  },
+  "findings": [
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F01",
+      "reproduction": "test_a01_f2_includes_final_minute_and_overshoot",
+      "resolution": "resolved",
+      "resolution_evidence": "FORMATION_CASES.json f2-overshoot; independent arithmetic 8+3+3-10=4",
+      "severity": "integrity",
+      "summary": "F2 overshoot on volumes 8,3,3 vs median 10 is 4 and the earliest minute is fully included."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/P15-05/40442820ef920707/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "id": "F02",
+      "reproduction": "test_value_area_sparse_rows_defect_confirmed",
+      "resolution": "resolved",
+      "resolution_evidence": "PROFILE_CASES.json sparse-va; DISPOSITION ruling 4 confirmed",
+      "severity": "integrity",
+      "summary": "Value-area sparse-row walk in frozen method_pack treats occupied rows as neighbors; the primitive uses contiguous ticks."
+    },
+    {
+      "affected_outputs": [
+        "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/SUBPHASE_RECEIPT.json"
+      ],
+      "id": "F03",
+      "reproduction": "check_foundation_adversarial.py and check_outcome_fixtures.py",
+      "resolution": "resolved",
+      "resolution_evidence": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/INDEPENDENT_RESULTS.json",
+      "severity": "integrity",
+      "summary": "Independent foundation checker 27/27 on bound foundation receipts; outcome fixtures exit 0."
+    }
+  ],
+  "graph": {
+    "path": "/workspace/planning/research-program/TASK_GRAPH.json",
+    "sha256": "938c847ee1bb0511c53a54a72542ceaaf7057f5b2d1db35a6c71a9ccf713e9ca"
+  },
+  "independent_suite": {
+    "checker_path": "/workspace/tools/check_foundation_adversarial.py",
+    "checker_sha256": "c9441fea0a79674991522ae8db5347cdd1060f372d6aa5cffd425c7f30d6b800",
+    "outcome_fixture_checker_path": "/workspace/tools/check_outcome_fixtures.py",
+    "outcome_fixture_checker_sha256": "0cd6910c9e9024342678df1d197c625d049eebb3cd5883f74499518092a6752d",
+    "outcome_fixture_log": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/outcome_fixtures.log",
+    "outcome_fixture_log_sha256": "f1ebac2c6adc2f7d7025039b3605be21322d45abfa7c7001b002c16aa4988695",
+    "required_case_count": 27,
+    "results_path": "/workspace/implementation/reports/research-work/03-primitives/1d3586803dd9688b/attempt-0001/INDEPENDENT_RESULTS.json",
+    "results_sha256": "e9f520f0fe2b48f687349943676cf976bce8149d4951c3522d672d941c6a3ce4",
+    "status": "pass"
+  },
+  "limitation": "parent Grok only; not cross-model",
+  "registry": {
+    "path": "/workspace/planning/research-program/ASSURANCE_CASES.json",
+    "sha256": "88324dcfb44de2269fd59783d1671b6d52f5e301ec70f1b0f2210c1a0c523bee"
+  },
+  "reviewed_at": "2026-09-14T23:50:00Z",
+  "reviewed_task_ids": [
+    "P15-05",
+    "P15-06",
+    "P15-07",
+    "P15-08"
+  ],
+  "reviewer": "coordinator-separate-pass",
+  "schema_version": "research-gate-review-v2",
+  "subphase_id": "03-primitives",
+  "unverified_checks": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "P15-05/P15-06 20-session p90 exceeded 5s; recorded engineering finding, bank not reduced.",
+    "F2 prior-20-session median on the slice uses the last 20 bars of the loaded session as a labelled stand-in.",
+    "expressions.py remains frozen; causal CASE/OR live in sequences.py."
+  ],
+  "verdict": "pass"
+}
