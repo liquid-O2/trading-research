@@ -36,6 +36,11 @@ That is `case_description_ok`, not full entry qualification. `sequence_ok = NULL
 **Source addition, 2026-09-14.** The 2026-09-11 trades ([raw](/workspace/sources/x-raw-2026-09-14/greenbirdtrader/README.md)) supply a continuation trigger this page records as unpublished: after a defined impulse, a New York pullback into the golden pocket `[L + 0.50(H-L), L + 0.618(H-L)]` in the impulse direction, stop beyond the far edge of the pocket, objective the impulse extreme or the prior-day extreme; the entry bar is an operational choice. Defined as `golden_pocket_continuation` in [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md). Printed fixture on MNQU2026, 2026-09-11: entry 29,382.00, stop 29,347.00, targets 29,494.50 and 29,521.75. `sequence_ok` remains NULL for the accepted M04 scorer; the addition is measured separately.
 
 
+## Source fidelity re-read, 2026-09-15
+
+The 2026 charts in [GB] pp.44–58 show what the author's non-A+ trading looks like on the tape: repeated small entries in both directions inside the 10:00–11:00 box (2026-09-10, arrows at 10:00–11:30 with a long 1 at 29,222 and a sell limit at 29,276 at the 10:30 high) ([GB] p.57), both edges of the 9–10 box traded on 2026-04-28 ([GB] p.45), and a PM reversal long sized 28 MNQ from a fresh 12:30 low on a losing morning (Day P&L −$20,841 with +$45,680 open) ([GB] p.50). These are directional scalps against the same level set as the failure method, with the same fixed-dollar risk and limit ladders. The complete trigger remains unpublished; the record does show that (a) scalps use the same session boxes and levels, (b) the exit is again a limit ladder, and (c) the author sizes scalps smaller only in the sense of fewer copy accounts, not a different risk unit. The golden-pocket continuation (2026-09-11) is the one scalp branch with a printed rule and ticket; its stop sat at the pocket's 50% line, not beyond the far edge, and the registered A4 definition is corrected accordingly in [SOURCE_ADDITIONS_2026-09-14.md](/workspace/planning/phase-1-5/SOURCE_ADDITIONS_2026-09-14.md).
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

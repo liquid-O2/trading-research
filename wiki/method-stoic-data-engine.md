@@ -47,6 +47,11 @@ AND revision_uses_only_prior_sample
 For the macro application add `release_vintages_recorded AND historical_comparison_defined AND cycle_and_indicator_rules_recorded`. Citation: [DATA] pp.3–6. This measures the research process. Exact macro-model outputs remain unknown without its unpublished rules; no entry/stop/target strategy is disclosed.
 
 
+## Source fidelity re-read, 2026-09-15
+
+[DATA] pp.3–6 were re-read. The process is concepts, then a reproducible process, then data collection, then a comparison of all winners against all losers, then refinement; probabilities, not certainties; the macro application quantifies trend strength, position against historical averages, custom C-scores, standard deviations and the macro cycle, with the bubble case as the worked example. The implemented research-process contract matches this ordering, and no intraday entry is disclosed. Nothing to change.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

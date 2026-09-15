@@ -59,6 +59,11 @@ END
 A transition row additionally requires `state_at < next_state_at` and `conditioning_known_at <= state_at`. Citations: [MATH] pp.5–11. Unpublished thresholds, missing cancels or required off-touch depth make faithful automatic classification unknown. Record the actual observation scope; a complete local observation does not claim coverage of the entire book. Supplied transition counts must identify the same native instrument as the cohort. There is no trade-admission predicate beyond this observation method.
 
 
+## Source fidelity re-read, 2026-09-15
+
+[MATH] was re-read in full with its figures. The definitions are literal in the implementation: participation is provide plus withdraw plus consume; imbalance matters only as replenishing versus vanishing; aggression is judged against response efficiency (efficient displacement is discovery, no displacement is an absorption candidate); absorption needs high aggression, low response efficiency and an opposite side that holds and refills; exhaustion is replenishment stopping; value is a statistical regime ([MATH] pp.4–9). The five states with the AAPL LOBSTER sample (20,000 events; B and A dominate; D→D 84%, D→A 12%) are an illustration, and the transition census on our tape is the comparable output ([MATH] pp.10–11). Sires' three fixes (trade the current auction; real extremes need two transitions, an LVN with a return to balance, a shelf that tapers, a ledge that cuts off; know the cycle) are his application, kept on the Sires page ([MATH] pp.12–14). The state classifier's windows and ratios (120-second windows) are ours and remain operational choices; the observational scope stands, and no entry rule is claimed.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

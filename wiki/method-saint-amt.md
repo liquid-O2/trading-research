@@ -73,7 +73,31 @@ AND CASE branch
 END
 ```
 
-Citations: [RTVP] pp.5–11; [AMTL] pp.8–12; [WIC] pp.7–10; [TRAP] pp.3–10. Preserve an explicitly sourced long mirror as its own side binding. A range still in “free game” with no confirmed control fails entry admission; an unobserved retest is unknown, not an assumed continuation. Measure POC chop versus passage and the subsequent source objective separately.
+Citations: [RTVP] pp.5–11; [AMTL] pp.8–12; [WIC] pp.7–10; [TRAP] pp.3–10. Source correction 2026-09-15: the `failed_auction_return` branch’s older-value conjuncts are not in the source (ruled F05), and the worked example is an Asia-session trade, so a New York-only scan is not the author’s (see the re-read below). Preserve an explicitly sourced long mirror as its own side binding. A range still in “free game” with no confirmed control fails entry admission; an unobserved retest is unknown, not an assumed continuation. Measure POC chop versus passage and the subsequent source objective separately.
+
+
+## Source fidelity re-read, 2026-09-15
+
+[RTVP], [AMTL], [WIC] and [TRAP] were re-read in full with every Sierra Chart screenshot and the Tradesea ticket rendered at native resolution and read from zoomed crops. The findings define what B0.2 ([P15-16A](/workspace/planning/phase-1-5/tasks/P15-16A.md)) must reproduce; the predicate above is unchanged.
+
+### How the author actually trades
+
+- **The read.** Value area at about 68%; the POC is a magnet inside the balance and the tell is what happens there: repeated failure to hold above POC sends price to VAL, an aggressive push through POC with a held retest sends it to VAH ([RTVP] pp.4–5; [AMTL] p.9). Continuation is the preferred trade (break, retest, continue); reversals are rare; the trending profile is left alone until a new balance forms ([RTVP] pp.6–11). Arrival matters: a fast aggressive push into an extreme expects defence, a slow drift expects the break ([WIC] p.4). Higher-timeframe control (a previous balance broken with a genuine retest; trapped positioning visible on the delta) must agree with the 15-minute confirmation ([WIC] pp.5–10).
+- **The failed auction.** A drive into a previous value area, rejection, return into the original range, then the POC tell for the 80/20 case ([AMTL] pp.8–9). No older-auction exploration is required. Ruled F05.
+- **Sessions.** The one ticketed trade is an Asia session short taken at 19:51 ET on 2026-08-10 (Tradesea cursor "Mon 10 Aug '26 23:51" on a UTC clock), reviewed on Sierra Chart the next morning (clocks "Tue 2026-08-11 10:32/10:35") ([TRAP] pp.4–10). The WIC screenshots are the same week (TPO periods 8-4 through 8-12, cursor "Sun 2026-08-09 21:00") ([WIC] pp.6–8). Saint's Sierra toolbar carries put wall, call wall, GEX flip and vol trigger buttons: gamma levels sit on the same chart ([TRAP] p.9).
+- **The ticket.** Balance drawn 29,600–29,960 with intraday levels at ≈29,860/29,840, 29,780, 29,740 and 29,690/29,660 off the session open and balance; the breakout below 29,740, the single retest, short 5 MNQ at 29,729.25 with the stop box at 29,729–29,736.75 (7.5 points) and the exit at 29,678.75 (50.5 points, the target set inside Asia's usual 150–160 point range); realized +$501.50 ([TRAP] pp.6–10). The Sierra replay shows "[Sim2] Trade: 5@29698.00" at the same size ([TRAP] p.9).
+
+### What the text above and the implementation had wrong or missing
+
+1. The NY-only scan is wrong: the worked example is an Asia trade and the author trades that session ([TRAP] pp.3–10).
+2. `failed_auction_return` invented an older-auction gate; the source sequence is prior value rejected, return into the original range, then the POC tell ([AMTL] pp.8–9).
+3. `arrival_read_recorded`, `profile_allows_trade` and `alignment_ok` were unobservable in B0.1 (28 of 40 slice episodes without a confirm_at); the source defines each concretely: fast versus slow approach, shape category with trending excluded, HTF break-and-retest agreeing with the 15-minute confirmation. Ruled F04.
+4. The long mirror (trapped sellers at a low) is implied by the shape symmetry and the profile lessons; keep it as ruled.
+5. The Asia session's usual range (150–160 points) and the target-inside-range rule are statements to test on our tape; the 80% traverse after a POC push with a held retest is a published number to replicate ([TRAP] p.8; [AMTL] p.9).
+
+### Author-example replay
+
+2026-08-10 evening ET (Asia session of 2026-08-11) with the balance 29,600–29,960, the breakout below 29,740 and the retest short at 29,729.25; the WIC week (2026-08-04 to 2026-08-12) for the higher-timeframe balance and its retest that confirmed sellers (the 29,730–29,745 break, the 29,740–29,760 retest, the drop to 29,540). Both lie inside the native calendar.
 
 
 ## Objects used by this method

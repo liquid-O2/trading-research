@@ -133,3 +133,31 @@ Existing braindumps under /workspace/sources/documents/conversations/ and the Ju
 ## Additions 2026-09-14
 
 Two greenbirdtrader posts, raw capture [sources/x-raw-2026-09-14/greenbirdtrader](/workspace/sources/x-raw-2026-09-14/greenbirdtrader/README.md): post 2099513366326730859 (2026-09-14, London-low sweep and reclaim long, Asia-high failed-breakout short, four photos) and post 2099503614372741234 (2026-09-11 trades posted 2026-09-14, overnight previous-day-low reclaim long and golden-pocket continuation long, three photos). Both postdate the 2026-09-11 X archive and the native data endpoint; they are dated examples with printed prices. Chart footers read "UTC-4".
+
+## Fidelity re-read 2026-09-15: dated examples, instruments and clocks
+
+Every source above was re-read in full on 2026-09-15 with all charts, tickets and whiteboards rendered at native resolution (657 page renders, 535 embedded images) and the small print read from zoomed crops. The reading is recorded per method in each method page's "Source fidelity re-read, 2026-09-15" section. Three catalog-level facts came out of it.
+
+**The session PDFs are dated.** The Deepchart cursor labels, prop dashboards and calendars give the trading day of every worked example, and most fall inside the native calendar (run-1.0.1 evaluation dates through 2026-08-19):
+
+| Source | Trading day (ET) | Instrument | Clock on the chart |
+|---|---|---|---|
+| [OFM] pp.7–14 | 2026-07-08, 2026-07-09, 2026-07-10 (replays from 10:15 and 09:30) | NQ-202609 | Deepchart, ET |
+| [NYAM] pp.4–11 | 2026-07-14 | NQ-202609 | Deepchart, ET |
+| [STOP] pp.8–9 | 2026-07-15 (01:01 and 03:04) | NQ-202609 | Deepchart, ET |
+| [STOP] pp.11–13 | 2025-11-07 and 2025-11-13 (SIM) | ES (EPZ25) | MotiveWave, ET |
+| [ANAT] pp.5–9 | 2026-07-23 | NQ-202609 | Deepchart, ET |
+| [K18] pp.4–10; [MAMT] p.12 | 2026-07-31 (context from 2026-07-30) | NQ-202609 | Deepchart, ET |
+| [K2345] pp.3–9 | 2026-08-04 (calendar also shows 2026-08-03) | NQ-202609 | Deepchart, ET |
+| [BIG] pp.3–16 | 2026-08-06 | NQ-202609 | Deepchart, ET |
+| [TRAP] pp.4–10; [WIC] pp.6–8 | 2026-08-10 evening (Asia session of 2026-08-11); TPO week 2026-08-04 to 2026-08-12 | MNQ / NQ | Tradesea UTC; Sierra Chart ET |
+| [CONT] pp.4–10 | 2026-08-19 | NQ-202609 | Deepchart, ET |
+| [K10] pp.7–13 | July 2026 (presentation dated 2026-07-01) | ES-202609 | Deepchart, ET |
+| [OFM] p.10 | posted 2026-06-20 (Discord) | NQ | Deepchart |
+| [GB] pp.43–60 | 2025-11-20; 2026-04 (MNQM26); 2026-04-23; 2026-04-28; 2026-06 (two sessions); 2026-07-13; 2026-07-29/30; 2026-08-11/12; 2026-08-13; 2026-08-27/28; 2026-08-31; 2026-09-01; 2026-09-03; 2026-09-08 | MNQ | TradingView UTC−4 |
+| [JR] | 2025-01-28, 2025-05-23, 2025-09-09, 2025-09-12, 2025-10-01, 2025-10-03, 2025-10-06/07/08, 2025-10-13, 2025-11-10, 2025-11-18, 2025-12-30, 2026-01-02, 2026-01-09, 2026-02-24, 2026-06-05, 2026-06-09, 2026-07-06, 2026-07-10, 2026-07-16, 2026-07-27/28, 2026-08-28, 2026-09-01, 2026-09-02 | NQ / MNQ | TradingView UTC−4/−5; NinjaTrader (2026) UK local time; tickets UTC |
+
+**Instruments.** The Member method's only worked example is on ES-202609 with ES tick economics ([K10]); the STOP lesson's DOM examples and the FP9 footprints are ES; everything else is NQ or MNQ. Green Bird trades MNQ across 26–37 copy accounts with a fixed $750 risk per account ([GB] pp.44–60). Sires trades one NQ per attempt on the personal account ([NYAM], [K18], [K2345], [BIG], [OFM]).
+
+**Clocks.** Deepchart screenshots print ET (the 09:30 opening burst sits at 09:30 on every session chart). The 2026 NinjaTrader screenshots in [JR] print UK local time (09:40 ET appears as 14:40 in summer). TradingView charts print the footer's UTC−4 or UTC−5. The Tradesea chart in [TRAP] prints UTC. The 2025-01-28 order ticket in [JR] p.71 prints UTC. Sierra Chart screenshots in [TRAP] and [WIC] print ET.
+

@@ -51,8 +51,20 @@ AND (
 )
 ```
 
-Citation: [K10] pp.5–8, 12. Score the structural sequence and post-entry outcomes in the instrument actually shown. A target-policy check is separate and unknown when the prose and ticket conflict. The student's case is not automatic evidence for transferring the same thresholds to another contract.
+Citation: [K10] pp.5–8, 12. Score the structural sequence and post-entry outcomes in the instrument actually shown, which is ES-202609 (re-read 2026-09-15 below). A target-policy check is separate and unknown when the prose and ticket conflict. The student's case is not automatic evidence for transferring the same thresholds to another contract.
 
+
+
+## Source fidelity re-read, 2026-09-15
+
+[K10] was re-read in full and its charts rendered at native resolution. The material fact the zoomed tickets add is the instrument: every chart is **ES-202609** (Deepchart via dxFeed, 2-minute and 30-minute), and the tickets use ES tick economics ([K10] pp.7–8, 12–13). The Lucid Trading slide dates the presentation to July 01, 2026 ([K10] p.4).
+
+- **Trade 1** is "SELL 2 | R:R 1.00" with a 20-tick stop (−$500 = 2 × 20 × $12.50) at the pre-marked 7,558.75–7,564.00 pair; **trade 2** is "BUY 2 | R:R 9.60" from ≈7,530 with a 20-tick stop and a 192-tick target box (+$4,800) up to ≈7,578; the 30-minute context shows the balance 7,545.25–7,564.50, the value box 7,586.25–7,597.75 and the objective band 7,625.75–7,639.25 ([K10] pp.7–8, 12).
+- **Sizing** is a fixed $500 risk with the quantity derived from the stop distance (tickets "SELL 2 / 20 ticks −$500", "SELL 1.82 / 22 ticks −$500.50", "BUY 1.82 / 22 ticks") ([K10] p.13).
+- The prose says both targets were planned at 1.5R ([K10] text); the drawn first ticket is R:R 1.00 and the second R:R 9.60. The existing note above that keeps these evidence states separate stands.
+- The two reasons are a level that rejected before (look left, any prior history) and a minor high-volume node close by, or a KG1 level aligned with the author's own areas; there is no 12:45 split and no disjoint time windows ([K10] pp.6–8). Ruled F15.
+
+**Consequence.** The only worked example is on ES. The two-reason rule, the marked-level discipline and the fixed-dollar sizing are instrument-agnostic, but the author-example replay needs an ES tape; the native census tape is NQ and ES is held only as an options decode in Phase 2. B0.2 records the replay as data_unavailable until an ES tape exists, and the NQ adapter is labelled a transfer.
 
 
 ## Objects used by this method

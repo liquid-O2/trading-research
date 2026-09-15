@@ -50,6 +50,11 @@ END
 Citation: [DATA] pp.7–8. Units use the initial baseline of the printed illustration, so `3 - 4 = -1` and `3 + 12 = 15`; silently rebasing every percentage on the changed equity produces different arithmetic. Handling after other outcomes, the sizing denominator in a general implementation, and the heading's alternative activation rule are not fully specified. The generic overlay is therefore only partially reconstructable. This is a rule/arithmetic audit, not a new simulation or a profitability claim.
 
 
+## Source fidelity re-read, 2026-09-15
+
+[DATA] pp.7–8 were re-read against the implemented ladder. The printed arithmetic is risk 1% at 1:3; after a win, risk 1% plus the 3% just banked (4%) for 3R (+12%, running +15%); the worst case from +3% is −1% net; reset to 1% after the second win; guardrails are never to raise base risk above 1%, to expect a volatile curve, to have 100 or more trades of data first and to know the win rate, average R:R and maximum consecutive losses from a Monte Carlo. The implemented 1 → 4 → reset ladder matches the printed illustration exactly; the "two trade winning streak" heading against the escalation after the first win is an internal source inconsistency that the page above already preserves. Nothing to change.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

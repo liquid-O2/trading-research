@@ -49,6 +49,11 @@ AND side = 'long'
 Citation: [GB] p.33 and its chart. Score this **entry sequence** and later directional movement. General target selection is unpublished. Do not use the reported 150-point result as an entry condition or an assumed planned target.
 
 
+## Source fidelity re-read, 2026-09-15
+
+The re-read of [GB] found no second VWAP example beyond 2026-02-24; VWAP is not drawn on any of the 2026-04 to 2026-09 charts (pp.44–60), and the author's own statement that VWAP is consulted only for continuation trades stands ([GB] p.33). The 2026-09-11 continuation long used the golden pocket of the CPI impulse, not VWAP, as the pullback location (raw capture 2026-09-14). B0.2 therefore keeps this method as a single-example branch: the London-and-Asia-high close, the retrace into session VWAP, the long with a 30-point stop. The B0.1 result of 628 unknown verdicts out of 1,127 episodes reflects an unspecified retest horizon, which the source does not supply; the Strategy Book must report that horizon as an operational choice, not as a source rule.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

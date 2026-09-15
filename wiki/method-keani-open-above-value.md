@@ -53,6 +53,13 @@ AND defense_at <= decision_at AND side = 'long'
 Citation: [AVG] pp.21–22. The source's near-10:00 observation does not define an exact universal minute tolerance. Missing that convention is an explicitly named timing variant. A developing-VAL short is not claimed as Keani's published mirror.
 
 
+## Source fidelity re-read, 2026-09-15
+
+[AVG] pp.21–28 and the whiteboard sketches (pp.20, 22, 24) were re-read. The setup as stated: the day's TPO opens fully above yesterday's value with the A period clear of the prior VAH; wait until around 10:00 for the day type to show in the profile; buyers are in control when value opens and builds higher; price will probably reject off the POC or the previous day's VAH; once above it, price breaks the current developing VAH with aggressive buying imbalances, comes back to those imbalances, and the retest is the long if the buyers who broke the level defend it; the caveats are time of day, the DOM at the retest (location, pacing, digits; absorption needs the three-tick reward) and a decent higher-timeframe objective ([AVG] pp.21–28). The p.22 sketch draws exactly this: the open above VAH/POC, the rejection circle, the "b" break of the developing VAH and the arrow back up on the retest.
+
+What the implementation added that the source does not state: an 11:00 cutoff and a 60-minute retest expiry (the A period ends at 10:00 and the observation is "around 10:00"); a "developing VAL rise" condition; an objective of A-high plus A-width (the objective is a higher-timeframe level: POC, value, VAH, a poor high). Ruled F16. The B0.1 count of 39 passes in 1,695 A observations is not contradicted by the source, but the funnel (open above value, rejection at POC or prior VAH, aggressive VAH break with imbalances, defended retest) must be reported stage by stage. No dated ticket exists for this setup; the author-example replay is recorded as none.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.

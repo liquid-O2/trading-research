@@ -61,6 +61,13 @@ AND fill_assumption_recorded
 Citations: [REF] pp.5–12, 16, 22; [OFM] pp.15–18. This second predicate verifies the documented configuration, not its profitability. If the grade/model or side/zone construction is unavailable, it is unknown. The default full mechanical-entry claim remains unsupported by the supplied sources.
 
 
+## Source fidelity re-read, 2026-09-15
+
+[REF] was re-read in full with its tables and charts. The zone is a price area where a burst of large aggressive orders traded (sixty, eighty, a hundred contracts within seconds); a touch is a later return; features known before the touch fall into memory, construction, location and flow ([REF] pp.2–8). The data are 199 million ticks of NQ and MNQ from December 2024 to November 2025, 235 regular sessions and 41,152 zone-touch events, about 175 touches per session ([REF] p.8). Baseline: 42% of touches hold and fading every touch loses −0.285R after costs; the graded selection reaches AUC 0.63 out of sample against 0.51 for a placebo, with the top decile holding 63% and the bottom 25%; memory and location carry the signal, flow alone reaches AUC 0.54 ([REF] pp.8–9). Execution: the median eventual winner dips 18 ticks past the touch; a resting limit inside the zone gives PF 1.80 (64 trades, 68.8%) against PF 0.81 (312 trades, 27.2%) for a market order at the touch on an independent engine ([REF] pp.10–11). The deployed configuration is the 12/32/96-tick bracket with a 30-minute cancel and one position at a time ([REF] p.12); out of sample 79 sessions, 542 trades, +0.143R, PF 1.19, about 6.8 trades a day, 30% win rate ([REF] pp.12–13); the independent-engine year shows 223 trades, 58.7%, PF 1.45, +$3,803 with a losing Q4 ([REF] p.14); a −4R daily stop adds about 14 points of pass rate ([REF] p.21).
+
+Against the implementation: the zone construction (print clusters with size thresholds and width) is the source's and the adapter's ≥40 prints in 5 seconds with ≥80 size is an operational stand-in; the touch definition, the 30-minute horizon and the bracket are literal; the "hold" label boundary is not printed and must be registered as an operational choice; the population target for reconciliation is about 175 touches per session. The correction in [OFM] p.18 stands: the fully causal mechanical rebuild was negative, so no automatic positive entry edge is claimed.
+
+
 ## Objects used by this method
 
 These pages define the observations, locations, execution branches and process records in the loop. A shared object does not transfer another author’s entry rule.
