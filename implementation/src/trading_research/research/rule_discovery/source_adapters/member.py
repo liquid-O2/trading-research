@@ -83,6 +83,135 @@ def apply_member_rules(document: Mapping[str, Any], market, branch: str, version
 register_family_transform(FAMILY, apply_member_rules)
 
 
+def _member_prior_reasons(market, side: str) -> dict[str, Any]:
+    """Prior-day reaction and disjoint HVN, same recipe as scan_member_repaired."""
+    from datetime import date
+    from decimal import Decimal as D
+
+    from trading_research.research.method_pack.branch_coverage import setting
+    from trading_research.research.method_pack.empirical_market import clock
+    from trading_research.research.method_pack.historical_features import Q, pivots
+
+    prior = market.prior("day")
+    empty = {"reaction": None, "node": None, "independent": None, "profile": None, "confluence": None}
+    if not prior.get("sessions"):
+        return empty
+    day = prior["sessions"][-1]
+    win = day["window"]
+    split = clock(date.fromisoformat(day["day"]), setting("auction_selection")["member_prior_split"])
+    reactionbars = win.bars(win.start, split, 300)
+    qualified = []
+    for reaction in pivots(reactionbars):
+        after = [row for row in reactionbars if row["start"] >= reaction["at"] and row["known_at"] <= reaction["known_at"]]
+        if not after:
+            continue
+        distance = (
+            reaction["price"] - min(row["L"] for row in after)
+            if reaction["side"] == "high"
+            else max(row["H"] for row in after) - reaction["price"]
+        )
+        if distance >= Q * setting("reaction")["reaction_ticks"]:
+            qualified.append(dict(reaction, reaction_distance=distance))
+    wanted = "high" if side == "short" else "low"
+    reactions = [row for row in qualified if row["side"] == wanted]
+    profile = win.profile(split, win.end)
+    levels = {row["price"]: row["total_volume"] for row in profile["rows"]}
+    radius = setting("reaction")["hvn_radius_ticks"]
+    nodes = [
+        price
+        for price, volume in levels.items()
+        if volume > 0 and all(volume > levels.get(price + Q * i, D(0)) for i in range(-radius, radius + 1) if i)
+    ]
+    pairs = []
+    for reaction in reactions:
+        matching = [price for price in nodes if abs(price - reaction["price"]) <= Q * setting("reaction")["confluence_ticks"]]
+        if not matching:
+            continue
+        node = min(matching, key=lambda price: (abs(price - reaction["price"]), price))
+        pairs.append((reaction, node))
+    if not pairs:
+        return {"reaction": None, "node": None, "independent": False, "profile": profile, "confluence": False}
+    reaction, node = pairs[-1]
+    independent = reaction["known_at"] <= split and profile["formation_start"] >= split
+    confluence = abs(node - reaction["price"]) <= Q * setting("reaction")["confluence_ticks"]
+    return {"reaction": reaction, "node": node, "independent": independent, "profile": profile, "confluence": confluence}
+
+
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """Defense (long) or rejection (short) after the candidate contact."""
+    from trading_research.research.method_pack.historical_features import MINUTE, Q, sign
+    from trading_research.research.method_pack.historical_flow import flow_stages
+    from trading_research.research.rule_discovery.baseline_repairs import flow_absent_repaired, local_observations_repaired
+    from trading_research.research.rule_discovery.source_adapters.confirmation import (
+        bounds,
+        contact_as_trigger,
+        contact_side,
+        scanner_ref,
+    )
+
+    trigger = contact_as_trigger(market, contact)
+    side = contact_side(contact)
+    sg = sign(side)
+    ref = scanner_ref(reference, formation)
+    lo, hi = bounds(ref)
+    if lo is None or hi is None:
+        decision = trigger.get("known_at") or trigger.get("end")
+        return {
+            "values": {"branch": branch, "side": side, "source_confirmation": None, "decision_at": decision, "location_touched": True},
+            "confirm_at": None,
+            "decision_at": decision,
+            "cutoff_ns": decision,
+            "source_confirmation": None,
+        }
+    from trading_research.research.method_pack.historical_flow import exact_contact
+
+    exact = exact_contact(market, trigger, lo, hi)
+    touch_at = exact["at"] if exact else (contact.get("at_ns") or trigger.get("start"))
+    obs = local_observations_repaired(market, touch_at, [lo, hi], side)
+    stages = flow_stages(obs)
+    defense = stages["defense"]
+    selected = defense if side == "long" else stages["reward"]
+    decision = selected["known_at"] if selected else obs["end"]
+    entry = selected.get("entry_px", selected["last"]) if selected else None
+    observed = [row for row in obs["chunks"] if row["end"] <= decision]
+    high = max((row["high"] for row in observed), default=hi)
+    low = min((row["low"] for row in observed), default=lo)
+    stop = high + Q if side == "short" else low - Q
+    missing = flow_absent_repaired(market, trigger["start"], min(int(market.end), ((int(decision) + MINUTE - 1) // MINUTE) * MINUTE), observed)
+    prior = _member_prior_reasons(market, side)
+    reaction = prior.get("reaction")
+    profile = prior.get("profile")
+    reaction_at = None if reaction is None else reaction.get("known_at")
+    hvn_at = None if profile is None else profile.get("known_at")
+    prior_known = None if reaction is None or touch_at is None else int(reaction_at) < int(touch_at)
+    values = {
+        "branch": branch,
+        "side": side,
+        "thesis_predefined": None if ref.get("known_at") is None or touch_at is None else int(ref["known_at"]) < int(touch_at),
+        "objective_fixed": None if entry is None else sg * ((entry + sg * abs(entry - stop)) - entry) > 0,
+        "risk_defined": None if entry is None else sg * (entry - stop) > 0,
+        "prior_reaction_area_known": prior_known,
+        "area_known_at": reaction_at if reaction_at is not None else ref.get("known_at"),
+        "independent_minor_hvn_known": prior.get("independent"),
+        "hvn_known_at": hvn_at,
+        "confluence_band_defined": prior.get("confluence"),
+        "actual_band_contact": True,
+        "touch_at": touch_at,
+        "reaction_at": selected["known_at"] if selected else None,
+        "confirm_at": selected["known_at"] if selected else None,
+        "decision_at": decision,
+        "source_confirmation": True if selected else missing,
+    }
+    if side == "short":
+        values["resistance_rejection"] = selected is not None or missing
+        values["stop_above_rejection_high"] = stop > high
+    else:
+        values["planned_return_to_structure"] = prior_known
+        values["buyers_absorb_and_hold"] = defense["held"] if defense else missing
+        values["stop_behind_long_invalidation"] = stop < low
+    return {"values": values, "confirm_at": values["confirm_at"], "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 

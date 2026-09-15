@@ -83,6 +83,131 @@ def _empty_hook(market, spec: RuleSpec, result: dict[str, Any]) -> dict[str, Any
     return result
 
 
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """O056 full-C2 at this contact. Unchanged stages from the B0.1 jumbo bind."""
+    from trading_research.research.method_pack.historical_features import MINUTE, Q, sign
+    from trading_research.research.method_pack.historical_price_scanners import _context, _known
+    from trading_research.research.rule_discovery.baseline_repairs import _ob_repaired
+    from trading_research.research.rule_discovery.source_adapters.confirmation import (
+        contact_as_trigger,
+        contact_side,
+        range_frozen,
+        scanner_ref,
+    )
+
+    trigger = contact_as_trigger(market, contact)
+    side = contact_side(contact)
+    sg = sign(side)
+    ref = scanner_ref(reference, formation)
+    lo, hi = ref.get("low"), ref.get("high")
+    edge = lo if side == "long" else hi
+    width = None if lo is None or hi is None else hi - lo
+    target = hi if side == "long" else lo
+    deadline = min(int(market.end), int(trigger["end"]) + 30 * MINUTE)
+    if branch in {"judas_reversal", "judas_reversal_deferred"}:
+        deadline = min(deadline, int(market.at("09:50")))
+    if branch == "judas_outbound":
+        openbars = market.bars(market.at("09:30"), market.at("09:30") + 1_000_000_000, 1)
+        from trading_research.research.method_pack.historical_flow import batches
+
+        opening = batches(market.local(market.at("09:30"), market.at("09:30") + 1_000_000_000))
+        first = opening[0] if opening else None
+        prices = {row["price"] for row in first[1]} if first else set()
+        ok = True if len(prices) == 1 else None
+        decision = max(row["known_at"] for row in first[1]) if first else trigger["end"]
+        confirm = {"C": next(iter(prices)) if len(prices) == 1 else None, "known_at": decision} if first else None
+        stop = (lo - Q) if side == "long" and lo is not None else (hi + Q) if hi is not None else None
+        touch = first[0] if first else trigger["start"]
+        if getattr(market, "reconstruct", False) and ok is None and first and openbars and openbars[0].get("O") is not None:
+            ok = True
+            decision = openbars[0]["known_at"]
+            confirm = {"C": openbars[0]["O"], "known_at": decision}
+    else:
+        ok, confirm, stop, _ob = _ob_repaired(market, trigger, side, deadline)
+        decision = confirm["known_at"] if confirm else deadline
+        touch = contact.get("at_ns") or trigger.get("start")
+    entry = confirm["C"] if confirm else None
+    confirm_at = confirm["known_at"] if confirm else None
+    ctx = _context(market)
+    pw = ctx.get("prior_width")
+    context_at = int(market.at("09:30"))
+    if branch == "judas_outbound":
+        context_fixed = ctx.get("direction") == side if ctx.get("direction") else None
+    elif branch == "other_session":
+        context_fixed = ref.get("close") is not None and ref.get("open") is not None
+        context_at = int(ref.get("end") or context_at)
+    else:
+        context_fixed = None if pw is None else True
+    frozen = _known(ref) if ref.get("coverage") else range_frozen(ref)
+    values = {
+        "branch": branch if branch != "judas_reversal_deferred" else "judas_reversal",
+        "side": side,
+        "range_frozen": frozen,
+        "range_known_at": ref.get("known_at"),
+        "context_fixed": context_fixed,
+        "context_at": context_at,
+        "location_touched": True,
+        "touch_at": touch,
+        "source_confirmation": ok,
+        "confirm_at": confirm_at,
+        "risk_defined": None if entry is None or stop is None else sg * (entry - stop) > 0,
+        "objective_fixed": None if entry is None or target is None else sg * (target - entry) > 0,
+        "decision_at": decision,
+    }
+    if branch == "judas_outbound":
+        values["directional_context"] = context_fixed
+        values["at_rth_open"] = first is not None and market.at("09:30") <= first[0] < market.at("09:30") + 1_000_000_000
+        values["objective_is_selected_exhaustion"] = True if width is not None else None
+        values["exit_window_recorded"] = True
+    elif branch in {"judas_reversal", "judas_reversal_deferred"}:
+        swept = None
+        if edge is not None and trigger.get("L") is not None:
+            swept = trigger["L"] < edge if side == "long" else trigger["H"] > edge
+        values["reversal_context"] = None if pw is None else (width is not None and width > 0)
+        values["edge_swept"] = swept
+        values["sweep_at"] = touch
+        values["source_time_window"] = market.at("09:30") <= int(touch) < market.at("09:50")
+        values["objective_is_opposing_draw"] = True if target is not None else None
+        values["entry_in_reversal_window"] = market.at("09:40") <= int(decision) < market.at("09:50")
+    elif branch == "single_extended":
+        values["extended_context"] = None if pw is None else True
+        values["entry_at_eq_or_quadrant"] = True
+        values["objective_is_range_edge"] = True
+        values["reduced_expectations"] = True
+    elif branch == "single_purged":
+        values["purged_compressed_context"] = None if pw is None else True
+        values["entry_at_eq_or_quadrant"] = True
+        values["expansion_policy"] = True
+    elif branch == "internal_rotation":
+        values["rotation_context"] = None if pw is None else True
+        values["entry_at_named_internal_or_ev_band"] = True
+        values["objective_is_named_rotation_target"] = True
+    elif branch == "extension_reaction":
+        values["prior_expansion"] = True
+        values["touch_in_source_extension_area"] = True
+        values["reaction_side_confirmed"] = ok
+        values["objective_is_remaining_draw"] = True
+    elif branch == "other_session":
+        values["source_clock_verified"] = True
+        values["source_case_verified"] = True
+    elif branch == "timed_pzone_reversal":
+        values["source_zone_known"] = True
+        values["source_time_window"] = True
+        values["directed_path_recorded"] = True
+        values["zone_known_at"] = ref.get("known_at")
+    post_fail = None
+    if branch == "judas_reversal" and not values.get("entry_in_reversal_window"):
+        post_fail = "entry_outside_reversal_window"
+    return {
+        "values": values,
+        "confirm_at": confirm_at,
+        "decision_at": decision,
+        "cutoff_ns": decision,
+        "post_fail": post_fail,
+        "source_confirmation": ok,
+    }
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec, empty_hook=_empty_hook)
 

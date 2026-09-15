@@ -77,6 +77,115 @@ def apply_keani_rules(document: Mapping[str, Any], market, branch: str, version:
 register_family_transform(FAMILY, apply_keani_rules)
 
 
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """Unchanged Keani stages from B0.1; defense uses the candidate band when the axis changed."""
+    from decimal import Decimal as D
+
+    from trading_research.research.method_pack.branch_coverage import setting
+    from trading_research.research.method_pack.historical_features import MINUTE, Q, first_contact
+    from trading_research.research.method_pack.historical_flow import exact_contact, flow_stages
+    from trading_research.research.rule_discovery.baseline_repairs import absent_repaired, flow_absent_repaired, local_observations_repaired
+    from trading_research.research.rule_discovery.source_adapters.confirmation import bounds, scanner_ref
+
+    prior = market.prior("day")
+    old = prior["sessions"][-1]["window"] if prior.get("sessions") else None
+    p = old.profile(old.start, old.end) if old else None
+    a = market.range(market.at("09:30"), market.at("10:00"), "Keani-A")
+    if a is None:
+        decision = int(market.end)
+        return {
+            "values": {"branch": branch, "side": "long", "a_period_complete": None, "source_confirmation": None, "decision_at": decision},
+            "confirm_at": None,
+            "decision_at": decision,
+            "cutoff_ns": decision,
+            "source_confirmation": None,
+        }
+    initial = market.profile(a["start"], a["end"])
+    limit = market.at(setting("keani_time")["latest_break"])
+    observation = breakout = band = retest = defense = exact = obs = None
+    dev = None
+    for row in market.bars(a["end"], limit):
+        current = market.profile(a["start"], row["start"])
+        higher = current["val"] is not None and initial["val"] is not None and current["val"] > initial["val"] and current["vah"] >= initial["vah"]
+        poc = current.get("poc")
+        prior_vah = p["vah"] if p and p.get("vah") is not None and prior.get("scope_complete") else None
+        hit_poc = poc is not None and row["C"] is not None and row["L"] <= poc and row["C"] > poc
+        hit_vah = prior_vah is not None and row["C"] is not None and row["L"] <= prior_vah and row["C"] > prior_vah
+        rejection = higher and row["C"] is not None and (hit_poc or hit_vah)
+        if observation is None and rejection:
+            observation = row
+            continue
+        if observation and row.get("observed_complete") and row["C"] is not None and current["vah"] is not None and row["C"] > current["vah"]:
+            footprint = market.window.footprints.get(row["start"])
+            if not footprint or any(u > 0 for _px, _b, _s, u in footprint["rows"]):
+                continue
+            cfg = setting("imbalance")
+            im = market.domain(
+                "O109",
+                {
+                    "candle_id": row["bar_id"],
+                    "footprint_rows": [{"price": px, "B": b, "A": s} for px, b, s, u in footprint["rows"]],
+                    "q": Q,
+                    "ratio_min": D(str(cfg["ratio"])),
+                    "row_count": cfg["consecutive_rows"],
+                    "zero_rule": cfg["zero"],
+                    "known_at": row["known_at"],
+                },
+            )
+            runs = im.get("buy_runs", [])
+            if runs:
+                breakout = row
+                dev = current
+                band = [D(str(v)) for v in runs[0]["band"]]
+                break
+    cand_lo, cand_hi = bounds(scanner_ref(reference, formation))
+    if changed_axis not in {"none", "baseline", ""} and cand_lo is not None and cand_hi is not None:
+        band = [cand_lo, cand_hi]
+    if breakout and band:
+        retest = first_contact(market.bars(breakout["end"], min(int(market.end), breakout["end"] + 60 * MINUTE)), *band)
+        if retest:
+            exact = exact_contact(market, retest, *band)
+            if exact:
+                obs = local_observations_repaired(market, exact["at"], band, "long")
+                defense = flow_stages(obs)["defense"]
+    absent_stage = absent_repaired(market, a["end"], limit, fields=("C",))
+    decision = defense["known_at"] if defense else min(int(market.end), limit + 60 * MINUTE)
+    absent_defense = (
+        flow_absent_repaired(market, retest["start"], min(int(market.end), ((int(decision) + MINUTE - 1) // MINUTE) * MINUTE), [r for r in obs["chunks"] if r["known_at"] <= decision])
+        if obs
+        else absent_stage
+    )
+    values = {
+        "branch": branch,
+        "side": "long",
+        "prior_value_fixed": True if p and p.get("vah") is not None and prior.get("scope_complete") else None,
+        "prior_vah": p["vah"] if p and prior.get("scope_complete") else None,
+        "a_period_complete": True if a["coverage"]["observed_scope_complete"] else None,
+        "a_low": a["low"],
+        "a_end_at": a["known_at"],
+        "developing_value_builds_higher": True if observation else absent_stage,
+        "source_rejection_observed": True if observation else absent_stage,
+        "observation_at": observation["known_at"] if observation else None,
+        "dev_vah_known_at": dev["known_at"] if dev else None,
+        "dev_vah_at_break": dev["vah"] if dev else None,
+        "breakout_at": breakout["known_at"] if breakout else None,
+        "breakout_close": breakout["C"] if breakout else None,
+        "aggressive_buy_imbalance_break": True if breakout else absent_stage,
+        "imbalance_band_known_at": breakout["known_at"] if breakout else None,
+        "retest_at": exact["at"] if exact else None,
+        "defense_at": defense["known_at"] if defense else None,
+        "buyers_defend_same_imbalance_band": defense["held"] if defense else absent_defense,
+        "dom_supports_long": defense["displayed_defense"] if defense else absent_defense,
+        "time_of_day_allowed": breakout["known_at"] <= limit if breakout else absent_stage,
+        "objective_fixed": None,
+        "risk_defined": None,
+        "decision_at": decision,
+        "confirm_at": defense["known_at"] if defense else None,
+        "source_confirmation": True if defense else absent_defense,
+    }
+    return {"values": values, "confirm_at": values["confirm_at"], "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 

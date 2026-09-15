@@ -168,6 +168,93 @@ def bind_saint_operational(document: Mapping[str, Any], market, branch: str, ver
 register_family_transform(FAMILY, bind_saint_operational)
 
 
+def confirm_at_contact(market, *, branch, contact, reference, formation=None, changed_axis="none", view=None) -> dict[str, Any]:
+    """Two-bar body/delta control after the contact, then operational stages."""
+    from trading_research.research.method_pack.historical_auction_scanners import _control
+    from trading_research.research.method_pack.historical_features import MINUTE, Q, sign
+    from trading_research.research.rule_discovery.baseline_repairs import _control_absence_repaired
+    from trading_research.research.rule_discovery.source_adapters.confirmation import (
+        contact_as_trigger,
+        contact_side,
+        scanner_ref,
+    )
+
+    trigger = contact_as_trigger(market, contact)
+    side = contact_side(contact)
+    sg = sign(side)
+    ref = scanner_ref(reference, formation)
+    end = min(int(market.end), int(trigger["end"]) + 60 * MINUTE)
+    lo, hi = ref.get("low"), ref.get("high")
+    boundary = hi if side == "long" else lo
+    retest_hi = (boundary + Q) if boundary is not None else None
+    retest_lo = (boundary - Q) if boundary is not None else None
+    from trading_research.research.method_pack.historical_features import first_contact
+
+    retest = None
+    if retest_lo is not None and retest_hi is not None:
+        retest = first_contact(market.bars(trigger["end"], end), retest_lo, retest_hi)
+    control, controlbars = _control(market, retest["end"] if retest else trigger["end"], end, side)
+    decision = control["known_at"] if control else end
+    entry = control["C"] if control else None
+    stop = None
+    if lo is not None and hi is not None:
+        stop = lo - Q if side == "long" else hi + Q
+    target = hi if side == "long" else lo
+    confirm_at = control["known_at"] if control else None
+    profile = None
+    if ref.get("start") is not None and ref.get("known_at") is not None:
+        profile = market.profile(ref["start"], ref["known_at"], ".68")
+    permission = None
+    if profile and profile.get("poc") is not None and lo is not None and hi is not None:
+        permission = lo <= profile["poc"] <= hi
+    arrival = None
+    trigger_at = trigger.get("known_at") or trigger.get("end")
+    complete = bool(trigger.get("observed_complete") or trigger.get("complete"))
+    if trigger_at is None:
+        arrival = None
+    elif confirm_at is None:
+        arrival = None
+    else:
+        arrival = bool(complete and int(trigger_at) <= int(confirm_at))
+    alignment = None
+    close = trigger.get("C")
+    if close is not None and lo is not None and hi is not None:
+        if close > hi:
+            alignment = side == "long"
+        elif close < lo:
+            alignment = side == "short"
+    held = None
+    if retest and control and boundary is not None:
+        held = all(
+            r["L"] >= boundary - Q * 2 if side == "long" else r["H"] <= boundary + Q * 2
+            for r in market.bars(retest["start"], control["end"])
+        )
+    values = {
+        "branch": branch,
+        "side": side,
+        "balance_fixed_before_use": True if ref.get("known_at") is not None else None,
+        "balance_known_at": ref.get("known_at"),
+        "profile_allows_trade": permission,
+        "arrival_read_recorded": arrival,
+        "arrival_at": trigger.get("start"),
+        "control_evidence_recorded": True if control else _control_absence_repaired(market, retest["end"] if retest else trigger["end"], end, side),
+        "control_at": confirm_at,
+        "alignment_ok": True if control else alignment,
+        "risk_defined": None if entry is None or stop is None else sg * (entry - stop) > 0,
+        "objective_fixed": None if entry is None or target is None else sg * (target - entry) > 0,
+        "ltf_balance_broken": True,
+        "ltf_balance_known_at": ref.get("known_at"),
+        "breakout_at": trigger.get("known_at") or trigger.get("end"),
+        "same_boundary_retest_held": held if retest else None,
+        "repeated_aggression_in_trade_direction": True if control else _control_absence_repaired(market, retest["end"] if retest else trigger["end"], end, side),
+        "retest_at": retest["start"] if retest else None,
+        "confirm_at": confirm_at,
+        "decision_at": decision,
+        "source_confirmation": True if control else None,
+    }
+    return {"values": values, "confirm_at": confirm_at, "decision_at": decision, "cutoff_ns": decision, "source_confirmation": values["source_confirmation"]}
+
+
 def scan_variant(market, view, spec: RuleSpec) -> dict[str, Any]:
     return dispatch_scan_variant(market, view, spec)
 

@@ -1,0 +1,11 @@
+ts	phase	decision	why	evidence	result
+2026-09-15T00:00:00Z	playbook	matched Feature playbook for candidate verdicts	new named behavior on the verdict path, not a one-line bug patch	poteto-mode/playbooks/feature.md	open
+2026-09-15T00:00:00Z	how	simple how path, one explainer, grok-4.6	how skill says take the simple path when in doubt; user cap is three live agents	source_adapters/common.py:816	open
+2026-09-15T00:00:00Z	architect	skip arena panel, record design in DESIGN.md	ruling R1 already names the module split; user cap of three live agents and one code writer forbids a multi-runner panel	_track_r1/DESIGN.md	architect skipped
+2026-09-15T06:33:13Z	implement	spawned one code writer on grok-4.6	Feature step 4 plus user cap of one writer	subagent 01a0a3c4-c5a2-7d10-8286-d4eb5673cd97	open
+2026-09-15T06:33:53Z	reproduce	2021-01-04 JJ-TBR F1 and R candidates are unknown while B0.1 is no_setup/fail	contact.source_confirmation is present and None	_track_r1/BEFORE_UNKNOWN.json	reproduced
+2026-09-15T06:37:21Z	how	confirmation uses HistoricalFeatures same as B0.1 dual_scan, not NativeMarketView 17:00	empty-delta must match B0.1 contact for contact; B0.1 scanners read HistoricalFeatures ending 16:00	historical_features.HistoricalFeatures, common.py load_source_market	open
+2026-09-15T06:41:17Z	implement	killed first writer after 95 read-only calls with no files	interrupt-chained resumes drop directives; fire a fresh writer with write-first scope	subagent 01a0a3c4-c5a2-7d10-8286-d4eb5673cd97	superseded
+2026-09-15T08:05:30Z	verify	empty-delta B0.1 match and 25 pytest passed	JJ-TBR F1 84 fail and R 156 fail against B0.1 10 no_setup, candidate unknown 0	_track_r1/VERDICTS.json pytest 25 passed in 342.18s	tests green
+2026-09-15T08:56:37Z	follow-up	bind REFILL zone_known_at departure_at feature_max_known_at; stop skipping zero-B0.1 families; pin compared==58; compute SIRES/MEMBER/REFILL operands	verification round 1 four defects	processes.py confirm_at_contact, test_candidate_verdicts.py	open
+2026-09-15T09:26:02Z	verify	REFILL unknown share 0; 320 pytest passed	four defects closed	_track_r1/VERDICTS.md pytest 320 passed in 783.45s	tests green
