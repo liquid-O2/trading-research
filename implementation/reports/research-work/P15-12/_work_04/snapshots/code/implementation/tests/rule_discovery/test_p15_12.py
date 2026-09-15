@@ -113,6 +113,20 @@ def test_p6_dedup_and_replenishment_and_ofm_in_scan_path():
     assert empty["empty_as_zero"] is True
 
 
+def test_b0_matches_frozen_scan_branch():
+    from trading_research.research.rule_discovery.source_adapters.common import FROZEN_PARITY_DATES, replay_b0_against_frozen
+    from trading_research.research.rule_discovery.source_adapters import sires as _sires  # noqa: F401
+
+    rows = []
+    for day in FROZEN_PARITY_DATES:
+        for branch in ("kg1_retest", "ofm_aggressive"):
+            row = replay_b0_against_frozen(day, FAMILY, branch)
+            rows.append(row)
+            assert row["b0_transform_markers"] == []
+            assert row["match"] is True, row
+    assert len(rows) == 6
+
+
 def test_changed_axis_scan_variant_exists():
     import inspect
     from trading_research.research.rule_discovery.source_adapters.sires import scan_variant

@@ -1,0 +1,481 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_a01_single_trade_below_vah_invalidates",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/",
+          "sha256": "78ed3ffe325d857a9ff364a10309a924bbf9ba8a921942a50e09be54a00b61ae"
+        }
+      ],
+      "expected": "pass",
+      "id": "A01",
+      "observed": "pass",
+      "oracle": "task card A01",
+      "requirement": "Family A01 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_a01_single_trade_below_vah_invalidates"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_a02_value_after_break_rejected",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "A02",
+      "observed": "pass",
+      "oracle": "task card A02",
+      "requirement": "Family A02 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_a02_value_after_break_rejected"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_a03_low_support_inconclusive",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "A03",
+      "observed": "pass",
+      "oracle": "task card A03",
+      "requirement": "Family A03 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_a03_low_support_inconclusive"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_c4_rejection_levels_in_repaired_scanner",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "A04",
+      "observed": "pass",
+      "oracle": "task card A04",
+      "requirement": "Own population / family A04.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_c4_rejection_levels_in_repaired_scanner"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "648b857baa5f0fd6787616bd7e5050ca148b2043c52c3ae2cbf15346747c9d16"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/populations",
+          "sha256": "78ed3ffe325d857a9ff364a10309a924bbf9ba8a921942a50e09be54a00b61ae"
+        }
+      ],
+      "expected": "slice exit 0",
+      "id": "A05",
+      "observed": "0",
+      "oracle": "native slice",
+      "requirement": "Native/future/long-short checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_c4_rejection_levels_in_repaired_scanner"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/THROUGHPUT.json",
+          "selector": "/p90_seconds",
+          "sha256": "ff195244ef6b50128bd9a9782d88a45629925295bf0acf9505750c283488120d"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "648b857baa5f0fd6787616bd7e5050ca148b2043c52c3ae2cbf15346747c9d16"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A06",
+      "observed": "0",
+      "oracle": "logged commands",
+      "requirement": "Commands, hashes, coverage, runtime.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "all A/S ids present",
+      "id": "A07",
+      "observed": "present",
+      "oracle": "required_matrix_ids",
+      "requirement": "Matrix completeness vs other checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "probes pass",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES",
+      "requirement": "Assigned silent-failure probes.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S01",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S01.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S02.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S03",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S03.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S07",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S07.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S08.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S09",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S09.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S21",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S21.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S22",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S22.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "184094b148305969d345144f191a14191f37d380ddcec2f2dcda1f315e320abe"
+        }
+      ],
+      "expected": "pass",
+      "id": "S31",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S31.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_15.py::test_s07_native_replay"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-15"
+}

@@ -1,0 +1,236 @@
+{
+  "accepted_schema_versions": [
+    "research-task-receipt-v2",
+    "research-subphase-receipt-v2",
+    "research-gate-review-v2"
+  ],
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "coverage": {
+    "clock_zone_unverified": true,
+    "full_history_run": false,
+    "market_feed_completeness": "unknown",
+    "native": true,
+    "population_kind": "engineering_slice",
+    "slice_dates": [
+      "2020-01-02",
+      "2021-01-04",
+      "2022-01-03",
+      "2023-01-03",
+      "2024-01-02",
+      "2025-01-02",
+      "2026-01-02",
+      "2023-11-06",
+      "2026-09-03"
+    ],
+    "unknown": 0
+  },
+  "gate": "pass",
+  "native_slice_ids": [
+    "2020-01-02",
+    "2021-01-04",
+    "2022-01-03",
+    "2023-01-03",
+    "2024-01-02",
+    "2025-01-02",
+    "2026-01-02",
+    "2023-11-06",
+    "2026-09-03"
+  ],
+  "reason": "04-family-adapters repair: own-population changed-axis scans, Saint operational stages bound from bars, Sires/Member/Keani rules in the scan path, F-REFILL-POP path (ii) unreconciled, engineering-slice labels.",
+  "run_id": "8b7e84385817cb18",
+  "schema_version": "research-subphase-receipt-v2",
+  "single_writer_audit": {
+    "checkout": "/workspace",
+    "nested_workers": 0,
+    "writer": "coordinator-parent-grok"
+  },
+  "subphase_id": "04-family-adapters",
+  "task_receipts": {
+    "P15-09": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-09/250e5aea146f3516/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "d12a670ecccc3385cb69f91cfb3bc6e873962f7cebad30d2f1d8119b66787830"
+    },
+    "P15-10": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-10/b89cbd7b0f4473cc/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "a9ecb00971ce59d7f713f65a54cb92d70ff6e913a989df3b31f14e02cf411312"
+    },
+    "P15-11": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "46186d40400c2b450874c3bda7417dd93b33e32bbe2de302c7ff011e33e0f8d9"
+    },
+    "P15-12": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-12/f33f750e365a04c1/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "795af26a3299e87348ac837e6599f55e9c17a6e1cb7f58511fbce5abf46ab38e"
+    },
+    "P15-13": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-13/8de8e78a21b0838a/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "1ff97dae205a8afd6c6304b66137e144dac8264186b60928828b9037c3c0fb10"
+    },
+    "P15-14": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-14/f01de253cf514105/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "0c5f6808621030f80201929b49c68cef55603f7bfa3f2ea4fe9dbe2bf6221b93"
+    },
+    "P15-15": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "7f9ebcd81a000cc6533f7433201531d64eee0d8e882b0dc4f48ea7d070e92c47"
+    },
+    "P15-16": {
+      "disposition": "implemented_verified",
+      "path": "/workspace/implementation/reports/research-work/P15-16/cf6bf4778e53a0b0/attempt-0001/TASK_RECEIPT.json",
+      "sha256": "7ed483afa01131cad5eac0efd9e6ffbb2f49cf63a58d9f874ae8b0c5954fc26e"
+    }
+  },
+  "test_evidence": [
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/rule_discovery/test_p15_09.py",
+        "tests/rule_discovery/test_p15_10.py",
+        "tests/rule_discovery/test_p15_11.py",
+        "tests/rule_discovery/test_p15_12.py",
+        "tests/rule_discovery/test_p15_13.py",
+        "tests/rule_discovery/test_p15_14.py",
+        "tests/rule_discovery/test_p15_15.py",
+        "tests/rule_discovery/test_p15_16.py",
+        "-q",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/pytest.log",
+      "log_sha256": "bafaee08a378bbf6b39146a3a4d3b7e7e83e9314c26e431fc8412902f38598c2",
+      "seconds": 140.59163381438702
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-09/250e5aea146f3516/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-09.log",
+      "log_sha256": "c1e6595dfbb716bf9680cd79e2b42ea71c192ff6c93284bdca1551fa2772d128",
+      "seconds": 27.444155102595687
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-10/b89cbd7b0f4473cc/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-10.log",
+      "log_sha256": "7cec32b4e74d7547058d40200af1548336ff865682e4aea8002900e4bec9cda2",
+      "seconds": 26.978735892102122
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-11.log",
+      "log_sha256": "b67d5c4653be64a0dc25a67c22d655a7938be440529a371c6407975c9e541843",
+      "seconds": 24.42119913548231
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-12/f33f750e365a04c1/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-12.log",
+      "log_sha256": "cd8551db2e1e8dee40c81b1f8d352826c481eb386cbcaa1f1f90968df66196c3",
+      "seconds": 26.63433729391545
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-13/8de8e78a21b0838a/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-13.log",
+      "log_sha256": "1144f652981b43d9562a881b8e59ec5db6966ccfcb8ded12d89dc0c2b1b6a7ad",
+      "seconds": 24.141946892254055
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-14/f01de253cf514105/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-14.log",
+      "log_sha256": "38a7d327f6df619b4514925740fdc2738efc50f1774e8ee3c295d07f5d6e45c5",
+      "seconds": 24.124704835005105
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-15/ced9a15cf6c6dae2/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-15.log",
+      "log_sha256": "e487027028b39dbaba031fef574533537eac3e22935625a38c9d50657c2e6616",
+      "seconds": 28.921268879435956
+    },
+    {
+      "argv": [
+        "/workspace/implementation/.venv/bin/python",
+        "tools/verify_research_release.py",
+        "task",
+        "--receipt",
+        "/workspace/implementation/reports/research-work/P15-16/cf6bf4778e53a0b0/attempt-0001/TASK_RECEIPT.json"
+      ],
+      "cwd": "/workspace/implementation",
+      "exit_code": 0,
+      "log_path": "/workspace/implementation/reports/research-work/04-family-adapters/8b7e84385817cb18/attempt-0001/verify_p15-16.log",
+      "log_sha256": "b486d3ea071b05783ae58380735e8c3e02b8555c219ff72d7c85a13a1517bb97",
+      "seconds": 25.67260884772986
+    }
+  ],
+  "unresolved": [
+    "Exchange-feed completeness remains unknown.",
+    "Same-model coordinator review is not cross-model diversity.",
+    "clock_zone_unverified for every family whose source clock zone the ledger marks unverified; clocks were not changed.",
+    "B0.1 full-history census RUN_COMPLETE.json was absent; dual-scan used live scanners and the 40-date preview identity.",
+    "20-session family p90 exceeds 5 s on HistoricalFeatures plus dual scan; engineering finding; bank not reduced.",
+    "Reported 04 populations are a 9-date engineering slice, not a family population. Full-history not run because every family p90 exceeds 5s and every P15-17 projection exceeds 24h.",
+    "F-REFILL-POP path (ii): pre-registration ordering cannot be established (git forbidden); 260-session printed-figure replay not re-run; REFILL-STUDY labelled population_scale_unreconciled."
+  ]
+}

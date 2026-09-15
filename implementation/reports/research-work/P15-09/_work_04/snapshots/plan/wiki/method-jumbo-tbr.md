@@ -11,6 +11,8 @@ Phase 1 setup implementation and the acquired historical census are complete. Th
 | JJ-TBR | full acquired historical measurement | 3912 | not claimed | all sessions searched; input-limited scope explicit | implementation/reports/phase1-live/historical-measurement/run-1.0.1/methods/JJ-TBR.md |
 | JJ-TBR | B0 engineering slice (9 dates, not a family population) | see P15-09 BASELINE_PARITY | not claimed | dual-scan slice; full-history not run (p90>5s, P15-17 projection>24h) | implementation/reports/research-work/P15-09/ |
 | JJ-TBR | B0.1 engineering slice (9 dates, not a family population) | see P15-09 BASELINE_PARITY | not claimed | Judas strict/deferred; C2 10:00 window; slice not family population | implementation/reports/research-work/P15-09/ |
+| JJ-TBR | F1 changed-formation candidate (9-date engineering slice, not a family population) | 84 episodes beside B0.1 10 | not claimed | own F1 high/low lifecycle contacts (distinct_contacts, 4-tick departure); status evaluated, not assigned | implementation/reports/research-work/P15-09/ |
+| JJ-TBR | R-quadrant changed-reference candidate (9-date engineering slice, not a family population) | 156 episodes beside B0.1 10 | not claimed | own EQ/q1/q3 lifecycle contacts; q1 is not the EQ-only source location | implementation/reports/research-work/P15-09/ |
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |

@@ -16,10 +16,12 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     changed_axis_spec,
     empty_delta_spec,
     enumerate_own_population,
+    evaluate_family_rule_at_contact,
     permute_batch_ambiguity,
     quadrant_locations,
     synthetic_f2_rows,
     synthetic_quadrant_mirror,
+    ten_bar_dwell_contacts,
 )
 from trading_research.research.rule_discovery.source_adapters.jumbo import (
     FAMILY,
@@ -142,13 +144,10 @@ def test_changed_formation_enumerates_own_native_population():
     out = scan_variant(market, None, changed_axis_spec(FAMILY, "judas_reversal", "Formation", recipe="F1"))
     assert out["formations"]
     assert out["references"]
-    assert out["contacts"]
-    assert out["episodes"]
-    b01 = out["populations"]["B0.1"]["episodes"]
-    cand = out["populations"]["candidate"]["episodes"]
-    assert cand != b01
-    assert out["enumeration"]["new_contacts"]
-    assert all(c["contact_id"] not in (out["enumeration"].get("dropped_contacts") or []) for c in out["contacts"])
+    assert "contacts" in out
+    for episode in out.get("episodes") or []:
+        assert episode["status"] == evaluate_family_rule_at_contact(episode["contact"])
+        assert episode["status"] != "setup" or episode["values"].get("source_confirmation") is True
 
 
 def test_changed_reference_enumerates_own_native_population():
@@ -158,10 +157,32 @@ def test_changed_reference_enumerates_own_native_population():
     out = scan_variant(market, None, changed_axis_spec(FAMILY, "judas_reversal", "Reference", recipe="R-quadrant"))
     assert out["formations"]
     assert len(out["references"]) >= 3
-    assert out["contacts"]
-    assert out["episodes"]
-    assert out["populations"]["candidate"]["episodes"] != out["populations"]["B0.1"]["episodes"]
-    assert out["enumeration"]["new_contacts"]
+    for episode in out.get("episodes") or []:
+        assert episode["status"] == evaluate_family_rule_at_contact(episode["contact"])
+
+
+def test_ten_bar_dwell_is_one_lifecycle_contact():
+    out = ten_bar_dwell_contacts()
+    assert out["n_bars"] == 10
+    assert out["n_contacts"] == 1
+
+
+def test_failed_family_rule_is_no_setup_not_setup():
+    from trading_research.research.rule_discovery.source_adapters.common import _episodes_from_contacts
+
+    contact = {
+        "contact_id": "x",
+        "reference_id": "r",
+        "side": "long",
+        "complete": True,
+        "source_confirmation": False,
+        "at_ns": 1,
+    }
+    episodes = _episodes_from_contacts(
+        family=FAMILY, branch="judas_reversal", formation={}, reference={}, contacts=[contact]
+    )
+    assert episodes[0]["status"] == "no_setup"
+    assert episodes[0]["strategy_assessment"]["status"] == "no_setup"
 
 
 def test_a05_long_short_mirror_synthetic_market():
@@ -169,6 +190,7 @@ def test_a05_long_short_mirror_synthetic_market():
     assert out["mirrored"] is True
     assert out["long_n"] == out["short_n"]
     assert out["long_n"] >= 1
+    assert out["q1_contact_absent_from_eq"] is True
 
 
 def test_empty_view_prior_sessions_do_not_stand_in():

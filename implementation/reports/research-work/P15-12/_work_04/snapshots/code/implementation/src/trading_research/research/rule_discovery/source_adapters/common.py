@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 import json
 import time
 
@@ -237,14 +237,38 @@ _FAMILY_TRANSFORMS: dict[str, Any] = {}
 
 
 def register_family_transform(family: str, fn) -> None:
-    """Post-process B0/B0.1 documents after the scanners run (adapter-level rules)."""
+    """Post-process B0.1 documents after the repaired scanner. Never applied to B0."""
     _FAMILY_TRANSFORMS[family] = fn
 
 
+def strip_baseline_version(document: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Frozen-scan comparison view: drop baseline_version tags only."""
+    if not document:
+        return {"episodes": []}
+    out = {key: value for key, value in dict(document).items() if key != "baseline_version"}
+    episodes = []
+    for episode in list(out.get("episodes") or []):
+        row = dict(episode)
+        row.pop("baseline_version", None)
+        episodes.append(row)
+    out["episodes"] = episodes
+    return out
+
+
+def frozen_scan_document(market: HistoricalFeatures, method_id: str, branch: str) -> dict[str, Any]:
+    return dict(native_scan_branch(market, coverage_row(method_id, branch)))
+
+
 def dual_scan(market: HistoricalFeatures, method_id: str, branch: str) -> dict[str, Any]:
-    """B0 frozen scanner plus B0.1 repaired-or-frozen scanner."""
+    """B0 frozen scanner plus B0.1 repaired-or-frozen scanner.
+
+    Adapter transforms bind on B0.1 only. B0 is frozen scan_branch output with
+    baseline_version tags; DISPOSITION ruling 1 keeps that the byte-identical
+    parity target.
+    """
     row = coverage_row(method_id, branch)
-    b0 = _tag_episodes(native_scan_branch(market, row), B0)
+    frozen = native_scan_branch(market, row)
+    b0 = _tag_episodes(frozen, B0)
     if is_repaired(method_id, branch):
         b01 = scan_branch_repaired(market, row)
         b01.pop("deferred_variant", None)
@@ -253,7 +277,6 @@ def dual_scan(market: HistoricalFeatures, method_id: str, branch: str) -> dict[s
         b01 = _tag_episodes(native_scan_branch(market, row), B0)
     transform = _FAMILY_TRANSFORMS.get(method_id)
     if transform is not None:
-        b0 = transform(b0, market, branch, B0)
         b01 = transform(b01, market, branch, B01)
     b0_counts = population_counts(b0)
     b01_counts = population_counts(b01)
@@ -465,6 +488,8 @@ def scan_family_date(day: str, method_id: str, branches: tuple[str, ...]) -> dic
                 "b01_episode_ids": [ep.get("candidate_id") for ep in item["b01"].get("episodes") or []],
                 "b0_status": [episode_status(ep) for ep in item["b0"].get("episodes") or []],
                 "b01_status": [episode_status(ep) for ep in item["b01"].get("episodes") or []],
+                "arrival_none_count": (item.get("b01") or {}).get("arrival_none_count"),
+                "status_changed_from_arrival_none": (item.get("b01") or {}).get("status_changed_from_arrival_none"),
             }
             for item in scans
         ],
@@ -720,6 +745,48 @@ def baseline_contact_ids(document: Mapping[str, Any] | None) -> set[str]:
     return ids
 
 
+def enumerate_lifecycle_contacts(
+    bars: Sequence[Mapping[str, Any]],
+    *,
+    lower: Decimal,
+    upper: Decimal,
+    reference_id: str,
+    side: str,
+    reference_lifecycle_id: str | None = None,
+) -> list[dict[str, Any]]:
+    """One contact per reference lifecycle per approach. Further contact requires departure.
+
+    This is the method_pack `distinct_contacts` primitive (4-tick departure) that
+    B0.1 scanners already use. Not a per-bar dwell enumeration.
+    """
+    from trading_research.research.method_pack.historical_features import Q as HQ
+    from trading_research.research.method_pack.historical_features import distinct_contacts
+
+    contacts: list[dict[str, Any]] = []
+    lid = reference_lifecycle_id or reference_id
+    for i, row in enumerate(distinct_contacts(list(bars), lower, upper, departure=HQ * 4)):
+        complete = bool(row.get("complete") or row.get("observed_complete"))
+        contact_id = f"{lid}:{row.get('bar_id') or row['start']}:{i}"
+        contacts.append(
+            {
+                "contact_id": contact_id,
+                "reference_id": reference_id,
+                "reference_lifecycle_id": lid,
+                "at_ns": int(row["start"]),
+                "available_at_ns": int(row.get("known_at") or row["end"]),
+                "side": side,
+                "kind": "touch",
+                "bar_id": row.get("bar_id"),
+                "low": str(row["L"]),
+                "high": str(row["H"]),
+                "close": None if row.get("C") is None else str(row["C"]),
+                "complete": complete,
+                "source_confirmation": row.get("source_confirmation"),
+            }
+        )
+    return contacts
+
+
 def enumerate_bar_contacts(
     market: HistoricalFeatures,
     *,
@@ -729,33 +796,33 @@ def enumerate_bar_contacts(
     end_ns: int,
     reference_id: str,
     side: str,
+    reference_lifecycle_id: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Every complete bar that overlaps the reference is a contact of this candidate's own population."""
+    """Adapter wrapper. Delegates to lifecycle contacts; per-bar overlap is not used."""
     lo = max(int(start_ns), int(market.start))
     hi = min(int(end_ns), int(market.end))
     if hi <= lo:
         return []
-    contacts: list[dict[str, Any]] = []
-    for i, row in enumerate(market.bars(lo, hi, 60)):
-        if row.get("L") is None or row.get("H") is None:
-            continue
-        if row["L"] > upper or row["H"] < lower:
-            continue
-        contact_id = f"{reference_id}:{row.get('bar_id') or row['start']}:{i}"
-        contacts.append(
-            {
-                "contact_id": contact_id,
-                "reference_id": reference_id,
-                "at_ns": int(row["start"]),
-                "available_at_ns": int(row["known_at"]),
-                "side": side,
-                "kind": "touch",
-                "bar_id": row.get("bar_id"),
-                "low": str(row["L"]),
-                "high": str(row["H"]),
-            }
-        )
-    return contacts
+    return enumerate_lifecycle_contacts(
+        market.bars(lo, hi, 60),
+        lower=lower,
+        upper=upper,
+        reference_id=reference_id,
+        side=side,
+        reference_lifecycle_id=reference_lifecycle_id,
+    )
+
+
+def evaluate_family_rule_at_contact(contact: Mapping[str, Any]) -> str:
+    """Family rule at this contact. Never assign setup by construction."""
+    if contact.get("complete") is False:
+        return "unknown"
+    confirmation = contact.get("source_confirmation")
+    if confirmation is False:
+        return "no_setup"
+    if confirmation is None:
+        return "unknown"
+    return "setup"
 
 
 def _episodes_from_contacts(
@@ -768,6 +835,7 @@ def _episodes_from_contacts(
 ) -> list[dict[str, Any]]:
     episodes = []
     for contact in contacts:
+        status = evaluate_family_rule_at_contact(contact)
         episodes.append(
             {
                 "candidate_id": f"cand:{family}:{branch}:{contact['contact_id']}",
@@ -778,9 +846,11 @@ def _episodes_from_contacts(
                     "location_touched": True,
                     "own_population": True,
                     "changed_axis": True,
+                    "source_confirmation": contact.get("source_confirmation"),
+                    "complete_bar": contact.get("complete"),
                 },
-                "strategy_assessment": {"status": "setup"},
-                "status": "setup",
+                "strategy_assessment": {"status": status},
+                "status": status,
                 "contact": contact,
                 "reference": reference,
                 "formation": formation,
@@ -932,53 +1002,36 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
         family=family,
         branch=branch,
     )
-    band_ref = _band_reference(
-        formed,
-        lower=formed.low,
-        upper=formed.high,
-        kind="R-band",
-        issue_ns=issue_at,
-        expiry_ns=expiry_ns,
-        family=family,
-        branch=branch,
-    )
     scan_start = issue_at
     contacts: list[dict[str, Any]] = []
-    contacts.extend(
-        enumerate_bar_contacts(
-            market,
-            lower=formed.high,
-            upper=formed.high,
-            start_ns=scan_start,
-            end_ns=expiry_ns,
-            reference_id=high_ref.reference_id,
-            side="short",
-        )
+    high_hits = enumerate_bar_contacts(
+        market,
+        lower=formed.high,
+        upper=formed.high,
+        start_ns=scan_start,
+        end_ns=expiry_ns,
+        reference_id=high_ref.reference_id,
+        side="short",
+        reference_lifecycle_id=high_ref.reference_lifecycle_id,
     )
-    contacts.extend(
-        enumerate_bar_contacts(
-            market,
-            lower=formed.low,
-            upper=formed.low,
-            start_ns=scan_start,
-            end_ns=expiry_ns,
-            reference_id=low_ref.reference_id,
-            side="long",
-        )
+    low_hits = enumerate_bar_contacts(
+        market,
+        lower=formed.low,
+        upper=formed.low,
+        start_ns=scan_start,
+        end_ns=expiry_ns,
+        reference_id=low_ref.reference_id,
+        side="long",
+        reference_lifecycle_id=low_ref.reference_lifecycle_id,
     )
-    contacts.extend(
-        enumerate_bar_contacts(
-            market,
-            lower=formed.low,
-            upper=formed.high,
-            start_ns=scan_start,
-            end_ns=expiry_ns,
-            reference_id=band_ref.reference_id,
-            side="long",
-        )
-    )
+    for hit in high_hits:
+        hit["geometric_reason"] = "F1 high is not the source-window high"
+    for hit in low_hits:
+        hit["geometric_reason"] = "F1 low is not the source-window low"
+    contacts.extend(high_hits)
+    contacts.extend(low_hits)
     episodes = []
-    for reference in (high_ref, low_ref, band_ref):
+    for reference in (high_ref, low_ref):
         ref_row = reference_record(reference)
         side = "short" if reference is high_ref else "long"
         subset = [c for c in contacts if c["reference_id"] == reference.reference_id]
@@ -986,6 +1039,16 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
     candidate_ids = {ep["candidate_id"] for ep in episodes} | {c["contact_id"] for c in contacts}
     baseline_ids = baseline_contact_ids(baseline["b01"])
     enumeration = enumerate_own_population(baseline_ids=baseline_ids, candidate_ids=candidate_ids, geometry_changed=True)
+    new_ids = set(enumeration.get("new_contacts") or [])
+    new_contact_records = [
+        {
+            "contact_id": contact["contact_id"],
+            "geometric_reason": contact.get("geometric_reason"),
+            "status": evaluate_family_rule_at_contact(contact),
+        }
+        for contact in contacts
+        if contact["contact_id"] in new_ids or f"cand:{family}:{branch}:{contact['contact_id']}" in new_ids
+    ]
     return {
         "schema_version": "research-changed-axis-scan-v1",
         "axis": "Formation",
@@ -993,7 +1056,7 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
         "family": family,
         "branch": branch,
         "formations": [form_row],
-        "references": [reference_record(high_ref), reference_record(low_ref), reference_record(band_ref)],
+        "references": [reference_record(high_ref), reference_record(low_ref)],
         "contacts": contacts,
         "episodes": episodes,
         "emitted": bool(episodes),
@@ -1003,6 +1066,7 @@ def changed_formation_scan(market: HistoricalFeatures, view: NativeMarketView | 
             "candidate": population_counts({"episodes": episodes}),
         },
         "enumeration": enumeration,
+        "new_contact_records": new_contact_records,
         "clock_zone_unverified": clock_zone_unverified(family, branch),
         "population_kind": "engineering_slice",
     }
@@ -1046,14 +1110,13 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
         _band_reference(formed, lower=loc["eq"], upper=loc["eq"], kind="R-eq", issue_ns=issue_ns, expiry_ns=expiry_ns, family=family, branch=branch),
         _band_reference(formed, lower=loc["q1"], upper=loc["q1"], kind="R-q1", issue_ns=issue_ns, expiry_ns=expiry_ns, family=family, branch=branch),
         _band_reference(formed, lower=loc["q3"], upper=loc["q3"], kind="R-q3", issue_ns=issue_ns, expiry_ns=expiry_ns, family=family, branch=branch),
-        _band_reference(formed, lower=formed.low, upper=formed.high, kind="R-band", issue_ns=issue_ns, expiry_ns=expiry_ns, family=family, branch=branch),
     ]
     form_row = formation_record(formed)
     contacts: list[dict[str, Any]] = []
     episodes: list[dict[str, Any]] = []
-    side_by_kind = {"R-eq": "long", "R-q1": "long", "R-q3": "short", "R-band": "long"}
+    side_by_kind = {"R-eq": "long", "R-q1": "long", "R-q3": "short"}
     for reference in refs:
-        kind = next((name for name in ("R-band", "R-q1", "R-q3", "R-eq") if name in reference.reference_id), "R-eq")
+        kind = next((name for name in ("R-q1", "R-q3", "R-eq") if name in reference.reference_id), "R-eq")
         side = side_by_kind.get(kind, "long")
         found = enumerate_bar_contacts(
             market,
@@ -1063,7 +1126,15 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
             end_ns=expiry_ns,
             reference_id=reference.reference_id,
             side=side,
+            reference_lifecycle_id=reference.reference_lifecycle_id,
         )
+        for hit in found:
+            if kind == "R-q1":
+                hit["geometric_reason"] = "q1 is not the EQ-only source location"
+            elif kind == "R-q3":
+                hit["geometric_reason"] = "q3 is not the EQ-only source location"
+            else:
+                hit["geometric_reason"] = "EQ contact on the candidate's own source-window reference"
         contacts.extend(found)
         episodes.extend(
             _episodes_from_contacts(
@@ -1077,6 +1148,16 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
     candidate_ids = {ep["candidate_id"] for ep in episodes} | {c["contact_id"] for c in contacts}
     baseline_ids = baseline_contact_ids(baseline["b01"])
     enumeration = enumerate_own_population(baseline_ids=baseline_ids, candidate_ids=candidate_ids, geometry_changed=True)
+    new_ids = set(enumeration.get("new_contacts") or [])
+    new_contact_records = [
+        {
+            "contact_id": contact["contact_id"],
+            "geometric_reason": contact.get("geometric_reason"),
+            "status": evaluate_family_rule_at_contact(contact),
+        }
+        for contact in contacts
+        if contact["contact_id"] in new_ids or f"cand:{family}:{branch}:{contact['contact_id']}" in new_ids
+    ]
     return {
         "schema_version": "research-changed-axis-scan-v1",
         "axis": "Reference",
@@ -1093,26 +1174,56 @@ def changed_reference_scan(market: HistoricalFeatures, view: NativeMarketView | 
             "candidate": population_counts({"episodes": episodes}),
         },
         "enumeration": enumeration,
+        "new_contact_records": new_contact_records,
         "clock_zone_unverified": clock_zone_unverified(family, branch),
         "population_kind": "engineering_slice",
     }
 
 
+def _synth_bar(i: int, low: Decimal, high: Decimal, *, bar_id: str, complete: bool = True) -> dict[str, Any]:
+    minute = 60_000_000_000
+    return {
+        "start": i * minute,
+        "end": (i + 1) * minute,
+        "L": low,
+        "H": high,
+        "C": (low + high) / Decimal("2"),
+        "known_at": (i + 1) * minute,
+        "bar_id": bar_id,
+        "complete": complete,
+        "observed_complete": complete,
+    }
+
+
+def ten_bar_dwell_contacts() -> dict[str, Any]:
+    """Ten overlapping bars inside one band yield one lifecycle contact."""
+    bars = [_synth_bar(i, Decimal("101.5"), Decimal("102.5"), bar_id=f"D{i}") for i in range(10)]
+    contacts = enumerate_lifecycle_contacts(
+        bars, lower=Decimal("102"), upper=Decimal("102"), reference_id="ref-q1", side="long", reference_lifecycle_id="life-q1"
+    )
+    return {"n_bars": 10, "n_contacts": len(contacts), "contacts": contacts}
+
+
 def synthetic_quadrant_mirror() -> dict[str, Any]:
-    """Long/short mirror on synthetic bars: long contacts q1, short contacts q3."""
+    """Long/short mirror: long contacts q1, short contacts q3. eq does not produce the q1 contact."""
     low, high = Decimal("100"), Decimal("108")
     long_loc = quadrant_locations(low, high, "long")
     short_loc = quadrant_locations(low, high, "short")
-    long_bars = [{"start": 0, "end": 60_000_000_000, "L": Decimal("101.5"), "H": Decimal("102.5"), "known_at": 60_000_000_000, "bar_id": "L1"}]
-    short_bars = [{"start": 0, "end": 60_000_000_000, "L": Decimal("105.5"), "H": Decimal("106.5"), "known_at": 60_000_000_000, "bar_id": "S1"}]
-
-    def touches(bars: list[dict[str, Any]], price: Decimal) -> list[str]:
-        return [str(row["bar_id"]) for row in bars if row["L"] <= price <= row["H"]]
-
-    long_ids = touches(long_bars, long_loc["q1"])
-    short_ids = touches(short_bars, short_loc["q3"])
+    long_bars = [_synth_bar(0, Decimal("101.5"), Decimal("102.5"), bar_id="L1")]
+    short_bars = [_synth_bar(0, Decimal("105.5"), Decimal("106.5"), bar_id="S1")]
+    long_q1 = enumerate_lifecycle_contacts(
+        long_bars, lower=long_loc["q1"], upper=long_loc["q1"], reference_id="long-q1", side="long", reference_lifecycle_id="life-long-q1"
+    )
+    long_eq = enumerate_lifecycle_contacts(
+        long_bars, lower=long_loc["eq"], upper=long_loc["eq"], reference_id="long-eq", side="long", reference_lifecycle_id="life-long-eq"
+    )
+    short_q3 = enumerate_lifecycle_contacts(
+        short_bars, lower=short_loc["q3"], upper=short_loc["q3"], reference_id="short-q3", side="short", reference_lifecycle_id="life-short-q3"
+    )
     mid = (low + high) / Decimal("2")
     mirrored_short_price = mid - (Decimal(str(long_bars[0]["L"])) - mid)
+    long_ids = [c["contact_id"] for c in long_q1]
+    short_ids = [c["contact_id"] for c in short_q3]
     # long L 101.5 mirrors to 106.5, which is the short bar high
     return {
         "low": str(low),
@@ -1125,6 +1236,8 @@ def synthetic_quadrant_mirror() -> dict[str, Any]:
         "short_n": len(short_ids),
         "mirrored": len(long_ids) == len(short_ids) and len(long_ids) >= 1,
         "eq": str(mid),
+        "eq_contacts_on_q1_bar": len(long_eq),
+        "q1_contact_absent_from_eq": len(long_q1) >= 1 and len(long_eq) == 0,
         "mirrored_short_price": str(mirrored_short_price),
     }
 
@@ -1148,6 +1261,32 @@ def dispatch_scan_variant(market, view, spec: RuleSpec, *, empty_hook=None) -> d
     return changed_formation_scan(market, view, spec)
 
 
+FROZEN_PARITY_DATES = ("2021-01-04", "2022-06-15", "2023-12-08")
+TRANSFORM_MARKERS = ("sires_adapter_rules", "saint_operational_bound", "member_adapter_rules", "keani_adapter_rules")
+
+
+def replay_b0_against_frozen(day: str, family: str, branch: str) -> dict[str, Any]:
+    """B0 episodes must equal frozen scan_branch. Transforms must not appear on B0."""
+    install_write_guard()
+    market = load_source_market(day)
+    dual = dual_scan(market, family, branch)
+    frozen = frozen_scan_document(market, family, branch)
+    b0 = strip_baseline_version(dual["b0"])
+    frozen_eps = list(frozen.get("episodes") or [])
+    b0_eps = list(b0.get("episodes") or [])
+    match = json.dumps(b0_eps, sort_keys=True, default=str) == json.dumps(frozen_eps, sort_keys=True, default=str)
+    markers = [key for key in TRANSFORM_MARKERS if key in (dual.get("b0") or {})]
+    return {
+        "date": day,
+        "family": family,
+        "branch": branch,
+        "frozen_n": len(frozen_eps),
+        "b0_n": len(b0_eps),
+        "match": match,
+        "b0_transform_markers": markers,
+    }
+
+
 def run_changed_axis_cases(day: str, family: str, branch: str) -> dict[str, Any]:
     """Native changed-formation and changed-reference scans for NATIVE_CASES.json."""
     install_write_guard()
@@ -1167,6 +1306,7 @@ def run_changed_axis_cases(day: str, family: str, branch: str) -> dict[str, Any]
             "b01_episodes": ((formation.get("populations") or {}).get("B0.1") or {}).get("episodes"),
             "candidate_episodes": ((formation.get("populations") or {}).get("candidate") or {}).get("episodes"),
             "new_contacts": (formation.get("enumeration") or {}).get("new_contacts"),
+            "new_contact_records": formation.get("new_contact_records") or [],
             "count_differs_from_b01": ((formation.get("populations") or {}).get("candidate") or {}).get("episodes")
             != ((formation.get("populations") or {}).get("B0.1") or {}).get("episodes"),
         },
@@ -1178,6 +1318,7 @@ def run_changed_axis_cases(day: str, family: str, branch: str) -> dict[str, Any]
             "b01_episodes": ((reference.get("populations") or {}).get("B0.1") or {}).get("episodes"),
             "candidate_episodes": ((reference.get("populations") or {}).get("candidate") or {}).get("episodes"),
             "new_contacts": (reference.get("enumeration") or {}).get("new_contacts"),
+            "new_contact_records": reference.get("new_contact_records") or [],
             "count_differs_from_b01": ((reference.get("populations") or {}).get("candidate") or {}).get("episodes")
             != ((reference.get("populations") or {}).get("B0.1") or {}).get("episodes"),
         },

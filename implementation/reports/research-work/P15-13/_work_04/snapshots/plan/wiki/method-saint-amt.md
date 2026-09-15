@@ -9,7 +9,7 @@ Phase 1 setup implementation and the acquired historical census are complete. Th
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
 | SAINT-AMT | full acquired historical measurement | 785 | not claimed | all sessions searched; input-limited scope explicit | implementation/reports/phase1-live/historical-measurement/run-1.0.1/methods/SAINT-AMT.md |
-| SAINT-AMT | B0/B0.1 engineering slice (9 dates, not a family population) | see P15-13 BASELINE_PARITY | not claimed | arrival/LTF/profile operational rules evaluated from bars/profile and bound into B0.1 verdicts; full-history not run (p90>5s, P15-17 projection>24h) | implementation/reports/research-work/P15-13/ |
+| SAINT-AMT | B0/B0.1 engineering slice (9 dates, not a family population) | see P15-13 BASELINE_PARITY | not claimed | C7 arrival/LTF/profile bound on B0.1 only; missing confirm_at makes arrival_read_recorded None; 28 of 40 slice episodes have no confirm_at; 0 of 40 change status (other conjuncts still fail). Full-history not run | implementation/reports/research-work/P15-13/ |
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |

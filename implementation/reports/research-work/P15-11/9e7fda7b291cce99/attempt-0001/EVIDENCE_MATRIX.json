@@ -1,0 +1,481 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_a01_unclosed_bar_cannot_admit",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/",
+          "sha256": "d1b0f0a130e808bbf1b0fc0c94e3a22168de898d9482e5f82c6522e4b842fd8c"
+        }
+      ],
+      "expected": "pass",
+      "id": "A01",
+      "observed": "pass",
+      "oracle": "task card A01",
+      "requirement": "Family A01 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_a01_unclosed_bar_cannot_admit"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_a02_custom_not_labelled_source_long",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "A02",
+      "observed": "pass",
+      "oracle": "task card A02",
+      "requirement": "Family A02 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_a02_custom_not_labelled_source_long"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_a03_scalp_mirrors",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "A03",
+      "observed": "pass",
+      "oracle": "task card A03",
+      "requirement": "Family A03 behavior.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_a03_scalp_mirrors"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_a01_gb_a4_golden_pocket_continuation",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "A04",
+      "observed": "pass",
+      "oracle": "task card A04",
+      "requirement": "Own population / family A04.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_a01_gb_a4_golden_pocket_continuation"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "194ccc3c788f469045ae98c1ea14ac999782ed82502bdabd65ccefae4790dc40"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/BASELINE_PARITY.json",
+          "selector": "/populations",
+          "sha256": "d1b0f0a130e808bbf1b0fc0c94e3a22168de898d9482e5f82c6522e4b842fd8c"
+        }
+      ],
+      "expected": "slice exit 0",
+      "id": "A05",
+      "observed": "0",
+      "oracle": "native slice",
+      "requirement": "Native/future/long-short checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_d1_retest_window_does_not_overwrite_breakout_context"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        1
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/THROUGHPUT.json",
+          "selector": "/p90_seconds",
+          "sha256": "747fd9fbc8f4924c5ca2b789a13ee9015121cad8a38ab0c3c31ad3f83705ddf7"
+        },
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/slice.log",
+          "selector": "/",
+          "sha256": "194ccc3c788f469045ae98c1ea14ac999782ed82502bdabd65ccefae4790dc40"
+        }
+      ],
+      "expected": "exit 0",
+      "id": "A06",
+      "observed": "0",
+      "oracle": "logged commands",
+      "requirement": "Commands, hashes, coverage, runtime.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "all A/S ids present",
+      "id": "A07",
+      "observed": "present",
+      "oracle": "required_matrix_ids",
+      "requirement": "Matrix completeness vs other checks.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "probes pass",
+      "id": "A08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES",
+      "requirement": "Assigned silent-failure probes.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S01",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S01.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S02",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S02.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S03",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S03.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S07",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S07.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S08",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S08.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S09",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S09.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S21",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S21.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S22",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S22.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/rule_discovery/source_adapters/green_vwap_scalp.py",
+          "symbol": "slice_family"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/implementation/reports/research-work/P15-11/9e7fda7b291cce99/attempt-0001/pytest.log",
+          "selector": "test_s07_native_replay",
+          "sha256": "5bf49f4d6f7ceeb33f433e3968d4e6f92cd3aa653411067ef37e0bb6a9576eb7"
+        }
+      ],
+      "expected": "pass",
+      "id": "S31",
+      "observed": "pass",
+      "oracle": "SILENT_FAILURES.md",
+      "requirement": "Assigned case S31.",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/rule_discovery/test_p15_11.py::test_s07_native_replay"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P15-11"
+}

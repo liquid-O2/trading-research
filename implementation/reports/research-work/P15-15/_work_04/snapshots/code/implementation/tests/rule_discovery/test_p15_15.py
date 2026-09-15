@@ -37,6 +37,16 @@ def test_c4_rejection_levels_in_repaired_scanner():
     assert family_document()["findings"] == ["C4"]
 
 
+def test_b0_matches_frozen_scan_branch():
+    from trading_research.research.rule_discovery.source_adapters.common import FROZEN_PARITY_DATES, replay_b0_against_frozen
+    from trading_research.research.rule_discovery.source_adapters import keani as _keani  # noqa: F401
+
+    for day in FROZEN_PARITY_DATES:
+        row = replay_b0_against_frozen(day, "KEANI-OPEN-ABOVE-VALUE", "source_long")
+        assert row["b0_transform_markers"] == []
+        assert row["match"] is True, row
+
+
 def test_keani_findings_applied_in_scan():
     src = inspect.getsource(apply_keani_rules)
     assert "a_period_trade_below_vah_invalidates" in src

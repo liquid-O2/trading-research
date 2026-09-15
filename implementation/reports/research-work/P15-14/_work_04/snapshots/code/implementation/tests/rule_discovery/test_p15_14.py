@@ -36,6 +36,16 @@ def test_vacuous_all_is_unknown():
     assert family_document()["clock_zone_unverified"] is True
 
 
+def test_b0_matches_frozen_scan_branch():
+    from trading_research.research.rule_discovery.source_adapters.common import FROZEN_PARITY_DATES, replay_b0_against_frozen
+    from trading_research.research.rule_discovery.source_adapters import member as _member  # noqa: F401
+
+    for day in FROZEN_PARITY_DATES:
+        row = replay_b0_against_frozen(day, "MEMBER-TWO-REASONS", "resistance_short")
+        assert row["b0_transform_markers"] == []
+        assert row["match"] is True, row
+
+
 def test_member_findings_applied_in_scan():
     import inspect
 

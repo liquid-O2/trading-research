@@ -79,11 +79,13 @@ def apply_operational_stages(episode: Mapping[str, Any], market=None) -> dict[st
     side = str(episode.get("side") or values.get("side") or "")
     complete = bool(trigger.get("observed_complete") or trigger.get("complete"))
     trigger_at = trigger.get("known_at") or trigger.get("end")
-    confirm_at = values.get("confirm_at") or values.get("control_at") or episode.get("decision_at")
+    confirm_at = values.get("confirm_at")
     if not trigger or trigger_at is None:
         arrival = None
+    elif confirm_at is None:
+        arrival = None
     else:
-        before = True if confirm_at is None else int(trigger_at) <= int(confirm_at)
+        before = int(trigger_at) <= int(confirm_at)
         arrival = evaluate_arrival_read(trigger_complete=complete, trigger_before_confirm=before)
     alignment = evaluate_ltf_alignment(side=side, ltf_break_up=_ltf_break_up_from_bars(episode))
     permission = evaluate_profile_permission(poc=profile.get("poc"), low=ref.get("low"), high=ref.get("high"))
@@ -138,16 +140,28 @@ def reassess_episode(episode: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def bind_saint_operational(document: Mapping[str, Any], market, branch: str, version: str) -> dict[str, Any]:
-    """Bind C7 operational stages into B0.1 (and B0) episode verdicts from actual geometry."""
+    """Bind C7 operational stages into B0.1 episode verdicts from actual geometry. Not applied to B0."""
+    from trading_research.research.rule_discovery.source_adapters.common import episode_status
+
     out = dict(document)
     episodes = []
+    arrival_none = 0
+    status_changed = 0
     for episode in list(out.get("episodes") or []):
         row = dict(episode)
+        old_status = episode_status(row)
         row["values"] = apply_operational_stages(row, market=market)
-        episodes.append(reassess_episode(row))
+        if row["values"].get("arrival_read_recorded") is None:
+            arrival_none += 1
+        new_row = reassess_episode(row)
+        if episode_status(new_row) != old_status:
+            status_changed += 1
+        episodes.append(new_row)
     out["episodes"] = episodes
     out["saint_operational_bound"] = True
     out["baseline_version"] = version
+    out["arrival_none_count"] = arrival_none
+    out["status_changed_from_arrival_none"] = status_changed
     return out
 
 
@@ -174,4 +188,8 @@ def slice_family(day: str) -> dict[str, Any]:
     payload["leaves_unknown"] = False
     payload["population_kind"] = "engineering_slice"
     payload["operational_bound"] = True
+    payload["arrival_none_count"] = sum(int(scan.get("arrival_none_count") or 0) for scan in payload.get("scans") or [])
+    payload["status_changed_from_arrival_none"] = sum(
+        int(scan.get("status_changed_from_arrival_none") or 0) for scan in payload.get("scans") or []
+    )
     return payload

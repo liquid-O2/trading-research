@@ -99,6 +99,49 @@ def test_operational_stages_read_market_not_literals():
     assert incomplete["arrival_read_recorded"] is False
 
 
+def test_missing_confirm_at_is_unknown():
+    from trading_research.research.rule_discovery.source_adapters.saint import reassess_episode
+
+    values = apply_operational_stages(
+        {
+            "side": "long",
+            "method": "SAINT-AMT",
+            "branch": "continuation_retest",
+            "trigger": {"C": 12, "observed_complete": True, "known_at": 5, "start": 1, "end": 5},
+            "decision_at": 20,
+            "values": {},
+            "geometry": {
+                "htf_profile": {"poc": 5},
+                "htf_balance": {"low": 0, "high": 10},
+                "ltf_balance": {"low": 0, "high": 10},
+            },
+            "reference": {"low": 0, "high": 10},
+        }
+    )
+    assert values["arrival_read_recorded"] is None
+    episode = reassess_episode(
+        {
+            "method": "SAINT-AMT",
+            "branch": "continuation_retest",
+            "side": "long",
+            "values": values,
+            "strategy_assessment": {"status": "no_setup"},
+        }
+    )
+    assert episode["research_verdict"] == "unknown"
+    assert episode["strategy_assessment"]["status"] == "data_unavailable"
+
+
+def test_b0_matches_frozen_scan_branch():
+    from trading_research.research.rule_discovery.source_adapters.common import FROZEN_PARITY_DATES, replay_b0_against_frozen
+    from trading_research.research.rule_discovery.source_adapters import saint as _saint  # noqa: F401
+
+    for day in FROZEN_PARITY_DATES:
+        row = replay_b0_against_frozen(day, "SAINT-AMT", "poc_traversal")
+        assert row["b0_transform_markers"] == []
+        assert row["match"] is True, row
+
+
 def test_bind_operational_in_scan_path():
     import inspect
     from trading_research.research.rule_discovery.source_adapters.saint import bind_saint_operational

@@ -52,7 +52,7 @@ def run(argv: list[str], log: Path, cwd: Path = IMP) -> dict:
 
 
 def load_task_receipts() -> dict[str, Path]:
-    for name in ("CANDIDATE_TASKS_REPAIR.json", "CANDIDATE_TASKS_ALL.json", "CANDIDATE_TASKS.json"):
+    for name in ("CANDIDATE_TASKS_R3.json", "CANDIDATE_TASKS_REPAIR.json", "CANDIDATE_TASKS_ALL.json", "CANDIDATE_TASKS.json"):
         index = REPORTS / "04-family-adapters" / name
         if index.is_file():
             body = json.loads(index.read_text())

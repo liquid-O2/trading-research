@@ -385,7 +385,7 @@ def produce_one(task_id: str) -> Path:
             "predecessor_receipts": {"P15-08": file_digest(P15_08)},
         },
     )
-    run_root = REPORTS / task_id / "_slice_04_repair"
+    run_root = REPORTS / task_id / "_slice_04_r3"
     if not (run_root / "FROZEN_MANIFEST.json").exists():
         freeze(run_root=run_root, manifest=draft_stub)
     frozen = run_root / "FROZEN_MANIFEST.json"
@@ -412,8 +412,25 @@ def produce_one(task_id: str) -> Path:
     if cmd1["exit_code"] != 0:
         raise SystemExit(f"{task_id} slice failed\n{cmd1['stdout_tail']}")
     summary = json.loads((run_root / "SLICE_SUMMARY.json").read_text())
-    thru_dates = primitive_throughput_dates()
-    throughput = measure_family_throughput(thru_dates, task_id)
+    prior_thru = {
+        "P15-09": REPORTS / "P15-09/72323a6d8f65b77d/attempt-0001/THROUGHPUT.json",
+        "P15-10": REPORTS / "P15-10/a856814fe11b24ac/attempt-0001/THROUGHPUT.json",
+        "P15-11": REPORTS / "P15-11/a3f84244bc9239c3/attempt-0001/THROUGHPUT.json",
+        "P15-12": REPORTS / "P15-12/2488a221f5843c26/attempt-0001/THROUGHPUT.json",
+        "P15-13": REPORTS / "P15-13/79e50a6a3faf8be2/attempt-0001/THROUGHPUT.json",
+        "P15-14": REPORTS / "P15-14/31841425087b5507/attempt-0001/THROUGHPUT.json",
+        "P15-15": REPORTS / "P15-15/f7df59d81e058166/attempt-0001/THROUGHPUT.json",
+        "P15-16": REPORTS / "P15-16/316dc53caf8bdfac/attempt-0001/THROUGHPUT.json",
+    }
+    prior = prior_thru.get(task_id)
+    if prior is not None and prior.is_file():
+        throughput = json.loads(prior.read_text())
+        throughput["reused_from"] = str(prior)
+        throughput["remeasured"] = False
+    else:
+        thru_dates = primitive_throughput_dates()
+        throughput = measure_family_throughput(thru_dates, task_id)
+        throughput["remeasured"] = True
     write_json_document(staging / "THROUGHPUT.json", throughput)
     pops_b0 = {"setup": 0, "rejected": 0, "unknown": 0, "episodes": 0}
     pops_b01 = {"setup": 0, "rejected": 0, "unknown": 0, "episodes": 0}
@@ -422,6 +439,7 @@ def produce_one(task_id: str) -> Path:
         pass
     jobs_dir = run_root / "jobs" / task_id
     native_rows = []
+    saint_arrival = {"arrival_none_count": 0, "status_changed_from_arrival_none": 0}
     for day in dates:
         shard = jobs_dir / f"{day}.json"
         if not shard.is_file():
@@ -433,6 +451,14 @@ def produce_one(task_id: str) -> Path:
             for k in dest:
                 dest[k] += int(src.get(k) or 0)
         native_rows.append({"date": day, "populations": pops, "clock_zone_unverified": job.get("clock_zone_unverified"), "native_executions": job.get("native_executions")})
+        if task_id == "P15-13":
+            if job.get("arrival_none_count") is not None:
+                saint_arrival["arrival_none_count"] += int(job.get("arrival_none_count") or 0)
+                saint_arrival["status_changed_from_arrival_none"] += int(job.get("status_changed_from_arrival_none") or 0)
+            else:
+                for scan in job.get("scans") or []:
+                    saint_arrival["arrival_none_count"] += int(scan.get("arrival_none_count") or 0)
+                    saint_arrival["status_changed_from_arrival_none"] += int(scan.get("status_changed_from_arrival_none") or 0)
     family_name, branch_name = PRIMARY_BRANCH[task_id]
     changed = run_changed_axis_cases(dates[1] if len(dates) > 1 else dates[0], family_name, branch_name)
     limit = full_history_limit(
@@ -471,6 +497,9 @@ def produce_one(task_id: str) -> Path:
         "changed_axis": changed,
         "synthetic_mirror": changed.get("synthetic_mirror"),
     }
+    if task_id == "P15-13":
+        parity["saint_arrival"] = saint_arrival
+        native_cases["saint_arrival"] = saint_arrival
     if task_id == "P15-16":
         from trading_research.research.rule_discovery.source_adapters.processes import (
             PRINT_THRESHOLD,
@@ -672,7 +701,7 @@ def main() -> int:
         print("verify", task_id, verify["exit_code"], flush=True)
         if verify["exit_code"] != 0:
             return verify["exit_code"]
-    index_path = REPORTS / "04-family-adapters" / "CANDIDATE_TASKS_REPAIR.json"
+    index_path = REPORTS / "04-family-adapters" / "CANDIDATE_TASKS_R3.json"
     existing = json.loads(index_path.read_text()) if index_path.is_file() else {}
     existing.update({task_id: str(path / "TASK_RECEIPT.json") for task_id, path in attempts.items()})
     index_path.parent.mkdir(parents=True, exist_ok=True)
