@@ -1,0 +1,547 @@
+{
+  "assurance_version": "research-assurance-2026-09-14-v3",
+  "checks": [
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "expiry_clocks_distinct"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/INSTRUMENT_LEDGER.json",
+          "selector": "/expiry_clocks/ndx_ndxp_distinct",
+          "sha256": "9fbcb2094da08cda24067cf72b78cc033d8c4c76f853025539a0e3ec432a638d"
+        }
+      ],
+      "expected": true,
+      "id": "A01",
+      "observed": true,
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "NDX/NDXP and SPX/SPXW expiry clocks stay distinct",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a01"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "load_oi_available_at"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/0/oi_used_before_asof",
+          "sha256": "115ea5f015abe68c5c877a0800b9ebe4c85c7ab4bc75a8335dd37fe26ceae548"
+        }
+      ],
+      "expected": false,
+      "id": "A02",
+      "observed": false,
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "Filename date cannot make daily OI available before publication",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a02"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "chain_universe"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices/0/universe/lookahead_excluded_count",
+          "sha256": "115ea5f015abe68c5c877a0800b9ebe4c85c7ab4bc75a8335dd37fe26ceae548"
+        }
+      ],
+      "expected": "see artifact",
+      "id": "A03",
+      "observed": "see artifact",
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "Future-listed strikes cannot appear in an earlier universe",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a03"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "quote_reject_codes"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/slices",
+          "sha256": "115ea5f015abe68c5c877a0800b9ebe4c85c7ab4bc75a8335dd37fe26ceae548"
+        }
+      ],
+      "expected": "see artifact",
+      "id": "A04",
+      "observed": "see artifact",
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "Stale/crossed/missing quotes remain rejection records",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a04"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "coverage_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/OPTIONS_AVAILABILITY.json",
+          "selector": "/coverage",
+          "sha256": "f276acab72650334a77207cb73db70a6f1831b8dfdd45aed28ed25fff54edcd5"
+        }
+      ],
+      "expected": "see artifact",
+      "id": "A05",
+      "observed": "see artifact",
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "Root coverage reconciles full-chain vs scoped feed",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_a05"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "replay_quote_row"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/SURFACE_INPUT_SLICE.json",
+          "selector": "/native_replay/kind",
+          "sha256": "115ea5f015abe68c5c877a0800b9ebe4c85c7ab4bc75a8335dd37fe26ceae548"
+        }
+      ],
+      "expected": "native",
+      "id": "S07",
+      "observed": "native",
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "Native quote row replays",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s07"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/src/trading_research/research/experts/options/instruments.py",
+          "symbol": "assumed_oi_available_ns"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/PUBLICATION_SENSITIVITY.json",
+          "selector": "/filename_date_is_not_publication",
+          "sha256": "7308a5efd0d1239e28e2dfadfdd5f57e3c40a978a288bed0bef42120872e5491"
+        }
+      ],
+      "expected": true,
+      "id": "S25",
+      "observed": true,
+      "oracle": "literal specification formula or native parquet replay",
+      "requirement": "OI assumed clock labelled; cash index not intraday",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py::test_s25"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "A06",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check A06",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "A07",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check A07",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "A08",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check A08",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S01",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S01",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S02",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S02",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S03",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S03",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S06",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S06",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S08",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S08",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S09",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S09",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S10",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S10",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S13",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S13",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S15",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S15",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    },
+    {
+      "code_refs": [
+        {
+          "path": "implementation/tests/context_experts/test_p2_09.py",
+          "symbol": "tests/context_experts/test_p2_09.py"
+        }
+      ],
+      "command_indices": [
+        0
+      ],
+      "evidence": [
+        {
+          "path": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-09/d8cdcbb62a1271a3/attempt-0001/pytest.log",
+          "selector": "pytest",
+          "sha256": "07064db894b1dc989a80472524b1f2f19e8c309faaf539542c8be48ad4430fa5"
+        }
+      ],
+      "expected": "sensitive controls pass",
+      "id": "S31",
+      "observed": "pytest exit 0",
+      "oracle": "unit tests plus native slice artifacts",
+      "requirement": "Assigned check S31",
+      "status": "pass",
+      "test_nodeids": [
+        "implementation/tests/context_experts/test_p2_09.py"
+      ]
+    }
+  ],
+  "schema_version": "research-evidence-matrix-v2",
+  "task_id": "P2-09"
+}
