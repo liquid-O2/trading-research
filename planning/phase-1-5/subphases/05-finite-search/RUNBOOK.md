@@ -2,7 +2,7 @@
 
 Status: **planned; not implemented by this planning task**. Generated from canonical contracts and task cards. Edit those sources, then rebuild; do not edit this bundle independently.
 
-Source content SHA256: `292548507578fbf8605a0dc3cce9a5d8bf4356b867bb44a75e9570bfc61cf204`.
+Source content SHA256: `c6cfc5144b157cbae888189e8b88ce2f32f4b5678ca5ed919d7d83f0d5887706`.
 
 Previous gate: **04-family-adapters**. External task dependencies: P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16. Read and verify their actual receipts before implementation.
 
@@ -944,6 +944,14 @@ The orchestrating session re-read every family against its raw sources with all 
 **Author-example fixtures.** The dated examples with printed levels, fills, resting orders and expected detections are compiled in [AUTHOR_EXAMPLES_2026-09-15.json](/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json) (54 examples, 42 inside the native calendar); P15-16A replays that file (A03) and supersedes the review's J/G/S index where the two overlap.
 
 **Clocks (all families).** Deepchart screenshots print ET; the 2026 NinjaTrader screenshots print UK local time; TradingView prints the footer's UTC−4/−5; the Tradesea chart and the 2025-01-28 order ticket print UTC; Sierra Chart prints ET. Every replay fixture carries its converted ET time.
+
+#### Evidence-binding gap in the closed Phase 1.5 receipts (recorded 2026-09-15, evening)
+
+Inspection of the closed P15-16 receipt `cf6bf4778e53a0b0` shows the receipt-level keys A06, A07 and A08 and the assigned cases S01 and S03 bound to the same unrelated test (`test_s07_native_replay`) with the pytest log as evidence; the S01 and S03 mutation probes SILENT_FAILURES.md defines were not executed as receipt evidence. The verifier accepts such rows because it only checks that node ids and selectors resolve. The same pattern was found and rejected in the Phase 2 early-track producer today (two follow-ups). Ruling: from P15-16A onward, a passing matrix row binds only to a test whose function name starts with `test_<id>_`, or (A06 to A08) to the recorded pytest command plus the artifact hashes it attests, or (S01, S03) to an executed mutation-probe file with a verifying control; anything else is "deferred" with its reason. The closed 00 to 04 receipts are not re-opened for this: their verifier-enforced identity, inventory and predecessor checks stand, and the 07-release task (P15-20) re-verifies every receipt and must re-bind or explicitly list these rows as a known limitation of the earlier closes.
+
+#### Successor-rule dependency after the pre-search merge (recorded 2026-09-15, evening)
+
+Merging the P15-17 pre-search tracks (97284bcd) changed native.py, runner.py, engine_slice.py, formations.py, profiles.py, sequences.py, source_adapters/common.py and every family adapter, all of which the closed P15-02 to P15-16 receipts pin. Under the verifier's supersession rule these receipts now verify only through a later verified receipt that lists them as transitive predecessors and pins those files at their live bytes. The P15-16A receipt is designated that successor: its identity must declare the full changed-file set (instruction added to the integration step), and its verification is the test that the chain is whole again. Receipts finalized in between (the Phase 2 early-track receipts, whose p15_02 predecessor must also be moved to the closed attempt `c9756fc1e534b240`) wait for it.
 
 Canonical source: [REVIEW.md](/workspace/planning/research-program/reviews/astra-fidelity-2026-09-15/REVIEW.md).
 
