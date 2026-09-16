@@ -1,0 +1,19 @@
+{
+  "family": "GB-VWAP",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "branches": {
+    "source_long": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "NY continuation after London and Asia exist", "page": "GB p.33"}], "verdict_rule": "pass in NY"},
+        "reference": {"measured": true, "operands": [{"name": "asia_high", "source": "market", "predicate": "finished Asia high", "page": "GB p.33"}, {"name": "london_high", "source": "market", "predicate": "finished London high", "page": "GB p.33"}], "verdict_rule": "unknown if either session box is missing"},
+        "location": {"measured": true, "operands": [{"name": "breakout_close", "source": "market", "predicate": "close above both highs", "page": "GB p.33 Broke and closed above London + Asia highs"}], "verdict_rule": "fail if no 5-minute close above max(asia_high, london_high)"},
+        "trigger": {"measured": true, "operands": [{"name": "breakout_close", "source": "market", "predicate": "close > asia_high and close > london_high", "page": "GB p.33"}, {"name": "asia_high", "source": "market", "predicate": "same", "page": "GB p.33"}, {"name": "london_high", "source": "market", "predicate": "same", "page": "GB p.33"}], "verdict_rule": "fail if the close is not above both"},
+        "confirmation": {"measured": true, "operands": [{"name": "vwap", "source": "market", "predicate": "later retrace into contemporaneous session VWAP", "page": "GB p.33 retraced into VWAP"}, {"name": "retest_low", "source": "market", "predicate": "bar range contains VWAP", "page": "same"}, {"name": "retest_high", "source": "market", "predicate": "same", "page": "same"}, {"name": "horizon", "source": "constant", "predicate": "F13 RTH close; missing retest is fail not unknown", "page": "F13"}], "verdict_rule": "fail if VWAP is never touched before the RTH close. Unknown only if coverage is missing."},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "30-point stop from the Feb 25 reply, labelled OD example risk", "page": "GB p.34 30 point stop, 100 point win; GB p.33 30-point stop"}], "verdict_rule": "fail if entry - 30 is not beyond a long entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "150-point caption result is the baseline objective; 100-point win is the OD variant. Neither is an entry condition.", "page": "GB p.33 One 150-point beauty; SD04 keeps both 150 and 100"}], "verdict_rule": "fail if target is not entry + 150"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12 $750 when a stop distance exists", "page": "RR-12"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    }
+  }
+}

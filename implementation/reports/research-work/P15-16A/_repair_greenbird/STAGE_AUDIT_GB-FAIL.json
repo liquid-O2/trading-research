@@ -1,0 +1,128 @@
+{
+  "family": "GB-FAIL",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "measured_rule": "A stage is measured only if its verdict depends on at least one market-derived operand compared with a source predicate and can fail on real data.",
+  "branches": {
+    "london_box": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "RR-11 London then NY open", "page": "GB NG 2099513366326730859"}, {"name": "bias_prior_side", "source": "market", "predicate": "F07 OD prior close vs midpoint", "page": "GB pp.25,35,37-40"}], "verdict_rule": "pass when the decision clock is in a source window"},
+        "reference": {"measured": true, "operands": [{"name": "box_low", "source": "market", "predicate": "painted London box", "page": "RR-11 GB pp.45,51-56,60"}, {"name": "box_high", "source": "market", "predicate": "opposite London edge", "page": "F06 A1"}], "verdict_rule": "unknown if the box cannot be built; else pass"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "London low", "page": "F06 A1"}, {"name": "distance_beyond_edge", "source": "market", "predicate": "print below the low", "page": "same post"}], "verdict_rule": "fail if the low is never traded"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "sweep of the London low; depth unpublished so any print through is OD", "page": "GB p.3 briefly trades beyond"}, {"name": "sweep_at_ns", "source": "market", "predicate": "before NY open allowed", "page": "F06 A1"}], "verdict_rule": "fail if sweep_depth is 0"},
+        "confirmation": {"measured": true, "operands": [{"name": "reclaim_px", "source": "market", "predicate": "close back above the London low", "page": "F06 A1"}, {"name": "retest_low", "source": "market", "predicate": "mandatory retest higher low", "page": "F06 A1; SD03"}, {"name": "post_open_close", "source": "market", "predicate": "after the NY open, close back above", "page": "same post"}, {"name": "higher_low_ok", "source": "market", "predicate": "retest low > sweep low", "page": "SD03"}], "verdict_rule": "fail if reclaim, retest higher-low, or post-open close is missing"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "below the retest higher low, above the earlier sweep", "page": "SD03 28903.75 / 28875.25 / 28827"}], "verdict_rule": "fail if stop is not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "midnight open first, London high next", "page": "F06 A1"}], "verdict_rule": "fail if target is not ahead of entry"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "$750 / (stop_points * $2)", "page": "RR-12 GB pp.52-53,56,58,60"}, {"name": "ladder_rungs", "source": "market", "predicate": "1-lot ladder 4-18 rungs, 8-33 points", "page": "RR-12; SOURCE_ADDITIONS_2026-09-15"}], "verdict_rule": "fail if quantity or ladder cannot be built from stop distance"}
+      }
+    },
+    "asia_box": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "Asia window", "page": "RR-11"}], "verdict_rule": "pass in Asia/overnight clocks"},
+        "reference": {"measured": true, "operands": [{"name": "box_high", "source": "market", "predicate": "painted Asia high", "page": "RR-11; F06 A2"}], "verdict_rule": "unknown if the box is missing"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "Asia high", "page": "GB p.16"}], "verdict_rule": "fail if never swept"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "sweep of the Asia high; no published min depth", "page": "GB p.16"}], "verdict_rule": "fail if no print above the high"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "5-minute close back below the Asia high is OD for plain Asia; TDO case is the literal 5-minute", "page": "GB p.16 vs p.19; A2/A3"}, {"name": "through_level", "source": "market", "predicate": "close on the inside of the high", "page": "GB p.16 fails to hold above"}], "verdict_rule": "fail if no 5-minute close through the high"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "case structure above the excursion, not +1 tick universal", "page": "A2/A3"}], "verdict_rule": "fail if stop is not above a short entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "Asia low", "page": "GB p.27"}], "verdict_rule": "fail if target is not below entry"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "$750 fixed risk", "page": "RR-12"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "asia_tdo_case": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "Asia plus midnight open", "page": "GB pp.19,27"}], "verdict_rule": "pass when TDO exists"},
+        "reference": {"measured": true, "operands": [{"name": "asia_high", "source": "market", "predicate": "Asia high", "page": "GB p.27"}, {"name": "tdo", "source": "market", "predicate": "midnight opening price", "page": "GB p.19"}], "verdict_rule": "unknown if Asia or TDO missing"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "sweep of Asia high", "page": "GB p.27"}], "verdict_rule": "fail if no Asia-high sweep"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "wick through the high", "page": "GB p.27"}], "verdict_rule": "fail if sweep_depth is 0"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "completed 5-minute close below TDO", "page": "GB p.19 closed on the 5 minute below TDO"}], "verdict_rule": "fail if no 5-minute close below TDO"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "case wick; not a universal excursion stop", "page": "A2/A3"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "Asia low", "page": "GB p.27"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12 $750", "page": "GB p.60"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "prior_day_level": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "overnight eligible", "page": "F06 A3"}], "verdict_rule": "pass from session clock"},
+        "reference": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "prior day high or low", "page": "GB p.25 Previous Days Low"}], "verdict_rule": "unknown if prior day missing"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "PDL or PDH", "page": "GB p.25"}], "verdict_rule": "fail if that extreme is never swept"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "sweep of the prior extreme", "page": "GB pp.23,25"}], "verdict_rule": "fail if no sweep"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "5-minute close back through PDL/PDH", "page": "GB p.25 I wait for the 5 min close back below the PDL"}], "verdict_rule": "fail if no 5-minute close through the level"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "above PDL or the swing high, not sweep-extreme plus one tick as a universal", "page": "GB pp.23,25; A2/A3"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "opposing prior extreme or next session", "page": "RR-15 GB pp.51-54"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12", "page": "GB pp.52-53"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "nyam_box": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "NY AM and PM 12:45-14:00 of AM highs", "page": "RR-11 GB pp.45,56"}], "verdict_rule": "pass in those windows"},
+        "reference": {"measured": true, "operands": [{"name": "box_low", "source": "market", "predicate": "09:00-09:30 until 10:00, then 09:00-10:00; PM short of the 09:00-10:00 high at 12:45-13:00. Grey 10:00-11:00 is painted live, not a third fail reference.", "page": "RR-11, RR-13; GB pp.45,56,58; SOURCE_ADDITIONS_2026-09-15 boxes"}, {"name": "box_high", "source": "market", "predicate": "same", "page": "RR-13"}], "verdict_rule": "pass when the box is complete"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "box edge", "page": "GB pp.22,38"}, {"name": "distance_beyond_edge", "source": "market", "predicate": "touch through the edge", "page": "GB p.38"}], "verdict_rule": "fail if the edge is never traded"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "sweep beyond the edge; min depth unpublished", "page": "GB p.3, p.58 09:30-09:33"}, {"name": "sweep_at_ns", "source": "market", "predicate": "as soon as the half-box exists", "page": "RR-13"}], "verdict_rule": "fail if sweep_depth is 0"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "close back through the edge inside the fail window (sweep 5-minute bar plus the next)", "page": "RR-13; GB p.43 11-20 at the high; GB p.58 two minutes after the spike"}, {"name": "inside_box", "source": "market", "predicate": "return inside the box", "page": "GB p.3 fail back inside"}, {"name": "fail_to_continue", "source": "market", "predicate": "the sweep fails rather than a later random touch", "page": "GB p.38 Watch the breakout FAIL"}], "verdict_rule": "fail if there is no close back through the edge inside the fail window"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "beyond the wick on tickets, $750", "page": "GB p.58"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "opposite box edge", "page": "GB p.38 First objective = low of 9-10"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12 $750", "page": "GB pp.52-53,58"}, {"name": "ladder_rungs", "source": "market", "predicate": "limit ladder", "page": "RR-12"}], "verdict_rule": "fail if quantity or ladder missing"}
+      }
+    },
+    "previous_hour": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "completed hour 13-14 then the next 15 minutes; hours 8-10 are named NYAM/pre-cash and 11-12 sit in the lunch gap and the 12:45 PM 9-10 window", "page": "GB pp.37-38; RR-11; GB pp.45,56 12:45-13:00"}], "verdict_rule": "pass on the next-hour clock"},
+        "reference": {"measured": true, "operands": [{"name": "box_high", "source": "market", "predicate": "completed 60-minute high/low", "page": "GB p.38"}], "verdict_rule": "pass when the hour is finished"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "previous-hour high or low", "page": "GB p.37"}], "verdict_rule": "fail if that hour edge is never traded"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "sweep of the hour edge", "page": "GB p.37"}], "verdict_rule": "fail if no sweep"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "price falls back inside the range; bar size OD", "page": "GB p.37 Breakout fails. Price falls back inside"}, {"name": "inside_box", "source": "market", "predicate": "return inside the hour box", "page": "same"}, {"name": "fail_to_continue", "source": "market", "predicate": "fail window, not a 30-minute later touch", "page": "RR-13"}], "verdict_rule": "fail if no close back inside the fail window"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "above the wick on the 27 Aug ticket", "page": "GB p.38"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "opposite hour edge / PDH / TDO as drawn", "page": "GB pp.37-38"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12", "page": "GB p.38 Amount 750"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "nwog": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "Monday weekly-gap day; no 09:00-11:00 cutoff", "page": "GB pp.13,14,36,37; F06 A5"}], "verdict_rule": "pass; weekday is market.day"},
+        "reference": {"measured": true, "operands": [{"name": "box_low", "source": "market", "predicate": "Friday close vs Sunday 18:00 ET open", "page": "GB p.37 Sunday @ 6PM EST"}], "verdict_rule": "unknown if either print is missing"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "NWOG is the destination; the swept edge is midnight or NY-open liquidity stacked with the gap", "page": "GB p.13 NWOG is a destination, not an entry"}], "verdict_rule": "fail if the gap edge is never traded. Using the gap as a sweep reference is an OD stand-in for the stacked high recipe."},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "midnight or NY-open sweep/fail", "page": "GB p.36"}], "verdict_rule": "fail if no sweep"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "failure after the sweep; 5-minute not named", "page": "GB p.36"}, {"name": "inside_box", "source": "market", "predicate": "fail back", "page": "same"}], "verdict_rule": "fail if no close back inside the fail window"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "unpublished general stop; $750 is the chart amount on other days", "page": "RR-12"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "tag NWOG", "page": "GB pp.13,36"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12", "page": "GB p.14 2-4 MNQ recap"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "cash_open_reclaim_case": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "09:30 cash open, not the finished 9-10 box", "page": "GB p.3 / p.40"}], "verdict_rule": "pass at the cash open"},
+        "reference": {"measured": true, "operands": [{"name": "cash_open", "source": "market", "predicate": "09:30 opening price", "page": "GB p.40"}], "verdict_rule": "unknown if the 09:30 open is missing"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "manipulation below that open", "page": "GB p.3 9:30am manipulation below"}], "verdict_rule": "fail if price never trades below the open"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "move below the open; no published depth", "page": "same"}], "verdict_rule": "fail if sweep_depth is 0"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "reclaim. Duration unpublished. OD first complete 5-minute close back above the open. Do not import the PDL 5-minute as a literal.", "page": "GB p.3 reclaim; wiki duration unspecified"}], "verdict_rule": "fail if no reclaim close above the open. unknown is not used: the close is observable."},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "stops at lows", "page": "GB p.3 / p.40"}], "verdict_rule": "fail if stop is not the sweep low"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "retracement into discount. Discount parent unpublished. B0/B0.1 formula open + 0.5*(open-sweep_low) is kept as OD, not target==open.", "page": "GB p.3 targeting retracement into discount; historical_price_scanners.py cash_open target"}], "verdict_rule": "fail if target is not ahead of entry. The prior B0.2 kill (target==entry on a degenerate box) is not the source."},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12", "page": "GB pp.52-53"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "golden_pocket": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "impulse already complete", "page": "GB pp.23,25"}], "verdict_rule": "pass from impulse clock"},
+        "reference": {"measured": true, "operands": [{"name": "pocket_low", "source": "market", "predicate": "down-leg [L+0.50W, L+0.618W] of the last impulse, not the 9-10 box", "page": "F06 A4; RR-14; GB p.25"}], "verdict_rule": "fail if no defined impulse"},
+        "location": {"measured": true, "operands": [{"name": "pocket_low", "source": "market", "predicate": "touch inside the pocket", "page": "GB p.25 band touch alone fails"}], "verdict_rule": "fail if no pullback into the pocket"},
+        "trigger": {"measured": true, "operands": [{"name": "pullback_at_ns", "source": "market", "predicate": "pocket touch plus a real failure", "page": "RR-14 Jul 29 / Sep 1"}], "verdict_rule": "fail if the pocket is never touched"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "5-minute close out of the pocket / below PDL on the stacked case", "page": "GB p.25"}, {"name": "continuation_hold", "source": "market", "predicate": "close does not take the far edge before the close-out", "page": "RR-14 near-edge stop"}], "verdict_rule": "fail if no close out of the pocket"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "near 50% edge on the example; PDL/swing on the stacked short", "page": "RR-14; GB pp.23,25,51"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "impulse extreme / the lows", "page": "GB p.25, p.51"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12", "page": "GB p.51 18-rung ladder"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    },
+    "ny_session_extreme": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "after 11:00 NY", "page": "SOURCE_ADDITIONS_2026-09-15 trade 3"}], "verdict_rule": "pass after 11:00"},
+        "reference": {"measured": true, "operands": [{"name": "box_low", "source": "market", "predicate": "09:30-11:00 NY range frozen at 11:00 (the 10:55 NY marker on 2026-09-15)", "page": "GB p.3 session highs and lows; 2026-09-15 NY marker"}, {"name": "box_high", "source": "market", "predicate": "same frozen range", "page": "same"}], "verdict_rule": "unknown if the 09:30-11:00 range cannot be built"},
+        "location": {"measured": true, "operands": [{"name": "level", "source": "market", "predicate": "sweep of the frozen 09:30-11:00 NY extreme after 11:00", "page": "2026-09-15 15:35"}], "verdict_rule": "fail if never swept after 11:00"},
+        "trigger": {"measured": true, "operands": [{"name": "sweep_depth", "source": "market", "predicate": "print beyond the frozen extreme", "page": "same"}], "verdict_rule": "fail if sweep_depth is 0"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "fail back inside, at-level, next bar holds", "page": "RR-13 at-level; 2026-09-15 fail back inside"}], "verdict_rule": "fail if no later-bar close back inside that holds"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "beyond the sweep extreme", "page": "2026-09-15 stop 29215.25 vs sweep ~29209"}], "verdict_rule": "fail if stop not beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "nearest opposing liquidity (running opposite extreme)", "page": "SOURCE_ADDITIONS_2026-09-15"}], "verdict_rule": "fail if target not ahead"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12 $750, ladder 8-33", "page": "SOURCE_ADDITIONS_2026-09-15"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    }
+  }
+}
