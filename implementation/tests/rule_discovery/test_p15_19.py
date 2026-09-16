@@ -354,3 +354,384 @@ def test_native_chronological_slice_reconciliation():
                 assert item["effective_after_batch_id"] != item["trigger_batch_id"]
     assert (PREP / "SLICE_EXITS.json").is_file()
     assert (PREP / "RECONCILIATION.json").is_file()
+
+
+# ==========================================================================
+# The executed exit study: frozen entries from the entry stage's own records,
+# E0-E4 on one tape, and the rule that this family cannot rescue an entry.
+# ==========================================================================
+
+import numpy as _np
+
+from trading_research.research.rule_discovery import exits as _exits
+from trading_research.research.rule_discovery.exits import POLICY_EXPIRY_MINUTES
+
+
+def _tape(start, n=600, step=NS, base=100.0, drift=0.0, dip_at=None, dip=0.0):
+    """A synthetic compact day. Labelled synthetic; the native evidence is the
+    study's own shards."""
+    event = _np.arange(n, dtype=_np.int64) * int(step) + int(start)
+    price = base + drift * _np.arange(n, dtype=_np.float64)
+    if dip_at is not None:
+        price[dip_at:] = price[dip_at:] + dip
+    return _exits.CompactDay(
+        event_ns=event,
+        available_at_ns=event,
+        min_bid=price - 0.25,
+        max_bid=price - 0.25,
+        min_ask=price + 0.25,
+        max_ask=price + 0.25,
+        min_trade=price,
+        max_trade=price,
+        q_avail=event,
+        q_bid=price - 0.25,
+        q_ask=price + 0.25,
+    )
+
+
+@pytest.mark.parametrize("policy", list(POLICIES))
+def test_every_policy_matches_its_scalar_reference_on_one_tape(policy):
+    """Each policy's compact evaluation is the plain-Python reference's answer,
+    on a path that reaches the objective late enough for the expiry minutes to
+    separate E1, E0 and E2 and for E3/E4 to have moved their stop."""
+    start = 1_700_000_000 * NS
+    day = _tape(start, n=8000, step=NS, base=100.0, drift=0.0005)
+    entry = _entry(
+        fill_at_ns=int(day.event_ns[5]),
+        fill_price=Decimal("100.00"),
+        initial_stop=Decimal("99.00"),
+        objective=Decimal("103.50"),
+        flatten_at_ns=int(day.event_ns[-1]),
+    )
+    fast = _exits.evaluate_policy_compact(entry, policy, day)
+    slow = _exits.evaluate_policy_compact_scalar(entry, policy, day)
+    assert fast == slow
+
+
+def test_the_five_policies_differ_where_the_contract_says_they_do():
+    """E1 (30m), E0 (60m) and E2 (120m) end at their own deadlines on a path
+    that never reaches stop or objective; E3 and E4 move the stop after +1R and
+    exit on it, and neither is ever looser than the initial stop."""
+    start = 1_700_000_000 * NS
+    day = _tape(start, n=9000, step=NS, base=100.0, drift=0.0004, dip_at=7000, dip=-2.0)
+    entry = _entry(
+        fill_at_ns=int(day.event_ns[5]),
+        fill_price=Decimal("100.00"),
+        initial_stop=Decimal("99.00"),
+        objective=Decimal("110.00"),
+        flatten_at_ns=int(day.event_ns[8500]),
+    )
+    records = {policy: _exits.evaluate_policy_compact(entry, policy, day) for policy in POLICIES}
+    expiries = {
+        policy: entry.fill_at_ns + POLICY_EXPIRY_MINUTES[policy] * MINUTE_NS
+        for policy in ("E0", "E1", "E2")
+    }
+    for policy in ("E0", "E1", "E2"):
+        assert records[policy].reason == "expiry"
+        assert records[policy].exit_at_ns >= expiries[policy]
+    assert expiries["E1"] < expiries["E0"] < expiries["E2"]
+    assert records["E1"].exit_at_ns < records["E0"].exit_at_ns < records["E2"].exit_at_ns
+    for policy in ("E3", "E4"):
+        record = records[policy]
+        assert isinstance(record, ExitRecord)
+        assert record.stop_updates, f"{policy} never moved its stop on a +1R path"
+        for update in record.stop_updates:
+            assert update.stop >= entry.initial_stop  # long: never looser
+            assert update.effective_available_at_ns >= update.trigger_available_at_ns
+        assert record.reason in ("break-even stop", "trailing stop", "expiry", "account-day close")
+    # OUTCOMES: "A price gap fills at that actual quote, not the boundary" --
+    # on this path E4's trailing stop is jumped through, so the fill is the
+    # executable quote less one tick and is worse than the stop, never clipped
+    # back to it.
+    trailing = records["E4"]
+    if trailing.reason == "trailing stop":
+        last_stop = trailing.stop_updates[-1].stop
+        assert trailing.exit_price != last_stop
+        assert trailing.exit_price < last_stop  # long: gapped through
+
+
+def _study_fixture(tmp_path, *, e0_points="1.0", entry_disposition="rejected_by_evidence"):
+    """A two-day entry run and refinement selection on disk, the shape the study
+    reads: job documents with their recorded E0 entries."""
+    from trading_research.research.rule_discovery import search_run
+
+    breadth = tmp_path / "breadth"
+    refinement = tmp_path / "refinement"
+    for root in (breadth, refinement):
+        search_run._write_json(root / "MANIFEST.json", {"dates": ["2020-01-02", "2020-01-03"]})
+    search_run._write_json(
+        refinement / "SELECTED_RULES_BY_FOLD.json",
+        {
+            "folds": [
+                {
+                    "outer_fold": 2022,
+                    "roles": [
+                        {
+                            "family": "SYN",
+                            "candidate_id": "SYN:syn_branch:S1:deadline_minutes=5",
+                            "role": "refined_selected",
+                            "parent_trial_ids": ["SYN:syn_branch:S1"],
+                            "disposition": entry_disposition,
+                            "promoted": False,
+                        }
+                    ],
+                    "combinations": [],
+                }
+            ],
+            "all_history_descriptive_recommendation": None,
+        },
+    )
+    for day in ("2020-01-02", "2020-01-03"):
+        search_run._write_gz(
+            search_run.job_path(refinement, day, "SYN:syn_branch:S1:deadline_minutes=5"),
+            {
+                "family": "SYN",
+                "branch": "syn_branch",
+                "status": "evaluated",
+                "candidate": {
+                    "opportunities": 1,
+                    "fills": 1,
+                    "exclusions": [],
+                    "net_points": e0_points,
+                    "entries": [
+                        {
+                            "entry_id": f"syn-{day}",
+                            "side": 1,
+                            "fill_at_ns": 1,
+                            "fill_price": "100.00",
+                            "initial_stop": "99.00",
+                            "objective": "102.00",
+                            "round_trip_cost": "5.00",
+                            "exit_at_ns": 2,
+                            "exit_reason": "objective",
+                            "net_points": e0_points,
+                        }
+                    ],
+                },
+            },
+        )
+    return breadth, refinement
+
+
+def test_frozen_entries_come_from_the_entry_stage_records(tmp_path):
+    """The study freezes the entries the entry run recorded -- ids, side, fill,
+    initial structural stop, objective and costs -- and never re-derives them."""
+    breadth, refinement = _study_fixture(tmp_path)
+    rules = _exits.selected_entry_rules(refinement, breadth)
+    assert [rule["candidate_id"] for rule in rules] == ["SYN:syn_branch:S1:deadline_minutes=5"]
+    assert rules[0]["role"] == "refined_selected"
+    fixed = _exits.freeze_entries(breadth_run_root=breadth, refinement_run_root=refinement)
+    assert fixed["entries"] == 2
+    assert fixed["dates_with_entries"] == ["2020-01-02", "2020-01-03"]
+    frozen = _exits.frozen_entries_for_day("2020-01-02", rules, flatten_at_ns=10**9)
+    entry, recorded = frozen["SYN:syn_branch:S1:deadline_minutes=5"][0]
+    assert entry.entry_id == "syn-2020-01-02"
+    assert entry.fill_price == Decimal("100.00") and entry.initial_stop == Decimal("99.00")
+    assert entry.round_trip_cost == Decimal("5.00")
+    assert recorded["exit_reason"] == "objective"
+
+
+def test_a_retained_parent_fold_contributes_the_parent_from_the_breadth_run(tmp_path):
+    """When a fold kept its breadth parent, the exit study must hold the parent's
+    entries, which live in the breadth run, not the neighbour's."""
+    from trading_research.research.rule_discovery import search_run
+
+    breadth, refinement = _study_fixture(tmp_path)
+    rules_doc = json.loads((refinement / "SELECTED_RULES_BY_FOLD.json").read_text())
+    rules_doc["folds"][0]["roles"][0]["role"] = "retained_parent"
+    search_run._write_json(refinement / "SELECTED_RULES_BY_FOLD.json", rules_doc)
+    rules = _exits.selected_entry_rules(refinement, breadth)
+    assert [rule["candidate_id"] for rule in rules] == ["SYN:syn_branch:S1"]
+    assert rules[0]["role"] == "retained_parent"
+    assert rules[0]["jobs_root"] == str(breadth)
+
+
+def test_the_exit_study_cannot_rescue_an_entry_candidate(tmp_path):
+    """The negative control of this family: give a rejected entry rule an exit
+    policy that improves its daily points enormously. The exit comparison is
+    reported, and the entry's disposition is still `rejected_by_evidence` with
+    `entry_rescued` false -- an exit can never promote an entry."""
+    breadth, refinement = _study_fixture(tmp_path, entry_disposition="rejected_by_evidence")
+    dispositions = _exits._entry_dispositions(refinement)
+    entry_rule = "SYN:syn_branch:S1:deadline_minutes=5"
+    assert dispositions[entry_rule]["disposition"] == "rejected_by_evidence"
+
+    shards = []
+    for index in range(40):
+        day = f"2022-01-{index + 1:02d}"
+        rows = [
+            {
+                "entry_id": f"syn-{day}",
+                "side": 1,
+                "fill_at_ns": 1,
+                "fill_price": "100.00",
+                "initial_stop": "99.00",
+                "objective": "102.00",
+                "round_trip_cost": "5.00",
+                "recorded_e0": {"exit_at_ns": 2, "exit_reason": "objective", "net_points": "1.00"},
+                "e0_matches_entry_run": True,
+                "policies": {
+                    policy: {
+                        "policy_id": policy,
+                        "entry_id": f"syn-{day}",
+                        "complete": True,
+                        "reason": "objective",
+                        "net_points": "50.00" if policy == "E2" else "1.00",
+                        "occupancy_flagged": False,
+                    }
+                    for policy in POLICIES
+                },
+            }
+        ]
+        shards.append(
+            {"schema_version": _exits.EXIT_SHARD_SCHEMA, "account_day": day, "rules": {entry_rule: rows}}
+        )
+    series = _exits.exit_daily_series(shards)
+    body = series[entry_rule]
+    assert body["entries"] == 40 and body["e0_mismatches"] == 0
+    e2 = [Decimal(cell["net_points"]["E2"]) for cell in body["daily"].values()]
+    e0 = [Decimal(cell["net_points"]["E0"]) for cell in body["daily"].values()]
+    assert sum(e2) > sum(e0) * 40  # the exit policy is hugely better
+    # the entry stage's verdict is carried through untouched
+    assert dispositions[entry_rule]["disposition"] == "rejected_by_evidence"
+    assert dispositions[entry_rule]["promoted"] is False
+
+
+def test_an_unusable_e0_day_leaves_the_paired_comparison(tmp_path):
+    """S30/A05: if the reconstructed E0 does not reproduce the E0 the entry run
+    recorded, that day cannot be paired -- it is reported, not averaged in."""
+    entry_rule = "SYN:syn_branch:S1:deadline_minutes=5"
+
+    def shard(day, matches):
+        return {
+            "account_day": day,
+            "rules": {
+                entry_rule: [
+                    {
+                        "entry_id": f"syn-{day}",
+                        "recorded_e0": {"net_points": "1.00"},
+                        "e0_matches_entry_run": matches,
+                        "policies": {
+                            policy: {
+                                "complete": True,
+                                "reason": "objective",
+                                "net_points": "2.00",
+                                "occupancy_flagged": False,
+                            }
+                            for policy in POLICIES
+                        },
+                    }
+                ]
+            },
+        }
+
+    series = _exits.exit_daily_series([shard("2022-01-03", True), shard("2022-01-04", False)])
+    body = series[entry_rule]
+    assert body["e0_mismatches"] == 1
+    assert body["daily"]["2022-01-03"]["usable"] is True
+    assert body["daily"]["2022-01-04"]["usable"] is False
+
+
+def test_an_unsupported_e3_keeps_its_entry_and_drops_only_that_policys_day():
+    """A04/S11: an undefined initial R is an explicit unsupported E3/E4 record;
+    the entry stays in the ledger and only that policy loses the day."""
+    entry_rule = "R"
+    row = {
+        "entry_id": "e1",
+        "recorded_e0": {"net_points": "1.00"},
+        "e0_matches_entry_run": True,
+        "policies": {
+            policy: {
+                "complete": policy not in ("E3", "E4"),
+                "reason": "undefined_initial_r" if policy in ("E3", "E4") else "objective",
+                "net_points": "2.00",
+                "occupancy_flagged": False,
+            }
+            for policy in POLICIES
+        },
+    }
+    series = _exits.exit_daily_series([{"account_day": "2022-01-03", "rules": {entry_rule: [row]}}])
+    body = series[entry_rule]
+    assert body["entries"] == 1
+    assert body["unsupported"]["E3"] == 1 and body["unsupported"]["E4"] == 1
+    cell = body["daily"]["2022-01-03"]
+    assert cell["complete"]["E0"] is True and cell["complete"]["E1"] is True
+    assert cell["complete"]["E3"] is False and cell["complete"]["E4"] is False
+
+
+def test_a_missing_daily_shard_falls_back_to_the_job_documents(tmp_path):
+    """A run root without daily shards must not report zero entries: the freeze
+    reads the job documents instead of treating a missing input as no entry."""
+    from trading_research.research.rule_discovery import search_run
+
+    breadth, refinement = _study_fixture(tmp_path)
+    assert not search_run.daily_path(refinement, "2020-01-02").is_file()
+    fixed = _exits.freeze_entries(breadth_run_root=breadth, refinement_run_root=refinement)
+    assert fixed["entries"] == 2
+    # and with a shard present the shard is enough
+    search_run._write_json(
+        search_run.daily_path(refinement, "2020-01-02"),
+        {"rows": [{"candidate_id": "SYN:syn_branch:S1:deadline_minutes=5", "candidate_fills": 1}]},
+    )
+    again = _exits.freeze_entries(breadth_run_root=breadth, refinement_run_root=refinement)
+    assert again["entries"] == 2
+
+
+def test_a_holdout_date_cannot_choose_an_exit_policy(tmp_path):
+    """P15-19 A09: the exit comparison drops hold-out days and records how many.
+    Make E2 spectacular on the hold-out only and the comparison does not move;
+    the same days in-block do move it."""
+    from trading_research.research.rule_discovery import search_run as sr
+
+    entry_rule = "SYN:syn_branch:S1:deadline_minutes=5"
+
+    def shard(day, e2):
+        return {
+            "account_day": day,
+            "rules": {
+                entry_rule: [
+                    {
+                        "entry_id": f"syn-{day}",
+                        "side": 1,
+                        "fill_price": "100.00",
+                        "round_trip_cost": "5.00",
+                        "recorded_e0": {"net_points": "1.00"},
+                        "e0_matches_entry_run": True,
+                        "policies": {
+                            policy: {
+                                "complete": True,
+                                "reason": "objective",
+                                "net_points": e2 if policy == "E2" else "1.00",
+                                "occupancy_flagged": False,
+                            }
+                            for policy in POLICIES
+                        },
+                    }
+                ]
+            },
+        }
+
+    in_block = [f"2026-03-{day:02d}" for day in range(2, 20)]
+    holdout = [f"2026-05-{day:02d}" for day in range(4, 22)]
+    assert all(sr.in_holdout(day) for day in holdout)
+    assert not any(sr.in_holdout(day) for day in in_block)
+
+    def mean_for(loud_days):
+        shards = [shard(day, "9.00" if day in loud_days else "1.00") for day in in_block + holdout]
+        series = _exits.exit_daily_series(shards)
+        body = series[entry_rule]
+        diffs = []
+        excluded = 0
+        for day, cell in sorted(body["daily"].items()):
+            if sr.in_holdout(day):
+                excluded += 1
+                continue
+            diffs.append(float(Decimal(cell["net_points"]["E2"]) - Decimal(cell["net_points"]["E0"])))
+        return (sum(diffs) / len(diffs)), excluded
+
+    quiet, excluded = mean_for(set())
+    loud_holdout, _ = mean_for(set(holdout))
+    loud_in_block, _ = mean_for(set(in_block))
+    assert excluded == len(holdout)
+    assert loud_holdout == quiet
+    assert loud_in_block > quiet

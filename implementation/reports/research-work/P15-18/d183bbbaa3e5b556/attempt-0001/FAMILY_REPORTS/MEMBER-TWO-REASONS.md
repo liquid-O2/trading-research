@@ -6,19 +6,19 @@ Run root `reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001`. Every num
 
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
 
 ## Audit table
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 315 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 294 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
 
 ## Quality–frequency Pareto set
 
 | candidate_id | bank | mean paired improvement (points/day) | entries | baseline entries |
 | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0 | Profile | -0.0562 | 315 | 316 |
+| MEMBER-TWO-REASONS:planned_return_long:P1:bandwidth=0 | Profile | -0.0619 | 294 | 295 |
 
 ## Retention set
 

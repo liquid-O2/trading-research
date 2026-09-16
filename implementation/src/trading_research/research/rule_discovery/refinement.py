@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
 from functools import cmp_to_key
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Sequence
@@ -22,6 +23,9 @@ MINUTE_NS = 60_000_000_000
 MAX_NEIGHBORS_PER_BANK = 12
 MAX_NEIGHBORS_PER_FAMILY = 24
 MAX_REFINED_PLUS_COMBINED = 25
+#: EVALUATION.md reports block lengths 1 and 10 beside the frozen block 5 as
+#: sensitivity, never as additional selection opportunities.
+BLOCK_SENSITIVITY = (1, 10)
 SIMPLICITY_THRESHOLD = 0.01
 FREQUENCY_FLOOR_FRACTION = 0.5
 SUPPORT_GATE_OPPORTUNITIES = 100
@@ -78,10 +82,31 @@ _F3 = (
     {"axis": "width_S", "values": (0.5, 0.75, 1.0), "freeze": {"efficiency": 0.35}},
     {"axis": "efficiency", "values": (0.2, 0.35, 0.5), "parent_axis": "width_S"},
 )
+#: SEARCH_CONTRACT refinement table, row "P value-area fraction" (2026-09-16):
+#: the chosen fraction -.10, the chosen fraction and +.10, bounded to [.30,.90],
+#: at the chosen b and prominence. The chosen value is always among the
+#: neighbours, so the round can keep it.
+VALUE_AREA_FRACTION_BOUNDS = (Decimal("0.30"), Decimal("0.90"))
+VALUE_AREA_FRACTION_STEP = Decimal("0.10")
+
+
+def value_area_fraction_values(chosen: Any) -> tuple[Decimal, ...]:
+    """The registered fraction neighbourhood around `chosen`, inside the bounds."""
+    low, high = VALUE_AREA_FRACTION_BOUNDS
+    centre = Decimal(str(chosen))
+    values = []
+    for value in (centre - VALUE_AREA_FRACTION_STEP, centre, centre + VALUE_AREA_FRACTION_STEP):
+        bounded = min(max(value, low), high)
+        if bounded not in values:
+            values.append(bounded)
+    return tuple(values)
+
+
 _P = (
     {"axis": "bandwidth", "values": (0, 2, 4), "freeze": {"prominence": 0.20}},
     {"axis": "prominence", "values": (0.10, 0.20, 0.30), "parent_axis": "bandwidth"},
 )
+_P_FRACTION = {"axis": "fraction", "values": None, "bounded": VALUE_AREA_FRACTION_BOUNDS}
 _S_DEADLINE = ({"axis": "deadline_minutes", "values": (5, 10, 15)},)
 _S_TICKS = ({"axis": "favorable_ticks", "values": (1, 2, 4)},)
 _S_BOTH = _S_DEADLINE + _S_TICKS
@@ -93,6 +118,8 @@ NEIGHBORHOODS: dict[str, tuple[dict[str, Any], ...]] = {
     "F3": _F3,
     "P1": _P,
     "P2": _P,
+    "P3": _P + (_P_FRACTION,),
+    "P4": _P + (_P_FRACTION,),
     "R1": ({"axis": "dispersion", "values": (0.5, 1.0, 1.5)},),
     "R2": (),
     "C1": ({"axis": "window_minutes", "values": (2, 5, 10)},),
@@ -259,6 +286,17 @@ def neighborhood_values(recipe_id: str, parameters: Mapping[str, Any] | None = N
     rows: list[dict[str, Any]] = []
     for sweep in spec:
         axis = str(sweep["axis"])
+        if axis == "fraction" and sweep.get("values") is None:
+            chosen = params.get("fraction")
+            if chosen is None:
+                continue
+            for value in value_area_fraction_values(chosen):
+                merged = dict(params)
+                merged["fraction"] = str(value)
+                rows.append(
+                    {"axis": axis, "value": str(value), "parameters": merged, "changed_axis": axis}
+                )
+            continue
         freeze = dict(sweep.get("freeze") or {})
         parent_axis = sweep.get("parent_axis")
         if parent_axis:
@@ -609,14 +647,45 @@ def _valid_diffs(daily_diff: Sequence[Any]) -> list[float]:
     return [float(value) for value in daily_diff if value is not None]
 
 
+def _valid_diffs_with_segments(
+    daily_diff: Sequence[Any], segments: Sequence[Any] | None
+) -> tuple[list[float], list[Any] | None]:
+    """Drop the missing days from the series and their labels with them, so the
+    segment labels stay aligned with the values they describe."""
+    if segments is None:
+        return _valid_diffs(daily_diff), None
+    labels = list(segments)
+    if len(labels) != len(list(daily_diff)):
+        raise ContractError("segments must align with the daily differences")
+    values: list[float] = []
+    kept: list[Any] = []
+    for value, label in zip(daily_diff, labels):
+        if value is None:
+            continue
+        values.append(float(value))
+        kept.append(label)
+    return values, kept
+
+
 def centered_bootstrap_pvalue(
     daily_diff: Sequence[Any],
     *,
     bootstrap_fn: Callable[..., Any] = moving_block_bootstrap,
+    segments: Sequence[Any] | None = None,
+    sensitivity_blocks: Sequence[int] = BLOCK_SENSITIVITY,
 ) -> dict[str, Any]:
-    valid = _valid_diffs(daily_diff)
+    """The frozen block bootstrap of EVALUATION.md.
+
+    `segments` are the calendar-year labels of the paired days in order: block
+    starts are drawn within a year and wrap only inside it. Block lengths 1 and
+    10 are reported beside the block-5 interval as sensitivity, never as extra
+    selection opportunities.
+    """
+    valid, kept = _valid_diffs_with_segments(daily_diff, segments)
     mean_diff = float(np.mean(valid)) if valid else 0.0
-    draws = bootstrap_fn(valid, block=BLOCK_LENGTH, draws=BOOTSTRAP_DRAWS, seed=BOOTSTRAP_SEED)
+    draws = bootstrap_fn(
+        valid, block=BLOCK_LENGTH, draws=BOOTSTRAP_DRAWS, seed=BOOTSTRAP_SEED, segments=kept
+    )
     draws_arr = np.asarray(draws, dtype=np.float64)
     count = int(draws_arr.size)
     if count == 0:
@@ -627,11 +696,27 @@ def centered_bootstrap_pvalue(
         p_raw = (1 + int(np.count_nonzero((draws_arr - mean_diff) >= mean_diff))) / (count + 1)
         ci_low = float(np.percentile(draws_arr, 2.5))
         ci_high = float(np.percentile(draws_arr, 97.5))
+    sensitivity: dict[str, Any] = {}
+    for block in sensitivity_blocks:
+        if block == BLOCK_LENGTH or not valid:
+            continue
+        other = np.asarray(
+            bootstrap_fn(valid, block=int(block), draws=BOOTSTRAP_DRAWS, seed=BOOTSTRAP_SEED, segments=kept),
+            dtype=np.float64,
+        )
+        if other.size:
+            sensitivity[f"block_{int(block)}"] = {
+                "ci_low": float(np.percentile(other, 2.5)),
+                "ci_high": float(np.percentile(other, 97.5)),
+            }
     return {
         "p_raw": float(p_raw),
         "mean_diff": mean_diff,
         "ci_low": ci_low,
         "ci_high": ci_high,
+        "block_length": BLOCK_LENGTH,
+        "segments": len({label for label in kept}) if kept else 0,
+        "block_sensitivity": sensitivity,
         "draws": draws_arr,
     }
 
@@ -706,7 +791,11 @@ def evaluate_promotion(
     apply_holm: bool = True,
     apply_frequency_floor: bool = True,
 ) -> dict[str, Any]:
-    computed = centered_bootstrap_pvalue(candidate.get("daily_diff") or (), bootstrap_fn=bootstrap_fn)
+    computed = centered_bootstrap_pvalue(
+        candidate.get("daily_diff") or (),
+        bootstrap_fn=bootstrap_fn,
+        segments=candidate.get("daily_segments"),
+    )
     pvalues: list[float] = []
     for trial in stage_trials:
         raw = trial.get("p_raw")
@@ -801,6 +890,8 @@ def evaluate_promotion(
         "ci_low": ci_low,
         "ci_high": float(computed["ci_high"]),
         "mean_diff": mean_diff,
+        "block_sensitivity": computed.get("block_sensitivity", {}),
+        "bootstrap_segments": computed.get("segments"),
         "support_pass": support_ok,
         "support_sensitivity": sensitivity,
         "frequency_floor_pass": frequency_floor_pass,
@@ -1083,11 +1174,28 @@ def resolve_refinement_bank(
     return out
 
 
-def refinement_parents(allowlist: Mapping[str, Any]) -> dict[str, Any]:
-    """The breadth ResolvedCandidate behind every selected bank, by candidate id."""
-    from trading_research.research.rule_discovery import search
+def refinement_parents(
+    allowlist: Mapping[str, Any], breadth_run_root: str | Path | None = None
+) -> dict[str, Any]:
+    """The breadth ResolvedCandidate behind every selected bank, by candidate id.
+
+    The universe is what the breadth evaluation decided, not the frozen bank
+    alone: a supplement attempt evaluated in the same Holm family can have a
+    bank selected, so its declared candidates are resolved here too.
+    """
+    from trading_research.research.rule_discovery import search, search_run
 
     resolved = {item.candidate_id: item for item in search.resolve_bank()}
+    if breadth_run_root is not None:
+        results = Path(breadth_run_root) / "BREADTH_RESULTS.json"
+        if results.is_file():
+            for supplement in json.loads(results.read_text()).get("supplements") or []:
+                declaration = supplement.get("declaration")
+                if not declaration or not Path(declaration).is_file():
+                    continue
+                document = json.loads(Path(declaration).read_text())
+                for item in search_run.supplement_candidates(document):
+                    resolved[item.candidate_id] = item
     out: dict[str, Any] = {}
     for fold in allowlist["folds"]:
         for family in fold["families"]:
@@ -1144,7 +1252,7 @@ def prepare_refinement(
         }
         for item in search.resolve_bank()
     ]
-    parents = refinement_parents(allowlist)
+    parents = refinement_parents(allowlist, root)
     # an allowlist written before select_banks carried the branch still resolves:
     # the branch comes from the parent's own resolution
     bank = build_refinement_bank(
@@ -1556,15 +1664,21 @@ def evaluate_refinement(
     freeze_path: str | Path,
     out_dir: str | Path | None = None,
     combination_run_root: str | Path | None = None,
+    holdout: tuple[str, str] | None = None,
 ) -> dict[str, Any]:
-    """The refinement evaluation, streaming, as a function of the run roots."""
+    """The refinement evaluation, streaming, as a function of the run roots.
+
+    The blind hold-out is removed from every fold window before anything is
+    scored, so no hold-out date reaches a neighbourhood, a combination choice,
+    the Holm family or the all-history recommendation.
+    """
     from trading_research.research.rule_discovery import search_run
 
     root = Path(run_root)
     out = Path(out_dir) if out_dir else root
     out.mkdir(parents=True, exist_ok=True)
     freeze = search_run.load_freeze(freeze_path)
-    folds = search_run.load_splits(freeze)
+    folds, holdout_excluded = search_run.apply_holdout(search_run.load_splits(freeze), holdout)
     bank = json.loads((root / "REFINEMENT_BANK.json").read_text())
     prepared = prepare_refinement(breadth_run_root)
     resolved = {item.candidate_id: item for item in prepared["candidates"]}
@@ -1603,8 +1717,10 @@ def evaluate_refinement(
         ledger_path.unlink()
     ledger = TrialLedger(ledger_path)
     for record in _refinement_trial_rows(bank, selections, decided, folds=folds, identity=identity):
+        record["holdout_excluded"] = holdout_excluded
         ledger.append(record)
     for record in _combination_trial_rows(combination_rows, decided, folds=folds, identity=identity):
+        record["holdout_excluded"] = holdout_excluded
         ledger.append(record)
 
     fold_roles = []
@@ -1646,6 +1762,7 @@ def evaluate_refinement(
             "label": "all-history descriptive recommendation; never applied backward to an earlier fold",
         }
     manifest_rules = selected_rules_by_fold(fold_roles, descriptive)
+    manifest_rules["holdout_excluded"] = holdout_excluded
     search_run._write_json(out / "SELECTED_RULES_BY_FOLD.json", manifest_rules)
 
     disposition_rows = []
@@ -1667,6 +1784,7 @@ def evaluate_refinement(
         )
     dispositions = family_dispositions(disposition_rows)
     dispositions["stage"] = "refinement"
+    dispositions["holdout_excluded"] = holdout_excluded
     dispositions["coverage"] = coverage
     search_run._write_json(out / "FAMILY_DISPOSITIONS.json", dispositions)
 
@@ -1716,10 +1834,12 @@ def evaluate_refinement(
     search_run._write_json(out / "COMBINATION_RESULTS.json", {
         "schema_version": "research-p15-18-combination-results-v1",
         "task_id": P15_18_TASK_ID,
+        "holdout_excluded": holdout_excluded,
         "rows": combination_rows,
     })
     return {
         "coverage": coverage,
+        "holdout_excluded": holdout_excluded,
         "selections": selections,
         "combinations": combination_rows,
         "trials": sum(1 for line in ledger_path.read_text().splitlines() if line.strip()),
@@ -1769,6 +1889,7 @@ def run_combinations(
     freeze_path: str | Path,
     dates: Sequence[str] | None = None,
     workers: int | None = None,
+    holdout: tuple[str, str] | None = None,
 ) -> dict[str, Any]:
     """Execute the combined candidates chosen by the refinement evaluation."""
     from trading_research.research.rule_discovery import search_run
@@ -1777,7 +1898,9 @@ def run_combinations(
     resolved = {item.candidate_id: item for item in prepared["candidates"]}
     bank = json.loads((Path(refinement_run_root) / "REFINEMENT_BANK.json").read_text())
     freeze = search_run.load_freeze(freeze_path)
-    folds = search_run.load_splits(freeze)
+    # the same trimmed folds the evaluation uses: a combination chosen on a
+    # hold-out date would be a hold-out-influenced choice
+    folds, _holdout_excluded = search_run.apply_holdout(search_run.load_splits(freeze), holdout)
     series, _ = search_run.stream_run(Path(refinement_run_root))
     proposals: list[dict[str, Any]] = []
     for fold in folds:
@@ -1800,6 +1923,19 @@ def run_combinations(
             ],
         },
     )
+    if not candidates:
+        # nothing qualified: there is no session to load, and a run over 1,742
+        # dates with an empty bank would burn the budget to write nothing
+        return {
+            "summary": {
+                "task_id": P15_18_TASK_ID,
+                "run_root": str(root),
+                "dates_declared": 0,
+                "executed": 0,
+                "reason": "no combination qualified in any fold",
+            },
+            "executed": [],
+        }
     summary = search_run.run_dates(
         run_root=root,
         freeze_path=freeze_path,

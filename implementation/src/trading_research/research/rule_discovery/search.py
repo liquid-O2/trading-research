@@ -844,6 +844,11 @@ def _value_area(counts, *, base: int, fraction: Decimal, bandwidth: int) -> dict
     }
 
 
+#: The registered value-area fraction of the profile recipes. P3 and P4 replace
+#: it with .68 and .40 (SEARCH_CONTRACT Profile row, supplement 2026-09-16).
+DEFAULT_VALUE_AREA_FRACTION = Decimal("0.70")
+
+
 def profile_value_area(market, end_ns: int, *, bandwidth: int = 0, fraction: Decimal = Decimal("0.70")) -> dict[str, Any] | None:
     """Value area of the session tick profile up to end_ns, walked incrementally."""
 
@@ -1276,13 +1281,19 @@ def _profile_stage(resolved, market, out, operands, name, issue_ns) -> None:
     # (raw tick b0) or the triangular kernel b2. The source's object is the vendor
     # footprint aggregation of the prior completed session; this is the changed
     # profile construction, not a changed clock.
-    bandwidth = int(dict(resolved.parameters).get("bandwidth") or 0)
-    area = profile_value_area(market, issue_ns, bandwidth=bandwidth)
+    parameters = dict(resolved.parameters)
+    bandwidth = int(parameters.get("bandwidth") or 0)
+    # P3/P4 (2026-09-16 supplement) change the value-area fraction of the same
+    # causal construction; P1/P2 keep the registered .70 default.
+    fraction = parameters.get("fraction")
+    fraction = DEFAULT_VALUE_AREA_FRACTION if fraction is None else Decimal(str(fraction))
+    area = profile_value_area(market, issue_ns, bandwidth=bandwidth, fraction=fraction)
     if area is None:
         out["verdict"] = "unknown"
         operands["profile_reason"] = "no_observed_profile"
         return
     operands["profile_bandwidth"] = bandwidth
+    operands["profile_fraction"] = str(fraction)
     operands["profile_recipe"] = resolved.recipe_id
     for key, value in (("prior_vah", area["vah"]), ("poc", area["poc"]), ("vah", area["vah"]), ("val", area["val"])):
         if key in operands:

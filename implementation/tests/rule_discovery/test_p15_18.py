@@ -427,12 +427,16 @@ def test_shuffle_does_not_change_selected_banks():
 def test_holm_and_bootstrap_contract_constants():
     recorded = {}
 
-    def spy(values, *, block, draws, seed):
-        recorded["block"] = block
+    def spy(values, *, block, draws, seed, segments=None):
+        # the contract's bootstrap draws inside calendar-year segments; the last
+        # call wins for block, and every call is recorded
+        recorded.setdefault("blocks", []).append(block)
+        recorded["block"] = 5 if 5 in recorded["blocks"] else block
         recorded["draws"] = draws
         recorded["seed"] = seed
         recorded["n"] = len(list(values))
-        return moving_block_bootstrap(values, block=block, draws=draws, seed=seed)
+        recorded["segments"] = segments
+        return moving_block_bootstrap(values, block=block, draws=draws, seed=seed, segments=segments)
 
     candidate = _promo_candidate()
     result = evaluate_promotion(
@@ -443,6 +447,8 @@ def test_holm_and_bootstrap_contract_constants():
     assert recorded["seed"] == 15022026
     assert recorded["draws"] == 2000
     assert recorded["block"] == 5
+    # blocks 1 and 10 are reported beside it as sensitivity (EVALUATION.md)
+    assert sorted(set(recorded["blocks"])) == [1, 5, 10]
     assert recorded["n"] == 30
     assert result["promoted"] is True
     assert result["ci_low"] > 0
@@ -786,6 +792,9 @@ def test_neighborhoods_are_exactly_the_contract_recipes():
         "F3",
         "P1",
         "P2",
+        # the 2026-09-16 supplement recipes carry the value-area fraction axis
+        "P3",
+        "P4",
         "R1",
         "R2",
         "C1",
@@ -803,7 +812,8 @@ def test_neighborhoods_are_exactly_the_contract_recipes():
         "T4",
     }
     assert "_CAP" not in NEIGHBORHOODS
-    assert len(NEIGHBORHOODS) == 20
+    # 18 original recipes plus the 2026-09-16 supplement's P3 and P4
+    assert len(NEIGHBORHOODS) == 22
 
 
 def test_generic_refinement_fallback_and_cap_registry():
@@ -1271,3 +1281,70 @@ def test_a_combination_whose_ingredients_live_on_different_branches_is_not_appli
     assert rows["JJ-TBR"]["reason"] == "ingredients_on_different_branches"
     assert rows["GB-FAIL"]["status"] == "attempted"
     assert rows["GB-FAIL"]["reason"] is None
+
+
+def test_a_holdout_date_cannot_change_a_refinement_choice():
+    """P15-18 A09: a hold-out date's outcome cannot move the refined mechanism a
+    fold picks; the same move on an in-block date does."""
+    from trading_research.research.rule_discovery import search_run as sr
+
+    bank = _bank_document()
+    resolved = {
+        row["candidate_id"]: _resolved(row["candidate_id"], row["bank"], row["recipe_id"], row["parameters"])
+        for row in bank["folds"][0]["families"][0]["neighbors"]
+    }
+    holdout_day, in_block_day = "2026-05-04", "2026-03-02"
+    fold = {
+        "test_year": 2022,
+        "fit": ["2020-01-02", in_block_day, holdout_day],
+        "tune": ["2021-07-01"],
+        "calibrate": ["2021-10-01"],
+        "test": ["2022-01-03"],
+    }
+    trimmed, info = sr.apply_holdout([fold])
+    assert info["days_excluded"] == 1
+
+    def series(loud_day):
+        quiet = {"2020-01-02": (3.0, 1.0), "2021-07-01": (3.0, 1.0), in_block_day: (3.0, 1.0), holdout_day: (3.0, 1.0)}
+        loud = dict(quiet)
+        loud[loud_day] = (500.0, 1.0)
+        return {
+            "SYN:syn_branch:S1:deadline_minutes=5": _series(loud),
+            "SYN:syn_branch:S1:deadline_minutes=15": _series(quiet),
+        }
+
+    # with both candidates equal the 1% simplicity rule breaks the tie on the
+    # lower candidate id, so "=15" is the quiet winner
+    base = rf.select_refined_for_fold(bank, trimmed[0], resolved, series("none"))
+    assert base["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=15"
+    quiet_holdout = rf.select_refined_for_fold(bank, trimmed[0], resolved, series(holdout_day))
+    assert quiet_holdout["families"] == base["families"]
+    moved = rf.select_refined_for_fold(bank, trimmed[0], resolved, series(in_block_day))
+    assert moved["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=5"
+
+
+def test_the_value_area_fraction_neighbourhood_is_the_contract_row():
+    """SEARCH_CONTRACT: chosen -.10, chosen, +.10, bounded to [.30,.90]. The
+    chosen value is always offered, so the round can keep it, and no value ever
+    leaves the bounds."""
+    from decimal import Decimal
+
+    assert rf.VALUE_AREA_FRACTION_BOUNDS == (Decimal("0.30"), Decimal("0.90"))
+    for chosen, expected in (
+        ("0.68", ["0.58", "0.68", "0.78"]),
+        ("0.40", ["0.30", "0.40", "0.50"]),
+        ("0.35", ["0.30", "0.35", "0.45"]),  # the low neighbour clamps onto the bound
+        ("0.88", ["0.78", "0.88", "0.90"]),
+        ("0.30", ["0.30", "0.40"]),  # at the bound the clamped duplicate collapses
+        ("0.90", ["0.80", "0.90"]),
+    ):
+        values = [str(value) for value in rf.value_area_fraction_values(chosen)]
+        assert values == expected, chosen
+        assert Decimal(chosen) in rf.value_area_fraction_values(chosen)
+        assert all(Decimal("0.30") <= value <= Decimal("0.90") for value in rf.value_area_fraction_values(chosen))
+    rows = rf.neighborhood_values("P3", {"bandwidth": 0, "prominence": 0.20, "fraction": "0.68"})
+    fractions = [row["value"] for row in rows if row["axis"] == "fraction"]
+    assert fractions == ["0.58", "0.68", "0.78"]
+    assert {row["axis"] for row in rows} == {"bandwidth", "prominence", "fraction"}
+    # P1/P2 have no fraction axis: their fraction is the registered default
+    assert all(row["axis"] != "fraction" for row in rf.neighborhood_values("P1", {"bandwidth": 0}))

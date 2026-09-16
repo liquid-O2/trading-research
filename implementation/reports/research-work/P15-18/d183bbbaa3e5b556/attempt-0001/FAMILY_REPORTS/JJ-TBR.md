@@ -6,26 +6,26 @@ Run root `reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001`. Every num
 
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
-| JJ-TBR | JJ-TBR:internal_rotation:F1:minutes=90 | 1219 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
-| JJ-TBR | JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75 | 1219 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
-| JJ-TBR | JJ-TBR:judas_reversal:S4:deadline_minutes=10 | 1219 | not claimed (no source-exact comparison) | promoted | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
-| JJ-TBR | JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
+| JJ-TBR | JJ-TBR:internal_rotation:F1:minutes=90 | 1107 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
+| JJ-TBR | JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75 | 1107 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
+| JJ-TBR | JJ-TBR:judas_reversal:S4:deadline_minutes=10 | 1107 | not claimed (no source-exact comparison) | promoted | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
+| JJ-TBR | JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75 | 1107 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/JJ-TBR.md |
 
 ## Audit table
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| JJ-TBR | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 249 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| JJ-TBR | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 238 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| JJ-TBR | P15-17 | promoted | pass | 0 | 0 | support 209 opps / 1219 days / 5 blocks; first attribution None; baseline retained |
-| JJ-TBR | P15-17 | retained_baseline | pass | 0 | 0 | support 246 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
+| JJ-TBR | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 236 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| JJ-TBR | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 224 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| JJ-TBR | P15-17 | promoted | pass | 0 | 0 | support 203 opps / 1107 days / 5 blocks; first attribution None; baseline retained |
+| JJ-TBR | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 225 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
 
 ## Quality–frequency Pareto set
 
 | candidate_id | bank | mean paired improvement (points/day) | entries | baseline entries |
 | --- | --- | --- | --- | --- |
-| JJ-TBR:judas_reversal:S4:deadline_minutes=10 | Sequence | 4.6758 | 209 | 417 |
-| JJ-TBR:internal_rotation:F1:minutes=90 | Formation | 0.6220 | 249 | 229 |
+| JJ-TBR:judas_reversal:S4:deadline_minutes=10 | Sequence | 4.8988 | 203 | 388 |
+| JJ-TBR:internal_rotation:F1:minutes=90 | Formation | 0.6678 | 236 | 220 |
 
 ## Retention set
 
@@ -34,7 +34,7 @@ Run root `reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001`. Every num
 | JJ-TBR:internal_rotation:F1:minutes=90 | internal_rotation | Formation | inactive_retained | location_miss | holm |
 | JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75 | internal_rotation | Formation | inactive_retained | location_miss | holm |
 | JJ-TBR:judas_reversal:S4:deadline_minutes=10 | judas_reversal | Sequence | active_selected |  |  |
-| JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75 | single_extended | Formation | inactive_retained | location_miss | no_improvement |
+| JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75 | single_extended | Formation | inactive_retained | location_miss | holm |
 
 ## Fold selections (inner tuning only)
 

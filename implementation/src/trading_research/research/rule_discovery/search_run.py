@@ -1582,6 +1582,128 @@ def load_splits(freeze: Mapping[str, Any]) -> list[dict[str, Any]]:
     return [dict(row) for row in document["outer"]]
 
 
+#: The blind hold-out of EVALUATION.md (amendment 2026-09-16): the last five
+#: months of the tape enter no fit, tune or calibration window, no selection, no
+#: Holm family, no promotion gate and no descriptive table read while deciding.
+#: The 2026 outer block therefore ends on 2026-03-31.
+HOLDOUT_START = "2026-04-01"
+HOLDOUT_END = "2026-09-03"
+
+
+def holdout_range(start: str | None = None, end: str | None = None) -> tuple[str, str]:
+    return (start or HOLDOUT_START, end or HOLDOUT_END)
+
+
+def in_holdout(day: str, holdout: tuple[str, str] | None = None) -> bool:
+    start, end = holdout_range(*(holdout or (None, None)))
+    return start <= str(day) <= end
+
+
+def apply_holdout(
+    folds: Sequence[Mapping[str, Any]], holdout: tuple[str, str] | None = None
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Trim every fold's windows to exclude the blind hold-out.
+
+    One rule, applied once: every statistic downstream reads the trimmed folds,
+    so no hold-out date can reach a selection, a gate or a report. What was
+    removed is returned and recorded, never silently dropped.
+    """
+    start, end = holdout_range(*(holdout or (None, None)))
+    trimmed: list[dict[str, Any]] = []
+    removed: dict[str, int] = {"fit": 0, "tune": 0, "calibrate": 0, "test": 0}
+    dates: set[str] = set()
+    for fold in folds:
+        body = dict(fold)
+        for window in ("fit", "tune", "calibrate", "test"):
+            days = list(fold.get(window) or [])
+            kept = [day for day in days if not (start <= day <= end)]
+            removed[window] += len(days) - len(kept)
+            dates.update(day for day in days if start <= day <= end)
+            body[window] = kept
+        trimmed.append(body)
+    return trimmed, {
+        "start": start,
+        "end": end,
+        "dates": sorted(dates),
+        "days_excluded": len(dates),
+        "removed_from_window": removed,
+        "contract": "EVALUATION.md, blind hold-out and walk-forward (2026-09-16)",
+    }
+
+
+def holdout_replay(
+    selection_manifests: Sequence[str | Path],
+    run_root: str | Path,
+    holdout: tuple[str, str] | None = None,
+    *,
+    freeze_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """Replay frozen selected rules on the hold-out dates only. Release tooling.
+
+    Called by the phase release after the selections are frozen, never by an
+    evaluation: it reads selection manifests that already exist, pins their
+    sha256, and reports the same paired metrics, bootstrap intervals and support
+    on the hold-out days. Nothing it returns can change a selection.
+    """
+    start, end = holdout_range(*(holdout or (None, None)))
+    root = Path(run_root)
+    manifests = [Path(path) for path in selection_manifests]
+    selected: dict[str, dict[str, Any]] = {}
+    for path in manifests:
+        document = json.loads(path.read_text())
+        for fold in document.get("folds") or []:
+            year = int(fold.get("outer_fold") or 0)
+            for role in fold.get("roles") or []:
+                candidate_id = str(role.get("candidate_id") or "")
+                if candidate_id:
+                    row = selected.setdefault(candidate_id, {"folds": [], "manifest": str(path)})
+                    row["folds"].append(year)
+            for family in (fold.get("families") or []):
+                for bank in family.get("selected_banks") or []:
+                    candidate_id = str(bank.get("candidate_id") or "")
+                    if candidate_id:
+                        row = selected.setdefault(candidate_id, {"folds": [], "manifest": str(path)})
+                        row["folds"].append(year)
+    dates = [
+        day
+        for day in json.loads((root / "MANIFEST.json").read_text())["dates"]
+        if start <= day <= end
+    ]
+    series, coverage = stream_run(root, dates)
+    rows = []
+    for candidate_id, body in sorted(selected.items()):
+        paired = (series.get(candidate_id) or CandidateSeries(candidate_id)).select(dates)
+        diffs = [row["diff"] for row in paired]
+        computed = refinement.centered_bootstrap_pvalue(diffs) if diffs else None
+        rows.append(
+            {
+                "candidate_id": candidate_id,
+                "selected_in_folds": sorted(set(body["folds"])),
+                "selection_manifest": body["manifest"],
+                "holdout_days": len(paired),
+                "entries": sum(row["candidate_fills"] for row in paired),
+                "baseline_entries": sum(row["baseline_fills"] for row in paired),
+                "mean_diff": float(np.mean(diffs)) if diffs else None,
+                "ci_low": None if computed is None else computed["ci_low"],
+                "ci_high": None if computed is None else computed["ci_high"],
+                "p_raw": None if computed is None else computed["p_raw"],
+            }
+        )
+    return {
+        "schema_version": "research-holdout-report-v1",
+        "holdout": {"start": start, "end": end, "dates": len(dates)},
+        "run_root": str(root),
+        "freeze_sha256": None if freeze_path is None else file_sha256(freeze_path),
+        "selection_manifests": [
+            {"path": str(path), "sha256": file_sha256(path)} for path in manifests
+        ],
+        "coverage": coverage,
+        "replayed_at": datetime.now(timezone.utc).isoformat(),
+        "note": "read after it is written; nothing here changes a selection",
+        "rules": rows,
+    }
+
+
 def load_daily_table(run_root: str | Path, dates: Sequence[str] | None = None) -> dict[str, dict[str, Any]]:
     """{candidate_id: {account_day: compact row}} from the per-date summaries."""
     root = Path(run_root)
@@ -1963,6 +2085,7 @@ def _outer_from_paired(
     """Outer evidence for the decision stage, over already-paired test days, one
     list per outer fold. Never consumed by select_for_fold (A02)."""
     diffs: list[float] = []
+    days_in_order: list[str] = []
     block_improvements: list[float] = []
     supported_blocks = 0
     days = 0
@@ -1981,6 +2104,7 @@ def _outer_from_paired(
         supported_blocks += 1
         block_improvements.append(float(np.mean([p["diff"] for p in paired])))
         diffs.extend(p["diff"] for p in paired)
+        days_in_order.extend(str(p["day"]) for p in paired)
         days += len(paired)
         entries += sum(p["candidate_fills"] for p in paired)
         baseline_entries += sum(p["baseline_fills"] for p in paired)
@@ -2007,6 +2131,8 @@ def _outer_from_paired(
         "parameters": dict(item.parameters),
         "changed_axes": 1,
         "daily_diff": diffs,
+        "daily_days": days_in_order,
+        "daily_segments": [day[:4] for day in days_in_order],
         "mean_diff": mean_diff,
         "block_improvements": block_improvements,
         "supported_outer_blocks": supported_blocks,
@@ -2109,6 +2235,7 @@ def decide(
     for row in rows:
         computed = refinement.centered_bootstrap_pvalue(
             row.get("daily_diff") or (),
+            segments=row.get("daily_segments"),
             **({"bootstrap_fn": bootstrap_fn} if bootstrap_fn is not None else {}),
         )
         stage_trials.append({"candidate_id": row["candidate_id"], "p_raw": computed["p_raw"]})
@@ -2282,6 +2409,7 @@ def trial_records(
     folds: Sequence[Mapping[str, Any]],
     *,
     identity: Mapping[str, Any],
+    holdout_excluded: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     """One row for every registered candidate in every outer fold, plus the
     decision-stage row. Unsupported, not-applicable and runtime-failed
@@ -2357,6 +2485,7 @@ def trial_records(
                     candidate_id=item.candidate_id,
                     recipe_id=item.recipe_id,
                     status=status,
+                    holdout_excluded=dict(holdout_excluded or {}),
                 )
             )
     return rows
@@ -2627,6 +2756,64 @@ def reconcile_jobs(
     return report
 
 
+def paired_series_rows(
+    run_root: str | Path,
+    dates: Sequence[str] | None = None,
+    candidate_ids: Sequence[str] | None = None,
+):
+    """Per candidate and per day: the date, the daily net points of both sides
+    and the decision clock of every opportunity.
+
+    The release's breakdown edition cuts these rows by year, session bucket, day
+    of week and the other frozen regime dimensions without re-running anything;
+    the clocks come from the job documents, one at a time.
+    """
+    root = Path(run_root)
+    if dates is None:
+        dates = json.loads((root / "MANIFEST.json").read_text())["dates"]
+    wanted = None if candidate_ids is None else set(candidate_ids)
+    for day in dates:
+        path = daily_path(root, day)
+        if not path.is_file():
+            continue
+        for row in json.loads(path.read_text())["rows"]:
+            if wanted is not None and row["candidate_id"] not in wanted:
+                continue
+            if row.get("status") != "evaluated":
+                continue
+            job = read_gz(job_path(root, day, row["candidate_id"]))
+            candidate = job.get("candidate") or {}
+            baseline = job.get("baseline") or {}
+            yield {
+                "account_day": day,
+                "candidate_id": row["candidate_id"],
+                "family": row["family"],
+                "branch": row["branch"],
+                "bank": row["bank"],
+                "candidate_net_points": row.get("candidate_net_points"),
+                "baseline_net_points": row.get("baseline_net_points"),
+                "complete": row.get("complete"),
+                "candidate_opportunities": [
+                    {
+                        "entry_id": entry["entry_id"],
+                        "decision_at_ns": entry["fill_at_ns"],
+                        "exit_reason": entry.get("exit_reason"),
+                        "net_points": entry.get("net_points"),
+                    }
+                    for entry in candidate.get("entries") or []
+                ],
+                "baseline_opportunities": [
+                    {
+                        "entry_id": entry["entry_id"],
+                        "decision_at_ns": entry["fill_at_ns"],
+                        "exit_reason": entry.get("exit_reason"),
+                        "net_points": entry.get("net_points"),
+                    }
+                    for entry in baseline.get("entries") or []
+                ],
+            }
+
+
 def _run_complete_summary(run_root: str | Path) -> dict[str, Any] | None:
     """The run's own completion record, including any retained runtime failures,
     carried into the results so a reader of BREADTH_RESULTS sees them."""
@@ -2652,8 +2839,14 @@ def evaluate_run(
     freeze_path: str | Path,
     out_dir: str | Path,
     dates: Sequence[str] | None = None,
+    holdout: tuple[str, str] | None = None,
+    extra_run_roots: Sequence[str | Path] = (),
 ) -> dict[str, Any]:
     """The whole fold evaluation of a run root, streaming.
+
+    `extra_run_roots` evaluates further attempts of the same bank family in one
+    pass -- the profile supplement runs as its own attempt but belongs to the
+    same Holm family, so its candidates join the decision stage here.
 
     A pure function of the run root: it reads `MANIFEST.json`, the per-date
     daily shards and (optionally) `RUN_COMPLETE.json`, and writes the four
@@ -2664,9 +2857,37 @@ def evaluate_run(
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     freeze = load_freeze(freeze_path)
-    folds = load_splits(freeze)
-    resolved = search.resolve_bank()
+    folds, holdout_excluded = apply_holdout(load_splits(freeze), holdout)
+    resolved = list(search.resolve_bank())
     series, coverage = stream_run(root, dates)
+    supplements = []
+    for extra in extra_run_roots:
+        extra_root = Path(extra)
+        extra_series, extra_coverage = stream_run(extra_root, None)
+        overlap = set(series) & set(extra_series)
+        if overlap:
+            raise ContractError(
+                f"{extra_root} repeats candidates of the primary run: {sorted(overlap)[:5]}"
+            )
+        series = {**series, **extra_series}
+        declaration = extra_root / "CANDIDATE_BANK_SUPPLEMENT.json"
+        document = json.loads(declaration.read_text()) if declaration.is_file() else {}
+        resolved.extend(supplement_candidates(document) if document else [])
+        supplements.append(
+            {
+                "run_root": str(extra_root),
+                "coverage": extra_coverage,
+                "declaration": str(declaration) if declaration.is_file() else None,
+                "declaration_sha256": file_sha256(declaration) if declaration.is_file() else None,
+                "declared_at": document.get("declared_at"),
+                "counts": document.get("counts"),
+                "duplicates_not_run": [
+                    {"candidate_id": row["candidate_id"], "reason": row["reason"]}
+                    for row in document.get("candidates", [])
+                    if row["status"] == "duplicate"
+                ],
+            }
+        )
     selections = [select_for_fold_from_series(resolved, series, fold) for fold in folds]
     outer = [
         outer_row_from_series(item, series.get(item.candidate_id), folds)
@@ -2687,7 +2908,9 @@ def evaluate_run(
     if ledger_path.exists():
         ledger_path.unlink()
     ledger = refinement.TrialLedger(ledger_path)
-    for record in trial_records(resolved, decided, selections, folds, identity=identity):
+    for record in trial_records(
+        resolved, decided, selections, folds, identity=identity, holdout_excluded=holdout_excluded
+    ):
         ledger.append(record)
     results = {
         "schema_version": RESULTS_SCHEMA,
@@ -2696,6 +2919,8 @@ def evaluate_run(
         "run_root": str(root),
         "identity": identity,
         "coverage": coverage,
+        "supplements": supplements,
+        "holdout_excluded": holdout_excluded,
         "run_complete": _run_complete_summary(root),
         "dates_evaluated": coverage["dates_with_daily_shard"],
         "candidates": len(resolved),
@@ -2713,7 +2938,12 @@ def evaluate_run(
         ],
         "selections": selections,
         "decisions": [
-            {key: value for key, value in row.items() if key != "daily_diff"} for row in decided
+            {
+                key: value
+                for key, value in row.items()
+                if key not in ("daily_diff", "daily_days", "daily_segments")
+            }
+            for row in decided
         ],
         "pareto": pareto_set(decided),
         "retention": retention,
@@ -2765,3 +2995,145 @@ def semantic_run_id(
         "pairing_baseline": freeze["pairing_baseline"],
     }
     return sha256(json.dumps(canonical, sort_keys=True).encode()).hexdigest()[:16]
+
+
+# --------------------------------------------------------------------------
+# The 2026-09-16 profile supplement (SEARCH_CONTRACT Profile row, P15-17 A10).
+#
+# P3 and P4 change only the value-area fraction of the same causal profile
+# construction. They are declared and hashed before any of their results exist,
+# run on the same roots, folds and hold-out exclusion as the 160, and evaluated
+# with them in one Holm family.
+# --------------------------------------------------------------------------
+
+SUPPLEMENT_SCHEMA = "research-p15-17-bank-supplement-v1"
+SUPPLEMENT_RECIPES = {
+    "P3": Decimal("0.68"),  # the one-sigma convention
+    "P4": Decimal("0.40"),  # the Sires printed intraday setting
+}
+#: The ten branches that carry P1/P2 today, from the frozen bank.
+SUPPLEMENT_BRANCHES = (
+    ("KEANI-OPEN-ABOVE-VALUE", "source_long"),
+    ("MEMBER-TWO-REASONS", "planned_return_long"),
+    ("MEMBER-TWO-REASONS", "resistance_short"),
+    ("SAINT-AMT", "continuation_retest"),
+    ("SAINT-AMT", "failed_auction_return"),
+    ("SAINT-AMT", "poc_traversal"),
+    ("SAINT-AMT", "trapped_buyers_retest"),
+    ("SIRES", "balance_failure_fade"),
+    ("SIRES", "defended_band_continuation"),
+    ("SIRES", "microbalance_break"),
+)
+#: The value-area fraction each family's own B0.2 scan uses, read from the code
+#: that runs: SAINT's B0.2 track calls `profile(..., fraction=".68")`; every
+#: other family reaches `historical_features.profile`, whose fraction is ".70".
+SOURCE_VALUE_AREA_FRACTION = {
+    "SAINT-AMT": Decimal("0.68"),
+    "KEANI-OPEN-ABOVE-VALUE": Decimal("0.70"),
+    "MEMBER-TWO-REASONS": Decimal("0.70"),
+    "SIRES": Decimal("0.70"),
+}
+
+
+def declare_profile_supplement(out_path: str | Path | None = None) -> dict[str, Any]:
+    """The supplement's declaration: 20 one-axis candidates, before any result.
+
+    A candidate whose fraction equals the branch's own source fraction is
+    recorded as a duplicate of B0.2 and is not run -- it would be the baseline
+    under another name.
+    """
+    resolved = {(item.family, item.branch, item.recipe_id): item for item in search.resolve_bank()}
+    rows: list[dict[str, Any]] = []
+    for family, branch in SUPPLEMENT_BRANCHES:
+        parent = resolved.get((family, branch, "P1")) or resolved.get((family, branch, "P2"))
+        source_fraction = SOURCE_VALUE_AREA_FRACTION[family]
+        for recipe_id, fraction in sorted(SUPPLEMENT_RECIPES.items()):
+            duplicate = fraction == source_fraction
+            rows.append(
+                {
+                    "candidate_id": f"{family}:{branch}:{recipe_id}",
+                    "family": family,
+                    "branch": branch,
+                    "bank": "Profile",
+                    "recipe_id": recipe_id,
+                    "changed_axis": "profile",
+                    "parameters": {"bandwidth": 0, "fraction": str(fraction)},
+                    "source_value_area_fraction": str(source_fraction),
+                    "status": "duplicate" if duplicate else "attempted",
+                    "reason": "equals the branch's own B0.2 value-area fraction" if duplicate else None,
+                    "parent_candidate_id": None if parent is None else parent.candidate_id,
+                    "supported": parent is not None,
+                    "unsupported_reason": None if parent is not None else "no P1/P2 on this branch",
+                }
+            )
+    body = {
+        "schema_version": SUPPLEMENT_SCHEMA,
+        "task_id": TASK_ID,
+        "declared_at": datetime.now(timezone.utc).isoformat(),
+        "contract": "SEARCH_CONTRACT.md Profile row, supplement 2026-09-16",
+        "recipes": {key: str(value) for key, value in sorted(SUPPLEMENT_RECIPES.items())},
+        "branches": [f"{family}:{branch}" for family, branch in SUPPLEMENT_BRANCHES],
+        "candidates": rows,
+        "counts": {
+            "declared": len(rows),
+            "attempted": sum(1 for row in rows if row["status"] == "attempted"),
+            "duplicate": sum(1 for row in rows if row["status"] == "duplicate"),
+        },
+    }
+    if out_path is not None:
+        _write_json(Path(out_path), body)
+    return body
+
+
+def supplement_candidates(document: Mapping[str, Any]) -> list[search.ResolvedCandidate]:
+    """The executable rows of a declared supplement, as ResolvedCandidates: the
+    branch's own P1/P2 resolution with the fraction replaced."""
+    resolved = {item.candidate_id: item for item in search.resolve_bank()}
+    out: list[search.ResolvedCandidate] = []
+    for row in document["candidates"]:
+        if row["status"] != "attempted" or not row["supported"]:
+            continue
+        parent = resolved[row["parent_candidate_id"]]
+        out.append(
+            replace(
+                parent,
+                candidate_id=row["candidate_id"],
+                recipe_id=row["recipe_id"],
+                parameters=dict(row["parameters"]),
+            )
+        )
+    return out
+
+
+def run_supplement(
+    *,
+    run_root: str | Path,
+    freeze_path: str | Path,
+    dates: Sequence[str] | None = None,
+    workers: int | None = None,
+    b02_roots: Sequence[str] = B02_ROOTS_DEFAULT,
+) -> dict[str, Any]:
+    """Declare, hash and run the profile supplement as its own attempt."""
+    root = Path(run_root)
+    root.mkdir(parents=True, exist_ok=True)
+    path = root / "CANDIDATE_BANK_SUPPLEMENT.json"
+    document = declare_profile_supplement(path)
+    candidates = supplement_candidates(document)
+    summary = run_dates(
+        run_root=root,
+        freeze_path=freeze_path,
+        dates=dates,
+        workers=workers,
+        b02_roots=b02_roots,
+        candidates=candidates,
+        bank_identity={
+            "source": "P15-17 profile supplement (P3, P4), declared before any result",
+            "path": str(path),
+            "sha256": file_sha256(path),
+            "declared_at": document["declared_at"],
+            "candidates": len(candidates),
+            "declared": document["counts"]["declared"],
+            "duplicate_not_run": document["counts"]["duplicate"],
+        },
+    )
+    return {"summary": summary, "supplement": document["counts"], "supplement_path": str(path)}

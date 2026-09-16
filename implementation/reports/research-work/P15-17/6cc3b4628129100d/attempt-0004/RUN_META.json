@@ -1,0 +1,101 @@
+{
+ "b02_roots": [
+  "/workspace/implementation/reports/research-work/P15-16A/823273eba4b9ec50",
+  "/workspace/implementation/reports/research-work/P15-16A/1019e6c09ee54609"
+ ],
+ "bank": {
+  "candidates": 16,
+  "declared": 20,
+  "declared_at": "2026-09-16T21:10:28.381644+00:00",
+  "duplicate_not_run": 4,
+  "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0004/CANDIDATE_BANK_SUPPLEMENT.json",
+  "sha256": "b1406549cdbbca03908d43ea12e1c8ae643fb4383d4112e700dce0bac4967498",
+  "source": "P15-17 profile supplement (P3, P4), declared before any result"
+ },
+ "budget_projection": {
+  "dates": 1742,
+  "exceeds_budget": false,
+  "formula": "dates x (frozen per-session p90 + measured stage B overhead) / (workers x 3600)",
+  "frozen_per_session_p90_seconds": 156.90102613391358,
+  "hours": 14.105443866910994,
+  "per_session_seconds": 174.90102613391358,
+  "stage_b_overhead_seconds": 18.0,
+  "stage_budget_hours": 24.0,
+  "workers": 6
+ },
+ "code_identity": {
+  "code_sha256": "44684f9f24db586bb9a3d624f4c3c96eddc726915fc6176e7aec6a57d7601f22",
+  "files": {
+   "implementation/src/trading_research/research/rule_discovery/exits.py": "eedecd038dc6a9ae7a00fb9cd8480fc47f6631ef3d78732bb6dd343a9b5216f7",
+   "implementation/src/trading_research/research/rule_discovery/refinement.py": "cf4c30d2043bef58a048e97a082def015add98eec67fbf7ad4a6cadacf974370",
+   "implementation/src/trading_research/research/rule_discovery/runner.py": "84718a616a7b5e58da3354a94a4e1110fa2b1a236f939f8b8d3095fe657815c0",
+   "implementation/src/trading_research/research/rule_discovery/search.py": "071481ff74c677b4fcec62e8ba58c7c9892e3bae9b9bbf54aa113a465fe6abcf",
+   "implementation/src/trading_research/research/rule_discovery/search_run.py": "cfe294aa27d1765e1145298f5693080cb8be571ac6962ec36719af6549a077fe"
+  },
+  "python": "3.12.3",
+  "worktree": "/workspace/.worktrees/p15-17-fast"
+ },
+ "dates": 1742,
+ "freeze": {
+  "attempt_id": "47dedaaa4f5b9ce1",
+  "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/FREEZE.json",
+  "sha256": "e06cf2765437a033e143b4e72e91bd853f4ea45f354f0c02dc524ed553099d74"
+ },
+ "p15_16a_receipt": {
+  "status": "PENDING"
+ },
+ "promotion_gates": {
+  "frequency_floor_of_baseline_entries": 0.5,
+  "holm_adjusted_p": 0.05,
+  "no_cost_stress_sign_reversal": true,
+  "no_unexplained_coverage_loss": true,
+  "paired_mean_improvement_lb_gt_0": true,
+  "positive_difference_block_share": 0.6,
+  "support": {
+   "below_gate": "inconclusive_support",
+   "eligible_test_days": 30,
+   "outer_blocks": 3,
+   "resolved_opportunities": 100,
+   "sensitivity": {
+    "half": {
+     "eligible_test_days": 15,
+     "outer_blocks": 2,
+     "resolved_opportunities": 50
+    },
+    "twice": {
+     "eligible_test_days": 60,
+     "outer_blocks": 6,
+     "resolved_opportunities": 200
+    }
+   }
+  }
+ },
+ "run_root": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0004",
+ "schema_version": "research-p15-17-breadth-run-meta-v1",
+ "scoring_policy": {
+  "inner_tuning_only_for_bank_choice": true,
+  "max_mechanism_banks_per_family": 2,
+  "primary": "daily net points (mean daily net points, one-mini benchmark)",
+  "simplicity_rule": "ties within 1% of the best tuning score choose the simpler model, then lower candidate ID lexically"
+ },
+ "splits": {
+  "evaluation_protocol_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/EVALUATION_PROTOCOL.json",
+  "evaluation_protocol_sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b",
+  "p15_03_attempt": "babe7a991b6b3dc1",
+  "regenerated": false,
+  "split_manifest_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/SPLIT_MANIFEST.json",
+  "split_manifest_sha256": "a30b03bf3ee7bd215ffaf11ff223b07fa0134202d544e4bd0dd353f730e2fde6"
+ },
+ "stage": "B",
+ "stage_a_attempt": "47dedaaa4f5b9ce1",
+ "started_at": "2026-09-16T21:10:28.434020+00:00",
+ "task_id": "P15-17",
+ "uncertainty": {
+  "block_bootstrap_seed": 15022026,
+  "block_length": 5,
+  "draws": 2000,
+  "generator": "numpy.random.Generator(PCG64(15022026))",
+  "holm": "across every candidate at the decision stage"
+ },
+ "workers": 6
+}

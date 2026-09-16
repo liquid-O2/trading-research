@@ -6,19 +6,19 @@ Run root `reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001`. Every num
 
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
-| KEANI-OPEN-ABOVE-VALUE | KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/KEANI-OPEN-ABOVE-VALUE.md |
+| KEANI-OPEN-ABOVE-VALUE | KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS/KEANI-OPEN-ABOVE-VALUE.md |
 
 ## Audit table
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| KEANI-OPEN-ABOVE-VALUE | P15-17 | inconclusive_support | pass | 0 | 0 | support 13 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
+| KEANI-OPEN-ABOVE-VALUE | P15-17 | inconclusive_support | pass | 0 | 0 | support 13 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
 
 ## Quality–frequency Pareto set
 
 | candidate_id | bank | mean paired improvement (points/day) | entries | baseline entries |
 | --- | --- | --- | --- | --- |
-| KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1 | Sequence | -0.2342 | 13 | 0 |
+| KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1 | Sequence | -0.2579 | 13 | 0 |
 
 ## Retention set
 

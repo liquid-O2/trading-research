@@ -1,0 +1,57 @@
+{
+ "attempt": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001",
+ "headline": [
+  {
+   "artifact": "attempt-0001/REFINEMENT_BANK.json#counts",
+   "name": "neighbours proposed / attempted / duplicate",
+   "unit": "rows",
+   "value": [
+    190,
+    165,
+    25
+   ]
+  },
+  {
+   "artifact": "attempt-0001/RUN_COMPLETE.json",
+   "name": "distinct neighbour candidates executed",
+   "unit": "candidates over 1,742 sessions",
+   "value": 46
+  },
+  {
+   "artifact": "attempt-0001/SELECTED_RULES_BY_FOLD.json",
+   "name": "refined mechanisms selected",
+   "unit": "fold-family roles over 5 folds",
+   "value": 42
+  },
+  {
+   "artifact": "attempt-0001/COMBINATION_RESULTS.json",
+   "name": "combinations attempted / not applicable",
+   "unit": "proposals",
+   "value": [
+    10,
+    10
+   ]
+  },
+  {
+   "artifact": "attempt-0001/TRIALS.jsonl",
+   "name": "trials promoted",
+   "support": "Holm across the refinement stage, same gates as the breadth screen",
+   "unit": "of 210 ledger rows",
+   "value": 22
+  }
+ ],
+ "label": "rehearsal",
+ "lever": {
+  "change": "give the refinement a larger resolved-entry population per fold -- the same neighbourhoods on the Phase 3 locations -- rather than more neighbours, which the contract caps for a reason",
+  "evidence_that_it_worked": "the selected refined mechanism's 95% lower bound stays above zero when the entry population doubles, instead of moving with the fold"
+ },
+ "limits": "Refinement can only move a parameter inside a mechanism the breadth screen already chose; it cannot rescue a family whose baseline is retained, and no number here touches the blind hold-out.",
+ "met": "partial",
+ "question": "Inside the two mechanism banks each family kept, does a neighbouring parameter value -- or the one combination of two -- beat the value the breadth screen selected?",
+ "schema_version": "research-result-card-v1",
+ "target": "SEARCH_CONTRACT refinement stage: at most 12 neighbours per bank and 24 per family from the registered neighbourhoods, one combination per family when each ingredient beats B0.2 on inner tuning, and the shared promotion gates for anything that replaces a baseline",
+ "task_id": "P15-18",
+ "verdict": "needs_upgrade",
+ "verdict_reason": "The bounded round ran exactly as specified and a few refined mechanisms and one combination clear the gates, but the result rests on an entry population whose first attribution is still support or location, so the gain is small and fragile.",
+ "written_at": "2026-09-16T21:00:51.939187+00:00"
+}

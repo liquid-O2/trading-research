@@ -6,28 +6,28 @@ Run root `reports/research-work/P15-17/6cc3b4628129100d/attempt-0002`. Every num
 
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
-| REFILL-STUDY | REFILL-STUDY:supplied_selected_order:M1 | 1204 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
-| REFILL-STUDY | REFILL-STUDY:supplied_selected_order:M2 | 1204 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
-| REFILL-STUDY | REFILL-STUDY:touch_record:M1 | 1204 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
-| REFILL-STUDY | REFILL-STUDY:touch_record:M2 | 1204 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
+| REFILL-STUDY | REFILL-STUDY:supplied_selected_order:M1 | 1094 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
+| REFILL-STUDY | REFILL-STUDY:supplied_selected_order:M2 | 1094 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
+| REFILL-STUDY | REFILL-STUDY:touch_record:M1 | 1094 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
+| REFILL-STUDY | REFILL-STUDY:touch_record:M2 | 1094 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/REFILL-STUDY.md |
 
 ## Audit table
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| REFILL-STUDY | P15-17 | inconclusive_support | pass | 15 | 0 | support 0 opps / 1204 days / 5 blocks; first attribution frequency; baseline retained |
-| REFILL-STUDY | P15-17 | inconclusive_support | pass | 15 | 0 | support 0 opps / 1204 days / 5 blocks; first attribution frequency; baseline retained |
-| REFILL-STUDY | P15-17 | inconclusive_support | pass | 15 | 0 | support 0 opps / 1204 days / 5 blocks; first attribution frequency; baseline retained |
-| REFILL-STUDY | P15-17 | inconclusive_support | pass | 15 | 0 | support 0 opps / 1204 days / 5 blocks; first attribution frequency; baseline retained |
+| REFILL-STUDY | P15-17 | inconclusive_support | pass | 13 | 0 | support 0 opps / 1094 days / 5 blocks; first attribution frequency; baseline retained |
+| REFILL-STUDY | P15-17 | inconclusive_support | pass | 13 | 0 | support 0 opps / 1094 days / 5 blocks; first attribution frequency; baseline retained |
+| REFILL-STUDY | P15-17 | inconclusive_support | pass | 13 | 0 | support 0 opps / 1094 days / 5 blocks; first attribution frequency; baseline retained |
+| REFILL-STUDY | P15-17 | inconclusive_support | pass | 13 | 0 | support 0 opps / 1094 days / 5 blocks; first attribution frequency; baseline retained |
 
 ## Quality–frequency Pareto set
 
 | candidate_id | bank | mean paired improvement (points/day) | entries | baseline entries |
 | --- | --- | --- | --- | --- |
-| REFILL-STUDY:supplied_selected_order:M1 | Memory | -55.2728 | 0 | 24206 |
-| REFILL-STUDY:supplied_selected_order:M2 | Memory | -55.2728 | 0 | 24206 |
-| REFILL-STUDY:touch_record:M1 | Memory | -55.2728 | 0 | 24206 |
-| REFILL-STUDY:touch_record:M2 | Memory | -55.2728 | 0 | 24206 |
+| REFILL-STUDY:supplied_selected_order:M1 | Memory | -53.1362 | 0 | 21395 |
+| REFILL-STUDY:supplied_selected_order:M2 | Memory | -53.1362 | 0 | 21395 |
+| REFILL-STUDY:touch_record:M1 | Memory | -53.1362 | 0 | 21395 |
+| REFILL-STUDY:touch_record:M2 | Memory | -53.1362 | 0 | 21395 |
 
 ## Retention set
 

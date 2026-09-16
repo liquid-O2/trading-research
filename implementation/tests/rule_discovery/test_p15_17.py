@@ -492,10 +492,15 @@ def test_stage_b_holm_and_bootstrap_are_the_frozen_calls():
     rows = [_sr.outer_row(item, table[item.candidate_id], _SYNTHETIC_FOLDS) for item in resolved]
     seen = {"bootstrap": 0, "holm": 0, "kwargs": []}
 
-    def bootstrap_fn(values, *, block, draws, seed):
+    def bootstrap_fn(values, *, block, draws, seed, segments=None):
         seen["bootstrap"] += 1
         seen["kwargs"].append((block, draws, seed))
-        return _np.asarray(contracts_evaluation.moving_block_bootstrap(values, block=block, draws=draws, seed=seed))
+        seen.setdefault("segments", []).append(None if segments is None else sorted(set(segments)))
+        return _np.asarray(
+            contracts_evaluation.moving_block_bootstrap(
+                values, block=block, draws=draws, seed=seed, segments=segments
+            )
+        )
 
     def holm_fn(pvalues, *, alpha):
         seen["holm"] += 1
@@ -503,8 +508,12 @@ def test_stage_b_holm_and_bootstrap_are_the_frozen_calls():
         return contracts_evaluation.holm(pvalues, alpha=alpha)
 
     decided = _sr.decide(rows, holm_fn=holm_fn, bootstrap_fn=bootstrap_fn)
-    assert seen["bootstrap"] == 2 * len(rows)  # stage p-values, then each verdict
-    assert set(seen["kwargs"]) == {(5, 2000, 15022026)}
+    # block 5 plus the block 1 and 10 sensitivity, for the stage p-value and
+    # again inside each verdict
+    assert seen["bootstrap"] == 2 * len(rows) * 3
+    # the block starts are drawn inside a calendar year, never across the series
+    assert all(labels == ["2022", "2023"] for labels in seen["segments"])
+    assert set(seen["kwargs"]) == {(5, 2000, 15022026), (1, 2000, 15022026), (10, 2000, 15022026)}
     assert seen["holm"] == len(rows)
     assert seen["m"] == len(rows)  # Holm across EVERY candidate at the stage
     assert all("p_holm" in row["promotion"] for row in decided)
@@ -884,6 +893,9 @@ def test_every_gate_is_load_bearing():
     row["candidate_entries"] = 400
     row["baseline_entries"] = 400
     row["daily_diff"] = [1.0, 2.0, 0.5, 1.5, 1.0, 2.0, 0.5, 1.5, 1.0, 2.0] * 6
+    # the year labels must stay aligned with the values they describe
+    row["daily_days"] = [f"2022-01-{index % 28 + 1:02d}" for index in range(len(row["daily_diff"]))]
+    row["daily_segments"] = [day[:4] for day in row["daily_days"]]
     trials = [{"candidate_id": row["candidate_id"], "p_raw": 0.0001}]
     base = _refinement.evaluate_promotion(row, trials)
     assert base["promoted"] is True, base
@@ -898,6 +910,9 @@ def test_every_gate_is_load_bearing():
     }
     for name, patch in mutations.items():
         mutated = {**row, **patch}
+        if "daily_diff" in patch:
+            mutated["daily_days"] = [f"2022-02-{i % 28 + 1:02d}" for i in range(len(patch["daily_diff"]))]
+            mutated["daily_segments"] = [day[:4] for day in mutated["daily_days"]]
         verdict = _refinement.evaluate_promotion(mutated, trials)
         assert verdict["promoted"] is False, f"{name} gate did not bite"
     holm_blocked = _refinement.evaluate_promotion(
@@ -915,12 +930,13 @@ SLICE_ROOT = next(
     (
         candidate
         for candidate in (
+            _ATTEMPTS / "attempt-0003/native-slice",
             _ATTEMPTS / "attempt-0002/native-slice",
             _ATTEMPTS / "attempt-0001/native-slice",
         )
         if (candidate / "RUN_COMPLETE.json").is_file()
     ),
-    _ATTEMPTS / "attempt-0002/native-slice",
+    _ATTEMPTS / "attempt-0003/native-slice",
 )
 SLICE_DATES = ("2020-01-02", "2023-11-06", "2024-01-02", "2026-01-02", "2026-09-03")
 native_slice = pytest.mark.skipif(
@@ -1593,3 +1609,181 @@ def test_completion_records_file_level_hashes_of_the_gitignored_shards(tmp_path)
     assert inventory["job_inventory_sha256"] == _sr.file_sha256(root / "JOB_INVENTORY.json")
     complete = _json.loads((root / "RUN_COMPLETE.json").read_text())
     assert complete["shard_inventory"]["sha256"] == _sr.file_sha256(root / "SHARD_INVENTORY.json")
+
+
+# --------------------------------------------------------------------------
+# the blind hold-out (EVALUATION.md, amendment 2026-09-16)
+# --------------------------------------------------------------------------
+
+
+def test_the_holdout_is_trimmed_from_every_fold_window():
+    """A09: the 2026 outer block ends 2026-03-31 and the hold-out dates are
+    removed from fit, tune, calibration and test, with the count recorded."""
+    folds = [
+        {
+            "test_year": 2026,
+            "fit": ["2020-01-02", "2026-04-02"],
+            "tune": ["2025-07-01"],
+            "calibrate": ["2025-10-01", "2026-05-04"],
+            "test": ["2026-03-30", "2026-03-31", "2026-04-01", "2026-09-03"],
+        }
+    ]
+    trimmed, info = _sr.apply_holdout(folds)
+    assert trimmed[0]["test"] == ["2026-03-30", "2026-03-31"]
+    assert trimmed[0]["fit"] == ["2020-01-02"] and trimmed[0]["calibrate"] == ["2025-10-01"]
+    assert info["start"] == "2026-04-01" and info["end"] == "2026-09-03"
+    assert info["days_excluded"] == 4
+    assert info["removed_from_window"] == {"fit": 1, "tune": 0, "calibrate": 1, "test": 2}
+    assert _sr.in_holdout("2026-04-01") and not _sr.in_holdout("2026-03-31")
+
+
+def test_a_holdout_date_cannot_change_a_breadth_fold_choice(tmp_path):
+    """Move a hold-out date's outcome and the fold's bank choice is identical;
+    the same move on an in-block date changes it. The negative control is the
+    in-block move: without it the test would pass on a broken filter."""
+    resolved = _synthetic_bank()
+    holdout_day = "2026-05-04"
+    in_block_day = "2026-03-02"
+    fold = {
+        "test_year": 2026,
+        "fit": ["2020-01-02", "2020-01-03", in_block_day, holdout_day],
+        "tune": ["2021-07-01"],
+        "calibrate": ["2021-10-01"],
+        "test": ["2026-03-30", "2026-04-02"],
+    }
+
+    def table(loud_day, loser_lift):
+        base = _synthetic_table()
+        for candidate_id, rows in base.items():
+            lift = loser_lift if candidate_id == "SYN:syn_branch:M1" else _D("0")
+            for day in (in_block_day, holdout_day, "2026-03-30", "2026-04-02"):
+                rows[day] = _daily_row(
+                    candidate_id,
+                    {"SYN:syn_branch:S1": "Sequence", "SYN:syn_branch:S2": "Sequence", "SYN:syn_branch:M1": "Memory"}[candidate_id],
+                    day,
+                    _D("1") + (lift if day == loud_day else _D("0")),
+                    _D("1"),
+                    4,
+                    4,
+                )
+        return base
+
+    trimmed, info = _sr.apply_holdout([fold])
+    quiet = _sr.select_for_fold(resolved, table(holdout_day, _D("0")), trimmed[0])
+    loud_holdout = _sr.select_for_fold(resolved, table(holdout_day, _D("500")), trimmed[0])
+    assert loud_holdout["families"] == quiet["families"]
+    assert info["days_excluded"] == 2
+    loud_in_block = _sr.select_for_fold(resolved, table(in_block_day, _D("500")), trimmed[0])
+    assert loud_in_block["families"] != quiet["families"]
+    assert loud_in_block["families"]["SYN"]["selected_banks"][0]["bank"] == "Memory"
+
+
+def test_holdout_replay_is_release_tooling_and_pins_what_it_read(tmp_path):
+    """The replay reports the hold-out for the already-frozen selection and
+    pins the manifest it consumed; it returns numbers, never a choice."""
+    days = ["2026-03-30", "2026-04-02", "2026-04-03"]
+    root = _fake_run_root(tmp_path, days)
+    manifest = tmp_path / "SELECTED_RULES_BY_FOLD.json"
+    _sr._write_json(
+        manifest,
+        {
+            "folds": [
+                {
+                    "outer_fold": 2026,
+                    "roles": [{"candidate_id": "SYN:syn_branch:S1", "role": "refined_selected"}],
+                }
+            ]
+        },
+    )
+    report = _sr.holdout_replay([manifest], root)
+    assert report["holdout"] == {"start": "2026-04-01", "end": "2026-09-03", "dates": 2}
+    assert report["selection_manifests"][0]["sha256"] == _sr.file_sha256(manifest)
+    row = next(r for r in report["rules"] if r["candidate_id"] == "SYN:syn_branch:S1")
+    assert row["holdout_days"] == 2  # only the hold-out days, never the in-block one
+    assert row["selected_in_folds"] == [2026]
+    assert "changes a selection" in report["note"]
+
+
+def test_the_bootstrap_segments_a_two_year_series_by_calendar_year():
+    """EVALUATION.md: block starts are drawn inside a calendar-year segment and
+    wrap only within it. A two-year paired series whose years have different
+    means must give the segment-exact interval, not the whole-series one."""
+    from trading_research.research.contracts import evaluation as contracts_evaluation
+
+    days = [f"2022-{month:02d}-{day:02d}" for month in range(1, 7) for day in range(1, 21)]
+    days += [f"2023-{month:02d}-{day:02d}" for month in range(1, 7) for day in range(1, 21)]
+    values = [1.0] * 120 + [3.0] * 120  # each year is constant, the years differ
+    segments = [day[:4] for day in days]
+    draws = contracts_evaluation.moving_block_bootstrap(
+        values, block=5, draws=200, seed=15022026, segments=segments
+    )
+    # every draw resamples each year to its own day count, so every draw is the
+    # mean of 120 ones and 120 threes: exactly 2.0, with no spread at all
+    assert _np.allclose(draws, 2.0)
+    mixed = contracts_evaluation.moving_block_bootstrap(
+        values, block=5, draws=200, seed=15022026, segments=None
+    )
+    assert not _np.allclose(mixed, 2.0)  # the unsegmented draw mixes the years
+    computed = _refinement.centered_bootstrap_pvalue(values, segments=segments)
+    assert computed["segments"] == 2
+    assert computed["ci_low"] == pytest.approx(2.0) and computed["ci_high"] == pytest.approx(2.0)
+    assert set(computed["block_sensitivity"]) == {"block_1", "block_10"}
+
+
+# --------------------------------------------------------------------------
+# the 2026-09-16 profile supplement (A10)
+# --------------------------------------------------------------------------
+
+
+def test_the_supplement_is_declared_before_any_result_and_duplicates_are_not_run():
+    """A10: 20 one-axis candidates on the ten branches that carry P1/P2; a
+    candidate whose fraction equals the branch's own B0.2 fraction is recorded
+    as a duplicate of B0.2 and is not executed."""
+    document = _sr.declare_profile_supplement()
+    assert document["counts"]["declared"] == 20
+    assert {row["recipe_id"] for row in document["candidates"]} == {"P3", "P4"}
+    assert len({(row["family"], row["branch"]) for row in document["candidates"]}) == 10
+    for row in document["candidates"]:
+        fraction = _D(row["parameters"]["fraction"])
+        assert fraction == (_D("0.68") if row["recipe_id"] == "P3" else _D("0.40"))
+        assert row["parameters"]["bandwidth"] == 0  # raw b0, the contract's wording
+        source = _D(row["source_value_area_fraction"])
+        assert row["status"] == ("duplicate" if fraction == source else "attempted")
+    duplicates = [row for row in document["candidates"] if row["status"] == "duplicate"]
+    # SAINT's B0.2 track prints .68, so P3 on its four branches is the baseline
+    assert {row["candidate_id"] for row in duplicates} == {
+        f"SAINT-AMT:{branch}:P3"
+        for branch in ("continuation_retest", "failed_auction_return", "poc_traversal", "trapped_buyers_retest")
+    }
+    assert all("equals the branch's own B0.2" in row["reason"] for row in duplicates)
+    executed = {item.candidate_id for item in _sr.supplement_candidates(document)}
+    assert len(executed) == 16
+    assert not (executed & {row["candidate_id"] for row in duplicates})
+
+
+def test_a_supplement_candidate_carries_its_fraction_into_the_profile_stage():
+    """The declared fraction must reach `profile_value_area`; a supplement whose
+    parameter never arrived would silently repeat P1."""
+    document = _sr.declare_profile_supplement()
+    item = next(
+        candidate
+        for candidate in _sr.supplement_candidates(document)
+        if candidate.candidate_id == "KEANI-OPEN-ABOVE-VALUE:source_long:P4"
+    )
+    assert item.recipe_id == "P4" and item.parameters["fraction"] == "0.40"
+    seen = {}
+    real = _sr.search.profile_value_area
+
+    def spy(market, end_ns, *, bandwidth=0, fraction=_sr.search.DEFAULT_VALUE_AREA_FRACTION):
+        seen["bandwidth"], seen["fraction"] = bandwidth, fraction
+        return {"vah": _D("1"), "val": _D("0"), "poc": _D("0.5")}
+
+    out, operands = {"verdict": "unknown"}, {"prior_vah": "0"}
+    try:
+        _sr.search.profile_value_area = spy
+        _sr.search._profile_stage(item, object(), out, operands, "reference", 1)
+    finally:
+        _sr.search.profile_value_area = real
+    assert seen == {"bandwidth": 0, "fraction": _D("0.40")}
+    assert operands["profile_fraction"] == "0.40"
+    assert operands["profile_recipe"] == "P4"

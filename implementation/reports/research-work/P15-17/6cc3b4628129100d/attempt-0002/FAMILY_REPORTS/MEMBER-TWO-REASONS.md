@@ -6,50 +6,53 @@ Run root `reports/research-work/P15-17/6cc3b4628129100d/attempt-0002`. Every num
 
 | family | variant | n | faithful_disagreements | status | report path |
 | --- | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:M1 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:M2 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P1 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P2 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S1 | 1219 | not claimed (no source-exact comparison) | rejected_by_evidence | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S2 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S3 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S4 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:M1 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:M2 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:P1 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:P2 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S1 | 1219 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S2 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S3 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
-| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S4 | 1219 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:M1 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:M2 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P1 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:P2 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S1 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S2 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S3 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:planned_return_long:S4 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:M1 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:M2 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:P1 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:P2 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S1 | 1107 | not claimed (no source-exact comparison) | retained_baseline | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S2 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S3 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
+| MEMBER-TWO-REASONS | MEMBER-TWO-REASONS:resistance_short:S4 | 1107 | not claimed (no source-exact comparison) | inconclusive_support | reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS/MEMBER-TWO-REASONS.md |
 
 ## Audit table
 
 | family | id | verdict | fixture | leakage | proxy-as-faithful | notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 80 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 266 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 315 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 315 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | rejected_by_evidence | pass | 0 | 0 | support 718 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 1 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 12 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 5 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 84 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 254 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 308 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 308 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 721 opps / 1219 days / 5 blocks; first attribution location_miss; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 0 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 15 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
-| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 5 opps / 1219 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 78 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 246 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 294 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 294 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 678 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 1 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 11 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 5 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 81 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 241 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 293 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 293 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | retained_baseline | pass | 0 | 0 | support 679 opps / 1107 days / 5 blocks; first attribution location_miss; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 0 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 15 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
+| MEMBER-TWO-REASONS | P15-17 | inconclusive_support | pass | 0 | 0 | support 5 opps / 1107 days / 5 blocks; first attribution frequency; baseline retained |
 
 ## Quality–frequency Pareto set
 
 | candidate_id | bank | mean paired improvement (points/day) | entries | baseline entries |
 | --- | --- | --- | --- | --- |
-| MEMBER-TWO-REASONS:planned_return_long:S1 | Sequence | 16.8421 | 718 | 316 |
-| MEMBER-TWO-REASONS:resistance_short:S1 | Sequence | -1.1386 | 721 | 309 |
+| MEMBER-TWO-REASONS:resistance_short:P1 | Profile | -0.0253 | 293 | 294 |
+| MEMBER-TWO-REASONS:resistance_short:P2 | Profile | -0.0253 | 293 | 294 |
+| MEMBER-TWO-REASONS:planned_return_long:P1 | Profile | -0.0619 | 294 | 295 |
+| MEMBER-TWO-REASONS:planned_return_long:P2 | Profile | -0.0619 | 294 | 295 |
+| MEMBER-TWO-REASONS:resistance_short:S1 | Sequence | -1.4600 | 679 | 294 |
 
 ## Retention set
 
@@ -59,7 +62,7 @@ Run root `reports/research-work/P15-17/6cc3b4628129100d/attempt-0002`. Every num
 | MEMBER-TWO-REASONS:planned_return_long:M2 | planned_return_long | Memory | inactive_retained | location_miss | no_improvement |
 | MEMBER-TWO-REASONS:planned_return_long:P1 | planned_return_long | Profile | active_selected | location_miss | selected for refinement by inner tuning |
 | MEMBER-TWO-REASONS:planned_return_long:P2 | planned_return_long | Profile | inactive_retained | location_miss | no_improvement |
-| MEMBER-TWO-REASONS:planned_return_long:S1 | planned_return_long | Sequence | inactive_retained | location_miss | holm |
+| MEMBER-TWO-REASONS:planned_return_long:S1 | planned_return_long | Sequence | inactive_retained | location_miss | no_improvement |
 | MEMBER-TWO-REASONS:planned_return_long:S2 | planned_return_long | Sequence | inactive_retained | frequency | support |
 | MEMBER-TWO-REASONS:planned_return_long:S3 | planned_return_long | Sequence | inactive_retained | frequency | support |
 | MEMBER-TWO-REASONS:planned_return_long:S4 | planned_return_long | Sequence | inactive_retained | frequency | support |

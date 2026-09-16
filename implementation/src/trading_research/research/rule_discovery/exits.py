@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from datetime import date
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 import bisect
+import gc
 import gzip
 import json
+import resource
+import time
+import traceback
 
 import numpy as np
 
@@ -1472,3 +1476,778 @@ def evaluate_policy_compact_scalar(
         stop_updates=tuple(state.updates),
         account_end_ns=account_end,
     )
+
+
+# ==========================================================================
+# P15-19 — the fixed-entry exit study.
+#
+# The entry stage is frozen before this runs: the entries, their sizes, costs
+# and initial structural stops come from the P15-18 selected rules' own job
+# documents. This is a separately counted decision family: it compares E0-E4 on
+# those unchanged entries and can never change an entry candidate's disposition.
+# ==========================================================================
+
+P15_19_TASK_ID = "P15-19"
+EXIT_RESULTS_SCHEMA = "research-p15-19-exit-results-v1"
+FIXED_ENTRIES_SCHEMA = "research-p15-19-fixed-entries-v1"
+EXIT_SHARD_SCHEMA = "research-p15-19-exit-shard-v1"
+
+
+def selected_entry_rules(
+    refinement_run_root: str | Path, breadth_run_root: str | Path
+) -> list[dict[str, Any]]:
+    """The frozen entry rules of the exit study, with the run that holds each.
+
+    A fold that kept its breadth parent contributes that parent (its entries live
+    in the breadth run); a refined or combined rule contributes itself.
+    """
+    refinement = Path(refinement_run_root)
+    breadth = Path(breadth_run_root)
+    rules = json.loads((refinement / "SELECTED_RULES_BY_FOLD.json").read_text())
+    executed: set[str] = set()
+    combinations = refinement / "combinations" / "COMBINATIONS.json"
+    if combinations.is_file():
+        executed = set(json.loads(combinations.read_text())["executed"])
+    out: dict[str, dict[str, Any]] = {}
+
+    def add(candidate_id: str, *, role: str, jobs_root: Path, family: str, year: int, parents):
+        row = out.setdefault(
+            str(candidate_id),
+            {
+                "candidate_id": str(candidate_id),
+                "role": role,
+                "family": family,
+                "jobs_root": str(jobs_root),
+                "parent_trial_ids": list(parents),
+                "outer_folds": [],
+            },
+        )
+        row["outer_folds"].append(int(year))
+
+    for fold in rules["folds"]:
+        year = int(fold["outer_fold"])
+        for role in fold["roles"]:
+            if role["role"] == "refined_selected":
+                add(
+                    role["candidate_id"],
+                    role="refined_selected",
+                    jobs_root=refinement,
+                    family=role["family"],
+                    year=year,
+                    parents=role.get("parent_trial_ids") or [],
+                )
+            else:
+                # the fold kept the breadth parent: its entries are the parent's
+                for parent in role.get("parent_trial_ids") or []:
+                    add(
+                        parent,
+                        role="retained_parent",
+                        jobs_root=breadth,
+                        family=role["family"],
+                        year=year,
+                        parents=[role["candidate_id"]],
+                    )
+        for candidate_id in fold.get("combinations") or []:
+            if candidate_id in executed:
+                add(
+                    candidate_id,
+                    role="combined",
+                    jobs_root=refinement / "combinations",
+                    family=str(candidate_id).split(":")[0],
+                    year=year,
+                    parents=[],
+                )
+    return [out[key] for key in sorted(out)]
+
+
+def _entry_from_job_row(
+    row: Mapping[str, Any], *, day: str, family: str, branch: str, flatten_at_ns: int
+) -> FrozenEntry:
+    """Rebuild the frozen entry a run recorded. The source deadline is not in the
+    record, so it is left unset here and the study verifies the reconstruction by
+    recomputing E0 and comparing it with the E0 the run wrote."""
+    return FrozenEntry(
+        entry_id=str(row["entry_id"]),
+        family=family,
+        branch=branch,
+        side=int(row["side"]),
+        fill_price=Decimal(str(row["fill_price"])),
+        fill_at_ns=int(row["fill_at_ns"]),
+        initial_stop=None if row.get("initial_stop") is None else Decimal(str(row["initial_stop"])),
+        objective=None if row.get("objective") is None else Decimal(str(row["objective"])),
+        source_deadline_ns=None,
+        flatten_at_ns=int(flatten_at_ns),
+        round_trip_cost=Decimal(str(row.get("round_trip_cost") or DEFAULT_ROUND_TRIP)),
+        account_day=day,
+    )
+
+
+def frozen_entries_for_day(
+    day: str, rules: Sequence[Mapping[str, Any]], *, flatten_at_ns: int
+) -> dict[str, list[tuple[FrozenEntry, dict[str, Any]]]]:
+    """Every frozen entry of every selected rule on one account day, with the E0
+    record the entry run wrote beside it."""
+    from trading_research.research.rule_discovery import search_run
+
+    out: dict[str, list[tuple[FrozenEntry, dict[str, Any]]]] = {}
+    for rule in rules:
+        path = search_run.job_path(rule["jobs_root"], day, rule["candidate_id"])
+        if not path.is_file():
+            continue
+        job = search_run.read_gz(path)
+        body = job.get("candidate") or {}
+        rows = body.get("entries") or []
+        if not rows:
+            continue
+        pairs = []
+        for row in rows:
+            entry = _entry_from_job_row(
+                row,
+                day=day,
+                family=str(job.get("family") or rule["family"]),
+                branch=str(job.get("branch") or ""),
+                flatten_at_ns=flatten_at_ns,
+            )
+            pairs.append((entry, dict(row)))
+        out[str(rule["candidate_id"])] = pairs
+    return out
+
+
+def freeze_entries(
+    *,
+    breadth_run_root: str | Path,
+    refinement_run_root: str | Path,
+    out_path: str | Path | None = None,
+    dates: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """FIXED_ENTRIES.json: which rules, which days, how many entries, and the
+    initial structural risk each entry carries. Pure: it reads job documents."""
+    from trading_research.research.rule_discovery import search_run
+
+    rules = selected_entry_rules(refinement_run_root, breadth_run_root)
+    refinement = Path(refinement_run_root)
+    if dates is None:
+        dates = json.loads((refinement / "MANIFEST.json").read_text())["dates"]
+    per_rule: dict[str, dict[str, Any]] = {
+        rule["candidate_id"]: {"entries": 0, "days": 0} for rule in rules
+    }
+    # The entry runs' daily shards already say how many entries each candidate
+    # filled on each day, so the days that carry a frozen entry are found
+    # without opening a single job document; the documents are read once, in the
+    # run, for the days that actually have one.
+    wanted: dict[str, set[str]] = {}
+    for rule in rules:
+        wanted.setdefault(str(rule["jobs_root"]), set()).add(str(rule["candidate_id"]))
+    days: list[str] = []
+    total = 0
+    for day in dates:
+        seen = False
+        for jobs_root, ids in wanted.items():
+            shard = search_run.daily_path(jobs_root, day)
+            if shard.is_file():
+                counts = {
+                    row["candidate_id"]: int(row.get("candidate_fills") or 0)
+                    for row in json.loads(shard.read_text())["rows"]
+                    if row["candidate_id"] in ids
+                }
+            else:
+                # no daily shard: read the documents rather than report no entry
+                counts = {}
+                for candidate_id in ids:
+                    path = search_run.job_path(jobs_root, day, candidate_id)
+                    if not path.is_file():
+                        continue
+                    body = search_run.read_gz(path).get("candidate") or {}
+                    counts[candidate_id] = len(body.get("entries") or [])
+            for candidate_id, fills in counts.items():
+                if not fills:
+                    continue
+                seen = True
+                stats = per_rule[candidate_id]
+                stats["entries"] += fills
+                stats["days"] += 1
+                total += fills
+        if seen:
+            days.append(day)
+    body = {
+        "schema_version": FIXED_ENTRIES_SCHEMA,
+        "task_id": P15_19_TASK_ID,
+        "breadth_run_root": str(breadth_run_root),
+        "refinement_run_root": str(refinement_run_root),
+        "policies": list(POLICIES),
+        "policy_expiry_minutes": dict(POLICY_EXPIRY_MINUTES),
+        "rules": rules,
+        "per_rule": per_rule,
+        "dates_with_entries": days,
+        "entries": total,
+    }
+    if out_path is not None:
+        search_run._write_json(Path(out_path), body)
+    return body
+
+
+def evaluate_exit_day(
+    day: str,
+    rules: Sequence[Mapping[str, Any]],
+    *,
+    tape: CompactDay | None = None,
+) -> dict[str, Any]:
+    """One account day of the exit study: every frozen entry of every selected
+    rule under all five policies, on one loaded tape.
+
+    E0 is recomputed here and checked against the E0 the entry run recorded. A
+    mismatch is reported per entry (it would mean the reconstruction lost a
+    binding source deadline) and excluded from the paired comparison, never
+    silently accepted.
+    """
+    from datetime import date as _date
+
+    from trading_research.research.rule_discovery.native import (
+        account_day_window,
+        build_market_view,
+        install_write_guard,
+    )
+
+    install_write_guard()
+    _, end_ns = account_day_window(_date.fromisoformat(day))
+    flatten_at_ns = end_ns - MINUTE_NS
+    frozen = frozen_entries_for_day(day, rules, flatten_at_ns=flatten_at_ns)
+    if not frozen:
+        return {
+            "schema_version": EXIT_SHARD_SCHEMA,
+            "account_day": day,
+            "rules": {},
+            "entries": 0,
+            "e0_mismatches": 0,
+        }
+    if tape is None:
+        view = build_market_view(day, full_account_day=True)
+        tape = compact_from_view(view)
+    out: dict[str, Any] = {}
+    mismatches = 0
+    entries_seen = 0
+    for candidate_id, pairs in frozen.items():
+        entries = [entry for entry, _ in pairs]
+        paired = evaluate_entries_compact(entries, tape)
+        rows = []
+        for (entry, recorded), result in zip(pairs, paired):
+            entries_seen += 1
+            row: dict[str, Any] = {
+                "entry_id": entry.entry_id,
+                "side": entry.side,
+                "fill_at_ns": entry.fill_at_ns,
+                "fill_price": str(entry.fill_price),
+                "initial_stop": None if entry.initial_stop is None else str(entry.initial_stop),
+                "objective": None if entry.objective is None else str(entry.objective),
+                "round_trip_cost": str(entry.round_trip_cost),
+                "recorded_e0": {
+                    "exit_at_ns": recorded.get("exit_at_ns"),
+                    "exit_reason": recorded.get("exit_reason"),
+                    "net_points": recorded.get("net_points"),
+                },
+                "policies": {},
+            }
+            for policy_id in POLICIES:
+                record = result.records[policy_id]
+                body = record_to_json(record)
+                body["occupancy_flagged"] = bool(result.occupancy_flags[policy_id])
+                row["policies"][policy_id] = body
+            e0 = row["policies"]["E0"]
+            recorded_points = recorded.get("net_points")
+            row["e0_matches_entry_run"] = bool(
+                e0.get("complete")
+                and recorded_points is not None
+                and Decimal(str(e0["net_points"])) == Decimal(str(recorded_points))
+                and int(e0["exit_at_ns"]) == int(recorded["exit_at_ns"])
+            )
+            if not row["e0_matches_entry_run"]:
+                mismatches += 1
+            rows.append(row)
+        out[candidate_id] = rows
+    return {
+        "schema_version": EXIT_SHARD_SCHEMA,
+        "task_id": P15_19_TASK_ID,
+        "account_day": day,
+        "rules": out,
+        "entries": entries_seen,
+        "e0_mismatches": mismatches,
+    }
+
+
+_EXIT_WORKER: dict[str, Any] = {}
+
+
+def _init_exit_worker(payload: Mapping[str, Any]) -> None:
+    _EXIT_WORKER.update(payload)
+
+
+def _process_exit_date(day: str) -> dict[str, Any]:
+    from trading_research.research.rule_discovery import search_run
+
+    root = Path(_EXIT_WORKER["run_root"])
+    started = time.perf_counter()
+    try:
+        shard = evaluate_exit_day(day, _EXIT_WORKER["rules"])
+    except Exception as exc:
+        record = {
+            "date": day,
+            "status": "failed",
+            "error": f"{type(exc).__name__}: {exc}",
+            "traceback": traceback.format_exc(limit=8),
+        }
+        search_run._write_json(root / "failed" / f"{day}.json", record)
+        return record
+    finally:
+        # the same per-session cache release the breadth runner uses: pure
+        # loaders keyed by path, so releasing them changes no result
+        search_run.release_session_caches()
+        gc.collect()
+    path = search_run._write_json(root / "exits" / f"{day}.json", shard)
+    record = {
+        "date": day,
+        "status": "completed",
+        "entries": shard["entries"],
+        "e0_mismatches": shard["e0_mismatches"],
+        "shard_sha256": search_run.file_sha256(path),
+        "wall_seconds": time.perf_counter() - started,
+        "peak_rss_bytes": int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss) * 1024,
+    }
+    search_run._write_json(root / "checkpoints" / f"{day}.json", record)
+    return record
+
+
+def run_exit_study(
+    *,
+    breadth_run_root: str | Path,
+    refinement_run_root: str | Path,
+    run_root: str | Path,
+    workers: int = 4,
+    dates: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Evaluate E0-E4 on the frozen entries, one account day at a time.
+
+    Only days that actually carry a frozen entry are loaded; the entry stage is
+    never re-scanned, so the study is a function of the two run roots.
+    """
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+
+    from trading_research.research.rule_discovery import search_run
+
+    root = Path(run_root)
+    root.mkdir(parents=True, exist_ok=True)
+    fixed = freeze_entries(
+        breadth_run_root=breadth_run_root,
+        refinement_run_root=refinement_run_root,
+        out_path=root / "FIXED_ENTRIES.json",
+        dates=dates,
+    )
+    selected = list(dates) if dates else fixed["dates_with_entries"]
+    todo = [
+        day
+        for day in selected
+        if not (root / "checkpoints" / f"{day}.json").is_file()
+    ]
+    started = time.perf_counter()
+    completed: list[str] = []
+    failed: list[str] = []
+    payload = {"run_root": str(root), "rules": fixed["rules"]}
+    if workers <= 1:
+        _init_exit_worker(payload)
+        for day in todo:
+            record = _process_exit_date(day)
+            (completed if record["status"] == "completed" else failed).append(day)
+    elif todo:
+        with ProcessPoolExecutor(
+            max_workers=int(workers), initializer=_init_exit_worker, initargs=(payload,)
+        ) as pool:
+            futures = {pool.submit(_process_exit_date, day): day for day in todo}
+            for future in as_completed(futures):
+                day = futures[future]
+                try:
+                    record = future.result()
+                except Exception:
+                    search_run._write_json(
+                        root / "failed" / f"{day}.json",
+                        {"date": day, "status": "failed", "error": traceback.format_exc()},
+                    )
+                    failed.append(day)
+                    continue
+                (completed if record["status"] == "completed" else failed).append(day)
+    pending = [day for day in selected if not (root / "checkpoints" / f"{day}.json").is_file()]
+    summary = {
+        "task_id": P15_19_TASK_ID,
+        "run_root": str(root),
+        "dates_with_entries": len(selected),
+        "dates_completed": len(selected) - len(pending),
+        "dates_failed": sorted(set(failed)),
+        "dates_pending": len(pending),
+        "workers": int(workers),
+        "wall_seconds": time.perf_counter() - started,
+        "entries": fixed["entries"],
+    }
+    search_run._write_json(root / "PROGRESS.json", summary)
+    if not pending:
+        search_run._write_json(
+            root / "RUN_COMPLETE.json",
+            {
+                "schema_version": "research-p15-19-run-complete-v1",
+                "task_id": P15_19_TASK_ID,
+                "completed_at": datetime.now(timezone.utc).isoformat(),
+                "fixed_entries_sha256": search_run.file_sha256(root / "FIXED_ENTRIES.json"),
+                "shards": len(selected),
+                "summary": summary,
+            },
+        )
+    return summary
+
+
+def _fold_of(day: str, folds: Sequence[Mapping[str, Any]]) -> int | None:
+    for fold in folds:
+        if day in fold["_test_set"]:
+            return int(fold["test_year"])
+    return None
+
+
+def exit_daily_series(shards: Sequence[Mapping[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Per rule, per policy, the daily net points and the completeness of each
+    day, from the study's own shards.
+
+    A day counts for a (policy, E0) pair only when every frozen entry of that
+    rule on that day is complete under both: an incomplete exit or an
+    unsupported E3/E4 keeps its entry in the ledger and takes the day out of the
+    paired comparison instead of imputing a number.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for shard in shards:
+        day = str(shard["account_day"])
+        for candidate_id, rows in (shard.get("rules") or {}).items():
+            rule = out.setdefault(
+                candidate_id,
+                {
+                    "daily": {},
+                    "entries": 0,
+                    "e0_mismatches": 0,
+                    "unsupported": {policy: 0 for policy in POLICIES},
+                    "incomplete": {policy: 0 for policy in POLICIES},
+                    "occupancy_flagged": {policy: 0 for policy in POLICIES},
+                    "reasons": {policy: {} for policy in POLICIES},
+                },
+            )
+            totals = {policy: Decimal(0) for policy in POLICIES}
+            complete = {policy: True for policy in POLICIES}
+            usable = True
+            for row in rows:
+                rule["entries"] += 1
+                if not row["e0_matches_entry_run"]:
+                    rule["e0_mismatches"] += 1
+                    usable = False
+                for policy in POLICIES:
+                    body = row["policies"][policy]
+                    if body.get("occupancy_flagged"):
+                        rule["occupancy_flagged"][policy] += 1
+                    if body.get("reason") == "undefined_initial_r":
+                        rule["unsupported"][policy] += 1
+                        complete[policy] = False
+                        continue
+                    if not body.get("complete"):
+                        rule["incomplete"][policy] += 1
+                        complete[policy] = False
+                        continue
+                    totals[policy] += Decimal(str(body["net_points"]))
+                    reason = str(body.get("reason"))
+                    rule["reasons"][policy][reason] = rule["reasons"][policy].get(reason, 0) + 1
+            rule["daily"][day] = {
+                "usable": usable,
+                "net_points": {policy: str(totals[policy]) for policy in POLICIES},
+                "complete": {policy: complete[policy] for policy in POLICIES},
+                "entries": len(rows),
+            }
+    return out
+
+
+def evaluate_exit_study(
+    *,
+    run_root: str | Path,
+    refinement_run_root: str | Path,
+    freeze_path: str | Path,
+    out_dir: str | Path | None = None,
+    holdout: tuple[str, str] | None = None,
+) -> dict[str, Any]:
+    """EXIT_RESULTS.json, EXIT_TRIALS.jsonl and the family reports.
+
+    Every comparison is against E0 on the same unchanged entries. The entry
+    stage's dispositions are carried through untouched: this family counts its
+    own trials and cannot promote or rescue an entry candidate.
+    """
+    import numpy as _np
+
+    from trading_research.research.rule_discovery import refinement as _refinement
+    from trading_research.research.rule_discovery import search_run
+
+    root = Path(run_root)
+    out = Path(out_dir) if out_dir else root
+    out.mkdir(parents=True, exist_ok=True)
+    fixed = json.loads((root / "FIXED_ENTRIES.json").read_text())
+    freeze = search_run.load_freeze(freeze_path)
+    trimmed, holdout_excluded = search_run.apply_holdout(search_run.load_splits(freeze), holdout)
+    folds = [dict(fold, _test_set=set(fold["test"])) for fold in trimmed]
+    entry_dispositions = _entry_dispositions(refinement_run_root)
+
+    shards = []
+    for day in fixed["dates_with_entries"]:
+        path = root / "exits" / f"{day}.json"
+        if path.is_file():
+            shards.append(json.loads(path.read_text()))
+    series = exit_daily_series(shards)
+
+    rows: list[dict[str, Any]] = []
+    for rule in fixed["rules"]:
+        candidate_id = rule["candidate_id"]
+        body = series.get(candidate_id)
+        if body is None:
+            continue
+        for policy in POLICIES:
+            if policy == "E0":
+                continue
+            diffs: list[float] = []
+            days_in_order: list[str] = []
+            per_block: dict[int, list[float]] = {}
+            days = 0
+            resolved = 0
+            holdout_days = 0
+            for day, cell in sorted(body["daily"].items()):
+                if search_run.in_holdout(day, holdout):
+                    # the blind hold-out chooses no exit policy
+                    holdout_days += 1
+                    continue
+                if not cell["usable"] or not cell["complete"]["E0"] or not cell["complete"][policy]:
+                    continue
+                diff = float(Decimal(cell["net_points"][policy]) - Decimal(cell["net_points"]["E0"]))
+                diffs.append(diff)
+                days_in_order.append(day)
+                days += 1
+                resolved += int(cell["entries"])
+                year = _fold_of(day, folds)
+                if year is not None:
+                    per_block.setdefault(year, []).append(diff)
+            block_improvements = [float(_np.mean(values)) for _, values in sorted(per_block.items())]
+            rows.append(
+                {
+                    "candidate_id": f"{candidate_id}|{policy}",
+                    "entry_rule": candidate_id,
+                    "policy": policy,
+                    "family": rule["family"],
+                    "branch": str(candidate_id).split(":")[1] if ":" in candidate_id else "",
+                    "bank": "EXIT",
+                    "recipe_id": policy,
+                    "parameters": {"expiry_minutes": POLICY_EXPIRY_MINUTES[policy]},
+                    "changed_axes": 1,
+                    "daily_diff": diffs,
+                    "daily_days": days_in_order,
+                    "daily_segments": [day[:4] for day in days_in_order],
+                    "mean_diff": float(_np.mean(diffs)) if diffs else 0.0,
+                    "block_improvements": block_improvements,
+                    "supported_outer_blocks": len(block_improvements),
+                    "eligible_test_days": days,
+                    "resolved_opportunities": resolved,
+                    # the entry population is identical by construction, so the
+                    # frequency floor cannot bite in this family
+                    "candidate_entries": body["entries"],
+                    "baseline_entries": body["entries"],
+                    "software_causality_pass": body["e0_mismatches"] == 0,
+                    "runtime_failures": 0,
+                    "cost_stress_sign_reversal": False,
+                    "unexplained_coverage_loss": False,
+                    "coverage_loss_days": body["incomplete"][policy],
+                    "missed_move": 0,
+                    "stop_first": 0,
+                    "nearest_approach_S": None,
+                    "adverse_S_before_favorable_0_5S": None,
+                    "objective_reached": None,
+                    "unsupported_entries": body["unsupported"][policy],
+                    "incomplete_entries": body["incomplete"][policy],
+                    "occupancy_flagged_entries": body["occupancy_flagged"][policy],
+                    "exit_reasons": body["reasons"][policy],
+                    "e0_mismatches": body["e0_mismatches"],
+                    "holdout_days_excluded": holdout_days,
+                }
+            )
+    decided = search_run.decide(rows)
+    for row in decided:
+        entry = entry_dispositions.get(row["entry_rule"], {})
+        row["entry_stage"] = {
+            "disposition": entry.get("disposition"),
+            "promoted": entry.get("promoted"),
+            "trial_ids": entry.get("trial_ids", []),
+            "unchanged_by_this_study": True,
+        }
+        # a separately counted decision family: an exit can improve a rule's
+        # daily points and still not make its entry promotable
+        row["entry_rescued"] = False
+
+    ledger_path = out / "EXIT_TRIALS.jsonl"
+    if ledger_path.exists():
+        ledger_path.unlink()
+    ledger = _refinement.TrialLedger(ledger_path)
+    for row in decided:
+        ledger.append(
+            _refinement.make_trial_record(
+                trial_id=f"P15-19:{row['entry_rule']}:{row['policy']}",
+                parent_trial_ids=list(row["entry_stage"]["trial_ids"]),
+                family=row["family"],
+                branch=row["branch"],
+                outer_fold=None,
+                stage="exit_study",
+                bank="EXIT",
+                parameters=row["parameters"],
+                code_hash=search_run.code_identity()["code_sha256"],
+                data_hash=fixed.get("refinement_run_root"),
+                plan_hash=search_run.file_sha256(freeze_path),
+                candidate_population_counts={
+                    "entries": row["candidate_entries"],
+                    "eligible_days": row["eligible_test_days"],
+                    "unsupported_entries": row["unsupported_entries"],
+                    "incomplete_entries": row["incomplete_entries"],
+                    "occupancy_flagged_entries": row["occupancy_flagged_entries"],
+                },
+                score=row["mean_diff"],
+                support=row["promotion"]["support_sensitivity"],
+                test_metrics={
+                    "mean_diff": row["mean_diff"],
+                    "p_raw": row["promotion"]["p_raw"],
+                    "p_holm": row["promotion"]["p_holm"],
+                    "ci_low": row["promotion"]["ci_low"],
+                    "ci_high": row["promotion"]["ci_high"],
+                    "exit_reasons": row["exit_reasons"],
+                },
+                reason=row["promotion"]["reason"],
+                disposition=row["promotion"]["disposition"],
+                artifacts={"run_root": str(root)},
+                failure_attribution=row["failure_attribution"],
+                candidate_id=row["candidate_id"],
+                recipe_id=row["policy"],
+                status="attempted",
+                entry_stage_disposition=row["entry_stage"]["disposition"],
+                entry_rescued=False,
+                holdout_excluded=holdout_excluded,
+            )
+        )
+
+    results = {
+        "schema_version": EXIT_RESULTS_SCHEMA,
+        "task_id": P15_19_TASK_ID,
+        "run_root": str(root),
+        "baseline_policy": "E0",
+        "policies": list(POLICIES),
+        "policy_expiry_minutes": dict(POLICY_EXPIRY_MINUTES),
+        "uncertainty": freeze["uncertainty"],
+        "promotion_gates": freeze["promotion_gates"],
+        "decision_family": "exit study, counted separately from the entry stage",
+        "holdout_excluded": holdout_excluded,
+        "cannot_rescue_an_entry": True,
+        "entries": fixed["entries"],
+        "rules": fixed["rules"],
+        "per_rule": {
+            candidate_id: {
+                "entries": body["entries"],
+                "e0_mismatches": body["e0_mismatches"],
+                "days": len(body["daily"]),
+                "unsupported": body["unsupported"],
+                "incomplete": body["incomplete"],
+                "occupancy_flagged": body["occupancy_flagged"],
+                "exit_reasons": body["reasons"],
+            }
+            for candidate_id, body in sorted(series.items())
+        },
+        "comparisons": [
+            {
+                key: value
+                for key, value in row.items()
+                if key not in ("daily_diff", "daily_days", "daily_segments")
+            }
+            for row in decided
+        ],
+    }
+    search_run._write_json(out / "EXIT_RESULTS.json", results)
+
+    reports = out / "FAMILY_REPORTS"
+    reports.mkdir(parents=True, exist_ok=True)
+    retention = [
+        {
+            "candidate_id": row["candidate_id"],
+            "family": row["family"],
+            "branch": row["branch"],
+            "bank": "EXIT",
+            "status": "active_selected" if row["promotion"]["promoted"] else "inactive_retained",
+            "first_attribution": (row["failure_attribution"] or [None])[0],
+            "reason": row["promotion"]["reason"],
+        }
+        for row in decided
+    ]
+    for family in sorted({row["family"] for row in decided}):
+        text = search_run.family_report(
+            family,
+            decided,
+            retention,
+            [],
+            run_root=str(root),
+            report_path=str(reports / f"{family}.md"),
+            title="P15-19 exit study (E0 baseline)",
+            results_file="EXIT_RESULTS.json",
+        )
+        (reports / f"{family}.md").write_text(text)
+
+    return {
+        "comparisons": len(decided),
+        "promoted": [row["candidate_id"] for row in decided if row["promotion"]["promoted"]],
+        "e0_mismatches": sum(body["e0_mismatches"] for body in series.values()),
+        "family_reports": sorted(path.name for path in reports.glob("*.md")),
+    }
+
+
+def _entry_dispositions(refinement_run_root: str | Path) -> dict[str, dict[str, Any]]:
+    """The entry stage's own verdicts, read once and never rewritten here."""
+    root = Path(refinement_run_root)
+    out: dict[str, dict[str, Any]] = {}
+    rules = json.loads((root / "SELECTED_RULES_BY_FOLD.json").read_text())
+    for fold in rules["folds"]:
+        year = fold["outer_fold"]
+        for role in fold["roles"]:
+            row = out.setdefault(
+                str(role["candidate_id"]),
+                {"disposition": role.get("disposition"), "promoted": bool(role.get("promoted")), "trial_ids": []},
+            )
+            row["trial_ids"].append(f"P15-18:{year}:{role['candidate_id']}")
+            if role.get("role") == "retained_parent":
+                # the fold kept the breadth parent, so the parent's own entries
+                # are the frozen ones and its trials are the breadth trials
+                for parent in role.get("parent_trial_ids") or []:
+                    parent_row = out.setdefault(
+                        str(parent),
+                        {"disposition": "retained_baseline", "promoted": False, "trial_ids": []},
+                    )
+                    trial = f"P15-17:{year}:{parent}"
+                    if trial not in parent_row["trial_ids"]:
+                        parent_row["trial_ids"].append(trial)
+        for candidate_id in fold.get("combinations") or []:
+            row = out.setdefault(
+                str(candidate_id),
+                {"disposition": None, "promoted": False, "trial_ids": []},
+            )
+            trial = f"P15-18:{year}:{candidate_id}"
+            if trial not in row["trial_ids"]:
+                row["trial_ids"].append(trial)
+    # every exit trial must name the entry trial it descends from
+    ledger = root / "TRIALS.jsonl"
+    if ledger.is_file():
+        for line in ledger.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            row = out.setdefault(
+                str(record["candidate_id"]),
+                {"disposition": record.get("disposition"), "promoted": False, "trial_ids": []},
+            )
+            if record["trial_id"] not in row["trial_ids"]:
+                row["trial_ids"].append(record["trial_id"])
+    return out
