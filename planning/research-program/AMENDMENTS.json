@@ -1140,6 +1140,48 @@
         }
       ],
       "previous_entry_sha256": "55d73d010fb15c9e84efffdc0ca8c4fe761e2b1823c52d4ef86a189082da4896"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-native-calendar-endpoint",
+      "date": "2026-09-16",
+      "scope": "Corrects the stated end of the native calendar from 2026-08-19 to 2026-09-03 (the run-1.0.1 evaluation calendar's last, partial session) in AUTHOR_EXAMPLES_2026-09-15.json, wiki/method-green-bird-failure.md and wiki/source-catalog.md, and marks the eight author examples dated 2026-08-27 to 2026-09-03 (JJ-2026-08-28, JJ-2026-09-01, JJ-2026-09-02, GB-2026-08-27, GB-2026-08-28, GB-2026-08-31, GB-2026-09-01, GB-2026-09-03) as inside the tape. Documentation and example metadata only: no formula, gate, budget, bank, receipt or Phase 1 predicate changed.",
+      "reason": "The frozen census manifest 20def36e065c13d7 lists 1,742 dates ending 2026-09-03; the examples file and two wiki sentences carried 2026-08-19 as the endpoint, which made eight replayable examples data_unavailable and made the after-tape cache guard reject a valid date.",
+      "changes": [
+        "native_calendar.last_date 2026-08-19 -> 2026-09-03 with a dated note; inside_tape true on the eight examples named in scope.",
+        "Green Bird page: the replay-scope sentence names 2026-09-03 as the endpoint and 2026-09-08 onward as after the tape.",
+        "Source catalog: the dated-sessions paragraph names 2026-09-03."
+      ],
+      "changed_files": [
+        {
+          "path": "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json",
+          "sha256_before": "820f195645daefb687a3d375580876df6d9e04dc061c4e1126f2deb45165668a",
+          "sha256_after": "5da810bff266f495c88b3193706de699361a781abcb18428532017ab339f2ee7"
+        },
+        {
+          "path": "wiki/method-green-bird-failure.md",
+          "sha256_before": "f6c81a3878a5d34905f4c48ede0c77e5140716b1d451a69555b94438df8420b8",
+          "sha256_after": "2ad8f53204b64eda64ce44c9eea24b3ac5b70b3aaa5f1a39d5db1498bb5e0e67"
+        },
+        {
+          "path": "wiki/source-catalog.md",
+          "sha256_before": "1c77be76d7d420fa26ae2559405933a302a486bc125a14c39bcbfd1e556493d5",
+          "sha256_after": "37fc2e705c49850fa38f569d4ac316dfde34f64b35ac93d5005fd730d74a8936"
+        }
+      ],
+      "previous_entry_sha256": "6ff19b97b699c9e48ca1fa514e847533fc0482a5ed0bc49ddbb027f4729bb5fd"
     }
   ]
 }

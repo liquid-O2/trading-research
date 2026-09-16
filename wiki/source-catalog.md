@@ -142,7 +142,7 @@ One greenbirdtrader post, raw capture [sources/x-raw-2026-09-15/greenbirdtrader]
 
 Every source above was re-read in full on 2026-09-15 with all charts, tickets and whiteboards rendered at native resolution (657 page renders, 535 embedded images) and the small print read from zoomed crops. The reading is recorded per method in each method page's "Source fidelity re-read, 2026-09-15" section. Three catalog-level facts came out of it.
 
-**The session PDFs are dated.** The Deepchart cursor labels, prop dashboards and calendars give the trading day of every worked example, and most fall inside the native calendar (run-1.0.1 evaluation dates through 2026-08-19):
+**The session PDFs are dated.** The Deepchart cursor labels, prop dashboards and calendars give the trading day of every worked example, and most fall inside the native calendar (run-1.0.1 evaluation dates through 2026-09-03, the last session being partial; corrected 2026-09-16 from 2026-08-19):
 
 | Source | Trading day (ET) | Instrument | Clock on the chart |
 |---|---|---|---|
