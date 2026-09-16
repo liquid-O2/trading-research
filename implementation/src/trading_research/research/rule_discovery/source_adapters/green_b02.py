@@ -2422,13 +2422,20 @@ SCANNERS = {
 }
 
 
-def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
+    def finish(doc):
+        if not overrides:
+            return doc
+        from trading_research.research.rule_discovery.search import finish_scan_b02
+
+        return finish_scan_b02(doc, overrides)
+
     rec = {key: value for key, value in dict(rec or {}).items() if key in REC_IDENTITY_KEYS or key in {"family", "method_id", "branch"}}
     family = rec.get("family") or rec.get("method_id") or "GB-FAIL"
     branch = rec.get("branch")
     branches = B02_BRANCHES.get(family, ())
     if branch in SCALP_OBSERVATIONS and family == "GB-SCALP":
-        return _document(market, family, branch, _scan_scalp_observation(market, branch))
+        return finish(_document(market, family, branch, _scan_scalp_observation(market, branch)))
     selected = list(branches) if branch in {None, "*", "all", "B0.2"} else [branch]
     episodes: list[dict[str, Any]] = []
     omissions: list[dict[str, Any]] = []
@@ -2444,7 +2451,7 @@ def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
         except Exception as exc:
             omissions.append({"reason": "scan_error", "branch": name, "error": f"{type(exc).__name__}: {exc}"})
     label = used[0] if len(used) == 1 else "B0.2"
-    return _document(market, family, label, episodes, omissions=omissions)
+    return finish(_document(market, family, label, episodes, omissions=omissions))
 
 
 def _parse_windows(text: str | None, market) -> list[tuple[int, int]]:

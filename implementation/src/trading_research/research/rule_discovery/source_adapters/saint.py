@@ -1146,7 +1146,7 @@ def scan_saint_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], li
     return [], [{"reason": f"unknown branch {branch}"}]
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
     family, branches = parse_rec(rec, FAMILY, BRANCHES)
     episodes = []
     omissions = []
@@ -1158,7 +1158,12 @@ def scan_b02(market, rec) -> dict[str, Any]:
     for episode in episodes:
         episode["rules"] = rules
     branch = branches[0] if len(branches) == 1 else None
-    return window_doc(FAMILY, branch, market, episodes, rules, omissions, {"family": family, "branches": list(branches)})
+    document = window_doc(FAMILY, branch, market, episodes, rules, omissions, {"family": family, "branches": list(branches)})
+    if not overrides:
+        return document
+    from trading_research.research.rule_discovery.search import finish_scan_b02
+
+    return finish_scan_b02(document, overrides)
 
 
 def replay_example(market, example) -> dict[str, Any]:

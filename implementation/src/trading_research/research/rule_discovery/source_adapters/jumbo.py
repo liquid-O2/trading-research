@@ -1639,14 +1639,21 @@ def _rec_branch(rec: Any) -> str | None:
     return None
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
     """Source-faithful B0.2 scan. Does not mutate B0 or B0.1 documents."""
+    def finish(doc):
+        if not overrides:
+            return doc
+        from trading_research.research.rule_discovery.search import finish_scan_b02
+
+        return finish_scan_b02(doc, overrides)
+
     day = _as_day(market) if market is not None else None
     branch = _rec_branch(rec)
     if market is None or day is None:
-        return _document(day, branch or "all", [], [{"reason": "data_unavailable"}])
+        return finish(_document(day, branch or "all", [], [{"reason": "data_unavailable"}]))
     if day > TAPE_LAST:
-        return _document(day, branch or "all", [], [{"reason": "data_unavailable", "date": day.isoformat()}])
+        return finish(_document(day, branch or "all", [], [{"reason": "data_unavailable", "date": day.isoformat()}]))
     branches = BRANCHES if not branch else (branch,)
     episodes: list[dict[str, Any]] = []
     omissions: list[dict[str, Any]] = []
@@ -1662,7 +1669,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
             continue
         episodes.extend(part)
         omissions.extend(omit)
-    return _document(day, branch or "all", episodes, omissions)
+    return finish(_document(day, branch or "all", episodes, omissions))
 
 
 def _example_levels(example: Mapping[str, Any]) -> list[float]:

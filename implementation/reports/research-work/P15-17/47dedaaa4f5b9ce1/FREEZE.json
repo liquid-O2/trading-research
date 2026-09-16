@@ -1,0 +1,3409 @@
+{
+  "attempt_id": "47dedaaa4f5b9ce1",
+  "density_matched_controls": {
+    "cycle": "SHA256(reference_id) mod 4",
+    "offsets": [
+      "-2S",
+      "-S",
+      "+S",
+      "+2S"
+    ],
+    "reject_duplicate_within_1_tick": true
+  },
+  "immutable": true,
+  "note": "No later result may change any field in this freeze.",
+  "pairing_baseline": "B0.2",
+  "promotion_gates": {
+    "frequency_floor_of_baseline_entries": 0.5,
+    "holm_adjusted_p": 0.05,
+    "no_cost_stress_sign_reversal": true,
+    "no_unexplained_coverage_loss": true,
+    "paired_mean_improvement_lb_gt_0": true,
+    "positive_difference_block_share": 0.6,
+    "support": {
+      "below_gate": "inconclusive_support",
+      "eligible_test_days": 30,
+      "outer_blocks": 3,
+      "resolved_opportunities": 100,
+      "sensitivity": {
+        "half": {
+          "eligible_test_days": 15,
+          "outer_blocks": 2,
+          "resolved_opportunities": 50
+        },
+        "twice": {
+          "eligible_test_days": 60,
+          "outer_blocks": 6,
+          "resolved_opportunities": 200
+        }
+      }
+    }
+  },
+  "ra1": {
+    "candidate_definition": "family B0.2 scan with exactly one axis replaced by the bank recipe on the same market view, dates, and episode accounting",
+    "negative_control": {
+      "branches": {
+        "GB-FAIL": "nyam_box",
+        "GB-SCALP": "golden_pocket_continuation",
+        "GB-VWAP": "source_long",
+        "JJ-TBR": "judas_reversal",
+        "KEANI-OPEN-ABOVE-VALUE": "source_long",
+        "MEMBER-TWO-REASONS": "planned_return_long",
+        "REFILL-STUDY": "touch_record",
+        "SAINT-AMT": "continuation_retest",
+        "SIRES": "absorption_reward_retest"
+      },
+      "byte_identical": true,
+      "dates": [
+        "2020-01-02",
+        "2023-11-06",
+        "2024-01-02"
+      ],
+      "families": [
+        "JJ-TBR",
+        "GB-FAIL",
+        "GB-VWAP",
+        "GB-SCALP",
+        "SIRES",
+        "SAINT-AMT",
+        "MEMBER-TWO-REASONS",
+        "KEANI-OPEN-ABOVE-VALUE",
+        "REFILL-STUDY"
+      ],
+      "full_history_job_compare": "PENDING",
+      "full_history_job_compare_reason": "corrected B0.2 run root not supplied in this stage A run; orchestrating session supplies path and sha256 at resume",
+      "n_files": 27
+    },
+    "overrides": "keyword-only mapping stage_name -> recipe implementation; omitted and None are byte-identical"
+  },
+  "ra2_axis_to_stage": {
+    "Delta": {
+      "hooks": [
+        "confirmation"
+      ],
+      "note": "delta input of confirmation"
+    },
+    "Formation": {
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "note": "formation part of context/reference"
+    },
+    "Memory": {
+      "hooks": [
+        "location"
+      ],
+      "note": "contact-memory filter"
+    },
+    "Profile": {
+      "hooks": [
+        "reference"
+      ],
+      "note": "reference profile construction"
+    },
+    "Reference": {
+      "hooks": [
+        "reference"
+      ],
+      "note": "the reference object itself"
+    },
+    "Sequence": {
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "note": "the sequence machine"
+    },
+    "Timing": {
+      "hooks": [
+        "trigger"
+      ],
+      "note": "trigger window and expiry"
+    },
+    "exposed_stages": {
+      "GB-FAIL": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "GB-SCALP": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "GB-VWAP": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "JJ-TBR": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "KEANI-OPEN-ABOVE-VALUE": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "MEMBER-TWO-REASONS": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "REFILL-STUDY": [
+        "confirmation",
+        "location",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "SAINT-AMT": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ],
+      "SIRES": [
+        "confirmation",
+        "context",
+        "location",
+        "management",
+        "objective",
+        "reference",
+        "risk",
+        "trigger"
+      ]
+    },
+    "gb_scalp_observations": {
+      "branches": [
+        "bearish_small_scalp",
+        "bullish_discount_pullback"
+      ],
+      "exposed": [
+        "context",
+        "reference"
+      ]
+    },
+    "stage_order": [
+      "context",
+      "reference",
+      "location",
+      "trigger",
+      "confirmation",
+      "risk",
+      "objective",
+      "management"
+    ],
+    "unsupported_policy": "record with reason; stay in the frozen list; nothing silently dropped; no candidate added"
+  },
+  "ra3_bank": {
+    "cap": 160,
+    "n_baselines": 50,
+    "n_candidates": 160,
+    "n_deferred": 840,
+    "p15_08_receipt_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/TASK_RECEIPT.json",
+    "p15_08_receipt_sha256": "bfe62f1cc8e724f87a12fd6fd2e497a3f7ba38999b9799e415b3b7c1f4cb9bbf",
+    "p15_16_closed_receipt_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-16/316dc53caf8bdfac/attempt-0001/TASK_RECEIPT.json",
+    "p15_16_closed_receipt_sha256": "1509fd9c5732e34e6e4a64e0cdf78c9f4607f86785da3ebf8837273a2fd09fa8",
+    "path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/CANDIDATE_BANK.json",
+    "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee",
+    "used_as_they_are": true
+  },
+  "ra4_splits": {
+    "evaluation_protocol_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/EVALUATION_PROTOCOL.json",
+    "evaluation_protocol_sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b",
+    "p15_03_attempt": "babe7a991b6b3dc1",
+    "regenerated": false,
+    "split_manifest_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-03/babe7a991b6b3dc1/attempt-0001/SPLIT_MANIFEST.json",
+    "split_manifest_sha256": "a30b03bf3ee7bd215ffaf11ff223b07fa0134202d544e4bd0dd353f730e2fde6"
+  },
+  "ra5_throughput": {
+    "bank_dates_coverage_shrunk": false,
+    "candidates": [
+      "GB-FAIL:nyam_box:F1",
+      "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
+      "GB-VWAP:source_long:R1",
+      "SAINT-AMT:continuation_retest:C1",
+      "SIRES:absorption_reward_retest:S1",
+      "MEMBER-TWO-REASONS:planned_return_long:M1",
+      "JJ-TBR:judas_reversal:T4"
+    ],
+    "cgroup_workers_floor": 17,
+    "dates": [
+      "2020-01-02",
+      "2020-06-01",
+      "2020-11-02",
+      "2021-01-04",
+      "2021-06-01",
+      "2021-11-01",
+      "2022-01-03",
+      "2022-06-01",
+      "2022-11-01",
+      "2023-01-03",
+      "2023-06-01",
+      "2023-11-06",
+      "2024-01-02",
+      "2024-06-03",
+      "2024-11-01",
+      "2025-01-02",
+      "2025-06-02",
+      "2025-11-03",
+      "2026-01-02",
+      "2026-06-01"
+    ],
+    "load_median_seconds": 5.118366700131446,
+    "load_p90_seconds": 7.748738319799312,
+    "market_view_loaded_once_per_date": true,
+    "n_dates": 20,
+    "one_process": true,
+    "per_candidate": [
+      {
+        "bank": "Formation",
+        "candidate_id": "GB-FAIL:nyam_box:F1",
+        "family": "GB-FAIL",
+        "median_seconds": 0.8913141847588122,
+        "p90_seconds": 2.1322092326357973
+      },
+      {
+        "bank": "Profile",
+        "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
+        "family": "KEANI-OPEN-ABOVE-VALUE",
+        "median_seconds": 18.410526680760086,
+        "p90_seconds": 25.246072358824318
+      },
+      {
+        "bank": "Reference",
+        "candidate_id": "GB-VWAP:source_long:R1",
+        "family": "GB-VWAP",
+        "median_seconds": 0.27068568812683225,
+        "p90_seconds": 10.251588187739253
+      },
+      {
+        "bank": "Delta",
+        "candidate_id": "SAINT-AMT:continuation_retest:C1",
+        "family": "SAINT-AMT",
+        "median_seconds": 0.034539998043328524,
+        "p90_seconds": 0.0859986621886492
+      },
+      {
+        "bank": "Sequence",
+        "candidate_id": "SIRES:absorption_reward_retest:S1",
+        "family": "SIRES",
+        "median_seconds": 1.0021340590901673,
+        "p90_seconds": 1.188704005163163
+      },
+      {
+        "bank": "Memory",
+        "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:M1",
+        "family": "MEMBER-TWO-REASONS",
+        "median_seconds": 2.8563377568498254,
+        "p90_seconds": 3.7794727834872903
+      },
+      {
+        "bank": "Timing",
+        "candidate_id": "JJ-TBR:judas_reversal:T4",
+        "family": "JJ-TBR",
+        "median_seconds": 0.02099484158679843,
+        "p90_seconds": 0.03909764448180795
+      }
+    ],
+    "profile_candidate": "GB-FAIL:nyam_box:F1",
+    "profile_date": "2024-01-02",
+    "profile_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/PROFILE_B02.txt",
+    "projection": {
+      "workers_12": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": true,
+        "formula": "160 x 1,742 x p90 / (workers x 3600)",
+        "hours": 162.88391870026652,
+        "p90_seconds": 25.246072358824318,
+        "workers": 12
+      },
+      "workers_17": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": true,
+        "formula": "160 x 1,742 x p90 / (workers x 3600)",
+        "hours": 114.97688378842342,
+        "p90_seconds": 25.246072358824318,
+        "workers": 17
+      }
+    },
+    "projection_p90_seconds": 25.246072358824318,
+    "projection_p90_source": "slowest measured candidate-branch (KEANI-OPEN-ABOVE-VALUE:source_long:P1)",
+    "r3_gate": {
+      "gate_3x_vs_phase1": false,
+      "mean_multiple": 2.71,
+      "measured_p90_seconds": 1.484442432411015,
+      "phase1_mean_seconds": 2.8859749833826815,
+      "residual": "parquet decode / load_span_arrow",
+      "status": "open engineering finding; freeze records measured values and does not shrink the bank, dates, or coverage"
+    },
+    "single_core": true,
+    "stage_budget_hours": 24.0
+  },
+  "ra6_identities": {
+    "b01_adapter_bound_run": {
+      "id": "dd386316321ee58d",
+      "manifest_sha256": "dd386316321ee58d42dc70a612181ed365f727eb0f8d6a82c53a2afbff33164d",
+      "path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/adapter-populations/dd386316321ee58d",
+      "run_complete_sha256": "e4dea25d6b8a4910724bcb4f4e8bd3e218383924160153179fedf6643afcd267"
+    },
+    "census_run": {
+      "id": "20def36e065c13d7",
+      "manifest_sha256": "20def36e065c13d75d738fbce475cf7ea5425255488861c58a1b5fbbbe8b488f",
+      "path": "/workspace/implementation/reports/research-work/baseline-repair/20def36e065c13d7",
+      "role": "B0 rows",
+      "summary_sha256": "073f270c5a5f454f4a338219eca9421e43bd3440f4ed42252dfb19f5f4d7838d"
+    },
+    "corrected_b02_run_root": "PENDING",
+    "corrected_b02_run_root_reason": "the corrected full-history run is being produced on main concurrently; the orchestrating session supplies path and sha256 at resume",
+    "first_round_b02_summary_schema_only": "implementation/reports/research-work/P15-16A/1e13829f2c88f1e1/B02_SUMMARY.md",
+    "p15_16a_receipt": "PENDING",
+    "p15_16a_receipt_reason": "its receipt is being issued by the integration round on main concurrently"
+  },
+  "resolutions": [
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:F1",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "internal_rotation",
+      "candidate_id": "JJ-TBR:internal_rotation:F1",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:F1",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F1",
+      "changed_axis": "formation",
+      "family": "SIRES",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
+      "changed_axis": "profile",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+      "changed_axis": "profile",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:P1",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P1",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:R1",
+      "changed_axis": "reference",
+      "family": "GB-SCALP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "recipe_id": "R1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "source_long",
+      "candidate_id": "GB-VWAP:source_long:R1",
+      "changed_axis": "reference",
+      "family": "GB-VWAP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "recipe_id": "R1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R1",
+      "changed_axis": "reference",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "recipe_id": "R1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:C1",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C1",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "asia_tdo_case",
+      "candidate_id": "GB-FAIL:asia_tdo_case:S1",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:S1",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "extension_reaction",
+      "candidate_id": "JJ-TBR:extension_reaction:S1",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S1",
+      "changed_axis": "sequence",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:S1",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:S1",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S1",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:M1",
+      "changed_axis": "memory",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "supplied_selected_order",
+      "candidate_id": "REFILL-STUDY:supplied_selected_order:M1",
+      "changed_axis": "memory",
+      "family": "REFILL-STUDY",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:M1",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M1",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "asia_tdo_case",
+      "candidate_id": "GB-FAIL:asia_tdo_case:T4",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+      },
+      "recipe_id": "T4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:T1",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "shift_minutes": 15
+      },
+      "recipe_id": "T1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:F2",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "internal_rotation",
+      "candidate_id": "JJ-TBR:internal_rotation:F2",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:F2",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F2",
+      "changed_axis": "formation",
+      "family": "SIRES",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P2",
+      "changed_axis": "profile",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P2",
+      "changed_axis": "profile",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:P2",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:P2",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:R2",
+      "changed_axis": "reference",
+      "family": "GB-SCALP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "recipe_id": "R2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "source_long",
+      "candidate_id": "GB-VWAP:source_long:R2",
+      "changed_axis": "reference",
+      "family": "GB-VWAP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "recipe_id": "R2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:R2",
+      "changed_axis": "reference",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "recipe_id": "R2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:C2",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C2",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "asia_tdo_case",
+      "candidate_id": "GB-FAIL:asia_tdo_case:S2",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:S2",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "extension_reaction",
+      "candidate_id": "JJ-TBR:extension_reaction:S2",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S2",
+      "changed_axis": "sequence",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:S2",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:S2",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S2",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:M2",
+      "changed_axis": "memory",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "supplied_selected_order",
+      "candidate_id": "REFILL-STUDY:supplied_selected_order:M2",
+      "changed_axis": "memory",
+      "family": "REFILL-STUDY",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:M2",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:M2",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "cash_open_reclaim_case",
+      "candidate_id": "GB-FAIL:cash_open_reclaim_case:T4",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+      },
+      "recipe_id": "T4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:T2",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "require_complete_formation": true,
+        "shift_minutes": -15
+      },
+      "recipe_id": "T2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:F3",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "internal_rotation",
+      "candidate_id": "JJ-TBR:internal_rotation:F3",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:F3",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:F3",
+      "changed_axis": "formation",
+      "family": "SIRES",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:P1",
+      "changed_axis": "profile",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:P1",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P1",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:R1",
+      "changed_axis": "reference",
+      "family": "GB-SCALP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "recipe_id": "R1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R1",
+      "changed_axis": "reference",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+      },
+      "recipe_id": "R1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:C3",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "history_sessions": 20
+      },
+      "recipe_id": "C3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:C3",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "history_sessions": 20
+      },
+      "recipe_id": "C3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "asia_tdo_case",
+      "candidate_id": "GB-FAIL:asia_tdo_case:S3",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:S3",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "extension_reaction",
+      "candidate_id": "JJ-TBR:extension_reaction:S3",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S3",
+      "changed_axis": "sequence",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:S3",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:S3",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S3",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:M1",
+      "changed_axis": "memory",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "touch_record",
+      "candidate_id": "REFILL-STUDY:touch_record:M1",
+      "changed_axis": "memory",
+      "family": "REFILL-STUDY",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:M1",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M1",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:T1",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "shift_minutes": 15
+      },
+      "recipe_id": "T1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:T3",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "window": "09:30-12:00"
+      },
+      "recipe_id": "T3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "previous_hour",
+      "candidate_id": "GB-FAIL:previous_hour:F1",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:F1",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:F1",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:P2",
+      "changed_axis": "profile",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:P2",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:P2",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:R2",
+      "changed_axis": "reference",
+      "family": "GB-SCALP",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "recipe_id": "R2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Reference",
+      "branch": "vwap_deviation_fade",
+      "candidate_id": "SIRES:vwap_deviation_fade:R2",
+      "changed_axis": "reference",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "edge": "prior_completed_session"
+      },
+      "recipe_id": "R2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:C1",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C1",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "asia_tdo_case",
+      "candidate_id": "GB-FAIL:asia_tdo_case:S4",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bearish_small_scalp",
+      "candidate_id": "GB-SCALP:bearish_small_scalp:S4",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "extension_reaction",
+      "candidate_id": "JJ-TBR:extension_reaction:S4",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "source_long",
+      "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+      "changed_axis": "sequence",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "planned_return_long",
+      "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:S4",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "continuation_retest",
+      "candidate_id": "SAINT-AMT:continuation_retest:S4",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "absorption_reward_retest",
+      "candidate_id": "SIRES:absorption_reward_retest:S4",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:M2",
+      "changed_axis": "memory",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "touch_record",
+      "candidate_id": "REFILL-STUDY:touch_record:M2",
+      "changed_axis": "memory",
+      "family": "REFILL-STUDY",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:M2",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "balance_failure_fade",
+      "candidate_id": "SIRES:balance_failure_fade:M2",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:T2",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "require_complete_formation": true,
+        "shift_minutes": -15
+      },
+      "recipe_id": "T2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:T4",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+      },
+      "recipe_id": "T4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "previous_hour",
+      "candidate_id": "GB-FAIL:previous_hour:F2",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:F2",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:F2",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:P1",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P1",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:C2",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C2",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "cash_open_reclaim_case",
+      "candidate_id": "GB-FAIL:cash_open_reclaim_case:S1",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:S1",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:S1",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:S1",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:S1",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S1",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "deadline_s": 600
+      },
+      "recipe_id": "S1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:M1",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M1",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:T3",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "window": "09:30-12:00"
+      },
+      "recipe_id": "T3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:T1",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "shift_minutes": 15
+      },
+      "recipe_id": "T1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "previous_hour",
+      "candidate_id": "GB-FAIL:previous_hour:F3",
+      "changed_axis": "formation",
+      "family": "GB-FAIL",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:F3",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:F3",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+      },
+      "recipe_id": "F3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:P2",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "microbalance_break",
+      "candidate_id": "SIRES:microbalance_break:P2",
+      "changed_axis": "profile",
+      "family": "SIRES",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:C3",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "history_sessions": 20
+      },
+      "recipe_id": "C3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:C3",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "history_sessions": 20
+      },
+      "recipe_id": "C3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "cash_open_reclaim_case",
+      "candidate_id": "GB-FAIL:cash_open_reclaim_case:S2",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:S2",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:S2",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:S2",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:S2",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S2",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "favorable_ticks": 2
+      },
+      "recipe_id": "S2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:M2",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:M2",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "nyam_box",
+      "candidate_id": "GB-FAIL:nyam_box:T4",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+      },
+      "recipe_id": "T4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:T2",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "require_complete_formation": true,
+        "shift_minutes": -15
+      },
+      "recipe_id": "T2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "single_extended",
+      "candidate_id": "JJ-TBR:single_extended:F1",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:F1",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "minutes": 60
+      },
+      "recipe_id": "F1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "trapped_buyers_retest",
+      "candidate_id": "SAINT-AMT:trapped_buyers_retest:P1",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 0
+      },
+      "recipe_id": "P1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:C1",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C1",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "window_minutes": 5
+      },
+      "recipe_id": "C1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "cash_open_reclaim_case",
+      "candidate_id": "GB-FAIL:cash_open_reclaim_case:S3",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:S3",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:S3",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:S3",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:S3",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S3",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "c1": "0.20",
+        "cohort_s": 120
+      },
+      "recipe_id": "S3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "trapped_buyers_retest",
+      "candidate_id": "SAINT-AMT:trapped_buyers_retest:M1",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "defended_band_continuation",
+      "candidate_id": "SIRES:defended_band_continuation:M1",
+      "changed_axis": "memory",
+      "family": "SIRES",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "max_prior_contacts": 1
+      },
+      "recipe_id": "M1",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "previous_hour",
+      "candidate_id": "GB-FAIL:previous_hour:T4",
+      "changed_axis": "timing",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+      },
+      "recipe_id": "T4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Timing",
+      "branch": "other_session",
+      "candidate_id": "JJ-TBR:other_session:T3",
+      "changed_axis": "timing",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger"
+      ],
+      "parameters": {
+        "window": "09:30-12:00"
+      },
+      "recipe_id": "T3",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "single_extended",
+      "candidate_id": "JJ-TBR:single_extended:F2",
+      "changed_axis": "formation",
+      "family": "JJ-TBR",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Formation",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:F2",
+      "changed_axis": "formation",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "context",
+        "reference"
+      ],
+      "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+      },
+      "recipe_id": "F2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Profile",
+      "branch": "trapped_buyers_retest",
+      "candidate_id": "SAINT-AMT:trapped_buyers_retest:P2",
+      "changed_axis": "profile",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "reference"
+      ],
+      "parameters": {
+        "bandwidth": 2
+      },
+      "recipe_id": "P2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "poc_traversal",
+      "candidate_id": "SAINT-AMT:poc_traversal:C2",
+      "changed_axis": "delta",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Delta",
+      "branch": "footprint_confirmed_reaction",
+      "candidate_id": "SIRES:footprint_confirmed_reaction:C2",
+      "changed_axis": "delta",
+      "family": "SIRES",
+      "hooks": [
+        "confirmation"
+      ],
+      "parameters": {
+        "half_life_s": 300
+      },
+      "recipe_id": "C2",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "cash_open_reclaim_case",
+      "candidate_id": "GB-FAIL:cash_open_reclaim_case:S4",
+      "changed_axis": "sequence",
+      "family": "GB-FAIL",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "bullish_discount_pullback",
+      "candidate_id": "GB-SCALP:bullish_discount_pullback:S4",
+      "changed_axis": "sequence",
+      "family": "GB-SCALP",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": false,
+      "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "judas_reversal",
+      "candidate_id": "JJ-TBR:judas_reversal:S4",
+      "changed_axis": "sequence",
+      "family": "JJ-TBR",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "resistance_short",
+      "candidate_id": "MEMBER-TWO-REASONS:resistance_short:S4",
+      "changed_axis": "sequence",
+      "family": "MEMBER-TWO-REASONS",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "failed_auction_return",
+      "candidate_id": "SAINT-AMT:failed_auction_return:S4",
+      "changed_axis": "sequence",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Sequence",
+      "branch": "clean_squeeze",
+      "candidate_id": "SIRES:clean_squeeze:S4",
+      "changed_axis": "sequence",
+      "family": "SIRES",
+      "hooks": [
+        "trigger",
+        "confirmation"
+      ],
+      "parameters": {
+        "pressure_s": 120
+      },
+      "recipe_id": "S4",
+      "supported": true,
+      "unsupported_reason": null
+    },
+    {
+      "applicable": true,
+      "bank": "Memory",
+      "branch": "trapped_buyers_retest",
+      "candidate_id": "SAINT-AMT:trapped_buyers_retest:M2",
+      "changed_axis": "memory",
+      "family": "SAINT-AMT",
+      "hooks": [
+        "location"
+      ],
+      "parameters": {
+        "prior_reaction": "0.25S"
+      },
+      "recipe_id": "M2",
+      "supported": true,
+      "unsupported_reason": null
+    }
+  ],
+  "resource_profile": {
+    "does_not_shrink_bank_dates_coverage": true,
+    "exceeds_24h_budget": true,
+    "measured_p90_seconds": 25.246072358824318,
+    "projection_hours_12": 162.88391870026652,
+    "projection_hours_17": 114.97688378842342,
+    "worker_count_cgroup_floor": 17,
+    "worker_count_projection_alt": 12
+  },
+  "schema_version": "research-p15-17-freeze-v1",
+  "scoring_policy": {
+    "inner_tuning_only_for_bank_choice": true,
+    "max_mechanism_banks_per_family": 2,
+    "primary": "daily net points (mean daily net points, one-mini benchmark)",
+    "simplicity_rule": "ties within 1% of the best tuning score choose the simpler model, then lower candidate ID lexically"
+  },
+  "stage": "A",
+  "support_counts": {
+    "per_bank": {
+      "Delta": {
+        "supported": 16,
+        "unsupported": 0
+      },
+      "Formation": {
+        "supported": 25,
+        "unsupported": 0
+      },
+      "Memory": {
+        "supported": 23,
+        "unsupported": 0
+      },
+      "Profile": {
+        "supported": 20,
+        "unsupported": 0
+      },
+      "Reference": {
+        "supported": 10,
+        "unsupported": 0
+      },
+      "Sequence": {
+        "supported": 44,
+        "unsupported": 8
+      },
+      "Timing": {
+        "supported": 14,
+        "unsupported": 0
+      }
+    },
+    "per_family": {
+      "GB-FAIL": {
+        "supported": 21,
+        "unsupported": 0
+      },
+      "GB-SCALP": {
+        "supported": 4,
+        "unsupported": 8
+      },
+      "GB-VWAP": {
+        "supported": 2,
+        "unsupported": 0
+      },
+      "JJ-TBR": {
+        "supported": 23,
+        "unsupported": 0
+      },
+      "KEANI-OPEN-ABOVE-VALUE": {
+        "supported": 6,
+        "unsupported": 0
+      },
+      "MEMBER-TWO-REASONS": {
+        "supported": 16,
+        "unsupported": 0
+      },
+      "REFILL-STUDY": {
+        "supported": 4,
+        "unsupported": 0
+      },
+      "SAINT-AMT": {
+        "supported": 40,
+        "unsupported": 0
+      },
+      "SIRES": {
+        "supported": 36,
+        "unsupported": 0
+      }
+    },
+    "unsupported": [
+      {
+        "bank": "Sequence",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:S1",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:S2",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:S3",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:S4",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:S1",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:S2",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:S3",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Sequence",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:S4",
+        "family": "GB-SCALP",
+        "reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      }
+    ]
+  },
+  "task_id": "P15-17",
+  "uncertainty": {
+    "block_bootstrap_seed": 15022026,
+    "block_length": 5,
+    "draws": 2000,
+    "generator": "numpy.random.Generator(PCG64(15022026))",
+    "holm": "across every candidate at the decision stage"
+  }
+}

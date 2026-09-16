@@ -391,7 +391,14 @@ def touch_hold_verdict(hold: bool | None) -> str:
     return "pass" if hold else "fail"
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    def finish(doc):
+        if not overrides:
+            return doc
+        from trading_research.research.rule_discovery.search import finish_scan_b02
+
+        return finish_scan_b02(doc, overrides)
+
     rec = dict(rec or {})
     family = rec.get("method_id") or rec.get("family") or FAMILY_REFILL
     if family != FAMILY_REFILL:
@@ -418,7 +425,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
     }
     if view is None or view.arrays.t_ns.size == 0:
         payload["omissions"].append({"reason": "operands_unavailable", "operand": "native_executions"})
-        return payload
+        return finish(payload)
     arrays = view.arrays
     cutoff = rec.get("b02_now_ns")
     if cutoff is None:
@@ -512,7 +519,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
     payload["episodes"] = episodes
     payload["n_zones"] = len(formed.get("zones") or [])
     payload["n_touches"] = len(episodes)
-    return payload
+    return finish(payload)
 
 
 def _date_outside_tape(example: Mapping[str, Any]) -> bool:

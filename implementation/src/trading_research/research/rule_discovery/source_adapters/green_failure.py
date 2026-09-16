@@ -223,10 +223,10 @@ def slice_family(day: str) -> dict[str, Any]:
 RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("RR-11", "RR-12", "RR-13", "RR-14", "RR-15", "F06", "F07", "F18"))}
 
 
-def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
     payload = dict(rec or {})
     payload.setdefault("family", FAMILY)
-    return gb_scan_b02(market, payload)
+    return gb_scan_b02(market, payload, overrides=overrides)
 
 
 def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:

@@ -1613,7 +1613,14 @@ def _values_common(branch, side, loc, features, replenish, reward, imb_ratio, ga
     }
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    def finish(doc):
+        if not overrides:
+            return doc
+        from trading_research.research.rule_discovery.search import finish_scan_b02
+
+        return finish_scan_b02(doc, overrides)
+
     rec = _identity_rec(rec)
     family = rec.get("method_id") or rec.get("family") or "SIRES"
     branch = rec.get("branch") or rec.get("source_branch") or "clean_squeeze"
@@ -1631,7 +1638,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
     }
     if arrays is None or arrays.t_ns.size == 0:
         empty["omissions"] = [{"reason": "operands_unavailable", "operand": "native_executions"}]
-        return empty
+        return finish(empty)
     needed = _needed_gamma(branch)
     probe_ns = int(arrays.t_ns[0]) if arrays.t_ns.size else None
     if needed and _gamma_from_market(market, probe_ns) is None:
@@ -1677,7 +1684,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
             )
         ]
         empty["omissions"] = [{"reason": GAMMA_UNOBSERVABLE, "operand": "gamma_regime"}]
-        return empty
+        return finish(empty)
     cutoff = _cutoff(arrays, rec)
     cached = getattr(view, "_sires_b02_locations", None)
     if cached is not None and getattr(view, "_sires_b02_cutoff", None) == cutoff:
@@ -1690,7 +1697,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
         locations = [row for row in locations if row.get("kind") == "kg1"]
         if not locations:
             empty["omissions"] = [{"reason": "operands_unavailable", "operand": "source_kg1_level_known"}]
-            return empty
+            return finish(empty)
     if branch == "microbalance_break":
         locations = [row for row in locations if row.get("kind") == "microbalance"]
     if branch == "vwap_deviation_fade":
@@ -1800,16 +1807,18 @@ def scan_b02(market, rec) -> dict[str, Any]:
                             trigger={"at_ns": at_ns, "ticks": feats.get("fill_ticks") or contact.get("price_ticks")},
                         )
                     )
-    return {
-        "schema_version": "research-family-b02-scan-v1",
-        "baseline_version": B02_VERSION,
-        "family": family,
-        "branch": branch,
-        "coverage_id": rec.get("coverage_id") or f"{family}:branch:{branch}",
-        "episodes": episodes,
-        "omissions": [],
-        "rules": rules_payload(),
-    }
+    return finish(
+        {
+            "schema_version": "research-family-b02-scan-v1",
+            "baseline_version": B02_VERSION,
+            "family": family,
+            "branch": branch,
+            "coverage_id": rec.get("coverage_id") or f"{family}:branch:{branch}",
+            "episodes": episodes,
+            "omissions": [],
+            "rules": rules_payload(),
+        }
+    )
 
 
 def _parse_window(day: str, text: str | None) -> tuple[int | None, int | None]:
