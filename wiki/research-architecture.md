@@ -6,8 +6,8 @@ The intended NQ decision process has separate responsibilities: understand conte
 | --- | --- |
 | Source setups and objects | Phase 1 complete acquired census; source facts and disclosed inferred reconstruction remain distinct. |
 | Better individual rules | Phase 1.5 finite reconstruction/breadth/refinement and unchanged-entry exits; subphases 00 to 04 closed, 05 in progress, closure targeted for 2026-09-17 (see [current status](current-status.md)). |
-| Context and forecasts | Phase 2 jointly fitted intraday volatility, native options/OI updates, auction/flow/cross-market and method-specific experts; specified and re-cut to 16 tasks on 2026-09-16, starts after the Phase 1.5 release. |
-| Actionable location quality | Phase 3 planned scope: native areas, arrival, conditional reaction, competing levels and P-zone upgrades. |
+| Context and forecasts | Phase 2: the authors' own context reads registered and measured first (P2-02A), then jointly fitted intraday volatility, native options/OI updates, auction/flow/cross-market and method-specific experts evaluated as upgrades against those reads; 17 tasks after the 2026-09-16 re-cut, starts after the Phase 1.5 release. |
+| Actionable location quality | Phase 3 planned scope: the authors' own location reads as baselines first, then native areas, arrival, conditional reaction, competing levels and P-zone upgrades. |
 | Response and final entry | Phase 4 planned scope: fitted response/entry experts, context/location integration and combined NQ replay. |
 | Learned management | Later recommendation, with fixed-entry controls first; no numbered Phase 5 commitment. |
 
