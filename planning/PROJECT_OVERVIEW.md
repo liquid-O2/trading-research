@@ -1,126 +1,151 @@
 # The project at a glance
 
-One page for the owner: what the program builds, phase by phase, what each task is for, and what you get out of it. Everything here is drawn from the plan and the wiki; the tables are the map, the linked documents are the territory. Status as of 2026-09-16 evening.
+Short version for the owner. One line per idea. Status as of 2026-09-16, 21:00 UTC. Numbers and verdicts per task live in the [results ledger](/workspace/wiki/results-ledger.md).
 
-## The objective in one paragraph
+## What we are building
 
-Build an adaptive decision process for trading the NQ future, one component at a time, on owned data from 2020 onward (earlier data only as causal lookback). Twelve published trading methods (Jumbo, Green Bird ×3, Sires, Saint, an unnamed member, Keani, the Refill study, jetbundle, Stoic ×2) supply the baselines and the mechanisms. Every claim is measured on 1,742 sessions from 2020-01-01 to 2026-09-03 with a fixed one-contract benchmark, chronological out-of-sample comparison by calendar year, and a verifier that refuses any result whose code, data and plan identities do not check out. The eventual economic target is $3,000 per trading day with a $1,000 maximum daily loss; no phase before the final combined replay may claim it.
+- A decision process for trading the NQ future, built one part at a time.
+- Twelve published methods supply the rules and the reads: Jumbo, Green Bird ×3, Sires, Saint, an unnamed member, Keani, Refill, jetbundle, Stoic ×2.
+- Everything is measured on 1,742 sessions, 2020-01-01 to 2026-09-03, with one contract and fixed costs.
+- Target at the very end: $3,000 per day, never more than $1,000 lost in a day. No phase before the final replay may claim it.
 
-## How the phases fit
+## The five phases
 
-| Phase | Question it answers | What comes out | Gate to the next |
+| Phase | Question | Output | Status |
 | --- | --- | --- | --- |
-| 1 (complete) | What do the source methods actually do, and how often do their setups occur on our data? | The accepted census: 50 branches and 8 observation units, 99,294 daily jobs, 18,747 observed setups | Accepted census with limitations carried forward |
-| 1.5 (closing tonight) | Can any single rule of a method be made better, honestly, within a finite search? | Strategy Book v1: per branch the definition, population, base rates, regime cuts, every attempted upgrade, a verdict; the retention set; fold-specific selected rules; the exit study | Phase receipt verified, every branch with a verdict |
-| 2 (starts 2026-09-18) | What is the market's context right now and what will it do next, per mechanism and per method? | Fitted context experts (volatility, range path, auction state, flow, cross-market, options exposure, intraday OI), method-specific suitability experts, conditional plans, Strategy Book v2 | Release receipt, every expert with a scorecard, Phase 3 allowlist |
-| 3 (scope reserved) | Where are the actionable locations, and how does price react when it arrives? | Fitted location experts: P-zone upgrades, forward-volatility areas, native gamma/vega/vanna/OI/volume/VWAP/prior-extreme areas, arrival and conditional reaction | Location gate |
-| 4 (scope reserved) | Whether and when to enter, given context and location, and how the whole thing performs as one account? | Response and entry experts, the integrator, cross-asset responses, the combined historical replay at account level | Combined replay against the economic target |
-| Later management work | Can learned exit and re-entry management beat the fixed-entry controls? | Empirical management specialists | A user decision; not a numbered phase |
+| 1 | What do the methods do, and how often do their setups appear on our data? | The census: 50 branches, 18,747 setups | closed |
+| 1.5 | Can any single rule be improved, honestly, within a finite search? | Strategy Book v1, retention set, exit study | closing tonight |
+| 2 | What is the market's context now, and what happens next? | Context experts, method experts, plans, Strategy Book v2 | starts 2026-09-18 |
+| 3 | Where are the actionable levels, and how does price react there? | Location experts | scope reserved |
+| 4 | Whether and when to enter, and how it all performs as one account | Entry experts, the integrator, the combined replay | scope reserved |
 
-Rules that hold in every phase: the last five months of the tape (2026-04-01 to 2026-09-03) are a blind hold-out that enters no fit, selection or gate and is evaluated once per phase release by tooling; comparisons are purged, embargoed walk-forward by calendar year, with rolling refits compared in Phase 2; the authors' own reads are the baseline for each component (entries in 1.5, context reads in 2, location reads in 3, entries again in 4) and a fitted model counts as an upgrade only when it beats them under the promotion gates; the Phase 3 and Phase 4 task packs are authored at the Phase 2 release from that rule and the retention set; nothing is discarded (every branch and candidate stays in a retention set with a status and a reason), every number points at the immutable artifact it came from, every date's outcome is used only after its availability clock, and a negative or inconclusive result closes a phase as validly as a positive one.
+Rules that never change:
 
-## Phase 1, complete
+- The author's own read is the baseline for each part. Our models must beat it, or the author's read stays.
+- The last five months, 2026-04-01 to 2026-09-03, are blind. Nothing fits, tunes or selects on them. Each release tests on them once.
+- Comparisons are walk-forward by calendar year, purged and embargoed. Phase 2 adds rolling refits beside that.
+- Nothing is thrown away. Every rule and candidate keeps a status and a reason.
+- Every number points at the file it came from. Every outcome is used only after it was knowable.
+- A negative result closes a phase as validly as a positive one.
+- Every task ends with a result card: question, numbers, target met or not, verdict, lever.
 
-The frozen run `run-1.0.1` measured every source branch on the acquired data with owned MBP-1 event-time executions, same-contract references and a versioned NQ session policy. The wiki method pages hold the exact source predicates, re-read against the raw pages and charts on 2026-09-15. Known boundary and bookkeeping defects in the frozen scanners are labelled B0; corrected semantics are B0.1; the source-faithful re-implementation used as the Phase 1.5 baseline is B0.2.
+## Phase 1 · What the methods do (closed)
 
-## Phase 1.5, the finite rule search
+Steps that were done, in order:
 
-Subphases in order; a subphase closes with verified task receipts, a subphase receipt and a passing gate review.
+1. Read every source page, chart and post; write the wiki: 12 method pages and about 90 object pages with the exact predicates.
+2. Register the formulas, rules and operators, with what is source-exact, printed-but-different, or inferred.
+3. Acquire the data and define event-time contracts: executions, quotes, coverage, clocks, availability.
+4. Implement one scanner per branch with fixtures, native controls and future-perturbation checks (773 tests).
+5. Run the census on all 1,742 sessions: 99,294 daily jobs, 18,747 observed setups.
+6. Audit: 341 charts inspected, construction audit, source conformance review, findings and handoffs.
 
-### 00 Foundation, closed
+What you got: per method, how many setups occur and what happened after them (prices, not fills). Setups per method: Jumbo 3,912 · GB failure 7,589 · GB VWAP 499 · GB scalps 3,066 · Sires 2,538 · Saint 785 · Member 352 · Keani 6.
 
-| Task | Builds | Why | You get |
+Judge it by: every branch searched on every session, limits explicit, no claim of edge.
+
+## Phase 1.5 · Improve single rules (closing tonight)
+
+### 00 Foundation (closed)
+
+| Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-00 | Binding of the accepted Phase 1 baseline and typed records for every later artifact | Everything downstream must refer to one frozen identity of code, data and registry | The engineering-date manifest, schema examples, baseline binding |
-| P15-01 | The receipt and dependency verifier | No result is accepted on a summary; the verifier recomputes identities, walks predecessors and rejects forged or incomplete evidence | `verify_research_release.py`, the verifier cases |
+| P15-00 | One frozen identity for the Phase 1 baseline and typed records | Everything after refers to it | 50 branches and 8 units reconcile; hashes stable |
+| P15-01 | The verifier for receipts and dependencies | Nothing counts on a summary | A missing predecessor or one tampered byte fails |
 
-### 01 Native data and outcomes, closed
+### 01 Native data and outcomes (closed)
 
-| Task | Builds | Why | You get |
+| Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-02 | The native MarketView over the full account day, delegating unchanged rules to the Phase 1 scanners | One columnar, causal view of executions, quotes and coverage that every rule and expert reads | Byte-identical baseline parity on a stratified sample, throughput measurement |
-| P15-03 | Ordered outcome labels, the costed one-contract replay, chronological folds | A single benchmark and evaluation protocol so candidates are compared on the same terms | The split manifest, the evaluation protocol, the outcome contracts |
+| P15-02 | The native market view over the full account day | One causal view for every rule and expert | Byte parity with the frozen scanners: 3,420 of 3,420 |
+| P15-03 | Outcome labels, the costed replay, the folds | One benchmark for every comparison | The $25 net-P&L fixture; ambiguous same-batch cases labelled |
 
-### 02 Source reconstruction, closed
+### 02 Source reconstruction (closed)
 
-| Task | Builds | Why | You get |
+| Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-04 | The source-to-operator ledger for every numerical operand (EV, P-zones, KG1/gamma, auction, macro) | Says, per operand, whether it is source-exact, printed-but-different, inferred or not identifiable | The ledger, the printed-figure replay, Strategy Book B0-only edition with frozen regime dimensions |
+| P15-04 | The operand ledger: EV, P-zones, KG1/gamma, auction, macro | Says what is source-exact and what is inferred | 48 rows, each with a source pointer and a disposition |
 
-### 03 Primitives, closed
+### 03 Primitives (closed)
 
-| Task | Builds | Why | You get |
+| Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-05 | Causal formations F1 to F3 and profile primitives | The candidate bank changes one mechanism at a time; formations are the first axis | Formation identities at registered source clocks |
-| P15-06 | CVD variants C0 to C3 and resolved cohort memory | Flow inputs with native aggressor uncertainty kept separate | Delta series with availability clocks |
-| P15-07 | Response state machines S1 to S4 | Explicit sequences (contact, sweep, reclaim, retest, confirm) instead of a universal shortcut | Pure transitions with stage evidence and expiry |
-| P15-08 | Reference rules and the finite candidate bank | Registers at most 160 candidates so the search is finite and pre-declared | `candidate-bank.json`, the bank axes and neighbourhoods |
+| P15-05 | Formations F1–F3, profiles | First axis of the candidate bank | Volume conserved; 70% area by the specified walk |
+| P15-06 | CVD variants C0–C3, cohort memory | Flow inputs with unknown volume kept apart | +10/−4/unknown 6 fixture |
+| P15-07 | Response state machines S1–S4 | Explicit sequences, no shortcuts | A retest before a reclaim cannot pass |
+| P15-08 | The finite candidate bank | At most 160 candidates, declared before results | One axis per candidate; identical expansion before outcomes |
 
-### 04 Family adapters, closed
+### 04 Family adapters (closed)
 
-| Task | Builds | Why | You get |
+| Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-09 to P15-15 | One adapter per method: Jumbo, Green Bird failure, Green Bird VWAP and scalps, Sires, Saint, Member, Keani | Each adapter reproduces its source predicate stage by stage and reports where an operand is unknown | Full-history populations and coverage per branch |
-| P15-16 | Research-process and risk observations (Refill, jetbundle, Stoic) preserved as observations | They inform context later; they are not market entries | Their records, without manufactured entries |
+| P15-09…15 | One adapter per method | Reproduces each source predicate stage by stage | Empty change reproduces the baseline; unknown operands named |
+| P15-16 | Refill, jetbundle, Stoic kept as observations | They are context, not entries | No entry win-rate for observation units |
 
-### 05 Finite search, in progress
+### 05 Finite search (running)
 
-| Task | Builds | Why | You get | State |
+| Task | What it makes | Why | Judge by |
+| --- | --- | --- | --- |
+| P15-16A | Baseline B0.2: the source's own rule, measured on the whole population | The comparison must be against the real rule | 41 branches in bound or diagnosed; author examples reach location |
+| P15-17 | The breadth screen: every candidate on every fold against B0.2 | Finds which mechanism changes help | Every candidate has a record; outer data never picks a bank |
+| P15-18 | One bounded refinement plus one combination per family | Tune only in the past, in fixed neighbourhoods | Neighbours exactly the contract's; a six-example win stays inconclusive |
+
+### 06 Exit controls (next)
+
+| Task | What it makes | Why | Judge by |
+| --- | --- | --- | --- |
+| P15-19 | Exit study E0–E4 on frozen entries | Exits cannot rescue a weak entry | No stop is loosened; no future maximum used |
+
+### 07 Release (machinery built)
+
+| Task | What it makes | Why | Judge by |
+| --- | --- | --- | --- |
+| P15-20 | Strategy Book v1, retention set, release inputs, hold-out report, handoff | The deliverable, with no hand-typed number | Every branch has a verdict; census reconciles; hold-out tested once |
+
+## Phase 2 · Context and experts (starts 2026-09-18)
+
+| Sub | Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- | --- |
-| P15-16A | The source-faithful baseline B0.2 for every family, plausibility gates, author-example replay | The comparison baseline must be the source's own rule, measured on the population, not a proxy | B0.2 over 1,742 sessions and 41 branches with funnels and bounds, the fidelity matrix | Receipt being re-issued tonight |
-| P15-17 | The breadth screen: every registered candidate on every fold, paired against B0.2 | Finds which mechanism changes help, with support gates, Holm and a block bootstrap | Trial ledger, breadth results, refinement allowlist, family reports | Definitive run on the fast engine running now |
-| P15-18 | One bounded refinement around the selected banks, plus one combination per family | Tunes only inside each fold's past data, within the contract's exact neighbourhoods | Refined selections per fold, the all-history recommendation kept separate | Rehearsal complete; definitive run next |
+| 00 | P2-00 | Verification of the Phase 1.5 release; the allowed inputs | Phase 2 uses only verified rules | Phase verifier exits 0; allowlist frozen |
+| 01 | P2-01 | Snapshot rows, labels, causal joins | Every expert trains on the same rows | Rows carry availability masks; hold-out rows refused |
+| 01 | P2-02 | The fitting engine and chronological stacking | One engine for every expert | Declared grids; purge and embargo respected |
+| 02 | P2-09 | Native option, spot and OI adapters | Owned chains with real identities | Every root normalised; raw ids preserved |
+| 02 | P2-10 | Pricing, Greeks, exposure boards | Gamma, vega, vanna, OI from owned chains | Pricing fixtures; units explicit |
+| 03 | P2-02A | The authors' own context reads, measured | Our models must beat the authors' reads | Each read fires at a plausible rate; causal; same rows as experts |
+| 03 | P2-03 | Volatility arithmetic and targets | One volatility expert, many heads | Estimator identities; clocks explicit |
+| 03 | P2-04 | The joint volatility expert | Forecast variance, intervals, movement scale | Beats the source read and the baselines, or is retained |
+| 04 | P2-05 | Range-path and auction experts | Excursion, first-passage, break topology, day state | Censored bins handled; provisional vs final state separated |
+| 04 | P2-11 | Option flow, exposure changes, scenarios | What options did and would do under a shock | Signed/unknown kept apart; roll ambiguity flagged |
+| 04 | P2-07 | Flow-memory and cross-market experts | Rewarded aggression; lead/lag; spot/IV coupling | No future returns; no cloned strategies on other assets |
+| 05 | P2-12 | Intraday open-interest updates | OI is daily; estimate it intraday | Complete contract-day groups; exclusions with reasons |
+| 06 | P2-13 | One context expert per method (eight) | Will a setup occur, how useful, which session and timing | Per method: masks separate, no future value, low support honest |
+| 06 | P2-21 | Process context and the risk overlay | Refill memory, jetbundle states, macro; risk stays a rule | Causal zones and contacts only |
+| 07 | P2-22 | Conditional plans and the contribution replay | Forecasts become per-method plans | Plan scoring exact; alternatives preserved |
+| 07 | P2-23 | Refit cadences, matured-label updates | Which refit schedule holds up | Rolling beside expanding, same purge and hold-out |
+| 08 | P2-24 | Full causal replay and the Phase 3 handoff | Proves the whole stack | Every expert has a scorecard; hold-out tested once |
 
-### 06 Exit controls, next
+## Phases 3 and 4 (scope reserved)
 
-| Task | Builds | Why | You get |
-| --- | --- | --- | --- |
-| P15-19 | The exit study E0 to E4 on frozen entries | Exits are compared after entries are frozen so they cannot rescue a weak entry rule | Paired exit comparisons per selected rule |
+- Phase 3: register the authors' own location reads first (P-zones, KG1 and gamma levels, prior extremes, value and volume nodes, blocks and gaps), then fit location experts: forward-volatility areas, native gamma/vega/vanna/OI/volume/VWAP areas, arrival and reaction, competing levels. Revisits candidates that failed on `location_miss`.
+- Phase 4: entry experts and the integrator; cross-asset responses; one combined account-level replay against the target. Revisits candidates that failed on `confirmation_delay` or `adverse_before_target`.
+- Later: learned exit and re-entry management, only after the fixed-entry controls. A user decision.
+- The Phase 3 and 4 task packs are written at the Phase 2 release.
 
-### 07 Release, machinery built
+## How "done" is checked
 
-| Task | Builds | Why | You get |
-| --- | --- | --- | --- |
-| P15-20 | Strategy Book v1, the retention set, census reconciliation, release inputs, Phase 2 handoff | The phase's deliverable, with every number pointing at its artifact and no hand-typed figure | `STRATEGY_BOOK.md/.json`, one CSV per branch, `RETENTION_SET.json`, `RELEASE_INPUTS.json` |
+- Each task: receipt (pinned plan and code, evidence matrix, work log, report) plus a result card.
+- The verifier recomputes every identity, walks predecessors, and fails on any gap or forgery.
+- Each subphase: its own receipt and gate review. Each phase: phase receipt and a fresh cross-model review.
+- Process: one page, [HOW_TO_RUN.md](research-program/HOW_TO_RUN.md). Policy: [AGENTS.md](/workspace/AGENTS.md).
 
-## Phase 2, context and experts (17 tasks)
+## Words
 
-| Subphase | Task | Builds | Why | You get |
-| --- | --- | --- | --- | --- |
-| 00 Entry gate | P2-00 | Verification of the whole Phase 1.5 release and the frozen Phase 2 scope | Phase 2 must consume only verified rules and manifests | The Phase 2 allowlist of inputs |
-| 01 Datasets and fitting | P2-01 | Snapshots, labels and causal dataset joins on account-day and quarter-hour grids | Every expert trains on the same causal rows | Snapshot and target rows with availability masks |
-| | P2-02 | Deterministic fitting and chronological stacking | One fitting engine (ridge, hinge, softmax, quantile, calibration) with declared grids | The shared engine every expert uses |
-| 02 Native options baseline | P2-09 | Native option, spot and OI adapters | Owned option chains normalised with their real identities | The options data plane (staged; starting in parallel now) |
-| | P2-10 | Pricing, Greeks and exposure boards | Gamma, vega, vanna and OI exposure from owned chains | Native exposure boards (staged) |
-| 03 Joint volatility | P2-02A | The authors' own context reads (Jumbo's day and break-topology read, Sires' regime read, Saint's structure read, Keani's open read, Green Bird's session read, Member's area memory) as deterministic baselines measured on the population | Our volatility, gamma and IV experts are upgrades on top of the authors' reads, not replacements; every expert must beat the source read | Source context rules registry, baseline results, the paired-comparison protocol |
-| | P2-03 | Volatility arithmetic and multi-horizon targets (GK, YZ, HAR, IV) | One volatility expert with several forecast heads, not one per estimator | Feature groups and targets (staged) |
-| | P2-04 | The joint volatility expert and its ablations | Forecast variance, intervals and movement scale | Expert artifact and scorecard |
-| 04 Context mechanisms | P2-05 | Range-path and auction-session experts | Remaining excursion, first-passage times, break topology; auction and day state | Two expert artifacts |
-| | P2-11 | Option flow, exposure changes and repricing scenarios | What the options market did and would do under a shock | Flow and scenario boards |
-| | P2-07 | Flow-memory and cross-market experts | Rewarded aggression, failed pushes; related-market lead/lag and spot/IV coupling | Two expert artifacts |
-| 05 Intraday OI | P2-12 | Weakly supervised intraday OI updates | Open interest is published daily; the update estimates it intraday with uncertainty | OI update expert against B0/B1/B2 baselines |
-| 06 Method experts | P2-13 | One context expert per source method (eight methods, one engine, one configuration each) | Per method: will a setup occur, how useful will it be, which session, reference, confirmation and timing suit it | Eight artifacts and scorecards |
-| | P2-21 | Research-process context and the risk overlay interfaces | Refill memory, jetbundle transitions, macro contribution; risk stays a rule overlay | Interfaces and artifacts |
-| 07 Plans and adaptation | P2-22 | Conditional plans and the fixed context-contribution replay | Turns forecasts into per-method conditional plans and measures their contribution | Plans manifest, replay report |
-| | P2-23 | Refit cadences and matured-label intraday updates | Which refit schedule (annual, monthly, weekly, plus intraday) holds up chronologically | The cadence comparison |
-| 08 Release | P2-24 | The full chronological dependency replay and the Phase 3 handoff | Proves the whole stack causally and hands Phase 3 its admissible inputs | Strategy Book v2, expert scorecards, retention set, `PHASE3_HANDOFF.md` |
-
-## Where to judge each task
-
-Every task ends with a result card: its question, at most five headline numbers with intervals and pointers, the target and whether it was met, a verdict (done well, needs upgrade, not reaching target, not applicable) and the smallest lever if it needs an upgrade. The cards live in the [results ledger](/workspace/wiki/results-ledger.md); the phase releases roll them up.
-
-## What "done" means, and how it is checked
-
-Each task ends with a receipt: pinned plan and code snapshots, a run manifest, an evidence matrix binding every acceptance key to a real test or audit command, a work log, and a report. The verifier recomputes every identity, walks the predecessor chain, and exits non-zero on any forgery, gap or unreconciled job. A subphase closes with its own receipt and a gate review; a phase with a phase receipt and a fresh cross-model review. The process for running a subphase is one page, [HOW_TO_RUN.md](research-program/HOW_TO_RUN.md); the policy is [AGENTS.md](/workspace/AGENTS.md).
-
-## Glossary
-
-- **Branch**: one source method's specific setup route (for example Green Bird `nyam_box`).
-- **B0 / B0.1 / B0.2**: the frozen Phase 1 scanner, its corrected semantics, and the source-faithful re-implementation used as the comparison baseline.
-- **Candidate**: a branch with exactly one mechanism axis changed (formation, profile, reference, delta, sequence, memory, timing).
-- **Fold**: a calendar-year test block (2022 to 2026) with fit, tune and calibration windows before it.
-- **Promotion gates**: support, paired improvement with a positive lower bound, Holm-adjusted p ≤ 0.05, positive blocks, no cost-stress reversal.
-- **Retention set**: every branch and candidate with a status (`active_selected`, `active_baseline`, `inactive_retained`) and a first failure attribution that decides which later phase revisits it.
-- **Receipt**: the immutable evidence bundle a task ends with; nothing counts without one.
-
-Sources: [ROADMAP.md](ROADMAP.md), [phase 1.5 pack](phase-1-5/README.md), [phase 2 pack](phase-2/README.md), [wiki status](/workspace/wiki/current-status.md).
+- **Branch**: one method's specific setup route, for example Green Bird `nyam_box`.
+- **B0 / B0.1 / B0.2**: frozen scanner; corrected semantics; source-faithful re-implementation (the baseline).
+- **Candidate**: a branch with one mechanism changed: formation, profile, reference, delta, sequence, memory or timing.
+- **Fold**: a test year, 2022 to 2026 (2026 ends 2026-03-31), with fit, tune and calibration windows before it.
+- **Hold-out**: 2026-04-01 to 2026-09-03, blind until a release tests on it once.
+- **Promotion gates**: support, positive lower bound, Holm p ≤ 0.05, positive blocks, no cost-stress reversal.
+- **Retention set**: every branch and candidate with a status and a first failure reason.
+- **Receipt**: the evidence bundle a task ends with. **Result card**: the judgement a task ends with.
+- **Source read**: an author's own rule for context, location or entry; the baseline a model must beat.
