@@ -289,7 +289,9 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
     B02_VERSION,
     FixtureMarket,
     Q as B02_Q,
+    account_day_for_example,
     as_balance,
+    bar_complete,
     bars_upto,
     cascade_stages,
     combine_verdict,
@@ -297,11 +299,16 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
     episode_doc,
     export_rules,
     first_touch,
+    first_true_break,
     fixtures,
     market_at,
     market_bars,
+    market_day,
+    outside_native_tape,
     parse_rec,
     replay_match,
+    replay_unavailable,
+    retest_held,
     stage_from,
     window_doc,
 )
@@ -441,10 +448,16 @@ def htf_control_direction(market, balance, decision_at):
     fx = fixtures(market).get("htf_control")
     if fx in {"up", "down"}:
         return fx
-    if balance is None:
+    if balance is None or decision_at is None:
         return None
-    start = int(balance.get("start") or getattr(market, "start", 0))
-    rows = bars_upto(market_bars(market, start, decision_at), decision_at)
+    session_start = int(getattr(market, "start", 0) or 0)
+    bal_start = int(balance.get("start") or session_start)
+    # HistoricalFeatures.bars returns [] when end <= start. A fitted balance
+    # can start after the trigger; never invert the window (repair 2026-09-15).
+    win_start = session_start if bal_start >= int(decision_at) else min(bal_start, int(decision_at))
+    rows = bars_upto(market_bars(market, win_start, decision_at), decision_at)
+    if not rows:
+        rows = bars_upto(market_bars(market, session_start, decision_at), decision_at)
     if not rows or rows[-1].get("C") is None:
         return None
     mid = (dec(balance["low"]) + dec(balance["high"])) / 2
@@ -456,10 +469,19 @@ def htf_control_direction(market, balance, decision_at):
     return None
 
 
-def ltf_break_direction(trigger, balance):
-    if trigger is None or balance is None or trigger.get("C") is None:
+def ltf_break_direction(trigger, balance, boundary=None):
+    """LTF break of the traded level, not only the HTF box edges."""
+    if trigger is None or trigger.get("C") is None:
         return None
     close = dec(trigger["C"])
+    if boundary is not None:
+        if close > dec(boundary):
+            return "up"
+        if close < dec(boundary):
+            return "down"
+        return None
+    if balance is None:
+        return None
     if close > dec(balance["high"]):
         return "up"
     if close < dec(balance["low"]):
@@ -566,6 +588,27 @@ def _finish(family, branch, side, market, stages, values, decision_at, reference
     )
 
 
+def _break_levels(market, balance, side: str):
+    edge = dec(balance["high"]) if side == "long" else dec(balance["low"])
+    levels = [edge]
+    for raw in fixtures(market).get("intraday_levels") or []:
+        px = dec(raw)
+        if px not in levels:
+            levels.append(px)
+    extra = fixtures(market).get("break_level")
+    if extra is not None:
+        if isinstance(extra, (list, tuple)):
+            for item in extra:
+                px = dec(item)
+                if px not in levels:
+                    levels.append(px)
+        else:
+            px = dec(extra)
+            if px not in levels:
+                levels.append(px)
+    return levels
+
+
 def _scan_continuation_or_trapped(market, branch, balance, bars):
     episodes = []
     sides = ("long", "short") if branch != "trapped_buyers_retest" else ("short", "long")
@@ -601,112 +644,152 @@ def _scan_continuation_or_trapped(market, branch, balance, bars):
         },
         require=("levels_marked",),
     )
-    intraday = [dec(x) for x in fixtures(market).get("intraday_levels") or []]
     for side in sides:
         sg = 1 if side == "long" else -1
-        candidates = [dec(balance["high"]) if side == "long" else dec(balance["low"])]
-        for level in intraday:
-            if side == "long" and dec(balance["low"]) < level < dec(balance["high"]):
-                candidates.append(level)
-            if side == "short" and dec(balance["low"]) < level < dec(balance["high"]):
-                candidates.append(level)
-        trigger = None
-        boundary = candidates[0]
-        for row in bars:
-            if not (row.get("observed_complete") or row.get("complete")):
-                continue
-            if row.get("C") is None:
-                continue
-            for level in candidates:
-                if sg * (dec(row["C"]) - dec(level)) > 0:
-                    trigger = row
-                    boundary = level
-                    break
+        candidates = _break_levels(market, balance, side)
+        breaks = []
+        for level in candidates:
+            trigger = first_true_break(bars, level, side)
             if trigger is not None:
-                break
-        if trigger is None:
+                breaks.append((level, trigger))
+        if not breaks:
             continue
-        after = [r for r in bars if int(r["start"]) >= int(trigger["end"])]
-        retest = first_touch(after, dec(boundary) - B02_Q, dec(boundary) + B02_Q)
-        if branch == "trapped_buyers_retest":
-            extreme_side = "high" if side == "short" else "low"
-            extreme_px = balance["high"] if side == "short" else balance["low"]
-        else:
-            extreme_side = "high" if side == "long" else "low"
-            extreme_px = boundary
-        approach = _approach_into(bars, extreme_px, extreme_side, trigger["start"])
-        klass, ratio = classify_arrival(approach, balance.get("width") or (dec(balance["high"]) - dec(balance["low"])))
-        if branch == "continuation_retest":
-            arrival_ok = None if klass is None else klass == "slow"
-        else:
-            arrival_ok = None if klass is None else klass == "fast"
-        arrival_verdict = "unknown" if arrival_ok is None else ("pass" if arrival_ok else "fail")
-        ltf_dir = ltf_break_direction(trigger, balance)
-        htf_dir = htf_control_direction(market, balance, int(trigger.get("known_at") or trigger["end"]))
-        if ltf_dir is None or htf_dir is None:
-            align_verdict = "unknown"
-            align_ok = None
-        else:
-            align_ok = htf_dir == ltf_dir
-            align_verdict = "pass" if align_ok else "fail"
-        confirm_at = int(retest.get("known_at") or retest["end"]) if retest else int(trigger.get("known_at") or trigger["end"])
-        beyond = sg * (dec(trigger["C"]) - dec(boundary)) > 0
-        trig_stage = stage_from(
-            "trigger",
-            int(trigger.get("known_at") or trigger["end"]),
-            {"break_level": str(boundary), "close": str(trigger["C"]), "beyond_boundary": beyond},
-            require=("beyond_boundary",),
-        )
-        conf_operands = {
-            "arrival": klass,
-            "arrival_ratio": str(ratio) if ratio is not None else None,
-            "arrival_ok": arrival_ok,
-            "retest": True if retest else False,
-            "htf_control": htf_dir,
-            "ltf_break": ltf_dir,
-            "alignment_ok": align_ok,
-        }
-        conf = stage_from("confirmation", confirm_at, conf_operands, require=("arrival_ok", "alignment_ok", "retest"))
-        entry = dec(retest["C"]) if retest and retest.get("C") is not None else dec(trigger["C"])
-        stop = dec(balance["low"]) - B02_Q if side == "long" else dec(balance["high"]) + B02_Q
-        shape = (context.get("operands") or {}).get("shape")
-        if shape == "double":
-            selector, target = opposite_shelf_near_edge(profile, side, balance["low"], balance["high"])
-        else:
-            selector = "VAH" if side == "long" else "VAL"
-            target = dec(balance["high"]) if side == "long" else dec(balance["low"])
-        risk_defined = entry is not None and stop is not None and (entry - stop) * sg > 0
-        risk = stage_from("risk", confirm_at, {"entry": str(entry), "stop": str(stop), "risk_defined": risk_defined}, require=("risk_defined",))
-        distance = abs(dec(target) - entry) if target is not None else None
-        asia = int(trigger["start"]) < market_at(market, "09:30") if getattr(market, "day", None) is not None else False
-        obj = stage_from(
-            "objective",
-            confirm_at,
-            {
-                "target": str(target) if target is not None else None,
+        breaks.sort(key=lambda item: int(item[1].get("start") or 0))
+        if not fixtures(market).get("intraday_levels") and not fixtures(market).get("break_level"):
+            breaks = breaks[:1]
+        for boundary, trigger in breaks:
+            after = [r for r in bars if int(r["start"]) >= int(trigger["end"])]
+            retest = first_touch(after, dec(boundary) - B02_Q, dec(boundary) + B02_Q)
+            if branch == "trapped_buyers_retest":
+                extreme_side = "high" if side == "short" else "low"
+                extreme_px = balance["high"] if side == "short" else balance["low"]
+            else:
+                extreme_side = "high" if side == "long" else "low"
+                extreme_px = boundary
+            approach = _approach_into(bars, extreme_px, extreme_side, trigger["start"])
+            klass, ratio = classify_arrival(approach, balance.get("width") or (dec(balance["high"]) - dec(balance["low"])))
+            if branch == "continuation_retest":
+                arrival_ok = None if klass is None else klass == "slow"
+            else:
+                arrival_ok = None if klass is None else klass == "fast"
+            ltf_dir = ltf_break_direction(trigger, balance, boundary)
+            htf_dir = htf_control_direction(market, balance, int(trigger.get("known_at") or trigger["end"]))
+            if ltf_dir is None or htf_dir is None:
+                align_ok = None
+            else:
+                align_ok = htf_dir == ltf_dir
+            confirm_at = int(retest.get("known_at") or retest["end"]) if retest else None
+            held = None
+            if retest is not None:
+                held = retest_held(after, retest, boundary, side)
+            trap_delta = None
+            if branch == "trapped_buyers_retest":
+                deltas = [r.get("delta") for r in approach if r.get("delta") is not None]
+                if not deltas:
+                    trap_delta = None
+                elif side == "short":
+                    trap_delta = sum(dec(d) for d in deltas) > 0
+                else:
+                    trap_delta = sum(dec(d) for d in deltas) < 0
+            beyond = sg * (dec(trigger["C"]) - dec(boundary)) > 0
+            origin_then_through = True
+            trig_stage = stage_from(
+                "trigger",
+                int(trigger.get("known_at") or trigger["end"]),
+                {
+                    "break_level": str(boundary),
+                    "close": str(trigger["C"]),
+                    "beyond_boundary": beyond,
+                    "true_break": origin_then_through,
+                },
+                require=("beyond_boundary", "true_break"),
+            )
+            retest_aggression = None
+            if retest is not None and retest.get("delta") is not None:
+                retest_aggression = sg * dec(retest["delta"]) > 0
+            conf_operands = {
+                "arrival": klass,
+                "arrival_ratio": str(ratio) if ratio is not None else None,
+                "arrival_ok": arrival_ok,
+                "retest": True if retest else False,
+                "confirm_at": confirm_at,
+                "held_retest": held,
+                "htf_control": htf_dir,
+                "ltf_break": ltf_dir,
+                "alignment_ok": align_ok,
+                "retest_aggression": retest_aggression,
+            }
+            if branch == "trapped_buyers_retest":
+                conf_operands["trap_delta_at_extreme"] = trap_delta
+                require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
+            else:
+                require = ("confirm_at", "held_retest", "arrival_ok", "alignment_ok")
+            conf = stage_from("confirmation", confirm_at, conf_operands, require=require)
+            entry = dec(retest["C"]) if retest and retest.get("C") is not None else None
+            stop = dec(balance["low"]) - B02_Q if side == "long" else dec(balance["high"]) + B02_Q
+            shape = (context.get("operands") or {}).get("shape")
+            if shape == "double":
+                selector, target = opposite_shelf_near_edge(profile, side, balance["low"], balance["high"])
+            else:
+                selector = "VAH" if side == "long" else "VAL"
+                target = dec(balance["high"]) if side == "long" else dec(balance["low"])
+            risk_defined = entry is not None and stop is not None and (entry - stop) * sg > 0
+            risk = stage_from(
+                "risk",
+                confirm_at,
+                {"entry": str(entry) if entry is not None else None, "stop": str(stop), "risk_defined": risk_defined},
+                require=("risk_defined",),
+            )
+            distance = abs(dec(target) - entry) if target is not None and entry is not None else None
+            asia = int(trigger["start"]) < market_at(market, "09:30") if getattr(market, "day", None) is not None else False
+            obj = stage_from(
+                "objective",
+                confirm_at,
+                {
+                    "target": str(target) if target is not None else None,
+                    "selector": selector,
+                    "target_fixed": target is not None,
+                    "distance": str(distance) if distance is not None else None,
+                    "asia_range_claim": "150-160",
+                    "inside_asia_usual_range": bool(_D("150") <= distance <= _D("160")) if asia and distance is not None else None,
+                },
+                require=("target_fixed",),
+            )
+            stages = [context, ref_stage, loc, trig_stage, conf, risk, obj]
+            values = {
+                "arrival_read": klass,
+                "profile_allows_trade": context["verdict"] == "pass",
+                "profile_shape": (context.get("operands") or {}).get("shape"),
+                "alignment_ok": align_ok,
+                "confirm_at": confirm_at,
+                "ltf_balance": {"low": str(balance["low"]), "high": str(balance["high"])},
+                "same_boundary_retest": True if retest else False,
+                "held_retest": held,
+                "asia_session": asia,
+                "target_selector": selector,
+                "true_break": True,
+            }
+            geometry = {
+                "entry": entry,
+                "stop": stop,
+                "target": target,
+                "break_level": boundary,
+                "ltf_balance": balance,
+                "htf_profile": profile,
                 "selector": selector,
-                "target_fixed": target is not None,
-                "distance": str(distance) if distance is not None else None,
-                "asia_range_claim": "150-160",
-                "inside_asia_usual_range": bool(_D("150") <= distance <= _D("160")) if asia and distance is not None else None,
-            },
-            require=("target_fixed",),
-        )
-        stages = [context, ref_stage, loc, trig_stage, conf, risk, obj]
-        values = {
-            "arrival_read": klass,
-            "profile_allows_trade": context["verdict"] == "pass",
-            "profile_shape": (context.get("operands") or {}).get("shape"),
-            "alignment_ok": align_ok,
-            "confirm_at": confirm_at,
-            "ltf_balance": {"low": str(balance["low"]), "high": str(balance["high"])},
-            "same_boundary_retest": True if retest else False,
-            "asia_session": asia,
-            "target_selector": selector,
-        }
-        geometry = {"entry": entry, "stop": stop, "target": target, "break_level": boundary, "ltf_balance": balance, "htf_profile": profile, "selector": selector}
-        episodes.append(_finish(FAMILY, branch, side, market, stages, values, confirm_at, balance, trigger, geometry))
+            }
+            decision = confirm_at if confirm_at is not None else int(trigger.get("known_at") or trigger["end"])
+            episodes.append(_finish(FAMILY, branch, side, market, stages, values, decision, balance, trigger, geometry))
     return episodes
+
+
+def _prior_va_distinct(balance, va_lo, va_hi, side: str) -> bool | None:
+    """AMTL p.8 previous area of fair value, not an overlap with the current box."""
+    if va_lo is None or va_hi is None or balance is None:
+        return None
+    if side == "short":
+        return dec(va_hi) < dec(balance["low"])
+    return dec(va_lo) > dec(balance["high"])
 
 
 def _scan_failed_auction(market, balance, bars):
@@ -724,7 +807,13 @@ def _scan_failed_auction(market, balance, bars):
         pass
     if fixtures(market).get("prior_va"):
         prior = fixtures(market)["prior_va"]
-    context = _stage_profile(fixtures(market).get("profile") or {"poc": (dec(balance["low"]) + dec(balance["high"])) / 2, "rows": []}, balance)
+    profile = fixtures(market).get("profile")
+    if profile is None:
+        try:
+            profile = market.profile(balance.get("start") or market.start, balance.get("known_at") or market.end, ".68")
+        except Exception:
+            profile = None
+    context = _stage_profile(profile, balance)
     ref_stage = stage_from(
         "reference",
         balance.get("known_at"),
@@ -749,20 +838,39 @@ def _scan_failed_auction(market, balance, bars):
             episodes.append(_finish(FAMILY, "failed_auction_return", side, market, stages, {"older_auction_gate": False}, balance.get("known_at"), balance, {}, {}))
         return episodes
     for side in ("long", "short"):
+        distinct = _prior_va_distinct(balance, va_lo, va_hi, side)
+        if distinct is False:
+            continue
         drive = None
+        left_original = False
         for row in bars:
-            if side == "short" and row.get("L") is not None and dec(row["L"]) <= dec(va_hi) and dec(row["L"]) < dec(balance["low"]):
-                drive = row
-                break
-            if side == "long" and row.get("H") is not None and dec(row["H"]) >= dec(va_lo) and dec(row["H"]) > dec(balance["high"]):
+            if row.get("C") is None:
+                continue
+            close = dec(row["C"])
+            if not left_original:
+                if side == "short" and close < dec(balance["low"]):
+                    left_original = True
+                elif side == "long" and close > dec(balance["high"]):
+                    left_original = True
+                continue
+            # AMTL p.8: after leaving current value, a close inside the previous area.
+            if dec(va_lo) <= close <= dec(va_hi):
                 drive = row
                 break
         if drive is None:
             continue
-        after = [r for r in bars if int(r["start"]) >= int(drive["end"])]
+        after = [r for r in bars if int(r["start"]) >= int(drive["start"])]
+        inside_va = [
+            r
+            for r in after
+            if r.get("C") is not None and dec(va_lo) <= dec(r["C"]) <= dec(va_hi)
+        ]
+        attempted_acceptance = len(inside_va) >= 2
         rejection = None
         for row in after:
             if row.get("C") is None:
+                continue
+            if int(row["start"]) < int(drive["end"]):
                 continue
             if side == "short" and dec(row["C"]) > dec(va_hi):
                 rejection = row
@@ -780,23 +888,45 @@ def _scan_failed_auction(market, balance, bars):
             if dec(balance["low"]) < dec(row["C"]) < dec(balance["high"]):
                 ret = row
                 break
+        return_held = False
+        if ret is not None:
+            held_n = 0
+            deadline = int(ret.get("end") or 0) + 15 * 60_000_000_000
+            for row in bars:
+                if int(row["start"]) < int(ret["end"]):
+                    continue
+                known = int(row.get("known_at") or row["end"])
+                if known > deadline:
+                    break
+                if row.get("C") is None:
+                    continue
+                if dec(balance["low"]) < dec(row["C"]) < dec(balance["high"]):
+                    held_n += 1
+                else:
+                    held_n = 0
+                    break
+            return_held = held_n >= 5
+        confirm_at = int(ret.get("known_at") or ret["end"]) if ret and return_held else None
         trig = stage_from(
             "trigger",
             int(drive.get("known_at") or drive["end"]),
-            {"drive": True, "drive_observed": drive is not None},
-            require=("drive_observed",),
+            {"drive": True, "drive_observed": True, "prior_va_distinct": distinct},
+            require=("drive_observed", "prior_va_distinct"),
         )
         conf = stage_from(
             "confirmation",
-            int((ret or rejection or drive).get("known_at") or (ret or rejection or drive)["end"]),
+            confirm_at,
             {
                 "rejection": True if rejection else False,
                 "return": True if ret else False,
+                "return_held": return_held,
+                "attempted_acceptance": attempted_acceptance,
+                "confirm_at": confirm_at,
                 "older_auction_gate": False,
             },
-            require=("rejection", "return"),
+            require=("attempted_acceptance", "rejection", "return", "return_held", "confirm_at"),
         )
-        decision = int((ret or rejection or drive).get("known_at") or (ret or rejection or drive)["end"])
+        decision = confirm_at if confirm_at is not None else int((rejection or drive).get("known_at") or drive["end"])
         stages = [context, ref_stage, loc, trig, conf]
         episodes.append(
             _finish(
@@ -805,11 +935,11 @@ def _scan_failed_auction(market, balance, bars):
                 side,
                 market,
                 stages,
-                {"older_auction_gate": False, "confirm_at": decision, "ltf_balance": {"low": str(balance["low"]), "high": str(balance["high"])}},
+                {"older_auction_gate": False, "confirm_at": confirm_at, "ltf_balance": {"low": str(balance["low"]), "high": str(balance["high"])}},
                 decision,
                 balance,
                 drive,
-                {"entry": dec((ret or drive)["C"]) if (ret or drive).get("C") is not None else None},
+                {"entry": dec(ret["C"]) if ret and ret.get("C") is not None else None},
             )
         )
     return episodes
@@ -840,13 +970,38 @@ def _scan_poc(market, balance, bars):
     if poc is None:
         episodes.append(_finish(FAMILY, "poc_traversal", "long", market, [context, ref_stage, loc], {"confirm_at": None, "ltf_balance": balance}, balance.get("known_at"), balance, {}, {}))
         return episodes
+    fa_eps = _scan_failed_auction(market, balance, bars)
+    prior_va_known = False
+    ret_times = []
+    for ep in fa_eps:
+        for item in ep.get("stages") or []:
+            ops = item.get("operands") or {}
+            if item.get("stage") == "location" and ops.get("prior_va_known"):
+                prior_va_known = True
+            if item.get("stage") == "confirmation" and ops.get("return") and item.get("at_ns"):
+                ret_times.append(int(item["at_ns"]))
     inside = [r for r in bars if r.get("C") is not None and dec(balance["low"]) <= dec(r["C"]) <= dec(balance["high"])]
+    if ret_times:
+        start_after = min(ret_times)
+        inside = [r for r in inside if int(r["start"]) >= start_after]
+    elif prior_va_known:
+        decision = int(inside[-1].get("known_at") or inside[-1]["end"]) if inside else balance.get("known_at")
+        stages = [
+            context,
+            ref_stage,
+            loc,
+            stage_from("trigger", decision, {"poc_push": False, "failed_auction_return": False}, require=("failed_auction_return",)),
+        ]
+        episodes.append(_finish(FAMILY, "poc_traversal", "long", market, stages, {"confirm_at": None, "ltf_balance": balance}, decision, balance, {}, {"poc": poc}))
+        return episodes
     fail_holds = 0
     last_fail = None
     push = None
+    left_poc = False
     hold = None
+    held = None
     for row in inside:
-        if not (row.get("observed_complete") or row.get("complete")):
+        if not bar_complete(row):
             continue
         low_px = _bar_px(row, "L")
         high_px = _bar_px(row, "H")
@@ -854,12 +1009,13 @@ def _scan_poc(market, balance, bars):
         open_px = _bar_px(row, "O")
         delta_px = _bar_px(row, "delta")
         tagged = low_px is not None and high_px is not None and low_px <= dec(poc) <= high_px
-        if tagged and close_px is not None and abs(close_px - dec(poc)) <= B02_Q * 2:
+        # Repeated failure to hold: wick through POC and close back at or below it. AMTL p.9.
+        if tagged and high_px is not None and close_px is not None and high_px > dec(poc) and close_px <= dec(poc):
             fail_holds += 1
             last_fail = row
-        # Close-above-open push requires a numeric open; missing O is not that tell.
         if (
-            delta_px is not None
+            push is None
+            and delta_px is not None
             and close_px is not None
             and open_px is not None
             and close_px > dec(poc)
@@ -868,6 +1024,9 @@ def _scan_poc(market, balance, bars):
         ):
             push = row
             after = [r for r in inside if int(r["start"]) >= int(row["end"])]
+            left_poc = any(
+                r.get("C") is not None and dec(r["C"]) > dec(poc) + B02_Q * 2 for r in after[:8]
+            )
             hold = first_touch(after, dec(poc) - B02_Q, dec(poc) + B02_Q)
             if hold is not None:
                 held = True
@@ -875,33 +1034,39 @@ def _scan_poc(market, balance, bars):
                     if r.get("C") is not None and dec(r["C"]) < dec(poc):
                         held = False
                         break
-                if not held:
-                    hold = None
-            break
-    if push is not None and hold is not None:
+            else:
+                held = False
+    if push is not None:
         side = "long"
         target = balance["high"]
         tell = "aggressive_through_held_retest"
-        decision = int(hold.get("known_at") or hold["end"])
-        conf = stage_from(
-            "confirmation",
-            decision,
-            {"tell": tell, "held_retest": True, "target": "VAH"},
-            require=("held_retest",),
-        )
+        confirm_at = int(hold.get("known_at") or hold["end"]) if hold else None
         trig = stage_from(
             "trigger",
             int(push.get("known_at") or push["end"]),
-            {"poc_push": True},
+            {"poc_push": True, "left_poc": bool(left_poc)},
             require=("poc_push",),
+        )
+        conf = stage_from(
+            "confirmation",
+            confirm_at,
+            {
+                "tell": tell,
+                "held_retest": bool(held),
+                "confirm_at": confirm_at,
+                "left_poc": bool(left_poc),
+                "target": "VAH",
+            },
+            require=("held_retest", "confirm_at", "left_poc"),
         )
         obj = stage_from(
             "objective",
-            decision,
+            confirm_at,
             {"target": str(target), "selector": "VAH", "target_fixed": target is not None},
             require=("target_fixed",),
         )
         stages = [context, ref_stage, loc, trig, conf, obj]
+        decision = confirm_at if confirm_at is not None else int(push.get("known_at") or push["end"])
         episodes.append(
             _finish(
                 FAMILY,
@@ -909,11 +1074,11 @@ def _scan_poc(market, balance, bars):
                 side,
                 market,
                 stages,
-                {"poc_tell": tell, "confirm_at": decision, "ltf_balance": balance, "target_edge": "VAH"},
+                {"poc_tell": tell, "confirm_at": confirm_at, "ltf_balance": balance, "target_edge": "VAH" if held else None, "held_retest": bool(held)},
                 decision,
                 balance,
                 push,
-                {"entry": dec(hold.get("C") or push["C"]), "target": dec(target), "poc": poc},
+                {"entry": dec((hold or push).get("C") or push["C"]), "target": dec(target), "poc": poc},
             )
         )
         return episodes
@@ -925,14 +1090,14 @@ def _scan_poc(market, balance, bars):
         trig = stage_from(
             "trigger",
             decision,
-            {"poc_failures": fail_holds, "repeated_failure": fail_holds >= 2},
+            {"poc_failures": fail_holds, "repeated_failure": True},
             require=("repeated_failure",),
         )
         conf = stage_from(
             "confirmation",
             decision,
-            {"tell": tell, "repeated_failure": fail_holds >= 2, "target": "VAL"},
-            require=("repeated_failure",),
+            {"tell": tell, "repeated_failure": True, "confirm_at": decision, "target": "VAL"},
+            require=("repeated_failure", "confirm_at"),
         )
         obj = stage_from(
             "objective",
@@ -963,7 +1128,7 @@ def _scan_poc(market, balance, bars):
             loc,
             stage_from("trigger", decision, {"poc_push": False, "poc_failures": fail_holds}, require=("poc_push",)),
         ]
-        episodes.append(_finish(FAMILY, "poc_traversal", "long", market, stages, {"confirm_at": decision, "ltf_balance": balance}, decision, balance, {}, {"poc": poc}))
+        episodes.append(_finish(FAMILY, "poc_traversal", "long", market, stages, {"confirm_at": None, "ltf_balance": balance}, decision, balance, {}, {"poc": poc}))
     return episodes
 
 
@@ -997,17 +1162,19 @@ def scan_b02(market, rec) -> dict[str, Any]:
 
 
 def replay_example(market, example) -> dict[str, Any]:
+    if outside_native_tape(example or {}):
+        return replay_unavailable(example, "date outside the tape")
+    wanted = account_day_for_example(example or {})
+    need_load = wanted and (market is None or str(market_day(market)) != wanted)
+    if need_load:
+        try:
+            from trading_research.research.rule_discovery.source_adapters.common import load_source_market
+
+            market = load_source_market(wanted)
+        except Exception:
+            return replay_unavailable(example, "date outside the tape")
     if market is None:
-        return {
-            "detected": None,
-            "branch": None,
-            "our_side": None,
-            "our_level": None,
-            "our_entry_ns": None,
-            "author_level": None,
-            "author_side": None,
-            "divergence": "date outside tape",
-        }
+        return replay_unavailable(example, "date outside the tape")
     extra = {}
     levels = (example or {}).get("levels") or {}
     if levels.get("balance"):

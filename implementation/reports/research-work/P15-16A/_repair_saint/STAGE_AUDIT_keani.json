@@ -1,0 +1,69 @@
+{
+  "family": "KEANI-OPEN-ABOVE-VALUE",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "branches": {
+    "source_long": {
+      "context": {
+        "measured": true,
+        "operands": [
+          {"name": "a_low", "source": "market_view", "primitive": "range(09:30,10:00) Keani-A", "predicate": "AVG p.21 entire A period clear of prior VAH; SD11 equality fails", "verdict": "fail unless a_low > prior_vah"},
+          {"name": "prior_vah", "source": "primitive", "primitive": "prior RTH 09:30-16:00 profile 70% contiguous POC-outward", "predicate": "empirical_registry complete_a_above_prior_value", "verdict": "unknown if missing"},
+          {"name": "value_fraction", "source": "constant", "predicate": "0.70 ruled", "verdict": "label"}
+        ],
+        "verdict_depends_on": ["fully_above"]
+      },
+      "reference": {
+        "measured": true,
+        "operands": [
+          {"name": "prior_vah", "source": "primitive", "predicate": "yesterday's value area high", "verdict": "unknown if missing"}
+        ],
+        "verdict_depends_on": ["prior_vah"]
+      },
+      "location": {
+        "measured": true,
+        "operands": [
+          {"name": "rejection", "source": "market_view", "predicate": "AVG p.21 POC or previous VAH (OR); p.22 AND unresolved SD11", "verdict": "fail if no wick into developing POC or prior VAH with close back above"}
+        ],
+        "verdict_depends_on": ["rejection"]
+      },
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "breakout", "source": "market_view", "primitive": "O109 buy run through developing VAH", "predicate": "AVG p.21 aggressive buying imbalances doing the breaking", "verdict": "fail if no complete close through developing VAH with a buy run"}
+        ],
+        "verdict_depends_on": ["breakout"]
+      },
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "retest", "source": "market_view", "predicate": "AVG p.21 price comes back to those imbalances", "verdict": "fail if no later touch of the imbalance band"},
+          {"name": "three_tick_reward", "source": "market_view", "predicate": "AVG p.24 absorption needs the three-tick reward", "verdict": "fail if the band is not defended with 3 ticks of reward"}
+        ],
+        "verdict_depends_on": ["retest", "three_tick_reward"],
+        "unobservable_operand": "DOM at the retest (AVG p.21, p.25 Location/Pacing/Digits)",
+        "unobservable_reason": "Phase 1.5 has no DOM stream. Confirmation uses the printed 3-tick reward stand-in. Missing DOM is named here and does not stamp pass by itself."
+      },
+      "risk": {
+        "measured": true,
+        "operands": [
+          {"name": "stop", "source": "market_view", "predicate": "below the imbalance band", "verdict": "unknown if band missing"}
+        ],
+        "verdict_depends_on": ["stop"]
+      },
+      "objective": {
+        "measured": true,
+        "operands": [
+          {"name": "target", "source": "primitive", "predicate": "F16 nearest of prior-day high, prior VAH, weekly high above; never A-high plus A-width", "verdict": "unknown if no HTF level above entry"}
+        ],
+        "verdict_depends_on": ["target"]
+      },
+      "management": {
+        "measured": false,
+        "omitted": true,
+        "unobservable_operand": "DOM pacing/digits and time-of-day discretion after entry",
+        "reason": "AVG p.25 DOM protocol is after the thesis; no dated ticket exists (RR Keani replay set empty)"
+      }
+    }
+  }
+}

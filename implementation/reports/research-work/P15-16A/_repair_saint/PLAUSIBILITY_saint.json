@@ -1,0 +1,1165 @@
+{
+  "family": "SAINT-AMT",
+  "slice_dates": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ],
+  "sessions_loaded": 15,
+  "load_errors": {},
+  "branches": {
+    "continuation_retest": {
+      "episodes": 30,
+      "pass": 0,
+      "fail": 28,
+      "unknown": 2,
+      "stages": {
+        "context": {
+          "pass": 28,
+          "fail": 2,
+          "unknown": 0,
+          "omitted": 0
+        },
+        "reference": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "location": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "trigger": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "confirmation": {
+          "pass": 0,
+          "fail": 26,
+          "unknown": 2,
+          "omitted": 2
+        },
+        "risk": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 30
+        },
+        "objective": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 30
+        },
+        "management": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 30
+        }
+      },
+      "pass_rate": 0.0,
+      "episodes_per_session": 2.0,
+      "sessions": 15,
+      "sessions_with_pass": 0,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          3
+        ],
+        "pass_rate": [
+          0.0,
+          0.35
+        ],
+        "source_claim": "unstated",
+        "reasoning": "RTVP p.6 prefers continuation (break, held retest, continue) and rarely trades reversals. No per-session count is printed. Bound by qualifying HTF-edge true breaks with a held retest, not every close beyond the box.",
+        "pages": "RTVP p.6; WIC pp.5,8"
+      },
+      "in_bound": true,
+      "report_note": "SAINT-AMT/continuation_retest: episodes=30 pass=0 fail=28 unknown=2 pass_rate=0.0 bound={'episodes_per_session': [0, 3], 'pass_rate': [0.0, 0.35], 'source_claim': 'unstated', 'reasoning': 'RTVP p.6 prefers continuation (break, held retest, continue) and rarely trades reversals. No per-session count is printed. Bound by qualifying HTF-edge true breaks with a held retest, not every close beyond the box.', 'pages': 'RTVP p.6; WIC pp.5,8'}. Confirmation requires confirm_at (F10), held_retest (WIC p.8), arrival_ok (WIC p.4) and alignment_ok (WIC pp.5-10). confirmation={'pass': 0, 'fail': 26, 'unknown': 2, 'omitted': 2} trigger={'pass': 28, 'fail': 0, 'unknown': 0, 'omitted': 2}. Root operand on the first B0.2 run was htf_control=None from an inverted HTF window (balance.start after trigger). The repair reads bars from market.start when the window would invert.",
+      "time_of_entry_et_30m": {
+        "01:00": 1,
+        "01:30": 1,
+        "03:00": 1,
+        "03:30": 1,
+        "04:00": 2,
+        "05:00": 1,
+        "05:30": 1,
+        "06:00": 2,
+        "06:30": 1,
+        "07:00": 4,
+        "08:00": 1,
+        "09:30": 1,
+        "18:00": 7,
+        "18:30": 2,
+        "19:00": 1,
+        "20:00": 1,
+        "20:30": 1,
+        "22:00": 1
+      },
+      "operand_values": {
+        "context": {
+          "shape": [
+            "\"P\"",
+            "\"balanced\"",
+            "\"double\"",
+            "\"trending\""
+          ],
+          "allows_trade": [
+            "false",
+            "true"
+          ],
+          "mid_frac": [
+            "\"0.3825360019526482792287039297\"",
+            "\"0.6232422822046225957653143688\"",
+            "\"0.6342003320420586607636967349\"",
+            "\"0.6736800882907899889636512514\"",
+            "\"0.6972880527730271194722697288\"",
+            "\"0.7026293823038397328881469115\"",
+            "\"0.7029958469416555784040966090\"",
+            "\"0.7096774193548387096774193548\"",
+            "\"0.7101167315175097276264591440\"",
+            "\"0.7146816276869000946329593078\"",
+            "\"0.7179540277490163594947194036\"",
+            "\"0.7304953794879563702469322830\""
+          ],
+          "va_span": [
+            "\"1.025\""
+          ],
+          "poc_pos": [
+            "\"0.345\"",
+            "\"0.4562043795620437956204379562\"",
+            "\"0.4618473895582329317269076305\"",
+            "\"0.4677419354838709677419354839\"",
+            "\"0.4791666666666666666666666667\"",
+            "\"0.4905660377358490566037735849\"",
+            "\"0.5172413793103448275862068966\"",
+            "\"0.5405405405405405405405405405\"",
+            "\"0.6\"",
+            "\"0.6190476190476190476190476190\"",
+            "\"0.6224899598393574297188755020\"",
+            "\"0.6478873239436619718309859155\""
+          ],
+          "lower_shelf": [
+            "\"11048.5\"",
+            "\"15214.25\""
+          ],
+          "upper_shelf": [
+            "\"11060.0\"",
+            "\"15216.75\""
+          ]
+        },
+        "reference": {
+          "low": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"12662.0\"",
+            "\"13732.25\"",
+            "\"15206.75\"",
+            "\"15870.0\"",
+            "\"16427.75\"",
+            "\"18132.75\"",
+            "\"20081.75\"",
+            "\"21201.25\"",
+            "\"21404.25\"",
+            "\"25707.5\""
+          ],
+          "high": [
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12686.0\"",
+            "\"13748.0\"",
+            "\"15221.25\"",
+            "\"15879.25\"",
+            "\"16443.25\"",
+            "\"18182.75\"",
+            "\"20112.5\"",
+            "\"21263.5\"",
+            "\"21466.5\"",
+            "\"25742.75\""
+          ],
+          "fit": [
+            "\"od\""
+          ],
+          "balance_known": [
+            "true"
+          ]
+        },
+        "location": {
+          "session_open": [
+            "\"11034.5\"",
+            "\"11122.5\"",
+            "\"12662.5\"",
+            "\"13660.5\"",
+            "\"15187.0\"",
+            "\"15885.25\"",
+            "\"16356.0\"",
+            "\"18246.0\"",
+            "\"20071.0\"",
+            "\"21269.0\"",
+            "\"21303.75\"",
+            "\"25478.5\""
+          ],
+          "balance_low": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"12662.0\"",
+            "\"13732.25\"",
+            "\"15206.75\"",
+            "\"15870.0\"",
+            "\"16427.75\"",
+            "\"18132.75\"",
+            "\"20081.75\"",
+            "\"21201.25\"",
+            "\"21404.25\"",
+            "\"25707.5\""
+          ],
+          "balance_high": [
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12686.0\"",
+            "\"13748.0\"",
+            "\"15221.25\"",
+            "\"15879.25\"",
+            "\"16443.25\"",
+            "\"18182.75\"",
+            "\"20112.5\"",
+            "\"21263.5\"",
+            "\"21466.5\"",
+            "\"25742.75\""
+          ],
+          "levels_marked": [
+            "true"
+          ]
+        },
+        "trigger": {
+          "break_level": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12662.0\"",
+            "\"12686.0\"",
+            "\"13732.25\"",
+            "\"13748.0\"",
+            "\"15206.75\"",
+            "\"15221.25\"",
+            "\"15870.0\"",
+            "\"15879.25\""
+          ],
+          "close": [
+            "\"11037.25\"",
+            "\"11046.75\"",
+            "\"11067.25\"",
+            "\"11124.25\"",
+            "\"12661.5\"",
+            "\"12686.5\"",
+            "\"13731.75\"",
+            "\"13753.0\"",
+            "\"15205.5\"",
+            "\"15222.25\"",
+            "\"15868.5\"",
+            "\"15879.75\""
+          ],
+          "beyond_boundary": [
+            "true"
+          ],
+          "true_break": [
+            "true"
+          ]
+        },
+        "confirmation": {
+          "arrival": [
+            "\"fast\"",
+            "\"slow\"",
+            "null"
+          ],
+          "arrival_ratio": [
+            "\"0.008032128514056224899598393574\"",
+            "\"0.025\"",
+            "\"0.03396226415094339622641509434\"",
+            "\"0.03448275862068965517241379310\"",
+            "\"0.03666666666666666666666666666\"",
+            "\"0.03809523809523809523809523810\"",
+            "\"0.05255474452554744525547445255\"",
+            "\"0.05291005291005291005291005291\"",
+            "\"0.05691056910569105691056910569\"",
+            "\"0.06451612903225806451612903226\"",
+            "\"0.06827309236947791164658634538\"",
+            "\"0.07389558232931726907630522088\""
+          ],
+          "arrival_ok": [
+            "false",
+            "null",
+            "true"
+          ],
+          "retest": [
+            "true"
+          ],
+          "confirm_at": [
+            "1590962580000000000",
+            "1590972360000000000",
+            "1604271900000000000",
+            "1604272140000000000",
+            "1622545320000000000",
+            "1622546880000000000",
+            "1635718140000000000",
+            "1635721620000000000",
+            "1641207660000000000",
+            "1641208320000000000",
+            "1654035240000000000",
+            "1654037340000000000"
+          ],
+          "held_retest": [
+            "false",
+            "true"
+          ],
+          "htf_control": [
+            "\"down\"",
+            "\"up\""
+          ],
+          "ltf_break": [
+            "\"down\"",
+            "\"up\""
+          ],
+          "alignment_ok": [
+            "true"
+          ],
+          "retest_aggression": [
+            "false",
+            "true"
+          ]
+        }
+      }
+    },
+    "trapped_buyers_retest": {
+      "episodes": 30,
+      "pass": 1,
+      "fail": 27,
+      "unknown": 2,
+      "stages": {
+        "context": {
+          "pass": 28,
+          "fail": 2,
+          "unknown": 0,
+          "omitted": 0
+        },
+        "reference": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "location": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "trigger": {
+          "pass": 28,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "confirmation": {
+          "pass": 1,
+          "fail": 25,
+          "unknown": 2,
+          "omitted": 2
+        },
+        "risk": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 29
+        },
+        "objective": {
+          "pass": 1,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 29
+        },
+        "management": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 30
+        }
+      },
+      "pass_rate": 0.03333333333333333,
+      "episodes_per_session": 2.0,
+      "sessions": 15,
+      "sessions_with_pass": 1,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "pass_rate": [
+          0.0,
+          0.25
+        ],
+        "source_claim": "unstated",
+        "reasoning": "TRAP is one worked Asia short with two prior NY failures and a single retest. Dossier S5 says those two sessions are this example, not a universal count. Bound by qualifying trap reads, not every fast arrival.",
+        "pages": "TRAP pp.3-9"
+      },
+      "in_bound": true,
+      "report_note": "SAINT-AMT/trapped_buyers_retest: episodes=30 pass=1 fail=27 unknown=2 pass_rate=0.03333333333333333 bound={'episodes_per_session': [0, 2], 'pass_rate': [0.0, 0.25], 'source_claim': 'unstated', 'reasoning': 'TRAP is one worked Asia short with two prior NY failures and a single retest. Dossier S5 says those two sessions are this example, not a universal count. Bound by qualifying trap reads, not every fast arrival.', 'pages': 'TRAP pp.3-9'}. Confirmation requires confirm_at (F10), held_retest (WIC p.8), arrival_ok (WIC p.4) and alignment_ok (WIC pp.5-10). confirmation={'pass': 1, 'fail': 25, 'unknown': 2, 'omitted': 2} trigger={'pass': 28, 'fail': 0, 'unknown': 0, 'omitted': 2}. Arrival must be fast (aggressive into the extreme, TRAP pp.4-5). Slow approaches fail arrival_ok; missing approach O/C is unknown, never pass.",
+      "time_of_entry_et_30m": {
+        "01:00": 1,
+        "01:30": 1,
+        "03:00": 1,
+        "03:30": 1,
+        "04:00": 2,
+        "05:00": 1,
+        "05:30": 1,
+        "06:00": 2,
+        "06:30": 1,
+        "07:00": 4,
+        "08:00": 1,
+        "09:30": 1,
+        "18:00": 7,
+        "18:30": 2,
+        "19:00": 1,
+        "20:00": 1,
+        "20:30": 1,
+        "22:00": 1
+      },
+      "operand_values": {
+        "context": {
+          "shape": [
+            "\"P\"",
+            "\"balanced\"",
+            "\"double\"",
+            "\"trending\""
+          ],
+          "allows_trade": [
+            "false",
+            "true"
+          ],
+          "mid_frac": [
+            "\"0.3825360019526482792287039297\"",
+            "\"0.6232422822046225957653143688\"",
+            "\"0.6342003320420586607636967349\"",
+            "\"0.6736800882907899889636512514\"",
+            "\"0.6972880527730271194722697288\"",
+            "\"0.7026293823038397328881469115\"",
+            "\"0.7029958469416555784040966090\"",
+            "\"0.7096774193548387096774193548\"",
+            "\"0.7101167315175097276264591440\"",
+            "\"0.7146816276869000946329593078\"",
+            "\"0.7179540277490163594947194036\"",
+            "\"0.7304953794879563702469322830\""
+          ],
+          "va_span": [
+            "\"1.025\""
+          ],
+          "poc_pos": [
+            "\"0.345\"",
+            "\"0.4562043795620437956204379562\"",
+            "\"0.4618473895582329317269076305\"",
+            "\"0.4677419354838709677419354839\"",
+            "\"0.4791666666666666666666666667\"",
+            "\"0.4905660377358490566037735849\"",
+            "\"0.5172413793103448275862068966\"",
+            "\"0.5405405405405405405405405405\"",
+            "\"0.6\"",
+            "\"0.6190476190476190476190476190\"",
+            "\"0.6224899598393574297188755020\"",
+            "\"0.6478873239436619718309859155\""
+          ],
+          "lower_shelf": [
+            "\"11048.5\"",
+            "\"15214.25\""
+          ],
+          "upper_shelf": [
+            "\"11060.0\"",
+            "\"15216.75\""
+          ]
+        },
+        "reference": {
+          "low": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"12662.0\"",
+            "\"13732.25\"",
+            "\"15206.75\"",
+            "\"15870.0\"",
+            "\"16427.75\"",
+            "\"18132.75\"",
+            "\"20081.75\"",
+            "\"21201.25\"",
+            "\"21404.25\"",
+            "\"25707.5\""
+          ],
+          "high": [
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12686.0\"",
+            "\"13748.0\"",
+            "\"15221.25\"",
+            "\"15879.25\"",
+            "\"16443.25\"",
+            "\"18182.75\"",
+            "\"20112.5\"",
+            "\"21263.5\"",
+            "\"21466.5\"",
+            "\"25742.75\""
+          ],
+          "fit": [
+            "\"od\""
+          ],
+          "balance_known": [
+            "true"
+          ]
+        },
+        "location": {
+          "session_open": [
+            "\"11034.5\"",
+            "\"11122.5\"",
+            "\"12662.5\"",
+            "\"13660.5\"",
+            "\"15187.0\"",
+            "\"15885.25\"",
+            "\"16356.0\"",
+            "\"18246.0\"",
+            "\"20071.0\"",
+            "\"21269.0\"",
+            "\"21303.75\"",
+            "\"25478.5\""
+          ],
+          "balance_low": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"12662.0\"",
+            "\"13732.25\"",
+            "\"15206.75\"",
+            "\"15870.0\"",
+            "\"16427.75\"",
+            "\"18132.75\"",
+            "\"20081.75\"",
+            "\"21201.25\"",
+            "\"21404.25\"",
+            "\"25707.5\""
+          ],
+          "balance_high": [
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12686.0\"",
+            "\"13748.0\"",
+            "\"15221.25\"",
+            "\"15879.25\"",
+            "\"16443.25\"",
+            "\"18182.75\"",
+            "\"20112.5\"",
+            "\"21263.5\"",
+            "\"21466.5\"",
+            "\"25742.75\""
+          ],
+          "levels_marked": [
+            "true"
+          ]
+        },
+        "trigger": {
+          "break_level": [
+            "\"11038.25\"",
+            "\"11052.5\"",
+            "\"11063.75\"",
+            "\"11118.75\"",
+            "\"12662.0\"",
+            "\"12686.0\"",
+            "\"13732.25\"",
+            "\"13748.0\"",
+            "\"15206.75\"",
+            "\"15221.25\"",
+            "\"15870.0\"",
+            "\"15879.25\""
+          ],
+          "close": [
+            "\"11037.25\"",
+            "\"11046.75\"",
+            "\"11067.25\"",
+            "\"11124.25\"",
+            "\"12661.5\"",
+            "\"12686.5\"",
+            "\"13731.75\"",
+            "\"13753.0\"",
+            "\"15205.5\"",
+            "\"15222.25\"",
+            "\"15868.5\"",
+            "\"15879.75\""
+          ],
+          "beyond_boundary": [
+            "true"
+          ],
+          "true_break": [
+            "true"
+          ]
+        },
+        "confirmation": {
+          "arrival": [
+            "\"fast\"",
+            "\"slow\"",
+            "null"
+          ],
+          "arrival_ratio": [
+            "\"0.05132075471698113207547169811\"",
+            "\"0.05291005291005291005291005291\"",
+            "\"0.05405405405405405405405405405\"",
+            "\"0.059\"",
+            "\"0.06788321167883211678832116788\"",
+            "\"0.07317073170731707317073170732\"",
+            "\"0.07916666666666666666666666667\"",
+            "\"0.07951807228915662650602409639\"",
+            "\"0.08674698795180722891566265060\"",
+            "\"0.1206896551724137931034482759\"",
+            "\"0.1269841269841269841269841270\"",
+            "\"0.1709677419354838709677419355\""
+          ],
+          "arrival_ok": [
+            "false",
+            "null",
+            "true"
+          ],
+          "retest": [
+            "true"
+          ],
+          "confirm_at": [
+            "1590962580000000000",
+            "1590972360000000000",
+            "1604271900000000000",
+            "1604272140000000000",
+            "1622545320000000000",
+            "1622546880000000000",
+            "1635718140000000000",
+            "1635721620000000000",
+            "1641207660000000000",
+            "1641208320000000000",
+            "1654035240000000000",
+            "1654037340000000000"
+          ],
+          "held_retest": [
+            "false",
+            "true"
+          ],
+          "htf_control": [
+            "\"down\"",
+            "\"up\""
+          ],
+          "ltf_break": [
+            "\"down\"",
+            "\"up\""
+          ],
+          "alignment_ok": [
+            "true"
+          ],
+          "retest_aggression": [
+            "false",
+            "true"
+          ],
+          "trap_delta_at_extreme": [
+            "false",
+            "null",
+            "true"
+          ]
+        },
+        "risk": {
+          "entry": [
+            "\"25702.5\""
+          ],
+          "stop": [
+            "\"25743.00\""
+          ],
+          "risk_defined": [
+            "true"
+          ]
+        },
+        "objective": {
+          "target": [
+            "\"25707.5\""
+          ],
+          "selector": [
+            "\"VAL\""
+          ],
+          "target_fixed": [
+            "true"
+          ],
+          "distance": [
+            "\"5.0\""
+          ],
+          "asia_range_claim": [
+            "\"150-160\""
+          ],
+          "inside_asia_usual_range": [
+            "false"
+          ]
+        }
+      }
+    },
+    "failed_auction_return": {
+      "episodes": 10,
+      "pass": 2,
+      "fail": 8,
+      "unknown": 0,
+      "stages": {
+        "context": {
+          "pass": 8,
+          "fail": 2,
+          "unknown": 0,
+          "omitted": 0
+        },
+        "reference": {
+          "pass": 8,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "location": {
+          "pass": 8,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "trigger": {
+          "pass": 8,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "confirmation": {
+          "pass": 2,
+          "fail": 6,
+          "unknown": 0,
+          "omitted": 2
+        },
+        "risk": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 10
+        },
+        "objective": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 10
+        },
+        "management": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 10
+        }
+      },
+      "pass_rate": 0.2,
+      "episodes_per_session": 0.6666666666666666,
+      "sessions": 15,
+      "sessions_with_pass": 2,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "pass_rate": [
+          0.0,
+          0.35
+        ],
+        "source_claim": "unstated",
+        "reasoning": "AMTL p.8 is a drive into a previous area of fair value, rejection, return into the original range. Frequency unstated. Prior VA must be distinct from the current balance so overlap cannot pass every session.",
+        "pages": "AMTL pp.8-10"
+      },
+      "in_bound": true,
+      "report_note": "SAINT-AMT/failed_auction_return: episodes=10 pass=2 fail=8 unknown=0 pass_rate=0.2 bound={'episodes_per_session': [0, 2], 'pass_rate': [0.0, 0.35], 'source_claim': 'unstated', 'reasoning': 'AMTL p.8 is a drive into a previous area of fair value, rejection, return into the original range. Frequency unstated. Prior VA must be distinct from the current balance so overlap cannot pass every session.', 'pages': 'AMTL pp.8-10'}. Drive must reach a distinct prior VA (AMTL p.8). Overlapping prior VA is skipped so mean-reversion inside one box cannot pass. confirmation={'pass': 2, 'fail': 6, 'unknown': 0, 'omitted': 2} location={'pass': 8, 'fail': 0, 'unknown': 0, 'omitted': 2}.",
+      "time_of_entry_et_30m": {
+        "00:30": 1,
+        "03:30": 1,
+        "04:30": 1,
+        "08:00": 2,
+        "09:30": 1,
+        "10:00": 1,
+        "18:00": 1,
+        "18:30": 1,
+        "19:30": 1
+      },
+      "operand_values": {
+        "context": {
+          "shape": [
+            "\"P\"",
+            "\"balanced\"",
+            "\"trending\""
+          ],
+          "allows_trade": [
+            "false",
+            "true"
+          ],
+          "mid_frac": [
+            "\"0.3825360019526482792287039297\"",
+            "\"0.6232422822046225957653143688\"",
+            "\"0.6342003320420586607636967349\"",
+            "\"0.6736800882907899889636512514\"",
+            "\"0.6972880527730271194722697288\"",
+            "\"0.7101167315175097276264591440\"",
+            "\"0.7146816276869000946329593078\"",
+            "\"0.7304953794879563702469322830\"",
+            "\"0.7493949870354364736387208297\""
+          ],
+          "va_span": [
+            "\"1.025\""
+          ],
+          "poc_pos": [
+            "\"0.4562043795620437956204379562\"",
+            "\"0.4677419354838709677419354839\"",
+            "\"0.4905660377358490566037735849\"",
+            "\"0.5405405405405405405405405405\"",
+            "\"0.6\"",
+            "\"0.6190476190476190476190476190\"",
+            "\"0.6224899598393574297188755020\"",
+            "\"0.6478873239436619718309859155\"",
+            "\"0.7234042553191489361702127660\""
+          ]
+        },
+        "reference": {
+          "low": [
+            "\"11052.5\"",
+            "\"13732.25\"",
+            "\"15870.0\"",
+            "\"16427.75\"",
+            "\"21404.25\"",
+            "\"25707.5\"",
+            "\"30443.75\"",
+            "\"9508.5\""
+          ],
+          "high": [
+            "\"11118.75\"",
+            "\"13748.0\"",
+            "\"15879.25\"",
+            "\"16443.25\"",
+            "\"21466.5\"",
+            "\"25742.75\"",
+            "\"30512.25\"",
+            "\"9526.25\""
+          ],
+          "balance_known": [
+            "true"
+          ]
+        },
+        "location": {
+          "prior_val": [
+            "\"10893.0\"",
+            "\"13664.25\"",
+            "\"15682.25\"",
+            "\"16356.75\"",
+            "\"21192.0\"",
+            "\"25537.5\"",
+            "\"30348.5\"",
+            "\"9389.0\""
+          ],
+          "prior_vah": [
+            "\"10950.25\"",
+            "\"13674.0\"",
+            "\"15816.5\"",
+            "\"16404.0\"",
+            "\"21364.5\"",
+            "\"25634.0\"",
+            "\"30439.5\"",
+            "\"9468.5\""
+          ],
+          "older_auction_required": [
+            "false"
+          ],
+          "prior_va_known": [
+            "true"
+          ]
+        },
+        "trigger": {
+          "drive": [
+            "true"
+          ],
+          "drive_observed": [
+            "true"
+          ],
+          "prior_va_distinct": [
+            "true"
+          ]
+        },
+        "confirmation": {
+          "rejection": [
+            "true"
+          ],
+          "return": [
+            "false",
+            "true"
+          ],
+          "return_held": [
+            "false",
+            "true"
+          ],
+          "attempted_acceptance": [
+            "true"
+          ],
+          "confirm_at": [
+            "1622537880000000000",
+            "1767343980000000000",
+            "null"
+          ],
+          "older_auction_gate": [
+            "false"
+          ]
+        }
+      }
+    },
+    "poc_traversal": {
+      "episodes": 15,
+      "pass": 4,
+      "fail": 11,
+      "unknown": 0,
+      "stages": {
+        "context": {
+          "pass": 14,
+          "fail": 1,
+          "unknown": 0,
+          "omitted": 0
+        },
+        "reference": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 1
+        },
+        "location": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 1
+        },
+        "trigger": {
+          "pass": 8,
+          "fail": 6,
+          "unknown": 0,
+          "omitted": 1
+        },
+        "confirmation": {
+          "pass": 4,
+          "fail": 4,
+          "unknown": 0,
+          "omitted": 7
+        },
+        "risk": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        },
+        "objective": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 11
+        },
+        "management": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        }
+      },
+      "pass_rate": 0.26666666666666666,
+      "episodes_per_session": 1.0,
+      "sessions": 15,
+      "sessions_with_pass": 4,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "pass_rate": [
+          0.0,
+          0.4
+        ],
+        "source_claim": "80 percent that price runs all the way to the far extreme, 20 percent that it simply ranges inside instead",
+        "reasoning": "AMTL p.9 odds are conditional on already being back inside the range after a failed auction, then reading POC behavior (aggressive push with a held retest vs repeated failure to hold). The 80% figure is that conditional traverse rate, not a session pass rate and not a target to hit.",
+        "pages": "AMTL p.9; RTVP p.5",
+        "denominator": "aggressive POC push with a held retest, after return into the original range"
+      },
+      "in_bound": true,
+      "report_note": "SAINT-AMT/poc_traversal: episodes=15 pass=4 fail=11 unknown=0 pass_rate=0.26666666666666666 bound={'episodes_per_session': [0, 2], 'pass_rate': [0.0, 0.4], 'source_claim': '80 percent that price runs all the way to the far extreme, 20 percent that it simply ranges inside instead', 'reasoning': 'AMTL p.9 odds are conditional on already being back inside the range after a failed auction, then reading POC behavior (aggressive push with a held retest vs repeated failure to hold). The 80% figure is that conditional traverse rate, not a session pass rate and not a target to hit.', 'pages': 'AMTL p.9; RTVP p.5', 'denominator': 'aggressive POC push with a held retest, after return into the original range'}. AMTL p.9 80/20 is conditional on return-into-range then POC behavior, not a session pass rate. Push episodes now emit when the retest fails (held_retest can be False). confirmation={'pass': 4, 'fail': 4, 'unknown': 0, 'omitted': 7} trigger={'pass': 8, 'fail': 6, 'unknown': 0, 'omitted': 1}.",
+      "time_of_entry_et_30m": {
+        "03:30": 2,
+        "04:00": 1,
+        "05:00": 1,
+        "05:30": 1,
+        "09:30": 2,
+        "10:00": 1,
+        "12:30": 1,
+        "13:30": 1,
+        "15:30": 1,
+        "18:00": 1,
+        "18:30": 1,
+        "23:00": 1,
+        "23:30": 1
+      },
+      "operand_values": {
+        "context": {
+          "shape": [
+            "\"P\"",
+            "\"balanced\"",
+            "\"double\"",
+            "\"trending\""
+          ],
+          "allows_trade": [
+            "false",
+            "true"
+          ],
+          "mid_frac": [
+            "\"0.3825360019526482792287039297\"",
+            "\"0.6232422822046225957653143688\"",
+            "\"0.6342003320420586607636967349\"",
+            "\"0.6736800882907899889636512514\"",
+            "\"0.6972880527730271194722697288\"",
+            "\"0.7026293823038397328881469115\"",
+            "\"0.7029958469416555784040966090\"",
+            "\"0.7096774193548387096774193548\"",
+            "\"0.7101167315175097276264591440\"",
+            "\"0.7146816276869000946329593078\"",
+            "\"0.7179540277490163594947194036\"",
+            "\"0.7304953794879563702469322830\""
+          ],
+          "va_span": [
+            "\"1.025\""
+          ],
+          "poc_pos": [
+            "\"0.345\"",
+            "\"0.4562043795620437956204379562\"",
+            "\"0.4618473895582329317269076305\"",
+            "\"0.4677419354838709677419354839\"",
+            "\"0.4791666666666666666666666667\"",
+            "\"0.4905660377358490566037735849\"",
+            "\"0.5172413793103448275862068966\"",
+            "\"0.5405405405405405405405405405\"",
+            "\"0.6\"",
+            "\"0.6190476190476190476190476190\"",
+            "\"0.6224899598393574297188755020\"",
+            "\"0.6478873239436619718309859155\""
+          ],
+          "lower_shelf": [
+            "\"11048.5\"",
+            "\"15214.25\""
+          ],
+          "upper_shelf": [
+            "\"11060.0\"",
+            "\"15216.75\""
+          ]
+        },
+        "reference": {
+          "poc": [
+            "\"11060.0\"",
+            "\"11085.0\"",
+            "\"12673.5\"",
+            "\"13742.0\"",
+            "\"15214.25\"",
+            "\"15875.0\"",
+            "\"16435.0\"",
+            "\"18150.0\"",
+            "\"20104.5\"",
+            "\"21230.0\"",
+            "\"21443.0\"",
+            "\"25733.0\""
+          ],
+          "poc_known": [
+            "true"
+          ]
+        },
+        "location": {
+          "poc": [
+            "\"11060.0\"",
+            "\"11085.0\"",
+            "\"12673.5\"",
+            "\"13742.0\"",
+            "\"15214.25\"",
+            "\"15875.0\"",
+            "\"16435.0\"",
+            "\"18150.0\"",
+            "\"20104.5\"",
+            "\"21230.0\"",
+            "\"21443.0\"",
+            "\"25733.0\""
+          ],
+          "poc_known": [
+            "true"
+          ]
+        },
+        "trigger": {
+          "poc_push": [
+            "false",
+            "true"
+          ],
+          "failed_auction_return": [
+            "false"
+          ],
+          "left_poc": [
+            "false",
+            "true"
+          ]
+        },
+        "confirmation": {
+          "tell": [
+            "\"aggressive_through_held_retest\""
+          ],
+          "held_retest": [
+            "false",
+            "true"
+          ],
+          "confirm_at": [
+            "1604271900000000000",
+            "1622539200000000000",
+            "1654052520000000000",
+            "1699261140000000000",
+            "1709628180000000000",
+            "1730414280000000000",
+            "1748836260000000000",
+            "1767345180000000000"
+          ],
+          "left_poc": [
+            "false",
+            "true"
+          ],
+          "target": [
+            "\"VAH\""
+          ]
+        },
+        "objective": {
+          "target": [
+            "\"13748.0\"",
+            "\"18182.75\"",
+            "\"21263.5\"",
+            "\"25742.75\""
+          ],
+          "selector": [
+            "\"VAH\""
+          ],
+          "target_fixed": [
+            "true"
+          ]
+        }
+      }
+    }
+  }
+}

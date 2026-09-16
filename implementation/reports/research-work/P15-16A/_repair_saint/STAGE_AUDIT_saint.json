@@ -1,0 +1,165 @@
+{
+  "family": "SAINT-AMT",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "branches": {
+    "continuation_retest": {
+      "context": {
+        "measured": true,
+        "operands": [
+          {"name": "shape", "source": "market_view", "primitive": "profile 68% over HTF balance", "predicate": "RTVP pp.6-11 trending excluded", "verdict": "fail if trending"}
+        ],
+        "verdict_depends_on": ["allows_trade"]
+      },
+      "reference": {
+        "measured": true,
+        "operands": [
+          {"name": "low", "source": "primitive", "primitive": "fit_balance / primary_balance", "predicate": "TRAP p.3 redraw until it fits", "verdict": "fail if no balance"}
+        ],
+        "verdict_depends_on": ["balance_known"]
+      },
+      "location": {
+        "measured": true,
+        "operands": [
+          {"name": "balance_high", "source": "market_view", "predicate": "WIC p.5 broken boundary", "verdict": "pass if HTF/intraday level is marked from the fitted balance"}
+        ],
+        "verdict_depends_on": ["levels_marked"]
+      },
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "true_break", "source": "market_view", "primitive": "1m close through level after origin-side bar", "predicate": "WIC p.5 break then retest, not already-beyond", "verdict": "fail if no origin-then-through close"}
+        ],
+        "verdict_depends_on": ["beyond_boundary", "true_break"]
+      },
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "confirm_at", "source": "market_view", "predicate": "F10 missing confirmation time is unknown never pass; WIC p.8 held retest", "verdict": "unknown if no retest time"},
+          {"name": "held_retest", "source": "market_view", "predicate": "WIC p.8 That's the confirmation. Not the initial break, the retest that held.", "verdict": "fail if retest reclaims through the level"},
+          {"name": "arrival_ok", "source": "market_view", "predicate": "WIC p.4 slow into the extreme expects the break", "verdict": "fail if fast; unknown if approach bars missing O/C"},
+          {"name": "alignment_ok", "source": "market_view", "predicate": "WIC pp.5-10 HTF value migration vs LTF break of the traded level, never from trade side", "verdict": "fail if HTF and LTF disagree; unknown if either direction missing"}
+        ],
+        "verdict_depends_on": ["confirm_at", "held_retest", "arrival_ok", "alignment_ok"]
+      },
+      "risk": {
+        "measured": true,
+        "operands": [
+          {"name": "risk_defined", "source": "market_view", "predicate": "stop beyond opposite balance edge", "verdict": "fail if entry-stop is not on the trade side"}
+        ],
+        "verdict_depends_on": ["risk_defined"]
+      },
+      "objective": {
+        "measured": true,
+        "operands": [
+          {"name": "target", "source": "primitive", "predicate": "RTVP p.8 opposite-shelf near edge if double, else VAH/VAL; SD09", "verdict": "unknown if no target from the live profile"}
+        ],
+        "verdict_depends_on": ["target_fixed"]
+      },
+      "management": {
+        "measured": false,
+        "omitted": true,
+        "unobservable_operand": "contemporaneous size and management records",
+        "reason": "TRAP p.10 management is a live size decision; Phase 1.5 inputs have no author management tape"
+      }
+    },
+    "trapped_buyers_retest": {
+      "inherits": "continuation_retest",
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "arrival_ok", "source": "market_view", "predicate": "WIC p.4 fast into the extreme expects defence then trap; TRAP pp.4-5", "verdict": "fail if slow"},
+          {"name": "held_retest", "source": "market_view", "predicate": "TRAP pp.6-7 two waits, break then retest", "verdict": "fail if retest does not hold"},
+          {"name": "trap_delta_at_extreme", "source": "market_view", "predicate": "TRAP p.4 heavy buying at the high can be trapped inventory", "verdict": "recorded; missing delta is not a pass operand"},
+          {"name": "confirm_at", "source": "market_view", "predicate": "F10", "verdict": "unknown if missing"}
+        ],
+        "verdict_depends_on": ["confirm_at", "held_retest", "arrival_ok", "alignment_ok"]
+      },
+      "management": {
+        "measured": false,
+        "omitted": true,
+        "unobservable_operand": "DOM at the fill (TRAP p.9)",
+        "reason": "Phase 1.5 has no DOM stream; confirmation uses held retest and arrival from 1m bars"
+      }
+    },
+    "failed_auction_return": {
+      "context": {
+        "measured": true,
+        "operands": [{"name": "allows_trade", "source": "market_view", "predicate": "RTVP pp.6-11", "verdict": "fail if trending"}],
+        "verdict_depends_on": ["allows_trade"]
+      },
+      "reference": {
+        "measured": true,
+        "operands": [{"name": "balance_known", "source": "primitive", "predicate": "AMTL p.8 original range", "verdict": "fail if missing"}],
+        "verdict_depends_on": ["balance_known"]
+      },
+      "location": {
+        "measured": true,
+        "operands": [
+          {"name": "prior_va_known", "source": "primitive", "predicate": "AMTL p.8 previous area of fair value; F05 no older-auction gate", "verdict": "unknown/fail if prior VAL/VAH missing"}
+        ],
+        "verdict_depends_on": ["prior_va_known"]
+      },
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "drive_observed", "source": "market_view", "predicate": "AMTL p.8 driven toward previous fair value", "verdict": "no episode if no drive"},
+          {"name": "prior_va_distinct", "source": "market_view", "predicate": "previous area is not the current box", "verdict": "skip overlapping VA so overlap cannot pass every session"}
+        ],
+        "verdict_depends_on": ["drive_observed", "prior_va_distinct"]
+      },
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "rejection", "source": "market_view", "predicate": "AMTL p.8 rejects rather than accepting into the lower area", "verdict": "fail if no close back out of prior VA"},
+          {"name": "return", "source": "market_view", "predicate": "AMTL p.8 coming all the way back into the original range", "verdict": "fail if no inside close"},
+          {"name": "confirm_at", "source": "market_view", "predicate": "F10", "verdict": "unknown if return time missing"}
+        ],
+        "verdict_depends_on": ["rejection", "return", "confirm_at"]
+      },
+      "risk": {"measured": false, "omitted": true, "unobservable_operand": "source stop formula", "reason": "AMTL does not print a stop for this route"},
+      "objective": {"measured": false, "omitted": true, "unobservable_operand": "POC tell is the next route", "reason": "AMTL p.9 POC 80/20 is poc_traversal, not this branch's target"},
+      "management": {"measured": false, "omitted": true, "unobservable_operand": "author management", "reason": "unstated"}
+    },
+    "poc_traversal": {
+      "context": {
+        "measured": true,
+        "operands": [{"name": "allows_trade", "source": "market_view", "predicate": "RTVP pp.6-11", "verdict": "fail if trending"}],
+        "verdict_depends_on": ["allows_trade"]
+      },
+      "reference": {
+        "measured": true,
+        "operands": [{"name": "poc_known", "source": "primitive", "predicate": "RTVP p.5 POC magnet", "verdict": "unknown if POC missing"}],
+        "verdict_depends_on": ["poc_known"]
+      },
+      "location": {
+        "measured": true,
+        "operands": [{"name": "poc", "source": "primitive", "predicate": "RTVP p.12 read POC not VAH/VAL as the test", "verdict": "unknown if missing"}],
+        "verdict_depends_on": ["poc_known"]
+      },
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "poc_push", "source": "market_view", "predicate": "AMTL p.9 aggressive push through POC (close through, close>open, delta>0)", "verdict": "fail if no push and not repeated failure"}
+        ],
+        "verdict_depends_on": ["poc_push"]
+      },
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "held_retest", "source": "market_view", "predicate": "AMTL p.9 maybe with a retest that holds; emit the push even when the retest fails", "verdict": "fail if retest does not hold"},
+          {"name": "confirm_at", "source": "market_view", "predicate": "F10", "verdict": "unknown if no retest time"},
+          {"name": "repeated_failure", "source": "market_view", "predicate": "AMTL p.9 / RTVP p.5 wick through POC and close back, twice", "verdict": "the 20% chop tell"}
+        ],
+        "verdict_depends_on": ["held_retest", "confirm_at"]
+      },
+      "risk": {"measured": false, "omitted": true, "unobservable_operand": "source stop", "reason": "unstated"},
+      "objective": {
+        "measured": true,
+        "operands": [{"name": "target", "source": "primitive", "predicate": "VAH after held push, VAL after repeated failure; SD09 near shelf if double", "verdict": "tied to the tell"}],
+        "verdict_depends_on": ["target_fixed"]
+      },
+      "management": {"measured": false, "omitted": true, "unobservable_operand": "author management", "reason": "unstated"}
+    }
+  }
+}

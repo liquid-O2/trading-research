@@ -235,11 +235,15 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
     Q as B02_Q,
     cascade_stages,
     combine_verdict,
+    contact_reaction,
     dec,
     episode_doc,
     export_rules,
     first_touch,
     fixtures,
+    outside_native_tape,
+    reaction_held,
+    replay_unavailable,
     market_at,
     market_bars,
     parse_rec,
@@ -432,7 +436,7 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
         contact = dict(fx["contact"])
     ctx = stage("context", "pass", reaction.get("known_at"), {"split_1245": False, "look_left": True})
     ref = stage("reference", "pass" if independent else "fail", reaction.get("known_at"), {"reaction": str(px), "second": str(second_px), "kind": kind, "independent": independent})
-    loc = stage("location", "pass", reaction.get("known_at"), {"low": str(lo), "high": str(hi)})
+    loc = stage("location", "pass", reaction.get("known_at"), {"low": str(lo), "high": str(hi), "band_defined": True})
     if contact is None:
         trig = stage("trigger", "fail", None, {"touch": False})
         stages = cascade_stages([ctx, ref, loc, trig])
@@ -453,7 +457,34 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
                 reference={"low": lo, "high": hi},
             )
         ]
-    trig = stage("trigger", "pass", int(contact.get("known_at") or contact["end"]), {"touch": True})
+    reaction_bar = contact_reaction(bars, contact, px, side)
+    trig = stage(
+        "trigger",
+        "pass" if reaction_bar else "fail",
+        int((reaction_bar or contact).get("known_at") or contact["end"]),
+        {"touch": True, "reaction": True if reaction_bar else False},
+    )
+    if reaction_bar is None:
+        trig = stage("trigger", "fail", int(contact.get("known_at") or contact["end"]), {"touch": True, "reaction": False})
+        stages = cascade_stages([ctx, ref, loc, trig])
+        verdict, failed, unknown = combine_verdict(stages)
+        return [
+            episode_doc(
+                family=FAMILY,
+                branch=branch,
+                side=side,
+                market=market,
+                verdict=verdict,
+                failed=failed,
+                unknown=unknown,
+                stages=stages,
+                rules=_rules(),
+                values={"independent": independent, "split_1245": False, "reaction": False},
+                decision_at=int(contact.get("known_at") or contact["end"]),
+                reference={"low": lo, "high": hi},
+                trigger=contact,
+            )
+        ]
     after = [r for r in bars if int(r["start"]) >= int(contact["start"])]
     observed = after[:5] or [contact]
     high = max(dec(r["H"]) for r in observed if r.get("H") is not None)
@@ -471,7 +502,20 @@ def scan_member_branch_b02(market, branch: str) -> list[dict[str, Any]]:
     stop_ticks = (r_dist / B02_Q) if r_dist > 0 else _D("1")
     qty = (FIXED_RISK_USD / (stop_ticks * NQ_TICK_VALUE)) if stop_ticks > 0 else None
     stop_ok = stop > high if side == "short" else stop < low
-    conf = stage("confirmation", "pass" if independent else "fail", int(contact.get("known_at") or contact["end"]), {"independent": independent, "kind": kind})
+    held = reaction_held(bars, reaction_bar, px, side)
+    if fx.get("held") is not None:
+        held = bool(fx["held"])
+    conf = stage(
+        "confirmation",
+        "pass" if held else "fail",
+        int((reaction_bar or contact).get("known_at") or contact["end"]),
+        {
+            "held": held,
+            "kind": kind,
+            "level_reason": kind,
+            "flow_reason": "prior_reaction",
+        },
+    )
     risk = stage(
         "risk",
         "pass" if stop_ok else "fail",
@@ -546,7 +590,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
 def replay_example(market, example) -> dict[str, Any]:
     instrument = str((example or {}).get("instrument") or "")
     example_id = str((example or {}).get("id") or "")
-    if example_id == "MB-2026-07-K10" or instrument.upper().startswith("ES") or (example or {}).get("inside_tape") is False:
+    if example_id == "MB-2026-07-K10" or instrument.upper().startswith("ES"):
         expected = (example or {}).get("expected_detection") or {}
         return {
             "detected": None,
@@ -557,18 +601,13 @@ def replay_example(market, example) -> dict[str, Any]:
             "author_level": None,
             "author_side": expected.get("side"),
             "divergence": "ES tape required",
+            "reached_location": False,
+            "failing_operand": None,
         }
+    if outside_native_tape(example or {}) or (example or {}).get("inside_tape") is False:
+        return replay_unavailable(example, "date outside the tape")
     if market is None:
-        return {
-            "detected": None,
-            "branch": None,
-            "our_side": None,
-            "our_level": None,
-            "our_entry_ns": None,
-            "author_level": None,
-            "author_side": None,
-            "divergence": "date outside tape",
-        }
+        return replay_unavailable(example, "date outside the tape")
     doc = scan_b02(market, {"family": FAMILY})
     return replay_match(doc, example)
 

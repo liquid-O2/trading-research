@@ -12,15 +12,28 @@ from trading_research.research.rule_discovery.census_reader import sha256_file
 from trading_research.research.rule_discovery.source_adapters.b02_saint_track import (
     AUTHOR_EXAMPLES,
     HASH_DATES,
+    REPAIR_DIR,
     SLICE_DATES,
     TRACK_DIR,
     SynthMarket,
     account_day_for_example,
     funnel_counts,
+    native_calendar_day,
+    outside_native_tape,
     sha256_json,
     synth_bar,
     write_json,
 )
+
+TRACK_SHA256 = {
+    "FUNNEL_MEMBER-TWO-REASONS.json": "b6c9e313f722f7b9de406c5bb56a43fcc62a57fb369744b3a996113255846860",
+    "FUNNEL_SAINT-AMT.json": "badc59dae64539ed50d9c4049483c06e520d5072ffeda9f1610e63e687a5b742",
+    "REPLAY_SAINT.json": "47ddf0b3cf8ebb33a74d733d9a2c3c5d292093f88008b392846a3eb6987403f7",
+    "RULES_KEANI.json": "d367e2fa89483d8f9f3f79decf3100a28be58777f85753c3cc537788e507cde3",
+    "RULES_MEMBER-TWO-REASONS.json": "f9ab96429b5aa871cf199c11c900a85581714dbe22b7ad5fa90f417c113db2ae",
+    "RULES_SAINT-AMT.json": "ce357cdfabdefbd29675632fbdceec36be69bb298287e3fdd24319077a2572d3",
+    "STATISTICS_SAINT.json": "b70f35a3874075240bcd5f22aa3d25f92cdf665e2d136b60f35c809fe3194c91",
+}
 from trading_research.research.rule_discovery.source_adapters import keani as keani_mod
 from trading_research.research.rule_discovery.source_adapters import member as member_mod
 from trading_research.research.rule_discovery.source_adapters import saint as saint_mod
@@ -198,8 +211,15 @@ def test_F05_no_older_auction_gate():
     t0 = _t("10:00")
     bars = _fill(START, 2, 150, 151, 149, 150) + [
         synth_bar(t0, 99, 100, 80, 85, delta=-5),
-        synth_bar(t0 + MINUTE, 90, 101, 88, 100.5, delta=3),
-        synth_bar(t0 + 2 * MINUTE, 140, 151, 139, 150, delta=2),
+        synth_bar(t0 + MINUTE, 86, 90, 82, 88, delta=-1),
+        synth_bar(t0 + 2 * MINUTE, 87, 91, 83, 87, delta=-1),
+        synth_bar(t0 + 3 * MINUTE, 90, 101, 88, 100.5, delta=3),
+        synth_bar(t0 + 4 * MINUTE, 140, 151, 139, 150, delta=2),
+        synth_bar(t0 + 5 * MINUTE, 150, 151, 149, 150, delta=1),
+        synth_bar(t0 + 6 * MINUTE, 150, 151, 149, 150, delta=1),
+        synth_bar(t0 + 7 * MINUTE, 150, 151, 149, 150, delta=1),
+        synth_bar(t0 + 8 * MINUTE, 150, 151, 149, 150, delta=1),
+        synth_bar(t0 + 9 * MINUTE, 150, 151, 149, 150, delta=1),
     ]
     doc = saint_scan(
         _saint_market(bars, extra_fx={"prior_va": {"val": D("80"), "vah": D("95")}}),
@@ -506,6 +526,127 @@ def test_F16_three_tick_reward():
     assert _stage(no["episodes"][0], "confirmation")["verdict"] == "fail"
 
 
+def test_true_break_ignores_already_beyond_interior_level():
+    t0 = _t("10:00")
+    bars = _fill(START, 2, 190, 191, 189, 190) + _fill(t0, 5, 199, 200, 198.75, 199.25, delta=1) + [
+        synth_bar(t0 + 5 * MINUTE, 199.5, 202, 199, 201.5, delta=5),
+        synth_bar(t0 + 6 * MINUTE, 201, 201.25, 199.75, 200, delta=-1),
+    ]
+    market = _saint_market(bars, extra_fx={"intraday_levels": [D("180")]})
+    doc = saint_scan(market, {"family": "SAINT-AMT", "branch": "continuation_retest"})
+    longs = [e for e in doc["episodes"] if e["side"] == "long"]
+    assert longs
+    levels = [D(str((e.get("geometry") or {}).get("break_level"))) for e in longs]
+    assert D("200") in levels
+    assert D("180") not in levels
+
+
+def test_htf_control_window_not_inverted():
+    t0 = _t("09:50")
+    bars = _continuation_bars(fast=False)
+    market = _saint_market(bars)
+    market.b02_fixtures["balance"]["start"] = t0 + 20 * MINUTE
+    market.b02_fixtures["htf_control"] = None
+    doc = saint_scan(market, {"family": "SAINT-AMT", "branch": "continuation_retest"})
+    assert doc["episodes"]
+    conf = _stage(doc["episodes"][0], "confirmation")
+    assert conf["operands"]["htf_control"] in {"up", "down"}
+    assert conf["operands"]["alignment_ok"] is not None
+
+
+def test_F10_missing_confirm_at_is_unknown():
+    t0 = _t("09:50")
+    bars = _fill(START, 2, 150, 151, 149, 150) + _fill(t0, 5, 199, 200, 198.75, 199.25, delta=1) + [
+        synth_bar(t0 + 5 * MINUTE, 199.5, 202, 199, 201.5, delta=5),
+    ]
+    doc = saint_scan(_saint_market(bars), {"family": "SAINT-AMT", "branch": "continuation_retest"})
+    assert doc["episodes"]
+    conf = _stage(doc["episodes"][0], "confirmation")
+    assert conf["operands"]["confirm_at"] is None
+    assert conf["operands"]["retest"] is False
+    assert conf["verdict"] == "unknown"
+    assert doc["episodes"][0]["verdict"] != "pass"
+
+
+def test_poc_held_retest_can_fail():
+    t0 = _t("10:00")
+    bars = _fill(START, 2, 150, 151, 149, 150) + [
+        synth_bar(t0, 150, 160, 150, 158, delta=10),
+        synth_bar(t0 + MINUTE, 157, 158, 149.75, 148, delta=-4),
+    ]
+    doc = saint_scan(_saint_market(bars), {"family": "SAINT-AMT", "branch": "poc_traversal"})
+    assert doc["episodes"]
+    conf = _stage(doc["episodes"][0], "confirmation")
+    assert conf is not None
+    assert conf["operands"].get("held_retest") is False or conf["verdict"] != "pass"
+    assert doc["episodes"][0]["verdict"] != "pass" or conf["operands"].get("held_retest") is False
+
+
+def test_failed_auction_drive_without_return_fails_confirmation():
+    t0 = _t("10:00")
+    bars = _fill(START, 2, 150, 151, 149, 150) + [
+        synth_bar(t0, 99, 100, 80, 85, delta=-5),
+        synth_bar(t0 + MINUTE, 86, 90, 82, 88, delta=-1),
+        synth_bar(t0 + 2 * MINUTE, 84, 86, 82, 83, delta=-2),
+    ]
+    doc = saint_scan(
+        _saint_market(bars, extra_fx={"prior_va": {"val": D("80"), "vah": D("95")}}),
+        {"family": "SAINT-AMT", "branch": "failed_auction_return"},
+    )
+    shorts = [e for e in doc["episodes"] if e["side"] == "short"]
+    assert shorts
+    conf = _stage(shorts[0], "confirmation")
+    assert conf["operands"]["return"] is False
+    assert conf["verdict"] != "pass"
+    assert shorts[0]["verdict"] != "pass"
+
+
+def test_member_touch_without_reaction_fails_trigger():
+    prior_t = clock(DAY - timedelta(days=1), "13:10")
+    t = _t("10:05")
+    bars = _fill(START, 2, 100, 101, 99, 100) + [
+        synth_bar(t, 100.0, 100.1, 99.95, 100.05, delta=0),
+        synth_bar(t + MINUTE, 100.05, 100.15, 100.0, 100.1, delta=0),
+    ]
+    reaction = {"id": "r1", "side": "high", "price": D("100"), "known_at": prior_t, "at": prior_t, "parent": "reaction"}
+    hvn = {"id": "h1", "price": D("100.25"), "known_at": prior_t, "parent": "profile"}
+    market = SynthMarket(
+        DAY,
+        bars,
+        start=START,
+        end=END,
+        fixtures={"reactions": [reaction], "hvns": [hvn], "independent": True, "kg1": []},
+    )
+    doc = member_scan(market, {"family": "MEMBER-TWO-REASONS", "branch": "resistance_short"})
+    assert doc["episodes"]
+    trig = _stage(doc["episodes"][0], "trigger")
+    assert trig["operands"]["reaction"] is False
+    assert trig["verdict"] == "fail"
+    assert doc["episodes"][0]["verdict"] != "pass"
+
+
+def test_member_reaction_not_held_fails_confirmation():
+    market = _member_market()
+    market.b02_fixtures["held"] = False
+    doc = member_scan(market, {"family": "MEMBER-TWO-REASONS", "branch": "resistance_short"})
+    assert _stage(doc["episodes"][0], "trigger")["verdict"] == "pass"
+    conf = _stage(doc["episodes"][0], "confirmation")
+    assert conf["operands"]["held"] is False
+    assert conf["verdict"] == "fail"
+    assert doc["episodes"][0]["verdict"] != "pass"
+
+
+def test_keani_a_low_equal_vah_not_fully_above():
+    bars = _keani_bars()
+    market = _keani_market(bars, extra={"prior_vah": D("104"), "a_period": {"low": D("104"), "high": D("106"), "start": _t("09:30"), "end": _t("10:00")}})
+    doc = keani_scan(market, {"family": "KEANI-OPEN-ABOVE-VALUE", "branch": "source_long"})
+    ctx = _stage(doc["episodes"][0], "context")
+    assert ctx["operands"]["strict_gt"] is True
+    assert ctx["operands"]["fully_above"] is False
+    assert ctx["verdict"] == "fail"
+    assert doc["episodes"][0]["verdict"] != "pass"
+
+
 def test_b0_b01_byte_identity():
     hashes = json.loads((TRACK_DIR / "B0_B01_HASHES.json").read_text())
     gz = json.loads((TRACK_DIR / "B0_B01_GZ_HASHES.json").read_text())
@@ -524,7 +665,7 @@ def test_b0_b01_byte_identity():
     for row in gz["rows"]:
         assert sha256_file(Path(row["b0_gz"])) == row["b0_gz_sha256"]
         assert sha256_file(Path(row["b01_gz"])) == row["b01_gz_sha256"]
-    write_json(TRACK_DIR / "B0_B01_HASHES_AFTER.json", {"rows": after})
+    write_json(REPAIR_DIR / "B0_B01_HASHES_AFTER.json", {"rows": after})
 
 
 def test_RR22_replay_does_not_mutate_market_fixtures():
@@ -548,7 +689,14 @@ def test_replay_writes():
     saint_out = []
     loaded = {}
     for example in saint_rows:
-        day = str(example.get("date"))
+        if outside_native_tape(example):
+            result = saint_replay(None, example)
+            result["id"] = example["id"]
+            assert result["detected"] is None
+            assert result["divergence"] == "date outside the tape"
+            saint_out.append(result)
+            continue
+        day = account_day_for_example(example) or str(example.get("date"))
         try:
             if day not in loaded:
                 loaded[day] = load_source_market(day)
@@ -566,11 +714,16 @@ def test_replay_writes():
                 "our_entry_ns": None,
                 "author_level": None,
                 "author_side": (example.get("expected_detection") or {}).get("side"),
-                "divergence": f"date outside tape: {exc}",
+                "divergence": f"date outside the tape: {exc}",
+                "reached_location": False,
+                "failing_operand": None,
             }
         result["id"] = example["id"]
         assert "detected" in result
         assert result["detected"] in {True, False, None}
+        assert isinstance(result.get("reached_location"), bool)
+        if result["detected"] is False:
+            assert result.get("failing_operand")
         saint_out.append(result)
     member_out = []
     for example in member_rows:
@@ -580,7 +733,7 @@ def test_replay_writes():
         assert result["divergence"] == "ES tape required"
         member_out.append(result)
     write_json(
-        TRACK_DIR / "REPLAY_SAINT.json",
+        REPAIR_DIR / "REPLAY_SAINT.json",
         {
             "family": "SAINT-AMT",
             "produced_by": {
@@ -592,7 +745,7 @@ def test_replay_writes():
             "examples": saint_out,
         },
     )
-    write_json(TRACK_DIR / "REPLAY_MEMBER.json", {"family": "MEMBER-TWO-REASONS", "examples": member_out})
+    write_json(REPAIR_DIR / "REPLAY_MEMBER.json", {"family": "MEMBER-TWO-REASONS", "examples": member_out})
 
 
 def test_funnel_and_statistics_slice():
@@ -608,6 +761,8 @@ def test_funnel_and_statistics_slice():
     poc_hit = 0
     asia_ranges = []
     for day in SLICE_DATES:
+        if not native_calendar_day(day):
+            continue
         try:
             market = load_source_market(day)
         except Exception as exc:
@@ -670,13 +825,13 @@ def test_funnel_and_statistics_slice():
             "fully_above_a_eligible": sum(int(d.get("fully_above_a_eligible") or 0) for d in docs) if family.startswith("KEANI") else None,
         }
 
-    write_json(TRACK_DIR / "FUNNEL_SAINT-AMT.json", pack("SAINT-AMT", saint_docs, b01_saint))
-    write_json(TRACK_DIR / "FUNNEL_MEMBER-TWO-REASONS.json", pack("MEMBER-TWO-REASONS", member_docs, b01_member))
-    write_json(TRACK_DIR / "FUNNEL_KEANI-OPEN-ABOVE-VALUE.json", pack("KEANI-OPEN-ABOVE-VALUE", keani_docs, b01_keani))
+    write_json(REPAIR_DIR / "FUNNEL_SAINT-AMT.json", pack("SAINT-AMT", saint_docs, b01_saint))
+    write_json(REPAIR_DIR / "FUNNEL_MEMBER-TWO-REASONS.json", pack("MEMBER-TWO-REASONS", member_docs, b01_member))
+    write_json(REPAIR_DIR / "FUNNEL_KEANI-OPEN-ABOVE-VALUE.json", pack("KEANI-OPEN-ABOVE-VALUE", keani_docs, b01_keani))
     widths = [row["width"] for row in asia_ranges]
     in_band = [w for w in widths if 150 <= w <= 160]
     write_json(
-        TRACK_DIR / "STATISTICS_SAINT.json",
+        REPAIR_DIR / "STATISTICS_SAINT.json",
         {
             "poc_traverse_80": {
                 "source": "AMTL p.9",
@@ -698,17 +853,17 @@ def test_funnel_and_statistics_slice():
             },
         },
     )
-    write_json(TRACK_DIR / "RULES_SAINT-AMT.json", {"family": "SAINT-AMT", "rules": saint_scan(_saint_market(_continuation_bars(fast=False)), {"family": "SAINT-AMT", "branch": "continuation_retest"})["rules"]})
-    write_json(TRACK_DIR / "RULES_MEMBER-TWO-REASONS.json", {"family": "MEMBER-TWO-REASONS", "rules": member_scan(_member_market(), {"family": "MEMBER-TWO-REASONS", "branch": "resistance_short"})["rules"]})
-    write_json(TRACK_DIR / "RULES_KEANI.json", {"family": "KEANI-OPEN-ABOVE-VALUE", "rules": keani_scan(_keani_market(_keani_bars()), {"family": "KEANI-OPEN-ABOVE-VALUE", "branch": "source_long"})["rules"]})
-    assert (TRACK_DIR / "FUNNEL_SAINT-AMT.json").is_file()
-    assert (TRACK_DIR / "STATISTICS_SAINT.json").is_file()
+    write_json(REPAIR_DIR / "RULES_SAINT-AMT.json", {"family": "SAINT-AMT", "rules": saint_scan(_saint_market(_continuation_bars(fast=False)), {"family": "SAINT-AMT", "branch": "continuation_retest"})["rules"]})
+    write_json(REPAIR_DIR / "RULES_MEMBER-TWO-REASONS.json", {"family": "MEMBER-TWO-REASONS", "rules": member_scan(_member_market(), {"family": "MEMBER-TWO-REASONS", "branch": "resistance_short"})["rules"]})
+    write_json(REPAIR_DIR / "RULES_KEANI.json", {"family": "KEANI-OPEN-ABOVE-VALUE", "rules": keani_scan(_keani_market(_keani_bars()), {"family": "KEANI-OPEN-ABOVE-VALUE", "branch": "source_long"})["rules"]})
+    assert (REPAIR_DIR / "FUNNEL_SAINT-AMT.json").is_file()
+    assert (REPAIR_DIR / "STATISTICS_SAINT.json").is_file()
     from trading_research.research.rule_discovery.source_adapters.b02_saint_track import STAGE_ORDER
 
     for path in (
-        TRACK_DIR / "FUNNEL_SAINT-AMT.json",
-        TRACK_DIR / "FUNNEL_MEMBER-TWO-REASONS.json",
-        TRACK_DIR / "FUNNEL_KEANI-OPEN-ABOVE-VALUE.json",
+        REPAIR_DIR / "FUNNEL_SAINT-AMT.json",
+        REPAIR_DIR / "FUNNEL_MEMBER-TWO-REASONS.json",
+        REPAIR_DIR / "FUNNEL_KEANI-OPEN-ABOVE-VALUE.json",
     ):
         payload = json.loads(path.read_text())
         for branch, row in payload["B0.2"].items():
@@ -720,3 +875,9 @@ def test_funnel_and_statistics_slice():
             if last is None:
                 continue
             assert row["stages"][last]["pass"] == row["pass"], (path.name, branch, last, row["pass"], row["stages"][last])
+
+
+def test_round1_track_files_byte_identical():
+    for name, expected in TRACK_SHA256.items():
+        actual = sha256_file(TRACK_DIR / name)
+        assert actual == expected, (name, actual, expected)
