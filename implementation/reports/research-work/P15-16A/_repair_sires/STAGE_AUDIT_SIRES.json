@@ -1,0 +1,1205 @@
+{
+  "schema_version": "p15-16a-stage-audit-v1",
+  "family": "SIRES",
+  "baseline_version": "B0.2-2026-09-15",
+  "stage_order": [
+    "context",
+    "reference",
+    "location",
+    "trigger",
+    "confirmation",
+    "risk",
+    "objective",
+    "management"
+  ],
+  "measured_rule": "A stage is measured only if its verdict depends on at least one market-derived operand compared with a source predicate and can fail on real data.",
+  "branches": {
+    "clean_squeeze": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4 structure break of the premarked level",
+              "rule": "fail if a 1-minute close is more than 8 ticks through the location before the contact"
+            },
+            {
+              "name": "new_information",
+              "origin": "unobservable",
+              "predicate": "C1 p.4 new information",
+              "rule": "recorded as None; does not drive the verdict"
+            }
+          ],
+          "measured": true,
+          "unobservable": [
+            "new_information"
+          ]
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "contact origin at the location",
+              "rule": "pass if the location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "ABS pp.6-7; F09 never POC or inside balance",
+              "rule": "pass if kind is source-literal and not inside overnight VA for a mid-range swing"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "release",
+              "origin": "market view",
+              "predicate": "CONT p.11 fast aggression",
+              "rule": "fail if displacement < 8 ticks or slower than 5s"
+            },
+            {
+              "name": "pullback",
+              "origin": "market view",
+              "predicate": "CONT p.11 no retest",
+              "rule": "fail on pullback"
+            },
+            {
+              "name": "failure",
+              "origin": "market view",
+              "predicate": "CONT p.11 no false start",
+              "rule": "fail on return to origin"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "opposite_absorbed",
+              "origin": "market view",
+              "predicate": "CONT p.11 buyers hit and got absorbed",
+              "rule": "fail if opposing side is rewarded 3+ ticks"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_stop_geometry",
+              "origin": "market view",
+              "predicate": "defined R from entry and stop",
+              "rule": "pass if stop is away from entry"
+            },
+            {
+              "name": "account_daily_r",
+              "origin": "unobservable",
+              "predicate": "STOP p.15 -4R daily stop",
+              "rule": "named unobservable; does not unknown the episode"
+            }
+          ],
+          "measured": true,
+          "unobservable": [
+            "account_daily_r"
+          ]
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "OFM pp.7-8 40-tick target",
+              "rule": "pass if a 40-tick target is defined from entry"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5 50% off at 1:1",
+              "rule": "fail if entry equals stop (R undefined)"
+            },
+            {
+              "name": "trail_after_close_with_aggression",
+              "origin": "market view",
+              "predicate": "RD p.4; K18 pp.8-9",
+              "rule": "fail if there is no release extreme with aggression"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "ofm_aggressive": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "gamma_regime",
+              "origin": "unobservable",
+              "predicate": "BIG p.14 short gamma permission",
+              "rule": "unknown with named reason when Phase 1.5 has no options board; fail if a supplied regime is not short"
+            }
+          ],
+          "measured": false,
+          "unobservable": [
+            "gamma_regime"
+          ],
+          "unobservable_reason": "gamma regime not observable in Phase 1.5 inputs; Phase 2 options boards supply it"
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "failed-squeeze origin",
+              "rule": "pass if origin exists"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "resting_stop",
+              "origin": "market view",
+              "predicate": "K2345 p.9; OFM pp.11-14 fill 1 tick beyond the wick",
+              "rule": "pass if fill is beyond the failed-squeeze wick"
+            },
+            {
+              "name": "drive_retest",
+              "origin": "market view",
+              "predicate": "RR-18 second entry",
+              "rule": "pass if pullback then failure"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "squeeze_failed",
+              "origin": "market view",
+              "predicate": "OFM p.11 reclaim and fail",
+              "rule": "fail if the squeeze did not fail"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "stop_ticks",
+              "origin": "market view",
+              "predicate": "RR-18 7-27 ticks beyond the failure box",
+              "rule": "fail if stop distance is outside 7-27"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "ofm_target_40_ticks",
+              "origin": "market view",
+              "predicate": "OFM pp.7-8",
+              "rule": "pass if 40-tick target is defined"
+            },
+            {
+              "name": "control_zone_far_ticks",
+              "origin": "primitive",
+              "predicate": "BIG pp.10, 15-16",
+              "rule": "fail if far side is not beyond the entry"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            },
+            {
+              "name": "trail_after_close_with_aggression",
+              "origin": "market view",
+              "predicate": "K18 pp.8-9",
+              "rule": "fail without a protected swing"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "balance_failure_fade": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "gamma_regime",
+              "origin": "unobservable",
+              "predicate": "BIG p.14 long gamma; 80% is a regime share",
+              "rule": "unknown with named reason when Phase 1.5 has no options board"
+            }
+          ],
+          "measured": false,
+          "unobservable": [
+            "gamma_regime"
+          ],
+          "unobservable_reason": "gamma regime not observable in Phase 1.5 inputs; Phase 2 options boards supply it"
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "balance extreme",
+              "rule": "pass if origin exists"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "failed_aggression",
+              "origin": "market view",
+              "predicate": "BIG pp.14-15 unpaid aggression at the extreme",
+              "rule": "fail if the squeeze did not fail"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "retest",
+              "origin": "market view",
+              "predicate": "BIG pp.14-15 leave and retest unpaid; GEX p.18 own aggression variant",
+              "rule": "fail if there is no retest; own-aggression variant fails without own-side 30-60 prints"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_stop_geometry",
+              "origin": "market view",
+              "predicate": "defined R",
+              "rule": "pass if stop is away from entry"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "control_zone_far_ticks",
+              "origin": "primitive",
+              "predicate": "fade toward where the other side last had control",
+              "rule": "unknown if no control zone; fail if far side is not beyond entry"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "stop_four_stage": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "replenishment_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.10, 14 minimum three ticks of refresh",
+              "rule": "fail if fewer than 3 passive refills at the defended price"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "dom_rejection": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "DOM6-7 pp.3-7",
+              "rule": "aggression_size at the level, fail if a clean squeeze release is present"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "absorption_reward_retest": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "opposite_absorbed",
+              "origin": "market view",
+              "predicate": "ABS pp.5-13 opposing effort absorbed at the extreme",
+              "rule": "fail if the opposing side is rewarded 3+ ticks"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS pp.5-13 own 3-tick reward then a distinct return to the rewarded area",
+              "rule": "fail if reward < 3 ticks or price does not return to origin ± 2 after the reward print"
+            },
+            {
+              "name": "retest",
+              "origin": "market view",
+              "predicate": "ABS pp.5-13 distinct reward-area retest",
+              "rule": "fail if there is no later print at origin ± 2 inside the registered reward window after the first 3-tick print"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "footprint_confirmed_reaction": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "FP8 p.5",
+              "rule": "footprint_ratio 3-4x at the contact price"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "vwap_deviation_fade": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "VWAP p.4",
+              "rule": "beyond the 1 VWAP band with absorption"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "ofm_passive": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "OFM p.14",
+              "rule": "failure with no 30-60 aggression at the failure"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "defended_band_continuation": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "NYAM pp.4-5",
+              "rule": "replenishment at a previously defended band"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "kg1_retest": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "NYAM pp.8-9",
+              "rule": "kind==kg1 and aggression_in_band"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    },
+    "microbalance_break": {
+      "stages": {
+        "context": {
+          "operands": [
+            {
+              "name": "structure_break",
+              "origin": "market view",
+              "predicate": "C1 p.4",
+              "rule": "fail on a close through the location"
+            }
+          ],
+          "measured": true
+        },
+        "reference": {
+          "operands": [
+            {
+              "name": "origin_ticks",
+              "origin": "market view",
+              "predicate": "defended price",
+              "rule": "pass if location ticks exist"
+            }
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {
+              "name": "location_kind",
+              "origin": "primitive",
+              "predicate": "F09",
+              "rule": "source-literal kinds only"
+            }
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {
+              "name": "trigger_operand",
+              "origin": "market view",
+              "predicate": "K2345 pp.4-7",
+              "rule": "kind==microbalance and release breakout"
+            }
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {
+              "name": "reward_ticks",
+              "origin": "market view",
+              "predicate": "ABS p.6 three ticks from the absorption print",
+              "rule": "fail if price does not move 3 ticks in 30s"
+            }
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {
+              "name": "entry_distance_ticks",
+              "origin": "market view",
+              "predicate": "STOP pp.9-15 entry 1 or 2 ticks from the level",
+              "rule": "fail at 0 or wider than 2"
+            }
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {
+              "name": "target",
+              "origin": "market view",
+              "predicate": "40-tick or control-zone far side",
+              "rule": "pass if a target is defined"
+            }
+          ],
+          "measured": true
+        },
+        "management": {
+          "operands": [
+            {
+              "name": "partial_1_to_1",
+              "origin": "market view",
+              "predicate": "C2 p.5",
+              "rule": "fail if R is undefined"
+            }
+          ],
+          "measured": true
+        }
+      }
+    }
+  },
+  "shared_by": [
+    "dom_rejection",
+    "absorption_reward_retest",
+    "footprint_confirmed_reaction",
+    "vwap_deviation_fade",
+    "ofm_passive",
+    "defended_band_continuation",
+    "kg1_retest",
+    "microbalance_break"
+  ],
+  "notes": [
+    "Branches not expanded above share the same context/reference/location/risk/objective/management measurement pattern. Trigger and confirmation operands are branch-specific and are implemented in sires_b02._branch_stages.",
+    "kg1_retest trigger is market-derived only when a supplied KG1 record exists; otherwise the scan omits the branch with operand source_kg1_level_known.",
+    "scan_b02 reads only registry identity from rec. Author-context keys are ignored."
+  ]
+}

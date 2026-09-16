@@ -14,8 +14,13 @@ FAMILY_REFILL = "REFILL-STUDY"
 PRINT_THRESHOLD = 40
 CLUSTER_SECONDS = 5
 CLUSTER_MIN_SIZE = 80
+SOURCE_CLUSTER_MIN_SIZE = 60
+CLUSTER_SPAN_TICKS = 2
 DEPARTURE_TICKS = 4
 PRINTED_TOUCHES_PER_SESSION = 175
+PRINTED_HOLD_RATE = 0.42
+PRINTED_SESSIONS = 235
+PRINTED_TOUCHES = 41152
 
 B02_VERSION = "B0.2-2026-09-15"
 LITERAL_CLUSTER_SIZES = (60, 80, 100)
@@ -230,14 +235,23 @@ def simulate_fade_r(arrays, zone: Mapping[str, Any], touch_at: int, cutoff: int)
 RULES: dict[str, dict[str, Any]] = {
     "F10_zone_from_aggressive_clusters": {
         "kind": "OD",
-        "source": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80",
+        "source": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80; source family 60/80/100 contracts in seconds (REF p.5)",
         "finding": "F10",
         "fn": zone_construction_ok,
         "parameters": {
             "print_threshold": PRINT_THRESHOLD,
             "cluster_seconds": CLUSTER_SECONDS,
             "cluster_min_size": CLUSTER_MIN_SIZE,
+            "source_cluster_min_size": SOURCE_CLUSTER_MIN_SIZE,
+            "source_cluster_sizes": list(LITERAL_CLUSTER_SIZES),
         },
+    },
+    "F10_touch_held_or_broke": {
+        "kind": "literal",
+        "source": "REF pp.5-8",
+        "finding": "F10",
+        "fn": hold_label,
+        "note": "pass = touch refilled and held; fail = broke; unknown = operands unavailable",
     },
     "F10_literal_cluster_size_family": {
         "kind": "literal",
@@ -322,6 +336,61 @@ def _as_view(market) -> NativeMarketView | None:
         return None
 
 
+def form_b02_zones(view: NativeMarketView) -> dict[str, Any]:
+    """REF p.5: sixty, eighty, a hundred contracts hitting in seconds. OD print floor 40 sits beside that family."""
+    arrays = view.arrays
+    if arrays.t_ns.size == 0:
+        return {"zones": [], "n_prints": 0, "n_zones": 0}
+    trade = arrays.is_trade & (arrays.size >= PRINT_THRESHOLD) & (arrays.side != 0)
+    idx = np.flatnonzero(trade)
+    n_prints = int(idx.size)
+    zones: list[dict[str, Any]] = []
+    if n_prints == 0:
+        return {"zones": [], "n_prints": 0, "n_zones": 0}
+    t_ns = arrays.t_ns[idx]
+    ticks = arrays.price_ticks[idx]
+    size = arrays.size[idx]
+    side = arrays.side[idx]
+    known = arrays.known_at_ns[idx]
+    cluster_ns = CLUSTER_SECONDS * NS
+    used = np.zeros(idx.size, dtype=np.bool_)
+    for i in range(idx.size):
+        if used[i]:
+            continue
+        same = (side == side[i]) & (np.abs(ticks - ticks[i]) <= CLUSTER_SPAN_TICKS) & (t_ns >= t_ns[i]) & (t_ns <= t_ns[i] + cluster_ns) & (~used)
+        members = np.flatnonzero(same)
+        total = int(size[members].sum())
+        if total < SOURCE_CLUSTER_MIN_SIZE:
+            continue
+        used[members] = True
+        lo = int(ticks[members].min())
+        hi = int(ticks[members].max())
+        formed_at = int(t_ns[members].max())
+        known_at = int(known[members].max())
+        zones.append(
+            {
+                "side": "long" if int(side[i]) > 0 else "short",
+                "low_ticks": lo,
+                "high_ticks": hi,
+                "formed_at_ns": formed_at,
+                "known_at_ns": known_at,
+                "print_count": int(members.size),
+                "size": total,
+                "meets_60": total >= 60,
+                "meets_80": total >= 80,
+                "meets_100": total >= 100,
+            }
+        )
+    return {"zones": zones, "n_prints": n_prints, "n_zones": len(zones)}
+
+
+def touch_hold_verdict(hold: bool | None) -> str:
+    """REF pp.5-8: pass means the touch refilled and held; fail means it broke."""
+    if hold is None:
+        return "unknown"
+    return "pass" if hold else "fail"
+
+
 def scan_b02(market, rec) -> dict[str, Any]:
     rec = dict(rec or {})
     family = rec.get("method_id") or rec.get("family") or FAMILY_REFILL
@@ -342,6 +411,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
             "print_threshold": PRINT_THRESHOLD,
             "cluster_seconds": CLUSTER_SECONDS,
             "cluster_min_size": CLUSTER_MIN_SIZE,
+            "source_cluster_min_size": SOURCE_CLUSTER_MIN_SIZE,
         },
         "literal_cluster_sizes": list(LITERAL_CLUSTER_SIZES),
         "hold_boundary_ticks": HOLD_BOUNDARY_TICKS,
@@ -354,9 +424,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
     if cutoff is None:
         cutoff = int(arrays.known_at_ns.max()) if arrays.known_at_ns.size else 0
     cutoff = int(cutoff)
-    from trading_research.research.rule_discovery.source_adapters.processes import form_refill_zones
-
-    formed = form_refill_zones(view)
+    formed = form_b02_zones(view)
     episodes = []
     for zone in formed.get("zones") or []:
         zone_known = int(zone.get("known_at_ns") or zone["formed_at_ns"])
@@ -391,24 +459,36 @@ def scan_b02(market, rec) -> dict[str, Any]:
                 "cluster_seconds": CLUSTER_SECONDS,
                 "cluster_min_size": CLUSTER_MIN_SIZE,
                 "literal_cluster_sizes": list(LITERAL_CLUSTER_SIZES),
+                "source_cluster_min_size": SOURCE_CLUSTER_MIN_SIZE,
+                "meets_60": zone.get("meets_60"),
+                "meets_80": zone.get("meets_80"),
+                "meets_100": zone.get("meets_100"),
+                "hold_definition": "pass=refilled_and_held; fail=broke; unknown=operands_unavailable",
+                "hold_source": "REF pp.5-8",
             }
             ref_v = zone_construction_ok(zone)
             loc_v = zone_known_ok(zone_known)
             trig_v = departure_ok(dep)
-            conf_v = touch_inside_ok(zone, touch.get("price_ticks"))
+            inside = touch_inside_ok(zone, touch.get("price_ticks"))
+            hold_v = touch_hold_verdict(hold)
+            conf_v = hold_v if inside != "fail" else "fail"
             risk_v = "pass" if br.get("stop_ticks") is not None else "unknown"
             obj_v = bracket_fillable(arrays, zone, touch_at, cutoff)
-            stages = cascade_stages(
-                [
-                    {"stage": "reference", "verdict": ref_v, "at_ns": zone_known, "operands": {"zone_low": zone.get("low_ticks"), "zone_high": zone.get("high_ticks"), "print_count": zone.get("print_count"), "size": zone.get("size")}},
-                    {"stage": "location", "verdict": loc_v, "at_ns": zone_known, "operands": {"zone_known_at": zone_known}},
-                    {"stage": "trigger", "verdict": trig_v, "at_ns": None if dep is None else int(dep), "operands": {"departure_at": dep}},
-                    {"stage": "confirmation", "verdict": conf_v, "at_ns": touch_at, "operands": {"touch_at": touch_at, "touch_ticks": touch.get("price_ticks"), "feature_max_known_at": feature_max}},
-                    {"stage": "risk", "verdict": risk_v, "at_ns": touch_at, "operands": {"stop_ticks": br.get("stop_ticks"), "entry_ticks": br.get("entry_ticks")}},
-                    {"stage": "objective", "verdict": obj_v, "at_ns": touch_at, "operands": {"target_ticks": br.get("target_ticks"), "target": br.get("target_ticks"), "cancel_ns": BRACKET_CANCEL_NS, "fillable": obj_v == "pass"}},
-                ]
-            )
-            verdict, failed, unknown = _combine(stages)
+            stages = [
+                {"stage": "reference", "verdict": ref_v, "at_ns": zone_known, "operands": {"zone_low": zone.get("low_ticks"), "zone_high": zone.get("high_ticks"), "print_count": zone.get("print_count"), "size": zone.get("size"), "source_min_contracts": SOURCE_CLUSTER_MIN_SIZE}},
+                {"stage": "location", "verdict": loc_v, "at_ns": zone_known, "operands": {"zone_known_at": zone_known}},
+                {"stage": "trigger", "verdict": trig_v, "at_ns": None if dep is None else int(dep), "operands": {"departure_at": dep}},
+                {"stage": "confirmation", "verdict": conf_v, "at_ns": touch_at, "operands": {"touch_at": touch_at, "touch_ticks": touch.get("price_ticks"), "feature_max_known_at": feature_max, "held": hold, "inside": inside, "hold_definition": "refilled_and_held vs broke (REF pp.5-8)"}},
+                {"stage": "risk", "verdict": risk_v, "at_ns": touch_at, "operands": {"stop_ticks": br.get("stop_ticks"), "entry_ticks": br.get("entry_ticks")}},
+                {"stage": "objective", "verdict": obj_v, "at_ns": touch_at, "operands": {"target_ticks": br.get("target_ticks"), "target": br.get("target_ticks"), "cancel_ns": BRACKET_CANCEL_NS, "fillable": obj_v == "pass"}},
+            ]
+            stages = cascade_stages(stages[:4]) + [row for row in stages[4:]]
+            verdict = hold_v
+            failed, unknown = [], []
+            if verdict == "fail":
+                failed = ["confirmation"]
+            elif verdict == "unknown":
+                unknown = ["confirmation"]
             episodes.append(
                 {
                     "candidate_id": f"b02:{family}:{branch}:{touch_at}:{zone['low_ticks']}",
@@ -435,7 +515,35 @@ def scan_b02(market, rec) -> dict[str, Any]:
     return payload
 
 
+def _date_outside_tape(example: Mapping[str, Any]) -> bool:
+    from datetime import date as date_cls
+
+    if example.get("inside_tape") is False:
+        return True
+    raw = example.get("date")
+    if not raw:
+        return True
+    try:
+        day = date_cls.fromisoformat(str(raw)[:10])
+    except ValueError:
+        return True
+    return day < date_cls(2020, 1, 2) or day > date_cls(2026, 8, 19)
+
+
 def replay_example(market, example) -> dict[str, Any]:
+    example = dict(example or {})
+    if _date_outside_tape(example):
+        return {
+            "detected": None,
+            "reached_location": False,
+            "branch": "touch_record",
+            "our_side": None,
+            "our_level": None,
+            "our_entry_ns": None,
+            "author_level": None,
+            "author_side": None,
+            "divergence": "date outside the tape",
+        }
     return {
         "detected": None,
         "branch": "touch_record",

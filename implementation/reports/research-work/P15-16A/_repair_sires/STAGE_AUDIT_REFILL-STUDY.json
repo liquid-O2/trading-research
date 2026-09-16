@@ -1,0 +1,51 @@
+{
+  "schema_version": "p15-16a-stage-audit-v1",
+  "family": "REFILL-STUDY",
+  "baseline_version": "B0.2-2026-09-15",
+  "stage_order": ["reference", "location", "trigger", "confirmation", "risk", "objective"],
+  "measured_rule": "A stage is measured only if its verdict depends on at least one market-derived operand compared with a source predicate and can fail on real data.",
+  "branches": {
+    "touch_record": {
+      "stages": {
+        "reference": {
+          "operands": [
+            {"name": "zone_low", "origin": "market view", "predicate": "REF p.5 cluster of large aggressive prints", "rule": "unknown if the zone has no price span"},
+            {"name": "size", "origin": "market view", "predicate": "REF p.5 sixty, eighty, a hundred contracts in seconds", "rule": "zone kept only if cluster size >= 60; OD print floor 40 sits beside that family"}
+          ],
+          "measured": true
+        },
+        "location": {
+          "operands": [
+            {"name": "zone_known_at", "origin": "market view", "predicate": "REF p.6 everything that defines the zone is known before the next touch", "rule": "unknown if zone_known_at is missing"}
+          ],
+          "measured": true
+        },
+        "trigger": {
+          "operands": [
+            {"name": "departure_at", "origin": "market view", "predicate": "REF pp.5-7 price leaves, then returns: that is the touch", "rule": "unknown if no actual departure"}
+          ],
+          "measured": true
+        },
+        "confirmation": {
+          "operands": [
+            {"name": "held", "origin": "market view", "predicate": "REF pp.5-8 pass = refilled and held; fail = broke", "rule": "pass if price does not trade HOLD_BOUNDARY_TICKS through the far side inside 30 minutes; fail if it does; unknown if the window is unobservable"}
+          ],
+          "measured": true
+        },
+        "risk": {
+          "operands": [
+            {"name": "stop_ticks", "origin": "constant", "predicate": "REF p.12 stop 32 ticks", "rule": "pass when the printed bracket is attached"}
+          ],
+          "measured": true
+        },
+        "objective": {
+          "operands": [
+            {"name": "fillable", "origin": "market view", "predicate": "REF p.12 12-tick inside limit, 96-tick target, 30-minute cancel", "rule": "fail if the inside limit is not traded inside the cancel window"}
+          ],
+          "measured": true
+        }
+      }
+    }
+  },
+  "episode_verdict": "research_verdict follows confirmation (hold vs broke), not the objective fill. REF pp.5-8."
+}

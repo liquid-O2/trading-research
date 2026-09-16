@@ -42,7 +42,12 @@ from trading_research.research.rule_discovery.native import (
     ticks_to_decimal,
 )
 from trading_research.research.rule_discovery.registry import expand_candidate_bank
-from trading_research.research.rule_discovery.runner import peak_rss_bytes
+
+
+def peak_rss_bytes() -> int:
+    from trading_research.research.rule_discovery.runner import peak_rss_bytes as _peak_rss_bytes
+
+    return int(_peak_rss_bytes())
 
 B0 = B0_VERSION
 B01 = BASELINE_REPAIR_VERSION
