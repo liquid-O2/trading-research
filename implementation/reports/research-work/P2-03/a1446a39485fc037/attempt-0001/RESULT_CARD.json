@@ -1,0 +1,68 @@
+{
+  "headline": [
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-03/a1446a39485fc037/attempt-0001/VOLATILITY_FIXTURES.json",
+      "interval": null,
+      "name": "Garman-Klass fixture variance",
+      "selector": "/gk/variance",
+      "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50",
+      "support": "contract worked example .5*ln(110/90)^2",
+      "unit": "interval log-return variance",
+      "value": 0.020134364008631726
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-03/a1446a39485fc037/attempt-0001/VOLATILITY_FIXTURES.json",
+      "interval": null,
+      "name": "realized-variance fixture",
+      "selector": "/rv/variance",
+      "sha256": "8c6c4d2a6529a234b6deb56e3cd816720c9a3c0d9c5563716030a29724e4af50",
+      "support": "contract worked example 2*ln(1.01)^2",
+      "unit": "interval log-return variance",
+      "value": 0.00019801816817500913
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-03/a1446a39485fc037/attempt-0001/VOLATILITY_TARGETS.json",
+      "interval": null,
+      "name": "days with a complete target row",
+      "selector": "/rows",
+      "sha256": "cfbdcf2d24fcbd00d33414217e1237b2a9e9672a88fb86361bdbc1b40fed9474",
+      "support": "20 slice days, 1 incomplete with a reason",
+      "unit": "days",
+      "value": 19
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-03/a1446a39485fc037/attempt-0001/VOLATILITY_TARGETS.json",
+      "interval": null,
+      "name": "target heads complete",
+      "selector": "/rows/0/heads",
+      "sha256": "cfbdcf2d24fcbd00d33414217e1237b2a9e9672a88fb86361bdbc1b40fed9474",
+      "support": "152 heads on 19 complete days (8 named heads per day); incomplete: {'remaining_account_day/missing_boundary_midpoint': 13}; horizons unsupported for crossing a close or roll: none",
+      "unit": "heads",
+      "value": 139
+    },
+    {
+      "artifact": "/workspace/.worktrees/phase2-early/implementation/reports/research-work/P2-03/a1446a39485fc037/attempt-0001/VOLATILITY_FEATURES.json",
+      "interval": null,
+      "name": "IV feature groups with a disposition",
+      "selector": "/rows/0/iv_groups",
+      "sha256": "4620f4771eba1c953e47061269ab8011860dd08b7d3f8357afb0b844de395e35",
+      "support": "each requested group is consumed or carries a missing-group record",
+      "unit": "groups",
+      "value": 3
+    }
+  ],
+  "lever": "Extend the feature builder to request every IV group named in VOLATILITY.md with a per-group disposition and add the session-bucket and rolling GK/YZ features, before P2-04 fits the joint model; VOLATILITY_FEATURES rows would then carry a disposition per named group rather than three.",
+  "limits": [
+    "Features and targets are built on 20 engineering dates, not the full history.",
+    "Realized variance uses native BBO midpoints with age<=5s; a missing boundary makes the target incomplete rather than bridged, and the minute-close series is kept only as a labelled comparison.",
+    "No forecast is fitted here; the joint volatility fit, its ablations and its horizons are P2-04.",
+    "2026-09-03 lies inside the blind hold-out 2026-04-01..2026-09-03 and appears only as an incomplete-target record; nothing here is fitted, tuned, ranked or selected."
+  ],
+  "met": "partial",
+  "question": "Do the volatility estimators reproduce their literal fixtures, and do the multi-horizon targets come from native midpoints without crossing a close, a roll or an unavailable boundary?",
+  "schema_version": "research-result-card-v1",
+  "target": "Card P2-03 A01-A08: GK/YZ/RV worked examples, separated variance units, unsupported rather than truncated horizons, a disposition for every requested IV group, and no future price in a current feature.",
+  "task_id": "P2-03",
+  "verdict": "needs_upgrade",
+  "verdict_reason": "The estimators reproduce every literal fixture to 1e-15 and 139 of 152 heads are built from native BBO midpoints with explicit incomplete records for the rest, but the feature side is the arithmetic core only: 3 IV groups are requested where VOLATILITY.md names six root board groups plus the VIX family, and session seasonality and the rolling historical feature bank are not built yet."
+}

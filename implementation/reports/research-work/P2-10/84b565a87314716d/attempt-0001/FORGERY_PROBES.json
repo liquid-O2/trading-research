@@ -1,0 +1,135 @@
+{
+  "control": {
+    "codes": [],
+    "ok": true
+  },
+  "mutations": {
+    "code_digest": {
+      "codes": [
+        "IDENTITY"
+      ],
+      "expected_code": "IDENTITY",
+      "expected_code_present": true,
+      "forgery": "code_sha256 does not recompute from CODE_SNAPSHOT",
+      "ok": false,
+      "rejected": true
+    },
+    "command_log": {
+      "codes": [
+        "ARTIFACT_HASH"
+      ],
+      "expected_code": "ARTIFACT_HASH",
+      "expected_code_present": true,
+      "forgery": "a command log digest does not match the log bytes",
+      "ok": false,
+      "rejected": true
+    },
+    "invalid_json": {
+      "codes": [
+        "JSON_PARSE"
+      ],
+      "expected_code": "JSON_PARSE",
+      "expected_code_present": true,
+      "forgery": "an artifact no longer parses",
+      "ok": false,
+      "rejected": true
+    },
+    "matrix_evidence": {
+      "codes": [
+        "ARTIFACT_HASH"
+      ],
+      "expected_code": "ARTIFACT_HASH",
+      "expected_code_present": true,
+      "forgery": "an evidence digest in the matrix is forged",
+      "ok": false,
+      "rejected": true
+    },
+    "matrix_status": {
+      "codes": [
+        "ACCEPTANCE"
+      ],
+      "expected_code": "ACCEPTANCE",
+      "expected_code_present": true,
+      "forgery": "a matrix row claims fail under an accepted disposition",
+      "ok": false,
+      "rejected": true
+    },
+    "omit_owned_file": {
+      "codes": [
+        "IDENTITY",
+        "INVENTORY"
+      ],
+      "expected_code": "INVENTORY",
+      "expected_code_present": true,
+      "forgery": "an owned source file is not pinned",
+      "ok": false,
+      "rejected": true
+    },
+    "plan_digest": {
+      "codes": [
+        "IDENTITY"
+      ],
+      "expected_code": "IDENTITY",
+      "expected_code_present": true,
+      "forgery": "plan_sha256 does not recompute from PLAN_SNAPSHOT",
+      "ok": false,
+      "rejected": true
+    },
+    "predecessor_digest": {
+      "codes": [
+        "IDENTITY",
+        "PREDECESSOR_HASH"
+      ],
+      "expected_code": "PREDECESSOR_HASH",
+      "expected_code_present": true,
+      "forgery": "a predecessor receipt digest is forged",
+      "ok": false,
+      "rejected": true
+    },
+    "remove_artifact": {
+      "codes": [
+        "ARTIFACT_MISSING"
+      ],
+      "expected_code": "ARTIFACT_MISSING",
+      "expected_code_present": true,
+      "forgery": "a required artifact file is deleted",
+      "ok": false,
+      "rejected": true
+    },
+    "row_count": {
+      "codes": [
+        "INVENTORY"
+      ],
+      "expected_code": "INVENTORY",
+      "expected_code_present": true,
+      "forgery": "a declared row count does not match the parsed rows",
+      "ok": false,
+      "rejected": true
+    },
+    "run_id": {
+      "codes": [
+        "IDENTITY"
+      ],
+      "expected_code": "IDENTITY",
+      "expected_code_present": true,
+      "forgery": "run_id does not recompute from DRAFT_MANIFEST",
+      "ok": false,
+      "rejected": true
+    },
+    "substitute_file": {
+      "codes": [
+        "SCHEMA"
+      ],
+      "expected_code": "SCHEMA",
+      "expected_code_present": true,
+      "forgery": "another artifact's bytes are declared under this name",
+      "ok": false,
+      "rejected": true
+    }
+  },
+  "n_mutations": 12,
+  "n_rejected": 12,
+  "ok": true,
+  "schema_version": "research-forgery-probes-v1",
+  "task_id": "P2-10"
+}
