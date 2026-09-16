@@ -1,0 +1,23 @@
+{
+  "family": "GB-SCALP",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "branches": {
+    "golden_pocket_continuation": {
+      "stages": {
+        "context": {"measured": true, "operands": [{"name": "session", "source": "market", "predicate": "New York pullback after a pre-09:30 impulse", "page": "F06 A4; SOURCE_ADDITIONS A4"}], "verdict_rule": "pass in NY"},
+        "reference": {"measured": true, "operands": [{"name": "pocket_low", "source": "market", "predicate": "up-leg [H-0.618W, H-0.50W] of a defined impulse, not the 9-10 box", "page": "F06 A4; RR-14; GB p.50 daily fib confirms the up-leg form"}, {"name": "impulse_width", "source": "market", "predicate": "impulse high minus low", "page": "same"}], "verdict_rule": "fail if no defined pre-09:30 up impulse"},
+        "location": {"measured": true, "operands": [{"name": "pocket_low", "source": "market", "predicate": "NY bar range overlaps the pocket", "page": "RR-14 continuation long"}, {"name": "pocket_high", "source": "market", "predicate": "same", "page": "same"}], "verdict_rule": "fail if no NY pullback into the pocket"},
+        "trigger": {"measured": true, "operands": [{"name": "near", "source": "market", "predicate": "touch of the 50% near edge", "page": "RR-14 stop at the near edge"}, {"name": "pullback_at_ns", "source": "market", "predicate": "first NY overlap", "page": "A4"}], "verdict_rule": "fail if the pocket is never touched after 09:30"},
+        "confirmation": {"measured": true, "operands": [{"name": "confirm_close", "source": "market", "predicate": "first 5-minute close back out of the pocket in the impulse direction; labelled OD", "page": "F06 A4 OD five-minute close out"}, {"name": "continuation_hold", "source": "market", "predicate": "pullback close does not take the far 61.8% edge", "page": "RR-14 near-edge stop"}, {"name": "ny_pullback", "source": "market", "predicate": "pullback search starts at 09:30", "page": "A4 New York pullback"}], "verdict_rule": "fail if no close out of the pocket, or the pullback close is through the far edge"},
+        "risk": {"measured": true, "operands": [{"name": "stop", "source": "market", "predicate": "near 50% edge (example 29347 inside 29318-29352)", "page": "SD04; RR-14"}], "verdict_rule": "fail if stop is not the near edge beyond entry"},
+        "objective": {"measured": true, "operands": [{"name": "target", "source": "market", "predicate": "impulse high / prior-day high", "page": "F06 A4; SD04 pending targets straddle PDH"}], "verdict_rule": "fail if target is not ahead of entry"},
+        "management": {"measured": true, "operands": [{"name": "derived_quantity", "source": "market", "predicate": "RR-12 $750", "page": "GB-SCALP re-read same risk unit"}], "verdict_rule": "fail if quantity undefined"}
+      }
+    }
+  },
+  "observation_only": {
+    "bearish_small_scalp": {"measured": false, "unobservable": "unpublished_entry", "page": "GB p.40; F01", "verdict_rule": "reference fail, observation scope, never a setup pass"},
+    "bullish_discount_pullback": {"measured": false, "unobservable": "unpublished_entry", "page": "GB p.40; F01", "verdict_rule": "reference fail, observation scope, never a setup pass"}
+  }
+}

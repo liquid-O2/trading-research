@@ -28,6 +28,14 @@ from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp i
 from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp import scan_b02 as vwap_scan
 
 TRACK = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_track_greenbird"
+REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_greenbird"
+TRACK_SHA256 = {
+    "FUNNEL_GB-FAIL.json": "415af2eef2e8d2af5eb7b9dbb2f242ec4ba5e334962e2b620688fdfff683fd59",
+    "FUNNEL_GB-SCALP.json": "35e65593fd20c0f931a2eaa82d31dd6cc9b2385fe8b2a997ac8ca892b0928d74",
+    "FUNNEL_GB-VWAP.json": "d2ad319aaeb64b18735f9c0d2bfade672bb10a4c5fe55edd113cf473d1757756",
+    "REPLAY_GB.json": "96fb13cf707de73cec6657df4828989f830d64875de6874c214d66e4dfd6124e",
+    "RULES_GB.json": "fb6abaf6988425a259dc7c2d1efbf18ba63efa8600958ac9812183439e57f735",
+}
 AUTHOR_EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 BYTE_DATES = ("2020-01-02", "2021-01-04")
 
@@ -132,6 +140,74 @@ def _passes(doc, *, branch=None, side=None):
     return rows
 
 
+def test_rr13_at_level_confirmation_writes_measured_operands():
+    day = "2026-08-31"
+    events = _fill(day, 29400)
+    events += _overlay(day, [(f"09:{m:02d}", 29515) for m in range(0, 30)])
+    events += _overlay(day, [("09:32", 29540), ("09:33", 29515)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "nyam_box"})
+    rows = _passes(doc, branch="nyam_box", side="short")
+    assert rows
+    confirm = [s for s in rows[0]["stages"] if s["stage"] == "confirmation"][0]
+    trig = [s for s in rows[0]["stages"] if s["stage"] == "trigger"][0]
+    ops = confirm["operands"]
+    assert ops.get("mode") == "at_level"
+    assert ops.get("confirm_close") is not None
+    assert ops.get("inside_box") is True
+    assert ops.get("fail_to_continue") is True
+    assert Decimal(str(trig["operands"]["sweep_depth"])) > 0
+    assert Decimal(str(trig["operands"]["sweep_extreme"])) > Decimal(str(trig["operands"]["level"]))
+
+
+def test_rr13_later_touch_outside_fail_window_does_not_pass():
+    day = "2026-08-31"
+    events = _fill(day, 29400)
+    events += _overlay(day, [(f"09:{m:02d}", 29515) for m in range(0, 30)])
+    events += _overlay(day, [("09:32", 29540)])
+    events += _overlay(day, [(f"09:{m:02d}", 29550) for m in range(33, 42)])
+    events += _overlay(day, [("10:05", 29515)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "nyam_box"})
+    assert not _passes(doc, branch="nyam_box", side="short")
+
+
+def test_cash_open_reclaim_uses_retracement_target_not_open():
+    day = "2026-08-31"
+    events = _fill(day, 29400)
+    events += _overlay(day, [("09:31", 29300), ("09:32", 29420), ("09:33", 29420), ("09:34", 29420), ("09:35", 29420), ("09:36", 29420)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "cash_open_reclaim_case"})
+    rows = _passes(doc, branch="cash_open_reclaim_case", side="long")
+    assert rows
+    geom = rows[0]["geometry"]
+    entry = Decimal(str(geom["entry"]))
+    target = Decimal(str(geom["target"]))
+    stop = Decimal(str(geom["stop"]))
+    assert target > entry
+    assert stop < entry
+    assert target != entry
+
+
+def test_vwap_objective_is_150_not_100():
+    day = "2026-02-24"
+    d0 = date.fromisoformat(day)
+    events = _fill(day, 20000, stop=clock(d0, "09:45"))
+    events += _fill(day, 20300, start=clock(d0, "09:45"), stop=clock(d0, "11:00"))
+    events += _overlay(day, [(f"20:{m:02d}", 20100, -1) for m in range(0, 60)])
+    events += _overlay(day, [(f"03:{m:02d}", 20150) for m in range(0, 60)])
+    events += _overlay(day, [("10:30", 20200)])
+    tape = Tape(day, events)
+    doc = vwap_scan(tape, {"family": "GB-VWAP", "branch": "source_long"})
+    rows = _passes(doc, branch="source_long")
+    if not rows:
+        return
+    entry = Decimal(str(rows[0]["geometry"]["entry"]))
+    target = Decimal(str(rows[0]["geometry"]["target"]))
+    assert target - entry == Decimal("150")
+    assert Decimal(str(rows[0]["values"]["example_target_points"])) == Decimal("150")
+
+
 def test_rr13_at_level_before_1000_and_rejects_future_high():
     day = "2026-08-31"
     events = _fill(day, 29400)
@@ -155,6 +231,7 @@ def test_rr13_at_level_removed_if_no_return():
     events = _fill(day, 29400)
     events += _overlay(day, [(f"09:{m:02d}", 29515) for m in range(0, 30)])
     events += _overlay(day, [("09:32", 29540)])
+    events += _overlay(day, [(f"09:{m:02d}", 29550) for m in range(33, 55)])
     tape = Tape(day, events)
     doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "nyam_box"})
     assert not _passes(doc, branch="nyam_box", side="short")
@@ -394,12 +471,12 @@ def test_rules_table_carries_finding_ids():
     for item in needed:
         assert item in blob
         assert any(item in key or item in str(val.get("finding")) for key, val in RULES.items())
-    TRACK.mkdir(parents=True, exist_ok=True)
+    REPAIR.mkdir(parents=True, exist_ok=True)
     payload = {
         key: {k: v for k, v in row.items() if k != "_fn"}
         for key, row in RULES.items()
     }
-    (TRACK / "RULES_GB.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    (REPAIR / "RULES_GB.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
 def test_b0_b01_byte_identity_two_slice_dates():
@@ -416,24 +493,25 @@ def test_b0_b01_byte_identity_two_slice_dates():
             dual_after = dual_scan(market, family, branch)
             assert content_hash(strip_baseline_version(dual_after["b0"])) == hashes[(day, family, branch, "B0")]
             assert content_hash(strip_baseline_version(dual_after["b01"])) == hashes[(day, family, branch, "B0.1")]
-    TRACK.mkdir(parents=True, exist_ok=True)
-    (TRACK / "B0_B01_HASHES.json").write_text(
+    REPAIR.mkdir(parents=True, exist_ok=True)
+    (REPAIR / "B0_B01_HASHES.json").write_text(
         json.dumps({"version": B02_VERSION, "hashes": {str(k): v for k, v in hashes.items()}}, indent=2, sort_keys=True) + "\n"
     )
 
 
 def test_replay_inside_tape_writes_verdict():
+    from trading_research.research.rule_discovery.source_adapters.green_b02 import _date_outside_tape
+
     examples = json.loads(AUTHOR_EXAMPLES.read_text())["examples"]
     gb = [row for row in examples if str(row.get("id", "")).startswith("GB-")]
     results = []
     for example in gb:
         day = example.get("date")
-        inside = bool(example.get("inside_tape")) and date.fromisoformat(str(day)[:10]) <= TAPE_END
         family = str(example.get("family") or "GB-FAIL")
-        if not inside:
+        if _date_outside_tape(example):
             row = fail_replay(None, example)
-            assert "detected" in row
-            assert row["detected"] is None
+            assert row.get("detected") is None
+            assert row.get("divergence") == "date outside the tape"
             results.append(row)
             continue
         try:
@@ -461,8 +539,8 @@ def test_replay_inside_tape_writes_verdict():
         if row.get("detected") is True:
             assert row.get("divergence") or row.get("author_level") is not None
         results.append(row)
-    TRACK.mkdir(parents=True, exist_ok=True)
-    (TRACK / "REPLAY_GB.json").write_text(json.dumps(results, indent=2, sort_keys=True, default=str) + "\n")
+    REPAIR.mkdir(parents=True, exist_ok=True)
+    (REPAIR / "REPLAY_GB.json").write_text(json.dumps(results, indent=2, sort_keys=True, default=str) + "\n")
     assert results
 
 
@@ -490,10 +568,10 @@ def test_nine_date_funnel_beside_b01():
         b01["GB-FAIL"].append({"date": day, "B0.1": dual_fail["populations"]["B0.1"], "B0": dual_fail["populations"]["B0"]})
         b01["GB-VWAP"].append({"date": day, "B0.1": dual_vwap["populations"]["B0.1"], "B0": dual_vwap["populations"]["B0"]})
         b01["GB-SCALP"].append({"date": day, "B0.1": dual_scalp["populations"]["B0.1"], "B0": dual_scalp["populations"]["B0"]})
-    TRACK.mkdir(parents=True, exist_ok=True)
+    REPAIR.mkdir(parents=True, exist_ok=True)
     for family in ("GB-FAIL", "GB-VWAP", "GB-SCALP"):
         payload = {"family": family, "slice_dates": dates, "B0.2": funnels[family], "B0.1": b01[family]}
-        (TRACK / f"FUNNEL_{family}.json").write_text(json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n")
+        (REPAIR / f"FUNNEL_{family}.json").write_text(json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n")
         for row in funnels[family]:
             counts = row.get("counts") or {}
             last_pass = 0
@@ -501,4 +579,72 @@ def test_nine_date_funnel_beside_b01():
                 last_pass += int(((st or {}).get("management") or {}).get("pass") or 0)
             if counts.get("pass") is not None:
                 assert last_pass == int(counts["pass"]), (family, row.get("date"), last_pass, counts)
-    assert (TRACK / "FUNNEL_GB-FAIL.json").is_file()
+    assert (REPAIR / "FUNNEL_GB-FAIL.json").is_file()
+
+
+def test_round1_track_files_remain_byte_identical():
+    import hashlib
+
+    for name, expected in TRACK_SHA256.items():
+        got = hashlib.sha256((TRACK / name).read_bytes()).hexdigest()
+        assert got == expected, (name, got, expected)
+
+
+def test_direct_reclaim_stop_is_sweep_buffer_not_retest_low():
+    day = "2026-09-15"
+    events = _fill(day, 29250)
+    events += _overlay(
+        day,
+        [(f"02:{m:02d}", 29233.5) for m in range(0, 60)]
+        + [(f"03:{m:02d}", 29233.5) for m in range(0, 60)]
+        + [(f"04:{m:02d}", 29233.5) for m in range(0, 60)],
+    )
+    events += _overlay(day, [("10:55", 29227.0)])
+    events += _overlay(day, [("11:00", 29245.0), ("11:01", 29245.0), ("11:02", 29245.0), ("11:03", 29245.0), ("11:04", 29245.0)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "london_box"})
+    rows = _passes(doc, branch="london_box", side="long")
+    assert rows, [ep.get("failed") for ep in doc.get("episodes") or []]
+    ep = rows[0]
+    stop = Decimal(str(ep["geometry"]["stop"]))
+    assert ep["values"].get("stop_placement") == "sweep_extreme_plus_buffer"
+    assert stop == Decimal("29227") - Decimal("11.75")
+    retest_rule = Decimal("29245") - Decimal("0.25")
+    assert stop != retest_rule
+
+
+def test_retest_stop_is_not_sweep_buffer():
+    day = "2026-09-14"
+    events = _fill(day, 28950)
+    events += _overlay(day, [(f"02:{m:02d}", 28860) for m in range(0, 60)] + [(f"03:{m:02d}", 28860) for m in range(0, 60)] + [(f"04:{m:02d}", 28860) for m in range(0, 30)])
+    events += _overlay(day, [("06:00", 28770), ("06:05", 28880), ("06:08", 28880), ("06:09", 28880)])
+    events += _overlay(day, [("09:15", 28780), ("09:16", 28870)])
+    events += _overlay(day, [("09:40", 28910), ("09:41", 28910), ("09:42", 28910), ("09:43", 28910), ("09:44", 28910)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "london_box"})
+    rows = _passes(doc, branch="london_box", side="long")
+    assert rows
+    stop = Decimal(str(rows[0]["geometry"]["stop"]))
+    ops = [s["operands"] for s in rows[0]["stages"] if s["stage"] == "confirmation"][0]
+    retest_low = Decimal(str(ops["retest_low"]))
+    sweep_low = Decimal(str(ops["sweep_low"]))
+    assert stop == retest_low - Decimal("0.25")
+    assert stop != sweep_low - Decimal("11.75")
+    assert rows[0]["values"].get("stop_placement") == "retest_higher_low"
+
+
+def test_ny_session_extreme_afternoon_sweep_fail():
+    day = "2026-06-01"
+    events = _fill(day, 29250)
+    events += _overlay(day, [("10:55", 29215.5)])
+    events += _overlay(day, [("15:35", 29209.0), ("15:36", 29250.0), ("15:37", 29250.0)])
+    tape = Tape(day, events)
+    doc = fail_scan(tape, {"family": "GB-FAIL", "branch": "ny_session_extreme"})
+    rows = _passes(doc, branch="ny_session_extreme", side="long")
+    assert rows, [ep.get("failed") or ep.get("research_verdict") for ep in doc.get("episodes") or []]
+    ep = rows[0]
+    level = Decimal(str(ep["values"]["reference_px"]))
+    assert level == Decimal("29215.5")
+    assert ep["values"].get("frozen_at") == "11:00"
+    stop = Decimal(str(ep["geometry"]["stop"]))
+    assert stop == Decimal("29209.0") - Decimal("0.25")
