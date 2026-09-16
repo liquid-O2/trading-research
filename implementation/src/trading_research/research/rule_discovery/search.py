@@ -158,7 +158,10 @@ THROUGHPUT_CANDIDATE_IDS = (
 )
 NATIVE_VIEW_FAMILIES = frozenset({"SIRES", "REFILL-STUDY"})
 TAPE_FIRST = "2020-01-02"
-TAPE_LAST = "2026-08-19"
+# The native calendar endpoint of run-1.0.1. Corrected from 2026-08-19 by the
+# chained amendment on main (commit cd76b741, "Correct the native calendar
+# endpoint to 2026-09-03"); the last 11 declared sessions load and scan.
+TAPE_LAST = "2026-09-03"
 NS = 1_000_000_000
 MINUTE_NS = 60 * NS
 

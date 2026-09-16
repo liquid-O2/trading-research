@@ -258,6 +258,30 @@ def _date_job(payload: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+
+# --- additive hook: P15-17 owns its own breadth runner (search_run.py). ---
+# `slice --task P15-17`, `run --task P15-17`, `resume --task P15-17` and
+# `summarize` on a P15-17 run root dispatch there; every other task is
+# unchanged. P15-17 passes its frozen FREEZE.json as --manifest.
+P15_17_TASK_ID = "P15-17"
+
+
+def _p15_17() -> Any:
+    from trading_research.research.rule_discovery import search_run
+
+    return search_run
+
+
+def _is_p15_17_root(run_root: Path) -> bool:
+    meta = Path(run_root) / "RUN_META.json"
+    if not meta.is_file():
+        return False
+    try:
+        return json.loads(meta.read_text()).get("task_id") == P15_17_TASK_ID
+    except (json.JSONDecodeError, OSError):
+        return False
+
+
 def slice_run(
     *,
     run_root: Path,
@@ -267,6 +291,10 @@ def slice_run(
     workers: int | None = None,
     write_jobs: bool = False,
 ) -> dict[str, Any]:
+    if task_id == P15_17_TASK_ID:
+        return _p15_17().slice_run(
+            run_root=Path(run_root), manifest=Path(manifest), dates=dates, workers=workers
+        )
     root = Path(run_root).resolve()
     frozen = json.loads(Path(manifest).read_text())
     if frozen.get("schema_version") != "research-frozen-manifest-v2":
@@ -339,10 +367,14 @@ def slice_run(
 
 
 def resume(*, run_root: Path, manifest: Path, task_id: str, workers: int | None = None) -> dict[str, Any]:
+    if task_id == P15_17_TASK_ID:
+        return _p15_17().resume(run_root=Path(run_root), manifest=Path(manifest), workers=workers)
     return slice_run(run_root=run_root, manifest=manifest, dates=None, task_id=task_id, workers=workers)
 
 
 def summarize(*, run_root: Path) -> dict[str, Any]:
+    if _is_p15_17_root(run_root):
+        return _p15_17().summarize(run_root=Path(run_root))
     path = Path(run_root) / "SLICE_SUMMARY.json"
     if not path.is_file():
         raise IntegrityError("no slice summary")

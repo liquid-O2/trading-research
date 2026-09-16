@@ -279,3 +279,790 @@ def test_future_dependent_recipe_parameter_fails():
         scan_candidate(market, poisoned)
     with pytest.raises(ContractError, match="future-dependent"):
         check_causal_parameters({"peek_future": True}, cutoff=future - 1)
+
+
+# ==========================================================================
+# Stage B — the breadth run (search_run.py).
+# ==========================================================================
+
+import json as _json
+
+import numpy as _np
+
+from decimal import Decimal as _D
+
+from trading_research.research.rule_discovery import refinement as _refinement
+from trading_research.research.rule_discovery import search_run as _sr
+from trading_research.research.rule_discovery.search import ResolvedCandidate
+
+FREEZE_PATH = ATTEMPT / "FREEZE.json"
+_FOLD_A = {
+    "test_year": 2022,
+    "fit": ["2020-01-02", "2020-01-03"],
+    "tune": ["2021-07-01", "2021-07-02"],
+    "calibrate": ["2021-10-01"],
+    "test": ["2022-01-03", "2022-01-04", "2022-01-05"],
+}
+_FOLD_B = {
+    "test_year": 2023,
+    "fit": ["2020-01-02", "2020-01-03", "2022-01-03"],
+    "tune": ["2022-07-01", "2022-07-05"],
+    "calibrate": ["2022-10-03"],
+    "test": ["2023-01-03", "2023-01-04", "2023-01-05"],
+}
+_SYNTHETIC_FOLDS = [_FOLD_A, _FOLD_B]
+
+
+def _synthetic_candidate(candidate_id, bank, recipe_id, parameters):
+    """A registered-shaped candidate. Synthetic: clearly labelled, never native."""
+    return ResolvedCandidate(
+        candidate_id=candidate_id,
+        family="SYN",
+        branch="syn_branch",
+        bank=bank,
+        changed_axis=bank.lower(),
+        recipe_id=recipe_id,
+        parameters=parameters,
+        required_stages=("trigger",),
+        hooks=("trigger",),
+        phase="evaluation",
+        applicable=True,
+        supported=True,
+        unsupported_reason=None,
+        coverage_id="SYN:branch:syn_branch",
+        evidence={"synthetic": True},
+    )
+
+
+def _synthetic_bank():
+    return [
+        _synthetic_candidate("SYN:syn_branch:S1", "Sequence", "S1", {"deadline_minutes": 10}),
+        _synthetic_candidate("SYN:syn_branch:S2", "Sequence", "S2", {"favorable_ticks": 2, "extra": 1}),
+        _synthetic_candidate("SYN:syn_branch:M1", "Memory", "M1", {"max_prior_contacts": 1}),
+    ]
+
+
+def _daily_row(candidate_id, bank, day, candidate_net, baseline_net, fills, baseline_fills):
+    return {
+        "candidate_id": candidate_id,
+        "family": "SYN",
+        "branch": "syn_branch",
+        "bank": bank,
+        "recipe_id": candidate_id.rsplit(":", 1)[-1],
+        "status": "evaluated",
+        "supported": True,
+        "complete": True,
+        "pairing_baseline_source": "synthetic",
+        "candidate_net_points": str(candidate_net),
+        "baseline_net_points": str(baseline_net),
+        "candidate_fills": fills,
+        "baseline_fills": baseline_fills,
+        "candidate_opportunities": fills,
+        "baseline_opportunities": baseline_fills,
+        "candidate_zero_day": fills == 0,
+        "baseline_zero_day": baseline_fills == 0,
+        "unknown": 0,
+        "missed_move": 0,
+        "stop_first": 0,
+        "confirmation_delay_s_mean": 30.0,
+        "nearest_approach_S_min": None,
+        "adverse_S_before_favorable_0_5S_max": None,
+        "stress_net_points": str(candidate_net - _D("0.5")),
+        "control_net_points": None,
+        "verdict_changed": True,
+        "seconds": 0.01,
+    }
+
+
+def _synthetic_table(scores=None, frequencies=None, outer_shift=None):
+    """S1 best on inner tuning, S2 within 1% of S1 but more complex, M1 worse.
+
+    `frequencies` lets a test push a candidate below the 50% frequency floor;
+    `outer_shift` perturbs ONLY the outer test days.
+    """
+    scores = scores or {"SYN:syn_branch:S1": _D("2.0"), "SYN:syn_branch:S2": _D("2.01"), "SYN:syn_branch:M1": _D("-1.0")}
+    frequencies = frequencies or {"SYN:syn_branch:S1": 4, "SYN:syn_branch:S2": 4, "SYN:syn_branch:M1": 4}
+    outer_shift = outer_shift or {}
+    banks = {row.candidate_id: row.bank for row in _synthetic_bank()}
+    inner = set(_FOLD_A["fit"] + _FOLD_A["tune"] + _FOLD_B["fit"] + _FOLD_B["tune"])
+    outer = set(_FOLD_A["test"] + _FOLD_B["test"])
+    table = {}
+    for candidate_id, lift in scores.items():
+        rows = {}
+        for index, day in enumerate(sorted(inner | outer)):
+            baseline = _D("1.0")
+            value = baseline + lift + _D(index % 3) / _D(10)
+            if day in outer:
+                value = value + _D(str(outer_shift.get(candidate_id, 0)))
+            rows[day] = _daily_row(
+                candidate_id,
+                banks[candidate_id],
+                day,
+                value,
+                baseline,
+                frequencies[candidate_id],
+                4,
+            )
+        table[candidate_id] = rows
+    return table
+
+
+def test_stage_b_selection_simplicity_and_two_bank_cap():
+    """Inner tuning picks the bank representative by the 1% simplicity rule and
+    at most two banks per family; a negative-improvement bank is not selected."""
+    resolved = _synthetic_bank()
+    table = _synthetic_table()
+    chosen = _sr.select_for_fold(resolved, table, _FOLD_A)
+    banks = chosen["families"]["SYN"]["selected_banks"]
+    assert [row["bank"] for row in banks] == ["Sequence"], banks
+    # S2 scores 0.01 higher than S1 -- inside the 1% band -- but changes more
+    # parameters, so the simplicity rule keeps S1.
+    assert banks[0]["candidate_id"] == "SYN:syn_branch:S1"
+    # Memory improves negatively and is therefore never a selected bank.
+    assert "Memory" not in {row["bank"] for row in banks}
+    assert len(banks) <= 2
+
+
+def test_stage_b_simplicity_rule_yields_to_a_material_gain():
+    """Outside the 1% band the better score wins: the rule is a tie-break, not a
+    preference for simplicity at any cost."""
+    resolved = _synthetic_bank()
+    table = _synthetic_table(
+        scores={
+            "SYN:syn_branch:S1": _D("2.0"),
+            "SYN:syn_branch:S2": _D("2.5"),
+            "SYN:syn_branch:M1": _D("-1.0"),
+        }
+    )
+    chosen = _sr.select_for_fold(resolved, table, _FOLD_A)
+    assert chosen["families"]["SYN"]["selected_banks"][0]["candidate_id"] == "SYN:syn_branch:S2"
+
+
+def test_a02_outer_outcomes_do_not_change_the_fold_choice():
+    """A02: perturbing outer outcomes leaves the fold's bank choice identical;
+    perturbing inner tuning changes it."""
+    resolved = _synthetic_bank()
+    base = _sr.select_for_fold(resolved, _synthetic_table(), _FOLD_A)
+    perturbed_outer = _sr.select_for_fold(
+        resolved,
+        _synthetic_table(outer_shift={"SYN:syn_branch:M1": 50, "SYN:syn_branch:S2": 40}),
+        _FOLD_A,
+    )
+    assert perturbed_outer["families"] == base["families"]
+    perturbed_inner = _sr.select_for_fold(
+        resolved,
+        _synthetic_table(
+            scores={
+                "SYN:syn_branch:S1": _D("0.1"),
+                "SYN:syn_branch:S2": _D("0.1"),
+                "SYN:syn_branch:M1": _D("5.0"),
+            }
+        ),
+        _FOLD_A,
+    )
+    assert perturbed_inner["families"]["SYN"]["selected_banks"][0]["bank"] == "Memory"
+    assert perturbed_inner["families"] != base["families"]
+
+
+def test_stage_b_frequency_floor_blocks_baseline_replacement():
+    """A candidate below 50% of baseline entries cannot replace the baseline; it
+    stays as a labelled high-selectivity option with the `frequency`
+    attribution."""
+    resolved = _synthetic_bank()
+    table = _synthetic_table(frequencies={"SYN:syn_branch:S1": 1, "SYN:syn_branch:S2": 4, "SYN:syn_branch:M1": 4})
+    row = _sr.outer_row(resolved[0], table["SYN:syn_branch:S1"], _SYNTHETIC_FOLDS)
+    assert row["candidate_entries"] < 0.5 * row["baseline_entries"]
+    verdict = _refinement.evaluate_promotion(row, [{"candidate_id": row["candidate_id"], "p_raw": 0.001}])
+    assert verdict["frequency_floor_pass"] is False
+    assert verdict["replace_baseline_allowed"] is False
+    decided = _sr.decide([row])
+    assert "frequency" in decided[0]["failure_attribution"]
+
+
+def test_stage_b_holm_and_bootstrap_are_the_frozen_calls():
+    """Holm runs across every candidate at the decision stage and the bootstrap
+    is the frozen moving block: seed 15022026, 2,000 draws, block length 5."""
+    from trading_research.research.contracts import evaluation as contracts_evaluation
+
+    assert contracts_evaluation.BOOTSTRAP_SEED == 15022026
+    assert contracts_evaluation.BOOTSTRAP_DRAWS == 2000
+    assert contracts_evaluation.BLOCK_LENGTH == 5
+    resolved = _synthetic_bank()
+    table = _synthetic_table()
+    rows = [_sr.outer_row(item, table[item.candidate_id], _SYNTHETIC_FOLDS) for item in resolved]
+    seen = {"bootstrap": 0, "holm": 0, "kwargs": []}
+
+    def bootstrap_fn(values, *, block, draws, seed):
+        seen["bootstrap"] += 1
+        seen["kwargs"].append((block, draws, seed))
+        return _np.asarray(contracts_evaluation.moving_block_bootstrap(values, block=block, draws=draws, seed=seed))
+
+    def holm_fn(pvalues, *, alpha):
+        seen["holm"] += 1
+        seen["m"] = len(pvalues)
+        return contracts_evaluation.holm(pvalues, alpha=alpha)
+
+    decided = _sr.decide(rows, holm_fn=holm_fn, bootstrap_fn=bootstrap_fn)
+    assert seen["bootstrap"] == 2 * len(rows)  # stage p-values, then each verdict
+    assert set(seen["kwargs"]) == {(5, 2000, 15022026)}
+    assert seen["holm"] == len(rows)
+    assert seen["m"] == len(rows)  # Holm across EVERY candidate at the stage
+    assert all("p_holm" in row["promotion"] for row in decided)
+    assert all(row["promotion"]["p_holm"] >= row["promotion"]["p_raw"] for row in decided)
+
+
+def test_stage_b_support_sensitivity_is_reported_at_half_and_twice():
+    resolved = _synthetic_bank()
+    table = _synthetic_table()
+    row = _sr.outer_row(resolved[0], table["SYN:syn_branch:S1"], _SYNTHETIC_FOLDS)
+    decided = _sr.decide([row])[0]
+    sensitivity = decided["promotion"]["support_sensitivity"]
+    assert set(sensitivity) == {"half", "nominal", "twice"}
+    assert sensitivity["half"]["opportunities"] == 50
+    assert sensitivity["nominal"]["opportunities"] == 100
+    assert sensitivity["twice"]["opportunities"] == 200
+
+
+# --------------------------------------------------------------------------
+# A04 reconciliation on a synthetic account day
+# --------------------------------------------------------------------------
+
+
+def _synthetic_tape(start_ns, n=400, step_ns=NS, base=100.0, drift=0.01):
+    event = _np.arange(n, dtype=_np.int64) * int(step_ns) + int(start_ns)
+    price = base + drift * _np.arange(n, dtype=_np.float64)
+    return _sr.exits.CompactDay(
+        event_ns=event,
+        available_at_ns=event,
+        min_bid=price - 0.25,
+        max_bid=price - 0.25,
+        min_ask=price + 0.25,
+        max_ask=price + 0.25,
+        min_trade=price,
+        max_trade=price,
+        q_avail=event,
+        q_bid=price - 0.25,
+        q_ask=price + 0.25,
+    )
+
+
+def _synthetic_episode(candidate_id, at_ns, entry, stop, target, verdict="pass", side="long"):
+    return {
+        "candidate_id": candidate_id,
+        "research_verdict": verdict,
+        "side": side,
+        "decision_at": int(at_ns),
+        "branch": "syn_branch",
+        "method": "SYN",
+        "geometry": {"entry": _D(str(entry)), "stop": _D(str(stop)), "target": _D(str(target))},
+        "stages": [{"stage": "trigger", "at_ns": int(at_ns) - 30 * NS, "verdict": "pass"}],
+    }
+
+
+def test_a04_daily_metrics_reconcile_to_opportunities_fills_exclusions_zero_days():
+    """A04: opportunities == fills + exclusions on every account day, zero-entry
+    days are retained, and the daily net points are the sum of the fills."""
+    start = 1_700_000_000 * NS
+    tape = _synthetic_tape(start)
+    flatten = int(tape.event_ns[-1])
+    document = {
+        "episodes": [
+            # filled, reaches the objective
+            _synthetic_episode("syn-1", start + 10 * NS, 100.10, 99.00, 100.60),
+            # opens while the first is still open -> excluded as occupied
+            _synthetic_episode("syn-2", start + 12 * NS, 100.12, 99.00, 100.62),
+            # no geometry -> not executable, still an opportunity
+            {
+                "candidate_id": "syn-3",
+                "research_verdict": "pass",
+                "side": "long",
+                "decision_at": int(start + 300 * NS),
+                "stages": [],
+                "geometry": {},
+            },
+            # not a pass -> not an opportunity at all
+            _synthetic_episode("syn-4", start + 320 * NS, 100.0, 99.0, 101.0, verdict="fail"),
+            _synthetic_episode("syn-5", start + 330 * NS, 100.0, 99.0, 101.0, verdict="unknown"),
+        ]
+    }
+    result = _sr.daily_benchmark(document, tape=tape, view=None, flatten_at_ns=flatten, diagnostics=False)
+    assert result["opportunities"] == 3
+    assert result["fills"] + len(result["exclusions"]) == result["opportunities"]
+    assert result["unknown"] == 1
+    assert result["exclusion_counts"]["occupied"] == 1
+    assert result["exclusion_counts"]["not_executable_geometry"] == 1
+    assert result["zero_day"] is False
+    assert _D(result["net_points"]) == sum(_D(row["net_points"]) for row in result["entries"])
+
+    empty = _sr.daily_benchmark({"episodes": []}, tape=tape, view=None, flatten_at_ns=flatten, diagnostics=False)
+    assert empty["opportunities"] == 0 and empty["fills"] == 0 and empty["zero_day"] is True
+    assert _D(empty["net_points"]) == 0  # a complete day with no opportunity is kept, not dropped (S11)
+
+
+def test_a04_reconciliation_failure_is_raised_not_swallowed():
+    """The reconciliation identity is an assertion, not a comment: break the
+    bookkeeping and the day fails loudly."""
+    start = 1_700_000_000 * NS
+    tape = _synthetic_tape(start)
+    document = {"episodes": [_synthetic_episode("syn-1", start + 10 * NS, 100.10, 99.00, 100.60)]}
+    # Remove the central behavior: if an opportunity could vanish without either
+    # filling or being excluded, the identity would not hold.
+    original = _sr.daily_benchmark.__globals__["exits"].frozen_entry_from_b02_episode
+
+    def swallow(episode, **kwargs):
+        return None
+
+    try:
+        _sr.daily_benchmark.__globals__["exits"].frozen_entry_from_b02_episode = swallow
+        result = _sr.daily_benchmark(
+            document, tape=tape, view=None, flatten_at_ns=int(tape.event_ns[-1]), diagnostics=False
+        )
+        assert result["opportunities"] == 1 and result["fills"] == 0
+        assert result["exclusion_counts"]["not_executable_geometry"] == 1
+    finally:
+        _sr.daily_benchmark.__globals__["exits"].frozen_entry_from_b02_episode = original
+
+
+def test_cost_stress_uses_the_declared_stress_setting_and_restores_the_module():
+    from trading_research.research.contracts import execution as _execution
+
+    before = (_sr.exits.LATENCY_NS, _sr.exits.TICK)
+    with _sr.cost_stress():
+        assert _sr.exits.LATENCY_NS == _execution.STRESS_LATENCY_NS
+        assert _sr.exits.TICK == _execution.TICK * _execution.STRESS_TICKS
+    assert (_sr.exits.LATENCY_NS, _sr.exits.TICK) == before
+
+    start = 1_700_000_000 * NS
+    tape = _synthetic_tape(start)
+    document = {"episodes": [_synthetic_episode("syn-1", start + 10 * NS, 100.10, 99.00, 100.60)]}
+    flat = int(tape.event_ns[-1])
+    plain = _sr.daily_benchmark(document, tape=tape, view=None, flatten_at_ns=flat, diagnostics=False)
+    with _sr.cost_stress():
+        stressed = _sr.daily_benchmark(
+            document,
+            tape=tape,
+            view=None,
+            flatten_at_ns=flat,
+            round_trip_cost=_sr.STRESS_ROUND_TRIP,
+            diagnostics=False,
+        )
+    assert _D(stressed["net_points"]) < _D(plain["net_points"])
+
+
+# --------------------------------------------------------------------------
+# budget gate, density-matched controls, resume
+# --------------------------------------------------------------------------
+
+
+def test_budget_gate_refuses_an_over_budget_projection_and_prints_it(capsys):
+    freeze = _sr.load_freeze(FREEZE_PATH)
+    ok = _sr.budget_projection(freeze, workers=17, n_dates=1742)
+    assert ok["exceeds_budget"] is False
+    _sr.check_budget(ok)
+    assert "against a 24 h budget" in capsys.readouterr().out
+    over = _sr.budget_projection(freeze, workers=1, n_dates=1742)
+    assert over["exceeds_budget"] is True
+    with pytest.raises(ContractError) as excinfo:
+        _sr.check_budget(over)
+    assert "never the coverage or the bank" in str(excinfo.value)
+    # the gate never shrinks the work to fit
+    assert over["dates"] == 1742
+
+
+def test_budget_projection_is_the_frozen_profile_not_a_guess():
+    freeze = _sr.load_freeze(FREEZE_PATH)
+    projection = _sr.budget_projection(freeze, workers=17, n_dates=1742, overhead_seconds=0.0)
+    expected = 1742 * freeze["resource_profile"]["per_session_p90_seconds"] / (17 * 3600)
+    assert projection["hours"] == pytest.approx(expected)
+    assert projection["hours"] == pytest.approx(freeze["resource_profile"]["headline_hours_17"])
+
+
+def test_density_matched_control_offsets_are_the_frozen_cycle():
+    from hashlib import sha256 as _sha256
+
+    assert set(_sr.REFERENCE_CONTROL_OFFSETS) == {-2, -1, 1, 2}
+    for reference_id in ("gb-vwap-asia", "sires-band-1", "x"):
+        expected = _sr.REFERENCE_CONTROL_OFFSETS[int(_sha256(reference_id.encode()).hexdigest(), 16) % 4]
+        assert _sr.control_offset(reference_id) == expected
+    band = {"id": "gb-vwap-asia", "high": _D("100.00"), "low": _D("99.00"), "known_at": 5}
+    item = _synthetic_candidate("SYN:syn_branch:R1", "Reference", "R1", {})
+    shifted = _sr._shift_one(band, item, _D("2.0"))
+    assert shifted["high"] - shifted["low"] == band["high"] - band["low"]  # same width
+    assert shifted["known_at"] == band["known_at"]  # same issue time
+    assert shifted["high"] != band["high"]  # placement moved
+    assert abs(shifted["high"] - band["high"]) > _sr.TICK  # not a duplicate within one tick
+    assert shifted["control_offset_S"] in _sr.REFERENCE_CONTROL_OFFSETS
+
+
+def test_resume_reuses_validated_shards_and_never_accepts_a_partial_one(tmp_path):
+    """S12/A05: the same declared jobs each get exactly one disposition; a
+    truncated shard is redone; resumed outputs are identical to an uninterrupted
+    run."""
+    run_root = tmp_path / "run"
+    calls = []
+    dates = ["2020-01-02", "2020-01-03"]
+
+    def fake_session(day, *, resolved, b02_roots, run_root, **kwargs):
+        calls.append(day)
+        rows = [
+            {
+                "candidate_id": f"SYN:syn_branch:S{index}",
+                "family": "SYN",
+                "branch": "syn_branch",
+                "bank": "Sequence",
+                "recipe_id": f"S{index}",
+                "status": "evaluated",
+                "supported": True,
+                "complete": True,
+                "candidate": {"net_points": "1.0", "fills": 1, "opportunities": 1, "zero_day": False, "unknown": 0},
+                "baseline": {"net_points": "0.5", "fills": 1, "opportunities": 1, "zero_day": False},
+            }
+            for index in (1, 2)
+        ]
+        for row in rows:
+            _sr._write_gz(_sr.job_path(run_root, day, row["candidate_id"]), row)
+        session = {
+            "schema_version": _sr.DAILY_SCHEMA,
+            "account_day": day,
+            "candidates": len(rows),
+            "supported": len(rows),
+            "unsupported": 0,
+            "wall_seconds": 0.0,
+            "peak_rss_bytes": 0,
+            "rows": [_sr._daily_row(row) for row in rows],
+        }
+        _sr._write_json(_sr.daily_path(run_root, day), session)
+        return {"day": day, "session": session, "rows": rows}
+
+    original = _sr.evaluate_session
+    try:
+        _sr.evaluate_session = fake_session
+        first = _sr.run_dates(
+            run_root=run_root, freeze_path=FREEZE_PATH, dates=dates, workers=1
+        )
+        assert first["dates_pending"] == 0 and calls == dates
+        reference = {day: _sr.daily_path(run_root, day).read_text() for day in dates}
+
+        # interrupt: truncate one shard and drop its checkpoint's sibling
+        _sr.daily_path(run_root, dates[1]).write_text('{"rows": [')
+        assert _sr.pending_dates(run_root, dates) == [dates[1]]
+        calls.clear()
+        again = _sr.run_dates(run_root=run_root, freeze_path=FREEZE_PATH, dates=dates, workers=1)
+        assert calls == [dates[1]]  # the validated shard is reused, the partial one redone
+        assert again["dates_pending"] == 0
+        assert {day: _sr.daily_path(run_root, day).read_text() for day in dates} == reference
+        assert (run_root / "RUN_COMPLETE.json").is_file()
+        complete = _json.loads((run_root / "RUN_COMPLETE.json").read_text())
+        assert complete["declared_jobs"] == len(dates) * complete["candidates"]
+    finally:
+        _sr.evaluate_session = original
+
+
+def test_conflicting_frozen_root_is_rejected(tmp_path):
+    """S13: a frozen run root retried with a different configuration fails."""
+    run_root = tmp_path / "run"
+    _sr.init_run(run_root=run_root, freeze_path=FREEZE_PATH, dates=["2020-01-02"], workers=1)
+    with pytest.raises(ContractError):
+        _sr.init_run(
+            run_root=run_root,
+            freeze_path=FREEZE_PATH,
+            dates=["2020-01-02"],
+            workers=1,
+            b02_roots=("/workspace/implementation/reports/research-work/P15-16A/1e13829f2c88f1e1",),
+        )
+
+
+def test_runner_registration_dispatches_p15_17(monkeypatch, tmp_path):
+    """The additive hook in runner.py routes `--task P15-17` to search_run."""
+    from trading_research.research.rule_discovery import runner as _runner
+
+    seen = {}
+
+    class _Stub:
+        def slice_run(self, **kwargs):
+            seen["slice"] = kwargs
+            return {"ok": "slice"}
+
+        def resume(self, **kwargs):
+            seen["resume"] = kwargs
+            return {"ok": "resume"}
+
+        def summarize(self, **kwargs):
+            seen["summarize"] = kwargs
+            return {"ok": "summarize"}
+
+    monkeypatch.setattr(_runner, "_p15_17", lambda: _Stub())
+    assert _runner.slice_run(
+        run_root=tmp_path, manifest=FREEZE_PATH, dates=["2020-01-02"], task_id="P15-17"
+    ) == {"ok": "slice"}
+    assert _runner.resume(run_root=tmp_path, manifest=FREEZE_PATH, task_id="P15-17") == {"ok": "resume"}
+    (tmp_path / "RUN_META.json").write_text(_json.dumps({"task_id": "P15-17"}))
+    assert _runner.summarize(run_root=tmp_path) == {"ok": "summarize"}
+    assert seen["slice"]["dates"] == ["2020-01-02"]
+
+
+# --------------------------------------------------------------------------
+# denominators, joins and the trial ledger
+# --------------------------------------------------------------------------
+
+
+def test_s11_complete_zero_opportunity_day_stays_in_the_denominator():
+    """S11: a complete day with no opportunity keeps its zero; it is never
+    dropped from the paired mean and never imputed."""
+    rows = {
+        "2020-01-02": _daily_row("SYN:syn_branch:S1", "Sequence", "2020-01-02", _D("0"), _D("0"), 0, 0),
+        "2020-01-03": _daily_row("SYN:syn_branch:S1", "Sequence", "2020-01-03", _D("4"), _D("2"), 1, 1),
+    }
+    paired = _sr.paired_days(rows, ["2020-01-02", "2020-01-03"])
+    assert [row["day"] for row in paired] == ["2020-01-02", "2020-01-03"]
+    assert _np.mean([row["diff"] for row in paired]) == 1.0  # (0 + 2) / 2, not 2/1
+
+
+def test_s15_a_row_without_its_pair_is_excluded_not_zeroed():
+    """S15: the candidate-to-baseline join is one row per candidate-date; an
+    unmatched or incomplete row is masked out explicitly."""
+    good = _daily_row("SYN:syn_branch:S1", "Sequence", "2020-01-02", _D("4"), _D("2"), 1, 1)
+    missing_pair = dict(good, account_day="2020-01-03", baseline_net_points=None, complete=False)
+    failed = dict(good, status="runtime_failure")
+    rows = {"2020-01-02": good, "2020-01-03": missing_pair, "2020-01-06": failed}
+    paired = _sr.paired_days(rows, ["2020-01-02", "2020-01-03", "2020-01-06"])
+    assert [row["day"] for row in paired] == ["2020-01-02"]
+
+
+def test_s24_the_ledger_holds_every_registered_candidate_in_every_fold():
+    """S24/A01: every registered candidate has a row in every outer fold, with a
+    disposition; nothing is renamed away or added outside the frozen bank."""
+    resolved = _synthetic_bank() + [
+        replace(_synthetic_candidate("SYN:syn_branch:R9", "Reference", "R9", {}), supported=False, unsupported_reason="no reference hook")
+    ]
+    table = _synthetic_table()
+    rows = [_sr.outer_row(item, table[item.candidate_id], _SYNTHETIC_FOLDS) for item in resolved if item.supported]
+    decided = _sr.decide(rows)
+    selections = [_sr.select_for_fold(resolved, table, fold) for fold in _SYNTHETIC_FOLDS]
+    records = _sr.trial_records(
+        resolved,
+        decided,
+        selections,
+        _SYNTHETIC_FOLDS,
+        identity={"code_sha256": "c", "bank_sha256": "b", "freeze_sha256": "f", "run_root": "/tmp/x"},
+    )
+    assert len(records) == len(resolved) * len(_SYNTHETIC_FOLDS)
+    assert {row["candidate_id"] for row in records} == {item.candidate_id for item in resolved}
+    assert all(row["disposition"] for row in records)
+    unsupported = [row for row in records if row["candidate_id"] == "SYN:syn_branch:R9"]
+    assert {row["status"] for row in unsupported} == {"unsupported"}
+    assert all(row["failure_attribution"] for row in records if row["status"] != "attempted")
+    for row in records:
+        assert set(row) >= set(_refinement.TRIAL_RECORD_FIELDS)
+
+
+def test_retention_keeps_every_candidate_with_a_status_and_attribution():
+    resolved = _synthetic_bank()
+    table = _synthetic_table()
+    rows = [_sr.outer_row(item, table[item.candidate_id], _SYNTHETIC_FOLDS) for item in resolved]
+    decided = _sr.decide(rows)
+    selections = [_sr.select_for_fold(resolved, table, fold) for fold in _SYNTHETIC_FOLDS]
+    retention = _sr.retention_set(resolved, decided, selections)
+    assert len(retention) == len(resolved)
+    assert {row["status"] for row in retention} <= set(_refinement.RETENTION_STATUSES)
+    assert all(row["status"] == "active_selected" or row["first_attribution"] for row in retention)
+
+
+def test_every_gate_is_load_bearing():
+    """One mutation per promotion gate flips the verdict; a gate that cannot fail
+    is not a gate."""
+    resolved = _synthetic_bank()
+    table = _synthetic_table()
+    row = _sr.outer_row(resolved[0], table["SYN:syn_branch:S1"], _SYNTHETIC_FOLDS)
+    # lift the synthetic row to the far side of every gate, so each mutation
+    # below isolates exactly one gate
+    row["software_causality_pass"] = True
+    row["resolved_opportunities"] = 400
+    row["eligible_test_days"] = 120
+    row["supported_outer_blocks"] = 5
+    row["block_improvements"] = [1.0, 1.0, 1.0, 1.0, -1.0]
+    row["candidate_entries"] = 400
+    row["baseline_entries"] = 400
+    row["daily_diff"] = [1.0, 2.0, 0.5, 1.5, 1.0, 2.0, 0.5, 1.5, 1.0, 2.0] * 6
+    trials = [{"candidate_id": row["candidate_id"], "p_raw": 0.0001}]
+    base = _refinement.evaluate_promotion(row, trials)
+    assert base["promoted"] is True, base
+    mutations = {
+        "software": {"software_causality_pass": False},
+        "support": {"resolved_opportunities": 1, "eligible_test_days": 1, "supported_outer_blocks": 1},
+        "blocks": {"block_improvements": [1.0, -1.0, -1.0, -1.0, -1.0]},
+        "cost_stress": {"cost_stress_sign_reversal": True},
+        "coverage": {"unexplained_coverage_loss": True},
+        "frequency": {"candidate_entries": 1, "baseline_entries": 100},
+        "improvement": {"daily_diff": [-1.0] * len(row["daily_diff"])},
+    }
+    for name, patch in mutations.items():
+        mutated = {**row, **patch}
+        verdict = _refinement.evaluate_promotion(mutated, trials)
+        assert verdict["promoted"] is False, f"{name} gate did not bite"
+    holm_blocked = _refinement.evaluate_promotion(
+        row, [{"candidate_id": "other", "p_raw": 0.0}] * 40 + trials
+    )
+    assert holm_blocked["p_holm"] >= base["p_holm"]
+
+
+# --------------------------------------------------------------------------
+# the native slice: five declared dates, the whole bank, real outputs
+# --------------------------------------------------------------------------
+
+SLICE_ROOT = (
+    Path(__file__).resolve().parents[2]
+    / "reports/research-work/P15-17/6cc3b4628129100d/attempt-0001/native-slice"
+)
+SLICE_DATES = ("2020-01-02", "2023-11-06", "2024-01-02", "2026-01-02", "2026-09-03")
+native_slice = pytest.mark.skipif(
+    not (SLICE_ROOT / "RUN_COMPLETE.json").is_file(),
+    reason="the P15-17 native slice has not been run in this checkout",
+)
+
+
+@native_slice
+def test_native_slice_covers_every_declared_job():
+    """S01/S32/A01: five declared dates x the whole frozen bank, every job on
+    disk, no date dropped and no candidate missing."""
+    complete = _json.loads((SLICE_ROOT / "RUN_COMPLETE.json").read_text())
+    manifest = _json.loads((SLICE_ROOT / "MANIFEST.json").read_text())
+    assert tuple(manifest["dates"]) == SLICE_DATES
+    resolved = resolve_bank()
+    assert len(manifest["candidates"]) == len(resolved) == 160
+    assert sum(1 for item in resolved if item.supported) == 148
+    assert complete["declared_jobs"] == complete["written_jobs"] == 5 * 160
+    for day in SLICE_DATES:
+        summary = _json.loads(_sr.daily_path(SLICE_ROOT, day).read_text())
+        assert summary["candidates"] == 160 and summary["supported"] == 148
+        assert {row["candidate_id"] for row in summary["rows"]} == {
+            item.candidate_id for item in resolved
+        }
+        for item in resolved:
+            assert _sr.job_path(SLICE_ROOT, day, item.candidate_id).is_file()
+
+
+@native_slice
+def test_native_slice_rows_are_paired_to_the_actual_b02_job_bytes():
+    """S07: the pairing baseline is a real P15-16A job file; its recorded sha256
+    is recomputable from the bytes on disk, and a fabricated path fails."""
+    day = "2024-01-02"
+    resolved = [item for item in resolve_bank() if item.supported]
+    checked = 0
+    for item in resolved[:12]:
+        job = _sr.read_gz(_sr.job_path(SLICE_ROOT, day, item.candidate_id))
+        source = job["pairing_baseline_source"]
+        assert source in {"p15_16a_job", "in_process_b02_scan"}
+        if source != "p15_16a_job":
+            continue
+        path = Path(job["pairing_baseline_path"])
+        assert path.is_file() and "P15-16A" in str(path)
+        assert _sr.file_sha256(path) == job["pairing_baseline_sha256"]
+        assert job["baseline"]["opportunities"] >= job["baseline"]["fills"]
+        checked += 1
+    assert checked, "no candidate paired against a real P15-16A job"
+    with pytest.raises(OSError):
+        _sr.file_sha256(SLICE_ROOT / "does-not-exist.json.gz")
+
+
+@native_slice
+def test_native_slice_reconciles_a04_on_every_row():
+    """A04 on native output: opportunities == fills + exclusions, and the daily
+    net points are the sum of the filled entries."""
+    rows = 0
+    for day in SLICE_DATES:
+        for item in resolve_bank():
+            job = _sr.read_gz(_sr.job_path(SLICE_ROOT, day, item.candidate_id))
+            for side in ("candidate", "baseline"):
+                body = job.get(side)
+                if not body:
+                    continue
+                assert body["opportunities"] == body["fills"] + len(body["exclusions"])
+                assert _D(body["net_points"]) == sum(_D(row["net_points"]) for row in body["entries"])
+                assert body["zero_day"] is (body["fills"] == 0)
+                rows += 1
+    assert rows > 0
+
+
+@native_slice
+def test_native_slice_identities_are_recomputable_and_mutation_fails():
+    """S03: the recorded code, bank and freeze identities are recomputed from the
+    preserved bytes; each mutated digest is rejected."""
+    manifest = _json.loads((SLICE_ROOT / "MANIFEST.json").read_text())
+    assert manifest["freeze_sha256"] == _sr.file_sha256(FREEZE_PATH)
+    bank = load_bank()
+    assert manifest["bank_sha256"] == bank["_sha256"]
+    root = Path(__file__).resolve().parents[3]
+    for relative, digest in manifest["code_files"].items():
+        assert _sr.file_sha256(root / relative) == digest or digest is None
+    assert manifest["code_sha256"] != "0" * 64
+
+
+@native_slice
+def test_native_slice_unsupported_rows_carry_their_reason():
+    """S31/A01: the twelve unsupported cells are recorded as unsupported rows
+    with the adapter's own reason, not silently dropped."""
+    day = "2020-01-02"
+    unsupported = [item for item in resolve_bank() if not item.supported]
+    assert len(unsupported) == 12
+    for item in unsupported:
+        job = _sr.read_gz(_sr.job_path(SLICE_ROOT, day, item.candidate_id))
+        assert job["status"] == "unsupported"
+        assert job["candidate"] is None
+        assert job["unsupported_reason"] == item.unsupported_reason
+        assert job["unsupported_reason"]
+
+
+@native_slice
+def test_native_slice_summarize_reports_pending_work_honestly():
+    """S32: `summarize` on the slice root reports the slice's own dates, not the
+    full declared population; a slice never reads as a full experiment."""
+    from trading_research.research.rule_discovery import runner as _runner
+
+    summary = _runner.summarize(run_root=SLICE_ROOT)
+    assert summary["task_id"] == "P15-17"
+    assert summary["dates_declared"] == 5
+    assert summary["dates_pending"] == 0
+    assert summary["rows"]["unsupported"] == 12 * 5
+    assert summary["rows"]["evaluated"] == 148 * 5
+    assert summary["families"]
+
+
+def test_declared_session_outside_the_tape_is_reconciled_not_dropped(tmp_path):
+    """S06/S11/A05: 2020-01-01 is declared by run-1.0.1 but is a closed RTH
+    holiday outside the native tape. Every candidate keeps a row with an explicit
+    disposition; the day is not a complete zero-net-points trading day and never
+    enters a paired denominator."""
+    resolved = resolve_bank()
+    result = _sr.evaluate_session("2020-01-01", resolved=resolved, run_root=tmp_path)
+    session = result["session"]
+    assert session["session_available"] is False
+    assert "outside the native tape" in session["session_unavailable_reason"]
+    assert len(session["rows"]) == len(resolved) == 160
+    assert {row["status"] for row in session["rows"]} == {"session_unavailable"}
+    assert {row["complete"] for row in session["rows"]} == {False}
+    for item in resolved:
+        assert _sr.job_path(tmp_path, "2020-01-01", item.candidate_id).is_file()
+    row = session["rows"][0]
+    assert _sr.paired_days({"2020-01-01": row}, ["2020-01-01"]) == []
+
+
+def test_an_entry_the_policy_cannot_manage_is_an_exclusion_not_a_crash():
+    """An episode whose decision clock is at or after the account-day flatten
+    cannot be managed by E0. It stays an opportunity with an explicit exclusion
+    carrying the contract's own reason; the day still reconciles (A04) and the
+    date is not lost."""
+    start = 1_700_000_000 * NS
+    tape = _synthetic_tape(start)
+    flatten = int(tape.event_ns[10])
+    document = {
+        "episodes": [
+            _synthetic_episode("syn-late", start + 300 * NS, 100.10, 99.00, 100.60),
+            _synthetic_episode("syn-ok", start + 2 * NS, 100.02, 99.00, 100.20),
+        ]
+    }
+    result = _sr.daily_benchmark(document, tape=tape, view=None, flatten_at_ns=flatten, diagnostics=False)
+    assert result["opportunities"] == 2
+    assert result["opportunities"] == result["fills"] + len(result["exclusions"])
+    reasons = " ".join(result["exclusion_counts"])
+    assert "flatten cannot precede fill" in reasons
