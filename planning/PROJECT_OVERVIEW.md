@@ -28,6 +28,7 @@ Rules that never change:
 - Every number points at the file it came from. Every outcome is used only after it was knowable.
 - A negative result closes a phase as validly as a positive one.
 - Every task ends with a result card: question, numbers, target met or not, verdict, lever.
+- Every release report comes twice: the full edition, and the breakdown by year, by regime and by day.
 
 ## Phase 1 · What the methods do (closed)
 
@@ -87,7 +88,7 @@ Judge it by: every branch searched on every session, limits explicit, no claim o
 | Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
 | P15-16A | Baseline B0.2: the source's own rule, measured on the whole population | The comparison must be against the real rule | 41 branches in bound or diagnosed; author examples reach location |
-| P15-17 | The breadth screen: every candidate on every fold against B0.2 | Finds which mechanism changes help | Every candidate has a record; outer data never picks a bank |
+| P15-17 | The breadth screen: every candidate on every fold against B0.2, value-area widths 68% and 40% included | Finds which mechanism changes help | Every candidate has a record; outer data never picks a bank |
 | P15-18 | One bounded refinement plus one combination per family | Tune only in the past, in fixed neighbourhoods | Neighbours exactly the contract's; a six-example win stays inconclusive |
 
 ### 06 Exit controls (next)
@@ -100,7 +101,7 @@ Judge it by: every branch searched on every session, limits explicit, no claim o
 
 | Task | What it makes | Why | Judge by |
 | --- | --- | --- | --- |
-| P15-20 | Strategy Book v1, retention set, release inputs, hold-out report, handoff | The deliverable, with no hand-typed number | Every branch has a verdict; census reconciles; hold-out tested once |
+| P15-20 | Strategy Book v1 with its breakdown by year, regime and day, retention set, release inputs, hold-out report, handoff | The deliverable, with no hand-typed number | Every branch has a verdict; census reconciles; hold-out tested once |
 
 ## Phase 2 · Context and experts (starts 2026-09-18)
 
