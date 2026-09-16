@@ -1,0 +1,3693 @@
+{
+ "folds": [
+  {
+   "families": [
+    {
+     "family": "GB-FAIL",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "neighbors": [
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.5,
+          "width_mult": 0.5
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 1.0,
+          "width_mult": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.2,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.35
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.5,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.5
+        }
+       ],
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "neighbors": [
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -30
+         },
+         "value": -30
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -15
+         },
+         "value": -15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 15
+         },
+         "value": 15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 30
+         },
+         "value": 30
+        }
+       ],
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 144,
+        "baseline_mean_daily_net_points": 1.9521978021978021,
+        "candidate_mean_daily_net_points": 2.7335164835164836,
+        "common_complete_days": 455,
+        "entries": 186,
+        "frequency_of_baseline": 1.2916666666666667,
+        "improvement_vs_b02": 0.7813186813186814,
+        "mean_confirmation_delay_s": 188.49056603773585,
+        "support_days": 159,
+        "support_opportunities": 186
+       },
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 144,
+        "baseline_mean_daily_net_points": 1.9521978021978021,
+        "candidate_mean_daily_net_points": 8.258241758241759,
+        "common_complete_days": 455,
+        "entries": 269,
+        "frequency_of_baseline": 1.8680555555555556,
+        "improvement_vs_b02": 6.306043956043957,
+        "mean_confirmation_delay_s": 192.37209302325581,
+        "support_days": 215,
+        "support_opportunities": 269
+       },
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ]
+    },
+    {
+     "family": "GB-VWAP",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "JJ-TBR",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:single_extended:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:single_extended:F2",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 100,
+        "baseline_mean_daily_net_points": -0.3967032967032967,
+        "candidate_mean_daily_net_points": 0.08626373626373626,
+        "common_complete_days": 455,
+        "entries": 95,
+        "frequency_of_baseline": 0.95,
+        "improvement_vs_b02": 0.4829670329670329,
+        "mean_confirmation_delay_s": 60.0,
+        "support_days": 85,
+        "support_opportunities": 95
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 165,
+        "baseline_mean_daily_net_points": -1.0093406593406593,
+        "candidate_mean_daily_net_points": 1.8362637362637362,
+        "common_complete_days": 455,
+        "entries": 223,
+        "frequency_of_baseline": 1.3515151515151516,
+        "improvement_vs_b02": 2.8456043956043953,
+        "mean_confirmation_delay_s": -59.02173913043478,
+        "support_days": 184,
+        "support_opportunities": 223
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "neighborhoods": [
+      {
+       "bank": "Sequence",
+       "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Sequence",
+       "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+       "changed_axes": 1,
+       "family": "KEANI-OPEN-ABOVE-VALUE",
+       "inner_tuning": {
+        "baseline_entries": 0,
+        "baseline_mean_daily_net_points": 0.0,
+        "candidate_mean_daily_net_points": 0.05274725274725275,
+        "common_complete_days": 455,
+        "entries": 2,
+        "frequency_of_baseline": null,
+        "improvement_vs_b02": 0.05274725274725275,
+        "mean_confirmation_delay_s": -120.0,
+        "support_days": 2,
+        "support_opportunities": 2
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "MEMBER-TWO-REASONS",
+     "neighborhoods": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "neighbors": [
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 0,
+          "prominence": 0.2
+         },
+         "value": 0
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 2,
+          "prominence": 0.2
+         },
+         "value": 2
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 4,
+          "prominence": 0.2
+         },
+         "value": 4
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.1
+         },
+         "value": 0.1
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.2
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.3
+         },
+         "value": 0.3
+        }
+       ],
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "changed_axes": 1,
+       "family": "MEMBER-TWO-REASONS",
+       "inner_tuning": {
+        "baseline_entries": 123,
+        "baseline_mean_daily_net_points": 3.1192307692307693,
+        "candidate_mean_daily_net_points": 3.1192307692307693,
+        "common_complete_days": 455,
+        "entries": 123,
+        "frequency_of_baseline": 1.0,
+        "improvement_vs_b02": 0.0,
+        "mean_confirmation_delay_s": -19.024390243902438,
+        "support_days": 123,
+        "support_opportunities": 123
+       },
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ]
+    },
+    {
+     "family": "REFILL-STUDY",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "SAINT-AMT",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900
+         },
+         "value": 15
+        }
+       ],
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.0005494505494505495,
+        "candidate_mean_daily_net_points": 0.004945054945054945,
+        "common_complete_days": 455,
+        "entries": 2,
+        "frequency_of_baseline": 2.0,
+        "improvement_vs_b02": 0.004395604395604396,
+        "mean_confirmation_delay_s": 180.0,
+        "support_days": 2,
+        "support_opportunities": 2
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.0005494505494505495,
+        "candidate_mean_daily_net_points": 0.328021978021978,
+        "common_complete_days": 455,
+        "entries": 137,
+        "frequency_of_baseline": 137.0,
+        "improvement_vs_b02": 0.3274725274725275,
+        "mean_confirmation_delay_s": -167.8048780487805,
+        "support_days": 123,
+        "support_opportunities": 137
+       },
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ]
+    },
+    {
+     "family": "SIRES",
+     "neighborhoods": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "neighbors": [
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 1
+         },
+         "value": 1
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 2
+         },
+         "value": 2
+        }
+       ],
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "neighbors": [
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 0.5,
+          "frozen": true
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.0,
+          "frozen": true
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.5,
+          "frozen": true
+         },
+         "value": 1.5
+        }
+       ],
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 11,
+        "baseline_mean_daily_net_points": 49.84645232815964,
+        "candidate_mean_daily_net_points": 233.94955654101994,
+        "common_complete_days": 451,
+        "entries": 551,
+        "frequency_of_baseline": 50.09090909090909,
+        "improvement_vs_b02": 184.1031042128603,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 247,
+        "support_opportunities": 551
+       },
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 869,
+        "baseline_mean_daily_net_points": -379.859756097561,
+        "candidate_mean_daily_net_points": 143.20953436807096,
+        "common_complete_days": 451,
+        "entries": 64,
+        "frequency_of_baseline": 0.07364787111622555,
+        "improvement_vs_b02": 523.069290465632,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 62,
+        "support_opportunities": 64
+       },
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ]
+    }
+   ],
+   "inner_cutoff_day": "2021-09-30",
+   "outer_fold": 2022
+  },
+  {
+   "families": [
+    {
+     "family": "GB-FAIL",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "neighbors": [
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.5,
+          "width_mult": 0.5
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 1.0,
+          "width_mult": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.2,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.35
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.5,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.5
+        }
+       ],
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "neighbors": [
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -30
+         },
+         "value": -30
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -15
+         },
+         "value": -15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 15
+         },
+         "value": 15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 30
+         },
+         "value": 30
+        }
+       ],
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 226,
+        "baseline_mean_daily_net_points": 2.8701117318435756,
+        "candidate_mean_daily_net_points": 3.846368715083799,
+        "common_complete_days": 716,
+        "entries": 294,
+        "frequency_of_baseline": 1.3008849557522124,
+        "improvement_vs_b02": 0.9762569832402233,
+        "mean_confirmation_delay_s": 189.24603174603175,
+        "support_days": 252,
+        "support_opportunities": 294
+       },
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 226,
+        "baseline_mean_daily_net_points": 2.8701117318435756,
+        "candidate_mean_daily_net_points": 8.205307262569832,
+        "common_complete_days": 716,
+        "entries": 398,
+        "frequency_of_baseline": 1.761061946902655,
+        "improvement_vs_b02": 5.335195530726256,
+        "mean_confirmation_delay_s": 190.62305295950156,
+        "support_days": 321,
+        "support_opportunities": 398
+       },
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ]
+    },
+    {
+     "family": "GB-VWAP",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "JJ-TBR",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F2",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 124,
+        "baseline_mean_daily_net_points": -0.4615921787709497,
+        "candidate_mean_daily_net_points": 0.19099162011173185,
+        "common_complete_days": 716,
+        "entries": 130,
+        "frequency_of_baseline": 1.0483870967741935,
+        "improvement_vs_b02": 0.6525837988826816,
+        "mean_confirmation_delay_s": 60.0,
+        "support_days": 130,
+        "support_opportunities": 130
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 257,
+        "baseline_mean_daily_net_points": -1.164804469273743,
+        "candidate_mean_daily_net_points": 1.7416201117318435,
+        "common_complete_days": 716,
+        "entries": 336,
+        "frequency_of_baseline": 1.3073929961089494,
+        "improvement_vs_b02": 2.906424581005586,
+        "mean_confirmation_delay_s": -59.35943060498221,
+        "support_days": 281,
+        "support_opportunities": 336
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "neighborhoods": [
+      {
+       "bank": "Sequence",
+       "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Sequence",
+       "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+       "changed_axes": 1,
+       "family": "KEANI-OPEN-ABOVE-VALUE",
+       "inner_tuning": {
+        "baseline_entries": 0,
+        "baseline_mean_daily_net_points": 0.0,
+        "candidate_mean_daily_net_points": 0.007681564245810056,
+        "common_complete_days": 716,
+        "entries": 3,
+        "frequency_of_baseline": null,
+        "improvement_vs_b02": 0.007681564245810056,
+        "mean_confirmation_delay_s": -120.0,
+        "support_days": 3,
+        "support_opportunities": 3
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "MEMBER-TWO-REASONS",
+     "neighborhoods": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "neighbors": [
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 0,
+          "prominence": 0.2
+         },
+         "value": 0
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 2,
+          "prominence": 0.2
+         },
+         "value": 2
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 4,
+          "prominence": 0.2
+         },
+         "value": 4
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.1
+         },
+         "value": 0.1
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.2
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.3
+         },
+         "value": 0.3
+        }
+       ],
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "changed_axes": 1,
+       "family": "MEMBER-TWO-REASONS",
+       "inner_tuning": {
+        "baseline_entries": 192,
+        "baseline_mean_daily_net_points": 3.7534916201117317,
+        "candidate_mean_daily_net_points": 3.7534916201117317,
+        "common_complete_days": 716,
+        "entries": 192,
+        "frequency_of_baseline": 1.0,
+        "improvement_vs_b02": 0.0,
+        "mean_confirmation_delay_s": -16.5625,
+        "support_days": 192,
+        "support_opportunities": 192
+       },
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ]
+    },
+    {
+     "family": "REFILL-STUDY",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "SAINT-AMT",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900
+         },
+         "value": 15
+        }
+       ],
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.00034916201117318437,
+        "candidate_mean_daily_net_points": 0.0031424581005586594,
+        "common_complete_days": 716,
+        "entries": 2,
+        "frequency_of_baseline": 2.0,
+        "improvement_vs_b02": 0.002793296089385475,
+        "mean_confirmation_delay_s": 180.0,
+        "support_days": 2,
+        "support_opportunities": 2
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.00034916201117318437,
+        "candidate_mean_daily_net_points": 0.31843575418994413,
+        "common_complete_days": 716,
+        "entries": 211,
+        "frequency_of_baseline": 211.0,
+        "improvement_vs_b02": 0.31808659217877094,
+        "mean_confirmation_delay_s": -50.91891891891892,
+        "support_days": 185,
+        "support_opportunities": 211
+       },
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ]
+    },
+    {
+     "family": "SIRES",
+     "neighborhoods": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "neighbors": [
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 1
+         },
+         "value": 1
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 2
+         },
+         "value": 2
+        }
+       ],
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "neighbors": [
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 0.5,
+          "frozen": true
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.0,
+          "frozen": true
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.5,
+          "frozen": true
+         },
+         "value": 1.5
+        }
+       ],
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 17,
+        "baseline_mean_daily_net_points": 31.692605633802817,
+        "candidate_mean_daily_net_points": 148.08556338028168,
+        "common_complete_days": 710,
+        "entries": 940,
+        "frequency_of_baseline": 55.294117647058826,
+        "improvement_vs_b02": 116.39295774647887,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 400,
+        "support_opportunities": 940
+       },
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 1471,
+        "baseline_mean_daily_net_points": -238.27852112676055,
+        "candidate_mean_daily_net_points": 90.925,
+        "common_complete_days": 710,
+        "entries": 112,
+        "frequency_of_baseline": 0.07613868116927261,
+        "improvement_vs_b02": 329.20352112676056,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 108,
+        "support_opportunities": 112
+       },
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ]
+    }
+   ],
+   "inner_cutoff_day": "2022-09-30",
+   "outer_fold": 2023
+  },
+  {
+   "families": [
+    {
+     "family": "GB-FAIL",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "neighbors": [
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.5,
+          "width_mult": 0.5
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 1.0,
+          "width_mult": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.2,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.35
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.5,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.5
+        }
+       ],
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "neighbors": [
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -30
+         },
+         "value": -30
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -15
+         },
+         "value": -15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 15
+         },
+         "value": 15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 30
+         },
+         "value": 30
+        }
+       ],
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 316,
+        "baseline_mean_daily_net_points": 2.662141393442623,
+        "candidate_mean_daily_net_points": 3.5753073770491803,
+        "common_complete_days": 976,
+        "entries": 405,
+        "frequency_of_baseline": 1.2816455696202531,
+        "improvement_vs_b02": 0.9131659836065573,
+        "mean_confirmation_delay_s": 188.54285714285714,
+        "support_days": 350,
+        "support_opportunities": 405
+       },
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 316,
+        "baseline_mean_daily_net_points": 2.662141393442623,
+        "candidate_mean_daily_net_points": 8.10297131147541,
+        "common_complete_days": 976,
+        "entries": 551,
+        "frequency_of_baseline": 1.7436708860759493,
+        "improvement_vs_b02": 5.440829918032787,
+        "mean_confirmation_delay_s": 189.3362831858407,
+        "support_days": 452,
+        "support_opportunities": 551
+       },
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ]
+    },
+    {
+     "family": "GB-VWAP",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "JJ-TBR",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F2",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 180,
+        "baseline_mean_daily_net_points": -0.36501024590163933,
+        "candidate_mean_daily_net_points": 0.2776639344262295,
+        "common_complete_days": 976,
+        "entries": 183,
+        "frequency_of_baseline": 1.0166666666666666,
+        "improvement_vs_b02": 0.6426741803278688,
+        "mean_confirmation_delay_s": 60.0,
+        "support_days": 183,
+        "support_opportunities": 183
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 352,
+        "baseline_mean_daily_net_points": -1.3767930327868851,
+        "candidate_mean_daily_net_points": 1.2930327868852458,
+        "common_complete_days": 976,
+        "entries": 447,
+        "frequency_of_baseline": 1.2698863636363635,
+        "improvement_vs_b02": 2.669825819672131,
+        "mean_confirmation_delay_s": -59.530026109660575,
+        "support_days": 383,
+        "support_opportunities": 447
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "MEMBER-TWO-REASONS",
+     "neighborhoods": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "neighbors": [
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 0,
+          "prominence": 0.2
+         },
+         "value": 0
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 2,
+          "prominence": 0.2
+         },
+         "value": 2
+        },
+        {
+         "axis": "bandwidth",
+         "changed_axis": "bandwidth",
+         "parameters": {
+          "bandwidth": 4,
+          "prominence": 0.2
+         },
+         "value": 4
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.1
+         },
+         "value": 0.1
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.2
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "prominence",
+         "changed_axis": "prominence",
+         "parameters": {
+          "bandwidth": 0.0,
+          "prominence": 0.3
+         },
+         "value": 0.3
+        }
+       ],
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Profile",
+       "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:P1",
+       "changed_axes": 1,
+       "family": "MEMBER-TWO-REASONS",
+       "inner_tuning": {
+        "baseline_entries": 264,
+        "baseline_mean_daily_net_points": 3.748719262295082,
+        "candidate_mean_daily_net_points": 3.748719262295082,
+        "common_complete_days": 976,
+        "entries": 264,
+        "frequency_of_baseline": 1.0,
+        "improvement_vs_b02": 0.0,
+        "mean_confirmation_delay_s": -18.181818181818183,
+        "support_days": 264,
+        "support_opportunities": 264
+       },
+       "parameters": {
+        "bandwidth": 0
+       },
+       "recipe_id": "P1"
+      }
+     ]
+    },
+    {
+     "family": "REFILL-STUDY",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "SAINT-AMT",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900
+         },
+         "value": 15
+        }
+       ],
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.00025614754098360657,
+        "candidate_mean_daily_net_points": 0.002305327868852459,
+        "common_complete_days": 976,
+        "entries": 2,
+        "frequency_of_baseline": 2.0,
+        "improvement_vs_b02": 0.0020491803278688526,
+        "mean_confirmation_delay_s": 180.0,
+        "support_days": 2,
+        "support_opportunities": 2
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 1,
+        "baseline_mean_daily_net_points": 0.00025614754098360657,
+        "candidate_mean_daily_net_points": 0.3235143442622951,
+        "common_complete_days": 976,
+        "entries": 290,
+        "frequency_of_baseline": 290.0,
+        "improvement_vs_b02": 0.32325819672131145,
+        "mean_confirmation_delay_s": 93.76470588235294,
+        "support_days": 255,
+        "support_opportunities": 290
+       },
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ]
+    },
+    {
+     "family": "SIRES",
+     "neighborhoods": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "neighbors": [
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 1
+         },
+         "value": 1
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 2
+         },
+         "value": 2
+        }
+       ],
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "neighbors": [
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 0.5,
+          "frozen": true
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.0,
+          "frozen": true
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.5,
+          "frozen": true
+         },
+         "value": 1.5
+        }
+       ],
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:absorption_reward_retest:M1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 22,
+        "baseline_mean_daily_net_points": 23.254912099276112,
+        "candidate_mean_daily_net_points": 108.35573940020683,
+        "common_complete_days": 967,
+        "entries": 1254,
+        "frequency_of_baseline": 57.0,
+        "improvement_vs_b02": 85.10082730093072,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 541,
+        "support_opportunities": 1254
+       },
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 2038,
+        "baseline_mean_daily_net_points": -172.9089968976215,
+        "candidate_mean_daily_net_points": 66.6918304033092,
+        "common_complete_days": 967,
+        "entries": 152,
+        "frequency_of_baseline": 0.0745829244357213,
+        "improvement_vs_b02": 239.6008273009307,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 147,
+        "support_opportunities": 152
+       },
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ]
+    }
+   ],
+   "inner_cutoff_day": "2023-09-29",
+   "outer_fold": 2024
+  },
+  {
+   "families": [
+    {
+     "family": "GB-FAIL",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "neighbors": [
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.5,
+          "width_mult": 0.5
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 1.0,
+          "width_mult": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.2,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.35
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.5,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.5
+        }
+       ],
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "neighbors": [
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -30
+         },
+         "value": -30
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -15
+         },
+         "value": -15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 15
+         },
+         "value": 15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 30
+         },
+         "value": 30
+        }
+       ],
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 404,
+        "baseline_mean_daily_net_points": 2.7799110751818916,
+        "candidate_mean_daily_net_points": 3.7029102667744542,
+        "common_complete_days": 1237,
+        "entries": 536,
+        "frequency_of_baseline": 1.3267326732673268,
+        "improvement_vs_b02": 0.9229991915925626,
+        "mean_confirmation_delay_s": 188.1304347826087,
+        "support_days": 460,
+        "support_opportunities": 536
+       },
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 404,
+        "baseline_mean_daily_net_points": 2.7799110751818916,
+        "candidate_mean_daily_net_points": 8.183104284559418,
+        "common_complete_days": 1237,
+        "entries": 707,
+        "frequency_of_baseline": 1.75,
+        "improvement_vs_b02": 5.403193209377527,
+        "mean_confirmation_delay_s": 188.67241379310346,
+        "support_days": 580,
+        "support_opportunities": 707
+       },
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ]
+    },
+    {
+     "family": "GB-VWAP",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "JJ-TBR",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F1",
+       "neighbors": [
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 30
+         },
+         "value": 30
+        },
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 60
+         },
+         "value": 60
+        },
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 90
+         },
+         "value": 90
+        }
+       ],
+       "parameters": {
+        "minutes": 60
+       },
+       "recipe_id": "F1"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F1",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 229,
+        "baseline_mean_daily_net_points": -0.33852061438965236,
+        "candidate_mean_daily_net_points": 0.1307599029911075,
+        "common_complete_days": 1237,
+        "entries": 245,
+        "frequency_of_baseline": 1.0698689956331877,
+        "improvement_vs_b02": 0.4692805173807599,
+        "mean_confirmation_delay_s": 60.0,
+        "support_days": 245,
+        "support_opportunities": 245
+       },
+       "parameters": {
+        "minutes": 60
+       },
+       "recipe_id": "F1"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 445,
+        "baseline_mean_daily_net_points": -1.452101859337106,
+        "candidate_mean_daily_net_points": 1.1958367016976557,
+        "common_complete_days": 1237,
+        "entries": 570,
+        "frequency_of_baseline": 1.2808988764044944,
+        "improvement_vs_b02": 2.6479385610347617,
+        "mean_confirmation_delay_s": -59.621848739495796,
+        "support_days": 476,
+        "support_opportunities": 570
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "MEMBER-TWO-REASONS",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "REFILL-STUDY",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "SAINT-AMT",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900
+         },
+         "value": 15
+        }
+       ],
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 3,
+        "baseline_mean_daily_net_points": -0.0008084074373484236,
+        "candidate_mean_daily_net_points": 0.0008084074373484236,
+        "common_complete_days": 1237,
+        "entries": 4,
+        "frequency_of_baseline": 1.3333333333333333,
+        "improvement_vs_b02": 0.0016168148746968471,
+        "mean_confirmation_delay_s": 120.0,
+        "support_days": 4,
+        "support_opportunities": 4
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 3,
+        "baseline_mean_daily_net_points": -0.0008084074373484236,
+        "candidate_mean_daily_net_points": 0.2789005658852061,
+        "common_complete_days": 1237,
+        "entries": 371,
+        "frequency_of_baseline": 123.66666666666667,
+        "improvement_vs_b02": 0.27970897332255457,
+        "mean_confirmation_delay_s": 288.98148148148147,
+        "support_days": 324,
+        "support_opportunities": 371
+       },
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ]
+    },
+    {
+     "family": "SIRES",
+     "neighborhoods": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:clean_squeeze:M1",
+       "neighbors": [
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 1
+         },
+         "value": 1
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 2
+         },
+         "value": 2
+        }
+       ],
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "neighbors": [
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 0.5,
+          "frozen": true
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.0,
+          "frozen": true
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.5,
+          "frozen": true
+         },
+         "value": 1.5
+        }
+       ],
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:clean_squeeze:M1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 162,
+        "baseline_mean_daily_net_points": 0.7516326530612245,
+        "candidate_mean_daily_net_points": 68.37183673469387,
+        "common_complete_days": 1225,
+        "entries": 324,
+        "frequency_of_baseline": 2.0,
+        "improvement_vs_b02": 67.62020408163265,
+        "mean_confirmation_delay_s": 0.6564290126594465,
+        "support_days": 277,
+        "support_opportunities": 324
+       },
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 2649,
+        "baseline_mean_daily_net_points": -135.26489795918368,
+        "candidate_mean_daily_net_points": 52.57714285714286,
+        "common_complete_days": 1225,
+        "entries": 202,
+        "frequency_of_baseline": 0.07625519063797659,
+        "improvement_vs_b02": 187.84204081632654,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 193,
+        "support_opportunities": 202
+       },
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ]
+    }
+   ],
+   "inner_cutoff_day": "2024-09-30",
+   "outer_fold": 2025
+  },
+  {
+   "families": [
+    {
+     "family": "GB-FAIL",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "neighbors": [
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.5,
+          "width_mult": 0.5
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "width_S",
+         "changed_axis": "width_S",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 1.0,
+          "width_mult": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.2,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.2
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.35,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.35
+        },
+        {
+         "axis": "efficiency",
+         "changed_axis": "efficiency",
+         "parameters": {
+          "efficiency": 0.5,
+          "lengths": "15,30,60",
+          "width_S": 0.75,
+          "width_mult": 0.75
+         },
+         "value": 0.5
+        }
+       ],
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "neighbors": [
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -30
+         },
+         "value": -30
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": -15
+         },
+         "value": -15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 15
+         },
+         "value": 15
+        },
+        {
+         "axis": "shift_minutes",
+         "changed_axis": "shift_minutes",
+         "parameters": {
+          "clock_limit": false,
+          "expiry_s_after_qual": 3600,
+          "search": "09:30_to_flatten",
+          "shift_minutes": 30
+         },
+         "value": 30
+        }
+       ],
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "GB-FAIL:previous_hour:F3",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 486,
+        "baseline_mean_daily_net_points": 3.065754339118825,
+        "candidate_mean_daily_net_points": 3.963618157543391,
+        "common_complete_days": 1498,
+        "entries": 661,
+        "frequency_of_baseline": 1.360082304526749,
+        "improvement_vs_b02": 0.897863818424566,
+        "mean_confirmation_delay_s": 187.60141093474428,
+        "support_days": 567,
+        "support_opportunities": 661
+       },
+       "parameters": {
+        "efficiency": "0.35",
+        "lengths": "15,30,60",
+        "width_mult": "0.75"
+       },
+       "recipe_id": "F3"
+      },
+      {
+       "bank": "Timing",
+       "candidate_id": "GB-FAIL:previous_hour:T4",
+       "changed_axes": 1,
+       "family": "GB-FAIL",
+       "inner_tuning": {
+        "baseline_entries": 486,
+        "baseline_mean_daily_net_points": 3.065754339118825,
+        "candidate_mean_daily_net_points": 8.669392523364486,
+        "common_complete_days": 1498,
+        "entries": 858,
+        "frequency_of_baseline": 1.7654320987654322,
+        "improvement_vs_b02": 5.603638184245661,
+        "mean_confirmation_delay_s": 189.10919540229884,
+        "support_days": 696,
+        "support_opportunities": 858
+       },
+       "parameters": {
+        "clock_limit": false,
+        "expiry_s_after_qual": 3600,
+        "search": "09:30_to_flatten"
+       },
+       "recipe_id": "T4"
+      }
+     ]
+    },
+    {
+     "family": "GB-VWAP",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "JJ-TBR",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F1",
+       "neighbors": [
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 30
+         },
+         "value": 30
+        },
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 60
+         },
+         "value": 60
+        },
+        {
+         "axis": "minutes",
+         "changed_axis": "minutes",
+         "parameters": {
+          "minutes": 90
+         },
+         "value": 90
+        }
+       ],
+       "parameters": {
+        "minutes": 60
+       },
+       "recipe_id": "F1"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300,
+          "pressure_s": 120
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600,
+          "pressure_s": 120
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900,
+          "pressure_s": 120
+         },
+         "value": 15
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 1,
+          "pressure_s": 120
+         },
+         "value": 1
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 2,
+          "pressure_s": 120
+         },
+         "value": 2
+        },
+        {
+         "axis": "favorable_ticks",
+         "changed_axis": "favorable_ticks",
+         "parameters": {
+          "favorable_ticks": 4,
+          "pressure_s": 120
+         },
+         "value": 4
+        }
+       ],
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "JJ-TBR:internal_rotation:F1",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 276,
+        "baseline_mean_daily_net_points": -0.3523030707610147,
+        "candidate_mean_daily_net_points": 0.25100133511348466,
+        "common_complete_days": 1498,
+        "entries": 293,
+        "frequency_of_baseline": 1.0615942028985508,
+        "improvement_vs_b02": 0.6033044058744994,
+        "mean_confirmation_delay_s": 60.0,
+        "support_days": 293,
+        "support_opportunities": 293
+       },
+       "parameters": {
+        "minutes": 60
+       },
+       "recipe_id": "F1"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "JJ-TBR:judas_reversal:S4",
+       "changed_axes": 1,
+       "family": "JJ-TBR",
+       "inner_tuning": {
+        "baseline_entries": 531,
+        "baseline_mean_daily_net_points": -1.5619158878504673,
+        "candidate_mean_daily_net_points": 1.2638518024032044,
+        "common_complete_days": 1498,
+        "entries": 667,
+        "frequency_of_baseline": 1.256120527306968,
+        "improvement_vs_b02": 2.825767690253672,
+        "mean_confirmation_delay_s": -59.67741935483871,
+        "support_days": 558,
+        "support_opportunities": 667
+       },
+       "parameters": {
+        "pressure_s": 120
+       },
+       "recipe_id": "S4"
+      }
+     ]
+    },
+    {
+     "family": "KEANI-OPEN-ABOVE-VALUE",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "MEMBER-TWO-REASONS",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "REFILL-STUDY",
+     "neighborhoods": [],
+     "retained_baseline": true,
+     "selected_banks": []
+    },
+    {
+     "family": "SAINT-AMT",
+     "neighborhoods": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "neighbors": [
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 0.75
+         },
+         "value": 0.75
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.0
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "volume_threshold_multiplier",
+         "changed_axis": "volume_threshold_multiplier",
+         "parameters": {
+          "max_minutes": 180,
+          "median_sessions": 20,
+          "volume_threshold_multiplier": 1.25
+         },
+         "value": 1.25
+        }
+       ],
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "neighbors": [
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 5,
+          "deadline_s": 300
+         },
+         "value": 5
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 10,
+          "deadline_s": 600
+         },
+         "value": 10
+        },
+        {
+         "axis": "deadline_minutes",
+         "changed_axis": "deadline_minutes",
+         "parameters": {
+          "deadline_minutes": 15,
+          "deadline_s": 900
+         },
+         "value": 15
+        }
+       ],
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Formation",
+       "candidate_id": "SAINT-AMT:continuation_retest:F2",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 4,
+        "baseline_mean_daily_net_points": -0.0010013351134846463,
+        "candidate_mean_daily_net_points": 0.0003337783711615487,
+        "common_complete_days": 1498,
+        "entries": 5,
+        "frequency_of_baseline": 1.25,
+        "improvement_vs_b02": 0.0013351134846461949,
+        "mean_confirmation_delay_s": 108.0,
+        "support_days": 5,
+        "support_opportunities": 5
+       },
+       "parameters": {
+        "max_minutes": 180,
+        "median_sessions": 20
+       },
+       "recipe_id": "F2"
+      },
+      {
+       "bank": "Sequence",
+       "candidate_id": "SAINT-AMT:continuation_retest:S1",
+       "changed_axes": 1,
+       "family": "SAINT-AMT",
+       "inner_tuning": {
+        "baseline_entries": 4,
+        "baseline_mean_daily_net_points": -0.0010013351134846463,
+        "candidate_mean_daily_net_points": 0.2441588785046729,
+        "common_complete_days": 1498,
+        "entries": 455,
+        "frequency_of_baseline": 113.75,
+        "improvement_vs_b02": 0.24516021361815757,
+        "mean_confirmation_delay_s": 230.15151515151516,
+        "support_days": 396,
+        "support_opportunities": 455
+       },
+       "parameters": {
+        "deadline_s": 600
+       },
+       "recipe_id": "S1"
+      }
+     ]
+    },
+    {
+     "family": "SIRES",
+     "neighborhoods": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:clean_squeeze:M1",
+       "neighbors": [
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 0
+         },
+         "value": 0
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 1
+         },
+         "value": 1
+        },
+        {
+         "axis": "max_prior_contacts",
+         "changed_axis": "max_prior_contacts",
+         "parameters": {
+          "max_prior_contacts": 2
+         },
+         "value": 2
+        }
+       ],
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "neighbors": [
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 0.5,
+          "frozen": true
+         },
+         "value": 0.5
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.0,
+          "frozen": true
+         },
+         "value": 1.0
+        },
+        {
+         "axis": "dispersion",
+         "changed_axis": "dispersion",
+         "parameters": {
+          "band": "vwap_pm_1_dispersion",
+          "dispersion": 1.5,
+          "frozen": true
+         },
+         "value": 1.5
+        }
+       ],
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ],
+     "retained_baseline": false,
+     "selected_banks": [
+      {
+       "bank": "Memory",
+       "candidate_id": "SIRES:clean_squeeze:M1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 187,
+        "baseline_mean_daily_net_points": 0.684885290148448,
+        "candidate_mean_daily_net_points": 56.45900809716599,
+        "common_complete_days": 1482,
+        "entries": 410,
+        "frequency_of_baseline": 2.192513368983957,
+        "improvement_vs_b02": 55.77412280701754,
+        "mean_confirmation_delay_s": 0.5998888677990338,
+        "support_days": 345,
+        "support_opportunities": 410
+       },
+       "parameters": {
+        "max_prior_contacts": 1
+       },
+       "recipe_id": "M1"
+      },
+      {
+       "bank": "Reference",
+       "candidate_id": "SIRES:defended_band_continuation:R1",
+       "changed_axes": 1,
+       "family": "SIRES",
+       "inner_tuning": {
+        "baseline_entries": 3296,
+        "baseline_mean_daily_net_points": -110.58771929824562,
+        "candidate_mean_daily_net_points": 43.42358299595141,
+        "common_complete_days": 1482,
+        "entries": 264,
+        "frequency_of_baseline": 0.08009708737864078,
+        "improvement_vs_b02": 154.01130229419704,
+        "mean_confirmation_delay_s": 0.0,
+        "support_days": 250,
+        "support_opportunities": 264
+       },
+       "parameters": {
+        "band": "vwap_pm_1_dispersion",
+        "frozen": true
+       },
+       "recipe_id": "R1"
+      }
+     ]
+    }
+   ],
+   "inner_cutoff_day": "2025-09-30",
+   "outer_fold": 2026
+  }
+ ],
+ "max_banks_per_family": 2,
+ "schema_version": "research-p15-17-refinement-allowlist-v1",
+ "selection_evidence": "inner fit+tune only; outer test outcomes excluded",
+ "task_id": "P15-17"
+}

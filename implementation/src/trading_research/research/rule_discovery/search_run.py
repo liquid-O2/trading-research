@@ -21,7 +21,7 @@ No result may change the bank, the gates, the splits or the seed.
 from __future__ import annotations
 
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from hashlib import sha256
@@ -944,12 +944,17 @@ def _evaluate_candidate(
         document = ensure_candidate_ids(search.scan_candidate(market, item), item.family, item.branch)
         benchmark = daily_benchmark(document, tape=tape, view=view, flatten_at_ns=flatten_at_ns)
     except Exception as exc:  # a runtime failure is never a data rejection
+        error = f"{type(exc).__name__}: {exc}"
+        kind = classify_failure(error)
         base.update(
             {
-                "status": "runtime_failure",
+                # a session that never had this family's inputs is an explained
+                # missing input, not a defect in the candidate
+                "status": "input_unavailable" if kind == "input_unavailable" else "runtime_failure",
+                "failure_class": kind,
                 "complete": False,
                 "candidate": None,
-                "error": f"{type(exc).__name__}: {exc}",
+                "error": error,
                 "traceback": traceback.format_exc(limit=6),
                 "seconds": time.perf_counter() - started,
             }
@@ -1191,6 +1196,70 @@ def pending_dates(run_root: str | Path, dates: Sequence[str]) -> list[str]:
     return out
 
 
+def retained_failures(run_root: str | Path, dates: Sequence[str]) -> list[dict[str, Any]]:
+    """The failed records of dates that never produced a daily shard.
+
+    A runtime failure is not a data rejection and is not a reason to hide a run:
+    it stays in the ledger with its own error and traceback. A date is a
+    *retained* failure when it has a `failed/<date>.json` record; a date with no
+    record at all is unresolved work and still blocks completion.
+    """
+    out: list[dict[str, Any]] = []
+    root = Path(run_root)
+    for day in dates:
+        path = root / "failed" / f"{day}.json"
+        if not path.is_file():
+            continue
+        try:
+            record = json.loads(path.read_text())
+        except json.JSONDecodeError:
+            continue
+        if record.get("status") != "failed":
+            continue
+        out.append(
+            {
+                "date": day,
+                "status": "failed",
+                "error": record.get("error"),
+                "record": str(path),
+                "record_sha256": file_sha256(path),
+                "disposition": "runtime_failure_retained",
+            }
+        )
+    return out
+
+
+def complete_run(*, run_root: str | Path) -> dict[str, Any]:
+    """Close a run whose only pending dates carry retained failure records.
+
+    Reads checkpoints, daily shards and failed records only; it never re-runs a
+    date and never touches RUN_META.json, so the run keeps the code identities
+    that actually produced its documents.
+    """
+    root = Path(run_root)
+    manifest = json.loads((root / "MANIFEST.json").read_text())
+    dates = list(manifest["dates"])
+    still = pending_dates(root, dates)
+    retained = retained_failures(root, still)
+    unresolved = sorted(set(still) - {row["date"] for row in retained})
+    if unresolved:
+        raise ContractError(
+            f"{len(unresolved)} pending dates have no failure record and are unfinished work: "
+            f"{unresolved[:10]}"
+        )
+    summary = {
+        "task_id": TASK_ID,
+        "run_root": str(root),
+        "dates_declared": len(dates),
+        "dates_completed": len(dates) - len(still),
+        "dates_pending": 0,
+        "dates_retained_failures": len(retained),
+        "closed_by": "complete_run",
+    }
+    path = write_run_complete(root, summary, retained=retained)
+    return {**summary, "run_complete": str(path)}
+
+
 def run_dates(
     *,
     run_root: str | Path,
@@ -1238,20 +1307,25 @@ def run_dates(
                     (completed if record["status"] == "completed" else failed).append(day)
                     _progress(root, selected, completed, failed, started)
     still = pending_dates(root, selected)
+    retained = retained_failures(root, still)
+    unresolved = sorted(set(still) - {row["date"] for row in retained})
     summary = {
         "task_id": TASK_ID,
         "run_root": str(root),
         "dates_declared": len(selected),
         "dates_completed": len(selected) - len(still),
-        "dates_pending": len(still),
+        "dates_pending": len(unresolved),
+        "dates_retained_failures": len(retained),
         "dates_failed": sorted(set(failed)),
         "wall_seconds": time.perf_counter() - started,
         "workers": worker_n,
         "resume_only": resume_only,
     }
-    _write_json(root / "PROGRESS.json", {**summary, "pending": still[:50]})
-    if not still:
-        write_run_complete(root, summary)
+    _write_json(root / "PROGRESS.json", {**summary, "pending": unresolved[:50]})
+    if not unresolved:
+        # A run whose only pending dates carry retained failure records is
+        # complete, and RUN_COMPLETE.json names them.
+        write_run_complete(root, summary, retained=retained)
     return summary
 
 
@@ -1274,26 +1348,44 @@ def _progress(
     )
 
 
-def write_run_complete(run_root: str | Path, summary: Mapping[str, Any]) -> Path:
+def write_run_complete(
+    run_root: str | Path,
+    summary: Mapping[str, Any],
+    *,
+    retained: Sequence[Mapping[str, Any]] = (),
+) -> Path:
+    """Close the run. Retained runtime failures are named here, never hidden:
+    the declared-job arithmetic is written out so the missing shards of a failed
+    date are visible in the same file that claims completion."""
     root = Path(run_root)
     manifest = json.loads((root / "MANIFEST.json").read_text())
     dates = list(manifest["dates"])
+    candidates = len(manifest["candidates"])
     jobs = 0
     for day in dates:
         folder = root / "jobs" / day
         jobs += len(list(folder.glob("*.json.gz"))) if folder.is_dir() else 0
+    failures = [dict(row) for row in retained]
+    declared = len(dates) * candidates
     body = {
-        "schema_version": "research-p15-17-run-complete-v1",
+        "schema_version": "research-p15-17-run-complete-v2",
         "task_id": TASK_ID,
         "stage": STAGE,
         "run_root": str(root),
         "completed_at": datetime.now(timezone.utc).isoformat(),
         "dates": len(dates),
-        "candidates": len(manifest["candidates"]),
-        "declared_jobs": len(dates) * len(manifest["candidates"]),
+        "candidates": candidates,
+        "declared_jobs": declared,
         "written_jobs": jobs,
+        "dates_with_documents": len(dates) - len(failures),
+        "retained_failures": failures,
+        "retained_failure_dates": [row["date"] for row in failures],
+        "jobs_absent_on_retained_failure_dates": len(failures) * candidates,
+        "declared_jobs_reconciled": jobs + len(failures) * candidates == declared,
+        "completed_with_retained_failures": bool(failures),
         "manifest_sha256": file_sha256(root / "MANIFEST.json"),
         "run_meta_sha256": file_sha256(root / "RUN_META.json"),
+        "completed_by_code_sha256": code_identity()["code_sha256"],
         "summary": dict(summary),
     }
     return _write_json(root / "RUN_COMPLETE.json", body)
@@ -1422,22 +1514,57 @@ def _float(value: Any) -> float | None:
     return float(value)
 
 
-def paired_days(rows: Mapping[str, Any], days: Sequence[str]) -> list[dict[str, Any]]:
-    """Common complete days only: both sides present and the session evaluated.
+#: A session can be missing the inputs a family needs (a holiday with no native
+#: events: `market_for_family` returns a view with no clock). That is a missing
+#: input, not a defect in the candidate, and it must not read as a software
+#: failure on the promotion gate. The messages are the contract's own.
+INPUT_UNAVAILABLE_MARKERS = (
+    "market has no cutoff clock",
+    "no native account-day view",
+)
+
+
+def classify_failure(error: str | None) -> str:
+    """`input_unavailable` for a missing required input, else `software_failure`.
+
+    Pure: it reads a message, never a file. Neither class is ever a data
+    rejection -- both keep their row, their reason and their terminal
+    disposition; they differ only in which gate they inform.
+    """
+    text = str(error or "")
+    if any(marker in text for marker in INPUT_UNAVAILABLE_MARKERS):
+        return "input_unavailable"
+    return "software_failure"
+
+
+def paired_row(day: str, row: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    """The one definition of a common complete day, used by both the in-memory
+    table path and the streaming path, so they cannot drift apart.
 
     A complete day with no opportunity stays in the denominator with zero net
     points (S11); it is never dropped and never imputed.
     """
+    if row is None or row.get("status") != "evaluated" or not row.get("complete"):
+        return None
+    candidate = _float(row.get("candidate_net_points"))
+    baseline = _float(row.get("baseline_net_points"))
+    if candidate is None or baseline is None:
+        return None
+    return _paired_body(day, row, candidate, baseline)
+
+
+def paired_days(rows: Mapping[str, Any], days: Sequence[str]) -> list[dict[str, Any]]:
+    """Common complete days of `days`, in that order."""
     out = []
     for day in days:
-        row = rows.get(day)
-        if row is None or row.get("status") != "evaluated" or not row.get("complete"):
-            continue
-        candidate = _float(row.get("candidate_net_points"))
-        baseline = _float(row.get("baseline_net_points"))
-        if candidate is None or baseline is None:
-            continue
-        out.append(
+        paired = paired_row(day, rows.get(day))
+        if paired is not None:
+            out.append(paired)
+    return out
+
+
+def _paired_body(day: str, row: Mapping[str, Any], candidate: float, baseline: float) -> dict[str, Any]:
+    return (
             {
                 "day": day,
                 "candidate": candidate,
@@ -1454,14 +1581,16 @@ def paired_days(rows: Mapping[str, Any], days: Sequence[str]) -> list[dict[str, 
                 "adverse_S": _float(row.get("adverse_S_before_favorable_0_5S_max")),
             }
         )
-    return out
 
 
-def inner_row(
-    item: search.ResolvedCandidate, rows: Mapping[str, Any], fold: Mapping[str, Any]
+def _inner_from_paired(
+    item: search.ResolvedCandidate, paired: Sequence[Mapping[str, Any]]
 ) -> dict[str, Any]:
-    inner_days = list(fold["fit"]) + list(fold["tune"])
-    paired = paired_days(rows, inner_days)
+    """Inner tuning summary of one candidate over an already-paired day list.
+
+    The single scoring core: the table path and the streaming path both call it
+    with the same days in the same order, so they cannot diverge.
+    """
     candidate_mean = float(np.mean([p["candidate"] for p in paired])) if paired else 0.0
     baseline_mean = float(np.mean([p["baseline"] for p in paired])) if paired else 0.0
     improvement = candidate_mean - baseline_mean
@@ -1493,6 +1622,18 @@ def inner_row(
     }
 
 
+
+
+def inner_days(fold: Mapping[str, Any]) -> list[str]:
+    return list(fold["fit"]) + list(fold["tune"])
+
+
+def inner_row(
+    item: search.ResolvedCandidate, rows: Mapping[str, Any], fold: Mapping[str, Any]
+) -> dict[str, Any]:
+    return _inner_from_paired(item, paired_days(rows, inner_days(fold)))
+
+
 def pick_representative(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any] | None:
     """The 1% simplicity rule inside one bank: among candidates whose inner
     tuning score is within 1% of the best, take the simpler model (fewer changed
@@ -1513,17 +1654,167 @@ def pick_representative(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any] | N
     return dict(near[0])
 
 
-def select_for_fold(
+@dataclass(slots=True)
+class CandidateSeries:
+    """What one candidate needs from a whole run, in bounded memory.
+
+    Only the paired numbers of its common complete days are kept -- never the
+    job documents, never the raw daily rows. 148 supported candidates over 1,742
+    declared sessions is a few hundred megabytes, so an evaluation of any run
+    root is a single streaming pass.
+    """
+
+    candidate_id: str
+    paired: dict[str, dict[str, Any]] = field(default_factory=dict)
+    coverage_loss_days: set[str] = field(default_factory=set)
+    runtime_failures: int = 0
+    input_unavailable: int = 0
+    failure_dates: dict[str, str] = field(default_factory=dict)
+    status_counts: dict[str, int] = field(default_factory=dict)
+    days_seen: int = 0
+
+    def select(self, days: Sequence[str]) -> list[dict[str, Any]]:
+        """The candidate's common complete days among `days`, in that order --
+        the same list `paired_days` would return from the full table."""
+        out = []
+        for day in days:
+            paired = self.paired.get(day)
+            if paired is not None:
+                out.append(paired)
+        return out
+
+    def coverage_loss(self, days: Sequence[str]) -> int:
+        return sum(1 for day in days if day in self.coverage_loss_days)
+
+
+def stream_run(
+    run_root: str | Path,
+    dates: Sequence[str] | None = None,
+) -> tuple[dict[str, CandidateSeries], dict[str, Any]]:
+    """One pass over `daily/<date>.json`, one date at a time.
+
+    Returns the per-candidate series and a coverage report that states, in the
+    run's own terms, how many declared dates produced a shard, how many did not
+    and what the row statuses were. Dates without a shard are reported, never
+    silently skipped.
+    """
+    root = Path(run_root)
+    if dates is None:
+        dates = json.loads((root / "MANIFEST.json").read_text())["dates"]
+    series: dict[str, CandidateSeries] = {}
+    statuses: dict[str, int] = {}
+    failure_classes: dict[str, int] = {}
+    missing: list[str] = []
+    present = 0
+    unavailable = 0
+    for day in dates:
+        path = daily_path(root, day)
+        if not path.is_file():
+            missing.append(day)
+            continue
+        document = json.loads(path.read_text())
+        present += 1
+        if document.get("session_available") is False:
+            unavailable += 1
+        for row in document["rows"]:
+            item = series.get(row["candidate_id"])
+            if item is None:
+                item = series[row["candidate_id"]] = CandidateSeries(row["candidate_id"])
+            status = str(row.get("status"))
+            statuses[status] = statuses.get(status, 0) + 1
+            item.status_counts[status] = item.status_counts.get(status, 0) + 1
+            item.days_seen += 1
+            if status in ("runtime_failure", "input_unavailable"):
+                kind = (
+                    "input_unavailable"
+                    if status == "input_unavailable"
+                    else classify_failure(_failure_error(root, day, row["candidate_id"]))
+                )
+                item.failure_dates[day] = kind
+                if kind == "input_unavailable":
+                    item.input_unavailable += 1
+                else:
+                    item.runtime_failures += 1
+                failure_classes[kind] = failure_classes.get(kind, 0) + 1
+            paired = paired_row(day, row)
+            if paired is not None:
+                item.paired[day] = paired
+            elif row.get("baseline_net_points") is not None and not row.get("complete"):
+                item.coverage_loss_days.add(day)
+        del document
+    report = {
+        "run_root": str(root),
+        "dates_declared": len(dates),
+        "dates_with_daily_shard": present,
+        "dates_without_daily_shard": missing,
+        "sessions_unavailable": unavailable,
+        "rows_by_status": statuses,
+        "runtime_failure_classes": failure_classes,
+        "candidates_seen": len(series),
+    }
+    return series, report
+
+
+def _failure_error(run_root: Path, day: str, candidate_id: str) -> str | None:
+    """The recorded error of one runtime-failure row. Only those documents are
+    opened; the daily shard does not carry the message."""
+    path = job_path(run_root, day, candidate_id)
+    if not path.is_file():
+        return None
+    try:
+        return read_gz(path).get("error")
+    except OSError:
+        return None
+
+
+def inner_row_from_series(
+    item: search.ResolvedCandidate, series: CandidateSeries | None, fold: Mapping[str, Any]
+) -> dict[str, Any]:
+    paired = series.select(inner_days(fold)) if series is not None else []
+    return _inner_from_paired(item, paired)
+
+
+def outer_row_from_series(
+    item: search.ResolvedCandidate,
+    series: CandidateSeries | None,
+    folds: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    if series is None:
+        return _outer_from_paired(item, [[] for _ in folds], coverage_loss=0, runtime_failures=0)
+    per_fold = [series.select(fold["test"]) for fold in folds]
+    coverage_loss = sum(series.coverage_loss(fold["test"]) for fold in folds)
+    row = _outer_from_paired(
+        item, per_fold, coverage_loss=coverage_loss, runtime_failures=series.runtime_failures
+    )
+    # An input the session never had is explained coverage, not a software
+    # failure and not an unexplained loss; it is reported with its dates.
+    row["input_unavailable_days"] = series.input_unavailable
+    row["input_unavailable_dates"] = sorted(
+        day for day, kind in series.failure_dates.items() if kind == "input_unavailable"
+    )
+    row["software_failure_dates"] = sorted(
+        day for day, kind in series.failure_dates.items() if kind == "software_failure"
+    )
+    return row
+
+
+def select_for_fold_from_series(
     resolved: Sequence[search.ResolvedCandidate],
-    table: Mapping[str, Mapping[str, Any]],
+    series: Mapping[str, CandidateSeries],
     fold: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Inner-only bank selection: at most two mechanism banks per family."""
-    inner_rows: list[dict[str, Any]] = []
-    for item in resolved:
-        if not item.supported:
-            continue
-        inner_rows.append(inner_row(item, table.get(item.candidate_id, {}), fold))
+    rows = [
+        inner_row_from_series(item, series.get(item.candidate_id), fold)
+        for item in resolved
+        if item.supported
+    ]
+    return _select_from_inner_rows(rows, fold)
+
+
+def _select_from_inner_rows(
+    inner_rows: Sequence[Mapping[str, Any]], fold: Mapping[str, Any]
+) -> dict[str, Any]:
+    """At most two mechanism banks per family, from inner tuning only."""
     by_family: dict[str, list[dict[str, Any]]] = {}
     for row in inner_rows:
         by_family.setdefault(row["family"], []).append(row)
@@ -1557,12 +1848,31 @@ def select_for_fold(
     }
 
 
-def outer_row(
-    item: search.ResolvedCandidate,
-    rows: Mapping[str, Any],
-    folds: Sequence[Mapping[str, Any]],
+
+
+def select_for_fold(
+    resolved: Sequence[search.ResolvedCandidate],
+    table: Mapping[str, Mapping[str, Any]],
+    fold: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Outer evidence for the decision stage. Never consumed by select_for_fold."""
+    """Inner-only bank selection over an in-memory daily table."""
+    rows = [
+        inner_row(item, table.get(item.candidate_id, {}), fold)
+        for item in resolved
+        if item.supported
+    ]
+    return _select_from_inner_rows(rows, fold)
+
+
+def _outer_from_paired(
+    item: search.ResolvedCandidate,
+    per_fold: Sequence[Sequence[Mapping[str, Any]]],
+    *,
+    coverage_loss: int,
+    runtime_failures: int,
+) -> dict[str, Any]:
+    """Outer evidence for the decision stage, over already-paired test days, one
+    list per outer fold. Never consumed by select_for_fold (A02)."""
     diffs: list[float] = []
     block_improvements: list[float] = []
     supported_blocks = 0
@@ -1574,17 +1884,9 @@ def outer_row(
     control_diffs: list[float] = []
     missed = 0
     stopped = 0
-    coverage_loss = 0
     nearest: list[float] = []
     adverse: list[float] = []
-    for fold in folds:
-        paired = paired_days(rows, fold["test"])
-        for day in fold["test"]:
-            row = rows.get(day)
-            if row is None:
-                continue
-            if row.get("baseline_net_points") is not None and not row.get("complete"):
-                coverage_loss += 1
+    for paired in per_fold:
         if not paired:
             continue
         supported_blocks += 1
@@ -1606,7 +1908,7 @@ def outer_row(
         adverse.extend(p["adverse_S"] for p in paired if p["adverse_S"] is not None)
     mean_diff = float(np.mean(diffs)) if diffs else 0.0
     stress_mean = float(np.mean(stress_diffs)) if stress_diffs else None
-    runtime_failures = sum(1 for row in rows.values() if row.get("status") == "runtime_failure")
+
     return {
         "candidate_id": item.candidate_id,
         "family": item.family,
@@ -1638,6 +1940,42 @@ def outer_row(
         "adverse_S_before_favorable_0_5S": max(adverse) if adverse else None,
         "objective_reached": None,
     }
+
+
+
+
+def _coverage_loss_days(rows: Mapping[str, Any], days: Sequence[str]) -> int:
+    """Test days where the paired baseline exists but the candidate row is not a
+    usable common complete day: unexplained input coverage loss."""
+    lost = 0
+    for day in days:
+        row = rows.get(day)
+        if row is None:
+            continue
+        if row.get("baseline_net_points") is not None and not row.get("complete"):
+            lost += 1
+    return lost
+
+
+def outer_row(
+    item: search.ResolvedCandidate,
+    rows: Mapping[str, Any],
+    folds: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    per_fold = [paired_days(rows, fold["test"]) for fold in folds]
+    coverage_loss = sum(_coverage_loss_days(rows, fold["test"]) for fold in folds)
+    # The table path classifies from the recorded terminal disposition alone;
+    # the streaming path additionally repairs a legacy `runtime_failure` row by
+    # reading the error the job document recorded.
+    unavailable = sorted(day for day, row in rows.items() if row.get("status") == "input_unavailable")
+    failures = sorted(day for day, row in rows.items() if row.get("status") == "runtime_failure")
+    row = _outer_from_paired(
+        item, per_fold, coverage_loss=coverage_loss, runtime_failures=len(failures)
+    )
+    row["input_unavailable_days"] = len(unavailable)
+    row["input_unavailable_dates"] = unavailable
+    row["software_failure_dates"] = failures
+    return row
 
 
 def family_thresholds(rows: Sequence[Mapping[str, Any]]) -> dict[str, dict[str, float]]:
@@ -2042,6 +2380,181 @@ def family_report(
     return "\n".join(lines)
 
 
+def reconcile_jobs(
+    run_root: str | Path,
+    *,
+    dates: Sequence[str] | None = None,
+    out_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """Stream every job document of the run, one date and family at a time.
+
+    Opens each `jobs/<date>/<candidate>.json.gz`, checks A04 on both sides of
+    the pairing (opportunities == fills + exclusions, daily net points == the sum
+    of the filled entries), tallies exclusion and exit reasons per family, and
+    reconciles the declared job count against what is on disk. One document is
+    held at a time; nothing is accumulated but counters.
+    """
+    root = Path(run_root)
+    manifest = json.loads((root / "MANIFEST.json").read_text())
+    if dates is None:
+        dates = list(manifest["dates"])
+    candidates = list(manifest["candidates"])
+    families: dict[str, dict[str, Any]] = {}
+    statuses: dict[str, int] = {}
+    pairing_sources: dict[str, int] = {}
+    missing: list[dict[str, str]] = []
+    violations: list[dict[str, Any]] = []
+    identity_mismatches: list[dict[str, Any]] = []
+    dates_without_jobs: list[str] = []
+    documents = 0
+    # unique artifacts: the sanitized file name must be injective over the bank,
+    # or two candidates would share one document.
+    names: dict[str, str] = {}
+    collisions: list[dict[str, str]] = []
+    for candidate_id in candidates:
+        name = sanitize_candidate_id(candidate_id)
+        if name in names:
+            collisions.append({"name": name, "candidates": f"{names[name]} + {candidate_id}"})
+        names[name] = candidate_id
+    for day in dates:
+        folder = root / "jobs" / day
+        if not folder.is_dir():
+            dates_without_jobs.append(day)
+            continue
+        for candidate_id in candidates:
+            path = job_path(root, day, candidate_id)
+            if not path.is_file():
+                missing.append({"date": day, "candidate_id": candidate_id})
+                continue
+            job = read_gz(path)
+            documents += 1
+            # the artifact must say which declared job it is (no substitution)
+            if job.get("candidate_id") is not None and (
+                job.get("candidate_id") != candidate_id or job.get("account_day") not in (None, day)
+            ):
+                identity_mismatches.append(
+                    {
+                        "date": day,
+                        "expected_candidate_id": candidate_id,
+                        "document_candidate_id": job.get("candidate_id"),
+                        "document_account_day": job.get("account_day"),
+                    }
+                )
+            status = str(job.get("status"))
+            statuses[status] = statuses.get(status, 0) + 1
+            source = str(job.get("pairing_baseline_source"))
+            pairing_sources[source] = pairing_sources.get(source, 0) + 1
+            family = families.setdefault(
+                job.get("family") or "?",
+                {
+                    "documents": 0,
+                    "candidate_opportunities": 0,
+                    "candidate_fills": 0,
+                    "baseline_opportunities": 0,
+                    "baseline_fills": 0,
+                    "candidate_zero_days": 0,
+                    "unknown_episodes": 0,
+                    "verdict_changed": 0,
+                    "exclusions": {},
+                    "exit_reasons": {},
+                    "runtime_failures": 0,
+                },
+            )
+            family["documents"] += 1
+            if status == "runtime_failure":
+                family["runtime_failures"] += 1
+            if job.get("verdict_change", {}).get("changed"):
+                family["verdict_changed"] += 1
+            for side, prefix in (("candidate", "candidate"), ("baseline", "baseline")):
+                body = job.get(side)
+                if not body:
+                    continue
+                opportunities = int(body["opportunities"])
+                fills = int(body["fills"])
+                exclusions = body.get("exclusions") or []
+                if opportunities != fills + len(exclusions):
+                    violations.append(
+                        {
+                            "date": day,
+                            "candidate_id": candidate_id,
+                            "side": side,
+                            "reason": "opportunities != fills + exclusions",
+                            "opportunities": opportunities,
+                            "fills": fills,
+                            "exclusions": len(exclusions),
+                        }
+                    )
+                total = sum(Decimal(str(row["net_points"])) for row in body.get("entries") or [])
+                if Decimal(str(body["net_points"])) != total:
+                    violations.append(
+                        {
+                            "date": day,
+                            "candidate_id": candidate_id,
+                            "side": side,
+                            "reason": "net points != sum of filled entries",
+                        }
+                    )
+                family[f"{prefix}_opportunities"] += opportunities
+                family[f"{prefix}_fills"] += fills
+                if side == "candidate":
+                    family["candidate_zero_days"] += int(bool(body.get("zero_day")))
+                    family["unknown_episodes"] += int(body.get("unknown") or 0)
+                    for name, count in (body.get("exclusion_counts") or {}).items():
+                        family["exclusions"][name] = family["exclusions"].get(name, 0) + int(count)
+                    for name, count in (body.get("exit_reasons") or {}).items():
+                        family["exit_reasons"][name] = family["exit_reasons"].get(name, 0) + int(count)
+            del job
+    declared = len(dates) * len(candidates)
+    absent = len(dates_without_jobs) * len(candidates)
+    report = {
+        "schema_version": "research-p15-17-job-reconciliation-v1",
+        "task_id": TASK_ID,
+        "run_root": str(root),
+        "dates_declared": len(dates),
+        "candidates": len(candidates),
+        "declared_jobs": declared,
+        "documents_read": documents,
+        "dates_without_a_jobs_directory": dates_without_jobs,
+        "jobs_absent_on_those_dates": absent,
+        "jobs_missing_individually": missing,
+        "declared_jobs_reconciled": documents + absent + len(missing) == declared,
+        "rows_by_status": statuses,
+        "terminal_dispositions": {
+            **statuses,
+            "absent_on_retained_failure_dates": absent,
+            "missing_without_a_record": len(missing),
+        },
+        "terminal_dispositions_cover_declared": documents + absent + len(missing) == declared,
+        "artifact_name_collisions": collisions,
+        "identity_mismatches": identity_mismatches,
+        "pairing_baseline_sources": pairing_sources,
+        "a04_violations": violations,
+        "families": {name: body for name, body in sorted(families.items())},
+    }
+    if out_path is not None:
+        _write_json(Path(out_path), report)
+    return report
+
+
+def _run_complete_summary(run_root: str | Path) -> dict[str, Any] | None:
+    """The run's own completion record, including any retained runtime failures,
+    carried into the results so a reader of BREADTH_RESULTS sees them."""
+    path = Path(run_root) / "RUN_COMPLETE.json"
+    if not path.is_file():
+        return None
+    body = json.loads(path.read_text())
+    return {
+        "path": str(path),
+        "sha256": file_sha256(path),
+        "completed_at": body.get("completed_at"),
+        "dates": body.get("dates"),
+        "written_jobs": body.get("written_jobs"),
+        "declared_jobs": body.get("declared_jobs"),
+        "declared_jobs_reconciled": body.get("declared_jobs_reconciled"),
+        "retained_failures": body.get("retained_failures"),
+    }
+
+
 def evaluate_run(
     *,
     run_root: str | Path,
@@ -2049,17 +2562,23 @@ def evaluate_run(
     out_dir: str | Path,
     dates: Sequence[str] | None = None,
 ) -> dict[str, Any]:
-    """The whole fold evaluation over a finished (or partial, declared) run."""
+    """The whole fold evaluation of a run root, streaming.
+
+    A pure function of the run root: it reads `MANIFEST.json`, the per-date
+    daily shards and (optionally) `RUN_COMPLETE.json`, and writes the four
+    deliverables into `out_dir`. Point it at another run root and it re-runs in
+    minutes; nothing about it is specific to one attempt.
+    """
     root = Path(run_root)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     freeze = load_freeze(freeze_path)
     folds = load_splits(freeze)
     resolved = search.resolve_bank()
-    table = load_daily_table(root, dates)
-    selections = [select_for_fold(resolved, table, fold) for fold in folds]
+    series, coverage = stream_run(root, dates)
+    selections = [select_for_fold_from_series(resolved, series, fold) for fold in folds]
     outer = [
-        outer_row(item, table.get(item.candidate_id, {}), folds)
+        outer_row_from_series(item, series.get(item.candidate_id), folds)
         for item in resolved
         if item.supported
     ]
@@ -2085,7 +2604,9 @@ def evaluate_run(
         "stage": STAGE,
         "run_root": str(root),
         "identity": identity,
-        "dates_evaluated": len({day for rows in table.values() for day in rows}),
+        "coverage": coverage,
+        "run_complete": _run_complete_summary(root),
+        "dates_evaluated": coverage["dates_with_daily_shard"],
         "candidates": len(resolved),
         "supported": sum(1 for item in resolved if item.supported),
         "unsupported": [
@@ -2122,6 +2643,7 @@ def evaluate_run(
         )
         (reports / f"{family}.md").write_text(body)
     return {
+        "coverage": coverage,
         "trials": sum(1 for _ in ledger_path.read_text().splitlines() if _.strip()),
         "results": str(out / "BREADTH_RESULTS.json"),
         "allowlist": str(out / "REFINEMENT_ALLOWLIST.json"),

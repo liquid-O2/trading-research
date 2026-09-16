@@ -1,0 +1,181 @@
+{
+ "PLAN_SNAPSHOT": {
+  "files": {
+   "AGENTS.md": "5392d47f0f77acc79bf9aaed9dc57701cfb205732d2944097dafab47407ca8fd",
+   "planning/phase-1-5/SEARCH_CONTRACT.md": "70001063cb309bd8626bd767cb4788a420d0a7b155fb401ea4b7dd893929577b",
+   "planning/phase-1-5/tasks/P15-17.md": "dc6d3d25f9ceb3f876546661a8d20f15fa4a27eaaa923578ff5e388446dd3366",
+   "planning/research-program/AMENDMENTS.json": "032cc7c0882a129eb96baf3dc23ad6c196bb962a9f94c93bb13572448921192f",
+   "planning/research-program/ASSURANCE.md": "ffc5acfe2551a42ad6553a0eea46c821ef7ead32436f91bea13e69fa2304ca35",
+   "planning/research-program/EVALUATION.md": "3c0628acd7db481adfa41e4b6a11fc87368909c67bf213d82061643cc2cfadd1",
+   "planning/research-program/PERFORMANCE.md": "adc203aa7eedaab96085b4db3ced595b6c790ddcb10db5c8e1cd2f56eb623311",
+   "planning/research-program/RETENTION.md": "2dcfa87bcb2519adba8a7ea95a710ed6eed092124cf3dacedc8cc1588cd59fdc",
+   "planning/research-program/SILENT_FAILURES.md": "75fd0c8c3bb0ae4f55ac621db114afacf619371660c3497d0a1926c222f72155",
+   "planning/research-program/WORKFLOW.md": "1be9448c5feded3bf20fae9821768702af4067173695c898d54126b152893d3d"
+  },
+  "note": "the live planning files as they are at the time of this draft",
+  "root": "/workspace"
+ },
+ "acceptance": {
+  "A01": "every registered candidate has a row in every fold: TRIALS.jsonl 800 = 160 x 5; terminal dispositions in BREADTH_RESULTS.coverage.rows_by_status sum to 278,560 and RUN_COMPLETE reconciles 278,720 declared = 278,560 written + 160 absent on the retained failure date",
+  "A02": "tests/rule_discovery/test_p15_17.py::test_a02_outer_outcomes_do_not_change_the_fold_choice and select_for_fold_from_series reading only fit+tune days",
+  "A03": "the bank is the frozen CANDIDATE_BANK.json pinned in MANIFEST.bank_sha256; no candidate was added after any result was read",
+  "A04": "daily_benchmark raises unless opportunities == fills + exclusions; JOB_RECONCILIATION checks both sides of every declared job document",
+  "A05": "complete_run closes a run whose only pending dates carry retained failure records, naming them; pending dates without a record are refused",
+  "A06": "PENDING: the final receipt carries command exit codes and predecessor verification for attempt-0003",
+  "A07": "PENDING: EVIDENCE_MATRIX.json is written with the final receipt",
+  "A08": "PENDING: the assigned silent-failure probes are re-run against attempt-0003"
+ },
+ "artifacts": {
+  "BREADTH_RESULTS.json": {
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/BREADTH_RESULTS.json",
+   "sha256": "156839d4ab8d440517af81db116055a4f068fea4d9871fc3f66dfb3cc0fbffca"
+  },
+  "FAMILY_REPORTS": {
+   "files": 9,
+   "members": {
+    "GB-FAIL.md": "2f62ca9912b936b52ced0b9ef7cd417518ddb45cb956249e1c40c407f0d34239",
+    "GB-SCALP.md": "4bed4a4823dc6171d3eb9a1f5c43e6edd1a312614ee3f612a4e85f6566a82731",
+    "GB-VWAP.md": "357e92ac25f7bcb67c17be0ca46b1415c9976d1883ea557e7bdf40fdc1f81e01",
+    "JJ-TBR.md": "965032c40fa9be1bbfd4753545381ce8d83e5d6ee1170cb945ceedf04dc41e54",
+    "KEANI-OPEN-ABOVE-VALUE.md": "dd6ce754c070758f23bb1d7dec8de2ed7936c0f055a4d82ea37cd72f333f8daa",
+    "MEMBER-TWO-REASONS.md": "dc9511fb5a294275d2d2461da550dea02609d415a075cbe39f7b854e59156aa4",
+    "REFILL-STUDY.md": "0dc32a11d1394ce642815b7a7fd7ad0df89f0f59ff234995859b9f235934f3cc",
+    "SAINT-AMT.md": "0720adbdd2f228da599d2f200c0e994f1570438edcd51c82af45c2f0d560327a",
+    "SIRES.md": "a5811b37b45c294065cc3601a5ed9e8dc71ac9fd5d6476838cd5676e851bd6c0"
+   },
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/FAMILY_REPORTS"
+  },
+  "JOB_RECONCILIATION.json": {
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/JOB_RECONCILIATION.json",
+   "sha256": "da001f3a4f012d7d82ba5b483afec7ca856a68fd79dcfd834891c465a9cb7e9b"
+  },
+  "REFINEMENT_ALLOWLIST.json": {
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/REFINEMENT_ALLOWLIST.json",
+   "sha256": "bb77f9c726f92b1cf100bbc3eda6a825166d45ed843cf867c2865be6821bdc79"
+  },
+  "TRIALS.jsonl": {
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/TRIALS.jsonl",
+   "sha256": "0e1f2acc3b6830c3da890b630d69750bf54e63e427e3ff71b6c4fdec37b9bd32"
+  },
+  "WORK_LOG.md": {
+   "path": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/WORK_LOG.md",
+   "sha256": "bdab093e18639262e31d4f354deb4e8c49c916c96cbf4feba6d846fafde993eb"
+  }
+ },
+ "attempt": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002",
+ "freeze": {
+  "immutable": true,
+  "path": "reports/research-work/P15-17/47dedaaa4f5b9ce1/FREEZE.json",
+  "sha256": "e06cf2765437a033e143b4e72e91bd853f4ea45f354f0c02dc524ed553099d74"
+ },
+ "limitations": [
+  "This is the rehearsal: the pairing baseline is the uncorrected P15-16A root 1019e6c09ee54609, so no disposition here is a research finding about a candidate.",
+  "REFILL-STUDY:supplied_selected_order has no B0.2 job in any P15-16A root; its two candidates pair against an in-process B0.2 scan (pairing_baseline_source = in_process_b02_scan).",
+  "800 candidate-date rows are input_unavailable (20 holiday sessions x 40 SIRES and REFILL-STUDY candidates, 'market has no cutoff clock'): a missing input, recorded with its date, not counted as a software failure and not silently dropped.",
+  "2020-06-30 is a retained runtime failure (no native account-day view); its 160 declared jobs are absent and named in RUN_COMPLETE.json.",
+  "The cost stress covers commission and exit slippage exactly and the 500 ms latency by rebinding the two constants exits.py reads at call time; no file is edited."
+ ],
+ "predecessor_receipts": {
+  "P15-08": {
+   "path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/TASK_RECEIPT.json",
+   "sha256": "bfe62f1cc8e724f87a12fd6fd2e497a3f7ba38999b9799e415b3b7c1f4cb9bbf"
+  },
+  "P15-16": {
+   "path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-16/316dc53caf8bdfac/attempt-0001/TASK_RECEIPT.json",
+   "sha256": "1509fd9c5732e34e6e4a64e0cdf78c9f4607f86785da3ebf8837273a2fd09fa8"
+  },
+  "P15-16A": {
+   "reason": "the P15-16A receipt is issued by the integration round; its digest, the corrected B0.2 run root and the supplemental root for prior_week_level, asia_box, prior_day_level and the tdo_retest mode are supplied for attempt-0003",
+   "status": "PENDING"
+  }
+ },
+ "results_summary": {
+  "candidates": 160,
+  "dispositions": {
+   "inconclusive_support": 89,
+   "rejected_by_evidence": 21,
+   "retained_baseline": 38
+  },
+  "promoted": [],
+  "retention": {
+   "active_selected": 13,
+   "inactive_retained": 147
+  },
+  "rows_by_status": {
+   "evaluated": 256720,
+   "runtime_failure": 800,
+   "session_unavailable": 160,
+   "unsupported": 20880
+  },
+  "runtime_failure_classes": {
+   "input_unavailable": 800
+  },
+  "supported": 148,
+  "unsupported": 12
+ },
+ "role": "rehearsal and parity oracle; the definitive run is attempt-0003",
+ "run": {
+  "b02_roots": [
+   "/workspace/implementation/reports/research-work/P15-16A/1019e6c09ee54609"
+  ],
+  "code_identity": {
+   "code_sha256": "0ad79ae8e5ccff5d26781ebbd01c8cf922f4cd978ab495cc480ceb9eb8846324",
+   "files": {
+    "implementation/src/trading_research/research/rule_discovery/exits.py": "a216b8465623612eb6ddbe1bbb9edf3008c7238ba492975975e3d5ba2ca38068",
+    "implementation/src/trading_research/research/rule_discovery/refinement.py": "1b49b005a68bef4f130477a8d3c1f4fdfbec1afa51040767aeb37680dc0ea9bf",
+    "implementation/src/trading_research/research/rule_discovery/runner.py": "84718a616a7b5e58da3354a94a4e1110fa2b1a236f939f8b8d3095fe657815c0",
+    "implementation/src/trading_research/research/rule_discovery/search.py": "6b8934752ba195ebb19a6a6b115969ece90feb721ea236295944ca62ab89eb25",
+    "implementation/src/trading_research/research/rule_discovery/search_run.py": "6d69b3fc58784a6973429ee18e4453a076d5b62c7514b10392998b6e53d564b5"
+   },
+   "python": "3.12.3",
+   "worktree": "/workspace/.worktrees/p15-17-fast"
+  },
+  "code_identity_equivalence": {
+   "claim": "the run started under a runner without the per-session cache release and finished under the runner with it",
+   "evidence": "four first-segment dates (2020-01-02, 2021-03-15, 2022-03-14, 2022-06-15) re-run under the second identity: 640/640 candidate documents and 4/4 daily records byte-identical",
+   "log": "implementation/reports/research-work/P15-17/_fast/WORK_LOG.md (round 2, 'Identity equivalence')"
+  },
+  "dates_declared": 1742,
+  "declared_jobs": 278720,
+  "declared_jobs_reconciled": true,
+  "manifest_sha256": "10ab6e20281b58d1032028a15e33e0645cb4f0e3b54ebc0c62de64c5485fc6bc",
+  "previous_code_identities": [
+   {
+    "code_identity": {
+     "code_sha256": "46a5861a8a4d2f34278280895555c1429c3abb76ca36defbe6de89728ccfe853",
+     "files": {
+      "implementation/src/trading_research/research/rule_discovery/exits.py": "a216b8465623612eb6ddbe1bbb9edf3008c7238ba492975975e3d5ba2ca38068",
+      "implementation/src/trading_research/research/rule_discovery/refinement.py": "1b49b005a68bef4f130477a8d3c1f4fdfbec1afa51040767aeb37680dc0ea9bf",
+      "implementation/src/trading_research/research/rule_discovery/runner.py": "84718a616a7b5e58da3354a94a4e1110fa2b1a236f939f8b8d3095fe657815c0",
+      "implementation/src/trading_research/research/rule_discovery/search.py": "6b8934752ba195ebb19a6a6b115969ece90feb721ea236295944ca62ab89eb25",
+      "implementation/src/trading_research/research/rule_discovery/search_run.py": "44543ec0507665db004abe7920c3881ca4c4180cdd44c35446cc655063c2ff9f"
+     },
+     "python": "3.12.3",
+     "worktree": "/workspace/.worktrees/p15-17-fast"
+    },
+    "superseded_at": "2026-09-16T17:11:16.912471+00:00"
+   }
+  ],
+  "retained_failures": [
+   {
+    "date": "2020-06-30",
+    "disposition": "runtime_failure_retained",
+    "error": "ContractError: 2020-06-30: no native account-day view; the session cannot be benchmarked",
+    "record": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/failed/2020-06-30.json",
+    "record_sha256": "9800d1dad3e35bd661e6ad7b0984ffe03f033192d1d2ab5fd2c5af815439e632",
+    "status": "failed"
+   }
+  ],
+  "run_complete_sha256": "be49546d46e0e31fb2212941f1ba42eab23be51c791f756afa33f731ee77ec7d",
+  "run_meta_sha256": "61a8d9dea8136bc3c4940332a3374085fe498f911fc4cce24ed6b81e7c305af3",
+  "run_root": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002",
+  "workers": 12,
+  "written_jobs": 278560
+ },
+ "schema_version": "research-p15-17-draft-receipt-v1",
+ "stage": "B",
+ "stage_a_attempt": "reports/research-work/P15-17/47dedaaa4f5b9ce1",
+ "status": "draft",
+ "task_id": "P15-17",
+ "written_at": "2026-09-16T18:37:58.543671+00:00"
+}

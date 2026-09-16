@@ -910,9 +910,17 @@ def test_every_gate_is_load_bearing():
 # the native slice: five declared dates, the whole bank, real outputs
 # --------------------------------------------------------------------------
 
-SLICE_ROOT = (
-    Path(__file__).resolve().parents[2]
-    / "reports/research-work/P15-17/6cc3b4628129100d/attempt-0001/native-slice"
+_ATTEMPTS = Path(__file__).resolve().parents[2] / "reports/research-work/P15-17/6cc3b4628129100d"
+SLICE_ROOT = next(
+    (
+        candidate
+        for candidate in (
+            _ATTEMPTS / "attempt-0002/native-slice",
+            _ATTEMPTS / "attempt-0001/native-slice",
+        )
+        if (candidate / "RUN_COMPLETE.json").is_file()
+    ),
+    _ATTEMPTS / "attempt-0002/native-slice",
 )
 SLICE_DATES = ("2020-01-02", "2023-11-06", "2024-01-02", "2026-01-02", "2026-09-03")
 native_slice = pytest.mark.skipif(
@@ -1312,3 +1320,284 @@ def test_no_line_number_moved_in_a_module_a_traceback_can_name():
                   for name, line in rows.items() if seen.get(name) != line]
     assert sum(len(rows) for rows in expected.values()) == 207
     assert moved == []
+
+
+# ==========================================================================
+# Stage B, round 2: completion with retained failures, and the streaming
+# evaluation that makes any run root re-runnable in minutes.
+# ==========================================================================
+
+
+def _fake_run_root(tmp_path, days, *, failed=(), candidates=("SYN:syn_branch:S1", "SYN:syn_branch:M1")):
+    """A minimal run root: MANIFEST, checkpoints, daily shards, job documents."""
+    root = tmp_path / "run"
+    (root / "jobs").mkdir(parents=True, exist_ok=True)
+    _sr._write_json(
+        root / "MANIFEST.json",
+        {
+            "schema_version": _sr.MANIFEST_SCHEMA,
+            "task_id": "P15-17",
+            "dates": list(days) + list(failed),
+            "candidates": list(candidates),
+            "code_sha256": "c" * 64,
+            "bank_sha256": "b" * 64,
+            "freeze_sha256": "f" * 64,
+        },
+    )
+    _sr._write_json(root / "RUN_META.json", {"task_id": "P15-17", "workers": 1})
+    banks = {"SYN:syn_branch:S1": "Sequence", "SYN:syn_branch:M1": "Memory"}
+    for index, day in enumerate(days):
+        rows = []
+        for candidate_id in candidates:
+            row = _daily_row(
+                candidate_id,
+                banks[candidate_id],
+                day,
+                _D("3") + _D(index % 3),
+                _D("1"),
+                2,
+                2,
+            )
+            rows.append(row)
+            _sr._write_gz(
+                _sr.job_path(root, day, candidate_id),
+                {
+                    "family": "SYN",
+                    "status": "evaluated",
+                    "pairing_baseline_source": "synthetic",
+                    "candidate": {
+                        "opportunities": 2,
+                        "fills": 2,
+                        "exclusions": [],
+                        "exclusion_counts": {},
+                        "exit_reasons": {"objective": 2},
+                        "zero_day": False,
+                        "unknown": 0,
+                        "net_points": "4",
+                        "entries": [{"net_points": "1"}, {"net_points": "3"}],
+                    },
+                    "baseline": {
+                        "opportunities": 3,
+                        "fills": 2,
+                        "exclusions": [{"entry_id": "x", "reason": "occupied"}],
+                        "exclusion_counts": {"occupied": 1},
+                        "zero_day": False,
+                        "net_points": "2",
+                        "entries": [{"net_points": "1"}, {"net_points": "1"}],
+                    },
+                },
+            )
+        _sr._write_json(
+            _sr.daily_path(root, day),
+            {"schema_version": _sr.DAILY_SCHEMA, "account_day": day, "rows": rows},
+        )
+        _sr._write_json(
+            _sr.checkpoint_path(root, day),
+            {
+                "date": day,
+                "status": "completed",
+                "daily_sha256": _sr.file_sha256(_sr.daily_path(root, day)),
+            },
+        )
+    for day in failed:
+        _sr._write_json(
+            root / "failed" / f"{day}.json",
+            {
+                "date": day,
+                "status": "failed",
+                "error": "ContractError: no native account-day view",
+                "traceback": "Traceback ...",
+            },
+        )
+    return root
+
+
+def test_a_run_whose_only_pending_dates_are_retained_failures_completes(tmp_path):
+    """A05/A01: a runtime failure keeps the run from being silently 'done', but
+    it must not keep the run open forever either. RUN_COMPLETE names the failure,
+    and the declared-job arithmetic shows the shards it did not write."""
+    days = ["2020-01-02", "2020-01-03"]
+    root = _fake_run_root(tmp_path, days, failed=["2020-06-30"])
+    assert _sr.pending_dates(root, days + ["2020-06-30"]) == ["2020-06-30"]
+    retained = _sr.retained_failures(root, ["2020-06-30"])
+    assert [row["date"] for row in retained] == ["2020-06-30"]
+    assert retained[0]["disposition"] == "runtime_failure_retained"
+    assert retained[0]["record_sha256"] == _sr.file_sha256(root / "failed/2020-06-30.json")
+
+    result = _sr.complete_run(run_root=root)
+    body = _json.loads((root / "RUN_COMPLETE.json").read_text())
+    assert result["dates_retained_failures"] == 1
+    assert body["completed_with_retained_failures"] is True
+    assert body["retained_failure_dates"] == ["2020-06-30"]
+    assert body["retained_failures"][0]["error"].startswith("ContractError")
+    assert body["declared_jobs"] == 3 * 2
+    assert body["written_jobs"] == 2 * 2
+    assert body["jobs_absent_on_retained_failure_dates"] == 2
+    assert body["declared_jobs_reconciled"] is True
+
+
+def test_completion_refuses_a_pending_date_with_no_failure_record(tmp_path):
+    """A date that simply never ran is unfinished work, not a retained failure."""
+    root = _fake_run_root(tmp_path, ["2020-01-02"], failed=[])
+    _sr._write_json(
+        root / "MANIFEST.json",
+        {
+            **_json.loads((root / "MANIFEST.json").read_text()),
+            "dates": ["2020-01-02", "2020-01-03"],
+        },
+    )
+    with pytest.raises(ContractError) as excinfo:
+        _sr.complete_run(run_root=root)
+    assert "unfinished work" in str(excinfo.value)
+    assert not (root / "RUN_COMPLETE.json").is_file()
+
+
+def test_streaming_evaluation_equals_the_in_memory_table(tmp_path):
+    """The streaming path is the same arithmetic as the table path: same inner
+    rows, same fold selection, same outer evidence -- it just never holds the
+    run in memory."""
+    days = sorted(
+        set(_FOLD_A["fit"] + _FOLD_A["tune"] + _FOLD_A["test"] + _FOLD_B["fit"] + _FOLD_B["tune"] + _FOLD_B["test"])
+    )
+    root = _fake_run_root(tmp_path, days)
+    resolved = [item for item in _synthetic_bank() if item.candidate_id != "SYN:syn_branch:S2"]
+    table = _sr.load_daily_table(root, days)
+    series, coverage = _sr.stream_run(root, days)
+    assert coverage["dates_with_daily_shard"] == len(days)
+    assert coverage["dates_without_daily_shard"] == []
+    assert coverage["rows_by_status"] == {"evaluated": 2 * len(days)}
+    for item in resolved:
+        assert _sr.inner_row_from_series(item, series.get(item.candidate_id), _FOLD_A) == _sr.inner_row(
+            item, table.get(item.candidate_id, {}), _FOLD_A
+        )
+        assert _sr.outer_row_from_series(
+            item, series.get(item.candidate_id), _SYNTHETIC_FOLDS
+        ) == _sr.outer_row(item, table.get(item.candidate_id, {}), _SYNTHETIC_FOLDS)
+    for fold in _SYNTHETIC_FOLDS:
+        assert _sr.select_for_fold_from_series(resolved, series, fold) == _sr.select_for_fold(
+            resolved, table, fold
+        )
+
+
+def test_streaming_reports_a_missing_daily_shard_rather_than_skipping_it(tmp_path):
+    """S01/S32: a declared date with no shard is named in the coverage report, so
+    a partial run can never read as a full one."""
+    days = ["2020-01-02", "2020-01-03"]
+    root = _fake_run_root(tmp_path, days)
+    _sr.daily_path(root, "2020-01-03").unlink()
+    series, coverage = _sr.stream_run(root, days)
+    assert coverage["dates_with_daily_shard"] == 1
+    assert coverage["dates_without_daily_shard"] == ["2020-01-03"]
+    assert set(series) == {"SYN:syn_branch:S1", "SYN:syn_branch:M1"}
+
+
+def test_reconcile_jobs_streams_every_document_and_checks_a04(tmp_path):
+    """A01/A04 at run scale: every declared job is opened once, both sides
+    reconcile, and a broken document is reported rather than averaged away."""
+    days = ["2020-01-02", "2020-01-03"]
+    root = _fake_run_root(tmp_path, days, failed=["2020-06-30"])
+    report = _sr.reconcile_jobs(root, out_path=tmp_path / "JOB_RECONCILIATION.json")
+    assert report["documents_read"] == 4
+    assert report["declared_jobs"] == 6
+    assert report["dates_without_a_jobs_directory"] == ["2020-06-30"]
+    assert report["jobs_absent_on_those_dates"] == 2
+    assert report["declared_jobs_reconciled"] is True
+    assert report["a04_violations"] == []
+    family = report["families"]["SYN"]
+    assert family["documents"] == 4
+    assert family["candidate_opportunities"] == 8 and family["candidate_fills"] == 8
+    assert family["baseline_opportunities"] == 12 and family["baseline_fills"] == 8
+    assert family["exclusions"] == {}
+    assert family["exit_reasons"] == {"objective": 8}
+    assert report["pairing_baseline_sources"] == {"synthetic": 4}
+
+    assert report["terminal_dispositions_cover_declared"] is True
+    assert report["terminal_dispositions"]["absent_on_retained_failure_dates"] == 2
+    assert report["artifact_name_collisions"] == []
+    assert report["identity_mismatches"] == []
+
+    # a substituted document is caught by the identity it claims, not by its size
+    swapped = _sr.read_gz(_sr.job_path(root, days[0], "SYN:syn_branch:M1"))
+    swapped["candidate_id"] = "SYN:syn_branch:M1"
+    swapped["account_day"] = days[0]
+    _sr._write_gz(_sr.job_path(root, days[0], "SYN:syn_branch:S1"), swapped)
+    substituted = _sr.reconcile_jobs(root)
+    assert substituted["identity_mismatches"] == [
+        {
+            "date": days[0],
+            "expected_candidate_id": "SYN:syn_branch:S1",
+            "document_candidate_id": "SYN:syn_branch:M1",
+            "document_account_day": days[0],
+        }
+    ]
+
+    broken = _sr.read_gz(_sr.job_path(root, days[0], "SYN:syn_branch:S1"))
+    broken["candidate"]["fills"] = 1
+    _sr._write_gz(_sr.job_path(root, days[0], "SYN:syn_branch:S1"), broken)
+    again = _sr.reconcile_jobs(root)
+    assert any(row["reason"].startswith("opportunities") for row in again["a04_violations"])
+
+
+@pytest.mark.parametrize(
+    "error,expected",
+    [
+        ("ContractError: market has no cutoff clock", "input_unavailable"),
+        ("ContractError: 2020-12-25: no native account-day view", "input_unavailable"),
+        ("ZeroDivisionError: division by zero", "software_failure"),
+        ("", "software_failure"),
+        (None, "software_failure"),
+    ],
+)
+def test_a_missing_input_is_not_a_software_failure(error, expected):
+    """A holiday session with no native events cannot make a candidate look
+    defective. Both classes keep their row; they inform different gates."""
+    assert _sr.classify_failure(error) == expected
+
+
+def test_input_unavailable_days_do_not_fail_the_software_gate(tmp_path):
+    """Independent expectation: the promotion gate's software flag answers 'did
+    this candidate's code work', so a session whose inputs never existed leaves
+    it true, while a genuine error sets it false."""
+    days = ["2020-01-02", "2020-01-03"]
+    root = _fake_run_root(tmp_path, days, candidates=("SYN:syn_branch:S1",))
+    holiday = "2020-12-25"
+    for kind, message in (
+        ("input_unavailable", "ContractError: market has no cutoff clock"),
+        ("software_failure", "ZeroDivisionError: division by zero"),
+    ):
+        _sr._write_gz(
+            _sr.job_path(root, holiday, "SYN:syn_branch:S1"),
+            {"family": "SYN", "status": "runtime_failure", "error": message},
+        )
+        _sr._write_json(
+            _sr.daily_path(root, holiday),
+            {
+                "schema_version": _sr.DAILY_SCHEMA,
+                "account_day": holiday,
+                "rows": [
+                    {
+                        "candidate_id": "SYN:syn_branch:S1",
+                        "family": "SYN",
+                        "branch": "syn_branch",
+                        "bank": "Sequence",
+                        "recipe_id": "S1",
+                        "status": "runtime_failure",
+                        "supported": True,
+                        "complete": False,
+                    }
+                ],
+            },
+        )
+        series, coverage = _sr.stream_run(root, days + [holiday])
+        assert coverage["runtime_failure_classes"] == {kind: 1}
+        item = _synthetic_bank()[0]
+        row = _sr.outer_row_from_series(item, series["SYN:syn_branch:S1"], _SYNTHETIC_FOLDS)
+        if kind == "input_unavailable":
+            assert row["software_causality_pass"] is True
+            assert row["input_unavailable_days"] == 1
+            assert row["input_unavailable_dates"] == [holiday]
+            assert row["software_failure_dates"] == []
+        else:
+            assert row["software_causality_pass"] is False
+            assert row["input_unavailable_days"] == 0
+            assert row["software_failure_dates"] == [holiday]
