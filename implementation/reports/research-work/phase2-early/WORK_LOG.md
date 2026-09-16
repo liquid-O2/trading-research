@@ -117,3 +117,37 @@ P2-03 binds the P2-10 receipt above and P15-02 `38ea8035...`; P2-10 binds P2-09;
 each, with no `--receipts-root` or `--graph` override. 61 tests pass in `tests/context_experts`
 (P2-09 18, P2-10 23, P2-03 15, producer matrix 5). GATE_REVIEW.json and SUBPHASE_RECEIPT.json remain the
 subphase owner's to write.
+
+## Result-card re-issue attempt 2026-09-16 23:40 — blocked on the P15-02 chain
+
+Main's merge (62c2063d here, 98ac1156 in /workspace) added `result_card_failures` to the verifier, and the
+three receipts of `ffef986a` fail it: 7, 8 and 7 problems respectively (headline rows carried a prose support
+string, `target`/`verdict` were flat values). Fixed in `produce_receipts.py`:
+
+- every headline row is `{value, unit, support | interval, artifact, sha256, name, note}`; a count carries the
+  denominator it was counted out of (roots 8, root-days 160, quote rows 215,142, slices 160, board root-days 80,
+  NQ boards 12, day rows 20, heads 152, IV groups 10 as named in VOLATILITY.md), and a deterministic identity
+  against a contract worked example carries `interval [value, value]` with a limits line saying why;
+- `target {text, met}`, `verdict {value, reason}`, `lever {change, evidence}`, `limits` a list.
+  `result_card_failures` now returns `[]` for all three cards, and two new tests in
+  `tests/context_experts/test_produce_receipts_matrix.py` hold it there: the card of each task must pass the
+  rule, and a card with a headline stripped of its support must be rejected with the same message the verifier
+  produced. Receipts are re-issued as `attempt-000N` beside the old attempt, never over it.
+
+The re-issue itself is **blocked outside this task's ownership**. P15-02's receipt
+`c9669fa98ba72c43` (the digest these tasks bind) no longer verifies against live `/workspace` bytes:
+
+- `implementation/src/trading_research/research/rule_discovery/native.py` — superseded by this run's pins
+  (every expert module imports it, so all three receipts now pin the live bytes);
+- `implementation/src/trading_research/research/contracts/receipts.py` — P15-01 `a4c95ab43aef1038` pins the old
+  bytes; also superseded by this run's pins (the producer verifies and probes with it);
+- `implementation/src/trading_research/research/rule_discovery/runner.py` — **not** superseded and not
+  superseded by anything: 49 receipts pin this file, none at the live digest `84718a616a7b5e58`, and no module
+  in these tasks' execution path imports it, so pinning it from here would be a false claim. Commit `456d0812`
+  (P15-17 stage B) changed it without re-issuing P15-02.
+
+Until P15-02 (and P15-01) are re-issued against the current bytes, or a successor receipt that binds P15-02
+pins the live `runner.py`, acceptance key A06 ("All predecessor receipts verify") is false for P2-09, P2-10 and
+P2-03, so no receipt was written: the producer stops at the predecessor-verification command, which exits 2.
+The corrected cards are reproducible with `produce_receipts.py --task P2-09 --task P2-10 --task P2-03`
+(about 25 minutes) as soon as that chain verifies.

@@ -109,3 +109,36 @@ def test_unknown_case_id_raises(tmp_path):
 def test_ambiguous_case_binding_raises():
     with pytest.raises(RuntimeError, match="test_s0"):
         producer._bind_test_function(["test_s07_one", "test_s07_two"], "S07")
+
+
+@pytest.mark.parametrize("task_id", ["P2-09", "P2-10", "P2-03"])
+def test_result_card_passes_the_verifier_rule(task_id, tmp_path):
+    """The card the producer writes must satisfy receipts.result_card_failures as it stands."""
+    from trading_research.research.contracts.receipts import RESULT_CARD_SCHEMA, result_card_failures
+
+    spec = producer.load_spec(task_id, WORKTREE)
+    attempt = _stage(tmp_path, task_id, spec)
+    card = {"schema_version": RESULT_CARD_SCHEMA, "task_id": task_id, **producer.CARDS[task_id](attempt, ["2020-01-02", "2026-09-03"])}
+    path = attempt / "RESULT_CARD.json"
+    path.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    assert result_card_failures(path) == []
+    for row in card["headline"]:
+        assert ("support" in row) != ("interval" in row)
+        if "support" in row:
+            assert row["support"] >= row["value"] or row["unit"] == "relative"
+        else:
+            assert row["interval"] == [row["value"], row["value"]]
+
+
+def test_result_card_without_support_or_interval_is_rejected(tmp_path):
+    """Negative control: the rule that broke the first issue must still bite."""
+    from trading_research.research.contracts.receipts import RESULT_CARD_SCHEMA, result_card_failures
+
+    spec = producer.load_spec("P2-09", WORKTREE)
+    attempt = _stage(tmp_path, "P2-09", spec)
+    card = {"schema_version": RESULT_CARD_SCHEMA, **producer.CARDS["P2-09"](attempt, ["2020-01-02"])}
+    card["headline"][0].pop("support")
+    path = attempt / "BROKEN_CARD.json"
+    path.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n")
+    problems = result_card_failures(path)
+    assert any("headline[0] needs an interval" in item for item in problems), problems

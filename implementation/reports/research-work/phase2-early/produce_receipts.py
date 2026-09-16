@@ -96,6 +96,8 @@ EXTRA: dict[str, dict] = {
             "implementation/src/trading_research/research/method_pack/clocks.py",
             "implementation/src/trading_research/research/method_pack/session_policy.py",
             "implementation/src/trading_research/errors.py",
+            "implementation/src/trading_research/research/rule_discovery/native.py",
+            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.options.instruments",
@@ -136,6 +138,8 @@ EXTRA: dict[str, dict] = {
             "implementation/src/trading_research/research/experts/options/slice_runner.py",
             "implementation/tools/run_context_experts.py",
             "implementation/src/trading_research/errors.py",
+            "implementation/src/trading_research/research/rule_discovery/native.py",
+            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.options.pricing",
@@ -180,6 +184,8 @@ EXTRA: dict[str, dict] = {
             "implementation/src/trading_research/research/method_pack/clocks.py",
             "implementation/src/trading_research/research/method_pack/session_policy.py",
             "implementation/src/trading_research/errors.py",
+            "implementation/src/trading_research/research/rule_discovery/native.py",
+            "implementation/src/trading_research/research/contracts/receipts.py",
         ],
         "imported": [
             "trading_research.research.experts.features.volatility",
@@ -736,18 +742,52 @@ def _pointer(path: Path, selector: str):
 # --------------------------------------------------------------------------- result cards
 
 
-def _headline(name: str, value, unit: str, support, attempt: Path, artifact: str, selector: str) -> dict:
+def _headline(
+    name: str,
+    value: float,
+    unit: str,
+    *,
+    attempt: Path,
+    artifact: str,
+    selector: str,
+    support: int | None = None,
+    interval: list[float] | None = None,
+    note: str = "",
+) -> dict:
+    """One judgeable number: its unit, its support count or interval, and where it was read.
+
+    A count carries the denominator it was counted out of. A deterministic identity check
+    against a contract worked example carries interval [value, value]: the same inputs always
+    give the same number, so there is nothing to put an interval around.
+    """
     path = attempt / artifact
-    return {
+    if (support is None) == (interval is None):
+        raise RuntimeError(f"headline {name!r} needs exactly one of support or interval")
+    row = {
         "name": name,
         "value": value,
         "unit": unit,
-        "support": support,
-        "interval": None,
         "artifact": str(path),
         "sha256": file_digest(path),
         "selector": selector,
+        "note": note,
     }
+    if support is not None:
+        row["support"] = int(support)
+    else:
+        row["interval"] = [float(interval[0]), float(interval[1])]
+    return row
+
+
+IDENTITY_INTERVAL_LIMIT = (
+    "Headline rows whose interval is [value, value] are deterministic identity checks against the "
+    "contract's literal worked example: the inputs are fixed, so the interval is the value itself and "
+    "not a sampling interval."
+)
+HOLDOUT_LIMIT = (
+    f"Nothing here is fitted, tuned, ranked or selected, so the blind hold-out {HOLDOUT[0]}..{HOLDOUT[1]} "
+    "is not consumed; 2026-09-03 appears only as a slice date."
+)
 
 
 def _p2_09_card(attempt: Path, dates: list[str]) -> dict:
@@ -756,6 +796,7 @@ def _p2_09_card(attempt: Path, dates: list[str]) -> dict:
     surface = _load(attempt / "SURFACE_INPUT_SLICE.json")
     coverage = avail.get("coverage") or []
     slices = surface.get("slices") or []
+    roots = ledger.get("roots") or {}
     complete = [row for row in coverage if row.get("disposition") == "complete_observed_scope"]
     no_spot = [row for row in coverage if not row.get("native_intraday_spot")]
     n_ok = sum(int(row.get("n_ok") or 0) for row in slices)
@@ -765,35 +806,47 @@ def _p2_09_card(attempt: Path, dates: list[str]) -> dict:
         "question": "Does every required option root get a dated instrument definition, a causally clocked "
         "quote/spot/OI snapshot and an explicit disposition for what is not owned?",
         "headline": [
-            _headline("required roots with dated definitions", len(ledger.get("roots") or {}), "roots",
-                      f"{len(ledger.get('roots') or {})} of 8 required roots", attempt, "INSTRUMENT_LEDGER.json", "/roots"),
+            _headline("required option roots with a dated instrument definition", len(roots), "roots",
+                      support=len(roots), attempt=attempt, artifact="INSTRUMENT_LEDGER.json", selector="/roots",
+                      note="the 8 roots OPTIONS.md requires: NDX, NDXP, SPX, SPXW, QQQ, SPY, NQ, ES"),
             _headline("root-days with a complete observed-scope disposition", len(complete), "root-days",
-                      f"{len(complete)} of {len(coverage)} root-days", attempt, "OPTIONS_AVAILABILITY.json", "/coverage"),
-            _headline("snapshot quote rows kept", n_ok, "quote rows",
-                      f"{n_rejected} rejected rows retained as records", attempt, "SURFACE_INPUT_SLICE.json", "/slices"),
-            _headline("slices that used OI before its availability", len(early_oi), "slices",
-                      f"0 expected over {len(slices)} slices", attempt, "SURFACE_INPUT_SLICE.json", "/slices"),
+                      support=len(coverage), attempt=attempt, artifact="OPTIONS_AVAILABILITY.json",
+                      selector="/coverage", note="denominator is every root-day attempted in the slice"),
+            _headline("snapshot quote rows kept by the freshness and crossed filters", n_ok, "quote rows",
+                      support=n_ok + n_rejected, attempt=attempt, artifact="SURFACE_INPUT_SLICE.json",
+                      selector="/slices",
+                      note=f"{n_rejected} rejected rows are retained as rejection records, never zero prices"),
+            _headline("slices that used open interest before its publication clock", len(early_oi), "slices",
+                      support=len(slices), attempt=attempt, artifact="SURFACE_INPUT_SLICE.json", selector="/slices",
+                      note="the assumed clock is the next regular session at 12:00 ET"),
             _headline("root-days without native intraday spot", len(no_spot), "root-days",
-                      "NDX/NDXP/SPX/SPXW cash index, explicitly unsupported", attempt, "OPTIONS_AVAILABILITY.json", "/coverage"),
+                      support=len(coverage), attempt=attempt, artifact="OPTIONS_AVAILABILITY.json",
+                      selector="/coverage", note="NDX/NDXP/SPX/SPXW cash index, explicitly unsupported"),
         ],
-        "target": "Card P2-09 A01-A08: distinct expiry clocks, no pre-publication OI, no look-ahead strikes, "
-        "rejections rather than zero prices, reconciled coverage denominators, and bound evidence.",
-        "met": "yes",
-        "verdict": "needs_upgrade",
-        "verdict_reason": "The adapters carry every owned input with dated definitions and explicit dispositions, "
-        "but two of the six required underlyings have no owned two-sided option quote (NQ/ES use a one-minute "
-        "last-trade mid) and the cash indices have no owned intraday spot, so the surface inputs are thin where "
-        "the contract wants a chain.",
-        "lever": "Own an option BBO or MBP schema for NQ and ES, and an intraday NDX/SPX print; the same slice "
-        "would then show n_live per board in the tens rather than 2-7, which OPTIONS_AVAILABILITY.board_depth "
-        "would show directly.",
+        "target": {
+            "text": "Card P2-09 A01-A08: distinct expiry clocks, no pre-publication OI, no look-ahead strikes, "
+            "rejections rather than zero prices, reconciled coverage denominators, and bound evidence.",
+            "met": "yes",
+        },
+        "verdict": {
+            "value": "needs_upgrade",
+            "reason": "The adapters carry every owned input with dated definitions and explicit dispositions, "
+            "but two of the six required underlyings have no owned two-sided option quote (NQ/ES use a "
+            "one-minute last-trade mid) and the cash indices have no owned intraday spot, so the surface "
+            "inputs are thin where the contract wants a chain.",
+        },
+        "lever": {
+            "change": "Own an option BBO or MBP schema for NQ and ES, and an intraday NDX/SPX print.",
+            "evidence": "The same 20-date slice would show live contracts per board in the tens or hundreds "
+            "for NQ and ES instead of 1 and 6, in OPTIONS_AVAILABILITY.board_depth_20date and "
+            "EXPOSURE_BOARDS.depth_by_root.",
+        },
         "limits": [
             f"Slice of {len(dates)} engineering dates, not full history; the frozen engineering dates are a subset.",
             "Exchange-feed completeness is unknown; scoped feeds are labelled scoped, never treated as full chains.",
             "NQ/ES option quotes are ohlcv-1m last trade as bid=ask mid (no owned option BBO), labelled in the artifact.",
             "Cash-index intraday spot is not owned, so native NDX/SPX intraday exposure stays unsupported.",
-            f"2026-09-03 lies inside the blind hold-out {HOLDOUT[0]}..{HOLDOUT[1]}; nothing here is fitted, tuned, "
-            "ranked or selected, so the hold-out is not consumed.",
+            HOLDOUT_LIMIT,
         ],
     }
 
@@ -802,47 +855,62 @@ def _p2_10_card(attempt: Path, dates: list[str]) -> dict:
     pricing = _load(attempt / "PRICING_FIXTURES.json")
     greeks = _load(attempt / "GREEK_SENSITIVITY.json")
     boards_doc = _load(attempt / "EXPOSURE_BOARDS.json")
-    quality = _load(attempt / "SURFACE_QUALITY.json")
     atm = pricing.get("atm") or {}
     fd = pricing.get("finite_difference") or {}
-    worst = 0.0
-    for key in ("delta", "gamma", "vega", "vanna"):
-        analytic = float(atm.get(key))
-        numeric = float(fd.get(key))
-        worst = max(worst, abs(numeric - analytic) / max(abs(analytic), 1e-12))
+    compared = ("delta", "gamma", "vega", "vanna")
+    worst = max(abs(float(fd[key]) - float(atm[key])) / max(abs(float(atm[key])), 1e-12) for key in compared)
     boards = boards_doc.get("boards") or []
     days = boards_doc.get("days") or []
-    refused = [row for row in days if row.get("status") != "ok"]
     depth = boards_doc.get("depth_by_root") or {}
     medians = {root: (rec.get("n_live") or {}).get("median") for root, rec in depth.items()}
+    nq = depth.get("NQ") or {}
+    call = float(atm.get("call"))
     return {
         "question": "Do the pricing, Greek and exposure-board primitives reproduce the contract's reference "
         "vectors, and do the native boards they build carry their model and scenario labels?",
         "headline": [
-            _headline("ATM European call, S=K=100, sigma=.2, T=1", atm.get("call"), "index points",
-                      "contract reference 7.96556746", attempt, "PRICING_FIXTURES.json", "/atm/call"),
-            _headline("worst analytic-vs-finite-difference relative error", worst, "relative",
-                      "4 Greeks at h=.01, v=.0001", attempt, "PRICING_FIXTURES.json", "/finite_difference"),
-            _headline("American 400 vs 800 step delta relative difference", greeks.get("delta_rel"), "relative",
-                      "1 engineering contract; contract gate is 10%", attempt, "GREEK_SENSITIVITY.json", "/delta_rel"),
-            _headline("native boards built", len(boards), "boards",
-                      f"{len(days)} root-days attempted, {len(refused)} refused with a reason",
-                      attempt, "EXPOSURE_BOARDS.json", "/boards"),
-            _headline("median live contracts per board by root", medians, "contracts",
-                      f"{len(days)} root-days", attempt, "EXPOSURE_BOARDS.json", "/depth_by_root"),
+            _headline("ATM European call, S=K=100, sigma=.2, T=1", call, "index points",
+                      interval=[call, call], attempt=attempt, artifact="PRICING_FIXTURES.json",
+                      selector="/atm/call",
+                      note="deterministic identity against the OPTIONS.md reference 7.96556746; parity C-P-(S-K) is 0"),
+            _headline("worst analytic-versus-finite-difference relative error", worst, "relative",
+                      support=len(compared), attempt=attempt, artifact="PRICING_FIXTURES.json",
+                      selector="/finite_difference",
+                      note="delta, gamma, vega and vanna at h=.01 and v=.0001; the contract tolerance is 1e-4"),
+            _headline("American 400 versus 800 step delta relative difference", float(greeks.get("delta_rel")),
+                      "relative", support=1, attempt=attempt, artifact="GREEK_SENSITIVITY.json",
+                      selector="/delta_rel",
+                      note="one engineering ATM contract, not the contract's 16-per-root-date sample; the "
+                      "exclusion gate is 10%"),
+            _headline("native boards built", len(boards), "boards", support=len(days), attempt=attempt,
+                      artifact="EXPOSURE_BOARDS.json", selector="/boards",
+                      note=f"{len(days) - len(boards)} of {len(days)} root-days are refused with a named reason"),
+            _headline("median live contracts per NQ board", float((nq.get("n_live") or {}).get("median") or 0.0),
+                      "contracts", support=int(nq.get("n_boards") or 0), attempt=attempt,
+                      artifact="EXPOSURE_BOARDS.json", selector="/depth_by_root",
+                      note=f"medians by root: {medians}; QQQ and SPY are deep, NQ and ES are degenerate"),
         ],
-        "target": "Card P2-10 A01-A08: fixture and parity to declared tolerance, finite-difference and "
-        "American 400/800 sensitivity, .01 vega scaling with explicit units, unavailable rather than invented "
-        "IV and term brackets, and scenario labels that are assumptions.",
-        "met": "partial",
-        "verdict": "needs_upgrade",
-        "verdict_reason": "The primitives match the independent reference vectors to 1e-12 and every board row "
-        "carries its model, scenario and coverage labels, but the NQ and ES boards built from owned data are "
-        f"degenerate (median live contracts {medians.get('NQ')} and {medians.get('ES')}), and the American "
-        "400/800 sensitivity is one engineering contract rather than the contract's per-root-date sample, so "
-        "the exposure board is only informative for QQQ and SPY today.",
-        "lever": "Own an option BBO or MBP schema for NQ and ES; board depth, concentration nodes and churn "
-        "become measurable on the futures roots, which EXPOSURE_BOARDS.depth_by_root would show directly.",
+        "target": {
+            "text": "Card P2-10 A01-A08: fixture and parity to declared tolerance, finite-difference and "
+            "American 400/800 sensitivity, .01 vega scaling with explicit units, unavailable rather than "
+            "invented IV and term brackets, and scenario labels that are assumptions.",
+            "met": "partial",
+        },
+        "verdict": {
+            "value": "needs_upgrade",
+            "reason": "The primitives match the independent reference vectors to 1e-12 and every board row "
+            "carries its model, scenario and coverage labels, but the NQ and ES boards built from owned data "
+            f"are degenerate (median live contracts {medians.get('NQ')} and {medians.get('ES')}), and the "
+            "American 400/800 sensitivity is one engineering contract rather than the contract's "
+            "per-root-date sample, so the exposure board is only informative for QQQ and SPY today.",
+        },
+        "lever": {
+            "change": "Own an option BBO or MBP schema for NQ and ES, then run the American sensitivity on the "
+            "contract's 16 contracts per supported root and engineering date with the 10% exclusion recorded "
+            "per cohort.",
+            "evidence": "EXPOSURE_BOARDS.depth_by_root would show NQ and ES medians in the tens, and "
+            "GREEK_SENSITIVITY would carry a per-cohort excluded-Greek record instead of one ATM case.",
+        },
         "limits": [
             f"Boards are built on {len(dates)} engineering dates at 10:00 ET, not on the full history.",
             "The full-chain reference model is the labelled equivalent-European approximation; the American tree "
@@ -855,7 +923,8 @@ def _p2_10_card(attempt: Path, dates: list[str]) -> dict:
             "The 1,742-session Level Atlas produced on 2026-09-15 stays under reports/research-work/phase2-early/"
             "P2-10 as a descriptive by-product; it is not an artifact of this receipt because it ranks levels over "
             f"a window that includes the blind hold-out {HOLDOUT[0]}..{HOLDOUT[1]}, and location work is Phase 3.",
-            "Nothing in this receipt is fitted, tuned, ranked or selected, so the hold-out is not consumed.",
+            IDENTITY_INTERVAL_LIMIT,
+            HOLDOUT_LIMIT,
         ],
     }
 
@@ -874,49 +943,64 @@ def _p2_03_card(attempt: Path, dates: list[str]) -> dict:
     head_gaps: dict[str, int] = {}
     for head in heads:
         if head.get("status") != "ok":
-            head_gaps[f"{head.get('name')}/{head.get('reason')}"] = head_gaps.get(f"{head.get('name')}/{head.get('reason')}", 0) + 1
+            key = f"{head.get('name')}/{head.get('reason')}"
+            head_gaps[key] = head_gaps.get(key, 0) + 1
     groups = next((row.get("iv_groups") for row in (features.get("rows") or []) if row.get("iv_groups")), {})
+    gk = float((fixtures.get("gk") or {}).get("variance"))
+    rv = float((fixtures.get("rv") or {}).get("variance"))
     return {
         "question": "Do the volatility estimators reproduce their literal fixtures, and do the multi-horizon "
         "targets come from native midpoints without crossing a close, a roll or an unavailable boundary?",
         "headline": [
-            _headline("Garman-Klass fixture variance", (fixtures.get("gk") or {}).get("variance"),
-                      "interval log-return variance", "contract worked example .5*ln(110/90)^2",
-                      attempt, "VOLATILITY_FIXTURES.json", "/gk/variance"),
-            _headline("realized-variance fixture", (fixtures.get("rv") or {}).get("variance"),
-                      "interval log-return variance", "contract worked example 2*ln(1.01)^2",
-                      attempt, "VOLATILITY_FIXTURES.json", "/rv/variance"),
-            _headline("days with a complete target row", len(ok_rows), "days",
-                      f"{len(rows)} slice days, {len(incomplete)} incomplete with a reason",
-                      attempt, "VOLATILITY_TARGETS.json", "/rows"),
-            _headline("target heads complete", len(heads_ok), "heads",
-                      f"{len(heads)} heads on {len(ok_rows)} complete days ({len(head_names)} named heads per day); "
-                      f"incomplete: {head_gaps or 'none'}; horizons unsupported for crossing a close or roll: "
-                      f"{unsupported or 'none'}",
-                      attempt, "VOLATILITY_TARGETS.json", "/rows/0/heads"),
-            _headline("IV feature groups with a disposition", len(groups), "groups",
-                      "each requested group is consumed or carries a missing-group record",
-                      attempt, "VOLATILITY_FEATURES.json", "/rows/0/iv_groups"),
+            _headline("Garman-Klass fixture variance", gk, "interval log-return variance",
+                      interval=[gk, gk], attempt=attempt, artifact="VOLATILITY_FIXTURES.json",
+                      selector="/gk/variance",
+                      note="deterministic identity against the VOLATILITY.md worked example .5*ln(110/90)^2"),
+            _headline("realized-variance fixture", rv, "interval log-return variance",
+                      interval=[rv, rv], attempt=attempt, artifact="VOLATILITY_FIXTURES.json",
+                      selector="/rv/variance",
+                      note="deterministic identity against the worked example 2*ln(1.01)^2"),
+            _headline("slice days with a complete target row", len(ok_rows), "days", support=len(rows),
+                      attempt=attempt, artifact="VOLATILITY_TARGETS.json", selector="/rows",
+                      note=f"{len(incomplete)} incomplete day rows, each with a reason"),
+            _headline("target heads complete", len(heads_ok), "heads", support=len(heads), attempt=attempt,
+                      artifact="VOLATILITY_TARGETS.json", selector="/rows/0/heads",
+                      note=f"{len(head_names)} named heads on {len(ok_rows)} complete days; incomplete: "
+                      f"{head_gaps or 'none'}; horizons unsupported for crossing a close or roll: "
+                      f"{unsupported or 'none'}"),
+            _headline("IV feature groups requested with a disposition", len(groups), "groups", support=10,
+                      attempt=attempt, artifact="VOLATILITY_FEATURES.json", selector="/rows/0/iv_groups",
+                      note="VOLATILITY.md names ten IV groups (NDX/NDXP, SPX/SPXW, QQQ, SPY, NQ, ES boards and "
+                      "the VIX, VX, VVIX, VXN series); this build requests three and each carries a disposition"),
         ],
-        "target": "Card P2-03 A01-A08: GK/YZ/RV worked examples, separated variance units, unsupported rather "
-        "than truncated horizons, a disposition for every requested IV group, and no future price in a current feature.",
-        "met": "partial",
-        "verdict": "needs_upgrade",
-        "verdict_reason": f"The estimators reproduce every literal fixture to 1e-15 and {len(heads_ok)} of "
-        f"{len(heads)} heads are built from native BBO midpoints with explicit incomplete records for the rest, "
-        "but the feature side is the "
-        f"arithmetic core only: {len(groups)} IV groups are requested where VOLATILITY.md names six root board "
-        "groups plus the VIX family, and session seasonality and the rolling historical feature bank are not built yet.",
-        "lever": "Extend the feature builder to request every IV group named in VOLATILITY.md with a per-group "
-        "disposition and add the session-bucket and rolling GK/YZ features, before P2-04 fits the joint model; "
-        "VOLATILITY_FEATURES rows would then carry a disposition per named group rather than three.",
+        "target": {
+            "text": "Card P2-03 A01-A08: GK/YZ/RV worked examples, separated variance units, unsupported rather "
+            "than truncated horizons, a disposition for every requested IV group, and no future price in a "
+            "current feature.",
+            "met": "partial",
+        },
+        "verdict": {
+            "value": "needs_upgrade",
+            "reason": f"The estimators reproduce every literal fixture to 1e-15 and {len(heads_ok)} of "
+            f"{len(heads)} heads are built from native BBO midpoints with explicit incomplete records for the "
+            f"rest, but the feature side is the arithmetic core only: {len(groups)} IV groups are requested "
+            "where VOLATILITY.md names ten, and session seasonality and the rolling historical feature bank "
+            "are not built yet.",
+        },
+        "lever": {
+            "change": "Extend the feature builder to request every IV group named in VOLATILITY.md with a "
+            "per-group disposition, and add the session-bucket and rolling GK/YZ features, before P2-04 fits "
+            "the joint model.",
+            "evidence": "VOLATILITY_FEATURES rows would carry ten group dispositions instead of three, and the "
+            "A3 (IV-only) and A5 (joint) ablations in P2-04 would then be separable.",
+        },
         "limits": [
             f"Features and targets are built on {len(dates)} engineering dates, not the full history.",
             "Realized variance uses native BBO midpoints with age<=5s; a missing boundary makes the target "
             "incomplete rather than bridged, and the minute-close series is kept only as a labelled comparison.",
             "No forecast is fitted here; the joint volatility fit, its ablations and its horizons are P2-04.",
-            f"2026-09-03 lies inside the blind hold-out {HOLDOUT[0]}..{HOLDOUT[1]} and appears only as an "
-            "incomplete-target record; nothing here is fitted, tuned, ranked or selected.",
+            IDENTITY_INTERVAL_LIMIT,
+            HOLDOUT_LIMIT,
         ],
     }
 
@@ -925,16 +1009,24 @@ CARDS = {"P2-09": _p2_09_card, "P2-10": _p2_10_card, "P2-03": _p2_03_card}
 
 
 def _card_markdown(card: dict) -> str:
-    lines = ["## Result card", "", f"**Question.** {card['question']}", "", "| headline | value | unit | support |", "| --- | --- | --- | --- |"]
+    lines = [
+        "## Result card",
+        "",
+        f"**Question.** {card['question']}",
+        "",
+        "| headline | value | unit | support or interval | note |",
+        "| --- | --- | --- | --- | --- |",
+    ]
     for item in card["headline"]:
-        lines.append(f"| {item['name']} | {item['value']} | {item['unit']} | {item['support']} |")
+        bound = f"support {item['support']}" if "support" in item else f"interval {item['interval']}"
+        lines.append(f"| {item['name']} | {item['value']} | {item['unit']} | {bound} | {item['note']} |")
     lines += [
         "",
-        f"**Target.** {card['target']} **Met:** {card['met']}.",
+        f"**Target.** {card['target']['text']} **Met:** {card['target']['met']}.",
         "",
-        f"**Verdict.** {card['verdict']} — {card['verdict_reason']}",
+        f"**Verdict.** {card['verdict']['value']} — {card['verdict']['reason']}",
         "",
-        f"**Lever.** {card['lever']}",
+        f"**Lever.** {card['lever']['change']} Evidence that it worked: {card['lever']['evidence']}",
         "",
         "**Limits.**",
         "",
@@ -1011,6 +1103,12 @@ def _report(spec: dict, attempt: Path, card: dict, commands: list[dict], probes:
 # --------------------------------------------------------------------------- produce
 
 
+def _next_attempt(run_dir: Path) -> Path:
+    """A re-issue writes a new attempt beside the old one; issued evidence is never overwritten."""
+    existing = sorted(int(path.name.split("-")[1]) for path in run_dir.glob("attempt-*") if path.is_dir())
+    return run_dir / f"attempt-{(existing[-1] + 1) if existing else 1:04d}"
+
+
 def _receipt_from_run(impl_out: Path, dep: str, run_stamp: str) -> Path:
     """The dependency's receipt issued from this same slice run, and only that one."""
     root = impl_out / "reports/research-work" / dep
@@ -1023,9 +1121,9 @@ def _receipt_from_run(impl_out: Path, dep: str, run_stamp: str) -> Path:
         slice_path = (identities.get("slice_command") or {}).get("path") or ""
         if f"/{run_stamp}/" in slice_path:
             found.append(receipt)
-    if len(found) != 1:
-        raise SystemExit(f"{dep}: expected exactly one receipt from {run_stamp}, found {found}")
-    return found[0]
+    if not found:
+        raise SystemExit(f"{dep}: no receipt issued from {run_stamp}")
+    return found[-1]  # the newest attempt of that run
 
 
 def _coverage(task_id: str, attempt: Path, dates: list[str]) -> dict:
@@ -1147,9 +1245,7 @@ def produce(task_id: str, *, root: Path, out_root: Path, run_stamp: str, produce
         )
         draft["code_sha256"] = digest(code_doc)
         run_id = semantic_run_id(draft)
-        attempt = attempt_parent / run_id / "attempt-0001"
-        if attempt.exists():
-            shutil.rmtree(attempt)
+        attempt = _next_attempt(attempt_parent / run_id)
         shutil.copytree(staging, attempt)
     finally:
         shutil.rmtree(staging, ignore_errors=True)
@@ -1243,7 +1339,8 @@ def produce(task_id: str, *, root: Path, out_root: Path, run_stamp: str, produce
             f"- Predecessor receipts {sorted(predecessors)} verified, exit {commands[2]['exit_code']}.\n"
             f"- Forgery probes: control ok={probes['control']['ok']}, "
             f"{probes['n_rejected']} of {probes['n_mutations']} mutations rejected with their intended code.\n"
-            f"- Result card verdict {card['verdict']}; the receipt claims no fitted or ranked quantity, so the "
+            f"- Result card verdict {card['verdict']['value']} (target met: {card['target']['met']}); the receipt "
+            f"claims no fitted or ranked quantity, so the "
             f"blind hold-out {HOLDOUT[0]}..{HOLDOUT[1]} is not consumed.\n",
             encoding="utf-8",
         )
@@ -1281,7 +1378,7 @@ def produce(task_id: str, *, root: Path, out_root: Path, run_stamp: str, produce
             acceptance_checks={key: True for key in spec["acceptance_keys"]},
             disposition="implemented_verified",
             reason=f"{task_id}: native slice on {len(dates)} engineering dates, owned tests, bound evidence matrix "
-            f"and forgery probes; result card verdict {card['verdict']}.",
+            f"and forgery probes; result card verdict {card['verdict']['value']}.",
             coverage=coverage,
             unresolved=unresolved,
         )
@@ -1305,7 +1402,8 @@ def produce(task_id: str, *, root: Path, out_root: Path, run_stamp: str, produce
                 "receipt_sha256": file_digest(receipt_path),
                 "verifier_ok": bool(result.ok),
                 "failures": [item.to_dict() for item in result.failures][:6],
-                "verdict": card["verdict"],
+                "verdict": card["verdict"]["value"],
+                "target_met": card["target"]["met"],
             },
             sort_keys=True,
         )
