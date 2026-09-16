@@ -427,12 +427,16 @@ def test_shuffle_does_not_change_selected_banks():
 def test_holm_and_bootstrap_contract_constants():
     recorded = {}
 
-    def spy(values, *, block, draws, seed):
-        recorded["block"] = block
+    def spy(values, *, block, draws, seed, segments=None):
+        # the contract's bootstrap draws inside calendar-year segments; the last
+        # call wins for block, and every call is recorded
+        recorded.setdefault("blocks", []).append(block)
+        recorded["block"] = 5 if 5 in recorded["blocks"] else block
         recorded["draws"] = draws
         recorded["seed"] = seed
         recorded["n"] = len(list(values))
-        return moving_block_bootstrap(values, block=block, draws=draws, seed=seed)
+        recorded["segments"] = segments
+        return moving_block_bootstrap(values, block=block, draws=draws, seed=seed, segments=segments)
 
     candidate = _promo_candidate()
     result = evaluate_promotion(
@@ -443,6 +447,8 @@ def test_holm_and_bootstrap_contract_constants():
     assert recorded["seed"] == 15022026
     assert recorded["draws"] == 2000
     assert recorded["block"] == 5
+    # blocks 1 and 10 are reported beside it as sensitivity (EVALUATION.md)
+    assert sorted(set(recorded["blocks"])) == [1, 5, 10]
     assert recorded["n"] == 30
     assert result["promoted"] is True
     assert result["ci_low"] > 0
@@ -786,6 +792,9 @@ def test_neighborhoods_are_exactly_the_contract_recipes():
         "F3",
         "P1",
         "P2",
+        # the 2026-09-16 supplement recipes carry the value-area fraction axis
+        "P3",
+        "P4",
         "R1",
         "R2",
         "C1",
@@ -803,7 +812,8 @@ def test_neighborhoods_are_exactly_the_contract_recipes():
         "T4",
     }
     assert "_CAP" not in NEIGHBORHOODS
-    assert len(NEIGHBORHOODS) == 20
+    # 18 original recipes plus the 2026-09-16 supplement's P3 and P4
+    assert len(NEIGHBORHOODS) == 22
 
 
 def test_generic_refinement_fallback_and_cap_registry():
@@ -856,3 +866,485 @@ def test_p_holm_matches_holm_fn_rows_with_ties():
     assert result["p_holm"] == expected[0]
     assert result["p_raw"] == 0.02
     assert result["p_holm"] == pytest.approx(0.06)
+
+
+# ==========================================================================
+# The executed refinement round: the bank built from P15-17's allowlist, its
+# caps, the fold isolation of the selection, the combination rule and the
+# native negative control.
+# ==========================================================================
+
+from pathlib import Path as _Path
+
+from trading_research.research.rule_discovery import refinement as rf
+
+CONTRACT = _Path("/workspace/planning/phase-1-5/SEARCH_CONTRACT.md")
+MINUTE_NS = 60_000_000_000
+CUTOFF_NS = 1_600_000_000 * 1_000_000_000
+
+#: The refinement neighbourhoods exactly as the search contract's table states
+#: them, transcribed from the document, not from the implementation.
+CONTRACT_NEIGHBOURHOODS = {
+    "F1": {"minutes": [30, 60, 90]},
+    "F2": {"volume_threshold_multiplier": [0.75, 1.0, 1.25]},
+    "F3": {"width_S": [0.5, 0.75, 1.0], "efficiency": [0.2, 0.35, 0.5]},
+    "P1": {"bandwidth": [0, 2, 4], "prominence": [0.10, 0.20, 0.30]},
+    "P2": {"bandwidth": [0, 2, 4], "prominence": [0.10, 0.20, 0.30]},
+    "R1": {"dispersion": [0.5, 1.0, 1.5]},
+    "R2": {},
+    "C1": {"window_minutes": [2, 5, 10]},
+    "C2": {"half_life_s": [120, 300, 600]},
+    "C3": {"history_sessions": [10, 20, 40]},
+    "S1": {"deadline_minutes": [5, 10, 15]},
+    "S2": {"favorable_ticks": [1, 2, 4]},
+    "S3": {"deadline_minutes": [5, 10, 15], "favorable_ticks": [1, 2, 4]},
+    "S4": {"deadline_minutes": [5, 10, 15], "favorable_ticks": [1, 2, 4]},
+    "M1": {"max_prior_contacts": [0, 1, 2]},
+    "M2": {"prior_reaction_S": [0.1, 0.25, 0.5]},
+    "T1": {"shift_minutes": [-30, -15, 0, 15, 30]},
+    "T2": {"shift_minutes": [-30, -15, 0, 15, 30]},
+    "T3": {"shift_minutes": [-30, -15, 0, 15, 30]},
+    "T4": {"shift_minutes": [-30, -15, 0, 15, 30]},
+}
+
+
+@pytest.mark.parametrize("recipe_id", sorted(CONTRACT_NEIGHBOURHOODS))
+def test_neighborhood_values_are_exactly_the_contract_table(recipe_id):
+    """Every proposed value comes from the contract's table, and no axis or
+    value outside it is ever proposed."""
+    expected = CONTRACT_NEIGHBOURHOODS[recipe_id]
+    rows = rf.neighborhood_values(recipe_id, {})
+    proposed: dict[str, list] = {}
+    for row in rows:
+        proposed.setdefault(row["axis"], []).append(row["value"])
+    assert set(proposed) == set(expected), recipe_id
+    for axis, values in expected.items():
+        assert proposed[axis] == values, (recipe_id, axis)
+
+
+def test_the_contract_document_still_states_those_values():
+    """If the contract's table changes, this expectation is stale -- fail loudly
+    rather than keep refining to a retired neighbourhood."""
+    text = CONTRACT.read_text()
+    for fragment in (
+        "30,60,90 matching minutes",
+        ".75,1,1.25 times the prior 20-session median",
+        "width .5,.75,1S with efficiency fixed.35",
+        "efficiency .2,.35,.5 at chosen width",
+        "b0,2,4 with prominence.20",
+        "prominence .10,.20,.30 at chosen b",
+        ".5,1,1.5 dispersion",
+        "2,5,10 minutes / 120,300,600 seconds / 10,20,40 sessions",
+        "5,10,15 minutes / 1,2,4 ticks",
+        "at most 0,1,2 previous contacts / .1,.25,.5S",
+        "-30,-15,0,+15,+30 minutes",
+    ):
+        assert fragment in text, fragment
+
+
+def _bank(recipe_id="F1", bank="Formation", parameters=None, branch="nyam_box"):
+    return {
+        "candidate_id": f"GB-FAIL:{branch}:{recipe_id}",
+        "bank": bank,
+        "recipe_id": recipe_id,
+        "branch": branch,
+        "family": "GB-FAIL",
+        "parameters": dict(parameters or {"minutes": 60}),
+        "issue_at_ns": CUTOFF_NS - rf.MAX_TIMING_SHIFT_MINUTES * MINUTE_NS,
+    }
+
+
+def test_neighbors_respect_the_per_bank_and_per_family_caps():
+    """At most 12 attempted neighbours per bank and 24 per family; everything
+    beyond the cap keeps a row with its reason."""
+    banks = [
+        _bank("S3", "Sequence", {"deadline_minutes": d}, branch=f"b{i}")
+        for i, d in enumerate((5, 10, 15, 5, 10))
+    ]
+    rows = rf.generate_neighbors("GB-FAIL", rf.fold_guard(CUTOFF_NS), banks)
+    attempted = [row for row in rows if row["status"] == "attempted"]
+    per_bank: dict[str, int] = {}
+    for row in attempted:
+        per_bank[row["bank"]] = per_bank.get(row["bank"], 0) + 1
+    assert max(per_bank.values()) <= rf.MAX_NEIGHBORS_PER_BANK
+    assert len(attempted) <= rf.MAX_NEIGHBORS_PER_FAMILY
+    capped = [row for row in rows if row["reason"] in ("cap_per_bank", "cap_per_family")]
+    assert capped, "the cap must be visible as a row, not as a silent truncation"
+    assert all(row["status"] == "not_applicable" for row in capped)
+
+
+def test_a_timing_shift_outside_the_registered_set_is_refused_by_the_past_only_guard():
+    """The registered T neighbourhood is -30..+30 minutes measured from the
+    parent issue; a wider shift needs information the fit cutoff cannot supply."""
+    guard = rf.fold_guard(CUTOFF_NS)
+    parent = _bank("T4", "Timing", {"shift_minutes": 0})
+    rows = rf.generate_neighbors("GB-FAIL", guard, [parent])
+    assert [row["status"] for row in rows if row["changed_axis"] == "shift_minutes"].count("attempted") >= 1
+    assert all(
+        abs(row["parameters"]["shift_minutes"]) <= rf.MAX_TIMING_SHIFT_MINUTES
+        for row in rows
+        if row["status"] == "attempted"
+    )
+    wider = dict(parent, issue_at_ns=CUTOFF_NS)  # a parent issued at the cutoff itself
+    rows = rf.generate_neighbors("GB-FAIL", guard, [wider])
+    late = [row for row in rows if row["parameters"].get("shift_minutes", 0) > 0]
+    assert late and all(row["reason"] == "past_only_allowlist" for row in late)
+
+
+def test_a_selected_bank_without_a_branch_is_refused():
+    """Two branches of one family and recipe would collide in the neighbour
+    identity; the bank builder refuses rather than merge them."""
+    allowlist = {
+        "folds": [
+            {
+                "outer_fold": 2022,
+                "inner_cutoff_day": "2021-09-30",
+                "families": [
+                    {"family": "GB-FAIL", "selected_banks": [{"candidate_id": "GB-FAIL:x:F1", "bank": "Formation", "recipe_id": "F1", "parameters": {"minutes": 60}}]}
+                ],
+            }
+        ]
+    }
+    with pytest.raises(ContractError) as excinfo:
+        rf.build_refinement_bank(allowlist, {2022: CUTOFF_NS})
+    assert "collide" in str(excinfo.value)
+
+
+def test_a_combination_needs_both_ingredients_to_beat_the_baseline():
+    """A01: the combined candidate exists only when each ingredient individually
+    beats B0.2 on inner tuning."""
+    a = _bank("F1", "Formation", {"minutes": 30})
+    b = _bank("T4", "Timing", {"shift_minutes": 15})
+    fold = rf.fold_guard(CUTOFF_NS)
+    combined = rf.combine_candidates(
+        "GB-FAIL", fold, a, b, b02_score=1.0, score_a=2.0, score_b=1.5, combo_score=2.5
+    )
+    assert combined is not None
+    assert combined["changed_axes"] == 2 and combined["interaction"] == "synergistic"
+    assert combined["parameters"] == {"minutes": 30, "shift_minutes": 15}
+    assert combined["parent_trial_ids"] == [a["candidate_id"], b["candidate_id"]]
+    for score_a, score_b in ((1.0, 1.5), (2.0, 0.5), (0.9, 0.9)):
+        assert (
+            rf.combine_candidates(
+                "GB-FAIL", fold, a, b, b02_score=1.0, score_a=score_a, score_b=score_b, combo_score=9.0
+            )
+            is None
+        )
+    assert (
+        rf.combine_candidates(
+            "GB-FAIL", fold, a, b, b02_score=1.0, score_a=2.0, score_b=1.5, combo_score=2.5,
+            source_dependencies_causal=False,
+        )
+        is None
+    )
+
+
+def test_a_combination_reports_an_antagonistic_interaction_honestly():
+    a = _bank("F1", "Formation", {"minutes": 30})
+    b = _bank("T4", "Timing", {"shift_minutes": 15})
+    combined = rf.combine_candidates(
+        "GB-FAIL", {}, a, b, b02_score=1.0, score_a=2.0, score_b=1.8, combo_score=1.2
+    )
+    assert combined["interaction"] == "antagonistic"
+    assert combined["vs_ingredient_a"] < 0 and combined["vs_ingredient_b"] < 0
+    assert combined["vs_b02"] > 0
+
+
+# --------------------------------------------------------------------------
+# fold isolation and the negative control
+# --------------------------------------------------------------------------
+
+_FOLD_2022 = {
+    "test_year": 2022,
+    "fit": ["2020-01-02", "2020-01-03"],
+    "tune": ["2021-07-01"],
+    "calibrate": ["2021-10-01"],
+    "test": ["2022-01-03", "2022-01-04"],
+}
+_FOLD_2023 = {
+    "test_year": 2023,
+    "fit": ["2022-01-03", "2022-01-04"],
+    "tune": ["2022-07-01"],
+    "calibrate": ["2022-10-03"],
+    "test": ["2023-01-03", "2023-01-04"],
+}
+
+
+def _neighbor_row(candidate_id, bank, recipe_id, parameters, axis):
+    return {
+        "candidate_id": candidate_id,
+        "family": "SYN",
+        "branch": "syn_branch",
+        "bank": bank,
+        "recipe_id": recipe_id,
+        "parameters": dict(parameters),
+        "changed_axis": axis,
+        "changed_axes": 1,
+        "parent_trial_ids": ["SYN:syn_branch:" + recipe_id],
+        "status": "attempted",
+        "reason": None,
+    }
+
+
+def _series(values):
+    """A CandidateSeries whose paired days carry the given per-day net points."""
+    from trading_research.research.rule_discovery import search_run as sr
+
+    series = sr.CandidateSeries("cid")
+    for day, (candidate, baseline) in values.items():
+        series.paired[day] = {
+            "day": day,
+            "candidate": candidate,
+            "baseline": baseline,
+            "diff": candidate - baseline,
+            "candidate_fills": 2,
+            "baseline_fills": 2,
+            "stress": None,
+            "control": None,
+            "missed_move": 0,
+            "stop_first": 0,
+            "delay": None,
+            "nearest_approach_S": None,
+            "adverse_S": None,
+        }
+    return series
+
+
+def _resolved(candidate_id, bank, recipe_id, parameters):
+    from trading_research.research.rule_discovery.search import ResolvedCandidate
+
+    return ResolvedCandidate(
+        candidate_id=candidate_id,
+        family="SYN",
+        branch="syn_branch",
+        bank=bank,
+        changed_axis=bank.lower(),
+        recipe_id=recipe_id,
+        parameters=dict(parameters),
+        required_stages=("trigger",),
+        hooks=("trigger",),
+        phase="evaluation",
+        applicable=True,
+        supported=True,
+        unsupported_reason=None,
+        coverage_id="SYN:branch:syn_branch",
+        evidence={"synthetic": True},
+    )
+
+
+def _bank_document():
+    rows = [
+        _neighbor_row("SYN:syn_branch:S1:deadline_minutes=5", "Sequence", "S1", {"deadline_minutes": 5}, "deadline_minutes"),
+        _neighbor_row("SYN:syn_branch:S1:deadline_minutes=15", "Sequence", "S1", {"deadline_minutes": 15}, "deadline_minutes"),
+    ]
+    return {
+        "folds": [
+            {"outer_fold": 2022, "families": [{"family": "SYN", "neighbors": rows}]},
+            {"outer_fold": 2023, "families": [{"family": "SYN", "neighbors": rows}]},
+        ]
+    }
+
+
+def test_a_fold_selects_only_from_its_own_inner_days():
+    """A02: the 2022 fold's choice is made on its fit+tune days; changing only
+    the 2023 fold's inner days (which are 2022's test days) cannot move it."""
+    bank = _bank_document()
+    resolved = {
+        row["candidate_id"]: _resolved(row["candidate_id"], row["bank"], row["recipe_id"], row["parameters"])
+        for row in bank["folds"][0]["families"][0]["neighbors"]
+    }
+    inner = {"2020-01-02": (3.0, 1.0), "2020-01-03": (3.0, 1.0), "2021-07-01": (3.0, 1.0)}
+    outer = {"2022-01-03": (1.0, 1.0), "2022-01-04": (1.0, 1.0)}
+    weak = {day: (2.0, 1.0) for day in inner}
+    series = {
+        "SYN:syn_branch:S1:deadline_minutes=5": _series({**inner, **outer}),
+        "SYN:syn_branch:S1:deadline_minutes=15": _series({**weak, **outer}),
+    }
+    first = rf.select_refined_for_fold(bank, _FOLD_2022, resolved, series)
+    assert first["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=5"
+
+    # move only the 2022 test days (= the 2023 fold's fit days) far in favour of
+    # the loser: the 2022 choice must not move
+    loud = {"2022-01-03": (99.0, 1.0), "2022-01-04": (99.0, 1.0)}
+    series_outer = {
+        "SYN:syn_branch:S1:deadline_minutes=5": _series({**inner, **outer}),
+        "SYN:syn_branch:S1:deadline_minutes=15": _series({**weak, **loud}),
+    }
+    again = rf.select_refined_for_fold(bank, _FOLD_2022, resolved, series_outer)
+    assert again["families"] == first["families"]
+    # and the 2023 fold, whose inner days those are, does move
+    later = rf.select_refined_for_fold(bank, _FOLD_2023, resolved, series_outer)
+    assert later["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=15"
+
+
+def test_a_combination_is_proposed_only_from_two_qualifying_banks():
+    """One combination per family per fold, from two different banks, and only
+    when both ingredients beat B0.2 on inner tuning."""
+    def selection(first_beats, second_beats, same_bank=False):
+        return {
+            "outer_fold": 2022,
+            "families": {
+                "SYN": {
+                    "refined": [
+                        {
+                            "bank": "Sequence",
+                            "candidate_id": "a",
+                            "improvement_vs_b02": 2.0 if first_beats else -1.0,
+                            "beats_b02": first_beats,
+                        },
+                        {
+                            "bank": "Sequence" if same_bank else "Memory",
+                            "candidate_id": "b",
+                            "improvement_vs_b02": 1.0 if second_beats else -1.0,
+                            "beats_b02": second_beats,
+                        },
+                    ],
+                    "retained_parent": [],
+                }
+            },
+        }
+
+    assert len(rf.propose_combinations(selection(True, True), None)) == 1
+    assert rf.propose_combinations(selection(True, False), None) == []
+    assert rf.propose_combinations(selection(False, True), None) == []
+    assert rf.propose_combinations(selection(True, True, same_bank=True), None) == []
+
+
+def test_negative_control_a_refined_parameter_must_change_the_scan():
+    """The negative control: a refinement that does not reach the scanner would
+    leave the document identical to its parent's. The parent's own value must
+    reproduce the parent exactly, and a neighbour value must not."""
+    from trading_research.research.rule_discovery import search
+
+    day = "2021-06-01"
+    parents = {item.candidate_id: item for item in search.resolve_bank()}
+    parent = parents["SAINT-AMT:continuation_retest:S1"]
+    market = search.load_b02_market(day, warm=True, branches=[(parent.family, parent.branch)])
+    base = search.serialize_scan_bytes(search.scan_candidate(market, parent))
+    from dataclasses import replace
+
+    same = replace(parent, parameters=dict(parent.parameters))
+    assert search.serialize_scan_bytes(search.scan_candidate(market, same)) == base
+    values = rf.neighborhood_values(parent.recipe_id, dict(parent.parameters))
+    changed = [
+        item for item in values if dict(item["parameters"]) != dict(parent.parameters)
+    ]
+    assert changed, "the contract's neighbourhood must offer a different value"
+    moved = replace(parent, parameters=dict(changed[0]["parameters"]))
+    assert search.serialize_scan_bytes(search.scan_candidate(market, moved)) != base
+
+
+def test_a_combination_whose_ingredients_live_on_different_branches_is_not_applicable():
+    """Two mechanisms on different branches cannot be put on one scan; the
+    proposal keeps a row with its reason instead of disappearing."""
+    selection = {
+        "outer_fold": 2022,
+        "families": {
+            "JJ-TBR": {
+                "refined": [
+                    {
+                        "bank": "Sequence",
+                        "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+                        "improvement_vs_b02": 2.0,
+                        "beats_b02": True,
+                    },
+                    {
+                        "bank": "Formation",
+                        "candidate_id": "JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+                        "improvement_vs_b02": 1.0,
+                        "beats_b02": True,
+                    },
+                ],
+                "retained_parent": [],
+            },
+            "GB-FAIL": {
+                "refined": [
+                    {
+                        "bank": "Timing",
+                        "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+                        "improvement_vs_b02": 2.0,
+                        "beats_b02": True,
+                    },
+                    {
+                        "bank": "Formation",
+                        "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+                        "improvement_vs_b02": 1.0,
+                        "beats_b02": True,
+                    },
+                ],
+                "retained_parent": [],
+            },
+        },
+    }
+    rows = {row["family"]: row for row in rf.propose_combinations(selection, None)}
+    assert rows["JJ-TBR"]["status"] == "not_applicable"
+    assert rows["JJ-TBR"]["reason"] == "ingredients_on_different_branches"
+    assert rows["GB-FAIL"]["status"] == "attempted"
+    assert rows["GB-FAIL"]["reason"] is None
+
+
+def test_a_holdout_date_cannot_change_a_refinement_choice():
+    """P15-18 A09: a hold-out date's outcome cannot move the refined mechanism a
+    fold picks; the same move on an in-block date does."""
+    from trading_research.research.rule_discovery import search_run as sr
+
+    bank = _bank_document()
+    resolved = {
+        row["candidate_id"]: _resolved(row["candidate_id"], row["bank"], row["recipe_id"], row["parameters"])
+        for row in bank["folds"][0]["families"][0]["neighbors"]
+    }
+    holdout_day, in_block_day = "2026-05-04", "2026-03-02"
+    fold = {
+        "test_year": 2022,
+        "fit": ["2020-01-02", in_block_day, holdout_day],
+        "tune": ["2021-07-01"],
+        "calibrate": ["2021-10-01"],
+        "test": ["2022-01-03"],
+    }
+    trimmed, info = sr.apply_holdout([fold])
+    assert info["days_excluded"] == 1
+
+    def series(loud_day):
+        quiet = {"2020-01-02": (3.0, 1.0), "2021-07-01": (3.0, 1.0), in_block_day: (3.0, 1.0), holdout_day: (3.0, 1.0)}
+        loud = dict(quiet)
+        loud[loud_day] = (500.0, 1.0)
+        return {
+            "SYN:syn_branch:S1:deadline_minutes=5": _series(loud),
+            "SYN:syn_branch:S1:deadline_minutes=15": _series(quiet),
+        }
+
+    # with both candidates equal the 1% simplicity rule breaks the tie on the
+    # lower candidate id, so "=15" is the quiet winner
+    base = rf.select_refined_for_fold(bank, trimmed[0], resolved, series("none"))
+    assert base["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=15"
+    quiet_holdout = rf.select_refined_for_fold(bank, trimmed[0], resolved, series(holdout_day))
+    assert quiet_holdout["families"] == base["families"]
+    moved = rf.select_refined_for_fold(bank, trimmed[0], resolved, series(in_block_day))
+    assert moved["families"]["SYN"]["refined"][0]["candidate_id"] == "SYN:syn_branch:S1:deadline_minutes=5"
+
+
+def test_the_value_area_fraction_neighbourhood_is_the_contract_row():
+    """SEARCH_CONTRACT: chosen -.10, chosen, +.10, bounded to [.30,.90]. The
+    chosen value is always offered, so the round can keep it, and no value ever
+    leaves the bounds."""
+    from decimal import Decimal
+
+    assert rf.VALUE_AREA_FRACTION_BOUNDS == (Decimal("0.30"), Decimal("0.90"))
+    for chosen, expected in (
+        ("0.68", ["0.58", "0.68", "0.78"]),
+        ("0.40", ["0.30", "0.40", "0.50"]),
+        ("0.35", ["0.30", "0.35", "0.45"]),  # the low neighbour clamps onto the bound
+        ("0.88", ["0.78", "0.88", "0.90"]),
+        ("0.30", ["0.30", "0.40"]),  # at the bound the clamped duplicate collapses
+        ("0.90", ["0.80", "0.90"]),
+    ):
+        values = [str(value) for value in rf.value_area_fraction_values(chosen)]
+        assert values == expected, chosen
+        assert Decimal(chosen) in rf.value_area_fraction_values(chosen)
+        assert all(Decimal("0.30") <= value <= Decimal("0.90") for value in rf.value_area_fraction_values(chosen))
+    rows = rf.neighborhood_values("P3", {"bandwidth": 0, "prominence": 0.20, "fraction": "0.68"})
+    fractions = [row["value"] for row in rows if row["axis"] == "fraction"]
+    assert fractions == ["0.58", "0.68", "0.78"]
+    assert {row["axis"] for row in rows} == {"bandwidth", "prominence", "fraction"}
+    # P1/P2 have no fraction axis: their fraction is the registered default
+    assert all(row["axis"] != "fraction" for row in rf.neighborhood_values("P1", {"bandwidth": 0}))

@@ -183,10 +183,10 @@ def _merge(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
 RULES = {key: value for key, value in B02_RULES.items() if key.startswith(("F01", "F13", "F06-A4", "RR-14", "RR-12", "F07"))}
 
 
-def scan_b02(market, rec: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
     payload = dict(rec or {})
     payload.setdefault("family", FAMILY_VWAP)
-    return gb_scan_b02(market, payload)
+    return gb_scan_b02(market, payload, overrides=overrides)
 
 
 def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:

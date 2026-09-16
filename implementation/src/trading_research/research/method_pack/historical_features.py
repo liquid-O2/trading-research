@@ -14,8 +14,9 @@ from functools import lru_cache
 from .branch_coverage import setting
 from .empirical_market import clock
 from .empirical_protocol import content_hash
-from .event_cache import cached_window, contract_at, ownership
-from .event_time import EventWindow, BookObservations, MINUTE, SECOND
+from .event_cache import cached_window, ownership
+from .event_time import BookObservations, MINUTE, SECOND
+from .event_time_fast import FastEventWindow as EventWindow, contract_at
 from .mbp1_views import iter_mbp1_window, plan_window
 from .native_resolution import NativeEvidenceError
 from .protocol import RECIPES, jsonable
@@ -140,17 +141,11 @@ class HistoricalFeatures:
         return self._ranges[key]
 
     def profile(self,start,end,fraction='.70'):
-        from .empirical_tape import _profile_payload
         key=start,end,fraction
         if key not in self._profiles:
-            accum=defaultdict(lambda:[D(0),D(0),D(0)])
-            members=[]
-            for at,r in self.window.footprints.items():
-                if at>=start and r['end']<=end and r['known_at']<=end:
-                    members.append(at)
-                    for px,b,a,u in r['rows']:
-                        for i,v in enumerate((b,a,u)):accum[px][i]+=v
-            p=_profile_payload(accum,tick=Q,tie_policy='lowest',value_area={'fraction':D(fraction),
+            prefix=self.window._prefix(start,end)
+            members=prefix.members
+            p=prefix.payload(tick=Q,tie_policy='lowest',value_area={'fraction':D(fraction),
                 'algorithm':'contiguous_larger_adjacent_volume_tie_both','tie_policy':'both'},
                 complete=self.coverage(start,end)['observed_scope_complete'])
             p.update(id=f'profile:{self.instrument_id}:{start}:{end}:{fraction}',known_at=end,start=start,end=end,

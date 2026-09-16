@@ -12,7 +12,8 @@ from pathlib import Path
 
 import pyarrow.parquet as pq
 
-from .event_time import EventWindow, MINUTE, SECOND
+from .event_time import MINUTE, SECOND
+from .event_time_fast import FastEventWindow as EventWindow
 from .empirical_protocol import content_hash
 
 

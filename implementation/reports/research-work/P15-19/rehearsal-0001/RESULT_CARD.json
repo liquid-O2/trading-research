@@ -1,0 +1,61 @@
+{
+ "attempt": "reports/research-work/P15-19/rehearsal-0001",
+ "headline": [
+  {
+   "artifact": "rehearsal-0001/FIXED_ENTRIES.json",
+   "name": "frozen entries compared",
+   "unit": "entries over 1680 account days and 17 selected rules",
+   "value": 9562
+  },
+  {
+   "artifact": "rehearsal-0001/EXIT_TRIALS.jsonl",
+   "name": "policies promoted over E0",
+   "support": "Holm across the exit stage, block bootstrap segmented by calendar year",
+   "unit": "of 68 policy-by-rule comparisons",
+   "value": 0
+  },
+  {
+   "artifact": "rehearsal-0001/EXIT_RESULTS.json#comparisons",
+   "candidate": "KEANI-OPEN-ABOVE-VALUE:source_long:S4:favorable_ticks=1|E3",
+   "interval": [
+    3.8214,
+    33.8214
+   ],
+   "name": "best comparison",
+   "support": "14 days",
+   "unit": "net points per common complete day against E0",
+   "value": 18.8214
+  },
+  {
+   "artifact": "rehearsal-0001/EXIT_RESULTS.json#comparisons",
+   "name": "mean improvement by policy",
+   "unit": "net points per day, mean over rules",
+   "value": {
+    "E1": 0.0386,
+    "E2": 0.3837,
+    "E3": 0.42,
+    "E4": -0.1351
+   }
+  },
+  {
+   "artifact": "rehearsal-0001/SELF_CHECK.txt",
+   "name": "E0 reproduced from the frozen entries",
+   "unit": "zero mismatches against the entry run's own E0 record",
+   "value": true
+  }
+ ],
+ "label": "rehearsal",
+ "lever": {
+  "change": "the exits differ only where price reaches +1R or the expiry binds; raise the share of entries that travel that far -- better locations or a later entry -- before asking a management policy to add value",
+  "evidence_that_it_worked": "the share of entries whose exit reason differs between E0 and E4 rises materially above its current level, and E4's interval separates from zero"
+ },
+ "limits": "A bounded baseline study on the entries the selected rules produced, not a learned management system; it cannot promote or rescue an entry candidate, and no hold-out date enters any comparison.",
+ "met": "partial",
+ "question": "With the entries frozen, does any of E1-E4 beat the E0 baseline management (structural objective, 60-minute or source expiry) on the selected rules?",
+ "schema_version": "research-result-card-v1",
+ "target": "OUTCOMES.md unchanged-entry exit experiment: compare exactly E0-E4 on frozen entries with the shared promotion gates, choosing only inside tuning and retaining every policy",
+ "task_id": "P15-19",
+ "verdict": "needs_upgrade",
+ "verdict_reason": "All five policies ran on every frozen entry and the comparison is clean (E0 reproduces the entry run exactly), but no alternative policy clears the gates, so the baseline management stands.",
+ "written_at": "2026-09-16T21:00:52.241341+00:00"
+}

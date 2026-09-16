@@ -1,5 +1,10 @@
 """SIRES B0.2 scan. Independent of frozen B0 / B0.1 scanners."""
 from __future__ import annotations
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 
 from datetime import date
 from pathlib import Path
@@ -1259,30 +1264,30 @@ def enumerate_locations(view: NativeMarketView, cutoff: int) -> list[dict[str, A
 
 def enumerate_contacts(arrays, loc: Mapping[str, Any], cutoff: int) -> list[dict[str, Any]]:
     """One contact per approach with a 4-tick departure. B0.1 lifecycle rule."""
-    level = int(loc["ticks"])
-    known = int(loc["known_at_ns"])
-    trade = arrays.is_trade & (arrays.known_at_ns <= cutoff) & (arrays.t_ns >= known)
-    idx = np.flatnonzero(trade)
-    if idx.size == 0:
-        return []
-    px = arrays.price_ticks[idx].astype(np.int64)
-    t = arrays.t_ns[idx]
-    kn = arrays.known_at_ns[idx]
-    band = CONTACT_BAND_TICKS
-    dep = CONTACT_DEPARTURE_TICKS
-    contacts: list[dict[str, Any]] = []
-    armed = True
-    for j in range(px.size):
-        p = int(px[j])
-        if armed:
-            if abs(p - level) <= band:
-                contacts.append({"at_ns": int(t[j]), "price_ticks": p, "known_at_ns": int(kn[j])})
-                armed = False
-                if len(contacts) >= MAX_CONTACTS_PER_LOCATION:
-                    break
-        elif abs(p - level) >= dep:
-            armed = True
-    return contacts
+    # P15-17: `_enumerate_contacts_kernel` is this function's own mask and loop,
+    # statement for statement, over the same int64 arrays; the Python version
+    # cost 17.0 s of one measured session (2024-03-05, 520 calls). The mask is
+    # folded into the walk, so the account day is touched once instead of four
+    # times, and the walk stops at MAX_CONTACTS_PER_LOCATION exactly where the
+    # Python loop broke. The kernel and `enumerate_contacts_scalar`, its parity
+    # oracle, are appended at the END of this module so that no rule's reported
+    # file:line moves -- every B0.2 rules payload keeps the bytes it has today.
+    t_a, px_a, kn_a = _enumerate_contacts_kernel(
+        arrays.t_ns,
+        arrays.known_at_ns,
+        arrays.price_ticks,
+        arrays.is_trade,
+        int(loc["ticks"]),
+        int(loc["known_at_ns"]),
+        int(cutoff),
+        int(CONTACT_BAND_TICKS),
+        int(CONTACT_DEPARTURE_TICKS),
+        int(MAX_CONTACTS_PER_LOCATION),
+    )
+    return [
+        {"at_ns": int(t_a[j]), "price_ticks": int(px_a[j]), "known_at_ns": int(kn_a[j])}
+        for j in range(t_a.size)
+    ]
 
 
 def _location_inside_balance(loc: Mapping[str, Any]) -> bool:
@@ -1611,7 +1616,21 @@ def _values_common(branch, side, loc, features, replenish, reward, imb_ratio, ga
     }
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
+
+    def finish(doc):
+        if not stage_overrides:
+            return doc
+        from trading_research.research.rule_discovery.search import finish_scan_b02
+
+        return finish_scan_b02(doc, stage_overrides)
+
     rec = _identity_rec(rec)
     family = rec.get("method_id") or rec.get("family") or "SIRES"
     branch = rec.get("branch") or rec.get("source_branch") or "clean_squeeze"
@@ -1629,7 +1648,7 @@ def scan_b02(market, rec) -> dict[str, Any]:
     }
     if arrays is None or arrays.t_ns.size == 0:
         empty["omissions"] = [{"reason": "operands_unavailable", "operand": "native_executions"}]
-        return empty
+        return finish(empty)
     cutoff = _cutoff(arrays, rec)
     cached = getattr(view, "_sires_b02_locations", None)
     if cached is not None and getattr(view, "_sires_b02_cutoff", None) == cutoff:
@@ -1642,17 +1661,24 @@ def scan_b02(market, rec) -> dict[str, Any]:
         locations = [row for row in locations if row.get("kind") == "kg1"]
         if not locations:
             empty["omissions"] = [{"reason": "operands_unavailable", "operand": "source_kg1_level_known"}]
-            return empty
+            return finish(empty)
     if branch == "microbalance_break":
         locations = [row for row in locations if row.get("kind") == "microbalance"]
     if branch == "vwap_deviation_fade":
         preferred = [row for row in locations if row.get("kind") == "vwap_band"]
         if preferred:
             locations = preferred
+    locations = enumeration_point(
+        "references", locations, family=family, branch=branch, market=market, view=view, cutoff=cutoff
+    )
     cash = _cash_open_ns(view, arrays)
     episodes: list[dict[str, Any]] = []
     for loc in locations:
         contacts = enumerate_contacts(arrays, loc, cutoff)
+        contacts = enumeration_point(
+            "contacts", contacts, family=family, branch=branch, market=market, view=view,
+            cutoff=cutoff, location=loc,
+        )
         if not contacts:
             continue
         for contact in contacts:
@@ -1752,16 +1778,18 @@ def scan_b02(market, rec) -> dict[str, Any]:
                             trigger={"at_ns": at_ns, "ticks": feats.get("fill_ticks") or contact.get("price_ticks")},
                         )
                     )
-    return {
-        "schema_version": "research-family-b02-scan-v1",
-        "baseline_version": B02_VERSION,
-        "family": family,
-        "branch": branch,
-        "coverage_id": rec.get("coverage_id") or f"{family}:branch:{branch}",
-        "episodes": episodes,
-        "omissions": [],
-        "rules": rules_payload(),
-    }
+    return finish(
+        {
+            "schema_version": "research-family-b02-scan-v1",
+            "baseline_version": B02_VERSION,
+            "family": family,
+            "branch": branch,
+            "coverage_id": rec.get("coverage_id") or f"{family}:branch:{branch}",
+            "episodes": episodes,
+            "omissions": [],
+            "rules": rules_payload(),
+        }
+    )
 
 
 def _parse_window(day: str, text: str | None) -> tuple[int | None, int | None]:
@@ -2009,3 +2037,97 @@ def replay_example(market, example) -> dict[str, Any]:
         "failing_operand": fail_op,
         "divergence": divergence,
     }
+
+
+# --------------------------------------------------------------------------
+# P15-17 speedup, appended so that NO line number above this point moves:
+# `_file_line` reports a function's source position, which is constant inside a
+# process, but the uncached call ran `inspect.getsourcelines` ->
+# `linecache.checkcache` -> `os.stat` on every rules payload (measured
+# 2026-09-16 on 2020-01-02: 15,749 getsourcelines calls, 24.4 s cumulative,
+# 19.5 s of it in posix.stat). Memoizing returns the identical string, so the
+# rules payload and every document built from it keep the same bytes.
+# --------------------------------------------------------------------------
+_FILE_LINE_UNCACHED = _file_line
+_FILE_LINE_MEMO: dict[Any, str] = {}
+
+
+def _file_line_memoized(fn) -> str:
+    try:
+        return _FILE_LINE_MEMO[fn]
+    except (KeyError, TypeError):
+        pass
+    value = _FILE_LINE_UNCACHED(fn)
+    try:
+        _FILE_LINE_MEMO[fn] = value
+    except TypeError:  # an unhashable implementation object stays uncached
+        pass
+    return value
+
+
+_file_line = _file_line_memoized
+
+
+def enumerate_contacts_scalar(arrays, loc: Mapping[str, Any], cutoff: int) -> list[dict[str, Any]]:
+    """The pre-kernel reference implementation, kept as the parity oracle."""
+    level = int(loc["ticks"])
+    known = int(loc["known_at_ns"])
+    trade = arrays.is_trade & (arrays.known_at_ns <= cutoff) & (arrays.t_ns >= known)
+    idx = np.flatnonzero(trade)
+    if idx.size == 0:
+        return []
+    px = arrays.price_ticks[idx].astype(np.int64)
+    t = arrays.t_ns[idx]
+    kn = arrays.known_at_ns[idx]
+    band = CONTACT_BAND_TICKS
+    dep = CONTACT_DEPARTURE_TICKS
+    contacts: list[dict[str, Any]] = []
+    armed = True
+    for j in range(px.size):
+        p = int(px[j])
+        if armed:
+            if abs(p - level) <= band:
+                contacts.append({"at_ns": int(t[j]), "price_ticks": p, "known_at_ns": int(kn[j])})
+                armed = False
+                if len(contacts) >= MAX_CONTACTS_PER_LOCATION:
+                    break
+        elif abs(p - level) >= dep:
+            armed = True
+    return contacts
+
+
+from numba import njit as _njit  # noqa: E402  (appended; shifts no line above)
+
+
+@_njit(cache=True)
+def _enumerate_contacts_kernel(t_ns, known_at_ns, price_ticks, is_trade, level, known, cutoff, band, dep, max_contacts):
+    n = t_ns.shape[0]
+    cap = max_contacts if max_contacts > 0 else n
+    t_out = np.empty(cap, dtype=np.int64)
+    px_out = np.empty(cap, dtype=np.int64)
+    kn_out = np.empty(cap, dtype=np.int64)
+    k = 0
+    armed = True
+    for i in range(n):
+        if not is_trade[i]:
+            continue
+        if known_at_ns[i] > cutoff:
+            continue
+        if t_ns[i] < known:
+            continue
+        p = price_ticks[i]
+        d = p - level
+        if d < 0:
+            d = -d
+        if armed:
+            if d <= band:
+                t_out[k] = t_ns[i]
+                px_out[k] = p
+                kn_out[k] = known_at_ns[i]
+                k += 1
+                armed = False
+                if k >= max_contacts:
+                    break
+        elif d >= dep:
+            armed = True
+    return t_out[:k].copy(), px_out[:k].copy(), kn_out[:k].copy()

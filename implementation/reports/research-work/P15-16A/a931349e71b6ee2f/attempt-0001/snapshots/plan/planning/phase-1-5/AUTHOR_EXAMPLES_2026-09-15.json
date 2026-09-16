@@ -1,0 +1,2796 @@
+{
+ "schema": "author-examples-v1",
+ "compiled": "2026-09-15",
+ "compiled_by": "orchestrating session (Fable), from the zoomed re-read of every chart, ticket and table in the raw sources; see wiki/log.md entry 2026-09-15 and each method page's 'Source fidelity re-read, 2026-09-15' section",
+ "native_calendar": {
+  "first_date": "2020-01-02",
+  "last_date": "2026-09-03",
+  "note": "run-1.0.1 evaluation calendar, 1,742 dates ending with the partial session 2026-09-03 (corrected 2026-09-16; an earlier copy said 2026-08-19); examples after the last date are data_unavailable for replay"
+ },
+ "clock_conventions": {
+  "deepchart": "ET as printed",
+  "ninjatrader_2026": "UK local time as printed; subtract 5 hours in British Summer Time to get ET",
+  "tradingview": "footer UTC-4 or UTC-5 as printed",
+  "tradesea": "UTC as printed",
+  "ticket_2025-01-28": "UTC as printed",
+  "sierra_chart": "ET as printed"
+ },
+ "fields": {
+  "levels": "prices the author drew before or at the trade, as read from the chart",
+  "actions": "printed fills, resting orders and position-tool boxes; qty in contracts of the stated instrument; times ET",
+  "expected_detection": "what B0.2 must find for the example to count as detected: branch, side, reference level and the entry window; a miss is a finding, never a reason to change a rule without a source quote"
+ },
+ "examples": [
+  {
+   "id": "JJ-2025-01-28",
+   "family": "JJ-TBR",
+   "source": "JR p.71 (post 2025-01-30, chart 2025-01-28)",
+   "date": "2025-01-28",
+   "session": "NY AM",
+   "instrument": "NQH5",
+   "chart_clock": "tradingview UTC-5; ticket UTC",
+   "inside_tape": true,
+   "levels": {
+    "H": 21410,
+    "EQ": 21334,
+    "L": 21258,
+    "width": 152.5,
+    "minus_0_5": 21180,
+    "prior_rth_high": 21415,
+    "plus_1_33": 21613,
+    "plus_1_66": 21663
+   },
+   "actions": [
+    {
+     "time_et": "09:40-09:50",
+     "note": "judas sweep below L into -0.5"
+    },
+    {
+     "time_et": "09:53:46",
+     "action": "buy",
+     "qty": 2,
+     "price": 21241.75,
+     "note": "market fill on the reclaim of L"
+    },
+    {
+     "time_et": "10:27:05",
+     "action": "sell",
+     "qty": 2,
+     "price": 21457.75,
+     "note": "exit under +0.5; day ran to +1.33/+1.66 by 15:00"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "L 21258 swept, reclaim entry",
+    "entry_window_et": "09:40-10:00",
+    "objective": "+0.5 then opposite liquidity"
+   }
+  },
+  {
+   "id": "JJ-2025-05-23-LONDON",
+   "family": "JJ-TBR",
+   "source": "JR p.69",
+   "date": "2025-05-23",
+   "session": "London",
+   "instrument": "MNQM25",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "prior_rth_low": 21115,
+    "sessionstat_4h_low_box": [
+     21086.45,
+     21102.5
+    ],
+    "sessionstat_4h_high_box": [
+     21199.38,
+     21226.53
+    ],
+    "sessionstat": {
+     "exp_avg": 74.53,
+     "dist_avg": 65.55,
+     "min_avg": 40.74,
+     "sample": 60
+    }
+   },
+   "actions": [
+    {
+     "time_et": "02:20",
+     "action": "buy",
+     "qty": 10,
+     "price": 21108.5,
+     "note": "sweep below the prior RTH low into the LOW 4H box"
+    },
+    {
+     "time_et": "03:10",
+     "action": "buy",
+     "qty": 5,
+     "price": 21170.5
+    },
+    {
+     "time_et": "03:15",
+     "action": "sell",
+     "qty": 15,
+     "price": 21172.25,
+     "note": "three sells 21169.75 / 21172.25 / 2117x.75 under the 21185-21192 box"
+    }
+   ],
+   "expected_detection": {
+    "branch": "other_session",
+    "side": "long",
+    "reference": "prior RTH low 21115 swept inside the London statistical envelope",
+    "entry_window_et": "02:00-03:30"
+   }
+  },
+  {
+   "id": "JJ-2025-09-09",
+   "family": "JJ-TBR",
+   "source": "JR pp.25-26",
+   "date": "2025-09-09",
+   "session": "NY",
+   "instrument": "NQU2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "H": 23860,
+    "L": 23810,
+    "width": 50,
+    "minus_1": 23760,
+    "minus_1_33": 23743.5,
+    "minus_1_66": 23727,
+    "sessionstat_rth_low_box": [
+     23735,
+     23765
+    ],
+    "equal_highs_draw": 23885
+   },
+   "actions": [
+    {
+     "time_et": "10:35",
+     "action": "buy",
+     "note": "long from -1.66 inside the SessionStat LOW box"
+    },
+    {
+     "time_et": "11:45",
+     "action": "exit",
+     "price": 23814,
+     "note": "+84 at the range low"
+    }
+   ],
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "long",
+    "reference": "L - [1.33,1.66]W",
+    "entry_window_et": "10:00-12:00"
+   }
+  },
+  {
+   "id": "JJ-2025-09-12",
+   "family": "JJ-TBR",
+   "source": "JR p.23",
+   "date": "2025-09-12",
+   "session": "NY",
+   "instrument": "NQU2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "plus_1_33_1_66_band": [
+     24105,
+     24118
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:00",
+     "note": "range high at 09:00"
+    },
+    {
+     "time_et": "09:40-09:50",
+     "note": "low sweep"
+    },
+    {
+     "time_et": "11:00",
+     "note": "day high inside the +1.33/+1.66 band"
+    }
+   ],
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "short",
+    "reference": "H + [1.33,1.66]W",
+    "entry_window_et": "10:00-12:00"
+   }
+  },
+  {
+   "id": "JJ-2025-10-01",
+   "family": "JJ-TBR",
+   "source": "JR p.21",
+   "date": "2025-10-01",
+   "session": "NY AM",
+   "instrument": "NQ",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "H": 24805,
+    "L": 24722,
+    "plus_0_5": 24845
+   },
+   "actions": [
+    {
+     "time_et": "09:30",
+     "note": "dip into the lower quadrant box and the range open"
+    },
+    {
+     "time_et": "09:37-09:45",
+     "note": "run to +0.5"
+    },
+    {
+     "time_et": "09:40-09:50",
+     "note": "reversal from +0.5 back below the range open"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "short",
+    "reference": "H swept to +0.5 inside 09:40-09:50",
+    "entry_window_et": "09:40-09:55"
+   }
+  },
+  {
+   "id": "JJ-2025-10-03",
+   "family": "JJ-TBR",
+   "source": "JR pp.65-66",
+   "date": "2025-10-03",
+   "session": "NY AM",
+   "instrument": "MNQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "H": 25196,
+    "q75": 25174,
+    "EQ": 25150,
+    "q25": 25127,
+    "L": 25104,
+    "minus_0_5": 25058,
+    "prior_rth_high": 25170
+   },
+   "actions": [
+    {
+     "time_et": "09:55",
+     "action": "sell",
+     "qty": 5,
+     "price": 25119.5,
+     "note": "after the 09:30-09:50 rally to 75% and the prior RTH high test"
+    },
+    {
+     "time_et": "10:05-10:15",
+     "action": "buy",
+     "qty": 5,
+     "price": 25091.45,
+     "note": "sweep below L toward -0.5"
+    },
+    {
+     "time_et": "10:05-10:15",
+     "action": "buy",
+     "qty": 5,
+     "price": 25072.75
+    },
+    {
+     "time_et": "10:25",
+     "action": "buy",
+     "qty": 5,
+     "price": 25100
+    },
+    {
+     "time_et": "11:00",
+     "action": "buy",
+     "qty": 10,
+     "price": 25111.5
+    },
+    {
+     "time_et": "11:00",
+     "action": "sell",
+     "qty": 5,
+     "price": 25117
+    },
+    {
+     "time_et": "11:15",
+     "action": "sell",
+     "qty": 15,
+     "price": 25128.75
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "L 25104 swept to -0.5 at 10:05-10:15 (outside the 09:40-09:50 window)",
+    "entry_window_et": "10:00-10:20"
+   }
+  },
+  {
+   "id": "JJ-2025-10-06-LONDON",
+   "family": "JJ-TBR",
+   "source": "JR p.64",
+   "date": "2025-10-06",
+   "session": "London",
+   "instrument": "NQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box": "02:00-03:00",
+    "H": 25108,
+    "q75": 25095,
+    "EQ": 25080,
+    "q25": 25066,
+    "L": 25052,
+    "plus_0_5": 25138
+   },
+   "actions": [
+    {
+     "time_et": "03:40",
+     "note": "dip to the 25% line"
+    },
+    {
+     "time_et": "05:45",
+     "note": "through H to +0.5"
+    }
+   ],
+   "expected_detection": {
+    "branch": "other_session",
+    "side": "long",
+    "reference": "London box 02:00-03:00, quadrant entry, +0.5 objective",
+    "entry_window_et": "03:00-06:00"
+   }
+  },
+  {
+   "id": "JJ-2025-10-07-LONDON",
+   "family": "JJ-TBR",
+   "source": "JR p.64",
+   "date": "2025-10-07",
+   "session": "London",
+   "instrument": "NQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box": "02:00-03:00",
+    "H": 25187,
+    "EQ": 25154,
+    "q25": 25140,
+    "L": 25122
+   },
+   "actions": [
+    {
+     "time_et": "04:30",
+     "note": "dip to and below 25%"
+    },
+    {
+     "time_et": "05:00-06:00",
+     "note": "return to H"
+    }
+   ],
+   "expected_detection": {
+    "branch": "other_session",
+    "side": "long",
+    "reference": "London box quadrant entry",
+    "entry_window_et": "03:00-06:00"
+   }
+  },
+  {
+   "id": "JJ-2025-10-08-LONDON",
+   "family": "JJ-TBR",
+   "source": "JR p.63",
+   "date": "2025-10-08",
+   "session": "London",
+   "instrument": "NQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box": "02:00-03:00",
+    "H": 25093,
+    "EQ": 25060,
+    "L": 25028
+   },
+   "actions": [
+    {
+     "time_et": "02:45",
+     "note": "low swept"
+    },
+    {
+     "time_et": "03:00-04:00",
+     "note": "reversal through EQ to H"
+    },
+    {
+     "time_et": "04:45",
+     "note": "25110"
+    }
+   ],
+   "expected_detection": {
+    "branch": "other_session",
+    "side": "long",
+    "reference": "London low swept at 02:45, reversal from 03:00",
+    "entry_window_et": "03:00-04:00"
+   }
+  },
+  {
+   "id": "JJ-2025-10-13",
+   "family": "JJ-TBR",
+   "source": "JR p.20",
+   "date": "2025-10-13",
+   "session": "NY AM",
+   "instrument": "NQZ2025",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "H": 24878,
+    "EQ": 24806,
+    "L": 24731,
+    "plus_0_5": 24950
+   },
+   "actions": [
+    {
+     "time_et": "09:05",
+     "action": "sell",
+     "qty": 1,
+     "price": 24848.5,
+     "note": "near H after the 09:00 range close"
+    },
+    {
+     "time_et": "09:40",
+     "action": "buy",
+     "qty": 1,
+     "price": 24768.5,
+     "note": "at the 09:40-09:50 low sweep"
+    },
+    {
+     "time_et": "10:00",
+     "note": "full reversal through EQ to H"
+    },
+    {
+     "time_et": "13:00",
+     "note": "+0.5"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "both edges taken: H at 09:00-09:15, L at 09:40-09:50",
+    "entry_window_et": "09:00-09:55"
+   }
+  },
+  {
+   "id": "JJ-2025-11-10",
+   "family": "JJ-TBR",
+   "source": "JR p.59",
+   "date": "2025-11-10",
+   "session": "NY",
+   "instrument": "NQZ",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 25560,
+    "EQ": 25530,
+    "L": 25500,
+    "london_high": 25570,
+    "london_low": 25458,
+    "plus_1_33_1_66_band": [
+     25635,
+     25650
+    ],
+    "minus_0_5": 25478,
+    "plus_2_5": 25690
+   },
+   "actions": [
+    {
+     "time_et": "10:15",
+     "note": "reversal from the +1.33/+1.66 band"
+    },
+    {
+     "time_et": "11:45-12:00",
+     "note": "-0.5 and the London low"
+    },
+    {
+     "time_et": "14:30",
+     "note": "+2.5"
+    }
+   ],
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "short",
+    "reference": "H + [1.33,1.66]W at 10:15",
+    "entry_window_et": "10:00-10:30",
+    "objective": "-0.5 / London low"
+   }
+  },
+  {
+   "id": "JJ-2025-11-18",
+   "family": "JJ-TBR",
+   "source": "JR p.57",
+   "date": "2025-11-18",
+   "session": "NY",
+   "instrument": "NQ",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 24840,
+    "EQ": 24750,
+    "L": 24660,
+    "london_high": 24860,
+    "london_low": 24600,
+    "minus_1_33_1_66_band": [
+     24375,
+     24420
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:30",
+     "note": "sweep above H with a BigTrades marker"
+    },
+    {
+     "time_et": "11:00",
+     "note": "reversal from the -1.33/-1.66 band"
+    },
+    {
+     "time_et": "13:00",
+     "note": "24800 toward the London high"
+    }
+   ],
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "long",
+    "reference": "L - [1.33,1.66]W at 11:00",
+    "entry_window_et": "10:00-11:30"
+   }
+  },
+  {
+   "id": "JJ-2025-12-30",
+   "family": "JJ-TBR",
+   "source": "JR p.55",
+   "date": "2025-12-30",
+   "session": "NY AM",
+   "instrument": "NQH",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 25745,
+    "EQ": 25712,
+    "L": 25690,
+    "pzones": [
+     25790,
+     25745,
+     25682,
+     25635
+    ],
+    "dev_vah": 25737.5,
+    "dev_val": 25688.5,
+    "plus_0_33_0_66": [
+     25760,
+     25778
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:31",
+     "action": "sell",
+     "note": "initial short near BE"
+    },
+    {
+     "time_et": "09:37",
+     "action": "sell",
+     "note": "second short near BE"
+    },
+    {
+     "time_et": "09:45-09:47",
+     "action": "buy",
+     "price": 25690,
+     "note": "longs at the 09:40-09:50 low sweep into the P-zone box"
+    },
+    {
+     "time_et": "09:58",
+     "action": "sell",
+     "note": "exits at +0.33/+0.66"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "L swept inside 09:40-09:50 into the P-zone box",
+    "entry_window_et": "09:40-09:55"
+   }
+  },
+  {
+   "id": "JJ-2026-01-02",
+   "family": "JJ-TBR",
+   "source": "JR pp.53-54",
+   "date": "2026-01-02",
+   "session": "NY AM",
+   "instrument": "NQH",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 25741,
+    "EQ": 25711,
+    "L": 25681,
+    "range_open": 25695,
+    "pzone_boxes": [
+     [
+      25758,
+      25764
+     ],
+     [
+      25718,
+      25725
+     ],
+     [
+      25660,
+      25666
+     ],
+     [
+      25620,
+      25626
+     ]
+    ],
+    "pzone_10am_box": [
+     25760,
+     25768
+    ],
+    "d2_high": 25795,
+    "london_low": 25625
+   },
+   "actions": [
+    {
+     "time_et": "09:22",
+     "action": "buy",
+     "note": "P-zone + low > range open: long from the lower P-zone"
+    },
+    {
+     "time_et": "09:31",
+     "action": "exit",
+     "note": "at the upper P-zone / H"
+    },
+    {
+     "time_et": "09:40-09:50",
+     "note": "low at 25650"
+    },
+    {
+     "time_et": "09:50",
+     "note": "rally to the D-2 high 25795"
+    },
+    {
+     "time_et": "10:00-10:05",
+     "action": "sell",
+     "note": "10am P-zone reversal"
+    },
+    {
+     "time_et": "10:15",
+     "note": "25570 after the London low"
+    }
+   ],
+   "expected_detection": {
+    "branch": "timed_pzone_reversal",
+    "side": "long then short",
+    "reference": "09:00 P-zone box then the 10:00 P-zone box",
+    "entry_window_et": "09:15-10:10"
+   }
+  },
+  {
+   "id": "JJ-2026-01-09",
+   "family": "JJ-TBR",
+   "source": "JR pp.51-52",
+   "date": "2026-01-09",
+   "session": "NY AM",
+   "instrument": "NQ",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 25810,
+    "EQ": 25760,
+    "q25": 25730,
+    "L": 25710,
+    "d1_high": 25850,
+    "d1_low": 25570,
+    "pzone_9am_box": [
+     25655,
+     25665
+    ],
+    "pzone_10am_box": [
+     25625,
+     25640
+    ],
+    "pzones_above": [
+     [
+      25835,
+      25845
+     ],
+     [
+      25890,
+      25900
+     ]
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:00",
+     "note": "absorption marker at 25830 before the open"
+    },
+    {
+     "time_et": "09:32",
+     "action": "buy",
+     "qty": 1,
+     "price": 25664.25,
+     "note": "absorption print inside the 9am P-zone"
+    },
+    {
+     "time_et": "09:32",
+     "action": "stop",
+     "price": 25617.25
+    },
+    {
+     "time_et": "09:32",
+     "action": "sell_limit",
+     "price": 25846.5,
+     "note": "under the D-1 High"
+    },
+    {
+     "time_et": "10:07",
+     "note": "10am P-zone absorption at 25625"
+    },
+    {
+     "time_et": "10:26",
+     "note": "stop trailed to 25733.25; +3120 open at 25820"
+    }
+   ],
+   "expected_detection": {
+    "branch": "timed_pzone_reversal",
+    "side": "long",
+    "reference": "09:00 P-zone box 25655-25665, absorption print",
+    "entry_window_et": "09:25-09:40",
+    "objective": "D-1 High 25850"
+   }
+  },
+  {
+   "id": "JJ-2026-02-24",
+   "family": "JJ-TBR",
+   "source": "JR p.13",
+   "date": "2026-02-24",
+   "session": "NY AM",
+   "instrument": "NQ",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "H": 24897,
+    "EQ": 24845,
+    "L": 24795,
+    "pzone_boxes": [
+     [
+      24710,
+      24720
+     ],
+     [
+      25000,
+      25010
+     ]
+    ],
+    "plus_0_33_0_66": "drawn",
+    "minus_0_66": "drawn"
+   },
+   "actions": [
+    {
+     "time_et": "09:30-09:37",
+     "note": "drop to -0.66 and the lower P-zone"
+    },
+    {
+     "time_et": "09:37-09:40",
+     "action": "buy",
+     "note": "reversal"
+    },
+    {
+     "time_et": "10:30",
+     "note": "+0.33/+0.66"
+    },
+    {
+     "time_et": "10:45",
+     "note": "upper P-zone; +155 with two losses"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "L swept to -0.66 by 09:37",
+    "entry_window_et": "09:35-09:50"
+   }
+  },
+  {
+   "id": "JJ-2026-06-05-LONDON",
+   "family": "JJ-TBR",
+   "source": "JR p.50",
+   "date": "2026-06-05",
+   "session": "London",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 30222,
+    "EQ": 30195,
+    "R_lo": 30162,
+    "minus_1_33": 30078,
+    "minus_1_66": 30058
+   },
+   "actions": [
+    {
+     "time_et": "03:20",
+     "action": "buy",
+     "qty": 3,
+     "price": 30066.5,
+     "note": "-1.66 exhaustion long"
+    },
+    {
+     "time_et": "04:30",
+     "action": "sell",
+     "qty": 10,
+     "price": 30215.25,
+     "note": "at R-Hi"
+    },
+    {
+     "time_et": "05:03",
+     "action": "buy",
+     "qty": 5,
+     "price": 30160.75,
+     "note": "at R-Lo"
+    },
+    {
+     "time_et": "05:14",
+     "action": "sell",
+     "qty": 5,
+     "price": 30215.75,
+     "note": "above R-Hi"
+    }
+   ],
+   "expected_detection": {
+    "branch": "other_session",
+    "side": "long",
+    "reference": "London box -1.66 at 03:20; R-Hi short 04:30; R-Lo long 05:03",
+    "entry_window_et": "03:00-06:00"
+   }
+  },
+  {
+   "id": "JJ-2026-06-09",
+   "family": "JJ-TBR",
+   "source": "JR p.8",
+   "date": "2026-06-09",
+   "session": "NY",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "bigtrades": [
+     219,
+     245
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:40-09:50",
+     "note": "aggressive buyers at the session high reversed"
+    },
+    {
+     "time_et": "11:20",
+     "note": "-1.33/-1.66 reached"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "short",
+    "reference": "session high inside 09:40-09:50 with BigTrades absorbed",
+    "entry_window_et": "09:40-09:55"
+   }
+  },
+  {
+   "id": "JJ-2026-07-06",
+   "family": "JJ-TBR",
+   "source": "JR p.44",
+   "date": "2026-07-06",
+   "session": "NY",
+   "instrument": "MNQ SEP26",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 29940,
+    "EQ": 29885,
+    "R_lo": 29840,
+    "L1": 29760,
+    "plus_1_33": 30065,
+    "plus_1_66": 30095,
+    "sessionstat_9_12_boundary": "near +1.66"
+   },
+   "actions": [
+    {
+     "time_et": "09:15-09:30",
+     "note": "dip below R-Lo to 29780"
+    },
+    {
+     "time_et": "10:45",
+     "note": "+1.33"
+    },
+    {
+     "time_et": "12:00",
+     "note": "near +1.66 with the 9-12 boundary"
+    },
+    {
+     "time_et": "13:45",
+     "note": "back to EQ"
+    }
+   ],
+   "expected_detection": {
+    "branch": "extension_reaction",
+    "side": "short",
+    "reference": "H + [1.33,1.66]W coinciding with the SessionStat 9-12 boundary",
+    "entry_window_et": "10:30-12:15"
+   }
+  },
+  {
+   "id": "JJ-2026-07-10",
+   "family": "JJ-TBR",
+   "source": "JR p.42",
+   "date": "2026-07-10",
+   "session": "NY",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "prth_val": 29790,
+    "prth_vah": 29985,
+    "pdh": 30000,
+    "poc": 29905,
+    "R_hi": 29890,
+    "EQ": 29830,
+    "R_lo": 29770,
+    "plus_1_33": 30041.25
+   },
+   "actions": [
+    {
+     "time_et": "10:30",
+     "note": "spike to 29720; losses and round trips"
+    },
+    {
+     "time_et": "11:05",
+     "action": "buy",
+     "qty": 3,
+     "price": 29809,
+     "note": "after the test of pRTHVAL / R-Lo"
+    },
+    {
+     "time_et": "later",
+     "action": "sell_limit",
+     "price": 30041.25,
+     "note": "+1.33; +945"
+    }
+   ],
+   "expected_detection": {
+    "branch": "internal_rotation",
+    "side": "long",
+    "reference": "open inside prior RTH value: range scalps; R-Lo / pRTHVAL test at 11:05",
+    "entry_window_et": "10:45-11:15"
+   }
+  },
+  {
+   "id": "JJ-2026-07-16",
+   "family": "JJ-TBR",
+   "source": "JR p.41",
+   "date": "2026-07-16",
+   "session": "NY AM",
+   "instrument": "MNQ SEP26",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 29555,
+    "EQ": 29460,
+    "R_lo": 29358,
+    "level_swept": 29525
+   },
+   "actions": [
+    {
+     "time_et": "09:30-09:35",
+     "note": "sweep of 29525"
+    },
+    {
+     "time_et": "09:35",
+     "action": "sell",
+     "qty": 3,
+     "price": 29451.5
+    },
+    {
+     "time_et": "09:35",
+     "action": "sell",
+     "qty": 2,
+     "price": 29438
+    },
+    {
+     "time_et": "09:45",
+     "action": "buy",
+     "qty": 5,
+     "price": 29312.25,
+     "note": "below R-Lo; +143; the retrace-to-mid long was skipped"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_outbound",
+    "side": "short",
+    "reference": "opening sweep of 29525 then the ride to R-Lo / -0.5",
+    "entry_window_et": "09:30-09:40"
+   }
+  },
+  {
+   "id": "JJ-2026-07-27",
+   "family": "JJ-TBR",
+   "source": "JR p.38",
+   "date": "2026-07-27",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "context": "open below the prior RTH high and value-area high"
+   },
+   "actions": [
+    {
+     "time_et": "09:30-10:30",
+     "note": "single break through the A period, entry at the range mid, +124, done at the open"
+    }
+   ],
+   "expected_detection": {
+    "branch": "single_extended",
+    "side": "short",
+    "reference": "open below pRTHH and pRTHVAH; entry at EQ",
+    "entry_window_et": "09:30-10:30"
+   }
+  },
+  {
+   "id": "JJ-2026-07-28",
+   "family": "JJ-TBR",
+   "source": "JR p.36",
+   "date": "2026-07-28",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "context": "RTH open below the prior RTH value low"
+   },
+   "actions": [
+    {
+     "time_et": "09:30-11:00",
+     "note": "continuation down, +138; discard mean reversion and double breaks when these align"
+    }
+   ],
+   "expected_detection": {
+    "branch": "single_purged",
+    "side": "short",
+    "reference": "open below pRTHVAL; continuation",
+    "entry_window_et": "09:30-10:30"
+   }
+  },
+  {
+   "id": "JJ-2026-08-28",
+   "family": "JJ-TBR",
+   "source": "JR pp.32-33",
+   "date": "2026-08-28",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 29668,
+    "EQ": 29630,
+    "R_lo": 29592,
+    "evrange_upper": 29724,
+    "evrange_lower": 29590,
+    "onh": 29707,
+    "onl": 29578,
+    "d1_high": "swept first"
+   },
+   "actions": [
+    {
+     "time_et": "09:30-09:32",
+     "action": "buy",
+     "qty": 10,
+     "note": "at the R-Lo / EVRange lower / ONL confluence"
+    },
+    {
+     "time_et": "09:32",
+     "action": "sell_limit",
+     "price": 29707.25
+    },
+    {
+     "time_et": "09:32",
+     "action": "sell_limit",
+     "price": 29724.5
+    },
+    {
+     "time_et": "09:45",
+     "action": "trailing_sell_stops",
+     "prices": [
+      29619,
+      29604.75
+     ],
+     "note": "+1447.50 on 10 MNQ"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal",
+    "side": "long",
+    "reference": "R-Lo swept into the EVRange lower line and the overnight low at 09:30-09:32",
+    "entry_window_et": "09:30-09:40"
+   }
+  },
+  {
+   "id": "JJ-2026-09-01",
+   "family": "JJ-TBR",
+   "source": "JR pp.30-31",
+   "date": "2026-09-01",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "R_hi": 29260,
+    "EQ": 29192,
+    "R_lo": 29120,
+    "evrange_lower": 29058,
+    "evrange_upper": 29195,
+    "evrange_plus_50": 29290,
+    "bigtrades": [
+     150,
+     252,
+     147,
+     178,
+     185
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:25",
+     "action": "buy",
+     "qty": 10,
+     "price": 29106.5
+    },
+    {
+     "time_et": "09:30-09:35",
+     "action": "sell",
+     "qty": 10,
+     "note": "29082.25 / 29102"
+    },
+    {
+     "time_et": "09:35",
+     "action": "buy",
+     "qty": 25,
+     "note": "5 @ 29113.25, 10 @ 29113.75, 10 @ 29115.75"
+    },
+    {
+     "time_et": "09:35",
+     "action": "sell",
+     "qty": 5,
+     "price": 29112.75
+    },
+    {
+     "time_et": "09:40",
+     "action": "buy",
+     "qty": 5,
+     "price": 29074.25,
+     "note": "timed low at the EVRange lower line"
+    },
+    {
+     "time_et": "10:00",
+     "action": "buy",
+     "qty": 10,
+     "note": "5 @ 29121.50, 5 @ 29100"
+    },
+    {
+     "time_et": "10:05",
+     "action": "sell",
+     "qty": 5,
+     "price": 29085.5
+    },
+    {
+     "time_et": "10:10",
+     "action": "sell",
+     "qty": 5,
+     "price": 29116.5
+    },
+    {
+     "time_et": "10:32",
+     "action": "sell",
+     "qty": 5,
+     "price": 29196.25,
+     "note": "at EVRange / EQ"
+    },
+    {
+     "time_et": "10:40",
+     "action": "buy",
+     "qty": 10,
+     "note": "5 @ 29219.75, 5 @ 29221.50"
+    },
+    {
+     "time_et": "10:42",
+     "action": "sell",
+     "qty": 5,
+     "price": 29218.5
+    },
+    {
+     "time_et": "11:00",
+     "action": "sell",
+     "qty": 3,
+     "price": 29230.5,
+     "note": "'-60ish points as of now'"
+    },
+    {
+     "time_et": "10:40",
+     "action": "buy",
+     "qty": 5,
+     "price": 29204.75,
+     "note": "'simple pullback long', sell stop 29214.75, +569.50"
+    }
+   ],
+   "expected_detection": {
+    "branch": "judas_reversal / internal_rotation",
+    "side": "long",
+    "reference": "timed 09:40 low at the EVRange lower line; EQ = EVRange upper as the pivot",
+    "entry_window_et": "09:40-09:50"
+   }
+  },
+  {
+   "id": "JJ-2026-09-02",
+   "family": "JJ-TBR",
+   "source": "JR p.3",
+   "date": "2026-09-02",
+   "session": "NY AM",
+   "instrument": "MNQ",
+   "chart_clock": "ninjatrader UK",
+   "inside_tape": true,
+   "levels": {
+    "context": "big 6-9 range; EVRange and EVRange +60% lines; EQ scalps"
+   },
+   "actions": [
+    {
+     "time_et": "AM",
+     "note": "EQ scalps both ways; two losses catching the pullback"
+    }
+   ],
+   "expected_detection": {
+    "branch": "internal_rotation",
+    "side": "both",
+    "reference": "EQ and EVRange",
+    "entry_window_et": "09:30-11:00"
+   }
+  },
+  {
+   "id": "GB-2025-11-20",
+   "family": "GB-FAIL",
+   "source": "GB p.43",
+   "date": "2025-11-20",
+   "session": "NY AM",
+   "instrument": "MNQZ2025",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "nyam_high": 25301.75,
+    "nyam_low": 25150,
+    "tdo": 25189,
+    "pwh": 25360,
+    "pdh": 25135,
+    "mss_fvg_boxes": [
+     [
+      25270,
+      25285
+     ],
+     [
+      25250,
+      25262
+     ]
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:00-10:05",
+     "note": "sweep to 25320"
+    },
+    {
+     "time_et": "10:05",
+     "action": "sell",
+     "qty": 2,
+     "price": 25301.75,
+     "note": "at the level on the failure"
+    },
+    {
+     "time_et": "10:35-10:50",
+     "note": "MSS + FVG retests"
+    },
+    {
+     "time_et": "11:00",
+     "action": "buy_limit",
+     "price": 25112.5,
+     "note": "target the 9-10 lows; +732.50 on 2 MNQ"
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "9-10 high 25301.75 swept at 10:00-10:05, entry at the level",
+    "entry_window_et": "10:00-10:15"
+   }
+  },
+  {
+   "id": "GB-2025-11-19",
+   "family": "GB-FAIL",
+   "source": "GB p.31",
+   "date": "2025-11-19",
+   "session": "NY AM",
+   "instrument": "MNQZ2025",
+   "chart_clock": "tradingview UTC-5",
+   "inside_tape": true,
+   "levels": {
+    "pwl": 24625,
+    "nyam_low": 24575,
+    "tdo": 24525,
+    "pdh": 24975,
+    "nyam_box": "09:00-10:00"
+   },
+   "actions": [
+    {
+     "time_et": "09:45-10:00",
+     "note": "sweep of the previous week's low 24625 and reclaim"
+    },
+    {
+     "time_et": "10:00",
+     "action": "buy",
+     "qty": 1,
+     "price": 24625,
+     "note": "+687 open at 11:25; sell limit 24999 above PDH 24975 ('Previous days highs')"
+    }
+   ],
+   "expected_detection": {
+    "branch": "prior_week_level",
+    "side": "long",
+    "reference": "PWL 24625 swept and reclaimed inside the 9-10 box",
+    "entry_window_et": "09:45-10:15",
+    "objective": "PDH 24975"
+   }
+  },
+  {
+   "id": "GB-2026-04-23",
+   "family": "GB-FAIL",
+   "source": "GB p.45",
+   "date": "2026-04-23",
+   "session": "PM",
+   "instrument": "MNQM2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "am_high": 27146.5,
+    "pdh": 26895,
+    "pwh": 26884,
+    "tdo": 26900,
+    "asia_box": "20:00-23:00",
+    "london_box": "03:00-04:30"
+   },
+   "actions": [
+    {
+     "time_et": "13:00",
+     "note": "sweep of the 11:00 high 27146.50 (eye)"
+    },
+    {
+     "time_et": "13:00-14:00",
+     "action": "sell",
+     "qty": 1,
+     "price": 27116.25,
+     "note": "stop 27146.50 (30.25, 121 ticks, Amount 750), target 26847.25 (269 pts, R:R 8.89), buy limit 26850.50"
+    }
+   ],
+   "expected_detection": {
+    "branch": "previous_hour / nyam_box (PM sweep of the AM high)",
+    "side": "short",
+    "reference": "AM high 27146.50 swept at 13:00",
+    "entry_window_et": "13:00-14:15"
+   }
+  },
+  {
+   "id": "GB-2026-04-28",
+   "family": "GB-FAIL",
+   "source": "GB p.45",
+   "date": "2026-04-28",
+   "session": "NY AM",
+   "instrument": "MNQM2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box_9_10": [
+     27075,
+     27250
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:30",
+     "action": "buy",
+     "note": "at the 09:30 low 27075"
+    },
+    {
+     "time_et": "09:45-09:50",
+     "action": "sell",
+     "note": "at the 27250 highs; Day P&L +13410.40"
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "both",
+    "reference": "both edges of the 9-10 box",
+    "entry_window_et": "09:30-10:00"
+   }
+  },
+  {
+   "id": "GB-2026-07-13",
+   "family": "GB-FAIL",
+   "source": "GB p.48",
+   "date": "2026-07-13",
+   "session": "Asia",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "pdl": 29385,
+    "asia_low": 29340,
+    "asia_box": "20:00-21:00"
+   },
+   "actions": [
+    {
+     "time_et": "20:30",
+     "note": "sweep below PDL to AS.L 29340"
+    },
+    {
+     "time_et": "20:40",
+     "action": "buy",
+     "qty": 4,
+     "price": 29414.25,
+     "note": "on the reclaim of PDL; +865.50 open"
+    },
+    {
+     "time_et": "20:40",
+     "action": "sell_limits",
+     "prices": [
+      29537.5,
+      29552.75,
+      29569.25,
+      29589.75
+     ]
+    }
+   ],
+   "expected_detection": {
+    "branch": "prior_day_level / asia_box",
+    "side": "long",
+    "reference": "PDL 29385 swept in the Asia session and reclaimed",
+    "entry_window_et": "20:15-21:00"
+   }
+  },
+  {
+   "id": "GB-2026-07-29-30",
+   "family": "GB-FAIL",
+   "source": "GB pp.51-52",
+   "date": "2026-07-29",
+   "session": "overnight then London",
+   "instrument": "MNQU6",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "impulse": [
+     27760,
+     27190
+    ],
+    "golden_pocket": [
+     27652,
+     27718
+    ],
+    "london_low_next": 27327
+   },
+   "actions": [
+    {
+     "time_et": "23:20",
+     "action": "sell",
+     "qty": 21,
+     "price": 27644.5,
+     "note": "golden pocket short; stop 27717.50 (73 pts, 292 ticks, Amount 750), target 27189 (455.50, R:R 6.24)"
+    },
+    {
+     "time_et": "23:30-01:00",
+     "action": "sell",
+     "qty": 15,
+     "price": 27652.25,
+     "note": "add; stop 27716.50, target 27190.25 (R:R 7.19)"
+    },
+    {
+     "time_et": "23:20",
+     "action": "buy_limits",
+     "prices": [
+      27533.75,
+      27525.25,
+      27511.75,
+      27498.5,
+      27490.25,
+      27481.75,
+      27469,
+      27455.5,
+      27430.25,
+      27406,
+      27380.5,
+      27355.25,
+      27326.5,
+      27293.5,
+      27264,
+      27237.25,
+      27211.75,
+      27191
+     ]
+    },
+    {
+     "time_et": "04:00 (07-30)",
+     "action": "buy",
+     "qty": 5,
+     "price": 27359.75,
+     "note": "London long from the 04:00 low; +5 at 27382"
+    },
+    {
+     "time_et": "04:05 (07-30)",
+     "action": "sell_limits",
+     "prices": [
+      27521.25,
+      27552.25,
+      27592.25,
+      27638,
+      27680.5
+     ]
+    }
+   ],
+   "expected_detection": {
+    "branch": "golden_pocket (down-leg short) then london_box long",
+    "side": "short then long",
+    "reference": "0.5-0.618 retracement of the 27760-27190 impulse; London low 27327",
+    "entry_window_et": "23:00-01:00 and 03:30-04:30"
+   }
+  },
+  {
+   "id": "GB-2026-08-11-12",
+   "family": "GB-FAIL",
+   "source": "GB pp.52-54",
+   "date": "2026-08-11",
+   "session": "Asia, held into the 08-12 NY open",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "asia_low": 29630,
+    "london_low_next": 29695,
+    "tdo": 29830,
+    "pdh": 29896,
+    "pdl": 29720,
+    "ny_box_9_10": [
+     29635,
+     29850
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "20:40",
+     "action": "buy",
+     "qty": 12,
+     "price": 29635.75,
+     "note": "at the Asia low; stop 29587.50 (48.25, 193 ticks, Amount 750), target 29896 (260.25, R:R 5.39)"
+    },
+    {
+     "time_et": "20:40",
+     "action": "sell_limits",
+     "prices": [
+      29679.25,
+      29687.25,
+      29696.5,
+      29710,
+      29726.75,
+      29745.25,
+      29763.25,
+      29788,
+      29806.75,
+      29828
+     ]
+    },
+    {
+     "time_et": "09:30 (08-12)",
+     "note": "PDH target filled; 30000 at the open"
+    }
+   ],
+   "expected_detection": {
+    "branch": "asia_box",
+    "side": "long",
+    "reference": "Asia low 29630 defended at 20:40; objective PDH 29896 next session",
+    "entry_window_et": "20:30-21:00"
+   }
+  },
+  {
+   "id": "GB-2026-08-13",
+   "family": "GB-FAIL",
+   "source": "GB p.54",
+   "date": "2026-08-13",
+   "session": "NY PM",
+   "instrument": "MNQU26",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "tops": [
+     30260,
+     30238.75
+    ],
+    "breakout_base": 30011.75,
+    "open_0930": 29907.75
+   },
+   "actions": [
+    {
+     "time_et": "11:45",
+     "action": "sell",
+     "qty": 2,
+     "price": 30227.5,
+     "note": "stop 30238.75, target 30011.75, limit buy 30069.50"
+    }
+   ],
+   "expected_detection": {
+    "branch": "previous_hour",
+    "side": "short",
+    "reference": "double top 30260 / 30238.75 after the 09:35 breakout",
+    "entry_window_et": "11:30-12:00"
+   }
+  },
+  {
+   "id": "GB-2026-08-27",
+   "family": "GB-FAIL",
+   "source": "GB pp.38, 56",
+   "date": "2026-08-27",
+   "session": "NY PM",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box_9_10_highs": [
+     29600,
+     29620
+    ],
+    "london_box": "02:00-05:00",
+    "london_low": 29400,
+    "tdo": 29537,
+    "pdh": 29432,
+    "box_10_11": [
+     29480,
+     29620
+    ],
+    "tdo_11_46": 29537
+   },
+   "actions": [
+    {
+     "time_et": "11:15-11:30",
+     "note": "sweep of the 10:00-11:00 box high 29620 into 29633"
+    },
+    {
+     "time_et": "11:30",
+     "action": "sell",
+     "qty": 5,
+     "price": 29613.75,
+     "note": "+1002.50 at 11:46; stop 29633 (19.25 pts, 77 ticks, Amount 750, qty 6.494), target 29427.75 (186 pts, R:R 9.66) = PDH 29432; buy limits 29505.50 / 29490.75 / 29473.50 / 29454 / 29425.50"
+    },
+    {
+     "time_et": "12:45-13:00",
+     "note": "sweep of the 9-10 highs into 29675"
+    },
+    {
+     "time_et": "13:00",
+     "action": "sell",
+     "qty": 8,
+     "price": 29642.25,
+     "note": "stop 29664 (21.75, 87 ticks, Amount 750), target 29425.25 (217, R:R 9.98)"
+    },
+    {
+     "time_et": "13:00",
+     "action": "buy_limits",
+     "prices": [
+      29551,
+      29535.5,
+      29519.25,
+      29505.5,
+      29490.75,
+      29473.5,
+      29454,
+      29425.5
+     ]
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box (PM sweep)",
+    "side": "short",
+    "reference": "10:00-11:00 box high 29620 swept at 11:15-11:30; 9-10 highs 29600/29620 swept again at 12:45-13:00",
+    "entry_window_et": "11:15-11:45 and 12:45-13:30"
+   }
+  },
+  {
+   "id": "GB-2026-08-28",
+   "family": "GB-FAIL",
+   "source": "GB pp.39, 55",
+   "date": "2026-08-28",
+   "session": "NY AM",
+   "instrument": "MNQU6",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "highs": 29700,
+    "ny_box_9_10": [
+     29570,
+     29708.75
+    ],
+    "tdo": 29674,
+    "pdl": 29400
+   },
+   "actions": [
+    {
+     "time_et": "10:00-10:05",
+     "note": "sweep of the 9-10 box high 29708.75 (eye) and failure"
+    },
+    {
+     "time_et": "10:05",
+     "action": "sell",
+     "qty": 5,
+     "price": 29674.25,
+     "note": "+1571.50 at 10:13; stop 29708.75 (34.50 pts, 138 ticks, Amount 750, qty 3.623), target 29374 (300.25 pts, R:R 8.7) toward PDL 29400; buy limits 29488.50 / 29460.25 / 29418.25 / 29374"
+    },
+    {
+     "time_et": "later",
+     "action": "sell",
+     "qty": 3,
+     "note": "position shown as 8 at 29680.75 (+2388.50) on the 15-minute chart; seven buy limits 29492.50-29384.50"
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box",
+    "side": "short",
+    "reference": "9-10 box high 29708.75 swept at 10:00-10:05 and failed",
+    "entry_window_et": "10:00-10:15"
+   }
+  },
+  {
+   "id": "GB-2026-08-31",
+   "family": "GB-FAIL",
+   "source": "GB p.58",
+   "date": "2026-08-31",
+   "session": "NY AM",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "box_9_930": [
+     29375,
+     29515
+    ],
+    "pdl": 29437,
+    "tdo": 29350
+   },
+   "actions": [
+    {
+     "time_et": "09:30-09:33",
+     "note": "spike swept the box high 29515 and failed"
+    },
+    {
+     "time_et": "09:33",
+     "action": "sell",
+     "qty": 4,
+     "price": 29510.5,
+     "note": "stop 29538.75 (28, 112 ticks, Amount 750), target 29280.75 (230, R:R 8.21)"
+    },
+    {
+     "time_et": "09:33",
+     "action": "buy_limits",
+     "prices": [
+      29392,
+      29360.75,
+      29327.5,
+      29281.25
+     ]
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box (at-level failure before 10:00)",
+    "side": "short",
+    "reference": "09:00-09:30 box high 29515 swept at 09:30-09:33",
+    "entry_window_et": "09:30-09:40"
+   }
+  },
+  {
+   "id": "GB-2026-09-01",
+   "family": "GB-FAIL",
+   "source": "GB p.23",
+   "date": "2026-09-01",
+   "session": "NY",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "pdl": 29270,
+    "pocket_50": 29311.5,
+    "ny_low_0930": 29044
+   },
+   "actions": [
+    {
+     "time_et": "11:45",
+     "action": "sell",
+     "qty": 4,
+     "price": 29253.75,
+     "note": "live 4 @ 29254 (drawn 29253.75); after the sweep above PDL and the 5-minute close below; stop 29303.50 (49.75), target 29044 (drawn; live target 29043.75), R:R 4.22"
+    },
+    {
+     "time_et": "11:45",
+     "action": "buy_limits",
+     "prices": [
+      29117.75,
+      29097.25,
+      29074,
+      29044
+     ]
+    }
+   ],
+   "expected_detection": {
+    "branch": "prior_day_level with golden pocket",
+    "side": "short",
+    "reference": "PDL 29270 swept, 5-minute close below",
+    "entry_window_et": "11:30-12:00"
+   }
+  },
+  {
+   "id": "GB-2026-09-03",
+   "family": "GB-FAIL",
+   "source": "GB pp.27, 59",
+   "date": "2026-09-03",
+   "session": "Asia",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": true,
+   "levels": {
+    "asia_high": 29238.25,
+    "tdo": 29238.25,
+    "pdh": 29213.25,
+    "asia_low": 29126.25
+   },
+   "actions": [
+    {
+     "time_et": "00:40",
+     "note": "sweep to 29255, close back below"
+    },
+    {
+     "time_et": "00:45",
+     "action": "sell",
+     "price": 29238.25,
+     "note": "stop 29255 (16.75), target 29126.50; buy limits 29189.50 / 29153.75 / 29140.50 / 29126.50"
+    }
+   ],
+   "expected_detection": {
+    "branch": "asia_tdo_case",
+    "side": "short",
+    "reference": "Asia high = TDO 29238.25 swept at 00:40",
+    "entry_window_et": "00:40-01:00"
+   }
+  },
+  {
+   "id": "GB-2026-09-08",
+   "family": "GB-FAIL",
+   "source": "GB pp.16, 19, 60",
+   "date": "2026-09-08",
+   "session": "Asia then NY AM",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": false,
+   "levels": {
+    "asia_high": 29748.25,
+    "tdo": 29740,
+    "pdh": 29720,
+    "asia_low": 29571,
+    "london_low": 29585,
+    "nwog": [
+     29530.5,
+     29524.75
+    ],
+    "box_9_10_low": 29469.25,
+    "box_9_10_high": 29686.75
+   },
+   "actions": [
+    {
+     "time_et": "00:30-00:45",
+     "note": "sweep above the Asia high to 29770"
+    },
+    {
+     "time_et": "00:55",
+     "action": "sell",
+     "qty": 1,
+     "price": 29730.5,
+     "note": "live 29730.75 (drawn 29730.50) after the 5-minute close below TDO; stop 29748.25 (17.75, 71 ticks, Amount 750), target 29571 (R:R 8.99); +100 with partials"
+    },
+    {
+     "time_et": "NY AM",
+     "action": "buy",
+     "qty": 4,
+     "price": 29469.25,
+     "note": "9-10 low failure long; stop 29436.75 (32.50), target 29686.75 (R:R 6.69); sell limits 29579.50 / 29618.75 / 29655 / 29686.75"
+    }
+   ],
+   "expected_detection": {
+    "branch": "asia_tdo_case then nyam_box",
+    "side": "short then long",
+    "reference": "Asia high 29748.25 / TDO 29740; 9-10 low 29469.25",
+    "entry_window_et": "00:45-01:05 and 09:30-10:30"
+   }
+  },
+  {
+   "id": "GB-2026-09-11",
+   "family": "GB-FAIL / GB-SCALP",
+   "source": "raw capture 2026-09-14, post 2099503614372741234",
+   "date": "2026-09-11",
+   "session": "overnight then NY",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": false,
+   "levels": {
+    "asia_low": 29045,
+    "pdl": 29040,
+    "tdo": 29059.5,
+    "cpi_impulse": [
+     29190,
+     29505
+    ],
+    "pdh": 29505,
+    "golden_pocket": [
+     29320,
+     29347
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "00:00-00:15",
+     "note": "sweep below AS.L / PDL to 29029, reclaim"
+    },
+    {
+     "time_et": "00:15",
+     "action": "buy",
+     "price": 29059.5,
+     "note": "stop 29029"
+    },
+    {
+     "time_et": "09:30",
+     "note": "pullback touched 29345"
+    },
+    {
+     "time_et": "10:00",
+     "action": "buy",
+     "price": 29382,
+     "note": "live 2 @ 29381.75 (drawn 29382); stop 29347 inside the upper part of the pocket ~29318-29352 (35 points); drawn target 29521.75, pending 29494.50 and 29522 straddling PDH ~29508; second account 3 @ 29382.25 with sells 29469.75 / 29496.75 / 29528.25"
+    }
+   ],
+   "expected_detection": {
+    "branch": "overnight prior_day_level long; golden_pocket_continuation",
+    "side": "long",
+    "reference": "PDL 29040 swept and reclaimed at 00:00-00:15; pocket [29320, 29347]",
+    "entry_window_et": "00:00-00:30 and 09:30-10:15"
+   }
+  },
+  {
+   "id": "GB-2026-09-14",
+   "family": "GB-FAIL",
+   "source": "raw capture 2026-09-14, post 2099513366326730859",
+   "date": "2026-09-14",
+   "session": "London then NY AM",
+   "instrument": "MNQU2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": false,
+   "levels": {
+    "london_box": "02:00-05:00",
+    "london_low": 28860,
+    "tdo": 29018,
+    "london_high_pdl_label": 29036.75,
+    "asia_high": [
+     29036,
+     29090
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "06:00",
+     "note": "sweep below the London low to 28770; higher low 28780 at 09:15"
+    },
+    {
+     "time_et": "09:40",
+     "action": "buy",
+     "price": 28903.75,
+     "note": "live 1 @ 28903.75 after the 5-minute close back above the London low; drawn stop 28875.25 below the retest's higher low and above the early sweep low ~28827; targets TDO 29018 then 29037 (pending sell 29036.75); +100"
+    },
+    {
+     "time_et": "09:55-10:05",
+     "note": "sweep of the Asia high and failure"
+    },
+    {
+     "time_et": "10:10",
+     "action": "sell",
+     "price": 29081.5,
+     "note": "live 29081.75 (drawn 29081.50); stop 29098.75 (17.25); drawn target 28890.25 / pending buy 28890.50, R:R 11.09; second account 2 @ 29074.25 with buy limits 28952 / 28843.25"
+    }
+   ],
+   "expected_detection": {
+    "branch": "london_box then asia_box",
+    "side": "long then short",
+    "reference": "London low 28860; Asia high 29036-29090",
+    "entry_window_et": "09:30-09:50 and 10:00-10:20"
+   }
+  },
+  {
+   "id": "SI-2026-07-08",
+   "family": "SIRES",
+   "source": "OFM p.7",
+   "date": "2026-07-08",
+   "session": "NY",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "failure_box": [
+     29246,
+     29251
+    ],
+    "line": 29251.69,
+    "absorbed_aggression_boxes": [
+     [
+      29238,
+      29246
+     ],
+     [
+      29224,
+      29231
+     ]
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:47",
+     "action": "sell",
+     "qty": 1,
+     "price": 29246.5,
+     "note": "SELL 1 | R:R 1.48; stop 27 ticks (29253.25); target 40 ticks (29236.50)"
+    }
+   ],
+   "expected_detection": {
+    "branch": "ofm_aggressive",
+    "side": "short",
+    "reference": "failed squeeze into 29246-29251",
+    "entry_window_et": "10:40-10:52"
+   }
+  },
+  {
+   "id": "SI-2026-07-09",
+   "family": "SIRES",
+   "source": "OFM pp.9, 14",
+   "date": "2026-07-09",
+   "session": "NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "ofm_line": 29811.25,
+    "aggression_box": [
+     29790,
+     29797
+    ],
+    "second_entry_box": [
+     29846,
+     29850
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:35",
+     "action": "buy",
+     "qty": 1,
+     "price": 29812.25,
+     "note": "stop 29798.25 (57 ticks), target +145 ticks (29848.50), R:R 2.54"
+    },
+    {
+     "time_et": "09:51",
+     "action": "buy",
+     "qty": 1,
+     "price": 29856,
+     "note": "BUY 1 | R:R 1.31 toward 29888"
+    }
+   ],
+   "expected_detection": {
+    "branch": "ofm_aggressive / defended_band_continuation",
+    "side": "long",
+    "reference": "OFM 29811.25 with the aggression box 29790-29797",
+    "entry_window_et": "09:31-10:06"
+   }
+  },
+  {
+   "id": "SI-2026-07-10",
+   "family": "SIRES",
+   "source": "OFM pp.8, 11-13",
+   "date": "2026-07-10",
+   "session": "NY",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "sq_c": 29908.64,
+    "aggression_box": [
+     29889,
+     29892
+    ],
+    "absorbed_buying_band": [
+     29915,
+     29925
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:18-10:19",
+     "action": "sell",
+     "qty": 1,
+     "price": 29901.75,
+     "note": "replay: stop 29911.75 (-200); later flat with daily +565; the exact exit fill is not printed (29873.50 is the inferred level)"
+    },
+    {
+     "time_et": "10:24",
+     "action": "sell",
+     "qty": 1,
+     "price": 29909.75,
+     "note": "plan ticket SELL 1 | R:R 5.71; stop 7 ticks (29911.50); target 40 ticks (29900.00)"
+    }
+   ],
+   "expected_detection": {
+    "branch": "ofm_aggressive (resting stop below the wick)",
+    "side": "short",
+    "reference": "SQ C 29908.64 reclaimed then failed",
+    "entry_window_et": "10:13-10:33"
+   }
+  },
+  {
+   "id": "SI-2026-07-14",
+   "family": "SIRES",
+   "source": "NYAM pp.4-11",
+   "date": "2026-07-14",
+   "session": "NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "refill_zone": [
+     29750,
+     29757
+    ],
+    "open_sweep_low": 29708,
+    "support_band": [
+     29614,
+     29623
+    ],
+    "support_2": 29580,
+    "resistance_box": [
+     29770,
+     29777
+    ],
+    "ofm_line": 29785,
+    "kg1": "retest at 29654.50"
+   },
+   "actions": [
+    {
+     "time_et": "09:37",
+     "action": "buy",
+     "qty": 1,
+     "price": 29757.25,
+     "note": "stop 29744.25, target 29804.25; +755 (exit 29795)"
+    },
+    {
+     "time_et": "10:15",
+     "action": "sell",
+     "qty": 1,
+     "price": 29608.5,
+     "note": "third retest, no buyers; image shows -100 floating with a -235 working stop at 29621.25, not a filled -100 stop"
+    },
+    {
+     "time_et": "10:17",
+     "action": "buy",
+     "qty": 1,
+     "price": 29654.5,
+     "note": "stop 29640.00 (58 ticks, unchanged in the images); target extended from 40 to 106 ticks (R:R 0.69 -> 1.83), narrated trail not visible; band 29680.25"
+    },
+    {
+     "time_et": "10:36",
+     "action": "sell",
+     "qty": 1,
+     "price": 29764.25,
+     "note": "stop 29769.25, target 29721.50 (+855 limit); position still open in the image (-55 floating); day about +1000 per the six-account card"
+    }
+   ],
+   "expected_detection": {
+    "branch": "defended_band_continuation (refill long); third_retest_attempt; kg1_retest; late_resistance_fade",
+    "side": "long; short; long; short",
+    "reference": "as listed",
+    "entry_window_et": "09:30-10:40"
+   }
+  },
+  {
+   "id": "SI-2026-07-15-OVERNIGHT",
+   "family": "SIRES",
+   "source": "STOP pp.8-9",
+   "date": "2026-07-15",
+   "session": "overnight (01:01 and 03:04)",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "absorption_box_1": [
+     30050,
+     30056
+    ],
+    "absorption_boxes_2": [
+     [
+      30044,
+      30046
+     ],
+     [
+      30052,
+      30056
+     ],
+     [
+      30044,
+      30047
+     ]
+    ],
+    "sd_bands": "SD+1, SD+2 on the right axis"
+   },
+   "actions": [
+    {
+     "time_et": "01:01",
+     "action": "sell",
+     "qty": 1,
+     "price": 30045,
+     "note": "SELL 1 | R:R 2.00; stop 20 ticks (-100); target 40 ticks (+200)"
+    }
+   ],
+   "expected_detection": {
+    "branch": "stop_four_stage / absorption_reward_retest",
+    "side": "short",
+    "reference": "absorption box 30050-30056 with the speed-of-tape and CVD read",
+    "entry_window_et": "00:55-01:05"
+   }
+  },
+  {
+   "id": "SI-2026-07-23",
+   "family": "SIRES",
+   "source": "ANAT pp.5-9",
+   "date": "2026-07-23",
+   "session": "NY",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "reaction_band": [
+     28700,
+     28765
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "10:14-10:32",
+     "note": "nine trades L,L,W,L,W,W,L,L,W: four wins +1445, five losses -945, net +500, equity trough -480 against a stated $250 daily cap; p.8 BUY drawing 35 ticks/$175 risk vs 188 ticks/$940; p.9 SELL 15 ticks/$75 vs 211 ticks/$1055"
+    }
+   ],
+   "expected_detection": {
+    "branch": "defended_band_continuation / reentry",
+    "side": "as attempted",
+    "reference": "band 28700-28765",
+    "entry_window_et": "10:05-10:35"
+   }
+  },
+  {
+   "id": "SI-2026-07-31",
+   "family": "SIRES",
+   "source": "K18 pp.4-10; MAMT p.12",
+   "date": "2026-07-31",
+   "session": "NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "dealing_range": [
+     28000,
+     28200
+    ],
+    "balance": [
+     28450,
+     28650
+    ],
+    "upper_node": [
+     28585,
+     28612
+    ],
+    "lower_node": [
+     28530,
+     28547
+    ],
+    "resistance_box": [
+     28620,
+     28640
+    ],
+    "ofm_line": 28685,
+    "wick_box": [
+     28697,
+     28703
+    ],
+    "weekly_delta_levels": [
+     28521.25,
+     28535,
+     28561
+    ],
+    "composite_zone": 28000
+   },
+   "actions": [
+    {
+     "time_et": "09:33",
+     "action": "sell",
+     "qty": 1,
+     "price": 28693.5,
+     "note": "pre-file; -40"
+    },
+    {
+     "time_et": "09:35",
+     "action": "sell",
+     "qty": 1,
+     "price": 28670.75,
+     "note": "OFM short; stop trailed to 28632.00 (09:38) then 28608.75 (09:39); target 28555.75 then 28538.50 (+2645)"
+    },
+    {
+     "time_et": "09:42",
+     "note": "price 28480; a '1' marker at 28495.50 at 09:41"
+    }
+   ],
+   "expected_detection": {
+    "branch": "ofm_aggressive",
+    "side": "short",
+    "reference": "OFM 28685; third attempt with refreshing sellers; entry 28670.75",
+    "entry_window_et": "09:31-09:40"
+   }
+  },
+  {
+   "id": "SI-2026-08-04",
+   "family": "SIRES",
+   "source": "K2345 pp.3-9",
+   "date": "2026-08-04",
+   "session": "NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "aggression_box": [
+     29290,
+     29296
+    ],
+    "refill_boxes": [
+     [
+      29349,
+      29352
+     ],
+     [
+      29363,
+      29367
+     ]
+    ],
+    "ofm_line": 29362.5,
+    "failed_squeeze_box": [
+     29363,
+     29375
+    ],
+    "wick_box": [
+     29385,
+     29390
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:31",
+     "action": "buy",
+     "qty": 1,
+     "price": 29304.25,
+     "note": "stop raised to 29321.50; target 29358.25"
+    },
+    {
+     "time_et": "09:33",
+     "action": "sell",
+     "qty": 1,
+     "price": 29358.5,
+     "note": "target filled"
+    },
+    {
+     "time_et": "09:37-09:38",
+     "action": "sell_stop",
+     "price": 29370.25,
+     "note": "resting entry below the failed-squeeze wick; target limit 29354.75 (+310)"
+    }
+   ],
+   "expected_detection": {
+    "branch": "clean_squeeze / drive long then ofm_aggressive short",
+    "side": "long then short",
+    "reference": "09:30 drive from the 29290 aggression box; OFM 29362.50",
+    "entry_window_et": "09:30-09:40"
+   }
+  },
+  {
+   "id": "SI-2026-08-06",
+   "family": "SIRES",
+   "source": "BIG pp.3-16",
+   "date": "2026-08-06",
+   "session": "NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "prior_day_aggression_band": [
+     29200,
+     29255
+    ],
+    "prior_day_band_2": [
+     29270,
+     29375
+    ],
+    "ofm_line": 29362,
+    "balance_band": [
+     29420,
+     29468
+    ],
+    "refill_boxes": [
+     [
+      29323,
+      29327
+     ],
+     [
+      29345,
+      29352
+     ]
+    ],
+    "failed_squeeze_box": [
+     29365,
+     29372
+    ],
+    "pm_boxes": [
+     [
+      29548,
+      29553
+     ],
+     [
+      29505,
+      29510
+     ],
+     [
+      29487,
+      29493
+     ]
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "09:33",
+     "action": "buy",
+     "qty": 1,
+     "price": 29258,
+     "note": "BUY 1 | R:R 6.78; stop 29242 (-315)"
+    },
+    {
+     "time_et": "09:36",
+     "action": "buy",
+     "qty": 1,
+     "price": 29380.75,
+     "note": "BUY 1 | R:R 4.85; stop 29362.75 (-360); target 29468 (+1745)"
+    },
+    {
+     "time_et": "09:52-10:04",
+     "action": "sell",
+     "qty": 1,
+     "price": 29550,
+     "note": "SELL 1 | R:R 3.67; stop 29559 (-180); target 29517 (+660); and SELL 1 | R:R 5.00 stop 29558.50 target 29507.50"
+    },
+    {
+     "time_et": "10:04",
+     "action": "buy",
+     "qty": 1,
+     "price": 29500,
+     "note": "BUY 1 | R:R 5.68; stop 29486 (-285); target 29580"
+    }
+   ],
+   "expected_detection": {
+    "branch": "balance_failure_fade (long at the prior-value band); ofm_aggressive drive long; balance_failure_fade shorts; defended_band_continuation long",
+    "side": "long; long; short; long",
+    "reference": "as listed",
+    "entry_window_et": "09:30-10:10"
+   }
+  },
+  {
+   "id": "SI-2026-08-19",
+   "family": "SIRES",
+   "source": "CONT pp.4-10",
+   "date": "2026-08-19",
+   "session": "pre-open and NY AM",
+   "instrument": "NQ-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": true,
+   "levels": {
+    "composite_zone": [
+     30240,
+     30260
+    ],
+    "refill_zone": [
+     29720,
+     29740
+    ],
+    "grey_band": [
+     29690,
+     29745
+    ],
+    "support_box": [
+     29500,
+     29515
+    ],
+    "ofm_line": 29657,
+    "weekly_delta_levels": [
+     29694.5,
+     29696.25,
+     29556,
+     29547.5
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "08:45-09:20",
+     "note": "fills at 29680, 29660 and 29620 (short entries and covers); refill ticket R:R 6.11 ($1100 target vs $180 stop)"
+    },
+    {
+     "time_et": "09:35",
+     "action": "sell",
+     "qty": 1,
+     "price": 29665,
+     "note": "OFM short; price ran 29660 -> 29565 by 09:48"
+    }
+   ],
+   "expected_detection": {
+    "branch": "defended_band_continuation (refill short) then ofm_aggressive",
+    "side": "short",
+    "reference": "refill zone 29720-29740; OFM 29657",
+    "entry_window_et": "08:30-09:50"
+   }
+  },
+  {
+   "id": "SA-2026-08-10-ASIA",
+   "family": "SAINT-AMT",
+   "source": "TRAP pp.3-11",
+   "date": "2026-08-10",
+   "session": "Asia (19:51 ET on 2026-08-10; Tradesea 23:51 UTC)",
+   "instrument": "MNQ",
+   "chart_clock": "tradesea UTC; sierra ET",
+   "inside_tape": true,
+   "levels": {
+    "balance": [
+     29600,
+     29960
+    ],
+    "composite_high_band": [
+     30400,
+     30440
+    ],
+    "intraday_levels": [
+     29860,
+     29840,
+     29780,
+     29740,
+     29690,
+     29660
+    ],
+    "stop_box": [
+     29729,
+     29736.75
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "19:51",
+     "action": "sell",
+     "qty": null,
+     "price": 29729.25,
+     "note": "retest short after the break below 29740; drawn stop 29736.75 (7.5 points), drawn target 29678.75 (50.5 points, 6.73R); quantity not printed (a 5-lot MNQ read of the +$501.50 realized panel is an inference)"
+    },
+    {
+     "time_et": "later",
+     "action": "exit",
+     "price": null,
+     "note": "realized +501.50 on the Tradesea panel; the exit arrow near 29676 is not an exact fill; the Sim2 DOM panel is a separate evidence state"
+    }
+   ],
+   "expected_detection": {
+    "branch": "trapped_buyers_retest / continuation_retest",
+    "side": "short",
+    "reference": "balance 29600-29960; break below 29740; single retest",
+    "entry_window_et": "19:30-20:15"
+   }
+  },
+  {
+   "id": "SA-2026-08-04-12-WIC",
+   "family": "SAINT-AMT",
+   "source": "WIC pp.6-8",
+   "date": "2026-08-10",
+   "session": "week context 2026-08-04 to 2026-08-12",
+   "instrument": "NQ",
+   "chart_clock": "sierra ET",
+   "inside_tape": true,
+   "levels": {
+    "balance": [
+     29560,
+     29960
+    ],
+    "composite_bands": [
+     [
+      30160,
+      30240
+     ],
+     [
+      29460,
+      29480
+     ],
+     [
+      29570,
+      29590
+     ]
+    ],
+    "break_level": [
+     29730,
+     29745
+    ],
+    "retest": [
+     29740,
+     29760
+    ]
+   },
+   "actions": [
+    {
+     "time_et": "week",
+     "note": "break below 29740, retest from below rejected, drop to 29540-29560"
+    }
+   ],
+   "expected_detection": {
+    "branch": "continuation_retest",
+    "side": "short",
+    "reference": "29740 break and retest",
+    "entry_window_et": "session of the retest"
+   }
+  },
+  {
+   "id": "MB-2026-07-K10",
+   "family": "MEMBER-TWO-REASONS",
+   "source": "K10 pp.7-8, 12-13",
+   "date": "2026-07 (undated day; presentation 2026-07-01)",
+   "session": "NY",
+   "instrument": "ES-202609",
+   "chart_clock": "deepchart ET",
+   "inside_tape": false,
+   "levels": {
+    "resistance_pair": [
+     7558.75,
+     7564
+    ],
+    "green_pair": [
+     7544.75,
+     7547.75
+    ],
+    "balance_30m": [
+     7545.25,
+     7564.5
+    ],
+    "value_box": [
+     7586.25,
+     7597.75
+    ],
+    "objective_band": [
+     7625.75,
+     7639.25
+    ],
+    "p13_drawings": "two SELL (2 @ 20 ticks; 1.82 @ 22 ticks) and one BUY (1.82 @ 22 ticks), R:R 1.00 each; the caption says three shorts"
+   },
+   "actions": [
+    {
+     "time_et": "trade 1",
+     "action": "sell",
+     "qty": 2,
+     "note": "SELL 2 | R:R 1.00; stop 20 ticks (-500)"
+    },
+    {
+     "time_et": "trade 2",
+     "action": "buy",
+     "qty": 2,
+     "price": 7530,
+     "note": "BUY 2 | R:R 9.60; stop 20 ticks; target 192 ticks (+4800) to 7578"
+    },
+    {
+     "time_et": "p.13",
+     "note": "negative-control drawings: two shorts and one long against HTF demand; use the drawn directions"
+    }
+   ],
+   "expected_detection": {
+    "branch": "member two reasons",
+    "side": "short then long",
+    "reference": "ES tape required; data_unavailable on the NQ census tape",
+    "entry_window_et": "unknown"
+   }
+  },
+  {
+   "id": "GB-2026-09-15",
+   "family": "GB-FAIL",
+   "source": "raw capture 2026-09-15, post 2099958990486798753",
+   "date": "2026-09-15",
+   "session": "NY AM then NY PM",
+   "instrument": "MNQZ2026",
+   "chart_clock": "tradingview UTC-4",
+   "inside_tape": false,
+   "levels": {
+    "asia_box": "20:00-00:00",
+    "asia_high": 29495,
+    "asia_low": 29415,
+    "london_box": "02:00-05:00",
+    "london_high": 29400,
+    "london_low": 29233.5,
+    "nyam_box": "09:00-10:00",
+    "nyam_box_high": 29453,
+    "tdo": 29417,
+    "pwl": 29330.5,
+    "pdh": 29603,
+    "ny_session_low": 29215.5
+   },
+   "actions": [
+    {
+     "time_et": "09:50",
+     "note": "sweep above the 09:00-10:00 box high to ~29484 (under the Asia high 29495); 5-minute close back inside by 09:55; retest of the box top 10:00-10:05 with highs ~29455"
+    },
+    {
+     "time_et": "10:05",
+     "action": "sell",
+     "price": 29441.5,
+     "note": "2 @ 29441.50 at the box top on the retest; stop 29466.75 (25.25, 101 ticks, Amount 750) above the retest high and below the sweep extreme; buy limits 29330.50 (PWL) and 29233.50 (LO.L); target 208 points, R:R 8.24; qty 4.95 per account"
+    },
+    {
+     "time_et": "10:55",
+     "note": "sweep below the London low 29233.50 to ~29227 (NY session low marker ~29215.5 on the later chart); reclaim on the 11:00-11:05 candles"
+    },
+    {
+     "time_et": "11:05",
+     "action": "buy",
+     "price": 29244.75,
+     "note": "6 @ 29244.75 on the reclaim; stop 29215.25 (29.25, 117 ticks, Amount 750) below the sweep extreme; sell limits 29297.50 / 29316.25 / 29340.50 / 29366.50 / 29398.75 / 29425.50; target 181 points, R:R 6.19; qty 4.274"
+    },
+    {
+     "time_et": "15:30",
+     "note": "sweep of the NY session low to ~29209; the 6-lot long stopped at 29215.25"
+    },
+    {
+     "time_et": "15:35",
+     "action": "buy",
+     "price": 29215.5,
+     "note": "1 @ 29215.50 on the failed breakdown of the NY session low; sell limit 29282.50; +125 open at 16:04"
+    }
+   ],
+   "expected_detection": {
+    "branch": "nyam_box then london_box then ny_session_extreme",
+    "side": "short then long then long",
+    "reference": "09:00-10:00 box high ~29453; London low 29233.50; NY session low ~29215.5",
+    "entry_window_et": "10:00-10:15, 11:00-11:15 and 15:30-15:45"
+   }
+  }
+ ]
+}
