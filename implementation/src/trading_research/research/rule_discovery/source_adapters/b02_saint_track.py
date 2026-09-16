@@ -38,10 +38,31 @@ SLICE_DATES = [
     "2026-09-03",
 ]
 HASH_DATES = ["2021-01-04", "2022-01-03"]
-TRACK_DIR = Path("/workspace/implementation/reports/research-work/P15-16A/_track_saint")
+_IMPL_ROOT = Path(__file__).resolve().parents[5]
+TRACK_DIR = _IMPL_ROOT / "reports/research-work/P15-16A/_track_saint"
+REPAIR_DIR = _IMPL_ROOT / "reports/research-work/P15-16A/_repair_saint"
+NATIVE_CALENDAR_START = date(2020, 1, 2)
+NATIVE_CALENDAR_END = date(2026, 8, 19)
 AUTHOR_EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NQ_TICK_VALUE = Decimal("5")
 FIXED_RISK_USD = Decimal("500")
+REPAIR_SLICE_DATES = [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01",
+]
 
 
 def dec(value) -> Decimal:
@@ -179,6 +200,108 @@ def first_touch(bars: Sequence[Mapping[str, Any]], lo, hi) -> dict[str, Any] | N
         if dec(low) <= hi and dec(high) >= lo:
             return dict(row)
     return None
+
+
+def bar_complete(row: Mapping[str, Any] | None) -> bool:
+    if not row:
+        return False
+    return bool(row.get("observed_complete") or row.get("complete"))
+
+
+def first_true_break(bars: Sequence[Mapping[str, Any]], level, side: str) -> dict[str, Any] | None:
+    """Close through `level` only after a complete bar on the origin side."""
+    sg = 1 if side == "long" else -1
+    px = dec(level)
+    seen_origin = False
+    for row in bars:
+        if not bar_complete(row) or row.get("C") is None:
+            continue
+        close = dec(row["C"])
+        if sg * (close - px) <= 0:
+            seen_origin = True
+            continue
+        if seen_origin:
+            return dict(row)
+    return None
+
+
+def retest_held(bars: Sequence[Mapping[str, Any]], retest: Mapping[str, Any], level, side: str, *, ticks: int = 2, until_ns: int | None = None) -> bool:
+    """WIC p.8. The retest holds on the 15-minute confirmation horizon, not the rest of the session."""
+    if retest is None:
+        return False
+    px = dec(level)
+    pad = Q * ticks
+    start = int(retest.get("end") or retest.get("start") or 0)
+    deadline = int(until_ns) if until_ns is not None else start + 15 * MINUTE_NS
+    for row in bars:
+        known = row.get("known_at") or row.get("end")
+        if known is None or int(row.get("start") or 0) < start:
+            continue
+        if int(known) > deadline:
+            break
+        if side == "long" and row.get("L") is not None and dec(row["L"]) < px - pad:
+            return False
+        if side == "short" and row.get("H") is not None and dec(row["H"]) > px + pad:
+            return False
+    return True
+
+
+def contact_reaction(bars: Sequence[Mapping[str, Any]], contact: Mapping[str, Any], level, side: str, *, wick_ticks: int = 2) -> dict[str, Any] | None:
+    """Member K10 pp.7-8. Rejection (short) or absorb-and-hold (long) at the planned level."""
+    if contact is None:
+        return None
+    px = dec(level)
+    start = int(contact.get("start") or 0)
+    wick = Q * wick_ticks
+    window = [dict(contact)]
+    for row in bars:
+        if int(row.get("start") or 0) <= start:
+            continue
+        window.append(dict(row))
+        if len(window) >= 5:
+            break
+    for row in window:
+        high, low, close = row.get("H"), row.get("L"), row.get("C")
+        if close is None:
+            continue
+        if side == "short":
+            if high is None:
+                continue
+            if dec(high) >= px - Q and (dec(high) - dec(close)) >= wick and dec(close) <= px:
+                return dict(row)
+        else:
+            if low is None:
+                continue
+            if dec(low) <= px + Q and (dec(close) - dec(low)) >= wick and dec(close) >= px:
+                return dict(row)
+    return None
+
+
+def reaction_held(bars: Sequence[Mapping[str, Any]], reaction: Mapping[str, Any], level, side: str) -> bool:
+    """K10 pp.7-8. After the rejection/absorb wick, later bars must hold the side. Independent of the wick."""
+    if reaction is None:
+        return False
+    px = dec(level)
+    start = int(reaction.get("end") or reaction.get("start") or 0)
+    deadline = start + 15 * MINUTE_NS
+    held_bars = 0
+    for row in bars:
+        if int(row.get("start") or 0) < start:
+            continue
+        known = row.get("known_at") or row.get("end")
+        if known is None or int(known) > deadline:
+            if known is not None and int(known) > deadline:
+                break
+            continue
+        if row.get("C") is None:
+            continue
+        close = dec(row["C"])
+        if side == "short" and close > px:
+            return False
+        if side == "long" and close < px:
+            return False
+        held_bars += 1
+    return held_bars >= 1
 
 
 def sha256_json(obj) -> str:
@@ -358,6 +481,41 @@ def account_day_for_example(example: Mapping[str, Any]) -> str | None:
     return day.isoformat()
 
 
+def outside_native_tape(example: Mapping[str, Any] | None) -> bool:
+    """True when the example's session date is outside 2020-01-02..2026-08-19. Does not load a market."""
+    example = example or {}
+    raw = example.get("date")
+    parsed = None
+    if raw and re.match(r"^\d{4}-\d{2}-\d{2}$", str(raw)):
+        account = account_day_for_example(example)
+        parsed = date.fromisoformat(account or str(raw))
+    if parsed is None:
+        return True
+    return parsed < NATIVE_CALENDAR_START or parsed > NATIVE_CALENDAR_END
+
+
+def native_calendar_day(day: str | date) -> bool:
+    value = day if isinstance(day, date) else date.fromisoformat(str(day))
+    return NATIVE_CALENDAR_START <= value <= NATIVE_CALENDAR_END
+
+
+def replay_unavailable(example: Mapping[str, Any] | None, divergence: str) -> dict[str, Any]:
+    expected = (example or {}).get("expected_detection") or {}
+    fill = author_printed_fill(example or {})
+    return {
+        "detected": None,
+        "branch": expected.get("branch"),
+        "our_side": None,
+        "our_level": None,
+        "our_entry_ns": None,
+        "author_level": float(fill) if fill is not None else None,
+        "author_side": expected.get("side"),
+        "divergence": divergence,
+        "reached_location": False,
+        "failing_operand": None,
+    }
+
+
 def numbers_from(value) -> list[Decimal]:
     found: list[Decimal] = []
     if isinstance(value, (int, float, Decimal)):
@@ -394,11 +552,25 @@ def author_printed_fill(example: Mapping[str, Any]):
     return None
 
 
+def author_reference_prices(example: Mapping[str, Any]) -> list[Decimal]:
+    found: list[Decimal] = []
+    fill = author_printed_fill(example)
+    if fill is not None:
+        found.append(fill)
+    levels = (example or {}).get("levels") or {}
+    for key in ("stop_box", "break_level", "retest"):
+        found.extend(numbers_from(levels.get(key)))
+    expected = (example or {}).get("expected_detection") or {}
+    found.extend(numbers_from(expected.get("reference")))
+    return found
+
+
 def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dict[str, Any]:
     expected = example.get("expected_detection") or {}
     author_side = expected.get("side")
     fill = author_printed_fill(example)
-    author_level = float(fill) if fill is not None else None
+    refs = author_reference_prices(example)
+    author_level = float(fill) if fill is not None else (float(refs[0]) if refs else None)
     wanted_sides = set()
     if isinstance(author_side, str):
         for token in re.split(r"[^a-z]+", author_side.lower()):
@@ -413,6 +585,7 @@ def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dic
     win_lo, win_hi = entry_window_ns(day, window_et)
     best = None
     matched = False
+    location_hit = False
     for episode in document.get("episodes") or []:
         side = str(episode.get("side") or "")
         branch = str(episode.get("branch") or "")
@@ -426,21 +599,38 @@ def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dic
         geom = episode.get("geometry") or {}
         values = episode.get("values") or {}
         our_level = geom.get("entry") or values.get("entry")
+        break_level = geom.get("break_level")
+        loc_ops = {}
+        for item in episode.get("stages") or []:
+            if item.get("stage") == "location":
+                loc_ops = item.get("operands") or {}
+                break
+        candidates = [our_level, break_level, loc_ops.get("poc"), loc_ops.get("low"), loc_ops.get("high"), loc_ops.get("break_level")]
+        close_hit = False
+        if refs:
+            for value in candidates:
+                if value is None:
+                    continue
+                if any(levels_close(value, ref) for ref in refs):
+                    close_hit = True
+                    break
+        if close_hit:
+            location_hit = True
+            if best is None or not matched:
+                best = episode
         entry_ns = episode.get("decision_at") or values.get("entry_ns") or geom.get("entry_ns")
         window_hit = True
         if win_lo is not None and win_hi is not None and entry_ns is not None:
             window_hit = int(win_lo) <= int(entry_ns) <= int(win_hi)
-        if fill is None:
+        if not refs:
             if best is None:
                 best = episode
             continue
-        if our_level is None or not levels_close(our_level, fill):
+        if not close_hit:
             if best is None:
                 best = episode
             continue
         if not window_hit:
-            if best is None:
-                best = episode
             continue
         best = episode
         matched = True
@@ -454,7 +644,9 @@ def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dic
             "our_entry_ns": None,
             "author_level": author_level,
             "author_side": author_side,
-            "divergence": "date outside tape",
+            "divergence": "date outside the tape",
+            "reached_location": False,
+            "failing_operand": None,
         }
     if best is None:
         return {
@@ -466,23 +658,41 @@ def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dic
             "author_level": author_level,
             "author_side": author_side,
             "divergence": "miss" if fill is not None else "no printed fill",
+            "reached_location": False,
+            "failing_operand": "location",
         }
     geom = best.get("geometry") or {}
     values = best.get("values") or {}
-    our_level = geom.get("entry") or values.get("entry")
+    our_level = geom.get("entry") or values.get("entry") or geom.get("break_level")
     our_level_f = float(our_level) if our_level is not None else None
+    failing = None
+    for item in best.get("stages") or []:
+        if item.get("verdict") in {"fail", "unknown"}:
+            for key, value in (item.get("operands") or {}).items():
+                if value is False or value is None:
+                    failing = f"{item.get('stage')}.{key}"
+                    break
+            if failing is None:
+                failing = str(item.get("stage"))
+            break
     if fill is None:
         detected = False
         divergence = "no printed fill"
+        if failing is None:
+            failing = "printed_fill"
     elif not matched:
         detected = False
         divergence = "level"
+        if failing is None:
+            failing = "level"
     else:
         detected = True
         divergence = "match"
+        failing = None
     if wanted_sides and str(best.get("side")) not in wanted_sides:
         detected = False
         divergence = "side"
+        failing = "side"
     return {
         "detected": detected,
         "branch": best.get("branch"),
@@ -492,6 +702,8 @@ def replay_match(document: Mapping[str, Any], example: Mapping[str, Any]) -> dic
         "author_level": author_level,
         "author_side": author_side,
         "divergence": divergence,
+        "reached_location": bool(location_hit),
+        "failing_operand": failing,
     }
 
 

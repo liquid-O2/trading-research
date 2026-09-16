@@ -213,8 +213,10 @@ from trading_research.research.rule_discovery.source_adapters.b02_saint_track im
     fixtures,
     market_at,
     market_bars,
+    outside_native_tape,
     parse_rec,
     replay_match,
+    replay_unavailable,
     stage,
     window_doc,
 )
@@ -256,9 +258,21 @@ def _prior_profile(market):
         if not prior.get("sessions"):
             return {}
         win = prior["sessions"][-1]["window"]
-        p = win.profile(win.start, win.end)
         rng = prior.get("range") or {}
-        return {"vah": p.get("vah") if p else None, "high": rng.get("high"), "scope_complete": prior.get("scope_complete")}
+        vah = None
+        try:
+            rth_start = win.at("09:30") if hasattr(win, "at") else None
+            rth_end = win.at("16:00") if hasattr(win, "at") else None
+        except Exception:
+            rth_start = rth_end = None
+        if rth_start is not None and rth_end is not None:
+            p70 = win.profile(rth_start, rth_end, ".70")
+            if p70 and p70.get("vah") is not None:
+                vah = p70.get("vah")
+        if vah is None:
+            p = win.profile(win.start, win.end)
+            vah = p.get("vah") if p else None
+        return {"vah": vah, "high": rng.get("high"), "scope_complete": prior.get("scope_complete"), "value_fraction": "0.70"}
     except Exception:
         return {}
 
@@ -310,19 +324,29 @@ def scan_keani_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], di
     weekly = _weekly_high(market)
     fully_above = False
     if a is not None and prior_vah is not None and a.get("low") is not None:
-        fully_above = dec(a["low"]) >= dec(prior_vah)
+        # SD11: equality of A low with prior VAH fails the strict fully-above condition. AVG p.21.
+        fully_above = dec(a["low"]) > dec(prior_vah)
     extra = {
         "fully_above_a_eligible": 1 if fully_above else 0,
         "a_period": ["09:30", "10:00"],
         "cutoff_1100": False,
         "retest_expiry_60m": False,
         "val_rise_required": False,
+        "value_fraction": prior.get("value_fraction") or "0.70",
+        "prior_session": ["09:30", "16:00"],
     }
     ctx = stage(
         "context",
         "pass" if fully_above else ("unknown" if a is None or prior_vah is None else "fail"),
         a_end,
-        {"a_low": str(a["low"]) if a and a.get("low") is not None else None, "prior_vah": str(prior_vah) if prior_vah is not None else None, "a_period": "09:30-10:00"},
+        {
+            "a_low": str(a["low"]) if a and a.get("low") is not None else None,
+            "prior_vah": str(prior_vah) if prior_vah is not None else None,
+            "a_period": "09:30-10:00",
+            "fully_above": fully_above,
+            "strict_gt": True,
+            "value_fraction": extra["value_fraction"],
+        },
     )
     ref = stage("reference", "pass" if prior_vah is not None else "unknown", a_end, {"prior_vah": str(prior_vah) if prior_vah is not None else None})
     if a is None:
@@ -480,27 +504,13 @@ def scan_b02(market, rec) -> dict[str, Any]:
 def replay_example(market, example) -> dict[str, Any]:
     expected = (example or {}).get("expected_detection") or {}
     if not example or example.get("id") is None:
-        return {
-            "detected": None,
-            "branch": "source_long",
-            "our_side": None,
-            "our_level": None,
-            "our_entry_ns": None,
-            "author_level": None,
-            "author_side": expected.get("side"),
-            "divergence": "no dated example",
-        }
+        out = replay_unavailable(example, "no dated example")
+        out["branch"] = "source_long"
+        return out
+    if outside_native_tape(example):
+        return replay_unavailable(example, "date outside the tape")
     if market is None:
-        return {
-            "detected": None,
-            "branch": "source_long",
-            "our_side": None,
-            "our_level": None,
-            "our_entry_ns": None,
-            "author_level": None,
-            "author_side": expected.get("side"),
-            "divergence": "no dated example",
-        }
+        return replay_unavailable(example, "date outside the tape")
     doc = scan_b02(market, {"family": FAMILY, "branch": "source_long"})
     return replay_match(doc, example)
 

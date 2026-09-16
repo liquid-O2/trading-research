@@ -1,0 +1,79 @@
+{
+  "family": "MEMBER-TWO-REASONS",
+  "baseline": "B0.2-2026-09-15",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "branches": {
+    "resistance_short": {
+      "context": {
+        "measured": true,
+        "operands": [
+          {"name": "look_left", "source": "market_view", "predicate": "K10 pp.5-8 any prior history, no 12:45 split (F15)", "verdict": "fail if no prior reaction/HVN pair"}
+        ],
+        "verdict_depends_on": ["look_left"]
+      },
+      "reference": {
+        "measured": true,
+        "operands": [
+          {"name": "independent", "source": "market_view", "predicate": "K10 pp.6-7 two reasons with distinct parents", "verdict": "fail if same parent or same window"},
+          {"name": "kind", "source": "market_view", "predicate": "HVN or aligned KG1", "verdict": "level reason identity"}
+        ],
+        "verdict_depends_on": ["independent"]
+      },
+      "location": {
+        "measured": true,
+        "operands": [
+          {"name": "low", "source": "market_view", "predicate": "confluence band around the paired prices", "verdict": "pass once the band is formed from market levels"}
+        ],
+        "verdict_depends_on": ["band_defined"]
+      },
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "touch", "source": "market_view", "predicate": "K10 actual_band_contact", "verdict": "fail if no touch after 09:30"},
+          {"name": "reaction", "source": "market_view", "predicate": "K10 pp.7-8 short on the resistance rejection; wick at the level and close back", "verdict": "fail if touch without rejection"}
+        ],
+        "verdict_depends_on": ["reaction"]
+      },
+      "confirmation": {
+        "measured": true,
+        "operands": [
+          {"name": "held", "source": "market_view", "predicate": "K10 pp.7-8 absorb-and-hold / rejection that holds after the wick, 15-minute window, at least one later bar", "verdict": "fail if a later bar reclaims through the level or no later bar holds"},
+          {"name": "level_reason", "source": "market_view", "predicate": "HVN or KG1", "verdict": "recorded"},
+          {"name": "flow_reason", "source": "market_view", "predicate": "prior reaction area", "verdict": "recorded"}
+        ],
+        "verdict_depends_on": ["held"]
+      },
+      "risk": {
+        "measured": true,
+        "operands": [
+          {"name": "stop", "source": "market_view", "predicate": "K10 stop above rejection high", "verdict": "fail if stop is not beyond the rejection structure"},
+          {"name": "risk_usd", "source": "constant", "predicate": "K10 p.13 $500", "verdict": "recorded, not a fail gate"}
+        ],
+        "verdict_depends_on": ["stop"]
+      },
+      "objective": {
+        "measured": true,
+        "operands": [
+          {"name": "target_r", "source": "constant", "predicate": "K10 1.5R spoken target (tickets 1.00 and 9.60 recorded as conflict)", "verdict": "pass when the 1.5R price is computed from entry-stop"}
+        ],
+        "verdict_depends_on": ["target_r"]
+      },
+      "management": {
+        "measured": false,
+        "omitted": true,
+        "unobservable_operand": "author journal and trailing",
+        "reason": "K10 step 5 is process review; Phase 1.5 has no account tape. ES-202609 example is data_unavailable."
+      }
+    },
+    "planned_return_long": {
+      "inherits": "resistance_short",
+      "trigger": {
+        "measured": true,
+        "operands": [
+          {"name": "reaction", "source": "market_view", "predicate": "K10 pp.7-8 long on return/second tap when buyers absorb and hold", "verdict": "fail if touch without absorb-and-hold"}
+        ],
+        "verdict_depends_on": ["reaction"]
+      }
+    }
+  }
+}
