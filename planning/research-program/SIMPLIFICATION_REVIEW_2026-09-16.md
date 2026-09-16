@@ -28,7 +28,7 @@ The pstack and mattpocock material the user pointed at argues the opposite of wh
 
 R1. **Retire the pstack layer now** (no verifier change, no science change). Remove the "Read first" pointers to `PSTACK_EXECUTION.md`, stop generating RUNBOOK bundles and copyable prompts, and replace `PSTACK_EXECUTION.md` and the prompt blocks with one 40-line page, "How to run a subphase": read `AGENTS.md`, the subphase's cards, the five contracts above; implement one vertical slice with a negative case; run the declared slice, then the full run; produce the receipt with the producer tool; verify. Cards' read lists shrink from ten documents to four. Keep the two tools (`build_research_plan_bundles.py`, `check_research_plan.py`) only if they still check something the guard test and the verifier do not.
 
-R2. **Re-cut the remaining tasks so one task is one unit of work with one owner.** Phase 1.5 keeps P15-17, P15-18, P15-19, P15-20 as they are; they are distinct stages. Phase 2 goes from 25 cards to 14: merge P2-13 to P2-20 into one "method context experts" task with a per-method section and the same acceptance keys; merge P2-05/P2-06 and P2-07/P2-08 into two mechanism tasks that share the fitting engine of P2-02; keep P2-00 to P2-04, P2-09 to P2-12 (P2-03, P2-09 and P2-10 already have staged receipts), P2-21 to P2-24. Receipts, reviews and verifications fall by eleven. The subphases and their gates do not change.
+R2. **Re-cut the remaining tasks so one task is one unit of work with one owner.** Phase 1.5 keeps P15-17, P15-18, P15-19, P15-20 as they are; they are distinct stages. Phase 2 goes from 25 cards to 16: merge P2-13 to P2-20 into one "method context experts" task with a per-method section and the same acceptance keys; merge P2-05/P2-06 and P2-07/P2-08 into two mechanism tasks that share the fitting engine of P2-02; keep P2-00 to P2-04, P2-09 to P2-12 (P2-03, P2-09 and P2-10 already have staged receipts), P2-21 to P2-24. Receipts, reviews and verifications fall by nine. The subphases and their gates do not change.
 
 R3. **Assign S01 to S04 once.** They belong to the verifier's owner (P15-01, closed) and the two phase closures (P15-20, P2-24). Every other task cites the bound shared evidence, which the contract already allows. This removes four probes from roughly forty tasks without weakening any check, because the check is on the shared verifier, which does not change per task.
 
@@ -54,6 +54,6 @@ Labelled as projections. They assume no further repair loops and the R1 to R4 ch
 | P15-17 definitive run (about 30 minutes at 17 workers), fold evaluation, receipt | 2026-09-17 morning |
 | P15-18 refinement (at most 24 neighbours per family on the fast engine) and P15-19 exit study | 2026-09-17 afternoon |
 | P15-20 release, gate review, Phase 1.5 closure | 2026-09-18 |
-| Phase 2 (14 tasks after R2, fitting runs dominate) | start 2026-09-18, close about 2026-09-23 to 24 |
+| Phase 2 (16 tasks after R2, fitting runs dominate) | start 2026-09-18, close about 2026-09-23 to 24 |
 
 Without R1 to R4, Phase 2's per-task receipt and review overhead alone adds two to three days.

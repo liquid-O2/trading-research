@@ -1,6 +1,6 @@
 # Method-specific context experts and conditional plans
 
-Owners `P2-13` through `P2-21`; `P2-22` owns conditional plans/replay. Each source entry method has a separately fitted artifact/configuration using the common engine. Do not pool Jumbo, Green Bird, Sires and Saint into one unexplained “good market” score. Share primitives and fitting code; keep branch/source semantics and tests distinct.
+Owners `P2-13` (all eight source methods) and `P2-21`; `P2-22` owns conditional plans/replay. Each source entry method has a separately fitted artifact/configuration using the common engine. Do not pool Jumbo, Green Bird, Sires and Saint into one unexplained “good market” score. Share primitives and fitting code; keep branch/source semantics and tests distinct.
 
 ## Training population and targets
 

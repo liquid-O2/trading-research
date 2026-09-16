@@ -16,9 +16,9 @@ Start with the first open subphase: read its task cards and follow [HOW_TO_RUN.m
 | 1 | 01-datasets-and-fitting | P2-01, P2-02 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 2 | 02-native-options-baseline | P2-09, P2-10 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 3 | 03-joint-volatility | P2-03, P2-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 4 | 04-context-mechanisms | P2-05, P2-06, P2-07, P2-11, P2-08 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 4 | 04-context-mechanisms | P2-05, P2-11, P2-07 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 5 | 05-intraday-oi | P2-12 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 6 | 06-method-experts | P2-13, P2-14, P2-15, P2-16, P2-17, P2-18, P2-19, P2-20, P2-21 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 6 | 06-method-experts | P2-13, P2-21 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 7 | 07-plans-and-adaptation | P2-22, P2-23 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 8 | 08-release | P2-24 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 

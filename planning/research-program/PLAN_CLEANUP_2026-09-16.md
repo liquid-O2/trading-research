@@ -29,7 +29,7 @@ Cases S01 to S04 (missing or forged artifacts, green tests hiding missing behavi
 
 Phase 1.5 keeps P15-17, P15-18, P15-19 and P15-20 as they are: they are distinct stages with one owner each, and P15-17 and P15-18 are in flight. Their open cards lose the pstack read pointers and prompt sections and gain the template's "Delivers" and "Out of scope" paragraphs; nothing else changes.
 
-Phase 2 goes from 25 cards to 14. Subphases, gates and the entry rule (P2-09, P2-10, P2-03 may start from the verified P15-02 receipt) are unchanged.
+Phase 2 goes from 25 cards to 16. Subphases, gates and the entry rule (P2-09, P2-10, P2-03 may start from the verified P15-02 receipt) are unchanged.
 
 | New card | Absorbs | Owns |
 | --- | --- | --- |
