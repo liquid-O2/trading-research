@@ -70,3 +70,91 @@ cwd `/workspace/.worktrees/p15-17-stage-a/implementation`, `PYTHONPATH=src`, pyt
 - Pinned adversarial checker still times out at 60 s on P15-01 verify. Not a stage A code defect. Do not edit the checker. Independent timing: `verify_research_release.py task --receipt .../P15-01/a4c95ab43aef1038/attempt-0001/TASK_RECEIPT.json` took 109.6 s wall against the checker's hard-coded 60 s subprocess timeout (line 67). That subcommand exits 0 reporting an IDENTITY mismatch on `/workspace/implementation/src/trading_research/research/contracts/receipts.py` because the checker resolves code identity against main's working tree, which the concurrent P15-16A round is editing.
 - Keani B0.2 scan p90 25.25 s dominates the 160 x 1742 projection (115 h on 17 workers, 163 h on 12). Freeze records it. Bank, dates, and coverage stay.
 
+
+---
+
+# Round 2, 2026-09-16: the three stage A verification findings
+
+Same attempt directory `47dedaaa4f5b9ce1`. Round 1 artifacts preserved as
+`THROUGHPUT_B02_run1.json`, `PROFILE_B02_run1.txt`, `B02_CONTROL_SCANS_run1/`.
+
+## Decisions
+
+| # | Decision |
+| --- | --- |
+| R2-01 | Finding 2 first: the axis-to-stage map is split by PHASE. Formation, Reference and Timing run at enumeration, before the adapter builds references and contacts, and may change the contact population. Profile, Delta, Sequence and Memory run at stage evaluation on the contacts B0.2 already enumerated. |
+| R2-02 | The second hook point is a new dependency-free module `source_adapters/enumeration.py`: `ENUMERATION_KEY`, `split_b02_overrides`, `enumeration_scope` (a ContextVar scope opened by `scan_b02`) and `enumeration_point(point, payload, **ctx)`. Chosen over threading an `overrides` argument through every internal branch scanner: no internal signature changes, and with no hook installed every call is the identity, so the no-override path stays byte-identical. |
+| R2-03 | Enumeration points implemented: `window` and `references` in jumbo `_scan_judas_reversal`, `_scan_other_session`, `_scan_eq_branch`; `window` and `references` in green_b02 `_scan_box_at_level` (nyam_box, previous_hour), `_scan_asia_tdo`, `_scan_cash_open`; `references` in green_b02 `_scan_vwap` and `_scan_golden_pocket`; `references` in saint `scan_saint_branch_b02`; `references` and `contacts` in sires_b02. Frozen in FREEZE.json `ra2_axis_to_stage.enumeration_support`. |
+| R2-04 | Every `scan_b02` is now a thin wrapper `with enumeration_scope(overrides): return _scan_b02_impl(...)`, and `_scan_b02_impl` passes only the stage half of the overrides to `finish_scan_b02`. Nine families, seven modules. |
+| R2-05 | GB-SCALP `bearish_small_scalp` and `bullish_discount_pullback` are observation-only records (`unpublished_entry`, `observation_only`) with no published reference. Their four Reference candidates join their eight Sequence candidates as unsupported-with-reason. 148 supported, 12 unsupported. Nothing dropped, nothing added. |
+| R2-06 | `FAMILY_AXIS_STAGES` pins Profile on KEANI to `context, reference`: the decision operand (`fully_above`) is on the context stage, so a Profile recipe hooked only to `reference` could never move a verdict there. |
+| R2-07 | CORRECTED in round 3 after independent verification; the original wording was wrong. The round 1 p90 of 25.2 s for KEANI P1 is NOT the prior-completed-session decode and the round 2 `warm_session` did not prepay it. See R3-01. |
+| R2-08 | `SessionCache` is bound to the market object and memoizes every primitive on its parameter tuple: session minute bars with VWAP prefix sums, F1/F2/F3 geometry, VWAP mean and dispersion, C1/C2/C3 delta windows, the tick profile value area, band touches. Shared by every candidate on the session. |
+| R2-09 | Incremental paths. GB-VWAP reference: `vwap_between` is a prefix-sum difference with `bisect`, O(log n), not a bar walk. KEANI profile: `_profile_state` keeps one tick histogram plus a cursor; `profile_value_area(end_ns)` advances the cursor with `np.add.at` over only the new slice, so the whole session's value areas cost one pass. A request behind the cursor falls back to one `np.bincount` over the prefix. |
+| R2-10 | `scan_bank_session(market, resolved)` evaluates the whole bank on one loaded session; `measure_stage_a2.py` uses it for the per-session whole-bank cost. |
+| R2-11 | Finding 3: recipes rewritten to reach a verdict, not only an operand. Profile recomputes the value reference from the raw tick tape (b0 or triangular b2) and re-derives `fully_above`. Delta recomputes the confirmation gate from C1/C2/C3 and recombines the stage's boolean gates. Sequence runs a real machine (S1 reclaim, S2 defended retest, S3 flow-supported reclaim, S4 failure-to-progress) and sets the trigger/confirmation verdict. Memory counts distinct prior completed contacts of the band and fails M1 above the limit, M2 without a prior favorable reaction. |
+| R2-12 | `episode_operands(episode)` gives a recipe the operands of the whole episode plus its reference and geometry. Needed because SIRES `trigger` carries only `opposite_absorbed`; the contact level is on `location`/`reference`. Without it the Sequence machine had no level and added operands without moving a verdict. |
+| R2-13 | `contact_ids(document)` deliberately excludes `at_ns`: a recipe that only moves a clock on the same contact must not read as a different contact population. `verdict_changed` counts an episode `research_verdict` difference, a stage verdict difference, or a contact-population difference. |
+| R2-14 | Fixture date for the override proof and the positive controls is 2021-11-01, chosen because Formation F1 (3 -> 2 contacts) and Timing T4 (2 -> 1) both change count and ids there while Sequence S2 on SAINT keeps the contact set and moves stage verdicts. |
+| R2-15 | Known limitation recorded in FREEZE.json `recipe_limitations`: F2 `median_sessions`, C3 `history_sessions` and a prior-session raw tape for P1/P2 all need cross-session history the account-day view does not carry. Stage A uses the in-session equivalent; stage B loads the history. Not silent: the parameter is named in the freeze. |
+| R2-16 | `file_line` provenance in every rule payload shifts when a module gains lines. The RA-1 control is the same-process comparison of `scan_b02(...)` against `scan_b02(..., overrides=None)`, which is unaffected and passes 27/27. The regenerated `B02_CONTROL_SCANS/` differ from `B02_CONTROL_SCANS_run1/` by 1 to 4 bytes, all of it `file_line`. Recorded, not suppressed. |
+
+## Commands
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `pytest tests/rule_discovery/test_p15_17.py -q -p no:cacheprovider --tb=line` | 0 | 8 passed in 236.09 s |
+| `measure_stage_a2.py` (20 R3 dates, 148 supported candidates, single core) | 0 | THROUGHPUT_B02.json + VERDICT_CHANGES.json |
+| `profile2.py` | 0 | PROFILE_B02.txt, whole bank 63.62 s on 2024-01-02 |
+| `update_freeze.py` | 0 | FREEZE.json + FREEZE.md |
+| `pytest tests/rule_discovery -q -p no:cacheprovider --tb=line` (detached, PID-file waiter) | 0 | 571 passed in 3069.61 s (0:51:09) |
+
+## Hashes (round 2)
+
+- FREEZE.json sha256 `251030f57a973224686088714d8283d2b3a17a734efe75c52c8d8770ff274c70`
+- FREEZE.md sha256 `264d656f4849e56f518e29c442f68560c5446efea558f7d72ed9b58717078968`
+- THROUGHPUT_B02.json sha256 `9ddc01438d37746dec9486289f013f6f9f044e476326c459b383ab57c23a8144`
+- VERDICT_CHANGES.json sha256 `3dced7149c93da05473ad5d438df6bb7f5ddfa8d51c957ec2243e5af7130d0f3`
+- PROFILE_B02.txt sha256 `2b9b4939a454a295c567262e57d155cb321aa132b4c2973b48d1646453f6acc9`
+- DRAFT_STUB.json sha256 `96b19051934848744ec16240f924508e21b5c82485ab2a23aab082ae33b00b66` (unchanged; pending fields left for the orchestrator)
+
+## Skips (round 2)
+
+- git. Forbidden by the brief. No status, no commit, no branch.
+- `tools/check_foundation_adversarial.py`. Its timeout finding is environmental and handled elsewhere.
+- Receipt. Not issued. DRAFT_STUB.json pending fields untouched.
+- `families/*.json`. No new stage name had to be registered; the enumeration points are code, not stage names.
+
+
+---
+
+# Round 3, 2026-09-16: orchestrator follow-up after independent verification
+
+| # | Decision |
+| --- | --- |
+| R3-01 | The verifier was right: round 2 `warm_session` did not prepay the cold cost. Measured directly (`probe.py`, 2024-01-02): after `load_b02_market(warm=True)` the FIRST B0.2 scan of KEANI-OPEN-ABOVE-VALUE:source_long still costs 19.8 s and the second 0.058 s; MEMBER planned_return_long 6.4 s then 0.066 s; SAINT continuation_retest 0.044 s; GB-FAIL nyam_box 0.082 s. cProfile of that cold scan: 360 calls to `historical_features.profile` (24.5 s cumulative), `dataclasses._asdict_inner` 4.7 s tottime, `copy.deepcopy` 3.5 s. So the cost is the family's OWN repeated profile construction, memoized on the market object by the first scan -- not the prior-completed-session decode, which `warm_session` already paid in 2.2 s and which returned a real value (no silent failure there). |
+| R3-02 | `warm_session(market, *, branches=(), strict=False)` now has two parts: the shared data plane, and a per-(family, branch) prepay that runs each branch's B0.2 scan once and returns the baseline documents. That is the only way to prepay it: it is the same work either way. The cold cost is NOT removed, it is paid once per family-branch per session. |
+| R3-03 | The blanket `except Exception: pass` is gone. Every warm step records `{"step", "error"}` in `failures`; `strict=True` re-raises. `measure_stage_a2.py` writes them to THROUGHPUT_B02.json `warm_failures` (0 over the twenty dates). |
+| R3-04 | THROUGHPUT_B02.json now carries two columns per candidate, `fresh` (first scan of that family-branch on the session, after the data-plane warm only) and `warm_repeat`. The seven RA-5 candidates sit on seven distinct family-branch pairs, so one load yields the whole fresh column. The contract-formula projection is computed from the fresh column as instructed; it gives 109.32 h on 17 workers and 154.87 h on 12, both over budget, because it charges a once-per-branch cost to all 160 candidates. |
+| R3-05 | Per instruction 2's fallback: the headline is now the per-session projection, in FREEZE.json `resource_profile.headline` and as the bold first row of the FREEZE.md table. per-session p90 156.90 s -> 4.47 h on 17 workers, 6.33 h on 12. FREEZE.md now states plainly that the cold cost is paid once per family-branch per session and cannot be made to disappear. |
+| R3-06 | VERDICT_CHANGES.json schema v2: `rows` holds the full 2,960-row table (148 supported candidates x 20 dates) with candidate_id, date, bank, family, branch, episode_verdict_changed, stage_verdict_changed, contact_population_changed and both contact counts. `per_bank` is derived from `rows` in the same file and is independently recomputable. |
+| R3-07 | The full-suite log is preserved at `logs/SUITE_round3.log` in this attempt directory. |
+
+## Commands (round 3)
+
+| Command | Exit | Result |
+| --- | --- | --- |
+| `probe.py` (cold-cost attribution) | 0 | KEANI first 19.767 s / second 0.058 s; 360 `historical_features.profile` calls |
+| `measure_stage_a2.py` (20 dates, fresh + warm columns, 2,960 diff rows) | 0 | fresh p90 24.004 s, warm-repeat p90 1.056 s, per-session p90 156.90 s, 0 warm failures |
+| `update_freeze3.py` | 0 | FREEZE.json + FREEZE.md |
+| `pytest tests/rule_discovery tests/contracts -q -p no:cacheprovider --tb=line` (detached, PID-file waiter) | 0 | 581 passed in 2956.29 s (0:49:16); log preserved at `logs/SUITE_round3.log` |
+| `pytest tests/contracts -q -p no:cacheprovider --tb=line` | 0 | 10 passed in 19.09 s; log at `logs/SUITE_round3_contracts.log` |
+
+## Hashes (round 3)
+
+- FREEZE.json sha256 `e06cf2765437a033e143b4e72e91bd853f4ea45f354f0c02dc524ed553099d74`
+- FREEZE.md sha256 `c2abac01f4f29f20cbcdfd38065ba37b91b5d3234de2809561e844f1a2d7f069`
+- THROUGHPUT_B02.json sha256 `dbdaafbdfb00781434503cd7459f538a54a0eb9fbd4461ddaa6cfa8e15575f7b`
+- VERDICT_CHANGES.json sha256 `cd4e7affe92ec38c4fb7795bfe3c179dae17f988608e582e90df98552b08ba57`
+- PROFILE_B02.txt sha256 `2b9b4939a454a295c567262e57d155cb321aa132b4c2973b48d1646453f6acc9`
+- DRAFT_STUB.json sha256 `96b19051934848744ec16240f924508e21b5c82485ab2a23aab082ae33b00b66`

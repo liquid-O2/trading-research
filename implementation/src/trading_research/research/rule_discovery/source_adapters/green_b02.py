@@ -1,5 +1,10 @@
 """Green Bird B0.2 scan. Family-owned; does not edit common.py or the runner."""
 from __future__ import annotations
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 
 from datetime import date, timedelta
 from decimal import Decimal
@@ -1252,12 +1257,14 @@ def _scan_asia_tdo(market) -> list[dict[str, Any]]:
     spec = asia_box_spec(market.day)
     start, end = _box_ns(market, spec)
     ref = _range(market, start, end, f"asia-tdo-{spec['name']}")
+    ref = enumeration_point("references", ref, family="GB-FAIL", branch="asia_tdo_case", market=market, begin=int(end), end=int(market.end))
     tdo = _tdo(market)
     if ref is None or tdo is None:
         return [_unknown_ref_episode(market, "GB-FAIL", "asia_tdo_case", "short", "asia_or_tdo_missing", ("RR-13-confirmation-modes", "F06-A2-asia"))]
     level = _dec(ref["high"])
     side = "short"
-    sweep = first_sweep(market, end, int(market.end), level, side)
+    _clocks = enumeration_point("window", {"begin": int(end), "end": int(market.end)}, family="GB-FAIL", branch="asia_tdo_case", market=market, reference=ref)
+    sweep = first_sweep(market, int(_clocks["begin"]), int(_clocks["end"]), level, side)
     if sweep is None:
         stages = [
             _stage("context", "pass", end, session="asia"),
@@ -1431,6 +1438,20 @@ def _scan_pdl(market) -> list[dict[str, Any]]:
 
 def _scan_box_at_level(market, *, branch: str, ref: Mapping[str, Any], begin: int, end: int, sides: tuple[str, ...], extra_values=None) -> list[dict[str, Any]]:
     episodes = []
+    _clocks = enumeration_point(
+        "window",
+        {"begin": int(begin), "end": int(end)},
+        family="GB-FAIL",
+        branch=branch,
+        market=market,
+        reference=ref,
+        extra_values=dict(extra_values or {}),
+    )
+    begin, end = int(_clocks["begin"]), int(_clocks["end"])
+    ref = enumeration_point(
+        "references", ref, family="GB-FAIL", branch=branch, market=market, begin=begin, end=end,
+        extra_values=dict(extra_values or {}),
+    )
     box_low, box_high = _d(ref.get("low")), _d(ref.get("high"))
     for side in sides:
         level = _dec(ref["high"] if side == "short" else ref["low"])
@@ -1698,8 +1719,15 @@ def _scan_cash_open(market) -> list[dict[str, Any]]:
         "known_at": known,
         "open": px,
     }
-    begin = int(market.at("09:30"))
-    end = int(market.at("11:30") + MINUTE)
+    ref = enumeration_point("references", ref, family="GB-FAIL", branch="cash_open_reclaim_case", market=market)
+    px = _dec(ref.get("open") if ref.get("open") is not None else ref.get("high"))
+    _clocks = enumeration_point(
+        "window",
+        {"begin": int(market.at("09:30")), "end": int(market.at("11:30") + MINUTE)},
+        family="GB-FAIL", branch="cash_open_reclaim_case", market=market, reference=ref,
+    )
+    begin = int(_clocks["begin"])
+    end = int(_clocks["end"])
     side = "long"
     sweep = first_sweep(market, begin, end, px, side)
     if sweep is None:
@@ -1901,6 +1929,10 @@ def _scan_golden_pocket(market, *, family: str, branch: str, kinds: tuple[str, .
     impulse_end = market.at("09:30") if ny_pullback else None
     for kind in kinds:
         impulse = _impulse_leg(market, kind=kind, end_ns=impulse_end)
+        impulse = enumeration_point(
+            "references", impulse, family=family, branch=branch, market=market, kind=kind,
+            impulse_end=impulse_end, nyam=nyam,
+        )
         if impulse is None:
             stages = [
                 _stage("context", "pass", int(market.at("09:30")), session="ny_am" if ny_pullback else "overnight"),
@@ -2133,6 +2165,14 @@ def _scan_vwap(market) -> list[dict[str, Any]]:
     if asia is None or london is None:
         return [_unknown_ref_episode(market, "GB-VWAP", "source_long", "long", "session_reference_missing", ("F13-gb-vwap",))]
     boundary = max(_dec(asia["high"]), _dec(london["high"]))
+    _refs = enumeration_point(
+        "references",
+        {"asia": asia, "london": london, "boundary": boundary},
+        family="GB-VWAP",
+        branch="source_long",
+        market=market,
+    )
+    asia, london, boundary = _refs["asia"], _refs["london"], _refs["boundary"]
     begin = max(int(market.at("09:30")), int(asia["known_at"]), int(london["known_at"]))
     rows = _safe_bars(market, begin, int(market.end), 300)
     breakout = None
@@ -2423,12 +2463,19 @@ SCANNERS = {
 
 
 def scan_b02(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec: Mapping[str, Any] | None = None, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
+
     def finish(doc):
-        if not overrides:
+        if not stage_overrides:
             return doc
         from trading_research.research.rule_discovery.search import finish_scan_b02
 
-        return finish_scan_b02(doc, overrides)
+        return finish_scan_b02(doc, stage_overrides)
 
     rec = {key: value for key, value in dict(rec or {}).items() if key in REC_IDENTITY_KEYS or key in {"family", "method_id", "branch"}}
     family = rec.get("family") or rec.get("method_id") or "GB-FAIL"

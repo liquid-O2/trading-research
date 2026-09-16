@@ -1,0 +1,29 @@
+candidate GB-FAIL:nyam_box:F1 date 2024-01-02 (scan only; load excluded)
+         77985 function calls (76453 primitive calls) in 0.879 seconds
+
+   Ordered by: cumulative time
+   List reduced from 202 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.879    0.879 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/search.py:406(scan_candidate)
+        1    0.000    0.000    0.879    0.879 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_failure.py:226(scan_b02)
+        1    0.000    0.000    0.879    0.879 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:2425(scan_b02)
+        1    0.000    0.000    0.869    0.869 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:1593(_scan_nyam)
+        3    0.000    0.000    0.863    0.288 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:1432(_scan_box_at_level)
+       10    0.000    0.000    0.854    0.085 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:127(bars)
+       10    0.001    0.000    0.854    0.085 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:117(bars)
+        5    0.000    0.000    0.853    0.171 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:398(sweep_and_at_level)
+        8    0.000    0.000    0.853    0.107 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:218(_safe_bars)
+        1    0.093    0.093    0.817    0.817 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:46(aggregate_vendor)
+     2462    0.002    0.000    0.718    0.000 {built-in method builtins.any}
+     7920    0.715    0.000    0.715    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:56(<genexpr>)
+        1    0.010    0.010    0.033    0.033 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:19(vendor_rows)
+        1    0.000    0.000    0.017    0.017 /workspace/implementation/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py:1884(read_table)
+        4    0.000    0.000    0.013    0.003 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:132(coverage)
+        4    0.000    0.000    0.013    0.003 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:135(coverage)
+        4    0.002    0.000    0.013    0.003 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:292(coverage)
+        1    0.011    0.011    0.011    0.011 /workspace/implementation/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py:1525(read)
+       65    0.000    0.000    0.010    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:124(at)
+       65    0.000    0.000    0.010    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/empirical_market.py:16(clock)
+
+

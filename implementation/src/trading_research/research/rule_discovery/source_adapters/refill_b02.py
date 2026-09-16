@@ -1,5 +1,10 @@
 """REFILL-STUDY B0.2 scan. Does not change JETBUNDLE or STOIC."""
 from __future__ import annotations
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 
 from pathlib import Path
 from typing import Any, Mapping
@@ -392,12 +397,19 @@ def touch_hold_verdict(hold: bool | None) -> str:
 
 
 def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
+
     def finish(doc):
-        if not overrides:
+        if not stage_overrides:
             return doc
         from trading_research.research.rule_discovery.search import finish_scan_b02
 
-        return finish_scan_b02(doc, overrides)
+        return finish_scan_b02(doc, stage_overrides)
 
     rec = dict(rec or {})
     family = rec.get("method_id") or rec.get("family") or FAMILY_REFILL

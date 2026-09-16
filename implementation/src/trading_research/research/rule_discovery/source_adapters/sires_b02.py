@@ -1,5 +1,10 @@
 """SIRES B0.2 scan. Independent of frozen B0 / B0.1 scanners."""
 from __future__ import annotations
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 
 from datetime import date
 from pathlib import Path
@@ -1614,12 +1619,19 @@ def _values_common(branch, side, loc, features, replenish, reward, imb_ratio, ga
 
 
 def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
+
     def finish(doc):
-        if not overrides:
+        if not stage_overrides:
             return doc
         from trading_research.research.rule_discovery.search import finish_scan_b02
 
-        return finish_scan_b02(doc, overrides)
+        return finish_scan_b02(doc, stage_overrides)
 
     rec = _identity_rec(rec)
     family = rec.get("method_id") or rec.get("family") or "SIRES"
@@ -1704,10 +1716,17 @@ def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
         preferred = [row for row in locations if row.get("kind") == "vwap_band"]
         if preferred:
             locations = preferred
+    locations = enumeration_point(
+        "references", locations, family=family, branch=branch, market=market, view=view, cutoff=cutoff
+    )
     cash = _cash_open_ns(view, arrays)
     episodes: list[dict[str, Any]] = []
     for loc in locations:
         contacts = enumerate_contacts(arrays, loc, cutoff)
+        contacts = enumeration_point(
+            "contacts", contacts, family=family, branch=branch, market=market, view=view,
+            cutoff=cutoff, location=loc,
+        )
         if not contacts:
             continue
         for contact in contacts:

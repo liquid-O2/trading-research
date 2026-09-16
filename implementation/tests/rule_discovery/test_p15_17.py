@@ -9,11 +9,15 @@ import pytest
 from trading_research.errors import ContractError
 from trading_research.research.rule_discovery.registry import applicable as bank_applicable
 from trading_research.research.rule_discovery.search import (
+    AXIS_ENUMERATION_POINTS,
+    AXIS_PHASE,
     B02_FAMILIES,
     CONTROL_BRANCH,
     CONTROL_DATES,
     THROUGHPUT_CANDIDATE_IDS,
+    build_overrides,
     check_causal_parameters,
+    contact_ids,
     cutoff_ns,
     load_b02_market,
     load_bank,
@@ -21,14 +25,20 @@ from trading_research.research.rule_discovery.search import (
     negative_control_pair,
     resolve_bank,
     resolve_candidate,
+    scan_b02_baseline,
     scan_candidate,
     serialize_scan_bytes,
+    stage_verdict_vector,
+    verdict_changed,
     write_control_scan,
 )
 from trading_research.research.rule_discovery.source_adapters.common import install_write_guard
+from trading_research.research.rule_discovery.source_adapters.enumeration import ENUMERATION_KEY
 
 ATTEMPT = Path(__file__).resolve().parents[2] / "reports/research-work/P15-17/47dedaaa4f5b9ce1"
-FIXTURE_DAY = "2021-01-04"
+FIXTURE_DAY = "2021-11-01"
+ENUMERATION_PROOF_DAY = "2021-11-01"
+SEQUENCE_PROOF_ID = "SAINT-AMT:continuation_retest:S2"
 NS = 1_000_000_000
 
 
@@ -47,51 +57,39 @@ def _existing_value_changed(left: dict, right: dict) -> bool:
 
 
 def _assert_predicted_direction(bank: str, left_map: dict, right_map: dict, item) -> bool:
-    if bank == "Formation":
-        left = left_map.get("reference") or {}
-        right = right_map.get("reference") or {}
-        lo = left.get("operands") or {}
-        ro = right.get("operands") or {}
-        if any(lo.get(key) != ro.get(key) for key in ("box_low", "box_high", "level") if key in lo):
-            return True
-        return (left_map.get("context") or {}).get("at_ns") != (right_map.get("context") or {}).get("at_ns")
+    """The overridden stage moved in the direction the recipe predicts."""
     if bank == "Profile":
-        return (left_map.get("reference") or {}).get("operands", {}).get("prior_vah") != (
-            right_map.get("reference") or {}
-        ).get("operands", {}).get("prior_vah")
-    if bank == "Reference":
-        lo = (left_map.get("reference") or {}).get("operands") or {}
-        ro = (right_map.get("reference") or {}).get("operands") or {}
-        return lo.get("asia_high") != ro.get("asia_high") or lo.get("london_high") != ro.get("london_high")
+        lo = (left_map.get("context") or left_map.get("reference") or {}).get("operands") or {}
+        ro = (right_map.get("context") or right_map.get("reference") or {}).get("operands") or {}
+        if ro.get("profile_recipe") != item.recipe_id:
+            return False
+        return any(lo.get(key) != ro.get(key) for key in ("prior_vah", "poc", "vah", "val", "fully_above")) or (
+            (left_map.get("context") or {}).get("verdict") != (right_map.get("context") or {}).get("verdict")
+        )
     if bank == "Delta":
         left = left_map.get("confirmation") or {}
         right = right_map.get("confirmation") or {}
-        if left.get("verdict") != right.get("verdict"):
-            return True
-        return (left.get("operands") or {}).get("arrival_ratio") != (right.get("operands") or {}).get("arrival_ratio")
+        ro = right.get("operands") or {}
+        if ro.get("delta_recipe") != item.recipe_id:
+            return False
+        return left.get("verdict") != right.get("verdict") or (left.get("operands") or {}).get(
+            "arrival_ratio"
+        ) != ro.get("arrival_ratio") or "delta_value" in ro or "delta_reason" in ro
     if bank == "Sequence":
-        deadline_s = int(item.parameters.get("deadline_s") or 600)
         for name in item.hooks:
             if name not in left_map:
                 continue
-            left_at = left_map[name].get("at_ns")
-            right_at = right_map[name].get("at_ns")
-            if left_at is not None and right_at == int(left_at) + deadline_s * NS:
+            ro = (right_map[name].get("operands") or {})
+            if ro.get("sequence_recipe") == item.recipe_id:
                 return True
         return False
     if bank == "Memory":
         left = left_map.get("location") or {}
         right = right_map.get("location") or {}
-        return left.get("verdict") != right.get("verdict") or left.get("at_ns") != right.get("at_ns")
-    if bank == "Timing":
-        left = left_map.get("trigger") or {}
-        right = right_map.get("trigger") or {}
-        if (right.get("operands") or {}).get("in_modal_window") is True and (left.get("operands") or {}).get(
-            "in_modal_window"
-        ) is False:
-            return True
-        expiry_s = int(item.parameters.get("expiry_s_after_qual") or 3600)
-        return left.get("at_ns") is not None and right.get("at_ns") == int(left["at_ns"]) + expiry_s * NS
+        ro = right.get("operands") or {}
+        if ro.get("memory_recipe") != item.recipe_id:
+            return False
+        return "prior_contacts" in ro or "memory_reason" in ro
     return False
 
 
@@ -156,6 +154,8 @@ def test_ra1_negative_control_per_family():
 
 
 def test_positive_control_per_bank_other_stages_unchanged():
+    """Evaluation axes move only their own stage; enumeration axes are allowed to
+    move the contact population and are checked separately."""
     install_write_guard()
     market = load_b02_market(FIXTURE_DAY)
     resolved_map = {item.candidate_id: item for item in resolve_bank()}
@@ -164,15 +164,21 @@ def test_positive_control_per_bank_other_stages_unchanged():
         item = resolved_map[cid]
         assert item.supported, (cid, item.unsupported_reason)
         seen_banks.add(item.bank)
-        from trading_research.research.rule_discovery.search import scan_b02_baseline
-
         baseline = scan_b02_baseline(market, item.family, item.branch)
         candidate = scan_candidate(market, item)
-        assert serialize_scan_bytes(baseline) != serialize_scan_bytes(candidate)
+        assert serialize_scan_bytes(baseline) != serialize_scan_bytes(candidate), cid
         baseline_eps = list(baseline.get("episodes") or [])
         candidate_eps = list(candidate.get("episodes") or [])
-        assert len(candidate_eps) == len(baseline_eps)
-        assert candidate_eps, cid
+        assert baseline_eps, cid
+        if item.phase == "enumeration":
+            # An enumeration axis runs before references and contacts are built,
+            # so the contact population itself is allowed to move.
+            base_stages = [_stage_map(episode) for episode in baseline_eps]
+            cand_stages = [_stage_map(episode) for episode in candidate_eps]
+            assert contact_ids(candidate) != contact_ids(baseline) or base_stages != cand_stages, cid
+            continue
+        assert len(candidate_eps) == len(baseline_eps), cid
+        assert contact_ids(candidate) == contact_ids(baseline), cid
         predicted = False
         real = False
         for left, right in zip(baseline_eps, candidate_eps):
@@ -184,12 +190,63 @@ def test_positive_control_per_bank_other_stages_unchanged():
                     if _existing_value_changed(record, right_map[name]):
                         real = True
                     continue
-                assert record == right_map[name]
+                assert record == right_map[name], (cid, name)
             if _assert_predicted_direction(item.bank, left_map, right_map, item):
                 predicted = True
         assert real, cid
         assert predicted, cid
     assert seen_banks == {"Formation", "Profile", "Reference", "Delta", "Sequence", "Memory", "Timing"}
+
+
+def test_axis_phase_map_splits_enumeration_from_evaluation():
+    assert {bank for bank, phase in AXIS_PHASE.items() if phase == "enumeration"} == {
+        "Formation",
+        "Reference",
+        "Timing",
+    }
+    assert {bank for bank, phase in AXIS_PHASE.items() if phase == "evaluation"} == {
+        "Profile",
+        "Delta",
+        "Sequence",
+        "Memory",
+    }
+    assert AXIS_ENUMERATION_POINTS["Formation"] == ("references",)
+    assert AXIS_ENUMERATION_POINTS["Reference"] == ("references",)
+    assert AXIS_ENUMERATION_POINTS["Timing"] == ("window",)
+    resolved_map = {item.candidate_id: item for item in resolve_bank()}
+    for cid in THROUGHPUT_CANDIDATE_IDS:
+        item = resolved_map[cid]
+        overrides = build_overrides(item, object())
+        if item.phase == "enumeration":
+            assert set(overrides) == {ENUMERATION_KEY}
+        else:
+            assert ENUMERATION_KEY not in overrides
+            assert set(overrides) == set(item.hooks)
+
+
+def test_enumeration_axes_change_the_contact_population():
+    """Formation and Timing (T4) recipes run before references and contacts are
+    built, so they may change which contacts exist. A Sequence recipe runs after
+    and leaves the contact set alone while moving stage verdicts."""
+    install_write_guard()
+    market = load_b02_market(ENUMERATION_PROOF_DAY)
+    resolved_map = {item.candidate_id: item for item in resolve_bank()}
+
+    for cid, expected in (("GB-FAIL:nyam_box:F1", (3, 2)), ("JJ-TBR:judas_reversal:T4", (2, 1))):
+        item = resolved_map[cid]
+        baseline = scan_b02_baseline(market, item.family, item.branch)
+        candidate = scan_candidate(market, item)
+        base_ids = contact_ids(baseline)
+        cand_ids = contact_ids(candidate)
+        assert (len(base_ids), len(cand_ids)) == expected, (cid, base_ids, cand_ids)
+        assert cand_ids != base_ids, (cid, base_ids, cand_ids)
+        assert verdict_changed(baseline, candidate)["changed"], cid
+
+    item = resolved_map[SEQUENCE_PROOF_ID]
+    baseline = scan_b02_baseline(market, item.family, item.branch)
+    candidate = scan_candidate(market, item)
+    assert contact_ids(candidate) == contact_ids(baseline), SEQUENCE_PROOF_ID
+    assert stage_verdict_vector(candidate) != stage_verdict_vector(baseline), SEQUENCE_PROOF_ID
 
 
 def test_freeze_pins_every_candidate_resolution():
@@ -205,7 +262,7 @@ def test_freeze_pins_every_candidate_resolution():
     for row, item in zip(rows, resolved):
         assert row == item.freeze_row()
     unsupported = [row for row in rows if not row["supported"]]
-    assert len(unsupported) == 8
+    assert len(unsupported) == 12
     assert freeze["support_counts"]["unsupported"]
     assert {row["candidate_id"] for row in unsupported} == {
         item["candidate_id"] for item in freeze["support_counts"]["unsupported"]

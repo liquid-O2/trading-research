@@ -78,48 +78,176 @@
   },
   "ra2_axis_to_stage": {
     "Delta": {
+      "enumeration_points": [],
       "hooks": [
         "confirmation"
       ],
-      "note": "delta input of confirmation"
+      "note": "delta input of confirmation; applied at stage evaluation on the enumerated contacts",
+      "phase": "evaluation"
     },
     "Formation": {
+      "enumeration_points": [
+        "references"
+      ],
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
-      "note": "formation part of context/reference"
+      "note": "formation part of context/reference; applied at enumeration, may change the contact population",
+      "phase": "enumeration"
     },
     "Memory": {
+      "enumeration_points": [],
       "hooks": [
         "location"
       ],
-      "note": "contact-memory filter"
+      "note": "contact-memory filter; applied at stage evaluation on the enumerated contacts",
+      "phase": "evaluation"
     },
     "Profile": {
+      "enumeration_points": [],
       "hooks": [
         "reference"
       ],
-      "note": "reference profile construction"
+      "note": "reference profile construction; applied at stage evaluation on the enumerated contacts",
+      "phase": "evaluation"
     },
     "Reference": {
-      "hooks": [
-        "reference"
+      "enumeration_points": [
+        "references"
       ],
-      "note": "the reference object itself"
+      "hooks": [
+        "reference",
+        "location"
+      ],
+      "note": "the reference object itself; applied at enumeration, may change the contact population",
+      "phase": "enumeration"
     },
     "Sequence": {
+      "enumeration_points": [],
       "hooks": [
         "trigger",
         "confirmation"
       ],
-      "note": "the sequence machine"
+      "note": "the sequence machine; applied at stage evaluation on the enumerated contacts",
+      "phase": "evaluation"
     },
     "Timing": {
-      "hooks": [
-        "trigger"
+      "enumeration_points": [
+        "window"
       ],
-      "note": "trigger window and expiry"
+      "hooks": [
+        "trigger",
+        "location"
+      ],
+      "note": "trigger window and expiry; applied at enumeration, may change the contact population",
+      "phase": "enumeration"
+    },
+    "amendment": {
+      "date": "2026-09-16",
+      "draft": true,
+      "implemented_in": [
+        "implementation/src/trading_research/research/rule_discovery/source_adapters/enumeration.py",
+        "implementation/src/trading_research/research/rule_discovery/search.py (axis_phase, build_enumeration_hook, build_overrides)"
+      ],
+      "resolution_ids_unchanged": true,
+      "ruling": "Recipes on the Formation, Reference and Timing axes apply at enumeration time, before the adapter builds references and contacts, and may change the contact population. Recipes on the Profile, Delta, Sequence and Memory axes apply at stage evaluation on the contacts B0.2 has already enumerated. The earlier map applied every axis after enumeration, so Formation, Reference and Timing candidates could not change which contacts exist."
+    },
+    "enumeration_support": {
+      "GB-FAIL": {
+        "asia_tdo_case": [
+          "references",
+          "window"
+        ],
+        "cash_open_reclaim_case": [
+          "references",
+          "window"
+        ],
+        "nyam_box": [
+          "references",
+          "window"
+        ],
+        "previous_hour": [
+          "references",
+          "window"
+        ]
+      },
+      "GB-SCALP": {
+        "golden_pocket_continuation": [
+          "references"
+        ],
+        "golden_pocket_reversal": [
+          "references"
+        ]
+      },
+      "GB-VWAP": {
+        "source_long": [
+          "references"
+        ]
+      },
+      "JJ-TBR": {
+        "internal_rotation": [
+          "references",
+          "window"
+        ],
+        "judas_reversal": [
+          "references",
+          "window"
+        ],
+        "other_session": [
+          "references",
+          "window"
+        ],
+        "single_extended": [
+          "references",
+          "window"
+        ],
+        "single_purged": [
+          "references",
+          "window"
+        ]
+      },
+      "SAINT-AMT": {
+        "continuation_retest": [
+          "references"
+        ],
+        "failed_auction_return": [
+          "references"
+        ],
+        "poc_traversal": [
+          "references"
+        ],
+        "trapped_buyers_retest": [
+          "references"
+        ]
+      },
+      "SIRES": {
+        "absorption_reward_retest": [
+          "contacts",
+          "references"
+        ],
+        "clean_squeeze": [
+          "contacts",
+          "references"
+        ],
+        "defended_band_continuation": [
+          "contacts",
+          "references"
+        ],
+        "kg1_retest": [
+          "contacts",
+          "references"
+        ],
+        "microbalance_break": [
+          "contacts",
+          "references"
+        ],
+        "vwap_deviation_fade": [
+          "contacts",
+          "references"
+        ]
+      }
     },
     "exposed_stages": {
       "GB-FAIL": [
@@ -211,6 +339,12 @@
         "trigger"
       ]
     },
+    "family_stage_overrides": {
+      "Profile:KEANI-OPEN-ABOVE-VALUE": [
+        "context",
+        "reference"
+      ]
+    },
     "gb_scalp_observations": {
       "branches": [
         "bearish_small_scalp",
@@ -256,6 +390,8 @@
   },
   "ra5_throughput": {
     "bank_dates_coverage_shrunk": false,
+    "branch_prepay_median_seconds": 17.677084613591433,
+    "branch_prepay_p90_seconds": 33.6844097243622,
     "candidates": [
       "GB-FAIL:nyam_box:F1",
       "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
@@ -266,6 +402,12 @@
       "JJ-TBR:judas_reversal:T4"
     ],
     "cgroup_workers_floor": 17,
+    "cold_cost_note": "The per-(family, branch) cold cost is real work and is paid once per family-branch per session by warm_session's branch prepay. It is not removed, only amortized: the first B0.2 scan of KEANI-OPEN-ABOVE-VALUE:source_long drives 360 historical_features.profile calls whose results memoize on the market object. The headline projection is therefore the per-session formula, which counts that cost once per session, not the contract formula, which would charge it to all 160 candidates.",
+    "columns": {
+      "fresh": "first scan of that (family, branch) on the session, after the data-plane warm only",
+      "warm_repeat": "second scan of the same candidate on the same session"
+    },
+    "data_plane_median_seconds": 2.4102332685142756,
     "dates": [
       "2020-01-02",
       "2020-06-01",
@@ -288,62 +430,76 @@
       "2026-01-02",
       "2026-06-01"
     ],
-    "load_median_seconds": 5.118366700131446,
-    "load_p90_seconds": 7.748738319799312,
+    "distinct_branches": 26,
+    "engine": "per-session data plane plus per-(family, branch) cold-scan prepay; whole bank evaluated on one loaded account-day view",
+    "headline_projection": "projection_per_session",
+    "load_median_seconds": 5.378120513167232,
+    "load_p90_seconds": 8.403394226357346,
     "market_view_loaded_once_per_date": true,
+    "measured_at": "2026-09-16",
     "n_dates": 20,
     "one_process": true,
-    "per_candidate": [
-      {
+    "per_candidate": {
+      "GB-FAIL:nyam_box:F1": {
         "bank": "Formation",
-        "candidate_id": "GB-FAIL:nyam_box:F1",
-        "family": "GB-FAIL",
-        "median_seconds": 0.8913141847588122,
-        "p90_seconds": 2.1322092326357973
+        "fresh_median_seconds": 0.014267095364630222,
+        "fresh_p90_seconds": 0.018479517381638305,
+        "phase": "enumeration",
+        "warm_repeat_median_seconds": 0.011999599169939756,
+        "warm_repeat_p90_seconds": 0.013884672429412605
       },
-      {
-        "bank": "Profile",
-        "candidate_id": "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
-        "family": "KEANI-OPEN-ABOVE-VALUE",
-        "median_seconds": 18.410526680760086,
-        "p90_seconds": 25.246072358824318
-      },
-      {
+      "GB-VWAP:source_long:R1": {
         "bank": "Reference",
-        "candidate_id": "GB-VWAP:source_long:R1",
-        "family": "GB-VWAP",
-        "median_seconds": 0.27068568812683225,
-        "p90_seconds": 10.251588187739253
+        "fresh_median_seconds": 0.24392032762989402,
+        "fresh_p90_seconds": 2.5184582263231294,
+        "phase": "enumeration",
+        "warm_repeat_median_seconds": 0.007383984513580799,
+        "warm_repeat_p90_seconds": 0.014671438187360766
       },
-      {
-        "bank": "Delta",
-        "candidate_id": "SAINT-AMT:continuation_retest:C1",
-        "family": "SAINT-AMT",
-        "median_seconds": 0.034539998043328524,
-        "p90_seconds": 0.0859986621886492
-      },
-      {
-        "bank": "Sequence",
-        "candidate_id": "SIRES:absorption_reward_retest:S1",
-        "family": "SIRES",
-        "median_seconds": 1.0021340590901673,
-        "p90_seconds": 1.188704005163163
-      },
-      {
-        "bank": "Memory",
-        "candidate_id": "MEMBER-TWO-REASONS:planned_return_long:M1",
-        "family": "MEMBER-TWO-REASONS",
-        "median_seconds": 2.8563377568498254,
-        "p90_seconds": 3.7794727834872903
-      },
-      {
+      "JJ-TBR:judas_reversal:T4": {
         "bank": "Timing",
-        "candidate_id": "JJ-TBR:judas_reversal:T4",
-        "family": "JJ-TBR",
-        "median_seconds": 0.02099484158679843,
-        "p90_seconds": 0.03909764448180795
+        "fresh_median_seconds": 0.02951315976679325,
+        "fresh_p90_seconds": 0.05249399300664674,
+        "phase": "enumeration",
+        "warm_repeat_median_seconds": 0.006976142525672913,
+        "warm_repeat_p90_seconds": 0.015123509056866168
+      },
+      "KEANI-OPEN-ABOVE-VALUE:source_long:P1": {
+        "bank": "Profile",
+        "fresh_median_seconds": 17.941893639042974,
+        "fresh_p90_seconds": 24.003965566121042,
+        "phase": "evaluation",
+        "warm_repeat_median_seconds": 0.09109743218868971,
+        "warm_repeat_p90_seconds": 0.12423171866685152
+      },
+      "MEMBER-TWO-REASONS:planned_return_long:M1": {
+        "bank": "Memory",
+        "fresh_median_seconds": 2.799979427829385,
+        "fresh_p90_seconds": 3.4758411249145866,
+        "phase": "evaluation",
+        "warm_repeat_median_seconds": 0.12009105272591114,
+        "warm_repeat_p90_seconds": 0.13909721942618491
+      },
+      "SAINT-AMT:continuation_retest:C1": {
+        "bank": "Delta",
+        "fresh_median_seconds": 0.03215922228991985,
+        "fresh_p90_seconds": 0.08503813324496153,
+        "phase": "evaluation",
+        "warm_repeat_median_seconds": 0.021791480481624603,
+        "warm_repeat_p90_seconds": 0.05311418697237969
+      },
+      "SIRES:absorption_reward_retest:S1": {
+        "bank": "Sequence",
+        "fresh_median_seconds": 0.9694325486198068,
+        "fresh_p90_seconds": 1.1772153324447572,
+        "phase": "evaluation",
+        "warm_repeat_median_seconds": 0.9380034157074988,
+        "warm_repeat_p90_seconds": 1.0556969991885126
       }
-    ],
+    },
+    "per_session_median_seconds": 92.64995527267456,
+    "per_session_p90_seconds": 156.90102613391358,
+    "previous_round_file": "THROUGHPUT_B02_run1.json",
     "profile_candidate": "GB-FAIL:nyam_box:F1",
     "profile_date": "2024-01-02",
     "profile_path": "/workspace/.worktrees/p15-17-stage-a/implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/PROFILE_B02.txt",
@@ -351,34 +507,97 @@
       "workers_12": {
         "candidates": 160,
         "dates": 1742,
-        "exceeds_24h_budget": true,
+        "exceeds_24h_budget": false,
         "formula": "160 x 1,742 x p90 / (workers x 3600)",
-        "hours": 162.88391870026652,
-        "p90_seconds": 25.246072358824318,
+        "hours": 9.768128705317244,
+        "p90_seconds": 1.5140038751065763,
+        "workers": 12
+      },
+      "workers_17": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": false,
+        "formula": "160 x 1,742 x p90 / (workers x 3600)",
+        "hours": 6.895149674341583,
+        "p90_seconds": 1.5140038751065763,
+        "workers": 17
+      }
+    },
+    "projection_contract_fresh": {
+      "workers_12": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": true,
+        "formula": "160 x 1,742 x fresh p90 / (workers x 3600)",
+        "hours": 154.87002968956614,
+        "p90_seconds": 24.003965566121042,
         "workers": 12
       },
       "workers_17": {
         "candidates": 160,
         "dates": 1742,
         "exceeds_24h_budget": true,
-        "formula": "160 x 1,742 x p90 / (workers x 3600)",
-        "hours": 114.97688378842342,
-        "p90_seconds": 25.246072358824318,
+        "formula": "160 x 1,742 x fresh p90 / (workers x 3600)",
+        "hours": 109.3200209573408,
+        "p90_seconds": 24.003965566121042,
         "workers": 17
       }
     },
-    "projection_p90_seconds": 25.246072358824318,
-    "projection_p90_source": "slowest measured candidate-branch (KEANI-OPEN-ABOVE-VALUE:source_long:P1)",
-    "r3_gate": {
-      "gate_3x_vs_phase1": false,
-      "mean_multiple": 2.71,
-      "measured_p90_seconds": 1.484442432411015,
-      "phase1_mean_seconds": 2.8859749833826815,
-      "residual": "parquet decode / load_span_arrow",
-      "status": "open engineering finding; freeze records measured values and does not shrink the bank, dates, or coverage"
+    "projection_contract_warm_repeat": {
+      "workers_12": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": false,
+        "formula": "160 x 1,742 x warm-repeat p90 / (workers x 3600)",
+        "hours": 6.811200639208848,
+        "p90_seconds": 1.0556969991885126,
+        "workers": 12
+      },
+      "workers_17": {
+        "candidates": 160,
+        "dates": 1742,
+        "exceeds_24h_budget": false,
+        "formula": "160 x 1,742 x warm-repeat p90 / (workers x 3600)",
+        "hours": 4.8079063335591865,
+        "p90_seconds": 1.0556969991885126,
+        "workers": 17
+      }
     },
+    "projection_p90_seconds": 24.003965566121042,
+    "projection_p90_source": "max fresh (cold) per-candidate p90 over the seven RA-5 candidates",
+    "projection_per_session": {
+      "workers_12": {
+        "dates": 1742,
+        "exceeds_24h_budget": false,
+        "formula": "1,742 x per-session p90 / (workers x 3600)",
+        "hours": 6.326888600122163,
+        "per_session_p90_seconds": 156.90102613391358,
+        "workers": 12
+      },
+      "workers_17": {
+        "dates": 1742,
+        "exceeds_24h_budget": false,
+        "formula": "1,742 x per-session p90 / (workers x 3600)",
+        "hours": 4.466039011850939,
+        "per_session_p90_seconds": 156.90102613391358,
+        "workers": 17
+      }
+    },
+    "r3_gate": {
+      "fresh_p90_seconds": 24.003965566121042,
+      "mean_multiple_warm": 7.7811602158034106,
+      "meets_target_p90_fresh": false,
+      "meets_target_p90_warm": true,
+      "phase1_mean_seconds": 2.8859749833826815,
+      "target_p90_seconds": 5.0,
+      "warm_repeat_p90_seconds": 1.0556969991885126
+    },
+    "round": 3,
     "single_core": true,
-    "stage_budget_hours": 24.0
+    "stage_budget_hours": 24.0,
+    "warm_failures": [],
+    "whole_bank_median_seconds": 46.01013335213065,
+    "whole_bank_p90_seconds": 86.42454801248385
   },
   "ra6_identities": {
     "b01_adapter_bound_run": {
@@ -400,6 +619,222 @@
     "p15_16a_receipt": "PENDING",
     "p15_16a_receipt_reason": "its receipt is being issued by the integration round on main concurrently"
   },
+  "recipe_limitations": [
+    "F2 completes the source formation's own volume within max_minutes; the bank's median_sessions parameter would need 20 prior sessions, which stage A does not load. Stage B loads them.",
+    "C3 scores the current delta bucket against earlier same-session buckets; the bank's history_sessions parameter would need 20 prior sessions. Stage B loads them.",
+    "P1/P2 rebuild the value reference from the raw tick tape of the account-day view up to the stage's own known_at (developing value). The prior completed session's raw tape is not in the account-day view; stage B loads it for families whose profile reference is the prior session."
+  ],
+  "recipes_bite": {
+    "dates": [
+      "2020-01-02",
+      "2020-06-01",
+      "2020-11-02",
+      "2021-01-04",
+      "2021-06-01",
+      "2021-11-01",
+      "2022-01-03",
+      "2022-06-01",
+      "2022-11-01",
+      "2023-01-03",
+      "2023-06-01",
+      "2023-11-06",
+      "2024-01-02",
+      "2024-06-03",
+      "2024-11-01",
+      "2025-01-02",
+      "2025-06-02",
+      "2025-11-03",
+      "2026-01-02",
+      "2026-06-01"
+    ],
+    "n_rows": 2960,
+    "per_bank": {
+      "Delta": {
+        "candidate_dates_changed": 129,
+        "candidate_dates_evaluated": 320,
+        "candidate_dates_with_contact_population_change": 0,
+        "candidate_dates_with_episode_verdict_change": 126,
+        "candidate_dates_with_stage_verdict_change": 129,
+        "distinct_candidates_changed": [
+          "SAINT-AMT:continuation_retest:C1",
+          "SAINT-AMT:continuation_retest:C2",
+          "SAINT-AMT:continuation_retest:C3",
+          "SAINT-AMT:failed_auction_return:C1",
+          "SAINT-AMT:failed_auction_return:C2",
+          "SAINT-AMT:failed_auction_return:C3",
+          "SAINT-AMT:poc_traversal:C1",
+          "SAINT-AMT:poc_traversal:C2",
+          "SIRES:absorption_reward_retest:C3",
+          "SIRES:defended_band_continuation:C1",
+          "SIRES:defended_band_continuation:C2",
+          "SIRES:defended_band_continuation:C3",
+          "SIRES:footprint_confirmed_reaction:C1",
+          "SIRES:footprint_confirmed_reaction:C2"
+        ]
+      },
+      "Formation": {
+        "candidate_dates_changed": 147,
+        "candidate_dates_evaluated": 500,
+        "candidate_dates_with_contact_population_change": 113,
+        "candidate_dates_with_episode_verdict_change": 82,
+        "candidate_dates_with_stage_verdict_change": 101,
+        "distinct_candidates_changed": [
+          "GB-FAIL:nyam_box:F1",
+          "GB-FAIL:nyam_box:F2",
+          "GB-FAIL:nyam_box:F3",
+          "GB-FAIL:previous_hour:F3",
+          "JJ-TBR:internal_rotation:F1",
+          "JJ-TBR:internal_rotation:F2",
+          "JJ-TBR:internal_rotation:F3",
+          "JJ-TBR:other_session:F2",
+          "JJ-TBR:other_session:F3",
+          "JJ-TBR:single_extended:F1",
+          "JJ-TBR:single_extended:F2",
+          "SAINT-AMT:continuation_retest:F1",
+          "SAINT-AMT:continuation_retest:F2",
+          "SAINT-AMT:continuation_retest:F3",
+          "SAINT-AMT:failed_auction_return:F1",
+          "SAINT-AMT:failed_auction_return:F2",
+          "SAINT-AMT:failed_auction_return:F3",
+          "SAINT-AMT:poc_traversal:F1",
+          "SAINT-AMT:poc_traversal:F2"
+        ]
+      },
+      "Memory": {
+        "candidate_dates_changed": 272,
+        "candidate_dates_evaluated": 460,
+        "candidate_dates_with_contact_population_change": 0,
+        "candidate_dates_with_episode_verdict_change": 175,
+        "candidate_dates_with_stage_verdict_change": 204,
+        "distinct_candidates_changed": [
+          "MEMBER-TWO-REASONS:planned_return_long:M1",
+          "MEMBER-TWO-REASONS:planned_return_long:M2",
+          "MEMBER-TWO-REASONS:resistance_short:M1",
+          "MEMBER-TWO-REASONS:resistance_short:M2",
+          "REFILL-STUDY:supplied_selected_order:M1",
+          "REFILL-STUDY:supplied_selected_order:M2",
+          "REFILL-STUDY:touch_record:M1",
+          "REFILL-STUDY:touch_record:M2",
+          "SAINT-AMT:continuation_retest:M1",
+          "SAINT-AMT:continuation_retest:M2",
+          "SAINT-AMT:failed_auction_return:M1",
+          "SAINT-AMT:failed_auction_return:M2",
+          "SAINT-AMT:poc_traversal:M1",
+          "SAINT-AMT:poc_traversal:M2",
+          "SAINT-AMT:trapped_buyers_retest:M1",
+          "SAINT-AMT:trapped_buyers_retest:M2",
+          "SIRES:absorption_reward_retest:M1",
+          "SIRES:absorption_reward_retest:M2",
+          "SIRES:clean_squeeze:M1",
+          "SIRES:clean_squeeze:M2",
+          "SIRES:defended_band_continuation:M1"
+        ]
+      },
+      "Profile": {
+        "candidate_dates_changed": 18,
+        "candidate_dates_evaluated": 400,
+        "candidate_dates_with_contact_population_change": 0,
+        "candidate_dates_with_episode_verdict_change": 2,
+        "candidate_dates_with_stage_verdict_change": 18,
+        "distinct_candidates_changed": [
+          "KEANI-OPEN-ABOVE-VALUE:source_long:P1",
+          "KEANI-OPEN-ABOVE-VALUE:source_long:P2"
+        ]
+      },
+      "Reference": {
+        "candidate_dates_changed": 103,
+        "candidate_dates_evaluated": 120,
+        "candidate_dates_with_contact_population_change": 99,
+        "candidate_dates_with_episode_verdict_change": 96,
+        "candidate_dates_with_stage_verdict_change": 100,
+        "distinct_candidates_changed": [
+          "GB-VWAP:source_long:R1",
+          "GB-VWAP:source_long:R2",
+          "SIRES:defended_band_continuation:R1",
+          "SIRES:defended_band_continuation:R2",
+          "SIRES:vwap_deviation_fade:R1",
+          "SIRES:vwap_deviation_fade:R2"
+        ]
+      },
+      "Sequence": {
+        "candidate_dates_changed": 600,
+        "candidate_dates_evaluated": 880,
+        "candidate_dates_with_contact_population_change": 0,
+        "candidate_dates_with_episode_verdict_change": 331,
+        "candidate_dates_with_stage_verdict_change": 600,
+        "distinct_candidates_changed": [
+          "GB-FAIL:asia_tdo_case:S1",
+          "GB-FAIL:asia_tdo_case:S2",
+          "GB-FAIL:asia_tdo_case:S3",
+          "GB-FAIL:asia_tdo_case:S4",
+          "GB-FAIL:cash_open_reclaim_case:S1",
+          "GB-FAIL:cash_open_reclaim_case:S2",
+          "GB-FAIL:cash_open_reclaim_case:S3",
+          "GB-FAIL:cash_open_reclaim_case:S4",
+          "JJ-TBR:extension_reaction:S1",
+          "JJ-TBR:extension_reaction:S2",
+          "JJ-TBR:extension_reaction:S3",
+          "JJ-TBR:extension_reaction:S4",
+          "JJ-TBR:judas_reversal:S1",
+          "JJ-TBR:judas_reversal:S2",
+          "JJ-TBR:judas_reversal:S3",
+          "JJ-TBR:judas_reversal:S4",
+          "KEANI-OPEN-ABOVE-VALUE:source_long:S1",
+          "KEANI-OPEN-ABOVE-VALUE:source_long:S2",
+          "KEANI-OPEN-ABOVE-VALUE:source_long:S4",
+          "MEMBER-TWO-REASONS:planned_return_long:S1",
+          "MEMBER-TWO-REASONS:planned_return_long:S2",
+          "MEMBER-TWO-REASONS:planned_return_long:S3",
+          "MEMBER-TWO-REASONS:planned_return_long:S4",
+          "MEMBER-TWO-REASONS:resistance_short:S1",
+          "MEMBER-TWO-REASONS:resistance_short:S2",
+          "MEMBER-TWO-REASONS:resistance_short:S3",
+          "MEMBER-TWO-REASONS:resistance_short:S4",
+          "SAINT-AMT:continuation_retest:S1",
+          "SAINT-AMT:continuation_retest:S2",
+          "SAINT-AMT:continuation_retest:S3",
+          "SAINT-AMT:continuation_retest:S4",
+          "SAINT-AMT:failed_auction_return:S1",
+          "SAINT-AMT:failed_auction_return:S2",
+          "SAINT-AMT:failed_auction_return:S3",
+          "SAINT-AMT:failed_auction_return:S4",
+          "SIRES:absorption_reward_retest:S1",
+          "SIRES:absorption_reward_retest:S2",
+          "SIRES:absorption_reward_retest:S3",
+          "SIRES:absorption_reward_retest:S4",
+          "SIRES:clean_squeeze:S1",
+          "SIRES:clean_squeeze:S2",
+          "SIRES:clean_squeeze:S3",
+          "SIRES:clean_squeeze:S4"
+        ]
+      },
+      "Timing": {
+        "candidate_dates_changed": 149,
+        "candidate_dates_evaluated": 280,
+        "candidate_dates_with_contact_population_change": 95,
+        "candidate_dates_with_episode_verdict_change": 121,
+        "candidate_dates_with_stage_verdict_change": 147,
+        "distinct_candidates_changed": [
+          "GB-FAIL:asia_tdo_case:T4",
+          "GB-FAIL:cash_open_reclaim_case:T4",
+          "GB-FAIL:nyam_box:T1",
+          "GB-FAIL:nyam_box:T2",
+          "GB-FAIL:nyam_box:T3",
+          "GB-FAIL:nyam_box:T4",
+          "GB-FAIL:previous_hour:T4",
+          "JJ-TBR:judas_reversal:T1",
+          "JJ-TBR:judas_reversal:T2",
+          "JJ-TBR:judas_reversal:T3",
+          "JJ-TBR:judas_reversal:T4",
+          "JJ-TBR:other_session:T1",
+          "JJ-TBR:other_session:T2",
+          "JJ-TBR:other_session:T3"
+        ]
+      }
+    },
+    "rows_file": "VERDICT_CHANGES.json",
+    "supported_candidates": 148
+  },
   "resolutions": [
     {
       "applicable": true,
@@ -410,11 +845,13 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -428,11 +865,13 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -446,11 +885,13 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -464,11 +905,13 @@
       "family": "SIRES",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -481,11 +924,13 @@
       "changed_axis": "profile",
       "family": "KEANI-OPEN-ABOVE-VALUE",
       "hooks": [
+        "context",
         "reference"
       ],
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -503,6 +948,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -520,6 +966,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -537,6 +984,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -549,15 +997,17 @@
       "changed_axis": "reference",
       "family": "GB-SCALP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "band": "vwap_pm_1_dispersion",
         "frozen": true
       },
+      "phase": "enumeration",
       "recipe_id": "R1",
-      "supported": true,
-      "unsupported_reason": null
+      "supported": false,
+      "unsupported_reason": "adapter exposes no references enumeration point for GB-SCALP:bearish_small_scalp; Reference recipes apply before references and contacts are built (implemented points [])"
     },
     {
       "applicable": true,
@@ -567,12 +1017,14 @@
       "changed_axis": "reference",
       "family": "GB-VWAP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "band": "vwap_pm_1_dispersion",
         "frozen": true
       },
+      "phase": "enumeration",
       "recipe_id": "R1",
       "supported": true,
       "unsupported_reason": null
@@ -585,12 +1037,14 @@
       "changed_axis": "reference",
       "family": "SIRES",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "band": "vwap_pm_1_dispersion",
         "frozen": true
       },
+      "phase": "enumeration",
       "recipe_id": "R1",
       "supported": true,
       "unsupported_reason": null
@@ -608,6 +1062,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -625,6 +1080,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -643,6 +1099,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -661,6 +1118,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -679,6 +1137,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -697,6 +1156,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -715,6 +1175,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -733,6 +1194,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -751,6 +1213,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -768,6 +1231,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -785,6 +1249,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -802,6 +1267,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -819,6 +1285,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -831,13 +1298,15 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "clock_limit": false,
         "expiry_s_after_qual": 3600,
         "search": "09:30_to_flatten"
       },
+      "phase": "enumeration",
       "recipe_id": "T4",
       "supported": true,
       "unsupported_reason": null
@@ -850,11 +1319,13 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "shift_minutes": 15
       },
+      "phase": "enumeration",
       "recipe_id": "T1",
       "supported": true,
       "unsupported_reason": null
@@ -868,12 +1339,14 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -887,12 +1360,14 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -906,12 +1381,14 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -925,12 +1402,14 @@
       "family": "SIRES",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -943,11 +1422,13 @@
       "changed_axis": "profile",
       "family": "KEANI-OPEN-ABOVE-VALUE",
       "hooks": [
+        "context",
         "reference"
       ],
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -965,6 +1446,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -982,6 +1464,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -999,6 +1482,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -1011,14 +1495,16 @@
       "changed_axis": "reference",
       "family": "GB-SCALP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "edge": "prior_completed_session"
       },
+      "phase": "enumeration",
       "recipe_id": "R2",
-      "supported": true,
-      "unsupported_reason": null
+      "supported": false,
+      "unsupported_reason": "adapter exposes no references enumeration point for GB-SCALP:bearish_small_scalp; Reference recipes apply before references and contacts are built (implemented points [])"
     },
     {
       "applicable": true,
@@ -1028,11 +1514,13 @@
       "changed_axis": "reference",
       "family": "GB-VWAP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "edge": "prior_completed_session"
       },
+      "phase": "enumeration",
       "recipe_id": "R2",
       "supported": true,
       "unsupported_reason": null
@@ -1045,11 +1533,13 @@
       "changed_axis": "reference",
       "family": "SIRES",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "edge": "prior_completed_session"
       },
+      "phase": "enumeration",
       "recipe_id": "R2",
       "supported": true,
       "unsupported_reason": null
@@ -1067,6 +1557,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -1084,6 +1575,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -1102,6 +1594,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1120,6 +1613,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -1138,6 +1632,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1156,6 +1651,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1174,6 +1670,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1192,6 +1689,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1210,6 +1708,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -1227,6 +1726,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -1244,6 +1744,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -1261,6 +1762,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -1278,6 +1780,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -1290,13 +1793,15 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "clock_limit": false,
         "expiry_s_after_qual": 3600,
         "search": "09:30_to_flatten"
       },
+      "phase": "enumeration",
       "recipe_id": "T4",
       "supported": true,
       "unsupported_reason": null
@@ -1309,12 +1814,14 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "require_complete_formation": true,
         "shift_minutes": -15
       },
+      "phase": "enumeration",
       "recipe_id": "T2",
       "supported": true,
       "unsupported_reason": null
@@ -1328,13 +1835,15 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -1348,13 +1857,15 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -1368,13 +1879,15 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -1388,13 +1901,15 @@
       "family": "SIRES",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -1412,6 +1927,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -1429,6 +1945,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -1446,6 +1963,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -1458,15 +1976,17 @@
       "changed_axis": "reference",
       "family": "GB-SCALP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "band": "vwap_pm_1_dispersion",
         "frozen": true
       },
+      "phase": "enumeration",
       "recipe_id": "R1",
-      "supported": true,
-      "unsupported_reason": null
+      "supported": false,
+      "unsupported_reason": "adapter exposes no references enumeration point for GB-SCALP:bullish_discount_pullback; Reference recipes apply before references and contacts are built (implemented points [])"
     },
     {
       "applicable": true,
@@ -1476,12 +1996,14 @@
       "changed_axis": "reference",
       "family": "SIRES",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "band": "vwap_pm_1_dispersion",
         "frozen": true
       },
+      "phase": "enumeration",
       "recipe_id": "R1",
       "supported": true,
       "unsupported_reason": null
@@ -1499,6 +2021,7 @@
       "parameters": {
         "history_sessions": 20
       },
+      "phase": "evaluation",
       "recipe_id": "C3",
       "supported": true,
       "unsupported_reason": null
@@ -1516,6 +2039,7 @@
       "parameters": {
         "history_sessions": 20
       },
+      "phase": "evaluation",
       "recipe_id": "C3",
       "supported": true,
       "unsupported_reason": null
@@ -1535,6 +2059,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1554,6 +2079,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -1573,6 +2099,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1592,6 +2119,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1611,6 +2139,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1630,6 +2159,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1649,6 +2179,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -1666,6 +2197,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -1683,6 +2215,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -1700,6 +2233,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -1717,6 +2251,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -1729,11 +2264,13 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "shift_minutes": 15
       },
+      "phase": "enumeration",
       "recipe_id": "T1",
       "supported": true,
       "unsupported_reason": null
@@ -1746,11 +2283,13 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "window": "09:30-12:00"
       },
+      "phase": "enumeration",
       "recipe_id": "T3",
       "supported": true,
       "unsupported_reason": null
@@ -1764,11 +2303,13 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -1782,11 +2323,13 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -1800,11 +2343,13 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -1822,6 +2367,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -1839,6 +2385,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -1856,6 +2403,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -1868,14 +2416,16 @@
       "changed_axis": "reference",
       "family": "GB-SCALP",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "edge": "prior_completed_session"
       },
+      "phase": "enumeration",
       "recipe_id": "R2",
-      "supported": true,
-      "unsupported_reason": null
+      "supported": false,
+      "unsupported_reason": "adapter exposes no references enumeration point for GB-SCALP:bullish_discount_pullback; Reference recipes apply before references and contacts are built (implemented points [])"
     },
     {
       "applicable": true,
@@ -1885,11 +2435,13 @@
       "changed_axis": "reference",
       "family": "SIRES",
       "hooks": [
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "edge": "prior_completed_session"
       },
+      "phase": "enumeration",
       "recipe_id": "R2",
       "supported": true,
       "unsupported_reason": null
@@ -1907,6 +2459,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -1924,6 +2477,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -1942,6 +2496,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -1960,6 +2515,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -1978,6 +2534,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -1996,6 +2553,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -2014,6 +2572,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -2032,6 +2591,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -2050,6 +2610,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -2067,6 +2628,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2084,6 +2646,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2101,6 +2664,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2118,6 +2682,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2130,12 +2695,14 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "require_complete_formation": true,
         "shift_minutes": -15
       },
+      "phase": "enumeration",
       "recipe_id": "T2",
       "supported": true,
       "unsupported_reason": null
@@ -2148,13 +2715,15 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "clock_limit": false,
         "expiry_s_after_qual": 3600,
         "search": "09:30_to_flatten"
       },
+      "phase": "enumeration",
       "recipe_id": "T4",
       "supported": true,
       "unsupported_reason": null
@@ -2168,12 +2737,14 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -2187,12 +2758,14 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -2206,12 +2779,14 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -2229,6 +2804,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -2246,6 +2822,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -2263,6 +2840,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -2280,6 +2858,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -2298,6 +2877,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -2316,6 +2896,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -2334,6 +2915,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -2352,6 +2934,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -2370,6 +2953,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -2388,6 +2972,7 @@
       "parameters": {
         "deadline_s": 600
       },
+      "phase": "evaluation",
       "recipe_id": "S1",
       "supported": true,
       "unsupported_reason": null
@@ -2405,6 +2990,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -2422,6 +3008,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -2434,11 +3021,13 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "window": "09:30-12:00"
       },
+      "phase": "enumeration",
       "recipe_id": "T3",
       "supported": true,
       "unsupported_reason": null
@@ -2451,11 +3040,13 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "shift_minutes": 15
       },
+      "phase": "enumeration",
       "recipe_id": "T1",
       "supported": true,
       "unsupported_reason": null
@@ -2469,13 +3060,15 @@
       "family": "GB-FAIL",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -2489,13 +3082,15 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -2509,13 +3104,15 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "efficiency": "0.35",
         "lengths": "15,30,60",
         "width_mult": "0.75"
       },
+      "phase": "enumeration",
       "recipe_id": "F3",
       "supported": true,
       "unsupported_reason": null
@@ -2533,6 +3130,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -2550,6 +3148,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -2567,6 +3166,7 @@
       "parameters": {
         "history_sessions": 20
       },
+      "phase": "evaluation",
       "recipe_id": "C3",
       "supported": true,
       "unsupported_reason": null
@@ -2584,6 +3184,7 @@
       "parameters": {
         "history_sessions": 20
       },
+      "phase": "evaluation",
       "recipe_id": "C3",
       "supported": true,
       "unsupported_reason": null
@@ -2602,6 +3203,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -2620,6 +3222,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -2638,6 +3241,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -2656,6 +3260,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -2674,6 +3279,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -2692,6 +3298,7 @@
       "parameters": {
         "favorable_ticks": 2
       },
+      "phase": "evaluation",
       "recipe_id": "S2",
       "supported": true,
       "unsupported_reason": null
@@ -2709,6 +3316,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2726,6 +3334,7 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
@@ -2738,13 +3347,15 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "clock_limit": false,
         "expiry_s_after_qual": 3600,
         "search": "09:30_to_flatten"
       },
+      "phase": "enumeration",
       "recipe_id": "T4",
       "supported": true,
       "unsupported_reason": null
@@ -2757,12 +3368,14 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "require_complete_formation": true,
         "shift_minutes": -15
       },
+      "phase": "enumeration",
       "recipe_id": "T2",
       "supported": true,
       "unsupported_reason": null
@@ -2776,11 +3389,13 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -2794,11 +3409,13 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "minutes": 60
       },
+      "phase": "enumeration",
       "recipe_id": "F1",
       "supported": true,
       "unsupported_reason": null
@@ -2816,6 +3433,7 @@
       "parameters": {
         "bandwidth": 0
       },
+      "phase": "evaluation",
       "recipe_id": "P1",
       "supported": true,
       "unsupported_reason": null
@@ -2833,6 +3451,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -2850,6 +3469,7 @@
       "parameters": {
         "window_minutes": 5
       },
+      "phase": "evaluation",
       "recipe_id": "C1",
       "supported": true,
       "unsupported_reason": null
@@ -2869,6 +3489,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -2888,6 +3509,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -2907,6 +3529,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -2926,6 +3549,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -2945,6 +3569,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -2964,6 +3589,7 @@
         "c1": "0.20",
         "cohort_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S3",
       "supported": true,
       "unsupported_reason": null
@@ -2981,6 +3607,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -2998,6 +3625,7 @@
       "parameters": {
         "max_prior_contacts": 1
       },
+      "phase": "evaluation",
       "recipe_id": "M1",
       "supported": true,
       "unsupported_reason": null
@@ -3010,13 +3638,15 @@
       "changed_axis": "timing",
       "family": "GB-FAIL",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "clock_limit": false,
         "expiry_s_after_qual": 3600,
         "search": "09:30_to_flatten"
       },
+      "phase": "enumeration",
       "recipe_id": "T4",
       "supported": true,
       "unsupported_reason": null
@@ -3029,11 +3659,13 @@
       "changed_axis": "timing",
       "family": "JJ-TBR",
       "hooks": [
-        "trigger"
+        "trigger",
+        "location"
       ],
       "parameters": {
         "window": "09:30-12:00"
       },
+      "phase": "enumeration",
       "recipe_id": "T3",
       "supported": true,
       "unsupported_reason": null
@@ -3047,12 +3679,14 @@
       "family": "JJ-TBR",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -3066,12 +3700,14 @@
       "family": "SAINT-AMT",
       "hooks": [
         "context",
-        "reference"
+        "reference",
+        "location"
       ],
       "parameters": {
         "max_minutes": 180,
         "median_sessions": 20
       },
+      "phase": "enumeration",
       "recipe_id": "F2",
       "supported": true,
       "unsupported_reason": null
@@ -3089,6 +3725,7 @@
       "parameters": {
         "bandwidth": 2
       },
+      "phase": "evaluation",
       "recipe_id": "P2",
       "supported": true,
       "unsupported_reason": null
@@ -3106,6 +3743,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -3123,6 +3761,7 @@
       "parameters": {
         "half_life_s": 300
       },
+      "phase": "evaluation",
       "recipe_id": "C2",
       "supported": true,
       "unsupported_reason": null
@@ -3141,6 +3780,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -3159,6 +3799,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": false,
       "unsupported_reason": "adapter does not expose stage trigger for GB-SCALP:bullish_discount_pullback (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
@@ -3177,6 +3818,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -3195,6 +3837,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -3213,6 +3856,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -3231,6 +3875,7 @@
       "parameters": {
         "pressure_s": 120
       },
+      "phase": "evaluation",
       "recipe_id": "S4",
       "supported": true,
       "unsupported_reason": null
@@ -3248,19 +3893,27 @@
       "parameters": {
         "prior_reaction": "0.25S"
       },
+      "phase": "evaluation",
       "recipe_id": "M2",
       "supported": true,
       "unsupported_reason": null
     }
   ],
   "resource_profile": {
-    "does_not_shrink_bank_dates_coverage": true,
-    "exceeds_24h_budget": true,
-    "measured_p90_seconds": 25.246072358824318,
-    "projection_hours_12": 162.88391870026652,
-    "projection_hours_17": 114.97688378842342,
-    "worker_count_cgroup_floor": 17,
-    "worker_count_projection_alt": 12
+    "contract_formula_hours_12_fresh": 154.87002968956614,
+    "contract_formula_hours_12_warm_repeat": 6.811200639208848,
+    "contract_formula_hours_17_fresh": 109.3200209573408,
+    "contract_formula_hours_17_warm_repeat": 4.8079063335591865,
+    "fresh_p90_seconds": 24.003965566121042,
+    "headline": "1,742 x per-session p90 / (workers x 3600)",
+    "headline_hours_12": 6.326888600122163,
+    "headline_hours_17": 4.466039011850939,
+    "per_session_median_seconds": 92.64995527267456,
+    "per_session_p90_seconds": 156.90102613391358,
+    "stage_budget_hours": 24,
+    "warm_repeat_p90_seconds": 1.0556969991885126,
+    "workers": 17,
+    "workers_alternate": 12
   },
   "schema_version": "research-p15-17-freeze-v1",
   "scoring_policy": {
@@ -3289,8 +3942,8 @@
         "unsupported": 0
       },
       "Reference": {
-        "supported": 10,
-        "unsupported": 0
+        "supported": 6,
+        "unsupported": 4
       },
       "Sequence": {
         "supported": 44,
@@ -3307,8 +3960,8 @@
         "unsupported": 0
       },
       "GB-SCALP": {
-        "supported": 4,
-        "unsupported": 8
+        "supported": 0,
+        "unsupported": 12
       },
       "GB-VWAP": {
         "supported": 2,
@@ -3341,11 +3994,25 @@
     },
     "unsupported": [
       {
+        "bank": "Reference",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:R1",
+        "family": "GB-SCALP",
+        "reason": "adapter exposes no references enumeration point for GB-SCALP:bearish_small_scalp; Reference recipes apply before references and contacts are built (implemented points [])"
+      },
+      {
         "bank": "Sequence",
         "branch": "bearish_small_scalp",
         "candidate_id": "GB-SCALP:bearish_small_scalp:S1",
         "family": "GB-SCALP",
         "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Reference",
+        "branch": "bearish_small_scalp",
+        "candidate_id": "GB-SCALP:bearish_small_scalp:R2",
+        "family": "GB-SCALP",
+        "reason": "adapter exposes no references enumeration point for GB-SCALP:bearish_small_scalp; Reference recipes apply before references and contacts are built (implemented points [])"
       },
       {
         "bank": "Sequence",
@@ -3355,11 +4022,25 @@
         "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
       },
       {
+        "bank": "Reference",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:R1",
+        "family": "GB-SCALP",
+        "reason": "adapter exposes no references enumeration point for GB-SCALP:bullish_discount_pullback; Reference recipes apply before references and contacts are built (implemented points [])"
+      },
+      {
         "bank": "Sequence",
         "branch": "bearish_small_scalp",
         "candidate_id": "GB-SCALP:bearish_small_scalp:S3",
         "family": "GB-SCALP",
         "reason": "adapter does not expose stage trigger for GB-SCALP:bearish_small_scalp (hooks ['trigger', 'confirmation']; exposed ['context', 'reference'])"
+      },
+      {
+        "bank": "Reference",
+        "branch": "bullish_discount_pullback",
+        "candidate_id": "GB-SCALP:bullish_discount_pullback:R2",
+        "family": "GB-SCALP",
+        "reason": "adapter exposes no references enumeration point for GB-SCALP:bullish_discount_pullback; Reference recipes apply before references and contacts are built (implemented points [])"
       },
       {
         "bank": "Sequence",

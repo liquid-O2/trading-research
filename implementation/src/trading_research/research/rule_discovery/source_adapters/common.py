@@ -42,6 +42,13 @@ from trading_research.research.rule_discovery.native import (
     ticks_to_decimal,
 )
 from trading_research.research.rule_discovery.registry import expand_candidate_bank
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    ENUMERATION_KEY,
+    ENUMERATION_POINTS,
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 
 
 def peak_rss_bytes() -> int:

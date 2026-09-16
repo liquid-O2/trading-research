@@ -9,6 +9,11 @@ import inspect
 import json
 
 from trading_research.research.contracts.types import RuleSpec
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 from trading_research.research.rule_discovery.source_adapters.common import (
     FAMILY_BRANCHES,
     clock_zone_unverified,
@@ -995,6 +1000,9 @@ def _verdict(failed: list[str], unknown: list[str]) -> str:
 def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     day = _as_day(market)
     formation = _ny_range(market)
+    formation = enumeration_point(
+        "references", formation, family="JJ-TBR", branch="judas_reversal", market=market
+    )
     if formation is None:
         return [], [{"reason": "formation_has_no_observed_executions"}]
     high, low = formation["high"], formation["low"]
@@ -1002,10 +1010,26 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
     if width <= 0:
         return [], [{"reason": "nonpositive_formation_width"}]
     label, context_unknown = _context_label(market)
-    sweep_bars = _bars(market, _at(market, "09:00"), _at(market, "10:00"), 60)
-    reclaim_bars = _bars(market, _at(market, "09:00"), _at(market, "11:00"), 60)
-    modal_lo, modal_hi = _at(market, "09:40"), _at(market, "09:50")
-    confirm_lo, confirm_hi = _at(market, "09:40"), _at(market, "10:10")
+    clocks = enumeration_point(
+        "window",
+        {
+            "sweep_lo": _at(market, "09:00"),
+            "sweep_hi": _at(market, "10:00"),
+            "reclaim_lo": _at(market, "09:00"),
+            "reclaim_hi": _at(market, "11:00"),
+            "modal_lo": _at(market, "09:40"),
+            "modal_hi": _at(market, "09:50"),
+            "confirm_lo": _at(market, "09:40"),
+            "confirm_hi": _at(market, "10:10"),
+        },
+        family="JJ-TBR",
+        branch="judas_reversal",
+        market=market,
+    )
+    sweep_bars = _bars(market, int(clocks["sweep_lo"]), int(clocks["sweep_hi"]), 60)
+    reclaim_bars = _bars(market, int(clocks["reclaim_lo"]), int(clocks["reclaim_hi"]), 60)
+    modal_lo, modal_hi = int(clocks["modal_lo"]), int(clocks["modal_hi"])
+    confirm_lo, confirm_hi = int(clocks["confirm_lo"]), int(clocks["confirm_hi"])
     episodes = []
     passed_session = False
     for side, edge, opposite in (("long", low, high), ("short", high, low)):
@@ -1282,12 +1306,18 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
 def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     day = _as_day(market)
     formation = _london_range(market)
+    formation = enumeration_point("references", formation, family="JJ-TBR", branch="other_session", market=market)
     if formation is None:
         return [], [{"reason": "london_box_unobserved"}]
     high, low = formation["high"], formation["low"]
     width = high - low
     loc = quadrant_locations(low, high, "long")
-    action = _bars(market, _at(market, "03:00"), _at(market, "06:00"), 60)
+    _clocks = enumeration_point(
+        "window",
+        {"begin": _at(market, "03:00"), "end": _at(market, "06:00")},
+        family="JJ-TBR", branch="other_session", market=market, reference=formation,
+    )
+    action = _bars(market, int(_clocks["begin"]), int(_clocks["end"]), 60)
     bands = extension_reaction_bands(high, low)
     plus_half = high + width * Decimal("0.5")
     minus_half = low - width * Decimal("0.5")
@@ -1505,6 +1535,7 @@ def _scan_pzone(market) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
 def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     day = _as_day(market)
     formation = _ny_range(market)
+    formation = enumeration_point("references", formation, family="JJ-TBR", branch=branch, market=market)
     if formation is None:
         return [], [{"reason": "formation_has_no_observed_executions"}]
     high, low = formation["high"], formation["low"]
@@ -1520,6 +1551,10 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     if branch == "single_purged":
         start = _at(market, "09:40")
         end = _at(market, "09:50")
+    _clocks = enumeration_point(
+        "window", {"begin": start, "end": end}, family="JJ-TBR", branch=branch, market=market, reference=formation
+    )
+    start, end = int(_clocks["begin"]), int(_clocks["end"])
     action = _bars(market, start, end, 60)
     episodes = []
     contacts = (("eq", loc["eq"]),)
@@ -1641,12 +1676,19 @@ def _rec_branch(rec: Any) -> str | None:
 
 def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
     """Source-faithful B0.2 scan. Does not mutate B0 or B0.1 documents."""
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
+
     def finish(doc):
-        if not overrides:
+        if not stage_overrides:
             return doc
         from trading_research.research.rule_discovery.search import finish_scan_b02
 
-        return finish_scan_b02(doc, overrides)
+        return finish_scan_b02(doc, stage_overrides)
 
     day = _as_day(market) if market is not None else None
     branch = _rec_branch(rec)

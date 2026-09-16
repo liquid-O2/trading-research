@@ -8,19 +8,26 @@ A candidate is the family's B0.2 scan with exactly one axis replaced by the bank
 
 ## Axis-to-stage map
 
-| Bank | B0.2 hooks | Note |
-| --- | --- | --- |
-| Formation | context, reference | formation part of context/reference |
-| Profile | reference | profile construction |
-| Reference | reference | the reference object itself |
-| Delta | confirmation | delta input of confirmation |
-| Sequence | trigger, confirmation | the sequence machine |
-| Memory | location | contact-memory filter |
-| Timing | trigger | trigger window and expiry |
+| Bank | Phase | B0.2 hooks | Enumeration point | Note |
+| --- | --- | --- | --- | --- |
+| Formation | enumeration | context, reference, location | references | formation part of context/reference; applied at enumeration, may change the contact population |
+| Profile | evaluation | reference | - | reference profile construction; applied at stage evaluation on the enumerated contacts |
+| Reference | enumeration | reference, location | references | the reference object itself; applied at enumeration, may change the contact population |
+| Delta | evaluation | confirmation | - | delta input of confirmation; applied at stage evaluation on the enumerated contacts |
+| Sequence | evaluation | trigger, confirmation | - | the sequence machine; applied at stage evaluation on the enumerated contacts |
+| Memory | evaluation | location | - | contact-memory filter; applied at stage evaluation on the enumerated contacts |
+| Timing | enumeration | trigger, location | window | trigger window and expiry; applied at enumeration, may change the contact population |
 
 Stage order is context, reference, location, trigger, confirmation, risk, objective, management.
 
-GB-SCALP `bearish_small_scalp` and `bullish_discount_pullback` emit only context and reference. Sequence candidates on those branches are unsupported. They stay in the frozen list.
+Amended 2026-09-16: Formation, Reference and Timing apply before the adapter builds references and
+contacts and may change the contact population; Profile, Delta, Sequence and Memory apply at stage
+evaluation on the contacts B0.2 has already enumerated. Resolution row ids are unchanged. The freeze
+is a draft until resume.
+
+GB-SCALP `bearish_small_scalp` and `bullish_discount_pullback` are observation-only records with no
+published reference and no trigger. Their Sequence and Reference candidates are unsupported with a
+reason. They stay in the frozen list.
 
 ## Bank (RA-3)
 
@@ -63,29 +70,78 @@ Support gate is 100 resolved opportunities on 30 eligible test days in at least 
 
 Block bootstrap seed is 15022026, 2,000 draws, block length 5. Density-matched control offsets are {-2S, -S, +S, +2S}, cycled by SHA256(reference_id) mod 4.
 
-## Throughput (RA-5)
+## Throughput (RA-5, round 3)
 
-Market view loaded once per date. Single core, one process. Twenty R3 dates. Projection uses the slowest measured candidate-branch p90 (Keani P1). The bank, dates, and coverage are not shrunk. The 3x-versus-Phase-1 miss remains the R3 finding (2.71x, p90 1.48 s, residual parquet decode).
+Twenty R3 dates, single core, one process. **fresh** is the first scan of that (family, branch) on
+the session, after the data-plane warm only; **warm repeat** is the second scan of the same candidate
+on the same session. The seven RA-5 candidates sit on seven distinct family-branch pairs, so one
+session load yields the whole fresh column.
 
-| Candidate | median s | p90 s |
-| --- | ---: | ---: |
-| GB-FAIL:nyam_box:F1 | 0.891 | 2.132 |
-| KEANI-OPEN-ABOVE-VALUE:source_long:P1 | 18.411 | 25.246 |
-| GB-VWAP:source_long:R1 | 0.271 | 10.252 |
-| SAINT-AMT:continuation_retest:C1 | 0.035 | 0.086 |
-| SIRES:absorption_reward_retest:S1 | 1.002 | 1.189 |
-| MEMBER-TWO-REASONS:planned_return_long:M1 | 2.856 | 3.779 |
-| JJ-TBR:judas_reversal:T4 | 0.021 | 0.039 |
+| Candidate | Bank | Phase | fresh median s | fresh p90 s | warm median s | warm p90 s |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| GB-FAIL:nyam_box:F1 | Formation | enumeration | 0.014 | 0.018 | 0.012 | 0.014 |
+| KEANI-OPEN-ABOVE-VALUE:source_long:P1 | Profile | evaluation | 17.942 | 24.004 | 0.091 | 0.124 |
+| GB-VWAP:source_long:R1 | Reference | enumeration | 0.244 | 2.518 | 0.007 | 0.015 |
+| SAINT-AMT:continuation_retest:C1 | Delta | evaluation | 0.032 | 0.085 | 0.022 | 0.053 |
+| SIRES:absorption_reward_retest:S1 | Sequence | evaluation | 0.969 | 1.177 | 0.938 | 1.056 |
+| MEMBER-TWO-REASONS:planned_return_long:M1 | Memory | evaluation | 2.800 | 3.476 | 0.120 | 0.139 |
+| JJ-TBR:judas_reversal:T4 | Timing | enumeration | 0.030 | 0.052 | 0.007 | 0.015 |
 
-Account-day view load median 5.118 s, p90 7.749 s.
+Account-day view load: median 5.38 s, p90 8.40 s.
+Data-plane warm: median 2.41 s. Branch prepay over
+26 distinct (family, branch) pairs: median 17.68 s,
+p90 33.68 s. Whole bank (148 supported candidates) after the prepay:
+median 46.01 s, p90 86.42 s.
+Per session end to end (load + data plane + fresh + prepay + bank): median
+92.65 s, p90 156.90 s.
+`warm_session` recorded 0 named step failures over the twenty dates
+(`THROUGHPUT_B02.json` `warm_failures`); no warm step is silently swallowed.
 
-| Workers | projected hours | exceeds 24 h |
-| ---: | ---: | --- |
-| 17 | 114.98 | yes |
-| 12 | 162.88 | yes |
+The per-(family, branch) cold cost is real work, not an accounting artifact. The first B0.2 scan of
+`KEANI-OPEN-ABOVE-VALUE:source_long` drives 360 `historical_features.profile` calls whose results
+memoize on the market object; the second scan of the same branch costs about 0.06 s. `warm_session`
+now prepays it by running each branch's B0.2 scan once per session, so it is paid **once per
+family-branch per session** and every candidate on the branch reuses it. It cannot be made to
+disappear. The headline projection is therefore the per-session formula, which counts that cost once
+per session; the contract formula, which charges a per-candidate p90 to all 160 candidates, is
+reported beside it on both columns.
+
+| Projection | 17 workers | 12 workers | > 24 h |
+| --- | ---: | ---: | --- |
+| **headline** 1,742 x per-session p90 / (workers x 3600) | **4.47 h** | **6.33 h** | no / no |
+| 160 x 1,742 x fresh p90 (24.004 s) / (workers x 3600) | 109.32 h | 154.87 h | yes / yes |
+| 160 x 1,742 x warm-repeat p90 (1.056 s) / (workers x 3600) | 4.81 h | 6.81 h | no / no |
+
+Budget is 24 h. Bank, dates and coverage are unchanged. Round 1 measured p90 25.246 s and projected
+114.98 h on 17 workers because it charged each branch's cold scan to whichever candidate touched the
+branch first and then multiplied that by all 160 candidates. Round 1 numbers stay in
+`THROUGHPUT_B02_run1.json` and `PROFILE_B02_run1.txt`.
+
+## Recipes bite
+
+Every supported candidate on every measurement date: 2960 rows in
+`VERDICT_CHANGES.json` (`rows`), which is the source of truth. `per_bank` in the same file is derived
+from those rows by grouping on bank and counting each flag.
+
+| Bank | changed / evaluated | episode verdict | stage verdict | contact population |
+| --- | ---: | ---: | ---: | ---: |
+| Delta | 129 / 320 | 126 | 129 | 0 |
+| Formation | 147 / 500 | 82 | 101 | 113 |
+| Memory | 272 / 460 | 175 | 204 | 0 |
+| Profile | 18 / 400 | 2 | 18 | 0 |
+| Reference | 103 / 120 | 96 | 100 | 99 |
+| Sequence | 600 / 880 | 331 | 600 | 0 |
+| Timing | 149 / 280 | 121 | 147 | 95 |
+
+Every bank changes at least one verdict. Only the enumeration axes (Formation, Reference, Timing)
+change the contact population, which is the point of the amended map.
 
 ## Supported / unsupported
 
 `FREEZE.json` `resolutions` pins all 160 bank candidates in the bank's own order. Each row has candidate_id, family, branch, bank, recipe_id, changed_axis, parameters, applicable, supported, hooks, and unsupported_reason (null when supported). Stage B must not re-resolve membership.
 
-152 supported, 8 unsupported. The eight are GB-SCALP Sequence recipes on `bearish_small_scalp` and `bullish_discount_pullback`. Reason: adapter does not expose stage trigger (observation path emits context and reference only).
+148 supported, 12 unsupported. All twelve are on GB-SCALP `bearish_small_scalp` and
+`bullish_discount_pullback`: eight Sequence recipes (the observation path emits context and reference
+only, so there is no trigger stage) and four Reference recipes (the observation record has no
+published reference, so there is no references enumeration point). They stay in the frozen list with
+their reasons.
