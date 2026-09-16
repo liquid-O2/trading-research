@@ -6,7 +6,7 @@ Reuse a bound shared test/evidence artifact when it proves the same invariant on
 
 ## S01 — Missing, substituted or malformed required artifacts
 
-Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-17, P15-18, P15-19, P15-20, P2-24.
+Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-20, P2-24.
 
 **Probe:** Remove one required artifact from a valid copied receipt; then substitute a different task’s file with a correct byte hash; separately alter a claimed row count and replace JSON with invalid contents. Keep valid controls.
 
@@ -16,7 +16,7 @@ Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, 
 
 ## S02 — Unimplemented behavior hidden behind green tests
 
-Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-17, P15-18, P15-19, P15-20, P2-24.
+Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-20, P2-24.
 
 **Probe:** For the central card requirement, identify the actual callable and output field; use independent arithmetic, a frozen baseline or a specified invariant to construct one sensitive check. For a new fix retain before/after; for existing behavior mutate a boundary input.
 
@@ -26,7 +26,7 @@ Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, 
 
 ## S03 — Self-asserted code, plan and run identities
 
-Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-17, P15-18, P15-19, P15-20, P2-24.
+Assigned tasks: P15-00, P15-01, P15-02, P15-03, P15-04, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-20, P2-24.
 
 **Probe:** Recompute the plan/code/draft identities independently from preserved bytes. Mutate each digest separately, omit an owned untracked file, and change a relevant helper/configuration without updating the binding.
 
@@ -66,7 +66,7 @@ Assigned tasks: P15-00, P15-02, P15-03, P15-17, P15-20, P2-00, P2-01, P2-09, P2-
 
 ## S07 — Synthetic data presented as native evidence
 
-Assigned tasks: P15-00, P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-17, P15-18, P15-19, P15-20, P2-00, P2-01, P2-03, P2-04, P2-05, P2-07, P2-09, P2-10, P2-11, P2-12, P2-13, P2-21, P2-22, P2-23, P2-24.
+Assigned tasks: P15-00, P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-17, P15-18, P15-19, P15-20, P2-00, P2-01, P2-09, P2-10, P2-11, P2-03, P2-04, P2-05, P2-07, P2-12, P2-13, P2-21, P2-22, P2-23, P2-24.
 
 **Probe:** Reopen one actual native artifact and row named in the output lineage and replay the named adapter. Separately include a clearly marked synthetic missing/ambiguous fixture.
 
@@ -76,7 +76,7 @@ Assigned tasks: P15-00, P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, 
 
 ## S08 — Future data changes earlier output
 
-Assigned tasks: P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P2-01, P2-03, P2-04, P2-05, P2-07, P2-09, P2-10, P2-11, P2-12, P2-13, P2-21, P2-22, P2-23.
+Assigned tasks: P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P2-01, P2-09, P2-10, P2-11, P2-03, P2-04, P2-05, P2-07, P2-12, P2-13, P2-21, P2-22, P2-23.
 
 **Probe:** Choose cutoff t; alter all post-t records and all earlier-event records whose availability is after t. Recompute from raw inputs, including the join/preprocessing/fit path. Separately alter a relevant pre-t input on a sensitive fixture.
 
@@ -86,7 +86,7 @@ Assigned tasks: P15-02, P15-03, P15-05, P15-06, P15-07, P15-08, P15-09, P15-10, 
 
 ## S09 — Invented order within one timestamp batch
 
-Assigned tasks: P15-02, P15-03, P15-06, P15-07, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P2-01, P2-07, P2-09, P2-11.
+Assigned tasks: P15-02, P15-03, P15-06, P15-07, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P2-01, P2-09, P2-11, P2-07.
 
 **Probe:** Permute conflicting high/low, buy/sell or target/stop events in the same unresolved batch, including row-ID order.
 
@@ -96,7 +96,7 @@ Assigned tasks: P15-02, P15-03, P15-06, P15-07, P15-09, P15-10, P15-11, P15-12, 
 
 ## S10 — DST, session or roll leakage
 
-Assigned tasks: P15-00, P15-02, P15-03, P15-05, P2-00, P2-01, P2-03, P2-09, P2-22.
+Assigned tasks: P15-00, P15-02, P15-03, P15-05, P2-00, P2-01, P2-09, P2-03, P2-22.
 
 **Probe:** Use the DST transition, a verified early close, an unverified holiday, a contract roll and a missing same-contract lookback. Change later contract volume after the account-day contract was selected.
 
@@ -136,7 +136,7 @@ Assigned tasks: P15-00, P15-02, P15-05, P15-17, P15-18, P2-01, P2-02, P2-09, P2-
 
 ## S14 — Unit, sign, precision and nonfinite errors
 
-Assigned tasks: P15-00, P15-03, P15-05, P15-06, P15-19, P2-02, P2-03, P2-10, P2-11, P2-12, P2-22.
+Assigned tasks: P15-00, P15-03, P15-05, P15-06, P15-19, P2-02, P2-10, P2-11, P2-03, P2-12, P2-22.
 
 **Probe:** Use the literal reference vectors and mirror long/short cases. Check ticks versus points/dollars, seconds versus ns/years, percent versus decimal, prices versus returns and contract multipliers. Inject nested NaN/Infinity, bool clocks and numeric overflow.
 
@@ -146,7 +146,7 @@ Assigned tasks: P15-00, P15-03, P15-05, P15-06, P15-19, P2-02, P2-03, P2-10, P2-
 
 ## S15 — Many-to-many joins or feature order silently corrupt rows
 
-Assigned tasks: P15-02, P15-17, P2-01, P2-02, P2-07, P2-09, P2-12, P2-13.
+Assigned tasks: P15-02, P15-17, P2-01, P2-02, P2-09, P2-07, P2-12, P2-13.
 
 **Probe:** Duplicate one right-side key; omit one row; shuffle native row order and predictor columns; collide a timestamp across two assets/contracts/folds.
 
@@ -306,7 +306,7 @@ Assigned tasks: P15-03, P15-19, P2-21, P2-22, P2-24.
 
 ## S31 — Provenance or unsupported input silently relabelled
 
-Assigned tasks: P15-00, P15-04, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-20, P2-00, P2-07, P2-09, P2-21, P2-24.
+Assigned tasks: P15-00, P15-04, P15-08, P15-09, P15-10, P15-11, P15-12, P15-13, P15-14, P15-15, P15-16, P15-16A, P15-20, P2-00, P2-09, P2-07, P2-21, P2-24.
 
 **Probe:** Round-trip an unknown source_exact field, a source-inspired operational rule, missing proprietary constants, cash-index input limits and personal-execution-only data.
 
