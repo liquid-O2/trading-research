@@ -1684,7 +1684,8 @@
       "dependencies": [
         "P2-10",
         "P2-02",
-        "P2-04"
+        "P2-04",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/options/flow.py",
@@ -1722,7 +1723,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1736,6 +1738,77 @@
         "S25",
         "S26",
         "S27"
+      ]
+    },
+    {
+      "id": "P2-02A",
+      "phase": "phase-2",
+      "subphase": "03-joint-volatility",
+      "title": "Source context baselines: the authors' own reads, measured",
+      "dependencies": [
+        "P2-00",
+        "P2-01",
+        "P2-02"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/context_baselines/",
+        "implementation/src/trading_research/research/experts/configs/context_baselines.json",
+        "implementation/tests/context_experts/test_p2_02a.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/phase-1-5/SOURCE_RECONSTRUCTION_LEDGER.json",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "SOURCE_CONTEXT_RULES.json",
+        "CONTEXT_BASELINE_CASES.json",
+        "CONTEXT_BASELINE_RESULTS.json",
+        "CONTEXT_BASELINE_PROTOCOL.json",
+        "PLAUSIBILITY.md",
+        "FAMILY_REPORTS/"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_02a.py",
+      "path": "planning/phase-2/tasks/P2-02A.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S15",
+        "S18",
+        "S19",
+        "S28",
+        "S32"
       ]
     },
     {
@@ -1800,7 +1873,8 @@
       "title": "Fit one joint volatility expert and its ablations",
       "dependencies": [
         "P2-03",
-        "P2-00"
+        "P2-00",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/volatility.py",
@@ -1836,7 +1910,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1860,7 +1935,8 @@
       "subphase": "04-context-mechanisms",
       "title": "Fit the range-path and auction-session experts",
       "dependencies": [
-        "P2-04"
+        "P2-04",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/features/range_path.py",
@@ -1912,7 +1988,8 @@
         "A08",
         "A09",
         "A10",
-        "A11"
+        "A11",
+        "A12"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1936,7 +2013,8 @@
       "title": "Fit the flow-memory and cross-market experts",
       "dependencies": [
         "P2-04",
-        "P2-11"
+        "P2-11",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/features/flow_memory.py",
@@ -1988,7 +2066,8 @@
         "A08",
         "A09",
         "A10",
-        "A11"
+        "A11",
+        "A12"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2014,7 +2093,8 @@
       "subphase": "05-intraday-oi",
       "title": "Fit and test weakly supervised intraday OI updates",
       "dependencies": [
-        "P2-11"
+        "P2-11",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/options/oi_labels.py",
@@ -2053,7 +2133,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2086,7 +2167,8 @@
       "dependencies": [
         "P2-05",
         "P2-07",
-        "P2-12"
+        "P2-12",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/methods/jumbo.py",
@@ -2153,7 +2235,8 @@
         "A11",
         "A12",
         "A13",
-        "A14"
+        "A14",
+        "A15"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
