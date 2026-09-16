@@ -1199,9 +1199,61 @@ class NativeMarketView:
         ]
 
 
+ENGINEERING_DATES_PATH = Path(
+    "/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/ENGINEERING_DATES.json"
+)
+
+_CLASSIFIED_SESSION_DATES: frozenset[str] | None = None
+
+
+def _classified_session_dates() -> frozenset[str]:
+    """The frozen run-1.0.1 classified session list (n=1742, ending 2026-09-03)."""
+    global _CLASSIFIED_SESSION_DATES
+    if _CLASSIFIED_SESSION_DATES is None:
+        payload = json.loads(ENGINEERING_DATES_PATH.read_text()) if ENGINEERING_DATES_PATH.is_file() else {}
+        _CLASSIFIED_SESSION_DATES = frozenset(
+            str(row["date"])
+            for row in payload.get("classified_dates") or []
+            if isinstance(row, dict) and row.get("date")
+        )
+    return _CLASSIFIED_SESSION_DATES
+
+
+def is_native_session(day: str | date | None) -> bool:
+    """True iff the ISO date is a member of the frozen classified session list.
+
+    Membership, never a range: 2026-09-03 is the last member and every
+    non-session weekday and holiday inside the span is absent.
+    """
+    if day is None:
+        return False
+    if isinstance(day, date):
+        iso = day.isoformat()[:10]
+    else:
+        token = str(day)[:10]
+        try:
+            iso = date.fromisoformat(token).isoformat()
+        except ValueError:
+            return False
+    return iso in _classified_session_dates()
+
+
+def require_native_session(day: str | date) -> str:
+    """Return the ISO date when it is a frozen session; else raise before any derived-cache use."""
+    try:
+        value = date.fromisoformat(str(day)[:10]) if not isinstance(day, date) else day
+    except ValueError as exc:
+        raise ContractError(f"date {day!r} is not an ISO session date") from exc
+    iso = value.isoformat()
+    if iso not in _classified_session_dates():
+        raise ContractError(
+            f"date {iso} is outside the native calendar (frozen classified session list, n={len(_classified_session_dates())})"
+        )
+    return iso
+
+
 def _engineering_complete_dates() -> list[str]:
-    path = Path("/workspace/implementation/reports/research-work/P15-00/ea9693217cb577cb/attempt-0001/ENGINEERING_DATES.json")
-    document = json.loads(path.read_text())
+    document = json.loads(ENGINEERING_DATES_PATH.read_text())
     return [row["date"] for row in document.get("classified_dates", []) if row.get("status") == "complete"]
 
 
@@ -1228,7 +1280,7 @@ def build_market_view(
     instrument_id: str | int | None = None,
     timing: dict[str, float] | None = None,
 ) -> NativeMarketView:
-    day = date.fromisoformat(day) if isinstance(day, str) else day
+    day = date.fromisoformat(require_native_session(day))
     arrays, selection, unowned, seam_rule = load_session_arrays(
         day,
         full_account_day=full_account_day,

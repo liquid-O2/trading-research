@@ -51,8 +51,12 @@
       "episode_kind": "session_unknown",
       "episodes_per_session": [1, 1],
       "pass_rate": [0.0, 0.0],
-      "source_claim": "an A++ a handful of times a month. Short-gamma permission is not observable in Phase 1.5. The scan emits one unknown-with-reason per session, not per contact.",
-      "page": "OFM p.4; BIG p.14"
+      "source_claim": "an A++ a handful of times a month. Short-gamma permission is not observable in Phase 1.5. Combined verdict stays unknown when gamma is missing; location and later stages are still evaluated when their operands exist. The source gives no contact-per-session density.",
+      "page": "OFM p.4; BIG p.14",
+      "observed_rate_justification": {
+        "page": "OFM p.4",
+        "text": "OFM p.4 states an A++ a handful of times a month. That is an A++-trade frequency, not a contact-per-session density. The B0.2 scan enumerates contacts at source-literal locations. No source page states a contact density, so the registry keeps the source-grounded one-decision-per-session bound [1, 1] and episode_kind session_unknown. After ruling (a) the scan no longer stops at the unknown gamma context, so it enumerates every source-literal contact and the observed density lands above [1, 1]. That is reported as an out-of-bound finding with this justification; the bound is not widened to make the gate pass."
+      }
     },
     "ofm_passive": {
       "episode_kind": "contact_at_source_literal_location",
@@ -72,8 +76,12 @@
       "episode_kind": "session_unknown",
       "episodes_per_session": [1, 1],
       "pass_rate": [0.0, 0.0],
-      "source_claim": "Balance fade in long gamma about 80% of the time is a regime share, not a pass rate. Long-gamma permission is not observable in Phase 1.5. The scan emits one unknown-with-reason per session, not per contact.",
-      "page": "BIG p.14"
+      "source_claim": "Balance fade in long gamma about 80% of the time is a regime share, not a pass rate or a contact density. Long-gamma permission is not observable in Phase 1.5. Combined verdict stays unknown when gamma is missing; location and later stages are still evaluated when their operands exist. The source gives no contact-per-session density.",
+      "page": "BIG p.14",
+      "observed_rate_justification": {
+        "page": "BIG p.14",
+        "text": "BIG p.14 states the balance fade in long gamma about 80% of the time. That is a regime-share frequency, not a contact-per-session density. The B0.2 scan enumerates contacts at source-literal locations. No source page states a contact density, so the registry keeps the source-grounded one-decision-per-session bound [1, 1] and episode_kind session_unknown. After ruling (a) the scan no longer stops at the unknown gamma context, so it enumerates every source-literal contact and the observed density lands above [1, 1]. That is reported as an out-of-bound finding with this justification; the bound is not widened to make the gate pass."
+      }
     },
     "defended_band_continuation": {
       "episode_kind": "contact_at_source_literal_location",

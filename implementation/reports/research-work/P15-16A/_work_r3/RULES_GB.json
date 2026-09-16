@@ -1,0 +1,202 @@
+{
+  "F01-scalp-observations": {
+    "file_line": "green_b02.py:2566",
+    "finding": "F01",
+    "kind": "literal",
+    "source": "GB p.40"
+  },
+  "F06-A1-london": {
+    "file_line": "green_b02.py:1027",
+    "finding": "F06",
+    "kind": "literal",
+    "parameters": {
+      "dated_direct_reclaim": "2026-09-15",
+      "dated_retest": "2026-09-14",
+      "stop_direct_reclaim": "sweep_extreme_plus_buffer",
+      "stop_retest_higher_low": "retest_higher_low_minus_tick",
+      "sweep_buffer_points": "11.75"
+    },
+    "source": "GB NG 2099513366326730859; GB p.60"
+  },
+  "F06-A2-asia": {
+    "file_line": "green_b02.py:1267",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB pp.19, 27; NG 2099513366326730859"
+  },
+  "F06-A3-pdl": {
+    "file_line": "green_b02.py:1437",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB pp.25, 48, 52-54; NG 2099503614372741234"
+  },
+  "F06-A4-pocket": {
+    "file_line": "green_b02.py:117",
+    "finding": "F06",
+    "kind": "OD",
+    "parameters": {
+      "confirmation": "five_minute_close_out",
+      "far_edge_variant": true,
+      "stop": "near_50_edge"
+    },
+    "source": "OD:five_minute_close_out_of_pocket; stop_near_50_edge; far_edge_variant"
+  },
+  "F06-A5-nwog": {
+    "file_line": "green_b02.py:2034",
+    "finding": "F06",
+    "kind": "literal",
+    "source": "GB p.37 and pp.23, 30-39"
+  },
+  "F06-A9-pwl": {
+    "file_line": "green_b02.py:1534",
+    "finding": "F06",
+    "kind": "literal",
+    "parameters": {
+      "confirmation": "five_minute_close_back_through_level",
+      "lifecycle": "one_reference_per_level_per_week",
+      "period_kind": "week",
+      "scope": "rth_0930_1600",
+      "sides": [
+        "long",
+        "short"
+      ],
+      "source_calendar": "method_pack.session_policy (versioned regular NQ matching policy)",
+      "week_convention": "iso_monday_to_sunday"
+    },
+    "source": "GB p.31 (SD03 addendum); 2025-11-19 previous-week-low reclaim long; 2026-04-23 PWH 26,884; 2026-09-15 PWL 29,330.50"
+  },
+  "F07-directional-bias": {
+    "file_line": "green_b02.py:403",
+    "finding": "F07",
+    "kind": "OD",
+    "parameters": {
+      "no_daily_cap": true,
+      "nyam_box": "09:00-10:00 close vs open, available only at/after 10:00",
+      "prior": "close vs prior RTH midpoint (value unpublished; midpoint registered)"
+    },
+    "source": "OD:prior_close_vs_range_midpoint,nyam_box_close_vs_open"
+  },
+  "F13-gb-vwap": {
+    "file_line": "green_b02.py:2341",
+    "finding": "F13",
+    "kind": "OD",
+    "parameters": {
+      "candidate": "60m",
+      "census_unknowns": 628,
+      "example_stop_points": 30,
+      "example_target_points": 150,
+      "example_target_points_variant_100": 100,
+      "no_retest": "fail",
+      "retest_horizon": "rth_close"
+    },
+    "source": "OD:retest_horizon_rth_close; 60m_candidate"
+  },
+  "F18-clock-seasonal-ny": {
+    "file_line": "green_b02.py:155",
+    "finding": "F18",
+    "kind": "literal",
+    "source": "GB pp.43, 45, 48"
+  },
+  "RR-11-sessions-boxes": {
+    "file_line": "green_b02.py:107",
+    "finding": "RR-11",
+    "kind": "OD",
+    "parameters": {
+      "asia_baseline_apr_aug": "20:00-23:00",
+      "asia_baseline_sep": "20:00-00:00",
+      "asia_variants": [
+        "20:00-21:00",
+        "20:00-23:00",
+        "20:00-00:00"
+      ],
+      "entry_windows": [
+        "00:00-02:00",
+        "20:00-23:00",
+        "03:00-06:00",
+        "09:30-11:30",
+        "12:45-14:30"
+      ],
+      "london_baseline": "02:00-05:00",
+      "london_variants": [
+        "03:00-04:30",
+        "02:00-05:00"
+      ],
+      "ny": [
+        "09:00-10:00",
+        "09:00-09:30",
+        "10:00-11:00"
+      ],
+      "ny_10_11_painted_live": "developing hour on Sep-2026 charts, not a third fail reference",
+      "ny_fail_scan": [
+        "09:00-09:30",
+        "09:00-10:00",
+        "pm_sweep_910_high"
+      ]
+    },
+    "source": "OD:asia_box_windows,london_box_windows,ny_sub_boxes"
+  },
+  "RR-12-position-size": {
+    "file_line": "green_b02.py:149",
+    "finding": "RR-12",
+    "kind": "literal",
+    "parameters": {
+      "amount": 750,
+      "scored": false
+    },
+    "source": "GB pp.52-53, 56, 58, 60"
+  },
+  "RR-12-risk-exits": {
+    "file_line": "green_b02.py:137",
+    "finding": "RR-12",
+    "kind": "literal",
+    "parameters": {
+      "author_spacing": [
+        8,
+        33
+      ],
+      "ladder_spacing_od_baseline": 15,
+      "risk_dollars": 750
+    },
+    "source": "GB pp.52-53, 56, 58, 60"
+  },
+  "RR-13-confirmation-modes": {
+    "file_line": "green_b02.py:498",
+    "finding": "RR-13",
+    "kind": "literal",
+    "source": "GB pp.19, 25; RR-13 at-level box edges"
+  },
+  "RR-14-golden-pocket": {
+    "file_line": "green_b02.py:117",
+    "finding": "RR-14",
+    "kind": "literal",
+    "source": "GB pp.23, 25, 51; raw capture 2026-09-11"
+  },
+  "RR-15-objective-horizon": {
+    "file_line": "green_b02.py:180",
+    "finding": "RR-15",
+    "kind": "literal",
+    "source": "GB pp.51-54"
+  },
+  "RR-16-tdo-retest": {
+    "file_line": "green_b02.py:331",
+    "finding": "RR-16",
+    "kind": "literal",
+    "parameters": {
+      "applies_to": [
+        "asia_box",
+        "prior_day_level",
+        "prior_week_level"
+      ],
+      "fails_when": [
+        "no_retest_in_window",
+        "retest_broke_through",
+        "tdo_unavailable"
+      ],
+      "replaces_close_through": false,
+      "sequence": "sweep, reclaim, retest of the True Day Open, entry",
+      "window_minutes": 120,
+      "window_source": "unstated"
+    },
+    "source": "GB post 2098333408237662406 (2026-09-11); GB pp.27, 59"
+  }
+}

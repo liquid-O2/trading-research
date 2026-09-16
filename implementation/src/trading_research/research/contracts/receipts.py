@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from contextvars import ContextVar
 from dataclasses import dataclass
+from functools import wraps
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Iterable, Literal, Mapping
 import ast
@@ -17,7 +20,7 @@ from trading_research.research.contracts.identity import (
     artifact_entry,
     code_snapshot_document,
     digest,
-    file_digest,
+    file_digest as _identity_file_digest,
     make_task_receipt,
     plan_snapshot_document,
     semantic_run_id,
@@ -26,6 +29,46 @@ from trading_research.research.contracts.identity import (
     write_snapshot_tree,
     write_task_receipt,
 )
+
+_DIGEST_STATE: ContextVar["_VerifyState | None"] = ContextVar("receipt_digest_state", default=None)
+
+
+def _verification_file_cache(fn):
+    """Reuse read-only parses within a verification, never across public calls.
+
+    Read and fingerprint bytes on every access. Filesystem timestamps can be
+    too coarse to distinguish successive same-size edits; only parsing is
+    cached, never the assertion that bytes are unchanged.
+    """
+    @wraps(fn)
+    def read(path: Path):
+        state = _DIGEST_STATE.get()
+        if state is None:
+            return fn(path)
+        try:
+            text = Path(path).read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            return fn(path)
+        payload = text.encode("utf-8")
+        key = (fn.__name__, os.path.abspath(path), sha256(payload).digest())
+        if key in state._parsed_files:
+            return state._parsed_files[key]
+        result = fn(path, _text=text)
+        size = len(payload)
+        # Large population artifacts should not accumulate in memory merely
+        # because a verification visits them. Bound retained input bytes.
+        if len(state._parsed_files) < 1024 and state._parsed_bytes + size <= 16 * 1024 * 1024:
+            state._parsed_files[key] = result
+            state._parsed_bytes += size
+        return result
+    return read
+
+
+def file_digest(path: Path) -> str:
+    state = _DIGEST_STATE.get()
+    if state is None:
+        return _identity_file_digest(path)
+    return state.cached_file_digest(path)
 
 SCHEMA_SUBPHASE_RECEIPT = "research-subphase-receipt-v2"
 SCHEMA_PHASE_RECEIPT = "research-phase-receipt-v2"
@@ -322,10 +365,11 @@ def _run_id(value: object) -> bool:
     return isinstance(value, str) and len(value) == RUN_ID_LEN and set(value) <= HEX_CHARS
 
 
-def load_json_document(path: Path) -> tuple[Any | None, tuple[CheckFailure, ...]]:
+@_verification_file_cache
+def load_json_document(path: Path, *, _text: str | None = None) -> tuple[Any | None, tuple[CheckFailure, ...]]:
     path = Path(path)
     try:
-        text = path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8") if _text is None else _text
     except OSError as exc:
         return None, (CheckFailure(FailureCode.JSON_PARSE, str(path), f"cannot read file: {exc}"),)
     try:
@@ -515,6 +559,28 @@ class _VerifyState:
         self._amendments: Mapping[str, Any] | None = None
         self._amendments_loaded = False
         self._all_receipts: tuple[Path, ...] | None = None
+        self._receipts_by_task: dict[str, tuple[Path, ...]] = {}
+        self._receipt_buckets: dict[str, list[Path]] | None = None
+        self._parsed_files: dict[tuple[Any, ...], Any] = {}
+        self._parsed_bytes = 0
+        self._receipt_results: dict[tuple[str, tuple[str, ...], tuple[str, ...]], VerificationResult] = {}
+        self._predecessor_results: dict[tuple[str, str, str, str], VerificationResult] = {}
+
+    def receipt_memo_key(self, resolved: str) -> tuple[str, tuple[str, ...], tuple[str, ...]]:
+        """Memo key for one receipt result.
+
+        A result is reusable only under the same assumption set: ``pending_ok``
+        makes ``_check_predecessors`` skip a predecessor and ``visiting`` makes
+        ``_code_superseded_by_successor`` skip a candidate, so both belong in the
+        key. Within one successor search both are constant, which is where the
+        repeated verification is.
+        """
+        return (resolved, tuple(sorted(self.pending_ok)), tuple(sorted(self.visiting)))
+
+    def cached_file_digest(self, path: Path) -> str:
+        # Kept as an internal compatibility entry point. Rehash actual bytes:
+        # neither path-only nor timestamp-only memoization proves integrity.
+        return _identity_file_digest(Path(path))
 
     def all_receipts(self) -> tuple[Path, ...]:
         if self._all_receipts is None:
@@ -522,23 +588,30 @@ class _VerifyState:
         return self._all_receipts
 
     def receipts_for(self, task_id: str) -> tuple[Path, ...]:
+        if task_id in self._receipts_by_task:
+            return self._receipts_by_task[task_id]
         root = self.receipts_root
         found: list[Path] = []
         direct = root / task_id
         if direct.is_file():
             found.append(direct)
-        try:
-            root_resolved = root.resolve()
-        except OSError:
-            root_resolved = root
-        for path in self.all_receipts():
+        if self._receipt_buckets is None:
+            self._receipt_buckets = {}
             try:
-                rel = path.resolve().relative_to(root_resolved)
-            except ValueError:
-                continue
-            if rel.parts and rel.parts[0] == task_id:
-                found.append(path)
-        return tuple(sorted(set(found)))
+                root_resolved = root.resolve()
+            except OSError:
+                root_resolved = root
+            for path in self.all_receipts():
+                try:
+                    rel = path.resolve().relative_to(root_resolved)
+                except ValueError:
+                    continue
+                if rel.parts:
+                    self._receipt_buckets.setdefault(rel.parts[0], []).append(path)
+        found.extend(self._receipt_buckets.get(task_id, ()))
+        result = tuple(sorted(set(found)))
+        self._receipts_by_task[task_id] = result
+        return result
 
     def amendments(self) -> Mapping[str, Any] | None:
         if not self._amendments_loaded:
@@ -766,10 +839,12 @@ def _code_superseded_by_successor(
         document, failures = load_json_document(candidate)
         if failures or not isinstance(document, dict):
             continue
-        if not _receipt_lists_predecessor(document, candidate, current_id, current_digest, state):
-            continue
         files = _code_files_from_receipt(document)
         if files.get(rel) != live:
+            continue
+        # Most historical attempts cannot authorize these live bytes. Reject
+        # them before walking their (often shared) predecessor DAG.
+        if not _receipt_lists_predecessor(document, candidate, current_id, current_digest, state):
             continue
         state.pending_ok.add(str(receipt_path))
         try:
@@ -808,7 +883,6 @@ def _check_artifacts(entries: Any, receipt_path: Path, failures: list[CheckFailu
         if not artifact.is_file():
             _append(failures, FailureCode.ARTIFACT_MISSING, raw_path, "artifact file does not exist")
             continue
-        payload = artifact.read_bytes()
         actual = file_digest(artifact)
         declared = entry.get("sha256")
         if not _hex_digest(declared):
@@ -816,8 +890,9 @@ def _check_artifacts(entries: Any, receipt_path: Path, failures: list[CheckFailu
         elif actual != declared:
             _append(failures, FailureCode.ARTIFACT_HASH, raw_path, "artifact sha256 does not match file bytes")
         declared_bytes = entry.get("bytes")
-        if type(declared_bytes) is int and declared_bytes != len(payload):
-            _append(failures, FailureCode.ARTIFACT_BYTES, raw_path, f"declared {declared_bytes} bytes, file has {len(payload)}")
+        actual_bytes = artifact.stat().st_size
+        if type(declared_bytes) is int and declared_bytes != actual_bytes:
+            _append(failures, FailureCode.ARTIFACT_BYTES, raw_path, f"declared {declared_bytes} bytes, file has {actual_bytes}")
 
 
 def _check_commands(
@@ -948,10 +1023,11 @@ def _check_predecessors(
         if matched is not None and graph is not None:
             if state is not None and str(matched) in state.pending_ok:
                 continue
-            cache_key = (expected, graph.path, graph.assurance_version)
-            cached = _VERIFY_CACHE.get(cache_key)
+            cache_key = (str(matched), expected, graph.path, graph.assurance_version)
+            cache = state._predecessor_results if state is not None else _VERIFY_CACHE
+            cached = cache.get(cache_key)
             if cached is None:
-                _VERIFY_CACHE[cache_key] = VerificationResult(
+                cache[cache_key] = VerificationResult(
                     "task",
                     False,
                     str(matched),
@@ -964,7 +1040,7 @@ def _check_predecessors(
                     amendments_path=state.amendments_path if state is not None else None,
                     _state=state,
                 )
-                _VERIFY_CACHE[cache_key] = cached
+                cache[cache_key] = cached
             if not cached.ok:
                 _append(
                     failures,
@@ -1050,9 +1126,10 @@ def _required_plan_files(spec: TaskSpec, graph: TaskGraph) -> tuple[str, ...]:
     return _unique_paths(items)
 
 
-def _module_symbols(path: Path) -> set[str] | None:
+@_verification_file_cache
+def _module_symbols(path: Path, *, _text: str | None = None) -> set[str] | None:
     try:
-        tree = ast.parse(path.read_text(encoding="utf-8"))
+        tree = ast.parse(path.read_text(encoding="utf-8") if _text is None else _text)
     except (OSError, SyntaxError, UnicodeDecodeError):
         return None
     names: set[str] = set()
@@ -1666,7 +1743,14 @@ def _check_identities(
     _check_input_identities(draft_doc, failures, draft_entry["path"])
 
 
-_VERIFY_CACHE: dict[tuple[str, str, str], VerificationResult] = {}
+_VERIFY_CACHE: dict[tuple[str, str, str, str], VerificationResult] = {}
+
+
+def _resolved_path(path: Path) -> str:
+    try:
+        return str(Path(path).resolve())
+    except OSError:
+        return str(path)
 
 
 def verify_task_receipt(
@@ -1679,80 +1763,99 @@ def verify_task_receipt(
     _state: _VerifyState | None = None,
 ) -> VerificationResult:
     path = Path(receipt_path)
-    failures: list[CheckFailure] = []
-    document, parse_failures = load_json_document(path)
-    failures.extend(parse_failures)
-    loaded_graph = graph
-    graph_failures: tuple[CheckFailure, ...] = ()
-    if loaded_graph is None:
-        loaded_graph, graph_failures = load_task_graph(graph_path)
-        failures.extend(graph_failures)
     resolved_root = Path(receipts_root) if receipts_root is not None else DEFAULT_RECEIPTS_ROOT
     resolved_amendments = Path(amendments_path) if amendments_path is not None else DEFAULT_AMENDMENTS_PATH
+    resolved = _resolved_path(path)
     state = _state
     if state is None:
         state = _VerifyState(
             receipts_root=resolved_root,
-            graph=loaded_graph,
+            graph=graph,
             amendments_path=resolved_amendments,
         )
-    elif state.graph is None and loaded_graph is not None:
-        state.graph = loaded_graph
-    if document is None or loaded_graph is None:
-        return VerificationResult("task", False, str(path), tuple(failures))
-    if not isinstance(document, dict):
-        _append(failures, FailureCode.SCHEMA, str(path), "task receipt must be a JSON object")
-        return VerificationResult("task", False, str(path), tuple(failures))
+    memo_key = state.receipt_memo_key(resolved)
+    cached = state._receipt_results.get(memo_key)
+    if cached is not None:
+        return cached
+    token = _DIGEST_STATE.set(state)
     try:
-        receipt = validate_receipt_shape(document)
-    except ContractError as exc:
-        _append(failures, FailureCode.SCHEMA, str(path), str(exc))
-        return VerificationResult("task", False, str(path), tuple(failures))
-    if receipt.get("assurance_version") != ASSURANCE_VERSION:
-        _append(failures, FailureCode.IDENTITY, str(path), "assurance_version is not current")
-    task_id = receipt["task_id"]
-    spec = loaded_graph.require(task_id)
-    if spec is None:
-        _append(failures, FailureCode.UNKNOWN_TASK, str(path), f"{task_id} is not in TASK_GRAPH")
-        return VerificationResult("task", False, str(path), tuple(failures))
-    checks = receipt["acceptance_checks"]
-    for key in spec.required_acceptance_keys:
-        if key not in checks:
-            _append(failures, FailureCode.ACCEPTANCE, str(path), f"required acceptance key {key} is missing")
-        elif checks[key] is not True:
-            _append(failures, FailureCode.ACCEPTANCE, str(path), f"required acceptance key {key} is not true")
-    if receipt["disposition"] not in spec.allowed_terminal_statuses:
-        _append(
-            failures,
-            FailureCode.DISPOSITION,
-            str(path),
-            f"disposition {receipt['disposition']} is not allowed for {task_id}",
-        )
-    if receipt["disposition"] == "blocked_implementation":
-        _append(failures, FailureCode.BLOCKED_IMPLEMENTATION, str(path), "blocked_implementation is not an accepted terminal")
-    if not isinstance(receipt["coverage"], dict):
-        _append(failures, FailureCode.COVERAGE, str(path), "coverage must be an object")
-    _check_artifacts(receipt["artifact_manifest"], path, failures)
-    _check_inventory(receipt, spec, loaded_graph, path, failures)
-    state.visiting.add(str(path))
-    try:
-        _check_identities(receipt, path, loaded_graph, failures, state=state)
-        _check_evidence_matrix(receipt, spec, path, failures)
-        unresolved = receipt["unresolved"] if isinstance(receipt["unresolved"], list) else []
-        _check_commands(receipt["command_results"], unresolved, path, receipt["disposition"], failures)
-        _check_predecessors(
-            receipt,
-            spec,
-            path,
-            resolved_root,
-            failures,
-            graph=loaded_graph,
-            state=state,
-        )
+        failures: list[CheckFailure] = []
+        document, parse_failures = load_json_document(path)
+        failures.extend(parse_failures)
+        loaded_graph = graph
+        graph_failures: tuple[CheckFailure, ...] = ()
+        if loaded_graph is None:
+            loaded_graph, graph_failures = load_task_graph(graph_path)
+            failures.extend(graph_failures)
+        if state.graph is None and loaded_graph is not None:
+            state.graph = loaded_graph
+        if document is None or loaded_graph is None:
+            result = VerificationResult("task", False, str(path), tuple(failures))
+            state._receipt_results[memo_key] = result
+            return result
+        if not isinstance(document, dict):
+            _append(failures, FailureCode.SCHEMA, str(path), "task receipt must be a JSON object")
+            result = VerificationResult("task", False, str(path), tuple(failures))
+            state._receipt_results[memo_key] = result
+            return result
+        try:
+            receipt = validate_receipt_shape(document)
+        except ContractError as exc:
+            _append(failures, FailureCode.SCHEMA, str(path), str(exc))
+            result = VerificationResult("task", False, str(path), tuple(failures))
+            state._receipt_results[memo_key] = result
+            return result
+        if receipt.get("assurance_version") != ASSURANCE_VERSION:
+            _append(failures, FailureCode.IDENTITY, str(path), "assurance_version is not current")
+        task_id = receipt["task_id"]
+        spec = loaded_graph.require(task_id)
+        if spec is None:
+            _append(failures, FailureCode.UNKNOWN_TASK, str(path), f"{task_id} is not in TASK_GRAPH")
+            result = VerificationResult("task", False, str(path), tuple(failures))
+            state._receipt_results[memo_key] = result
+            return result
+        checks = receipt["acceptance_checks"]
+        for key in spec.required_acceptance_keys:
+            if key not in checks:
+                _append(failures, FailureCode.ACCEPTANCE, str(path), f"required acceptance key {key} is missing")
+            elif checks[key] is not True:
+                _append(failures, FailureCode.ACCEPTANCE, str(path), f"required acceptance key {key} is not true")
+        if receipt["disposition"] not in spec.allowed_terminal_statuses:
+            _append(
+                failures,
+                FailureCode.DISPOSITION,
+                str(path),
+                f"disposition {receipt['disposition']} is not allowed for {task_id}",
+            )
+        if receipt["disposition"] == "blocked_implementation":
+            _append(failures, FailureCode.BLOCKED_IMPLEMENTATION, str(path), "blocked_implementation is not an accepted terminal")
+        if not isinstance(receipt["coverage"], dict):
+            _append(failures, FailureCode.COVERAGE, str(path), "coverage must be an object")
+        _check_artifacts(receipt["artifact_manifest"], path, failures)
+        _check_inventory(receipt, spec, loaded_graph, path, failures)
+        state.visiting.add(str(path))
+        try:
+            _check_identities(receipt, path, loaded_graph, failures, state=state)
+            _check_evidence_matrix(receipt, spec, path, failures)
+            unresolved = receipt["unresolved"] if isinstance(receipt["unresolved"], list) else []
+            _check_commands(receipt["command_results"], unresolved, path, receipt["disposition"], failures)
+            _check_predecessors(
+                receipt,
+                spec,
+                path,
+                resolved_root,
+                failures,
+                graph=loaded_graph,
+                state=state,
+            )
+        finally:
+            state.visiting.discard(str(path))
+        unique = _unique_failures(failures)
+        result = VerificationResult("task", not unique, str(path), unique)
+        state._receipt_results[memo_key] = result
+        return result
     finally:
-        state.visiting.discard(str(path))
-    unique = _unique_failures(failures)
-    return VerificationResult("task", not unique, str(path), unique)
+        _DIGEST_STATE.reset(token)
 
 
 def _parse_task_ref(task_id: str, raw: Any, receipt_path: Path, failures: list[CheckFailure], *, want_disposition: bool) -> TaskRef | None:
@@ -2326,6 +2429,7 @@ def verify_subphase_receipt(
         _gate_for_missing_software(gate, str(path), f"required tasks absent: {missing_tasks}", failures)
     root = Path(receipts_root) if receipts_root is not None else DEFAULT_RECEIPTS_ROOT
     resolved_amendments = Path(amendments_path) if amendments_path is not None else DEFAULT_AMENDMENTS_PATH
+    state = _VerifyState(receipts_root=root, graph=loaded_graph, amendments_path=resolved_amendments)
     blocked = False
     disallowed = False
     for spec in required:
@@ -2337,6 +2441,7 @@ def verify_subphase_receipt(
             graph=loaded_graph,
             receipts_root=root,
             amendments_path=resolved_amendments,
+            _state=state,
         )
         if not child.ok:
             failures.extend(child.failures)
@@ -2403,6 +2508,11 @@ def verify_phase_receipt(
     resolved_amendments = Path(amendments_path) if amendments_path is not None else DEFAULT_AMENDMENTS_PATH
     if document is None or loaded_graph is None:
         return VerificationResult("phase", False, str(path), tuple(failures))
+    state = _VerifyState(
+        receipts_root=Path(receipts_root) if receipts_root is not None else DEFAULT_RECEIPTS_ROOT,
+        graph=loaded_graph,
+        amendments_path=resolved_amendments,
+    )
     if not isinstance(document, dict):
         _append(failures, FailureCode.SCHEMA, str(path), "phase receipt must be a JSON object")
         return VerificationResult("phase", False, str(path), tuple(failures))
@@ -2474,6 +2584,7 @@ def verify_phase_receipt(
                                 graph=loaded_graph,
                                 receipts_root=Path(receipts_root) if receipts_root is not None else DEFAULT_RECEIPTS_ROOT,
                                 amendments_path=resolved_amendments,
+                                _state=state,
                             )
                             if not nested.ok:
                                 failures.extend(nested.failures)

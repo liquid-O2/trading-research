@@ -33,6 +33,8 @@ from trading_research.research.rule_discovery.kernels import lifecycle_contact_i
 from trading_research.research.rule_discovery.native import (
     NativeMarketView,
     build_market_view,
+    is_native_session,
+    require_native_session,
     cgroup_worker_count,
     install_write_guard,
     UNITS_PER_TICK,
@@ -199,8 +201,9 @@ def coverage_row(method_id: str, branch: str) -> dict[str, Any]:
 
 
 def load_source_market(day: str) -> HistoricalFeatures:
+    iso = require_native_session(day)
     registry, _manifest = load_phase1_registry()
-    return HistoricalFeatures(day, records=_records(registry))
+    return HistoricalFeatures(iso, records=_records(registry))
 
 
 def _tag_episodes(document: Mapping[str, Any], version: str) -> dict[str, Any]:

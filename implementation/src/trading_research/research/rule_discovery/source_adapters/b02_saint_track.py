@@ -41,8 +41,6 @@ HASH_DATES = ["2021-01-04", "2022-01-03"]
 _IMPL_ROOT = Path(__file__).resolve().parents[5]
 TRACK_DIR = _IMPL_ROOT / "reports/research-work/P15-16A/_track_saint"
 REPAIR_DIR = _IMPL_ROOT / "reports/research-work/P15-16A/_repair_saint"
-NATIVE_CALENDAR_START = date(2020, 1, 2)
-NATIVE_CALENDAR_END = date(2026, 8, 19)
 AUTHOR_EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NQ_TICK_VALUE = Decimal("5")
 FIXED_RISK_USD = Decimal("500")
@@ -94,11 +92,11 @@ def stage_from(name: str, at_ns: int | None, operands: Mapping[str, Any], *, req
 
 
 def cascade_stages(stages: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    """Keep stages in order and stop after the first fail or unknown."""
+    """Keep later stages after unknown. Stop after the first fail."""
     out: list[dict[str, Any]] = []
     for item in stages:
         out.append(dict(item))
-        if item.get("verdict") in {"fail", "unknown"}:
+        if item.get("verdict") == "fail":
             break
     return out
 
@@ -482,8 +480,12 @@ def account_day_for_example(example: Mapping[str, Any]) -> str | None:
 
 
 def outside_native_tape(example: Mapping[str, Any] | None) -> bool:
-    """True when the example's session date is outside 2020-01-02..2026-08-19. Does not load a market."""
+    """True when the example is marked outside tape or its session is not a frozen native session. Does not load a market."""
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
+
     example = example or {}
+    if example.get("inside_tape") is False:
+        return True
     raw = example.get("date")
     parsed = None
     if raw and re.match(r"^\d{4}-\d{2}-\d{2}$", str(raw)):
@@ -491,12 +493,13 @@ def outside_native_tape(example: Mapping[str, Any] | None) -> bool:
         parsed = date.fromisoformat(account or str(raw))
     if parsed is None:
         return True
-    return parsed < NATIVE_CALENDAR_START or parsed > NATIVE_CALENDAR_END
+    return not is_native_session(parsed)
 
 
 def native_calendar_day(day: str | date) -> bool:
-    value = day if isinstance(day, date) else date.fromisoformat(str(day))
-    return NATIVE_CALENDAR_START <= value <= NATIVE_CALENDAR_END
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
+
+    return is_native_session(day)
 
 
 def replay_unavailable(example: Mapping[str, Any] | None, divergence: str) -> dict[str, Any]:

@@ -1,0 +1,196 @@
+{
+  "baseline": "B0.2-2026-09-15",
+  "branches": {
+    "golden_pocket_continuation": {
+      "asia_passes": 0,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "page": "GB p.40 unpublished trigger; F06 A4 / RR-14 continuation long; 2026-09-11 ticket",
+        "pass_rate": [
+          0.0,
+          0.35
+        ],
+        "source_claim": "unstated as a daily rate. A4 is a NY pullback into the impulse pocket, long in bullish context. A scalp setup does not occur on 80% of sessions."
+      },
+      "branch": "golden_pocket_continuation",
+      "diagnosis": null,
+      "episodes": 15,
+      "episodes_per_session": 1.0,
+      "fail": 14,
+      "family": "GB-SCALP",
+      "in_bound": true,
+      "london_passes": 0,
+      "monday_passes": 0,
+      "pass": 1,
+      "pass_rate": 0.0667,
+      "sessions": 15,
+      "sessions_with_pass": 1,
+      "stage_counts": {
+        "confirmation": {
+          "fail": 3,
+          "pass": 2
+        },
+        "context": {
+          "pass": 15
+        },
+        "location": {
+          "fail": 10,
+          "pass": 5
+        },
+        "management": {
+          "fail": 1,
+          "pass": 1
+        },
+        "objective": {
+          "fail": 1,
+          "pass": 1
+        },
+        "reference": {
+          "fail": 10,
+          "pass": 5
+        },
+        "risk": {
+          "pass": 2
+        },
+        "trigger": {
+          "pass": 5
+        }
+      },
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "decision_ns",
+            "bias_direction",
+            "bias_prior_side",
+            "bias_compatible"
+          ]
+        },
+        {
+          "stage": "trigger",
+          "varying_operands": [
+            "sweep_at_ns",
+            "sweep_depth",
+            "sweep_extreme",
+            "level",
+            "near",
+            "pullback_at_ns"
+          ]
+        },
+        {
+          "stage": "risk",
+          "varying_operands": [
+            "stop",
+            "entry",
+            "stop_points"
+          ]
+        }
+      ],
+      "stage_value_nunique": {
+        "confirmation": {
+          "close_out_of_pocket": 1,
+          "confirm_at_ns": 2,
+          "confirm_close": 3,
+          "continuation_hold": 2,
+          "fail_to_continue": 1,
+          "fail_window_end_ns": 1,
+          "far": 4,
+          "inside_box": 1,
+          "mode_od": 1,
+          "near": 5,
+          "ny_pullback": 1,
+          "pocket_high": 2,
+          "pocket_low": 2,
+          "sweep_depth": 2,
+          "through_level": 1
+        },
+        "context": {
+          "bias_box_side": 1,
+          "bias_compatible": 2,
+          "bias_direction": 2,
+          "bias_prior_side": 2,
+          "decision_ns": 2,
+          "session": 1,
+          "source_session_allowed": 1
+        },
+        "location": {
+          "box_high": 2,
+          "box_low": 2,
+          "distance_beyond_edge": 2,
+          "kind": 1,
+          "level": 2,
+          "near": 3,
+          "pocket_high": 3,
+          "pocket_low": 3,
+          "pocket_touch": 1,
+          "sweep_extreme": 2
+        },
+        "management": {
+          "derived_quantity": 2,
+          "ladder_rungs": 1,
+          "ladder_spacing": 1,
+          "risk_dollars": 1,
+          "stop_points": 2
+        },
+        "objective": {
+          "entry": 2,
+          "first_rung": 2,
+          "opposite_edge": 2,
+          "target": 2
+        },
+        "reference": {
+          "box_high": 2,
+          "box_low": 2,
+          "kind": 1,
+          "known_at": 2,
+          "level": 2,
+          "not_9_10_box": 1,
+          "pocket_high": 3,
+          "pocket_low": 3
+        },
+        "risk": {
+          "entry": 2,
+          "risk_dollars": 1,
+          "stop": 2,
+          "stop_points": 2
+        },
+        "trigger": {
+          "level": 2,
+          "near": 3,
+          "pocket_touch": 1,
+          "pullback_at_ns": 3,
+          "side": 1,
+          "sweep_at_ns": 2,
+          "sweep_depth": 2,
+          "sweep_extreme": 2
+        }
+      },
+      "time_of_entry_histogram_et_30m": {
+        "09:30": 1
+      },
+      "unknown": 0
+    }
+  },
+  "family": "GB-SCALP",
+  "load_errors": [],
+  "slice": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ]
+}

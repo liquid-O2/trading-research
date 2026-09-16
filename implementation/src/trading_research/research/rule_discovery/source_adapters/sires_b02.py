@@ -54,8 +54,6 @@ CONTACT_BAND_TICKS = 2
 MAX_CONTACTS_PER_LOCATION = 1
 MAX_LOCATIONS = 16
 MAX_SWING_PIVOTS = 8
-TAPE_END = date(2026, 8, 19)
-TAPE_START = date(2020, 1, 2)
 PIVOT_RADIUS = 1
 PROFILE_BANDWIDTH = 2
 STRUCTURE_BREAK_TICKS = 8
@@ -857,11 +855,11 @@ def _stage(name: str, verdict: str, at_ns: int | None, operands: dict[str, Any])
 
 
 def cascade_stages(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Drop later stages once an earlier stage is not pass."""
+    """Keep later stages after unknown. Stop after the first fail."""
     out: list[dict[str, Any]] = []
     for row in rows:
         out.append(row)
-        if row.get("verdict") != "pass":
+        if row.get("verdict") == "fail":
             break
     return out
 
@@ -1632,52 +1630,6 @@ def scan_b02(market, rec) -> dict[str, Any]:
     if arrays is None or arrays.t_ns.size == 0:
         empty["omissions"] = [{"reason": "operands_unavailable", "operand": "native_executions"}]
         return empty
-    needed = _needed_gamma(branch)
-    probe_ns = int(arrays.t_ns[0]) if arrays.t_ns.size else None
-    if needed and _gamma_from_market(market, probe_ns) is None:
-        stages = cascade_stages(
-            [
-                _stage(
-                    "context",
-                    "unknown",
-                    probe_ns,
-                    {
-                        "gamma_regime": None,
-                        "gamma_needed": needed,
-                        "gamma_reason": GAMMA_UNOBSERVABLE,
-                        "thesis_alive": True,
-                        "structure_break": False,
-                        "value_shift": False,
-                        "new_information": None,
-                        "new_information_reason": NEWS_UNOBSERVABLE,
-                    },
-                )
-            ]
-        )
-        empty["episodes"] = [
-            _episode(
-                family=family,
-                branch=branch,
-                side="short" if needed == "short" else "long",
-                verdict="unknown",
-                failed=[],
-                unknown=["context", "gamma_regime"],
-                values={
-                    "branch": branch,
-                    "gamma_regime": None,
-                    "gamma_needed": needed,
-                    "gamma_reason": GAMMA_UNOBSERVABLE,
-                    "episode_kind": "session_unknown",
-                },
-                stages=stages,
-                decision_at=probe_ns,
-                geometry={},
-                reference={"kind": None, "ticks": None},
-                trigger={"at_ns": probe_ns},
-            )
-        ]
-        empty["omissions"] = [{"reason": GAMMA_UNOBSERVABLE, "operand": "gamma_regime"}]
-        return empty
     cutoff = _cutoff(arrays, rec)
     cached = getattr(view, "_sires_b02_locations", None)
     if cached is not None and getattr(view, "_sires_b02_cutoff", None) == cutoff:
@@ -1902,6 +1854,8 @@ def _failing_operand(ep: Mapping[str, Any]) -> dict[str, Any] | None:
 
 
 def _date_outside_tape(example: Mapping[str, Any]) -> bool:
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
+
     if example.get("inside_tape") is False:
         return True
     raw = example.get("date")
@@ -1911,7 +1865,7 @@ def _date_outside_tape(example: Mapping[str, Any]) -> bool:
         day = date.fromisoformat(str(raw)[:10])
     except ValueError:
         return True
-    return day < TAPE_START or day > TAPE_END
+    return not is_native_session(day)
 
 
 def replay_example(market, example) -> dict[str, Any]:
@@ -1985,7 +1939,13 @@ def replay_example(market, example) -> dict[str, Any]:
             return False
         return abs(our - author_level) / TICK_POINTS <= level_tolerance_ticks()
 
-    reached = [ep for ep in hits if at_author_level(ep)]
+    def location_pass(ep) -> bool:
+        for row in ep.get("stages") or []:
+            if row.get("stage") == "location":
+                return row.get("verdict") == "pass"
+        return False
+
+    reached = [ep for ep in hits if at_author_level(ep) and location_pass(ep)]
     if author_side:
         reached_side = [ep for ep in reached if ep.get("side") == author_side]
         if reached_side:

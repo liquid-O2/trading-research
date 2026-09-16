@@ -1,0 +1,185 @@
+{
+  "baseline": "B0.2-2026-09-15",
+  "branches": {
+    "source_long": {
+      "asia_passes": 0,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          1
+        ],
+        "page": "GB pp.33-34; SD04 keeps 150 and 100; 30-point stop is the example risk",
+        "pass_rate": [
+          0.0,
+          0.5
+        ],
+        "source_claim": "unstated. One dated continuation: close above London and Asia highs, retrace into VWAP, long, 30-point stop, 150-point caption result. VWAP is not drawn on later charts. Bound is the measured sequence rate, not a published frequency."
+      },
+      "branch": "source_long",
+      "diagnosis": null,
+      "episodes": 15,
+      "episodes_per_session": 1.0,
+      "fail": 14,
+      "family": "GB-VWAP",
+      "in_bound": true,
+      "london_passes": 0,
+      "monday_passes": 0,
+      "pass": 1,
+      "pass_rate": 0.0667,
+      "sessions": 15,
+      "sessions_with_pass": 1,
+      "stage_counts": {
+        "confirmation": {
+          "fail": 10,
+          "pass": 1
+        },
+        "context": {
+          "pass": 15
+        },
+        "location": {
+          "fail": 4,
+          "pass": 11
+        },
+        "management": {
+          "pass": 1
+        },
+        "objective": {
+          "pass": 1
+        },
+        "reference": {
+          "pass": 15
+        },
+        "risk": {
+          "pass": 1
+        },
+        "trigger": {
+          "fail": 4,
+          "pass": 11
+        }
+      },
+      "stage_never_fails_while_varies": [
+        {
+          "stage": "context",
+          "varying_operands": [
+            "session"
+          ]
+        },
+        {
+          "stage": "reference",
+          "varying_operands": [
+            "asia_high",
+            "london_high"
+          ]
+        }
+      ],
+      "stage_value_nunique": {
+        "confirmation": {
+          "asia_high": 1,
+          "boundary": 9,
+          "breakout_close": 1,
+          "candidate_60m": 1,
+          "confirm_at_ns": 1,
+          "confirm_close": 1,
+          "continuation_hold": 2,
+          "fail_to_continue": 1,
+          "fail_window_end_ns": 1,
+          "horizon": 1,
+          "inside_box": 1,
+          "london_high": 1,
+          "retest_close": 9,
+          "retest_high": 1,
+          "retest_low": 1,
+          "sweep_depth": 1,
+          "through_level": 1,
+          "touched_vwap": 1,
+          "vwap": 9
+        },
+        "context": {
+          "bias_box_side": 1,
+          "bias_compatible": 1,
+          "bias_direction": 1,
+          "bias_prior_side": 1,
+          "decision_ns": 1,
+          "session": 2,
+          "source_session_allowed": 1
+        },
+        "location": {
+          "asia_high": 4,
+          "boundary": 8,
+          "box_high": 1,
+          "box_low": 1,
+          "breakout": 1,
+          "breakout_close": 8,
+          "distance_beyond_edge": 1,
+          "level": 1,
+          "london_high": 4,
+          "sweep_extreme": 1
+        },
+        "management": {
+          "derived_quantity": 1,
+          "ladder_rungs": 1,
+          "ladder_spacing": 1,
+          "risk_dollars": 1,
+          "stop_points": 1
+        },
+        "objective": {
+          "entry": 1,
+          "first_rung": 1,
+          "opposite_edge": 1,
+          "target": 1
+        },
+        "reference": {
+          "asia_high": 14,
+          "box_high": 1,
+          "box_low": 1,
+          "known_at": 1,
+          "level": 1,
+          "london_high": 14
+        },
+        "risk": {
+          "entry": 1,
+          "risk_dollars": 1,
+          "stop": 1,
+          "stop_points": 1
+        },
+        "trigger": {
+          "asia_high": 5,
+          "boundary": 10,
+          "breakout": 1,
+          "breakout_close": 10,
+          "close": 2,
+          "close_above_both": 2,
+          "level": 1,
+          "london_high": 5,
+          "side": 1,
+          "sweep_at_ns": 1,
+          "sweep_depth": 1,
+          "sweep_extreme": 1
+        }
+      },
+      "time_of_entry_histogram_et_30m": {
+        "13:00": 1
+      },
+      "unknown": 0
+    }
+  },
+  "family": "GB-VWAP",
+  "load_errors": [],
+  "slice": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ]
+}

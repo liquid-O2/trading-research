@@ -25,6 +25,7 @@ from trading_research.research.rule_discovery.source_adapters.member import scan
 from trading_research.research.rule_discovery.source_adapters.saint import replay_example as saint_replay
 from trading_research.research.rule_discovery.source_adapters.saint import scan_b02 as saint_scan
 
+WORK_DIR = Path("/workspace/implementation/reports/research-work/P15-16A/_work_r3")
 ET = ZoneInfo("America/New_York")
 FAMILIES = {
     "SAINT-AMT": {
@@ -228,7 +229,7 @@ def _diagnose(family: str, branch: str, funnel_row: dict, bound: dict) -> str:
 
 
 def test_p15_16a_plausibility_saint_track():
-    REPAIR_DIR.mkdir(parents=True, exist_ok=True)
+    WORK_DIR.mkdir(parents=True, exist_ok=True)
     markets = {}
     load_errors = {}
     for day in REPAIR_SLICE_DATES:
@@ -321,8 +322,8 @@ def test_p15_16a_plausibility_saint_track():
             "load_errors": load_errors,
             "branches": branch_rows,
         }
-        write_json(REPAIR_DIR / f"PLAUSIBILITY_{cfg['slug']}.json", payload)
-        (REPAIR_DIR / f"PLAUSIBILITY_{cfg['slug']}.md").write_text("\n".join(md_lines) + "\n")
+        write_json(WORK_DIR / f"PLAUSIBILITY_{cfg['slug']}.json", payload)
+        (WORK_DIR / f"PLAUSIBILITY_{cfg['slug']}.md").write_text("\n".join(md_lines) + "\n")
 
     examples = json.loads(AUTHOR_EXAMPLES.read_text())["examples"]
     replay_rows = {"SAINT-AMT": [], "MEMBER-TWO-REASONS": [], "KEANI-OPEN-ABOVE-VALUE": []}
@@ -354,9 +355,9 @@ def test_p15_16a_plausibility_saint_track():
             result["divergence"] = f"date outside the tape: {exc}"
         result["id"] = example["id"]
         replay_rows[family].append(result)
-    write_json(REPAIR_DIR / "REPLAY_saint.json", {"family": "SAINT-AMT", "examples": replay_rows["SAINT-AMT"]})
-    write_json(REPAIR_DIR / "REPLAY_member.json", {"family": "MEMBER-TWO-REASONS", "examples": replay_rows["MEMBER-TWO-REASONS"]})
-    write_json(REPAIR_DIR / "REPLAY_keani.json", {"family": "KEANI-OPEN-ABOVE-VALUE", "examples": replay_rows["KEANI-OPEN-ABOVE-VALUE"]})
+    write_json(WORK_DIR / "REPLAY_saint.json", {"family": "SAINT-AMT", "examples": replay_rows["SAINT-AMT"]})
+    write_json(WORK_DIR / "REPLAY_member.json", {"family": "MEMBER-TWO-REASONS", "examples": replay_rows["MEMBER-TWO-REASONS"]})
+    write_json(WORK_DIR / "REPLAY_keani.json", {"family": "KEANI-OPEN-ABOVE-VALUE", "examples": replay_rows["KEANI-OPEN-ABOVE-VALUE"]})
 
     if gate_errors:
         raise AssertionError("\n".join(gate_errors))
