@@ -136,22 +136,40 @@ def holm(pvalues: Sequence[float], *, alpha: float = 0.05) -> list[dict[str, Any
     return rejected
 
 
-def moving_block_bootstrap(values: Sequence[float], *, block: int = BLOCK_LENGTH, draws: int = BOOTSTRAP_DRAWS, seed: int = BOOTSTRAP_SEED) -> np.ndarray:
+def moving_block_bootstrap(values: Sequence[float], *, block: int = BLOCK_LENGTH, draws: int = BOOTSTRAP_DRAWS, seed: int = BOOTSTRAP_SEED, segments: Sequence[Any] | None = None) -> np.ndarray:
+    """Paired circular moving-block bootstrap of account days (EVALUATION.md).
+
+    ``values`` are the per-day paired differences in chronological order and ``segments`` the
+    calendar-year label of each day. Block starts are drawn uniformly within each segment and a
+    block wraps only within its segment; each segment is resampled to its own day count, the
+    segments are concatenated in order, and the draw's statistic is the mean over all days.
+    Without ``segments`` the whole series is one segment. The same seed gives the same draws
+    for every series of the same segment structure, so baseline, candidate and variants share
+    draws. Returns the ``draws`` bootstrap means."""
     array = np.asarray(list(values), dtype=np.float64)
     n = array.size
     if n == 0:
         return np.zeros(draws, dtype=np.float64)
+    labels = [None] * n if segments is None else list(segments)
+    if len(labels) != n:
+        raise ValueError("segments must align with values")
+    runs: list[tuple[int, int]] = []
+    start = 0
+    for index in range(1, n + 1):
+        if index == n or labels[index] != labels[start]:
+            runs.append((start, index - start))
+            start = index
     rng = np.random.Generator(np.random.PCG64(seed))
     block = max(1, int(block))
-    starts = rng.integers(0, n, size=(draws, int(math.ceil(n / block))))
-    samples = []
-    for draw in starts:
-        pieces = [array[int(s): int(s) + block] for s in draw]
-        concat = np.concatenate(pieces)[:n]
-        if concat.size < n:
-            concat = np.pad(concat, (0, n - concat.size), mode="wrap")
-        samples.append(float(concat.mean()))
-    return np.asarray(samples, dtype=np.float64)
+    offsets = np.arange(block)
+    totals = np.zeros(draws, dtype=np.float64)
+    for run_start, length in runs:
+        segment = array[run_start:run_start + length]
+        k = int(math.ceil(length / block))
+        starts = rng.integers(0, length, size=(draws, k))
+        positions = ((starts[:, :, None] + offsets[None, None, :]) % length).reshape(draws, k * block)[:, :length]
+        totals += segment[positions].sum(axis=1)
+    return totals / n
 
 
 def evaluation_protocol() -> dict[str, Any]:
