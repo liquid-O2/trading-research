@@ -1,0 +1,50 @@
+[
+  {
+    "rule_id": "F10_zone_from_aggressive_clusters",
+    "kind": "OD",
+    "source": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80; source family 60/80/100 contracts in seconds (REF p.5)",
+    "file_line": "refill_b02.py:142"
+  },
+  {
+    "rule_id": "F10_touch_held_or_broke",
+    "kind": "literal",
+    "source": "REF pp.5-8",
+    "file_line": "refill_b02.py:93"
+  },
+  {
+    "rule_id": "F10_literal_cluster_size_family",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:37"
+  },
+  {
+    "rule_id": "F10_actual_departure",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:51"
+  },
+  {
+    "rule_id": "F10_distinct_later_touches",
+    "kind": "literal",
+    "source": "REF pp.5-7",
+    "file_line": "refill_b02.py:66"
+  },
+  {
+    "rule_id": "F20_printed_bracket",
+    "kind": "literal",
+    "source": "REF p.12",
+    "file_line": "refill_b02.py:119"
+  },
+  {
+    "rule_id": "RR21_hold_label_boundary",
+    "kind": "OD",
+    "source": "OD:HOLD_BOUNDARY_TICKS=8,HOLD_WINDOW_NS=30m",
+    "file_line": "refill_b02.py:93"
+  },
+  {
+    "rule_id": "RR21_population_175",
+    "kind": "literal",
+    "source": "REF p.8",
+    "file_line": "refill_b02.py:RULES[RR21_population_175]"
+  }
+]
