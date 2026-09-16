@@ -1601,3 +1601,23 @@ def test_input_unavailable_days_do_not_fail_the_software_gate(tmp_path):
             assert row["software_causality_pass"] is False
             assert row["input_unavailable_days"] == 0
             assert row["software_failure_dates"] == [holiday]
+
+
+def test_completion_records_file_level_hashes_of_the_gitignored_shards(tmp_path):
+    """The receipt must be able to name the bytes a run was evaluated from, even
+    though daily/, checkpoints/ and JOB_INVENTORY.json are gitignored."""
+    days = ["2020-01-02", "2020-01-03"]
+    root = _fake_run_root(tmp_path, days, failed=["2020-06-30"])
+    _sr._write_json(root / "JOB_INVENTORY.json", {"jobs": []})
+    _sr.complete_run(run_root=root)
+    inventory = _json.loads((root / "SHARD_INVENTORY.json").read_text())
+    assert inventory["dates_declared"] == 3
+    assert inventory["dates_with_a_daily_shard"] == 2
+    assert inventory["dates_with_a_checkpoint"] == 2
+    assert "2020-06-30" not in inventory["shards"]
+    for day in days:
+        assert inventory["shards"][day]["daily"] == _sr.file_sha256(_sr.daily_path(root, day))
+        assert inventory["shards"][day]["checkpoint"] == _sr.file_sha256(_sr.checkpoint_path(root, day))
+    assert inventory["job_inventory_sha256"] == _sr.file_sha256(root / "JOB_INVENTORY.json")
+    complete = _json.loads((root / "RUN_COMPLETE.json").read_text())
+    assert complete["shard_inventory"]["sha256"] == _sr.file_sha256(root / "SHARD_INVENTORY.json")

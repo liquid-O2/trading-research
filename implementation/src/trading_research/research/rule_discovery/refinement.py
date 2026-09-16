@@ -596,6 +596,7 @@ def select_banks(
             "candidate_id": row.get("candidate_id"),
             "recipe_id": row.get("recipe_id"),
             "family": row.get("family", family),
+            "branch": row.get("branch"),
             "parameters": dict(row.get("parameters") or {}),
             "changed_axes": changed_axes(row),
             "inner_tuning": dict(row.get("inner_tuning") or {}),
@@ -936,3 +937,883 @@ def family_dispositions(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             }
         )
     return {"schema_version": "research-family-dispositions-v1", "families": families}
+
+
+# ==========================================================================
+# P15-18 — one bounded refinement round over P15-17's allowlist.
+#
+# The bank is a pure function of the breadth allowlist; execution reuses the
+# breadth runner (search_run) with that bank, and scoring reuses the breadth
+# evaluation. Refinement never reads outer test data to choose anything.
+# ==========================================================================
+
+P15_18_TASK_ID = "P15-18"
+REFINEMENT_BANK_SCHEMA = "research-p15-18-refinement-bank-v1"
+#: The registered T neighbourhood is -30..+30 minutes (SEARCH_CONTRACT). The
+#: fold guard compares an availability instant to the fit cutoff, so the parent
+#: issue is taken one maximum shift before the cutoff: every registered shift is
+#: then decidable by the cutoff and anything outside the registered set is not.
+MAX_TIMING_SHIFT_MINUTES = 30
+
+
+def fold_guard(inner_cutoff_ns: int) -> dict[str, Any]:
+    """The fold dict `generate_neighbors` needs: the fit cutoff and the parent
+    issue instant the timing neighbourhood is measured from."""
+    return {
+        "fit_cutoff_ns": int(inner_cutoff_ns),
+        "issue_at_ns": int(inner_cutoff_ns) - MAX_TIMING_SHIFT_MINUTES * MINUTE_NS,
+    }
+
+
+def build_refinement_bank(
+    allowlist: Mapping[str, Any],
+    inner_cutoff_ns: Mapping[int, int],
+    *,
+    attempted: Iterable[Mapping[str, Any]] = (),
+    branches: Mapping[str, str] | None = None,
+) -> dict[str, Any]:
+    """The whole refinement bank, per fold and family, from the allowlist alone.
+
+    Pure: no run root, no market, no outcome. Every proposed neighbour keeps a
+    row -- attempted, duplicate or not_applicable with its reason -- so the
+    caps and the contract's neighbourhoods are auditable from this file.
+    """
+    folds: list[dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
+    for fold in allowlist["folds"]:
+        year = int(fold["outer_fold"])
+        guard = fold_guard(inner_cutoff_ns[year])
+        families: list[dict[str, Any]] = []
+        for family in fold["families"]:
+            banks = [
+                dict(
+                    bank,
+                    issue_at_ns=guard["issue_at_ns"],
+                    branch=bank.get("branch")
+                    or (branches or {}).get(str(bank.get("candidate_id")), ""),
+                )
+                for bank in family.get("selected_banks") or []
+            ]
+            missing = [bank["candidate_id"] for bank in banks if not bank["branch"]]
+            if missing:
+                raise ContractError(
+                    f"selected banks without a branch would collide in the neighbour identity: {missing}"
+                )
+            if not banks:
+                families.append(
+                    {
+                        "family": family["family"],
+                        "selected_banks": [],
+                        "neighbors": [],
+                        "retained_baseline": True,
+                        "reason": "no bank passed inner selection in this fold",
+                    }
+                )
+                continue
+            neighbors = generate_neighbors(
+                family["family"], guard, banks, attempted=attempted
+            )
+            families.append(
+                {
+                    "family": family["family"],
+                    "selected_banks": [bank["candidate_id"] for bank in banks],
+                    "neighbors": neighbors,
+                    "retained_baseline": False,
+                }
+            )
+            for row in neighbors:
+                rows.append({**row, "outer_fold": year})
+        folds.append(
+            {
+                "outer_fold": year,
+                "inner_cutoff_day": fold.get("inner_cutoff_day"),
+                "fit_cutoff_ns": guard["fit_cutoff_ns"],
+                "families": families,
+            }
+        )
+    attempted_rows = [row for row in rows if row["status"] == "attempted"]
+    distinct = {}
+    for row in attempted_rows:
+        distinct.setdefault(_identity(row), row)
+    return {
+        "schema_version": REFINEMENT_BANK_SCHEMA,
+        "task_id": P15_18_TASK_ID,
+        "max_neighbors_per_bank": MAX_NEIGHBORS_PER_BANK,
+        "max_neighbors_per_family": MAX_NEIGHBORS_PER_FAMILY,
+        "neighborhoods": {key: [dict(sweep) for sweep in spec] for key, spec in NEIGHBORHOODS.items()},
+        "folds": folds,
+        "rows": rows,
+        "counts": {
+            "rows": len(rows),
+            "attempted": len(attempted_rows),
+            "duplicate": sum(1 for row in rows if row["status"] == "duplicate"),
+            "not_applicable": sum(1 for row in rows if row["status"] == "not_applicable"),
+            "distinct_candidates": len(distinct),
+        },
+        "distinct_candidates": sorted(
+            (dict(row) for row in distinct.values()), key=lambda row: str(row["candidate_id"])
+        ),
+    }
+
+
+def refinement_candidate_id(row: Mapping[str, Any]) -> str:
+    """The executed candidate's identity: the neighbour id is already unique per
+    family, branch, recipe and changed axis value."""
+    return str(row["candidate_id"])
+
+
+def resolve_refinement_bank(
+    distinct_candidates: Sequence[Mapping[str, Any]],
+    parents: Mapping[str, Any],
+) -> list[Any]:
+    """Turn the bank's distinct rows into ResolvedCandidates the breadth runner
+    can execute: the parent's resolution with its parameters replaced."""
+    from dataclasses import replace as _replace
+
+    out = []
+    for row in distinct_candidates:
+        parent = parents[str(row["parent_trial_ids"][0])]
+        out.append(
+            _replace(
+                parent,
+                candidate_id=refinement_candidate_id(row),
+                parameters=dict(row["parameters"]),
+            )
+        )
+    return out
+
+
+def refinement_parents(allowlist: Mapping[str, Any]) -> dict[str, Any]:
+    """The breadth ResolvedCandidate behind every selected bank, by candidate id."""
+    from trading_research.research.rule_discovery import search
+
+    resolved = {item.candidate_id: item for item in search.resolve_bank()}
+    out: dict[str, Any] = {}
+    for fold in allowlist["folds"]:
+        for family in fold["families"]:
+            for bank in family.get("selected_banks") or []:
+                cid = str(bank["candidate_id"])
+                if cid in resolved:
+                    out[cid] = resolved[cid]
+    return out
+
+
+def refinement_bank_identity(bank: Mapping[str, Any], allowlist_sha256: str) -> dict[str, Any]:
+    body = json.dumps(bank["distinct_candidates"], sort_keys=True, default=str).encode()
+    from hashlib import sha256
+
+    return {
+        "source": "P15-18 refinement bank, generated from the P15-17 allowlist",
+        "allowlist_sha256": allowlist_sha256,
+        "sha256": sha256(body).hexdigest(),
+        "candidates": len(bank["distinct_candidates"]),
+        "rows": bank["counts"]["rows"],
+    }
+
+
+def prepare_refinement(
+    breadth_run_root: str | Path,
+    *,
+    allowlist_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """The whole refinement input, as a function of the breadth run root.
+
+    Reads the allowlist and the breadth bank, builds the neighbour bank with the
+    fold guards, and resolves the distinct candidates for execution.
+    """
+    from datetime import date
+
+    from trading_research.research.rule_discovery import search_run
+    from trading_research.research.rule_discovery.native import account_day_window
+
+    root = Path(breadth_run_root)
+    path = Path(allowlist_path) if allowlist_path else root / "REFINEMENT_ALLOWLIST.json"
+    allowlist = json.loads(path.read_text())
+    cutoffs = {
+        int(fold["outer_fold"]): account_day_window(date.fromisoformat(fold["inner_cutoff_day"]))[1]
+        for fold in allowlist["folds"]
+    }
+    from trading_research.research.rule_discovery import search
+
+    attempted = [
+        {
+            "family": item.family,
+            "branch": item.branch,
+            "recipe_id": item.recipe_id,
+            "parameters": dict(item.parameters),
+        }
+        for item in search.resolve_bank()
+    ]
+    parents = refinement_parents(allowlist)
+    # an allowlist written before select_banks carried the branch still resolves:
+    # the branch comes from the parent's own resolution
+    bank = build_refinement_bank(
+        allowlist,
+        cutoffs,
+        attempted=attempted,
+        branches={cid: item.branch for cid, item in parents.items()},
+    )
+    candidates = resolve_refinement_bank(bank["distinct_candidates"], parents)
+    return {
+        "allowlist_path": str(path),
+        "allowlist_sha256": search_run.file_sha256(path),
+        "breadth_run_root": str(root),
+        "bank": bank,
+        "candidates": candidates,
+        "bank_identity": refinement_bank_identity(bank, search_run.file_sha256(path)),
+        "inner_cutoff_ns": cutoffs,
+    }
+
+
+def run_refinement(
+    *,
+    breadth_run_root: str | Path,
+    run_root: str | Path,
+    freeze_path: str | Path,
+    dates: Sequence[str] | None = None,
+    workers: int | None = None,
+    allowlist_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """Execute the refinement bank through the breadth runner.
+
+    Same sessions, same pairing, same E0 benchmark, same checkpoints and resume:
+    only the bank differs, so a refinement run is auditable exactly like a
+    breadth run and re-runs against another breadth root by pointing at it.
+    """
+    from trading_research.research.rule_discovery import search_run
+
+    prepared = prepare_refinement(breadth_run_root, allowlist_path=allowlist_path)
+    root = Path(run_root)
+    root.mkdir(parents=True, exist_ok=True)
+    search_run._write_json(root / "REFINEMENT_BANK.json", prepared["bank"])
+    summary = search_run.run_dates(
+        run_root=root,
+        freeze_path=freeze_path,
+        dates=dates,
+        workers=workers,
+        candidates=prepared["candidates"],
+        bank_identity=prepared["bank_identity"],
+    )
+    return {
+        "summary": summary,
+        "bank_identity": prepared["bank_identity"],
+        "refinement_bank": str(root / "REFINEMENT_BANK.json"),
+    }
+
+
+def _fold_neighbors(bank: Mapping[str, Any], year: int) -> dict[str, list[dict[str, Any]]]:
+    """The attempted neighbours of one fold, by family. Fold isolation starts
+    here: a neighbour proposed for another fold is not in this mapping."""
+    out: dict[str, list[dict[str, Any]]] = {}
+    for fold in bank["folds"]:
+        if int(fold["outer_fold"]) != year:
+            continue
+        for family in fold["families"]:
+            rows = [row for row in family["neighbors"] if row["status"] == "attempted"]
+            if rows:
+                out[family["family"]] = rows
+    return out
+
+
+def select_refined_for_fold(
+    bank: Mapping[str, Any],
+    fold: Mapping[str, Any],
+    resolved: Mapping[str, Any],
+    series: Mapping[str, Any],
+) -> dict[str, Any]:
+    """The refined mechanism chosen inside each selected bank of each family.
+
+    Inner fit+tune days of THIS fold only; the same 1% simplicity rule as the
+    breadth stage; a bank keeps its breadth parent when no neighbour improves.
+    """
+    from trading_research.research.rule_discovery import search_run
+
+    year = int(fold["test_year"])
+    families: dict[str, Any] = {}
+    for family, rows in sorted(_fold_neighbors(bank, year).items()):
+        by_bank: dict[str, list[dict[str, Any]]] = {}
+        for row in rows:
+            item = resolved.get(str(row["candidate_id"]))
+            if item is None:
+                continue
+            inner = search_run.inner_row_from_series(item, series.get(item.candidate_id), fold)
+            inner["parent_trial_ids"] = list(row.get("parent_trial_ids") or [])
+            inner["changed_axis"] = row.get("changed_axis")
+            by_bank.setdefault(str(row["bank"]), []).append(inner)
+        chosen: list[dict[str, Any]] = []
+        for bank_name, group in sorted(by_bank.items()):
+            best = search_run.pick_representative(group)
+            if best is None:
+                continue
+            inner = best.get("inner_tuning") or {}
+            improvement = float(inner.get("improvement_vs_b02") or 0.0)
+            supported = _inner_support_ok(inner)
+            chosen.append(
+                {
+                    "bank": bank_name,
+                    "candidate_id": best["candidate_id"],
+                    "recipe_id": best["recipe_id"],
+                    "parameters": dict(best.get("parameters") or {}),
+                    "parent_trial_ids": list(best.get("parent_trial_ids") or []),
+                    "inner_tuning": dict(inner),
+                    "improvement_vs_b02": improvement,
+                    "inner_support_ok": supported,
+                    "beats_b02": improvement > 0 and supported,
+                    "candidates_considered": len(group),
+                }
+            )
+        families[family] = {
+            "refined": chosen,
+            "retained_parent": [row for row in chosen if not row["beats_b02"]],
+        }
+    return {"outer_fold": year, "families": families, "evidence": "inner fit+tune days of this fold only"}
+
+
+def _branch_of(candidate_id: str) -> str:
+    """`FAMILY:branch:RECIPE:axis=value` -- the branch is the second segment."""
+    parts = str(candidate_id).split(":")
+    return parts[1] if len(parts) > 1 else ""
+
+
+def propose_combinations(selection: Mapping[str, Any], fold: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """At most one combined candidate per family per fold, and only when each of
+    the two best refined mechanisms beats B0.2 on inner tuning by itself (A01)."""
+    out: list[dict[str, Any]] = []
+    for family, body in sorted(selection["families"].items()):
+        qualifying = [row for row in body["refined"] if row["beats_b02"]]
+        qualifying.sort(key=lambda row: (-float(row["improvement_vs_b02"]), str(row["candidate_id"])))
+        if len(qualifying) < 2:
+            continue
+        first, second = qualifying[0], qualifying[1]
+        if first["bank"] == second["bank"]:
+            continue
+        row = {
+            "family": family,
+            "outer_fold": int(selection["outer_fold"]),
+            "ingredients": [first, second],
+            "candidate_id": f"{family}:COMBINED:{first['candidate_id']}+{second['candidate_id']}",
+            "status": "attempted",
+            "reason": None,
+        }
+        # both changes must live on one branch, or there is no single scan that
+        # carries them; recorded with its reason, never silently dropped
+        branches = {_branch_of(first["candidate_id"]), _branch_of(second["candidate_id"])}
+        if len(branches) != 1:
+            row["status"] = "not_applicable"
+            row["reason"] = "ingredients_on_different_branches"
+        out.append(row)
+    del fold
+    return out
+
+
+def build_combined_overrides(first: Any, second: Any, market: Any) -> dict[str, Any]:
+    """Both mechanisms on one scan.
+
+    Enumeration hooks chain (the second sees the first's payload); stage hooks
+    merge by stage name and chain when both name the same stage. Nothing else is
+    changed, so a combination is exactly its two ingredients.
+    """
+    from trading_research.research.rule_discovery import search
+
+    left = search.build_overrides(first, market)
+    right = search.build_overrides(second, market)
+    merged = dict(left)
+    for key, hook in right.items():
+        if key not in merged:
+            merged[key] = hook
+            continue
+        before = merged[key]
+        if key == search.ENUMERATION_KEY:
+
+            def chained(*, point, payload, _a=before, _b=hook, **ctx):
+                return _b(point=point, payload=_a(point=point, payload=payload, **ctx), **ctx)
+
+        else:
+
+            def chained(*, stage, episode, document, _a=before, _b=hook):
+                return _b(stage=_a(stage=stage, episode=episode, document=document), episode=episode, document=document)
+
+        merged[key] = chained
+    return merged
+
+
+def _refinement_trial_rows(
+    bank: Mapping[str, Any],
+    selections: Sequence[Mapping[str, Any]],
+    decided: Mapping[str, Mapping[str, Any]],
+    *,
+    folds: Sequence[Mapping[str, Any]],
+    identity: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    """One ledger row per proposed neighbour per fold, plus the combinations.
+
+    Duplicates, capped and not-applicable neighbours all keep a row: the trial
+    count and the multiplicity adjustment must see every proposal (A04).
+    """
+    windows = {int(fold["test_year"]): fold for fold in folds}
+    chosen: dict[int, set[str]] = {}
+    for selection in selections:
+        year = int(selection["outer_fold"])
+        chosen[year] = {
+            row["candidate_id"] for body in selection["families"].values() for row in body["refined"]
+        }
+    rows: list[dict[str, Any]] = []
+    for fold in bank["folds"]:
+        year = int(fold["outer_fold"])
+        window = windows[year]
+        for family in fold["families"]:
+            for row in family["neighbors"]:
+                cid = str(row["candidate_id"])
+                verdict = decided.get(cid) if row["status"] == "attempted" else None
+                if row["status"] != "attempted":
+                    status, disposition = row["status"], "unsupported_owned_input"
+                    reason = row.get("reason")
+                    attribution = ["coverage"]
+                elif verdict is None:
+                    status, disposition = "attempted", "inconclusive_support"
+                    reason = "not selected inside its bank by inner tuning"
+                    attribution = ["support"]
+                else:
+                    status = "attempted"
+                    disposition = verdict["promotion"]["disposition"]
+                    reason = verdict["promotion"]["reason"]
+                    attribution = verdict["failure_attribution"]
+                rows.append(
+                    make_trial_record(
+                        trial_id=f"P15-18:{year}:{cid}",
+                        parent_trial_ids=list(row.get("parent_trial_ids") or []),
+                        family=row["family"],
+                        branch=row["branch"],
+                        outer_fold=year,
+                        stage="refinement",
+                        bank=row["bank"],
+                        parameters=dict(row["parameters"]),
+                        code_hash=identity["code_sha256"],
+                        data_hash=identity["bank_sha256"],
+                        plan_hash=identity["freeze_sha256"],
+                        fit_window=[window["fit"][0], window["fit"][-1]] if window["fit"] else None,
+                        tune_window=[window["tune"][0], window["tune"][-1]] if window["tune"] else None,
+                        calibration_window=[window["calibrate"][0], window["calibrate"][-1]]
+                        if window["calibrate"]
+                        else None,
+                        outcome_exposure_cutoff=window["test"][-1] if window["test"] else None,
+                        candidate_population_counts={}
+                        if verdict is None
+                        else {
+                            "candidate_entries": verdict["candidate_entries"],
+                            "baseline_entries": verdict["baseline_entries"],
+                            "eligible_test_days": verdict["eligible_test_days"],
+                        },
+                        score=None if verdict is None else verdict["mean_diff"],
+                        support={} if verdict is None else verdict["promotion"]["support_sensitivity"],
+                        test_metrics={}
+                        if verdict is None
+                        else {
+                            "mean_diff": verdict["mean_diff"],
+                            "p_raw": verdict["promotion"]["p_raw"],
+                            "p_holm": verdict["promotion"]["p_holm"],
+                            "ci_low": verdict["promotion"]["ci_low"],
+                            "ci_high": verdict["promotion"]["ci_high"],
+                        },
+                        reason=reason,
+                        disposition=disposition,
+                        artifacts={"run_root": identity["run_root"]},
+                        failure_attribution=attribution,
+                        candidate_id=cid,
+                        recipe_id=row["recipe_id"],
+                        status=status,
+                        selected_in_fold=cid in chosen.get(year, set()),
+                    )
+                )
+    return rows
+
+
+def _score_combinations(
+    proposals: Sequence[Mapping[str, Any]],
+    selections: Sequence[Mapping[str, Any]],
+    folds: Sequence[Mapping[str, Any]],
+    resolved: Mapping[str, Any],
+    series: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    """Each combination against B0.2 and against each ingredient, on the inner
+    days of its own fold, with the interaction labelled explicitly."""
+    from trading_research.research.rule_discovery import search_run
+
+    by_year = {int(fold["test_year"]): fold for fold in folds}
+    rows: list[dict[str, Any]] = []
+    for proposal in proposals:
+        year = int(proposal["outer_fold"])
+        fold = by_year[year]
+        first, second = proposal["ingredients"]
+        cid = str(proposal["candidate_id"])
+        row = {
+            "candidate_id": cid,
+            "family": proposal["family"],
+            "outer_fold": year,
+            "status": proposal.get("status", "attempted"),
+            "reason": proposal.get("reason"),
+            "ingredients": [first["candidate_id"], second["candidate_id"]],
+            "parent_trial_ids": [first["candidate_id"], second["candidate_id"]],
+            "inner_improvement_a": float(first["improvement_vs_b02"]),
+            "inner_improvement_b": float(second["improvement_vs_b02"]),
+        }
+        item = resolved.get(cid)
+        if row["status"] == "attempted" and item is not None and series.get(cid) is not None:
+            inner = search_run.inner_row_from_series(item, series.get(cid), fold)["inner_tuning"]
+            combo = float(inner["improvement_vs_b02"])
+            row["inner_improvement_vs_b02"] = combo
+            row["inner_tuning"] = inner
+            verdict = combine_candidates(
+                proposal["family"],
+                fold,
+                {"candidate_id": first["candidate_id"], "parameters": first["parameters"], "branch": _branch_of(first["candidate_id"])},
+                {"candidate_id": second["candidate_id"], "parameters": second["parameters"], "branch": _branch_of(second["candidate_id"])},
+                b02_score=0.0,
+                score_a=row["inner_improvement_a"],
+                score_b=row["inner_improvement_b"],
+                combo_score=combo,
+            )
+            if verdict is None:
+                row["status"] = "not_applicable"
+                row["reason"] = "an ingredient does not beat B0.2 on inner tuning"
+            else:
+                row["interaction"] = verdict["interaction"]
+                row["vs_ingredient_a"] = verdict["vs_ingredient_a"]
+                row["vs_ingredient_b"] = verdict["vs_ingredient_b"]
+                row["vs_b02"] = verdict["vs_b02"]
+        elif row["status"] == "attempted":
+            row["status"] = "not_applicable"
+            row["reason"] = "not executed"
+        rows.append(row)
+    return rows
+
+
+def _combination_trial_rows(
+    rows: Sequence[Mapping[str, Any]],
+    decided: Mapping[str, Mapping[str, Any]],
+    *,
+    folds: Sequence[Mapping[str, Any]],
+    identity: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    windows = {int(fold["test_year"]): fold for fold in folds}
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        year = int(row["outer_fold"])
+        window = windows[year]
+        verdict = decided.get(row["candidate_id"])
+        if row["status"] != "attempted":
+            disposition, attribution = "unsupported_owned_input", ["coverage"]
+        elif verdict is None:
+            disposition, attribution = "inconclusive_support", ["support"]
+        else:
+            disposition = verdict["promotion"]["disposition"]
+            attribution = verdict["failure_attribution"]
+        out.append(
+            make_trial_record(
+                trial_id=f"P15-18:{year}:{row['candidate_id']}",
+                parent_trial_ids=list(row["parent_trial_ids"]),
+                family=row["family"],
+                branch=_branch_of(row["ingredients"][0]),
+                outer_fold=year,
+                stage="refinement_combination",
+                bank="COMBINED",
+                parameters={"ingredients": list(row["ingredients"])},
+                code_hash=identity["code_sha256"],
+                data_hash=identity["bank_sha256"],
+                plan_hash=identity["freeze_sha256"],
+                fit_window=[window["fit"][0], window["fit"][-1]] if window["fit"] else None,
+                tune_window=[window["tune"][0], window["tune"][-1]] if window["tune"] else None,
+                calibration_window=[window["calibrate"][0], window["calibrate"][-1]]
+                if window["calibrate"]
+                else None,
+                outcome_exposure_cutoff=window["test"][-1] if window["test"] else None,
+                score=row.get("inner_improvement_vs_b02"),
+                test_metrics={}
+                if verdict is None
+                else {
+                    "mean_diff": verdict["mean_diff"],
+                    "p_holm": verdict["promotion"]["p_holm"],
+                    "interaction": row.get("interaction"),
+                    "vs_ingredient_a": row.get("vs_ingredient_a"),
+                    "vs_ingredient_b": row.get("vs_ingredient_b"),
+                },
+                reason=row.get("reason") or (None if verdict is None else verdict["promotion"]["reason"]),
+                disposition=disposition,
+                artifacts={"run_root": identity["run_root"]},
+                failure_attribution=attribution,
+                candidate_id=row["candidate_id"],
+                recipe_id="COMBINED",
+                status=row["status"],
+            )
+        )
+    return out
+
+
+def evaluate_refinement(
+    *,
+    run_root: str | Path,
+    breadth_run_root: str | Path,
+    freeze_path: str | Path,
+    out_dir: str | Path | None = None,
+    combination_run_root: str | Path | None = None,
+) -> dict[str, Any]:
+    """The refinement evaluation, streaming, as a function of the run roots."""
+    from trading_research.research.rule_discovery import search_run
+
+    root = Path(run_root)
+    out = Path(out_dir) if out_dir else root
+    out.mkdir(parents=True, exist_ok=True)
+    freeze = search_run.load_freeze(freeze_path)
+    folds = search_run.load_splits(freeze)
+    bank = json.loads((root / "REFINEMENT_BANK.json").read_text())
+    prepared = prepare_refinement(breadth_run_root)
+    resolved = {item.candidate_id: item for item in prepared["candidates"]}
+    series, coverage = search_run.stream_run(root)
+    if combination_run_root is not None:
+        extra, extra_coverage = search_run.stream_run(combination_run_root)
+        series = {**series, **extra}
+        coverage = {"neighbors": coverage, "combinations": extra_coverage}
+
+    selections = [select_refined_for_fold(bank, fold, resolved, series) for fold in folds]
+    combinations = [row for selection in selections for row in propose_combinations(selection, None)]
+
+    combined_candidates, _parts = resolve_combinations(combinations, resolved)
+    resolved = {**resolved, **{item.candidate_id: item for item in combined_candidates}}
+    combination_rows = _score_combinations(combinations, selections, folds, resolved, series)
+    outer_ids = sorted(
+        {row["candidate_id"] for s in selections for b in s["families"].values() for row in b["refined"]}
+        | {row["candidate_id"] for row in combination_rows if row["status"] == "attempted"}
+    )
+    outer = [
+        search_run.outer_row_from_series(resolved[cid], series.get(cid), folds)
+        for cid in outer_ids
+        if cid in resolved
+    ]
+    decided = {row["candidate_id"]: row for row in search_run.decide(outer)}
+
+    manifest = json.loads((root / "MANIFEST.json").read_text())
+    identity = {
+        "code_sha256": manifest["code_sha256"],
+        "bank_sha256": manifest["bank_sha256"],
+        "freeze_sha256": manifest["freeze_sha256"],
+        "run_root": str(root),
+    }
+    ledger_path = out / "TRIALS.jsonl"
+    if ledger_path.exists():
+        ledger_path.unlink()
+    ledger = TrialLedger(ledger_path)
+    for record in _refinement_trial_rows(bank, selections, decided, folds=folds, identity=identity):
+        ledger.append(record)
+    for record in _combination_trial_rows(combination_rows, decided, folds=folds, identity=identity):
+        ledger.append(record)
+
+    fold_roles = []
+    for selection in selections:
+        year = int(selection["outer_fold"])
+        roles = []
+        for family, body in sorted(selection["families"].items()):
+            for row in body["refined"]:
+                verdict = decided.get(row["candidate_id"])
+                roles.append(
+                    {
+                        "family": family,
+                        "bank": row["bank"],
+                        "candidate_id": row["candidate_id"],
+                        "parameters": row["parameters"],
+                        "parent_trial_ids": row["parent_trial_ids"],
+                        "role": "refined_selected" if row["beats_b02"] else "retained_parent",
+                        "inner_improvement_vs_b02": row["improvement_vs_b02"],
+                        "disposition": None if verdict is None else verdict["promotion"]["disposition"],
+                        "promoted": bool(verdict and verdict["promotion"]["promoted"]),
+                    }
+                )
+        fold_roles.append(
+            {
+                "outer_fold": year,
+                "selection_manifest_id": f"P15-18:{year}",
+                "evidence_cutoff_day": bank["folds"][0].get("inner_cutoff_day"),
+                "roles": roles,
+                "combinations": [row["candidate_id"] for row in combinations if row["outer_fold"] == year],
+            }
+        )
+    promoted = [cid for cid, row in decided.items() if row["promotion"]["promoted"]]
+    descriptive = None
+    if promoted:
+        best = max((decided[cid] for cid in promoted), key=lambda row: row["mean_diff"])
+        descriptive = {
+            "candidate_id": best["candidate_id"],
+            "mean_diff": best["mean_diff"],
+            "label": "all-history descriptive recommendation; never applied backward to an earlier fold",
+        }
+    manifest_rules = selected_rules_by_fold(fold_roles, descriptive)
+    search_run._write_json(out / "SELECTED_RULES_BY_FOLD.json", manifest_rules)
+
+    disposition_rows = []
+    for family in sorted({row["family"] for fold in bank["folds"] for f in fold["families"] for row in f["neighbors"]}):
+        family_rows = [decided[cid] for cid in decided if decided[cid]["family"] == family]
+        if not family_rows:
+            disposition_rows.append(
+                {"family": family, "status": "active_baseline", "candidate_id": None, "failure_attribution": []}
+            )
+            continue
+        best = max(family_rows, key=lambda row: row["mean_diff"])
+        disposition_rows.append(
+            {
+                "family": family,
+                "status": "active_selected" if best["promotion"]["promoted"] else "active_baseline",
+                "candidate_id": best["candidate_id"],
+                "failure_attribution": best["failure_attribution"],
+            }
+        )
+    dispositions = family_dispositions(disposition_rows)
+    dispositions["stage"] = "refinement"
+    dispositions["coverage"] = coverage
+    search_run._write_json(out / "FAMILY_DISPOSITIONS.json", dispositions)
+
+    reports = out / "FAMILY_REPORTS"
+    reports.mkdir(parents=True, exist_ok=True)
+    retention = [
+        {
+            "candidate_id": row["candidate_id"],
+            "family": row["family"],
+            "branch": row["branch"],
+            "bank": row["bank"],
+            "status": "active_selected" if row["promotion"]["promoted"] else "inactive_retained",
+            "first_attribution": (row["failure_attribution"] or [None])[0],
+            "reason": row["promotion"]["reason"],
+        }
+        for row in decided.values()
+    ]
+    for family in sorted({row["family"] for row in decided.values()}):
+        body = search_run.family_report(
+            family,
+            list(decided.values()),
+            retention,
+            [
+                {
+                    "outer_fold": s["outer_fold"],
+                    "families": {
+                        fam: {
+                            "selected_banks": [
+                                {"bank": r["bank"], "candidate_id": r["candidate_id"]}
+                                for r in b["refined"]
+                                if r["beats_b02"]
+                            ],
+                            "retained_baseline": not any(r["beats_b02"] for r in b["refined"]),
+                        }
+                        for fam, b in s["families"].items()
+                    },
+                }
+                for s in selections
+            ],
+            run_root=str(root),
+            report_path=str(reports / f"{family}.md"),
+            title="P15-18 refinement",
+            results_file="SELECTED_RULES_BY_FOLD.json and COMBINATION_RESULTS.json",
+        )
+        (reports / f"{family}.md").write_text(body)
+
+    search_run._write_json(out / "COMBINATION_RESULTS.json", {
+        "schema_version": "research-p15-18-combination-results-v1",
+        "task_id": P15_18_TASK_ID,
+        "rows": combination_rows,
+    })
+    return {
+        "coverage": coverage,
+        "selections": selections,
+        "combinations": combination_rows,
+        "trials": sum(1 for line in ledger_path.read_text().splitlines() if line.strip()),
+        "promoted": promoted,
+        "family_reports": sorted(path.name for path in reports.glob("*.md")),
+    }
+
+
+from hashlib import sha256
+
+
+def resolve_combinations(
+    combinations: Sequence[Mapping[str, Any]],
+    resolved: Mapping[str, Any],
+) -> tuple[list[Any], dict[str, tuple[Any, Any]]]:
+    """The distinct executable combined candidates and their two ingredients.
+
+    A combined candidate is the first ingredient's resolution carrying both
+    parameter sets; `build_combined_overrides` installs both mechanisms.
+    """
+    from dataclasses import replace as _replace
+
+    out: dict[str, Any] = {}
+    parts: dict[str, tuple[Any, Any]] = {}
+    for row in combinations:
+        if row.get("status") != "attempted":
+            continue
+        first = resolved.get(row["ingredients"][0]["candidate_id"])
+        second = resolved.get(row["ingredients"][1]["candidate_id"])
+        if first is None or second is None:
+            continue
+        cid = str(row["candidate_id"])
+        if cid in out:
+            continue
+        parameters = dict(first.parameters)
+        parameters.update(dict(second.parameters))
+        out[cid] = _replace(first, candidate_id=cid, parameters=parameters)
+        parts[cid] = (first, second)
+    return [out[key] for key in sorted(out)], parts
+
+
+def run_combinations(
+    *,
+    breadth_run_root: str | Path,
+    refinement_run_root: str | Path,
+    run_root: str | Path,
+    freeze_path: str | Path,
+    dates: Sequence[str] | None = None,
+    workers: int | None = None,
+) -> dict[str, Any]:
+    """Execute the combined candidates chosen by the refinement evaluation."""
+    from trading_research.research.rule_discovery import search_run
+
+    prepared = prepare_refinement(breadth_run_root)
+    resolved = {item.candidate_id: item for item in prepared["candidates"]}
+    bank = json.loads((Path(refinement_run_root) / "REFINEMENT_BANK.json").read_text())
+    freeze = search_run.load_freeze(freeze_path)
+    folds = search_run.load_splits(freeze)
+    series, _ = search_run.stream_run(Path(refinement_run_root))
+    proposals: list[dict[str, Any]] = []
+    for fold in folds:
+        selection = select_refined_for_fold(bank, fold, resolved, series)
+        proposals.extend(propose_combinations(selection, None))
+    candidates, parts = resolve_combinations(proposals, resolved)
+    root = Path(run_root)
+    root.mkdir(parents=True, exist_ok=True)
+    search_run._write_json(
+        root / "COMBINATIONS.json",
+        {
+            "schema_version": "research-p15-18-combinations-v1",
+            "task_id": P15_18_TASK_ID,
+            "proposals": proposals,
+            "executed": [item.candidate_id for item in candidates],
+            "not_applicable": [
+                {"candidate_id": row["candidate_id"], "reason": row["reason"]}
+                for row in proposals
+                if row.get("status") != "attempted"
+            ],
+        },
+    )
+    summary = search_run.run_dates(
+        run_root=root,
+        freeze_path=freeze_path,
+        dates=dates,
+        workers=workers,
+        candidates=candidates,
+        combinations=parts,
+        bank_identity={
+            "source": "P15-18 combined candidates",
+            "sha256": sha256(
+                json.dumps(sorted(item.candidate_id for item in candidates)).encode()
+            ).hexdigest(),
+            "candidates": len(candidates),
+            "refinement_run_root": str(refinement_run_root),
+        },
+    )
+    return {"summary": summary, "executed": [item.candidate_id for item in candidates]}

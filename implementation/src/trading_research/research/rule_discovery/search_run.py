@@ -760,8 +760,13 @@ def evaluate_session(
     run_root: str | Path | None = None,
     with_controls: bool = True,
     with_stress: bool = True,
+    combinations: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Load the session once, evaluate the whole bank on it, pair against B0.2."""
+    """Load the session once, evaluate the whole bank on it, pair against B0.2.
+
+    `combinations` maps a candidate id to its two ingredient candidates, so a
+    P15-18 combined candidate scans with both mechanisms installed.
+    """
     started = time.perf_counter()
     supported = [item for item in resolved if item.supported]
     branches = sorted({(item.family, item.branch) for item in supported})
@@ -832,6 +837,7 @@ def evaluate_session(
                 baselines=baselines,
                 with_controls=with_controls,
                 with_stress=with_stress,
+                combination=(combinations or {}).get(item.candidate_id),
             )
         )
         if run_root is not None:
@@ -904,6 +910,7 @@ def _evaluate_candidate(
     baselines: Mapping[tuple[str, str], Mapping[str, Any]],
     with_controls: bool,
     with_stress: bool,
+    combination: tuple[search.ResolvedCandidate, search.ResolvedCandidate] | None = None,
 ) -> dict[str, Any]:
     started = time.perf_counter()
     pairing = baselines.get((item.family, item.branch)) or {}
@@ -941,7 +948,20 @@ def _evaluate_candidate(
         return base
     view = search.market_for_family(market, item.family)
     try:
-        document = ensure_candidate_ids(search.scan_candidate(market, item), item.family, item.branch)
+        if combination is None:
+            scanned = search.scan_candidate(market, item)
+        else:
+            # P15-18's one combined candidate: both ingredients on one scan
+            from trading_research.research.rule_discovery import refinement as _refinement
+
+            scanned = search.scan_candidate(
+                market,
+                item,
+                overrides=_refinement.build_combined_overrides(
+                    combination[0], combination[1], search.market_for_family(market, item.family)
+                ),
+            )
+        document = ensure_candidate_ids(scanned, item.family, item.branch)
         benchmark = daily_benchmark(document, tape=tape, view=view, flatten_at_ns=flatten_at_ns)
     except Exception as exc:  # a runtime failure is never a data rejection
         error = f"{type(exc).__name__}: {exc}"
@@ -1011,7 +1031,8 @@ _WORKER: dict[str, Any] = {}
 
 def _init_worker(payload: Mapping[str, Any]) -> None:
     _WORKER.update(payload)
-    _WORKER["resolved"] = search.resolve_bank()
+    if _WORKER.get("resolved") is None:
+        _WORKER["resolved"] = search.resolve_bank()
 
 
 def release_session_caches() -> None:
@@ -1041,6 +1062,7 @@ def _process_date(day: str) -> dict[str, Any]:
             resolved=_WORKER["resolved"],
             b02_roots=_WORKER["b02_roots"],
             run_root=run_root,
+            combinations=_WORKER.get("combinations"),
         )
     except Exception as exc:
         release_session_caches()
@@ -1084,7 +1106,12 @@ def init_run(
     workers: int | None = None,
     b02_roots: Sequence[str] = B02_ROOTS_DEFAULT,
     p15_16a_receipt: Mapping[str, Any] | None = None,
+    candidates: Sequence[search.ResolvedCandidate] | None = None,
+    bank_identity: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
+    """`candidates` runs a bank other than the frozen breadth bank (P15-18's
+    refinement bank); `bank_identity` is then what RUN_META records instead of
+    the frozen bank digest."""
     root = Path(run_root)
     freeze = load_freeze(freeze_path)
     identity = freeze_identity(freeze_path)
@@ -1092,7 +1119,7 @@ def init_run(
     worker_n = int(workers) if workers else cgroup_workers()
     projection = budget_projection(freeze, workers=worker_n, n_dates=len(selected))
     check_budget(projection)
-    resolved = search.resolve_bank()
+    resolved = list(candidates) if candidates is not None else search.resolve_bank()
     bank = search.load_bank()
     meta = {
         "schema_version": RUN_META_SCHEMA,
@@ -1103,7 +1130,9 @@ def init_run(
         "freeze": identity,
         "stage_a_attempt": STAGE_A_ATTEMPT,
         "code_identity": code_identity(),
-        "bank": {"path": bank.get("_path"), "sha256": bank.get("_sha256"), "candidates": len(resolved)},
+        "bank": dict(bank_identity)
+        if bank_identity is not None
+        else {"path": bank.get("_path"), "sha256": bank.get("_sha256"), "candidates": len(resolved)},
         "b02_roots": list(b02_roots),
         "p15_16a_receipt": p15_16a_receipt or {"status": "PENDING"},
         "workers": worker_n,
@@ -1268,16 +1297,30 @@ def run_dates(
     workers: int | None = None,
     b02_roots: Sequence[str] = B02_ROOTS_DEFAULT,
     resume_only: bool = False,
+    candidates: Sequence[search.ResolvedCandidate] | None = None,
+    bank_identity: Mapping[str, Any] | None = None,
+    combinations: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     root = Path(run_root)
     meta = init_run(
-        run_root=root, freeze_path=freeze_path, dates=dates, workers=workers, b02_roots=b02_roots
+        run_root=root,
+        freeze_path=freeze_path,
+        dates=dates,
+        workers=workers,
+        b02_roots=b02_roots,
+        candidates=candidates,
+        bank_identity=bank_identity,
     )
     manifest = json.loads((root / "MANIFEST.json").read_text())
     selected = list(manifest["dates"])
     todo = pending_dates(root, selected)
     worker_n = int(meta["workers"])
-    payload = {"run_root": str(root), "b02_roots": list(b02_roots)}
+    payload = {
+        "run_root": str(root),
+        "b02_roots": list(b02_roots),
+        "resolved": None if candidates is None else list(candidates),
+        "combinations": dict(combinations or {}) or None,
+    }
     started = time.perf_counter()
     completed: list[str] = []
     failed: list[str] = []
@@ -1348,6 +1391,44 @@ def _progress(
     )
 
 
+def write_shard_inventory(run_root: str | Path, dates: Sequence[str]) -> dict[str, Any]:
+    """File-level hashes of the shards Git does not carry.
+
+    `daily/<date>.json`, `checkpoints/<date>.json` and `JOB_INVENTORY.json` are
+    gitignored as large shards, so the receipt's artifact manifest carries their
+    digests instead: without this a reader could not tell which bytes an
+    accepted run was evaluated from.
+    """
+    root = Path(run_root)
+    shards: dict[str, dict[str, str]] = {}
+    for day in dates:
+        row: dict[str, str] = {}
+        for name, path in (("daily", daily_path(root, day)), ("checkpoint", checkpoint_path(root, day))):
+            if path.is_file():
+                row[name] = file_sha256(path)
+        if row:
+            shards[day] = row
+    inventory = root / "JOB_INVENTORY.json"
+    body = {
+        "schema_version": "research-p15-17-shard-inventory-v1",
+        "task_id": TASK_ID,
+        "run_root": str(root),
+        "dates_declared": len(dates),
+        "dates_with_a_daily_shard": sum(1 for row in shards.values() if "daily" in row),
+        "dates_with_a_checkpoint": sum(1 for row in shards.values() if "checkpoint" in row),
+        "job_inventory_sha256": file_sha256(inventory) if inventory.is_file() else None,
+        "shards": shards,
+    }
+    path = _write_json(root / "SHARD_INVENTORY.json", body)
+    return {
+        "path": str(path),
+        "sha256": file_sha256(path),
+        "dates_with_a_daily_shard": body["dates_with_a_daily_shard"],
+        "dates_with_a_checkpoint": body["dates_with_a_checkpoint"],
+        "job_inventory_sha256": body["job_inventory_sha256"],
+    }
+
+
 def write_run_complete(
     run_root: str | Path,
     summary: Mapping[str, Any],
@@ -1367,6 +1448,7 @@ def write_run_complete(
         jobs += len(list(folder.glob("*.json.gz"))) if folder.is_dir() else 0
     failures = [dict(row) for row in retained]
     declared = len(dates) * candidates
+    shard_inventory = write_shard_inventory(root, dates)
     body = {
         "schema_version": "research-p15-17-run-complete-v2",
         "task_id": TASK_ID,
@@ -1386,6 +1468,7 @@ def write_run_complete(
         "manifest_sha256": file_sha256(root / "MANIFEST.json"),
         "run_meta_sha256": file_sha256(root / "RUN_META.json"),
         "completed_by_code_sha256": code_identity()["code_sha256"],
+        "shard_inventory": shard_inventory,
         "summary": dict(summary),
     }
     return _write_json(root / "RUN_COMPLETE.json", body)
@@ -2289,6 +2372,8 @@ def family_report(
     *,
     run_root: str,
     report_path: str,
+    title: str = "P15-17 breadth",
+    results_file: str = "BREADTH_RESULTS.json",
 ) -> str:
     rows = [row for row in decided if row["family"] == family]
     held = [row for row in retention if row["family"] == family]
@@ -2318,10 +2403,10 @@ def family_report(
         for row in sorted(rows, key=lambda row: row["candidate_id"])
     ]
     lines = [
-        f"# P15-17 breadth — {family}",
+        f"# {title} — {family}",
         "",
         f"Run root `{run_root}`. Every number below is a cell of "
-        f"`BREADTH_RESULTS.json` in the same run root; per-day evidence is "
+        f"`{results_file}` in the same run root; per-day evidence is "
         f"`daily/<date>.json` and `jobs/<date>/<candidate>.json.gz`.",
         "",
         "## PHASE table",

@@ -3,34 +3,36 @@
   "/workspace/implementation/reports/research-work/P15-16A/1019e6c09ee54609"
  ],
  "bank": {
-  "candidates": 160,
-  "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/CANDIDATE_BANK.json",
-  "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee"
+  "allowlist_sha256": "bb77f9c726f92b1cf100bbc3eda6a825166d45ed843cf867c2865be6821bdc79",
+  "candidates": 46,
+  "rows": 190,
+  "sha256": "d183bbbaa3e5b55645ee14b793bc22a63ab8d13a7f96a2b44505fe6b34e9243f",
+  "source": "P15-18 refinement bank, generated from the P15-17 allowlist"
  },
  "budget_projection": {
-  "dates": 5,
+  "dates": 1742,
   "exceeds_budget": false,
   "formula": "dates x (frozen per-session p90 + measured stage B overhead) / (workers x 3600)",
   "frozen_per_session_p90_seconds": 156.90102613391358,
-  "hours": 0.08097269728421924,
+  "hours": 7.052721933455497,
   "per_session_seconds": 174.90102613391358,
   "stage_b_overhead_seconds": 18.0,
   "stage_budget_hours": 24.0,
-  "workers": 3
+  "workers": 12
  },
  "code_identity": {
-  "code_sha256": "5cec3b300ae48b68834a8fa8010917d42ed1951031441c8e5700cc3d0a1952cb",
+  "code_sha256": "f5b57cf972e93a69aa4fee6297b9ee939f27856c01292e2f9e0f3a9bf72a1b8c",
   "files": {
    "implementation/src/trading_research/research/rule_discovery/exits.py": "a216b8465623612eb6ddbe1bbb9edf3008c7238ba492975975e3d5ba2ca38068",
-   "implementation/src/trading_research/research/rule_discovery/refinement.py": "a35c99c7aaa33d54224ad443435aa3625d08cea19184079d57550a6077025822",
+   "implementation/src/trading_research/research/rule_discovery/refinement.py": "7b6d532ff3f0e7f3eb705312ce8238af84564aecfb62f69ef22aa9dfecfa7dc5",
    "implementation/src/trading_research/research/rule_discovery/runner.py": "84718a616a7b5e58da3354a94a4e1110fa2b1a236f939f8b8d3095fe657815c0",
    "implementation/src/trading_research/research/rule_discovery/search.py": "6b8934752ba195ebb19a6a6b115969ece90feb721ea236295944ca62ab89eb25",
-   "implementation/src/trading_research/research/rule_discovery/search_run.py": "46738870c1cd0d1f9822ed69bfe2161e635469f2fdb96792c7e90f9b0f6eaac0"
+   "implementation/src/trading_research/research/rule_discovery/search_run.py": "901614c59ac2a6bba6c9ff07904f1480c9e73da7dbd11b577b7f3ff2802aca74"
   },
   "python": "3.12.3",
   "worktree": "/workspace/.worktrees/p15-17-fast"
  },
- "dates": 5,
+ "dates": 1742,
  "freeze": {
   "attempt_id": "47dedaaa4f5b9ce1",
   "path": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/FREEZE.json",
@@ -65,7 +67,7 @@
    }
   }
  },
- "run_root": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-17/6cc3b4628129100d/attempt-0002/native-slice",
+ "run_root": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001",
  "schema_version": "research-p15-17-breadth-run-meta-v1",
  "scoring_policy": {
   "inner_tuning_only_for_bank_choice": true,
@@ -83,7 +85,7 @@
  },
  "stage": "B",
  "stage_a_attempt": "47dedaaa4f5b9ce1",
- "started_at": "2026-09-16T19:38:04.942134+00:00",
+ "started_at": "2026-09-16T18:50:05.422701+00:00",
  "task_id": "P15-17",
  "uncertainty": {
   "block_bootstrap_seed": 15022026,
@@ -92,5 +94,5 @@
   "generator": "numpy.random.Generator(PCG64(15022026))",
   "holm": "across every candidate at the decision stage"
  },
- "workers": 3
+ "workers": 12
 }
