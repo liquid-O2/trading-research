@@ -1009,6 +1009,24 @@ def _init_worker(payload: Mapping[str, Any]) -> None:
     _WORKER["resolved"] = search.resolve_bank()
 
 
+def release_session_caches() -> None:
+    """Drop the per-process caches the method pack keeps across sessions.
+
+    ``strategy_options.option_rows`` (32 option-quote files as Python rows), ``spot_rows``
+    and ``strategy_measurements.vendor_rows`` (24 vendor-bar files) grow a worker by
+    hundreds of MB per session; the P15-16A producer clears the same three after every
+    date. Clearing changes no result: each is a pure loader keyed by file path."""
+    import gc
+
+    from trading_research.research.method_pack.strategy_measurements import vendor_rows
+    from trading_research.research.method_pack.strategy_options import option_rows, spot_rows
+
+    option_rows.cache_clear()
+    spot_rows.cache_clear()
+    vendor_rows.cache_clear()
+    gc.collect()
+
+
 def _process_date(day: str) -> dict[str, Any]:
     run_root = Path(_WORKER["run_root"])
     started = time.perf_counter()
@@ -1020,6 +1038,7 @@ def _process_date(day: str) -> dict[str, Any]:
             run_root=run_root,
         )
     except Exception as exc:
+        release_session_caches()
         record = {
             "date": day,
             "status": "failed",
@@ -1029,6 +1048,7 @@ def _process_date(day: str) -> dict[str, Any]:
         }
         _write_json(run_root / "failed" / f"{day}.json", record)
         return record
+    release_session_caches()
     session = result["session"]
     record = {
         "date": day,
