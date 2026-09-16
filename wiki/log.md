@@ -1,5 +1,13 @@
 # Ingest log
 
+## 2026-09-16 — Breadth engine 10x faster, rehearsal run complete, stage B evaluated
+
+The P15-17 engine on branch p15/17-fast reproduces the old engine byte for byte (75 dates × 160 candidates, RA-1 27/27) at 15 s per session steady state against 168 s, through a new method-pack module outside the event-cache identity (memoised digests, roll map and manifest, incremental footprint prefixes, an array profile payload, per-minute coverage cache), Numba kernels in exits, refill and sires, and evaluation-axis reuse. Two full runs died at the container's 77.3 GB cgroup limit; the cause of the growth was three per-process loader caches the runner never released, now released after every session; the worker budget is set from measured peak RSS. The rehearsal run completed 1,741 dates, and the streaming fold evaluation, trial ledger, allowlist and family reports exist on it; holiday sessions with no market are classified as missing input, not software failure. Throughput protocol: fresh per session median 19.8 s / p90 23.6 s, steady 12.7 / 16.6 s, run wall 0.85 s per date on 17 workers (THROUGHPUT_FAST.json).
+
+## 2026-09-16 — Working rules rewritten, plan cleaned up, policy made structural
+
+`AGENTS.md` rewritten by the user and chained (two amendments); `CLAUDE.md` imports it. Plan cleanup in three chained passes: process layers retired behind notices on their pinned paths, WORKFLOW trimmed, one process page HOW_TO_RUN.md with performance defaults and review discipline, a card template, AGENT_OPERATIONS.md (model-agnostic roles), Phase 2 re-cut from 25 to 16 tasks, verifier cases S01 to S03 assigned once, bundle tools retired. A guard test pins AGENTS.md, CLAUDE.md and the process pages to the amendment chain; a PreToolUse hook prefixes the policy to every spawned agent brief and a SessionStart hook re-injects it after resume or compaction. Review and cleanup plan: SIMPLIFICATION_REVIEW_2026-09-16.md, PLAN_CLEANUP_2026-09-16.md.
+
 ## 2026-09-16 — Native calendar endpoint corrected to 2026-09-03
 
 The frozen run-1.0.1 calendar (census manifest 20def36e065c13d7) has 1,742 sessions ending with the partial session 2026-09-03, but the examples file and two wiki sentences said 2026-08-19. Eight author examples dated 2026-08-27 to 2026-09-03 (three Jumbo, five Green Bird) were therefore marked outside the tape and never replayed, and the new after-tape cache guard, written to the stated range, rejected a valid P15-19 slice date. Corrected under a chained amendment: the examples carry inside_tape true, the endpoint reads 2026-09-03, and the guard is ruled to admit exactly the frozen date list. The integration round replays the eight examples.
