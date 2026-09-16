@@ -2,7 +2,7 @@
 
 This shared wiki defines source methods, objects and domain language across phases. Start with an operating method, then follow its objects. Source facts, our operational hypotheses and measured evidence have distinct labels.
 
-[Current status](current-status.md) · [Program roadmap](/workspace/planning/ROADMAP.md) · [Phase 1.5 implementation pack](/workspace/planning/phase-1-5/README.md) · [Phase 2 implementation pack](/workspace/planning/phase-2/README.md) · [Research architecture](research-architecture.md) · [Source catalog](source-catalog.md) · [Ingest log](log.md)
+[Current status](current-status.md) · [Results ledger](results-ledger.md) · [Program roadmap](/workspace/planning/ROADMAP.md) · [Phase 1.5 implementation pack](/workspace/planning/phase-1-5/README.md) · [Phase 2 implementation pack](/workspace/planning/phase-2/README.md) · [Research architecture](research-architecture.md) · [Source catalog](source-catalog.md) · [Ingest log](log.md)
 
 Phase 1 is complete: 1,742 searched session dates and 18,747 observed setups, with the input limits retained in the [measurement report](/workspace/implementation/reports/phase1-live/historical-measurement/MEASUREMENT_REPORT.md). Phase 1.5 subphases 00 to 04 are closed and 05 is in progress (see [current status](current-status.md) for receipts and the progress table); closure is targeted for 2026-09-17. Phase 2 is specified, re-cut to 17 tasks on 2026-09-16, and opens with the authors' own context reads as baselines (P2-02A) that every fitted expert must beat. The whole program at a glance: [PROJECT_OVERVIEW.md](/workspace/planning/PROJECT_OVERVIEW.md).
 

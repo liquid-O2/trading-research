@@ -105,6 +105,10 @@ Subphases in order; a subphase closes with verified task receipts, a subphase re
 | | P2-23 | Refit cadences and matured-label intraday updates | Which refit schedule (annual, monthly, weekly, plus intraday) holds up chronologically | The cadence comparison |
 | 08 Release | P2-24 | The full chronological dependency replay and the Phase 3 handoff | Proves the whole stack causally and hands Phase 3 its admissible inputs | Strategy Book v2, expert scorecards, retention set, `PHASE3_HANDOFF.md` |
 
+## Where to judge each task
+
+Every task ends with a result card: its question, at most five headline numbers with intervals and pointers, the target and whether it was met, a verdict (done well, needs upgrade, not reaching target, not applicable) and the smallest lever if it needs an upgrade. The cards live in the [results ledger](/workspace/wiki/results-ledger.md); the phase releases roll them up.
+
 ## What "done" means, and how it is checked
 
 Each task ends with a receipt: pinned plan and code snapshots, a run manifest, an evidence matrix binding every acceptance key to a real test or audit command, a work log, and a report. The verifier recomputes every identity, walks the predecessor chain, and exits non-zero on any forgery, gap or unreconciled job. A subphase closes with its own receipt and a gate review; a phase with a phase receipt and a fresh cross-model review. The process for running a subphase is one page, [HOW_TO_RUN.md](research-program/HOW_TO_RUN.md); the policy is [AGENTS.md](/workspace/AGENTS.md).
