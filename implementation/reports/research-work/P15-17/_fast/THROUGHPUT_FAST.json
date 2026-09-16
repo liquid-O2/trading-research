@@ -1,0 +1,406 @@
+{
+ "schema_version": "research-p15-17-throughput-fast-v1",
+ "measured_at": "2026-09-16",
+ "engine": "p15/17-fast at 5f4c2e77: event_time_fast module, incremental prefixes, memoized digests/roll map/manifest/coverage, array profile payload, numba kernels (exits/refill/sires), evaluation-axis reuse, per-session cache release",
+ "protocol": {
+  "dates": [
+   "2020-01-02",
+   "2020-06-01",
+   "2020-11-02",
+   "2021-01-04",
+   "2021-06-01",
+   "2021-11-01",
+   "2022-01-03",
+   "2022-06-01",
+   "2022-11-01",
+   "2023-01-03",
+   "2023-06-01",
+   "2023-11-06",
+   "2024-01-02",
+   "2024-06-03",
+   "2024-11-01",
+   "2025-01-02",
+   "2025-06-02",
+   "2025-11-03",
+   "2026-01-02",
+   "2026-06-01"
+  ],
+  "fresh": "one process per session pinned to one core (taskset -c 3), whole bank + stage B overhead, run_root=None; process_wall includes interpreter start, imports, ownership manifest and numba cache load",
+  "steady": "one process (taskset -c 5) evaluating the 20 sessions in sequence; per-process costs paid once",
+  "conditions": "machine otherwise idle except the P15-16A producer (one process); container cgroup 77.3 GB / 17.85 cores",
+  "before": "THROUGHPUT_B02.json of stage A attempt 47dedaaa4f5b9ce1 (old engine, fresh per session) and the realised rate of the old-engine run 6cc3b4628129100d/attempt-0001 (17 workers, 367 dates, 9.1 s/date wall before it died)"
+ },
+ "before": {
+  "per_session_median_seconds": 92.64995527267456,
+  "per_session_p90_seconds": 156.90102613391358,
+  "load_median_seconds": 5.378120513167232,
+  "load_p90_seconds": 8.403394226357346,
+  "whole_bank_median_seconds": 46.01013335213065,
+  "whole_bank_p90_seconds": 86.42454801248385,
+  "branch_prepay_p90_seconds": 33.6844097243622,
+  "run_wall_seconds_per_date_17_workers": 9.1
+ },
+ "after_fresh": {
+  "session_wall_median_seconds": 19.8165,
+  "session_wall_p90_seconds": 23.5949,
+  "load_median_seconds": 18.389,
+  "load_p90_seconds": 21.698800000000002,
+  "process_wall_median_seconds": 24.9265,
+  "process_wall_p90_seconds": 28.375100000000003,
+  "rows": [
+   {
+    "date": "2020-01-02",
+    "process_wall": 26.861,
+    "bank_setup": 0.027,
+    "load_seconds": 19.132,
+    "session_wall": 20.167,
+    "evaluate_wall": 20.169,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2020-06-01",
+    "process_wall": 17.914,
+    "bank_setup": 0.021,
+    "load_seconds": 12.681,
+    "session_wall": 14.105,
+    "evaluate_wall": 14.107,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2020-11-02",
+    "process_wall": 25.981,
+    "bank_setup": 0.032,
+    "load_seconds": 20.049,
+    "session_wall": 21.862,
+    "evaluate_wall": 21.874,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2021-01-04",
+    "process_wall": 23.793,
+    "bank_setup": 0.019,
+    "load_seconds": 17.77,
+    "session_wall": 19.321,
+    "evaluate_wall": 19.325,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2021-06-01",
+    "process_wall": 19.424,
+    "bank_setup": 0.019,
+    "load_seconds": 14.087,
+    "session_wall": 15.238,
+    "evaluate_wall": 15.242,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2021-11-01",
+    "process_wall": 19.735,
+    "bank_setup": 0.028,
+    "load_seconds": 14.368,
+    "session_wall": 15.689,
+    "evaluate_wall": 15.692,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2022-01-03",
+    "process_wall": 19.933,
+    "bank_setup": 0.016,
+    "load_seconds": 14.662,
+    "session_wall": 15.985,
+    "evaluate_wall": 15.987,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2022-06-01",
+    "process_wall": 20.645,
+    "bank_setup": 0.018,
+    "load_seconds": 14.955,
+    "session_wall": 16.575,
+    "evaluate_wall": 16.577,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2022-11-01",
+    "process_wall": 20.45,
+    "bank_setup": 0.017,
+    "load_seconds": 15.026,
+    "session_wall": 16.682,
+    "evaluate_wall": 16.684,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2023-01-03",
+    "process_wall": 23.499,
+    "bank_setup": 0.019,
+    "load_seconds": 17.383,
+    "session_wall": 19.475,
+    "evaluate_wall": 19.477,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2023-06-01",
+    "process_wall": 23.872,
+    "bank_setup": 0.034,
+    "load_seconds": 17.454,
+    "session_wall": 19.015,
+    "evaluate_wall": 19.018,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2023-11-06",
+    "process_wall": 26.493,
+    "bank_setup": 0.019,
+    "load_seconds": 20.582,
+    "session_wall": 22.097,
+    "evaluate_wall": 22.101,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2024-01-02",
+    "process_wall": 22.231,
+    "bank_setup": 0.022,
+    "load_seconds": 16.658,
+    "session_wall": 18.05,
+    "evaluate_wall": 18.052,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2024-06-03",
+    "process_wall": 28.196,
+    "bank_setup": 0.03,
+    "load_seconds": 21.571,
+    "session_wall": 23.458,
+    "evaluate_wall": 23.463,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2024-11-01",
+    "process_wall": 26.268,
+    "bank_setup": 0.039,
+    "load_seconds": 20.306,
+    "session_wall": 21.625,
+    "evaluate_wall": 21.629,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2025-01-02",
+    "process_wall": 26.325,
+    "bank_setup": 0.032,
+    "load_seconds": 19.134,
+    "session_wall": 21.221,
+    "evaluate_wall": 21.224,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2025-06-02",
+    "process_wall": 26.357,
+    "bank_setup": 0.04,
+    "load_seconds": 19.008,
+    "session_wall": 20.158,
+    "evaluate_wall": 20.162,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2025-11-03",
+    "process_wall": 30.468,
+    "bank_setup": 0.019,
+    "load_seconds": 23.57,
+    "session_wall": 25.036,
+    "evaluate_wall": 25.041,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2026-01-02",
+    "process_wall": 27.342,
+    "bank_setup": 0.033,
+    "load_seconds": 21.151,
+    "session_wall": 22.714,
+    "evaluate_wall": 22.719,
+    "ok": true,
+    "stderr_tail": ""
+   },
+   {
+    "date": "2026-06-01",
+    "process_wall": 29.987,
+    "bank_setup": 0.019,
+    "load_seconds": 22.849,
+    "session_wall": 24.827,
+    "evaluate_wall": 24.833,
+    "ok": true,
+    "stderr_tail": ""
+   }
+  ]
+ },
+ "after_steady": {
+  "session_wall_median_seconds": 12.65,
+  "session_wall_p90_seconds": 16.587,
+  "load_median_seconds": 10.99,
+  "load_p90_seconds": 14.813000000000002,
+  "rows": [
+   {
+    "date": "2020-01-02",
+    "wall": 20.15,
+    "load": 19.13
+   },
+   {
+    "date": "2020-06-01",
+    "wall": 6.83,
+    "load": 5.35
+   },
+   {
+    "date": "2020-11-02",
+    "wall": 13.93,
+    "load": 11.97
+   },
+   {
+    "date": "2021-01-04",
+    "wall": 12.49,
+    "load": 10.83
+   },
+   {
+    "date": "2021-06-01",
+    "wall": 8.85,
+    "load": 7.47
+   },
+   {
+    "date": "2021-11-01",
+    "wall": 10.23,
+    "load": 8.99
+   },
+   {
+    "date": "2022-01-03",
+    "wall": 9.54,
+    "load": 7.98
+   },
+   {
+    "date": "2022-06-01",
+    "wall": 10.02,
+    "load": 8.45
+   },
+   {
+    "date": "2022-11-01",
+    "wall": 9.86,
+    "load": 8.3
+   },
+   {
+    "date": "2023-01-03",
+    "wall": 11.07,
+    "load": 9.35
+   },
+   {
+    "date": "2023-06-01",
+    "wall": 11.61,
+    "load": 9.9
+   },
+   {
+    "date": "2023-11-06",
+    "wall": 14.03,
+    "load": 12.5
+   },
+   {
+    "date": "2024-01-02",
+    "wall": 11.23,
+    "load": 9.5
+   },
+   {
+    "date": "2024-06-03",
+    "wall": 16.47,
+    "load": 14.72
+   },
+   {
+    "date": "2024-11-01",
+    "wall": 14.1,
+    "load": 12.77
+   },
+   {
+    "date": "2025-01-02",
+    "wall": 12.93,
+    "load": 11.15
+   },
+   {
+    "date": "2025-06-02",
+    "wall": 12.81,
+    "load": 11.43
+   },
+   {
+    "date": "2025-11-03",
+    "wall": 15.46,
+    "load": 14.07
+   },
+   {
+    "date": "2026-01-02",
+    "wall": 15.74,
+    "load": 14.18
+   },
+   {
+    "date": "2026-06-01",
+    "wall": 17.64,
+    "load": 15.65
+   }
+  ]
+ },
+ "after_run": {
+  "run_root": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002",
+  "dates_completed": 1741,
+  "session_wall_median_seconds": 14.906201870180666,
+  "session_wall_p90_seconds": 25.910460111685097,
+  "segments": [
+   {
+    "workers": 17,
+    "dates": 442,
+    "wall_seconds": 546,
+    "marginal_seconds_per_date": 0.85
+   },
+   {
+    "workers": 12,
+    "dates": 147,
+    "note": "stopped by hand at 71 GB"
+   },
+   {
+    "workers": 9,
+    "dates": 195,
+    "wall_seconds": 318,
+    "note": "stopped by the watcher at 70 GB"
+   },
+   {
+    "workers": 12,
+    "dates": 959,
+    "wall_seconds": 1516,
+    "seconds_per_date": 1.58,
+    "note": "after the per-session cache release; heavier 2023-2026 sessions"
+   }
+  ],
+  "total_run_wall_seconds_approx": 2600
+ },
+ "speedup": {
+  "per_session_p90_fresh": 6.649785594934227,
+  "per_session_median_fresh": 4.675394508246893,
+  "per_session_p90_steady": 9.45927691167261,
+  "per_session_median_steady": 7.324107136179807,
+  "run_wall_per_date_17_workers": 10.705882352941176
+ },
+ "projection": {
+  "label": "projection",
+  "full_run_17_workers_minutes_at_marginal_0_85": 24.7,
+  "full_run_12_workers_minutes_at_1_58": 45.9
+ }
+}

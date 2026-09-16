@@ -4,6 +4,11 @@ from __future__ import annotations
 from typing import Any, Mapping
 
 from trading_research.research.contracts.types import RuleSpec
+from trading_research.research.rule_discovery.source_adapters.enumeration import (
+    enumeration_point,
+    enumeration_scope,
+    split_b02_overrides,
+)
 from trading_research.research.rule_discovery.source_adapters.common import (
     FAMILY_BRANCHES,
     clock_zone_unverified,
@@ -1134,6 +1139,9 @@ def _scan_poc(market, balance, bars):
 
 def scan_saint_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     balance, _fit = fit_balance(market)
+    balance = enumeration_point(
+        "references", balance, family="SAINT-AMT", branch=branch, market=market
+    )
     if balance is None:
         return [], [{"reason": "no HTF balance", "kind": "measured_selection"}]
     bars = market_bars(market, getattr(market, "start", 0), getattr(market, "end", 0), 60)
@@ -1146,7 +1154,13 @@ def scan_saint_branch_b02(market, branch: str) -> tuple[list[dict[str, Any]], li
     return [], [{"reason": f"unknown branch {branch}"}]
 
 
-def scan_b02(market, rec) -> dict[str, Any]:
+def scan_b02(market, rec, *, overrides=None) -> dict[str, Any]:
+    with enumeration_scope(overrides):
+        return _scan_b02_impl(market, rec, overrides=overrides)
+
+
+def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
+    stage_overrides, _enum = split_b02_overrides(overrides)
     family, branches = parse_rec(rec, FAMILY, BRANCHES)
     episodes = []
     omissions = []
@@ -1158,7 +1172,12 @@ def scan_b02(market, rec) -> dict[str, Any]:
     for episode in episodes:
         episode["rules"] = rules
     branch = branches[0] if len(branches) == 1 else None
-    return window_doc(FAMILY, branch, market, episodes, rules, omissions, {"family": family, "branches": list(branches)})
+    document = window_doc(FAMILY, branch, market, episodes, rules, omissions, {"family": family, "branches": list(branches)})
+    if not stage_overrides:
+        return document
+    from trading_research.research.rule_discovery.search import finish_scan_b02
+
+    return finish_scan_b02(document, stage_overrides)
 
 
 def replay_example(market, example) -> dict[str, Any]:

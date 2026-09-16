@@ -1,0 +1,1384 @@
+{
+ "executed": [
+  "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+  "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+  "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75"
+ ],
+ "not_applicable": [
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+   "reason": "ingredients_on_different_branches"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+   "reason": "ingredients_on_different_branches"
+  }
+ ],
+ "proposals": [
+  {
+   "candidate_id": "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "family": "GB-FAIL",
+   "ingredients": [
+    {
+     "bank": "Timing",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "candidates_considered": 5,
+     "improvement_vs_b02": 6.306043956043957,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 144,
+      "baseline_mean_daily_net_points": 1.9521978021978021,
+      "candidate_mean_daily_net_points": 8.258241758241759,
+      "common_complete_days": 455,
+      "entries": 269,
+      "frequency_of_baseline": 1.8680555555555556,
+      "improvement_vs_b02": 6.306043956043957,
+      "mean_confirmation_delay_s": 192.37209302325581,
+      "support_days": 215,
+      "support_opportunities": 269
+     },
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "recipe_id": "T4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "candidates_considered": 4,
+     "improvement_vs_b02": 1.7445054945054947,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 144,
+      "baseline_mean_daily_net_points": 1.9521978021978021,
+      "candidate_mean_daily_net_points": 3.696703296703297,
+      "common_complete_days": 455,
+      "entries": 205,
+      "frequency_of_baseline": 1.4236111111111112,
+      "improvement_vs_b02": 1.7445054945054947,
+      "mean_confirmation_delay_s": 188.32369942196533,
+      "support_days": 173,
+      "support_opportunities": 205
+     },
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "recipe_id": "F3"
+    }
+   ],
+   "outer_fold": 2022,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+   "family": "JJ-TBR",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "candidates_considered": 6,
+     "improvement_vs_b02": 4.007142857142857,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 165,
+      "baseline_mean_daily_net_points": -1.0093406593406593,
+      "candidate_mean_daily_net_points": 2.997802197802198,
+      "common_complete_days": 455,
+      "entries": 109,
+      "frequency_of_baseline": 0.6606060606060606,
+      "improvement_vs_b02": 4.007142857142857,
+      "mean_confirmation_delay_s": -539.4,
+      "support_days": 100,
+      "support_opportunities": 109
+     },
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "recipe_id": "S4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.4829670329670329,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 100,
+      "baseline_mean_daily_net_points": -0.3967032967032967,
+      "candidate_mean_daily_net_points": 0.08626373626373626,
+      "common_complete_days": 455,
+      "entries": 95,
+      "frequency_of_baseline": 0.95,
+      "improvement_vs_b02": 0.4829670329670329,
+      "mean_confirmation_delay_s": 60.0,
+      "support_days": 85,
+      "support_opportunities": 95
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:single_extended:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2022,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "family": "SAINT-AMT",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.28296703296703296,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.0005494505494505495,
+      "candidate_mean_daily_net_points": 0.2835164835164835,
+      "common_complete_days": 455,
+      "entries": 148,
+      "frequency_of_baseline": 148.0,
+      "improvement_vs_b02": 0.28296703296703296,
+      "mean_confirmation_delay_s": -488.9312977099237,
+      "support_days": 131,
+      "support_opportunities": 148
+     },
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "recipe_id": "S1"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.004395604395604396,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.0005494505494505495,
+      "candidate_mean_daily_net_points": 0.004945054945054945,
+      "common_complete_days": 455,
+      "entries": 2,
+      "frequency_of_baseline": 2.0,
+      "improvement_vs_b02": 0.004395604395604396,
+      "mean_confirmation_delay_s": 180.0,
+      "support_days": 2,
+      "support_opportunities": 2
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2022,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "family": "SIRES",
+   "ingredients": [
+    {
+     "bank": "Reference",
+     "beats_b02": true,
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 523.069290465632,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 869,
+      "baseline_mean_daily_net_points": -379.859756097561,
+      "candidate_mean_daily_net_points": 143.20953436807096,
+      "common_complete_days": 451,
+      "entries": 64,
+      "frequency_of_baseline": 0.07364787111622555,
+      "improvement_vs_b02": 523.069290465632,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 62,
+      "support_opportunities": 64
+     },
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "recipe_id": "R1"
+    },
+    {
+     "bank": "Memory",
+     "beats_b02": true,
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 184.1031042128603,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 11,
+      "baseline_mean_daily_net_points": 49.84645232815964,
+      "candidate_mean_daily_net_points": 233.94955654101994,
+      "common_complete_days": 451,
+      "entries": 551,
+      "frequency_of_baseline": 50.09090909090909,
+      "improvement_vs_b02": 184.1031042128603,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 247,
+      "support_opportunities": 551
+     },
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "recipe_id": "M1"
+    }
+   ],
+   "outer_fold": 2022,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "family": "GB-FAIL",
+   "ingredients": [
+    {
+     "bank": "Timing",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "candidates_considered": 5,
+     "improvement_vs_b02": 5.335195530726256,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 226,
+      "baseline_mean_daily_net_points": 2.8701117318435756,
+      "candidate_mean_daily_net_points": 8.205307262569832,
+      "common_complete_days": 716,
+      "entries": 398,
+      "frequency_of_baseline": 1.761061946902655,
+      "improvement_vs_b02": 5.335195530726256,
+      "mean_confirmation_delay_s": 190.62305295950156,
+      "support_days": 321,
+      "support_opportunities": 398
+     },
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "recipe_id": "T4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "candidates_considered": 4,
+     "improvement_vs_b02": 1.8990921787709496,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 226,
+      "baseline_mean_daily_net_points": 2.8701117318435756,
+      "candidate_mean_daily_net_points": 4.769203910614525,
+      "common_complete_days": 716,
+      "entries": 330,
+      "frequency_of_baseline": 1.4601769911504425,
+      "improvement_vs_b02": 1.8990921787709496,
+      "mean_confirmation_delay_s": 189.06137184115522,
+      "support_days": 277,
+      "support_opportunities": 330
+     },
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "recipe_id": "F3"
+    }
+   ],
+   "outer_fold": 2023,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+   "family": "JJ-TBR",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "candidates_considered": 6,
+     "improvement_vs_b02": 3.996857541899441,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 257,
+      "baseline_mean_daily_net_points": -1.164804469273743,
+      "candidate_mean_daily_net_points": 2.8320530726256985,
+      "common_complete_days": 716,
+      "entries": 154,
+      "frequency_of_baseline": 0.5992217898832685,
+      "improvement_vs_b02": 3.996857541899441,
+      "mean_confirmation_delay_s": -539.5774647887324,
+      "support_days": 142,
+      "support_opportunities": 154
+     },
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "recipe_id": "S4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.6525837988826816,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 124,
+      "baseline_mean_daily_net_points": -0.4615921787709497,
+      "candidate_mean_daily_net_points": 0.19099162011173185,
+      "common_complete_days": 716,
+      "entries": 130,
+      "frequency_of_baseline": 1.0483870967741935,
+      "improvement_vs_b02": 0.6525837988826816,
+      "mean_confirmation_delay_s": 60.0,
+      "support_days": 130,
+      "support_opportunities": 130
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2023,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "family": "SAINT-AMT",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.26256983240223464,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.00034916201117318437,
+      "candidate_mean_daily_net_points": 0.2629189944134078,
+      "common_complete_days": 716,
+      "entries": 233,
+      "frequency_of_baseline": 233.0,
+      "improvement_vs_b02": 0.26256983240223464,
+      "mean_confirmation_delay_s": -389.7029702970297,
+      "support_days": 202,
+      "support_opportunities": 233
+     },
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "recipe_id": "S1"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.002793296089385475,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.00034916201117318437,
+      "candidate_mean_daily_net_points": 0.0031424581005586594,
+      "common_complete_days": 716,
+      "entries": 2,
+      "frequency_of_baseline": 2.0,
+      "improvement_vs_b02": 0.002793296089385475,
+      "mean_confirmation_delay_s": 180.0,
+      "support_days": 2,
+      "support_opportunities": 2
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2023,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "family": "SIRES",
+   "ingredients": [
+    {
+     "bank": "Reference",
+     "beats_b02": true,
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 329.20352112676056,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1471,
+      "baseline_mean_daily_net_points": -238.27852112676055,
+      "candidate_mean_daily_net_points": 90.925,
+      "common_complete_days": 710,
+      "entries": 112,
+      "frequency_of_baseline": 0.07613868116927261,
+      "improvement_vs_b02": 329.20352112676056,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 108,
+      "support_opportunities": 112
+     },
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "recipe_id": "R1"
+    },
+    {
+     "bank": "Memory",
+     "beats_b02": true,
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 116.39295774647887,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 17,
+      "baseline_mean_daily_net_points": 31.692605633802817,
+      "candidate_mean_daily_net_points": 148.08556338028168,
+      "common_complete_days": 710,
+      "entries": 940,
+      "frequency_of_baseline": 55.294117647058826,
+      "improvement_vs_b02": 116.39295774647887,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 400,
+      "support_opportunities": 940
+     },
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "recipe_id": "M1"
+    }
+   ],
+   "outer_fold": 2023,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "family": "GB-FAIL",
+   "ingredients": [
+    {
+     "bank": "Timing",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "candidates_considered": 5,
+     "improvement_vs_b02": 5.440829918032787,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 316,
+      "baseline_mean_daily_net_points": 2.662141393442623,
+      "candidate_mean_daily_net_points": 8.10297131147541,
+      "common_complete_days": 976,
+      "entries": 551,
+      "frequency_of_baseline": 1.7436708860759493,
+      "improvement_vs_b02": 5.440829918032787,
+      "mean_confirmation_delay_s": 189.3362831858407,
+      "support_days": 452,
+      "support_opportunities": 551
+     },
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "recipe_id": "T4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "candidates_considered": 4,
+     "improvement_vs_b02": 1.890112704918033,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 316,
+      "baseline_mean_daily_net_points": 2.662141393442623,
+      "candidate_mean_daily_net_points": 4.552254098360656,
+      "common_complete_days": 976,
+      "entries": 455,
+      "frequency_of_baseline": 1.4398734177215189,
+      "improvement_vs_b02": 1.890112704918033,
+      "mean_confirmation_delay_s": 188.20580474934036,
+      "support_days": 379,
+      "support_opportunities": 455
+     },
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "recipe_id": "F3"
+    }
+   ],
+   "outer_fold": 2024,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+   "family": "JJ-TBR",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "candidates_considered": 6,
+     "improvement_vs_b02": 4.056352459016393,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 352,
+      "baseline_mean_daily_net_points": -1.3767930327868851,
+      "candidate_mean_daily_net_points": 2.6795594262295084,
+      "common_complete_days": 976,
+      "entries": 205,
+      "frequency_of_baseline": 0.5823863636363636,
+      "improvement_vs_b02": 4.056352459016393,
+      "mean_confirmation_delay_s": -539.6858638743455,
+      "support_days": 191,
+      "support_opportunities": 205
+     },
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "recipe_id": "S4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.6426741803278688,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 180,
+      "baseline_mean_daily_net_points": -0.36501024590163933,
+      "candidate_mean_daily_net_points": 0.2776639344262295,
+      "common_complete_days": 976,
+      "entries": 183,
+      "frequency_of_baseline": 1.0166666666666666,
+      "improvement_vs_b02": 0.6426741803278688,
+      "mean_confirmation_delay_s": 60.0,
+      "support_days": 183,
+      "support_opportunities": 183
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2024,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "family": "SAINT-AMT",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=15",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.27740778688524587,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.00025614754098360657,
+      "candidate_mean_daily_net_points": 0.2776639344262295,
+      "common_complete_days": 976,
+      "entries": 323,
+      "frequency_of_baseline": 323.0,
+      "improvement_vs_b02": 0.27740778688524587,
+      "mean_confirmation_delay_s": -259.7508896797153,
+      "support_days": 281,
+      "support_opportunities": 323
+     },
+     "parameters": {
+      "deadline_minutes": 15,
+      "deadline_s": 900
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "recipe_id": "S1"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.0020491803278688526,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 1,
+      "baseline_mean_daily_net_points": 0.00025614754098360657,
+      "candidate_mean_daily_net_points": 0.002305327868852459,
+      "common_complete_days": 976,
+      "entries": 2,
+      "frequency_of_baseline": 2.0,
+      "improvement_vs_b02": 0.0020491803278688526,
+      "mean_confirmation_delay_s": 180.0,
+      "support_days": 2,
+      "support_opportunities": 2
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2024,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+   "family": "SIRES",
+   "ingredients": [
+    {
+     "bank": "Reference",
+     "beats_b02": true,
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 239.6008273009307,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 2038,
+      "baseline_mean_daily_net_points": -172.9089968976215,
+      "candidate_mean_daily_net_points": 66.6918304033092,
+      "common_complete_days": 967,
+      "entries": 152,
+      "frequency_of_baseline": 0.0745829244357213,
+      "improvement_vs_b02": 239.6008273009307,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 147,
+      "support_opportunities": 152
+     },
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "recipe_id": "R1"
+    },
+    {
+     "bank": "Memory",
+     "beats_b02": true,
+     "candidate_id": "SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 85.10082730093072,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 22,
+      "baseline_mean_daily_net_points": 23.254912099276112,
+      "candidate_mean_daily_net_points": 108.35573940020683,
+      "common_complete_days": 967,
+      "entries": 1254,
+      "frequency_of_baseline": 57.0,
+      "improvement_vs_b02": 85.10082730093072,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 541,
+      "support_opportunities": 1254
+     },
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:absorption_reward_retest:M1"
+     ],
+     "recipe_id": "M1"
+    }
+   ],
+   "outer_fold": 2024,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "family": "GB-FAIL",
+   "ingredients": [
+    {
+     "bank": "Timing",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "candidates_considered": 5,
+     "improvement_vs_b02": 5.403193209377527,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 404,
+      "baseline_mean_daily_net_points": 2.7799110751818916,
+      "candidate_mean_daily_net_points": 8.183104284559418,
+      "common_complete_days": 1237,
+      "entries": 707,
+      "frequency_of_baseline": 1.75,
+      "improvement_vs_b02": 5.403193209377527,
+      "mean_confirmation_delay_s": 188.67241379310346,
+      "support_days": 580,
+      "support_opportunities": 707
+     },
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "recipe_id": "T4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "candidates_considered": 4,
+     "improvement_vs_b02": 1.8613581244947457,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 404,
+      "baseline_mean_daily_net_points": 2.7799110751818916,
+      "candidate_mean_daily_net_points": 4.641269199676637,
+      "common_complete_days": 1237,
+      "entries": 594,
+      "frequency_of_baseline": 1.4702970297029703,
+      "improvement_vs_b02": 1.8613581244947457,
+      "mean_confirmation_delay_s": 187.6008064516129,
+      "support_days": 496,
+      "support_opportunities": 594
+     },
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "recipe_id": "F3"
+    }
+   ],
+   "outer_fold": 2025,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+   "family": "JJ-TBR",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "candidates_considered": 6,
+     "improvement_vs_b02": 4.021018593371059,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 445,
+      "baseline_mean_daily_net_points": -1.452101859337106,
+      "candidate_mean_daily_net_points": 2.568916734033953,
+      "common_complete_days": 1237,
+      "entries": 259,
+      "frequency_of_baseline": 0.5820224719101124,
+      "improvement_vs_b02": 4.021018593371059,
+      "mean_confirmation_delay_s": -539.7489539748954,
+      "support_days": 239,
+      "support_opportunities": 259
+     },
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "recipe_id": "S4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:internal_rotation:F1:minutes=90",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.6560226354082457,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 229,
+      "baseline_mean_daily_net_points": -0.33852061438965236,
+      "candidate_mean_daily_net_points": 0.31750202101859337,
+      "common_complete_days": 1237,
+      "entries": 243,
+      "frequency_of_baseline": 1.0611353711790392,
+      "improvement_vs_b02": 0.6560226354082457,
+      "mean_confirmation_delay_s": 60.0,
+      "support_days": 243,
+      "support_opportunities": 243
+     },
+     "parameters": {
+      "minutes": 90
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F1"
+     ],
+     "recipe_id": "F1"
+    }
+   ],
+   "outer_fold": 2025,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "family": "SAINT-AMT",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=5",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.22493936944219886,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 3,
+      "baseline_mean_daily_net_points": -0.0008084074373484236,
+      "candidate_mean_daily_net_points": 0.22413096200485044,
+      "common_complete_days": 1237,
+      "entries": 309,
+      "frequency_of_baseline": 103.0,
+      "improvement_vs_b02": 0.22493936944219886,
+      "mean_confirmation_delay_s": 635.1648351648352,
+      "support_days": 273,
+      "support_opportunities": 309
+     },
+     "parameters": {
+      "deadline_minutes": 5,
+      "deadline_s": 300
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "recipe_id": "S1"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.0016168148746968471,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 3,
+      "baseline_mean_daily_net_points": -0.0008084074373484236,
+      "candidate_mean_daily_net_points": 0.0008084074373484236,
+      "common_complete_days": 1237,
+      "entries": 4,
+      "frequency_of_baseline": 1.3333333333333333,
+      "improvement_vs_b02": 0.0016168148746968471,
+      "mean_confirmation_delay_s": 120.0,
+      "support_days": 4,
+      "support_opportunities": 4
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2025,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+   "family": "SIRES",
+   "ingredients": [
+    {
+     "bank": "Reference",
+     "beats_b02": true,
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 187.84204081632654,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 2649,
+      "baseline_mean_daily_net_points": -135.26489795918368,
+      "candidate_mean_daily_net_points": 52.57714285714286,
+      "common_complete_days": 1225,
+      "entries": 202,
+      "frequency_of_baseline": 0.07625519063797659,
+      "improvement_vs_b02": 187.84204081632654,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 193,
+      "support_opportunities": 202
+     },
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "recipe_id": "R1"
+    },
+    {
+     "bank": "Memory",
+     "beats_b02": true,
+     "candidate_id": "SIRES:clean_squeeze:M1:max_prior_contacts=0",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 67.62020408163265,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 162,
+      "baseline_mean_daily_net_points": 0.7516326530612245,
+      "candidate_mean_daily_net_points": 68.37183673469387,
+      "common_complete_days": 1225,
+      "entries": 324,
+      "frequency_of_baseline": 2.0,
+      "improvement_vs_b02": 67.62020408163265,
+      "mean_confirmation_delay_s": 0.6564290126594465,
+      "support_days": 277,
+      "support_opportunities": 324
+     },
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:clean_squeeze:M1"
+     ],
+     "recipe_id": "M1"
+    }
+   ],
+   "outer_fold": 2025,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "family": "GB-FAIL",
+   "ingredients": [
+    {
+     "bank": "Timing",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+     "candidates_considered": 5,
+     "improvement_vs_b02": 5.603638184245661,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 486,
+      "baseline_mean_daily_net_points": 3.065754339118825,
+      "candidate_mean_daily_net_points": 8.669392523364486,
+      "common_complete_days": 1498,
+      "entries": 858,
+      "frequency_of_baseline": 1.7654320987654322,
+      "improvement_vs_b02": 5.603638184245661,
+      "mean_confirmation_delay_s": 189.10919540229884,
+      "support_days": 696,
+      "support_opportunities": 858
+     },
+     "parameters": {
+      "clock_limit": false,
+      "expiry_s_after_qual": 3600,
+      "search": "09:30_to_flatten",
+      "shift_minutes": -15
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:T4"
+     ],
+     "recipe_id": "T4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "GB-FAIL:previous_hour:F3:efficiency=0.5",
+     "candidates_considered": 4,
+     "improvement_vs_b02": 1.6553738317757012,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 486,
+      "baseline_mean_daily_net_points": 3.065754339118825,
+      "candidate_mean_daily_net_points": 4.721128170894526,
+      "common_complete_days": 1498,
+      "entries": 736,
+      "frequency_of_baseline": 1.51440329218107,
+      "improvement_vs_b02": 1.6553738317757012,
+      "mean_confirmation_delay_s": 187.16612377850163,
+      "support_days": 614,
+      "support_opportunities": 736
+     },
+     "parameters": {
+      "efficiency": 0.5,
+      "lengths": "15,30,60",
+      "width_S": 0.75,
+      "width_mult": 0.75
+     },
+     "parent_trial_ids": [
+      "GB-FAIL:previous_hour:F3"
+     ],
+     "recipe_id": "F3"
+    }
+   ],
+   "outer_fold": 2026,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+   "family": "JJ-TBR",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:judas_reversal:S4:deadline_minutes=10",
+     "candidates_considered": 6,
+     "improvement_vs_b02": 4.293224299065421,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 531,
+      "baseline_mean_daily_net_points": -1.5619158878504673,
+      "candidate_mean_daily_net_points": 2.7313084112149535,
+      "common_complete_days": 1498,
+      "entries": 302,
+      "frequency_of_baseline": 0.568738229755179,
+      "improvement_vs_b02": 4.293224299065421,
+      "mean_confirmation_delay_s": -539.7864768683274,
+      "support_days": 281,
+      "support_opportunities": 302
+     },
+     "parameters": {
+      "deadline_minutes": 10,
+      "deadline_s": 600,
+      "pressure_s": 120
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:judas_reversal:S4"
+     ],
+     "recipe_id": "S4"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "JJ-TBR:internal_rotation:F1:minutes=90",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.7017690253671562,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 276,
+      "baseline_mean_daily_net_points": -0.3523030707610147,
+      "candidate_mean_daily_net_points": 0.34946595460614155,
+      "common_complete_days": 1498,
+      "entries": 294,
+      "frequency_of_baseline": 1.065217391304348,
+      "improvement_vs_b02": 0.7017690253671562,
+      "mean_confirmation_delay_s": 60.0,
+      "support_days": 294,
+      "support_opportunities": 294
+     },
+     "parameters": {
+      "minutes": 90
+     },
+     "parent_trial_ids": [
+      "JJ-TBR:internal_rotation:F1"
+     ],
+     "recipe_id": "F1"
+    }
+   ],
+   "outer_fold": 2026,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  },
+  {
+   "candidate_id": "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "family": "SAINT-AMT",
+   "ingredients": [
+    {
+     "bank": "Sequence",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:S1:deadline_minutes=5",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 0.17807076101468627,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 4,
+      "baseline_mean_daily_net_points": -0.0010013351134846463,
+      "candidate_mean_daily_net_points": 0.17706942590120162,
+      "common_complete_days": 1498,
+      "entries": 380,
+      "frequency_of_baseline": 95.0,
+      "improvement_vs_b02": 0.17807076101468627,
+      "mean_confirmation_delay_s": 578.6607142857143,
+      "support_days": 336,
+      "support_opportunities": 380
+     },
+     "parameters": {
+      "deadline_minutes": 5,
+      "deadline_s": 300
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:S1"
+     ],
+     "recipe_id": "S1"
+    },
+    {
+     "bank": "Formation",
+     "beats_b02": true,
+     "candidate_id": "SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 0.0013351134846461949,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 4,
+      "baseline_mean_daily_net_points": -0.0010013351134846463,
+      "candidate_mean_daily_net_points": 0.0003337783711615487,
+      "common_complete_days": 1498,
+      "entries": 5,
+      "frequency_of_baseline": 1.25,
+      "improvement_vs_b02": 0.0013351134846461949,
+      "mean_confirmation_delay_s": 108.0,
+      "support_days": 5,
+      "support_opportunities": 5
+     },
+     "parameters": {
+      "max_minutes": 180,
+      "median_sessions": 20,
+      "volume_threshold_multiplier": 0.75
+     },
+     "parent_trial_ids": [
+      "SAINT-AMT:continuation_retest:F2"
+     ],
+     "recipe_id": "F2"
+    }
+   ],
+   "outer_fold": 2026,
+   "reason": null,
+   "status": "attempted"
+  },
+  {
+   "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+   "family": "SIRES",
+   "ingredients": [
+    {
+     "bank": "Reference",
+     "beats_b02": true,
+     "candidate_id": "SIRES:defended_band_continuation:R1:dispersion=0.5",
+     "candidates_considered": 3,
+     "improvement_vs_b02": 154.01130229419704,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 3296,
+      "baseline_mean_daily_net_points": -110.58771929824562,
+      "candidate_mean_daily_net_points": 43.42358299595141,
+      "common_complete_days": 1482,
+      "entries": 264,
+      "frequency_of_baseline": 0.08009708737864078,
+      "improvement_vs_b02": 154.01130229419704,
+      "mean_confirmation_delay_s": 0.0,
+      "support_days": 250,
+      "support_opportunities": 264
+     },
+     "parameters": {
+      "band": "vwap_pm_1_dispersion",
+      "dispersion": 0.5,
+      "frozen": true
+     },
+     "parent_trial_ids": [
+      "SIRES:defended_band_continuation:R1"
+     ],
+     "recipe_id": "R1"
+    },
+    {
+     "bank": "Memory",
+     "beats_b02": true,
+     "candidate_id": "SIRES:clean_squeeze:M1:max_prior_contacts=0",
+     "candidates_considered": 2,
+     "improvement_vs_b02": 55.77412280701754,
+     "inner_support_ok": true,
+     "inner_tuning": {
+      "baseline_entries": 187,
+      "baseline_mean_daily_net_points": 0.684885290148448,
+      "candidate_mean_daily_net_points": 56.45900809716599,
+      "common_complete_days": 1482,
+      "entries": 410,
+      "frequency_of_baseline": 2.192513368983957,
+      "improvement_vs_b02": 55.77412280701754,
+      "mean_confirmation_delay_s": 0.5998888677990338,
+      "support_days": 345,
+      "support_opportunities": 410
+     },
+     "parameters": {
+      "max_prior_contacts": 0
+     },
+     "parent_trial_ids": [
+      "SIRES:clean_squeeze:M1"
+     ],
+     "recipe_id": "M1"
+    }
+   ],
+   "outer_fold": 2026,
+   "reason": "ingredients_on_different_branches",
+   "status": "not_applicable"
+  }
+ ],
+ "schema_version": "research-p15-18-combinations-v1",
+ "task_id": "P15-18"
+}

@@ -1,0 +1,60 @@
+{
+ "attempt": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002",
+ "headline": [
+  {
+   "artifact": "attempt-0002/BREADTH_RESULTS.json#decisions",
+   "name": "candidates promoted",
+   "support": "5 outer folds, Holm across the stage",
+   "unit": "candidates of 148 supported",
+   "value": 0
+  },
+  {
+   "artifact": "attempt-0002/BREADTH_RESULTS.json#decisions",
+   "candidate": "SIRES:absorption_reward_retest:S1",
+   "interval": [
+    24.7714,
+    26.7971
+   ],
+   "name": "best mean paired improvement",
+   "support": "1094 days, 10325 resolved entries",
+   "unit": "net points per common complete day",
+   "value": 25.7799
+  },
+  {
+   "artifact": "attempt-0002/TRIALS.jsonl",
+   "name": "dispositions",
+   "unit": "candidates",
+   "value": {
+    "inconclusive_support": 91,
+    "rejected_by_evidence": 19,
+    "retained_baseline": 38
+   }
+  },
+  {
+   "artifact": "attempt-0002/RUN_COMPLETE.json",
+   "name": "declared jobs reconciled",
+   "unit": "278560 written + 160 absent = 278720 declared",
+   "value": true
+  },
+  {
+   "artifact": "attempt-0002/BREADTH_RESULTS.json#holdout_excluded",
+   "name": "hold-out days excluded",
+   "unit": "account days, 2026-04-01..2026-09-03",
+   "value": 112
+  }
+ ],
+ "label": "rehearsal",
+ "lever": {
+  "change": "raise the entry count of the location-limited candidates before re-screening: the most common first attribution is location_miss (48 candidates), which Phase 3's improved locations address directly under the bounded-revisit rule",
+  "evidence_that_it_worked": "the same breadth screen, re-run on the retained candidates with Phase 3 locations, moves candidates out of inconclusive_support into a decided disposition and at least one clears the support gate"
+ },
+ "limits": "Mean daily net points in the one-mini benchmark on an isolated family under a fixed scheduler; not a portfolio, not a claim about the user's daily target, and no statement about the blind hold-out, which no number here touches.",
+ "met": "no",
+ "question": "Does any of the 160 registered one-axis candidates beat the source-faithful baseline B0.2 well enough to replace it as a family's entry rule?",
+ "schema_version": "research-result-card-v1",
+ "target": "EVALUATION.md promotion gates: paired mean improvement with a 95% lower bound above zero, Holm-adjusted p <= .05, support (100 resolved opportunities, 30 days, 3 blocks), positive in 60% of supported blocks, no cost-stress reversal, no unexplained coverage loss",
+ "task_id": "P15-17",
+ "verdict": "not_reaching_target",
+ "verdict_reason": "No candidate clears the gates: 91 of 148 fail support outright and the rest fall at Holm, coverage or the cost stress, so the source-faithful baseline is retained in every family.",
+ "written_at": "2026-09-16T21:00:51.745415+00:00"
+}

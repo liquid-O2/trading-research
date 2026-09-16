@@ -1,0 +1,240 @@
+{
+ "PLAN_SNAPSHOT": {
+  "files": {
+   "AGENTS.md": "5392d47f0f77acc79bf9aaed9dc57701cfb205732d2944097dafab47407ca8fd",
+   "planning/ROADMAP.md": "6fe20e71cd9c39cabaf4509efb0c9d743a717063b157c0aed88cc3829f622aa5",
+   "planning/phase-1-5/SEARCH_CONTRACT.md": "70001063cb309bd8626bd767cb4788a420d0a7b155fb401ea4b7dd893929577b",
+   "planning/phase-1-5/tasks/P15-18.md": "6d7a5771e33a85b1d015352c28df90e1b85059df92af271efb81d0973cfaf991",
+   "planning/research-program/AMENDMENTS.json": "ba559ea39258088638b987a20e8360787c71156b760ee4e710c00ae13db3d971",
+   "planning/research-program/ASSURANCE.md": "ffc5acfe2551a42ad6553a0eea46c821ef7ead32436f91bea13e69fa2304ca35",
+   "planning/research-program/ASSURANCE_CASES.json": "9d98c1f6005a70abe664dc3ea4887fa7bcde8b4722715f4affa13d9cdd0dd8bd",
+   "planning/research-program/DATA_CONTRACTS.md": "8274d2707340ba820ede105f91e43da0f6df1739de8da0a8b4d3acd93919288e",
+   "planning/research-program/EVALUATION.md": "3c0628acd7db481adfa41e4b6a11fc87368909c67bf213d82061643cc2cfadd1",
+   "planning/research-program/HOW_TO_RUN.md": "2d5dc6fb24b882bd2b8b61697769b362029edac32ce611b595894827aad6a106",
+   "planning/research-program/OUTCOMES.md": "e965b685a1cc4bf7642f0879f3c5f2c0c210c206a5cec96b42468b5786ba566a",
+   "planning/research-program/PERFORMANCE.md": "adc203aa7eedaab96085b4db3ced595b6c790ddcb10db5c8e1cd2f56eb623311",
+   "planning/research-program/PSTACK_EXECUTION.md": "386c00728989095b7ad6f36742d49fe888d793f885ba9e19194c07333e88c274",
+   "planning/research-program/RETENTION.md": "2dcfa87bcb2519adba8a7ea95a710ed6eed092124cf3dacedc8cc1588cd59fdc",
+   "planning/research-program/SILENT_FAILURES.md": "a58495caa90b5ac00427838d440dae3a90a4b82b36168066e615931597f5aeb6",
+   "planning/research-program/TASK_GRAPH.json": "43efa50795a3d75aa40175b68c0e53e3a6f47dcd9899f54284f14c9a6b1e2b3c",
+   "planning/research-program/WORKFLOW.md": "1be9448c5feded3bf20fae9821768702af4067173695c898d54126b152893d3d"
+  },
+  "note": "the live planning files as they are at the time of this draft",
+  "root": "/workspace"
+ },
+ "acceptance": {
+  "A01": "a combination exists only when each ingredient beats B0.2 on inner tuning and both live on one branch: tests test_a_combination_needs_both_ingredients_to_beat_the_baseline and test_a_combination_whose_ingredients_live_on_different_branches_is_not_applicable; combinations/COMBINATIONS.json records 3 executed and 10 not applicable with reasons",
+  "A02": "test_a_fold_selects_only_from_its_own_inner_days: moving a fold's test days leaves its choice identical and moves the fold whose fit days those are",
+  "A03": "the support gate is unchanged from the breadth stage; a six-example result stays inconclusive_support (refinement.support_sensitivity, reported at half and twice)",
+  "A04": "every proposal has exactly one ledger row (190 = the bank's rows), including duplicates and not-applicable ones; Holm runs across the stage's candidates",
+  "A05": "SELECTED_RULES_BY_FOLD.json carries a per-fold selection_manifest_id and a separately labelled all-history descriptive recommendation",
+  "A06": "PENDING: command exit codes and predecessor verification with the P15-17 receipt",
+  "A07": "PENDING: EVIDENCE_MATRIX.json is written with the final receipt",
+  "A08": "PENDING: the assigned probes (S07, S11, S12, S13, S17, S22, S24, S32; S01-S03 cited from the P15-01 bound evidence) are run against the definitive round"
+ },
+ "artifacts": {
+  "FAMILY_DISPOSITIONS.json": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_DISPOSITIONS.json",
+   "sha256": "8ce5fad689bf8cc422e5b5a4182bdb0692154d282b476e058c34733ce6778b89"
+  },
+  "FAMILY_REPORTS": {
+   "files": 6,
+   "members": {
+    "GB-FAIL.md": "665ea956a6ff2927d3a83b149e80d5dd54b6e7bfb055225ba86513d8ef0d00a5",
+    "JJ-TBR.md": "31073de48edcabbe76e8f4b9fcdb173ad6b973fae84f3062d1b6bdf18f69aeee",
+    "KEANI-OPEN-ABOVE-VALUE.md": "018b0891fc75c17bf7208c05ae8cf493806aeae27cfb7bff7349fb85a859121b",
+    "MEMBER-TWO-REASONS.md": "8f4d6bb4ca3e8d9c012858fbe05420e9a288a4d070dc75fbf3d1b211d7f41f28",
+    "SAINT-AMT.md": "27d5039b6100ed9fe451f3db01f096c11b73e91ff19bd004752f9e831ccf2d6d",
+    "SIRES.md": "114b1d72e148ce2fdc7f82e69a98ece96775dcaba1860a152819042dcb27244d"
+   },
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/FAMILY_REPORTS"
+  },
+  "REFINEMENT_BANK.json": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/REFINEMENT_BANK.json",
+   "sha256": "cbd1ee71b330881f9e620fbfd758e1fab2203c89c60fc0b7f8c3ca43147fb606"
+  },
+  "SELECTED_RULES_BY_FOLD.json": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/SELECTED_RULES_BY_FOLD.json",
+   "sha256": "713d01b6d7631d2bdce574122dd6400eb0ccd1a8c6e379b1c4826caddabc8cce"
+  },
+  "SELF_CHECK.txt": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/SELF_CHECK.txt",
+   "sha256": "93ec8ad02c9abcfc81fc4aa342c3948d6c0d4713a171058e94c204456c623d1f"
+  },
+  "TRIALS.jsonl": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/TRIALS.jsonl",
+   "sha256": "85285072004ac92e7ba49a8e70f538419618a3b04d8af8e928354cf79b865023"
+  },
+  "WORK_LOG.md": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/WORK_LOG.md",
+   "sha256": "252696533a50d442387d4f142e8ec3ae3141c773b7eb53c667b43919bcea92c3"
+  },
+  "combinations/COMBINATIONS.json": {
+   "path": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/combinations/COMBINATIONS.json",
+   "sha256": "2a15931eb1e4174a565b61cc31522082d423b38beacd1ac9eaae9a9ee0099b63"
+  }
+ },
+ "attempt": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001",
+ "freeze": {
+  "path": "reports/research-work/P15-17/47dedaaa4f5b9ce1/FREEZE.json",
+  "sha256": "e06cf2765437a033e143b4e72e91bd853f4ea45f354f0c02dc524ed553099d74"
+ },
+ "limitations": [
+  "Rehearsal: the allowlist comes from the P15-17 rehearsal, whose pairing baseline is the uncorrected P15-16A root, so no disposition here is a research finding.",
+  "A combined candidate needs both mechanisms on one branch; 10 of 13 proposals pair mechanisms from different branches of the same family and are recorded not_applicable.",
+  "2020-06-30 is a retained runtime failure in both stages (no native account-day view)."
+ ],
+ "predecessor_receipts": {
+  "P15-17": {
+   "allowlist_sha256": "bb77f9c726f92b1cf100bbc3eda6a825166d45ed843cf867c2865be6821bdc79",
+   "attempt": "reports/research-work/P15-17/6cc3b4628129100d/attempt-0002",
+   "draft_stub_sha256": "6147b31fb402f739c3559249e33968cca669a8e6280d69aa1299cd52ed1128e3",
+   "reason": "P15-17's receipt is issued for attempt-0003 after P15-16A closes",
+   "status": "PENDING"
+  }
+ },
+ "results_summary": {
+  "all_history_descriptive_recommendation": {
+   "candidate_id": "GB-FAIL:previous_hour:T4:shift_minutes=-15",
+   "label": "all-history descriptive recommendation; never applied backward to an earlier fold",
+   "mean_diff": 6.016406890894175
+  },
+  "bank_counts": {
+   "attempted": 165,
+   "distinct_candidates": 46,
+   "duplicate": 25,
+   "not_applicable": 0,
+   "rows": 190
+  },
+  "caps": {
+   "per_bank": 12,
+   "per_family": 24
+  },
+  "combinations_executed": [
+   "GB-FAIL:COMBINED:GB-FAIL:previous_hour:T4:shift_minutes=-15+GB-FAIL:previous_hour:F3:efficiency=0.5",
+   "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=15+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75",
+   "SAINT-AMT:COMBINED:SAINT-AMT:continuation_retest:S1:deadline_minutes=5+SAINT-AMT:continuation_retest:F2:volume_threshold_multiplier=0.75"
+  ],
+  "combinations_not_applicable": [
+   {
+    "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:single_extended:F2:volume_threshold_multiplier=0.75",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F2:volume_threshold_multiplier=0.75",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:absorption_reward_retest:M1:max_prior_contacts=0",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "JJ-TBR:COMBINED:JJ-TBR:judas_reversal:S4:deadline_minutes=10+JJ-TBR:internal_rotation:F1:minutes=90",
+    "reason": "ingredients_on_different_branches"
+   },
+   {
+    "candidate_id": "SIRES:COMBINED:SIRES:defended_band_continuation:R1:dispersion=0.5+SIRES:clean_squeeze:M1:max_prior_contacts=0",
+    "reason": "ingredients_on_different_branches"
+   }
+  ],
+  "family_dispositions": [
+   {
+    "family": "GB-FAIL",
+    "first_attribution": "location_miss",
+    "status": "active_baseline"
+   },
+   {
+    "family": "JJ-TBR",
+    "first_attribution": null,
+    "status": "active_selected"
+   },
+   {
+    "family": "KEANI-OPEN-ABOVE-VALUE",
+    "first_attribution": "location_miss",
+    "status": "active_baseline"
+   },
+   {
+    "family": "MEMBER-TWO-REASONS",
+    "first_attribution": "location_miss",
+    "status": "active_baseline"
+   },
+   {
+    "family": "SAINT-AMT",
+    "first_attribution": "location_miss",
+    "status": "active_baseline"
+   },
+   {
+    "family": "SIRES",
+    "first_attribution": "coverage",
+    "status": "active_baseline"
+   }
+  ],
+  "folds": 5
+ },
+ "role": "rehearsal on the P15-17 rehearsal allowlist; the definitive round runs on attempt-0003",
+ "run": {
+  "bank": {
+   "allowlist_sha256": "bb77f9c726f92b1cf100bbc3eda6a825166d45ed843cf867c2865be6821bdc79",
+   "candidates": 46,
+   "rows": 190,
+   "sha256": "d183bbbaa3e5b55645ee14b793bc22a63ab8d13a7f96a2b44505fe6b34e9243f",
+   "source": "P15-18 refinement bank, generated from the P15-17 allowlist"
+  },
+  "code_identity": {
+   "code_sha256": "f5b57cf972e93a69aa4fee6297b9ee939f27856c01292e2f9e0f3a9bf72a1b8c",
+   "files": {
+    "implementation/src/trading_research/research/rule_discovery/exits.py": "a216b8465623612eb6ddbe1bbb9edf3008c7238ba492975975e3d5ba2ca38068",
+    "implementation/src/trading_research/research/rule_discovery/refinement.py": "7b6d532ff3f0e7f3eb705312ce8238af84564aecfb62f69ef22aa9dfecfa7dc5",
+    "implementation/src/trading_research/research/rule_discovery/runner.py": "84718a616a7b5e58da3354a94a4e1110fa2b1a236f939f8b8d3095fe657815c0",
+    "implementation/src/trading_research/research/rule_discovery/search.py": "6b8934752ba195ebb19a6a6b115969ece90feb721ea236295944ca62ab89eb25",
+    "implementation/src/trading_research/research/rule_discovery/search_run.py": "901614c59ac2a6bba6c9ff07904f1480c9e73da7dbd11b577b7f3ff2802aca74"
+   },
+   "python": "3.12.3",
+   "worktree": "/workspace/.worktrees/p15-17-fast"
+  },
+  "combination_run_root": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/combinations",
+  "declared_jobs": 80132,
+  "declared_jobs_reconciled": true,
+  "manifest_sha256": "7574fabe726abf47821eb8c6efa8e5751bb016a199c48421c71f1360683fcc79",
+  "retained_failures": [
+   {
+    "date": "2020-06-30",
+    "disposition": "runtime_failure_retained",
+    "error": "ContractError: 2020-06-30: no native account-day view; the session cannot be benchmarked",
+    "record": "/workspace/.worktrees/p15-17-fast/implementation/reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001/failed/2020-06-30.json",
+    "record_sha256": "57447120f3e63981497d920216a35a2893a97a972724cec079fa6f7202a48d12",
+    "status": "failed"
+   }
+  ],
+  "run_complete_sha256": "7db90c2e3a18cb18c46e2ffc29679dbdb9a27ebc933ebafc9970dc8c2e070641",
+  "run_meta_sha256": "345e2fceedf5f6c71f0154923a310cebee6666208126f21cfd43ed3ef1377671",
+  "run_root": "reports/research-work/P15-18/d183bbbaa3e5b556/attempt-0001",
+  "shard_inventory_sha256": "2552eeedd33723c3eb755ad7be114b74bccd7d8afe212d36d50f324e041bfd87",
+  "workers": 12,
+  "written_jobs": 80086
+ },
+ "schema_version": "research-p15-18-draft-receipt-v1",
+ "status": "draft",
+ "task_id": "P15-18",
+ "written_at": "2026-09-16T19:44:17.323813+00:00"
+}

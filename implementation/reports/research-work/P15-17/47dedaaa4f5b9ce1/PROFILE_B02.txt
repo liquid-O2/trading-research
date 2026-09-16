@@ -1,0 +1,96 @@
+# P15-17 stage A round 2 profile, session 2024-01-02
+# account-day view load 16.820 s; per-session warm 2.167 s
+
+candidate KEANI-OPEN-ABOVE-VALUE:source_long:P1 date 2024-01-02 (scan only; load excluded)
+         391917 function calls (385734 primitive calls) in 0.173 seconds
+
+   Ordered by: cumulative time
+   List reduced from 188 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.176    0.176 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/search.py:1395(scan_candidate)
+        1    0.000    0.000    0.176    0.176 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:494(scan_b02)
+        1    0.000    0.000    0.176    0.176 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:499(_scan_b02_impl)
+        1    0.002    0.002    0.143    0.143 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:313(scan_keani_branch_b02)
+        1    0.000    0.000    0.138    0.138 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:253(_prior_profile)
+        1    0.028    0.028    0.138    0.138 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:317(profile)
+    70945    0.040    0.000    0.056    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/empirical_tape.py:36(_d)
+        1    0.004    0.004    0.043    0.043 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/empirical_tape.py:345(_profile_payload)
+        2    0.000    0.000    0.042    0.021 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:135(coverage)
+        2    0.006    0.003    0.042    0.021 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:292(coverage)
+      679    0.000    0.000    0.034    0.000 /usr/lib/python3.12/dataclasses.py:1301(asdict)
+ 6823/679    0.011    0.000    0.033    0.000 /usr/lib/python3.12/dataclasses.py:1325(_asdict_inner)
+     1710    0.001    0.000    0.033    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:137(interval_state)
+        1    0.000    0.000    0.033    0.033 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/b02_saint_track.py:381(window_doc)
+        1    0.000    0.000    0.033    0.033 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:132(coverage)
+     1710    0.006    0.000    0.032    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/session_policy.py:92(state)
+     3420    0.005    0.000    0.015    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/clocks.py:101(ns_to_et)
+     6102    0.008    0.000    0.013    0.000 /usr/lib/python3.12/copy.py:118(deepcopy)
+96286/96278    0.011    0.000    0.011    0.000 {built-in method builtins.isinstance}
+    70945    0.009    0.000    0.009    0.000 {method 'is_finite' of 'decimal.Decimal' objects}
+
+
+
+
+candidate GB-FAIL:nyam_box:F1 date 2024-01-02 (scan only; load excluded)
+         33025 function calls (31494 primitive calls) in 0.026 seconds
+
+   Ordered by: cumulative time
+   List reduced from 147 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.026    0.026 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/search.py:1395(scan_candidate)
+        1    0.000    0.000    0.026    0.026 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_failure.py:226(scan_b02)
+        1    0.000    0.000    0.026    0.026 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:2465(scan_b02)
+        1    0.000    0.000    0.026    0.026 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:2470(_scan_b02_impl)
+        1    0.000    0.000    0.016    0.016 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:1614(_scan_nyam)
+       65    0.000    0.000    0.013    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:124(at)
+       65    0.000    0.000    0.013    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/empirical_market.py:16(clock)
+        3    0.000    0.000    0.013    0.004 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:1439(_scan_box_at_level)
+       65    0.000    0.000    0.013    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/clocks.py:51(et_ns)
+       65    0.001    0.000    0.013    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/foundations/calendar.py:22(local_timestamp)
+       65    0.003    0.000    0.011    0.000 {built-in method no_cache}
+        1    0.000    0.000    0.010    0.010 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:651(_document)
+        1    0.000    0.000    0.010    0.010 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/historical_features.py:132(coverage)
+        1    0.000    0.000    0.010    0.010 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/strategy_measurements.py:135(coverage)
+        1    0.001    0.001    0.010    0.010 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:292(coverage)
+        5    0.000    0.000    0.008    0.002 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:160(session_label)
+      390    0.000    0.000    0.007    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:137(interval_state)
+      390    0.001    0.000    0.007    0.000 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/session_policy.py:92(state)
+       65    0.002    0.000    0.005    0.000 /usr/lib/python3.12/zoneinfo/_common.py:27(load_data)
+        5    0.000    0.000    0.003    0.001 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/green_b02.py:548(_episode)
+
+
+
+
+whole bank (148 supported candidates) on one loaded session 2024-01-02: 63.622 s
+         33510786 function calls (33155680 primitive calls) in 63.469 seconds
+
+   Ordered by: cumulative time
+   List reduced from 2096 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      148    0.002    0.000   63.616    0.430 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/search.py:1395(scan_candidate)
+       36    0.001    0.000   26.501    0.736 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py:1621(scan_b02)
+       36    0.038    0.001   26.499    0.736 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py:1626(_scan_b02_impl)
+        4    0.000    0.000   23.309    5.827 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:399(scan_b02)
+        4    0.026    0.007   23.308    5.827 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:404(_scan_b02_impl)
+    15125    0.274    0.000   19.581    0.001 /usr/lib/python3.12/inspect.py:1251(getsourcelines)
+      446    0.040    0.000   14.247    0.032 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py:496(rules_payload)
+    15125    0.176    0.000   14.211    0.001 /usr/lib/python3.12/inspect.py:1063(findsource)
+    11150    0.075    0.000   14.193    0.001 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py:99(_file_line)
+    16869   13.626    0.001   13.626    0.001 {built-in method posix.stat}
+    15125    0.040    0.000   13.431    0.001 /usr/lib/python3.12/linecache.py:52(checkcache)
+       36   12.526    0.348   12.526    0.348 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:71(touches_after_departure)
+      378    0.004    0.000   11.875    0.031 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/sires_b02.py:882(_episode)
+       16    0.000    0.000    6.329    0.396 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:583(scan_b02)
+       16    0.001    0.000    6.329    0.396 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:588(_scan_b02_impl)
+       44    1.307    0.030    6.304    0.143 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/method_pack/event_time.py:317(profile)
+      564    0.012    0.000    6.260    0.011 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:311(rules_payload)
+     3948    0.022    0.000    6.244    0.002 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:47(_file_line)
+       16    0.003    0.000    5.794    0.362 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:396(scan_member_branch_b02)
+       40    0.000    0.000    5.154    0.129 /workspace/.worktrees/p15-17-stage-a/implementation/src/trading_research/research/rule_discovery/source_adapters/saint.py:1157(scan_b02)
+
+
+
+session cache: {'entries': 186, 'hits': 807, 'misses': 186}

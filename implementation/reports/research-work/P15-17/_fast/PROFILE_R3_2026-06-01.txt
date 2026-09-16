@@ -1,0 +1,50 @@
+# P15-17 R3 profile 2026-06-01
+# wall_seconds=37.104 load_seconds=34.028 candidates=160 supported=148 tape_batches=324878
+         17857577 function calls (17613379 primitive calls) in 35.157 seconds
+
+   Ordered by: cumulative time
+   List reduced from 3664 to 40 due to restriction <40>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003   37.098   37.098 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search_run.py:755(evaluate_session)
+        1    0.003    0.003   33.997   33.997 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:342(load_b02_market)
+        1    0.000    0.000   22.645   22.645 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:943(warm_session)
+       30    0.000    0.000   22.645    0.755 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:966(run)
+       26    0.000    0.000   22.092    0.850 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:990(<lambda>)
+       26    0.000    0.000   22.092    0.850 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:1461(scan_b02_baseline)
+        1    0.000    0.000    9.689    9.689 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/common.py:208(load_source_market)
+        1    0.000    0.000    9.487    9.487 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:494(scan_b02)
+        1    0.000    0.000    9.487    9.487 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:499(_scan_b02_impl)
+        1    0.003    0.003    9.482    9.482 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/keani.py:313(scan_keani_branch_b02)
+        1    0.000    0.000    9.441    9.441 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/historical_features.py:96(__init__)
+      375    0.024    0.000    8.298    0.022 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/historical_features.py:143(profile)
+        7    0.007    0.001    7.801    1.114 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_cache.py:59(cached_window)
+      374    2.742    0.007    6.976    0.019 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_time_fast.py:155(profile_payload)
+        2    0.000    0.000    6.003    3.001 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:399(scan_b02)
+        2    0.029    0.014    6.003    3.001 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/refill_b02.py:404(_scan_b02_impl)
+        1    0.074    0.074    5.389    5.389 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_cache.py:30(ownership)
+        1    0.109    0.109    5.315    5.315 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/adapters.py:2840(ownership_manifest)
+      142    0.015    0.000    3.894    0.027 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/adapters.py:2018(_inspect_file)
+        2    0.000    0.000    3.575    1.787 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:583(scan_b02)
+        2    0.000    0.000    3.574    1.787 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:588(_scan_b02_impl)
+        2    0.001    0.000    3.570    1.785 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:396(scan_member_branch_b02)
+        2    0.000    0.000    3.467    1.734 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/source_adapters/member.py:347(_kg1_levels)
+        2    0.002    0.001    3.462    1.731 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/strategy_options.py:140(key_gamma_reference)
+        2    0.000    0.000    3.447    1.724 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/strategy_options.py:115(gamma_at)
+  518/132    0.006    0.000    3.185    0.024 <frozen importlib._bootstrap>:1349(_find_and_load)
+   439/53    0.004    0.000    3.181    0.060 <frozen importlib._bootstrap>:1304(_find_and_load_unlocked)
+        2    3.117    1.559    3.171    1.585 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/strategy_options.py:41(option_rows)
+      414    0.008    0.000    3.112    0.008 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_time_fast.py:134(contract_at)
+      414    0.010    0.000    3.098    0.007 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_time_fast.py:121(_roll_map)
+   424/53    0.003    0.000    3.093    0.058 <frozen importlib._bootstrap>:911(_load_unlocked)
+   366/53    0.002    0.000    3.091    0.058 <frozen importlib._bootstrap_external>:989(exec_module)
+  1020/72    0.002    0.000    3.037    0.042 <frozen importlib._bootstrap>:480(_call_with_frames_removed)
+   398/53    0.009    0.000    2.834    0.053 {built-in method builtins.exec}
+     4677    2.712    0.001    2.727    0.001 {built-in method posix.stat}
+       17    0.000    0.000    2.714    0.160 /workspace/implementation/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py:1884(read_table)
+      160    0.004    0.000    2.627    0.016 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search_run.py:897(_evaluate_candidate)
+      561    2.120    0.004    2.600    0.005 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/method_pack/event_time_fast.py:309(_prefix)
+       17    0.080    0.005    2.513    0.148 /workspace/implementation/.venv/lib/python3.12/site-packages/pyarrow/parquet/core.py:1387(__init__)
+      154    0.001    0.000    2.490    0.016 /workspace/.worktrees/p15-17-fast/implementation/src/trading_research/research/rule_discovery/search.py:1440(scan_candidate)
+
+

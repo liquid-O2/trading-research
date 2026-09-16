@@ -893,6 +893,64 @@ def _check_artifacts(entries: Any, receipt_path: Path, failures: list[CheckFailu
         actual_bytes = artifact.stat().st_size
         if type(declared_bytes) is int and declared_bytes != actual_bytes:
             _append(failures, FailureCode.ARTIFACT_BYTES, raw_path, f"declared {declared_bytes} bytes, file has {actual_bytes}")
+        if artifact.name == RESULT_CARD_NAME:
+            for detail in result_card_failures(artifact):
+                _append(failures, FailureCode.INVENTORY, raw_path, detail)
+
+
+RESULT_CARD_NAME = "RESULT_CARD.json"
+RESULT_CARD_SCHEMA = "research-result-card-v1"
+RESULT_CARD_VERDICTS = ("done_well", "needs_upgrade", "not_reaching_target", "not_applicable")
+RESULT_CARD_MET = ("yes", "no", "partial", "not_applicable")
+
+
+def result_card_failures(path: Path) -> list[str]:
+    """The result card of DELIVERABLES.md: a task cannot close without a judgeable result.
+
+    Shape: schema_version; question (text); headline (1 to 5 rows, each with value, unit, an
+    interval or a support count, and an artifact pointer with sha256); target (text and met in
+    yes/no/partial/not_applicable); verdict (done_well, needs_upgrade, not_reaching_target,
+    not_applicable) with a reason; lever (required unless the verdict is done_well); limits."""
+    problems: list[str] = []
+    try:
+        card = json.loads(path.read_text())
+    except Exception as exc:
+        return [f"result card is not valid JSON: {exc}"]
+    if not isinstance(card, dict):
+        return ["result card must be an object"]
+    if card.get("schema_version") != RESULT_CARD_SCHEMA:
+        problems.append(f"result card schema_version must be {RESULT_CARD_SCHEMA}")
+    if not isinstance(card.get("question"), str) or not card["question"].strip():
+        problems.append("result card question must be a non-empty string")
+    headline = card.get("headline")
+    if not isinstance(headline, list) or not 1 <= len(headline) <= 5:
+        problems.append("result card headline must list 1 to 5 numbers")
+    else:
+        for index, row in enumerate(headline):
+            if not isinstance(row, dict):
+                problems.append(f"headline[{index}] must be an object")
+                continue
+            if not isinstance(row.get("value"), (int, float)) or isinstance(row.get("value"), bool):
+                problems.append(f"headline[{index}].value must be a number")
+            if not isinstance(row.get("unit"), str) or not row["unit"]:
+                problems.append(f"headline[{index}].unit must name the unit")
+            if not (isinstance(row.get("interval"), (list, tuple)) and len(row["interval"]) == 2) and not isinstance(row.get("support"), int):
+                problems.append(f"headline[{index}] needs an interval [low, high] or a support count")
+            if not isinstance(row.get("artifact"), str) or not _hex_digest(row.get("sha256")):
+                problems.append(f"headline[{index}] needs an artifact path and its sha256")
+    target = card.get("target")
+    if not isinstance(target, dict) or not isinstance(target.get("text"), str) or target.get("met") not in RESULT_CARD_MET:
+        problems.append("result card target needs text and met in yes/no/partial/not_applicable")
+    verdict = card.get("verdict")
+    if not isinstance(verdict, dict) or verdict.get("value") not in RESULT_CARD_VERDICTS or not isinstance(verdict.get("reason"), str) or not verdict["reason"].strip():
+        problems.append("result card verdict needs value in done_well/needs_upgrade/not_reaching_target/not_applicable and a reason")
+    elif verdict["value"] != "done_well":
+        lever = card.get("lever")
+        if not isinstance(lever, dict) or not isinstance(lever.get("change"), str) or not lever["change"].strip() or not isinstance(lever.get("evidence"), str) or not lever["evidence"].strip():
+            problems.append("result card lever (change and evidence) is required unless the verdict is done_well")
+    if not isinstance(card.get("limits"), list):
+        problems.append("result card limits must be a list")
+    return problems
 
 
 def _check_commands(

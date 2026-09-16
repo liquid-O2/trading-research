@@ -1,0 +1,87 @@
+{
+  "schema_version": "research-task-receipt-draft-stub-v1",
+  "status": "draft_stub",
+  "task_id": "P15-17",
+  "stage": "A",
+  "attempt_id": "47dedaaa4f5b9ce1",
+  "disposition": "not_issued",
+  "reason": "P15-16A receipt digest and the corrected B0.2 run identity are pending. Stage A does not issue TASK_RECEIPT.json. The orchestrating session resumes with those values and the draft is issued then. Nothing in stage A is finalized.",
+  "filled": {
+    "worktree": "/workspace/.worktrees/p15-17-stage-a",
+    "branch": "p15/17-stage-a",
+    "start_commit": "50df48f2",
+    "attempt_path": "implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1",
+    "freeze_path": "implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/FREEZE.json",
+    "freeze_sha256": "36e98f3a3b6d64cf937f12988641c5e1f127945e9045f2150a750c3c369c97fd",
+    "throughput_path": "implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/THROUGHPUT_B02.json",
+    "throughput_sha256": "7c658c25e969e6e2bebd3976195c3a89908e675fb05bb3f1737f2a46f4fa984c",
+    "profile_path": "implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/PROFILE_B02.txt",
+    "profile_sha256": "387123427bf7c21d5b02cd30a092fbe0a26fcf2d7742e989e43086b16ec782be",
+    "r1_fixtures": {
+      "path": "implementation/tests/rule_discovery/test_candidate_verdicts.py",
+      "empty_delta": "test_empty_delta_matches_b01_verdicts_contact_for_contact",
+      "track": "implementation/reports/research-work/P15-17/_track_r1",
+      "verdicts_sha256": "f52acd5e3a424042435bd279ccedf840304610a53ed7f2f48a127dcae563a1e0"
+    },
+    "r3_measurement": {
+      "path": "implementation/reports/research-work/P15-17/_track_r3/THROUGHPUT.json",
+      "sha256": "58025d9c2e12e422179012a6c3d296a38e10d5ea9979548d09cab9ceb019d7ea",
+      "p90_seconds": 1.484442432411015,
+      "mean_multiple_vs_phase1": 2.71,
+      "parity_path": "implementation/reports/research-work/P15-17/_track_r3/PARITY_STRATIFIED.json",
+      "parity_sha256": "57054c1913ce9dbfbe8f8e14d7d4d675255a546047a8d3c0a8f7f73be4b81863"
+    },
+    "ra5_measurement": {
+      "path": "implementation/reports/research-work/P15-17/47dedaaa4f5b9ce1/THROUGHPUT_B02.json",
+      "pipeline_p90_seconds": 25.246072358824318,
+      "load_p90_seconds": 7.748738319799312
+    },
+    "r4_run_root": "PENDING",
+    "bank": {
+      "path": "implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/CANDIDATE_BANK.json",
+      "sha256": "3354f99fb315edebd62e17e6d32c80ea5c1400f6bd996488fbf7084798da54ee",
+      "n_candidates": 160,
+      "n_supported": 152,
+      "n_unsupported": 8
+    },
+    "splits": {
+      "attempt": "babe7a991b6b3dc1",
+      "split_manifest_sha256": "a30b03bf3ee7bd215ffaf11ff223b07fa0134202d544e4bd0dd353f730e2fde6",
+      "evaluation_protocol_sha256": "a22d86bff730bbb1f672cf9af6dfad95c88c310a6c7f639724c25f64573a272b"
+    },
+    "census": {
+      "id": "20def36e065c13d7",
+      "manifest_sha256": "20def36e065c13d75d738fbce475cf7ea5425255488861c58a1b5fbbbe8b488f",
+      "summary_sha256": "073f270c5a5f454f4a338219eca9421e43bd3440f4ed42252dfb19f5f4d7838d"
+    },
+    "b01": {
+      "id": "dd386316321ee58d",
+      "run_complete_sha256": "e4dea25d6b8a4910724bcb4f4e8bd3e218383924160153179fedf6643afcd267",
+      "manifest_sha256": "dd386316321ee58d42dc70a612181ed365f727eb0f8d6a82c53a2afbff33164d"
+    },
+    "search_module": "implementation/src/trading_research/research/rule_discovery/search.py",
+    "tests": "implementation/tests/rule_discovery/test_p15_17.py",
+    "scored_candidates": 0,
+    "trial_ledger_rows": 0,
+    "wiki": "not written in this run"
+  },
+  "pending_fields": [
+    "corrected_b02_run_root_path",
+    "corrected_b02_run_root_sha256",
+    "p15_16a_receipt_path",
+    "p15_16a_receipt_sha256",
+    "r4_run_root",
+    "byte_compare_against_corrected_full_history_jobs",
+    "TASK_RECEIPT.json",
+    "predecessor_receipts.P15-16A",
+    "code_sha256_at_draft_issue",
+    "verify_research_release.py task"
+  ],
+  "citations_required_at_draft_issue": [
+    "R1 fixtures (empty-delta contact-for-contact)",
+    "R3 throughput and parity",
+    "RA-5 THROUGHPUT_B02.json",
+    "R4 run root (PENDING)",
+    "FREEZE.json"
+  ]
+}

@@ -1,0 +1,17 @@
+ts	phase	decision	why	evidence	result
+2026-09-16T04:09:51Z	frame	stage A predicate frozen; no scores; no trial rows	orchestrating session bound this run to machinery plus freeze plus draft stub	planning/phase-1-5/tasks/P15-17.md	open
+2026-09-16T04:15:00Z	how	overrides are a keyword on scan_b02, never a rec field	Green Bird and SIRES drop unknown rec keys so a rec smuggle would silently no-op	source_adapters/green_b02.py REC_IDENTITY_KEYS	open
+2026-09-16T04:15:00Z	architect	skipped arena; RA-1..RA-6 already name the types	a second arena over a settled design is extra work	user prompt RA-1..RA-6	skipped
+2026-09-16T04:26:00Z	bank	P15-08 9728f9ee0bbbdfd5 CANDIDATE_BANK.json 160 rows	closed P15-16 predecessor_receipts P15-08 digest bfe62f1cc8e724f87a12fd6fd2e497a3f7ba38999b9799e415b3b7c1f4cb9bbf	reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/CANDIDATE_BANK.json	open
+2026-09-16T04:56:00Z	proof	merged-tree pytest 573 passed	prove the hooked adapters against the existing suite	logs/pytest_merged_tree.log	tests green
+2026-09-16T04:58:00Z	harness	test_p15_17 5 passed including byte-identical negative control	RA-1 is a serialized equality, not a self-report	logs/pytest_p15_17.log B02_CONTROL_SCANS/	tests green
+2026-09-16T05:15:00Z	measure	recorded Keani p90 25.25 s and projected 115 h / 163 h	freeze records measured values; does not shrink bank dates or coverage	THROUGHPUT_B02.json PROFILE_B02.txt	open
+2026-09-16T05:17:00Z	freeze	wrote FREEZE.json sha256 7da3b53035dde551b3e44cd0dd05a167adde7835850bdd16037aec74524cbac0	RA-6 identities stay PENDING for B0.2 root and P15-16A receipt	FREEZE.json	open
+2026-09-16T05:18:00Z	draft	wrote DRAFT_STUB.json instead of TASK_RECEIPT.json	P15-16A digest and corrected run identity are not here yet	DRAFT_STUB.json	open
+2026-09-16T05:20:00Z	checker	pinned adversarial checker exit 2 twice	verify_research_release on P15-01 exceeds the checker's 60 s timeout; checker not edited	logs/check_foundation_adversarial_2.log	INCONCLUSIVE
+2026-09-16T06:20:00Z	freeze	pinned all 160 bank candidates in FREEZE.json resolutions	stage B must not silently re-resolve membership	FREEZE.json resolutions	tests green
+2026-09-16T06:20:00Z	override	replaced hooked stage verdict at_ns or existing operand values from the recipe	annotation-only hooks failed independent verification	search.py _replace_stage	tests green
+2026-09-16T04:26:24Z	frame	stage A predicate frozen; no scores; no trials	orchestrating session bound the run to machinery plus freeze plus draft stub	planning/phase-1-5/tasks/P15-17.md	open
+2026-09-16T04:26:24Z	how	overrides are a keyword on scan_b02, never a rec field	Green Bird and SIRES drop unknown rec keys so a rec smuggle would silently no-op	source_adapters/green_b02.py REC_IDENTITY_KEYS	open
+2026-09-16T04:26:24Z	architect	skipped arena; RA-1..RA-6 already name the types	a second arena over a settled design is extra work	user prompt RA-1..RA-6	skipped
+2026-09-16T04:26:24Z	bank	P15-08 9728f9ee0bbbdfd5 CANDIDATE_BANK.json 160 rows	closed P15-16 predecessor_receipts P15-08 digest bfe62f1cc8e724f87a12fd6fd2e497a3f7ba38999b9799e415b3b7c1f4cb9bbf	reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/CANDIDATE_BANK.json	open
