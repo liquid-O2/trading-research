@@ -19,3 +19,10 @@ These are specifications for future implementation. Proposed Python symbols and 
 | [Method review](METHOD_REVIEW.md) | Matt and pstack workflow synthesis, pinned review inventory and adaptations. |
 
 Every task also obeys [workspace rules](/workspace/AGENTS.md) and the [roadmap](/workspace/planning/ROADMAP.md). Definitions live in the [wiki](/workspace/wiki/index.md); these files define executable research policy.
+
+## Process pages (2026-09-16 cleanup)
+
+- [HOW_TO_RUN.md](HOW_TO_RUN.md): how one owner runs a subphase from cards to a verified receipt, performance defaults, reviews that catch defects.
+- [TASK_CARD_TEMPLATE.md](TASK_CARD_TEMPLATE.md): the card shape for every open and future task.
+- [AGENT_OPERATIONS.md](AGENT_OPERATIONS.md): roles and operating judgment, model-agnostic.
+- [PLAN_CLEANUP_2026-09-16.md](PLAN_CLEANUP_2026-09-16.md) and [SIMPLIFICATION_REVIEW_2026-09-16.md](SIMPLIFICATION_REVIEW_2026-09-16.md): what was retired, the Phase 2 re-cut and the closure schedule.

@@ -1,6 +1,6 @@
 # Plan cleanup, 2026-09-16
 
-The user's decision after the [simplification review](SIMPLIFICATION_REVIEW_2026-09-16.md): clean the plan up, keep only what helps, retire the pstack and Grok layers, and close Phase 1.5 by 2026-09-17. This document is the executable cleanup plan: what changes, in which order, and the schedule. It changes no formula, budget, gate, split, seed, bank or retention rule. Every edit of a pinned plan file is recorded in one chained `AMENDMENTS.json` entry when the edit pass lands.
+The user's decision after the [simplification review](SIMPLIFICATION_REVIEW_2026-09-16.md): clean the plan up, keep only what helps, retire the plugin-routed process layers, and close Phase 1.5 by 2026-09-17. This document is the executable cleanup plan: what changes, in which order, and the schedule. It changes no formula, budget, gate, split, seed, bank or retention rule. Every edit of a pinned plan file is recorded in one chained `AMENDMENTS.json` entry when the edit pass lands.
 
 ## 1. What stays exactly as it is
 
@@ -10,14 +10,14 @@ The user's decision after the [simplification review](SIMPLIFICATION_REVIEW_2026
 
 | File or tool | Action | Why |
 | --- | --- | --- |
-| `research-program/PSTACK_EXECUTION.md` | Replaced by a retirement notice pointing to `HOW_TO_RUN.md` | Router, role tables and Grok-only rules are replaced by `AGENTS.md` |
+| `research-program/PSTACK_EXECUTION.md` | Replaced by a retirement notice pointing to `HOW_TO_RUN.md` | Router and model role tables are replaced by `AGENTS.md` |
 | `phase-1-5/PROMPTS.md`, `phase-2/PROMPTS.md` | Retirement notice | Prompt blocks copied the runbooks; the card plus `HOW_TO_RUN.md` is the prompt |
 | `phase-*/subphases/*/RUNBOOK.md` | Retirement notice in each; no longer generated | Each embedded the whole pstack contract again |
 | "Copyable worker prompt" sections in cards | Removed from open cards; closed cards untouched | Duplicated the card |
 | `tools/build_research_plan_bundles.py`, `tools/check_research_plan.py` | Retired (kept in history; not run) | They only generated and checked the retired bundles |
 | `TASK_GRAPH.json` `reads` | `PSTACK_EXECUTION.md` replaced by `HOW_TO_RUN.md` for every task; `WORKFLOW.md` kept only where it adds the two tables | Shrinks each task's read list |
 | `WORKFLOW.md` | Trimmed to the execution contract that is not in `AGENTS.md`/`HOW_TO_RUN.md`: the two family tables, terminal statuses, the artifact list | Rest is duplicated |
-| Phase READMEs, `ROADMAP.md` "Reading and starting" | Point to `HOW_TO_RUN.md` and the cards; drop pstack and Grok sentences | Current entry points |
+| Phase READMEs, `ROADMAP.md` "Reading and starting" | Point to `HOW_TO_RUN.md` and the cards; drop the retired process sentences | Current entry points |
 
 Retirement notices keep the file paths alive so that closed receipts, which pin those files by hash, verify through the amendment chain from their declared hash, and nothing is deleted from history.
 
@@ -54,7 +54,7 @@ Merged cards keep every acceptance key of the cards they absorb, expressed per m
 
 ## 5. Patterns adopted from the mat and pstack repositories
 
-Adopted, in `HOW_TO_RUN.md` and `TASK_CARD_TEMPLATE.md`: a card is a tracer-bullet vertical slice sized for one context window with declared blocking edges, and work proceeds on the frontier (mat `to-tickets`); a spec states problem, solution, decisions, testing decisions and out-of-scope, without file paths in prose (mat `to-spec`); hand-offs and briefs point at artifacts instead of restating them (mat `implement-spec`, `claude-handoff`); an autonomous run states its exit predicate first, picks a wake mechanism, makes the smallest change the evidence justifies, and never relaxes the predicate (pstack `autonomous-run`); the four-part throughput checkpoint before fan-out (pstack `feature`); resume from the trail and verify inherited claims on the real artifact (pstack `session-pickup`); a durable wip commit and a resume note when pausing (pstack `pause-safely`); subtract before you add, minimise reader load, build the lever (pstack principles).
+Adopted, in `HOW_TO_RUN.md` and `TASK_CARD_TEMPLATE.md`: a card is a tracer-bullet vertical slice sized for one context window with declared blocking edges, and work proceeds on the frontier (mat `to-tickets`); a spec states problem, solution, decisions, testing decisions and out-of-scope, without file paths in prose (mat `to-spec`); hand-offs and briefs point at artifacts instead of restating them (mat `implement-spec` and its handoff skill); an autonomous run states its exit predicate first, picks a wake mechanism, makes the smallest change the evidence justifies, and never relaxes the predicate (pstack `autonomous-run`); the four-part throughput checkpoint before fan-out (pstack `feature`); resume from the trail and verify inherited claims on the real artifact (pstack `session-pickup`); a durable wip commit and a resume note when pausing (pstack `pause-safely`); subtract before you add, minimise reader load, build the lever (pstack principles).
 
 Not adopted: the skill router, model role tables, agent panels (arena, interrogate, swarm), PR and shipping playbooks, and any playbook copied verbatim into a runbook.
 
