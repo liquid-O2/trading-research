@@ -1,6 +1,6 @@
 # Phase 2 implementation pack
 
-Status: **specified, not implemented by this planning task**.
+Status: specified and re-cut to 16 tasks on 2026-09-16; starts after the verified Phase 1.5 release.
 
 Build intraday forecasts, native options updates and separately fitted context/method experts. Start only after the verified complete Phase 1.5 release.
 

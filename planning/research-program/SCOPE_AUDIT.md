@@ -1,3 +1,5 @@
+> Historical: the conversation scope audit that shaped plan version v3; navigation now starts at HOW_TO_RUN.md.
+
 # Scope reconciliation and conversation audit
 
 This ledger records what the older material contributed and where it belongs now. Current user decisions and the [roadmap](/workspace/planning/ROADMAP.md) supersede old assistant proposals, fixed model counts, example clocks and historical average-profit targets. The [answer ledger](/workspace/planning/phase-1-live/NEXT_PHASES_DISCUSSION.md) retains the accepted clarifications.
