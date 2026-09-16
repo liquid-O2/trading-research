@@ -20,7 +20,7 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     install_write_guard,
     load_source_market,
 )
-from trading_research.research.rule_discovery.source_adapters.enumeration import ENUMERATION_KEY
+from trading_research.research.rule_discovery.source_adapters.enumeration import ENUMERATION_KEY, split_b02_overrides
 
 _WORKTREE = Path(__file__).resolve().parents[5]
 BANK_PATH = (
@@ -1455,7 +1455,7 @@ def scan_candidate(
     }
     view = market_for_family(market, resolved.family)
     built = build_overrides(resolved, market) if overrides is None else overrides
-    return scanner(view, rec, overrides=built)
+    return scan_or_reuse(market, scanner, view, rec, resolved, built)
 
 
 def scan_b02_baseline(market, family: str, branch: str, *, with_overrides_kw: bool = False, overrides=None):
@@ -1752,3 +1752,50 @@ def verdict_changed(baseline: Mapping[str, Any], candidate: Mapping[str, Any]) -
         "added_contacts": sorted(set(cand_ids) - set(base_ids))[:8],
         "dropped_contacts": sorted(set(base_ids) - set(cand_ids))[:8],
     }
+
+
+# --------------------------------------------------------------------------
+# P15-17 speedup, appended so that NO line number above this point moves: a
+# traceback recorded in a `runtime_failure` job row names the frame's line, so
+# the rows the engine writes have to keep the line numbers they have today.
+# --------------------------------------------------------------------------
+
+
+def scan_or_reuse(market, scanner, view, rec, resolved: "ResolvedCandidate", built):
+    """Run the family's B0.2 scan, or reuse the one this session already paid for.
+
+    An evaluation-axis candidate (Profile / Delta / Sequence / Memory) installs
+    only stage hooks. `scan_b02` would then rebuild the SAME document -- the
+    enumeration is untouched, the hooks only run in `finish_scan_b02` at the
+    end -- and `warm_session` has already built that document for this session
+    with exactly the same `rec` (`coverage_id(family, branch)`). So the rebuild
+    is pure waste and the stage overrides are applied to the warm document
+    instead. Measured 2026-09-16 on 2020-01-02: whole bank 40.6 s -> 1.1 s.
+
+    Anything that makes the request different -- an enumeration hook, a branch
+    that was not prepaid, a prepay that failed -- falls through to the scan.
+    """
+    cached = warm_baseline_document(market, resolved.family, resolved.branch, overrides=built)
+    if cached is None:
+        return scanner(view, rec, overrides=built)
+    return finish_scan_b02(cached, split_b02_overrides(built)[0])
+
+
+def warm_baseline_document(market, family: str, branch: str, *, overrides) -> dict[str, Any] | None:
+    """The branch's own B0.2 document if this session already scanned it."""
+    stage_overrides, enum_hook = split_b02_overrides(overrides)
+    if enum_hook is not None:
+        return None
+    warm = getattr(market, "_p15_17_warm", None)
+    if not isinstance(warm, Mapping):
+        return None
+    document = (warm.get("baselines") or {}).get((str(family), str(branch)))
+    if not isinstance(document, Mapping):
+        return None
+    if stage_overrides:
+        return dict(document)
+    # No stage hook either: hand back a copy whose episode records are the
+    # caller's own, so `ensure_candidate_ids` can never mutate the warm one.
+    out = dict(document)
+    out["episodes"] = [dict(episode) for episode in (document.get("episodes") or [])]
+    return out

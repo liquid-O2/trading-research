@@ -69,30 +69,30 @@ def actual_departure_ns(arrays, zone: Mapping[str, Any], cutoff: int) -> int | N
 
 
 def touches_after_departure(arrays, zone: Mapping[str, Any], departure_at: int, cutoff: int) -> list[dict[str, Any]]:
+    # P15-17: this state machine used to walk every tick of the account day in
+    # Python; it cost 33.4 s of one measured session (2024-03-05, 72 calls).
+    # `_touches_after_departure_kernel` is the same machine statement for
+    # statement over the same int64 arrays, and `touches_after_departure_scalar`
+    # keeps the old loop as its parity oracle. Both are appended at the END of
+    # this module so that no rule's reported file:line moves -- the rules
+    # payload of every B0.2 document has to keep the bytes it has today.
     lo, hi = int(zone["low_ticks"]), int(zone["high_ticks"])
-    out: list[dict[str, Any]] = []
-    armed = True
-    trade = arrays.is_trade
-    for i in range(arrays.t_ns.size):
-        if not bool(trade[i]):
-            continue
-        ts = int(arrays.t_ns[i])
-        kn = int(arrays.known_at_ns[i])
-        if ts <= departure_at:
-            continue
-        if kn > cutoff:
-            continue
-        px = int(arrays.price_ticks[i])
-        outside = px >= hi + DEPARTURE_TICKS if zone["side"] == "long" else px <= lo - DEPARTURE_TICKS
-        inside = lo <= px <= hi
-        if not armed:
-            if outside:
-                armed = True
-            continue
-        if inside:
-            out.append({"touch_at_ns": ts, "known_at_ns": kn, "price_ticks": px})
-            armed = False
-    return out
+    ts_a, kn_a, px_a = _touches_after_departure_kernel(
+        arrays.t_ns,
+        arrays.known_at_ns,
+        arrays.price_ticks,
+        arrays.is_trade,
+        lo,
+        hi,
+        int(departure_at),
+        int(cutoff),
+        1 if zone["side"] == "long" else 0,
+        int(DEPARTURE_TICKS),
+    )
+    return [
+        {"touch_at_ns": int(ts_a[i]), "known_at_ns": int(kn_a[i]), "price_ticks": int(px_a[i])}
+        for i in range(ts_a.size)
+    ]
 
 
 def hold_label(arrays, zone: Mapping[str, Any], touch_at: int, cutoff: int) -> bool | None:
@@ -573,3 +573,99 @@ def replay_example(market, example) -> dict[str, Any]:
         "author_side": None,
         "divergence": "no_refill_author_example",
     }
+
+
+# --------------------------------------------------------------------------
+# P15-17 speedup, appended so that NO line number above this point moves:
+# `_file_line` reports a function's source position, which is constant inside a
+# process, but the uncached call ran `inspect.getsourcelines` ->
+# `linecache.checkcache` -> `os.stat` on every rules payload (measured
+# 2026-09-16 on 2020-01-02: 15,749 getsourcelines calls, 24.4 s cumulative,
+# 19.5 s of it in posix.stat). Memoizing returns the identical string, so the
+# rules payload and every document built from it keep the same bytes.
+# --------------------------------------------------------------------------
+_FILE_LINE_UNCACHED = _file_line
+_FILE_LINE_MEMO: dict[Any, str] = {}
+
+
+def _file_line_memoized(fn) -> str:
+    try:
+        return _FILE_LINE_MEMO[fn]
+    except (KeyError, TypeError):
+        pass
+    value = _FILE_LINE_UNCACHED(fn)
+    try:
+        _FILE_LINE_MEMO[fn] = value
+    except TypeError:  # an unhashable implementation object stays uncached
+        pass
+    return value
+
+
+_file_line = _file_line_memoized
+
+
+def touches_after_departure_scalar(arrays, zone: Mapping[str, Any], departure_at: int, cutoff: int) -> list[dict[str, Any]]:
+    """The pre-kernel reference loop, kept as the parity oracle."""
+    lo, hi = int(zone["low_ticks"]), int(zone["high_ticks"])
+    out: list[dict[str, Any]] = []
+    armed = True
+    trade = arrays.is_trade
+    for i in range(arrays.t_ns.size):
+        if not bool(trade[i]):
+            continue
+        ts = int(arrays.t_ns[i])
+        kn = int(arrays.known_at_ns[i])
+        if ts <= departure_at:
+            continue
+        if kn > cutoff:
+            continue
+        px = int(arrays.price_ticks[i])
+        outside = px >= hi + DEPARTURE_TICKS if zone["side"] == "long" else px <= lo - DEPARTURE_TICKS
+        inside = lo <= px <= hi
+        if not armed:
+            if outside:
+                armed = True
+            continue
+        if inside:
+            out.append({"touch_at_ns": ts, "known_at_ns": kn, "price_ticks": px})
+            armed = False
+    return out
+
+
+from numba import njit as _njit  # noqa: E402  (appended; shifts no line above)
+
+
+@_njit(cache=True)
+def _touches_after_departure_kernel(t_ns, known_at_ns, price_ticks, is_trade, lo, hi, departure_at, cutoff, is_long, dep_ticks):
+    n = t_ns.shape[0]
+    ts_out = np.empty(n, dtype=np.int64)
+    kn_out = np.empty(n, dtype=np.int64)
+    px_out = np.empty(n, dtype=np.int64)
+    k = 0
+    armed = True
+    for i in range(n):
+        if not is_trade[i]:
+            continue
+        ts = t_ns[i]
+        kn = known_at_ns[i]
+        if ts <= departure_at:
+            continue
+        if kn > cutoff:
+            continue
+        px = price_ticks[i]
+        if is_long == 1:
+            outside = px >= hi + dep_ticks
+        else:
+            outside = px <= lo - dep_ticks
+        inside = lo <= px and px <= hi
+        if not armed:
+            if outside:
+                armed = True
+            continue
+        if inside:
+            ts_out[k] = ts
+            kn_out[k] = kn
+            px_out[k] = px
+            k += 1
+            armed = False
+    return ts_out[:k].copy(), kn_out[:k].copy(), px_out[:k].copy()

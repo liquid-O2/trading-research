@@ -1066,3 +1066,249 @@ def test_an_entry_the_policy_cannot_manage_is_an_exclusion_not_a_crash():
     assert result["opportunities"] == result["fills"] + len(result["exclusions"])
     reasons = " ".join(result["exclusion_counts"])
     assert "flatten cannot precede fill" in reasons
+
+
+# ==========================================================================
+# P15-17 speedup (_fast): the engine is faster, the bytes are the same.
+# ==========================================================================
+
+import gzip as _gzip
+
+from trading_research.research.rule_discovery import exits as _exits
+from trading_research.research.rule_discovery.native import build_market_view as _build_view
+from trading_research.research.rule_discovery.source_adapters import refill_b02 as _refill
+from trading_research.research.rule_discovery.source_adapters import sires_b02 as _sires
+
+PARITY_FIXTURES = Path(__file__).resolve().parent / "fixtures/p15_17_parity"
+PARITY_DAYS = ("2020-01-02", "2020-03-12", "2020-11-02")
+#: A faster engine cannot reproduce its own wall clock or its own peak RSS.
+#: These are the ONLY excluded keys; the tests below assert the keys are still
+#: present on both sides, so nothing is dropped -- only the value is ignored.
+RUNTIME_JOB_KEYS = ("seconds", "peak_rss_bytes")
+RUNTIME_DAILY_KEYS = ("load_seconds", "wall_seconds", "peak_rss_bytes")
+
+
+def _canonical(payload) -> bytes:
+    return _json.dumps(payload, sort_keys=True, default=str, separators=(",", ":")).encode()
+
+
+def _blank_runtime(row, keys):
+    out = dict(row)
+    for key in keys:
+        if key in out:
+            out[key] = "<runtime>"
+    return out
+
+
+def _oracle(day: str) -> dict:
+    return _json.loads(_gzip.open(PARITY_FIXTURES / f"{day}.json.gz", "rb").read())
+
+
+@pytest.mark.parametrize("day", PARITY_DAYS)
+def test_every_job_document_is_byte_identical_to_the_recorded_engine(day):
+    """The whole bank on a real session, every document, against the documents
+    the pre-speedup engine wrote into the stage B run root."""
+    oracle = _oracle(day)
+    result = _sr.evaluate_session(day, resolved=resolve_bank(), run_root=None)
+    mine = {_sr.sanitize_candidate_id(row["candidate_id"]): row for row in result["rows"]}
+    assert set(mine) == set(oracle["jobs"]), "the bank must produce the same candidate ids"
+    for candidate_id, recorded in oracle["jobs"].items():
+        produced = _json.loads(_canonical(mine[candidate_id]))
+        assert set(produced) == set(recorded), f"{candidate_id}: field set changed"
+        for key in RUNTIME_JOB_KEYS:
+            assert (key in produced) == (key in recorded), f"{candidate_id}: {key} dropped"
+        assert _canonical(_blank_runtime(produced, RUNTIME_JOB_KEYS)) == _canonical(
+            _blank_runtime(recorded, RUNTIME_JOB_KEYS)
+        ), f"{candidate_id}: document bytes changed"
+    daily = _json.loads(_canonical(result["session"]))
+    recorded_daily = oracle["daily"]
+    assert set(daily) == set(recorded_daily)
+    left = _blank_runtime(daily, RUNTIME_DAILY_KEYS)
+    right = _blank_runtime(recorded_daily, RUNTIME_DAILY_KEYS)
+    left["rows"] = [_blank_runtime(row, ("seconds",)) for row in left["rows"]]
+    right["rows"] = [_blank_runtime(row, ("seconds",)) for row in right["rows"]]
+    assert _canonical(left) == _canonical(right), f"{day}: daily record bytes changed"
+
+
+def test_compaction_kernel_equals_the_scalar_reference():
+    view = _build_view(PARITY_DAYS[0], full_account_day=True)
+    fast = _exits.compact_from_view(view)
+    slow = _exits.compact_from_view_scalar(view)
+    assert fast.event_ns.size > 100_000, "the fixture session must be a real account day"
+    for field in ("event_ns", "available_at_ns", "min_bid", "max_bid", "min_ask", "max_ask",
+                  "min_trade", "max_trade", "q_avail", "q_bid", "q_ask"):
+        a, b = getattr(fast, field), getattr(slow, field)
+        assert a.shape == b.shape, field
+        assert _np.array_equal(a, b, equal_nan=True), field
+
+
+def _synthetic_ambiguous_tape():
+    """Batches that share a timestamp, a gap, a batch with no quote, and a batch
+    where the stop and the objective are both touched (the pessimistic case)."""
+    event = _np.array([0, 10, 10, 20, 20, 20, 90, 100, 101], dtype=_np.int64) * _np.int64(10**9)
+    avail = event.copy()
+    avail[2] += 5  # availability later than the event inside one batch
+    mid = _np.array([100.0, 100.5, 99.0, 101.0, 97.0, 103.0, 100.0, 100.0, 100.0])
+    return _exits.CompactDay(
+        event_ns=event,
+        available_at_ns=avail,
+        min_bid=mid - 0.25,
+        max_bid=mid + 0.25,
+        min_ask=mid,
+        max_ask=mid + 0.5,
+        min_trade=mid - 0.5,
+        max_trade=mid + 0.5,
+        q_avail=_np.array([0, 100, 101], dtype=_np.int64) * _np.int64(10**9),
+        q_bid=_np.array([99.75, 99.75, 99.75]),
+        q_ask=_np.array([100.25, 100.25, 100.25]),
+    )
+
+
+@pytest.mark.parametrize("policy", ["E0", "E1", "E2"])
+@pytest.mark.parametrize("side", [1, -1])
+def test_first_passage_kernel_equals_the_scalar_loop_on_ambiguous_batches(policy, side):
+    day = _synthetic_ambiguous_tape()
+    for width in ("0.25", "1.00", "3.00", "50.00"):
+        for objective in (None, _D("2.00"), _D("6.00")):
+            entry = _exits.FrozenEntry(
+                entry_id="amb", family="SYN", branch="b", side=side,
+                fill_price=_D("100.00"), fill_at_ns=0,
+                initial_stop=_D("100.00") - side * _D(width),
+                objective=None if objective is None else _D("100.00") + side * objective,
+                source_deadline_ns=None,
+                flatten_at_ns=int(day.event_ns[-1]),
+            )
+            assert _exits.evaluate_policy_compact(entry, policy, day) == \
+                _exits.evaluate_policy_compact_scalar(entry, policy, day)
+
+
+def test_first_passage_kernel_equals_the_scalar_loop_on_a_real_session():
+    day = _exits.compact_from_view(_build_view(PARITY_DAYS[0], full_account_day=True))
+    finite = day.max_trade[_np.isfinite(day.max_trade)]
+    rng = _np.random.default_rng(20260916)
+    reasons = set()
+    for trial in range(120):
+        index = int(rng.integers(0, day.event_ns.size - 1))
+        base = float(finite[int(rng.integers(0, finite.size))])
+        side = 1 if trial % 2 == 0 else -1
+        width = float(rng.choice([0.25, 1.0, 5.0, 25.0]))
+        quantize = lambda x: _D(str(round(round(x * 4) / 4, 2)))
+        entry = _exits.FrozenEntry(
+            entry_id=f"t{trial}", family="SYN", branch="b", side=side,
+            fill_price=quantize(base), fill_at_ns=int(day.event_ns[index]),
+            initial_stop=quantize(base - side * width),
+            objective=quantize(base + side * 2 * width) if trial % 5 else None,
+            source_deadline_ns=(int(day.event_ns[index]) + 600 * NS) if trial % 3 == 0 else None,
+            flatten_at_ns=int(day.event_ns[-1]),
+        )
+        for policy in ("E0", "E1", "E2"):
+            fast = _exits.evaluate_policy_compact(entry, policy, day)
+            assert fast == _exits.evaluate_policy_compact_scalar(entry, policy, day)
+            reasons.add(getattr(fast, "reason", None))
+    assert {"stop", "objective"} <= reasons, "the sample must exercise both first-passage outcomes"
+
+
+def test_adapter_kernels_equal_their_scalar_references():
+    view = _build_view(PARITY_DAYS[0], full_account_day=True)
+    arrays = view.arrays
+    cutoff = int(arrays.known_at_ns.max())
+    zones = (_refill.form_b02_zones(view).get("zones") or [])[:6]
+    assert zones, "the fixture session must form at least one REFILL zone"
+    for zone in zones:
+        departure = _refill.actual_departure_ns(arrays, zone, cutoff)
+        if departure is None:
+            continue
+        assert _refill.touches_after_departure(arrays, zone, departure, cutoff) == \
+            _refill.touches_after_departure_scalar(arrays, zone, departure, cutoff)
+    ticks = int(_np.median(arrays.price_ticks[arrays.is_trade]))
+    for offset in (-40, -8, 0, 3, 25):
+        loc = {"ticks": ticks + offset, "known_at_ns": int(arrays.t_ns[0])}
+        assert _sires.enumerate_contacts(arrays, loc, cutoff) == \
+            _sires.enumerate_contacts_scalar(arrays, loc, cutoff)
+
+
+def test_a_session_primitive_is_built_once_per_session(monkeypatch):
+    """Every expensive per-session primitive is paid for once and shared."""
+    from trading_research.research.rule_discovery import search as _search
+
+    calls: dict[str, int] = {}
+
+    def counted(name, fn):
+        def wrapper(*args, **kwargs):
+            calls[name] = calls.get(name, 0) + 1
+            return fn(*args, **kwargs)
+        return wrapper
+
+    for name in ("session_bars", "_delta_prefix", "_profile_state", "prior_session_profile"):
+        inner = getattr(_search, name)
+        monkeypatch.setattr(_search, name, counted(name, inner.__wrapped__ if hasattr(inner, "__wrapped__") else inner))
+    market = load_b02_market(PARITY_DAYS[0], warm=True, branches=())
+    cache = _search.session_cache(market)
+    before = dict(cache.stats())
+    for _ in range(5):
+        _search.session_bars(market)
+        _search._delta_prefix(market)
+        _search._profile_state(market)
+        _search.prior_session_profile(market)
+    after = cache.stats()
+    assert after["entries"] == before["entries"], "no primitive was rebuilt under a new key"
+    assert after["hits"] - before["hits"] == 20, "every repeat call was served from the session memo"
+
+
+def test_an_evaluation_axis_candidate_does_not_rerun_its_family_b02_scan(monkeypatch):
+    """The whole point of the speedup: a Profile/Delta/Sequence/Memory candidate
+    re-evaluates the overridden stage on the branch's already-scanned contacts."""
+    from trading_research.research.rule_discovery import search as _search
+
+    items = [item for item in resolve_bank() if item.supported]
+    pairs = {(item.family, item.branch) for item in items if _search.axis_phase(item.bank) == "enumeration"}
+    evaluation = next(
+        item for item in items
+        if _search.axis_phase(item.bank) == "evaluation" and (item.family, item.branch) in pairs
+    )
+    enumeration = next(
+        item for item in items
+        if _search.axis_phase(item.bank) == "enumeration" and item.family == evaluation.family
+        and item.branch == evaluation.branch
+    )
+    market = load_b02_market(PARITY_DAYS[0], warm=True, branches=[(evaluation.family, evaluation.branch)])
+    scans = {"n": 0}
+    real = _search.b02_scanner(evaluation.family)
+
+    def counted(*args, **kwargs):
+        scans["n"] += 1
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(_search, "b02_scanner", lambda family: counted)
+    reused = scan_candidate(market, evaluation)
+    assert scans["n"] == 0, "an evaluation-axis candidate must not re-enumerate"
+    rescanned = scan_candidate(market, enumeration)
+    assert scans["n"] == 1, "an enumeration-axis candidate must re-enumerate"
+    warm = market._p15_17_warm["baselines"][(evaluation.family, evaluation.branch)]
+    assert len(reused["episodes"]) == len(warm["episodes"]), "the contact set is the branch's own"
+    assert rescanned["episodes"] is not warm["episodes"]
+    assert serialize_scan_bytes(_search.finish_scan_b02(warm, None)) == serialize_scan_bytes(
+        _search.scan_candidate(market, evaluation, overrides={})
+    ), "with no override the reused document is the branch's B0.2 document"
+
+
+def test_no_line_number_moved_in_a_module_a_traceback_can_name():
+    """A `runtime_failure` job row records `traceback.format_exc()`, and a
+    traceback names the line of every frame. The speedup therefore had to be
+    written without moving a single top-level definition in the modules those
+    frames walk; the map was taken from the pre-speedup files."""
+    import re
+
+    expected = _json.loads((PARITY_FIXTURES / "pre_speedup_line_map.json").read_text())
+    base = Path(_sr.search.__file__).resolve().parent
+    moved = []
+    for module, rows in expected.items():
+        seen: dict[str, int] = {}
+        for number, line in enumerate((base / module).read_text().split("\n"), 1):
+            match = re.match(r"^(?:def|class) (\w+)", line)
+            if match:
+                seen.setdefault(match.group(1), number)
+        moved += [f"{module}:{name} {line} -> {seen.get(name)}"
+                  for name, line in rows.items() if seen.get(name) != line]
+    assert sum(len(rows) for rows in expected.values()) == 207
+    assert moved == []

@@ -1116,3 +1116,198 @@ def kernel_inventory() -> dict[str, Any]:
         "python_references": list(PYTHON_REFERENCE_NAMES),
         "kernels": list(KERNEL_NAMES),
     }
+
+
+# --------------------------------------------------------------------------
+# P15-17 breadth-run kernels (added 2026-09-16). Each one replaces a Python
+# loop the P15-17 profile showed on the critical path; each reproduces its
+# scalar reference statement for statement so the documents keep their bytes.
+# --------------------------------------------------------------------------
+
+
+@njit(cache=True)
+def compact_day_kernel(t_ns, known_at_ns, bid_ticks, ask_ticks, price_ticks, is_trade, bid_sz, ask_sz, tick):
+    """Group one account day's tick arrays by event timestamp.
+
+    Scalar reference: the `for gi, start in enumerate(starts)` loop of
+    `exits.compact_from_view`. Same grouping, same per-group extrema, same
+    single-quote admission test.
+    """
+    n = t_ns.shape[0]
+    g = 0
+    for i in range(n):
+        if i == 0 or t_ns[i] != t_ns[i - 1]:
+            g += 1
+    event_ns = np.empty(g, dtype=np.int64)
+    available_at_ns = np.empty(g, dtype=np.int64)
+    min_bid = np.full(g, np.nan)
+    max_bid = np.full(g, np.nan)
+    min_ask = np.full(g, np.nan)
+    max_ask = np.full(g, np.nan)
+    min_trade = np.full(g, np.nan)
+    max_trade = np.full(g, np.nan)
+    q_avail = np.empty(g, dtype=np.int64)
+    q_bid = np.empty(g, dtype=np.float64)
+    q_ask = np.empty(g, dtype=np.float64)
+    q_n = 0
+    gi = -1
+    start = 0
+    while start < n:
+        end = start + 1
+        while end < n and t_ns[end] == t_ns[start]:
+            end += 1
+        gi += 1
+        event = t_ns[start]
+        event_ns[gi] = event
+        known = known_at_ns[start]
+        for k in range(start + 1, end):
+            if known_at_ns[k] > known:
+                known = known_at_ns[k]
+        available_at_ns[gi] = event if event > known else known
+        b_lo = 0
+        b_hi = 0
+        b_seen = 0
+        a_lo = 0
+        a_hi = 0
+        a_seen = 0
+        t_lo = 0
+        t_hi = 0
+        t_seen = 0
+        for k in range(start, end):
+            v = bid_ticks[k]
+            if v > 0:
+                if b_seen == 0:
+                    b_lo = v
+                    b_hi = v
+                    b_seen = 1
+                else:
+                    if v < b_lo:
+                        b_lo = v
+                    if v > b_hi:
+                        b_hi = v
+            w = ask_ticks[k]
+            if w > 0:
+                if a_seen == 0:
+                    a_lo = w
+                    a_hi = w
+                    a_seen = 1
+                else:
+                    if w < a_lo:
+                        a_lo = w
+                    if w > a_hi:
+                        a_hi = w
+            p = price_ticks[k]
+            if is_trade[k] and p > 0:
+                if t_seen == 0:
+                    t_lo = p
+                    t_hi = p
+                    t_seen = 1
+                else:
+                    if p < t_lo:
+                        t_lo = p
+                    if p > t_hi:
+                        t_hi = p
+        if b_seen == 1:
+            min_bid[gi] = np.float64(b_lo) * tick
+            max_bid[gi] = np.float64(b_hi) * tick
+        if a_seen == 1:
+            min_ask[gi] = np.float64(a_lo) * tick
+            max_ask[gi] = np.float64(a_hi) * tick
+        if t_seen == 1:
+            min_trade[gi] = np.float64(t_lo) * tick
+            max_trade[gi] = np.float64(t_hi) * tick
+        last = end - 1
+        bt = bid_ticks[last]
+        at = ask_ticks[last]
+        bsz = bid_sz[last]
+        asz = ask_sz[last]
+        # `np.unique(pos).size <= 1` for positive ints is exactly min == max;
+        # an empty group leaves both at 0, which the bt > 0 test then rejects.
+        unique_b_over_one = b_hi != b_lo
+        unique_a_over_one = a_hi != a_lo
+        if (
+            bt > 0
+            and at > 0
+            and at >= bt
+            and bsz > 0
+            and asz > 0
+            and not unique_b_over_one
+            and not unique_a_over_one
+        ):
+            q_avail[q_n] = available_at_ns[gi]
+            q_bid[q_n] = np.float64(bt) * tick
+            q_ask[q_n] = np.float64(at) * tick
+            q_n += 1
+        start = end
+    return (
+        event_ns,
+        available_at_ns,
+        min_bid,
+        max_bid,
+        min_ask,
+        max_ask,
+        min_trade,
+        max_trade,
+        q_avail[:q_n].copy(),
+        q_bid[:q_n].copy(),
+        q_ask[:q_n].copy(),
+    )
+
+
+@njit(cache=True)
+def fixed_stop_first_passage_kernel(
+    min_bid,
+    max_bid,
+    min_ask,
+    max_ask,
+    min_trade,
+    max_trade,
+    available_at_ns,
+    start,
+    side,
+    stop,
+    has_stop,
+    objective,
+    has_objective,
+    bound_ns,
+):
+    """First batch that resolves a fixed-stop, fixed-objective entry.
+
+    Scalar reference: the `for index in range(start, n)` loop of
+    `exits.evaluate_policy_compact` for a policy that never moves the stop
+    (E0/E1/E2: `_manage` returns immediately and no update is ever queued).
+    The three tests keep the source order -- stop, then objective, then the
+    binding deadline -- so a batch that touches both stop and objective is the
+    pessimistic stop, and a batch whose availability is already past the
+    deadline still loses to a stop printed in that same batch. NaN never
+    compares true, which is the `_finite_le`/`_finite_ge` guard.
+
+    Returns (index, code): code 1 stop, 2 objective, 3 deadline, 0 exhausted.
+    """
+    n = available_at_ns.shape[0]
+    for i in range(start, n):
+        if has_stop:
+            if side == 1:
+                v = min_bid[i]
+                w = min_trade[i]
+                if (v == v and v <= stop) or (w == w and w <= stop):
+                    return i, 1
+            else:
+                v = max_ask[i]
+                w = max_trade[i]
+                if (v == v and v >= stop) or (w == w and w >= stop):
+                    return i, 1
+        if has_objective:
+            if side == 1:
+                v = max_bid[i]
+                w = max_trade[i]
+                if (v == v and v >= objective) or (w == w and w >= objective):
+                    return i, 2
+            else:
+                v = min_ask[i]
+                w = min_trade[i]
+                if (v == v and v <= objective) or (w == w and w <= objective):
+                    return i, 2
+        if available_at_ns[i] >= bound_ns:
+            return i, 3
+    return -1, 0

@@ -819,80 +819,80 @@ class CompactDay:
 
 
 def compact_from_view(view: Any) -> CompactDay:
+    """Group one account day's tick arrays by event timestamp.
+
+    P15-17: the grouping loop that used to stand here ran in Python over every
+    distinct event of the account day and cost 7.2 s of a measured session
+    (2020-01-02, 190,809 groups, one core). `kernels.compact_day_kernel` is
+    that loop statement for statement over the same int64 arrays, and
+    `compact_from_view_scalar` (appended at the end of this module) keeps the
+    original as its parity oracle. Measured on the same session: 0.023 s.
+
+    The kernel is compiled for int64/bool inputs; the native arrays already
+    carry those dtypes, so `ascontiguousarray` is a no-op view, not a copy.
+
+    Nothing below this function may move: a `runtime_failure` job row records a
+    traceback, and a traceback names the line of every frame, so this module's
+    line numbers are part of the bytes the engine writes.
+    """
     arrays = view.arrays
     n = int(arrays.t_ns.size)
     if n == 0:
         empty = np.zeros(0, dtype=np.int64)
         nan = np.zeros(0, dtype=np.float64)
         return CompactDay(empty, empty, nan, nan, nan, nan, nan, nan, empty, nan, nan)
-    t = arrays.t_ns
-    change = np.empty(n, dtype=np.bool_)
-    change[0] = True
-    if n > 1:
-        change[1:] = t[1:] != t[:-1]
-    starts = np.flatnonzero(change)
-    g = int(starts.size)
-    event_ns = np.empty(g, dtype=np.int64)
-    available_at_ns = np.empty(g, dtype=np.int64)
-    min_bid = np.full(g, np.nan)
-    max_bid = np.full(g, np.nan)
-    min_ask = np.full(g, np.nan)
-    max_ask = np.full(g, np.nan)
-    min_trade = np.full(g, np.nan)
-    max_trade = np.full(g, np.nan)
-    q_avail = np.empty(g, dtype=np.int64)
-    q_bid = np.empty(g, dtype=np.float64)
-    q_ask = np.empty(g, dtype=np.float64)
-    q_n = 0
-    tick = 0.25
-    for gi, start in enumerate(starts):
-        start = int(start)
-        end = int(starts[gi + 1]) if gi + 1 < g else n
-        event = int(t[start])
-        event_ns[gi] = event
-        known = int(np.max(arrays.known_at_ns[start:end]))
-        available_at_ns[gi] = event if event > known else known
-        bids = arrays.bid_ticks[start:end]
-        asks = arrays.ask_ticks[start:end]
-        pos_b = bids[bids > 0]
-        pos_a = asks[asks > 0]
-        if pos_b.size:
-            min_bid[gi] = float(int(pos_b.min())) * tick
-            max_bid[gi] = float(int(pos_b.max())) * tick
-        if pos_a.size:
-            min_ask[gi] = float(int(pos_a.min())) * tick
-            max_ask[gi] = float(int(pos_a.max())) * tick
-        trades = arrays.price_ticks[start:end]
-        trade_mask = arrays.is_trade[start:end] & (trades > 0)
-        if np.any(trade_mask):
-            px = trades[trade_mask]
-            min_trade[gi] = float(int(px.min())) * tick
-            max_trade[gi] = float(int(px.max())) * tick
-        last = end - 1
-        bt = int(arrays.bid_ticks[last])
-        at = int(arrays.ask_ticks[last])
-        bsz = int(arrays.bid_sz[last])
-        asz = int(arrays.ask_sz[last])
-        unique_b = int(np.unique(pos_b).size) if pos_b.size else 0
-        unique_a = int(np.unique(pos_a).size) if pos_a.size else 0
-        if bt > 0 and at > 0 and at >= bt and bsz > 0 and asz > 0 and unique_b <= 1 and unique_a <= 1:
-            q_avail[q_n] = available_at_ns[gi]
-            q_bid[q_n] = float(bt) * tick
-            q_ask[q_n] = float(at) * tick
-            q_n += 1
     return CompactDay(
-        event_ns,
-        available_at_ns,
-        min_bid,
-        max_bid,
-        min_ask,
-        max_ask,
-        min_trade,
-        max_trade,
-        q_avail[:q_n],
-        q_bid[:q_n],
-        q_ask[:q_n],
+        *kernels.compact_day_kernel(
+            np.ascontiguousarray(arrays.t_ns, dtype=np.int64),
+            np.ascontiguousarray(arrays.known_at_ns, dtype=np.int64),
+            np.ascontiguousarray(arrays.bid_ticks, dtype=np.int64),
+            np.ascontiguousarray(arrays.ask_ticks, dtype=np.int64),
+            np.ascontiguousarray(arrays.price_ticks, dtype=np.int64),
+            np.ascontiguousarray(arrays.is_trade, dtype=np.bool_),
+            np.ascontiguousarray(arrays.bid_sz, dtype=np.int64),
+            np.ascontiguousarray(arrays.ask_sz, dtype=np.int64),
+            0.25,
+        )
     )
+
+
+# --------------------------------------------------------------------------
+# The blank run below is deliberate and load-bearing. A P15-17 job row with
+# status `runtime_failure` records `traceback.format_exc()`, and a traceback
+# names the line of every frame it walks -- several of them in this module.
+# The speedup above therefore had to be written WITHOUT moving any line: a
+# replaced function body is padded back to its original length here and every
+# new definition is appended past the last existing one. Do not close this
+# gap; closing it silently rewrites the bytes of every failure row.
+# --------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def _finite_le(value: float, bound: float) -> bool:
@@ -993,97 +993,97 @@ def evaluate_policy_compact(
     *,
     known_at_guard: bool = True,
 ) -> PolicyRecord:
+    """Manage one fixed entry to its exit over the compact account-day tape.
+
+    P15-17: E0, E1 and E2 never move the stop -- `_manage` returns on its first
+    line for any policy outside ("E3", "E4"), so nothing is ever queued and
+    `state.updates` stays empty -- which makes the whole walk a first passage
+    over a fixed stop, a fixed objective and one binding deadline.
+    `kernels.fixed_stop_first_passage_kernel` runs the identical three tests in
+    the identical source order (stop, then objective, then the deadline, so a
+    batch that touches both is the pessimistic stop) and stops at the identical
+    batch. E3 and E4, which do move the stop, still walk the Python loop, which
+    lives on as `evaluate_policy_compact_scalar` at the end of this module and
+    is also the parity oracle the tests compare the kernel against.
+
+    Measured 2026-09-16 on 2020-01-02, one core: the whole bank's E0 benchmark
+    (148 candidates, plus the cost-stress repeat) fell from 40.6 s to 1.1 s
+    together with the scan reuse; on synthetic tapes with equal-timestamp
+    batches, gaps and quoteless batches the two paths agree record for record.
+
+    Nothing below this function may move: a `runtime_failure` job row records a
+    traceback, and a traceback names the line of every frame, so this module's
+    line numbers are part of the bytes the engine writes.
+    """
     if policy_id not in POLICIES:
         raise ContractError(f"unknown policy {policy_id}")
-    r_width = initial_r(entry)
-    if policy_id in ("E3", "E4") and r_width is None:
-        return UnsupportedRecord(policy_id, entry.entry_id)
+    if policy_id in ("E3", "E4"):
+        return evaluate_policy_compact_scalar(
+            entry, policy_id, day, known_at_guard=known_at_guard
+        )
     bound_ns, bound_reason = _binding_deadline(entry, policy_id)
-    account_end = entry.flatten_at_ns + MINUTE_NS
-    state = _Live(entry.initial_stop)
-    start = int(np.searchsorted(day.event_ns, entry.fill_at_ns, side="right"))
-    n = int(day.event_ns.size)
-    side = entry.side
-    for index in range(start, n):
-        batch_id = str(int(day.event_ns[index]))
-        avail_ns = int(day.available_at_ns[index])
-        mb = float(day.max_bid[index])
-        ma = float(day.min_ask[index])
-        max_bid = None
-        min_ask = None
-        if mb == mb and (state.high_bid is None or mb > float(state.high_bid)):
-            max_bid = Decimal(str(mb))
-        if ma == ma and (state.low_ask is None or ma < float(state.low_ask)):
-            min_ask = Decimal(str(ma))
-        if known_at_guard:
-            state.apply_pending(batch_id, avail_ns)
-        else:
-            state.apply_pending(batch_id, avail_ns)
-            _manage(
-                state,
-                batch_id=batch_id,
-                available_at_ns=avail_ns,
-                max_bid=max_bid,
-                min_ask=min_ask,
-                entry=entry,
-                policy_id=policy_id,
-                r_width=r_width,
-            )
-            state.apply_pending(batch_id, avail_ns)
-        hit_stop = _hit_stop_compact(day, index, side, state.stop)
-        hit_obj = _hit_target_compact(day, index, side, entry.objective)
-        time_hit = avail_ns >= bound_ns
-        trigger_ns = avail_ns
-        if hit_stop:
-            return _make_exit_compact(
-                entry,
-                policy_id,
-                trigger_ns=trigger_ns,
-                reason=_stop_reason(state.stop_kind),
-                day=day,
-                stop_updates=tuple(state.updates),
-                account_end_ns=account_end,
-            )
-        if hit_obj:
-            return _make_exit_compact(
-                entry,
-                policy_id,
-                trigger_ns=trigger_ns,
-                reason="objective",
-                day=day,
-                stop_updates=tuple(state.updates),
-                account_end_ns=account_end,
-            )
-        if time_hit:
-            return _make_exit_compact(
-                entry,
-                policy_id,
-                trigger_ns=trigger_ns,
-                reason=bound_reason,
-                day=day,
-                stop_updates=tuple(state.updates),
-                account_end_ns=account_end,
-            )
-        if known_at_guard:
-            _manage(
-                state,
-                batch_id=batch_id,
-                available_at_ns=avail_ns,
-                max_bid=max_bid,
-                min_ask=min_ask,
-                entry=entry,
-                policy_id=policy_id,
-                r_width=r_width,
-            )
+    index, code = kernels.fixed_stop_first_passage_kernel(
+        day.min_bid,
+        day.max_bid,
+        day.min_ask,
+        day.max_ask,
+        day.min_trade,
+        day.max_trade,
+        day.available_at_ns,
+        int(np.searchsorted(day.event_ns, entry.fill_at_ns, side="right")),
+        int(entry.side),
+        0.0 if entry.initial_stop is None else float(entry.initial_stop),
+        entry.initial_stop is not None,
+        0.0 if entry.objective is None else float(entry.objective),
+        entry.objective is not None,
+        int(bound_ns),
+    )
+    if code == 0:
+        trigger_ns = int(bound_ns)
+        reason = bound_reason
+    else:
+        trigger_ns = int(day.available_at_ns[index])
+        reason = _stop_reason(None) if code == 1 else ("objective" if code == 2 else bound_reason)
     return _make_exit_compact(
         entry,
         policy_id,
-        trigger_ns=bound_ns,
-        reason=bound_reason,
+        trigger_ns=trigger_ns,
+        reason=reason,
         day=day,
-        stop_updates=tuple(state.updates),
-        account_end_ns=account_end,
+        stop_updates=(),
+        account_end_ns=entry.flatten_at_ns + MINUTE_NS,
     )
+
+
+# --------------------------------------------------------------------------
+# The blank run below is deliberate and load-bearing. A P15-17 job row with
+# status `runtime_failure` records `traceback.format_exc()`, and a traceback
+# names the line of every frame it walks -- several of them in this module.
+# The speedup above therefore had to be written WITHOUT moving any line: a
+# replaced function body is padded back to its original length here and every
+# new definition is appended past the last existing one. Do not close this
+# gap; closing it silently rewrites the bytes of every failure row.
+# --------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def _flag_occupancy(entries: Sequence[FrozenEntry], paired: list[PairedExits]) -> list[PairedExits]:
@@ -1284,3 +1284,191 @@ def run_native_slice(
     (out_dir / "SLICE_EXITS.json").write_text(json.dumps({"entries": slice_rows}, indent=2) + "\n")
     (out_dir / "RECONCILIATION.json").write_text(json.dumps(reconciliation, indent=2) + "\n")
     return reconciliation
+
+
+# --------------------------------------------------------------------------
+# P15-17 speedup, appended so that NO line number above this point moves.
+# --------------------------------------------------------------------------
+from trading_research.research.rule_discovery import kernels  # noqa: E402
+
+
+def compact_from_view_scalar(view: Any) -> CompactDay:
+    """The pre-kernel reference implementation, kept as the parity oracle."""
+    arrays = view.arrays
+    n = int(arrays.t_ns.size)
+    if n == 0:
+        empty = np.zeros(0, dtype=np.int64)
+        nan = np.zeros(0, dtype=np.float64)
+        return CompactDay(empty, empty, nan, nan, nan, nan, nan, nan, empty, nan, nan)
+    t = arrays.t_ns
+    change = np.empty(n, dtype=np.bool_)
+    change[0] = True
+    if n > 1:
+        change[1:] = t[1:] != t[:-1]
+    starts = np.flatnonzero(change)
+    g = int(starts.size)
+    event_ns = np.empty(g, dtype=np.int64)
+    available_at_ns = np.empty(g, dtype=np.int64)
+    min_bid = np.full(g, np.nan)
+    max_bid = np.full(g, np.nan)
+    min_ask = np.full(g, np.nan)
+    max_ask = np.full(g, np.nan)
+    min_trade = np.full(g, np.nan)
+    max_trade = np.full(g, np.nan)
+    q_avail = np.empty(g, dtype=np.int64)
+    q_bid = np.empty(g, dtype=np.float64)
+    q_ask = np.empty(g, dtype=np.float64)
+    q_n = 0
+    tick = 0.25
+    for gi, start in enumerate(starts):
+        start = int(start)
+        end = int(starts[gi + 1]) if gi + 1 < g else n
+        event = int(t[start])
+        event_ns[gi] = event
+        known = int(np.max(arrays.known_at_ns[start:end]))
+        available_at_ns[gi] = event if event > known else known
+        bids = arrays.bid_ticks[start:end]
+        asks = arrays.ask_ticks[start:end]
+        pos_b = bids[bids > 0]
+        pos_a = asks[asks > 0]
+        if pos_b.size:
+            min_bid[gi] = float(int(pos_b.min())) * tick
+            max_bid[gi] = float(int(pos_b.max())) * tick
+        if pos_a.size:
+            min_ask[gi] = float(int(pos_a.min())) * tick
+            max_ask[gi] = float(int(pos_a.max())) * tick
+        trades = arrays.price_ticks[start:end]
+        trade_mask = arrays.is_trade[start:end] & (trades > 0)
+        if np.any(trade_mask):
+            px = trades[trade_mask]
+            min_trade[gi] = float(int(px.min())) * tick
+            max_trade[gi] = float(int(px.max())) * tick
+        last = end - 1
+        bt = int(arrays.bid_ticks[last])
+        at = int(arrays.ask_ticks[last])
+        bsz = int(arrays.bid_sz[last])
+        asz = int(arrays.ask_sz[last])
+        unique_b = int(np.unique(pos_b).size) if pos_b.size else 0
+        unique_a = int(np.unique(pos_a).size) if pos_a.size else 0
+        if bt > 0 and at > 0 and at >= bt and bsz > 0 and asz > 0 and unique_b <= 1 and unique_a <= 1:
+            q_avail[q_n] = available_at_ns[gi]
+            q_bid[q_n] = float(bt) * tick
+            q_ask[q_n] = float(at) * tick
+            q_n += 1
+    return CompactDay(
+        event_ns,
+        available_at_ns,
+        min_bid,
+        max_bid,
+        min_ask,
+        max_ask,
+        min_trade,
+        max_trade,
+        q_avail[:q_n],
+        q_bid[:q_n],
+        q_ask[:q_n],
+    )
+
+
+
+
+def evaluate_policy_compact_scalar(
+    entry: FrozenEntry,
+    policy_id: str,
+    day: CompactDay,
+    *,
+    known_at_guard: bool = True,
+) -> PolicyRecord:
+    """The pre-kernel reference loop: E3/E4 still run it, and the tests compare
+    the first-passage kernel against it record for record."""
+    if policy_id not in POLICIES:
+        raise ContractError(f"unknown policy {policy_id}")
+    r_width = initial_r(entry)
+    if policy_id in ("E3", "E4") and r_width is None:
+        return UnsupportedRecord(policy_id, entry.entry_id)
+    bound_ns, bound_reason = _binding_deadline(entry, policy_id)
+    account_end = entry.flatten_at_ns + MINUTE_NS
+    state = _Live(entry.initial_stop)
+    start = int(np.searchsorted(day.event_ns, entry.fill_at_ns, side="right"))
+    n = int(day.event_ns.size)
+    side = entry.side
+    for index in range(start, n):
+        batch_id = str(int(day.event_ns[index]))
+        avail_ns = int(day.available_at_ns[index])
+        mb = float(day.max_bid[index])
+        ma = float(day.min_ask[index])
+        max_bid = None
+        min_ask = None
+        if mb == mb and (state.high_bid is None or mb > float(state.high_bid)):
+            max_bid = Decimal(str(mb))
+        if ma == ma and (state.low_ask is None or ma < float(state.low_ask)):
+            min_ask = Decimal(str(ma))
+        if known_at_guard:
+            state.apply_pending(batch_id, avail_ns)
+        else:
+            state.apply_pending(batch_id, avail_ns)
+            _manage(
+                state,
+                batch_id=batch_id,
+                available_at_ns=avail_ns,
+                max_bid=max_bid,
+                min_ask=min_ask,
+                entry=entry,
+                policy_id=policy_id,
+                r_width=r_width,
+            )
+            state.apply_pending(batch_id, avail_ns)
+        hit_stop = _hit_stop_compact(day, index, side, state.stop)
+        hit_obj = _hit_target_compact(day, index, side, entry.objective)
+        time_hit = avail_ns >= bound_ns
+        trigger_ns = avail_ns
+        if hit_stop:
+            return _make_exit_compact(
+                entry,
+                policy_id,
+                trigger_ns=trigger_ns,
+                reason=_stop_reason(state.stop_kind),
+                day=day,
+                stop_updates=tuple(state.updates),
+                account_end_ns=account_end,
+            )
+        if hit_obj:
+            return _make_exit_compact(
+                entry,
+                policy_id,
+                trigger_ns=trigger_ns,
+                reason="objective",
+                day=day,
+                stop_updates=tuple(state.updates),
+                account_end_ns=account_end,
+            )
+        if time_hit:
+            return _make_exit_compact(
+                entry,
+                policy_id,
+                trigger_ns=trigger_ns,
+                reason=bound_reason,
+                day=day,
+                stop_updates=tuple(state.updates),
+                account_end_ns=account_end,
+            )
+        if known_at_guard:
+            _manage(
+                state,
+                batch_id=batch_id,
+                available_at_ns=avail_ns,
+                max_bid=max_bid,
+                min_ask=min_ask,
+                entry=entry,
+                policy_id=policy_id,
+                r_width=r_width,
+            )
+    return _make_exit_compact(
+        entry,
+        policy_id,
+        trigger_ns=bound_ns,
+        reason=bound_reason,
+        day=day,
+        stop_updates=tuple(state.updates),
+        account_end_ns=account_end,
+    )
