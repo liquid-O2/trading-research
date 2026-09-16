@@ -1,6 +1,6 @@
 # Phase 2 implementation pack
 
-Status: **specified, not implemented by this planning task**.
+Status: specified and re-cut to 16 tasks on 2026-09-16; starts after the verified Phase 1.5 release.
 
 Build intraday forecasts, native options updates and separately fitted context/method experts. Start only after the verified complete Phase 1.5 release.
 
@@ -15,7 +15,7 @@ Start with the first open subphase: read its task cards and follow [HOW_TO_RUN.m
 | 0 | 00-entry-gate | P2-00 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 1 | 01-datasets-and-fitting | P2-01, P2-02 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 2 | 02-native-options-baseline | P2-09, P2-10 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
-| 3 | 03-joint-volatility | P2-03, P2-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
+| 3 | 03-joint-volatility | P2-02A, P2-03, P2-04 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 4 | 04-context-mechanisms | P2-05, P2-11, P2-07 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 5 | 05-intraday-oi | P2-12 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |
 | 6 | 06-method-experts | P2-13, P2-21 | Verified task receipts + SUBPHASE_RECEIPT.json + passing GATE_REVIEW.json |

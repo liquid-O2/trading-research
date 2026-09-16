@@ -20,7 +20,7 @@ This page replaces `PSTACK_EXECUTION.md`, the generated subphase runbooks and th
 
 ## Closing
 
-11. Produce the receipt with the task's producer tool (PLAN_SNAPSHOT, CODE_SNAPSHOT, DRAFT_MANIFEST, EVIDENCE_MATRIX, WORK_LOG, DECISIONS, REPORT, TASK_RECEIPT). Every EVIDENCE_MATRIX row binds to the test node or audit command that proves it.
+11. Produce the receipt with the task's producer tool (PLAN_SNAPSHOT, CODE_SNAPSHOT, DRAFT_MANIFEST, EVIDENCE_MATRIX, WORK_LOG, DECISIONS, REPORT, TASK_RECEIPT). Every EVIDENCE_MATRIX row binds to the test node or audit command that proves it. Write the result card (`RESULT_CARD.json`, DELIVERABLES.md): the question, at most five headline numbers with intervals and pointers, the target and whether it was met, the verdict (done_well, needs_upgrade, not_reaching_target, not_applicable), the smallest lever if not done well, and the limits.
 12. Run the verifier on the actual receipt; then the independent probes stage; fix causes, not symptoms, and re-run only the affected checks.
 13. The subphase owner writes `SUBPHASE_RECEIPT.json` and `GATE_REVIEW.json` after the task receipts are immutable; a fresh reviewer writes the phase-level review at phase closure.
 14. Merge accepted work into main, remove the merged worktree, update `wiki/current-status.md` and `wiki/log.md`, and print the PHASE and audit tables for any family result.

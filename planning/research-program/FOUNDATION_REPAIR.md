@@ -1,3 +1,5 @@
+> Historical since 2026-09-14: the 00-foundation repair it describes is closed; kept for the record and for receipts that pin it.
+
 # Repair 00-foundation before the next subphase
 
 The 2026-09-14 review found that the original completion is not safe to use as a dependency gate. The implementer's 25 tests passed, but the independent 27-case suite accepted 18 invalid cases. Valid controls still passed. Read the [review](reviews/00-foundation-2026-09-14/REVIEW.md), [recorded counterexamples](reviews/00-foundation-2026-09-14/adversarial-confirmed/RESULTS.json) and [amendment](AMENDMENTS.json). `01-native-and-outcomes` waits for repaired foundation receipts and a matching passing review.

@@ -1135,7 +1135,9 @@
         "TRIALS.jsonl",
         "BREADTH_RESULTS.json",
         "REFINEMENT_ALLOWLIST.json",
-        "FAMILY_REPORTS/"
+        "FAMILY_REPORTS/",
+        "RESULT_CARD.json",
+        "CANDIDATE_BANK_SUPPLEMENT.json"
       ],
       "native": true,
       "test": "implementation/tests/rule_discovery/test_p15_17.py",
@@ -1148,7 +1150,9 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09",
+        "A10"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1199,7 +1203,8 @@
         "REFINEMENT_BANK.json",
         "TRIALS.jsonl",
         "SELECTED_RULES_BY_FOLD.json",
-        "FAMILY_DISPOSITIONS.json"
+        "FAMILY_DISPOSITIONS.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/rule_discovery/test_p15_18.py",
@@ -1212,7 +1217,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1260,7 +1266,8 @@
         "FIXED_ENTRIES.json",
         "EXIT_TRIALS.jsonl",
         "EXIT_COMPARISON.json",
-        "FAMILY_REPORTS/"
+        "FAMILY_REPORTS/",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/rule_discovery/test_p15_19.py",
@@ -1273,7 +1280,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1332,7 +1340,11 @@
         "STRATEGY_BOOK.json",
         "STRATEGY_BOOK_CSVS/",
         "REGIME_DIMENSIONS.json",
-        "RETENTION_SET.json"
+        "RETENTION_SET.json",
+        "HOLDOUT_REPORT.json",
+        "RESULT_CARD.json",
+        "BREAKDOWN.json",
+        "BREAKDOWN_REPORT.md"
       ],
       "native": true,
       "test": "implementation/tests/rule_discovery/test_p15_20.py",
@@ -1351,7 +1363,9 @@
         "A11",
         "A12",
         "A13",
-        "A15"
+        "A15",
+        "A16",
+        "A17"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1405,7 +1419,8 @@
         "PHASE2_INPUTS.json",
         "OWNED_AVAILABILITY.json",
         "EXPOSURE_LEDGER.json",
-        "ENGINEERING_DATES.json"
+        "ENGINEERING_DATES.json",
+        "RESULT_CARD.json"
       ],
       "native": false,
       "test": "implementation/tests/context_experts/test_p2_00.py",
@@ -1465,7 +1480,8 @@
         "FEATURE_DICTIONARY.json",
         "TARGET_DICTIONARY.json",
         "DATASET_MANIFEST.json",
-        "LINEAGE_CASES.json"
+        "LINEAGE_CASES.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_01.py",
@@ -1529,7 +1545,8 @@
         "SOLVER_FIXTURES.json",
         "STACKING_MANIFEST.json",
         "SERIALIZATION_CHECK.json",
-        "FIT_PROFILE.json"
+        "FIT_PROFILE.json",
+        "RESULT_CARD.json"
       ],
       "native": false,
       "test": "implementation/tests/context_experts/test_p2_02.py",
@@ -1542,7 +1559,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1589,7 +1607,8 @@
         "INSTRUMENT_LEDGER.json",
         "OPTIONS_AVAILABILITY.json",
         "SURFACE_INPUT_SLICE.json",
-        "PUBLICATION_SENSITIVITY.json"
+        "PUBLICATION_SENSITIVITY.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_09.py",
@@ -1648,7 +1667,8 @@
         "PRICING_FIXTURES.json",
         "GREEK_SENSITIVITY.json",
         "EXPOSURE_BOARDS.json",
-        "SURFACE_QUALITY.json"
+        "SURFACE_QUALITY.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_10.py",
@@ -1684,7 +1704,8 @@
       "dependencies": [
         "P2-10",
         "P2-02",
-        "P2-04"
+        "P2-04",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/options/flow.py",
@@ -1709,7 +1730,8 @@
         "OPTION_FLOW.json",
         "EXPOSURE_CHANGE_CASES.json",
         "SCENARIO_BOARDS.json",
-        "OPTIONS_CONTEXT_EVALUATION.json"
+        "OPTIONS_CONTEXT_EVALUATION.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_11.py",
@@ -1722,7 +1744,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1736,6 +1759,78 @@
         "S25",
         "S26",
         "S27"
+      ]
+    },
+    {
+      "id": "P2-02A",
+      "phase": "phase-2",
+      "subphase": "03-joint-volatility",
+      "title": "Source context baselines: the authors' own reads, measured",
+      "dependencies": [
+        "P2-00",
+        "P2-01",
+        "P2-02"
+      ],
+      "owns": [
+        "implementation/src/trading_research/research/experts/context_baselines/",
+        "implementation/src/trading_research/research/experts/configs/context_baselines.json",
+        "implementation/tests/context_experts/test_p2_02a.py"
+      ],
+      "reads": [
+        "AGENTS.md",
+        "planning/ROADMAP.md",
+        "planning/research-program/HOW_TO_RUN.md",
+        "planning/research-program/WORKFLOW.md",
+        "planning/phase-2/CONTEXT.md",
+        "planning/phase-2/VOLATILITY.md",
+        "planning/phase-2/OPTIONS.md",
+        "planning/phase-2/METHOD_EXPERTS.md",
+        "planning/research-program/EVALUATION.md",
+        "planning/research-program/DATA_CONTRACTS.md",
+        "planning/phase-1-5/SOURCE_RECONSTRUCTION_LEDGER.json",
+        "planning/research-program/ASSURANCE.md",
+        "planning/research-program/SILENT_FAILURES.md"
+      ],
+      "artifacts": [
+        "SOURCE_CONTEXT_RULES.json",
+        "CONTEXT_BASELINE_CASES.json",
+        "CONTEXT_BASELINE_RESULTS.json",
+        "CONTEXT_BASELINE_PROTOCOL.json",
+        "PLAUSIBILITY.md",
+        "FAMILY_REPORTS/",
+        "RESULT_CARD.json"
+      ],
+      "native": true,
+      "test": "implementation/tests/context_experts/test_p2_02a.py",
+      "path": "planning/phase-2/tasks/P2-02A.md",
+      "required_acceptance_keys": [
+        "A01",
+        "A02",
+        "A03",
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10"
+      ],
+      "status": "planned",
+      "allowed_terminal_statuses": [
+        "implemented_verified",
+        "retained_baseline",
+        "inconclusive_support",
+        "unsupported_owned_input"
+      ],
+      "assurance_cases": [
+        "S07",
+        "S08",
+        "S11",
+        "S15",
+        "S18",
+        "S19",
+        "S28",
+        "S32"
       ]
     },
     {
@@ -1766,7 +1861,8 @@
       "artifacts": [
         "VOLATILITY_FEATURES.json",
         "VOLATILITY_TARGETS.json",
-        "VOLATILITY_FIXTURES.json"
+        "VOLATILITY_FIXTURES.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_03.py",
@@ -1800,7 +1896,8 @@
       "title": "Fit one joint volatility expert and its ablations",
       "dependencies": [
         "P2-03",
-        "P2-00"
+        "P2-00",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/volatility.py",
@@ -1823,7 +1920,8 @@
         "JOINT_VOL_ARTIFACT.json",
         "VOL_ABLATIONS.json",
         "VOL_FORECASTS_MANIFEST.json",
-        "VOL_VISUAL_QA.json"
+        "VOL_VISUAL_QA.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_04.py",
@@ -1836,7 +1934,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1860,7 +1959,8 @@
       "subphase": "04-context-mechanisms",
       "title": "Fit the range-path and auction-session experts",
       "dependencies": [
-        "P2-04"
+        "P2-04",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/features/range_path.py",
@@ -1896,7 +1996,8 @@
         "auction_session/EXPERT_ARTIFACT.json",
         "auction_session/ABLATIONS.json",
         "auction_session/FORECASTS_MANIFEST.json",
-        "auction_session/VISUAL_QA.json"
+        "auction_session/VISUAL_QA.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_05.py",
@@ -1912,7 +2013,8 @@
         "A08",
         "A09",
         "A10",
-        "A11"
+        "A11",
+        "A12"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -1936,7 +2038,8 @@
       "title": "Fit the flow-memory and cross-market experts",
       "dependencies": [
         "P2-04",
-        "P2-11"
+        "P2-11",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/features/flow_memory.py",
@@ -1972,7 +2075,8 @@
         "cross_market/EXPERT_ARTIFACT.json",
         "cross_market/ABLATIONS.json",
         "cross_market/FORECASTS_MANIFEST.json",
-        "cross_market/VISUAL_QA.json"
+        "cross_market/VISUAL_QA.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_07.py",
@@ -1988,7 +2092,8 @@
         "A08",
         "A09",
         "A10",
-        "A11"
+        "A11",
+        "A12"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2014,7 +2119,8 @@
       "subphase": "05-intraday-oi",
       "title": "Fit and test weakly supervised intraday OI updates",
       "dependencies": [
-        "P2-11"
+        "P2-11",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/options/oi_labels.py",
@@ -2040,7 +2146,8 @@
         "OI_GRADIENT_CASES.json",
         "OI_ARTIFACT.json",
         "OI_ENDPOINT_EVALUATION.json",
-        "OI_OOF_MANIFEST.json"
+        "OI_OOF_MANIFEST.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_12.py",
@@ -2053,7 +2160,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2086,7 +2194,8 @@
       "dependencies": [
         "P2-05",
         "P2-07",
-        "P2-12"
+        "P2-12",
+        "P2-02A"
       ],
       "owns": [
         "implementation/src/trading_research/research/experts/methods/jumbo.py",
@@ -2134,7 +2243,8 @@
         "methods/<method-id>/METHOD_ARTIFACT.json",
         "methods/<method-id>/METHOD_ABLATIONS.json",
         "methods/<method-id>/BRANCH_SUPPORT.json",
-        "methods/<method-id>/FAMILY_REPORT.md"
+        "methods/<method-id>/FAMILY_REPORT.md",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_13.py",
@@ -2153,7 +2263,8 @@
         "A11",
         "A12",
         "A13",
-        "A14"
+        "A14",
+        "A15"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2205,7 +2316,8 @@
         "PROCESS_ARTIFACTS.json",
         "PROCESS_SUPPORT.json",
         "RISK_OVERLAY_CASES.json",
-        "FAMILY_REPORT.md"
+        "FAMILY_REPORT.md",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_21.py",
@@ -2268,7 +2380,8 @@
         "CONDITIONAL_PLANS_MANIFEST.json",
         "PLAN_REVISION_CASES.json",
         "CONTEXT_REPLAY.json",
-        "CONTRIBUTION_REPORT.md"
+        "CONTRIBUTION_REPORT.md",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_22.py",
@@ -2331,7 +2444,8 @@
         "CADENCE_TRIALS.jsonl",
         "UPDATE_LEDGER.json",
         "DRIFT_REPORT.json",
-        "CADENCE_COMPARISON.json"
+        "CADENCE_COMPARISON.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_23.py",
@@ -2344,7 +2458,8 @@
         "A05",
         "A06",
         "A07",
-        "A08"
+        "A08",
+        "A09"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [
@@ -2404,7 +2519,9 @@
         "STRATEGY_BOOK_CSVS/",
         "REGIME_DIMENSIONS.json",
         "RETENTION_SET.json",
-        "EXPERT_SCORECARDS/"
+        "EXPERT_SCORECARDS/",
+        "HOLDOUT_REPORT.json",
+        "RESULT_CARD.json"
       ],
       "native": true,
       "test": "implementation/tests/context_experts/test_p2_24.py",
@@ -2424,7 +2541,8 @@
         "A12",
         "A13",
         "A14",
-        "A15"
+        "A15",
+        "A16"
       ],
       "status": "planned",
       "allowed_terminal_statuses": [

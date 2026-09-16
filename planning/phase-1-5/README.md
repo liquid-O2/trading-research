@@ -1,6 +1,6 @@
 # Phase 1.5 implementation pack
 
-Status: **specified, not implemented by this planning task**.
+Status: in execution; subphases 00 to 04 closed, 05 in progress (see [wiki/current-status.md](/workspace/wiki/current-status.md)).
 
 Reconstruct missing numerical rules and compare finite, explicitly attributed setup improvements. All Phase 1.5 work must close before Phase 2 implementation.
 

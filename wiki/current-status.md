@@ -4,6 +4,8 @@ Phase 1 setup implementation and measurement are complete for the acquired obser
 
 ## Phase 1.5 progress, 2026-09-16 evening
 
+Per-task result cards (question, headline numbers, target met, verdict, lever): [results ledger](results-ledger.md).
+
 | Subphase | Tasks | State |
 | --- | --- | --- |
 | 00 foundation | P15-00, P15-01 | closed (receipts below) |

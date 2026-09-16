@@ -5,7 +5,6 @@ These are specifications for future implementation. Proposed Python symbols and 
 | Contract | Purpose |
 | --- | --- |
 | [Workflow](WORKFLOW.md) | Coordinator/worker responsibilities, task receipts, gates and stopping rules. |
-| [Grok/pstack execution](PSTACK_EXECUTION.md) | `/poteto-mode` routing, role overrides, bounded worker prompts, resuming and independent review. |
 | [Evidence and failure checks](ASSURANCE.md) | Required evidence matrix, strict identity/artifact/dependency verification, native coverage and independent closure for every subphase. |
 | [Silent failure cases](SILENT_FAILURES.md) | 32 concrete probes and expected results assigned across all 46 tasks by [machine-readable registry](ASSURANCE_CASES.json). |
 | [Foundation repair](FOUNDATION_REPAIR.md) | Current entry: reproduce and repair the rejected 00-foundation completion; preserve old evidence. |

@@ -14,7 +14,7 @@ One entry per family and per branch in the frozen Phase 1 registry, including re
 6. **Verdict.** Promoted, retained baseline, inconclusive support or not applicable, with the reason, the fold-specific selected-rule manifest IDs, and the all-history descriptive recommendation kept separate from the causal fold roles.
 7. **Limitations.** Coverage gaps, inferred inputs, unknown operands, exposure notes, and what the branch's numbers cannot claim.
 
-**Formats.** `STRATEGY_BOOK.md` (one section per family, one subsection per branch), `STRATEGY_BOOK.json` (the same numbers under a versioned schema) and one CSV per branch for sections 3 to 5. Produced by P15-20 from the immutable trial ledgers. A **B0-only edition** covering sections 1 to 4 and 7 is produced as soon as the outcome machinery exists, so base rates are readable before any search result; it is regenerated, never edited, when the full edition is built.
+**Formats.** `STRATEGY_BOOK.md` (one section per family, one subsection per branch), `STRATEGY_BOOK.json` (the same numbers under a versioned schema) and one CSV per branch for sections 3 to 5. Produced by P15-20 from the immutable trial ledgers. A **B0-only edition** covering sections 1 to 4 and 7 is produced as soon as the outcome machinery exists, so base rates are readable before any search result; it is regenerated, never edited, when the full edition is built. The breakdown edition, `BREAKDOWN_REPORT.md` with `BREAKDOWN.json` (added 2026-09-16), is the second report beside the full one: sections 3 and 5 cut by outer fold (year) and by every frozen regime dimension, one-way, for B0.2 and the selected rule of every branch, with support marks and unknown buckets counted; descriptive only, and the baseline judgement of conditions that Phase 2 makes formal.
 
 **Definition of done for Phase 1.5.** The release receipt verifies; every registry branch has a book entry with a verdict; the B0-only and full editions render from artifacts with no hand-typed number; all attempted candidates appear; the Phase 2 allowlist and selected-rule manifests are frozen.
 
@@ -37,3 +37,16 @@ Per strategy, adding to version 1: fitted conditional probability of target-firs
 | 1.5 / 06 | The exit study. |
 | 1.5 / 07 | Strategy Book version 1 and the release. |
 | 2 / 00–08 | Expert scorecards as each is fitted; Strategy Book version 2 at release. |
+
+## Result card, every task (added 2026-09-16)
+
+Receipts prove that software ran and that checks passed; the result card says whether the task reached what it was for, in a shape a person can judge in a minute. Every task writes `RESULT_CARD.json` (schema `research-result-card-v1`) beside its receipt and repeats it as the last section of `REPORT.md`:
+
+- `question`: the one question the task answers, in plain words.
+- `headline`: at most five numbers, each with its unit, its interval or support count, and the pointer to the artifact it was read from.
+- `target`: the gate or target the task was held to, from the contract, and `met`: yes, no, partial or not_applicable.
+- `verdict`: one of `done_well`, `needs_upgrade`, `not_reaching_target`, `not_applicable`, with one sentence of reason.
+- `lever`: if the verdict is not `done_well`, the single smallest change that would most plausibly improve the result, and what evidence would show it did.
+- `limits`: what the numbers cannot claim.
+
+A subphase receipt lists its tasks' verdicts; a phase release rolls them into the wiki results ledger. A task whose result is honestly `not_reaching_target` still closes with a verified receipt; the ledger is where the program decides what to upgrade next, in small parts.
