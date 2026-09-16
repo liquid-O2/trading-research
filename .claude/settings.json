@@ -8,5 +8,31 @@
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
     "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS": "2",
     "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /workspace/tools/hooks/agents_md_preamble.py",
+            "timeout": 10,
+            "statusMessage": "Prefixing the workspace policy to the agent brief"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /workspace/tools/hooks/session_policy_context.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }

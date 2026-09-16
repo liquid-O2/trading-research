@@ -1678,6 +1678,54 @@
         }
       ],
       "previous_entry_sha256": "6ddbb55657a18df746321915597568d0b8abc85a0b539f6a9a4285df5e87a100"
+    },
+    {
+      "prior_plan_version": "research-plan-2026-09-14-v3",
+      "new_plan_version": "research-plan-2026-09-14-v3",
+      "assurance_version": "research-assurance-2026-09-14-v3",
+      "unchanged": [
+        "Research formulas and source attribution",
+        "Finite candidate/trial budgets and statistical selection rules",
+        "Accepted Phase 1 code/data/report identities",
+        "Pinned foundation checker tools/check_foundation_adversarial.py",
+        "Pinned outcome fixture checker tools/check_outcome_fixtures.py",
+        "Acceptance amendment research-assurance-2026-09-14-v3"
+      ],
+      "execution_rule": "Preserve old reports and their original plan identities. New work after this amendment binds research-assurance-2026-09-14-v3. Plan-file live mismatches verify through this amendment chain starting at the declared hash; code-file live mismatches verify through a later verified successor receipt.",
+      "exposure_rule": "Carry all previously exposed dates and inspected coverage forward. Descriptive regime cuts in the B0 Strategy Book edition do not select candidates, thresholds or dates.",
+      "id": "amendment-2026-09-16-process-pages-created",
+      "date": "2026-09-16",
+      "scope": "Records the creation of the process pages introduced by the plan cleanup (HOW_TO_RUN.md, TASK_CARD_TEMPLATE.md, AGENT_OPERATIONS.md) and of CLAUDE.md, which imports AGENTS.md, so that the guard test implementation/tests/test_agents_md_pinned.py pins them to this chain: any later edit needs a new entry; a revert fails the suite. sha256_before is null for a created file. No formula, gate, budget, bank, split, seed, receipt or Phase 1 predicate changed.",
+      "reason": "The user asked that the workspace rules be followed no matter how many sessions or agents come and go; pages that carry the rules are guarded the same way as AGENTS.md.",
+      "changes": [
+        "CLAUDE.md: created",
+        "planning/research-program/HOW_TO_RUN.md: created",
+        "planning/research-program/TASK_CARD_TEMPLATE.md: created",
+        "planning/research-program/AGENT_OPERATIONS.md: created"
+      ],
+      "changed_files": [
+        {
+          "path": "CLAUDE.md",
+          "sha256_before": null,
+          "sha256_after": "747ed368b9e2ac0a170fedbd728db08112d495f8c32386d6eb7922d5dc09e3b8"
+        },
+        {
+          "path": "planning/research-program/HOW_TO_RUN.md",
+          "sha256_before": null,
+          "sha256_after": "2d5dc6fb24b882bd2b8b61697769b362029edac32ce611b595894827aad6a106"
+        },
+        {
+          "path": "planning/research-program/TASK_CARD_TEMPLATE.md",
+          "sha256_before": null,
+          "sha256_after": "bb20ef2d5c972533419c097f074757d94706450e8c0e129ed7660d47360fd668"
+        },
+        {
+          "path": "planning/research-program/AGENT_OPERATIONS.md",
+          "sha256_before": null,
+          "sha256_after": "0c05fa1bf0b505588b6e86e7299c1626c158c9737da6a664c69fc4d39816f0b2"
+        }
+      ],
+      "previous_entry_sha256": "0d5a09c615b26b062cf155b06b6a7a7c427c04ecdb193692919579d6a0afa49c"
     }
   ]
 }
