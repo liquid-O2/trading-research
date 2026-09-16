@@ -37,3 +37,16 @@ Per strategy, adding to version 1: fitted conditional probability of target-firs
 | 1.5 / 06 | The exit study. |
 | 1.5 / 07 | Strategy Book version 1 and the release. |
 | 2 / 00–08 | Expert scorecards as each is fitted; Strategy Book version 2 at release. |
+
+## Result card, every task (added 2026-09-16)
+
+Receipts prove that software ran and that checks passed; the result card says whether the task reached what it was for, in a shape a person can judge in a minute. Every task writes `RESULT_CARD.json` (schema `research-result-card-v1`) beside its receipt and repeats it as the last section of `REPORT.md`:
+
+- `question`: the one question the task answers, in plain words.
+- `headline`: at most five numbers, each with its unit, its interval or support count, and the pointer to the artifact it was read from.
+- `target`: the gate or target the task was held to, from the contract, and `met`: yes, no, partial or not_applicable.
+- `verdict`: one of `done_well`, `needs_upgrade`, `not_reaching_target`, `not_applicable`, with one sentence of reason.
+- `lever`: if the verdict is not `done_well`, the single smallest change that would most plausibly improve the result, and what evidence would show it did.
+- `limits`: what the numbers cannot claim.
+
+A subphase receipt lists its tasks' verdicts; a phase release rolls them into the wiki results ledger. A task whose result is honestly `not_reaching_target` still closes with a verified receipt; the ledger is where the program decides what to upgrade next, in small parts.
