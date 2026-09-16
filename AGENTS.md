@@ -2,6 +2,8 @@
 
 ## Must-follow rules
 
+- **Simplicity first.** Fully implement the requested behavior, relevant edge cases, failure handling, and required verification. Choose a clear design with fewer unnecessary moving parts while preserving those requirements. Add flexibility only for demonstrated needs; judge simplicity by clarity and maintainability, not line count or effort saved.
+- **Surgical changes.** Make every change needed to deliver the request and fix its underlying cause, including affected callers and sibling paths. Tie each edit to that purpose or a necessary supporting change. Simplify touched code when it directly supports the fix; keep unrelated refactors separate. Scope is complete when the affected behavior and required checks are satisfied, not when the diff is smallest.
 - Finish the requested behavior and its required verification. Use the existing task requirements to define completion. Resolve routine implementation choices independently.
 - Before an expensive full run, verify a small representative end-to-end case, including a meaningful negative case. Check that expected work and output identities are complete.
 - Add tests only for distinct behavior, a plausible regression, or a required contract not already covered. Extend existing tests where possible. Skip redundant and low-value tests.
