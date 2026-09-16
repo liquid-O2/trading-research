@@ -76,7 +76,11 @@ Owners: the P15-16A integration implementer on main until its receipt verifies; 
 
 Slack is about three hours before midnight. What consumes slack: a repair loop on any receipt (each costs about an hour), an OOM (worker budget is now 17 × 2.5 GB under 70 GB with nothing else heavy), or a research surprise in P15-18 that changes a disposition (allowed and recorded; it does not change the schedule). Phase 2 starts on the 18th on the re-cut cards.
 
-## 7. Order of the cleanup edits
+## 7. Status of the cleanup edits
+
+Landed on main on 2026-09-16 evening, each with a chained amendment: pass 1 (ebe9e7dc, `amendment-2026-09-16-plan-cleanup-1`): retirement notices, WORKFLOW trim, roadmap and README pointers, open Phase 1.5 cards; pass 2 (696deaa7, `plan-cleanup-2-phase-2-recut`): Phase 2 re-cut to 16 tasks on the template; pass 3 (f15c7b2d, `plan-cleanup-3-phase-1-5-open-tasks`): open Phase 1.5 tasks read HOW_TO_RUN.md, S01 to S03 assigned once, bundle tools retired. Remaining: the wiki catch-up at the P15-16A closure and the guard test extension for the new process pages.
+
+## 7a. Original order of the cleanup edits
 
 1. Tonight, after the P15-16A receipt verifies (so no verifier run races the edits): retirement notices, `TASK_GRAPH.json` reads, `WORKFLOW.md` trim, phase READMEs and `ROADMAP.md` pointers, `ASSURANCE_CASES.json` assignments and the regenerated `SILENT_FAILURES.md`, the open Phase 1.5 cards thinned; one chained amendment listing every changed file with its hashes; the guard test extended to keep `HOW_TO_RUN.md` and `TASK_CARD_TEMPLATE.md` chained.
 2. On the 17th, while the runs execute: the fourteen Phase 2 cards rewritten on the template, `TASK_GRAPH.json` re-cut, a second amendment.
