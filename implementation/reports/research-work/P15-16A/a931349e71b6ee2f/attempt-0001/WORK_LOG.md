@@ -1,3 +1,31 @@
+# Adapter-population full-history work log
+
+- Run id: `1019e6c09ee54609`
+- Manifest sha256: `1019e6c09ee54609e69412f852b40213b033b6b99c6ff8e03cfdea7d626dae23`
+- Baseline: `B0.2-2026-09-15`
+- Dates: 1742 (2020-01-01 .. 2026-09-03)
+- Branches: 40
+- Jobs: 69680
+- Workers requested: 12
+- default_workers: 12
+- cgroup_worker_count: 17
+- cpu quota: {'cpu_quota_us': 1785000, 'cpu_period_us': 100000, 'cpu_quota_cpus': 17.85}
+- census_run_id: `20def36e065c13d7`
+
+## Decisions
+
+- Default --baseline B0.1 keeps the frozen BRANCH_RECORDS table and does not recompute B0/B0.1.
+- --baseline B0.2 dispatches every family's scan_b02; B0 and B0.1 rows are read from run-1.0.1 and census 20def36e065c13d7.
+- gb_fail_0930/overnight redirect to green_failure.scan_b02; golden_pocket redirects to green_vwap_scalp.scan_b02.
+- Jobs are jobs/<date>/<coverage_id with ':' replaced by '--'>.json.gz (JOB_PATH_SCHEME=coverage_id--json.gz). Branch names may collide across families.
+- cpu_quota reads cgroup v1 cpu.cfs_quota_us/period first, then v2 cpu.max.
+- default_workers is floor(quota/period)-5, at least 1 (12 on this machine).
+- install_write_guard is on. A cache miss fails the date.
+- load_registry(..., check_software=False) because this runner sits beside frozen baseline_repairs.py.
+- SIRES and REFILL-STUDY B0.2 use the R3 NativeMarketView array plane attached once per date.
+- Resume skips a date with a valid completion.json. Existing job gz files are kept.
+- SUMMARY.json and RUN_COMPLETE.json are written only when all 1742 dates have a valid completion.
+
 # P15-16A round 3 work log
 
 - Merge notes: no remaining shared-file conflict. Kept main `runner.py`. `common.peak_rss_bytes` already lazy. Family-qualified job paths already on main.
@@ -39,4 +67,3 @@
 - Peak memory: main run root `1019e6c09ee54609` peak worker RSS 3.82 GB over 12 workers (wall 7,413 s); supplemental root `823273eba4b9ec50` peak worker RSS 1.09 GB (wall 1,674.8 s); receipt production peak child RSS 14.73 GB (wall 3,780.5 s), measured with `resource.getrusage(RUSAGE_CHILDREN).ru_maxrss` in `_work_r3/run_produce.py` and recorded in `_work_r3/produce.rss.json`.
 - Verifier rejection, both defects fixed at the cause. (1) `_unpinned_owned_paths` (receipts.py:524-542) pins every regular file under an owned directory, while the producer enumerated owned directories by extension, so `families/.gitkeep` was never in CODE_SNAPSHOT. `_repo_files` now takes an optional suffix and `_owned_dir_files` enumerates owned directories with no filter (produce_p15_16a.py:88-121); both owned directories in TASK_GRAPH P15-16A `owns` (source_adapters/, families/) go through it, and `_unpinned_owned_paths` over the new CODE_PATHS returns []. (2) A06, A07, A08 and S01 carried `test_nodeids: []` with command indices 0 and 1, which are not audit commands, so `_check_evidence_matrix` (receipts.py:1533) rejected them. Each now binds to a test of its own id: `test_A06_command_exit_codes_hashes_and_coverage_reconcile`, `test_A07_evidence_matrix_resolves_every_key`, `test_A08_silent_failure_probes_are_assigned_to_their_own_ids` and `test_S01_missing_substituted_and_malformed_artifacts_are_rejected`. A08 and S03 also got their own evidence selectors instead of borrowing A06's and S01's.
 - The bound tests exercise the producing code, not the issued attempt: the producer runs this suite before it writes the attempt it is issuing, so a test that reads issued attempts cannot see the receipt it supports and re-judges frozen history instead (the first attempt at this fix did exactly that and failed on the rejected attempt `8228d638a16d71bd` after 57 minutes of pytest). A06 checks that `run_cmd` records the real exit code and a log digest that matches the bytes, with a failing command as the negative control, then reconciles branches x dates against RUN_COMPLETE and the job files on disk for the main root `1019e6c09ee54609` (69,680) and the supplemental root `823273eba4b9ec50` (6,968), and against the declared `job_count_all_roots` (76,648). A07 runs the contract's own `_check_evidence_matrix` over the matrix `write_matrix` writes into a stand-in attempt and requires zero failures; its negative control clears A06's node ids and reproduces the verifier's exact rejection, `INVENTORY: passing check has no test_nodeids or audit command`. A08 takes the nine assurance cases from TASK_GRAPH, requires each row to name a test of its own id that resolves in this file, and its negative control flips S01/S03 from accepted-limit to pass only when the probes stage has run. S01 replaces a source-string assertion with three real mutations of a bound receipt (removed artifact -> ARTIFACT_MISSING, substituted bytes -> ARTIFACT_HASH, unparseable JSON re-pinned -> JSON_PARSE). `test_code_snapshot_pins_every_file_under_an_owned_directory` guards defect (1) with the extension filter as its negative control.
-- Re-issue: `a931349e71b6ee2f/attempt-0001`, produced 2026-09-16T22:12:17Z with `_work_r3/run_produce.py` (pytest 603 passed in 3,132.6 s; produce wall 3,780.3 s; peak child RSS 14.81 GB, recorded in `_work_r3/produce.rss.json`), one heavy process at a time. `verify_research_release.py task --receipt reports/research-work/P15-16A/a931349e71b6ee2f/attempt-0001/TASK_RECEIPT.json` returns `{"kind": "task", "ok": true, ...}` with exit 0. The verifier command is still not recorded inside the receipt, so S01/S03 stay accepted-limit and the unresolved line stands.

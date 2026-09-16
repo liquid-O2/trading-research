@@ -1,0 +1,1761 @@
+{
+  "baseline": "B0.2-2026-09-15",
+  "family_rules": [
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:1599",
+      "fixture": "test_p15_16a_greenbird.py::test_f01_old_scalp_branches_are_observations",
+      "id": "F01",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F01-scalp-observations",
+      "source_reason": "GB p.40",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:727",
+      "fixture": "test_p15_16a_greenbird.py::test_f06_a1_requires_retest_and_post_open_close",
+      "id": "F06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F06-A1-london",
+      "source_reason": "GB NG 2099513366326730859; GB p.60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:917",
+      "fixture": "test_p15_16a_greenbird.py::test_rr13_five_minute_required_for_asia_high",
+      "id": "F06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F06-A2-asia",
+      "source_reason": "GB pp.19, 27; NG 2099513366326730859",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:1063",
+      "fixture": "test_p15_16a_greenbird.py::test_f06_a3_pdl_stop_is_swept_level_not_extreme",
+      "id": "F06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F06-A3-pdl",
+      "source_reason": "GB pp.25, 48, 52-54; NG 2099503614372741234",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:108",
+      "fixture": "test_p15_16a_greenbird.py::test_rr14_pocket_uses_impulse_not_910_box",
+      "id": "F06",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F06-A4-pocket",
+      "source_reason": "OD:five_minute_close_out_of_pocket; stop_near_50_edge; far_edge_variant",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:1297",
+      "fixture": "test_p15_16a_greenbird.py::test_f06_a5_nwog_has_no_am_cutoff",
+      "id": "F06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F06-A5-nwog",
+      "source_reason": "GB p.37 and pp.23, 30-39",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:294",
+      "fixture": "test_p15_16a_greenbird.py::test_f07_bias_reports_unfiltered_and_filtered",
+      "id": "F07",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F07-directional-bias",
+      "source_reason": "OD:prior_close_vs_range_midpoint,nyam_box_close_vs_open",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:1471",
+      "fixture": "test_p15_16a_greenbird.py::test_f13_vwap_missing_retest_is_fail_not_unknown",
+      "id": "F13",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F13-gb-vwap",
+      "source_reason": "OD:retest_horizon_rth_close; 60m_candidate",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "source_adapters/common.py:CLOCK_ZONE_UNVERIFIED_FAMILIES",
+      "fixture": "no discriminating fixture: GB-FAIL/GB-VWAP/GB-SCALP stay in CLOCK_ZONE_UNVERIFIED_FAMILIES so frozen B0/B0.1 dual-scan flags do not move",
+      "id": "F18",
+      "kind": "literal",
+      "notes": "JJ-TBR is dropped from CLOCK_ZONE_UNVERIFIED_FAMILIES (TBR p.4/p.6 New York clock). GB-FAIL, GB-VWAP and GB-SCALP remain in the frozenset so frozen B0/B0.1 dual-scan flags do not move. WORK_LOG: keeping the frozen B0/B0.1 dual-scan flags from moving.",
+      "rule_id": "F18-clock-seasonal-ny",
+      "source_reason": "GB pp.43, 45, 48",
+      "status": "partial"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:98",
+      "fixture": "test_p15_16a_greenbird.py::test_rr11_september_uses_asia_0000_and_london_0200_0500",
+      "id": "RR-11",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-11-sessions-boxes",
+      "source_reason": "OD:asia_box_windows,london_box_windows,ny_sub_boxes",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:140",
+      "fixture": "test_p15_16a_greenbird.py::test_rr12_ladder_and_750_not_scored",
+      "id": "RR-12",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-12-position-size",
+      "source_reason": "GB pp.52-53, 56, 58, 60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:128",
+      "fixture": "test_p15_16a_greenbird.py::test_rr12_ladder_and_750_not_scored",
+      "id": "RR-12",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-12-risk-exits",
+      "source_reason": "GB pp.52-53, 56, 58, 60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:375",
+      "fixture": "test_p15_16a_greenbird.py::test_rr13_five_minute_required_for_asia_high",
+      "id": "RR-13",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-13-confirmation-modes",
+      "source_reason": "GB pp.19, 25; RR-13 at-level box edges",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:108",
+      "fixture": "test_p15_16a_greenbird.py::test_rr14_pocket_uses_impulse_not_910_box",
+      "id": "RR-14",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-14-golden-pocket",
+      "source_reason": "GB pp.23, 25, 51; raw capture 2026-09-11",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "family": "GB-FAIL",
+      "file_line": "green_b02.py:171",
+      "fixture": "test_p15_16a_greenbird.py::test_rr15_objective_horizon_is_next_open_not_30m",
+      "id": "RR-15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-15-objective-horizon",
+      "source_reason": "GB pp.51-54",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:315",
+      "fixture": "test_p15_16a_jumbo.py::test_rr01_extension_band_identity_and_printed_examples",
+      "id": "RR-01",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-01-extension-band-1.33-1.66",
+      "source_reason": "JR p.23; o015",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:344",
+      "fixture": "test_p15_16a_jumbo.py::test_rr01_extension_band_identity_and_printed_examples",
+      "id": "RR-01",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-01-OD-near-band-0.33-0.66",
+      "source_reason": "OD:historical scanner band, not source",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr03_sweep_before_0930_is_a_valid_trigger",
+      "id": "RR-03",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-03-sweep-from-09:00",
+      "source_reason": "JR p.20",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: modal 09:40-09:50 is labelled; no nodeid fails when this row is removed",
+      "id": "RR-03",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-03-modal-reversal-09:40-09:50",
+      "source_reason": "JR p.70",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f08_extension_after_1000_and_1300_admitted",
+      "id": "RR-03",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-03-extension-after-10:00",
+      "source_reason": "JR pp.25-26",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr04_london_box_is_0200_0300_not_0000_0300",
+      "id": "RR-04",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-04-london-02:00-03:00",
+      "source_reason": "JR pp.50, 63-64",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr05_printed_pzone_absorption_fixture",
+      "id": "RR-05",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-05-pzone-anchors",
+      "source_reason": "JR pp.16-18",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr05_printed_pzone_absorption_fixture",
+      "id": "RR-05",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-05-OD-absorption-proxy",
+      "source_reason": "OD:TBR p.35 body<=0.6 vol>=1.5x14-period average",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr06_reclaim_is_the_entry_and_depth_is_recorded_not_required",
+      "id": "RR-06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-06-reclaim-entry",
+      "source_reason": "JR p.71",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: +0.5 objective is labelled; no nodeid fails when this row is removed",
+      "id": "RR-06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-06-objective-plus-0.5",
+      "source_reason": "JR p.71",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:356",
+      "fixture": "no discriminating fixture: projection ladder is labelled; no nodeid fails when this row is removed",
+      "id": "RR-06",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-06-projection-ladder",
+      "source_reason": "JR pp.16-18",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr06_reclaim_is_the_entry_and_depth_is_recorded_not_required",
+      "id": "F11",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-06-sweep-depth-recorded",
+      "source_reason": "F11; RR-06",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr07_sessionstat_coincidence_and_evrange_after_tape",
+      "id": "RR-07",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-07-OD-sessionstat-60",
+      "source_reason": "OD:60-session mean/median of selected clock from native tape",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr07_sessionstat_coincidence_and_evrange_after_tape",
+      "id": "RR-07",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-07-evrange-fixture",
+      "source_reason": "F17; JR pp.30-33",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr08_open_location_uses_prior_rth_at_0930",
+      "id": "RR-08",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-08-open-location-at-09:30",
+      "source_reason": "JR pp.36, 38, 42",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: OD branch selector is labelled; no nodeid fails when this row is removed",
+      "id": "RR-08",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-08-OD-branch-selector",
+      "source_reason": "OD:TBR pp.12-24 no numeric threshold",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1495",
+      "fixture": "test_p15_16a_jumbo.py::test_rr09_one_side_is_high_only_plus_low_only",
+      "id": "RR-09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-09-published-statistics",
+      "source_reason": "JR pp.23, 37, 70",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: bigtrades is deferred; no nodeid fails when this row is removed",
+      "id": "RR-09",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-09-bigtrades-deferred",
+      "source_reason": "deferred: JR p.50 BigTrades NQ >=100 NY / >=75 London; JR pp.49-50 35% footprint filter is a different flow view; neither series is on the native tape",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f08_extension_after_1000_and_1300_admitted",
+      "id": "F08",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F08-single-extended-reduced-after-10:00",
+      "source_reason": "TBR p.12",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f11_3m_ob_baseline_and_od_variants_labelled",
+      "id": "F11",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F11-confirm-3m-ob-baseline",
+      "source_reason": "TBR p.27",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f11_3m_ob_baseline_and_od_variants_labelled",
+      "id": "F11",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F11-OD-confirm-2m-5m-rejection",
+      "source_reason": "OD:2m/5m OB and rejection-block variants",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: RULES membership is asserted in test_f18_f19_clock_fields; no nodeid fails when F12 behavior is removed",
+      "id": "F12",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F12-candidate-references-unchanged",
+      "source_reason": "F12 note only",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: pzone generator unknown is labelled; no nodeid fails when this row is removed",
+      "id": "F17",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F17-pzone-generator-unknown",
+      "source_reason": "OD:proprietary P-zone generator unknown",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a.py::test_S31_jj_tbr_clock_zone_verified",
+      "id": "F18",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F18-ny-clock-ET",
+      "source_reason": "TBR p.6",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "family": "JJ-TBR",
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f18_f19_clock_fields",
+      "id": "F19",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F19-chart-clocks-UK-UTC",
+      "source_reason": "JR p.71 ticket UTC; 2026 NT charts UK",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_a_period_0930_1000",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-a-period",
+      "source_reason": "TPO p.3",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_a_period_0930_1000",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-observation-1000",
+      "source_reason": "AVG p.21",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_no_1100_cutoff",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-no-1100-cutoff",
+      "source_reason": "F16",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_no_60m_retest_expiry",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-no-60m-expiry",
+      "source_reason": "F16",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_no_developing_val_rise",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-no-val-rise",
+      "source_reason": "F16",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "no discriminating fixture: open-above-value admission is labelled; no nodeid fails when this row is removed",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-open-above-value",
+      "source_reason": "AVG pp.21-22",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "no discriminating fixture: rejection at POC/prior VAH is labelled; no nodeid fails when this row is removed",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-rejection-poc-or-prior-vah",
+      "source_reason": "AVG p.21",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "no discriminating fixture: VAH-break imbalance is labelled; no nodeid fails when this row is removed",
+      "id": "F16",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F16-imbalance-vah-break",
+      "source_reason": "OD:O109 buy run or synth fixture band (AVG pp.21-28)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "no discriminating fixture: defended retest is labelled; no nodeid fails when this row is removed",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-defended-retest",
+      "source_reason": "AVG pp.21-28",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_three_tick_reward",
+      "id": "F16",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F16-three-tick-reward",
+      "source_reason": "AVG p.24",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "family": "KEANI-OPEN-ABOVE-VALUE",
+      "file_line": "keani.py:280",
+      "fixture": "test_p15_16a_saint.py::test_F16_htf_objective_not_a_width",
+      "id": "F16",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F16-htf-objective",
+      "source_reason": "OD:nearest of prior-day high, prior VAH, weekly high above (F16)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_no_1245_split",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-no-1245-split",
+      "source_reason": "K10 pp.5-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:350",
+      "fixture": "test_p15_16a_saint.py::test_F15_independence_binds_admission",
+      "id": "F15",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F15-two-reasons",
+      "source_reason": "OD:reaction_ticks=4, confluence_ticks=2, look-left any prior history (K10 pp.5-8)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:338",
+      "fixture": "no discriminating fixture: KG1 OD alternative is labelled; no nodeid fails when this row is removed",
+      "id": "F15",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F15-kg1-alternative",
+      "source_reason": "OD:KG1 aligned within confluence_ticks (K10 p.6)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:373",
+      "fixture": "test_p15_16a_saint.py::test_F15_independence_binds_admission",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-independence-admission",
+      "source_reason": "K10 pp.5-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_target_1_5R_and_ticket_conflict",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-target-1.5R",
+      "source_reason": "K10 pp.7-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_target_1_5R_and_ticket_conflict",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-ticket-rr-conflict",
+      "source_reason": "K10 pp.7-8 tickets R:R 1.00 and 9.60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_stop_above_rejection_high",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-stop-beyond-rejection",
+      "source_reason": "K10 pp.7-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_fixed_500_risk",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-fixed-500-risk",
+      "source_reason": "K10 p.13",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_k10_p13_drawn_directions_negative_control",
+      "id": "F15",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F15-k10-p13-drawn-directions",
+      "source_reason": "K10 p.13",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "family": "MEMBER-TWO-REASONS",
+      "file_line": "member.py:546",
+      "fixture": "test_p15_16a_saint.py::test_RR23_es_tape_required",
+      "id": "RR-23",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-23-instrument-transfer",
+      "source_reason": "OD:instrument transfer NQ from ES-202609 (K10 pp.7-8,12-13)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:342",
+      "fixture": "test_p15_16a_saint.py::test_F04_arrival_fast_vs_slow",
+      "id": "F04",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F04-arrival_read",
+      "source_reason": "OD:approach_bars=5,fast_ratio=0.08 of balance_width (WIC p.4)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:359",
+      "fixture": "test_p15_16a_saint.py::test_F04_profile_excludes_trend",
+      "id": "F04",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F04-profile_allows_trade",
+      "source_reason": "OD:shape classifier mid_volume_frac/poc_pos (RTVP pp.6-11)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:402",
+      "fixture": "test_p15_16a_saint.py::test_F04_double_shelf_target",
+      "id": "F04",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F04-double-shelf-target",
+      "source_reason": "RTVP p.8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:428",
+      "fixture": "test_p15_16a_saint.py::test_F04_alignment_not_from_trade_side",
+      "id": "F04",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F04-alignment_ok",
+      "source_reason": "OD:HTF value-migration vs 15m break, never from trade side (WIC pp.5-10)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:701",
+      "fixture": "test_p15_16a_saint.py::test_F05_no_older_auction_gate",
+      "id": "F05",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F05-failed_auction_return",
+      "source_reason": "AMTL p.8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:807",
+      "fixture": "test_p15_16a_saint.py::test_F05_poc_tell_selects_target",
+      "id": "F05",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F05-poc_traversal",
+      "source_reason": "AMTL p.9; RTVP p.5",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:960",
+      "fixture": "test_p15_16a_saint.py::test_RR22_asia_session_not_ny_only",
+      "id": "RR-22",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-22-asia-session",
+      "source_reason": "TRAP pp.3-10",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:459",
+      "fixture": "no discriminating fixture: cover_frac OD is labelled; no nodeid fails when this row is removed",
+      "id": "RR-22",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR-22-balance-fit",
+      "source_reason": "OD:cover_frac>=0.55 else latest confirmed (TRAP p.3)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:558",
+      "fixture": "test_p15_16a_saint.py::test_RR22_single_retest_only",
+      "id": "RR-22",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-22-single-retest",
+      "source_reason": "TRAP pp.6-7",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:960",
+      "fixture": "test_p15_16a_saint.py::test_RR22_asia_range_literal",
+      "id": "RR-22",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-22-asia-range",
+      "source_reason": "TRAP p.8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "family": "SAINT-AMT",
+      "file_line": "saint.py:558",
+      "fixture": "test_p15_16a_saint.py::test_RR22_long_mirror",
+      "id": "RR-22",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR-22-long-mirror",
+      "source_reason": "TRAP long mirror as ruled",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:137",
+      "fixture": "test_p15_16a_sires.py::test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time",
+      "id": "F10",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "F10_zone_from_aggressive_clusters",
+      "source_reason": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:32",
+      "fixture": "test_p15_16a_sires.py::test_rr21_refill_literal_size_family_and_bracket",
+      "id": "F10",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F10_literal_cluster_size_family",
+      "source_reason": "REF pp.5-7",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:46",
+      "fixture": "test_p15_16a_sires.py::test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time",
+      "id": "F10",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F10_actual_departure",
+      "source_reason": "REF pp.5-7",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:61",
+      "fixture": "test_p15_16a_sires.py::test_f10_future_prints_after_touch_do_not_change_pre_touch_features",
+      "id": "F10",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F10_distinct_later_touches",
+      "source_reason": "REF pp.5-7",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:114",
+      "fixture": "test_p15_16a_sires.py::test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time",
+      "id": "F20",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F20_printed_bracket",
+      "source_reason": "REF p.12",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:88",
+      "fixture": "test_p15_16a_sires.py::test_rr21_future_refills_after_decision_are_ignored",
+      "id": "RR-21",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "RR21_hold_label_boundary",
+      "source_reason": "OD:HOLD_BOUNDARY_TICKS=8,HOLD_WINDOW_NS=30m",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "family": "REFILL-STUDY",
+      "file_line": "refill_b02.py:RULES[RR21_population_175]",
+      "fixture": "test_p15_16a_sires.py::test_rr21_refill_literal_size_family_and_bracket",
+      "id": "RR-21",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR21_population_175",
+      "source_reason": "REF p.8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:64",
+      "fixture": "test_p15_16a_sires.py::test_f02_pullback_then_absorption_is_not_clean_squeeze",
+      "id": "F02",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F02_clean_squeeze_no_retest",
+      "source_reason": "CONT p.11",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:78",
+      "fixture": "test_p15_16a_sires.py::test_f03_replenishment_three_refills_pass_two_fail",
+      "id": "F03",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F03_replenishment_ticks",
+      "source_reason": "STOP pp.10, 14",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:86",
+      "fixture": "test_p15_16a_sires.py::test_f03_reward_ticks_separate_from_replenishment",
+      "id": "F03",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F03_reward_ticks",
+      "source_reason": "ABS p.6",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:86",
+      "fixture": "no discriminating fixture: ES-tick conversion is labelled; no nodeid fails when this SIRES row is removed",
+      "id": "RR-21",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR21_es_ticks_not_nq",
+      "source_reason": "STOP pp.11-13; FP9 pp.3-4",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:94",
+      "fixture": "test_p15_16a_sires.py::test_f09_location_lvn_passes_poc_fails",
+      "id": "F09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F09_location_eligibility",
+      "source_reason": "ABS pp.6-7; VP2 p.7; BIG p.10",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:106",
+      "fixture": "test_p15_16a_sires.py::test_f09_thesis_killers_c1",
+      "id": "F09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F09_thesis_killers",
+      "source_reason": "C1 p.4",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:128",
+      "fixture": "test_p15_16a_sires.py::test_f09_gamma_ofm_short_fade_long_missing_is_unknown",
+      "id": "F09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F09_gamma_permission",
+      "source_reason": "BIG p.14",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:112",
+      "fixture": "test_p15_16a_sires.py::test_rr20_aggression_30_60",
+      "id": "RR-20",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR20_aggression_band",
+      "source_reason": "OFM p.4; BIG p.3",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:120",
+      "fixture": "test_p15_16a_sires.py::test_rr20_imbalance_350_and_vwap_bands",
+      "id": "RR-20",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR20_imbalance_350",
+      "source_reason": "BIG p.5",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:156",
+      "fixture": "no discriminating fixture: footprint flag is labelled; no nodeid fails when this row is removed",
+      "id": "RR-20",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR20_footprint_flag",
+      "source_reason": "FP8 p.5",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:165",
+      "fixture": "test_p15_16a_sires.py::test_rr20_imbalance_350_and_vwap_bands",
+      "id": "RR-20",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR20_vwap_bands",
+      "source_reason": "VWAP p.4",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:138",
+      "fixture": "test_p15_16a_sires.py::test_rr18_resting_stop_is_baseline_ofm_entry",
+      "id": "RR-18",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR18_resting_stop_entry",
+      "source_reason": "K2345 p.9; OFM pp.11-14",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:177",
+      "fixture": "test_p15_16a_sires.py::test_rr18_40_tick_and_control_zone_objectives",
+      "id": "RR-18",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR18_ofm_40_tick_target",
+      "source_reason": "OFM pp.7-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:187",
+      "fixture": "test_p15_16a_sires.py::test_rr18_40_tick_and_control_zone_objectives",
+      "id": "RR-18",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR18_control_zone_target",
+      "source_reason": "BIG pp.10, 15-16",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:195",
+      "fixture": "test_p15_16a_sires.py::test_rr19_management_partial_trail_daily_stop",
+      "id": "RR-19",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR19_partial_1to1_be",
+      "source_reason": "C2 p.5",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:205",
+      "fixture": "test_p15_16a_sires.py::test_rr19_management_partial_trail_daily_stop",
+      "id": "RR-19",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR19_trail_protected_swing",
+      "source_reason": "RD p.4; K18 pp.8-9",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:148",
+      "fixture": "test_p15_16a_sires.py::test_rr19_management_partial_trail_daily_stop",
+      "id": "RR-19",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "RR19_daily_stop",
+      "source_reason": "STOP p.15",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:213",
+      "fixture": "test_p15_16a_sires.py::test_rr17_replay_sires_author_examples",
+      "id": "OD_level_tolerance_ticks",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "OD_level_tolerance_ticks",
+      "source_reason": "OD:LEVEL_TOLERANCE_TICKS=8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:219",
+      "fixture": "test_p15_16a_sires.py::test_f02_fast_release_no_pullback_passes_clean_squeeze",
+      "id": "OD_fast_release",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "OD_fast_release",
+      "source_reason": "OD:FAST_RELEASE_TICKS=8,FAST_RELEASE_NS=5s",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:227",
+      "fixture": "no discriminating fixture: reward window OD is labelled; no nodeid fails when this row is removed",
+      "id": "OD_reward_window",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "OD_reward_window",
+      "source_reason": "OD:REWARD_WINDOW_NS=30s",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:233",
+      "fixture": "test_p15_16a_sires.py::test_a3_entry_one_to_two_ticks_rejects_wider",
+      "id": "A3_entry_one_to_two_ticks",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "A3_entry_one_to_two_ticks",
+      "source_reason": "STOP pp.9-15",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:242",
+      "fixture": "test_p15_16a_sires.py::test_f09_balance_fade_unpaid_and_own_aggression",
+      "id": "F09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F09_balance_fade_unpaid",
+      "source_reason": "BIG pp.14-15",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:250",
+      "fixture": "test_p15_16a_sires.py::test_f09_balance_fade_unpaid_and_own_aggression",
+      "id": "F09",
+      "kind": "literal",
+      "notes": null,
+      "rule_id": "F09_balance_fade_own_aggression",
+      "source_reason": "GEX p.18",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "family": "SIRES",
+      "file_line": "sires_b02.py:261",
+      "fixture": "test_p15_16a_sires.py::test_f03_replenishment_three_refills_pass_two_fail",
+      "id": "OD_replenishment_band",
+      "kind": "OD",
+      "notes": null,
+      "rule_id": "OD_replenishment_band",
+      "source_reason": "OD:REPLENISHMENT_BAND_TICKS=2",
+      "status": "implemented"
+    }
+  ],
+  "findings": [
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:1599",
+      "fixture": "test_p15_16a_greenbird.py::test_f01_old_scalp_branches_are_observations",
+      "id": "F01",
+      "notes": null,
+      "source_reason": "GB p.40",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:64",
+      "fixture": "test_p15_16a_sires.py::test_f02_pullback_then_absorption_is_not_clean_squeeze",
+      "id": "F02",
+      "notes": null,
+      "source_reason": "CONT p.11",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:78",
+      "fixture": "test_p15_16a_sires.py::test_f03_replenishment_three_refills_pass_two_fail",
+      "id": "F03",
+      "notes": null,
+      "source_reason": "STOP pp.10, 14",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "families": [
+        "SAINT-AMT"
+      ],
+      "file_line": "saint.py:342",
+      "fixture": "test_p15_16a_saint.py::test_F04_arrival_fast_vs_slow",
+      "id": "F04",
+      "notes": null,
+      "source_reason": "OD:approach_bars=5,fast_ratio=0.08 of balance_width (WIC p.4)",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "families": [
+        "SAINT-AMT"
+      ],
+      "file_line": "saint.py:701",
+      "fixture": "test_p15_16a_saint.py::test_F05_no_older_auction_gate",
+      "id": "F05",
+      "notes": null,
+      "source_reason": "AMTL p.8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:727",
+      "fixture": "test_p15_16a_greenbird.py::test_f06_a1_requires_retest_and_post_open_close",
+      "id": "F06",
+      "notes": null,
+      "source_reason": "GB NG 2099513366326730859; GB p.60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:294",
+      "fixture": "test_p15_16a_greenbird.py::test_f07_bias_reports_unfiltered_and_filtered",
+      "id": "F07",
+      "notes": null,
+      "source_reason": "OD:prior_close_vs_range_midpoint,nyam_box_close_vs_open",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f08_extension_after_1000_and_1300_admitted",
+      "id": "F08",
+      "notes": null,
+      "source_reason": "TBR p.12",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:94",
+      "fixture": "test_p15_16a_sires.py::test_f09_location_lvn_passes_poc_fails",
+      "id": "F09",
+      "notes": null,
+      "source_reason": "ABS pp.6-7; VP2 p.7; BIG p.10",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "families": [
+        "REFILL-STUDY"
+      ],
+      "file_line": "refill_b02.py:137",
+      "fixture": "test_p15_16a_sires.py::test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time",
+      "id": "F10",
+      "notes": null,
+      "source_reason": "OD:PRINT_THRESHOLD=40,CLUSTER_SECONDS=5,CLUSTER_MIN_SIZE=80",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f11_3m_ob_baseline_and_od_variants_labelled",
+      "id": "F11",
+      "notes": null,
+      "source_reason": "F11; RR-06",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: RULES membership is asserted in test_f18_f19_clock_fields; no nodeid fails when F12 behavior is removed",
+      "id": "F12",
+      "notes": null,
+      "source_reason": "F12 note only",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:1471",
+      "fixture": "test_p15_16a_greenbird.py::test_f13_vwap_missing_retest_is_fail_not_unknown",
+      "id": "F13",
+      "notes": null,
+      "source_reason": "OD:retest_horizon_rth_close; 60m_candidate",
+      "status": "implemented"
+    },
+    {
+      "evidence": null,
+      "families": [],
+      "file_line": null,
+      "fixture": "no discriminating fixture: SOURCE_ADDITIONS items 11/19/27 are documentation corrections",
+      "id": "F14",
+      "notes": null,
+      "source_reason": "SOURCE_ADDITIONS items 11/19/27 are documentation corrections; B0.2 adapters implement the underlying F06/F13 rules.",
+      "status": "deferred"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "families": [
+        "MEMBER-TWO-REASONS"
+      ],
+      "file_line": "member.py:387",
+      "fixture": "test_p15_16a_saint.py::test_F15_no_1245_split",
+      "id": "F15",
+      "notes": null,
+      "source_reason": "K10 pp.5-8",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_KEANI.json",
+      "families": [
+        "KEANI-OPEN-ABOVE-VALUE"
+      ],
+      "file_line": "keani.py:294",
+      "fixture": "test_p15_16a_saint.py::test_F16_no_1100_cutoff",
+      "id": "F16",
+      "notes": null,
+      "source_reason": "TPO p.3",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "no discriminating fixture: pzone generator unknown is labelled; no nodeid fails when this row is removed",
+      "id": "F17",
+      "notes": null,
+      "source_reason": "OD:proprietary P-zone generator unknown",
+      "status": "implemented"
+    },
+    {
+      "evidence": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+      "families": [
+        "GB-FAIL",
+        "GB-SCALP",
+        "GB-VWAP",
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/common.py:CLOCK_ZONE_UNVERIFIED_FAMILIES",
+      "fixture": "test_p15_16a.py::test_S31_jj_tbr_clock_zone_verified",
+      "id": "F18",
+      "notes": "JJ-TBR is dropped from CLOCK_ZONE_UNVERIFIED_FAMILIES (TBR p.4/p.6 New York clock). GB-FAIL, GB-VWAP and GB-SCALP remain in the frozenset so frozen B0/B0.1 dual-scan flags do not move. WORK_LOG: keeping the frozen B0/B0.1 dual-scan flags from moving.",
+      "source_reason": "TBR p.4/p.6 New York clock for JJ-TBR; GB seasonal NY clocks evidenced but frozen B0/B0.1 flag unchanged",
+      "status": "partial"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_f18_f19_clock_fields",
+      "id": "F19",
+      "notes": null,
+      "source_reason": "JR p.71 ticket UTC; 2026 NT charts UK",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "families": [
+        "REFILL-STUDY"
+      ],
+      "file_line": "refill_b02.py:114",
+      "fixture": "test_p15_16a_sires.py::test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time",
+      "id": "F20",
+      "notes": null,
+      "source_reason": "REF p.12",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:315",
+      "fixture": "test_p15_16a_jumbo.py::test_rr01_extension_band_identity_and_printed_examples",
+      "id": "RR-01",
+      "notes": null,
+      "source_reason": "JR p.23; o015",
+      "status": "implemented"
+    },
+    {
+      "evidence": "implementation/src/trading_research/research/rule_discovery/source_adapters/common.py",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/common.py:changed_reference_scan",
+      "fixture": "test_p15_16a.py::test_S02_rr02_eq_contacts_are_two_sided",
+      "id": "RR-02",
+      "notes": "EQ two-sided is implemented in common.changed_reference_scan. Quadrant sides stay the default pair (q1 long / q3 short); they are not bound to the branch context as RR-02 states. WORK_LOG: q1 long / q3 short stay the default pair.",
+      "source_reason": "TBR pp.12-15; author trades EQ both ways 2026-09-01/02",
+      "status": "partial"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr03_sweep_before_0930_is_a_valid_trigger",
+      "id": "RR-03",
+      "notes": null,
+      "source_reason": "JR p.20",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr04_london_box_is_0200_0300_not_0000_0300",
+      "id": "RR-04",
+      "notes": null,
+      "source_reason": "JR pp.50, 63-64",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr05_printed_pzone_absorption_fixture",
+      "id": "RR-05",
+      "notes": null,
+      "source_reason": "JR pp.16-18",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr06_reclaim_is_the_entry_and_depth_is_recorded_not_required",
+      "id": "RR-06",
+      "notes": null,
+      "source_reason": "JR p.71",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr07_sessionstat_coincidence_and_evrange_after_tape",
+      "id": "RR-07",
+      "notes": null,
+      "source_reason": "OD:60-session mean/median of selected clock from native tape",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1322",
+      "fixture": "test_p15_16a_jumbo.py::test_rr08_open_location_uses_prior_rth_at_0930",
+      "id": "RR-08",
+      "notes": null,
+      "source_reason": "JR pp.36, 38, 42",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_jumbo/RULES_JJ-TBR.json",
+      "families": [
+        "JJ-TBR"
+      ],
+      "file_line": "source_adapters/jumbo.py:1495",
+      "fixture": "test_p15_16a_jumbo.py::test_rr09_one_side_is_high_only_plus_low_only",
+      "id": "RR-09",
+      "notes": null,
+      "source_reason": "JR pp.23, 37, 70",
+      "status": "implemented"
+    },
+    {
+      "evidence": null,
+      "families": [],
+      "file_line": null,
+      "fixture": "no discriminating fixture: author-example replay set; covered by AUTHOR_EXAMPLE_REPLAY rather than a RULES row",
+      "id": "RR-10",
+      "notes": null,
+      "source_reason": "Author-example replay set; covered by AUTHOR_EXAMPLE_REPLAY rather than a RULES row.",
+      "status": "deferred"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:98",
+      "fixture": "test_p15_16a_greenbird.py::test_rr11_september_uses_asia_0000_and_london_0200_0500",
+      "id": "RR-11",
+      "notes": null,
+      "source_reason": "OD:asia_box_windows,london_box_windows,ny_sub_boxes",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:140",
+      "fixture": "test_p15_16a_greenbird.py::test_rr12_ladder_and_750_not_scored",
+      "id": "RR-12",
+      "notes": null,
+      "source_reason": "GB pp.52-53, 56, 58, 60",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:375",
+      "fixture": "test_p15_16a_greenbird.py::test_rr13_five_minute_required_for_asia_high",
+      "id": "RR-13",
+      "notes": null,
+      "source_reason": "GB pp.19, 25; RR-13 at-level box edges",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:108",
+      "fixture": "test_p15_16a_greenbird.py::test_rr14_pocket_uses_impulse_not_910_box",
+      "id": "RR-14",
+      "notes": null,
+      "source_reason": "GB pp.23, 25, 51; raw capture 2026-09-11",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_greenbird/RULES_GB.json",
+      "families": [
+        "GB-FAIL"
+      ],
+      "file_line": "green_b02.py:171",
+      "fixture": "test_p15_16a_greenbird.py::test_rr15_objective_horizon_is_next_open_not_30m",
+      "id": "RR-15",
+      "notes": null,
+      "source_reason": "GB pp.51-54",
+      "status": "implemented"
+    },
+    {
+      "evidence": null,
+      "families": [],
+      "file_line": null,
+      "fixture": "no discriminating fixture: GB author-example replay set; covered by AUTHOR_EXAMPLE_REPLAY",
+      "id": "RR-16",
+      "notes": null,
+      "source_reason": "Author-example replay set for GB; covered by AUTHOR_EXAMPLE_REPLAY.",
+      "status": "deferred"
+    },
+    {
+      "evidence": null,
+      "families": [],
+      "file_line": null,
+      "fixture": "test_p15_16a_sires.py::test_rr17_replay_sires_author_examples",
+      "id": "RR-17",
+      "notes": null,
+      "source_reason": "Author-example replay set for SIRES; covered by AUTHOR_EXAMPLE_REPLAY.",
+      "status": "deferred"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:138",
+      "fixture": "test_p15_16a_sires.py::test_rr18_resting_stop_is_baseline_ofm_entry",
+      "id": "RR-18",
+      "notes": null,
+      "source_reason": "K2345 p.9; OFM pp.11-14",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:195",
+      "fixture": "test_p15_16a_sires.py::test_rr19_management_partial_trail_daily_stop",
+      "id": "RR-19",
+      "notes": null,
+      "source_reason": "C2 p.5",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_SIRES.json",
+      "families": [
+        "SIRES"
+      ],
+      "file_line": "sires_b02.py:112",
+      "fixture": "test_p15_16a_sires.py::test_rr20_aggression_30_60",
+      "id": "RR-20",
+      "notes": null,
+      "source_reason": "OFM p.4; BIG p.3",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_sires/RULES_REFILL-STUDY.json",
+      "families": [
+        "REFILL-STUDY",
+        "SIRES"
+      ],
+      "file_line": "refill_b02.py:88",
+      "fixture": "test_p15_16a_sires.py::test_rr21_refill_literal_size_family_and_bracket",
+      "id": "RR-21",
+      "notes": null,
+      "source_reason": "OD:HOLD_BOUNDARY_TICKS=8,HOLD_WINDOW_NS=30m",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_SAINT-AMT.json",
+      "families": [
+        "SAINT-AMT"
+      ],
+      "file_line": "saint.py:960",
+      "fixture": "test_p15_16a_saint.py::test_RR22_asia_session_not_ny_only",
+      "id": "RR-22",
+      "notes": null,
+      "source_reason": "TRAP pp.3-10",
+      "status": "implemented"
+    },
+    {
+      "evidence": "/workspace/implementation/reports/research-work/P15-16A/_track_saint/RULES_MEMBER-TWO-REASONS.json",
+      "families": [
+        "MEMBER-TWO-REASONS"
+      ],
+      "file_line": "member.py:546",
+      "fixture": "test_p15_16a_saint.py::test_RR23_es_tape_required",
+      "id": "RR-23",
+      "notes": null,
+      "source_reason": "OD:instrument transfer NQ from ES-202609 (K10 pp.7-8,12-13)",
+      "status": "implemented"
+    }
+  ],
+  "n_family_rules": 103,
+  "n_findings_deferred": 4,
+  "n_findings_implemented": 37,
+  "n_findings_partial": 2,
+  "schema": "research-fidelity-matrix-v1",
+  "task_id": "P15-16A"
+}
