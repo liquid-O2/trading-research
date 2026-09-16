@@ -231,7 +231,9 @@ def slice_family(day: str) -> dict[str, Any]:
 NS_MINUTE = 60_000_000_000
 TICK = Decimal("0.25")
 REPLAY_LEVEL_TOLERANCE = Decimal("2")
+TAPE_FIRST = date(2020, 1, 2)
 TAPE_LAST = date(2026, 8, 19)
+OUTSIDE_TAPE = "date outside the tape"
 STAGE_ORDER = ("context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management")
 LADDER_MULT = (Decimal("0.5"), Decimal("1"), Decimal("1.33"), Decimal("1.66"), Decimal("2"), Decimal("2.5"), Decimal("3"))
 TRACK_DIR = Path("/workspace/.worktrees/b02-jumbo/implementation/reports/research-work/P15-16A/_track_jumbo")
@@ -295,8 +297,18 @@ RULES = {
         "status": "deferred",
     },
     "F08-single-extended-reduced-after-10:00": {"kind": "literal", "source": "TBR p.12", "finding": "F08"},
-    "F11-confirm-3m-ob-baseline": {"kind": "literal", "source": "TBR p.27", "finding": "F11"},
-    "F11-OD-confirm-2m-5m-rejection": {"kind": "OD", "source": "OD:2m/5m OB and rejection-block variants", "finding": "F11"},
+    "RR-02-eq-both-sides-context-bound": {
+        "kind": "literal",
+        "source": "TBR pp.12-15; JR 2026-09-01/02 EQ both ways; RR-02",
+        "finding": "RR-02",
+    },
+    "F11-confirm-3m-ob-baseline": {"kind": "literal", "source": "TBR p.27 C2 sweeps C1, C3 closes beyond C2 opposite extreme (O056)", "finding": "F11"},
+    "F11-OD-confirm-2m-5m-rejection": {"kind": "OD", "source": "OD:2m/5m OB and rejection-block TBR p.29 close above sweep candle", "finding": "F11"},
+    "F11-confirm-any-2-3-5-or-rejection": {
+        "kind": "literal",
+        "source": "TBR pp.27-29; F11 any of 2m/3m/5m full-C2 OB or rejection block",
+        "finding": "F11",
+    },
     "F12-candidate-references-unchanged": {"kind": "literal", "source": "F12 note only", "finding": "F12"},
     "F17-pzone-generator-unknown": {"kind": "OD", "source": "OD:proprietary P-zone generator unknown", "finding": "F17"},
     "F18-ny-clock-ET": {"kind": "literal", "source": "TBR p.6", "finding": "F18"},
@@ -523,22 +535,169 @@ def _touch_band(bars: list[dict[str, Any]], lo: Decimal, hi: Decimal) -> dict[st
     return None
 
 
-def _three_candle_ob(bars: list[dict[str, Any]], side: str) -> dict[str, Any] | None:
+def _three_candle_ob(bars: list[dict[str, Any]], side: str, level: Decimal | None = None) -> dict[str, Any] | None:
+    """TBR pp.27-28 / O056: C2 sweeps C1; C3 closes beyond C2's opposite extreme.
+
+    When level is supplied, C2 must trade the location. Confirmation at a distant
+    three-candle structure is not the source signature.
+    """
     rows = [row for row in bars if row.get("C") is not None and row.get("H") is not None and row.get("L") is not None]
     for first, second, third in zip(rows, rows[1:], rows[2:]):
-        if first["end"] != second["start"] or second["end"] != third["start"]:
+        if not (first["end"] <= second["start"] and second["end"] <= third["start"]):
+            continue
+        if level is not None and not (second["L"] <= level <= second["H"]):
             continue
         if side == "long":
             swept = second["L"] < first["L"]
-            closed = third["C"] > second["C"]
+            closed = third["C"] > second["H"]
             stop = second["L"] - TICK
         else:
             swept = second["H"] > first["H"]
-            closed = third["C"] < second["C"]
+            closed = third["C"] < second["L"]
             stop = second["H"] + TICK
         if swept and closed:
-            return {"ok": True, "at": third["known_at"], "entry": third["C"], "stop": stop}
+            return {"ok": True, "at": third["known_at"], "entry": third["C"], "stop": stop, "band": [str(second["L"]), str(second["H"])]}
     return None
+
+
+def _rejection_block(bars: list[dict[str, Any]], side: str, level: Decimal | None = None) -> dict[str, Any] | None:
+    """TBR p.29: rejection wick on the sweep candle; next candle closes beyond it.
+
+    Timeframes are 2/3/5 minutes (TBR p.27). The wick must be the larger part of
+    the candle so a one-tick tail is not a rejection block.
+    """
+    rows = [
+        row
+        for row in bars
+        if row.get("O") is not None and row.get("C") is not None and row.get("H") is not None and row.get("L") is not None
+    ]
+    for sweep, close in zip(rows, rows[1:]):
+        if sweep["end"] > close["start"]:
+            continue
+        if level is not None and not (sweep["L"] <= level <= sweep["H"]):
+            continue
+        body_lo = min(sweep["O"], sweep["C"])
+        body_hi = max(sweep["O"], sweep["C"])
+        body = body_hi - body_lo
+        if side == "long":
+            wick_w = body_lo - sweep["L"]
+            closed = close["C"] > sweep["H"]
+            band = [sweep["L"], body_lo]
+        else:
+            wick_w = sweep["H"] - body_hi
+            closed = close["C"] < sweep["L"]
+            band = [body_hi, sweep["H"]]
+        if wick_w > body and closed:
+            return {"ok": True, "at": close["known_at"], "band": [str(band[0]), str(band[1])]}
+    return None
+
+
+def _confirm_pack(
+    market,
+    start_ns: int,
+    side: str,
+    level: Decimal | None = None,
+    horizon_min: int = 15,
+    end_ns: int | None = None,
+) -> dict[str, Any]:
+    """F11: 2/3/5-minute full-C2 OB or rejection-block, each computed from bars."""
+    close_ns = int(end_ns) if end_ns is not None else int(start_ns) + horizon_min * NS_MINUTE
+    pack: dict[str, Any] = {"ob_2m": None, "ob_3m": None, "ob_5m": None, "rejection_block": None, "at": None}
+    rb_seen = False
+    rb_hit = False
+    for seconds, key in ((120, "ob_2m"), (180, "ob_3m"), (300, "ob_5m")):
+        rows = [row for row in _bars(market, int(start_ns), close_ns, seconds) if row["start"] >= int(start_ns)]
+        complete = [row for row in rows if row.get("C") is not None and row.get("H") is not None and row.get("L") is not None]
+        if len(complete) < 3:
+            pack[key] = None
+        else:
+            found = _three_candle_ob(rows, side, level=level)
+            pack[key] = found is not None
+            if found is not None:
+                pack["at"] = found["at"]
+        if len(complete) >= 2:
+            rb_seen = True
+            found_rb = _rejection_block(rows, side, level=level)
+            if found_rb is not None:
+                rb_hit = True
+                if pack["at"] is None:
+                    pack["at"] = found_rb["at"]
+    pack["rejection_block"] = True if rb_hit else (False if rb_seen else None)
+    return pack
+
+
+def _f11_verdict(pack: Mapping[str, Any]) -> str:
+    flags = [pack.get(key) for key in ("ob_2m", "ob_3m", "ob_5m", "rejection_block")]
+    if any(flag is True for flag in flags):
+        return "pass"
+    if all(flag is None for flag in flags):
+        return "unknown"
+    return "fail"
+
+
+def _contact_kind(bar: Mapping[str, Any], level: Decimal, side: str) -> str | None:
+    high, low = bar.get("H"), bar.get("L")
+    if high is None or low is None:
+        return None
+    if low <= level <= high:
+        if side == "long" and low < level:
+            return "sweep"
+        if side == "short" and high > level:
+            return "sweep"
+        return "touch"
+    return None
+
+
+def _overnight_span(market) -> dict[str, Any] | None:
+    try:
+        start = _at(market, "18:00", offset=-1)
+    except Exception:
+        return None
+    end = _at(market, "09:30")
+    bars = _cutoff(_bars(market, start, end, 60), end)
+    return _span(bars, known_at=end)
+
+
+def _purge_state(market, prior: Mapping[str, Any] | None) -> dict[str, Any]:
+    overnight = _overnight_span(market)
+    if overnight is None or not prior:
+        return {"available": False, "purged_high": None, "purged_low": None, "compressed": None}
+    pdh, pdl = _d(prior.get("high")), _d(prior.get("low"))
+    prior_width = None if pdh is None or pdl is None else pdh - pdl
+    width = overnight["high"] - overnight["low"]
+    return {
+        "available": True,
+        "purged_high": None if pdh is None else overnight["high"] > pdh,
+        "purged_low": None if pdl is None else overnight["low"] < pdl,
+        "compressed": None if prior_width is None else width < prior_width,
+        "overnight_high": str(overnight["high"]),
+        "overnight_low": str(overnight["low"]),
+        "overnight_width": str(width),
+    }
+
+
+def _context_sides(branch: str, label: str | None, purge: Mapping[str, Any]) -> tuple[str, ...]:
+    """RR-02: enumerate both sides, keep the side the branch context permits."""
+    if branch == "internal_rotation":
+        return ("long", "short") if label == "inside_value" else ()
+    if branch == "single_extended":
+        if label in {"below_pdl", "below_val"}:
+            return ("short",)
+        if label in {"above_pdh", "above_vah"}:
+            return ("long",)
+        return ()
+    if branch == "single_purged":
+        if label not in {"below_val", "below_pdl"}:
+            return ()
+        if not purge.get("available"):
+            return ()
+        sides: list[str] = []
+        if purge.get("purged_low") is True:
+            sides.append("short")
+        if purge.get("purged_high") is True:
+            sides.append("long")
+        return tuple(sides)
+    return ("long", "short")
 
 
 def _absorption(bar: Mapping[str, Any], avg_volume: Decimal | None) -> bool | None:
@@ -708,8 +867,10 @@ def rules_payload() -> list[dict[str, Any]]:
         "RR-01-extension-band-1.33-1.66": extension_reaction_bands,
         "RR-01-OD-near-band-0.33-0.66": mean_reversal_bands,
         "RR-06-projection-ladder": projection_ladder,
+        "RR-02-eq-both-sides-context-bound": scan_b02,
         "RR-03-sweep-from-09:00": scan_b02,
         "RR-04-london-02:00-03:00": scan_b02,
+        "F11-confirm-any-2-3-5-or-rejection": scan_b02,
         "RR-05-pzone-anchors": scan_b02,
         "RR-06-reclaim-entry": scan_b02,
         "RR-07-OD-sessionstat-60": scan_b02,
@@ -841,16 +1002,26 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
     if width <= 0:
         return [], [{"reason": "nonpositive_formation_width"}]
     label, context_unknown = _context_label(market)
-    action = _bars(market, _at(market, "09:00"), _at(market, "16:00"), 60)
+    sweep_bars = _bars(market, _at(market, "09:00"), _at(market, "10:00"), 60)
+    reclaim_bars = _bars(market, _at(market, "09:00"), _at(market, "11:00"), 60)
     modal_lo, modal_hi = _at(market, "09:40"), _at(market, "09:50")
+    confirm_lo, confirm_hi = _at(market, "09:40"), _at(market, "10:10")
     episodes = []
+    passed_session = False
     for side, edge, opposite in (("long", low, high), ("short", high, low)):
-        for sweep, reclaim in _sweep_cycles(action, side, edge, modal_lo, modal_hi):
+        for sweep, reclaim in _sweep_cycles(sweep_bars, side, edge, modal_lo, modal_hi):
             depth = (edge - sweep["L"]) if side == "long" else (sweep["H"] - edge)
-            ob_window = _bars(market, sweep["start"], sweep["start"] + 30 * NS_MINUTE, 180)
-            ob = _three_candle_ob(ob_window, side)
-            ob2 = _three_candle_ob(_bars(market, sweep["start"], sweep["start"] + 30 * NS_MINUTE, 120), side)
-            ob5 = _three_candle_ob(_bars(market, sweep["start"], sweep["start"] + 30 * NS_MINUTE, 300), side)
+            if reclaim is None:
+                reclaim = _reclaim(reclaim_bars, side, edge, sweep["end"])
+            confirm_start = max(int(sweep["end"]), confirm_lo)
+            pack = _confirm_pack(
+                market,
+                confirm_start,
+                side,
+                level=sweep["L"] if side == "long" else sweep["H"],
+                end_ns=confirm_hi,
+            )
+            f11 = _f11_verdict(pack)
             failed: list[str] = []
             unknown: list[str] = list(context_unknown)
             if reclaim is None:
@@ -860,23 +1031,24 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
             else:
                 entry = reclaim.get("C") if reclaim.get("C") is not None else edge
                 decision = reclaim["known_at"]
-            action_cut = _cutoff(action, decision)
+            action_cut = _cutoff(reclaim_bars, decision)
             if reclaim is not None and _reclaim(action_cut, side, edge, sweep["end"]) is None:
                 failed.append("future_reclaim")
+            if passed_session and "source_confirmation" not in failed and f11 == "pass" and reclaim is not None:
+                failed.append("first_pass_already_taken")
+                f11 = "fail"
             plus = edge + width * Decimal("0.5") if side == "long" else edge - width * Decimal("0.5")
             stop = (sweep["L"] - TICK) if side == "long" else (sweep["H"] + TICK)
-            if ob is None:
+            if f11 == "unknown":
                 unknown.append("source_confirmation")
+            elif f11 == "fail":
+                failed.append("source_confirmation")
+            verdict = _verdict(failed, [item for item in unknown if item == "source_confirmation"])
             if "edge_reclaimed" in failed:
                 verdict = "fail"
-            elif reclaim is not None:
-                verdict = "pass"
-                unknown = [item for item in unknown if item != "source_confirmation"] + (
-                    ["source_confirmation"] if ob is None else []
-                )
-            else:
+            if "first_pass_already_taken" in failed:
                 verdict = "fail"
-            confirm_verdict = "pass" if reclaim is not None else "fail"
+            confirm_verdict = "fail" if reclaim is None or "first_pass_already_taken" in failed else f11
             stages = []
             if label is not None:
                 stages.append(_stage("context", "pass", _at(market, "09:30"), open_location=label))
@@ -891,19 +1063,20 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
                     sweep_depth=str(depth),
                     before_0930=sweep["start"] < _at(market, "09:30"),
                     in_modal_window=modal_lo <= sweep["start"] < modal_hi,
+                    edge_reclaimed=reclaim is not None,
                 ),
                 _stage(
                     "confirmation",
                     confirm_verdict,
-                    decision if reclaim is not None else sweep["known_at"],
+                    pack["at"] if pack["at"] is not None else (decision if reclaim is not None else sweep["known_at"]),
                     reclaim=reclaim is not None,
-                    ob_3m=ob is not None,
-                    ob_2m=ob2 is not None,
-                    ob_5m=ob5 is not None,
-                    rejection_block=None,
+                    ob_3m=pack["ob_3m"],
+                    ob_2m=pack["ob_2m"],
+                    ob_5m=pack["ob_5m"],
+                    rejection_block=pack["rejection_block"],
                 ),
             ])
-            if reclaim is not None:
+            if reclaim is not None and confirm_verdict == "pass":
                 stages.append(_stage("risk", "pass" if stop is not None else "unknown", decision, stop=None if stop is None else str(stop)))
                 stages.append(_stage("objective", "pass", decision, plus_0_5=str(plus), opposite_edge=str(opposite)))
             values = {
@@ -914,10 +1087,11 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
                 "sweep_at": sweep["start"],
                 "sweep_depth": str(depth),
                 "edge_reclaimed": reclaim is not None,
-                "source_confirmation": None if ob is None else True,
-                "confirm_3m": ob is not None,
-                "confirm_2m_od": ob2 is not None,
-                "confirm_5m_od": ob5 is not None,
+                "source_confirmation": None if f11 == "unknown" else f11 == "pass",
+                "confirm_3m": pack["ob_3m"],
+                "confirm_2m_od": pack["ob_2m"],
+                "confirm_5m_od": pack["ob_5m"],
+                "rejection_block": pack["rejection_block"],
                 "modal_window": "09:40-09:50",
             }
             geometry = {
@@ -941,6 +1115,8 @@ def _scan_judas_reversal(market) -> tuple[list[dict[str, Any]], list[dict[str, A
                     decision_at=decision,
                 )
             )
+            if verdict == "pass":
+                passed_session = True
     return episodes, []
 
 
@@ -968,23 +1144,49 @@ def _scan_judas_outbound(market) -> tuple[list[dict[str, Any]], list[dict[str, A
         target = high + width * Decimal("0.5") if side == "long" else low - width * Decimal("0.5")
         stop = (low - TICK) if side == "long" else (high + TICK)
         decision = first["known_at"]
+        at_open = int(first["start"]) == int(_at(market, "09:30"))
+        depth = (edge - first["L"]) if side == "long" and first.get("L") is not None else (
+            (first["H"] - edge) if side == "short" and first.get("H") is not None else None
+        )
+        pack = _confirm_pack(market, first["end"], side, level=edge, horizon_min=10)
+        f11 = _f11_verdict(pack)
+        failed: list[str] = []
+        unknown: list[str] = []
+        if f11 == "fail":
+            failed.append("source_confirmation")
+        elif f11 == "unknown":
+            unknown.append("source_confirmation")
+        verdict = _verdict(failed, unknown)
         stages = [
-            _stage("context", "pass", _at(market, "09:30"), at_rth_open=True),
+            _stage("context", "pass" if at_open else "fail", _at(market, "09:30"), at_rth_open=at_open, open_px=None if open_px is None else str(open_px)),
             _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low)),
-            _stage("trigger", "pass", first["start"], opening_sweep=True),
-            _stage("risk", "pass", decision, stop=str(stop), expiry="09:40"),
-            _stage("objective", "pass", decision, plus_0_5=str(target)),
+            _stage("trigger", "pass", first["start"], opening_sweep=True, sweep_depth=None if depth is None else str(depth)),
+            _stage(
+                "confirmation",
+                f11,
+                pack["at"] if pack["at"] is not None else decision,
+                ob_2m=pack["ob_2m"],
+                ob_3m=pack["ob_3m"],
+                ob_5m=pack["ob_5m"],
+                rejection_block=pack["rejection_block"],
+            ),
         ]
+        if not at_open:
+            failed.append("at_rth_open")
+            verdict = "fail"
+        if verdict == "pass":
+            stages.append(_stage("risk", "pass", decision, stop=str(stop), expiry_ns=int(_at(market, "09:40"))))
+            stages.append(_stage("objective", "pass", decision, plus_0_5=str(target)))
         episodes.append(
             _episode(
                 branch="judas_outbound",
                 side=side,
                 day=day,
-                verdict="pass",
-                failed=[],
-                unknown=[],
-                values={"branch": "judas_outbound", "side": side, "at_rth_open": True, "exit_window_recorded": True},
-                geometry={"entry": float(open_px), "stop": float(stop), "target": float(target), "reference_level": float(edge), "sweep_depth": None},
+                verdict=verdict,
+                failed=failed,
+                unknown=unknown,
+                values={"branch": "judas_outbound", "side": side, "at_rth_open": at_open, "exit_window_recorded": True},
+                geometry={"entry": float(open_px), "stop": float(stop), "target": float(target), "reference_level": float(edge), "sweep_depth": None if depth is None else float(depth)},
                 stages=stages,
                 decision_at=decision,
             )
@@ -1021,24 +1223,40 @@ def _scan_extension_reaction(market) -> tuple[list[dict[str, Any]], list[dict[st
         entry = touch.get("C")
         stop = (touch["L"] - TICK) if side == "long" else (touch["H"] + TICK)
         target = low if side == "long" else high
-        ob = _three_candle_ob(_bars(market, touch["start"], touch["start"] + 30 * NS_MINUTE, 180), side)
+        pack = _confirm_pack(market, touch["end"], side, level=(band[0] + band[1]) / 2, horizon_min=10)
+        f11 = _f11_verdict(pack)
+        failed: list[str] = []
+        if f11 == "fail":
+            failed.append("source_confirmation")
+        elif f11 == "unknown":
+            unknown.append("source_confirmation")
+        range_frozen = formation["known_at"] <= _at(market, "09:00")
+        after_1000 = touch["start"] >= _at(market, "10:00")
         stages = [
-            _stage("context", "pass", _at(market, "09:30"), session="ny_am", after_0930=True),
+            _stage("context", "pass" if range_frozen else "fail", formation["known_at"], range_frozen=range_frozen, open_location=None),
             _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low), ladder=projection_ladder(high, low)),
             _stage("location", "pass", formation["known_at"], band=[str(band[0]), str(band[1])], sessionstat_coincidence=coincidence),
-            _stage("trigger", "pass", touch["start"], after_1000=touch["start"] >= _at(market, "10:00")),
+            _stage("trigger", "pass" if after_1000 else "fail", touch["start"], after_1000=after_1000, kind="touch"),
+            _stage(
+                "confirmation",
+                f11,
+                pack["at"] if pack["at"] is not None else decision,
+                ob_2m=pack["ob_2m"],
+                ob_3m=pack["ob_3m"],
+                ob_5m=pack["ob_5m"],
+                rejection_block=pack["rejection_block"],
+            ),
         ]
-        if ob is not None:
-            stages.append(_stage("confirmation", "pass", ob["at"], ob_3m=True))
-        stages.append(_stage("risk", "pass", decision, stop=str(stop)))
-        stages.append(_stage("objective", "pass", decision, remaining_draw=str(target)))
+        if f11 == "pass" and not failed:
+            stages.append(_stage("risk", "pass", decision, stop=str(stop)))
+            stages.append(_stage("objective", "pass", decision, remaining_draw=str(target)))
         episodes.append(
             _episode(
                 branch="extension_reaction",
                 side=side,
                 day=day,
-                verdict="pass",
-                failed=[],
+                verdict=_verdict(failed, [item for item in unknown if item == "source_confirmation"]),
+                failed=failed,
                 unknown=unknown,
                 values={
                     "branch": "extension_reaction",
@@ -1071,56 +1289,129 @@ def _scan_other_session(market) -> tuple[list[dict[str, Any]], list[dict[str, An
     loc = quadrant_locations(low, high, "long")
     action = _bars(market, _at(market, "03:00"), _at(market, "06:00"), 60)
     bands = extension_reaction_bands(high, low)
-    episodes = []
-    contacts = [
-        ("long", loc["q1"], "q1"),
-        ("long", loc["eq"], "eq"),
-        ("short", loc["q3"], "q3"),
-        ("short", loc["eq"], "eq"),
+    plus_half = high + width * Decimal("0.5")
+    minus_half = low - width * Decimal("0.5")
+    levels: list[tuple[str, Decimal, Decimal, str]] = [
+        ("long", loc["q1"], loc["q1"], "q1"),
+        ("long", loc["eq"], loc["eq"], "eq"),
+        ("long", loc["q3"], loc["q3"], "q3"),
+        ("long", low, low, "box_low"),
+        ("long", minus_half, minus_half, "minus_0_5"),
+        ("short", loc["q1"], loc["q1"], "q1"),
+        ("short", loc["eq"], loc["eq"], "eq"),
+        ("short", loc["q3"], loc["q3"], "q3"),
+        ("short", high, high, "box_high"),
+        ("short", plus_half, plus_half, "plus_0_5"),
     ]
     if bands.get("available"):
-        contacts.extend(
+        levels.extend(
             [
-                ("long", bands["lower"][0], "ext"),
-                ("short", bands["upper"][0], "ext"),
+                ("long", bands["lower"][0], bands["lower"][1], "ext"),
+                ("short", bands["upper"][0], bands["upper"][1], "ext"),
             ]
         )
+    box_known = formation.get("high") is not None and formation.get("low") is not None
+    raid_bars = _bars(market, _at(market, "02:00"), _at(market, "06:00"), 60)
+    low_raided = any(row.get("L") is not None and row["L"] < low for row in raid_bars)
+    high_raided = any(row.get("H") is not None and row["H"] > high for row in raid_bars)
+    episodes = []
+    passed_side: set[str] = set()
     seen: set[tuple[str, str]] = set()
-    for side, level, kind in contacts:
-        touch = _touch_band(action, level, level) if kind != "ext" else _touch_band(
-            action, *(bands["lower"] if side == "long" else bands["upper"])
-        )
-        if touch is None:
-            continue
+    for side, lo, hi, kind in levels:
         key = (side, kind)
         if key in seen:
             continue
+        touch = _touch_band(action, lo, hi)
+        if touch is None:
+            continue
         seen.add(key)
-        plus = high + width * Decimal("0.5") if side == "long" else low - width * Decimal("0.5")
+        level = lo if side == "long" else hi
+        kind_at = _contact_kind(touch, lo if lo == hi else (lo if side == "long" else hi), side)
+        if kind != "ext" and kind_at is None:
+            continue
+        if kind == "ext":
+            far = bands["lower"][0] if side == "long" else bands["upper"][1]
+            kind_at = _contact_kind(touch, far, side) or "touch"
+        plus = plus_half if side == "long" else minus_half
         stop = (touch["L"] - TICK) if side == "long" else (touch["H"] + TICK)
         decision = touch["known_at"]
+        pack = _confirm_pack(market, touch["end"], side, level=level, horizon_min=10)
+        f11 = _f11_verdict(pack)
+        if pack.get("ob_3m") is not True:
+            f11 = "unknown" if pack.get("ob_3m") is None and f11 == "unknown" else "fail"
+        failed: list[str] = []
+        unknown: list[str] = []
+        trigger_ok = kind_at == "sweep"
+        if not trigger_ok:
+            failed.append("sweep")
+        raided = low_raided if side == "long" else high_raided
+        if not raided:
+            failed.append("box_edge_swept")
+            trigger_ok = False
+        if f11 == "fail":
+            failed.append("source_confirmation")
+        elif f11 == "unknown":
+            unknown.append("source_confirmation")
+        if side in passed_side and not failed:
+            failed.append("first_pass_already_taken")
+            if f11 == "pass":
+                f11 = "fail"
+        verdict = _verdict(failed, unknown)
+        if verdict == "pass":
+            passed_side.add(side)
+        depth = None
+        if kind_at == "sweep":
+            depth = (level - touch["L"]) if side == "long" else (touch["H"] - level)
         stages = [
+            _stage(
+                "context",
+                "pass" if box_known else "unknown",
+                formation["known_at"],
+                box_observed=box_known,
+                clock="02:00-03:00",
+                box_low_swept=low_raided,
+                box_high_swept=high_raided,
+            ),
             _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low), box="02:00-03:00"),
             _stage("location", "pass", touch["known_at"], kind=kind, level=str(level)),
-            _stage("trigger", "pass", touch["start"], action_window="03:00-06:00"),
-            _stage("risk", "pass", decision, stop=str(stop)),
-            _stage("objective", "pass", decision, plus_0_5=str(plus)),
+            _stage(
+                "trigger",
+                "pass" if trigger_ok else "fail",
+                touch["start"],
+                kind=kind_at,
+                window_start=_at(market, "03:00"),
+                window_end=_at(market, "06:00"),
+                sweep_depth=None if depth is None else str(depth),
+                box_edge_swept=raided,
+            ),
+            _stage(
+                "confirmation",
+                f11,
+                pack["at"] if pack["at"] is not None else decision,
+                ob_2m=pack["ob_2m"],
+                ob_3m=pack["ob_3m"],
+                ob_5m=pack["ob_5m"],
+                rejection_block=pack["rejection_block"],
+            ),
         ]
+        if verdict == "pass":
+            stages.append(_stage("risk", "pass", decision, stop=str(stop)))
+            stages.append(_stage("objective", "pass", decision, plus_0_5=str(plus)))
         episodes.append(
             _episode(
                 branch="other_session",
                 side=side,
                 day=day,
-                verdict="pass",
-                failed=[],
-                unknown=[],
-                values={"branch": "other_session", "side": side, "source_clock_verified": True, "location_kind": kind},
+                verdict=verdict,
+                failed=failed,
+                unknown=unknown,
+                values={"branch": "other_session", "side": side, "source_clock_verified": box_known, "location_kind": kind, "trigger_kind": kind_at},
                 geometry={
                     "entry": None if touch.get("C") is None else float(touch["C"]),
                     "stop": float(stop),
                     "target": float(plus),
-                    "reference_level": float(level if kind != "ext" else (bands["lower"][0] if side == "long" else bands["upper"][0])),
-                    "sweep_depth": None,
+                    "reference_level": float(level if kind != "ext" else ((bands["lower"][0] + bands["lower"][1]) / 2 if side == "long" else (bands["upper"][0] + bands["upper"][1]) / 2)),
+                    "sweep_depth": None if depth is None else float(depth),
                 },
                 stages=stages,
                 decision_at=decision,
@@ -1219,80 +1510,109 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
     high, low = formation["high"], formation["low"]
     loc = quadrant_locations(low, high, "long")
     label, context_unknown = _context_label(market)
-    selectors = {
-        "single_extended": {"above_pdh", "above_vah", "below_pdl", "below_val"},
-        "single_purged": {"below_val", "below_pdl"},
-        "internal_rotation": {"inside_value"},
-    }
-    wanted = selectors[branch]
-    selector_ok = label in wanted if label is not None else None
+    prior = _prior_rth(market)
+    purge = _purge_state(market, prior)
+    allowed = _context_sides(branch, label, purge)
+    if not allowed:
+        return [], [{"reason": "no_qualifying_context", "branch": branch, "open_location": label, "purge": {k: purge.get(k) for k in ("purged_high", "purged_low", "compressed")}}]
     start = _at(market, "09:00")
     end = _at(market, "16:00")
-    if branch == "single_extended":
-        # reduced-expectation window still scans after 10:00; entry may be earlier
-        pass
     if branch == "single_purged":
         start = _at(market, "09:40")
         end = _at(market, "09:50")
     action = _bars(market, start, end, 60)
     episodes = []
-    for side, level, kind in (("long", loc["eq"], "eq"), ("long", loc["q1"], "q1"), ("short", loc["eq"], "eq"), ("short", loc["q3"], "q3")):
-        touch = _touch_band(action, level, level)
-        if touch is None:
-            continue
-        decision = touch["known_at"]
-        reduced = branch == "single_extended" and touch["start"] >= _at(market, "10:00")
-        failed: list[str] = []
-        unknown = list(context_unknown)
-        if selector_ok is False:
-            failed.append("open_location_selector")
-        if selector_ok is None:
-            unknown.append("open_location_selector")
-        target = high if side == "long" else low
-        stop = (touch["L"] - TICK) if side == "long" else (touch["H"] + TICK)
-        verdict = _verdict(failed, [item for item in unknown if item == "open_location_selector"])
-        if selector_ok is False:
-            verdict = "fail"
-        elif selector_ok is True or selector_ok is None:
-            verdict = "pass" if selector_ok is True else "unknown"
-        stages = [
-            _stage("context", "unknown" if label is None else ("pass" if selector_ok else "fail"), _at(market, "09:30"), open_location=label, selector=branch),
-            _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low)),
-            _stage("location", "pass", touch["known_at"], kind=kind, level=str(level)),
-            _stage("trigger", "pass", touch["start"], reduced_expectations=reduced),
-            _stage("risk", "pass", decision, stop=str(stop)),
-            _stage("objective", "pass", decision, range_edge=str(target)),
-        ]
-        if branch == "internal_rotation":
-            evr = EVRANGE_FIXTURES.get(day.isoformat() if day else "")
-            if evr is None and day is not None and day > TAPE_LAST:
-                stages.append(_stage("location", "unknown", None, evrange="data_unavailable"))
-        episodes.append(
-            _episode(
-                branch=branch,
-                side=side,
-                day=day,
-                verdict=verdict,
-                failed=failed,
-                unknown=unknown,
-                values={
-                    "branch": branch,
-                    "side": side,
-                    "open_location": label,
-                    "reduced_expectations": reduced if branch == "single_extended" else False,
-                    "entry_at_eq_or_quadrant": True,
-                },
-                geometry={
-                    "entry": None if touch.get("C") is None else float(touch["C"]),
-                    "stop": float(stop),
-                    "target": float(target),
-                    "reference_level": float(level),
-                    "sweep_depth": None,
-                },
-                stages=stages,
-                decision_at=decision,
+    contacts = (("eq", loc["eq"]),)
+    if branch != "internal_rotation":
+        contacts = (("eq", loc["eq"]), ("q1", loc["q1"]), ("q3", loc["q3"]))
+    for kind, level in contacts:
+        for side in ("long", "short"):
+            if side not in allowed:
+                continue
+            touch = _touch_band(action, level, level)
+            if touch is None:
+                continue
+            kind_at = _contact_kind(touch, level, side) or "touch"
+            decision = touch["known_at"]
+            reduced = branch == "single_extended" and touch["start"] >= _at(market, "10:00")
+            pack = _confirm_pack(market, touch["end"], side, level=level, horizon_min=10)
+            f11 = _f11_verdict(pack)
+            failed: list[str] = []
+            unknown = list(context_unknown)
+            if branch == "internal_rotation" and kind_at != "sweep":
+                failed.append("eq_sweep")
+            if f11 == "fail":
+                failed.append("source_confirmation")
+            elif f11 == "unknown":
+                unknown.append("source_confirmation")
+            target = high if side == "long" else low
+            stop = (touch["L"] - TICK) if side == "long" else (touch["H"] + TICK)
+            verdict = _verdict(failed, [item for item in unknown if item == "source_confirmation"])
+            loc_operands: dict[str, Any] = {"kind": kind, "level": str(level)}
+            if branch == "internal_rotation":
+                evr = EVRANGE_FIXTURES.get(day.isoformat() if day else "")
+                if evr is None and day is not None and day > TAPE_LAST:
+                    loc_operands["evrange"] = "data_unavailable"
+            stages = [
+                _stage(
+                    "context",
+                    "pass",
+                    _at(market, "09:30"),
+                    open_location=label,
+                    selector=branch,
+                    allowed_sides=list(allowed),
+                    purged_high=purge.get("purged_high"),
+                    purged_low=purge.get("purged_low"),
+                    compressed=purge.get("compressed"),
+                ),
+                _stage("reference", "pass", formation["known_at"], high=str(high), low=str(low)),
+                _stage("location", "pass", touch["known_at"], **loc_operands),
+                _stage(
+                    "trigger",
+                    "fail" if "eq_sweep" in failed else "pass",
+                    touch["start"],
+                    kind=kind_at,
+                    reduced_expectations=reduced if branch == "single_extended" else False,
+                ),
+                _stage(
+                    "confirmation",
+                    f11,
+                    pack["at"] if pack["at"] is not None else decision,
+                    ob_2m=pack["ob_2m"],
+                    ob_3m=pack["ob_3m"],
+                    ob_5m=pack["ob_5m"],
+                    rejection_block=pack["rejection_block"],
+                ),
+            ]
+            if verdict == "pass":
+                stages.append(_stage("risk", "pass", decision, stop=str(stop)))
+                stages.append(_stage("objective", "pass", decision, range_edge=str(target)))
+            episodes.append(
+                _episode(
+                    branch=branch,
+                    side=side,
+                    day=day,
+                    verdict=verdict,
+                    failed=failed,
+                    unknown=unknown,
+                    values={
+                        "branch": branch,
+                        "side": side,
+                        "open_location": label,
+                        "reduced_expectations": reduced if branch == "single_extended" else False,
+                        "entry_at_eq_or_quadrant": True,
+                    },
+                    geometry={
+                        "entry": None if touch.get("C") is None else float(touch["C"]),
+                        "stop": float(stop),
+                        "target": float(target),
+                        "reference_level": float(level),
+                        "sweep_depth": None,
+                    },
+                    stages=stages,
+                    decision_at=decision,
+                )
             )
-        )
     return episodes, []
 
 
@@ -1343,6 +1663,36 @@ def scan_b02(market, rec) -> dict[str, Any]:
         episodes.extend(part)
         omissions.extend(omit)
     return _document(day, branch or "all", episodes, omissions)
+
+
+def _example_levels(example: Mapping[str, Any]) -> list[float]:
+    levels = example.get("levels") or {}
+    out: list[float] = []
+    for value in levels.values():
+        if isinstance(value, (int, float, Decimal)):
+            out.append(float(value))
+        elif isinstance(value, list) and value and isinstance(value[0], (int, float, Decimal)):
+            out.extend(float(item) for item in value if isinstance(item, (int, float, Decimal)))
+        elif isinstance(value, Mapping):
+            for inner in value.values():
+                if isinstance(inner, (int, float, Decimal)):
+                    out.append(float(inner))
+    preferred = _author_level(example)
+    if preferred is not None:
+        out.append(preferred)
+    return out
+
+
+def _failing_from_episode(episode: Mapping[str, Any]) -> tuple[str | None, str | None]:
+    failed = list(episode.get("failed") or [])
+    if failed:
+        return failed[0], next((str(row.get("stage")) for row in episode.get("stages") or [] if row.get("verdict") == "fail"), None)
+    for row in episode.get("stages") or []:
+        if row.get("verdict") in {"fail", "unknown"}:
+            operands = row.get("operands") or {}
+            name = next(iter(operands), None)
+            return (None if name is None else str(name)), str(row.get("stage"))
+    return None, None
 
 
 def _author_level(example: Mapping[str, Any]) -> float | None:
@@ -1429,15 +1779,32 @@ def replay_example(market, example) -> dict[str, Any]:
         "author_level": author_level,
         "author_side": author_side,
         "divergence": "",
+        "reached_location": False,
+        "failing_operand": None,
+        "failing_stage": None,
     }
     inside = payload.get("inside_tape", True)
-    day = date.fromisoformat(day_text) if day_text else _as_day(market)
-    if not inside or (day is not None and day > TAPE_LAST) or market is None:
+    day = date.fromisoformat(day_text) if day_text else None
+    if day is None and market is not None:
+        day = _as_day(market)
+    if (
+        inside is False
+        or (day is not None and (day < TAPE_FIRST or day > TAPE_LAST))
+    ):
+        result["detected"] = None
+        result["divergence"] = OUTSIDE_TAPE
+        result["failing_operand"] = "date"
+        result["failing_stage"] = None
+        return result
+    if market is None or day is None:
+        result["detected"] = None
         result["divergence"] = "data_unavailable"
+        result["failing_operand"] = "market"
         return result
     rec_branch = _primary_branch(branch_expected)
     document = scan_b02(market, {"branch": rec_branch} if rec_branch else None)
     window = _window_bounds(day, expected.get("entry_window_et")) if day else None
+    author_levels = _example_levels(payload)
     scored: list[tuple[int, dict[str, Any], str]] = []
     for episode in document.get("episodes") or []:
         if rec_branch and episode.get("branch") != rec_branch and rec_branch not in str(branch_expected):
@@ -1449,6 +1816,15 @@ def replay_example(market, example) -> dict[str, Any]:
         level_ok = author_level is None or level is None or abs(Decimal(str(level)) - Decimal(str(author_level))) <= REPLAY_LEVEL_TOLERANCE
         entry_ns = episode.get("decision_at")
         window_ok = True if window is None or entry_ns is None else window[0] <= int(entry_ns) < window[1]
+        loc_stage = next((row for row in episode.get("stages") or [] if row.get("stage") == "location"), None)
+        loc_pass = loc_stage is not None and loc_stage.get("verdict") == "pass"
+        loc_level_ok = False
+        if level is not None and author_levels:
+            loc_level_ok = any(abs(Decimal(str(level)) - Decimal(str(item))) <= REPLAY_LEVEL_TOLERANCE for item in author_levels)
+        elif loc_pass:
+            loc_level_ok = author_level is None
+        if loc_pass and loc_level_ok:
+            result["reached_location"] = True
         passed = episode.get("research_verdict") == "pass"
         score = int(passed) + int(side_ok) + int(level_ok) + int(window_ok)
         reason = "match"
@@ -1466,9 +1842,13 @@ def replay_example(market, example) -> dict[str, Any]:
         if any(row.get("reason") == "data_unavailable" for row in document.get("omissions") or []):
             result["detected"] = None
             result["divergence"] = "data_unavailable"
+            result["failing_operand"] = "market"
         else:
             result["detected"] = False
             result["divergence"] = "miss"
+            omit = (document.get("omissions") or [{}])[0]
+            result["failing_operand"] = str(omit.get("reason") or "location")
+            result["failing_stage"] = "location"
         return result
     score, best, reason = scored[0]
     result["our_side"] = best.get("side")
@@ -1477,6 +1857,20 @@ def replay_example(market, example) -> dict[str, Any]:
     result["branch"] = best.get("branch") or result["branch"]
     result["detected"] = reason == "match"
     result["divergence"] = reason
+    if reason != "match":
+        operand, stage = _failing_from_episode(best)
+        if reason.startswith("miss: level"):
+            operand, stage = "reference_level", "location"
+        elif reason.startswith("miss: side"):
+            operand, stage = "side", "location"
+        elif "entry_outside_window" in reason:
+            operand, stage = "entry_window_et", "trigger"
+        elif operand is None:
+            operand, stage = "research_verdict", (stage or "confirmation")
+        result["failing_operand"] = operand
+        result["failing_stage"] = stage
+        if best.get("failed"):
+            result["divergence"] = f"{reason}; failed={best.get('failed')}"
     our_level = result.get("our_level")
     if payload.get("id") == "JJ-2025-09-09" and our_level is not None and author_level is not None:
         lo, hi = Decimal("23727.00"), Decimal("23743.50")

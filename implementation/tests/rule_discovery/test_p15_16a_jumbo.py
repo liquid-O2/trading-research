@@ -19,9 +19,11 @@ from trading_research.research.rule_discovery.source_adapters.common import (
 )
 from trading_research.research.rule_discovery.source_adapters.jumbo import (
     FAMILY,
+    OUTSIDE_TAPE,
     PZONE_FIXTURES,
     RULES,
     STAGE_ORDER,
+    TAPE_LAST,
     classify_first_hour_sweep,
     compute_published_statistics,
     extension_reaction_bands,
@@ -33,9 +35,15 @@ from trading_research.research.rule_discovery.source_adapters.jumbo import (
     scan_b02,
 )
 
-TRACK = Path("/workspace/implementation/reports/research-work/P15-16A/_track_jumbo")
+TRACK = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_track_jumbo"
+REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_jumbo"
 EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NS_MINUTE = 60_000_000_000
+ROUND1_SHA256 = {
+    "FUNNEL_JJ-TBR.json": "23aa7991bdb800aae7d591117522e1ec26aa1b8f8fe9a64c2bb747a63d95c4d5",
+    "REPLAY_JJ-TBR.json": "4bf6567b085cbd35e14d2b4c239323b7f55070fa84a79be9a44956d646b502b4",
+    "RULES_JJ-TBR.json": "d8a1a90fadfc77b1230c7d34ea728fd2031f93594e942c4188bda0e685009e28",
+}
 
 
 class Tape:
@@ -163,11 +171,24 @@ def test_rr05_printed_pzone_absorption_fixture():
     assert any(row.get("operand") == "source_zone_known" for row in doc["omissions"])
 
 
+def _ob_long_follow(day: str):
+    """Three consecutive 1-minute bars that satisfy TBR p.27 / O056 for a long.
+
+    C1 L=21190; C2 L=21170 sweeps C1; C3 C=21240 > C2 H=21185.
+    """
+    return [
+        _bar(day, "09:46", 21200, 21210, 21190, 21202),
+        _bar(day, "09:47", 21195, 21198, 21170, 21176),
+        _bar(day, "09:48", 21180, 21245, 21178, 21240),
+    ]
+
+
 def test_rr06_reclaim_is_the_entry_and_depth_is_recorded_not_required():
     day = "2025-01-28"
     high, low = Decimal("21410"), Decimal("21258")
     bars = _range_bars(day, high, low) + [
         _bar(day, "09:45", 21240, 21250, 21180, 21220),
+        *_ob_long_follow(day),
         _bar(day, "09:53", 21240, 21270, 21230, Decimal("21241.75")),
     ]
     doc = scan_b02(Tape(day, bars), "judas_reversal")
@@ -312,18 +333,21 @@ def test_b0_b01_byte_identity_two_slice_dates():
         }
         assert hashes[day]["b0"] == hashes[day]["frozen"]
         assert hashes[day]["b01"] == hashes[day]["repaired"]
-    TRACK.mkdir(parents=True, exist_ok=True)
-    (TRACK / "B0_B01_HASHES.json").write_text(json.dumps(hashes, indent=2) + "\n")
+    REPAIR.mkdir(parents=True, exist_ok=True)
+    (REPAIR / "B0_B01_HASHES.json").write_text(json.dumps(hashes, indent=2) + "\n")
 
 
 def test_replay_funnel_statistics_and_rules():
-    TRACK.mkdir(parents=True, exist_ok=True)
+    from trading_research.research.rule_discovery.native import build_market_view, install_write_guard
+
+    install_write_guard()
+    REPAIR.mkdir(parents=True, exist_ok=True)
     examples = [row for row in json.loads(EXAMPLES.read_text())["examples"] if row.get("family") == "JJ-TBR"]
     replays = []
-    from trading_research.research.rule_discovery.native import build_market_view
-
     for example in examples:
-        if example.get("inside_tape"):
+        day_text = str(example.get("date") or "")
+        inside = example.get("inside_tape") is True and day_text <= TAPE_LAST.isoformat()
+        if inside:
             try:
                 market = build_market_view(example["date"])
             except Exception:
@@ -333,8 +357,12 @@ def test_replay_funnel_statistics_and_rules():
             row = replay_example(None, example)
         assert "detected" in row
         assert row["detected"] in {True, False, None}
+        if row["detected"] is False:
+            assert row.get("failing_operand"), f"{row['id']} miss has no failing_operand"
+        if row["detected"] is None:
+            assert row.get("divergence") in {OUTSIDE_TAPE, "data_unavailable"}
         replays.append(row)
-    (TRACK / "REPLAY_JJ-TBR.json").write_text(json.dumps(replays, indent=2, default=str) + "\n")
+    (REPAIR / "REPLAY_jumbo.json").write_text(json.dumps(replays, indent=2, default=str) + "\n")
 
     dates = engineering_slice_dates()
     funnel: dict[str, Any] = {"slice_dates": dates, "branches": {}}
@@ -347,6 +375,8 @@ def test_replay_funnel_statistics_and_rules():
         }
     collected: dict[str, list[dict[str, Any]]] = {branch: [] for branch in BRANCHES}
     for day in dates:
+        if day > TAPE_LAST.isoformat():
+            continue
         try:
             hist = load_source_market(day)
         except Exception:
@@ -380,12 +410,13 @@ def test_replay_funnel_statistics_and_rules():
         assert passes == sorted(passes, reverse=True)
         if names:
             assert passes[-1] == funnel["branches"][branch]["B0.2"]["pass"]
-    (TRACK / "FUNNEL_JJ-TBR.json").write_text(json.dumps(funnel, indent=2) + "\n")
+    (REPAIR / "FUNNEL_jumbo.json").write_text(json.dumps(funnel, indent=2) + "\n")
 
-    stats = compute_published_statistics(dates)
-    (TRACK / "STATISTICS_JJ.json").write_text(json.dumps(stats, indent=2, default=str) + "\n")
+    in_tape = [day for day in dates if day <= TAPE_LAST.isoformat()]
+    stats = compute_published_statistics(in_tape)
+    (REPAIR / "STATISTICS_jumbo.json").write_text(json.dumps(stats, indent=2, default=str) + "\n")
     payload = rules_payload()
-    (TRACK / "RULES_JJ-TBR.json").write_text(json.dumps(payload, indent=2) + "\n")
+    (REPAIR / "RULES_jumbo.json").write_text(json.dumps(payload, indent=2) + "\n")
     assert any(row["rule_id"].startswith("RR-01") for row in payload)
     assert all(row.get("file_line", "").startswith("source_adapters/jumbo.py:") for row in payload)
     assert len(replays) == len(examples)
@@ -397,3 +428,150 @@ def test_replay_funnel_statistics_and_rules():
     assert hour["one_side"] == hour["high_only"] + hour["low_only"]
     for loc_row in hour["by_open_location"].values():
         assert loc_row["one_side"] == loc_row["high_only"] + loc_row["low_only"]
+
+
+def test_f11_ob_uses_c2_extreme_and_can_be_false():
+    day = "2025-01-28"
+    high, low = Decimal("110"), Decimal("100")
+    bars = _range_bars(day, high, low) + [
+        _bar(day, "09:45", 99, 100, 98, 99),
+        _bar(day, "09:46", 99, 100, 98.5, 99),
+        _bar(day, "09:47", 98.8, 99.5, 97.5, 98.2),
+        _bar(day, "09:48", 98.5, 99.2, 98.5, 99.0),
+        _bar(day, "09:53", 100, 101, 99.5, 100.5),
+    ]
+    doc = scan_b02(Tape(day, bars), "judas_reversal")
+    longs = [ep for ep in doc["episodes"] if ep["side"] == "long"]
+    assert longs
+    confirm = next(stage for stage in longs[0]["stages"] if stage["stage"] == "confirmation")
+    assert confirm["operands"]["ob_3m"] is False
+    assert confirm["operands"]["rejection_block"] in {False, None}
+    assert confirm["verdict"] in {"fail", "unknown"}
+    assert longs[0]["research_verdict"] != "pass"
+
+
+def test_rr02_q3_purged_context_binds_side_and_absent_context_yields_no_episode():
+    day = "2026-07-28"
+    prior = {"high": Decimal("100"), "low": Decimal("80"), "vah": Decimal("95"), "val": Decimal("90")}
+    overnight = [_bar("2026-07-27", "18:00", 100, 110, 85, 88, minutes=60)]
+    formation = _range_bars(day, 100, 90)
+    q3 = Decimal("97.5")
+    touch = _bar(day, "09:42", q3, q3 + Decimal("1"), q3 - Decimal("1"), q3)
+    open_bar = _bar(day, "09:30", 85, 86, 84, 85)
+    market = Tape(day, overnight + formation + [open_bar, touch], prior_rth=prior)
+    doc = scan_b02(market, "single_purged")
+    longs = [ep for ep in doc["episodes"] if ep["side"] == "long" and any(
+        row.get("stage") == "location" and str((row.get("operands") or {}).get("kind")) == "q3" for row in ep["stages"]
+    )]
+    assert longs, "purged-high context must bind a q3 contact to the long side"
+    assert longs[0]["values"]["open_location"] == "below_val"
+    no_purge = Tape(
+        day,
+        [_bar("2026-07-27", "18:00", 90, 95, 82, 88, minutes=60)] + formation + [open_bar, touch],
+        prior_rth=prior,
+    )
+    empty = scan_b02(no_purge, "single_purged")
+    assert empty["episodes"] == []
+    assert any(row.get("reason") == "no_qualifying_context" for row in empty["omissions"])
+
+
+def test_other_session_trigger_is_sweep_not_window_label_and_confirmation_can_fail():
+    day = "2025-10-06"
+    high, low = Decimal("25108"), Decimal("25052")
+    q1 = Decimal("25066")
+    bars = [
+        _bar(day, "02:00", 25080, high, low, 25080, minutes=60),
+        _bar(day, "03:40", q1 + Decimal("2"), q1 + Decimal("3"), q1 - Decimal("4"), q1 + Decimal("1")),
+        _bar(day, "03:41", q1 - Decimal("1"), q1 + Decimal("1"), q1 - Decimal("2"), q1),
+        _bar(day, "03:42", q1, q1 + Decimal("1"), q1 - Decimal("1"), q1 + Decimal("0.5")),
+    ]
+    doc = scan_b02(Tape(day, bars), "other_session")
+    longs = [ep for ep in doc["episodes"] if ep["side"] == "long"]
+    assert longs
+    trigger = next(stage for stage in longs[0]["stages"] if stage["stage"] == "trigger")
+    assert "action_window" not in trigger["operands"]
+    assert trigger["operands"]["kind"] in {"sweep", "touch"}
+    assert "window_start" in trigger["operands"]
+    confirm = next(stage for stage in longs[0]["stages"] if stage["stage"] == "confirmation")
+    assert "ob_3m" in confirm["operands"]
+    assert "rejection_block" in confirm["operands"]
+    if trigger["operands"]["kind"] != "sweep":
+        assert longs[0]["research_verdict"] != "pass"
+    confirmed = [ep for ep in longs if ep["research_verdict"] == "pass"]
+    sides = {}
+    for ep in confirmed:
+        sides[ep["side"]] = sides.get(ep["side"], 0) + 1
+    assert all(count <= 1 for count in sides.values())
+
+
+def test_rec_author_context_is_ignored_in_population_scan():
+    day = "2025-01-28"
+    bars = _range_bars(day, 110, 100) + [
+        _bar(day, "09:45", 99, 100, 98, 99),
+        *_ob_long_follow(day),
+        _bar(day, "09:53", 100, 101, 99, 100.5),
+    ]
+    rec = {
+        "method_id": "JJ-TBR",
+        "branch": "judas_reversal",
+        "coverage_id": "x",
+        "location_kind": "author_eq",
+        "defended_level": 999,
+        "gamma_regime": "short",
+        "thesis_killer": True,
+        "entry_variant": "midpoint",
+    }
+    doc = scan_b02(Tape(day, bars), rec)
+    assert doc["branch"] == "judas_reversal"
+    for ep in doc["episodes"]:
+        assert ep["values"].get("location_kind") != "author_eq"
+        assert "defended_level" not in ep["values"]
+
+
+def test_after_tape_replay_names_date_and_skips_market(monkeypatch):
+    from trading_research.research.method_pack import event_cache, event_time
+
+    def boom(*_args, **_kwargs):
+        raise AssertionError("build_event_window must not run")
+
+    monkeypatch.setattr(event_cache, "build_event_window", boom)
+    monkeypatch.setattr(event_time, "build_event_window", boom)
+    example = {
+        "id": "JJ-2026-08-28",
+        "family": FAMILY,
+        "date": "2026-08-28",
+        "inside_tape": False,
+        "expected_detection": {"branch": "judas_reversal", "side": "long"},
+        "levels": {"R_lo": 29592},
+    }
+    row = replay_example(object(), example)
+    assert row["detected"] is None
+    assert row["divergence"] == OUTSIDE_TAPE
+    assert row["failing_operand"] == "date"
+
+
+def test_level_miss_names_reference_level_operand():
+    example = {
+        "id": "synth-level-miss",
+        "family": FAMILY,
+        "date": "2025-10-06",
+        "inside_tape": True,
+        "expected_detection": {"branch": "other_session", "side": "long", "entry_window_et": "03:00-06:00"},
+        "levels": {"L": 25052, "H": 25108, "EQ": 25080},
+    }
+    day = "2025-10-06"
+    high, low = Decimal("25108"), Decimal("25052")
+    q1 = Decimal("25066")
+    bars = [
+        _bar(day, "02:00", 25080, high, low, 25080, minutes=60),
+        _bar(day, "03:40", q1 + Decimal("2"), q1 + Decimal("3"), q1 - Decimal("4"), q1 + Decimal("1")),
+    ]
+    row = replay_example(Tape(day, bars), example)
+    if row["detected"] is False:
+        assert row.get("failing_operand")
+
+
+def test_round1_track_evidence_bytes_unchanged():
+    for name, expected in ROUND1_SHA256.items():
+        digest = hashlib.sha256((TRACK / name).read_bytes()).hexdigest()
+        assert digest == expected, f"{name} sha256 {digest} != {expected}"

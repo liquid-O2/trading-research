@@ -1,0 +1,496 @@
+{
+  "family": "JJ-TBR",
+  "slice_dates": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ],
+  "sessions_used": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ],
+  "load_errors": [],
+  "branches": [
+    {
+      "branch": "judas_outbound",
+      "sessions": 15,
+      "episodes": 11,
+      "pass": 2,
+      "fail": 9,
+      "unknown": 0,
+      "pass_rate": 0.18181818181818182,
+      "episodes_per_session": 0.7333333333333333,
+      "sessions_with_pass": 2,
+      "session_pass_fraction": 0.13333333333333333,
+      "stages": {
+        "context": {
+          "pass": 11,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 11,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 11,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 2,
+          "fail": 9,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:30": 2
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "pass_rate": [
+          0,
+          0.7
+        ],
+        "source_claim": "Once-per-session opening drive toward a selected 6-9 edge; two sides at most.",
+        "page": "TBR pp.8-10",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "judas_reversal",
+      "sessions": 15,
+      "episodes": 34,
+      "pass": 7,
+      "fail": 27,
+      "unknown": 0,
+      "pass_rate": 0.20588235294117646,
+      "episodes_per_session": 2.2666666666666666,
+      "sessions_with_pass": 7,
+      "session_pass_fraction": 0.4666666666666667,
+      "stages": {
+        "context": {
+          "pass": 34,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 34,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 34,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 34,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 7,
+          "fail": 27,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:30": 6,
+        "10:00": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          4
+        ],
+        "pass_rate": [
+          0,
+          0.9
+        ],
+        "source_claim": "Once-per-session reversal structure (first sweep plus optional 09:40-09:50 cycle, two sides). 86.46% is the author's reversal-share histogram over 4,537 days, a plausibility reference not a scanner target. Capture 0.66-0.92 is the 1.33/1.66 table, not a pass-rate target.",
+        "page": "JR p.70; JR p.23",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "single_extended",
+      "sessions": 15,
+      "episodes": 12,
+      "pass": 4,
+      "fail": 8,
+      "unknown": 0,
+      "pass_rate": 0.3333333333333333,
+      "episodes_per_session": 0.8,
+      "sessions_with_pass": 3,
+      "session_pass_fraction": 0.2,
+      "stages": {
+        "context": {
+          "pass": 12,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 12,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 12,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 12,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 4,
+          "fail": 8,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:00": 2,
+        "09:30": 1,
+        "15:30": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          6
+        ],
+        "pass_rate": [
+          0,
+          0.5
+        ],
+        "source_claim": "EQ/quadrant contacts in the allowed continuation direction after an extended overnight. Bounded by qualifying contacts, not by every session.",
+        "page": "TBR pp.12-14, 24",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "single_purged",
+      "sessions": 15,
+      "episodes": 0,
+      "pass": 0,
+      "fail": 0,
+      "unknown": 0,
+      "pass_rate": 0.0,
+      "episodes_per_session": 0.0,
+      "sessions_with_pass": 0,
+      "session_pass_fraction": 0.0,
+      "stages": {},
+      "time_of_entry_histogram_30m_et": {},
+      "bound": {
+        "episodes_per_session": [
+          0,
+          6
+        ],
+        "pass_rate": [
+          0,
+          0.5
+        ],
+        "source_claim": "09:40-09:50 add/continuation after overnight liquidity is purged. Bounded by qualifying contacts in that window.",
+        "page": "TBR pp.12-15; E3",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "internal_rotation",
+      "sessions": 15,
+      "episodes": 20,
+      "pass": 3,
+      "fail": 17,
+      "unknown": 0,
+      "pass_rate": 0.15,
+      "episodes_per_session": 1.3333333333333333,
+      "sessions_with_pass": 2,
+      "session_pass_fraction": 0.13333333333333333,
+      "stages": {
+        "context": {
+          "pass": 20,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 20,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 20,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 20,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 3,
+          "fail": 17,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:00": 2,
+        "09:30": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          8
+        ],
+        "pass_rate": [
+          0,
+          0.4
+        ],
+        "source_claim": "In-value rotations at EQ/quadrants with confirmation. Touch EQ is not a trade (JR p.3). Bounded by qualifying contacts.",
+        "page": "TBR p.24; JR p.3",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "extension_reaction",
+      "sessions": 15,
+      "episodes": 14,
+      "pass": 3,
+      "fail": 11,
+      "unknown": 0,
+      "pass_rate": 0.21428571428571427,
+      "episodes_per_session": 0.9333333333333333,
+      "sessions_with_pass": 3,
+      "session_pass_fraction": 0.2,
+      "stages": {
+        "context": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 14,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 3,
+          "fail": 11,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "10:00": 1,
+        "10:30": 1,
+        "13:00": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          2
+        ],
+        "pass_rate": [
+          0,
+          0.5
+        ],
+        "source_claim": "First touch of the 1.33-1.66 band after 10:00, one side per band. Bounded by qualifying band contacts.",
+        "page": "TBR p.21; JR pp.23-26; RR-01",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "other_session",
+      "sessions": 15,
+      "episodes": 116,
+      "pass": 1,
+      "fail": 115,
+      "unknown": 0,
+      "pass_rate": 0.008620689655172414,
+      "episodes_per_session": 7.733333333333333,
+      "sessions_with_pass": 1,
+      "session_pass_fraction": 0.06666666666666667,
+      "stages": {
+        "context": {
+          "pass": 116,
+          "fail": 0,
+          "unknown": 0
+        },
+        "reference": {
+          "pass": 116,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 116,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 90,
+          "fail": 26,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 1,
+          "fail": 89,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "04:00": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          12
+        ],
+        "pass_rate": [
+          0,
+          0.5
+        ],
+        "passes_per_side_per_session": [
+          0,
+          1
+        ],
+        "source_claim": "London box 02:00-03:00 ET traded 03:00-06:00. At most one pass per side per session. Episodes bounded by distinct quadrant/box/band contacts. A session with no sweep has no pass.",
+        "page": "JR pp.50, 63-64; RR-04",
+        "claim_kind": "literal"
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": null
+    },
+    {
+      "branch": "timed_pzone_reversal",
+      "sessions": 15,
+      "episodes": 4,
+      "pass": 4,
+      "fail": 0,
+      "unknown": 0,
+      "pass_rate": 1.0,
+      "episodes_per_session": 0.26666666666666666,
+      "sessions_with_pass": 1,
+      "session_pass_fraction": 0.06666666666666667,
+      "stages": {
+        "reference": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "location": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "trigger": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "confirmation": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        },
+        "risk": {
+          "pass": 4,
+          "fail": 0,
+          "unknown": 0
+        }
+      },
+      "time_of_entry_histogram_30m_et": {
+        "09:00": 1,
+        "09:30": 2,
+        "10:00": 1
+      },
+      "bound": {
+        "episodes_per_session": [
+          0,
+          6
+        ],
+        "pass_rate": null,
+        "population_bound": "none",
+        "source_claim": "Fixture-limited, no population bound. Proprietary P-zone generator unknown (F17, RR-05). Report printed-zone fixture count. Do not invent a generator.",
+        "page": "JR pp.16-18; F17; RR-05",
+        "claim_kind": "literal",
+        "fixture_limited": true,
+        "printed_zone_dates": [
+          "2025-12-30",
+          "2026-01-02",
+          "2026-01-09",
+          "2026-02-24"
+        ]
+      },
+      "in_bound": true,
+      "violations": [],
+      "diagnosis": null,
+      "printed_zone_fixture_count": 4
+    }
+  ]
+}

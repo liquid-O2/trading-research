@@ -1,0 +1,13 @@
+ts	phase	decision	why	evidence	result
+2026-09-15T00:00:00Z	frame	exit predicate is the six-point repair contract plus CLOSURE REPORT	unattended run needs a checkable stop	planning/phase-1-5/tasks/P15-16A.md	open
+2026-09-15T00:10:00Z	baseline	assert trading_research.__file__ is in the worktree with PYTHONPATH=src	wrong package would edit the main tree	implementation/src/trading_research/__init__.py	OK worktree import
+2026-09-15T00:20:00Z	audit	OB used C3 vs C2 close and rejection_block was None	TBR pp.27-29 / O056 requires C3 beyond C2 extreme	source_adapters/jumbo.py _three_candle_ob	root cause
+2026-09-15T00:30:00Z	repair	F11 any of 2/3/5m OB or RB at the location; unknown if the window is missing	F11; a distant 30-minute OB is not the signature	jumbo.py _confirm_pack	implemented
+2026-09-15T00:40:00Z	repair	RR-02 enumerate EQ/q1/q3 both sides, bind side from context, no context means no episode	DISPOSITION RR-02; TBR pp.12-15	test_rr02_q3_purged_context_binds_side	tests green
+2026-09-15T00:50:00Z	repair	other_session trigger is sweep/touch of geometry, window is not the trigger, one pass per side	RR-04; 2024-03-05 all-pass was the label action_window	test_other_session_trigger_is_sweep	tests green
+2026-09-15T01:00:00Z	gate	plausibility test over 15 dates is the lever the receipt re-runs	encode the population check in a pytest, not a paragraph	test_p15_16a_plausibility_jumbo.py	1 passed
+2026-09-15T01:10:00Z	identity	B0/B0.1 hashes on 2021-01-04 and 2025-01-02 match the first-round frozen rows	byte-identity is a hard rule	_track_jumbo/B0_B01_HASHES.json	1 passed
+2026-09-15T22:00:00Z	gate	plausibility out-of-bound now fails unless a human justification field quotes a different page	the old diagnosis was stamped from bound.page so [0,0] still passed	test_mutated_pass_rate_bound_fails_the_gate	passed
+2026-09-15T22:10:00Z	density	confirmation starts after the trigger bar; Judas hunts 09:40-10:10; London pass needs box-edge raid and 3-minute OB	session-with-pass was 93-100% because the sweep bar was counted as the OB	PLAUSIBILITY_jumbo.md	in bound
+2026-09-15T22:20:00Z	replay	every miss sets failing_operand; after-tape returns before reading the market	FAILURE 3 and 4	REPLAY_jumbo.json	named
+2026-09-15T22:30:00Z	hygiene	restored FUNNEL/REPLAY/RULES under _track_jumbo to committed bytes	tests now write only under _repair_jumbo	sha256 23aa7991 / 4bf6567b / d8a1a90f	restored

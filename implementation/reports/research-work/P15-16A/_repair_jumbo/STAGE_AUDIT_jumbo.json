@@ -1,0 +1,450 @@
+{
+  "family": "JJ-TBR",
+  "baseline": "B0.2-repair",
+  "stage_order": ["context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management"],
+  "measured_definition": "A stage is measured only if its verdict depends on at least one market-derived operand compared with a source predicate and can fail on real data.",
+  "branches": {
+    "judas_reversal": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "emission_gate": false,
+          "operands": [
+            {"name": "open_location", "origin": "market_view", "predicate": "JR pp.36, 38, 42 open vs prior RTH H/L/VA", "verdict_rule": "recorded; missing prior VA is unknown not fail", "recorded_not_gating": true}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6 06:00-09:00 ET freeze at 09:00", "verdict_rule": "pass if formation span exists; no episode otherwise"},
+            {"name": "low", "origin": "market_view", "predicate": "TBR p.6", "verdict_rule": "same"}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "edge", "origin": "primitive", "predicate": "swept 6-9 H or L", "verdict_rule": "pass on the swept edge"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "sweep_at", "origin": "market_view", "predicate": "RR-03 sweep search from 09:00 JR p.20", "verdict_rule": "no episode without a sweep; pass on the sweep bar"},
+            {"name": "sweep_depth", "origin": "market_view", "predicate": "F11/RR-06 record depth, not a fail gate", "verdict_rule": "recorded_not_gating", "recorded_not_gating": true},
+            {"name": "edge_reclaimed", "origin": "market_view", "predicate": "RR-06 reclaim of swept edge JR p.71", "verdict_rule": "recorded on trigger; fail lives on confirmation if unreclaimed", "recorded_not_gating": true}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "TBR p.27 O056 C2 sweeps C1 and C3 closes beyond C2 opposite extreme on 2-minute bars", "verdict_rule": "pass if any of ob_2m/ob_3m/ob_5m/rejection_block is true; fail if all false; unknown if no complete window"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "TBR p.27 O056 on 3-minute bars", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "TBR p.27 O056 on 5-minute bars", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29 close of the next candle beyond the sweep candle wick", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "TBR pp.27-28 stop beyond C2/sweep extreme, one tick OD", "verdict_rule": "pass when a stop price is computed from the sweep bar"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "plus_0_5", "origin": "primitive", "predicate": "RR-06 +0.5 W beyond the swept edge JR p.71", "verdict_rule": "pass when width is positive"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "author scale/partial/amend records are not on the Phase 1.5 tape (TBR pp.24, 36-37). Stage omitted, never pass."
+        }
+      }
+    },
+    "judas_outbound": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "operands": [
+            {"name": "at_rth_open", "origin": "market_view", "predicate": "TBR pp.8-10 opening drive at 09:30", "verdict_rule": "pass if the sweep bar starts at 09:30 ET; fail otherwise"}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6 06:00-09:00", "verdict_rule": "pass if formation exists"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "opening_sweep", "origin": "market_view", "predicate": "first 09:30-09:40 bar trades through a 6-9 edge", "verdict_rule": "no episode if neither edge is swept"},
+            {"name": "sweep_depth", "origin": "market_view", "predicate": "F11 record depth", "verdict_rule": "recorded_not_gating", "recorded_not_gating": true}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "TBR pp.27-29 F11", "verdict_rule": "any of 2/3/5m OB or rejection-block"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "TBR pp.27-29 F11", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "TBR pp.27-29 F11", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the 6-9 edge, one tick OD", "verdict_rule": "pass when computed"},
+            {"name": "expiry_ns", "origin": "market_view", "predicate": "09:40 ET clock", "verdict_rule": "recorded from the session clock, not a label"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "plus_0_5", "origin": "primitive", "predicate": "TBR pp.8-10 +0.5 W", "verdict_rule": "pass when width is positive"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "09:40 close of the outbound is recorded as expiry_ns on risk; later management is not on the tape."
+        }
+      }
+    },
+    "extension_reaction": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "operands": [
+            {"name": "range_frozen", "origin": "market_view", "predicate": "6-9 known_at <= 09:00", "verdict_rule": "fail if the formation is not frozen before the band is used"}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6", "verdict_rule": "pass if formation exists"}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "band", "origin": "primitive", "predicate": "RR-01 / o015 edge +/- [1.33, 1.66] W", "verdict_rule": "pass when o015 returns a band"},
+            {"name": "sessionstat_coincidence", "origin": "market_view", "predicate": "RR-07 SessionStat 60-session envelope", "verdict_rule": "recorded; unknown if no injected/native box", "recorded_not_gating": true}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "after_1000", "origin": "market_view", "predicate": "RR-03 / dated examples after 10:00 JR pp.25-26", "verdict_rule": "pass if first band touch is at or after 10:00; no episode before 10:00"}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "F11 TBR pp.27-29", "verdict_rule": "any of 2/3/5m OB or rejection-block; fail if all false"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the confirming bar extreme", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "remaining_draw", "origin": "primitive", "predicate": "TBR p.21 remaining draw to the opposite 6-9 edge", "verdict_rule": "pass when the opposite edge exists"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "continuation vs reversal after the band is discretionary (TBR p.21)."
+        }
+      }
+    },
+    "other_session": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "operands": [
+            {"name": "box_observed", "origin": "market_view", "predicate": "RR-04 London box 02:00-03:00 ET JR pp.50, 63-64", "verdict_rule": "pass if the 02:00-03:00 span exists; no episode otherwise"}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "RR-04", "verdict_rule": "pass if box high/low exist"},
+            {"name": "box", "origin": "constant", "predicate": "clock identity 02:00-03:00", "verdict_rule": "label of a measured span, not the trigger", "recorded_not_gating": true}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "level", "origin": "primitive", "predicate": "quadrant / box edge / +/-0.5 / 1.33-1.66 RR-01 RR-04", "verdict_rule": "pass on a contact of those levels"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "operands": [
+            {"name": "kind", "origin": "market_view", "predicate": "sweep or touch of the location; pass requires sweep. Window 03:00-06:00 is where the trigger may occur, not the trigger.", "verdict_rule": "fail if the contact is a touch without a sweep"},
+            {"name": "box_edge_swept", "origin": "market_view", "predicate": "JR pp.63-64 box low/high raid (including 02:00-03:00). A session with no box-edge sweep has no pass (RR-04).", "verdict_rule": "fail the side if that box edge was never swept"},
+            {"name": "sweep_depth", "origin": "market_view", "predicate": "distance through the level", "verdict_rule": "recorded_not_gating", "recorded_not_gating": true}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "F11 TBR pp.27-29 recorded", "verdict_rule": "recorded"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "TBR p.27 3-minute reversal favourite. London pass requires ob_3m.", "verdict_rule": "pass iff ob_3m is true"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "F11 recorded", "verdict_rule": "recorded"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29 recorded", "verdict_rule": "recorded"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the contact extreme", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "plus_0_5", "origin": "primitive", "predicate": "RR-04 +/-0.5 of the London box", "verdict_rule": "pass when width is positive"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "one-pass-per-side cap is an OD bound from the author's London examples, recorded as first_pass_already_taken when a second pass would otherwise fire."
+        }
+      }
+    },
+    "single_extended": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "open_location", "origin": "market_view", "predicate": "RR-08 / TBR pp.12-14 outside prior value in the continuation direction", "verdict_rule": "no episode unless open_location is below_pdl/below_val (short) or above_pdh/above_vah (long). F08 10:00 reduced-expectation is recorded on trigger, not a context fail."}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6", "verdict_rule": "pass if formation exists"}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "level", "origin": "primitive", "predicate": "RR-02 EQ and quadrants both sides, bound to continuation side TBR pp.12-15", "verdict_rule": "pass on a contact of eq/q1/q3 on the allowed side"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "kind", "origin": "market_view", "predicate": "touch or sweep of the location", "verdict_rule": "pass on contact"},
+            {"name": "reduced_expectations", "origin": "market_view", "predicate": "F08 after 10:00 TBR p.12", "verdict_rule": "recorded, not a fail gate", "recorded_not_gating": true}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "F11", "verdict_rule": "any of 2/3/5m OB or rejection-block"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the contact extreme", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "range_edge", "origin": "primitive", "predicate": "TBR p.12 nearer 6-9 edge", "verdict_rule": "pass when the edge exists"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "reduced ambition after 10:00 is labelled on trigger; later management is not on the tape."
+        }
+      }
+    },
+    "single_purged": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "open_location", "origin": "market_view", "predicate": "E3 / RR-08 open below VAL/PDL", "verdict_rule": "no episode unless below_val or below_pdl"},
+            {"name": "purged_high", "origin": "market_view", "predicate": "TBR pp.12-15 overnight high > prior RTH high (OD stand-in A2 for all-significant-overnight-liquidity)", "verdict_rule": "side bound: purged_high permits long"},
+            {"name": "purged_low", "origin": "market_view", "predicate": "overnight low < prior RTH low", "verdict_rule": "side bound: purged_low permits short. No qualifying purge yields no episode (RR-02)."},
+            {"name": "compressed", "origin": "market_view", "predicate": "TBR p.12 shrank overnight vs prior RTH width", "verdict_rule": "recorded OD, not a fail gate", "recorded_not_gating": true}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6", "verdict_rule": "pass if formation exists"}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "level", "origin": "primitive", "predicate": "RR-02 EQ/quadrant on the context-bound side", "verdict_rule": "pass on contact"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "kind", "origin": "market_view", "predicate": "09:40-09:50 continuation window E3", "verdict_rule": "pass on contact inside 09:40-09:50"}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "F11", "verdict_rule": "any of 2/3/5m OB or rejection-block"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the contact extreme", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "range_edge", "origin": "primitive", "predicate": "expansion objective TBR p.12", "verdict_rule": "pass when the edge exists"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "add-on size after the first entry is not on the tape."
+        }
+      }
+    },
+    "internal_rotation": {
+      "stages": {
+        "context": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "open_location", "origin": "market_view", "predicate": "RR-08 inside prior value JR pp.36, 38, 42", "verdict_rule": "no episode unless inside_value. Both sides permitted (RR-02)."}
+          ]
+        },
+        "reference": {
+          "measured": true,
+          "operands": [
+            {"name": "high", "origin": "market_view", "predicate": "TBR p.6", "verdict_rule": "pass if formation exists"}
+          ]
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "level", "origin": "primitive", "predicate": "EQ/quadrant both sides JR p.3", "verdict_rule": "pass on contact"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "operands": [
+            {"name": "kind", "origin": "market_view", "predicate": "JR p.3 touch EQ is not a trade; pass requires a sweep of EQ", "verdict_rule": "fail if kind is touch; pass if kind is sweep"}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "operands": [
+            {"name": "ob_2m", "origin": "market_view", "predicate": "F11; touch EQ is not a trade JR p.3", "verdict_rule": "any of 2/3/5m OB or rejection-block"},
+            {"name": "ob_3m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "ob_5m", "origin": "market_view", "predicate": "F11", "verdict_rule": "same"},
+            {"name": "rejection_block", "origin": "market_view", "predicate": "TBR p.29", "verdict_rule": "same"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "market_view", "predicate": "beyond the contact extreme", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": true,
+          "operands": [
+            {"name": "range_edge", "origin": "primitive", "predicate": "nearer rotation target TBR p.24", "verdict_rule": "pass when the edge exists"}
+          ]
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "two-way EQ grinding and personal 20-minute stop (JR p.3) are not on the tape."
+        }
+      }
+    },
+    "timed_pzone_reversal": {
+      "stages": {
+        "reference": {
+          "measured": false,
+          "unobservable": "P-zone generator unknown (F17, RR-05). Printed fixture boxes are the only reference. Never pass a generated zone."
+        },
+        "location": {
+          "measured": true,
+          "operands": [
+            {"name": "inside_box", "origin": "market_view", "predicate": "bar overlaps the printed box", "verdict_rule": "skip the box if never inside"}
+          ]
+        },
+        "trigger": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "absorption", "origin": "market_view", "predicate": "RR-05 OD TBR p.35 body<=0.6 vol>=1.5x14", "verdict_rule": "unknown if volume average missing; skip the box if never absorbed"}
+          ]
+        },
+        "confirmation": {
+          "measured": true,
+          "emission_gate": true,
+          "operands": [
+            {"name": "proxy", "origin": "market_view", "predicate": "same absorption print", "verdict_rule": "tied to absorption; not a constant pass"}
+          ]
+        },
+        "risk": {
+          "measured": true,
+          "operands": [
+            {"name": "stop", "origin": "primitive", "predicate": "stop beyond the printed box RR-05", "verdict_rule": "pass when computed"}
+          ]
+        },
+        "objective": {
+          "measured": false,
+          "unobservable": "3-day pivot is a printed fixture field when supplied (RR-05). Unprinted targets stay unknown. No generator."
+        },
+        "context": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "zone generator is proprietary (F17). Context is the printed fixture identity."
+        },
+        "management": {
+          "measured": false,
+          "omitted": true,
+          "unobservable": "trailing to the 3-day pivot is not reconstructed without the author's ticket."
+        }
+      }
+    }
+  }
+}
