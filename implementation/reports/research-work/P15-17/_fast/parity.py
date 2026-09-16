@@ -113,8 +113,13 @@ def compare_day(day: str, *, verbose: bool = False) -> dict:
                     continue
                 if canonical(oracle_daily.get(key)) != canonical(mine_daily.get(key)):
                     diffs.append(f"{day} DAILY: {key}")
+    by_family: dict[str, list[int]] = {}
+    for line in diffs:
+        name = line.split(" ", 1)[1] if " " in line else line
+        fam = name.split("--")[0].split(":")[0]
+        by_family.setdefault(fam, [0])[0] += 1
     return {"day": day, "compared": compared, "equal": equal, "missing": missing,
-            "daily_equal": daily_equal, "diffs": diffs[:20]}
+            "daily_equal": daily_equal, "diffs": diffs[:20], "diffs_by_family": {k: v[0] for k, v in sorted(by_family.items())}}
 
 
 def main(days: list[str]) -> int:
@@ -131,7 +136,9 @@ def main(days: list[str]) -> int:
         status = "OK" if out["equal"] == out["compared"] and out["daily_equal"] is not False else "DIFF"
         print(f"{day} {status} compared={out['compared']} equal={out['equal']} "
               f"missing={out['missing']} daily_equal={out['daily_equal']}", flush=True)
-        for line in out["diffs"]:
+        if out.get("diffs_by_family"):
+            print("   diffs by family:", out["diffs_by_family"], flush=True)
+        for line in out["diffs"][:5]:
             print("   diff:", line, flush=True)
         bad += out["compared"] - out["equal"]
     print(f"TOTAL compared={total['compared']} equal={total['equal']} missing={total['missing']} "

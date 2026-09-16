@@ -68,7 +68,13 @@ STAGE_BUDGET_HOURS = 24.0
 #: The B0.2 pairing baseline. Read-only. The corrected run root and any
 #: supplemental root are supplied by the orchestrating session and recorded in
 #: RUN_META.json; these are the defaults used until then.
-B02_ROOTS_DEFAULT = ("/workspace/implementation/reports/research-work/P15-16A/1019e6c09ee54609",)
+#: Pairing baselines: the supplemental root first, so the four branches it re-ran after the
+#: main run (prior_week_level, asia_box, prior_day_level, JJ-TBR internal_rotation) come from it;
+#: every other branch falls through to the main root. Both are P15-16A run roots.
+B02_ROOTS_DEFAULT = (
+    "/workspace/implementation/reports/research-work/P15-16A/823273eba4b9ec50",
+    "/workspace/implementation/reports/research-work/P15-16A/1019e6c09ee54609",
+)
 
 #: Measured 2026-09-16 on 2024-03-05 with the stage A engine: the stage B
 #: additions on top of the frozen per-session p90 are the compact account-day

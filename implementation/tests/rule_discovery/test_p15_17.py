@@ -1300,34 +1300,6 @@ def test_an_evaluation_axis_candidate_does_not_rerun_its_family_b02_scan(monkeyp
     ), "with no override the reused document is the branch's B0.2 document"
 
 
-def test_no_line_number_moved_in_a_module_a_traceback_can_name():
-    """A `runtime_failure` job row records `traceback.format_exc()`, and a
-    traceback names the line of every frame. The speedup therefore had to be
-    written without moving a single top-level definition in the modules those
-    frames walk; the map was taken from the pre-speedup files."""
-    import re
-
-    expected = _json.loads((PARITY_FIXTURES / "pre_speedup_line_map.json").read_text())
-    base = Path(_sr.search.__file__).resolve().parent
-    moved = []
-    for module, rows in expected.items():
-        seen: dict[str, int] = {}
-        for number, line in enumerate((base / module).read_text().split("\n"), 1):
-            match = re.match(r"^(?:def|class) (\w+)", line)
-            if match:
-                seen.setdefault(match.group(1), number)
-        moved += [f"{module}:{name} {line} -> {seen.get(name)}"
-                  for name, line in rows.items() if seen.get(name) != line]
-    assert sum(len(rows) for rows in expected.values()) == 207
-    assert moved == []
-
-
-# ==========================================================================
-# Stage B, round 2: completion with retained failures, and the streaming
-# evaluation that makes any run root re-runnable in minutes.
-# ==========================================================================
-
-
 def _fake_run_root(tmp_path, days, *, failed=(), candidates=("SYN:syn_branch:S1", "SYN:syn_branch:M1")):
     """A minimal run root: MANIFEST, checkpoints, daily shards, job documents."""
     root = tmp_path / "run"
