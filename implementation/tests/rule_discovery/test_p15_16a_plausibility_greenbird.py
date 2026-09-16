@@ -32,6 +32,9 @@ SLICE = (
     "2026-06-01",
 )
 REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_greenbird"
+# Generated evidence goes to the round-3 work directory. The committed round-1
+# and repair-track evidence under _repair_*/_track_* stays byte-identical.
+OUT = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_work_r3"
 BYTE_DATES = ("2020-01-02", "2021-01-04")
 HASH_START = REPAIR / "B0_B01_HASHES_START.json"
 FAMILIES = {
@@ -45,6 +48,7 @@ BRANCHES = {
         "asia_box",
         "asia_tdo_case",
         "prior_day_level",
+        "prior_week_level",
         "nyam_box",
         "previous_hour",
         "nwog",
@@ -207,7 +211,7 @@ def _audit_unmeasured(family: str) -> list[str]:
 
 
 def test_p15_16a_plausibility_greenbird_gate():
-    REPAIR.mkdir(parents=True, exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
     start_hashes = json.loads(HASH_START.read_text()) if HASH_START.is_file() else {"hashes": {}}
     by_branch: dict[tuple[str, str], list] = {(family, branch): [] for family, branches in BRANCHES.items() for branch in branches}
     load_errors = []
@@ -271,7 +275,7 @@ def test_p15_16a_plausibility_greenbird_gate():
                 "page": "GB p.30, p.31",
             }
         reports[family] = payload
-        (REPAIR / f"PLAUSIBILITY_{family}.json").write_text(json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n")
+        (OUT / f"PLAUSIBILITY_{family}.json").write_text(json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n")
         lines = [f"# Plausibility {family}", "", f"slice n={len(SLICE)} baseline={B02_VERSION}", ""]
         lines.append("| branch | sessions | episodes | pass | fail | unknown | pass_rate | eps/session | bound | in/out |")
         lines.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
@@ -306,7 +310,7 @@ def test_p15_16a_plausibility_greenbird_gate():
             )
             nwog = rebuilt[("GB-FAIL", "nwog")]
             lines.append(f"NWOG monday_passes={nwog['monday_passes']} of {nwog['pass']} passes (GB pp.13,14,36,37).")
-        (REPAIR / f"PLAUSIBILITY_{family}.md").write_text("\n".join(lines) + "\n")
+        (OUT / f"PLAUSIBILITY_{family}.md").write_text("\n".join(lines) + "\n")
 
     problems = []
     for family in ("GB-FAIL", "GB-VWAP", "GB-SCALP"):
@@ -357,14 +361,14 @@ def test_p15_16a_plausibility_greenbird_gate():
                 assert b01 == start_hashes["hashes"][f"{day}|{family}|{branch}|B0.1"]
 
     assert not problems, problems
-    assert (REPAIR / "PLAUSIBILITY_GB-FAIL.json").is_file()
-    assert (REPAIR / "PLAUSIBILITY_GB-VWAP.md").is_file()
-    assert (REPAIR / "PLAUSIBILITY_GB-SCALP.json").is_file()
+    assert (OUT / "PLAUSIBILITY_GB-FAIL.json").is_file()
+    assert (OUT / "PLAUSIBILITY_GB-VWAP.md").is_file()
+    assert (OUT / "PLAUSIBILITY_GB-SCALP.json").is_file()
 
 
 def test_repair_replay_inside_tape_location_stage():
     from datetime import date
-    from trading_research.research.rule_discovery.source_adapters.green_b02 import TAPE_END, _date_outside_tape
+    from trading_research.research.rule_discovery.source_adapters.green_b02 import _date_outside_tape
     from trading_research.research.rule_discovery.source_adapters.green_failure import replay_example as fail_replay
     from trading_research.research.rule_discovery.source_adapters.green_vwap_scalp import replay_example as vwap_replay
 
@@ -408,13 +412,13 @@ def test_repair_replay_inside_tape_location_stage():
         else:
             by_family["GB-FAIL"].append(fail_replay(market, example))
     for family, rows in by_family.items():
-        (REPAIR / f"REPLAY_{family}.json").write_text(json.dumps(rows, indent=2, sort_keys=True, default=str) + "\n")
+        (OUT / f"REPLAY_{family}.json").write_text(json.dumps(rows, indent=2, sort_keys=True, default=str) + "\n")
     inside_fail = [row for row in by_family["GB-FAIL"] if row.get("detected") is not None]
     assert inside_fail
     missing_location = [
         row for row in inside_fail if row.get("detected") is False and row.get("reached_location") is False
     ]
-    (REPAIR / "REPLAY_LOCATION_MISSES.json").write_text(
+    (OUT / "REPLAY_LOCATION_MISSES.json").write_text(
         json.dumps(missing_location, indent=2, sort_keys=True, default=str) + "\n"
     )
     for row in inside_fail:
@@ -426,7 +430,7 @@ def test_mutated_asia_box_bound_fails_the_gate(tmp_path):
     spec = json.loads(FAMILIES["GB-FAIL"].read_text())
     spec["plausibility"]["asia_box"]["pass_rate"] = [0.0, 0.0]
     spec["plausibility"]["asia_box"].pop("observed_rate_justification", None)
-    payload_path = REPAIR / "PLAUSIBILITY_GB-FAIL.json"
+    payload_path = OUT / "PLAUSIBILITY_GB-FAIL.json"
     assert payload_path.is_file()
     stats = json.loads(payload_path.read_text())["branches"]["asia_box"]
     bounds = spec["plausibility"]["asia_box"]
@@ -443,7 +447,7 @@ def test_mutated_asia_box_bound_fails_the_gate(tmp_path):
 def test_after_tape_replay_does_not_call_build_event_window(monkeypatch):
     from datetime import date as date_cls
     from trading_research.research.method_pack import event_cache
-    from trading_research.research.rule_discovery.source_adapters.green_b02 import TAPE_END, _date_outside_tape
+    from trading_research.research.rule_discovery.source_adapters.green_b02 import _date_outside_tape
     from trading_research.research.rule_discovery.source_adapters.green_failure import replay_example as fail_replay
 
     def boom(*_a, **_k):

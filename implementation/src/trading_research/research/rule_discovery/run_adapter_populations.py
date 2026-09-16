@@ -13,6 +13,7 @@ import time
 import traceback
 
 from trading_research.research.method_pack import historical_runner as hr
+from trading_research.research.method_pack.clocks import ns_to_et
 from trading_research.research.method_pack.empirical_protocol import content_hash
 from trading_research.research.method_pack.historical_outcomes import observe_outcome
 from trading_research.research.method_pack.measurement_outcomes import measure_setup
@@ -56,6 +57,16 @@ SUMMARY_SCHEMA = "adapter-populations-full-history-summary-v1"
 COMPLETE_SCHEMA = "adapter-populations-run-complete-v1"
 RUNNER_RELATIVE = "implementation/src/trading_research/research/rule_discovery/run_adapter_populations.py"
 STAGE_KEYS = ("arrival_read_recorded", "alignment_ok", "profile_allows_trade")
+B02_STAGE_ORDER = (
+    "context",
+    "reference",
+    "location",
+    "trigger",
+    "confirmation",
+    "risk",
+    "objective",
+    "management",
+)
 VWAP_COVERAGE_ID = "GB-VWAP:branch:source_long"
 VWAP_CENSUS_JOB = "GB-VWAP--branch--source_long.json.gz"
 JOB_PATH_SCHEME = "coverage_id--json.gz"
@@ -164,11 +175,32 @@ def default_workers() -> int:
     return max(1, math.floor(amount / period) - 5)
 
 
+ADAPTERS_DIR = Path(__file__).resolve().parent / "source_adapters"
+FAMILIES_DIR = Path(__file__).resolve().parent / "families"
+
+
+def scan_code_identity() -> dict[str, str]:
+    """Digest of the scan code a run's job files are produced by.
+
+    The runner's own hash does not change when an adapter or a family registry
+    does, so a run whose scans changed would otherwise reuse the manifest hash,
+    and with it the run id and the checkpointed job files, of an earlier run.
+    """
+    out: dict[str, str] = {}
+    for base in (ADAPTERS_DIR, FAMILIES_DIR):
+        for path in sorted(base.rglob("*")):
+            if not path.is_file() or "__pycache__" in path.parts or path.suffix not in {".py", ".json"}:
+                continue
+            out[path.relative_to(ADAPTERS_DIR.parent).as_posix()] = sha256_file(path)
+    return out
+
+
 def code_identity():
     return {
         "python": sys.version.split()[0],
         "runner_path": RUNNER_RELATIVE,
         "runner_sha256": sha256_file(RUNNER_PATH),
+        "scan_code_sha256": sha256_bytes(canonical_json(scan_code_identity())),
     }
 
 
@@ -205,7 +237,7 @@ def resolve_recorded_job_path(run_root: Path, item: dict) -> Path:
     return run_root / "jobs" / recorded.parent.name / recorded.name
 
 
-def init_run(workers=None, reports_parent=None, baseline="B0.1"):
+def init_run(workers=None, reports_parent=None, baseline="B0.1", branches=None):
     configure_runtime()
     install_write_guard()
     ensure_transforms()
@@ -214,6 +246,14 @@ def init_run(workers=None, reports_parent=None, baseline="B0.1"):
     if baseline not in {"B0", "B0.1", "B0.2"}:
         raise SystemExit(f"unsupported baseline {baseline}")
     rows = [dict(row) for row in records_for_baseline(baseline)]
+    if branches:
+        wanted = [item.strip() for item in branches if item and item.strip()]
+        known = {row["coverage_id"] for row in rows}
+        unknown = [item for item in wanted if item not in known]
+        if unknown:
+            raise SystemExit(f"unknown coverage ids: {unknown}")
+        order = {cid: index for index, cid in enumerate(wanted)}
+        rows = sorted((row for row in rows if row["coverage_id"] in order), key=lambda row: order[row["coverage_id"]])
     if reports_parent is not None:
         parent = Path(reports_parent)
     elif baseline == "B0.2":
@@ -483,6 +523,41 @@ def _stage_counts(document):
     return out
 
 
+def _entry_bucket(ns: int) -> str:
+    local = ns_to_et(int(ns))
+    minute = local.minute - (local.minute % 30)
+    return f"{local.hour:02d}:{minute:02d}"
+
+
+def _funnel_and_histogram(document) -> tuple[dict, dict]:
+    funnel: dict[str, dict] = {}
+    histogram: dict[str, int] = {}
+    for episode in document.get("episodes") or []:
+        entry = episode.get("decision_at")
+        if entry is not None:
+            bucket = _entry_bucket(int(entry))
+            histogram[bucket] = histogram.get(bucket, 0) + 1
+        for row in episode.get("stages") or []:
+            name = row.get("stage")
+            if not name:
+                continue
+            slot = funnel.setdefault(
+                name,
+                {"entering": 0, "pass": 0, "fail": 0, "unknown": 0, "unknown_operands": {}},
+            )
+            slot["entering"] += 1
+            verdict = str(row.get("verdict") or "unknown")
+            if verdict not in slot:
+                slot[verdict] = 0
+            slot[verdict] += 1
+            if verdict == "unknown":
+                for key, value in (row.get("operands") or {}).items():
+                    if value is None:
+                        ops = slot["unknown_operands"]
+                        ops[str(key)] = ops.get(str(key), 0) + 1
+    return funnel, histogram
+
+
 def _vwap_census_transitions(day, document):
     path = CENSUS_ROOT / "jobs" / day / VWAP_CENSUS_JOB
     if not path.is_file():
@@ -509,6 +584,9 @@ def _branch_stats(day, rec, document, wall, rss):
     stats["baseline_version"] = document.get("baseline_version")
     if rec["family"] == "SAINT-AMT":
         stats["stages"] = _stage_counts(document)
+    funnel, histogram = _funnel_and_histogram(document)
+    stats["funnel"] = funnel
+    stats["entry_histogram"] = histogram
     if rec["coverage_id"] == VWAP_COVERAGE_ID:
         stats.update(_vwap_census_transitions(day, document))
     return stats
@@ -890,6 +968,8 @@ def aggregate(ctx, run_meta):
             "delta_unknown": 0,
             "wall_seconds": 0.0,
             "peak_rss_bytes_max": 0,
+            "funnel": {},
+            "entry_histogram": {},
         }
         census_row = census_index.get(cid)
         if census_row is not None:
@@ -932,6 +1012,17 @@ def aggregate(ctx, run_meta):
             if cid == VWAP_COVERAGE_ID:
                 slot["census_unknown_to_pass"] += rec.get("census_unknown_to_pass") or 0
                 slot["census_unknown_to_fail"] += rec.get("census_unknown_to_fail") or 0
+            for name, counts_row in (rec.get("funnel") or {}).items():
+                dest = slot["funnel"].setdefault(
+                    name,
+                    {"entering": 0, "pass": 0, "fail": 0, "unknown": 0, "unknown_operands": {}},
+                )
+                for key in ("entering", "pass", "fail", "unknown"):
+                    dest[key] += counts_row.get(key) or 0
+                for operand, n in (counts_row.get("unknown_operands") or {}).items():
+                    dest["unknown_operands"][operand] = dest["unknown_operands"].get(operand, 0) + n
+            for bucket, n in (rec.get("entry_histogram") or {}).items():
+                slot["entry_histogram"][bucket] = slot["entry_histogram"].get(bucket, 0) + n
     branches = []
     for rec in rows:
         slot = by_branch[rec["coverage_id"]]
@@ -939,6 +1030,8 @@ def aggregate(ctx, run_meta):
         slot["delta_pass"] = slot["pass"] - slot["census_b01_pass"]
         slot["delta_fail"] = slot["fail"] - slot["census_b01_fail"]
         slot["delta_unknown"] = slot["unknown"] - slot["census_b01_unknown"]
+        slot["episodes_per_session"] = (slot["episodes"] / slot["dates_run"]) if slot["dates_run"] else 0.0
+        slot["pass_rate"] = (slot["pass"] / slot["episodes"]) if slot["episodes"] else 0.0
         branches.append(slot)
     payload = {
         "schema": SUMMARY_SCHEMA,
@@ -1067,9 +1160,18 @@ def main(argv=None):
     parser.add_argument("--summarize-only", action="store_true")
     parser.add_argument("--reports-parent", type=Path, default=None)
     parser.add_argument("--baseline", default="B0.1", choices=("B0", "B0.1", "B0.2"))
+    parser.add_argument(
+        "--branches",
+        help="comma-separated coverage ids for a supplemental run; the manifest lists only these, so the run id differs from the full-history run",
+    )
     args = parser.parse_args(argv)
     workers = args.workers
-    ctx = init_run(workers=workers, reports_parent=args.reports_parent, baseline=args.baseline)
+    ctx = init_run(
+        workers=workers,
+        reports_parent=args.reports_parent,
+        baseline=args.baseline,
+        branches=args.branches.split(",") if args.branches else None,
+    )
     print(
         json.dumps(
             {

@@ -20,6 +20,7 @@ from trading_research.research.rule_discovery.source_adapters.common import (
     dispatch_scan_variant,
     dual_scan,
     enumerate_own_population,
+    is_native_session,
     quadrant_locations,
     scan_family_date,
 )
@@ -237,7 +238,6 @@ NS_MINUTE = 60_000_000_000
 TICK = Decimal("0.25")
 REPLAY_LEVEL_TOLERANCE = Decimal("2")
 TAPE_FIRST = date(2020, 1, 2)
-TAPE_LAST = date(2026, 8, 19)
 OUTSIDE_TAPE = "date outside the tape"
 STAGE_ORDER = ("context", "reference", "location", "trigger", "confirmation", "risk", "objective", "management")
 LADDER_MULT = (Decimal("0.5"), Decimal("1"), Decimal("1.33"), Decimal("1.66"), Decimal("2"), Decimal("2.5"), Decimal("3"))
@@ -822,7 +822,7 @@ def classify_first_hour_sweep(took_h: bool, took_l: bool) -> dict[str, int]:
 
 
 def funnel_stage_counts(episodes: list[Mapping[str, Any]]) -> dict[str, dict[str, int]]:
-    """Cascade pass along STAGE_ORDER. A fail or unknown stops later pass counts.
+    """Cascade pass along STAGE_ORDER. A fail stops later pass counts. Unknown does not.
 
     Only stages present on every episode of the branch are kept, so an optional
     stage (confirmation when no OB, objective when no printed pivot) is omitted
@@ -848,7 +848,7 @@ def funnel_stage_counts(episodes: list[Mapping[str, Any]]) -> dict[str, dict[str
             if verdict not in counts[name]:
                 counts[name][verdict] = 0
             counts[name][verdict] += 1
-            if verdict != "pass":
+            if verdict == "fail":
                 alive = False
     return {
         name: counts[name]
@@ -1586,7 +1586,7 @@ def _scan_eq_branch(market, branch: str) -> tuple[list[dict[str, Any]], list[dic
             loc_operands: dict[str, Any] = {"kind": kind, "level": str(level)}
             if branch == "internal_rotation":
                 evr = EVRANGE_FIXTURES.get(day.isoformat() if day else "")
-                if evr is None and day is not None and day > TAPE_LAST:
+                if evr is None and day is not None and not is_native_session(day):
                     loc_operands["evrange"] = "data_unavailable"
             stages = [
                 _stage(
@@ -1694,7 +1694,7 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
     branch = _rec_branch(rec)
     if market is None or day is None:
         return finish(_document(day, branch or "all", [], [{"reason": "data_unavailable"}]))
-    if day > TAPE_LAST:
+    if not is_native_session(day):
         return finish(_document(day, branch or "all", [], [{"reason": "data_unavailable", "date": day.isoformat()}]))
     branches = BRANCHES if not branch else (branch,)
     episodes: list[dict[str, Any]] = []
@@ -1836,19 +1836,18 @@ def replay_example(market, example) -> dict[str, Any]:
     day = date.fromisoformat(day_text) if day_text else None
     if day is None and market is not None:
         day = _as_day(market)
-    if (
-        inside is False
-        or (day is not None and (day < TAPE_FIRST or day > TAPE_LAST))
-    ):
+    if inside is False or (day is not None and not is_native_session(day)):
         result["detected"] = None
         result["divergence"] = OUTSIDE_TAPE
         result["failing_operand"] = "date"
         result["failing_stage"] = None
+        result["operands"] = {"reason": "date"}
         return result
     if market is None or day is None:
         result["detected"] = None
         result["divergence"] = "data_unavailable"
         result["failing_operand"] = "market"
+        result["operands"] = {"reason": "market"}
         return result
     rec_branch = _primary_branch(branch_expected)
     document = scan_b02(market, {"branch": rec_branch} if rec_branch else None)
@@ -1892,12 +1891,14 @@ def replay_example(market, example) -> dict[str, Any]:
             result["detected"] = None
             result["divergence"] = "data_unavailable"
             result["failing_operand"] = "market"
+            result["operands"] = {"reason": "data_unavailable"}
         else:
             result["detected"] = False
             result["divergence"] = "miss"
             omit = (document.get("omissions") or [{}])[0]
             result["failing_operand"] = str(omit.get("reason") or "location")
             result["failing_stage"] = "location"
+            result["operands"] = dict(omit) if omit else {"reason": result["failing_operand"]}
         return result
     score, best, reason = scored[0]
     result["our_side"] = best.get("side")
@@ -1906,6 +1907,8 @@ def replay_example(market, example) -> dict[str, Any]:
     result["branch"] = best.get("branch") or result["branch"]
     result["detected"] = reason == "match"
     result["divergence"] = reason
+    loc_stage = next((row for row in best.get("stages") or [] if row.get("stage") == "location"), None)
+    result["operands"] = (loc_stage or {}).get("operands") or {"branch": best.get("branch"), "side": best.get("side")}
     if reason != "match":
         operand, stage = _failing_from_episode(best)
         if reason.startswith("miss: level"):
@@ -1958,7 +1961,7 @@ def compute_published_statistics(dates: list[str]) -> dict[str, Any]:
             day = date.fromisoformat(item)
         except ValueError:
             continue
-        if day > TAPE_LAST:
+        if not is_native_session(day):
             continue
         market = None
         if hasattr(item, "completed_bars") or hasattr(item, "bars"):

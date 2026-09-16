@@ -51,6 +51,16 @@
       "source_claim": "Literal 5-minute close below TDO after Asia-high sweep.",
       "page": "GB pp.19, 27"
     },
+    "prior_week_level": {
+      "episodes_per_session": [0, 2],
+      "pass_rate": [0.0, 0.6],
+      "source_claim": "Previous weekly candle's extremes (PWH/PWL) as sweep-and-reclaim references, both sides, one reference lifecycle per level per week. The page names the level set and dates three uses; it states no frequency, so the bound is the structural one: at most one episode per side per session.",
+      "page": "GB p.31 (SD03 addendum); 2025-11-19, 2026-04-23, 2026-09-15; frequency unstated",
+      "observed_rate_justification": {
+        "page": "GB p.31 (SD03 addendum)",
+        "text": "The source gives no weekly-level frequency. The episodes-per-session bound [0, 2] is structural (one reference per side per session) and the pass-rate bound reuses the prior_day_level sweep-and-reclaim template on the same confirmation mode. An observed rate outside it is reported, not tuned."
+      }
+    },
     "prior_day_level": {
       "episodes_per_session": [0, 4],
       "pass_rate": [0.0, 0.60],

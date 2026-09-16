@@ -17,7 +17,6 @@ from trading_research.research.method_pack.historical_features import MINUTE, Q,
 from trading_research.research.method_pack.protocol import jsonable
 
 B02_VERSION = "B0.2-2026-09-15"
-TAPE_END = date(2026, 8, 19)
 STAGE_ORDER = (
     "context",
     "reference",
@@ -54,6 +53,7 @@ B02_BRANCHES = {
         "asia_box",
         "asia_tdo_case",
         "prior_day_level",
+        "prior_week_level",
         "nyam_box",
         "previous_hour",
         "nwog",
@@ -277,6 +277,106 @@ def _prior_value(market) -> dict[str, Any] | None:
     mid = (_dec(ref["low"]) + _dec(ref["high"])) / Decimal("2")
     close = _d(ref.get("close"))
     return {"mid": mid, "close": close, "low": _dec(ref["low"]), "high": _dec(ref["high"])}
+
+
+PRIOR_WEEK_SCOPE = "rth_0930_1600"
+PRIOR_WEEK_CONVENTION = "iso_monday_to_sunday"
+PRIOR_WEEK_CALENDAR = "method_pack.session_policy (versioned regular NQ matching policy)"
+TDO_RETEST_WINDOW = 120 * MINUTE
+TDO_RETEST_WINDOW_SOURCE = "unstated"
+
+
+def _prior_week_range(market) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    """Previous weekly candle's extremes, recorded per wiki/prior-day-week-month-levels.md.
+
+    Period kind, scope, source calendar and week convention, high/low, period end
+    and known_at are all recorded on the level object. The scope is the shared
+    prior-period loader's RTH windows, the same scope prior_day_level uses; the
+    full-session scope is a named limitation, not a silently different number.
+    """
+    fixture = getattr(market, "b02_prior_week", None)
+    if fixture is not None:
+        return fixture, []
+    try:
+        prior = market.prior("week")
+    except Exception as exc:
+        return None, [{"reason": "prior_week_unavailable", "detail": str(exc)}]
+    if not prior:
+        return None, [{"reason": "prior_week_unavailable"}]
+    span = prior.get("range")
+    if not span or span.get("low") is None or span.get("high") is None:
+        return None, [{"reason": "prior_week_range_missing"}]
+    week_end = market.day - timedelta(days=market.day.weekday())
+    ref = dict(span)
+    ref.update(
+        {
+            "period_kind": "week",
+            "scope": PRIOR_WEEK_SCOPE,
+            "source_calendar": PRIOR_WEEK_CALENDAR,
+            "week_convention": PRIOR_WEEK_CONVENTION,
+            "period_start": str(week_end - timedelta(days=7)),
+            "period_end": str(week_end - timedelta(days=1)),
+            "known_at": int(span.get("end") or market.start),
+            "id": f"prior_week:{market.instrument_id}:{week_end}",
+            "active": True,
+            "lifecycle": "one_reference_per_level_per_week",
+        }
+    )
+    omissions = list(prior.get("omissions") or [])
+    omissions.append(
+        {
+            "reason": "full_session_scope_unmeasured",
+            "operand": "full_session_prior_week_window",
+            "detail": "prior('week') supplies RTH windows only; the full-session weekly candle is not measurable from the shared prior-period loader in B0.2",
+        }
+    )
+    return ref, omissions
+
+
+def _tdo_retest(market, after_ns: int, tdo: Decimal | None, side: str, *, limit_ns: int | None = None) -> dict[str, Any]:
+    """Retest of the True Day Open after a reclaim. Always returns a verdict record.
+
+    Source: post 2098333408237662406 (2026-09-11) and [GB] pp.27, 59. The window
+    is unstated in the source and is registered here as a bounded 120 minutes.
+    """
+    if tdo is None:
+        return {"held": False, "reason": "tdo_unavailable", "at_ns": None, "price": None}
+    end = int(min(int(after_ns) + TDO_RETEST_WINDOW, int(limit_ns if limit_ns is not None else market.end)))
+    for row in _safe_bars(market, int(after_ns), end):
+        lo, hi = _d(row.get("L")), _d(row.get("H"))
+        if lo is None or hi is None or not (lo <= tdo <= hi):
+            continue
+        at = int(row.get("end") or row.get("start") or after_ns)
+        close = _d(row.get("C"))
+        if close is None:
+            return {"held": False, "reason": "retest_close_unknown", "at_ns": at, "price": tdo}
+        held = close >= tdo if side == "long" else close <= tdo
+        return {
+            "held": bool(held),
+            "reason": None if held else "retest_broke_through",
+            "at_ns": at,
+            "price": tdo,
+            "close": close,
+        }
+    return {"held": False, "reason": "no_retest_in_window", "at_ns": None, "price": tdo}
+
+
+def _confirmation_mode_values(market, confirm: Mapping[str, Any], side: str) -> dict[str, Any]:
+    """Confirmation mode for a reclaim: the close-through mode, plus the TDO retest variant."""
+    tdo = _tdo(market)
+    retest = _tdo_retest(market, int(confirm["at_ns"]), tdo, side, limit_ns=int(market.end))
+    mode = "tdo_retest" if retest.get("held") else "five_minute_close"
+    return {
+        "confirmation_mode": mode,
+        "reclaim_mode": "five_minute_close",
+        "tdo_required": bool(retest.get("held")),
+        "tdo": tdo,
+        "tdo_retest": bool(retest.get("held")),
+        "tdo_retest_at_ns": retest.get("at_ns"),
+        "tdo_retest_price": retest.get("price"),
+        "tdo_retest_close": retest.get("close"),
+        "tdo_retest_reason": retest.get("reason"),
+    }
 
 
 def _nwog_levels(market) -> dict[str, Any] | None:
@@ -509,7 +609,7 @@ def _rules_for(*ids: str) -> list[dict[str, Any]]:
 
 
 def _gate_stages(stages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Later stages cannot pass after an earlier fail or unknown. Funnel stays monotone."""
+    """Fail blocks later passes. Unknown leaves later evaluated stages in place."""
     blocked = None
     blocker = None
     out: list[dict[str, Any]] = []
@@ -518,13 +618,13 @@ def _gate_stages(stages: list[dict[str, Any]]) -> list[dict[str, Any]]:
         row = by_name.get(name)
         if row is None:
             continue
-        if blocked is not None and row.get("verdict") == "pass":
+        if blocked == "fail" and row.get("verdict") == "pass":
             operands = dict(row.get("operands") or {})
             operands["blocked_by"] = blocker
-            row = {**row, "verdict": blocked, "operands": operands}
+            row = {**row, "verdict": "fail", "operands": operands}
         out.append(row)
-        if blocked is None and row.get("verdict") in {"fail", "unknown"}:
-            blocked = "fail" if row.get("verdict") == "fail" else "unknown"
+        if blocked is None and row.get("verdict") == "fail":
+            blocked = "fail"
             blocker = name
     return out
 
@@ -1234,6 +1334,7 @@ def _scan_asia_high(market) -> list[dict[str, Any]]:
     high, low = excursion(market, sweep_at, int(confirm["at_ns"]))
     stop = (high + Q) if high is not None else level + Q
     target = _dec(ref["low"])
+    mode_values = _confirmation_mode_values(market, confirm, side)
     return [
         _finish_level_trade(
             market,
@@ -1244,11 +1345,11 @@ def _scan_asia_high(market) -> list[dict[str, Any]]:
             level=level,
             sweep=sweep,
             confirm=confirm,
-            mode="five_minute_close",
+            mode=mode_values["confirmation_mode"],
             stop=stop,
             target=target,
-            rule_ids=("RR-11-sessions-boxes", "F06-A2-asia", "RR-13-confirmation-modes", "RR-12-risk-exits", "F07-directional-bias"),
-            extra_values={"tdo_required": False, "box": spec["name"]},
+            rule_ids=("RR-11-sessions-boxes", "F06-A2-asia", "RR-13-confirmation-modes", "RR-16-tdo-retest", "RR-12-risk-exits", "F07-directional-bias"),
+            extra_values={**mode_values, "box": spec["name"]},
         )
     ]
 
@@ -1413,6 +1514,7 @@ def _scan_pdl(market) -> list[dict[str, Any]]:
             target = pdh if pdh is not None else tdo
         else:
             target = _dec(ref["low"])
+        mode_values = _confirmation_mode_values(market, confirm, side)
         episodes.append(
             _finish_level_trade(
                 market,
@@ -1423,11 +1525,124 @@ def _scan_pdl(market) -> list[dict[str, Any]]:
                 level=level,
                 sweep=sweep,
                 confirm=confirm,
-                mode="five_minute_close",
+                mode=mode_values["confirmation_mode"],
                 stop=stop,
                 target=target,
-                rule_ids=("F06-A3-pdl", "RR-13-confirmation-modes", "RR-12-risk-exits", "RR-15-objective-horizon"),
-                extra_values={"stop_is_swept_level": True},
+                rule_ids=("F06-A3-pdl", "RR-13-confirmation-modes", "RR-16-tdo-retest", "RR-12-risk-exits", "RR-15-objective-horizon"),
+                extra_values={**mode_values, "stop_is_swept_level": True},
+            )
+        )
+    if omissions:
+        for ep in episodes:
+            ep.setdefault("limitations", []).extend(omissions)
+    return episodes
+
+
+def _scan_pwl(market) -> list[dict[str, Any]]:
+    """Previous weekly candle's extremes, same sweep-and-fail template as prior_day_level.
+
+    Both sides, one reference lifecycle per level per week, confirmation by the
+    page's 5-minute close back through the level with the TDO-retest variant.
+    Source: [GB] p.31 per the SD03 addendum; 2025-11-19, 2026-04-23, 2026-09-15.
+    """
+    ref, omissions = _prior_week_range(market)
+    if ref is None:
+        ep = _unknown_ref_episode(market, "GB-FAIL", "prior_week_level", "long", "prior_week_missing", ("F06-A9-pwl",))
+        if omissions:
+            ep.setdefault("limitations", []).extend(omissions)
+        return [ep]
+    episodes: list[dict[str, Any]] = []
+    for side, key in (("long", "low"), ("short", "high")):
+        level = _d(ref.get(key))
+        if level is None:
+            continue
+        begin = int(market.start)
+        known_at = int(ref.get("known_at") or begin)
+        sweep = first_sweep(market, begin, int(market.end), level, side)
+        if sweep is None:
+            stages = [
+                _stage("context", "pass", begin, session=session_label(market, begin)),
+                _stage("reference", "pass", known_at, level=level, side=side, period_kind="week", scope=PRIOR_WEEK_SCOPE, week_convention=PRIOR_WEEK_CONVENTION),
+                _stage("location", "fail", begin, reason="no_sweep_of_prior_week_level", level=level, side=side),
+                _stage("trigger", "fail", begin, reason="no_sweep", sweep_depth=0, level=level),
+            ]
+            episodes.append(
+                _episode(
+                    market,
+                    family="GB-FAIL",
+                    branch="prior_week_level",
+                    side=side,
+                    stages=stages,
+                    rules=_rules_for("F06-A9-pwl"),
+                    decision_at=begin,
+                    entry=None,
+                    stop=None,
+                    target=None,
+                    reference=ref,
+                    trigger=None,
+                    values={"confirmation_mode": "five_minute_close", "tdo_required": False, "bias_compatible": None},
+                    geometry={},
+                )
+            )
+            continue
+        sweep_at = int(sweep.get("start") or begin)
+        confirm = first_five_minute_close_through(market, sweep_at, level, side, limit_ns=int(market.end))
+        if confirm is None:
+            stages = [
+                _stage("context", "pass", sweep_at, session=session_label(market, sweep_at)),
+                _stage("reference", "pass", known_at, level=level, period_kind="week", scope=PRIOR_WEEK_SCOPE),
+                _stage("location", "pass", sweep_at, sweep=True, level=level),
+                _stage("trigger", "pass", sweep_at, sweep=True, level=level),
+                _stage("confirmation", "fail", sweep_at, reason="no_five_minute_close"),
+            ]
+            episodes.append(
+                _episode(
+                    market,
+                    family="GB-FAIL",
+                    branch="prior_week_level",
+                    side=side,
+                    stages=stages,
+                    rules=_rules_for("F06-A9-pwl", "RR-13-confirmation-modes"),
+                    decision_at=sweep_at,
+                    entry=None,
+                    stop=None,
+                    target=None,
+                    reference=ref,
+                    trigger=sweep,
+                    values={"confirmation_mode": "five_minute_close", "tdo_required": False, "bias_compatible": None},
+                    geometry={},
+                )
+            )
+            continue
+        stop = level + Q if side == "short" else level - Q
+        other = _d(ref.get("high" if side == "long" else "low"))
+        target = other if other is not None else _tdo(market)
+        mode_values = _confirmation_mode_values(market, confirm, side)
+        extra = dict(mode_values)
+        extra.update(
+            {
+                "stop_is_swept_level": True,
+                "period_kind": "week",
+                "scope": PRIOR_WEEK_SCOPE,
+                "week_convention": PRIOR_WEEK_CONVENTION,
+                "period_end": ref.get("period_end"),
+            }
+        )
+        episodes.append(
+            _finish_level_trade(
+                market,
+                family="GB-FAIL",
+                branch="prior_week_level",
+                side=side,
+                ref=ref,
+                level=level,
+                sweep=sweep,
+                confirm=confirm,
+                mode=mode_values["confirmation_mode"],
+                stop=stop,
+                target=target if target is not None else level,
+                rule_ids=("F06-A9-pwl", "RR-13-confirmation-modes", "RR-12-risk-exits", "RR-15-objective-horizon"),
+                extra_values=extra,
             )
         )
     if omissions:
@@ -2449,6 +2664,7 @@ SCANNERS = {
     ("GB-FAIL", "asia_box"): _scan_asia_high,
     ("GB-FAIL", "asia_tdo_case"): _scan_asia_tdo,
     ("GB-FAIL", "prior_day_level"): _scan_pdl,
+    ("GB-FAIL", "prior_week_level"): _scan_pwl,
     ("GB-FAIL", "nyam_box"): _scan_nyam,
     ("GB-FAIL", "previous_hour"): _scan_previous_hour,
     ("GB-FAIL", "nwog"): _scan_nwog,
@@ -2584,13 +2800,15 @@ def _level_close(a: Decimal | None, b: Decimal | None) -> bool:
 
 
 def _date_outside_tape(example: Mapping[str, Any]) -> bool:
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
+
     if example.get("inside_tape") is False:
         return True
     try:
         day = date.fromisoformat(str(example.get("date") or "")[:10])
     except Exception:
         return True
-    return day > TAPE_END
+    return not is_native_session(day)
 
 
 def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
@@ -2725,11 +2943,15 @@ def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
     if not matches:
         loc = location_hits[0] if location_hits else None
         fail_stage, fail_op = _failing(loc)
+        loc_stage = None
+        if loc is not None:
+            loc_stage = next((row for row in loc.get("stages") or [] if row.get("stage") == "location"), None)
         return {
             "detected": False,
             "reached_location": loc is not None,
             "failing_stage": fail_stage,
             "failing_operand": fail_op,
+            "operands": (loc_stage or {}).get("operands") if loc_stage else {"reason": fail_op, "stage": fail_stage},
             "branch": None if loc is None else loc.get("branch"),
             "our_side": None if loc is None else loc.get("side"),
             "our_level": None if loc is None or _ep_level(loc) is None else float(_ep_level(loc)),
@@ -2750,11 +2972,13 @@ def replay_example(market, example: Mapping[str, Any]) -> dict[str, Any]:
         else:
             reported_author = drawn
             divergence = "drawn-not-live"
+    loc_stage = next((row for row in best.get("stages") or [] if row.get("stage") == "location"), None)
     return {
         "detected": True,
         "reached_location": True,
         "failing_stage": None,
         "failing_operand": None,
+        "operands": (loc_stage or {}).get("operands") or {"branch": best.get("branch"), "side": best.get("side")},
         "branch": best.get("branch"),
         "our_side": best.get("side"),
         "our_level": None if our_level is None else float(our_level),
@@ -2835,6 +3059,35 @@ RULES: dict[str, dict[str, Any]] = {
         "source": "GB pp.25, 48, 52-54; NG 2099503614372741234",
         "finding": "F06",
         "_fn": _scan_pdl,
+    },
+    "F06-A9-pwl": {
+        "kind": "literal",
+        "source": "GB p.31 (SD03 addendum); 2025-11-19 previous-week-low reclaim long; 2026-04-23 PWH 26,884; 2026-09-15 PWL 29,330.50",
+        "finding": "F06",
+        "parameters": {
+            "period_kind": "week",
+            "scope": PRIOR_WEEK_SCOPE,
+            "week_convention": PRIOR_WEEK_CONVENTION,
+            "source_calendar": PRIOR_WEEK_CALENDAR,
+            "sides": ["long", "short"],
+            "lifecycle": "one_reference_per_level_per_week",
+            "confirmation": "five_minute_close_back_through_level",
+        },
+        "_fn": _scan_pwl,
+    },
+    "RR-16-tdo-retest": {
+        "kind": "literal",
+        "source": "GB post 2098333408237662406 (2026-09-11); GB pp.27, 59",
+        "finding": "RR-16",
+        "parameters": {
+            "applies_to": ["asia_box", "prior_day_level", "prior_week_level"],
+            "sequence": "sweep, reclaim, retest of the True Day Open, entry",
+            "window_minutes": 120,
+            "window_source": TDO_RETEST_WINDOW_SOURCE,
+            "fails_when": ["no_retest_in_window", "retest_broke_through", "tdo_unavailable"],
+            "replaces_close_through": False,
+        },
+        "_fn": _tdo_retest,
     },
     "F06-A4-pocket": {
         "kind": "OD",

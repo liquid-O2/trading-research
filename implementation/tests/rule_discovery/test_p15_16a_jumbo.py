@@ -14,6 +14,7 @@ from trading_research.research.rule_discovery.runner import engineering_slice_da
 from trading_research.research.rule_discovery.source_adapters.common import (
     dual_scan,
     frozen_scan_document,
+    is_native_session,
     load_source_market,
     strip_baseline_version,
 )
@@ -23,7 +24,6 @@ from trading_research.research.rule_discovery.source_adapters.jumbo import (
     PZONE_FIXTURES,
     RULES,
     STAGE_ORDER,
-    TAPE_LAST,
     classify_first_hour_sweep,
     compute_published_statistics,
     extension_reaction_bands,
@@ -37,6 +37,9 @@ from trading_research.research.rule_discovery.source_adapters.jumbo import (
 
 TRACK = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_track_jumbo"
 REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_jumbo"
+# Generated evidence goes to the round-3 work directory; committed repair evidence stays byte-identical.
+OUT = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_work_r3"
+OUT.mkdir(parents=True, exist_ok=True)
 EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 NS_MINUTE = 60_000_000_000
 ROUND1_SHA256 = {
@@ -213,7 +216,9 @@ def test_rr07_sessionstat_coincidence_and_evrange_after_tape():
     assert longs
     loc = next(stage for stage in longs[0]["stages"] if stage["stage"] == "location")
     assert loc["operands"]["sessionstat_coincidence"] is True
-    late = scan_b02(Tape("2026-08-28", []), "extension_reaction")
+    # 2026-09-11 is not a member of the frozen classified session list, which
+    # ends 2026-09-03. 2026-08-28 is inside it and is no longer an after-tape date.
+    late = scan_b02(Tape("2026-09-11", []), "extension_reaction")
     assert late["omissions"]
     assert late["omissions"][0]["reason"] == "data_unavailable"
 
@@ -334,7 +339,7 @@ def test_b0_b01_byte_identity_two_slice_dates():
         assert hashes[day]["b0"] == hashes[day]["frozen"]
         assert hashes[day]["b01"] == hashes[day]["repaired"]
     REPAIR.mkdir(parents=True, exist_ok=True)
-    (REPAIR / "B0_B01_HASHES.json").write_text(json.dumps(hashes, indent=2) + "\n")
+    (OUT / "B0_B01_HASHES.json").write_text(json.dumps(hashes, indent=2) + "\n")
 
 
 def test_replay_funnel_statistics_and_rules():
@@ -346,7 +351,7 @@ def test_replay_funnel_statistics_and_rules():
     replays = []
     for example in examples:
         day_text = str(example.get("date") or "")
-        inside = example.get("inside_tape") is True and day_text <= TAPE_LAST.isoformat()
+        inside = example.get("inside_tape") is True and is_native_session(day_text)
         if inside:
             try:
                 market = build_market_view(example["date"])
@@ -362,7 +367,7 @@ def test_replay_funnel_statistics_and_rules():
         if row["detected"] is None:
             assert row.get("divergence") in {OUTSIDE_TAPE, "data_unavailable"}
         replays.append(row)
-    (REPAIR / "REPLAY_jumbo.json").write_text(json.dumps(replays, indent=2, default=str) + "\n")
+    (OUT / "REPLAY_jumbo.json").write_text(json.dumps(replays, indent=2, default=str) + "\n")
 
     dates = engineering_slice_dates()
     funnel: dict[str, Any] = {"slice_dates": dates, "branches": {}}
@@ -375,7 +380,7 @@ def test_replay_funnel_statistics_and_rules():
         }
     collected: dict[str, list[dict[str, Any]]] = {branch: [] for branch in BRANCHES}
     for day in dates:
-        if day > TAPE_LAST.isoformat():
+        if not is_native_session(day):
             continue
         try:
             hist = load_source_market(day)
@@ -410,13 +415,13 @@ def test_replay_funnel_statistics_and_rules():
         assert passes == sorted(passes, reverse=True)
         if names:
             assert passes[-1] == funnel["branches"][branch]["B0.2"]["pass"]
-    (REPAIR / "FUNNEL_jumbo.json").write_text(json.dumps(funnel, indent=2) + "\n")
+    (OUT / "FUNNEL_jumbo.json").write_text(json.dumps(funnel, indent=2) + "\n")
 
-    in_tape = [day for day in dates if day <= TAPE_LAST.isoformat()]
+    in_tape = [day for day in dates if is_native_session(day)]
     stats = compute_published_statistics(in_tape)
-    (REPAIR / "STATISTICS_jumbo.json").write_text(json.dumps(stats, indent=2, default=str) + "\n")
+    (OUT / "STATISTICS_jumbo.json").write_text(json.dumps(stats, indent=2, default=str) + "\n")
     payload = rules_payload()
-    (REPAIR / "RULES_jumbo.json").write_text(json.dumps(payload, indent=2) + "\n")
+    (OUT / "RULES_jumbo.json").write_text(json.dumps(payload, indent=2) + "\n")
     assert any(row["rule_id"].startswith("RR-01") for row in payload)
     assert all(row.get("file_line", "").startswith("source_adapters/jumbo.py:") for row in payload)
     assert len(replays) == len(examples)

@@ -40,7 +40,7 @@ The objective is an adaptive NQ decision process whose context, location and res
 
 ## Reading and starting
 
-Start at the selected phase README, then use its `PROMPTS.md`. Each subphase has a generated `RUNBOOK.md` containing the applicable contracts and its task cards. The coordinator reads one runbook; a worker receives one task card plus the named contract sections. Bundles are generated from canonical files, never independently edited.
+Start at the selected phase README, then the subphase's task cards, and follow [HOW_TO_RUN.md](/workspace/planning/research-program/HOW_TO_RUN.md). Roles and operating judgment are in [AGENT_OPERATIONS.md](/workspace/planning/research-program/AGENT_OPERATIONS.md); the cleanup that set this up is [PLAN_CLEANUP_2026-09-16.md](/workspace/planning/research-program/PLAN_CLEANUP_2026-09-16.md). A worker receives one task card and the contracts it names; nothing is copied into briefs or runbooks.
 
 [Shared contracts](/workspace/planning/research-program/README.md) · [Execution method](/workspace/planning/research-program/WORKFLOW.md) · [Conversation scope audit](/workspace/planning/research-program/SCOPE_AUDIT.md) · [Workflow repository review](/workspace/planning/research-program/METHOD_REVIEW.md) · [Decision ledger](/workspace/planning/phase-1-live/NEXT_PHASES_DISCUSSION.md) · [Shared wiki](/workspace/wiki/index.md).
 

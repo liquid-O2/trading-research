@@ -187,10 +187,11 @@ def bracket_fillable(arrays, zone: Mapping[str, Any], touch_at: int, cutoff: int
 
 
 def cascade_stages(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep later stages after unknown. Stop after the first fail."""
     out: list[dict[str, Any]] = []
     for row in rows:
         out.append(row)
-        if row.get("verdict") != "pass":
+        if row.get("verdict") == "fail":
             break
     return out
 
@@ -535,7 +536,7 @@ def _scan_b02_impl(market, rec, *, overrides=None) -> dict[str, Any]:
 
 
 def _date_outside_tape(example: Mapping[str, Any]) -> bool:
-    from datetime import date as date_cls
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
 
     if example.get("inside_tape") is False:
         return True
@@ -543,10 +544,12 @@ def _date_outside_tape(example: Mapping[str, Any]) -> bool:
     if not raw:
         return True
     try:
-        day = date_cls.fromisoformat(str(raw)[:10])
+        from datetime import date as date_cls
+
+        date_cls.fromisoformat(str(raw)[:10])
     except ValueError:
         return True
-    return day < date_cls(2020, 1, 2) or day > date_cls(2026, 8, 19)
+    return not is_native_session(raw)
 
 
 def replay_example(market, example) -> dict[str, Any]:

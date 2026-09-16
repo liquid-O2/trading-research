@@ -1,0 +1,69 @@
+receipt=/workspace/implementation/reports/research-work/P15-09/250e5aea146f3516/attempt-0001/TASK_RECEIPT.json
+before_source=/tmp/claude-1001/-workspace/a537e734-3756-42f3-86a8-d5066915b22a/scratchpad/verify-16a-integration-r2/verify_before_P15-09.json
+before_module=$SCRATCH/verify-16a-integration-r2/receipts_before.py (unchanged receipts.py, round-2 driver run)
+loadavg_at_start=(18.4501953125, 20.2900390625, 24.302734375)
+loadavg_at_end=(16.77490234375, 19.45458984375, 23.6826171875)
+before_wall_seconds=3702.6534935459495
+after_wall_seconds=41.668
+speedup_vs_before=88.86x
+before_ok=False
+after_ok=False
+profiled_after_ok=False
+before_n_failures=39
+after_n_failures=10
+before_n_distinct_triples=10
+after_n_distinct_triples=10
+equivalent_ok_and_distinct_triples=True
+failure	IDENTITY	/workspace/implementation/src/trading_research/research/contracts/receipts.py	code declared hash does not match workspace bytes for implementation/src/trading_research/research/contracts/receipts.py
+failure	IDENTITY	/workspace/implementation/src/trading_research/research/rule_discovery/families/jumbo.json	code declared hash does not match workspace bytes for implementation/src/trading_research/research/rule_discovery/families/jumbo.json
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-01/a4c95ab43aef1038/attempt-0001/TASK_RECEIPT.json	predecessor P15-01 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-02/c9669fa98ba72c43/attempt-0001/TASK_RECEIPT.json	predecessor P15-02 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-03/b957ec04d76e9c71/attempt-0001/TASK_RECEIPT.json	predecessor P15-03 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-04/0d0a57cc4de997b4/attempt-0001/TASK_RECEIPT.json	predecessor P15-04 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-05/8e1ea422bfc8678d/attempt-0001/TASK_RECEIPT.json	predecessor P15-05 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-06/50d64d506299dc8d/attempt-0002/TASK_RECEIPT.json	predecessor P15-06 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-07/ac09070f5aeb604b/attempt-0001/TASK_RECEIPT.json	predecessor P15-07 receipt failed recursive verification
+failure	PREDECESSOR_HASH	/workspace/implementation/reports/research-work/P15-08/9728f9ee0bbbdfd5/attempt-0001/TASK_RECEIPT.json	predecessor P15-08 receipt failed recursive verification
+triples_only_before=0
+triples_only_after=0
+
+--- top 30 cumulative (after, profiled) ---
+         1711252 function calls (1647530 primitive calls) in 39.183 seconds
+
+   Ordered by: cumulative time
+   List reduced from 214 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     18/1    0.002    0.000   39.183   39.183 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1756(verify_task_receipt)
+     18/1    0.002    0.000   38.415   38.415 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1629(_check_identities)
+     36/2    0.005    0.000   38.212   19.106 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1313(_check_declared_source_files)
+     70/6    0.008    0.000   38.004    6.334 /workspace/implementation/src/trading_research/research/contracts/receipts.py:812(_code_superseded_by_successor)
+     18/2    0.002    0.000   25.763   12.881 /workspace/implementation/src/trading_research/research/contracts/receipts.py:977(_check_predecessors)
+     2740    0.017    0.000   16.870    0.006 /usr/lib/python3.12/pathlib.py:1024(read_text)
+     2355    0.082    0.000   15.804    0.007 /workspace/implementation/src/trading_research/research/contracts/receipts.py:43(read)
+     4767    0.009    0.000   12.369    0.003 /usr/lib/python3.12/pathlib.py:1007(open)
+     4767   12.179    0.003   12.360    0.003 {built-in method _io.open}
+     2027    0.005    0.000   10.768    0.005 /workspace/implementation/src/trading_research/research/contracts/receipts.py:67(file_digest)
+     2027    0.016    0.000   10.762    0.005 /workspace/implementation/src/trading_research/research/contracts/receipts.py:580(cached_file_digest)
+     2027    0.032    0.000   10.726    0.005 /workspace/implementation/src/trading_research/research/contracts/identity.py:85(file_digest)
+       18    0.047    0.003   10.493    0.583 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1411(_check_evidence_matrix)
+     2740    8.732    0.003    8.783    0.003 {method 'read' of '_io.TextIOWrapper' objects}
+     4102    0.006    0.000    5.893    0.001 /workspace/implementation/src/trading_research/research/contracts/identity.py:88(<lambda>)
+     4102    5.887    0.001    5.887    0.001 {method 'read' of '_io.BufferedReader' objects}
+     4400    0.005    0.000    5.799    0.001 /usr/lib/python3.12/pathlib.py:837(stat)
+     4400    5.642    0.001    5.794    0.001 {built-in method posix.stat}
+     3677    0.013    0.000    4.924    0.001 /usr/lib/python3.12/pathlib.py:888(is_file)
+      681    0.007    0.000    4.413    0.006 /workspace/implementation/src/trading_research/research/contracts/receipts.py:761(_code_files_from_receipt)
+       36    0.005    0.000    3.570    0.099 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1278(_check_snapshot_copies)
+        6    0.000    0.000    2.269    0.378 /workspace/implementation/src/trading_research/research/contracts/receipts.py:585(all_receipts)
+        1    0.003    0.003    2.269    2.269 /workspace/implementation/src/trading_research/research/contracts/receipts.py:498(_index_task_receipts)
+      385    0.006    0.000    2.259    0.006 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1237(_selector_resolves)
+      478    0.011    0.000    2.252    0.005 <frozen os>:282(walk)
+     1024    0.006    0.000    2.062    0.002 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1260(_resolve_workspace_file)
+       18    0.005    0.000    2.001    0.111 /workspace/implementation/src/trading_research/research/contracts/receipts.py:869(_check_artifacts)
+       18    0.007    0.000    1.881    0.104 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1579(_check_inventory)
+      320    0.003    0.000    1.833    0.006 /workspace/implementation/src/trading_research/research/contracts/receipts.py:1156(_test_node_names)
+       73    0.001    0.000    1.739    0.024 /workspace/implementation/src/trading_research/research/contracts/receipts.py:963(_matching_receipt)
+
+
+

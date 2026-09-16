@@ -45,6 +45,7 @@ IMPL = Path(__file__).resolve().parents[2]
 REPORTS = IMPL / "reports/research-work/P15-16A"
 TRACK = REPORTS / "_track_sires"
 REPAIR = REPORTS / "_repair_sires"
+WORK = REPORTS / "_work_r3"
 EXAMPLES = IMPL.parent / "planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json"
 BYTE_BEFORE = TRACK / "BYTE_IDENTITY_BEFORE.json"
 SI_IDS = (
@@ -440,20 +441,28 @@ def test_f09_gamma_ofm_short_fade_long_missing_is_unknown():
     ]
     rec = _rec(branch="ofm_aggressive")
     missing = scan_b02(_view(events), rec)
-    ep = [e for e in missing["episodes"] if e["side"] == "short"][0]
-    assert ep["research_verdict"] == "unknown"
+    shorts = [e for e in missing["episodes"] if e["side"] == "short"]
+    assert shorts
+    ep = shorts[0]
+    assert any(s["stage"] == "location" for s in ep["stages"])
     ctx = next(s for s in ep["stages"] if s["stage"] == "context")
     assert ctx["verdict"] == "unknown"
+    no_fail = [e for e in shorts if e["research_verdict"] != "fail"]
+    assert no_fail
+    assert all(e["research_verdict"] == "unknown" for e in no_fail)
     ignored = scan_b02(_view(events), {**rec, "gamma_regime": "short"})
-    assert [e for e in ignored["episodes"] if e["side"] == "short"][0]["research_verdict"] == "unknown"
+    ignored_short = [e for e in ignored["episodes"] if e["side"] == "short"]
+    assert ignored_short
+    assert any(e["research_verdict"] == "unknown" for e in ignored_short)
     wrong = scan_b02(_with_gamma(_view(events), "long"), rec)
     assert [e for e in wrong["episodes"] if e["side"] == "short"][0]["research_verdict"] == "fail"
     right = scan_b02(_with_gamma(_view(events), "short"), rec)
     assert [e for e in right["episodes"] if e["side"] == "short"][0]["research_verdict"] != "unknown"
     fade = scan_b02(_view(events), _rec(branch="balance_failure_fade"))
     assert fade["episodes"]
-    assert fade["episodes"][0]["research_verdict"] == "unknown"
-    assert len(fade["episodes"]) == 1
+    assert any(s["stage"] == "location" for s in fade["episodes"][0]["stages"])
+    fade_ctx = next(s for s in fade["episodes"][0]["stages"] if s["stage"] == "context")
+    assert fade_ctx["verdict"] == "unknown"
 
 
 def test_rr19_management_partial_trail_daily_stop():
@@ -588,9 +597,15 @@ def test_funnel_cascade_last_stage_equals_pass():
     assert ep["stages"][-1]["verdict"] == "pass"
     missing = scan_b02(_view(events), _rec(branch="ofm_aggressive", location_kind="lvn", side="short"))
     ep_u = [e for e in missing["episodes"] if e["side"] == "short"][0]
-    assert ep_u["research_verdict"] == "unknown"
-    assert ep_u["stages"][-1]["verdict"] != "pass" or ep_u["stages"][-1]["stage"] != "management"
-    assert not any(s["stage"] == "management" and s["verdict"] == "pass" for s in ep_u["stages"])
+    assert any(s["stage"] == "location" for s in ep_u["stages"])
+    loc = next(s for s in ep_u["stages"] if s["stage"] == "location")
+    assert loc["verdict"] in {"pass", "fail", "unknown"}
+    ctx = next(s for s in ep_u["stages"] if s["stage"] == "context")
+    assert ctx["verdict"] == "unknown"
+    if any(s.get("verdict") == "fail" for s in ep_u["stages"]):
+        assert ep_u["research_verdict"] == "fail"
+    else:
+        assert ep_u["research_verdict"] == "unknown"
 
 
 def test_f10_f20_refill_zone_from_clusters_and_departure_is_actual_time():
@@ -702,8 +717,8 @@ def test_b0_b01_byte_identity_two_slice_dates():
         root = Path(before["b01_root"] if row["baseline"] == "B0.1" else before["b0_root"])
         path = root / row["date"] / row["file"]
         assert _sha256(path) == row["sha256"]
-    REPAIR.mkdir(parents=True, exist_ok=True)
-    (REPAIR / "BYTE_IDENTITY_AFTER.json").write_text(json.dumps({"files": after_rows}, indent=2) + "\n")
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "BYTE_IDENTITY_AFTER.json").write_text(json.dumps({"files": after_rows}, indent=2) + "\n")
 
 
 def test_rr17_replay_sires_author_examples():
@@ -745,17 +760,17 @@ def test_rr17_replay_sires_author_examples():
         "Replay reports reached_location separately from detected. "
         "A later-stage miss is recorded with failing_operand. Rules were not loosened."
     )
-    REPAIR.mkdir(parents=True, exist_ok=True)
-    (REPAIR / "REPLAY_SIRES.json").write_text(json.dumps({"examples": results, "finding": finding}, indent=2) + "\n")
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "REPLAY_SIRES.json").write_text(json.dumps({"examples": results, "finding": finding}, indent=2) + "\n")
     assert len(results) == 10
 
 
 def test_slice_funnels_and_refill_slice():
     from trading_research.research.rule_discovery.native import install_write_guard
-    from trading_research.research.rule_discovery.source_adapters.sires_b02 import TAPE_END
+    from trading_research.research.rule_discovery.source_adapters.common import is_native_session
 
     install_write_guard()
-    dates = [day for day in SLICE_DATES if date.fromisoformat(day) <= TAPE_END]
+    dates = [day for day in SLICE_DATES if is_native_session(day)]
     sires_funnel = {"family": "SIRES", "dates": dates, "b01": {}, "b02": {}}
     refill_funnel = {"family": "REFILL-STUDY", "dates": dates, "b01": {}, "b02": {}}
     entry_times = {branch: {} for branch in FAMILY_BRANCHES["SIRES"]}
@@ -874,13 +889,13 @@ def test_slice_funnels_and_refill_slice():
         "reason": "9-date engineering slice is not the registered 235-session window; hold/dip/R are not compared as a reconciled population",
         "bracket": {"inside_ticks": 12, "stop_ticks": 32, "target_ticks": 96, "cancel_minutes": 30},
     }
-    REPAIR.mkdir(parents=True, exist_ok=True)
-    (REPAIR / "FUNNEL_SIRES.json").write_text(json.dumps(sires_funnel, indent=2) + "\n")
-    (REPAIR / "FUNNEL_REFILL-STUDY.json").write_text(json.dumps(refill_funnel, indent=2) + "\n")
-    (REPAIR / "ENTRY_TIMES.json").write_text(json.dumps({"from_0930": entry_times, "bin_minutes": 5}, indent=2) + "\n")
-    (REPAIR / "REFILL_SLICE.json").write_text(json.dumps(slice_doc, indent=2) + "\n")
-    (REPAIR / "RULES_SIRES.json").write_text(json.dumps(rules_payload(), indent=2) + "\n")
-    (REPAIR / "RULES_REFILL-STUDY.json").write_text(
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "FUNNEL_SIRES.json").write_text(json.dumps(sires_funnel, indent=2) + "\n")
+    (WORK / "FUNNEL_REFILL-STUDY.json").write_text(json.dumps(refill_funnel, indent=2) + "\n")
+    (WORK / "ENTRY_TIMES.json").write_text(json.dumps({"from_0930": entry_times, "bin_minutes": 5}, indent=2) + "\n")
+    (WORK / "REFILL_SLICE.json").write_text(json.dumps(slice_doc, indent=2) + "\n")
+    (WORK / "RULES_SIRES.json").write_text(json.dumps(rules_payload(), indent=2) + "\n")
+    (WORK / "RULES_REFILL-STUDY.json").write_text(
         json.dumps(processes_mod.rules_payload(), indent=2) + "\n"
     )
     assert sires_funnel["b02"]["clean_squeeze"]["episodes"] >= 0

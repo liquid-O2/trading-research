@@ -1,6 +1,6 @@
 # Context, path, auction, flow and cross-market experts
 
-Owners `P2-05` through `P2-08`. Use independently fitted artifacts and the common chronological fitting, support and calibration contracts. Thresholds in this file define **our operational v1 labels**, not author-exact Sires/AMT or jetbundle constants. Preserve raw source terminology and the source-object distinction in the wiki.
+Owners `P2-05` (range path, auction session) and `P2-07` (flow memory, cross market). Use independently fitted artifacts and the common chronological fitting, support and calibration contracts. Thresholds in this file define **our operational v1 labels**, not author-exact Sires/AMT or jetbundle constants. Preserve raw source terminology and the source-object distinction in the wiki.
 
 ## Common causal features
 

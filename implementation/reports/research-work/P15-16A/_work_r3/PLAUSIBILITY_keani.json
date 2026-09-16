@@ -1,0 +1,180 @@
+{
+  "family": "KEANI-OPEN-ABOVE-VALUE",
+  "slice_dates": [
+    "2020-01-02",
+    "2020-06-01",
+    "2020-11-02",
+    "2021-06-01",
+    "2021-11-01",
+    "2022-01-03",
+    "2022-06-01",
+    "2023-01-03",
+    "2023-11-06",
+    "2024-03-05",
+    "2024-11-01",
+    "2025-01-02",
+    "2025-06-02",
+    "2026-01-02",
+    "2026-06-01"
+  ],
+  "sessions_loaded": 15,
+  "load_errors": {},
+  "branches": {
+    "source_long": {
+      "episodes": 15,
+      "pass": 0,
+      "fail": 15,
+      "unknown": 0,
+      "stages": {
+        "context": {
+          "pass": 5,
+          "fail": 9,
+          "unknown": 1,
+          "omitted": 0
+        },
+        "reference": {
+          "pass": 5,
+          "fail": 0,
+          "unknown": 1,
+          "omitted": 9
+        },
+        "location": {
+          "pass": 6,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 9
+        },
+        "trigger": {
+          "pass": 0,
+          "fail": 6,
+          "unknown": 0,
+          "omitted": 9
+        },
+        "confirmation": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        },
+        "risk": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        },
+        "objective": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        },
+        "management": {
+          "pass": 0,
+          "fail": 0,
+          "unknown": 0,
+          "omitted": 15
+        }
+      },
+      "pass_rate": 0.0,
+      "episodes_per_session": 1.0,
+      "sessions": 15,
+      "sessions_with_pass": 0,
+      "bound": {
+        "episodes_per_session": [
+          0,
+          1
+        ],
+        "pass_rate": [
+          0.0,
+          0.08
+        ],
+        "source_claim": "unstated; B0.1 reference density 39 of 1695 A-period observations",
+        "reasoning": "AVG p.21 requires the A period fully above prior-day value (strict A low > prior VAH, SD11), rejection at POC or prior VAH, aggressive developing-VAH break, then a defended retest. The branch is rare by construction. 39/1695 (~0.023) is the B0.1 reference density.",
+        "pages": "AVG pp.21-24; empirical_registry complete_a_above_prior_value value_fraction=0.70 prior RTH 09:30-16:00"
+      },
+      "in_bound": true,
+      "report_note": "KEANI-OPEN-ABOVE-VALUE/source_long: episodes=15 pass=0 fail=15 unknown=0 pass_rate=0.0 bound={'episodes_per_session': [0, 1], 'pass_rate': [0.0, 0.08], 'source_claim': 'unstated; B0.1 reference density 39 of 1695 A-period observations', 'reasoning': 'AVG p.21 requires the A period fully above prior-day value (strict A low > prior VAH, SD11), rejection at POC or prior VAH, aggressive developing-VAH break, then a defended retest. The branch is rare by construction. 39/1695 (~0.023) is the B0.1 reference density.', 'pages': 'AVG pp.21-24; empirical_registry complete_a_above_prior_value value_fraction=0.70 prior RTH 09:30-16:00'}. AVG p.21 A period fully above prior-day 70% VAH (strict > , SD11), then POC-or-VAH rejection, aggressive VAH break, defended 3-tick retest. context={'pass': 5, 'fail': 9, 'unknown': 1, 'omitted': 0} trigger={'pass': 0, 'fail': 6, 'unknown': 0, 'omitted': 9} confirmation={'pass': 0, 'fail': 0, 'unknown': 0, 'omitted': 15}. 39/1695 B0.1 is the reference density. DOM at retest is unobservable.",
+      "time_of_entry_et_30m": {
+        "10:00": 15
+      },
+      "operand_values": {
+        "context": {
+          "a_low": [
+            "\"10991.25\"",
+            "\"11108.5\"",
+            "\"12731.5\"",
+            "\"13705.5\"",
+            "\"15197.0\"",
+            "\"15797.75\"",
+            "\"16292.0\"",
+            "\"18023.25\"",
+            "\"20057.5\"",
+            "\"21166.5\"",
+            "\"21286.75\"",
+            "\"25638.25\""
+          ],
+          "prior_vah": [
+            "\"10950.25\"",
+            "\"11056.0\"",
+            "\"12757.5\"",
+            "\"13674.0\"",
+            "\"15217.5\"",
+            "\"15816.5\"",
+            "\"16404.0\"",
+            "\"18325.25\"",
+            "\"20132.75\"",
+            "\"21364.5\"",
+            "\"21399.0\"",
+            "\"25634.0\""
+          ],
+          "a_period": [
+            "\"09:30-10:00\""
+          ],
+          "fully_above": [
+            "false",
+            "true"
+          ],
+          "strict_gt": [
+            "true"
+          ],
+          "value_fraction": [
+            "\"0.70\""
+          ]
+        },
+        "reference": {
+          "prior_vah": [
+            "\"10950.25\"",
+            "\"11056.0\"",
+            "\"13674.0\"",
+            "\"25634.0\"",
+            "\"9468.5\"",
+            "null"
+          ]
+        },
+        "location": {
+          "rejection": [
+            "\"developing_poc\"",
+            "\"prior_day_vah\""
+          ],
+          "val_rise_required": [
+            "false"
+          ],
+          "poc_or_prior_vah": [
+            "\"OR\""
+          ],
+          "p22_and_unresolved": [
+            "true"
+          ]
+        },
+        "trigger": {
+          "breakout": [
+            "false"
+          ],
+          "cutoff_1100": [
+            "false"
+          ]
+        }
+      }
+    }
+  }
+}

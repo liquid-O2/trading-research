@@ -12,17 +12,20 @@ import json
 import pytest
 
 from trading_research.research.rule_discovery.native import build_market_view, install_write_guard
+from trading_research.research.rule_discovery.source_adapters.common import is_native_session
 from trading_research.research.rule_discovery.source_adapters.jumbo import (
     BRANCHES,
     FAMILY,
     PZONE_FIXTURES,
-    TAPE_LAST,
     funnel_stage_counts,
     replay_example,
     scan_b02,
 )
 
 REPAIR = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_repair_jumbo"
+# Generated evidence goes to the round-3 work directory; committed repair evidence stays byte-identical.
+OUT = Path(__file__).resolve().parents[2] / "reports/research-work/P15-16A/_work_r3"
+OUT.mkdir(parents=True, exist_ok=True)
 FAMILY_JSON = Path(__file__).resolve().parents[2] / "src/trading_research/research/rule_discovery/families/jumbo.json"
 EXAMPLES = Path("/workspace/planning/phase-1-5/AUTHOR_EXAMPLES_2026-09-15.json")
 SLICE_DATES = [
@@ -269,7 +272,7 @@ def test_p15_16a_plausibility_jumbo_gate(slice_population):
         "branches": rows,
     }
     REPAIR.mkdir(parents=True, exist_ok=True)
-    (REPAIR / "PLAUSIBILITY_jumbo.json").write_text(json.dumps(payload, indent=2, default=str) + "\n")
+    (OUT / "PLAUSIBILITY_jumbo.json").write_text(json.dumps(payload, indent=2, default=str) + "\n")
     lines = [
         "# JJ-TBR plausibility (15 stratified dates)",
         "",
@@ -297,7 +300,7 @@ def test_p15_16a_plausibility_jumbo_gate(slice_population):
             if hist:
                 lines.append("Time-of-entry (pass, 30-minute ET): " + ", ".join(f"{k}={v}" for k, v in hist.items()))
                 lines.append("")
-    (REPAIR / "PLAUSIBILITY_jumbo.md").write_text("\n".join(lines) + "\n")
+    (OUT / "PLAUSIBILITY_jumbo.md").write_text("\n".join(lines) + "\n")
     assert not errors, "\n".join(errors)
     assert len(slice_population["sessions_used"]) >= 10, slice_population["load_errors"]
 
@@ -331,8 +334,17 @@ def test_after_tape_examples_do_not_call_build_event_window(monkeypatch):
     after = [
         row
         for row in examples
-        if row.get("inside_tape") is False or str(row.get("date") or "") > TAPE_LAST.isoformat()
+        if row.get("inside_tape") is False or not is_native_session(row.get("date"))
     ]
+    after.append(
+        {
+            "id": "JJ-AFTER-TAPE",
+            "family": "JJ-TBR",
+            "date": "2026-09-11",
+            "inside_tape": False,
+            "expected_detection": {"branch": "judas_reversal"},
+        }
+    )
     assert after, "expected after-tape JJ examples"
     for example in after:
         row = replay_example(None, example)

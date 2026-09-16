@@ -124,7 +124,7 @@ All 60 pages of [GB] and the 2026-09-14 raw capture were re-read with every char
 
 ### What B0.2 must reproduce
 
-The three session boxes as painted, the level set, the two confirmation modes (5-minute close for level cases, at-level failure for box cases), the fixed-dollar risk with derived quantity, the limit ladder toward the opposing liquidity, and the author-example replay of the dated sessions above that fall inside the native calendar (2025-11-20 through 2026-08-19; the 2026-08-27 to 2026-09-14 examples postdate the data endpoint and are recorded as data_unavailable).
+The three session boxes as painted, the level set, the two confirmation modes (5-minute close for level cases, at-level failure for box cases), the fixed-dollar risk with derived quantity, the limit ladder toward the opposing liquidity, and the author-example replay of the dated sessions above that fall inside the native calendar (2025-11-20 through 2026-09-03, the last and partial session of the run-1.0.1 calendar; the 2026-09-08 to 2026-09-15 examples postdate the data endpoint and are recorded as data_unavailable; corrected 2026-09-16, an earlier copy put the endpoint at 2026-08-19).
 
 
 ### Astra dossier corrections (2026-09-15, night)

@@ -126,6 +126,10 @@ def _unavailable(example: dict, reason: str) -> dict:
         "family": example.get("family"),
         "branch": expected.get("branch"),
         "detected": None,
+        "reached_location": None,
+        "operands": None,
+        "failing_operand": None,
+        "failing_stage": None,
         "our_level": None,
         "our_side": None,
         "author_level": None,
@@ -136,12 +140,33 @@ def _unavailable(example: dict, reason: str) -> dict:
     }
 
 
+def _replay_operands(replay: dict) -> object:
+    if replay.get("operands") is not None:
+        return replay.get("operands")
+    fo = replay.get("failing_operand")
+    if isinstance(fo, dict):
+        return fo.get("operands") if fo.get("operands") is not None else fo
+    episode = replay.get("episode") or replay.get("matched_episode") or {}
+    for stage in episode.get("stages") or []:
+        if stage.get("stage") == "location" and stage.get("operands") is not None:
+            return stage.get("operands")
+        if stage.get("verdict") in {"fail", "unknown"} and stage.get("operands") is not None:
+            return stage.get("operands")
+    return fo
+
+
 def load_calendar() -> set[str]:
     registry, _coverage = hr.load_registry(PHASE1_RUN, check_software=False)
     return set(evaluation_dates(registry))
 
 
+_MARKET_CACHE: dict[str, object] = {}
+
+
 def load_market(day: str):
+    cached = _MARKET_CACHE.get(day)
+    if cached is not None:
+        return cached
     install_write_guard()
     registry, _manifest = hr.load_registry(PHASE1_RUN, check_software=False)
     market = HistoricalFeatures(day, records=hr._records(registry))
@@ -153,6 +178,7 @@ def load_market(day: str):
         market._native_view = None
     except Exception:
         market._native_view = None
+    _MARKET_CACHE[day] = market
     return market
 
 
@@ -185,6 +211,10 @@ def replay_one(example: dict, calendar: set[str]) -> dict:
         "family": example.get("family"),
         "branch": replay.get("branch") or expected.get("branch"),
         "detected": replay.get("detected"),
+        "reached_location": replay.get("reached_location"),
+        "operands": _replay_operands(replay),
+        "failing_operand": replay.get("failing_operand"),
+        "failing_stage": replay.get("failing_stage"),
         "our_level": replay.get("our_level"),
         "our_side": replay.get("our_side"),
         "author_level": replay.get("author_level"),
